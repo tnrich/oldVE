@@ -7,6 +7,8 @@
 Ext.define("Teselagen.manager.AAManager", {
     extend: "Teselagen.mappers.Mapper",
 
+    singleton: true,
+
     requires: ["Teselagen.bio.sequence.TranslationUtils","Teselagen.bio.sequence.symbols.GapSymbol"],
 
     config: {
@@ -22,17 +24,11 @@ Ext.define("Teselagen.manager.AAManager", {
 
     TranslationUtils: null,
 
-    updateEventString: Teselagen.event.MapperEvent.AA_MAPPER_UPDATED,
-
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.
      */
-    constructor: function(inData) {
+    initialize: function() {
         this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
-        this.mixins.observable.constructor.call(this, inData);
-        
-        this.callParent([inData]);
-        this.initConfig(inData);
     },
 
     /**
@@ -43,8 +39,6 @@ Ext.define("Teselagen.manager.AAManager", {
         if(this.sequenceManager) {
             this.recalculateNonCircular();
         }
-
-        Vede.application.fireEvent(this.updateEventString);
     },
     
     /**

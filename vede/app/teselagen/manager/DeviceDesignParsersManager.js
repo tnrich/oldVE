@@ -202,7 +202,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         name: partName,
                         sequenceFileContent: part.sequence["de:content"],
                         sequenceFileFormat: part.sequence["de:format"],
-                        sequenceFileName: part.sequence["de:fileName"],
+                        sequenceFileName: part.sequence["de:fileName"]
                     });
 
                     newSequence.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);

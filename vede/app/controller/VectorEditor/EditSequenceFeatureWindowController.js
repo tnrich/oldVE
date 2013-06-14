@@ -1,6 +1,8 @@
 Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
 	extend: "Ext.app.Controller",
-    
+	
+	requires: ["Teselagen.event.ContextMenuEvent"],
+               
 	actionStackManager: null,
     sequenceManager: null,
     selectedStart: null,
@@ -68,7 +70,7 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
     	}
     },
     
-    onVectorPanelAnnotationContextMenu: function(feature) {
+    onPieAnnotationRightClicked: function(feature) {
     	this.selectedFeature = feature;
     	this.selectedStart = feature.getStart();
     	this.selectedEnd = feature.getEnd();
@@ -174,8 +176,8 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
     	});
     	this.application.on("SequenceManagerChanged", 
                 this.onSequenceManagerChanged, this);
-    	this.application.on("VectorPanelAnnotationContextMenu", 
-                this.onVectorPanelAnnotationContextMenu, this);
+    	this.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, 
+                this.onPieAnnotationRightClicked, this);
     	this.application.on("ActionStackChanged", 
                 this.onActionStackManagerChanged, this);
     }

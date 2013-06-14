@@ -12,13 +12,13 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         sequenceAnnotator: null,
         topBarY: 20,
         featureGroupSVG: null,
-        featureColor: null,
+        featureColor: null
     },
 
     statics: {
         DEFAULT_FEATURE_HEIGHT: 8,
         DEFAULT_FEATURES_SEQUENCE_GAP: 6,
-        DEFAULT_FEATURES_GAP: 2,
+        DEFAULT_FEATURES_GAP: 2
     },
 
     constructor: function(inData){

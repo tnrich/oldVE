@@ -746,6 +746,11 @@ Ext.define("Teselagen.manager.PieManager", {
                      .append("svg:svg")
                      .attr("id", "Pie")
                      .attr("overflow", "auto");
+                     /*.on("mousedown", function(){
+                    	 return function() {
+                    		 if(d3.event.button == 2) d3.event.preventDefault();
+                    	 }
+                     });*/       
 
         this.parentSVG = this.pie.append("svg:g")
                                  .attr("class", "pieParent")
@@ -796,6 +801,12 @@ Ext.define("Teselagen.manager.PieManager", {
         this.featureRenderer.setFeatureSVG(this.featureSVG);
 
         this.fitWidthToContent(this);
+        
+        /*d3.select("#PieContainer").selectAll("*").on("mousedown", function(){
+       	 	return function() {
+       	 		if(d3.event.button == 2) d3.event.preventDefault();
+       	 	}
+        }); */
     },
 
     updateNameBox: function() {

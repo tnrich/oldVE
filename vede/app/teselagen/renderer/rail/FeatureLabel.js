@@ -8,7 +8,7 @@ Ext.define("Teselagen.renderer.rail.FeatureLabel", {
     extend: "Teselagen.renderer.common.Label",
 
     config: {
-        start: null,
+        start: null
     },
 
     constructor: function(inData) {

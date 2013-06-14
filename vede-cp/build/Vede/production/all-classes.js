@@ -62801,10 +62801,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'GapSymbol'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.AbstractAlphabet', Ext.Base, {symbolsMap: [], constructor: function(inData) {
-  var gap = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {name: "Gap", value: "-"});
-  var key = gap.getValue();
-  this.symbolsMap[key] = gap;
+(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.AbstractAlphabet', Ext.Base, {symbolsMap: [], gap: Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {name: "Gap", value: "-"}), constructor: function(inData) {
+  var key = this.gap.getValue();
+  this.symbolsMap[key] = this.gap;
   this.getSymbols = function() {
   var symbols = [];
   for (var index in this.symbolsMap) 
@@ -62827,7 +62826,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 };
   this.getGap = function() {
-  return gap;
+  return this.gap;
 };
   return this;
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'AbstractAlphabet'], 0));
@@ -63106,16 +63105,19 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 };
   this.seqString = function() {
   var string = [];
+  var element;
   if (this.sequenceString && !this.sequenceChanged) 
   {
     return this.sequenceString;
   } else {
-    symbols.forEach(function(element) {
-  if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) 
-  {
-    string.push(element.getValue());
-  }
-});
+    for (var i = 0; i < symbols.length; i++) 
+      {
+        element = symbols[i];
+        if (element.getValue()) 
+        {
+          string.push(element.getValue());
+        }
+      }
     this.sequenceChanged = false;
   }
   this.sequenceString = string.join("");
@@ -63229,22 +63231,17 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var symbol = this.aminoAcidsTranslationTable[triplet];
   if (symbol == null) 
   {
-    return this.ProteinAlphabet.getGap();
+    return this.ProteinAlphabet.gap;
   }
   ;
   return symbol;
 }, dnaToProteinSymbol: function(pNucleotide1, pNucleotide2, pNucleotide3) {
   this.initializeAminoAcidsTranslationTable();
-  if (pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol || pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol || pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
-  {
-    return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {name: "Gap", value: "-"});
-  }
-  ;
   var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
   var symbol = this.aminoAcidsTranslationTable[triplet];
-  if (symbol == null) 
+  if (!symbol) 
   {
-    return this.ProteinAlphabet.getGap();
+    return this.ProteinAlphabet.gap;
   }
   return symbol;
 }, rnaToProtein: function(pSymbolList) {
@@ -63264,20 +63261,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: proteinSymbols, alphabet: "Teselagen.bio.sequence.alphabets.ProteinAlphabet"});
 }, isStartCodon: function(pNucleotide1, pNucleotide2, pNucleotide3) {
   var result = false;
-  if (pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol || pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol || pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
-  {
-    return result;
-  }
-  ;
   var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
-  return (triplet === 'atg' || triplet === 'aug');
+  return (triplet === 'atg' || triplet === 'aug' && triplet.indexOf("-") === -1);
 }, isStopCodon: function(pNucleotide1, pNucleotide2, pNucleotide3) {
   var result = false;
-  if (pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol || pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol || pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
-  {
-    return result;
-  }
-  ;
   var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
   return (triplet == 'taa' || triplet == 'tag' || triplet == 'tga' || triplet == 'uaa' || triplet == 'uag' || triplet == 'uga');
 }, initializeAminoAcidsTranslationTable: function() {
@@ -63286,102 +63273,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     return;
   }
   ;
-  this.aminoAcidsTranslationTable = [];
-  this.aminoAcidsTranslationTable['gct'] = this.ProteinAlphabet.getAlanine();
-  this.aminoAcidsTranslationTable['gcc'] = this.ProteinAlphabet.getAlanine();
-  this.aminoAcidsTranslationTable['gca'] = this.ProteinAlphabet.getAlanine();
-  this.aminoAcidsTranslationTable['gcg'] = this.ProteinAlphabet.getAlanine();
-  this.aminoAcidsTranslationTable['gcu'] = this.ProteinAlphabet.getAlanine();
-  this.aminoAcidsTranslationTable['cgt'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['cgc'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['cga'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['cgg'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['aga'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['agg'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['cgu'] = this.ProteinAlphabet.getArginine();
-  this.aminoAcidsTranslationTable['aat'] = this.ProteinAlphabet.getAsparagine();
-  this.aminoAcidsTranslationTable['aac'] = this.ProteinAlphabet.getAsparagine();
-  this.aminoAcidsTranslationTable['aau'] = this.ProteinAlphabet.getAsparagine();
-  this.aminoAcidsTranslationTable['gat'] = this.ProteinAlphabet.getAspartic();
-  this.aminoAcidsTranslationTable['gac'] = this.ProteinAlphabet.getAspartic();
-  this.aminoAcidsTranslationTable['gau'] = this.ProteinAlphabet.getAspartic();
-  this.aminoAcidsTranslationTable['tgt'] = this.ProteinAlphabet.getCysteine();
-  this.aminoAcidsTranslationTable['tgc'] = this.ProteinAlphabet.getCysteine();
-  this.aminoAcidsTranslationTable['ugu'] = this.ProteinAlphabet.getCysteine();
-  this.aminoAcidsTranslationTable['ugc'] = this.ProteinAlphabet.getCysteine();
-  this.aminoAcidsTranslationTable['gaa'] = this.ProteinAlphabet.getGlutamic();
-  this.aminoAcidsTranslationTable['gag'] = this.ProteinAlphabet.getGlutamic();
-  this.aminoAcidsTranslationTable['caa'] = this.ProteinAlphabet.getGlutamine();
-  this.aminoAcidsTranslationTable['cag'] = this.ProteinAlphabet.getGlutamine();
-  this.aminoAcidsTranslationTable['ggt'] = this.ProteinAlphabet.getGlycine();
-  this.aminoAcidsTranslationTable['ggc'] = this.ProteinAlphabet.getGlycine();
-  this.aminoAcidsTranslationTable['gga'] = this.ProteinAlphabet.getGlycine();
-  this.aminoAcidsTranslationTable['ggg'] = this.ProteinAlphabet.getGlycine();
-  this.aminoAcidsTranslationTable['ggu'] = this.ProteinAlphabet.getGlycine();
-  this.aminoAcidsTranslationTable['cat'] = this.ProteinAlphabet.getHistidine();
-  this.aminoAcidsTranslationTable['cac'] = this.ProteinAlphabet.getHistidine();
-  this.aminoAcidsTranslationTable['cau'] = this.ProteinAlphabet.getHistidine();
-  this.aminoAcidsTranslationTable['att'] = this.ProteinAlphabet.getIsoleucine();
-  this.aminoAcidsTranslationTable['atc'] = this.ProteinAlphabet.getIsoleucine();
-  this.aminoAcidsTranslationTable['ata'] = this.ProteinAlphabet.getIsoleucine();
-  this.aminoAcidsTranslationTable['auu'] = this.ProteinAlphabet.getIsoleucine();
-  this.aminoAcidsTranslationTable['auc'] = this.ProteinAlphabet.getIsoleucine();
-  this.aminoAcidsTranslationTable['aua'] = this.ProteinAlphabet.getIsoleucine();
-  this.aminoAcidsTranslationTable['ctt'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['ctc'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['cta'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['ctg'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['tta'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['ttg'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['cuu'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['cuc'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['cua'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['cug'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['uua'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['uug'] = this.ProteinAlphabet.getLeucine();
-  this.aminoAcidsTranslationTable['aaa'] = this.ProteinAlphabet.getLysine();
-  this.aminoAcidsTranslationTable['aag'] = this.ProteinAlphabet.getLysine();
-  this.aminoAcidsTranslationTable['atg'] = this.ProteinAlphabet.getMethionine();
-  this.aminoAcidsTranslationTable['aug'] = this.ProteinAlphabet.getMethionine();
-  this.aminoAcidsTranslationTable['ttt'] = this.ProteinAlphabet.getPhenylalanine();
-  this.aminoAcidsTranslationTable['ttc'] = this.ProteinAlphabet.getPhenylalanine();
-  this.aminoAcidsTranslationTable['uuu'] = this.ProteinAlphabet.getPhenylalanine();
-  this.aminoAcidsTranslationTable['uuc'] = this.ProteinAlphabet.getPhenylalanine();
-  this.aminoAcidsTranslationTable['cct'] = this.ProteinAlphabet.getProline();
-  this.aminoAcidsTranslationTable['ccc'] = this.ProteinAlphabet.getProline();
-  this.aminoAcidsTranslationTable['cca'] = this.ProteinAlphabet.getProline();
-  this.aminoAcidsTranslationTable['ccg'] = this.ProteinAlphabet.getProline();
-  this.aminoAcidsTranslationTable['ccu'] = this.ProteinAlphabet.getProline();
-  this.aminoAcidsTranslationTable['tct'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['tcc'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['tca'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['tcg'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['agt'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['agc'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['ucu'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['ucc'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['uca'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['ucg'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['agu'] = this.ProteinAlphabet.getSerine();
-  this.aminoAcidsTranslationTable['act'] = this.ProteinAlphabet.getThreonine();
-  this.aminoAcidsTranslationTable['acc'] = this.ProteinAlphabet.getThreonine();
-  this.aminoAcidsTranslationTable['aca'] = this.ProteinAlphabet.getThreonine();
-  this.aminoAcidsTranslationTable['acg'] = this.ProteinAlphabet.getThreonine();
-  this.aminoAcidsTranslationTable['acu'] = this.ProteinAlphabet.getThreonine();
-  this.aminoAcidsTranslationTable['tgg'] = this.ProteinAlphabet.getTryptophan();
-  this.aminoAcidsTranslationTable['ugg'] = this.ProteinAlphabet.getTryptophan();
-  this.aminoAcidsTranslationTable['tat'] = this.ProteinAlphabet.getTyrosine();
-  this.aminoAcidsTranslationTable['tac'] = this.ProteinAlphabet.getTyrosine();
-  this.aminoAcidsTranslationTable['uau'] = this.ProteinAlphabet.getTyrosine();
-  this.aminoAcidsTranslationTable['uac'] = this.ProteinAlphabet.getTyrosine();
-  this.aminoAcidsTranslationTable['gtt'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['gtc'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['gta'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['gtg'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['guu'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['guc'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['gua'] = this.ProteinAlphabet.getValine();
-  this.aminoAcidsTranslationTable['gug'] = this.ProteinAlphabet.getValine();
+  this.aminoAcidsTranslationTable = {gct: this.ProteinAlphabet.getAlanine(), gcc: this.ProteinAlphabet.getAlanine(), gca: this.ProteinAlphabet.getAlanine(), gcg: this.ProteinAlphabet.getAlanine(), gcu: this.ProteinAlphabet.getAlanine(), cgt: this.ProteinAlphabet.getArginine(), cgc: this.ProteinAlphabet.getArginine(), cga: this.ProteinAlphabet.getArginine(), cgg: this.ProteinAlphabet.getArginine(), aga: this.ProteinAlphabet.getArginine(), agg: this.ProteinAlphabet.getArginine(), cgu: this.ProteinAlphabet.getArginine(), aat: this.ProteinAlphabet.getAsparagine(), aac: this.ProteinAlphabet.getAsparagine(), aau: this.ProteinAlphabet.getAsparagine(), gat: this.ProteinAlphabet.getAspartic(), gac: this.ProteinAlphabet.getAspartic(), gau: this.ProteinAlphabet.getAspartic(), tgt: this.ProteinAlphabet.getCysteine(), tgc: this.ProteinAlphabet.getCysteine(), ugu: this.ProteinAlphabet.getCysteine(), ugc: this.ProteinAlphabet.getCysteine(), gaa: this.ProteinAlphabet.getGlutamic(), gag: this.ProteinAlphabet.getGlutamic(), caa: this.ProteinAlphabet.getGlutamine(), cag: this.ProteinAlphabet.getGlutamine(), ggt: this.ProteinAlphabet.getGlycine(), ggc: this.ProteinAlphabet.getGlycine(), gga: this.ProteinAlphabet.getGlycine(), ggg: this.ProteinAlphabet.getGlycine(), ggu: this.ProteinAlphabet.getGlycine(), cat: this.ProteinAlphabet.getHistidine(), cac: this.ProteinAlphabet.getHistidine(), cau: this.ProteinAlphabet.getHistidine(), att: this.ProteinAlphabet.getIsoleucine(), atc: this.ProteinAlphabet.getIsoleucine(), ata: this.ProteinAlphabet.getIsoleucine(), auu: this.ProteinAlphabet.getIsoleucine(), auc: this.ProteinAlphabet.getIsoleucine(), aua: this.ProteinAlphabet.getIsoleucine(), ctt: this.ProteinAlphabet.getLeucine(), ctc: this.ProteinAlphabet.getLeucine(), cta: this.ProteinAlphabet.getLeucine(), ctg: this.ProteinAlphabet.getLeucine(), tta: this.ProteinAlphabet.getLeucine(), ttg: this.ProteinAlphabet.getLeucine(), cuu: this.ProteinAlphabet.getLeucine(), cuc: this.ProteinAlphabet.getLeucine(), cua: this.ProteinAlphabet.getLeucine(), cug: this.ProteinAlphabet.getLeucine(), uua: this.ProteinAlphabet.getLeucine(), uug: this.ProteinAlphabet.getLeucine(), aaa: this.ProteinAlphabet.getLysine(), aag: this.ProteinAlphabet.getLysine(), atg: this.ProteinAlphabet.getMethionine(), aug: this.ProteinAlphabet.getMethionine(), ttt: this.ProteinAlphabet.getPhenylalanine(), ttc: this.ProteinAlphabet.getPhenylalanine(), uuu: this.ProteinAlphabet.getPhenylalanine(), uuc: this.ProteinAlphabet.getPhenylalanine(), cct: this.ProteinAlphabet.getProline(), ccc: this.ProteinAlphabet.getProline(), cca: this.ProteinAlphabet.getProline(), ccg: this.ProteinAlphabet.getProline(), ccu: this.ProteinAlphabet.getProline(), tct: this.ProteinAlphabet.getSerine(), tcc: this.ProteinAlphabet.getSerine(), tca: this.ProteinAlphabet.getSerine(), tcg: this.ProteinAlphabet.getSerine(), agt: this.ProteinAlphabet.getSerine(), agc: this.ProteinAlphabet.getSerine(), ucu: this.ProteinAlphabet.getSerine(), ucc: this.ProteinAlphabet.getSerine(), uca: this.ProteinAlphabet.getSerine(), ucg: this.ProteinAlphabet.getSerine(), agu: this.ProteinAlphabet.getSerine(), act: this.ProteinAlphabet.getThreonine(), acc: this.ProteinAlphabet.getThreonine(), aca: this.ProteinAlphabet.getThreonine(), acg: this.ProteinAlphabet.getThreonine(), acu: this.ProteinAlphabet.getThreonine(), tgg: this.ProteinAlphabet.getTryptophan(), ugg: this.ProteinAlphabet.getTryptophan(), tat: this.ProteinAlphabet.getTyrosine(), tac: this.ProteinAlphabet.getTyrosine(), uau: this.ProteinAlphabet.getTyrosine(), uac: this.ProteinAlphabet.getTyrosine(), gtt: this.ProteinAlphabet.getValine(), gtc: this.ProteinAlphabet.getValine(), gta: this.ProteinAlphabet.getValine(), gtg: this.ProteinAlphabet.getValine(), guu: this.ProteinAlphabet.getValine(), guc: this.ProteinAlphabet.getValine(), gua: this.ProteinAlphabet.getValine(), gug: this.ProteinAlphabet.getValine()};
 }, initializeDNAToRNATranslationTable: function() {
   if (this.dnaToRNATranslationTable != null) 
   {
@@ -66062,6 +65954,128 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.tools, 'DigestionCalculator'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.bio.tools.TemperatureCalculator', Ext.Base, {singleton: true, TABLE_BRESLAUER: "breslauer", TABLE_SUGIMOTO: "sugimoto", TABLE_UNIFIED: "unified", A: -10.8, R: 1.987, C: 5.0E-7, Na: 0.05, calculateTemperature: function(dnaSequence, type, A, R, C, Na) {
+  if (typeof (type) === "undefined") 
+  {
+    type = this.TABLE_BRESLAUER;
+  } else if (type != this.TABLE_BRESLAUER && (type != this.TABLE_UNIFIED && type != this.TABLE_SUGIMOTO)) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid table type!"});
+  }
+  if (!A) 
+  {
+    A = this.A;
+  }
+  if (!R) 
+  {
+    R = this.R;
+  }
+  if (!C) 
+  {
+    C = this.C;
+  }
+  if (!Na) 
+  {
+    Na = this.Na;
+  }
+  var sequence = dnaSequence.seqString();
+  var sequenceLength = sequence.length;
+  if (sequenceLength == 0) 
+  {
+    return 0;
+  }
+  var deltaHTable = this.getDeltaHTable(type);
+  var deltaSTable = this.getDeltaSTable(type);
+  var neighbors = new Array();
+  neighbors.push(this.calculateReps(sequence, "aa"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "at"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "ac"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "ag"));
+  neighbors.push(this.calculateReps(sequence, "tt"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "ta"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "tc"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "tg"));
+  neighbors.push(this.calculateReps(sequence, "cc"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "ca"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "ct"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "cg"));
+  neighbors.push(this.calculateReps(sequence, "gg"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "ga"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "gt"));
+  neighbors.push(this.calculateNumberOfOccurrences(sequence, "gc"));
+  var sumDeltaH = 0;
+  var sumDeltaS = 0;
+  for (var i = 0; i < 16; i++) 
+    {
+      sumDeltaH = sumDeltaH + neighbors[i] * deltaHTable[i];
+      sumDeltaS = sumDeltaS + neighbors[i] * deltaSTable[i];
+    }
+  var temperature = ((-1000 * sumDeltaH) / (A + -sumDeltaS + R * Math.log(C / 4))) - 273.15 + 16.6 * Math.LOG10E * Math.log(Na);
+  if (temperature < 0) 
+  {
+    return 0;
+  }
+  return temperature;
+}, getDeltaHTable: function(type) {
+  if (type == this.TABLE_BRESLAUER) 
+  {
+    return [9.1, 8.6, 6.5, 7.8, 9.1, 6, 5.6, 5.8, 11, 5.8, 7.8, 11.9, 11, 5.6, 6.5, 11.1];
+  } else if (type == this.TABLE_SUGIMOTO) 
+  {
+    return [8, 5.6, 6.5, 7.8, 8, 5.6, 5.6, 5.8, 10.9, 8.2, 6.6, 11.8, 10.9, 6.6, 9.4, 11.9];
+  } else if (type == this.TABLE_UNIFIED) 
+  {
+    return [7.9, 7.2, 8.4, 7.8, 7.9, 7.2, 8.2, 8.5, 8, 8.5, 7.8, 10.6, 8, 8.2, 8.4, 9.8];
+  } else {
+    return null;
+  }
+}, getDeltaSTable: function(type) {
+  if (type == this.TABLE_BRESLAUER) 
+  {
+    return [24, 23.9, 17.3, 20.8, 24, 16.9, 13.5, 12.9, 26.6, 12.9, 20.8, 27.8, 26.6, 13.5, 17.3, 26.7];
+  } else if (type == this.TABLE_SUGIMOTO) 
+  {
+    return [21.9, 15.2, 17.3, 20.8, 21.9, 15.2, 13.5, 12.9, 28.4, 25.5, 23.5, 29, 28.4, 16.4, 25.5, 29];
+  } else if (type == this.TABLE_UNIFIED) 
+  {
+    return [22.2, 20.4, 22.4, 21, 22.2, 21.3, 22.2, 22.7, 19.9, 22.7, 21, 27.2, 19.9, 22.2, 22.4, 24.4];
+  } else {
+    return null;
+  }
+}, calculateReps: function(sequence, target) {
+  var sequenceLength = sequence.length;
+  if (sequenceLength == 0) 
+  {
+    return 0;
+  }
+  var numFound = 0;
+  var seqOffset = 0;
+  while (true) 
+    {
+      var foundSeq = sequence.indexOf(target, seqOffset);
+      if (foundSeq == -1) 
+      {
+        break;
+      }
+      seqOffset = foundSeq + 1;
+      numFound++;
+      if (seqOffset > sequenceLength) 
+      {
+        break;
+      }
+    }
+  return numFound;
+}, calculateNumberOfOccurrences: function(sequence, target) {
+  var sequenceLength = sequence.length;
+  if (sequenceLength == 0) 
+  {
+    return 0;
+  }
+  var numberFound = sequence.split(target).length - 1;
+  return numberFound;
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.tools, 'TemperatureCalculator'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.bio.util.Point', Ext.Base, {constructor: function(x, y) {
   this.x = x || 0;
   this.y = y || 0;
@@ -67646,10 +67660,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       }
     }
   }
-}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, constructor: function(inData) {
-  this.callParent([inData]);
-  this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
-}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
+}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
   return Ext.getClass(this).load(this.getId(), {success: function(r, o) {
   console.log("record reloaded!");
@@ -67754,7 +67765,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return false;
   }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.Project', Ext.data.Model, {fields: [{name: "id", type: "long"}, {name: "user_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}, {name: "dateCreated", type: "date"}, {name: "dateModified", type: "date"}], associations: [{type: "hasMany", model: "Teselagen.models.DeviceDesign", name: "designs", associationKey: "designs", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.SequenceFile", name: "sequences", associationKey: "sequences", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.Part", name: "parts", associationKey: "parts", foreignKey: "project_id"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], proxy: {type: "rest", url: "/vede/test/data/json/projects.json", reader: {type: "json", root: "projects"}, writer: {type: "json", getRecordData: function(record) {
@@ -68484,83 +68495,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, ["ProjectManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'ProjectManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.MenuItemEvent', Ext.Base, {singleton: true, NEW_BLANK_VECTOR_EDITOR: "NewBlankVectorEditor", CUT: "Cut", COPY: "Copy", PASTE: "Paste", UNDO: "Undo", REDO: "Redo", SAFE_EDITING_CHANGED: "SafeEditingChanged", SELECT_ALL: "SelectAll", SELECT_INVERSE: "SelectInverse", FIND_PANEL_OPENED: "FindPanelOpened", GOTO_WINDOW_OPENED: "GoToWindowOpened", SELECT_WINDOW_OPENED: "SelectWindowOpened", REVERSE_COMPLEMENT: "ReverseComplement", REBASE_SEQUENCE: "RebaseSequence"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'MenuItemEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.SequenceManagerEvent', Ext.Base, {singleton: true, SEQUENCE_MANAGER_CHANGED: "SequenceManagerChanged", SEQUENCE_CHANGING: "SequenceChanging", SEQUENCE_CHANGED: "SequenceChanged", KIND_FEATURE_ADD: "FeatureAddSequenceProviderEvent", KIND_FEATURE_REMOVE: "FeatureRemoveSequenceProviderEvent", KIND_FEATURES_ADD: "FeaturesAddSequenceProviderEvent", KIND_FEATURES_REMOVE: "FeaturesRemoveSequenceProviderEvent", KIND_SEQUENCE_INSERT: "SequenceInsertSequenceProviderEvent", KIND_SEQUENCE_REMOVE: "SequenceRemoveSequenceProviderEvent", KIND_MANUAL_UPDATE: "ManualUpdate", KIND_SET_MEMENTO: "SetMemento", KIND_INITIALIZED: "SequenceInitialized"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SequenceManagerEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.ActionStackEvent', Ext.Base, {singleton: true, ACTION_STACK_CHANGED: "ActionStackChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'ActionStackEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.ActionStackManager', Ext.Base, {config: {sequenceManager: null}, ActionStackEvent: null, undoStack: [], redoStack: [], constructor: function(inData) {
-  this.initConfig(inData);
-  this.ActionStackEvent = Teselagen.event.ActionStackEvent;
-}, undo: function() {
-  if (this.undoStack.length == 0) 
-  {
-    return;
-  }
-  var item = this.undoStack.pop();
-  this.redoStack.push(this.getSequenceManager().createMemento());
-  this.getSequenceManager().setMemento(item);
-  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
-}, redo: function() {
-  if (this.redoStack.length == 0) 
-  {
-    return;
-  }
-  var item = this.redoStack.pop();
-  this.undoStack.push(this.getSequenceManager().createMemento());
-  this.getSequenceManager().setMemento(item);
-  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
-}, add: function(memento) {
-  this.undoStack.push(memento);
-  this.redoStack = [];
-  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
-}, clear: function() {
-  this.undoStack = [];
-  this.redoStack = [];
-  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'ActionStackManager'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.ActionStackController', Ext.app.Controller, {ActionStackManager: null, SequenceManager: null, MenuItemEvent: null, SequenceManagerEvent: null, init: function() {
-  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
-  this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
-  this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGING, this.onSequenceChanging, this);
-  this.application.on(this.MenuItemEvent.UNDO, this.onUndo, this);
-  this.application.on(this.MenuItemEvent.REDO, this.onRedo, this);
-  this.application.on("saveCurrentVEProject", this.onsaveCurrentVEProject, this);
-}, onLaunch: function() {
-  this.ActionStackManager = Ext.create("Teselagen.manager.ActionStackManager");
-}, onSequenceManagerChanged: function(pSeqMan) {
-  this.SequenceManager = pSeqMan;
-  this.ActionStackManager.setSequenceManager(pSeqMan);
-  this.ActionStackManager.clear();
-}, onSequenceChanging: function(kind, memento) {
-  this.ActionStackManager.add(memento);
-}, onUndo: function() {
-  if (this.SequenceManager && this.ActionStackManager.undoStack.length != 0) 
-  {
-    this.ActionStackManager.undo();
-  }
-}, onRedo: function() {
-  if (this.SequenceManager && this.ActionStackManager.redoStack.length != 0) 
-  {
-    this.ActionStackManager.redo();
-  }
-}, onsaveCurrentVEProject: function() {
-  var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
-  var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();
-  workingSequence.set('sequenceFileFormat', updatedGenbankSequence);
-  workingSequence.save({callback: function() {
-  console.log("Working sequence updated!");
-}});
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'ActionStackController'], 0));
-;
-
 (Ext.cmd.derive('Vede.controller.AppController', Ext.app.Controller, {init: function() {
   Vede.application = Vede.app;
 }, onLaunch: function() {
@@ -68572,6811 +68506,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 });
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AppController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.CaretEvent', Ext.Base, {singleton: true, CARET_POSITION_CHANGED: "CaretPositionChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'CaretEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.MapperEvent', Ext.Base, {singleton: true, AA_MAPPER_UPDATED: "AAMapperUpdated", ORF_MAPPER_UPDATED: "ORFMapperUpdated", RESTRICTION_ENZYME_MAPPER_UPDATED: "RestrictionEnzymeMapperUpdate", TRACE_MAPPER_UPDATED: "TraceMapperUpdated"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'MapperEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.SelectionEvent', Ext.Base, {singleton: true, SELECTION_CHANGED: "SelectionChanged", SELECTION_CANCELED: "SelectionCanceled", HIGHLIGHT: "Highlight", CLEAR_HIGHLIGHT: "ClearHighlight"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SelectionEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.SelectionLayerEvent', Ext.Base, {singleton: true, OVER: "overSelectionEvent", OUT: "outOfSelectionEvent", SELECT: "selectEvent", DESELECT: "deselectEvent", SELECTION_CHANGED: "selectionLayerSelectionChanged", HANDLE_CLICKED: "handleClickedEvent", HANDLE_RELEASED: "handleReleasedEvent"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SelectionLayerEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.VisibilityEvent', Ext.Base, {singleton: true, SHOW_FEATURES_CHANGED: "ShowFeaturesChanged", SHOW_CUTSITES_CHANGED: "ShowCutSitesChanged", SHOW_ORFS_CHANGED: "ShowOrfsChanged", SHOW_COMPLEMENTARY_CHANGED: "ShowComplementaryChanged", SHOW_SPACES_CHANGED: "ShowSpacesChanged", SHOW_SEQUENCE_AA_CHANGED: "ShowSequenceAAChanged", SHOW_REVCOM_AA_CHANGED: "ShowRevcomAAChanged", SHOW_FEATURE_LABELS_CHANGED: "ShowFeatureLabelsChanged", SHOW_CUTSITE_LABELS_CHANGED: "ShowCutSiteLabelsChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'VisibilityEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.mappers.Mapper', Ext.Base, {config: {sequenceManager: null, dirty: true}, updateEventString: null, constructor: function(inData) {
-  var that = this;
-  this.mixins.observable.constructor.call(this, inData);
-  if (inData) 
-  {
-    this.initConfig(inData);
-  }
-}, sequenceChanged: function() {
-  this.dirty = true;
-}, setSequenceManager: function(pSeqMan) {
-  this.dirty = true;
-  this.sequenceManager = pSeqMan;
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.mappers, 'Mapper'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.AAManager', Teselagen.mappers.Mapper, {config: {aaSequence: ["", "", ""], aaSequenceSparse: ["", "", ""], aaRevCom: ["", "", ""], aaRevComSparse: ["", "", ""]}, TranslationUtils: null, updateEventString: Teselagen.event.MapperEvent.AA_MAPPER_UPDATED, constructor: function(inData) {
-  this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
-  this.mixins.observable.constructor.call(this, inData);
-  this.callParent([inData]);
-  this.initConfig(inData);
-}, recalculate: function() {
-  if (this.sequenceManager) 
-  {
-    this.recalculateNonCircular();
-  }
-  Vede.application.fireEvent(this.updateEventString);
-}, recalculateNonCircular: function() {
-  var i;
-  var sequence = this.sequenceManager.getSequence();
-  var revCom = this.sequenceManager.getReverseComplementSequence();
-  var seqLen = sequence.seqString().length;
-  var aminoAcid;
-  var aminoAcidRevCom;
-  var aaString;
-  var aaStringRevCom;
-  var codon = [];
-  var codonRevCom = [];
-  var aaSequenceNew = [];
-  var aaSequenceSparseNew = [];
-  var revComNew = [];
-  var revComSparseNew = [];
-  var aaSequenceArray = [[], [], []];
-  var revComArray = [[], [], []];
-  for (i = 0; i < seqLen; i++) 
-    {
-      if (i >= seqLen - 2) 
-      {
-        break;
-      }
-      codon = [sequence.symbolAt(i), sequence.symbolAt(i + 1), sequence.symbolAt(i + 2)];
-      codonRevCom = [revCom.symbolAt(i), revCom.symbolAt(i + 1), revCom.symbolAt(i + 2)];
-      aminoAcid = this.TranslationUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
-      aminoAcidRevCom = this.TranslationUtils.dnaToProteinSymbol(codonRevCom[0], codonRevCom[1], codonRevCom[2]);
-      aaString = "";
-      aaStringRevCom = "";
-      if (aminoAcid instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
-      {
-        if (this.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) 
-        {
-          aaString = ".";
-        }
-      } else {
-        aaString = aminoAcid.getValue();
-      }
-      if (aminoAcidRevCom instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
-      {
-        if (this.TranslationUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) 
-        {
-          aaStringRevCom = ".";
-        }
-      } else {
-        aaStringRevCom = aminoAcidRevCom.getValue();
-      }
-      aaSequenceArray[i % 3].push(aaString);
-      revComArray[i % 3].push(aaStringRevCom);
-    }
-  for (i = 0; i < 3; i++) 
-    {
-      aaSequenceNew[i] = aaSequenceArray[i].join("");
-      aaSequenceSparseNew[i] = aaSequenceArray[i].join(" ");
-      revComNew[i] = revComArray[i].join("");
-      revComSparseNew[i] = revComArray[i].join(" ");
-    }
-  this.setAaSequence(aaSequenceNew);
-  this.setAaSequenceSparse(aaSequenceSparseNew);
-  this.setAaRevCom(revComNew);
-  this.setAaRevComSparse(revComSparseNew);
-}, getSequenceFrame: function(frame, sparse) {
-  if (this.dirty) 
-  {
-    this.recalculate();
-    this.dirty = false;
-  }
-  if (sparse) 
-  {
-    return this.aaSequenceSparse[frame];
-  } else {
-    return this.aaSequence[frame];
-  }
-}, getRevComFrame: function(frame, sparse) {
-  if (this.dirty) 
-  {
-    this.recalculate();
-    this.dirty = false;
-  }
-  if (sparse) 
-  {
-    return this.aaRevComSparse[frame];
-  } else {
-    return this.aaRevCom[frame];
-  }
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'AAManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {config: {minORFSize: 300, orfs: null}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, constructor: function(inData) {
-  this.DNATools = Teselagen.bio.sequence.DNATools;
-  this.mixins.observable.constructor.call(this, inData);
-  this.callParent([inData]);
-  this.initConfig(inData);
-  this.orfs = [];
-}, setOrfs: function(pOrfs) {
-  this.orfs = pOrfs;
-}, getOrfs: function() {
-  if (this.dirty) 
-  {
-    this.recalculate();
-    this.dirty = false;
-  }
-  return this.orfs;
-}, setMinORFSize: function(pSize) {
-  if (this.minORFSize != pSize) 
-  {
-    this.minORFSize = pSize;
-    this.dirty = true;
-  }
-}, recalculate: function() {
-  if (this.sequenceManager) 
-  {
-    if (this.sequenceManager.getCircular()) 
-    {
-      this.recalculateCircular();
-    } else {
-      this.recalculateNonCircular();
-    }
-  } else {
-    this.setOrfs(null);
-  }
-  Vede.application.fireEvent(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED);
-}, recalculateNonCircular: function() {
-  this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(this.sequenceManager.getSequence(), this.sequenceManager.getReverseComplementSequence(), this.minORFSize));
-}, recalculateCircular: function() {
-  var forwardSequence = this.sequenceManager.getSequence().seqString();
-  var backwardSequence = this.sequenceManager.getReverseComplementSequence().seqString();
-  var doubleForward = this.DNATools.createDNA(forwardSequence + forwardSequence);
-  var doubleBackward = this.DNATools.createDNA(backwardSequence + backwardSequence);
-  var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(doubleForward, doubleBackward, this.minORFSize);
-  var maxLength = forwardSequence.length;
-  var recalcOrfs = [];
-  var normalOrfs = [];
-  var orf = null;
-  Ext.each(orfsSequence, function(orf) {
-  if (orf.getStart() >= maxLength) 
-  {
-  } else if (orf.getEnd() <= maxLength) 
-  {
-    normalOrfs.push(orf);
-  } else if (orf.getEnd() > maxLength && orf.getStart() < maxLength) 
-  {
-    orf.setOneEnd(orf.getEnd() - maxLength);
-    var startCodons = orf.getStartCodons();
-    Ext.each(startCodons, function(startCodon) {
-  if (startCodon >= maxLength) 
-  {
-    startCodon -= maxLength;
-  }
-});
-    recalcOrfs.push(orf);
-  }
-});
-  var normalOrf = null;
-  var circularOrf = null;
-  Ext.each(normalOrfs, function(normalOrf) {
-  var skip = false;
-  Ext.each(recalcOrfs, function(circularOrf) {
-  if (circularOrf.getEnd() == normalOrf.getEnd() && circularOrf.getStrand() == normalOrf.getStrand()) 
-  {
-    skip = true;
-    return false;
-  }
-});
-  if (!skip) 
-  {
-    recalcOrfs.push(normalOrf);
-  }
-});
-  this.setOrfs(recalcOrfs);
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'ORFManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeGroupManager', Ext.Base, {singleton: true, config: {systemGroups: [], userGroups: [], activeGroup: null, rebaseEnzymesDatabase: Ext.create("Ext.util.HashMap"), isInitialized: false}, RestrictionEnzymeManager: null, constructor: function(inData) {
-  this.RestrictionEnzymeManager = Teselagen.bio.enzymes.RestrictionEnzymeManager;
-  this.initConfig(inData);
-}, initialize: function() {
-  if (this.isInitialized) 
-  {
-    throw Ext.create("Teselagen.bio.BioException", {message: "REBASE database already initialized!"});
-  }
-  var rebaseList = this.RestrictionEnzymeManager.getRebaseRestrictionEnzymes();
-  var newDatabase = this.getRebaseEnzymesDatabase();
-  Ext.each(rebaseList, function(enzyme) {
-  newDatabase.add(enzyme.getName().toLowerCase(), enzyme);
-});
-  this.setRebaseEnzymesDatabase(newDatabase);
-  this.setIsInitialized(true);
-  this.registerSystemGroups();
-  this.initializeDefaultActiveGroup();
-}, loadUserRestrictionEnzymes: function(user) {
-  this.setUserGroups([]);
-  var newUserGroups = [];
-  var newUserGroup, userEnzymes;
-  var newActiveGroup = [];
-  Ext.each(user.restrictionEnzymeGroups(), function(group) {
-  if (!group || !group.get("groupName") || group.get("enzymeNames").length === 0) 
-  {
-    return true;
-  }
-  newUserGroup = this.createGroupByEnzymes(group.get("groupName"), group.get("enzymeNames"));
-  newUserGroups.push(newUserGroup);
-}, this);
-  if (userEnzymes.get("activeEnzymeNames").length > 0) 
-  {
-    this.setActiveGroup([]);
-    var activeEnzymeNames = this.createGroupByEnzymes("active", userEnzymes.get("activeEnzymeNames"));
-    Ext.each(activeEnzymeNames, function(enzymeName) {
-  newActiveGroup.push(this.getRebaseEnzymesDatabase().get(enzymeName));
-}, this);
-  }
-  this.setUserGroups(newUserGroups);
-  this.setActiveGroup(newActiveGroup);
-}, removeGroup: function(enzymeGroup) {
-  var newUserGroups = this.getUserGroups();
-  var index = newUserGroups.indexOf(enzymeGroup);
-  if (index !== -1) 
-  {
-    newUserGroups.splice(index, 1);
-  }
-  this.setUserGroups(newUserGroups);
-}, groupByName: function(name) {
-  var resultGroup = null;
-  Ext.each(this.getSystemGroups(), function(systemGroup) {
-  if (systemGroup.getName() === name) 
-  {
-    resultGroup = systemGroup;
-  }
-});
-  Ext.each(this.getUserGroups(), function(userGroup) {
-  if (userGroup.getName() === name) 
-  {
-    resultGroup = userGroup;
-  }
-});
-  return resultGroup;
-}, getEnzymeByName: function(name) {
-  return this.getRebaseEnzymesDatabase().get(name.toLowerCase());
-}, createGroupByEnzymes: function(name, enzymeNames) {
-  if (!this.isInitialized) 
-  {
-    throw Ext.create("Teselagen.bio.BioException", {message: "REBASE database already initialized!"});
-  }
-  var enzymes = [];
-  Ext.each(enzymeNames, function(name) {
-  if (name) 
-  {
-    var enzyme = this.getRebaseEnzymesDatabase().get(name.toLowerCase());
-    if (enzyme) 
-    {
-      enzymes.push(enzyme);
-    }
-  }
-}, this);
-  return Ext.create("Teselagen.models.RestrictionEnzymeGroup", {name: name, enzymes: enzymes});
-}, getGroupNames: function() {
-  var names = [];
-  Ext.each(this.systemGroups.concat(this.userGroups), function(group) {
-  names.push(group.getName());
-});
-  return names;
-}, initializeDefaultActiveGroup: function() {
-  var defaultGroupEnzymes = this.getSystemGroups()[0];
-  this.setActiveGroup(defaultGroupEnzymes);
-}, registerSystemGroups: function() {
-  var newSystemGroups = this.getSystemGroups();
-  var commonGroup = this.createGroupByEnzymes("Common Enzymes", ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV", "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI", "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"]);
-  newSystemGroups.push(commonGroup);
-  var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {name: "All Enzymes", enzymes: this.getRebaseEnzymesDatabase().getValues()});
-  newSystemGroups.push(rebaseGroup);
-  var berkeleyBBGroup = this.createGroupByEnzymes("Berkeley BglBricks", ["EcoRI", "BglII", "BamHI", "XhoI"]);
-  newSystemGroups.push(berkeleyBBGroup);
-  var mitBBGroup = this.createGroupByEnzymes("MIT BglBricks", ["EcoRI", "XbaI", "SpeI", "PstI"]);
-  newSystemGroups.push(mitBBGroup);
-  var fermentasFastDigestBBGroup = this.createGroupByEnzymes("Fermentas Fast Digest", ["AatII", "Acc65I", "AccI", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AgeI", "AjuI", "AleI", "AluI", "Alw21I", "Alw26I", "AlwNI", "ApaI", "ApaLI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BamHI", "BanI", "BbsI", "BbvI", "BclI", "BfaI", "BglI", "BglII", "BlpI", "Bme1580I", "BmtI", "BplI", "BpmI", "Bpu10I", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BseGI", "BseNI", "BseXI", "Bsh1236I", "BsiEI", "BsiWI", "BslI", "BsmBI", "BsmFI", "Bsp119I", "Bsp120I", "Bsp1286I", "Bsp1407I", "BspCNI", "BspHI", "BspMI", "BsrBI", "BsrDI", "BsrFI", "BssHII", "BstXI", "BstZ17I", "Bsu36I", "ClaI", "Csp6I", "DdeI", "DpnI", "DraI", "DraIII", "DrdI", "EagI", "Eam1105I", "EarI", "Ecl136II", "Eco31I", "Eco91I", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "EheI", "Fnu4HI", "FokI", "FspAI", "FspI", "HaeII", "HaeIII", "HgaI", "HhaI", "HincII", "HindIII", "HinfI", "HinP1I", "HpaI", "HpaII", "Hpy8I", "HpyF10VI", "Kpn2I", "KpnI", "MauBI", "MboI", "MboII", "MfeI", "MluI", "MlyI", "MnlI", "MreI", "MscI", "MseI", "MslI", "MspI", "MssI", "Mva1269I", "MvaI", "NaeI", "NciI", "NcoI", "NdeI", "NheI", "NlaIII", "NlaIV", "NmuCI", "NotI", "NruI", "NsiI", "NspI", "PacI", "PdmI", "PflMI", "PfoI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspFI", "PstI", "PsuI", "PsyI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SalI", "SanDI", "SapI", "Sau3AI", "Sau96I", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SmaI", "SnaBI", "SpeI", "SphI", "SspI", "StuI", "StyI", "SwaI", "TaaI", "TaiI", "TaqI", "TatI", "TauI", "TfiI", "Tru1I", "Tsp509I", "TspRI", "XapI", "XbaI", "XhoI"]);
-  newSystemGroups.push(fermentasFastDigestBBGroup);
-  this.setSystemGroups(newSystemGroups);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RestrictionEnzymeGroupManager'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.SequenceController', Ext.app.Controller, {AAManager: null, ORFManager: null, RestrictionEnzymeManager: null, SequenceManager: null, RestrictionEnzymeGroupManager: null, Managers: null, CaretEvent: null, MapperEvent: null, MenuItemEvent: null, SelectionEvent: null, SelectionLayerEvent: null, SequenceManagerEvent: null, VisibilityEvent: null, WireframeSelectionLayer: null, SelectionLayer: null, DNAAlphabet: null, DNATools: null, mouseIsDown: false, startSelectionIndex: 0, selectionDirection: 0, caretIndex: 0, safeEditing: true, clickedAnnotationStart: null, clickedAnnotationEnd: null, listeners: {}, init: function() {
-  this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
-  this.DNATools = Teselagen.bio.sequence.DNATools;
-  this.CaretEvent = Teselagen.event.CaretEvent;
-  this.MapperEvent = Teselagen.event.MapperEvent;
-  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-  this.SelectionEvent = Teselagen.event.SelectionEvent;
-  this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
-  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
-  this.VisibilityEvent = Teselagen.event.VisibilityEvent;
-  var listenersObject = {SequenceManagerChanged: this.onSequenceManagerChanged, ActiveEnzymesChanged: this.onActiveEnzymesChanged, VectorPanelAnnotationClicked: this.onVectorPanelAnnotationClicked, AnnotatePanelAnnotationClicked: this.onAnnotatePanelAnnotationClicked, ViewModeChanged: this.onViewModeChanged, scope: this};
-  listenersObject[this.VisibilityEvent.SHOW_FEATURES_CHANGED] = this.onShowFeaturesChanged;
-  listenersObject[this.VisibilityEvent.SHOW_CUTSITES_CHANGED] = this.onShowCutSitesChanged;
-  listenersObject[this.VisibilityEvent.SHOW_ORFS_CHANGED] = this.onShowOrfsChanged;
-  listenersObject[this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED] = this.onShowFeatureLabelsChanged;
-  listenersObject[this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED] = this.onShowCutSiteLabelsChanged;
-  listenersObject[this.MapperEvent.AA_MAPPER_UPDATED] = this.onAAManagerUpdated;
-  listenersObject[this.MapperEvent.ORF_MAPPER_UPDATED] = this.onORFManagerUpdated;
-  listenersObject[this.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED] = this.onRestrictionEnzymeManagerUpdated;
-  listenersObject[this.SelectionEvent.SELECTION_CHANGED] = this.onSelectionChanged;
-  listenersObject[this.SelectionEvent.SELECTION_CANCELED] = this.onSelectionCanceled;
-  listenersObject[this.CaretEvent.CARET_POSITION_CHANGED] = this.onCaretPositionChanged;
-  listenersObject[this.MenuItemEvent.SELECT_ALL] = this.onSelectAll;
-  listenersObject[this.MenuItemEvent.SELECT_INVERSE] = this.onSelectInverse;
-  listenersObject[this.MenuItemEvent.SAFE_EDITING_CHANGED] = this.onSafeEditingChanged;
-  listenersObject[this.MenuItemEvent.REVERSE_COMPLEMENT] = this.onReverseComplementSequence;
-  listenersObject[this.MenuItemEvent.REBASE_SEQUENCE] = this.onRebaseSequence;
-  listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGING] = this.onSequenceChanging;
-  listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGED] = this.onSequenceChanged;
-  this.application.on(listenersObject, this);
-}, onLaunch: function() {
-  this.RestrictionEnzymeGroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-  if (!this.RestrictionEnzymeGroupManager.isInitialized) 
-  {
-    this.RestrictionEnzymeGroupManager.initialize();
-  }
-  this.AAManager = Ext.create("Teselagen.manager.AAManager", {sequenceManager: this.SequenceManager});
-  this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {sequenceManager: this.SequenceManager});
-  this.RestrictionEnzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {sequenceManager: this.SequenceManager, restrictionEnzymeGroup: this.RestrictionEnzymeGroupManager.getActiveGroup()});
-  this.Managers = [this.AAManager, this.RestrictionEnzymeManager, this.ORFManager];
-}, onKeydown: function(event) {
-  var character = String.fromCharCode(event.getCharCode()).toLowerCase();
-  if (event.ctrlKey && event.getKey() === event.LEFT) 
-  {
-    if (this.caretIndex % 10 === 0) 
-    {
-      this.changeCaretPosition(this.caretIndex - 10);
-    } else {
-      this.changeCaretPosition(Math.round(this.caretIndex / 10) * 10);
-    }
-  } else if (event.ctrlKey && event.getKey() === event.RIGHT) 
-  {
-    if (this.caretIndex % 10 === 0) 
-    {
-      this.changeCaretPosition(this.caretIndex + 10);
-    } else {
-      this.changeCaretPosition(Math.round(this.caretIndex / 10 + 1) * 10);
-    }
-  } else if (event.ctrlKey && event.getKey() === event.HOME) 
-  {
-    this.changeCaretPosition(0);
-  } else if (event.ctrlKey && event.getKey() === event.END) 
-  {
-    this.changeCaretPosition(this.SequenceManager.getSequence().toString().length - 1);
-  } else if (event.ctrlKey && event.getKey() === event.X) 
-  {
-    this.cutSelection();
-  } else if (event.ctrlKey && event.getKey() === event.C) 
-  {
-    this.copySelection();
-  } else if (event.ctrlKey && event.getKey() === event.V) 
-  {
-    this.pasteFromClipboard();
-  } else if (event.ctrlKey && event.getKey() === event.Z) 
-  {
-    this.application.fireEvent(this.MenuItemEvent.UNDO);
-  } else if (event.ctrlKey && event.getKey() === event.U) 
-  {
-    this.application.fireEvent(this.MenuItemEvent.REDO);
-  } else if (event.ctrlKey && event.getKey() === event.A) 
-  {
-    this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
-  } else if (event.ctrlKey && event.getKey() === event.I) 
-  {
-    this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
-  } else if (event.getKey() === event.LEFT) 
-  {
-    this.changeCaretPosition(this.caretIndex - 1);
-  } else if (event.getKey() === event.RIGHT) 
-  {
-    this.changeCaretPosition(this.caretIndex + 1);
-  } else if (!event.ctrlKey && !event.altKey) 
-  {
-    if (this.DNAAlphabet.symbolByValue(character)) 
-    {
-      if (this.SelectionLayer.selected) 
-      {
-        if (this.safeEditing) 
-        {
-          this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
-          this.SequenceManager.insertSequence(this.DNATools.createDNA(character), this.caretIndex);
-        } else {
-          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
-          this.SequenceManager.insertSequence(this.DNATools.createDNA(character), this.caretIndex);
-          this.changeCaretPosition(this.caretIndex + 1);
-        }
-      } else {
-        if (this.safeEditing) 
-        {
-          this.safeInsert(character, this.caretIndex);
-        } else {
-          this.SequenceManager.insertSequence(this.DNATools.createDNA(character), this.caretIndex);
-          this.changeCaretPosition(this.caretIndex + 1);
-        }
-      }
-    } else if (event.getKey() === event.DELETE) 
-    {
-      if (this.SelectionLayer.selected) 
-      {
-        if (this.safeEditing) 
-        {
-          this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
-        } else {
-          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
-        }
-      } else {
-        if (this.safeEditing) 
-        {
-          this.safeDelete(this.caretIndex, this.caretIndex + 1);
-        } else {
-          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
-        }
-      }
-    } else if (event.getKey() === event.BACKSPACE && this.caretIndex > 0) 
-    {
-      if (this.SelectionLayer.selected) 
-      {
-        if (this.safeEditing) 
-        {
-          this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
-        } else {
-          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
-        }
-      } else {
-        if (this.safeEditing) 
-        {
-          this.safeDelete(this.caretIndex - 1, this.caretIndex);
-        } else {
-          this.deleteSequence(this.caretIndex - 1, this.caretIndex);
-        }
-      }
-    }
-  }
-}, safeEditPrompt: function(features, callback) {
-  var self = this;
-  var promptWindow = Ext.create("Vede.view.ve.SafeEditWindow").show();
-  var grid = promptWindow.down("gridpanel");
-  promptWindow.callback = callback;
-  grid.reconfigure(features);
-  grid.columns[grid.columns.length - 1].setText("Remove");
-  grid.columns[0].setWidth(139);
-  grid.columns[grid.columns.length - 1].setWidth(50);
-  promptWindow.on('close', function() {
-  Ext.getCmp("AnnotateContainer").el.focus();
-}, this);
-  promptWindow.down("displayfield").on("click", function() {
-  this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, false);
-  promptWindow.close();
-}, this);
-}, safeInsert: function(sequence, index, insertSequenceManager) {
-  var self = this;
-  var affectedFeatures = this.SequenceManager.featuresAt(index);
-  var sequenceLength;
-  if (affectedFeatures.length > 0) 
-  {
-    this.safeEditPrompt(affectedFeatures, function() {
-  if (insertSequenceManager) 
-  {
-    self.SequenceManager.insertSequenceManager(sequence, index);
-    sequenceLength = sequence.getSequence().toString().length;
-  } else {
-    self.SequenceManager.insertSequence(self.DNATools.createDNA(sequence), index);
-    sequenceLength = sequence.length;
-  }
-  var selected = this.down('gridpanel').selModel.getSelection();
-  var featureModel;
-  for (var i = 0; i < selected.length; i++) 
-    {
-      featureModel = selected[i];
-      self.SequenceManager.removeFeature(featureModel.data.field1);
-    }
-  self.changeCaretPosition(index + sequenceLength);
-});
-  } else {
-    if (insertSequenceManager) 
-    {
-      this.SequenceManager.insertSequenceManager(sequence, index);
-      sequenceLength = sequence.getSequence().toString().length;
-    } else {
-      this.SequenceManager.insertSequence(this.DNATools.createDNA(sequence), index);
-      sequenceLength = sequence.length;
-    }
-    self.changeCaretPosition(index + sequenceLength);
-  }
-}, safeDelete: function(start, end) {
-  var self = this;
-  var affectedFeatures = this.SequenceManager.featuresByRange(start, end);
-  if (affectedFeatures.length > 0) 
-  {
-    this.safeEditPrompt(affectedFeatures, function() {
-  self.deleteSequence(start, end);
-  var selected = this.down('gridpanel').selModel.getSelection();
-  var featureModel;
-  for (var i = 0; i < selected.length; i++) 
-    {
-      featureModel = selected[i];
-      self.SequenceManager.removeFeature(featureModel.data.field1);
-    }
-});
-  } else {
-    this.deleteSequence(start, end);
-  }
-}, cutSelection: function() {
-  if (this.SelectionLayer.selected) 
-  {
-    this.application.ClipBoardData = this.SequenceManager.subSequenceManager(this.SelectionLayer.start, this.SelectionLayer.end);
-    this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
-  }
-}, copySelection: function() {
-  if (this.SelectionLayer.selected) 
-  {
-    this.application.ClipBoardData = this.SequenceManager.subSequenceManager(this.SelectionLayer.start, this.SelectionLayer.end);
-  }
-}, pasteFromClipboard: function() {
-  if (this.application.ClipBoardData) 
-  {
-    var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
-    confirmationWindow.down("button[cls='pasteConfirmationOkButton']").on("click", function() {
-  var pasteSequenceManager;
-  if (this.SelectionLayer.selected) 
-  {
-    this.changeCaretPosition(this.SelectionLayer.start);
-    this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
-  }
-  pasteSequenceManager = this.application.ClipBoardData.clone();
-  if (confirmationWindow.down("radiogroup").getValue().pasteFormatField === "reverse") 
-  {
-    pasteSequenceManager.doReverseComplementSequence();
-  }
-  confirmationWindow.close();
-  this.safeInsert(pasteSequenceManager, this.caretIndex, true);
-}, this);
-    confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {
-  confirmationWindow.close();
-});
-  }
-}, deleteSequence: function(start, end) {
-  this.SequenceManager.removeSequence(start, end);
-  this.changeCaretPosition(start);
-  if (this.SelectionLayer.selected) 
-  {
-    this.SelectionLayer.deselect();
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-  }
-}, onActiveEnzymesChanged: function() {
-  this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(this.RestrictionEnzymeGroupManager.getActiveGroup());
-}, onSequenceManagerChanged: function(pSeqMan) {
-  this.SequenceManager = pSeqMan;
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  if (this.SelectionLayer && this.SelectionLayer.selected) 
-  {
-    this.SelectionLayer.deselect();
-  }
-  var manager;
-  for (var i = 0; i < this.Managers.length; i++) 
-    {
-      manager = this.Managers[i];
-      manager.setSequenceManager(pSeqMan);
-    }
-}, onSelectAll: function() {
-  if (this.SequenceManager) 
-  {
-    this.select(0, this.SequenceManager.getSequence().toString().length);
-  }
-}, onSelectInverse: function() {
-  if (this.SequenceManager && this.SelectionLayer) 
-  {
-    this.select(this.SelectionLayer.end, this.SelectionLayer.start);
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-  }
-}, onSafeEditingChanged: function(enabled) {
-  this.safeEditing = enabled;
-}, onRebaseSequence: function() {
-  var selectionEnd;
-  if (this.SequenceManager) 
-  {
-    this.SequenceManager.rebaseSequence(this.caretIndex);
-    this.changeCaretPosition(0);
-    if (this.SelectionLayer.start > this.SelectionLayer.end) 
-    {
-      selectionEnd = this.SequenceManager.getSequence().toString().length - this.SelectionLayer.start + this.SelectionLayer.end;
-    } else {
-      selectionEnd = this.SelectionLayer.end - this.SelectionLayer.start;
-    }
-    this.SelectionLayer.deselect();
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-    this.select(0, selectionEnd);
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, 0, selectionEnd);
-  }
-  return false;
-}, onReverseComplementSequence: function(e) {
-  if (this.SequenceManager) 
-  {
-    this.SequenceManager.doReverseComplementSequence();
-    var seqLen = this.SequenceManager.getSequence().toString().length;
-    var newSelectionEnd = seqLen - this.SelectionLayer.start;
-    var newSelectionStart = seqLen - this.SelectionLayer.end;
-    var oldCaretPosition = this.caretIndex;
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, null, newSelectionStart, newSelectionEnd);
-    this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED, null, seqLen - oldCaretPosition);
-  }
-  return false;
-}, onSequenceChanged: function(kind, obj) {
-  if (!this.SequenceManager) 
-  {
-    return;
-  }
-  var manager;
-  for (var i = 0; i < this.Managers.length; i++) 
-    {
-      manager = this.Managers[i];
-      if (manager.sequenceChanged) 
-      {
-        manager.sequenceChanged();
-      }
-    }
-  switch (kind) {
-    case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_REMOVE:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_FEATURES_ADD:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_FEATURES_REMOVE:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_SEQUENCE_INSERT:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KING_SEQUENCE_REMOVE:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_MANUAL_UPDATE:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO:
-      break;
-    case Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED:
-      break;
-  }
-  ;
-}, onSequenceChanging: function(kind, obj) {
-}, onAAManagerUpdated: function() {
-}, onORFManagerUpdated: function() {
-}, onRestrictionEnzymeManagerUpdated: function() {
-}, onSelectionChanged: function(scope, start, end) {
-}, onSelectionCanceled: function() {
-  if (this.SelectionLayer && this.SelectionLayer.selected) 
-  {
-    this.SelectionLayer.deselect();
-  }
-}, onCaretPositionChanged: function(scope, index) {
-  if (scope !== this && this.SelectionLayer && !this.SelectionLayer.selecting) 
-  {
-    this.changeCaretPosition(index, true, true);
-  }
-}, onVectorPanelAnnotationClicked: function(start, end) {
-}, onAnnotatePanelAnnotationClicked: function(start, end) {
-}, onShowCutSitesChanged: function(show) {
-}, onShowFeaturesChanged: function(show) {
-}, onShowOrfsChanged: function(show) {
-}, onShowFeatureLabelsChanged: function(show) {
-}, onShowCutSiteLabelsChanged: function(show) {
-}, onViewModeChanged: function(viewMode) {
-}, changeCaretPosition: function(index, silent) {
-  this.caretIndex = index;
-  if (!silent && this.SequenceManager) 
-  {
-    this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED, this, index);
-  }
-}, select: function() {
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'SequenceController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.sequence.Row', Ext.Base, {config: {rowData: null, metrics: {"x": 0, "y": 0, "width": 0, "height": 0}, sequenceMetrics: {"x": 0, "y": 0, "width": 0, "height": 0}, index: null}, constructor: function(inData) {
-  this.initConfig(inData);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.sequence, 'Row'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.sequence.RowData', Ext.Base, {config: {start: null, end: null, sequence: null, oppositeSequence: null, featuresAlignment: null, cutSitesAlignment: null, orfAlignment: null}, constructor: function(inData) {
-  this.initConfig(inData);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.sequence, 'RowData'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.RowManager', Ext.Base, {config: {sequenceAnnotator: null, rows: [], featureToRowMap: null, cutSiteToRowMap: null, orfToRowMap: null, showORFs: false, numRows: 10}, constructor: function(inData) {
-  this.initConfig(inData);
-  this.sequenceAnnotator = inData.sequenceAnnotator;
-}, update: function() {
-  this.rows = [];
-  if (this.sequenceAnnotator.getSequenceManager()) 
-  {
-    var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
-    this.numRows = Number(Math.ceil(((seqString.length + 1) / this.sequenceAnnotator.getBpPerRow())));
-    var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
-    for (var i = 0; i < this.numRows; i++) 
-      {
-        var start = i * this.sequenceAnnotator.getBpPerRow();
-        var end = (i + 1) * this.sequenceAnnotator.getBpPerRow() - 1;
-        var sequence = seqString.substring(start, end + 1);
-        var oppositeSequence = complementSeqString.substring(start, end + 1);
-        var rowData = Ext.create("Teselagen.models.sequence.RowData", {start: start, end: end, sequence: sequence, oppositeSequence: oppositeSequence});
-        var row = Ext.create("Teselagen.models.sequence.Row", {index: i, rowData: rowData});
-        this.rows.push(row);
-      }
-    this.reloadFeatures();
-    this.reloadORFs();
-    this.reloadCutSites();
-  }
-}, reloadFeatures: function() {
-  if (!this.sequenceAnnotator.getSequenceManager().getFeatures()) 
-  {
-    return;
-  }
-  var features = this.sequenceAnnotator.getSequenceManager().getFeatures();
-  var rowsFeatures = this.rowAnnotations(features);
-  this.featureToRowMap = Ext.create("Ext.util.HashMap");
-  var start;
-  var end;
-  var row;
-  var feature;
-  var featuresAlignment;
-  for (var i = 0; i < rowsFeatures.length; i++) 
-    {
-      row = rowsFeatures[i];
-      start = i * this.sequenceAnnotator.getBpPerRow();
-      end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
-      featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
-      this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
-      if (!row) 
-      {
-        return true;
-      }
-      for (var j = 0; j < row.length; j++) 
-        {
-          feature = row[j];
-          if (!this.featureToRowMap.get(feature.getName())) 
-          {
-            this.featureToRowMap.add(feature.getName(), []);
-          }
-          this.featureToRowMap.get(feature.getName()).push(i);
-        }
-    }
-}, reloadCutSites: function() {
-  if (!this.sequenceAnnotator.showCutSites || !this.sequenceAnnotator.restrictionEnzymeManager || !this.sequenceAnnotator.restrictionEnzymeManager.getCutSites()) 
-  {
-    return;
-  }
-  var cutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
-  var rowsCutSites = this.rowAnnotations(cutSites);
-  this.cutSiteToRowMap = Ext.create("Ext.util.HashMap");
-  var start;
-  var end;
-  var cutSitesAlignment;
-  Ext.each(rowsCutSites, function(row, i) {
-  start = i * this.sequenceAnnotator.getBpPerRow();
-  end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
-  cutSitesAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
-  this.rows[i].getRowData().setCutSitesAlignment(cutSitesAlignment.clone());
-  if (!row) 
-  {
-    return true;
-  }
-  Ext.each(row, function(site) {
-  if (!this.cutSiteToRowMap.get(site)) 
-  {
-    this.cutSiteToRowMap.add(site, []);
-  }
-  this.cutSiteToRowMap.get(site).push(i);
-}, this);
-}, this);
-}, reloadORFs: function() {
-  if (!this.sequenceAnnotator.showOrfs || !this.sequenceAnnotator.orfManager || !this.sequenceAnnotator.orfManager.getOrfs()) 
-  {
-    return;
-  }
-  this.orfToRowMap = Ext.create("Ext.util.HashMap");
-  var orfs = this.sequenceAnnotator.orfManager.getOrfs();
-  var rowsOrfs = this.rowAnnotations(orfs);
-  var start;
-  var end;
-  var orfAlignment;
-  Ext.each(rowsOrfs, function(row, i) {
-  start = i * this.sequenceAnnotator.getBpPerRow();
-  end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
-  orfAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
-  this.rows[i].getRowData().setOrfAlignment(orfAlignment.clone());
-  if (!row) 
-  {
-    return true;
-  }
-  Ext.each(row, function(orf) {
-  if (!this.orfToRowMap.get(orf.toString())) 
-  {
-    this.orfToRowMap.add(orf, []);
-  }
-  this.orfToRowMap.get(orf.toString()).push(i);
-}, this);
-}, this);
-}, rowAnnotations: function(pAnnotations) {
-  var rows = [];
-  var numRows = Math.ceil((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length / this.sequenceAnnotator.getBpPerRow()));
-  if (pAnnotations != null) 
-  {
-    for (var j = 0; j < numRows; j++) 
-      {
-        rows.push([]);
-      }
-    var numberOfItems = pAnnotations.length;
-    for (var i = 0; i < numberOfItems; ++i) 
-      {
-        var annotation = pAnnotations[i];
-        var itemStart = annotation.getStart();
-        var itemEnd = annotation.getEnd();
-        if (annotation instanceof Teselagen.bio.enzymes.RestrictionCutSite) 
-        {
-          itemEnd -= 1;
-        }
-        this.pushInRow(itemStart, itemEnd, annotation, rows);
-      }
-  }
-  return rows;
-}, pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows) {
-  var bpPerRow = this.sequenceAnnotator.getBpPerRow();
-  if (pItemStart > pItemEnd) 
-  {
-    var rowStartIndex = Math.floor(pItemStart / bpPerRow);
-    var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1) / bpPerRow);
-    var rowStartIndex2 = 0;
-    var rowEndIndex = Math.round(pItemEnd / this.sequenceAnnotator.getBpPerRow());
-    var rowEndIndex2 = Math.floor(pItemEnd / bpPerRow);
-    for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++) 
-      {
-        pRows[z1].push(pAnnotation);
-      }
-    for (var z2 = rowStartIndex2; z2 < rowEndIndex2 + 1; z2++) 
-      {
-        pRows[z2].push(pAnnotation);
-      }
-  } else {
-    var rowStartIndex = Math.floor(pItemStart / bpPerRow);
-    var rowEndIndex = Math.floor(pItemEnd / bpPerRow);
-    for (var z = rowStartIndex; z < rowEndIndex + 1; z++) 
-      {
-        pRows[z].push(pAnnotation);
-      }
-  }
-  return pRows;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RowManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.LineRenderer', Ext.Base, {config: {sequenceMananger: null, svgCanvas: null, panel: null, horizontalLines: null, featureHeight: 10, numFeatures: 2}, constructor: function(inData) {
-  this.initConfig(inData);
-  this.callParent(inData);
-  this.horizontalLines = [];
-}, recalculateLines: function() {
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'LineRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.Rectangle', Ext.Base, {config: {x: 0, y: 0, width: 0, height: 0}, constructor: function(inData) {
-  this.initConfig(inData);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'Rectangle'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.CutSiteRenderer', Ext.Base, {statics: {CURVY_LINE_COLOR: "#FF0000", CURVY_LINE_HEIGHT: 5, CUT_SITE_COLOR: "#625D5D", ONE_CUT_COLOR: "#E57676", MULTIPLE_CUT_COLOR: "#888888", CUTSITE_HEIGHT_OFFSET: 25}, config: {sequenceAnnotator: null, cutSite: []}, sequenceAnnotationManager: null, cutSiteSVG: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
-}, render: function() {
-  this.cutSiteSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "cutSiteSVG");
-  this.cutSiteSVG.append("svg:pattern").attr("id", "curvyLine").attr("width", 5).attr("height", 5).attr("patternUnits", "userSpaceOnUse").append("svg:path").attr("d", "M 0 0 L 2.5 5 L 5 0").attr("stroke", this.self.CURVY_LINE_COLOR).attr("fill", "none");
-  var cutSite = this.cutSite;
-  var cutSiteHeight = this.self.CUTSITE_HEIGHT_OFFSET;
-  var cutSiteRows = this.sequenceAnnotationManager.RowManager.getCutSiteToRowMap().get(cutSite);
-  if (!cutSiteRows) 
-  {
-    return;
-  }
-  var seqLen = this.sequenceAnnotationManager.sequenceManager.getSequence().toString().length;
-  var rowIndex;
-  var startBP;
-  var endBP;
-  var dsForwardPosition;
-  var dsReversePosition;
-  var cutSiteX;
-  var cutSiteY;
-  var currentWidth;
-  var currentHeight;
-  var addToEnd;
-  Ext.each(cutSiteRows, function(rowNumber) {
-  var row = this.sequenceAnnotationManager.RowManager.getRows()[rowNumber];
-  alignmentRowIndex = row.rowData.cutSitesAlignment.get(cutSite);
-  startBP = 0;
-  endBP = 0;
-  addToEnd = false;
-  if (cutSite.getStart() < cutSite.getEnd()) 
-  {
-    if (cutSite.getStart() < row.rowData.getStart() && cutSite.getEnd() <= row.rowData.getStart()) 
-    {
-      return true;
-    } else if (cutSite.getStart() > row.rowData.getEnd() && cutSite.getEnd() > row.rowData.getEnd()) 
-    {
-      return true;
-    } else {
-      if (cutSite.getStart() < row.rowData.getStart()) 
-      {
-        startBP = row.rowData.getStart();
-      } else {
-        startBP = cutSite.getStart();
-      }
-      if (cutSite.getEnd() - 1 < row.rowData.getEnd()) 
-      {
-        endBP = cutSite.getEnd();
-      } else {
-        endBP = row.rowData.getEnd();
-        addToEnd = true;
-      }
-    }
-  } else {
-    if (cutSite.getEnd() >= row.rowData.getStart() && cutSite.getEnd() <= row.rowData.getEnd()) 
-    {
-      endBP = cutSite.getEnd();
-    } else if (row.rowData.getEnd() >= seqLen) 
-    {
-      endBP = seqLen;
-    } else {
-      endBP = row.rowData.getEnd();
-    }
-    if (cutSite.getStart() >= row.rowData.getStart() && cutSite.getStart() <= row.rowData.getEnd()) 
-    {
-      startBP = cutSite.getStart();
-    } else {
-      startBP = row.rowData.getStart();
-    }
-  }
-  if (cutSite.getStrand() == 1) 
-  {
-    dsForwardPosition = cutSite.getStart() + cutSite.getRestrictionEnzyme().getDsForward();
-    dsReversePosition = cutSite.getStart() + cutSite.getRestrictionEnzyme().getDsReverse();
-  } else {
-    dsForwardPosition = cutSite.getEnd() - cutSite.getRestrictionEnzyme().getDsForward();
-    dsReversePosition = cutSite.getEnd() - cutSite.getRestrictionEnzyme().getDsReverse();
-  }
-  if (dsForwardPosition >= seqLen) 
-  {
-    dsForwardPosition -= seqLen;
-  }
-  if (dsReversePosition >= seqLen) 
-  {
-    dsReversePosition -= seqLen;
-  }
-  if (dsForwardPosition < 0) 
-  {
-    dsForwardPosition += seqLen;
-  }
-  if (dsReversePosition < 0) 
-  {
-    dsReversePosition -= seqLen;
-  }
-  if (dsForwardPosition <= row.rowData.getStart() || dsForwardPosition >= row.rowData.getEnd()) 
-  {
-    dsForwardPosition = -1;
-  }
-  if (dsReversePosition <= row.rowData.getStart() || dsReversePosition >= row.rowData.getEnd()) 
-  {
-    dsReversePosition = -1;
-  }
-  cutSiteX = this.sequenceAnnotator.bpMetricsByIndex(startBP).x;
-  cutSiteY = row.metrics.y + alignmentRowIndex * cutSiteHeight;
-  currentWidth = this.sequenceAnnotator.bpMetricsByIndex(endBP).x - cutSiteX - 4;
-  if (addToEnd) 
-  {
-    currentWidth += this.sequenceAnnotator.self.CHAR_WIDTH;
-  }
-  currentHeight = cutSiteHeight;
-  var oneCut = cutSite.getNumCuts() == 1;
-  this.drawName(cutSiteX, cutSiteY + cutSiteHeight, cutSite.getRestrictionEnzyme().getName(), oneCut);
-  if (startBP <= endBP) 
-  {
-    this.drawCurvyLine(cutSiteX, cutSiteY + cutSiteHeight, currentWidth - 2);
-  } else if (endBP >= row.rowData.getStart()) 
-  {
-    this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2);
-    var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
-    var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotator.sequenceManager.sequence.length - 1));
-    var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-    var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.rowData.end, this.sequenceAnnotator.sequenceManager.sequence.length - 1));
-    var cutSiteX1 = bpStartMetrics1.x;
-    var cutSiteY1 = row.metrics.y + alignmentRowIndex * cutSiteHeight;
-    var cutSiteX2 = bpStartMetrics2.x;
-    var cutSiteY2 = cutSiteY1;
-    var currentWidth1 = bpEndMetrics1.x - bpStartMetrics1.x + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
-    var currentWidth2 = bpEndMetrics2.x - bpStartMetrics2.x + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
-    this.drawCurvyLine(cutSiteX1 + 2, cutSiteY1, currentWidth1 - 2);
-    this.drawCurvyLine(cutSiteX2 + 2, cutSiteY2, currentWidth2 - 2);
-  }
-  if (dsForwardPosition != -1) 
-  {
-    var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
-    var ds1X = dsForwardMetrics.x - 5;
-    var ds1Y = cutSiteY + cutSiteHeight;
-    this.drawDsForwardPosition(ds1X, ds1Y);
-  }
-  if (dsReversePosition != -1) 
-  {
-    var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
-    var ds2X = dsReverseMetrics.x;
-    var ds2Y = cutSiteY + cutSiteHeight + 3;
-    this.drawDsReversePosition(ds2X, ds2Y);
-  }
-  this.addToolTip(cutSite);
-  this.addClickListener(cutSite);
-}, this);
-}, drawName: function(x, y, name, oneCut) {
-  var color;
-  if (oneCut) 
-  {
-    color = this.self.ONE_CUT_COLOR;
-  } else {
-    color = this.self.MULTIPLE_CUT_COLOR;
-  }
-  this.cutSiteSVG.append("svg:text").attr("x", x).attr("y", y - 4).style("fill", color).text(name);
-}, drawCurvyLine: function(x, y, width) {
-  this.cutSiteSVG.append("svg:rect").attr("x", x).attr("y", y).attr("width", width).attr("height", this.self.CURVY_LINE_HEIGHT).attr("fill", "url(#curvyLine)");
-}, drawDsForwardPosition: function(x, y) {
-  this.cutSiteSVG.append("svg:path").attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y - 4) + "L" + (x + 3) + " " + (y - 4)).attr("fill", this.self.CUT_SITE_COLOR);
-}, drawDsReversePosition: function(x, y) {
-  this.cutSiteSVG.append("svg:path").attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y + 4) + "L" + (x + 3) + " " + (y + 4)).attr("fill", this.self.CUT_SITE_COLOR);
-}, addToolTip: function(cutSite) {
-  var complement = ", complement";
-  if (cutSite.getStrand() == 1) 
-  {
-    complement = "";
-  }
-  var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) + complement + ", cuts " + cutSite.getNumCuts() + " times";
-  this.cutSiteSVG.append("svg:title").text(toolTip);
-}, addClickListener: function(cutSite) {
-  this.cutSiteSVG.on("mousedown", function() {
-  Vede.application.fireEvent("AnnotatePanelAnnotationClicked", cutSite.getStart(), cutSite.getEnd());
-});
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'CutSiteRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.FeatureRenderer', Ext.Base, {config: {feature: null, sequenceAnnotationManager: null, sequenceAnnotator: null, topBarY: 20, featureGroupSVG: null, featureColor: null}, statics: {DEFAULT_FEATURE_HEIGHT: 8, DEFAULT_FEATURES_SEQUENCE_GAP: 6, DEFAULT_FEATURES_GAP: 2}, constructor: function(inData) {
-  this.initConfig(inData);
-  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
-  this.sequenceAnnotator = this.sequenceAnnotator;
-}, update: function() {
-}, render: function() {
-  this.featureGroupSVG = this.sequenceAnnotator.featuresSVG.append("svg:g").attr("id", "feature-" + this.feature.getName());
-  this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
-  var g = this.featureGroupSVG;
-  var feature = this.feature;
-  var featureStart = this.feature.getStart();
-  var featureEnd = this.feature.getEnd();
-  g.attr("fill", this.featureColor);
-  var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
-  if (!featureRows) 
-  {
-    return;
-  }
-  for (var i = 0; i < featureRows.length; i++) 
-    {
-      var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
-      var alignmentRowIndex = row.rowData.getFeaturesAlignment().get(feature);
-      var fromSameFeatureIndex = 0;
-      var featuresAlignment = row.getRowData().getFeaturesAlignment();
-      var startBP;
-      var endBP;
-      var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
-      if (this.sequenceAnnotationManager.showComplementarySequence) 
-      {
-        downShift += 4 + this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
-      }
-      if (featureStart > featureEnd) 
-      {
-        if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
-        {
-          endBP = featureEnd - 1;
-        } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length) 
-        {
-        } else {
-          endBP = row.getRowData().getEnd();
-        }
-        if (featureStart >= row.getRowData().getStart() && featureStart < row.getRowData().getEnd()) 
-        {
-          startBP = featureStart;
-        } else {
-          startBP = row.getRowData().getStart();
-        }
-      } else {
-        if (featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()) 
-        {
-          continue;
-        } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()) 
-        {
-          continue;
-        } else {
-          startBP = (featureStart < row.getRowData().getStart()) ? row.getRowData().getStart() : featureStart;
-          endBP = ((featureEnd - 1) < row.getRowData().getEnd()) ? (featureEnd - 1) : row.getRowData().getEnd();
-        }
-      }
-      if (startBP < 0 || endBP < 0) 
-      {
-        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + featureStart + ", ending at " + featureEnd + ", ignoring.");
-        return;
-      }
-      if (startBP > endBP && this.feature.getType() != "misc_feature") 
-      {
-        var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
-        var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-        var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-        var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-        var featureX1 = bpStartMetrics1.x + 2;
-        var featureX2 = bpStartMetrics2.x + 2;
-        var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
-        if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
-        {
-          featureYCommon += 3 * 20;
-        }
-        var featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
-        var featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
-        var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
-        if (this.feature.getStrand() === 0) 
-        {
-          drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-          drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
-        } else if (this.feature.getStrand() === 1) 
-        {
-          drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-          drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-        } else if (this.feature.getStrand() === -1) 
-        {
-          drawFeatureBackwardRect(g, (featureX1 - 8), featureYCommon, featureRowWidth1, featureRowHeightCommon);
-          drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-        }
-      } else {
-        var bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-        var bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-        var featureX = bpStartMetrics.x + 2;
-        var featureY = bpStartMetrics.y + downShift;
-        if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
-        {
-          featureY += (3 * 20);
-        }
-        var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 3;
-        var featureRowHeight = 6;
-        if (this.feature.getStrand() == 0) 
-        {
-          drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
-        } else if (this.feature.getStrand() == 1) 
-        {
-          if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
-          {
-            drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
-          } else {
-            drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
-          }
-        } else if (this.feature.getStrand() == -1) 
-        {
-          if (featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()) 
-          {
-            drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
-          } else {
-            drawFeatureBackwardRect(g, (featureX - 8), featureY, featureRowWidth, featureRowHeight);
-          }
-        }
-      }
-      for (var j = 0; j < this.feature.getLocations().length; j++) 
-        {
-          var location = this.feature.getLocations()[j];
-          if (location.getStart() > location.getEnd()) 
-          {
-            if (location.getStart() > row.getRowData().getEnd() && location.getEnd() <= row.getRowData().getStart()) 
-            {
-              continue;
-            }
-            if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() <= row.getRowData().getEnd()) 
-            {
-              endBp = location.getEnd() - 1;
-            } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length) 
-            {
-              endBP = this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1;
-            } else {
-              endBP = row.getRowData().getEnd();
-            }
-            if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()) 
-            {
-              startBP = location.getStart();
-            } else {
-              startBP = row.getRowData().getStart();
-            }
-          } else {
-            if (location.getStart() < row.getRowData().getStart() && location.getEnd() <= row.getRowData().getStart()) 
-            {
-              continue;
-            } else if (location.getStart() > row.getRowData().getEnd() && location.getEnd() > row.getRowData().getEnd()) 
-            {
-              continue;
-            } else {
-              startBP = (location.getStart() < row.getRowData().getStart()) ? row.getRowData().getStart() : location.getStart();
-              endBP = (location.getEnd() - 1 < row.getRowData().getEnd()) ? location.getEnd() - 1 : row.getRowData().getEnd();
-            }
-          }
-          if (startBP > endBP && this.feature.getType() != "misc_feature") 
-          {
-            bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
-            bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-            bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-            bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-            featureX1 = bpStartMetrics1.x + 2;
-            featureX2 = bpStartMetrics2.x + 2;
-            featureYCommon = bpStartMetrics1.y + downShift;
-            if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
-            {
-              featureYCommon += (3 * 20);
-            }
-            featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
-            featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
-            var featureRowHeightCommon = 6;
-            if (this.feature.getStrand() == 0) 
-            {
-              drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-              drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
-            } else if (this.feature.getStrand() == 1) 
-            {
-              drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-              drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
-            } else if (this.feature.getStrand() == -1) 
-            {
-              drawFeatureBackwardRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-              drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
-            }
-          } else {
-            bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-            bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-            featureX = bpStartMetrics.x + 2;
-            featureY = bpStartMetrics.y + downShift;
-            if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
-            {
-              featureY += (3 * 20);
-            }
-            featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 10;
-            featureRowHeight = 6;
-            if (this.feature.getStrand() == 0) 
-            {
-              drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
-            } else if (this.feature.getStrand() == 1) 
-            {
-              if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1) 
-              {
-                if (featureEnd == location.getEnd()) 
-                {
-                  drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
-                } else {
-                  drawFeatureForwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
-                }
-              } else {
-                drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
-              }
-            } else if (this.feature.getStrand() == -1) 
-            {
-              if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()) 
-              {
-                if (featureStart == location.getStart()) 
-                {
-                  drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
-                } else {
-                  drawFeatureBackwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
-                }
-              } else {
-                drawFeatureBackwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
-              }
-            }
-          }
-        }
-      this.addToolTip(this.feature);
-      this.addClickListener(this.feature);
-    }
-  function drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight) {
-    pGraphics.append("svg:rect").attr("x", pX).attr("y", pY + 20).attr("stroke", this.featureColor).attr("width", pWidth).attr("height", 6);
-  }
-  function drawFeatureForwardRect(pGraphics, pX, pY, pWidth, pHeight) {
-    pY += 20;
-    pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) + " L " + (pX + pWidth) + " " + (pY + pHeight) + " L " + (pX + pWidth) + " " + (pY) + " L " + (pX) + " " + (pY));
-  }
-  function drawFeatureBackwardRect(pGraphics, pX, pY, pWidth, pHeight) {
-    pY += 20;
-    pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " L " + (pX) + " " + (pY + pHeight) + " L " + (pX + pWidth) + " " + (pY + pHeight) + " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) + " L " + (pX) + " " + (pY));
-  }
-  function drawFeatureForwardArrow(pGraphics, pX, pY, pWidth, pHeight) {
-    pY += 20;
-    if (pWidth) 
-    {
-      pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " L " + (pX + pWidth - 8) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + " L " + (pX + pWidth - 8) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY + pHeight) + " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
-    } else {
-      pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + " L " + (pX) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY));
-    }
-  }
-  function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight) {
-    pY += 20;
-    if (pWidth) 
-    {
-      pGraphics.append("svg:path").attr("d", " M " + (pX + 8) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY) + " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) + " L " + (pX + 8) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY + pHeight / 2) + " L " + (pX + 8) + " " + (pY));
-    } else {
-      pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + " L " + (pX + pWidth) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY + pHeight / 2));
-    }
-  }
-  function drawFeatureForwardCurved(pGraphics, pX, pY, pWidth, pHeight) {
-  }
-  function drawFeatureBackwardCurved(pGraphics, pX, pY, pWidth, pHeight) {
-  }
-}, colorByType: function(type) {
-  var switchObj = {promoter: "#31B440", terminator: "#F51600", cds: "#EF6500", m_rna: "#FFFF00", misc_binding: "#006FEF", misc_feature: "#006FEF", misc_marker: "#8DCEB1", rep_origin: "#878787"};
-  var color = switchObj[type] || "#CCCCCC";
-  return color;
-}, addToolTip: function(feature) {
-  var featureToolTip = this.featureGroupSVG.append("svg:title");
-  var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
-  featureToolTip.text(toolTip);
-}, addClickListener: function(feature) {
-  this.featureGroupSVG.on("mousedown", function() {
-  Vede.application.fireEvent("AnnotatePanelAnnotationClicked", feature.getStart(), feature.getEnd());
-});
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'FeatureRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.ORFRenderer', Ext.Base, {statics: {ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"], ORF_STROKE_WIDTH: 2}, config: {sequenceAnnotator: null, orf: null}, constructor: function(inData) {
-  this.initConfig(inData);
-}, render: function() {
-  this.orfSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "orfSVG");
-  var orf = this.orf;
-  var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap().get(orf);
-  if (!orfRows) 
-  {
-    return;
-  }
-  var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().toString().length;
-  var alignmentRowIndex;
-  var startBP;
-  var endBP;
-  var upShift;
-  Ext.each(orfRows, function(row) {
-  alignmentRowIndex = -1;
-  var row = this.sequenceAnnotator.sequenceAnnotator.RowManager.getRows()[row];
-  Ext.each(row.getRowData().orfAlignment.getKeys(), function(rowOrfs, index) {
-  Ext.each(rowOrfs, function(rowOrf) {
-  if (rowOrf == orf) 
-  {
-    alignmentRowIndex = index;
-    return false;
-  }
-});
-  if (alignmentRowIndex != -1) 
-  {
-    return false;
-  }
-});
-  if (orf.getStart() > orf.getEnd()) 
-  {
-    if (orf.getEnd() >= row.rowData.getStart() && orf.getEnd() <= row.rowData.getEnd()) 
-    {
-      endBP = orf.getEnd() - 1;
-    } else if (row.rowData.getEnd() >= seqLen) 
-    {
-      endBP = seqLen - 1;
-    } else {
-      endBP = row.rowData.getEnd();
-    }
-    if (orf.getStart() >= row.rowData.getStart() && orf.getStart() <= row.rowData.getEnd()) 
-    {
-      startBP = orf.getStart();
-    } else {
-      startBP = row.rowData.getStart();
-    }
-  } else {
-    if (orf.getStart() < row.rowData.getStart()) 
-    {
-      startBP = row.rowData.getStart();
-    } else {
-      startBP = orf.getStart();
-    }
-    if (orf.getEnd() < row.rowData.getEnd()) 
-    {
-      endBP = orf.getEnd() - 1;
-    } else {
-      endBP = row.rowData.getEnd();
-    }
-  }
-  var bpStartPoint = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-  var bpEndPoint = this.sequenceAnnotator.bpMetricsByIndex(endBP);
-  var upShift = alignmentRowIndex * 8 - 6;
-  var color = this.self.ORF_COLOR[orf.getFrame()];
-  var orfY = bpStartPoint.y - upShift;
-  var currentHeight = 6;
-  var textWidth = this.sequenceAnnotator.self.CHAR_WIDTH;
-  if (startBP > endBP) 
-  {
-    var rowStartPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
-    var rowEndPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.end);
-    this.orfSVG.append("svg:path").attr("d", "M" + (rowStartPoint.x + 2) + " " + orfY + "L" + (bpEndPoint.x + bpEndPoint.width) + " " + orfY + "M" + (bpStartPoint.x + 2) + " " + orfY + "L" + (rowEndPoint.x + rowEndPoint.width) + " " + orfY).attr("stroke", color).attr("stroke-width", this.self.ORF_STROKE_WIDTH);
-  } else {
-    this.orfSVG.append("svg:path").attr("d", "M" + (bpStartPoint.x + 2) + " " + orfY + "L" + (bpEndPoint.x + textWidth + 2) + " " + orfY).attr("stroke", color).attr("stroke-width", this.self.ORF_STROKE_WIDTH);
-  }
-  var codonShift = -8;
-  Ext.each(orf.getStartCodons(), function(startCodonIndex) {
-  if (startCodonIndex >= row.rowData.getStart() && startCodonIndex <= row.rowData.end) 
-  {
-    var codonStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startCodonIndex);
-    var codonStartPointX = codonStartMetrics.x;
-    var codonStartPointY = codonStartMetrics.y - upShift;
-    if (orf.getStrand() == -1) 
-    {
-      this.orfSVG.append("svg:circle").attr("cx", codonStartPointX + textWidth + codonShift).attr("cy", codonStartPointY).attr("r", 3.5).attr("fill", color);
-    } else {
-      this.orfSVG.append("svg:circle").attr("cx", codonStartPointX + textWidth + codonShift).attr("cy", codonStartPointY).attr("r", 3.5).attr("fill", color);
-    }
-  }
-}, this);
-  if (orf.getStrand() == 1 && endBP == orf.getEnd() - 1) 
-  {
-    var codonEndPoint1 = this.sequenceAnnotator.bpMetricsByIndex(endBP);
-    var codonEndPointX1 = codonEndPoint1.x + textWidth;
-    var codonEndPointY1 = codonEndPoint1.y - upShift;
-    this.orfSVG.append("svg:path").attr("d", "M" + (codonEndPointX1 - 10) + " " + (codonEndPointY1 - 4) + "L" + codonEndPointX1 + " " + codonEndPointY1 + "L" + (codonEndPointX1 - 10) + " " + (codonEndPointY1 + 4) + "L" + (codonEndPointX1 - 10) + " " + (codonEndPointY1 - 4)).attr("fill", color);
-  } else if (orf.getStrand() == -1 && startBP == orf.getStart()) 
-  {
-    var codonEndPoint2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-    var codonEndPointX2 = codonEndPoint2.x;
-    var codonEndPointY2 = codonEndPoint2.y - upShift;
-    this.orfSVG.append("svg:path").attr("d", "M" + codonEndPointX2 + " " + codonEndPointY2 + "L" + (codonEndPointX2 + 10) + " " + (codonEndPointY2 - 4) + "L" + (codonEndPointX2 + 10) + " " + (codonEndPointY2 + 4) + "L" + codonEndPointX2 + " " + codonEndPointY2).attr("fill", color);
-  }
-  this.addClickListener(orf);
-  this.addToolTip(orf);
-}, this);
-}, addClickListener: function(orf) {
-  var end;
-  if (orf.getStrand() === -1) 
-  {
-    end = orf.getEnd() + 1;
-  } else {
-    end = orf.getEnd();
-  }
-  this.orfSVG.on("mousedown", function() {
-  Vede.application.fireEvent("AnnotatePanelAnnotationClicked", orf.getStart(), end);
-});
-}, addToolTip: function(orf) {
-  var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
-  var aa = Math.floor(bp / 3);
-  var complimentary = "";
-  if (orf.getStrand() == 1 && orf.getStartCodons().length > 1) 
-  {
-    complimentary = ", complimentary";
-  }
-  var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) + ", frame: " + orf.getFrame() + ", length: " + bp + " BP" + ", " + aa + " AA" + complimentary;
-  if (orf.getStartCodons().length > 1) 
-  {
-    tooltipLabel += "\nStart Codons: ";
-    var codonsArray = [];
-    var codonString;
-    Ext.each(orf.getStartCodons(), function(codon, index) {
-  if (index != orf.getStartCodons().length - 1) 
-  {
-    codonString = (codon + 1) + ", ";
-  } else {
-    codonString = codon + 1;
-  }
-  codonsArray.push(codonString);
-});
-    tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
-  }
-  this.orfSVG.append("svg:title").text(tooltipLabel);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'ORFRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.sequenceAnnotationManager = this.sequenceAnnotator;
-  this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
-}, update: function() {
-  this.rows = [];
-  this.numRows = Math.round((Math.ceil(((contentHolder.sequenceProvider.sequence.length + 1) / 50))));
-}, render: function() {
-  var newRows = [];
-  this.aminoAcidsString1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true);
-  this.aminoAcidsString2 = this.sequenceAnnotator.getAaManager().getSequenceFrame(1, true);
-  this.aminoAcidsString3 = this.sequenceAnnotator.getAaManager().getSequenceFrame(2, true);
-  this.aminoAcidsStringRevCom1 = this.sequenceAnnotator.getAaManager().getRevComFrame(0, true);
-  this.aminoAcidsStringRevCom2 = this.sequenceAnnotator.getAaManager().getRevComFrame(1, true);
-  this.aminoAcidsStringRevCom3 = this.sequenceAnnotator.getAaManager().getRevComFrame(2, true);
-  this.totalWidth = 0;
-  this.totalHeight = 0;
-  var sequenceX = 6 * 3;
-  var sequenceY = 0;
-  var sequence = this.sequenceAnnotator.getSequenceManager().getSequence().seqString();
-  var rows = this.sequenceAnnotator.getRowManager().getRows();
-  var sequenceNucleotideMatrix = [];
-  for (var i = 0; i < rows.length; i++) 
-    {
-      var row = rows[i];
-      var rowX = 0;
-      var rowY = this.totalHeight;
-      var sequenceString = "";
-      if (this.sequenceAnnotator.getShowSpaceEvery10Bp()) 
-      {
-        sequenceString += this.splitWithSpaces(row.getRowData().getSequence(), 0, false);
-      } else {
-        sequenceString += row.getRowData().getSequence();
-      }
-      var sequenceStringLength = sequenceString.length;
-      if (this.sequenceAnnotator.getShowCutSites() && row.getRowData().getCutSitesAlignment()) 
-      {
-        if (row.getRowData().getCutSitesAlignment().getCount() > 0) 
-        {
-          this.totalHeight += (Math.max.apply(null, row.getRowData().getCutSitesAlignment().getValues()) + 1) * 30;
-        }
-      }
-      if (this.sequenceAnnotator.getShowOrfs() && row.getRowData().getOrfAlignment()) 
-      {
-        this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
-      }
-      var sequenceX = 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH;
-      var sequenceY = this.totalHeight;
-      if (this.totalWidth < (this.sequenceAnnotationManager.self.CHAR_WIDTH * sequenceStringLength)) 
-      {
-        this.totalWidth = (this.sequenceAnnotationManager.self.CHAR_WIDTH * sequenceStringLength);
-      }
-      this.totalHeight += 20;
-      var sequenceWidth = sequenceStringLength * this.sequenceAnnotationManager.self.CHAR_WIDTH;
-      var sequenceHeight = this.totalHeight - sequenceY;
-      if (this.sequenceAnnotator.getShowAminoAcids()) 
-      {
-        this.renderAA(row);
-        sequenceY += 60;
-      }
-      if (this.sequenceAnnotator.getShowComplementarySequence()) 
-      {
-        this.renderComplementarySequence(row);
-        sequenceHeight = this.totalHeight - sequenceY;
-      }
-      if (this.sequenceAnnotator.showAminoAcidsRevCom) 
-      {
-        this.renderAARevCom(row);
-      }
-      if (this.sequenceAnnotator.showFeatures) 
-      {
-        if (row.getRowData().getFeaturesAlignment() && row.getRowData().getFeaturesAlignment().getCount() > 0) 
-        {
-          this.totalHeight += row.getRowData().getFeaturesAlignment().getCount() * (10) + 2;
-        }
-      }
-      this.totalHeight += 3;
-      var rowWidth = this.totalWidth;
-      var rowHeight = this.totalHeight - rowY;
-      var rowSequence = row.getRowData().getSequence();
-      this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "sequenceSVG").attr("x", sequenceX).attr("y", sequenceY + 20).text(sequenceString);
-      row.metrics.x = rowX;
-      row.metrics.y = rowY;
-      row.metrics.width = rowWidth;
-      row.metrics.height = rowHeight;
-      row.getRowData().sequenceString = sequenceString;
-      var newMetrics = {"x": rowX, "y": rowY, "width": rowWidth, "height": rowHeight};
-      var newSequenceMetrics = {"x": sequenceX, "y": sequenceY, "width": sequenceWidth, "height": sequenceHeight};
-      row.sequenceMetrics.x = sequenceX;
-      row.sequenceMetrics.y = sequenceY;
-      row.sequenceMetrics.width = sequenceWidth;
-      row.sequenceMetrics.height = sequenceHeight;
-      var newRow = Ext.create("Teselagen.models.sequence.Row", {rowData: row.getRowData(), metrics: newMetrics, sequenceMetrics: newSequenceMetrics, index: i});
-      newRows.push(newRow);
-      this.renderBpLabel(row.getRowData().getStart() + 1, rowX + 10, sequenceY + 20);
-    }
-  this.sequenceAnnotator.getRowManager().setRows(newRows);
-  this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
-  this.sequenceAnnotationManager.sequenceSVG.selectAll("text").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
-  this.sequenceAnnotationManager.sequenceSVG.selectAll(".complementarySequenceSVG").attr("fill", this.self.COMPLEMENTARY_SEQUENCE_FILL);
-  this.sequenceAnnotationManager.sequenceSVG.selectAll(".bpLabelSVG").attr("xml:space", "preserve");
-  this.sequenceAnnotationManager.aminoAcidsSVG.selectAll("text").attr("xml:space", "preserve").attr("fill", "blue").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
-}, getUpdatedRows: function() {
-  return this.sequenceAnnotator.getRowManager().getRows();
-}, splitWithSpaces: function(pString, pShift, pSplitLast) {
-  var result = "";
-  var stringLength = pString.length;
-  if (stringLength <= 10 - pShift) 
-  {
-    result += pString;
-  } else {
-    var start = 0;
-    var end = 10 - pShift;
-    while (start < stringLength) 
-      {
-        result += pString.substring(start, end);
-        start = end;
-        end += 10;
-        if (end <= this.sequenceAnnotator.getBpPerRow()) 
-        {
-          result += " ";
-        }
-      }
-  }
-  return result;
-}, renderAA: function(row) {
-  var baseStart;
-  var aaStart = [];
-  var aaEnd = [];
-  var leadingFrame;
-  var aaPadding = [];
-  var frontOffsets = [];
-  var start = row.getRowData().getStart();
-  var end = row.getRowData().getEnd();
-  leadingFrame = start % 3;
-  aaPadding[leadingFrame] = 0;
-  aaPadding[(leadingFrame + 1) % 3] = 1;
-  aaPadding[(leadingFrame + 2) % 3] = 2;
-  if (leadingFrame === 0) 
-  {
-    frontOffsets = [0, 0, 0];
-  } else if (leadingFrame === 2) 
-  {
-    frontOffsets = [1, 1, 0];
-  } else {
-    frontOffsets = [1, 0, 0];
-  }
-  baseStart = Math.floor(start / 3) * 2;
-  aaStart[0] = baseStart + frontOffsets[0] * 2;
-  aaStart[1] = baseStart + frontOffsets[1] * 2;
-  aaStart[2] = baseStart + frontOffsets[2] * 2;
-  aaEnd[leadingFrame] = aaStart[leadingFrame] + Math.ceil((end - start + 1) / 3) * 2;
-  aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + Math.ceil((end - start) / 3) * 2;
-  aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + Math.ceil((end - start - 1) / 3) * 2;
-  var aminoAcids1 = this.aminoAcidsString1.substring(aaStart[0], aaEnd[0]);
-  var aminoAcids2 = this.aminoAcidsString2.substring(aaStart[1], aaEnd[1]);
-  var aminoAcids3 = this.aminoAcidsString3.substring(aaStart[2], aaEnd[2]);
-  aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
-  aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
-  aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
-  if (this.sequenceAnnotator.showSpaceEvery10Bp) 
-  {
-    aminoAcids1 = this.splitWithSpaces(aminoAcids1, aaPadding[0], false);
-    aminoAcids2 = this.splitWithSpaces(aminoAcids2, aaPadding[1], false);
-    aminoAcids3 = this.splitWithSpaces(aminoAcids3, aaPadding[2], false);
-  }
-  var verticalOffset = 0;
-  if (row.getRowData().getOrfAlignment()) 
-  {
-    verticalOffset = row.getRowData().getOrfAlignment().getCount() * 8;
-  }
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids1);
-  this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids2);
-  this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids3);
-  this.totalHeight += 20;
-}, renderAARevCom: function(row) {
-  var baseStart;
-  var aaStart = [];
-  var aaEnd = [];
-  var leadingFrame;
-  var aaOffsets = [];
-  var aaPadding = [];
-  var frontOffsets = [];
-  var seqLen = this.sequenceAnnotator.getSequenceManager().getSequence().toString().length;
-  var start = seqLen - row.getRowData().getEnd() - 1;
-  var end = seqLen - row.getRowData().getStart() - 1;
-  leadingFrame = Math.abs(start) % 3;
-  if (leadingFrame === 0) 
-  {
-    frontOffsets = [0, 0, 0];
-  } else if (leadingFrame === 2) 
-  {
-    frontOffsets = [1, 1, 0];
-  } else {
-    frontOffsets = [1, 0, 0];
-  }
-  baseStart = Math.floor(start / 3) * 2;
-  aaStart[0] = baseStart + frontOffsets[0] * 2;
-  aaStart[1] = baseStart + frontOffsets[1] * 2;
-  aaStart[2] = baseStart + frontOffsets[2] * 2;
-  if (row.getIndex() !== this.sequenceAnnotator.getRowManager().getRows().length - 1) 
-  {
-    aaEnd[leadingFrame] = aaStart[leadingFrame] + Math.ceil((end - start + 1) / 3) * 2;
-    aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + Math.ceil((end - start) / 3) * 2;
-    aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + Math.ceil((end - start - 1) / 3) * 2;
-  } else {
-    aaEnd[0] = Math.ceil(row.getRowData().getSequence().length / 3) * 2;
-    aaEnd[1] = Math.ceil((row.getRowData().getSequence().length - 1) / 3) * 2;
-    aaEnd[2] = Math.ceil((row.getRowData().getSequence().length - 2) / 3) * 2;
-  }
-  var aminoAcids1 = this.aminoAcidsStringRevCom1.substring(aaStart[0], aaEnd[0]);
-  var aminoAcids2 = this.aminoAcidsStringRevCom2.substring(aaStart[1], aaEnd[1]);
-  var aminoAcids3 = this.aminoAcidsStringRevCom3.substring(aaStart[2], aaEnd[2]);
-  aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
-  aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
-  aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
-  var acids = [aminoAcids1, aminoAcids2, aminoAcids3];
-  aaPadding[leadingFrame] = end - start + 1 - acids[leadingFrame].length;
-  aaPadding[(leadingFrame + 1) % 3] = end - start - acids[(leadingFrame + 1) % 3].length;
-  aaPadding[(leadingFrame + 2) % 3] = end - start - 1 - acids[(leadingFrame + 2) % 3].length;
-  if (row.getIndex() === this.sequenceAnnotator.getRowManager().getRows().length - 1) 
-  {
-    var rowLength = row.getRowData().getSequence().length;
-    var extraBases = 0;
-    if (this.sequenceAnnotator.showSpaceEvery10Bp) 
-    {
-      extraBases = 10 - rowLength % 10;
-    }
-    aaPadding[0] = rowLength - 1 - aminoAcids1.length;
-    aaPadding[1] = rowLength - 2 - aminoAcids2.length;
-    aaPadding[2] = rowLength - 3 - aminoAcids3.length;
-    aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0 + extraBases, false).split("").reverse().join("");
-    aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1 + extraBases, false).split("").reverse().join("");
-    aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2 + extraBases, false).split("").reverse().join("");
-    aminoAcids1 = aminoAcids1.replace(/^\s{2,}/, "   ");
-    aminoAcids2 = aminoAcids2.replace(/^\s{2,}/, "   ");
-    aminoAcids3 = aminoAcids3.replace(/^\s{2,}/, "   ");
-  } else if (this.sequenceAnnotator.showSpaceEvery10Bp) 
-  {
-    aaOffsets[leadingFrame] = 0;
-    aaOffsets[(leadingFrame + 1) % 3] = 1;
-    aaOffsets[(leadingFrame + 2) % 3] = 2;
-    aminoAcids1 = this.splitWithSpaces(aminoAcids1, aaOffsets[0], false).split("").reverse().join("");
-    aminoAcids2 = this.splitWithSpaces(aminoAcids2, aaOffsets[1], false).split("").reverse().join("");
-    aminoAcids3 = this.splitWithSpaces(aminoAcids3, aaOffsets[2], false).split("").reverse().join("");
-  } else {
-    aminoAcids1 = aminoAcids1.split("").reverse().join("");
-    aminoAcids2 = aminoAcids2.split("").reverse().join("");
-    aminoAcids3 = aminoAcids3.split("").reverse().join("");
-  }
-  var verticalOffset = 15;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids1);
-  this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids2);
-  this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids3);
-  this.totalHeight += 20;
-}, renderComplementarySequence: function(row) {
-  var sequenceString = ["      "];
-  var stringLength;
-  if (this.sequenceAnnotator.showSpaceEvery10Bp) 
-  {
-    sequenceString = sequenceString.concat([this.splitWithSpaces(row.rowData.oppositeSequence, 0, false)]);
-  } else {
-    sequenceString = sequenceString.concat([row.rowData.oppositeSequence]);
-  }
-  sequenceString = sequenceString.join("");
-  stringLength = sequenceString.length;
-  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "complementarySequenceSVG").attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + this.self.COMPLEMENTARY_VERTICAL_OFFSET).text(sequenceString);
-  this.totalHeight += 20;
-}, renderIndexString: function(pIndex) {
-  var result = String(pIndex);
-  if (pIndex < 10) 
-  {
-    result = "   " + result;
-  } else if (pIndex < 100) 
-  {
-    result = "  " + result;
-  } else if (pIndex < 1000) 
-  {
-    result = " " + result;
-  } else if (pIndex < 10000) 
-  {
-    result = "" + result;
-  }
-  return result;
-}, renderBpLabel: function(basePairs, labelX, labelY) {
-  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "bpLabelSVG").attr("x", labelX).attr("y", labelY).text(this.renderIndexString(basePairs));
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SequenceRenderer'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.annotate.Annotator', Ext.draw.Component, {statics: {CHAR_WIDTH: 9}, autoScroll: true, config: {sequenceAnnotator: null, sequenceSVG: null, annotateSVG: null, bpLabelsSVG: null, linesSVG: null, featureRenderers: null, cutSiteRenderers: null, orfRenderers: null, sequenceRenderer: null, yMax: null, xMax: null, id: null, panel: null, dirty: false, featureRows: 2, BP_PER_LINE: 60, bpPerRow: 60, aminoSequencesShown: 5}, constructor: function(inData) {
-  this.callParent([inData]);
-  this.initConfig(inData);
-  this.id = "AnnotationSurface";
-  if (Ext.isGecko) 
-  {
-    this.self.CHAR_WIDTH = 7.25;
-  }
-  this.sequenceAnnotator = inData.sequenceAnnotator;
-  this.createSequenceRenderer();
-}, init: function() {
-  this.annotateSVG = d3.select("#AnnotateContainer").append("svg:svg").attr("id", "annotateSVG");
-  this.linesSVG = this.annotateSVG.append("svg:g").attr("id", "linesSVG");
-  this.sequenceSVG = this.annotateSVG.append("svg:g").attr("id", "sequenceSVG");
-  this.bpLabelsSVG = this.annotateSVG.append("svg:g").attr("id", "bpLabelsSVG");
-  this.aminoAcidsSVG = this.annotateSVG.append("svg:g").attr("id", "aminoAcidsSVG");
-  this.featuresSVG = this.annotateSVG.append("svg:g").attr("id", "featuresSVG");
-}, sequenceChanged: function() {
-}, render: function() {
-  Ext.suspendLayouts();
-  this.clean();
-  this.panel = Ext.getCmp('AnnotatePanel');
-  this.xMax = this.panel.getBox().width;
-  this.yMax = this.panel.getBox().height;
-  var x1 = 10;
-  var y = 20;
-  if (this.sequenceAnnotator.getSequenceManager()) 
-  {
-    this.renderSequence();
-    this.drawSplitLines();
-    d3.selectAll("#cutSiteSVG").remove();
-    d3.selectAll("#orfSVG").remove();
-    if (this.sequenceAnnotator.getShowFeatures()) 
-    {
-      this.loadFeatureRenderers();
-      this.renderFeatures();
-    }
-    if (this.sequenceAnnotator.getShowCutSites()) 
-    {
-      this.loadCutSiteRenderers();
-      this.renderCutSites();
-    }
-    if (this.sequenceAnnotator.getShowOrfs()) 
-    {
-      this.loadOrfRenderers();
-      this.renderOrfs();
-    }
-    this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
-    this.annotateSVG.attr("width", this.sequenceRenderer.getTotalWidth() + 60);
-  }
-  Ext.resumeLayouts(true);
-}, loadFeatureRenderers: function() {
-  this.removeFeatureRenderers();
-  var retrievedFeatures = this.sequenceAnnotator.getSequenceManager().getFeatures();
-  if (!this.sequenceAnnotator.getShowFeatures() || !retrievedFeatures) 
-  {
-    return;
-  }
-  var that = this;
-  for (var i = 0; i < retrievedFeatures.length; i++) 
-    {
-      var feature = retrievedFeatures[i];
-      var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {sequenceAnnotator: that, feature: feature});
-      this.featureRenderers.push(featureRenderer);
-    }
-}, removeFeatureRenderers: function() {
-  this.featureRenderers = [];
-}, loadCutSiteRenderers: function() {
-  this.removeCutSiteRenderers();
-  var retrievedCutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
-  if (!this.sequenceAnnotator.getShowCutSites() || !retrievedCutSites) 
-  {
-    return;
-  }
-  var that = this;
-  Ext.each(retrievedCutSites, function(site) {
-  var cutSiteRenderer = Ext.create("Teselagen.renderer.annotate.CutSiteRenderer", {sequenceAnnotator: this, cutSite: site});
-  this.cutSiteRenderers.push(cutSiteRenderer);
-}, this);
-}, removeCutSiteRenderers: function() {
-  this.setCutSiteRenderers([]);
-}, loadOrfRenderers: function() {
-  this.removeOrfRenderers();
-  var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
-  if (!this.sequenceAnnotator.getShowOrfs() || !retrievedOrfs) 
-  {
-    return;
-  }
-  Ext.each(retrievedOrfs, function(orf) {
-  var orfRenderer = Ext.create("Teselagen.renderer.annotate.ORFRenderer", {sequenceAnnotator: this, orf: orf});
-  this.orfRenderers.push(orfRenderer);
-}, this);
-}, removeOrfRenderers: function() {
-  this.setOrfRenderers([]);
-}, bpMetricsByIndex: function(pIndex) {
-  if (!this.isValidIndex(pIndex)) 
-  {
-    return null;
-    throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
-  }
-  var row = this.rowByBpIndex(pIndex);
-  var resultsMetrics;
-  if (row == null) 
-  {
-    throw new Error("Can't get bp point for index: " + String(pIndex));
-  } else {
-    var numberOfCharacters = pIndex - row.getIndex() * this.sequenceAnnotator.getBpPerRow();
-    if (this.sequenceAnnotator.showSpaceEvery10Bp) 
-    {
-      numberOfCharacters += Math.floor(numberOfCharacters / 10);
-    }
-    var bpX = row.getSequenceMetrics().x + numberOfCharacters * this.self.CHAR_WIDTH;
-    var bpY = row.getSequenceMetrics().y;
-    resultsMetrics = {x: bpX, y: bpY, width: 2, height: 3};
-  }
-  return resultsMetrics;
-}, rowByBpIndex: function(pIndex) {
-  if (!this.isValidIndex(pIndex)) 
-  {
-    return null;
-    throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
-  }
-  return this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex / this.sequenceAnnotator.getBpPerRow())];
-}, isValidIndex: function(pIndex) {
-  return pIndex >= 0 && pIndex <= this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length;
-}, renderSequence: function() {
-  this.sequenceRenderer.render();
-}, renderFeatures: function() {
-  if (this.sequenceAnnotator.getShowFeatures()) 
-  {
-    for (var i = 0; i < this.featureRenderers.length; ++i) 
-      {
-        var featureRenderer = this.featureRenderers[i];
-        featureRenderer.render();
-      }
-  }
-}, renderCutSites: function() {
-  if (this.sequenceAnnotator.getShowCutSites()) 
-  {
-    Ext.each(this.cutSiteRenderers, function(renderer) {
-  renderer.render();
-});
-  }
-}, renderOrfs: function() {
-  if (this.sequenceAnnotator.getShowOrfs()) 
-  {
-    Ext.each(this.orfRenderers, function(renderer) {
-  renderer.render();
-});
-  }
-}, drawSplitLines: function() {
-  var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
-  for (var i = 0; i < rows.length; ++i) 
-    {
-      var row = rows[i];
-      if (i != rows.length) 
-      {
-        var rowSequenceMetrics = row.getSequenceMetrics();
-        var rowMetrics = row.getMetrics();
-        this.linesSVG.append("svg:line").attr("x1", rowMetrics.x).attr("y1", rowMetrics.y).attr("x2", rowMetrics.x + (row.getRowData().getSequence().length * 20)).attr("y2", rowMetrics.y).attr("stroke", "lightgray");
-      }
-    }
-}, createSequenceRenderer: function() {
-  if (this.sequenceRenderer == null) 
-  {
-    this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.SequenceRenderer", {sequenceAnnotator: this});
-  }
-}, clean: function() {
-  d3.select("#linesSVG").remove();
-  this.linesSVG = this.annotateSVG.append("svg:g").attr("id", "linesSVG");
-  d3.select("#sequenceSVG").remove();
-  this.sequenceSVG = this.annotateSVG.append("svg:g").attr("id", "sequenceSVG");
-  d3.select("#bpLabelsSVG").remove();
-  this.bpLabelsSVG = this.annotateSVG.append("svg:g").attr("id", "bpLabelsSVG");
-  d3.select("#aminoAcidsSVG").remove();
-  this.aminoAcidsSVG = this.annotateSVG.append("svg:g").attr("id", "aminoAcidsSVG");
-  d3.select("#featuresSVG").remove();
-  this.featuresSVG = this.annotateSVG.append("svg:g").attr("id", "featuresSVG");
-}}, 1, ["annotator"], ["draw", "component", "box", "annotator"], {"draw": true, "component": true, "box": true, "annotator": true}, ["widget.annotator"], 0, [Vede.view.annotate, 'Annotator'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.annotate.Caret', Ext.Base, {statics: {CARET_COLOR: "#000000", CARET_WIDTH: 1, TIMER_REFRESH_SPEED: "1s", SINGLE_HEIGHT: 20, DOUBLE_HEIGHT: 40}, config: {position: 0, height: 40, sequenceAnnotator: null}, caretSVG: null, constructor: function(pConfig) {
-  this.initConfig(pConfig);
-}, render: function() {
-  d3.selectAll("#caretSVG").remove();
-  this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "caretSVG");
-  var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
-  if (location) 
-  {
-    this.caretSVG.append("svg:path").attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + "L" + (location.x - 1) + " " + (location.y + this.height)).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH).append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite");
-  }
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.annotate, 'Caret'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.SequenceAnnotationManager', Ext.Base, {config: {sequenceManager: null, orfManager: null, aaManager: null, restrictionEnzymeManager: null, highlights: null, features: null, contentHolder: null, annotator: null, readOnly: null, showFeatures: true, showCutSites: false, showOrfs: false, showComplementarySequence: true, showSpaceEvery10Bp: true, showAminoAcids: false, showAminoAcidsRevCom: false, bpPerRow: 60, sequenceFontSize: 11, labelFontSize: 10, sequenceManagerChanged: false, orfManagerChanged: false, aaManagerChanged: false, restrictionEnzymeManagerChanged: false, bpPerRowChanged: false, sequenceFontSizeChanged: false, labelFontSizeChanged: false, showFeaturesChanged: false, showCutSitesChanged: false, showOrfsChanged: false, showComplementarySequenceChanged: false, showSpaceEvery10BpChanged: false, showAminoAcidsChanged: false, showAminoAcidsRevComChanged: false, editingMode: false, floatingWidthChanged: false, lineRenderer: null, sequenceRenderer: null, complementRenderer: null, renderers: null, RowManager: null}, renderers: [], caret: null, statics: {DEFAULT_BP_PER_ROW: 60}, constructor: function(inData) {
-  this.initConfig(inData);
-  var that = this;
-  this.lineRenderer = Ext.create("Teselagen.renderer.annotate.LineRenderer");
-  this.RowManager = Ext.create("Teselagen.manager.RowManager", {sequenceAnnotator: that});
-  this.annotator = Ext.create("Vede.view.annotate.Annotator", {sequenceAnnotator: that});
-  this.caret = Ext.create("Vede.view.annotate.Caret", {sequenceAnnotator: that.annotator});
-}, setSequenceManager: function(pSeqMan) {
-  this.sequenceManager = pSeqMan;
-  this.RowManager.setSequenceAnnotator(this);
-  this.RowManager.update();
-  this.aaManager.setSequenceManager(this.sequenceManager);
-  this.features = this.sequenceManager.getFeatures();
-  Ext.suspendLayouts();
-  this.annotator.setSequenceAnnotator(this);
-  this.annotator.render();
-  this.caret.render();
-  Ext.resumeLayouts(true);
-}, render: function() {
-  this.RowManager.update();
-  this.annotator.render();
-  this.caret.setPosition(this.caret.getPosition());
-  this.caret.render();
-}, sequenceChanged: function() {
-  this.RowManager.setSequenceAnnotator(this);
-  this.RowManager.update();
-  this.aaManager.setSequenceManager(this.sequenceManager);
-  this.features = this.sequenceManager.getFeatures();
-  this.annotator.setSequenceAnnotator(this);
-  this.annotator.render();
-}, adjustCaret: function(index) {
-  this.caret.setPosition(index);
-  this.caret.render();
-}, bpAtPoint: function(x, y) {
-  var numberOfRows = this.RowManager.rows.length;
-  var bpIndex = -1;
-  for (var i = 0; i < numberOfRows; i++) 
-    {
-      var row = this.RowManager.rows[i];
-      if ((y >= row.metrics.y) && (y <= row.metrics.y + row.metrics.height)) 
-      {
-        bpIndex = i * this.bpPerRow;
-        if (x < row.sequenceMetrics.x) 
-        {
-        } else if (x > row.sequenceMetrics.x + row.sequenceMetrics.width) 
-        {
-          bpIndex += row.rowData.sequence.length;
-        } else {
-          var numberOfCharactersFromBeginning = Math.floor((x - row.sequenceMetrics.x + 15 / 2) / this.annotator.self.CHAR_WIDTH);
-          var numberOfSpaces = 0;
-          if (this.showSpaceEvery10Bp) 
-          {
-            numberOfSpaces = Math.floor(numberOfCharactersFromBeginning / 11);
-          }
-          var numberOfValidCharacters = numberOfCharactersFromBeginning - numberOfSpaces;
-          bpIndex += numberOfValidCharacters;
-        }
-        break;
-      }
-    }
-  return bpIndex;
-}, applySequenceManager: function(pSeqMan) {
-  if (this.SequenceManager !== pSeqMan) 
-  {
-    this.sequenceManagerChanged = true;
-  }
-  return pSeqMan;
-}, applyBpPerRow: function(pBpPerRow) {
-  if (this.bpPerRow !== pBpPerRow) 
-  {
-    this.bpPerRowChanged = true;
-  }
-  return pBpPerRow;
-}, applyShowFeatures: function(pShow) {
-  if (this.showFeatures !== pShow) 
-  {
-    this.showFeaturesChanged = true;
-  }
-  return pShow;
-}, applyShowCutSites: function(pShow) {
-  if (this.showCutSites !== pShow) 
-  {
-    this.showCutSitesChanged = true;
-  }
-  return pShow;
-}, applyShowOrfs: function(pShow) {
-  if (this.showOrfs !== pShow) 
-  {
-    this.showOrfsChanged = true;
-  }
-  return pShow;
-}, applyShowComplementarySequence: function(pShow) {
-  if (this.showComplementarySequence !== pShow) 
-  {
-    this.showComplementarySequenceChanged = true;
-    if (this.caret) 
-    {
-      if (pShow) 
-      {
-        this.caret.setHeight(this.caret.self.DOUBLE_HEIGHT);
-        this.caret.setPosition(this.caret.getPosition());
-        this.caret.render();
-      } else {
-        this.caret.setHeight(this.caret.self.SINGLE_HEIGHT);
-        this.caret.setPosition(this.caret.getPosition());
-        this.caret.render();
-      }
-    }
-  }
-  return pShow;
-}, applyShowSpaceEvery10Bp: function(pShow) {
-  if (this.showSpaceEvery10Bp !== pShow) 
-  {
-    this.showSpaceEvery10BpChanged = true;
-  }
-  return pShow;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SequenceAnnotationManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.HighlightLayer', Ext.Base, {statics: {HIGHLIGHT_COLOR: "#009900", HIGHLIGHT_TRANSPARENCY: 0.3}, config: {sequenceManager: null, sequenceAnnotator: null}, highlightSVG: null, sequenceAnnotationManager: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
-}, addHighlight: function(fromIndex, toIndex) {
-  if (fromIndex < 0 || toIndex < 0) 
-  {
-    return;
-  }
-  if (!this.highlightSVG) 
-  {
-    this.highlightSVG = d3.select("#annotateSVG").append("svg:g").attr("id", "highlightSVG");
-  }
-  if (fromIndex > toIndex) 
-  {
-    this.drawHighlight(0, toIndex);
-    this.drawHighlight(fromIndex, this.sequenceManager.getSequence().toString().length);
-  } else {
-    this.drawHighlight(fromIndex, toIndex);
-  }
-}, addAllHighlights: function(indices) {
-  Ext.each(indices, function(index) {
-  this.addHighlight(index.start, index.end);
-}, this);
-}, clearHighlights: function() {
-  if (this.highlightSVG) 
-  {
-    d3.selectAll("#highlightSVG").remove();
-    this.highlightSVG = null;
-  }
-}, drawHighlight: function(fromIndex, toIndex) {
-  var startRow = this.sequenceAnnotator.rowByBpIndex(fromIndex);
-  var endRow = this.sequenceAnnotator.rowByBpIndex(toIndex);
-  if (startRow.getIndex() === endRow.getIndex()) 
-  {
-    this.createHighlightSVG(fromIndex, toIndex);
-  } else if (startRow.getIndex() + 1 <= endRow.getIndex()) 
-  {
-    this.createHighlightSVG(fromIndex, startRow.rowData.getEnd(), true);
-    for (var i = startRow.getIndex() + 1; i < endRow.getIndex(); i++) 
-      {
-        var rowData = this.sequenceAnnotationManager.RowManager.rows[i].rowData;
-        this.createHighlightSVG(rowData.getStart(), rowData.getEnd(), true);
-      }
-    this.createHighlightSVG(endRow.rowData.getStart(), toIndex);
-  }
-}, createHighlightSVG: function(startIndex, endIndex, lastBaseInRow) {
-  var row = this.sequenceAnnotator.rowByBpIndex(startIndex);
-  var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(startIndex);
-  var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(endIndex);
-  if (lastBaseInRow) 
-  {
-    endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
-  }
-  d3.select("#highlightSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 4).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 4).attr("fill", this.self.HIGHLIGHT_COLOR).attr("fill-opacity", this.self.HIGHLIGHT_TRANSPARENCY);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'HighlightLayer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.annotate.SelectionLayer', Ext.Base, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, HANDLE_WIDTH: 9, HANDLE_HEIGHT: 16}, config: {sequenceManager: null, sequenceAnnotator: null}, SelectionLayerEvent: null, sequenceAnnotationManager: null, start: -1, end: -1, selected: false, selecting: false, selectionSVG: null, leftHandleSVG: null, rightHandleSVG: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
-  this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
-}, select: function(fromIndex, toIndex) {
-  if (fromIndex === this.start && toIndex === this.end && this.start !== -1 && this.end !== -1 || fromIndex == toIndex) 
-  {
-    return;
-  }
-  this.selected = false;
-  d3.selectAll("#selectionSVG").remove();
-  this.selectionSVG = d3.select("#annotateSVG").append("svg:g").attr("id", "selectionSVG");
-  if (fromIndex > toIndex) 
-  {
-    this.drawSelection(0, toIndex);
-    this.drawSelection(fromIndex, this.sequenceManager.getSequence().toString().length);
-  } else {
-    this.drawSelection(fromIndex, toIndex);
-  }
-  this.start = fromIndex;
-  this.end = toIndex;
-  this.selected = true;
-}, deselect: function() {
-  this.start = -1;
-  this.end = -1;
-  this.selected = false;
-  this.selecting = false;
-  d3.selectAll("#selectionSVG").remove();
-  this.hideHandles();
-}, refresh: function() {
-  var selectionStart;
-  var selectionEnd;
-  if (this.start > -1 && this.end > -1) 
-  {
-    selectionStart = this.start;
-    selectionEnd = this.end;
-    this.deselect();
-    this.select(selectionStart, selectionEnd);
-  }
-}, startSelecting: function() {
-  this.selecting = true;
-  this.hideHandles();
-}, endSelecting: function() {
-  this.selecting = false;
-}, onMouseover: function() {
-  if (!this.selecting && this.selected) 
-  {
-  }
-}, onMouseout: function(event) {
-  if (!this.selecting && this.selected) 
-  {
-  }
-}, showHandles: function() {
-  var leftMetrics = this.sequenceAnnotator.bpMetricsByIndex(this.start);
-  var rightMetrics = this.sequenceAnnotator.bpMetricsByIndex(this.end);
-  var startRow = this.sequenceAnnotator.rowByBpIndex(this.start);
-  var endRow = this.sequenceAnnotator.rowByBpIndex(this.end);
-  var that = this;
-  this.leftHandleSVG = d3.select("#selectionSVG").append("svg:image").attr("id", "leftHandleSVG").attr("xlink:href", "app/teselagen/renderer/annotate/assets/handle.png").attr("width", this.self.HANDLE_WIDTH).attr("height", this.self.HANDLE_HEIGHT).attr("x", leftMetrics.x - this.self.HANDLE_WIDTH / 2).attr("y", leftMetrics.y + startRow.sequenceMetrics.height / 2 - this.self.HANDLE_HEIGHT / 2);
-  this.rightHandleSVG = d3.select("#selectionSVG").append("svg:image").attr("id", "rightHandleSVG").attr("xlink:href", "app/teselagen/renderer/annotate/assets/handle.png").attr("width", this.self.HANDLE_WIDTH).attr("height", this.self.HANDLE_HEIGHT).attr("x", rightMetrics.x - this.self.HANDLE_WIDTH / 2).attr("y", rightMetrics.y + endRow.sequenceMetrics.height / 2 - this.self.HANDLE_HEIGHT / 2);
-}, hideHandles: function() {
-  d3.selectAll("#leftHandleSVG").remove();
-  d3.selectAll("#rightHandleSVG").remove();
-}, drawSelection: function(fromIndex, toIndex) {
-  var startRow = this.sequenceAnnotator.rowByBpIndex(fromIndex);
-  var endRow = this.sequenceAnnotator.rowByBpIndex(toIndex);
-  if (!startRow || !endRow) 
-  {
-    this.deselect();
-    return;
-  }
-  if (startRow.getIndex() === endRow.getIndex()) 
-  {
-    this.drawRowSelectionRect(fromIndex, toIndex);
-  } else if (startRow.getIndex() + 1 <= endRow.getIndex()) 
-  {
-    this.drawRowSelectionRect(fromIndex, startRow.rowData.getEnd(), true);
-    for (var i = startRow.getIndex() + 1; i < endRow.getIndex(); i++) 
-      {
-        var rowData = this.sequenceAnnotationManager.RowManager.rows[i].rowData;
-        this.drawRowSelectionRect(rowData.getStart(), rowData.getEnd(), true);
-      }
-    this.drawRowSelectionRect(endRow.rowData.getStart(), toIndex);
-  }
-  var that = this;
-  var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(fromIndex);
-  d3.select("#selectionSVG").append("svg:rect").attr("id", "selectionRectangle").attr("x", startMetrics.x - 10).attr("y", startMetrics.y).attr("width", 20).attr("height", this.sequenceAnnotationManager.caret.height).attr("fill-opacity", 0).on("mousedown", function(e) {
-  Vede.application.fireEvent(that.SelectionLayerEvent.HANDLE_CLICKED, "left");
-});
-  var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(toIndex);
-  d3.select("#selectionSVG").append("svg:rect").attr("id", "selectionRectangle").attr("x", endMetrics.x - 10).attr("y", endMetrics.y).attr("width", 20).attr("height", this.sequenceAnnotationManager.caret.height).attr("fill-opacity", 0).on("mousedown", function(e) {
-  Vede.application.fireEvent(that.SelectionLayerEvent.HANDLE_CLICKED, "right");
-});
-}, drawRowSelectionRect: function(startIndex, endIndex, lastBaseInRow) {
-  var row = this.sequenceAnnotator.rowByBpIndex(startIndex);
-  var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(startIndex);
-  var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(endIndex);
-  if (lastBaseInRow) 
-  {
-    endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
-  }
-  d3.select("#selectionSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 4).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 4).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SelectionLayer'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.AnnotatePanelController', Vede.controller.SequenceController, {statics: {MIN_BP_PER_ROW: 20}, AnnotatePanel: null, SequenceAnnotationManager: null, HighlightLayer: null, startHandleResizing: false, endHandleResizing: false, endSelectionIndex: null, init: function() {
-  this.callParent();
-  this.control({"#AnnotateContainer": {render: this.onRender}, "#AnnotatePanel": {resize: this.onResize, beforecollapse: this.onBeforeCollapse}});
-  var listenersObject = {scope: this};
-  listenersObject[this.MenuItemEvent.CUT] = this.cutSelection;
-  listenersObject[this.MenuItemEvent.COPY] = this.copySelection;
-  listenersObject[this.MenuItemEvent.PASTE] = this.pasteFromClipboard;
-  listenersObject[this.MenuItemEvent.GOTO_WINDOW_OPENED] = this.onGoToWindowOpened;
-  listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] = this.onShowComplementaryChanged;
-  listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] = this.onShowSpacesChanged;
-  listenersObject[this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED] = this.onShowSequenceAAChanged;
-  listenersObject[this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED] = this.onShowRevcomAAChanged;
-  listenersObject[this.SelectionLayerEvent.HANDLE_CLICKED] = this.onHandleClicked;
-  listenersObject[this.SelectionLayerEvent.HANDLE_RELEASED] = this.onHandleReleased;
-  listenersObject[this.SelectionEvent.HIGHLIGHT] = this.onHighlight;
-  listenersObject[this.SelectionEvent.CLEAR_HIGHLIGHT] = this.onClearHighlight;
-  this.application.on(listenersObject);
-}, onLaunch: function() {
-  this.callParent();
-  this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
-  this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {sequenceManager: this.SequenceManager, orfManager: this.ORFManager, aaManager: this.AAManager, restrictionEnzymeManager: this.RestrictionEnzymeManager, annotatePanel: this.AnnotatePanel});
-  document.onselectstart = function() {
-  return false;
-};
-  this.Managers.push(this.SequenceAnnotationManager);
-  this.SelectionLayer = Ext.create("Teselagen.renderer.annotate.SelectionLayer", {sequenceAnnotator: this.SequenceAnnotationManager.annotator});
-  this.HighlightLayer = Ext.create("Teselagen.renderer.annotate.HighlightLayer", {sequenceAnnotator: this.SequenceAnnotationManager.annotator});
-}, onRender: function(pCmp) {
-  pCmp.el.on("mousedown", this.onMousedown, this);
-  pCmp.el.on("mouseup", this.onMouseup, this);
-  pCmp.el.on("mousemove", this.onMousemove, this);
-  pCmp.el.dom.setAttribute("tabindex", "0");
-  pCmp.el.on("keydown", this.onKeydown, this);
-  this.SequenceAnnotationManager.annotator.init();
-}, onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
-  var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
-  var selectionStart;
-  var selectionEnd;
-  if (newBpPerRow < this.self.MIN_BP_PER_ROW) 
-  {
-    newBpPerRow = this.self.MIN_BP_PER_ROW;
-  }
-  this.SequenceAnnotationManager.setBpPerRow(newBpPerRow);
-  if (this.SequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-    this.SelectionLayer.refresh();
-  }
-}, onKeydown: function(event) {
-  this.callParent(arguments);
-  if (event.getKey() == event.UP) 
-  {
-    this.changeCaretPosition(this.caretIndex - this.SequenceAnnotationManager.bpPerRow, false, true);
-  } else if (event.getKey() == event.DOWN) 
-  {
-    this.changeCaretPosition(this.caretIndex + this.SequenceAnnotationManager.bpPerRow, false, true);
-  }
-}, cutSelection: function() {
-  this.callParent(arguments);
-}, copySelection: function() {
-  this.callParent(arguments);
-}, pasteSelection: function() {
-  this.callParent(arguments);
-}, onGoToWindowOpened: function(goToWindow) {
-  var numberField = goToWindow.down("numberfield");
-  goToWindow.CaretEvent = this.CaretEvent;
-  numberField.on("keyup", function(field, event) {
-  if (event.getKey() === event.ENTER) 
-  {
-    goToWindow.goto();
-  }
-}, this);
-  goToWindow.show();
-  numberField.setValue(this.caretIndex + 1);
-  numberField.setMaxValue(this.SequenceManager.getSequence().getSymbolsLength());
-  numberField.maxText = "Position must be at most " + numberField.maxValue + ".";
-  numberField.focus(true, 10);
-}, onHandleClicked: function(type) {
-  if (type == "left") 
-  {
-    this.startHandleResizing = true;
-  } else {
-    this.endHandleResizing = true;
-  }
-}, onHandleReleased: function() {
-  this.startHandleResizing = false;
-  this.endHandleResizing = false;
-}, onHighlight: function(indices) {
-  this.HighlightLayer.clearHighlights();
-  this.HighlightLayer.addAllHighlights(indices);
-}, onClearHighlight: function() {
-  this.HighlightLayer.clearHighlights();
-}, onVectorPanelAnnotationClicked: function(start, end) {
-  this.select(start, end);
-}, onAnnotatePanelAnnotationClicked: function(start, end) {
-  this.clickedAnnotationStart = start;
-  this.clickedAnnotationEnd = end;
-}, onSelectionChanged: function(scope, start, end) {
-  if (scope !== this) 
-  {
-    this.SelectionLayer.select(start, end);
-    this.changeCaretPosition(start, false, true);
-  }
-}, onSequenceManagerChanged: function(pSeqMan) {
-  this.callParent(arguments);
-  this.SelectionLayer.setSequenceManager(pSeqMan);
-  this.HighlightLayer.setSequenceManager(pSeqMan);
-  this.changeCaretPosition(0, true, true);
-}, onShowFeaturesChanged: function(show) {
-  this.SequenceAnnotationManager.setShowFeatures(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-  }
-}, onShowCutSitesChanged: function(show) {
-  this.SequenceAnnotationManager.setShowCutSites(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-  }
-}, onShowOrfsChanged: function(show) {
-  this.SequenceAnnotationManager.setShowOrfs(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-  }
-}, onMousedown: function(pEvt, pOpts) {
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    var el = Ext.getCmp("AnnotateContainer").el;
-    var adjustedX = pEvt.getX() - el.getX();
-    var adjustedY = pEvt.getY() + el.getScroll().top - el.getY();
-    var index = this.SequenceAnnotationManager.bpAtPoint(adjustedX, adjustedY);
-    this.mouseIsDown = true;
-    this.changeCaretPosition(index, false, true);
-    if (this.SelectionLayer.selected && pEvt.target.id !== "selectionRectangle") 
-    {
-      this.SelectionLayer.deselect();
-      this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-    }
-    if (!this.startHandleResizing && !this.endHandleResizing) 
-    {
-      this.startSelectionIndex = index;
-      this.selectionDirection = 0;
-    }
-  }
-}, onMousemove: function(pEvt, pOpts) {
-  if (this.mouseIsDown) 
-  {
-    var el = Ext.getCmp("AnnotateContainer").el;
-    var x = pEvt.getX() - el.getX();
-    var y = pEvt.getY() + el.getScroll().top - el.getY();
-    var bpIndex = this.SequenceAnnotationManager.bpAtPoint(x, y);
-    if (bpIndex == -1) 
-    {
-      return;
-    }
-    if (this.startHandleResizing) 
-    {
-      this.startSelectionIndex = bpIndex;
-      this.selectionDirection = 1;
-      this.changeCaretPosition(bpIndex, false, false);
-    } else if (this.endHandleResizing) 
-    {
-      this.endSelectionIndex = bpIndex;
-      this.selectionDirection = 1;
-      this.changeCaretPosition(this.startSelectionIndex, false, false);
-    } else {
-      this.endSelectionIndex = bpIndex;
-      this.changeCaretPosition(this.endSelectionIndex, false, false);
-    }
-    if (this.SequenceAnnotationManager.annotator.isValidIndex(this.startSelectionIndex) && this.SequenceAnnotationManager.annotator.isValidIndex(this.endSelectionIndex)) 
-    {
-      var start = this.startSelectionIndex;
-      var end = this.endSelectionIndex;
-      if (this.selectionDirection == 0 && this.startSelectionIndex != this.endSelectionIndex) 
-      {
-        if (this.startSelectionIndex < this.endSelectionIndex) 
-        {
-          this.selectionDirection = 1;
-        } else {
-          this.selectionDirection = -1;
-        }
-      }
-      if (this.selectionDirection === -1) 
-      {
-        start = this.endSelectionIndex;
-        end = this.startSelectionIndex;
-      }
-      this.SelectionLayer.startSelecting();
-      this.SelectionLayer.select(start, end);
-    }
-  }
-}, onMouseup: function(pEvt, pOpts) {
-  if (!(this.mouseIsDown || this.startHandleResizing || this.endHandleResizing)) 
-  {
-    return;
-  }
-  this.startHandleResizing = false;
-  this.endHandleResizing = false;
-  this.mouseIsDown = false;
-  if (this.SelectionLayer.selected && this.SelectionLayer.selecting) 
-  {
-    this.SelectionLayer.endSelecting();
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-    if (this.selectionDirection === 1) 
-    {
-      this.changeCaretPosition(this.SelectionLayer.end, false, false);
-    } else {
-      this.changeCaretPosition(this.SelectionLayer.start, false, false);
-    }
-  } else if (this.clickedAnnotationStart && this.clickedAnnotationEnd) 
-  {
-    this.SelectionLayer.endSelecting();
-    this.select(this.clickedAnnotationStart, this.clickedAnnotationEnd);
-    this.clickedAnnotationStart = null;
-    this.clickedAnnotationEnd = null;
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-  } else {
-    this.SelectionLayer.deselect();
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-  }
-}, select: function(start, end) {
-  this.changeCaretPosition(start, false, true);
-  this.SelectionLayer.select(start, end);
-}, changeCaretPosition: function(index, silent, scrollToCaret) {
-  if (index >= 0 && index <= this.SequenceManager.getSequence().toString().length) 
-  {
-    this.callParent(arguments);
-    this.SequenceAnnotationManager.adjustCaret(index);
-    if (scrollToCaret) 
-    {
-      var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
-      var el = Ext.getCmp("AnnotateContainer").el;
-      if (!(metrics.y < el.getScroll().top + el.getViewSize().height && metrics.y > el.getScroll().top)) 
-      {
-        el.scrollTo("top", metrics.y);
-      }
-    }
-  }
-}, onSequenceChanged: function(kind, obj) {
-  this.callParent(arguments);
-  this.SelectionLayer.refresh();
-  this.changeCaretPosition(this.caretIndex, true, false);
-}, onActiveEnzymesChanged: function() {
-  this.callParent();
-  if (this.SequenceAnnotationManager.sequenceManager && this.SequenceAnnotationManager.showCutSites) 
-  {
-    this.SequenceAnnotationManager.render();
-  }
-}, onSelectionChanged: function(scope, start, end) {
-  if (scope !== this) 
-  {
-    this.select(start, end);
-  }
-}, onSequenceChanging: function(kind, obj) {
-}, onAAManagerUpdated: function() {
-}, onORFManagerUpdated: function() {
-}, onRestrictionEnzymeManagerUpdated: function() {
-}, onShowComplementaryChanged: function(show) {
-  this.SequenceAnnotationManager.setShowComplementarySequence(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-  }
-}, onShowSpacesChanged: function(show) {
-  this.SequenceAnnotationManager.setShowSpaceEvery10Bp(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-  }
-}, onShowSequenceAAChanged: function(show) {
-  var start = this.SelectionLayer.start;
-  var end = this.SelectionLayer.end;
-  this.SequenceAnnotationManager.setShowAminoAcids(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-    this.SelectionLayer.deselect();
-    this.select(start, end);
-  }
-}, onShowRevcomAAChanged: function(show) {
-  var start = this.SelectionLayer.start;
-  var end = this.SelectionLayer.end;
-  this.SequenceAnnotationManager.setShowAminoAcidsRevCom(show);
-  if (this.SequenceAnnotationManager.sequenceManager) 
-  {
-    this.SequenceAnnotationManager.render();
-    this.SelectionLayer.deselect();
-    this.select(start, end);
-  }
-}, onBeforeCollapse: function() {
-  var vectorPanel = Ext.getCmp("VectorPanel");
-  if (vectorPanel.collapsed) 
-  {
-    vectorPanel.expand();
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AnnotatePanelController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.FindManager', Ext.Base, {config: {sequenceManager: null, AAManager: null}, findAll: function(expression, dataType, searchType) {
-  if (!this.sequenceManager || this.sequenceManager.getSequence().toString().length == 0 || expression.length == 0) 
-  {
-    return null;
-  }
-  expression = expression.toLowerCase();
-  dataType = dataType.toLowerCase();
-  searchType = searchType.toLowerCase();
-  var sequence;
-  var revComSequence;
-  var originalSequence;
-  var result = [];
-  if (dataType === "dna") 
-  {
-    if (searchType === "ambiguous") 
-    {
-      expression = this.makeAmbiguousDNAExpression(expression);
-    }
-    sequence = this.sequenceManager.getSequence().toString();
-    revComSequence = this.sequenceManager.getReverseComplementSequence().toString();
-    originalSequence = sequence;
-    sequence += sequence.slice(0, expression.length - 1);
-    revComSequence += revComSequence.slice(0, expression.length);
-    var regEx = new RegExp(expression, "gi");
-    var found;
-    var findStart;
-    var findEnd;
-    while ((found = regEx.exec(sequence)) !== null) 
-      {
-        findStart = found.index;
-        findEnd = regEx.lastIndex;
-        if (findStart >= originalSequence.length) 
-        {
-          findStart -= originalSequence.length;
-        }
-        if (findEnd >= originalSequence.length) 
-        {
-          findEnd -= originalSequence.length;
-        }
-        result.push({start: findStart, end: findEnd});
-      }
-    while ((found = regEx.exec(revComSequence)) !== null) 
-      {
-        findStart = revComSequence.length - regEx.lastIndex - expression.length;
-        findEnd = revComSequence.length - found.index - expression.length;
-        if (findStart >= originalSequence.length) 
-        {
-          findStart -= originalSequence.length;
-        }
-        if (findEnd >= originalSequence.length) 
-        {
-          findEnd -= originalSequence.length;
-        }
-        result.push({start: findStart, end: findEnd});
-      }
-  } else {
-    if (searchType === "ambiguous") 
-    {
-      expression = this.makeAmbiguousAAExpression(expression);
-    }
-    expression = expression.replace(".", "\\.");
-    this.AAManager.recalculateNonCircular();
-    var aaSequenceFrames = this.AAManager.getAaSequence();
-    var aaRevComSequenceFrames = this.AAManager.getAaRevCom();
-    var originalSequence;
-    var regEx;
-    var aaStart;
-    var found;
-    Ext.each(aaSequenceFrames, function(aaSequence, frame) {
-  originalSequence = aaSequence;
-  aaSequence += aaSequence.slice(0, expression.length - 1);
-  regEx = new RegExp(expression, "gi");
-  while ((found = regEx.exec(aaSequence)) !== null) 
-    {
-      var findStart = found.index;
-      var findEnd = regEx.lastIndex;
-      if (findStart >= originalSequence.length) 
-      {
-        findStart -= originalSequence.length;
-      }
-      if (findEnd >= originalSequence.length) 
-      {
-        findEnd -= originalSequence.length;
-      }
-      result.push({start: findStart * 3 + frame, end: findEnd * 3 + frame});
-    }
-});
-    var offsets;
-    var seqLength = this.sequenceManager.getSequence().toString().length;
-    if (seqLength % 3 === 0) 
-    {
-      offsets = [0, 2, 1];
-    } else if (seqLength % 3 === 1) 
-    {
-      offsets = [1, 0, 2];
-    } else {
-      offsets = [2, 1, 0];
-    }
-    Ext.each(aaRevComSequenceFrames, function(aaSequence, frame) {
-  originalSequence = aaSequence;
-  aaSequence += aaSequence.slice(0, expression.length - 1);
-  regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi");
-  while ((found = regEx.exec(aaSequence)) !== null) 
-    {
-      var findStart = aaSequence.length - regEx.lastIndex;
-      var findEnd = aaSequence.length - found.index;
-      if (findStart >= originalSequence.length) 
-      {
-        findStart -= originalSequence.length;
-      }
-      if (findEnd > originalSequence.length) 
-      {
-        findEnd -= originalSequence.length;
-      }
-      result.push({start: findStart * 3 + offsets[frame], end: findEnd * 3 + offsets[frame]});
-    }
-});
-  }
-  return result;
-}, findOne: function(expression, dataType, searchType, start, aaSearchStart) {
-  if (!this.sequenceManager || this.sequenceManager.getSequence().toString().length == 0 || expression.length == 0) 
-  {
-    return null;
-  }
-  expression = expression.toLowerCase();
-  dataType = dataType.toLowerCase();
-  searchType = searchType.toLowerCase();
-  var sequence;
-  var revComSequence;
-  var originalSequence;
-  var result;
-  if (dataType === "dna") 
-  {
-    if (searchType === "ambiguous") 
-    {
-      expression = this.makeAmbiguousDNAExpression(expression);
-    }
-    sequence = this.sequenceManager.getSequence().toString();
-    revComSequence = this.sequenceManager.getReverseComplementSequence().toString();
-    originalSequence = sequence;
-    sequence += sequence;
-    revComSequence += revComSequence;
-    if (start != 0) 
-    {
-      sequence = sequence.slice(start);
-      revComSequence = revComSequence.substring(0, revComSequence.length - start);
-    }
-    var regEx = new RegExp(expression, "gi");
-    var found = regEx.exec(sequence);
-    var distanceFromCaret;
-    if (found) 
-    {
-      var findStart = found.index + start;
-      var findEnd = regEx.lastIndex + start;
-      distanceFromCaret = found.index;
-      if (findStart >= originalSequence.length) 
-      {
-        findStart -= originalSequence.length;
-      }
-      if (findEnd >= originalSequence.length) 
-      {
-        findEnd -= originalSequence.length;
-      }
-    }
-    regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi");
-    var revComFound = regEx.exec(revComSequence);
-    var revComDistanceFromCaret;
-    if (revComFound) 
-    {
-      var revComStart = revComSequence.length - regEx.lastIndex + start;
-      var revComEnd = revComSequence.length - revComFound.index + start;
-      revComDistanceFromCaret = revComStart - start;
-      if (revComStart >= originalSequence.length) 
-      {
-        revComStart -= originalSequence.length;
-      }
-      if (revComEnd >= originalSequence.length) 
-      {
-        revComEnd -= originalSequence.length;
-      }
-    }
-    if (found && revComFound) 
-    {
-      if (distanceFromCaret < revComDistanceFromCaret) 
-      {
-        return {start: findStart, end: findEnd};
-      } else {
-        return {start: revComStart, end: revComEnd};
-      }
-    } else if (found) 
-    {
-      return {start: findStart, end: findEnd};
-    } else if (revComFound) 
-    {
-      return {start: revComStart, end: revComEnd};
-    } else {
-      return false;
-    }
-  } else {
-    if (searchType === "ambiguous") 
-    {
-      expression = this.makeAmbiguousAAExpression(expression);
-    }
-    expression = expression.replace(".", "\\.");
-    this.AAManager.recalculateNonCircular();
-    var aaSequenceFrames = this.AAManager.getAaSequence();
-    var aaRevComSequenceFrames = this.AAManager.getAaRevCom();
-    var originalSequence;
-    var regEx;
-    var aaStart;
-    var bestResult;
-    var bestRevComResult;
-    var found;
-    var distanceFromCaret;
-    var bestDistanceFromCaret = null;
-    Ext.each(aaSequenceFrames, function(aaSequence, frame) {
-  regEx = new RegExp(expression, "gi");
-  originalSequence = aaSequence;
-  aaSequence = aaSequence + aaSequence;
-  if (start === 0) 
-  {
-    aaStart = 0;
-  } else {
-    aaStart = Math.ceil((start - frame) / 3);
-  }
-  aaSequence = aaSequence.slice(aaStart);
-  found = regEx.exec(aaSequence);
-  if (found) 
-  {
-    var findStart = found.index + aaStart;
-    var findEnd = regEx.lastIndex + aaStart;
-    distanceFromCaret = found.index;
-    if (findStart >= originalSequence.length) 
-    {
-      findStart -= originalSequence.length;
-    }
-    if (findEnd >= originalSequence.length) 
-    {
-      findEnd -= originalSequence.length;
-    }
-    if (bestDistanceFromCaret === null || distanceFromCaret < bestDistanceFromCaret) 
-    {
-      bestResult = {start: findStart * 3 + frame, end: findEnd * 3 + frame};
-      bestDistanceFromCaret = distanceFromCaret;
-    }
-  }
-});
-    if (aaSearchStart) 
-    {
-      start = aaSearchStart;
-    }
-    var offsets;
-    var seqLength = this.sequenceManager.getSequence().toString().length;
-    if (seqLength % 3 === 0) 
-    {
-      offsets = [0, 2, 1];
-    } else if (seqLength % 3 === 1) 
-    {
-      offsets = [1, 0, 2];
-    } else {
-      offsets = [2, 1, 0];
-    }
-    Ext.each(aaRevComSequenceFrames, function(aaSequence, frame) {
-  regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi");
-  originalSequence = aaSequence;
-  aaSequence = aaSequence + aaSequence;
-  if (start === 0) 
-  {
-    aaStart = 0;
-  } else {
-    aaStart = Math.ceil((start - frame) / 3);
-  }
-  aaSequence = aaSequence.substring(0, aaSequence.length - aaStart);
-  found = regEx.exec(aaSequence);
-  if (found) 
-  {
-    var findStart = aaSequence.length - regEx.lastIndex + aaStart;
-    var findEnd = aaSequence.length - found.index + aaStart;
-    distanceFromCaret = findStart - aaStart;
-    if (findStart >= originalSequence.length) 
-    {
-      findStart -= originalSequence.length;
-    }
-    if (findEnd > originalSequence.length) 
-    {
-      findEnd -= originalSequence.length;
-    }
-    if (bestDistanceFromCaret === null || distanceFromCaret < bestDistanceFromCaret) 
-    {
-      bestResult = {start: findStart * 3 + offsets[frame], end: findEnd * 3 + offsets[frame]};
-      bestDistanceFromCaret = distanceFromCaret;
-    }
-  }
-}, this);
-    return bestResult;
-  }
-}, makeAmbiguousDNAExpression: function(expression) {
-  var ambiguous = [];
-  var switchObj = {n: "[ATGC]", k: "[GT]", m: "[AC]", r: "[AG]", y: "[CT]", s: "[CG]", w: "[AT]", b: "[CGT]", v: "[ACG]", h: "[ACT]", d: "[AGT]"};
-  for (var i = 0; i < expression.length; i++) 
-    {
-      var character = expression.charAt(i);
-      if (character.match(/[atcgu]/)) 
-      {
-        ambiguous.push(character);
-      } else {
-        ambiguous.push(switchObj[character]);
-      }
-    }
-  return ambiguous.join("");
-}, makeAmbiguousAAExpression: function(expression) {
-  var ambiguous = [];
-  var switchObj = {b: "[DN]", z: "[QE]", x: "[ARNDCQEGHILKMFPSTWYV.]"};
-  for (var i = 0; i < expression.length; i++) 
-    {
-      var character = expression.charAt(i);
-      if (character.match(/[arndcqeghilkmfpstwyv.]/)) 
-      {
-        ambiguous.push(character);
-      } else {
-        ambiguous.push(switchObj[character]);
-      }
-    }
-  return ambiguous.join("");
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.manager, 'FindManager'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.FindPanelController', Ext.app.Controller, {CaretEvent: null, MenuItemEvent: null, SelectionEvent: null, SequenceManagerEvent: null, findManager: null, sequenceManager: null, findField: null, findInSelector: null, literalSelector: null, caretIndex: 0, onCaretPositionChanged: function(scope, index) {
-  this.caretIndex = index;
-}, onFindPanelOpened: function() {
-  Ext.getCmp("FindPanel").setVisible(!Ext.getCmp("FindPanel").isVisible());
-  Ext.getCmp("findField").focus(true, 10);
-}, onSequenceManagerChanged: function(pSeqMan) {
-  this.sequenceManager = pSeqMan;
-  this.findManager.setSequenceManager(pSeqMan);
-  this.findManager.getAAManager().setSequenceManager(pSeqMan);
-}, onFindFieldKeyup: function(field, event) {
-  if (field.getValue() && event.getKey() === event.ENTER) 
-  {
-    this.find(this.caretIndex + 1, this.caretIndex + 2);
-  } else if (field.getValue() && event.getKey() !== event.ENTER) 
-  {
-    this.find();
-  } else {
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-    this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
-    this.findField.setFieldStyle("background-color:white");
-  }
-}, onFindFieldValidityChange: function(field, valid) {
-  if (valid) 
-  {
-    Ext.getCmp("findNextBtn").enable();
-  } else {
-    Ext.getCmp("findNextBtn").disable();
-    this.findField.setFieldStyle("background-color:#ff6666");
-  }
-}, onFindNextClick: function() {
-  this.find(this.caretIndex + 1, this.caretIndex + 2);
-}, find: function(startIndex, aaStartIndex) {
-  if (this.findField.isValid()) 
-  {
-    var result = this.findManager.findOne(this.findField.getValue(), this.findInSelector.getValue(), this.literalSelector.getValue(), startIndex || this.caretIndex, aaStartIndex);
-    if (result) 
-    {
-      this.findField.setFieldStyle("background-color:white");
-      this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, result.start, result.end);
-      if (Ext.getCmp("highlightAllBtn").pressed) 
-      {
-        this.highlightMatches();
-      }
-    } else {
-      this.findField.setFieldStyle("background-color:#ff6666");
-      this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-      this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
-    }
-  }
-}, onToggleHighlight: function(button, pressed) {
-  if (pressed) 
-  {
-    this.highlightMatches();
-  } else {
-    this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
-  }
-}, onFindInSelectorChange: function() {
-  this.validateFindField();
-  this.find();
-}, highlightMatches: function() {
-  var matches = this.findManager.findAll(this.findField.getValue(), this.findInSelector.getValue(), this.literalSelector.getValue());
-  if (matches) 
-  {
-    this.application.fireEvent(this.SelectionEvent.HIGHLIGHT, matches);
-  }
-}, validateFindField: function() {
-  this.findField.validate();
-}, init: function() {
-  this.control({"#findField": {keyup: this.onFindFieldKeyup, validitychange: this.onFindFieldValidityChange}, "#findNextBtn": {click: this.onFindNextClick}, "#highlightAllBtn": {toggle: this.onToggleHighlight}, "#findInSelector": {change: this.onFindInSelectorChange}, "#literalSelector": {change: this.validateFindField}});
-  this.CaretEvent = Teselagen.event.CaretEvent;
-  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-  this.SelectionEvent = Teselagen.event.SelectionEvent;
-  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
-  this.application.on(this.CaretEvent.CARET_POSITION_CHANGED, this.onCaretPositionChanged, this);
-  this.application.on(this.MenuItemEvent.FIND_PANEL_OPENED, this.onFindPanelOpened, this);
-  this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
-}, onLaunch: function() {
-  this.findField = Ext.getCmp("findField");
-  this.findInSelector = Ext.getCmp("findInSelector");
-  this.literalSelector = Ext.getCmp("literalSelector");
-  this.findManager = Ext.create("Teselagen.manager.FindManager");
-  this.findManager.setAAManager(Ext.create("Teselagen.manager.AAManager"));
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'FindPanelController'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.ve.GoToWindow', Ext.window.Window, {title: 'Go To...', modal: true, height: 110, resizable: false, items: [{xtype: 'container', layout: {type: 'vbox'}, height: 110, items: [{xtype: 'numberfield', fieldLabel: 'Position', allowDecimals: false, enableKeyEvents: true, minText: 'Position must be at least 1.', minValue: 1, msgTarget: 'under', value: 1}, {xtype: 'container', layout: {type: 'hbox'}, items: [{xtype: 'button', text: 'Ok', margin: 2, padding: 2, handler: function() {
-  this.up('window').goto();
-}}, {xtype: 'button', text: 'Cancel', margin: 2, padding: 2, handler: function() {
-  this.up('window').close();
-}}]}]}], goto: function() {
-  var field = this.down('numberfield');
-  var index = field.getValue();
-  if (index > field.maxValue) 
-  {
-    index = field.maxValue;
-  } else if (index < field.minValue) 
-  {
-    index = field.minValue - 1;
-  }
-  Vede.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED, this, index - 1);
-  this.close();
-}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'GoToWindow'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.form.ItemSelector', Ext.ux.form.MultiSelect, {hideNavIcons: false, buttons: ['top', 'up', 'add', 'remove', 'down', 'bottom'], buttonsText: {top: "Move to Top", up: "Move Up", add: "Add to Selected", remove: "Remove from Selected", down: "Move Down", bottom: "Move to Bottom"}, doCopy: false, layout: {type: 'hbox', align: 'stretch'}, initComponent: function() {
-  var me = this;
-  if (me.ddReorder) 
-  {
-    me.ddGroup = me.id + '-dd';
-  }
-  me.callParent();
-  me.bindStore(me.store);
-}, createList: function(title) {
-  var me = this;
-  return Ext.create('Ext.ux.form.MultiSelect', {submitValue: false, getSubmitData: function() {
-  return null;
-}, getModelData: function() {
-  return null;
-}, flex: 1, dragGroup: me.ddGroup, dropGroup: me.ddGroup, title: title, store: {model: me.store.model, data: []}, displayField: me.displayField, valueField: me.valueField, disabled: me.disabled, listeners: {boundList: {scope: me, itemdblclick: me.onItemDblClick, drop: me.syncValue}}});
-}, setupItems: function() {
-  var me = this;
-  me.fromField = me.createList(me.fromTitle);
-  me.toField = me.createList(me.toTitle);
-  return [me.fromField, {xtype: 'container', margins: '0 4', layout: {type: 'vbox', pack: 'center'}, items: me.createButtons()}, me.toField];
-}, createButtons: function() {
-  var me = this, buttons = [];
-  if (!me.hideNavIcons) 
-  {
-    Ext.Array.forEach(me.buttons, function(name) {
-  buttons.push({xtype: 'button', tooltip: me.buttonsText[name], handler: me['on' + Ext.String.capitalize(name) + 'BtnClick'], cls: Ext.baseCSSPrefix + 'form-itemselector-btn', iconCls: Ext.baseCSSPrefix + 'form-itemselector-' + name, navBtn: true, scope: me, margin: '4 0 0 0'});
-});
-  }
-  return buttons;
-}, getSelections: function(list) {
-  var store = list.getStore();
-  return Ext.Array.sort(list.getSelectionModel().getSelection(), function(a, b) {
-  a = store.indexOf(a);
-  b = store.indexOf(b);
-  if (a < b) 
-  {
-    return -1;
-  } else if (a > b) 
-  {
-    return 1;
-  }
-  return 0;
-});
-}, onTopBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
-  store.suspendEvents();
-  store.remove(selected, true);
-  store.insert(0, selected);
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onBottomBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
-  store.suspendEvents();
-  store.remove(selected, true);
-  store.add(selected);
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onUpBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = 0, len = selected.length, index = 0;
-  store.suspendEvents();
-  for (; i < len; ++i , index++) 
-    {
-      rec = selected[i];
-      index = Math.max(index, store.indexOf(rec) - 1);
-      store.remove(rec, true);
-      store.insert(index, rec);
-    }
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onDownBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = selected.length - 1, index = store.getCount() - 1;
-  store.suspendEvents();
-  for (; i > -1; --i , index--) 
-    {
-      rec = selected[i];
-      index = Math.min(index, store.indexOf(rec) + 1);
-      store.remove(rec, true);
-      store.insert(index, rec);
-    }
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onAddBtnClick: function() {
-  var me = this, selected = me.getSelections(me.fromField.boundList);
-  me.moveRec(true, selected);
-  me.toField.boundList.getSelectionModel().select(selected);
-}, onRemoveBtnClick: function() {
-  var me = this, selected = me.getSelections(me.toField.boundList);
-  me.moveRec(false, selected);
-  me.fromField.boundList.getSelectionModel().select(selected);
-}, moveRec: function(add, recs) {
-  var me = this, fromField = me.fromField, toField = me.toField, fromStore = add ? fromField.store : toField.store, toStore = add ? toField.store : fromField.store;
-  fromStore.suspendEvents();
-  toStore.suspendEvents();
-  if (!me.doCopy) 
-  {
-    fromStore.remove(recs);
-    toStore.add(recs);
-  } else {
-    if (add) 
-    {
-      toStore.add(recs);
-    } else {
-      fromStore.remove(recs);
-    }
-  }
-  fromStore.resumeEvents();
-  toStore.resumeEvents();
-  fromField.boundList.refresh();
-  toField.boundList.refresh();
-  me.syncValue();
-}, syncValue: function() {
-  var me = this;
-  me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
-}, onItemDblClick: function(view, rec) {
-  this.moveRec(view === this.fromField.boundList, rec);
-}, setValue: function(value) {
-  var me = this, fromField = me.fromField, toField = me.toField, fromStore = fromField.store, toStore = toField.store, selected;
-  if (!me.fromStorePopulated) 
-  {
-    me.fromField.store.on({load: Ext.Function.bind(me.setValue, me, [value]), single: true});
-    return;
-  }
-  value = me.setupValue(value);
-  me.mixins.field.setValue.call(me, value);
-  selected = me.getRecordsForValue(value);
-  fromStore.suspendEvents();
-  toStore.suspendEvents();
-  fromStore.removeAll();
-  toStore.removeAll();
-  me.populateFromStore(me.store);
-  Ext.Array.forEach(selected, function(rec) {
-  if (fromStore.indexOf(rec) > -1) 
-  {
-    fromStore.remove(rec);
-  }
-  toStore.add(rec);
-});
-  fromStore.resumeEvents();
-  toStore.resumeEvents();
-  Ext.suspendLayouts();
-  fromField.boundList.refresh();
-  toField.boundList.refresh();
-  Ext.resumeLayouts(true);
-}, onBindStore: function(store, initial) {
-  var me = this;
-  if (me.fromField) 
-  {
-    me.fromField.store.removeAll();
-    me.toField.store.removeAll();
-    if (store.getCount()) 
-    {
-      me.populateFromStore(store);
-    } else {
-      me.store.on('load', me.populateFromStore, me);
-    }
-  }
-}, populateFromStore: function(store) {
-  var fromStore = this.fromField.store;
-  this.fromStorePopulated = true;
-  fromStore.add(store.getRange());
-  fromStore.fireEvent('load', fromStore);
-}, onEnable: function() {
-  var me = this;
-  me.callParent();
-  me.fromField.enable();
-  me.toField.enable();
-  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
-  btn.enable();
-});
-}, onDisable: function() {
-  var me = this;
-  me.callParent();
-  me.fromField.disable();
-  me.toField.disable();
-  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
-  btn.disable();
-});
-}, onDestroy: function() {
-  this.bindStore(null);
-  this.callParent();
-}}, 0, ["itemselectorvede"], ["itemselectorvede", "component", "multiselectfield", "container", "multiselect", "fieldcontainer", "box"], {"itemselectorvede": true, "component": true, "multiselectfield": true, "container": true, "multiselect": true, "fieldcontainer": true, "box": true}, ["widget.itemselectorvede"], 0, [Vede.view.form, 'ItemSelector'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.RestrictionEnzymesManagerWindow', Ext.window.Window, {height: 474, width: 450, layout: {align: "stretch", type: "vbox"}, title: "Restriction Enzyme Manager", resizable: false, draggable: false, modal: true, initComponent: function() {
-  var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
-  var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], sorters: [{property: "name", direction: "ASC"}]});
-  var me = this;
-  Ext.applyIf(me, {items: [{xtype: "container", layout: {align: "middle", type: "hbox"}, items: [{xtype: "container", layout: {align: "stretch", type: "vbox"}, width: 180, items: [{xtype: "combobox", id: "enzymeGroupSelector", store: groupStore, displayField: "name", fieldLabel: "Enzyme Groups", labelAlign: "top", queryMode: "local", maxWidth: 150, editable: false}, {xtype: "textfield", id: "enzymeSearchField", fieldLabel: "Label", hideLabel: true, emptyText: "Search for Enzyme", maxWidth: 150, enableKeyEvents: true}]}, {xtype: "combobox", id: "enzymeUserGroupSelector", displayField: "name", fieldLabel: "User Enzyme Groups", labelAlign: "top", queryMode: "local", width: 150, editable: false}]}, {xtype: "container", layout: {align: "stretch", type: "hbox"}, flex: 1, items: [{xtype: "itemselectorvede", id: "enzymeSelector", store: enzymeListStore, displayField: "name", width: 330, buttons: ["add", "remove"], buttonsText: {add: "Add to Active", remove: "Remove from Active"}, doCopy: true}, {xtype: "container", layout: {align: "stretch", type: "vbox"}, items: [{xtype: "button", text: "Save as Group", id: "saveGroupButton"}, {xtype: "button", text: "Delete Group", id: "deleteGroupButton"}, {xtype: "button", text: "Make Active", id: "makeActiveButton"}]}]}, {xtype: "container", layout: {align: "stretch", type: "hbox"}, items: [{xtype: "button", id: "restrictionEnzymesManagerOKButton", width: 69, text: "OK"}, {xtype: "button", id: "restrictionEnzymesManagerCancelButton", width: 69, text: "Cancel"}]}]});
-  me.callParent(arguments);
-}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'RestrictionEnzymesManagerWindow'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.ve.SelectWindow', Ext.window.Window, {layout: {align: 'stretch', type: 'vbox'}, title: 'Select...', resizable: false, draggable: false, modal: true, width: 158, initComponent: function() {
-  var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'container', layout: {align: 'stretch', type: 'vbox'}, padding: 2, flex: 1, items: [{xtype: 'textfield', id: 'selectWindowFromField', fieldLabel: 'From', labelAlign: 'right', labelWidth: 50}, {xtype: 'textfield', id: 'selectWindowToField', fieldLabel: 'To', labelAlign: 'right', labelWidth: 50}]}, {xtype: 'container', layout: {pack: 'end', type: 'hbox'}, flex: 0.3, items: [{xtype: 'button', height: 23, id: 'selectWindowOKButton', margin: 2, maxHeight: 28, width: 69, text: 'OK'}, {xtype: 'button', height: 23, id: 'selectWindowCancelButton', margin: 2, maxHeight: 28, width: 69, text: 'Cancel'}]}]});
-  me.callParent(arguments);
-}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'SelectWindow'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.ve.SimulateDigestionWindow', Ext.window.Window, {height: 500, width: 900, layout: {align: "stretch", type: "hbox"}, resizable: true, constrainHeader: true, title: "Gel Digest", modal: true, initComponent: function() {
-  var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
-  var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], autoLoad: true, sorters: [{property: "name", direction: "ASC"}]});
-  var me = this;
-  Ext.applyIf(me, {items: [{xtype: "container", height: "100%", width: "100%", layout: {align: "stretch", type: "hbox"}, items: [{xtype: "panel", width: 300, title: "Enzyme Groups", layout: {align: "stretch", type: "vbox"}, items: [{xtype: "container", layout: {type: "hbox", align: "stretch"}, items: [{xtype: "combobox", hideTrigger: true, valueField: "name", emptyText: "Search for Enzyme in...", id: "enzymeGroupSelector-search", queryMode: "local", disabled: false, maxWidth: 134}, {xtype: "combobox", id: "enzymeGroupSelector-digest", store: groupStore, editable: false, queryMode: "local", value: "All Enzymes", displayField: "name", flex: 1}]}, {xtype: "itemselectorvede", name: "itemselectorvede", flex: 1, id: "enzymeListSelector-digest", store: enzymeListStore, displayField: "name", valueField: "name", buttons: ["add", "remove"], buttonsText: {add: "Add to Active", remove: "Remove from Active"}, msgTarget: "side", fromTitle: "Available", toTitle: "Active", doCopy: true}]}, {xtype: "panel", flex: 1, layout: {align: "stretch", type: "vbox"}, title: "Digest Results", items: [{xtype: "fieldcontainer", height: 40, padding: "10 0 30 10", width: 400, fieldLabel: "", flex: 0, items: [{xtype: "combobox", height: 21, id: "ladderSelector", padding: " 10 0 0 10", width: 425, value: "GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", store: ["GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", "GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", "GeneRuler Low Range DNA Ladder 25-700 bp"], fieldLabel: "Ladder", editable: false}]}, {xtype: "panel", flex: 1, layout: {type: "vbox", align: "stretch"}, bodyStyle: {background: "#000"}, items: [{xtype: "draw", id: "drawingSurface", flex: 1, x: 0, y: 0}]}]}]}]});
-  me.callParent(arguments);
-}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'SimulateDigestionWindow'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.MainMenuController', Ext.app.Controller, {CaretEvent: null, MenuItemEvent: null, ProjectManager: null, VisibilityEvent: null, SequenceManagerEvent: null, onCutMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.CUT);
-}, onCopyMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.COPY);
-}, onPasteMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.PASTE);
-}, onUndoMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.UNDO);
-}, onRedoMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.REDO);
-}, onSafeEditingMenuItemCheckChange: function(checkbox, checked) {
-  this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, checked);
-}, validateSafeEditingMenuItem: function(checked) {
-  Ext.getCmp("safeEditingMenuItem").setChecked(checked);
-}, onFindMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
-}, onGotoMenuItemClick: function() {
-  var gotoWindow = Ext.create("Vede.view.ve.GoToWindow");
-  this.application.fireEvent(this.MenuItemEvent.GOTO_WINDOW_OPENED, gotoWindow);
-}, onSelectMenuItemClick: function() {
-  var selectWindow = Ext.create("Vede.view.ve.SelectWindow");
-  selectWindow.show();
-  selectWindow.center();
-  this.application.fireEvent(this.MenuItemEvent.SELECT_WINDOW_OPENED, selectWindow);
-}, onSelectAllMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
-}, onSelectInverseMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
-}, onReverseComplementMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
-}, onRebaseMenuItemClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.REBASE_SEQUENCE);
-}, onCancelButtonClick: function(button, e, options) {
-  if (button.up('window')) 
-  {
-    button.up('window').close();
-  }
-}, onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
-  var viewMode;
-  if (checked) 
-  {
-    viewMode = "circular";
-  } else {
-    viewMode = "linear";
-  }
-  this.application.fireEvent("ViewModeChanged", viewMode);
-}, onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
-  var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
-  if (checked) 
-  {
-    btn.toggle(true, true);
-  } else {
-    btn.toggle(false, true);
-  }
-  this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED, checked);
-}, onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
-  var btn = Ext.ComponentQuery.query("#cutsitesBtn")[0];
-  if (checked) 
-  {
-    btn.toggle(true, true);
-  } else {
-    btn.toggle(false, true);
-  }
-  this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED, checked);
-}, onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
-  var btn = Ext.ComponentQuery.query("#orfsBtn")[0];
-  if (checked) 
-  {
-    btn.toggle(true, true);
-  } else {
-    btn.toggle(false, true);
-  }
-  this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED, checked);
-}, onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
-  this.application.fireEvent(this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED, checked);
-}, onShowSpacesMenuItemCheckChange: function(menucheckitem, checked) {
-  this.application.fireEvent(this.VisibilityEvent.SHOW_SPACES_CHANGED, checked);
-}, onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
-  this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED, checked);
-}, onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
-  this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED, checked);
-}, onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
-  this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED, checked);
-}, onCutSiteLabelsMenuItemCheckChange: function(menucheckitem, checked) {
-  this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED, checked);
-}, onSimulateDigestionMenuItemClick: function() {
-  var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
-  simulateDigestionWindow.show();
-  simulateDigestionWindow.center();
-  this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
-}, onCreateNewFeatureMenuItemClick: function() {
-  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");
-  createNewFeatureWindow.show();
-  createNewFeatureWindow.center();
-}, onRestrictionEnzymesManagerMenuItemClick: function() {
-  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.RestrictionEnzymesManagerWindow");
-  restrictionEnzymesManagerWindow.show();
-  restrictionEnzymesManagerWindow.center();
-  this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
-}, onViewModeChanged: function(viewMode) {
-  var circularMenuItem = Ext.getCmp("circularViewMenuItem");
-  var linearMenuItem = Ext.getCmp("linearViewMenuItem");
-  if (viewMode == "linear") 
-  {
-    circularMenuItem.setChecked(false, true);
-    linearMenuItem.setChecked(true, true);
-  } else {
-    circularMenuItem.setChecked(true, false);
-    linearMenuItem.setChecked(false, true);
-  }
-}, onDownloadGenbankMenuItemClick: function(item, e, options) {
-  console.log("Download genbank called");
-  var saveFile = function(name, gb) {
-  var flag;
-  var text = gb.toString();
-  var filename = name;
-  var bb = new BlobBuilder();
-  bb.append(text);
-  saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
-};
-  var sequenceFileManager = Teselagen.manager.ProjectManager.workingSequenceFileManager;
-  var fileName = sequenceFileManager.getName() + ".gb";
-  saveFile(fileName, sequenceFileManager.toGenbank());
-}, onRenameSequenceItemClick: function(item, e, options) {
-  var onPromptClosed = function(answer, text) {
-  Teselagen.manager.ProjectManager.workingSequence.set('name', text);
-  Teselagen.manager.ProjectManager.workingSequence.save({callback: function() {
-  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
-}});
-};
-  Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
-}, onHelpBtnClick: function(button, e, options) {
-  if (!this.helpWindow || !this.helpWindow.body) 
-  this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
-}, onSelectionCancelled: function(scope) {
-  Ext.getCmp("createNewFeatureMenuItem").disable();
-}, onSelectionChanged: function(scope) {
-  Ext.getCmp("createNewFeatureMenuItem").enable();
-}, onSequenceManagerChanged: function(scope) {
-  Ext.getCmp("createNewFeatureMenuItem").disable();
-}, init: function() {
-  this.control({"#cutMenuItem": {click: this.onCutMenuItemClick}, "#copyMenuItem": {click: this.onCopyMenuItemClick}, "#pasteMenuItem": {click: this.onPasteMenuItemClick}, "#undoMenuItem": {click: this.onUndoMenuItemClick}, "#redoMenuItem": {click: this.onRedoMenuItemClick}, "#safeEditingMenuItem": {checkchange: this.onSafeEditingMenuItemCheckChange}, "#findMenuItem": {click: this.onFindMenuItemClick}, "#gotoMenuItem": {click: this.onGotoMenuItemClick}, "#selectMenuItem": {click: this.onSelectMenuItemClick}, "#selectAllMenuItem": {click: this.onSelectAllMenuItemClick}, "#selectInverseMenuItem": {click: this.onSelectInverseMenuItemClick}, "#reverseComplementMenuItem": {click: this.onReverseComplementMenuItemClick}, "#rebaseMenuItem": {click: this.onRebaseMenuItemClick}, "#VectorEditorPanel > button[text=Cancel]": {click: this.onCancelButtonClick}, "#downloadGenbankMenuItem": {click: this.onDownloadGenbankMenuItemClick}, "#renameSequenceItem": {click: this.onRenameSequenceItemClick}, "#circularViewMenuItem": {checkchange: this.onCircularViewMenuItemCheckChange}, "#featuresMenuItem": {checkchange: this.onFeaturesMenuItemCheckChange}, "#cutSitesMenuItem": {checkchange: this.onCutSitesMenuItemCheckChange}, "#orfsMenuItem": {checkchange: this.onOrfsMenuItemCheckChange}, "#showComplementaryMenuItem": {checkchange: this.onShowComplementaryMenuItemCheckChange}, "#showSpacesMenuItem": {checkchange: this.onShowSpacesMenuItemCheckChange}, "#showSequenceAAMenuItem": {checkchange: this.onShowSequenceAAMenuItemCheckChange}, "#showRevcomAAMenuItem": {checkchange: this.onShowRevcomAAMenuItemCheckChange}, "#featureLabelsMenuItem": {checkchange: this.onFeatureLabelsMenuItemCheckChange}, "#cutSiteLabelsMenuItem": {checkchange: this.onCutSiteLabelsMenuItemCheckChange}, "#simulateDigestionMenuItem": {click: this.onSimulateDigestionMenuItemClick}, "#createNewFeatureMenuItem": {click: this.onCreateNewFeatureMenuItemClick}, "#restrictionEnzymesManagerMenuItem": {click: this.onRestrictionEnzymesManagerMenuItemClick}});
-  this.CaretEvent = Teselagen.event.CaretEvent;
-  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-  this.ProjectManager = Teselagen.manager.ProjectManager;
-  this.VisibilityEvent = Teselagen.event.VisibilityEvent;
-  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
-  this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED, this.validateSafeEditingMenuItem, this);
-  this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-  this.application.on(Teselagen.event.SelectionEvent.SELECTION_CANCELED, this.onSelectionCancelled, this);
-  this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this.onSelectionChanged, this);
-  this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'MainMenuController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.MainPanelController', Ext.app.Controller, {refs: [{ref: "deMainMenuBar", selector: "#DeviceEditorMainMenuBar"}, {ref: "deMainToolBar", selector: "#DeviceEditorMainToolBar"}, {ref: "veMainMenuBar", selector: "#VectorEditorMainMenuBar"}, {ref: "veMainToolBar", selector: "#VectorEditorMainToolBar"}], init: function() {
-  this.control({"#MainPanel": {tabchange: this.onTabChange}});
-}, onLaunch: function() {
-}, onTabChange: function(pTabpanel, pNewcard) {
-  if (pNewcard.id.indexOf("VectorEditor") === 0) 
-  {
-    this.getDeMainMenuBar().hide();
-    this.getDeMainToolBar().hide();
-    this.getVeMainMenuBar().show();
-    this.getVeMainToolBar().show();
-  } else if (pNewcard.id.indexOf("DeviceEditor") === 0) 
-  {
-    this.getVeMainMenuBar().hide();
-    this.getVeMainToolBar().hide();
-    this.getDeMainMenuBar().show();
-    this.getDeMainToolBar().show();
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'MainPanelController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.MainToolbarController', Ext.app.Controller, {MenuItemEvent: null, VisibilityEvent: null, onImportBtnChange: function(pBtn) {
-  if (typeof window.FileReader !== 'function') 
-  {
-    Ext.Msg.alert('Browser does not support File API.');
-  } else {
-    var fileInput = pBtn.extractFileInput();
-    var file = fileInput.files[0];
-    var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
-    if (ext) 
-    {
-      Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
-      var fr = new FileReader();
-      fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
-      fr.onerror = this.onImportFileError;
-      fr.readAsText(file);
-    } else {
-      Ext.MessageBox.alert('Error', 'Invalid file format');
-    }
-  }
-}, onImportFileLoad: function(pFile, pExt, pEvt) {
-  Vede.application.fireEvent("ImportFileToSequence", pFile, pExt, pEvt, Teselagen.manager.ProjectManager.workingSequence);
-}, onImportFileError: function(pEvt) {
-  var err = pEvt.target.error;
-  if (err) 
-  {
-    throw err;
-  }
-}, onCircularViewButtonClick: function(button, e, options) {
-  var viewMode;
-  if (button.pressed) 
-  {
-    viewMode = "circular";
-  } else {
-    viewMode = "linear";
-  }
-  this.application.fireEvent("ViewModeChanged", viewMode);
-}, onUndoButtonClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.UNDO);
-}, onRedoButtonClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.REDO);
-}, onFindButtonClick: function() {
-  this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
-}, onFeaturesButtonClick: function(button, e, options) {
-  var menuItem = Ext.ComponentQuery.query('#featuresMenuItem')[0];
-  if (button.pressed) 
-  {
-    menuItem.setChecked(true, true);
-  } else {
-    menuItem.setChecked(false, true);
-  }
-  this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED, button.pressed);
-}, onCutSitesButtonClick: function(button, e, options) {
-  var menuItem = Ext.ComponentQuery.query('#cutSitesMenuItem')[0];
-  if (button.pressed) 
-  {
-    menuItem.setChecked(true, true);
-  } else {
-    menuItem.setChecked(false, true);
-  }
-  this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED, button.pressed);
-}, onOrfsButtonClick: function(button, e, options) {
-  var menuItem = Ext.ComponentQuery.query('#orfsMenuItem')[0];
-  if (button.pressed) 
-  {
-    menuItem.setChecked(true, true);
-  } else {
-    menuItem.setChecked(false, true);
-  }
-  this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED, button.pressed);
-}, onREButtonClick: function() {
-  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.RestrictionEnzymesManagerWindow");
-  restrictionEnzymesManagerWindow.show();
-  restrictionEnzymesManagerWindow.center();
-  this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
-}, onLinearViewBtnClick: function(button, e, options) {
-  var viewMode;
-  if (button.pressed) 
-  {
-    viewMode = "linear";
-  } else {
-    viewMode = "circular";
-  }
-  this.application.fireEvent("ViewModeChanged", viewMode);
-}, onViewModeChanged: function(viewMode) {
-  var circularButton = Ext.getCmp("circularViewBtn");
-  var linearButton = Ext.getCmp("linearViewBtn");
-  if (viewMode == "linear") 
-  {
-    circularButton.toggle(false, true);
-    linearButton.toggle(true, true);
-  } else {
-    circularButton.toggle(true, false);
-    linearButton.toggle(false, true);
-  }
-}, onSaveToRegistryButtonClick: function() {
-  Ext.create("Vede.view.SaveToRegistryWindow").show();
-}, onSaveToRegistryConfirmationButtonClick: function(button, e, options) {
-  var form = button.up('form').getForm();
-  var name = form.findField('Name');
-  console.log(name.value);
-  var gbMng = Teselagen.bio.parsers.GenbankManager;
-}, hidePanels: function() {
-  Ext.getCmp('ProjectPanel').hide();
-  Ext.get("VectorEditorStatusPanel").hide();
-  Ext.get("FindPanel").hide();
-}, showPanels: function() {
-  Ext.getCmp('ProjectPanel').show();
-  Ext.get("VectorEditorStatusPanel").show();
-  Ext.get("FindPanel").show();
-}, registerFullScreenEventListener: function() {
-  var self = this;
-  document.addEventListener("fullscreenchange", function() {
-  if (!(document.fullscreenElement)) 
-  self.showPanels(); else self.hidePanels();
-}, false);
-  document.addEventListener("mozfullscreenchange", function() {
-  if (!(document.mozFullScreen)) 
-  self.showPanels(); else self.hidePanels();
-}, false);
-  document.addEventListener("webkitfullscreenchange", function() {
-  if (!(document.webkitIsFullScreen)) 
-  self.showPanels(); else self.hidePanels();
-}, false);
-}, onFullscreenButtonClick: function() {
-  if (document.fullscreenElement || document.mozFullScreen || document.webkitIsFullScreen) 
-  {
-    if (document.exitFullscreen) 
-    {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) 
-    {
-      document.mozCancelFullScreen();
-    } else if (document.webkitCancelFullScreen) 
-    {
-      document.webkitCancelFullScreen();
-    }
-  } else {
-    var docElm = document.documentElement;
-    if (docElm.requestFullscreen) 
-    {
-      docElm.requestFullscreen();
-    } else if (docElm.mozRequestFullScreen) 
-    {
-      docElm.mozRequestFullScreen();
-    } else if (docElm.webkitRequestFullScreen) 
-    {
-      docElm.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  }
-}, init: function() {
-  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-  this.VisibilityEvent = Teselagen.event.VisibilityEvent;
-  this.control({"#importBtn": {change: this.onImportBtnChange}, "#circularViewBtn": {click: this.onCircularViewButtonClick}, "#undoViewBtn": {click: this.onUndoButtonClick}, "#redoViewBtn": {click: this.onRedoButtonClick}, "#findBtn": {click: this.onFindButtonClick}, "#featuresBtn": {click: this.onFeaturesButtonClick}, "#cutsitesBtn": {click: this.onCutSitesButtonClick}, "#orfsBtn": {click: this.onOrfsButtonClick}, "#reBtn": {click: this.onREButtonClick}, "#linearViewBtn": {click: this.onLinearViewBtnClick}, "#exportBtn": {}, "#saveToRegistryConfirmation": {click: this.onSaveToRegistryConfirmationButtonClick}, "#fullscreen": {click: this.onFullscreenButtonClick}});
-  this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-  this.registerFullScreenEventListener();
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'MainToolbarController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.common.Label', Ext.Base, {inheritableStatics: {FONT_FAMILY: "sans-serif", FONT_SIZE: "6px"}, config: {labelSVG: null, tooltip: "", click: null, rightClick: null, needsMeasurement: true, annotation: null, includeInView: true, x: 0, y: 0}, StringUtil: null, labelText: function() {
-  return "";
-}, constructor: function(inData) {
-  this.initConfig(inData);
-  this.StringUtil = Teselagen.bio.util.StringUtil;
-  labelString = (typeof (this.labelText()) == "object") ? "" : this.labelText();
-  if (!this.labelText() || !this.StringUtil.trim(labelString)) 
-  {
-    this.setIncludeInView(false);
-  }
-  this.label = this.labelSVG.append("svg:text").attr("fill", inData.color || "black").attr("x", inData.x).attr("y", inData.y).text(this.labelText()).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).on("mousedown", inData.click).on("contextmenu", inData.rightClick);
-  this.label.append("svg:title").text(inData.tooltip);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'Label'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.CutSiteLabel', Teselagen.renderer.common.Label, {config: {center: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-}, labelText: function() {
-  return this.annotation.getRestrictionEnzyme().getName();
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'CutSiteLabel'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.common.Alignment', Ext.Base, {singleton: true, sequenceManager: null, SORT_BY_LENGTH: false, buildAlignmentMap: function(annotations, sequenceManager) {
-  this.sequenceManager = sequenceManager;
-  if (!!annotations) 
-  {
-    if (this.SORT_BY_LENGTH) 
-    {
-      annotations.sort(this.sortByLength);
-    } else {
-      annotations.sort(this.sortByStart);
-    }
-  }
-  var rows = [];
-  var alignmentMap = new Ext.util.HashMap();
-  Ext.each(annotations, function(annotation) {
-  var doesFitInRows = false;
-  var fitRow;
-  Ext.each(rows, function(row, rowIndex) {
-  if (this.doesFitInRow(row, annotation)) 
-  {
-    doesFitInRows = true;
-    fitRow = rowIndex;
-    row.push(annotation);
-    return false;
-  }
-}, this);
-  if (!doesFitInRows) 
-  {
-    rows.push([annotation]);
-    fitRow = rows.length - 1;
-  }
-  alignmentMap.add(annotation, fitRow);
-}, this);
-  return alignmentMap;
-}, sortByStart: function(a1, a2) {
-  var a1Start = a1.getStart();
-  var a2Start = a2.getStart();
-  if (a1Start > a2Start) 
-  {
-    return 1;
-  } else if (a1Start < a2Start) 
-  {
-    return -1;
-  } else {
-    return 0;
-  }
-}, sortByLength: function(a1, a2) {
-  if (a1.getStart() > a1.getEnd()) 
-  {
-    return a1.getEnd() + this.sequenceManager.getSequence().length - a1.getStart() + 1;
-  } else {
-    return a1.getEnd() - a1.getStart() + 1;
-  }
-  if (a2.getStart() > a2.getEnd()) 
-  {
-    return a2.getEnd() + this.sequenceManager.getSequence().length - a2.getStart() + 1;
-  } else {
-    return a2.getEnd() - a2.getStart() + 1;
-  }
-  if (a1Length < a2Length) 
-  {
-    return 1;
-  } else if (a1Length > a2Length) 
-  {
-    return -1;
-  } else {
-    return 0;
-  }
-}, doesFitInRow: function(row, annotation) {
-  var fits = true;
-  Ext.each(row, function(compareAnnotation) {
-  if (this.annotationOverlaps(annotation, compareAnnotation)) 
-  {
-    fits = false;
-    return false;
-  }
-}, this);
-  return fits;
-}, annotationOverlaps: function(annotation1, annotation2) {
-  var overlaps = false;
-  if (annotation1.getStart() > annotation1.getEnd() && annotation2.getStart() > annotation2.getEnd()) 
-  {
-    result = this.doOverlaps(annotation1.getStart(), this.sequenceManager.sequence.length - 1, annotation2.getStart(), this.sequenceManager.sequence.length - 1) || this.doOverlaps(0, annotation1.getStart(), 0, annotation2.getEnd());
-  } else if (annotation1.getStart() > annotation1.getEnd() && annotation2.getStart() <= annotation2.getEnd()) 
-  {
-    result = this.doOverlaps(annotation1.getStart(), this.sequenceManager.sequence.length - 1, annotation2.getStart(), annotation2.getEnd()) || this.doOverlaps(0, annotation1.getEnd(), annotation2.getStart(), annotation2.getEnd());
-  } else if (annotation1.getStart() <= annotation1.getEnd() && annotation2.getStart() > annotation2.getEnd()) 
-  {
-    result = this.doOverlaps(annotation1.getStart(), annotation1.getEnd(), annotation2.getStart(), this.sequenceManager.sequence.length - 1) || this.doOverlaps(annotation1.getStart(), annotation1.getEnd(), 0, annotation2.getEnd());
-  } else {
-    result = this.doOverlaps(annotation1.getStart(), annotation1.getEnd(), annotation2.getStart(), annotation2.getEnd());
-  }
-  return result;
-}, doOverlaps: function(start1, end1, start2, end2) {
-  return ((start1 >= start2) && (start1 < end2)) || ((start2 >= start1) && (start2 < end1));
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'Alignment'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.common.AnnotationRenderer', Ext.Base, {inheritableStatics: {FRAME_COLOR: "#606060"}, config: {sequenceManager: null, needsMeasurement: true}, Alignment: null, StrandType: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.Alignment = Teselagen.renderer.common.Alignment;
-  this.StrandType = Teselagen.bio.sequence.common.StrandType;
-}, applySequenceManager: function(pSeqMan) {
-  this.setNeedsMeasurement(true);
-  return pSeqMan;
-}, applyCenter: function(pCenter) {
-  this.setNeedsMeasurement(true);
-  return pCenter;
-}, addToolTip: function(sprite, tooltip) {
-  sprite.tooltip = tooltip;
-  sprite.on("render", function(me) {
-  var tip = Ext.create("Ext.tip.ToolTip", {target: me.el, html: me.tooltip});
-});
-}, getClickListener: function(start, end) {
-  return function() {
-  Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
-};
-}, getRightClickListener: function(feature) {
-  var sequenceManager = this.sequenceManager;
-  return function() {
-  Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
-  d3.event.preventDefault();
-  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Edit Sequence Feature', handler: function() {
-  var editSequenceFeatureWindow = Ext.create("Vede.view.ve.EditSequenceFeatureWindow");
-  editSequenceFeatureWindow.show();
-  editSequenceFeatureWindow.center();
-}}, {text: 'Delete Sequence Feature', handler: function() {
-  sequenceManager.removeFeature(feature, false);
-}}]});
-  contextMenu.show();
-  contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
-};
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'AnnotationRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.utils.GraphicUtils', Ext.Base, {singleton: true, ARC_THRESHOLD: 5, drawArc: function(center, radius, startAngle, endAngle, reverse, returnString, sweep, largeArc) {
-  var sweep = sweep || false;
-  var largeArc = largeArc || false;
-  var reverse = reverse || false;
-  var returnString = returnString || false;
-  var sweepFlag;
-  if (sweep) 
-  {
-    sweepFlag = 1;
-  } else {
-    sweepFlag = 0;
-  }
-  var largeFlag;
-  if (largeArc) 
-  {
-    largeFlag = 1;
-  } else {
-    largeFlag = 0;
-  }
-  var alpha;
-  if (endAngle < startAngle) 
-  {
-    alpha = 2 * Math.PI - startAngle + endAngle;
-  } else {
-    alpha = endAngle - startAngle;
-  }
-  var startPoint = Ext.create("Teselagen.bio.util.Point");
-  var endPoint = Ext.create("Teselagen.bio.util.Point");
-  var sprite;
-  var path;
-  var tempAngle;
-  if (reverse) 
-  {
-    tempAngle = startAngle;
-    startAngle = endAngle;
-    endAngle = tempAngle;
-  }
-  startPoint.x = center.x + radius * Math.sin(startAngle);
-  startPoint.y = center.y - radius * Math.cos(startAngle);
-  endPoint.x = center.x + radius * Math.sin(endAngle);
-  endPoint.y = center.y - radius * Math.cos(endAngle);
-  path = "M" + startPoint.x + " " + startPoint.y + "A" + radius + " " + radius + " 0 " + largeFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + " ";
-  return path;
-}, drawRect: function(xPos, yPos, width, color) {
-  var sprite;
-  var path;
-  var returnString = returnString || false;
-  path = "M" + xPos + " " + yPos + "L" + (xPos + width) + " " + yPos + "L" + (xPos + width) + " " + (yPos + 7) + "L" + xPos + " " + (yPos + 7) + "L" + xPos + " " + yPos + " ";
-  return path;
-}, drawFeaturePositiveArrow: function(xPos, yPos, width, color) {
-  var sprite;
-  var path;
-  if (width > 4) 
-  {
-    path = "M" + xPos + " " + yPos + "L" + (xPos + (width - 4)) + " " + yPos + "L" + (xPos + width) + " " + (yPos + ((8) / 2)) + "L" + (xPos + (width - 4)) + " " + (yPos + 8) + "L" + xPos + " " + (yPos + 8) + "L" + xPos + " " + yPos + " ";
-  } else {
-    path = "M" + xPos + " " + yPos + "L" + (xPos + width) + " " + (yPos + ((8) / 2)) + "L" + xPos + " " + (yPos + 8) + "L" + xPos + " " + yPos + " ";
-  }
-  return path;
-}, drawFeatureNegativeArrow: function(xPos, yPos, width, color) {
-  var sprite;
-  var path;
-  var returnSTring = returnSTring || false;
-  if (width > 4) 
-  {
-    path = "M" + xPos + " " + (yPos + ((8) / 2)) + "L" + (xPos + 4) + " " + yPos + "L" + (xPos + (width)) + " " + yPos + "L" + (xPos + (width)) + " " + (yPos + 8) + "L" + (xPos + 4) + " " + (yPos + 8) + "L" + xPos + " " + (yPos + ((8) / 2)) + " ";
-  } else {
-    path = "M" + xPos + " " + (yPos + ((8) / 2)) + "L" + (xPos + width) + " " + yPos + "L" + (xPos + width) + " " + (yPos + 8) + "L" + xPos + " " + (yPos + ((8) / 2)) + " ";
-  }
-  return path;
-}, drawPiePiece: function(center, radius, thickness, startAngle, endAngle, color) {
-  var outerRadius = radius + thickness / 2;
-  var innerRadius = radius - thickness / 2;
-  var outerCorner = Ext.create("Teselagen.bio.util.Point");
-  var innerCorner = Ext.create("Teselagen.bio.util.Point");
-  var path;
-  outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
-  outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
-  innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
-  innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
-  var sweep = true;
-  if (endAngle < startAngle) 
-  {
-    sweep = false;
-  }
-  var largeFlag = false;
-  if (Math.abs(endAngle - startAngle) > Math.PI) 
-  {
-    largeFlag = true;
-  }
-  path = "M" + outerCorner.x + " " + outerCorner.y + " " + this.drawArc(center, outerRadius, startAngle, endAngle, false, true, sweep, largeFlag) + "L" + innerCorner.x + " " + innerCorner.y + " " + this.drawArc(center, innerRadius, startAngle, endAngle, true, true, !sweep, largeFlag) + "L" + outerCorner.x + " " + outerCorner.y;
-  return path;
-}, drawDirectedPiePiece: function(center, radius, thickness, startAngle, endAngle, direction, color) {
-  var outerRadius = radius + thickness / 2;
-  var innerRadius = radius - thickness / 2;
-  var arcLength;
-  var outerCorner = Ext.create("Teselagen.bio.util.Point");
-  var innerCorner = Ext.create("Teselagen.bio.util.Point");
-  var middlePoint = Ext.create("Teselagen.bio.util.Point");
-  var path;
-  if (direction > 0) 
-  {
-    if (startAngle > endAngle) 
-    {
-      arcLength = radius * (2 * Math.PI - startAngle + endAngle);
-    } else {
-      arcLength = radius * (endAngle - startAngle);
-    }
-    if (arcLength > this.ARC_THRESHOLD) 
-    {
-      var alpha = this.ARC_THRESHOLD / radius;
-      var sweep = true;
-      if (endAngle < startAngle) 
-      {
-        sweep = false;
-      }
-      var largeFlag = false;
-      if (Math.abs(endAngle - startAngle) > Math.PI) 
-      {
-        largeFlag = true;
-      }
-      if (startAngle > endAngle) 
-      {
-        sweep = !sweep;
-        largeFlag = !largeFlag;
-      }
-      if (direction == 1) 
-      {
-        middlePoint.x = center.x + radius * Math.sin(endAngle);
-        middlePoint.y = center.y - radius * Math.cos(endAngle);
-        endAngle -= alpha;
-        outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
-        outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
-        innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
-        innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
-        path = this.drawArc(center, outerRadius, startAngle, endAngle, false, true, sweep, largeFlag) + "L" + middlePoint.x + " " + middlePoint.y + " " + "L" + innerCorner.x + " " + innerCorner.y + " " + this.drawArc(center, innerRadius, startAngle, endAngle, true, true, !sweep, largeFlag) + "L" + outerCorner.x + " " + outerCorner.y;
-      } else if (direction == 2) 
-      {
-        middlePoint.x = center.x + radius * Math.sin(startAngle);
-        middlePoint.y = center.y - radius * Math.cos(startAngle);
-        startAngle += alpha;
-        outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
-        outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
-        innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
-        innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
-        path = "M" + outerCorner.x + " " + outerCorner.y + this.drawArc(center, outerRadius, startAngle, endAngle, false, true, sweep, largeFlag) + "L" + innerCorner.x + " " + innerCorner.y + this.drawArc(center, innerRadius, startAngle, endAngle, true, true, !sweep, largeFlag) + "L" + middlePoint.x + " " + middlePoint.y + "L" + outerCorner.x + " " + outerCorner.y;
-      }
-    } else {
-      if (direction == 1) 
-      {
-        middlePoint.x = center.x + radius * Math.sin(endAngle);
-        middlePoint.y = center.y - radius * Math.cos(endAngle);
-        outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
-        outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
-        innerCorner.x = center.x + innerRadius * Math.sin(startAngle);
-        innerCorner.y = center.y - innerRadius * Math.cos(startAngle);
-        path = "M" + outerCorner.x + " " + outerCorner.y + "L" + middlePoint.x + " " + middlePoint.y + "L" + innerCorner.x + " " + innerCorner.y + "Z";
-      } else if (direction == 2) 
-      {
-        middlePoint.x = center.x + radius * Math.sin(startAngle);
-        middlePoint.y = center.y - radius * Math.cos(startAngle);
-        outerCorner.x = center.x + outerRadius * Math.sin(endAngle);
-        outerCorner.y = center.y - outerRadius * Math.cos(endAngle);
-        innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
-        innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
-        path = "M" + outerCorner.x + " " + outerCorner.y + "L" + innerCorner.x + " " + innerCorner.y + "L" + middlePoint.x + " " + middlePoint.y + "Z";
-      }
-    }
-  } else {
-    outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
-    outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
-    innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
-    innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
-    path = "M" + outerCorner.x + " " + outerCorner.y + this.drawArc(center, outerRadius, startAngle, endAngle, false, true) + "L" + innerCorner.x + " " + innerCorner.y + this.drawArc(center, innerRadius, startAngle, endAngle, false, true) + "L" + outerCorner.x + " " + outerCorner.y;
-  }
-  return path;
-}, pointOnCircle: function(center, angle, radius) {
-  if (angle > 2 * Math.PI) 
-  {
-    angle = angle % (2 * Math.PI);
-  }
-  var point = Ext.create("Teselagen.bio.util.Point");
-  if (angle < Math.PI / 2) 
-  {
-    point.x = center.x + Math.sin(angle) * radius;
-    point.y = center.y - Math.cos(angle) * radius;
-  } else if ((angle >= Math.PI / 2) && (angle < Math.PI)) 
-  {
-    point.x = center.x + Math.sin(Math.PI - angle) * radius;
-    point.y = center.y + Math.cos(Math.PI - angle) * radius;
-  } else if ((angle >= Math.PI) && (angle < 3 * Math.PI / 2)) 
-  {
-    point.x = center.x - Math.sin(angle - Math.PI) * radius;
-    point.y = center.y + Math.cos(angle - Math.PI) * radius;
-  } else if ((angle >= 3 * Math.PI / 2) && (angle <= 2 * Math.PI)) 
-  {
-    point.x = center.x - Math.sin(2 * Math.PI - angle) * radius;
-    point.y = center.y - Math.cos(2 * Math.PI - angle) * radius;
-  }
-  return point;
-}, pointOnRect: function(reference, railwidth, location, gap) {
-  var point = Ext.create("Teselagen.bio.util.Point");
-  point.x = reference.x + ((railwidth / location) * railwidth);
-  point.y = reference.y + gap;
-  return point;
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'GraphicUtils'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.PieRenderer', Teselagen.renderer.common.AnnotationRenderer, {config: {pie: null, center: null, railRadius: 0}, GraphicUtils: null, StrandType: null, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-  this.GraphicUtils = Teselagen.utils.GraphicUtils;
-}, applyRailRadius: function(pRailRadius) {
-  this.setNeedsMeasurement(true);
-  return pRailRadius;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'PieRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.CutSiteRenderer', Teselagen.renderer.pie.PieRenderer, {statics: {CUTSITE_LINE_WIDTH: 0.5}, config: {cutSiteSVG: null, cutSites: [], middlePoints: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-  this.middlePoints = Ext.create("Ext.util.HashMap");
-}, render: function() {
-  Ext.each(this.getCutSites(), function(site) {
-  var angle = site.getStart() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
-  this.middlePoints.add(site, this.GraphicUtils.pointOnCircle(this.center, angle, this.railRadius + 10));
-  var lineStart = Ext.create("Teselagen.bio.util.Point", this.center.x + this.railRadius * Math.sin(angle), this.center.y - this.railRadius * Math.cos(angle));
-  var lineEnd = Ext.create("Teselagen.bio.util.Point", this.center.x + (this.railRadius + 10) * Math.sin(angle), this.center.y - (this.railRadius + 10) * Math.cos(angle));
-  path = "M" + lineStart.x + " " + lineStart.y + " " + "L" + lineEnd.x + " " + lineEnd.y;
-  this.cutSiteSVG.append("svg:path").attr("stroke", this.self.FRAME_COLOR).attr("stroke-width", this.self.CUTSITE_LINE_WIDTH).attr("d", path).on("mousedown", this.getClickListener(site.getStart(), site.getEnd())).append("svg:title").text(this.getToolTip(site));
-}, this);
-}, getToolTip: function(cutSite) {
-  var complement = ", complement";
-  if (cutSite.getStrand() == 1) 
-  {
-    complement = "";
-  }
-  var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) + complement + ", cuts " + cutSite.getNumCuts() + " times";
-  return toolTip;
-}, applyCutSites: function(pCutSites) {
-  this.setNeedsMeasurement(true);
-  return pCutSites;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'CutSiteRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.FeatureLabel', Teselagen.renderer.common.Label, {config: {center: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-}, labelText: function() {
-  var label = [];
-  if (!this.annotation.getName() || !this.StringUtil.trim(this.annotation.getName())) 
-  {
-    var notes = this.annotation.getNotes();
-    Ext.each(notes, function(note) {
-  if (note.getName() == "label") 
-  {
-    label = note.getValue();
-    return false;
-  } else if (note.getName() == "apeinfo_label" || note.getName() == "note" || note.getName() == "gene") 
-  {
-    label = note.getValue();
-  }
-});
-  } else {
-    label = this.annotation.getName();
-  }
-  if (label == null) 
-  {
-    label = "";
-  }
-  return label;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'FeatureLabel'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.FeatureRenderer', Teselagen.renderer.pie.PieRenderer, {statics: {DEFAULT_FEATURE_HEIGHT: 7, DEFAULT_FEATURES_GAP: 3, OUTLINE_COLOR: "black", OUTLINE_WIDTH: 0.5}, config: {featureSVG: null, features: [], middlePoints: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-  this.setMiddlePoints(Ext.create("Ext.util.HashMap"));
-}, render: function() {
-  var path;
-  var featureAlignment = this.Alignment.buildAlignmentMap(this.features, this.sequenceManager);
-  Ext.each(this.features, function(feature) {
-  var featureRadius = this.railRadius - this.self.DEFAULT_FEATURES_GAP - 2 * this.self.DEFAULT_FEATURES_GAP;
-  var index = featureAlignment.get(feature);
-  if (index > 0) 
-  {
-    featureRadius -= index * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
-  }
-  this.calculateAngles(feature, featureRadius);
-  var color = "#ffffff";
-  var direction = 0;
-  if (feature.getStrand() == this.StrandType.FORWARD) 
-  {
-    direction = 1;
-  } else if (feature.getStrand() == this.StrandType.BACKWARD) 
-  {
-    direction = 2;
-  }
-  var startAngle;
-  var endAngle;
-  Ext.each(feature.getLocations(), function(location) {
-  color = this.colorByType(feature.getType().toLowerCase());
-  startAngle = location.getStart() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
-  endAngle = location.getEnd() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
-  if (feature.getStart() == location.getStart() && feature.getStrand() == this.StrandType.BACKWARD) 
-  {
-    path = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
-  } else if (feature.getEnd() == location.getEnd() && feature.getStrand() == this.StrandType.FORWARD) 
-  {
-    path = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
-  } else {
-    path = this.GraphicUtils.drawPiePiece(this.center, featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
-  }
-  this.featureSVG.append("svg:path").attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", color).attr("fill-rule", "evenodd").attr("d", path).on("mousedown", this.getClickListener(feature.getStart(), feature.getEnd())).on("contextmenu", this.getRightClickListener(feature)).append("svg:title").text(this.getToolTip(feature));
-}, this);
-}, this);
-}, calculateAngles: function(feature, featureRadius) {
-  var angle1 = feature.getStart() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
-  var angle2 = feature.getEnd() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
-  var centralAngle;
-  if (angle1 > angle2) 
-  {
-    var virtualCenter = angle2 - (((2 * Math.PI - angle1) + angle2) / 2);
-    if (virtualCenter > 0) 
-    {
-      centralAngle = virtualCenter;
-    } else {
-      centralAngle = 2 * Math.PI + virtualCenter;
-    }
-  } else {
-    centralAngle = (angle1 + angle2) / 2;
-  }
-  this.middlePoints.add(feature, this.GraphicUtils.pointOnCircle(this.center, centralAngle, featureRadius));
-  return [angle1, angle2];
-}, getToolTip: function(feature) {
-  var nameString = "";
-  if (feature.getName()) 
-  {
-    nameString = " - " + feature.getName();
-  }
-  return feature.getType() + nameString + ": " + (feature.getStart() + 1) + ".." + feature.getEnd();
-}, colorByType: function(type) {
-  var switchObj = {promoter: "#31B440", terminator: "#F51600", cds: "#EF6500", m_rna: "#FFFF00", misc_binding: "#006FEF", misc_feature: "#006FEF", misc_marker: "#8DCEB1", rep_origin: "#878787"};
-  var color = switchObj[type] || "#CCCCCC";
-  return color;
-}, applyFeatures: function(pFeatures) {
-  this.setNeedsMeasurement(true);
-  return pFeatures;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'FeatureRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.ORFRenderer', Teselagen.renderer.pie.PieRenderer, {statics: {DISTANCE_FROM_RAIL: 15, DISTANCE_BETWEEN_ORFS: 5, ORF_FRAME_COLOR: ["#FF0000", "#31B440", "#3366CC"]}, config: {orfSVG: null, orfs: null}, maxAlignmentRow: 0, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-}, render: function() {
-  var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, this.sequenceManager);
-  this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
-  var seqLen = this.sequenceManager.getSequence().seqString().length;
-  Ext.each(this.orfs, function(orf) {
-  var color = this.self.ORF_FRAME_COLOR[orf.getFrame()];
-  var tooltip = this.getToolTip(orf);
-  var index = orfAlignment.get(orf);
-  var orfRadius = this.railRadius + this.self.DISTANCE_FROM_RAIL;
-  if (index > 0) 
-  {
-    orfRadius += index * this.self.DISTANCE_BETWEEN_ORFS;
-  }
-  var startAngle = orf.getStart() * 2 * Math.PI / seqLen;
-  var endAngle = orf.getEnd() * 2 * Math.PI / seqLen;
-  var sweep = true;
-  if (endAngle < startAngle) 
-  {
-    sweep = false;
-  }
-  var largeArc = false;
-  if (Math.abs(endAngle - startAngle) > Math.PI) 
-  {
-    largeArc = true;
-  }
-  if (startAngle > endAngle) 
-  {
-    sweep = !sweep;
-    largeArc = !largeArc;
-  }
-  var selectEnd;
-  if (orf.getStrand() == -1) 
-  {
-    selectEnd = orf.getEnd() + 1;
-  } else {
-    selectEnd = orf.getEnd();
-  }
-  path = this.GraphicUtils.drawArc(this.center, orfRadius, startAngle, endAngle, false, true, sweep, largeArc);
-  this.orfSVG.append("svg:path").attr("stroke", color).attr("fill", "none").attr("d", path).on("mousedown", function() {
-  Vede.application.fireEvent("VectorPanelAnnotationClicked", orf.getStart(), selectEnd);
-}).append("svg:title").text(tooltip);
-  Ext.each(orf.getStartCodons(), function(codonIndex) {
-  var codonAngle = codonIndex * 2 * Math.PI / seqLen;
-  var codonX = this.center.x + orfRadius * Math.sin(codonAngle);
-  var codonY = this.center.y - orfRadius * Math.cos(codonAngle);
-  var codonSprite = Ext.create("Ext.draw.Sprite", {type: "circle", radius: 2, x: codonX, y: codonY, fill: color});
-  this.orfSVG.append("svg:circle").attr("r", 2).attr("cx", codonX).attr("cy", codonY).attr("fill", color).on("mousedown", function() {
-  Vede.application.fireEvent("VectorPanelAnnotationClicked", orf.getStart(), selectEnd);
-}).append("svg:title").text(tooltip);
-}, this);
-  var lastAngle;
-  var arrowShiftAngle;
-  if (orf.getStrand() == this.StrandType.FORWARD) 
-  {
-    arrowShiftAngle = endAngle - 5 / orfRadius;
-    lastAngle = endAngle;
-  } else {
-    arrowShiftAngle = startAngle + 5 / orfRadius;
-    lastAngle = startAngle;
-  }
-  path = "M" + (this.center.x + (orfRadius + 2) * Math.sin(arrowShiftAngle)) + " " + (this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle)) + "L" + (this.center.x + orfRadius * Math.sin(lastAngle)) + " " + (this.center.y - orfRadius * Math.cos(lastAngle)) + "L" + (this.center.x + (orfRadius - 2) * Math.sin(arrowShiftAngle)) + " " + (this.center.y - (orfRadius - 2) * Math.cos(arrowShiftAngle)) + "z";
-  this.orfSVG.append("svg:path").attr("stroke", color).attr("fill", color).attr("d", path).on("mousedown", function() {
-  Vede.application.fireEvent("VectorPanelAnnotationClicked", orf.getStart(), selectEnd);
-}).append("svg:title").text(tooltip);
-}, this);
-}, getToolTip: function(orf) {
-  var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
-  var aa = Math.floor(bp / 3);
-  var complimentary = "";
-  if (orf.getStrand() == 1 && orf.getStartCodons().length > 1) 
-  {
-    complimentary = ", complimentary";
-  }
-  var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) + ", frame: " + orf.getFrame() + ", length: " + bp + " BP" + ", " + aa + " AA" + complimentary;
-  if (orf.getStartCodons().length > 1) 
-  {
-    tooltipLabel += "\nStart Codons: ";
-    var codonsArray = [];
-    var codonString;
-    Ext.each(orf.getStartCodons(), function(codon, index) {
-  if (index != orf.getStartCodons().length - 1) 
-  {
-    codonString = (codon + 1) + ", ";
-  } else {
-    codonString = codon + 1;
-  }
-  codonsArray.push(codonString);
-});
-    tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
-  }
-  return tooltipLabel;
-}, applyOrfs: function(pOrfs) {
-  this.setNeedsMeasurement(true);
-  return pOrfs;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'ORFRenderer'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.pie.Caret', Ext.Base, {config: {pie: null, angle: null, center: null, radius: null}, statics: {CARET_COLOR: 'black', CARET_WIDTH: 1}, constructor: function(pConfig) {
-  this.initConfig(pConfig);
-  var x = pConfig.radius * Math.cos(pConfig.angle - Math.PI / 2) + pConfig.center.x;
-  var y = pConfig.radius * Math.sin(pConfig.angle - Math.PI / 2) + pConfig.center.y;
-  return pConfig.pie.append("svg:line").attr("class", "pieCaret").attr("x1", pConfig.center.x).attr("y1", pConfig.center.y).attr("x2", x).attr("y2", y).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH);
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'Caret'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.pie.Frame', Ext.Base, {statics: {OUTER_RADIUS: 100, INNER_RADIUS: 97, OUTLINE_WIDTH: 0.5, OUTLINE_COLOR: "#8F8F8F", RING_COLOR: "#ffffb3"}, constructor: function(inData) {
-  var center = inData.center;
-  var outerRadius = this.self.OUTER_RADIUS;
-  var innerRadius = this.self.INNER_RADIUS;
-  var outerStartPoint = {x: center.x - outerRadius, y: center.y};
-  var innerStartPoint = {x: center.x - innerRadius, y: center.y};
-  var path = "M" + outerStartPoint.x + " " + outerStartPoint.y + "A" + outerRadius + " " + outerRadius + " 0 1 1 " + outerStartPoint.x + " " + (outerStartPoint.y + 1.0E-4) + "L" + outerStartPoint.x + " " + outerStartPoint.y + "M" + innerStartPoint.x + " " + innerStartPoint.y + "A" + innerRadius + " " + innerRadius + " 0 1 0 " + innerStartPoint.x + " " + (innerStartPoint.y - 1.0E-4);
-  return inData.pie.append("svg:path").attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", this.self.RING_COLOR).attr("fill-rule", "evenodd").attr("d", path);
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'Frame'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.pie.NameBox', Ext.Base, {statics: {FONT_SIZE: "10px", FONT_WEIGHT: "bold"}, config: {pie: null, center: {}, name: "", length: 0}, constructor: function(inData) {
-  this.initConfig(inData);
-  var text1;
-  var text2;
-  var group = inData.pie.append("svg:g").attr("class", "pieNameBox").attr("text-anchor", "middle").attr("font-size", this.self.FONT_SIZE).attr("font-weight", this.self.FONT_WEIGHT);
-  if (!inData.name) 
-  {
-    text1 = '(' + inData.length + ' bp)';
-    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
-  } else {
-    text1 = inData.name;
-    text2 = '(' + inData.length + 'bp)';
-    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
-    group.append("svg:text").attr("dy", "1em").text(text2).attr("x", this.center.x).attr("y", this.center.y);
-  }
-  return group;
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'NameBox'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.PieManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 35, LABEL_HEIGHT: 10, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, center: null, pie: null, railRadius: 0, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railRadiusChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, zoomLevel: 0, constructor: function(inData) {
-  this.initConfig(inData);
-  this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, cutSites: this.cutSites});
-  this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, features: this.features});
-  this.orfRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {orfSVG: this.orfSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, orfs: this.orfs});
-  this.renderers = [this.cutSiteRenderer, this.featureRenderer, this.orfRenderer];
-}, getAnnotationsInRange: function(start, end) {
-  var annotationsInRange = [];
-  var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {start: start, end: end});
-  if (this.showFeatures) 
-  {
-    var feature;
-    for (var i = 0; i < this.features.length; i++) 
-      {
-        feature = this.features[i];
-        if (selectionAnnotation.contains(feature)) 
-        {
-          annotationsInRange.push(feature);
-        }
-      }
-  }
-  if (this.showCutSites) 
-  {
-    var site;
-    for (var i = 0; i < this.cutSites.length; i++) 
-      {
-        site = this.cutSites[i];
-        if (selectionAnnotation.contains(site)) 
-        {
-          annotationsInRange.push(site);
-        }
-      }
-  }
-  if (this.showOrfs) 
-  {
-    var orf;
-    for (var i = 0; i < this.orfs.length; i++) 
-      {
-        orf = this.orfs[i];
-        if (selectionAnnotation.contains(orf)) 
-        {
-          annotationsInRange.push(orf);
-        }
-      }
-  }
-  return annotationsInRange;
-}, render: function() {
-  Ext.suspendLayouts();
-  var renderer;
-  if (this.dirty) 
-  {
-    for (var i = 0; i < this.renderers.length; i++) 
-      {
-        renderer = this.renderers[i];
-        if (this.sequenceManagerChanged) 
-        {
-          renderer.setSequenceManager(this.sequenceManager);
-        }
-        if (this.railRadiusChanged) 
-        {
-          renderer.setRailRadius(this.railRadius);
-        }
-        if (this.centerChanged) 
-        {
-          renderer.setCenter(this.center);
-        }
-      }
-    this.dirty = false;
-    this.sequenceManagerChanged = false;
-    this.railRadiusChanged = false;
-    this.centerChanged = false;
-  }
-  if (this.cutSitesChanged) 
-  {
-    this.cutSiteSVG.remove();
-    this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "pieCutSite");
-    this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-    this.cutSiteRenderer.setCutSites(this.cutSites);
-    this.cutSiteRenderer.render();
-    this.cutSitesChanged = false;
-  }
-  if (this.featuresChanged) 
-  {
-    this.featureSVG.remove();
-    this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
-    this.featureRenderer.setFeatureSVG(this.featureSVG);
-    this.featureRenderer.setFeatures(this.features);
-    this.featureRenderer.render();
-    this.featuresChanged = false;
-  }
-  if (this.orfsChanged) 
-  {
-    this.orfSVG.remove();
-    this.orfSVG = this.parentSVG.append("svg:g").attr("class", "pieOrf");
-    this.orfRenderer.setOrfSVG(this.orfSVG);
-    this.orfRenderer.setOrfs(this.orfs);
-    this.orfRenderer.render();
-    this.orfsChanged = false;
-  }
-  this.renderLabels();
-  if (this.showOrfs) 
-  {
-    this.orfSVG.style("visibility", "visible");
-  } else {
-    this.orfSVG.style("visibility", "hidden");
-  }
-  if (this.showCutSites) 
-  {
-    this.cutSiteSVG.style("visibility", "visible");
-  } else {
-    this.cutSiteSVG.style("visibility", "hidden");
-  }
-  if (this.showFeatures) 
-  {
-    this.featureSVG.style("visibility", "visible");
-  } else {
-    this.featureSVG.style("visibility", "hidden");
-  }
-  Ext.resumeLayouts(true);
-  Ext.defer(function() {
-  this.fitWidthToContent(this);
-}, 10, this);
-}, zoomIn: function() {
-  Ext.suspendLayouts();
-  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [Number(translateValues[0]), Number(translateValues[3])];
-  var translate = [Number(translateValues[4]), Number(translateValues[5])];
-  scale[0] += this.self.ZOOM_INCREMENT;
-  scale[1] += this.self.ZOOM_INCREMENT;
-  this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
-  Ext.resumeLayouts(true);
-  this.fitWidthToContent(this);
-}, zoomOut: function() {
-  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [translateValues[0], translateValues[3]];
-  var translate = [translateValues[4], translateValues[5]];
-  if (scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) 
-  {
-    Ext.suspendLayouts();
-    scale[0] -= this.self.ZOOM_INCREMENT;
-    scale[1] -= this.self.ZOOM_INCREMENT;
-    this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
-    Ext.resumeLayouts(true);
-    this.fitWidthToContent(this);
-  }
-}, fitWidthToContent: function(scope) {
-  var containerSize = Ext.getCmp("PieContainer").getSize();
-  var transX = containerSize.width / 2 - scope.center.x;
-  var transY = containerSize.height / 2 - scope.center.y;
-  var pieBox = scope.pie[0][0].getBBox();
-  var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [Number(translateValues[0]), Number(translateValues[3])];
-  var translate = [Number(translateValues[4]), Number(translateValues[5])];
-  scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + transX + " " + transY + ")");
-  scope.pie.attr("width", pieBox.width + transX).attr("height", pieBox.height + transY);
-}, drawCoordinates: function() {
-  d3.select(".coordinateSVG").remove();
-  var coordSVG = this.parentSVG.append("svg:g").attr("class", "coordinateSVG");
-  for (var i = -50; i < 500; i += 20) 
-    {
-      for (var j = -50; j < 500; j += 20) 
-        {
-          coordSVG.append("svg:text").attr("font-size", "6px").attr("x", i).attr("y", j).text(i + "," + j);
-        }
-    }
-}, showSprites: function(collection) {
-  var sprite;
-  for (var i = 0; i < collection.length; i++) 
-    {
-      sprite = collection.getAt(i);
-      this.pie.surface.add(sprite);
-      sprite.show(true);
-      this.pie.doComponentLayout();
-    }
-}, hideSprites: function(collection) {
-  var sprite;
-  for (var i = 0; i < collection.length; i++) 
-    {
-      sprite = collection.getAt(i);
-      sprite.hide(true);
-    }
-}, renderLabels: function() {
-  var labels = [];
-  var center;
-  var color;
-  this.labelSVG.remove();
-  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "pieLabel");
-  if (this.showCutSites && this.showCutSiteLabels) 
-  {
-    var site;
-    for (var i = 0; i < this.cutSites.length; i++) 
-      {
-        site = this.cutSites[i];
-        center = this.cutSiteRenderer.middlePoints.get(site);
-        if (site.getNumCuts() == 1) 
-        {
-          color = "#E57676";
-        } else {
-          color = "#888888";
-        }
-        label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {labelSVG: this.labelSVG, annotation: site, x: center.x, y: center.y, center: this.annotationCenter(site), color: color, tooltip: this.cutSiteRenderer.getToolTip(site), click: this.cutSiteRenderer.getClickListener(site.getStart(), site.getEnd())});
-        labels.push(label);
-      }
-  }
-  if (this.showFeatures && this.showFeatureLabels) 
-  {
-    var feature;
-    for (var i = 0; i < this.features.length; i++) 
-      {
-        feature = this.features[i];
-        center = this.featureRenderer.middlePoints.get(feature);
-        label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {labelSVG: this.labelSVG, annotation: feature, x: center.x, y: center.y, center: this.annotationCenter(feature), tooltip: this.featureRenderer.getToolTip(feature), click: this.featureRenderer.getClickListener(feature.getStart(), feature.getEnd()), rightClick: this.featureRenderer.getRightClickListener(feature)});
-        labels.push(label);
-      }
-  }
-  labels.sort(this.labelSort);
-  this.adjustLabelPositions(labels);
-}, adjustLabelPositions: function(labels) {
-  var totalNumberOfLabels = labels.length;
-  var totalLength = this.sequenceManager.getSequence().toString().length;
-  var rightTopLabels = [];
-  var rightBottomLabels = [];
-  var leftTopLabels = [];
-  var leftBottomLabels = [];
-  var label;
-  for (var i = 0; i < labels.length; i++) 
-    {
-      label = labels[i];
-      var labelCenter = label.center;
-      if (labelCenter < totalLength / 4) 
-      {
-        rightTopLabels.push(label);
-      } else if ((labelCenter >= totalLength / 4) && (labelCenter < totalLength / 2)) 
-      {
-        rightBottomLabels.push(label);
-      } else if ((labelCenter >= totalLength / 2) && (labelCenter < 3 * totalLength / 4)) 
-      {
-        leftBottomLabels.push(label);
-      } else {
-        leftTopLabels.push(label);
-      }
-    }
-  var labelRadius = this.railRadius + this.self.LABEL_DISTANCE_FROM_RAIL;
-  if (this.showOrfs && this.orfRenderer.maxAlignmentRow > 0) 
-  {
-    labelRadius += this.orfRenderer.maxAlignmentRow * this.orfRenderer.self.DISTANCE_BETWEEN_ORFS;
-  }
-  var lastLabelYPosition = this.center.y - 15;
-  var numberOfRightTopLabels = rightTopLabels.length;
-  var label;
-  for (var i = numberOfRightTopLabels - 1; i >= 0; i--) 
-    {
-      label = rightTopLabels[i];
-      if (label.includeInView) 
-      {
-        var labelCenter = label.center;
-        var angle = labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length;
-        var xPosition = this.center.x + Math.sin(angle) * labelRadius;
-        var yPosition = this.center.y - Math.cos(angle) * labelRadius;
-        if (yPosition < lastLabelYPosition) 
-        {
-          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-        } else {
-          yPosition = lastLabelYPosition;
-          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-        }
-        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")");
-        labels.push(this.drawConnection(label, xPosition, yPosition));
-      }
-    }
-  lastLabelYPosition = this.center.y;
-  var numberOfRightBottomLabels = rightBottomLabels.length;
-  for (var j = 0; j < numberOfRightBottomLabels; j++) 
-    {
-      label = rightBottomLabels[j];
-      if (label.includeInView) 
-      {
-        var labelCenter = label.center;
-        var angle = labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length - Math.PI / 2;
-        var xPosition = this.center.x + Math.cos(angle) * labelRadius;
-        var yPosition = this.center.y + Math.sin(angle) * labelRadius;
-        if (yPosition > lastLabelYPosition) 
-        {
-          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-        } else {
-          yPosition = lastLabelYPosition;
-          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-        }
-        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")");
-        labels.push(this.drawConnection(label, xPosition, yPosition));
-      }
-    }
-  lastLabelYPosition = this.center.y - 15;
-  var numberOfLeftTopLabels = leftTopLabels.length;
-  for (var k = 0; k < numberOfLeftTopLabels; k++) 
-    {
-      label = leftTopLabels[k];
-      if (label.includeInView) 
-      {
-        var labelCenter = label.center;
-        var angle = 2 * Math.PI - labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length;
-        var xPosition = this.center.x - Math.sin(angle) * labelRadius;
-        var yPosition = this.center.y - Math.cos(angle) * labelRadius;
-        if (yPosition < lastLabelYPosition) 
-        {
-          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-        } else {
-          yPosition = lastLabelYPosition;
-          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-        }
-        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "end");
-        labels.push(this.drawConnection(label, xPosition, yPosition));
-      }
-    }
-  lastLabelYPosition = this.center.y;
-  var numberOfLeftBottomLabels = leftBottomLabels.length;
-  for (var l = numberOfLeftBottomLabels - 1; l >= 0; l--) 
-    {
-      label = leftBottomLabels[l];
-      if (label.includeInView) 
-      {
-        var labelCenter = label.center;
-        var angle = labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length - Math.PI;
-        var xPosition = this.center.x - Math.sin(angle) * labelRadius;
-        var yPosition = this.center.y + Math.cos(angle) * labelRadius;
-        if (yPosition > lastLabelYPosition) 
-        {
-          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-        } else {
-          yPosition = lastLabelYPosition;
-          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-        }
-        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "end");
-        labels.push(this.drawConnection(label, xPosition, yPosition));
-      }
-    }
-}, drawConnection: function(label, labelX, labelY) {
-  var path;
-  if (label.annotation instanceof Teselagen.bio.sequence.dna.Feature) 
-  {
-    path = "M" + labelX + " " + labelY + "L" + this.featureRenderer.middlePoints.get(label.annotation).x + " " + this.featureRenderer.middlePoints.get(label.annotation).y;
-  } else {
-    path = "M" + labelX + " " + labelY + "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y;
-  }
-  return this.labelSVG.append("svg:path").attr("stroke", this.self.LABEL_CONNECTION_COLOR).attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH).attr("d", path);
-}, labelSort: function(label1, label2) {
-  var labelCenter1 = label1.center;
-  var labelCenter2 = label2.center;
-  if (labelCenter1 > labelCenter2) 
-  {
-    return 1;
-  } else if (labelCenter1 < labelCenter2) 
-  {
-    return -1;
-  } else {
-    return 0;
-  }
-}, annotationCenter: function(annotation) {
-  var result;
-  if (annotation.getStart() > annotation.getEnd()) 
-  {
-    var virtualCenter = annotation.getEnd() - ((this.sequenceManager.getSequence().toString().length - annotation.getStart()) + annotation.getEnd()) / 2 + 1;
-    if (virtualCenter >= 0) 
-    {
-      return virtualCenter;
-    } else {
-      return this.sequenceManager.getSequence().toString().length + virtualCenter - 1;
-    }
-  } else {
-    return (annotation.getStart() + annotation.getEnd() - 1) / 2 + 1;
-  }
-}, applySequenceManager: function(pSequenceManager) {
-  if (!this.sequenceManager) 
-  this.sequenceManager = pSequenceManager;
-  this.dirty = true;
-  this.sequenceManagerChanged = true;
-  if (this.pie) 
-  {
-    if (pSequenceManager.getSequence().toString().length > 0) 
-    {
-      this.adjustCaret(0);
-    } else if (this.caret) 
-    {
-      this.caret.remove();
-    }
-    this.nameBox.remove();
-    this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: pSequenceManager.getName(), length: pSequenceManager.getSequence().toString().length});
-  }
-  return pSequenceManager;
-}, applyCenter: function(pCenter) {
-  this.dirty = true;
-  this.centerChanged = true;
-  return pCenter;
-}, applyRailRadius: function(pRailRadius) {
-  this.dirty = true;
-  this.railRadiusChanged = true;
-  return pRailRadius;
-}, applyCutSites: function(pCutSites) {
-  this.cutSitesChanged = true;
-  return pCutSites;
-}, applyFeatures: function(pFeatures) {
-  this.featuresChanged = true;
-  return pFeatures;
-}, applyOrfs: function(pOrfs) {
-  this.orfsChanged = true;
-  return pOrfs;
-}, initPie: function() {
-  this.pie = d3.select("#PieContainer").append("svg:svg").attr("id", "Pie").attr("overflow", "auto");
-  this.parentSVG = this.pie.append("svg:g").attr("class", "pieParent").attr("transform", "matrix(1.5 0 0 1.5 0 0)");
-  this.frame = Ext.create("Vede.view.pie.Frame", {pie: this.parentSVG, center: this.center});
-  this.caret = Ext.create("Vede.view.pie.Caret", {pie: this.parentSVG, angle: 0, center: this.center, radius: this.railRadius + 10});
-  var name = "unknown";
-  var length = 0;
-  if (this.sequenceManager) 
-  {
-    name = this.sequenceManager.getName();
-    length = this.sequenceManager.getSequence().toString().length;
-  }
-  this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
-  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "pieLabel");
-  this.selectionSVG = this.parentSVG.append("svg:g").attr("class", "pieSelection");
-  this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "pieCutSite");
-  this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-  this.orfSVG = this.parentSVG.append("svg:g").attr("class", "pieOrf");
-  this.orfRenderer.setOrfSVG(this.orfSVG);
-  this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
-  this.featureRenderer.setFeatureSVG(this.featureSVG);
-  this.fitWidthToContent(this);
-}, updateNameBox: function() {
-  var name;
-  var length;
-  if (this.sequenceManager) 
-  {
-    name = this.sequenceManager.getName();
-    length = this.sequenceManager.getSequence().toString().length;
-  }
-  this.nameBox.remove();
-  this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
-}, adjustCaret: function(bp) {
-  this.caret.remove();
-  if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
-  {
-    var angle = bp * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
-    this.caret = Ext.create("Vede.view.pie.Caret", {pie: this.parentSVG, angle: angle, center: this.center, radius: this.railRadius + 10});
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'PieManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.Layer', Ext.Base, {inheritableStatics: {STROKE_OPACITY: 0.8}, config: {selectionSVG: null, sequenceManager: null, center: {}, radius: 0}, start: -1, end: -1, startAngle: 0, endAngle: 0, selecting: false, selected: false, constructor: function(inData) {
-  this.initConfig(inData);
-}, select: function(fromIndex, toIndex) {
-  this.drawSelectionPie(fromIndex, toIndex);
-  this.selected = true;
-  this.start = fromIndex;
-  this.end = toIndex;
-}, deselect: function() {
-  this.start = -1;
-  this.end = -1;
-  this.startAngle = 0;
-  this.endAngle = 0;
-  this.selected = false;
-  this.selecting = false;
-}, startSelecting: function() {
-  this.selecting = true;
-}, endSelecting: function() {
-  this.selecting = false;
-}, drawSelectionPie: function(fromIndex, endIndex) {
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'Layer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.SelectionLayer', Teselagen.renderer.pie.Layer, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC"}, deselect: function() {
-  this.callParent();
-  d3.selectAll(".pieSelectionElement").remove();
-}, drawSelectionPie: function(fromIndex, endIndex) {
-  var path;
-  var seqLen = this.sequenceManager.getSequence().toString().length;
-  if (seqLen == 0) 
-  {
-    return;
-  }
-  d3.select(".pieSelectionElement").remove();
-  this.startAngle = fromIndex * 2 * Math.PI / seqLen;
-  this.endAngle = endIndex * 2 * Math.PI / seqLen;
-  var startPoint = Ext.create("Teselagen.bio.util.Point");
-  startPoint.x = this.center.x + this.radius * Math.sin(this.startAngle);
-  startPoint.y = this.center.y - this.radius * Math.cos(this.startAngle);
-  var endPoint = Ext.create("Teselagen.bio.util.Point");
-  endPoint.x = this.center.x + this.radius * Math.sin(this.endAngle);
-  endPoint.y = this.center.y - this.radius * Math.cos(this.endAngle);
-  var adjustedEnd = this.endAngle;
-  if (this.endAngle > this.startAngle) 
-  {
-    adjustedEnd -= this.startAngle;
-  } else {
-    adjustedEnd += 2 * Math.PI - this.startAngle;
-  }
-  var adjustedStart = 0;
-  var sweepFlag = 0;
-  if (adjustedEnd > adjustedStart) 
-  {
-    sweepFlag = 1;
-  }
-  var largeArcFlag = 0;
-  if (Math.abs(adjustedEnd - adjustedStart) > Math.PI) 
-  {
-    largeArcFlag = 1;
-  }
-  path = "M" + this.center.x + " " + this.center.y + " " + "L" + startPoint.x + " " + startPoint.y + " " + "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + "L" + this.center.x + " " + this.center.y;
-  this.selectionSVG.append("svg:path").attr("class", "pieSelectionElement").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).attr("d", path).style("pointer-events", "none");
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'SelectionLayer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.pie.WireframeSelectionLayer', Teselagen.renderer.pie.Layer, {statics: {FRAME_COLOR: "#808080", WIREFRAME_OFFSET: 10}, deselect: function() {
-  this.callParent();
-  d3.selectAll(".pieWireframeElement").remove();
-}, drawSelectionPie: function(fromIndex, endIndex) {
-  var path;
-  var seqLen = this.sequenceManager.getSequence().toString().length;
-  if (seqLen == 0 || (this.start == fromIndex && this.end == endIndex) || fromIndex == endIndex) 
-  {
-    return;
-  }
-  d3.selectAll(".pieWireframeElement").remove();
-  var startAngle = fromIndex * 2 * Math.PI / seqLen;
-  var endAngle = endIndex * 2 * Math.PI / seqLen;
-  var wireRadius = this.radius + this.self.WIREFRAME_OFFSET;
-  var startPoint = Ext.create("Teselagen.bio.util.Point");
-  startPoint.x = this.center.x + wireRadius * Math.sin(startAngle);
-  startPoint.y = this.center.y - wireRadius * Math.cos(startAngle);
-  var endPoint = Ext.create("Teselagen.bio.util.Point");
-  endPoint.x = this.center.x + wireRadius * Math.sin(endAngle);
-  endPoint.y = this.center.y - wireRadius * Math.cos(endAngle);
-  if (endAngle > startAngle) 
-  {
-    endAngle -= startAngle;
-  } else {
-    endAngle += 2 * Math.PI - startAngle;
-  }
-  startAngle = 0;
-  var sweepFlag = 0;
-  if (endAngle > startAngle) 
-  {
-    sweepFlag = 1;
-  }
-  var largeArcFlag = 0;
-  if (Math.abs(endAngle - startAngle) > Math.PI) 
-  {
-    largeArcFlag = 1;
-  }
-  path = "M" + this.center.x + " " + this.center.y + "L" + startPoint.x + " " + startPoint.y + "A" + wireRadius + " " + wireRadius + " 0 " + largeArcFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + "L" + this.center.x + " " + this.center.y;
-  this.selectionSVG.append("svg:path").attr("class", "pieWireframeElement").attr("stroke", this.self.FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none").attr("d", path);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'WireframeSelectionLayer'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.PieController', Vede.controller.SequenceController, {refs: [{ref: "pieContainer", selector: "#PieContainer"}], statics: {SELECTION_THRESHOLD: 2 * Math.PI / 360, PIE_CENTER: {x: 100, y: 100}, RAIL_RADIUS: 100}, pieManager: null, pieContainer: null, startSelectionAngle: 0, init: function() {
-  this.callParent();
-  this.control({"#zoomInMenuItem": {click: this.onZoomInMenuItemClick}, "#zoomOutMenuItem": {click: this.onZoomOutMenuItemClick}});
-}, initPie: function() {
-  this.pieManager.initPie();
-  var pie = this.pieManager.getPie();
-  var self = this;
-  pie.on("mousedown", function() {
-  self.onMousedown(self);
-});
-  pie.on("mouseup", function() {
-  self.onMouseup(self);
-});
-  pie.on("mousemove", function() {
-  self.onMousemove(self);
-});
-  this.pieContainer.on("resize", function() {
-  this.pieManager.fitWidthToContent(this.pieManager);
-}, this);
-  this.pieContainer.el.dom.setAttribute("tabindex", "0");
-  this.pieContainer.el.on("keydown", this.onKeydown, this);
-}, onLaunch: function() {
-  var pie;
-  var self = this;
-  this.callParent(arguments);
-  this.pieContainer = this.getPieContainer();
-  this.pieManager = Ext.create("Teselagen.manager.PieManager", {center: this.self.PIE_CENTER, railRadius: this.self.RAIL_RADIUS, showCutSites: Ext.getCmp("cutSitesMenuItem").checked, showFeatures: Ext.getCmp("featuresMenuItem").checked, showOrfs: Ext.getCmp("orfsMenuItem").checked});
-  pie = this.pieManager.getPie();
-  var timeOut = null;
-  window.onresize = function() {
-  if (timeOut != null) 
-  clearTimeout(timeOut);
-  timeOut = setTimeout(function() {
-  self.pieManager.fitWidthToContent(self.pieManager);
-}, 400);
-};
-  this.Managers.push(this.pieManager);
-  this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {center: this.pieManager.center, radius: this.pieManager.railRadius});
-  this.SelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {center: this.pieManager.center, radius: this.pieManager.railRadius});
-}, onKeydown: function(event) {
-  if (event.getKey() === 187) 
-  {
-    this.pieManager.zoomIn();
-  } else if (event.getKey() === 189) 
-  {
-    this.pieManager.zoomOut();
-  } else {
-    this.callParent(arguments);
-  }
-}, onSequenceChanged: function() {
-  if (!this.SequenceManager) 
-  {
-    return;
-  }
-  this.callParent();
-  this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-  this.pieManager.setOrfs(this.ORFManager.getOrfs());
-  this.pieManager.setFeatures(this.SequenceManager.getFeatures());
-  this.pieManager.render();
-  this.pieManager.updateNameBox();
-}, onActiveEnzymesChanged: function() {
-  this.callParent();
-  this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-  if (this.pieManager.sequenceManager && this.pieManager.showCutSites) 
-  {
-    this.pieManager.render();
-  }
-}, onVectorPanelAnnotationClicked: function(start, end) {
-  this.clickedAnnotationStart = start;
-  this.clickedAnnotationEnd = end;
-}, onAnnotatePanelAnnotationClicked: function(start, end) {
-  this.select(start, end);
-}, onViewModeChanged: function(viewMode) {
-  if (viewMode == "linear") 
-  {
-    Ext.getCmp("PieContainer").hide();
-  } else {
-    Ext.getCmp("PieContainer").show();
-  }
-}, onSelectionChanged: function(scope, start, end) {
-  if (scope !== this) 
-  {
-    this.SelectionLayer.select(start, end);
-    this.changeCaretPosition(start);
-  }
-}, onSequenceManagerChanged: function(pSeqMan) {
-  this.callParent(arguments);
-  this.pieManager.setOrfs(this.ORFManager.getOrfs());
-  this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-  this.pieManager.setFeatures(pSeqMan.getFeatures());
-  this.pieManager.render();
-  this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-  this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
-  this.SelectionLayer.setSequenceManager(pSeqMan);
-  this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
-}, onShowFeaturesChanged: function(show) {
-  this.pieManager.setShowFeatures(show);
-  if (this.pieManager.sequenceManager) 
-  {
-    this.pieManager.render();
-  }
-}, onShowCutSitesChanged: function(show) {
-  this.pieManager.setShowCutSites(show);
-  if (this.pieManager.sequenceManager) 
-  {
-    this.pieManager.render();
-  }
-}, onShowOrfsChanged: function(show) {
-  this.pieManager.setShowOrfs(show);
-  if (this.pieManager.sequenceManager) 
-  {
-    this.pieManager.render();
-  }
-}, onShowFeatureLabelsChanged: function(show) {
-  this.pieManager.setShowFeatureLabels(show);
-  if (this.pieManager.sequenceManager) 
-  {
-    this.pieManager.render();
-  }
-}, onShowCutSiteLabelsChanged: function(show) {
-  this.pieManager.setShowCutSiteLabels(show);
-  if (this.pieManager.sequenceManager) 
-  {
-    this.pieManager.render();
-  }
-}, onMousedown: function(self) {
-  self.startSelectionAngle = self.getClickAngle();
-  self.mouseIsDown = true;
-  if (self.pieManager.sequenceManager) 
-  {
-    self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
-    self.changeCaretPosition(self.startSelectionIndex);
-  }
-  self.selectionDirection = 0;
-}, onMousemove: function(self) {
-  var endSelectionAngle = self.getClickAngle();
-  var start;
-  var end;
-  if (self.mouseIsDown && Math.abs(self.startSelectionAngle - endSelectionAngle) > self.self.SELECTION_THRESHOLD && self.SequenceManager.getSequence().toString().length > 0 && self.pieManager.sequenceManager) 
-  {
-    var endSelectionIndex = self.bpAtAngle(endSelectionAngle);
-    if (self.selectionDirection == 0) 
-    {
-      if (self.startSelectionAngle < Math.PI) 
-      {
-        self.selectionDirection = -1;
-        if (endSelectionAngle >= self.startSelectionAngle && endSelectionAngle <= (self.startSelectionAngle + Math.PI)) 
-        {
-          self.selectionDirection = 1;
-        }
-      } else {
-        self.selectionDirection = 1;
-        if (endSelectionAngle <= self.startSelectionAngle && endSelectionAngle >= (self.startSelectionAngle - Math.PI)) 
-        {
-          self.selectionDirection = -1;
-        }
-      }
-    }
-    if (self.selectionDirection == -1) 
-    {
-      start = endSelectionIndex;
-      end = self.startSelectionIndex;
-    } else {
-      start = self.startSelectionIndex;
-      end = endSelectionIndex;
-    }
-    self.WireframeSelectionLayer.startSelecting();
-    self.WireframeSelectionLayer.select(start, end);
-    if (d3.event.ctrlKey) 
-    {
-      self.SelectionLayer.startSelecting();
-      self.select(start, end);
-      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
-    } else {
-      self.stickySelect(start, end);
-    }
-    self.changeCaretPosition(start);
-  }
-}, onMouseup: function(self) {
-  if (self.mouseIsDown) 
-  {
-    self.mouseIsDown = false;
-    if (self.WireframeSelectionLayer.selected && self.WireframeSelectionLayer.selecting) 
-    {
-      self.WireframeSelectionLayer.endSelecting();
-      self.WireframeSelectionLayer.deselect();
-      self.SelectionLayer.endSelecting();
-      if (self.SelectionLayer.end != -1) 
-      {
-        self.changeCaretPosition(self.SelectionLayer.start);
-      }
-    } else if (self.clickedAnnotationStart !== null && self.clickedAnnotationEnd !== null) 
-    {
-      self.select(self.clickedAnnotationStart, self.clickedAnnotationEnd);
-      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
-      self.clickedAnnotationStart = null;
-      self.clickedAnnotationEnd = null;
-    } else {
-      self.SelectionLayer.deselect();
-      self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
-    }
-  }
-}, onZoomInMenuItemClick: function() {
-  this.pieManager.zoomIn();
-}, onZoomOutMenuItemClick: function() {
-  this.pieManager.zoomOut();
-}, select: function(start, end) {
-  if (start == 0 && end == this.SequenceManager.getSequence().toString().length) 
-  {
-    this.SelectionLayer.select(start, end - 1);
-  } else {
-    this.SelectionLayer.select(start, end);
-  }
-  this.changeCaretPosition(this.SelectionLayer.start);
-}, getClickAngle: function() {
-  var svg = d3.select(".pieParent");
-  var transformValues;
-  var scrolled = this.pieContainer.el.getScroll();
-  transformValues = svg.attr("transform").match(/[-.\d]+/g);
-  var relX = d3.event.layerX - transformValues[4] - this.pieManager.center.x * transformValues[0] + scrolled.left;
-  var relY = d3.event.layerY - transformValues[5] - this.pieManager.center.y * transformValues[3] + scrolled.top;
-  var angle = Math.atan(relY / relX) + Math.PI / 2;
-  if (relX < 0) 
-  {
-    angle += Math.PI;
-  }
-  return angle;
-}, bpAtAngle: function(angle) {
-  return Math.floor(angle * this.pieManager.sequenceManager.getSequence().seqString().length / (2 * Math.PI));
-}, changeCaretPosition: function(index, silent) {
-  if (index >= 0 && this.SequenceManager && index <= this.SequenceManager.getSequence().toString().length) 
-  {
-    this.callParent(arguments);
-    this.pieManager.adjustCaret(index);
-  }
-}, stickySelect: function(start, end) {
-  var annotations = this.pieManager.getAnnotationsInRange(start, end);
-  if (annotations.length > 0) 
-  {
-    if (start <= end) 
-    {
-      var minStart = annotations[0].getStart();
-      var maxEnd = annotations[0].getEnd();
-      Ext.each(annotations, function(annotation) {
-  if (annotation.getStart() < minStart) 
-  {
-    minStart = annotation.getStart();
-  }
-  if (annotation.getEnd() > maxEnd) 
-  {
-    maxEnd = annotation.getEnd();
-  }
-});
-      this.SelectionLayer.startSelecting();
-      this.select(minStart, maxEnd);
-      this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-    } else {
-      var minStart1 = -1;
-      var maxEnd1 = -1;
-      var minStart2 = -1;
-      var maxEnd2 = -1;
-      Ext.each(annotations, function(annotation) {
-  if (annotation.getStart() > start) 
-  {
-    if (minStart1 == -1) 
-    {
-      minStart1 = annotation.getStart();
-    }
-    if (annotation.getStart() < minStart1) 
-    {
-      minStart1 = annotation.getStart();
-    }
-  } else {
-    if (minStart2 == -1) 
-    {
-      minStart2 = annotation.getStart();
-    }
-    if (annotation.getStart() < minStart2) 
-    {
-      minStart2 = annotation.getStart();
-    }
-  }
-  if (annotation.getEnd() > end) 
-  {
-    if (maxEnd1 == -1) 
-    {
-      maxEnd1 = annotation.getEnd();
-    }
-    if (annotation.getEnd() > maxEnd1) 
-    {
-      maxEnd1 = annotation.getEnd();
-    }
-  } else {
-    if (maxEnd2 == -1) 
-    {
-      maxEnd2 = annotation.getEnd();
-    }
-    if (annotation.getEnd() > maxEnd2) 
-    {
-      maxEnd2 = annotation.getEnd();
-    }
-  }
-});
-      var selStart = minStart1;
-      var selEnd;
-      if (minStart1 == -1 && minStart2 != -1) 
-      {
-        selStart = minStart2;
-      } else if (minStart1 != -1 && minStart2 == -1) 
-      {
-        selStart = minStart1;
-      } else if (minStart1 != -1 && minStart2 != -1) 
-      {
-        selStart = minStart1;
-      }
-      if (maxEnd1 == -1 && maxEnd2 != -1) 
-      {
-        selEnd = maxEnd2;
-      } else if (maxEnd1 != -1 && maxEnd2 == -1) 
-      {
-        selEnd = maxEnd1;
-      } else if (maxEnd1 != -1 && maxEnd2 != -1) 
-      {
-        selEnd = maxEnd2;
-      }
-      if (selEnd == -1 || selStart == -1) 
-      {
-        this.SelectionLayer.deselect();
-        this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-      } else {
-        this.SelectionLayer.startSelecting();
-        this.select(selStart, selEnd);
-        this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-      }
-    }
-  } else {
-    this.SelectionLayer.deselect();
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'PieController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.CutSiteLabel', Teselagen.renderer.common.Label, {config: {start: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-}, labelText: function() {
-  var label = [];
-  label = this.annotation.getRestrictionEnzyme().getName();
-  return label;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'CutSiteLabel'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.RailRenderer', Teselagen.renderer.common.AnnotationRenderer, {config: {references: null, railWidth: 0}, GraphicUtils: null, StrandType: null, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-  this.GraphicUtils = Teselagen.utils.GraphicUtils;
-}, applyRailRadius: function(pRailRadius) {
-  this.setNeedsMeasurement(true);
-  return pRailRadius;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'RailRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.CutSiteRenderer', Teselagen.renderer.rail.RailRenderer, {reqires: ["Teselagen.bio.util.Point"], statics: {CUTSITE_LINE_WIDTH: 0.5}, config: {cutSiteSVG: null, cutSites: [], railWidth: null, railHeight: null, railGap: null, startPoints: null, reference: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-  this.startPoints = Ext.create("Ext.util.HashMap");
-}, render: function() {
-  var labelPos = {};
-  var path;
-  Ext.each(this.getCutSites(), function(site) {
-  var startPos = site.getStart() / this.sequenceManager.getSequence().seqString().length;
-  var xStartPosition = this.reference.x + (startPos * this.railWidth);
-  var yPosition = this.reference.y;
-  labelPos = {x: xStartPosition, y: yPosition};
-  this.startPoints.add(site, labelPos);
-  var lineStart = Ext.create("Teselagen.bio.util.Point", xStartPosition, this.reference.y - this.railHeight);
-  var lineEnd = Ext.create("Teselagen.bio.util.Point", xStartPosition, this.reference.y - (this.railHeight + 8));
-  path = "M" + lineStart.x + " " + lineStart.y + " " + "L" + lineEnd.x + " " + lineEnd.y;
-  this.cutSiteSVG.append("svg:path").attr("stroke", this.self.FRAME_COLOR).attr("stroke-width", this.self.CUTSITE_LINE_WIDTH).attr("d", path).on("mousedown", this.getClickListener(site.getStart(), site.getEnd())).append("svg:title").text(this.getToolTip(site));
-}, this);
-}, getToolTip: function(cutSite) {
-  var complement = ", complement";
-  if (cutSite.getStrand() == 1) 
-  {
-    complement = "";
-  }
-  var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) + complement + ", cuts " + cutSite.getNumCuts() + " times";
-  return toolTip;
-}, applyCutSites: function(pCutSites) {
-  return pCutSites;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'CutSiteRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.FeatureLabel', Teselagen.renderer.common.Label, {config: {start: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-}, labelText: function() {
-  var label = [];
-  if (!this.annotation.getName() || !this.StringUtil.trim(this.annotation.getName())) 
-  {
-    var notes = this.annotation.getNotes();
-    Ext.each(notes, function(note) {
-  if (note.getName() == "label" || note.getName() == "apeinfo_label" || note.getName() == "note" || note.getName() == "gene") 
-  {
-    label = note.getValue();
-    return false;
-  }
-});
-  } else {
-    label = this.annotation.getName();
-  }
-  if (label == null) 
-  {
-    label = "";
-  }
-  return label;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'FeatureLabel'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.FeatureRenderer', Teselagen.renderer.rail.RailRenderer, {statics: {DEFAULT_FEATURE_HEIGHT: 7, DEFAULT_FEATURES_GAP: 5, OUTLINE_COLOR: "black", OUTLINE_WIDTH: 0.5}, config: {featureSVG: null, features: [], railWidth: null, railHeight: null, railGap: null, startPoints: null}, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-  this.setStartPoints(Ext.create("Ext.util.HashMap"));
-}, render: function() {
-  var path;
-  var featureAlignment = this.Alignment.buildAlignmentMap(this.features, this.sequenceManager);
-  Ext.each(this.features, function(feature) {
-  var featureGap = this.railGap - this.self.DEFAULT_FEATURES_GAP - 2 * this.self.DEFAULT_FEATURES_GAP;
-  var index = featureAlignment.get(feature);
-  if (index > 0) 
-  {
-    featureGap -= index * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
-  }
-  var color = "#ffffff";
-  var direction = 0;
-  if (feature.getStrand() == this.StrandType.FORWARD) 
-  {
-    direction = 1;
-  } else if (feature.getStrand() == this.StrandType.BACKWARD) 
-  {
-    direction = 2;
-  }
-  var recSprite;
-  var featureWidth;
-  var startPos;
-  var endPos;
-  var labelPos = {};
-  Ext.each(feature.getLocations(), function(location) {
-  color = this.colorByType(feature.getType().toLowerCase());
-  startPos = location.getStart() / this.sequenceManager.getSequence().seqString().length;
-  endPos = location.getEnd() / this.sequenceManager.getSequence().seqString().length;
-  var xStartPosition = (startPos * this.railWidth);
-  var yEndPosition = (endPos * this.railWidth);
-  var yPosition = -(this.railHeight + this.railGap + featureGap);
-  labelPos.x = xStartPosition;
-  labelPos.y = yPosition;
-  this.startPoints.add(feature, labelPos);
-  if (startPos > endPos) 
-  {
-    featureWidth = (startPos - endPos) * this.railWidth;
-  } else {
-    featureWidth = (endPos - startPos) * this.railWidth;
-  }
-  if (feature.getStart() == location.getStart() && feature.getStrand() == this.StrandType.BACKWARD) 
-  {
-    path = this.GraphicUtils.drawFeatureNegativeArrow(xStartPosition, yPosition, featureWidth, color);
-  } else if (feature.getEnd() == location.getEnd() && feature.getStrand() == this.StrandType.FORWARD) 
-  {
-    path = this.GraphicUtils.drawFeaturePositiveArrow(xStartPosition, yPosition, featureWidth, color);
-  } else {
-    path = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
-  }
-  this.featureSVG.append("svg:path").attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", color).attr("fill-rule", "evenodd").attr("d", path).on("mousedown", this.getClickListener(feature.getStart(), feature.getEnd())).append("svg:title").text(this.getToolTip(feature));
-}, this);
-}, this);
-}, calculateLocations: function(feature, featureGap) {
-  var locate1 = feature.getStart() / this.sequenceManager.getSequence().seqString().length;
-  var locate2 = feature.getEnd() / this.sequenceManager.getSequence().seqString().length;
-  var headLocate = locate1;
-  return [locate1, locate2];
-}, getToolTip: function(feature) {
-  var nameString = "";
-  if (feature.getName()) 
-  {
-    nameString = " - " + feature.getName();
-  }
-  return feature.getType() + nameString + ": " + feature.getStart() + ".." + feature.getEnd();
-}, colorByType: function(type) {
-  var switchObj = {promoter: "#31B440", terminator: "#F51600", cds: "#EF6500", m_rna: "#FFFF00", misc_binding: "#006FEF", misc_feature: "#006FEF", misc_marker: "#8DCEB1", rep_origin: "#878787"};
-  var color = switchObj[type] || "#CCCCCC";
-  return color;
-}, applyFeatures: function(pFeatures) {
-  this.setNeedsMeasurement(true);
-  return pFeatures;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'FeatureRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.ORFRenderer', Teselagen.renderer.rail.RailRenderer, {statics: {DISTANCE_FROM_RAIL: 15, DISTANCE_BETWEEN_ORFS: 5, ORF_FRAME_COLOR: ["#FF0000", "#31B440", "#3366CC"]}, config: {orfSVG: null, orfs: null, railWidth: null, railHeight: null, reference: null}, maxAlignmentRow: 0, constructor: function(inData) {
-  this.callParent(arguments);
-  this.initConfig(inData);
-}, render: function() {
-  var path;
-  var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, this.sequenceManager);
-  this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
-  var seqLen = this.sequenceManager.getSequence().seqString().length;
-  Ext.each(this.orfs, function(orf) {
-  var color = this.self.ORF_FRAME_COLOR[orf.getFrame()];
-  var tooltip = this.getToolTip(orf);
-  var index = orfAlignment.get(orf);
-  var orfHeight = this.reference.y - this.self.DISTANCE_FROM_RAIL;
-  if (index > 0) 
-  {
-    orfHeight += -(index * this.self.DISTANCE_BETWEEN_ORFS);
-  }
-  var startPoint = (orf.getStart() / seqLen) * this.railWidth;
-  var endPoint = (orf.getEnd() / seqLen) * this.railWidth;
-  path = "M" + startPoint + " " + orfHeight + "L" + endPoint + " " + orfHeight;
-  this.orfSVG.append("svg:path").attr("stroke", color).attr("d", path).on("mousedown", this.getClickListener(orf.getStart(), orf.getEnd())).append("svg:title").text(tooltip);
-  Ext.each(orf.getStartCodons(), function(codonIndex) {
-  var codonAngle = codonIndex * 2 * Math.PI / seqLen;
-  var codonX = this.reference.x + ((codonIndex / seqLen) * this.railWidth);
-  var codonY = this.reference.y + orfHeight;
-  this.orfSVG.append("svg:circle").attr("r", 2).attr("cx", codonX).attr("cy", codonY).attr("fill", color).on("mousedown", this.getClickListener(orf.getStart(), orf.getEnd())).append("svg:title").text(tooltip);
-}, this);
-  var lastPoint;
-  var arrowShiftAngle;
-  if (orf.getStrand() == this.StrandType.FORWARD) 
-  {
-    arrowShiftAngle = endPoint + 5;
-    lastPoint = endPoint;
-  } else {
-    arrowShiftAngle = startPoint - 5;
-    lastPoint = startPoint;
-  }
-  path = "M" + (this.reference.x + lastPoint) + " " + (this.reference.y + (orfHeight + 2)) + "L" + (this.reference.x + arrowShiftAngle) + " " + (this.reference.y + orfHeight) + "L" + (this.reference.x + lastPoint) + " " + (this.reference.y + (orfHeight - 2)) + "z";
-  this.orfSVG.append("svg:path").attr("stroke", color).attr("fill", color).attr("d", path).on("mousedown", this.getClickListener(orf.getStart(), orf.getEnd())).append("svg:title").text(tooltip);
-}, this);
-}, getToolTip: function(orf) {
-  var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
-  var aa = Math.floor(bp / 3);
-  var complimentary = "";
-  if (orf.getStrand() == 1 && orf.getStartCodons().length > 1) 
-  {
-    complimentary = ", complimentary";
-  }
-  var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) + ", frame: " + orf.getFrame() + ", length: " + bp + " BP" + ", " + aa + " AA" + complimentary;
-  if (orf.getStartCodons().length > 1) 
-  {
-    tooltipLabel += "<br>Start Codons: ";
-    var codonsArray = [];
-    var codonString;
-    Ext.each(orf.getStartCodons(), function(codon, index) {
-  if (index != orf.getStartCodons().length - 1) 
-  {
-    codonString = codon + ", ";
-  } else {
-    codonString = codon;
-  }
-  codonsArray.push(codonString);
-});
-    tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
-  }
-  return tooltipLabel;
-}, applyOrfs: function(pOrfs) {
-  return pOrfs;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'ORFRenderer'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.rail.Caret', Ext.Base, {config: {rail: null, start: null, reference: null, length: null, railWidth: null}, statics: {CARET_COLOR: 'black', CARET_WIDTH: 1, CARET_HEIGHT: 3}, constructor: function(pConfig) {
-  this.initConfig(pConfig);
-  var x = (this.start * this.railWidth) + pConfig.reference.x;
-  var y = pConfig.reference.y + this.self.CARET_HEIGHT;
-  var path = 'M' + x + ' ' + (-y) + 'L' + x + ' ' + y;
-  return pConfig.rail.append("svg:path").attr("class", "railCaret").attr("stroke", this.self.CARET_COLOR).attr("d", path);
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'Caret'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.rail.Frame', Ext.Base, {statics: {RECT_REFERENCE: {x: 0, y: 0}, RECT_HEIGHT: 3, RECT_GAP: 3, OUTLINE_WIDTH: 0.5, OUTLINE_COLOR: "#dddddd", RING_COLOR: "#ffffb3"}, constructor: function(inData) {
-  var reference = this.self.RECT_REFERENCE;
-  var railWidth = this.self.RECT_WIDTH;
-  var railHeight = this.self.RECT_HEIGHT;
-  var railGap = this.self.RECT_GAP;
-  return inData.rail.append("svg:rect").attr("x", reference.x).attr("y", reference.y).attr("width", inData.railWidth).attr("height", this.self.RECT_HEIGHT).attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", this.self.RING_COLOR).attr("fill-rule", "evenodd");
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'Frame'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.rail.NameBox', Ext.Base, {statics: {FONT_SIZE: "10px", FONT_WEIGHT: "bold"}, config: {rail: null, center: {x: 150, y: 50}, name: "", length: 0}, constructor: function(inData) {
-  this.initConfig(inData);
-  var text1;
-  var text2;
-  var group = inData.rail.append("svg:g").attr("class", "railNameBox").attr("text-anchor", "middle").attr("font-size", this.self.FONT_SIZE).attr("font-weight", this.self.FONT_WEIGHT);
-  if (!inData.name) 
-  {
-    text1 = '(' + inData.length + ' bp)';
-    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
-  } else {
-    text1 = inData.name;
-    text2 = '(' + inData.length + 'bp)';
-    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
-    group.append("svg:text").attr("dy", "1em").text(text2).attr("x", this.center.x).attr("y", this.center.y);
-  }
-  return group;
-}}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'NameBox'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.RailManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 3, LABEL_HEIGHT: 7, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", RAIL_PAD: 100, ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, reference: null, rail: null, nameBox: null, railGap: 0, railWidth: 300, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, startPoints: null, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railGapChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, reference: this.reference, railHeight: this.railHeight, railWidth: this.railWidth, railGap: this.railGap, cutSites: this.cutSites});
-  this.featureRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, railWidth: this.railWidth, railHeight: this.railHeight, reference: this.reference, railGap: this.railGap, features: this.features});
-  this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {orfSVG: this.orfSVG, sequenceManager: this.sequenceManager, reference: this.reference, railHeight: this.railGap, railWidth: this.railWidth, orfs: this.orfs});
-  this.renderers = [this.cutSiteRenderer, this.featureRenderer, this.orfRenderer];
-}, getAnnotationsInRange: function(start, end) {
-  var annotationsInRange = [];
-  var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {start: start, end: end});
-  if (this.showFeatures) 
-  {
-    Ext.each(this.features, function(feature) {
-  if (selectionAnnotation.contains(feature)) 
-  {
-    annotationsInRange.push(feature);
-  }
-});
-  }
-  if (this.showCutSites) 
-  {
-    Ext.each(this.cutSites, function(site) {
-  if (selectionAnnotation.contains(site)) 
-  {
-    annotationsInRange.push(site);
-  }
-});
-  }
-  if (this.showOrfs) 
-  {
-    Ext.each(this.orfs, function(orf) {
-  if (selectionAnnotation.contains(orf)) 
-  {
-    annotationsInRange.push(orf);
-  }
-});
-  }
-  return annotationsInRange;
-}, render: function() {
-  Ext.suspendLayouts();
-  var renderer;
-  if (this.dirty) 
-  {
-    for (var i = 0; i < this.renderers.length; i++) 
-      {
-        renderer = this.renderers[i];
-        if (this.sequenceManagerChanged) 
-        {
-          renderer.setSequenceManager(this.sequenceManager);
-        }
-        if (this.railRadiusChanged) 
-        {
-          renderer.setRailRadius(this.railRadius);
-        }
-        if (this.referenceChanged) 
-        {
-          renderer.setCenter(this.center);
-        }
-      }
-    this.dirty = false;
-    this.sequenceManagerChanged = false;
-    this.railWidthChanged = false;
-    this.referenceChanged = false;
-  }
-  if (this.cutSitesChanged) 
-  {
-    this.cutSiteSVG.remove();
-    this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "railCutSite");
-    this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-    this.cutSiteRenderer.setCutSites(this.cutSites);
-    this.cutSiteRenderer.render();
-    this.cutSitesChanged = false;
-  }
-  if (this.featuresChanged) 
-  {
-    this.featureSVG.remove();
-    this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
-    this.featureRenderer.setFeatureSVG(this.featureSVG);
-    this.featureRenderer.setFeatures(this.features);
-    this.featureRenderer.render();
-    this.featuresChanged = false;
-  }
-  if (this.orfsChanged) 
-  {
-    this.orfSVG.remove();
-    this.orfSVG = this.parentSVG.append("svg:g").attr("class", "railOrf");
-    this.orfRenderer.setOrfSVG(this.orfSVG);
-    this.orfRenderer.setOrfs(this.orfs);
-    this.orfRenderer.render();
-    this.orfsChanged = false;
-  }
-  this.renderLabels();
-  if (this.showOrfs) 
-  {
-    this.orfSVG.style("visibility", "visible");
-  } else {
-    this.orfSVG.style("visibility", "hidden");
-  }
-  if (this.showCutSites) 
-  {
-    this.cutSiteSVG.style("visibility", "visible");
-  } else {
-    this.cutSiteSVG.style("visibility", "hidden");
-  }
-  if (this.showFeatures) 
-  {
-    this.featureSVG.style("visibility", "visible");
-  } else {
-    this.featureSVG.style("visibility", "hidden");
-  }
-  Ext.resumeLayouts(true);
-}, zoomIn: function() {
-  Ext.suspendLayouts();
-  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [Number(translateValues[0]), Number(translateValues[3])];
-  var translate = [Number(translateValues[4]), Number(translateValues[5])];
-  scale[0] += this.self.ZOOM_INCREMENT;
-  scale[1] += this.self.ZOOM_INCREMENT;
-  this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
-  Ext.resumeLayouts(true);
-  this.fitWidthToContent(this);
-}, zoomOut: function() {
-  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [translateValues[0], translateValues[3]];
-  var translate = [translateValues[4], translateValues[5]];
-  if (scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) 
-  {
-    Ext.suspendLayouts();
-    scale[0] -= this.self.ZOOM_INCREMENT;
-    scale[1] -= this.self.ZOOM_INCREMENT;
-    this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
-    Ext.resumeLayouts(true);
-    this.fitWidthToContent(this);
-  }
-}, fitWidthToContent: function(scope) {
-  var containerSize = Ext.getCmp("RailContainer").getSize();
-  var transY = containerSize.height / 2;
-  var railBox = scope.rail[0][0].getBBox();
-  var parentBox = scope.parentSVG[0][0].getBBox();
-  var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [Number(translateValues[0]), Number(translateValues[3])];
-  var translate = [Number(translateValues[4]), Number(translateValues[5])];
-  scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + transY + ")");
-  scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD).attr("height", railBox.height + transY);
-}, showSprites: function(collection) {
-  var sprite;
-  for (var i = 0; i < collection.length; i++) 
-    {
-      sprite = collection.getAt(i);
-      this.rail.surface.add(sprite);
-      sprite.show(true);
-      this.rail.doComponentLayout();
-    }
-}, hideSprites: function(collection) {
-  for (var i = 0; i < collection.length; i++) 
-    {
-      collection.getAt(i).hide(true);
-    }
-}, renderLabels: function() {
-  var labels = [];
-  var start;
-  var color;
-  this.labelSVG.remove();
-  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "railLabel");
-  if (this.showCutSites && this.showCutSiteLabels) 
-  {
-    var site;
-    for (var i = 0; i < this.cutSites.length; i++) 
-      {
-        site = this.cutSites[i];
-        start = this.cutSiteRenderer.startPoints.get(site);
-        if (site.getNumCuts() == 1) 
-        {
-          color = "#E57676";
-        } else {
-          color = "#888888";
-        }
-        label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {labelSVG: this.labelSVG, annotation: site, x: start.x, y: start.y, start: start, color: color, tooltip: this.cutSiteRenderer.getToolTip(site), click: this.cutSiteRenderer.getClickListener(site.getStart(), site.getEnd())});
-        labels.push(label);
-      }
-  }
-  if (this.showFeatures && this.showFeatureLabels) 
-  {
-    var feature;
-    for (var i = 0; i < this.features.length; i++) 
-      {
-        feature = this.features[i];
-        start = this.featureRenderer.startPoints.get(feature);
-        label = Ext.create("Teselagen.renderer.rail.FeatureLabel", {labelSVG: this.labelSVG, annotation: feature, x: start.x, y: start.y, start: start, tooltip: this.featureRenderer.getToolTip(feature), click: this.featureRenderer.getClickListener(feature.getStart(), feature.getEnd())});
-        labels.push(label);
-      }
-  }
-  labels.sort(this.labelSort);
-  this.adjustLabelPositions(labels);
-}, adjustLabelPositions: function(labels) {
-  var railWidth = this.railWidth;
-  var totalNumberOfLabels = labels.length;
-  var totalLength = this.sequenceManager.getSequence().toString().length;
-  var rightLabels = [];
-  var leftLabels = [];
-  var label;
-  for (var i = 0; i < labels.length; i++) 
-    {
-      label = labels[i];
-      if (i < (totalNumberOfLabels / 2)) 
-      {
-        leftLabels.push(label);
-      } else {
-        rightLabels.push(label);
-      }
-    }
-  var labelHeight = 3 + this.self.LABEL_DISTANCE_FROM_RAIL;
-  if (this.showOrfs && this.orfRenderer.maxAlignmentRow > 0) 
-  {
-    labelHeight += this.orfRenderer.maxAlignmentRow * this.orfRenderer.self.DISTANCE_BETWEEN_ORFS;
-  }
-  var lastLabelYPosition = this.reference.y - 10;
-  var label;
-  var numberOfLeftLabels = leftLabels.length;
-  for (var i = 0; i <= numberOfLeftLabels - 1; i++) 
-    {
-      label = leftLabels[i];
-      if (!label.includeInView) 
-      {
-        continue;
-      }
-      var xPosition = this.reference.x + (label.label.attr("x"));
-      var yPosition = this.reference.y - labelHeight;
-      if (yPosition < lastLabelYPosition) 
-      {
-        lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-      } else {
-        yPosition = lastLabelYPosition;
-        lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-      }
-      label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "end");
-      labels.push(this.drawConnection(label, xPosition, yPosition));
-    }
-  for (var i = 0; i <= totalNumberOfLabels - numberOfLeftLabels - 1; i++) 
-    {
-      label = rightLabels[i];
-      if (!label.includeInView) 
-      {
-        continue;
-      }
-      var xPosition = this.reference.x + (label.label.attr("x"));
-      var yPosition = this.reference.y - labelHeight;
-      if (yPosition < lastLabelYPosition) 
-      {
-        lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-      } else {
-        yPosition = lastLabelYPosition;
-        lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-      }
-      label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "start");
-      labels.push(this.drawConnection(label, xPosition, yPosition));
-    }
-}, drawConnection: function(label, labelX, labelY) {
-  var path;
-  if (label.annotation instanceof Teselagen.bio.sequence.dna.Feature) 
-  {
-    path = "M" + this.featureRenderer.startPoints.get(label.annotation).x + " " + labelY + "L" + this.featureRenderer.startPoints.get(label.annotation).x + " " + this.featureRenderer.startPoints.get(label.annotation).y;
-  } else {
-    path = "M" + labelX + " " + labelY + "L" + this.cutSiteRenderer.startPoints.get(label.annotation).x + " " + this.cutSiteRenderer.startPoints.get(label.annotation).y;
-  }
-  return this.labelSVG.append("svg:path").attr("stroke", this.self.LABEL_CONNECTION_COLOR).attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH).attr("d", path);
-}, labelSort: function(label1, label2) {
-  var labelStart1 = label1.start.x;
-  var labelStart2 = label2.start.x;
-  if (labelStart1 > labelStart2) 
-  {
-    return 1;
-  } else if (labelStart1 < labelStart2) 
-  {
-    return -1;
-  } else {
-    return 0;
-  }
-}, applySequenceManager: function(pSequenceManager) {
-  this.dirty = true;
-  this.sequenceManagerChanged = true;
-  if (this.rail) 
-  {
-    this.nameBox.remove();
-    this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: pSequenceManager.getName(), length: pSequenceManager.getSequence().toString().length});
-  }
-  return pSequenceManager;
-}, applyCenter: function(pCenter) {
-  this.dirty = true;
-  this.centerChanged = true;
-  return pCenter;
-}, applyRailRadius: function(pRailRadius) {
-  this.dirty = true;
-  this.railRadiusChanged = true;
-  return pRailRadius;
-}, applyCutSites: function(pCutSites) {
-  this.cutSitesChanged = true;
-  return pCutSites;
-}, applyFeatures: function(pFeatures) {
-  this.featuresChanged = true;
-  return pFeatures;
-}, applyOrfs: function(pOrfs) {
-  this.orfsChanged = true;
-  return pOrfs;
-}, initRail: function() {
-  this.rail = d3.select("#RailContainer").append("svg:svg").attr("id", "Rail").attr("overflow", "auto");
-  this.parentSVG = this.rail.append("svg:g").attr("class", "railParent").attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
-  this.frame = Ext.create("Vede.view.rail.Frame", {rail: this.parentSVG, railWidth: this.railWidth, center: this.center});
-  this.caret = Ext.create("Vede.view.rail.Caret", {rail: this.parentSVG, start: 0, reference: this.reference, railWidth: this.railWidth, length: 3});
-  var name = "unknown";
-  var length = 0;
-  if (this.sequenceManager) 
-  {
-    name = this.sequenceManager.getName();
-    length = this.sequenceManager.getSequence().toString().length;
-  }
-  this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
-  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "railLabel");
-  this.selectionSVG = this.parentSVG.append("svg:g").attr("class", "railSelection");
-  this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "railCutSite");
-  this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-  this.orfSVG = this.parentSVG.append("svg:g").attr("class", "railOrf");
-  this.orfRenderer.setOrfSVG(this.orfSVG);
-  this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
-  this.featureRenderer.setFeatureSVG(this.featureSVG);
-  this.fitWidthToContent(this);
-}, updateNameBox: function() {
-  var name;
-  var length;
-  if (this.sequenceManager) 
-  {
-    name = this.sequenceManager.getName();
-    length = this.sequenceManager.getSequence().toString().length;
-  }
-  this.nameBox.remove();
-  this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
-}, adjustCaret: function(bp) {
-  var start = bp / this.sequenceManager.getSequence().seqString().length;
-  this.caret.remove();
-  if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
-  {
-    this.caret = Ext.create("Vede.view.rail.Caret", {rail: this.parentSVG, start: start, reference: this.reference, railWidth: this.railWidth, length: 3});
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RailManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.Layer', Ext.Base, {inheritableStatics: {STROKE_OPACITY: 0.8}, config: {selectionSVG: null, sequenceManager: null, reference: {}, radius: 0, railWidth: null}, start: -1, end: -1, startPos: 0, endPos: 0, selecting: false, selected: false, constructor: function(inData) {
-  this.initConfig(inData);
-}, select: function(fromIndex, toIndex) {
-  this.drawSelectionRail(fromIndex, toIndex);
-  this.selected = true;
-  this.start = fromIndex;
-  this.end = toIndex;
-}, deselect: function() {
-  this.start = -1;
-  this.end = -1;
-  this.startPos = 0;
-  this.endPos = 0;
-  this.selected = false;
-  this.selecting = false;
-}, startSelecting: function() {
-  this.selecting = true;
-}, endSelecting: function() {
-  this.selecting = false;
-}, drawSelectionRail: function(fromIndex, endIndex) {
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'Layer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.SelectionLayer', Teselagen.renderer.rail.Layer, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC", WIREFRAME_OFFSET: 5}, deselect: function() {
-  this.callParent();
-  d3.selectAll(".railSelectionElement").remove();
-}, drawSelectionRail: function(fromIndex, endIndex) {
-  var seqLen = this.sequenceManager.getSequence().toString().length;
-  var path;
-  if (seqLen == 0) 
-  {
-    return;
-  }
-  d3.select(".railSelectionElement").remove();
-  this.startAngle = fromIndex / seqLen;
-  this.endAngle = endIndex / seqLen;
-  var wireHeight = this.reference.y + this.self.WIREFRAME_OFFSET;
-  var adjustedEnd = this.endAngle;
-  var startPoint = this.startAngle * this.railWidth;
-  var endPoint = adjustedEnd * this.railWidth;
-  if (endPoint < startPoint) 
-  {
-    path = "M 0" + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L 0" + " " + (-wireHeight) + "L 0" + " " + (wireHeight) + "M" + startPoint + " " + wireHeight + "L" + this.railWidth + " " + (wireHeight) + "L" + this.railWidth + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
-  } else {
-    path = "M" + startPoint + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
-  }
-  this.selectionSVG.append("svg:path").attr("class", "railSelectionElement").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).attr("d", path).style("pointer-events", "none");
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'SelectionLayer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.renderer.rail.WireframeSelectionLayer', Teselagen.renderer.rail.Layer, {statics: {FRAME_COLOR: "#808080", WIREFRAME_OFFSET: 5}, deselect: function() {
-  this.callParent();
-  d3.selectAll(".railWireframeElement").remove();
-}, drawSelectionRail: function(fromIndex, endIndex) {
-  var path;
-  var seqLen = this.sequenceManager.getSequence().toString().length;
-  if (seqLen == 0 || (this.start == fromIndex && this.end == endIndex) || fromIndex == endIndex) 
-  {
-    return;
-  }
-  d3.selectAll(".railWireframeElement").remove();
-  var startAngle = fromIndex / seqLen;
-  var endAngle = endIndex / seqLen;
-  var wireHeight = this.reference.y + this.self.WIREFRAME_OFFSET;
-  var startPoint = startAngle * this.railWidth;
-  var endPoint = endAngle * this.railWidth;
-  var wireWidth = (startAngle - endAngle) * this.railWidth;
-  if (endPoint < startPoint) 
-  {
-    path = "M 0" + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L 0" + " " + (-wireHeight) + "L 0" + " " + (wireHeight) + "M" + startPoint + " " + wireHeight + "L" + this.railWidth + " " + (wireHeight) + "L" + this.railWidth + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
-  } else {
-    path = "M" + startPoint + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
-  }
-  this.selectionSVG.append("svg:path").attr("class", "railWireframeElement").attr("stroke", this.self.FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none").attr("d", path);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'WireframeSelectionLayer'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.RailController', Vede.controller.SequenceController, {statics: {SELECTION_THRESHOLD: 2 * Math.PI / 360}, refs: [{ref: "railContainer", selector: "#RailContainer"}], railManager: null, mouseIsDown: false, startSelectionAngle: 0, startSelectionIndex: 0, clickedAnnotationStart: null, clickedAnnotationEnd: null, init: function() {
-  this.callParent();
-  this.control({"#zoomInMenuItem": {click: this.onZoomInMenuItemClick}, "#zoomOutMenuItem": {click: this.onZoomOutMenuItemClick}});
-}, initRail: function() {
-  this.railManager.initRail();
-  var rail = this.railManager.getRail();
-  var self = this;
-  rail.on("mousedown", function() {
-  self.onMousedown(self);
-});
-  rail.on("mouseup", function() {
-  self.onMouseup(self);
-});
-  rail.on("mousemove", function() {
-  self.onMousemove(self);
-});
-  this.railContainer.on("resize", function() {
-  this.railManager.fitWidthToContent(this.railManager);
-}, this);
-  this.railContainer.el.dom.setAttribute("tabindex", "0");
-  this.railContainer.el.on("keydown", this.onKeydown, this);
-}, onLaunch: function() {
-  var rail;
-  var self = this;
-  this.callParent(arguments);
-  this.railContainer = this.getRailContainer();
-  this.railManager = Ext.create("Teselagen.manager.RailManager", {reference: {x: 0, y: 0}, railWidth: 400, showCutSites: Ext.getCmp("cutSitesMenuItem").checked, showFeatures: Ext.getCmp("featuresMenuItem").checked, showOrfs: Ext.getCmp("orfsMenuItem").checked});
-  rail = this.railManager.getRail();
-  var timeOut = null;
-  window.onresize = function() {
-  if (timeOut != null) 
-  clearTimeout(timeOut);
-  timeOut = setTimeout(function() {
-  self.railManager.fitWidthToContent(self.railManager);
-}, 400);
-};
-  this.Managers.push(this.railManager);
-  this.railContainer.hide();
-  this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {reference: this.railManager.reference, railWidth: this.railManager.railWidth});
-  this.SelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {reference: this.railManager.reference, railWidth: this.railManager.railWidth});
-}, onKeydown: function(event) {
-  if (event.getKey() === 187) 
-  {
-    this.railManager.zoomIn();
-  } else if (event.getKey() === 189) 
-  {
-    this.railManager.zoomOut();
-  } else {
-    this.callParent(arguments);
-  }
-}, onSequenceChanged: function() {
-  if (!this.SequenceManager) 
-  {
-    return;
-  }
-  this.callParent();
-  this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-  this.railManager.setOrfs(this.ORFManager.getOrfs());
-  this.railManager.setFeatures(this.SequenceManager.getFeatures());
-  this.railManager.render();
-  this.railManager.updateNameBox();
-}, onActiveEnzymesChanged: function() {
-  this.callParent();
-  this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-  if (this.railManager.sequenceManager && this.railManager.showCutSites) 
-  {
-    this.railManager.render();
-  }
-}, onVectorPanelAnnotationClicked: function(start, end) {
-  this.clickedAnnotationStart = start;
-  this.clickedAnnotationEnd = end;
-}, onAnnotatePanelAnnotationClicked: function(start, end) {
-  this.select(start, end);
-}, onViewModeChanged: function(viewMode) {
-  if (viewMode == "circular") 
-  {
-    Ext.getCmp("RailContainer").hide();
-  } else {
-    Ext.getCmp("RailContainer").show();
-  }
-}, onSelectionChanged: function(scope, start, end) {
-  if (scope != this) 
-  {
-    this.SelectionLayer.select(start, end);
-    this.changeCaretPosition(start);
-  }
-}, onSequenceManagerChanged: function(pSeqMan) {
-  this.callParent(arguments);
-  this.railManager.setOrfs(this.ORFManager.getOrfs());
-  this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-  this.railManager.setFeatures(pSeqMan.getFeatures());
-  this.railManager.render();
-  this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-  this.WireframeSelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
-  this.SelectionLayer.setSequenceManager(pSeqMan);
-  this.SelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
-}, onShowFeaturesChanged: function(show) {
-  this.railManager.setShowFeatures(show);
-  if (this.railManager.sequenceManager) 
-  {
-    this.railManager.render();
-  }
-}, onShowCutSitesChanged: function(show) {
-  this.railManager.setShowCutSites(show);
-  if (this.railManager.sequenceManager) 
-  {
-    this.railManager.render();
-  }
-}, onShowOrfsChanged: function(show) {
-  this.railManager.setShowOrfs(show);
-  if (this.railManager.sequenceManager) 
-  {
-    this.railManager.render();
-  }
-}, onShowFeatureLabelsChanged: function(show) {
-  this.railManager.setShowFeatureLabels(show);
-  if (this.railManager.sequenceManager) 
-  {
-    this.railManager.render();
-  }
-}, onShowCutSiteLabelsChanged: function(show) {
-  this.railManager.setShowCutSiteLabels(show);
-  if (this.railManager.sequenceManager) 
-  {
-    this.railManager.render();
-  }
-}, onMousedown: function(self) {
-  self.startSelectionAngle = self.getClickLocation();
-  self.mouseIsDown = true;
-  if (self.railManager.sequenceManager) 
-  {
-    self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
-    self.changeCaretPosition(self.startSelectionIndex);
-  }
-  self.selectionDirection = 0;
-}, onMousemove: function(self) {
-  var endSelectionAngle = self.getClickLocation();
-  var start;
-  var end;
-  var multirend;
-  if (self.mouseIsDown && Math.abs(self.startSelectionAngle - endSelectionAngle) > self.self.SELECTION_THRESHOLD && self.railManager.sequenceManager) 
-  {
-    self.endSelectionIndex = self.bpAtAngle(endSelectionAngle);
-    if (self.selectionDirection == 0) 
-    {
-      if (self.startSelectionAngle < endSelectionAngle) 
-      {
-        self.selectionDirection = -1;
-        if (endSelectionAngle >= self.startSelectionAngle) 
-        {
-          self.selectionDirection = 1;
-        }
-      } else {
-        self.selectionDirection = 1;
-        if (endSelectionAngle <= self.startSelectionAngle) 
-        {
-          self.selectionDirection = -1;
-        }
-      }
-    }
-    if (self.selectionDirection == -1) 
-    {
-      start = self.endSelectionIndex;
-      end = self.startSelectionIndex;
-    } else {
-      start = self.startSelectionIndex;
-      end = self.endSelectionIndex;
-    }
-    self.WireframeSelectionLayer.startSelecting();
-    self.WireframeSelectionLayer.select(start, end);
-    if (d3.event.ctrlKey) 
-    {
-      self.SelectionLayer.startSelecting();
-      self.select(start, end);
-      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
-    } else {
-      self.stickySelect(start, end);
-    }
-    self.changeCaretPosition(start);
-  }
-}, onMouseup: function(self) {
-  if (self.mouseIsDown) 
-  {
-    self.mouseIsDown = false;
-    if (self.WireframeSelectionLayer.selected && self.WireframeSelectionLayer.selecting) 
-    {
-      self.WireframeSelectionLayer.endSelecting();
-      self.WireframeSelectionLayer.deselect();
-      self.SelectionLayer.endSelecting();
-      if (self.SelectionLayer.end != -1) 
-      {
-        self.changeCaretPosition(self.SelectionLayer.start);
-      }
-    } else if (self.clickedAnnotationStart && self.clickedAnnotationEnd) 
-    {
-      self.select(self.clickedAnnotationStart, self.clickedAnnotationEnd);
-      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
-      self.clickedAnnotationStart = null;
-      self.clickedAnnotationEnd = null;
-    } else {
-      self.SelectionLayer.deselect();
-      self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
-    }
-  }
-}, onZoomInMenuItemClick: function() {
-  this.railManager.zoomIn();
-}, onZoomOutMenuItemClick: function() {
-  this.railManager.zoomOut();
-}, select: function(start, end) {
-  this.SelectionLayer.select(start, end);
-  this.changeCaretPosition(this.SelectionLayer.start);
-}, getClickLocation: function() {
-  var svg = d3.select(".railParent");
-  var transformValues;
-  var scrolled = this.railContainer.el.getScroll();
-  transformValues = svg.attr("transform").match(/[-.\d]+/g);
-  var fraction = (d3.event.layerX - transformValues[4] + scrolled.left) / (d3.select(".railParent > rect")[0][0].width.baseVal.value * transformValues[0]);
-  if (fraction > 1) 
-  {
-    fraction = 1;
-  }
-  return fraction;
-}, bpAtAngle: function(angle) {
-  return Math.floor(angle * this.railManager.sequenceManager.getSequence().seqString().length);
-}, changeCaretPosition: function(index) {
-  if (index >= 0 && index <= this.SequenceManager.getSequence().toString().length) 
-  {
-    this.callParent(arguments);
-    this.railManager.adjustCaret(index);
-  }
-}, stickySelect: function(start, end) {
-  var annotations = this.railManager.getAnnotationsInRange(start, end);
-  if (annotations.length > 0) 
-  {
-    if (start <= end) 
-    {
-      var minStart = annotations[0].getStart();
-      var maxEnd = annotations[0].getEnd();
-      Ext.each(annotations, function(annotation) {
-  if (annotation.getStart() < minStart) 
-  {
-    minStart = annotation.getStart();
-  }
-  if (annotation.getEnd() > maxEnd) 
-  {
-    maxEnd = annotation.getEnd();
-  }
-});
-      this.SelectionLayer.startSelecting();
-      this.select(minStart, maxEnd);
-      this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-    } else {
-      var minStart1 = -1;
-      var maxEnd1 = -1;
-      var minStart2 = -1;
-      var maxEnd2 = -1;
-      Ext.each(annotations, function(annotation) {
-  if (annotation.getStart() > start) 
-  {
-    if (minStart1 == -1) 
-    {
-      minStart1 = annotation.getStart();
-    }
-    if (annotation.getStart() < minStart1) 
-    {
-      minStart1 = annotation.getStart();
-    }
-  } else {
-    if (minStart2 == -1) 
-    {
-      minStart2 = annotation.getStart();
-    }
-    if (annotation.getStart() < minStart2) 
-    {
-      minStart2 = annotation.getStart();
-    }
-  }
-  if (annotation.getEnd() > end) 
-  {
-    if (maxEnd1 == -1) 
-    {
-      maxEnd1 = annotation.getEnd();
-    }
-    if (annotation.getEnd() > maxEnd1) 
-    {
-      maxEnd1 = annotation.getEnd();
-    }
-  } else {
-    if (maxEnd2 == -1) 
-    {
-      maxEnd2 = annotation.getEnd();
-    }
-    if (annotation.getEnd() > maxEnd2) 
-    {
-      maxEnd2 = annotation.getEnd();
-    }
-  }
-});
-      var selStart = minStart1;
-      var selEnd;
-      if (minStart1 == -1 && minStart2 != -1) 
-      {
-        selStart = minStart2;
-      } else if (minStart1 != -1 && minStart2 == -1) 
-      {
-        selStart = minStart1;
-      } else if (minStart1 != -1 && minStart2 != -1) 
-      {
-        selStart = minStart1;
-      }
-      if (maxEnd1 == -1 && maxEnd2 != -1) 
-      {
-        selEnd = maxEnd2;
-      } else if (maxEnd1 != -1 && maxEnd2 == -1) 
-      {
-        selEnd = maxEnd1;
-      } else if (maxEnd1 != -1 && maxEnd2 != -1) 
-      {
-        selEnd = maxEnd2;
-      }
-      if (selEnd == -1 || selStart == -1) 
-      {
-        this.SelectionLayer.deselect();
-      } else {
-        this.SelectionLayer.startSelecting();
-        this.select(selStart, selEnd);
-        this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
-      }
-    }
-  } else {
-    this.SelectionLayer.deselect();
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'RailController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.RestrictionEnzymeController', Ext.app.Controller, {GroupManager: null, managerWindow: null, enzymeSelector: null, init: function() {
-  this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-  this.control({"#enzymeGroupSelector": {change: this.onEnzymeGroupSelected}, "#enzymeSearchField": {keyup: this.onEnzymeSearchFieldKeyup}, "#restrictionEnzymesManagerOKButton": {click: this.onOKButtonClick}, "#saveGroupButton": {click: this.onSaveButtonClick}, "#deleteGroupButton": {click: this.onDeleteGroupButtonClick}, "#enzymeSelector": {change: this.onEnzymeListChange}});
-  this.application.on({RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened, scope: this});
-}, onEnzymeManagerOpened: function(manager) {
-  this.managerWindow = manager;
-  this.enzymeSelector = manager.query("#enzymeSelector")[0];
-  if (!this.GroupManager.getIsInitialized()) 
-  {
-    this.GroupManager.initialize();
-  }
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector")[0];
-  Ext.each(this.GroupManager.getGroupNames(), function(name) {
-  groupSelector.store.add({name: name});
-});
-  groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
-  var startGroup = this.GroupManager.groupByName(groupSelector.getValue());
-  var groupArray = [];
-  Ext.each(startGroup.getEnzymes(), function(enzyme) {
-  groupArray.push({name: enzyme.getName()});
-});
-  this.enzymeSelector.store.loadData(groupArray);
-  this.enzymeSelector.bindStore(this.enzymeSelector.store);
-  this.displayActiveGroup();
-}, displayActiveGroup: function() {
-  var activeGroup = this.GroupManager.getActiveGroup();
-  var names = [];
-  Ext.each(activeGroup.getEnzymes(), function(enzyme) {
-  names.push({name: enzyme.getName()});
-}, this);
-  this.enzymeSelector.toField.store.loadData(names, false);
-  this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
-}, onEnzymeGroupSelected: function(combobox) {
-  var newGroup = this.GroupManager.groupByName(combobox.getValue());
-  var enzymeArray = [];
-  Ext.each(newGroup.getEnzymes(), function(enzyme) {
-  enzymeArray.push({name: enzyme.getName()});
-});
-  this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
-  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
-}, onEnzymeSearchFieldKeyup: function(field) {
-  this.enzymeSelector.fromField.store.filterBy(function(rec) {
-  if (rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) 
-  {
-    return true;
-  }
-});
-  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
-}, onEnzymeListChange: function() {
-  this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
-}, onSaveButtonClick: function() {
-  alert("save button clicked, no function yet");
-}, onDeleteGroupButtonClick: function() {
-  alert("delete button clicked, no function yet");
-}, onOKButtonClick: function() {
-  var names = [];
-  this.enzymeSelector.toField.store.each(function(obj) {
-  names.push(obj.data.name);
-});
-  var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", names);
-  this.managerWindow.close();
-  if (newActiveGroup !== this.GroupManager.getActiveGroup()) 
-  {
-    this.GroupManager.setActiveGroup(newActiveGroup);
-    this.application.fireEvent("ActiveEnzymesChanged");
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'RestrictionEnzymeController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.SelectWindowController', Ext.app.Controller, {MenuItemEvent: null, SelectionEvent: null, selectWindow: null, sequenceManager: null, onSelectWindowOpened: function(window) {
-  this.selectWindow = window;
-}, onSequenceManagerChanged: function(sequenceManager) {
-  this.sequenceManager = sequenceManager;
-}, onOKButtonClick: function() {
-  if (!this.sequenceManager) 
-  {
-    this.selectWindow.close();
-  }
-  var from = Ext.getCmp("selectWindowFromField").getValue();
-  var to = Ext.getCmp("selectWindowToField").getValue();
-  var seqLen = this.sequenceManager.getSequence().toString().length;
-  if (isNaN(from) || from > seqLen || from < 1) 
-  {
-    Ext.getCmp("selectWindowFromField").setFieldStyle("border-color:red");
-  } else if (isNaN(to) || to > seqLen || to < 1) 
-  {
-    Ext.getCmp("selectWindowToField").setFieldStyle("border-color:red");
-  } else {
-    this.selectWindow.close();
-    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, Number(from) - 1, Number(to));
-  }
-}, init: function() {
-  this.control({"#selectWindowOKButton": {click: this.onOKButtonClick}});
-  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-  this.SelectionEvent = Teselagen.event.SelectionEvent;
-  this.application.on(this.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
-  this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'SelectWindowController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.HeaderPanelController', Ext.app.Controller, {ProjectManagerWindow: null, header: null, helpWindow: null, onHelpBtnClick: function(button, e, options) {
-  if (!this.helpWindow || !this.helpWindow.body) 
-  this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
-}, closeProjectManagerWindow: function() {
-  this.ProjectManagerWindow.close();
-}, onReportFeedbackBtnClick: function(btn) {
-  var feedback = btn.up('form').getForm().findField('feedback').getValue();
-  var self = this;
-  Ext.Ajax.request({url: '/api/sendFeedback', params: {feedback: feedback, user_id: Teselagen.manager.ProjectManager.currentUser.data.id, user: Teselagen.manager.ProjectManager.currentUser.data.username}, method: 'POST', success: function(response) {
-  Ext.MessageBox.alert('Send Feedback', 'Thanks for your feedback.', function() {
-  self.helpWindow.close();
-});
-}});
-}, onReportErrorBtnClick: function(btn) {
-  var error = btn.up('form').getForm().findField('error').getValue();
-  var error_feedback = btn.up('form').getForm().findField('error_feedback').getValue();
-  var self = this;
-  Ext.Ajax.request({url: '/api/sendFeedback', params: {error: error, error_feedback: error_feedback, user_id: Teselagen.manager.ProjectManager.currentUser.data.id, user: Teselagen.manager.ProjectManager.currentUser.data.username}, method: 'POST', success: function(response) {
-  Ext.MessageBox.alert('Send Feedback', 'Error reporting received. A ticket has been created to followup this error.', function() {
-  self.helpWindow.close();
-});
-}});
-}, init: function() {
-  this.control({"#headerPanel": {afterrender: this.onRender}, "#help_btn": {click: this.onHelpBtnClick}, "#reportFeedbackBtn": {click: this.onReportFeedbackBtnClick}, "#reportErrorBtn": {click: this.onReportErrorBtnClick}});
-}, onRender: function() {
-  Ext.get("help_btn").on('click', this.onHelpBtnClick);
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'HeaderPanelController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.VectorPanelController', Ext.app.Controller, {isRendered: false, onTabChange: function(tabPanel, newTab, oldTab) {
-  var self = this;
-  if (newTab.xtype == "VectorEditorPanel") 
-  {
-    if (!Teselagen.manager.ProjectManager.workingSequence) 
-    {
-      console.log("Opening VE Direct Mode");
-      Teselagen.manager.ProjectManager.directVEEditingMode = true;
-      Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {name: "Untitled VEProject", dateCreated: new Date(), dateModified: new Date()});
-      Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
-      Vede.application.fireEvent("OpenVectorEditor", Teselagen.manager.ProjectManager.workingSequence);
-    }
-  }
-}, init: function() {
-  this.control({"#VectorPanel": {afterrender: this.onRender, resize: this.onResize, collapse: this.onCollapse}});
-}, onLaunch: function() {
-  this.tabPanel = Ext.getCmp("mainAppPanel");
-  this.tabPanel.on("tabchange", this.onTabChange, this);
-}, onRender: function() {
-  if (!this.isRendered) 
-  {
-    Vede.application.getController("PieController").initPie();
-    Vede.application.getController("RailController").initRail();
-    this.isRendered = true;
-  }
-}, onResize: function() {
-}, onCollapse: function() {
-  var annotatePanel = Ext.getCmp("AnnotatePanel");
-  if (annotatePanel.collapsed) 
-  {
-    annotatePanel.expand([true]);
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'VectorPanelController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.digest.Ladder', Ext.Base, {config: {ladderTypes: null, bandSizes: null}, statics: {BP_LADDER_BANDS: [20000, 10000, 7000, 5000, 4000, 3000, 2000, 1500, 1000, 700, 500, 400, 300, 200, 75], GR_HIGH_RANGE_LADDER_BANDS: [48502, 24508, 20555, 17000, 15258, 13825, 12119, 10171], GR_1KB_LADDER_BANDS: [10000, 8000, 6000, 5000, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 750, 500, 250], GR_1KB_PLUS_LADDER_BANDS: [20000, 10000, 7000, 5000, 4000, 3000, 2000, 1500, 1000, 700, 500, 400, 300, 200, 75], GR_100BP_LADDER_BANDS: [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100], GR_100BP_PLUS_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100], GR_50BP_LADDER_BANDS: [1000, 900, 800, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50], GR_LOW_RANGE_LADDER_BANDS: [700, 500, 400, 300, 200, 150, 100, 75, 50, 25], GR_ULTRA_LOW_RANGE_LADDER_BANDS: [300, 200, 150, 100, 75, 50, 35, 25, 20, 15, 10], PBR322_LADDER_BANDS: [587, 540, 502, 458, 434, 267, 234, 213, 192, 184, 124, 123, 104, 89, 90], LAMBDA_LADDER_BANDS: [21226, 5148, 4973, 4268, 3530, 2027, 1904, 1584, 1375, 947, 831, 564], KB_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]}, fields: [{name: "bandSizes", type: "auto", defaultValue: null}], constructor: function(inData) {
-  this.initConfig(inData);
-  this.statics();
-  this.ladderTypes = new Ext.util.HashMap();
-  this.ladderTypes.add("GeneRuler High Range DNA Ladder 10,171-48,502 bp", this.self.GR_HIGH_RANGE_LADDER_BANDS);
-  this.ladderTypes.add("Generuler 1 kb DNA Ladder 250-10000 bp", this.self.GR_1KB_LADDER_BANDS);
-  this.ladderTypes.add("GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", this.self.GR_1KB_PLUS_LADDER_BANDS);
-  this.ladderTypes.add("GeneRuler 100 bp DNA Ladder 100-1000 bp", this.self.GR_100BP_LADDER_BANDS);
-  this.ladderTypes.add("GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", this.self.GR_100BP_PLUS_LADDER_BANDS);
-  this.ladderTypes.add("GeneRuler 50 bp DNA Ladder, 50-1000 bp", this.self.GR_50BP_LADDER_BANDS);
-  this.ladderTypes.add("GeneRuler Low Range DNA Ladder 25-700 bp", this.self.GR_LOW_RANGE_LADDER_BANDS);
-}, setLadder: function(pLadder) {
-  if (pLadder.indexOf("1kb") > -1) 
-  {
-    this.bandSizes = this.self.BP_LADDER_BANDS;
-  } else {
-    this.bandSizes = this.self.KB_LADDER_BANDS;
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'Ladder'], 0));
-;
-
-Ext.require("Teselagen.bio.tools.DigestionCalculator");
-(Ext.cmd.derive('Teselagen.models.digest.GelLane', Ext.Base, {config: {name: "default", BAND_COLOR: "#fff", CONNECTOR_COLOR: "#999999", ladder: null, ladderDefs: null, min: null, max: null, actualHeight: 400, actualWidth: 400, labelSize: 16, bandSprites: null, bandSizeLabels: null, bandSizeLabelYPositions: null, enzymes: null, sequence: null, digestionCalculator: null, Ladder: null, bands: null, laneType: "ladder", hPad: 0.1, xOffset: 100}, constructor: function(inData) {
-  this.bands = [];
-  this.initConfig(inData);
-  this.digestionCalculator = Teselagen.bio.tools.DigestionCalculator;
-  this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
-  if (inData.ladder !== undefined) 
-  {
-    for (var i = 0; i < inData.ladder.length; ++i) 
-      {
-        this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {size: inData.ladder[i], actualWidth: this.getActualWidth(), xOffset: this.getXOffset(), labelSize: this.getLabelSize()}));
-      }
-  } else {
-    this.laneType = "digest";
-  }
-}, setActualWidth: function(newValue) {
-  for (var i = 0; i < this.bands.length; ++i) 
-    {
-      this.bands[i].setActualWidth(newValue);
-    }
-  this.actualWidth = newValue;
-}, setXOffset: function(newValue) {
-  for (var i = 0; i < this.bands.length; ++i) 
-    {
-      this.bands[i].setXOffset(newValue);
-    }
-  this.xOffset = newValue;
-}, draw: function(totalLogDifference, min) {
-  this.bandSprites = [];
-  this.refreshDigestion();
-  for (var i = 0; i < this.bands.length; ++i) 
-    {
-      var bandSprite = this.bands[i].draw(totalLogDifference, min, this.getActualHeight());
-      this.bandSprites.push(bandSprite);
-      if (this.laneType === "ladder") 
-      {
-        var label = this.bands[i].drawLabels();
-        label.shifted = false;
-        if (this.bandSprites.length > 1) 
-        {
-          var previousLabel = this.bandSprites[this.bandSprites.length - 2];
-          var overlap = previousLabel.y - label.y - this.getLabelSize();
-          if (overlap < 0 && previousLabel.shifted !== true) 
-          {
-            label.setAttributes({translate: {x: this.getLabelSize() / 2 * -6, y: 0}}, true);
-            label.shifted = true;
-            var connector = Ext.create("Ext.draw.Sprite", {type: "rect", fill: this.CONNECTOR_COLOR, height: 1, width: bandSprite.x - label.x + this.getLabelSize() / 2 * (6 - label.text.length), x: label.x - this.getLabelSize() / 2 * (6 - label.text.length), y: label.y});
-            this.bandSprites.push(connector);
-          }
-        }
-        this.bandSprites.push(label);
-      }
-    }
-  if (this.laneType === "digest") 
-  {
-    var laneLabelText;
-    if (this.bands.length > 0) 
-    {
-      laneLabelText = this.bands.length + " fragment";
-      if (this.bands.length > 1) 
-      {
-        laneLabelText = laneLabelText + "s";
-      }
-    } else {
-      if (this.sequence === null) 
-      {
-        laneLabelText = "No Sequence";
-      } else {
-        laneLabelText = "No Digestion";
-      }
-    }
-    var halfWidth = this.actualWidth / 2;
-    var xSpacer = halfWidth + (halfWidth * this.hPad);
-    var xSpacerFactor = 0.25;
-    xSpacer = xSpacer * xSpacerFactor;
-    var laneLabel = Ext.create("Ext.draw.Sprite", {type: "text", text: laneLabelText, fill: this.BAND_COLOR, font: this.labelSize + "px 'monospace'", x: this.xOffset + xSpacer, y: 10});
-    this.bandSprites.push(laneLabel);
-  }
-  return this.bandSprites;
-}, drawLabels: function() {
-  var halfWidth = this.actualWidth / 2;
-  var sizeString = this.size.toString();
-  var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
-  var gelLabel = Ext.create("Ext.draw.Sprite", {type: "text", text: sizeString, fill: this.BAND_COLOR, font: this.labelSize + "px 'monospace'", style: {textAlign: "right", display: "block", width: "50px"}, x: txtOffset + this.xOffset + (halfWidth * this.hPad), y: this.bandYPosition});
-  return gelLabel;
-}, refreshDigestion: function() {
-  if (this.sequence !== null && this.enzymes !== null && this.enzymes.length > 0) 
-  {
-    this.mapFragmentsToBands(this.digestionCalculator.digestSequence(this.sequence, this.enzymes));
-  }
-  this.bands.sort(function(x, y) {
-  return x.size - y.size;
-});
-}, mapFragmentsToBands: function(fragments) {
-  this.bands = [];
-  for (var i = 0; i < fragments.length; ++i) 
-    {
-      this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {digestionFragment: fragments[i], actualWidth: this.getActualWidth(), xOffset: this.getXOffset(), labelSize: this.getLabelSize()}));
-    }
-}, calculateMinMax: function() {
-  this.refreshDigestion();
-  this.max = -Infinity , this.min = +Infinity;
-  for (var i = 0; i < this.getBands().length; i++) 
-    {
-      if (this.getBands()[i].size > this.max) 
-      {
-        this.max = this.getBands()[i].size;
-      }
-      if (this.getBands()[i].size < this.min) 
-      {
-        this.min = this.getBands()[i].size;
-      }
-    }
-}, getMin: function() {
-  this.calculateMinMax();
-  return this.min;
-}, getMax: function() {
-  this.calculateMinMax();
-  return this.max;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'GelLane'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.digest.GelBand', Ext.Base, {config: {BAND_COLOR: "#fff", CONNECTOR_COLOR: "#999999", labelSize: 16, bandHeight: 1, actualWidth: 400, xOffset: 100, bandYPosition: null, bandSizeLabel: null, bandSizeLabelYPosition: null, actualHeight: 800, hPad: 0.1, name: "default", start: null, end: null, size: 0, digestionFragment: null}, constructor: function(inData) {
-  this.initConfig(inData);
-  if (inData.digestionFragment !== undefined) 
-  {
-    this.size = inData.digestionFragment.getLength();
-    if (inData.digestionFragment.getStartRE() !== null) 
-    {
-      this.start = inData.digestionFragment.getStartRE().getName();
-    }
-    if (inData.digestionFragment.getEndRE() !== null) 
-    {
-      this.end = inData.digestionFragment.getEndRE().getName();
-    }
-  }
-}, draw: function(totalLogDifference, min, height) {
-  var ladderHeight = height * 0.8;
-  var currentLogDifference = Math.log(this.size / min);
-  var normalizedLogDifference = currentLogDifference / totalLogDifference;
-  var scalingFactor = -(0.1 * Math.sin(2 * 3.14 * normalizedLogDifference));
-  this.bandYPosition = (0.9 * height - (scalingFactor + normalizedLogDifference) * ladderHeight);
-  var altY = ladderHeight * Math.log(min) / Math.log(this.size);
-  var maxY = ladderHeight * Math.log(min) / Math.log(20000);
-  var scaled = (altY - maxY) * ladderHeight / (ladderHeight - maxY);
-  scaled = scaled + height * 0.1;
-  if (scaled >= height - 4) 
-  {
-    scaled = height - 4;
-  }
-  var halfWidth = this.actualWidth / 2;
-  var xSpacer = halfWidth + (halfWidth * this.hPad);
-  var xSpacerFactor = 0.25;
-  if (this.isDigest()) 
-  {
-    xSpacer = xSpacer * xSpacerFactor;
-  }
-  var gelBand = Ext.create("Ext.draw.Sprite", {type: "rect", fill: this.BAND_COLOR, height: this.bandHeight, width: halfWidth * (1 - 2 * this.hPad), x: this.xOffset + xSpacer, y: this.bandYPosition});
-  if (this.isDigest()) 
-  {
-    gelBand.bandType = "digest";
-    gelBand.size = this.getSize();
-    gelBand.start = this.digestionFragment.getStart();
-    gelBand.end = this.digestionFragment.getEnd();
-    gelBand.startRE = this.digestionFragment.getStartRE().getName();
-    gelBand.endRE = this.digestionFragment.getEndRE().getName();
-  }
-  return gelBand;
-}, drawLabels: function() {
-  var halfWidth = this.actualWidth / 2;
-  var sizeString = this.size.toString();
-  var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
-  var gelLabel = Ext.create("Ext.draw.Sprite", {type: "text", text: sizeString, fill: this.BAND_COLOR, font: this.labelSize + "px 'monospace'", style: {textAlign: "right", display: "block", width: "50px"}, x: txtOffset + this.xOffset + (halfWidth * this.hPad), y: this.bandYPosition});
-  return gelLabel;
-}, isDigest: function() {
-  return (this.digestionFragment !== null);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'GelBand'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.digest.Gel', Ext.Base, {config: {name: "default", BAND_COLOR: "#fff", CONNECTOR_COLOR: "#999999", ladder: null, ladderDefs: null, min: null, max: null, actualHeight: 400, actualWidth: 400}, lanes: null, getLanes: function() {
-  return this.lanes;
-}, constructor: function(inData) {
-  this.initConfig(inData);
-  this.lanes = [];
-  this.ladderDefs = Ext.create("Teselagen.models.digest.Ladder", {ladderName: "1kb"});
-}, setLadder: function(ladderName) {
-  if (ladderName.indexOf("1kb") > -1) 
-  {
-    this.ladder = this.ladderDefs.BP_LADDER_BANDS;
-  } else {
-    this.ladder = this.ladderDefs.KB_LADDER_BANDS;
-  }
-}, createLane: function(newLaneName, index) {
-  var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: newLaneName});
-  this.insertLane(newLane, index);
-}, insertLane: function(newLane, index) {
-  newLane.setActualHeight(this.getActualHeight());
-  if (typeof index === "undefined") 
-  {
-    index = this.getLanes().length;
-  }
-  this.getLanes().splice(index, 0, newLane);
-  var widthUnit = this.actualWidth / this.getLanes().length;
-  for (var i = 0; i < this.getLanes().length; i++) 
-    {
-      this.getLanes()[i].setActualWidth(widthUnit);
-      this.getLanes()[i].setXOffset(i * widthUnit);
-    }
-}, clearLanes: function() {
-  this.lanes = [];
-}, getLane: function(laneName) {
-  var lane = null;
-  for (var i = 0; i < this.getLanes().length; i++) 
-    {
-      if (this.getLanes()[i].name === laneName) 
-      {
-        lane = this.getLanes()[i];
-      }
-    }
-  return lane;
-}, calculateMinMax: function() {
-  this.max = -Infinity , this.min = +Infinity;
-  for (var i = 0; i < this.getLanes().length; i++) 
-    {
-      if (this.getLanes()[i].getMax() > this.max) 
-      {
-        this.max = this.getLanes()[i].getMax();
-      }
-      if (this.getLanes()[i].getMin() < this.min) 
-      {
-        this.min = this.getLanes()[i].getMin();
-      }
-    }
-}, getMin: function() {
-  this.calculateMinMax();
-  return this.min;
-}, getMax: function() {
-  this.calculateMinMax();
-  return this.max;
-}, draw: function() {
-  this.calculateMinMax();
-  var totalLogDifference = Math.log(this.max / this.min);
-  var laneBands = [];
-  for (var i = 0; i < this.getLanes().length; ++i) 
-    {
-      laneBands.push(this.getLanes()[i].draw(totalLogDifference, this.min));
-    }
-  var bands = [].concat.apply([], laneBands);
-  return bands;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'Gel'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.SimulateDigestionManager', Ext.Base, {config: {digestPanel: null, sampleLane: null, groupManager: null, enzymeListSelector: null, gel: null, Ladder: null, enzymes: null, dnaSequence: null}, currentEnzymes: null, constructor: function(inData) {
-  this.initConfig(inData);
-  this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
-}, setDnaSequence: function(dnaSequence) {
-  if (dnaSequence !== null && dnaSequence !== "") 
-  {
-    this.dnaSequence = dnaSequence;
-    dnaSequence.setCircular(true);
-  }
-}, filterEnzymes: function(searchCombo, groupSelector) {
-  this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
-  this.filterEnzymesInternal(searchCombo, groupSelector);
-}, filterEnzymesInternal: function(searchCombo, groupSelector) {
-  var currentList = this.groupManager.groupByName(groupSelector.getValue());
-  var enzymeArray = [];
-  Ext.each(currentList.getEnzymes(), function(enzyme) {
-  enzymeArray.push({name: enzyme.getName()});
-});
-  this.enzymeListSelector.store.loadData(enzymeArray, false);
-  this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
-  if (this.currentEnzymes === null) 
-  {
-    this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
-  }
-  this.enzymeListSelector.toField.store.loadData(this.currentEnzymes, false);
-  this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
-  var list = this.enzymeListSelector.fromField.boundList;
-  var store = list.getStore();
-  store.suspendEvents();
-  this.currentEnzymes = this.enzymeListSelector.toField.store.getRange();
-  this.currentEnzymes.forEach(function(enzyme) {
-  var deleted = store.query("name", enzyme.get("name"));
-  store.remove(deleted.items[0], false);
-});
-  store.resumeEvents();
-  list.refresh();
-  var searchPhrase = ".";
-  if (searchCombo.getValue() !== null) 
-  {
-    searchPhrase = searchCombo.getValue();
-  }
-  try {
-    var regEx = new RegExp(searchPhrase, "i");
-  }  catch (err) {
-  regEx = null;
-}
-  this.enzymeListSelector.fromField.store.filterBy(function(enzyme) {
-  return enzyme.get("name").search(regEx) !== -1;
-}, this);
-}, onClose: function() {
-  this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
-}, updateLadderLane: function(ladder) {
-  this.selectedLadder = this.Ladder.ladderTypes.get(ladder);
-  this.drawGel();
-}, updateSampleLane: function(selectedEnzymes) {
-  var tempEnzymes = [];
-  selectedEnzymes.each(function(enzyme) {
-  tempEnzymes.push(Teselagen.manager.RestrictionEnzymeGroupManager.getEnzymeByName(enzyme.data.name));
-});
-  this.enzymes = tempEnzymes;
-  this.drawGel();
-}, drawGel: function() {
-  if (this.digestPanel === null) 
-  {
-    return;
-  }
-  var tempSurface = this.digestPanel.surface;
-  var height = this.digestPanel.surface.height;
-  var width = this.digestPanel.surface.width;
-  var gel = Ext.create("Teselagen.models.digest.Gel", {name: "Gel", actualHeight: height, actualWidth: width});
-  var ladderLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: this.selectedLadder});
-  gel.insertLane(ladderLane);
-  var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: this.dnaSequence, enzymes: this.enzymes});
-  gel.insertLane(sampleLane);
-  var sprites = gel.draw();
-  if (this.ladderSpriteGroup !== undefined && this.ladderSpriteGroup !== null) 
-  {
-    this.ladderSpriteGroup.destroy();
-  }
-  this.ladderSpriteGroup = Ext.create("Ext.draw.CompositeSprite", {surface: this.digestPanel.surface});
-  for (var i = 0; i < sprites.length; i++) 
-    {
-      this.ladderSpriteGroup.add(sprites[i]);
-    }
-  this.ladderSpriteGroup.each(function(band) {
-  tempSurface.add(band);
-});
-  this.ladderSpriteGroup.show(true);
-  for (i = 0; i < sprites.length; i++) 
-    {
-      if (sprites[i].bandType === "digest") 
-      {
-        Ext.create("Ext.tip.ToolTip", {target: sprites[i].id, showDelay: 0, dismissDelay: 0, html: sprites[i].size + " bp, " + sprites[i].start + "(" + sprites[i].startRE + ").." + sprites[i].end + "(" + sprites[i].endRE + ")"});
-      }
-    }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SimulateDigestionManager'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.VectorEditor.SimulateDigestionController', Ext.app.Controller, {GroupManager: null, DNATools: null, digestManager: null, managerWindow: null, digestPanel: null, dnaSequence: null, groupSelector: null, enzymeListSelector: null, init: function() {
-  this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-  this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
-  this.DNATools = Teselagen.bio.sequence.DNATools;
-  this.filterTaskRunner = new Ext.util.TaskRunner();
-  this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
-  this.control({"#enzymeGroupSelector-digest": {change: this.onEnzymeGroupSelected}, "#ladderSelector": {change: this.updateLadderLane}, "#enzymeGroupSelector-search": {change: this.searchEnzymes}, "#drawingSurface": {resize: this.onGelResize}, "#enzymeListSelector-digest": {change: this.onEnzymeListChange}});
-  this.application.on({SequenceManagerChanged: this.getSequenceManagerData, SimulateDigestionWindowOpened: this.onSimulateDigestionOpened, scope: this});
-}, getSequenceManagerData: function(pSequenceManager) {
-  if (pSequenceManager.getSequence().seqString()) 
-  {
-    this.dnaSequence = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
-  } else {
-    this.dnaSequence = "";
-  }
-  this.digestManager.setDnaSequence(this.dnaSequence);
-}, onSimulateDigestionOpened: function(manager) {
-  this.managerWindow = manager;
-  this.managerWindow.on({beforeclose: this.onSimulateDigestionWindowClosed, scope: this});
-  this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
-  this.digestManager.digestPanel = this.digestPanel;
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-  this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
-  if (!this.GroupManager.getIsInitialized()) 
-  {
-    this.GroupManager.initialize();
-  }
-  Ext.each(this.GroupManager.getGroupNames(), function(name) {
-  groupSelector.store.add({"name": name});
-});
-  this.digestManager.setDigestPanel(this.digestPanel);
-  this.digestManager.setGroupManager(this.GroupManager);
-  this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
-  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-  this.digestManager.filterEnzymesInternal(searchCombobox, groupSelector);
-  var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
-  this.updateLadderLane(ladderSelector);
-  this.digestManager.drawGel();
-}, onSimulateDigestionWindowClosed: function() {
-  this.digestManager.onClose();
-}, onGelResize: function(drawingSurface, width, height) {
-  if (this.digestManager === undefined || this.digestManager === null) 
-  {
-    return;
-  }
-  this.digestManager.drawGel(drawingSurface, width, height);
-}, onEnzymeGroupSelected: function() {
-  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-  this.digestManager.filterEnzymes(searchCombobox, groupSelector);
-}, searchEnzymes: function() {
-  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-  this.digestManager.filterEnzymes(searchCombobox, groupSelector);
-}, onEnzymeListChange: function() {
-  this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
-  this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
-}, updateLadderLane: function(combobox) {
-  this.digestManager.updateLadderLane(combobox.getValue());
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'SimulateDigestionController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.VectorEditor.ImportSequenceController', Ext.app.Controller, {detectXMLFormat: function(data, cb) {
-  var parser = new DOMParser();
-  var xmlDoc = parser.parseFromString(data, "text/xml");
-  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
-  if (diff.length > 0) 
-  {
-    return cb(data, false);
-  } else {
-    Teselagen.bio.parsers.SbolParser.parse(data, cb);
-  }
-}, parseSequence: function(pFile, pExt, pEvt, cb) {
-  var self = this;
-  var result = pEvt.target.result;
-  var asyncParseFlag = false;
-  switch (pExt) {
-    case "fasta":
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
-      break;
-    case "fas":
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
-      break;
-    case "json":
-      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
-      break;
-    case "gb":
-      fileContent = result;
-      break;
-    case "xml":
-      asyncParseFlag = true;
-      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
-  var gb;
-  if (isSBOL) 
-  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
-  return cb(gb);
-  ;
-});
-      break;
-  }
-  if (!asyncParseFlag) 
-  {
-    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
-    return cb(gb);
-    ;
-  }
-}, onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
-  var self = this;
-  performSequenceCreation = function() {
-  self.parseSequence(pFile, pExt, pEvt, function(gb) {
-  seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-  if (Teselagen.manager.ProjectManager.workingSequence) 
-  {
-    var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
-    console.log(name);
-    if (name == "Untitled VEProject") 
-    {
-      console.log(seqMgr.name);
-      Teselagen.manager.ProjectManager.workingSequence.set('name', seqMgr.name);
-    } else {
-      seqMgr.setName(name);
-    }
-  }
-  Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
-  sequence.set('sequenceFileContent', gb.toString());
-  sequence.set('sequenceFileFormat', "GENBANK");
-  sequence.set('sequenceFileName', pFile.name);
-  sequence.set('firstTimeImported', true);
-  var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
-  parttext.animate({duration: 5000, to: {opacity: 0}});
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-});
-};
-  if (sequence.get('firstTimeImported')) 
-  {
-    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-    Ext.MessageBox.confirm('Confirm', 'A sequence has been already imported to this file. Are you sure you want to overwrite it?', function(btn) {
-  if (btn === "yes") 
-  {
-    performSequenceCreation();
-  }
-});
-  } else {
-    performSequenceCreation();
-  }
-}, init: function() {
-  this.application.on("ImportFileToSequence", this.onImportFileToSequence, this);
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'ImportSequenceController'], 0));
 ;
 
 (Ext.cmd.derive('Vede.controller.AuthWindowController', Ext.app.Controller, {require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"], onRegisterClick: function() {
@@ -75416,6 +68545,98 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Ext.get("auth-reconnect-btn").on('click', this.onReconnectClick);
   Ext.get("auth-logout-btn").on('click', this.onLogoutClick);
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AuthWindowController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.DashboardPanelController', Ext.app.Controller, {onLastDEProjectsItemClick: function(item, record) {
+  Teselagen.manager.ProjectManager.openDeviceDesign(record);
+}, init: function() {
+  this.control({"#designGrid_Panel": {itemclick: this.onLastDEProjectsItemClick}});
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'DashboardPanelController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.HeaderPanelController', Ext.app.Controller, {ProjectManagerWindow: null, header: null, helpWindow: null, onHelpBtnClick: function(button, e, options) {
+  if (!this.helpWindow || !this.helpWindow.body) 
+  this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
+}, closeProjectManagerWindow: function() {
+  this.ProjectManagerWindow.close();
+}, onReportFeedbackBtnClick: function(btn) {
+  var feedback = btn.up('form').getForm().findField('feedback').getValue();
+  var self = this;
+  Ext.Ajax.request({url: '/api/sendFeedback', params: {feedback: feedback, user_id: Teselagen.manager.ProjectManager.currentUser.data.id, user: Teselagen.manager.ProjectManager.currentUser.data.username}, method: 'POST', success: function(response) {
+  Ext.MessageBox.alert('Send Feedback', 'Thanks for your feedback.', function() {
+  self.helpWindow.close();
+});
+}});
+}, onReportErrorBtnClick: function(btn) {
+  var error = btn.up('form').getForm().findField('error').getValue();
+  var error_feedback = btn.up('form').getForm().findField('error_feedback').getValue();
+  var self = this;
+  Ext.Ajax.request({url: '/api/sendFeedback', params: {error: error, error_feedback: error_feedback, user_id: Teselagen.manager.ProjectManager.currentUser.data.id, user: Teselagen.manager.ProjectManager.currentUser.data.username}, method: 'POST', success: function(response) {
+  Ext.MessageBox.alert('Send Feedback', 'Error reporting received. A ticket has been created to followup this error.', function() {
+  self.helpWindow.close();
+});
+}});
+}, init: function() {
+  this.control({"#headerPanel": {afterrender: this.onRender}, "#help_btn": {click: this.onHelpBtnClick}, "#reportFeedbackBtn": {click: this.onReportFeedbackBtnClick}, "#reportErrorBtn": {click: this.onReportErrorBtnClick}});
+}, onRender: function() {
+  Ext.get("help_btn").on('click', this.onHelpBtnClick);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'HeaderPanelController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.MainPanelController', Ext.app.Controller, {refs: [{ref: "deMainMenuBar", selector: "#DeviceEditorMainMenuBar"}, {ref: "deMainToolBar", selector: "#DeviceEditorMainToolBar"}, {ref: "veMainMenuBar", selector: "#VectorEditorMainMenuBar"}, {ref: "veMainToolBar", selector: "#VectorEditorMainToolBar"}], init: function() {
+  this.control({"#MainPanel": {tabchange: this.onTabChange}});
+}, onLaunch: function() {
+}, onTabChange: function(pTabpanel, pNewcard) {
+  if (pNewcard.id.indexOf("VectorEditor") === 0) 
+  {
+    this.getDeMainMenuBar().hide();
+    this.getDeMainToolBar().hide();
+    this.getVeMainMenuBar().show();
+    this.getVeMainToolBar().show();
+  } else if (pNewcard.id.indexOf("DeviceEditor") === 0) 
+  {
+    this.getVeMainMenuBar().hide();
+    this.getVeMainToolBar().hide();
+    this.getDeMainMenuBar().show();
+    this.getDeMainToolBar().show();
+  }
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'MainPanelController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.store.PartStore', Ext.data.Store, {model: 'Teselagen.models.Part'}, 0, 0, 0, 0, 0, 0, [Teselagen.store, 'PartStore'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.PartLibraryController', Ext.app.Controller, {partLibraryStore: null, partLibraryWindow: null, callbackFn: null, fetchPartLibrary: function() {
+  var self = this;
+  var loadingMsgBox = Ext.MessageBox.show({title: 'Loading Part', progressText: 'Loading Part Library', progress: true, width: 300, renderTo: Ext.getCmp('mainAppPanel').getActiveTab().getEl(), closable: false});
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''), method: 'GET', success: function(response) {
+  loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
+  response = JSON.parse(response.responseText);
+  self.partLibraryStore = Ext.create('Teselagen.store.PartStore', {model: 'Teselagen.models.Part', data: response, proxy: {type: 'memory', reader: {type: 'json', root: 'parts'}}, autoLoad: true});
+  self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
+  self.partLibraryWindow.show();
+  loadingMsgBox.close();
+}});
+}, onPartListSelected: function(grid, part, item) {
+  console.log("Part selected");
+  console.log(part.get('name'));
+  console.log("Validating...");
+  Vede.application.fireEvent("validateDuplicatedPartName", part, part.get('name'));
+  this.callbackFn(grid, part, item, this.partLibraryWindow);
+}, onOpenPartLibrary: function(inCallbackFn) {
+  if (this.partLibraryWindow === null) 
+  {
+    this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow');
+    this.partLibraryWindow.render(Ext.getCmp('mainAppPanel').getActiveTab().getEl());
+  }
+  this.fetchPartLibrary();
+  this.callbackFn = inCallbackFn;
+}, init: function() {
+  this.control({'#partLibraryGridList': {itemclick: this.onPartListSelected}});
+  this.partLibraryStore = Teselagen.manager.ProjectManager.partLibrary;
+  this.application.on("openPartLibrary", this.onOpenPartLibrary, this);
+  this.callParent();
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'PartLibraryController'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default}], validation: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
@@ -75782,6 +69003,1067 @@ function requestMessageProcessor(request, success) {
 }, afterRequest: function(request, success) {
   requestMessageProcessor(request, success);
 }}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceEditorProject'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.ProjectController', Ext.app.Controller, {openProject: function(project) {
+  Teselagen.manager.ProjectManager.openProject(project);
+}, loadProjectTree: function(cb) {
+  var self = this;
+  var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
+  rootNode.removeAll();
+  rootNode.appendChild({text: "Create project", leaf: true, hrefTarget: "newproj", icon: "resources/images/add.png"});
+  var projects = Teselagen.manager.ProjectManager.projects;
+  projects.each(function(project) {
+  var projectNode = rootNode.appendChild({text: project.data.name, id: project.data.id, hrefTarget: "openproj"});
+  projectNode.appendChild({text: "Create design", leaf: true, hrefTarget: "newde", icon: "resources/images/add.png"});
+  projectNode.appendChild({text: "Create sequence", leaf: true, hrefTarget: "newsequence", icon: "resources/images/add.png"});
+  var designs = project.designs();
+  designs.load({callback: function() {
+  designs.each(function(design) {
+  var designnode = projectNode.appendChild({text: design.data.name, leaf: false, id: design.data.id, hrefTarget: "opende", icon: "resources/images/ux/design-tree-icon-leaf.png", qtip: 'Design ' + design.data.name});
+  designnode.appendChild({text: "J5 Reports", leaf: true, id: design.data.id + 'report', hrefTarget: "j5reports", icon: "resources/images/ux/j5-tree-icon-parent.png", qtip: design.data.name + ' Report'});
+});
+}});
+  Teselagen.manager.ProjectManager.sequenceStore = Ext.create("Ext.data.Store", {model: "Teselagen.models.SequenceFile"});
+  var sequences = project.sequences();
+  sequences.load({callback: function() {
+  sequences.each(function(sequence) {
+  Teselagen.manager.ProjectManager.sequenceStore.add(sequence);
+  projectNode.appendChild({text: sequence.data.name, leaf: true, id: sequence.data.id, hrefTarget: "opensequence", icon: "resources/images/ux/sequence-tree-icon-leaf.png", qtip: 'Sequence ' + sequence.data.name});
+});
+}});
+});
+  if (typeof (cb) === "function") 
+  {
+    cb();
+  }
+}, resolveAndopenDeviceDesign: function(record) {
+  var design_id = record.data.id;
+  var project_id = record.parentNode.data.id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  project.designs().load({id: design_id, callback: function(loadedDesign) {
+  Teselagen.manager.ProjectManager.workingProject = project;
+  Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+}});
+}, resolveAndOpenj5Reports: function(record) {
+  var design_id = record.data.id.replace("report", "");
+  ;
+  var project_id = record.parentNode.parentNode.data.id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  project.designs().load({id: design_id, callback: function(loadedDesign) {
+  Teselagen.manager.ProjectManager.workingProject = project;
+  var design = loadedDesign[0];
+  Teselagen.manager.ProjectManager.openj5Report(design);
+}});
+}, resolveAndCreateDEProject: function(record) {
+  var project_id = record.parentNode.data.id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  var projectNames = [];
+  project.designs().load().each(function(design) {
+  projectNames.push(design.data.name);
+});
+  Teselagen.manager.ProjectManager.workingProject = project;
+  Teselagen.manager.ProjectManager.createNewDeviceDesignAtProject(project, projectNames);
+}, createProject: function() {
+  Teselagen.manager.ProjectManager.createNewProject();
+}, createSequence: function(record) {
+  var project_id = record.parentNode.data.id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  var sequencesNames = [];
+  project.sequences().load().each(function(sequence) {
+  sequencesNames.push(sequence.data.name);
+});
+  Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
+}, promptPartName: function(cb) {
+  var onPromptClosed = function(btn, text) {
+  if (btn === "ok") 
+  {
+    if (text === "") 
+    {
+      return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this);
+    } else {
+      return cb(text);
+    }
+  }
+};
+  Ext.MessageBox.prompt("Name", "Please enter a part name:", onPromptClosed, this);
+}, addPart: function(record) {
+  var project_id = record.parentNode.parentNode.data.id;
+  var veproject_id = record.parentNode.data.id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  var selectedVEProject = project.veprojects().getById(veproject_id);
+  this.promptPartName(function(partName) {
+  var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
+  var newPart = Ext.create("Teselagen.models.Part", {name: partName, genbankStartBP: 1, endBP: 7});
+  newSequenceFile.save({callback: function() {
+  newPart.setSequenceFileModel(newSequenceFile);
+  var selectedVEProjectID = selectedVEProject.data.id;
+  newPart.set("veproject_id", selectedVEProjectID);
+  selectedVEProject.set("id", selectedVEProjectID);
+  newPart.save({callback: function() {
+  selectedVEProject.parts().add(newPart);
+  selectedVEProject.save({callback: function() {
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
+  Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + selectedVEProject.data.id);
+});
+  Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
+  Vede.application.fireEvent("openVectorEditor", newSequenceFile);
+}});
+}});
+}});
+});
+}, resolveAndOpenSequence: function(record) {
+  var sequence_id = record.data.id;
+  var project_id = record.parentNode.data.id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  project.sequences().load({id: sequence_id, callback: function(loadedsequence) {
+  Teselagen.manager.ProjectManager.workingProject = project;
+  Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
+  Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
+}});
+}, expandProject: function(record) {
+  if (record.isExpanded()) 
+  {
+    record.collapse();
+  } else {
+    record.expand();
+  }
+}, onProjectPanelItemClick: function(store, record) {
+  switch (record.data.hrefTarget) {
+    case "openproj":
+      this.expandProject(record);
+      break;
+    case "newproj":
+      this.createProject(record);
+      break;
+    case "newsequence":
+      this.createSequence(record);
+      break;
+    case "newde":
+      this.resolveAndCreateDEProject(record);
+      break;
+    case "opende":
+      this.resolveAndopenDeviceDesign(record);
+      break;
+    case "opensequence":
+      this.resolveAndOpenSequence(record);
+      break;
+    case "j5reports":
+      this.resolveAndOpenj5Reports(record);
+      break;
+    case "addpart":
+      this.addPart(record);
+      break;
+  }
+}, onProjectPartsPanelItemClick: function(store, record) {
+  switch (record.data.hrefTarget) {
+    case "addpart":
+      this.addPart(record);
+      break;
+    case "openpart":
+      this.resolveAndOpenPart(record);
+      break;
+  }
+}, onNewProjectClick: function() {
+  Teselagen.manager.ProjectManager.createNewProject();
+}, onNewDEClick: function() {
+  if (!Teselagen.manager.ProjectManager.workingProject) 
+  {
+    return Ext.MessageBox.alert("Alert", "First select or create a Project.");
+  }
+  Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
+}, onOpenSequenceFileClick: function() {
+  Teselagen.manager.ProjectManager.openSequenceFile();
+}, onRemoveProjectClick: function() {
+}, init: function() {
+  this.callParent();
+  this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
+  this.application.on(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
+  this.control({"#projectTreePanel": {itemclick: this.onProjectPanelItemClick}, "#projectPartsPanel": {itemclick: this.onProjectPartsPanelItemClick}, "#newProject_Btn": {click: this.onNewProjectClick}, "#newDE_Btn": {click: this.onNewDEClick}, "#openSequenceFile_Btn": {click: this.onOpenSequenceFileClick}, "#removeProject_Btn": {click: this.onRemoveProjectClick}});
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'ProjectController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeGroupManager', Ext.Base, {singleton: true, config: {systemGroups: [], userGroups: [], activeGroup: null, rebaseEnzymesDatabase: Ext.create("Ext.util.HashMap"), isInitialized: false}, RestrictionEnzymeManager: null, constructor: function(inData) {
+  this.RestrictionEnzymeManager = Teselagen.bio.enzymes.RestrictionEnzymeManager;
+  this.initConfig(inData);
+}, initialize: function() {
+  if (this.isInitialized) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "REBASE database already initialized!"});
+  }
+  var rebaseList = this.RestrictionEnzymeManager.getRebaseRestrictionEnzymes();
+  var newDatabase = this.getRebaseEnzymesDatabase();
+  Ext.each(rebaseList, function(enzyme) {
+  newDatabase.add(enzyme.getName().toLowerCase(), enzyme);
+});
+  this.setRebaseEnzymesDatabase(newDatabase);
+  this.setIsInitialized(true);
+  this.registerSystemGroups();
+  this.initializeDefaultActiveGroup();
+}, loadUserRestrictionEnzymes: function(user) {
+  this.setUserGroups([]);
+  var newUserGroups = [];
+  var newUserGroup, userEnzymes;
+  var newActiveGroup = [];
+  Ext.each(user.restrictionEnzymeGroups(), function(group) {
+  if (!group || !group.get("groupName") || group.get("enzymeNames").length === 0) 
+  {
+    return true;
+  }
+  newUserGroup = this.createGroupByEnzymes(group.get("groupName"), group.get("enzymeNames"));
+  newUserGroups.push(newUserGroup);
+}, this);
+  if (userEnzymes.get("activeEnzymeNames").length > 0) 
+  {
+    this.setActiveGroup([]);
+    var activeEnzymeNames = this.createGroupByEnzymes("active", userEnzymes.get("activeEnzymeNames"));
+    Ext.each(activeEnzymeNames, function(enzymeName) {
+  newActiveGroup.push(this.getRebaseEnzymesDatabase().get(enzymeName));
+}, this);
+  }
+  this.setUserGroups(newUserGroups);
+  this.setActiveGroup(newActiveGroup);
+}, removeGroup: function(enzymeGroup) {
+  var newUserGroups = this.getUserGroups();
+  var index = newUserGroups.indexOf(enzymeGroup);
+  if (index !== -1) 
+  {
+    newUserGroups.splice(index, 1);
+  }
+  this.setUserGroups(newUserGroups);
+}, groupByName: function(name) {
+  var resultGroup = null;
+  Ext.each(this.getSystemGroups(), function(systemGroup) {
+  if (systemGroup.getName() === name) 
+  {
+    resultGroup = systemGroup;
+  }
+});
+  Ext.each(this.getUserGroups(), function(userGroup) {
+  if (userGroup.getName() === name) 
+  {
+    resultGroup = userGroup;
+  }
+});
+  return resultGroup;
+}, getEnzymeByName: function(name) {
+  return this.getRebaseEnzymesDatabase().get(name.toLowerCase());
+}, createGroupByEnzymes: function(name, enzymeNames) {
+  if (!this.isInitialized) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "REBASE database already initialized!"});
+  }
+  var enzymes = [];
+  Ext.each(enzymeNames, function(name) {
+  if (name) 
+  {
+    var enzyme = this.getRebaseEnzymesDatabase().get(name.toLowerCase());
+    if (enzyme) 
+    {
+      enzymes.push(enzyme);
+    }
+  }
+}, this);
+  return Ext.create("Teselagen.models.RestrictionEnzymeGroup", {name: name, enzymes: enzymes});
+}, getGroupNames: function() {
+  var names = [];
+  Ext.each(this.systemGroups.concat(this.userGroups), function(group) {
+  names.push(group.getName());
+});
+  return names;
+}, initializeDefaultActiveGroup: function() {
+  var defaultGroupEnzymes = this.getSystemGroups()[0];
+  this.setActiveGroup(defaultGroupEnzymes);
+}, registerSystemGroups: function() {
+  var newSystemGroups = this.getSystemGroups();
+  var commonGroup = this.createGroupByEnzymes("Common Enzymes", ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV", "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI", "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"]);
+  newSystemGroups.push(commonGroup);
+  var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {name: "All Enzymes", enzymes: this.getRebaseEnzymesDatabase().getValues()});
+  newSystemGroups.push(rebaseGroup);
+  var berkeleyBBGroup = this.createGroupByEnzymes("Berkeley BglBricks", ["EcoRI", "BglII", "BamHI", "XhoI"]);
+  newSystemGroups.push(berkeleyBBGroup);
+  var mitBBGroup = this.createGroupByEnzymes("MIT BglBricks", ["EcoRI", "XbaI", "SpeI", "PstI"]);
+  newSystemGroups.push(mitBBGroup);
+  var fermentasFastDigestBBGroup = this.createGroupByEnzymes("Fermentas Fast Digest", ["AatII", "Acc65I", "AccI", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AgeI", "AjuI", "AleI", "AluI", "Alw21I", "Alw26I", "AlwNI", "ApaI", "ApaLI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BamHI", "BanI", "BbsI", "BbvI", "BclI", "BfaI", "BglI", "BglII", "BlpI", "Bme1580I", "BmtI", "BplI", "BpmI", "Bpu10I", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BseGI", "BseNI", "BseXI", "Bsh1236I", "BsiEI", "BsiWI", "BslI", "BsmBI", "BsmFI", "Bsp119I", "Bsp120I", "Bsp1286I", "Bsp1407I", "BspCNI", "BspHI", "BspMI", "BsrBI", "BsrDI", "BsrFI", "BssHII", "BstXI", "BstZ17I", "Bsu36I", "ClaI", "Csp6I", "DdeI", "DpnI", "DraI", "DraIII", "DrdI", "EagI", "Eam1105I", "EarI", "Ecl136II", "Eco31I", "Eco91I", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "EheI", "Fnu4HI", "FokI", "FspAI", "FspI", "HaeII", "HaeIII", "HgaI", "HhaI", "HincII", "HindIII", "HinfI", "HinP1I", "HpaI", "HpaII", "Hpy8I", "HpyF10VI", "Kpn2I", "KpnI", "MauBI", "MboI", "MboII", "MfeI", "MluI", "MlyI", "MnlI", "MreI", "MscI", "MseI", "MslI", "MspI", "MssI", "Mva1269I", "MvaI", "NaeI", "NciI", "NcoI", "NdeI", "NheI", "NlaIII", "NlaIV", "NmuCI", "NotI", "NruI", "NsiI", "NspI", "PacI", "PdmI", "PflMI", "PfoI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspFI", "PstI", "PsuI", "PsyI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SalI", "SanDI", "SapI", "Sau3AI", "Sau96I", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SmaI", "SnaBI", "SpeI", "SphI", "SspI", "StuI", "StyI", "SwaI", "TaaI", "TaiI", "TaqI", "TatI", "TauI", "TfiI", "Tru1I", "Tsp509I", "TspRI", "XapI", "XbaI", "XhoI"]);
+  newSystemGroups.push(fermentasFastDigestBBGroup);
+  this.setSystemGroups(newSystemGroups);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RestrictionEnzymeGroupManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.RestrictionEnzymeController', Ext.app.Controller, {GroupManager: null, managerWindow: null, enzymeSelector: null, init: function() {
+  this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+  this.control({"#enzymeGroupSelector": {change: this.onEnzymeGroupSelected}, "#enzymeSearchField": {keyup: this.onEnzymeSearchFieldKeyup}, "#restrictionEnzymesManagerOKButton": {click: this.onOKButtonClick}, "#saveGroupButton": {click: this.onSaveButtonClick}, "#deleteGroupButton": {click: this.onDeleteGroupButtonClick}, "#enzymeSelector": {change: this.onEnzymeListChange}});
+  this.application.on({RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened, scope: this});
+}, onEnzymeManagerOpened: function(manager) {
+  this.managerWindow = manager;
+  this.enzymeSelector = manager.query("#enzymeSelector")[0];
+  if (!this.GroupManager.getIsInitialized()) 
+  {
+    this.GroupManager.initialize();
+  }
+  var groupSelector = this.managerWindow.query("#enzymeGroupSelector")[0];
+  Ext.each(this.GroupManager.getGroupNames(), function(name) {
+  groupSelector.store.add({name: name});
+});
+  groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
+  var startGroup = this.GroupManager.groupByName(groupSelector.getValue());
+  var groupArray = [];
+  Ext.each(startGroup.getEnzymes(), function(enzyme) {
+  groupArray.push({name: enzyme.getName()});
+});
+  this.enzymeSelector.store.loadData(groupArray);
+  this.enzymeSelector.bindStore(this.enzymeSelector.store);
+  this.displayActiveGroup();
+}, displayActiveGroup: function() {
+  var activeGroup = this.GroupManager.getActiveGroup();
+  var names = [];
+  Ext.each(activeGroup.getEnzymes(), function(enzyme) {
+  names.push({name: enzyme.getName()});
+}, this);
+  this.enzymeSelector.toField.store.loadData(names, false);
+  this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
+}, onEnzymeGroupSelected: function(combobox) {
+  var newGroup = this.GroupManager.groupByName(combobox.getValue());
+  var enzymeArray = [];
+  Ext.each(newGroup.getEnzymes(), function(enzyme) {
+  enzymeArray.push({name: enzyme.getName()});
+});
+  this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
+  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+}, onEnzymeSearchFieldKeyup: function(field) {
+  this.enzymeSelector.fromField.store.filterBy(function(rec) {
+  if (rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) 
+  {
+    return true;
+  }
+});
+  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+}, onEnzymeListChange: function() {
+  this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
+}, onSaveButtonClick: function() {
+  alert("save button clicked, no function yet");
+}, onDeleteGroupButtonClick: function() {
+  alert("delete button clicked, no function yet");
+}, onOKButtonClick: function() {
+  var names = [];
+  this.enzymeSelector.toField.store.each(function(obj) {
+  names.push(obj.data.name);
+});
+  var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", names);
+  this.managerWindow.close();
+  if (newActiveGroup !== this.GroupManager.getActiveGroup()) 
+  {
+    this.GroupManager.setActiveGroup(newActiveGroup);
+    this.application.fireEvent("ActiveEnzymesChanged");
+  }
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'RestrictionEnzymeController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.DeviceDesignParsersManager', Ext.Base, {singleton: true, auto_migrate_XML4_to4_1: function(xmlDoc) {
+  var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
+  for (var indexBin in bins) 
+    {
+      if (!bins[indexBin].nodeName) 
+      {
+        continue;
+      }
+      var bin = bins[indexBin];
+      var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
+      if (!Teselagen.constants.SBOLIcons.ICONS[iconID]) 
+      {
+        bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
+      }
+    }
+  return xmlDoc;
+}, auto_migrate_JSON4_to4_1: function(jsonDoc) {
+  var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
+  bins.forEach(function(bin) {
+  var iconID = bin["de:iconID"].toUpperCase();
+  if (!Teselagen.constants.SBOLIcons.ICONS[iconID]) 
+  {
+    bin["de:iconID"] = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
+  }
+});
+  return jsonDoc;
+}, generateDesign: function(binsArray, eugeneRules, cb) {
+  if (typeof (cb) === "function") 
+  {
+    return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray));
+  } else {
+    Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+    var loadDesign = this.loadDesign.bind(this, binsArray, eugeneRules);
+    Ext.Msg.show({title: "Are you sure you want to load example?", msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.", buttons: Ext.Msg.OKCANCEL, cls: "messageBox", fn: loadDesign, icon: Ext.Msg.QUESTION});
+  }
+}, loadDesign: function(binsArray, eugeneRules, evt) {
+  if (evt === "ok") 
+  {
+    var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+    var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign, binsArray);
+    Ext.getCmp("mainAppPanel").getActiveTab().model = design;
+    for (var i = 0; i < eugeneRules.length; i++) 
+      {
+        design.addToRules(eugeneRules[i]);
+      }
+    Vede.application.fireEvent("ReRenderDECanvas");
+    Vede.application.fireEvent("checkj5Ready");
+  }
+}, parseJSON: function(input, cb) {
+  var jsonDoc = JSON.parse(input);
+  jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
+  var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
+  var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
+  var binsArray = [];
+  var fullPartsAssocArray = {};
+  var binsCounter = bins.length;
+  function getSequenceByHash(targetHash, part, cb) {
+    var found = false;
+    sequences.forEach(function(sequence) {
+  if (String(sequence.hash) === String(targetHash) && !found) 
+  {
+    found = true;
+    part.sequence = sequence;
+    return cb(part);
+  }
+});
+  }
+  function getPartByID(targetId, cb) {
+    var parts = jsonDoc["de:design"]["de:partVOs"]["de:partVO"];
+    parts.forEach(function(part) {
+  if (String(part["de:parts"]["de:part"].id) === String(targetId)) 
+  {
+    getSequenceByHash(part["de:sequenceFileHash"], part, cb);
+  } else if (part["de:parts"]["de:part"] instanceof Array) 
+  {
+    if (String(part["de:parts"]["de:part"][0].id) === String(targetId)) 
+    {
+      getSequenceByHash(part["de:sequenceFileHash"], part, cb);
+    }
+  }
+});
+  }
+  for (var indexBin in bins) 
+    {
+      var bin = bins[indexBin];
+      if (!Teselagen.constants.SBOLIcons.ICONS[bin["de:iconID"].toUpperCase()]) 
+      {
+        console.warn(bin["de:iconID"]);
+        console.warn("Invalid iconID");
+      }
+      var newBin = Ext.create("Teselagen.models.J5Bin", {binName: bin["de:binName"], iconID: bin["de:iconID"], directionForward: (bin["de:direction"] === "forward"), dsf: Boolean(bin["de:dsf"])});
+      var parts = bin["de:binItems"]["de:partID"];
+      if (typeof (parts) === "number") 
+      {
+        parts = [];
+        var itemsObj = bin["de:binItems"];
+        for (var prop in itemsObj) 
+          {
+            parts.push(itemsObj[prop]);
+          }
+      }
+      var partsCounter = parts.length;
+      if (indexBin == 1) 
+      {
+      }
+      var tempPartsArray = [];
+      for (var indexPart in parts) 
+        {
+          getPartByID(parts[indexPart], function(part) {
+  var newPart = Ext.create("Teselagen.models.Part", {name: part["de:name"], partSource: part["de:partSource"], genbankStartBP: part["de:startBP"], endBP: part["de:stopBP"], revComp: part["de:revComp"], fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]});
+  newPart.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
+  var partName;
+  partName = part.sequence["name"];
+  if (part.sequence["de:fileName"]) 
+  partName = part.sequence["de:fileName"].replace('.gb', "");
+  var newSequence = Ext.create("Teselagen.models.SequenceFile", {name: partName, sequenceFileContent: part.sequence["de:content"], sequenceFileFormat: part.sequence["de:format"], sequenceFileName: part.sequence["de:fileName"]});
+  newSequence.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
+  newPart.setSequenceFileModel(newSequence);
+  tempPartsArray.push(newPart);
+  fullPartsAssocArray[part.id] = newPart;
+  partsCounter--;
+  if (partsCounter === 0) 
+  {
+    newBin.addToParts(tempPartsArray);
+    binsArray.push(newBin);
+    binsCounter--;
+    if (binsCounter === 0) 
+    {
+      var rulesArray = [];
+      if (typeof (cb) !== "function") 
+      {
+        var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
+        if (eugeneRules["de:eugeneRule"] instanceof Array) 
+        {
+          eugeneRules = eugeneRules["de:eugeneRule"];
+        }
+        if (eugeneRules.eugeneRule instanceof Array) 
+        {
+          if (eugeneRules.eugeneRule.length === 0) 
+          {
+            eugeneRules = [];
+          }
+        }
+        for (var ruleIndex in eugeneRules) 
+          {
+            var rule = eugeneRules[ruleIndex];
+            var operand1 = rule["de:operand1ID"];
+            var operand2 = rule["de:operand2ID"];
+            if (fullPartsAssocArray[operand1]) 
+            {
+              var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule["de:name"], compositionalOperator: rule["de:compositionalOperator"], negationOperator: rule["de:negationOperator"]});
+              fullPartsAssocArray[operand1].save({callback: function() {
+  newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+}});
+              fullPartsAssocArray[operand2].save({callback: function() {
+  newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+}});
+              rulesArray.push(newEugeneRule);
+            } else {
+            }
+          }
+      }
+      Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
+    }
+  }
+});
+        }
+    }
+}, parseXML: function(input, cb) {
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(input, "text/xml");
+  xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
+  function getPartByID(targetId) {
+    var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
+    for (var indexPart in parts) 
+      {
+        if (!parts[indexPart].nodeName) 
+        {
+          continue;
+        }
+        var part = parts[indexPart];
+        var id = part.getElementsByTagNameNS("*", "part")[0].attributes[0].value;
+        if (id === targetId) 
+        {
+          return part;
+        }
+      }
+  }
+  function getSequenceByID(targetHash, cb) {
+    var found = false;
+    var sequences = xmlDoc.getElementsByTagNameNS("*", "sequenceFile");
+    for (var sequenceindex in sequences) 
+      {
+        var sequence = sequences[sequenceindex];
+        if (!sequence.nodeName || typeof sequence !== "object") 
+        {
+          continue;
+        }
+        if (String(sequence.getAttribute.hash) === String(targetHash) && !found) 
+        {
+          cb(sequence);
+        }
+      }
+  }
+  var binsArray = [];
+  var fullPartsAssocArray = {};
+  var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
+  for (var indexBin in bins) 
+    {
+      if (!bins[indexBin].nodeName) 
+      {
+        continue;
+      }
+      var bin = bins[indexBin];
+      var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
+      var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
+      var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;
+      var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
+      if (!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) 
+      {
+        console.warn(iconID);
+        console.warn("Invalid iconID");
+      }
+      var newBin = Ext.create("Teselagen.models.J5Bin", {binName: binName, iconID: iconID, directionForward: direction, dsf: (dsf === "true") ? true : false});
+      var parts = bin.getElementsByTagNameNS("*", "partID");
+      var tempPartsArray = [];
+      for (var indexPart in parts) 
+        {
+          if (!parts[indexPart].nodeName) 
+          {
+            continue;
+          }
+          var part = getPartByID(parts[indexPart].textContent);
+          var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
+          var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+          var newPart = Ext.create("Teselagen.models.Part", {name: part.getElementsByTagNameNS("*", "name")[0].textContent, genbankStartBP: part.getElementsByTagNameNS("*", "startBP")[0].textContent, endBP: part.getElementsByTagNameNS("*", "stopBP")[0].textContent, revComp: part.getElementsByTagNameNS("*", "revComp")[0].textContent, fas: (fas === "") ? "None" : fas});
+          getSequenceByID(hash, function(sequence) {
+  var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent, sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent, sequenceFileName: sequence.getElementsByTagNameNS("*", "fileName")[0].textContent});
+  newPart.setSequenceFileModel(newSequence);
+});
+          tempPartsArray.push(newPart);
+          fullPartsAssocArray[part.getAttribute("id")] = newPart;
+        }
+      newBin.addToParts(tempPartsArray);
+      binsArray.push(newBin);
+    }
+  var eugeneRules = xmlDoc.getElementsByTagNameNS("*", "eugeneRules")[0].getElementsByTagNameNS("*", "eugeneRule");
+  var rulesArray = [];
+  for (var i = 0; i < eugeneRules.length; i++) 
+    {
+      var rule = eugeneRules[i];
+      if (typeof (rule) !== "object") 
+      {
+        continue;
+      }
+      var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
+      var operand2isNumber = false;
+      var operand2Node = rule.getElementsByTagNameNS("*", "operand2ID")[0];
+      var operand2;
+      if (!operand2Node) 
+      {
+        operand2Node = rule.getElementsByTagNameNS("*", "operand2Number")[0];
+        operand2 = parseInt(operand2Node.textContent);
+        operand2isNumber = true;
+      } else operand2 = operand2Node.textContent;
+      var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule.getElementsByTagNameNS("*", "name")[0].textContent, compositionalOperator: rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent, negationOperator: rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent, operand2isNumber: operand2isNumber});
+      newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+      if (operand2isNumber) 
+      newEugeneRule.setOperand2(operand2); else newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+      rulesArray.push(newEugeneRule);
+    }
+  Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
+}, parseEugeneRules: function(content, filename, design) {
+  var existingRules = design.rules();
+  var partIndex = {};
+  design.getJ5Collection().bins().each(function(bin, binKey) {
+  bin.parts().each(function(part) {
+  partIndex[part.data.name] = part;
+});
+});
+  var lines = content.split("\n");
+  var newRule;
+  var parsedRules = Ext.create('Ext.data.Store', {model: "Teselagen.models.EugeneRule"});
+  var conflictRules = [];
+  var newRules = Ext.create('Ext.data.Store', {model: "Teselagen.models.EugeneRule"});
+  var ignoredLines = [];
+  var repeatedRules = [];
+  lines.forEach(function(line) {
+  if (line !== "") 
+  {
+    var commentLine = false;
+    var notfoundPart = false;
+    newRule = {operand1_id: "", operand2_id: "", negationOperator: "", name: "", compositionalOperator: "", operand2Number: 0, operand2isNumber: false};
+    var parsed = line.match(/Rule (.+)\((NOT|) (.+) (.+) (.+)\);/);
+    if (!parsed) 
+    parsed = line.match(/Rule (.+)\((.+) (.+) (.+)\);/);
+    if (!parsed) 
+    {
+      parsed = line.match(/\/\//);
+      commentLine = true;
+    }
+    if (!parsed) 
+    new Error("Invalid eugene rule line");
+    if (parsed.length === 6) 
+    {
+      newRule.name = parsed[1];
+      newRule.negationOperator = parsed[2];
+      newRule.operand1 = partIndex[parsed[3]];
+      newRule.compositionalOperator = parsed[4];
+      newRule.operand2 = partIndex[parsed[5]];
+    } else if (parsed.length === 5) 
+    {
+      newRule.name = parsed[1];
+      newRule.operand1 = partIndex[parsed[2]];
+      newRule.compositionalOperator = parsed[3];
+      var operand2 = parsed[4];
+      if (isNaN(parseInt(operand2))) 
+      {
+        newRule.operand2 = partIndex[operand2];
+        newRule.operand2isNumber = false;
+        if (operand2 && !newRule.operand2) 
+        notfoundPart = true;
+      } else {
+        newRule.operand2Number = operand2;
+        newRule.operand2isNumber = true;
+      }
+    } else if (commentLine) 
+    {
+      ignoredLines.push(line);
+    } else throw new Error("Invalid eugene rule line");
+    if (notfoundPart) 
+    ignoredLines.push(line);
+    if (!commentLine && !notfoundPart) 
+    {
+      var unsupported = false;
+      try {
+        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: newRule.name, compositionalOperator: newRule.compositionalOperator, negationOperator: newRule.negationOperator, originalRuleLine: line});
+      }      catch (e) {
+  if (e.message.match(/Illegal CompositionalOperator/)) 
+  {
+    unsupported = true;
+    ignoredLines.push(line);
+  }
+}
+      if (!unsupported) 
+      {
+        newEugeneRule.setOperand1(newRule.operand1);
+        if (!newRule.operand2isNumber) 
+        newEugeneRule.setOperand2(newRule.operand2); else {
+          newEugeneRule.set('operand2isNumber', true);
+          newEugeneRule.set('operand2Number', newRule.operand2Number);
+        }
+        parsedRules.add(newEugeneRule);
+      }
+    }
+  }
+});
+  var checkForDuplicatedName = function(parsedRule, cb) {
+  var rulesCounter = existingRules.count();
+  var duplicated = false;
+  existingRules.each(function(existingRule) {
+  if (parsedRule.data.name === existingRule.data.name) 
+  {
+    duplicated = true;
+    rulesCounter--;
+  } else {
+    rulesCounter--;
+  }
+  if (rulesCounter === 0) 
+  cb(duplicated);
+});
+};
+  var checkForConflicts = function(rule, cb) {
+  checkForDuplicatedName(rule, function(dup) {
+  if (dup) 
+  {
+    rule.set('name', rule.data.name + '_1');
+    conflictRules.push("Name conflict, renamed to " + rule.data.name);
+  }
+  return cb(dup);
+});
+};
+  var checkForRepeatedRule = function(parsedRule, cb) {
+  var rulesCounter = existingRules.count();
+  var duplicated = false;
+  existingRules.each(function(existingRule) {
+  if (parsedRule.data.operand1_id === existingRule.data.operand1_id && parsedRule.data.operand2_id === existingRule.data.operand2_id && parsedRule.data.negationOperator === existingRule.data.negationOperator && parsedRule.data.operand2isNumber === existingRule.data.operand2isNumber && parsedRule.data.operand2Number === existingRule.data.operand2Number && parsedRule.data.compositionalOperator === existingRule.data.compositionalOperator) 
+  {
+    duplicated = true;
+    rulesCounter--;
+  } else {
+    rulesCounter--;
+  }
+  if (rulesCounter === 0) 
+  cb(duplicated);
+});
+};
+  var endEugeneRulesProcessing = function() {
+  console.log("------------");
+  console.log("Conflicts");
+  console.log(conflictRules);
+  console.log("------------");
+  console.log("New rules");
+  newRules.each(function(rule) {
+  console.log(rule.data.originalRuleLine);
+});
+  console.log("------------");
+  console.log("Ignored lines");
+  console.log(ignoredLines);
+  console.log("------------");
+  console.log("Repeated rules");
+  console.log(repeatedRules);
+};
+  var processedRules = parsedRules.count();
+  parsedRules.each(function(parsedRule) {
+  checkForRepeatedRule(parsedRule, function(repeated) {
+  if (repeated) 
+  {
+    repeatedRules.push(parsedRule.data.originalRuleLine);
+    processedRules--;
+    if (processedRules === 0) 
+    endEugeneRulesProcessing();
+  } else {
+    checkForConflicts(parsedRule, function(conflicts) {
+  newRules.add(parsedRule);
+  processedRules--;
+  if (processedRules === 0) 
+  endEugeneRulesProcessing();
+});
+  }
+});
+});
+}}, 0, 0, 0, 0, ["DeviceDesignParsersManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'DeviceDesignParsersManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.DeviceEditor.DeviceEditorPanelController', Ext.app.Controller, {DeviceDesignManager: null, DeviceEvent: null, onLoadEugeneRulesEvent: function() {
+  var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+  var deproject_id = currentProject.data.id;
+  var self = this;
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/" + currentProject.data.project_id + "/devicedesigns/" + currentProject.data.id + "/eugenerules", ''), method: 'GET', params: {id: deproject_id}, success: function(response) {
+  response = JSON.parse(response.responseText);
+  rules = response.rules;
+  var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject.getDesign());
+  rules.forEach(function(rule) {
+  var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule.name, compositionalOperator: rule.compositionalOperator, negationOperator: rule.negationOperator});
+  if (!rule.operand1_id) 
+  {
+    throw new Error("Operand 1 ID is missing");
+  }
+  if (!rule.operand2_id && !rule.operand2isNumber) 
+  {
+    throw new Error("Operand 2 ID is missing");
+  }
+  newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
+  if (rule.operand2_id) 
+  newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
+  if (rule.operand2isNumber) 
+  {
+    newEugeneRule.set('Operand2Number', rule.operand2Number);
+    newEugeneRule.set('Operand2isNumber', true);
+  }
+  currentProject.getDesign().addToRules(newEugeneRule);
+});
+}, failure: function(response, opts) {
+  Ext.MessageBox.alert('Error', 'Problem while loading Eugene Rules');
+}});
+}, openProject: function(project) {
+  Ext.getCmp('mainAppPanel').getActiveTab().model = project;
+}, onDeviceEditorRenameBtnClick: function() {
+  var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+  var onPromptClosed = function(answer, text) {
+  deproject.set('name', text);
+  deproject.save({callback: function() {
+  Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | " + text);
+  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
+  parttext.animate({duration: 5000, to: {opacity: 0}});
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
+  Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
+});
+}});
+};
+  Ext.MessageBox.prompt("Rename Design", 'New name:', onPromptClosed, this, false, deproject.get("name"));
+}, onDeviceEditorDeleteBtnClick: function() {
+  Ext.Msg.show({title: 'Are you sure you want to delete this design?', msg: 'WARNING: This will remove the current design. This action is not undoable!', cls: 'messageBox', buttons: Ext.Msg.OKCANCEL, fn: DeleteDeviceDesignBtn, icon: Ext.Msg.QUESTION});
+  function DeleteDeviceDesignBtn(btn) {
+    if (btn == 'ok') 
+    {
+      var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+      Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
+      toastr.options.onclick = null;
+      toastr.info("Design Deleted");
+    }
+  }
+}, onOpenExampleItemBtnClick: function(item, e, eOpts) {
+  var selectedItem = item.text;
+  var examplesMap = {"SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json", "Combinatorial SLIC/Gibson/CPEC": "resources/examples/Combinatorial_SLIC_Gibson_CPEC.json", "Golden Gate": "resources/examples/Golden_Gate.json", "Combinatorial Golden Gate": "resources/examples/Combinatorial_Golden_Gate.json"};
+  Ext.Ajax.request({url: examplesMap[selectedItem], method: 'GET', success: function(response) {
+  Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
+}});
+}, createLoadingMessage: function() {
+  var msgBox = Ext.MessageBox.show({title: 'Please wait', msg: 'Preparing input parameters', progressText: 'Initializing...', width: 300, progress: true, closable: false});
+  return {close: function() {
+  msgBox.close();
+}, update: function(progress, msg) {
+  msgBox.updateProgress(progress / 100, progress + '% completed', msg);
+}};
+}, saveDEProject: function(cb) {
+  Vede.application.fireEvent("suspendPartAlerts");
+  var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+  var deproject = activeTab.model;
+  var design = deproject.getDesign();
+  var saveAssociatedSequence = function(part, cb) {
+  if (!part.data.phantom) 
+  {
+    part.getSequenceFile({callback: function(associatedSequence) {
+  if (associatedSequence) 
+  {
+    var lastSequenceId = associatedSequence.get('id');
+    if (Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id')) 
+    {
+      associatedSequence.save({callback: function(sequencefile) {
+  if (!lastSequenceId) 
+  {
+    part.set("sequencefile_id", sequencefile.get('id'));
+    part.save({callback: function() {
+  cb();
+}});
+  } else {
+    cb();
+  }
+}});
+    } else {
+      cb();
+    }
+  } else {
+    cb();
+  }
+}});
+  } else cb();
+};
+  var saveDesign = function() {
+  Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
+  var rules = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules();
+  rules.each(function(rule) {
+  rule.setOperand1(rule.getOperand1());
+  rule.setOperand2(rule.getOperand2());
+});
+  design = activeTab.model.getDesign();
+  design.save({callback: function(record, operation) {
+  Vede.application.fireEvent("resumePartAlerts");
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
+  Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
+  toastr.options.onclick = null;
+  toastr.info("Design Saved");
+});
+  if (typeof (cb) == "function") 
+  cb();
+}});
+};
+  var countParts = 0;
+  design.getJ5Collection().bins().each(function(bin, binKey) {
+  bin.parts().each(function(part, partIndex) {
+  countParts++;
+});
+});
+  design.getJ5Collection().bins().each(function(bin, binKey) {
+  bin.parts().each(function(part, partIndex) {
+  if (!part.data.project_id) 
+  part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
+  if (part.data.name === "") 
+  part.set('phantom', true); else part.set('phantom', false);
+  if (Object.keys(part.getChanges()).length > 0 || !part.data.id) 
+  {
+    part.save({callback: function(part) {
+  saveAssociatedSequence(part, function() {
+  if (countParts == 1) 
+  saveDesign();
+  countParts--;
+});
+}});
+  } else {
+    saveAssociatedSequence(part, function() {
+  if (countParts === 1) 
+  saveDesign();
+  countParts--;
+});
+  }
+});
+});
+}, onDeviceEditorSaveBtnClick: function() {
+  var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+  activeTab.el.mask('Loading');
+  this.saveDEProject(function() {
+  activeTab.el.unmask();
+});
+}, onDeviceEditorSaveEvent: function(arg) {
+  this.saveDEProject(arg);
+}, onAddRowClick: function() {
+  this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
+}, onAddColumnLeftClick: function() {
+  this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_LEFT);
+}, onAddColumnRightClick: function() {
+  this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_RIGHT);
+}, onclearPartMenuItemClick: function() {
+  this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
+}, onRemoveColumnMenuItemClick: function() {
+  this.application.fireEvent(this.DeviceEvent.REMOVE_COLUMN);
+}, onRemoveRowMenuItemClick: function() {
+  this.application.fireEvent(this.DeviceEvent.REMOVE_ROW);
+}, onJ5buttonClick: function(button, e, options) {
+  Vede.application.fireEvent("openj5");
+  toastr.options.onclick = null;
+  toastr.info("Design Saved");
+}, onImportEugeneRulesBtnClick: function() {
+}, onJumpToJ5Run: function(data) {
+  var design_id = data.devicedesign_id;
+  var project_id = data.project_id;
+  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  var self = this;
+  var continueCode = function() {
+  self.detailPanel = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel"]')[0];
+  self.detailPanelFill = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel-fill"]')[0];
+  self.detailPanel.show();
+  self.detailPanelFill.hide();
+  var j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
+  j5runs.load({callback: function() {
+  j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
+  self.activeJ5Run = j5runs.getById(data.id);
+  var assemblyMethod = self.activeJ5Run.get('assemblyMethod');
+  var status = self.activeJ5Run.get('status');
+  var startDate = new Date(self.activeJ5Run.get('date'));
+  var endDate = new Date(self.activeJ5Run.get('endDate'));
+  var elapsed = endDate - startDate;
+  elapsed = Math.round(elapsed / 1000);
+  elapsed = self.elapsedDate(elapsed);
+  startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
+  endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
+  var assemblies = self.activeJ5Run.getJ5Results().assemblies();
+  var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
+  var j5parameters = self.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
+  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
+  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
+  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
+  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
+  if (status == "Completed") 
+  {
+    var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+    $("#" + field + " .status-note").removeClass("status-note-warning");
+    $("#" + field + " .status-note").addClass("status-note-completed");
+  } else if (status == "Completed with warnings") 
+  {
+    var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+    $("#" + field + " .status-note").removeClass("status-note-completed");
+    $("#" + field + " .status-note").addClass("status-note-warning");
+  }
+  var warnings = self.activeJ5Run.raw.warnings;
+  var warningsStore = Ext.create('Teselagen.store.WarningsStore', {model: 'Teselagen.models.j5Output.Warning', data: warnings});
+  if ((warnings.length > 0) == true) 
+  {
+    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').show();
+    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+  } else {
+    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').hide();
+    warnings = null;
+    warningsStore = null;
+  }
+  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
+  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+  Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+  Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
+}});
+};
+  project.designs().load({id: design_id, callback: function(loadedDesign) {
+  Teselagen.manager.ProjectManager.workingProject = project;
+  var design = loadedDesign[0];
+  Teselagen.manager.ProjectManager.openj5Report(design, continueCode);
+}});
+}, elapsedDate: function(seconds) {
+  var numdays = Math.floor((seconds % 31536000) / 86400);
+  var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+  var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+  var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+  if (numdays > 0) 
+  {
+    return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+  } else if (numhours > 0) 
+  {
+    return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+  } else if (numminutes > 0) 
+  {
+    return numminutes + " minutes " + numseconds + " seconds";
+  } else {
+    return numseconds + " seconds";
+  }
+}, init: function() {
+  this.callParent();
+  this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
+  this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
+  this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+  this.application.on("jumpToJ5Run", this.onJumpToJ5Run, this);
+  this.control({"button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {click: this.onDeviceEditorSaveEvent}, "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {click: this.onDeviceEditorDeleteBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {click: this.onDeviceEditorRenameBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {click: this.onImportEugeneRulesBtnClick}, "button[cls='insertMenu'] > menu > menuitem[text='Row']": {click: this.onAddRowClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {click: this.onAddColumnLeftClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {click: this.onAddColumnRightClick}, "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {click: this.onclearPartMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {click: this.onRemoveColumnMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Row']": {click: this.onRemoveRowMenuItemClick}, "button[cls='examplesMenu'] > menu > menuitem": {click: this.onOpenExampleItemBtnClick}, "button[cls='j5button']": {click: this.onJ5buttonClick}});
+  this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
+  this.DeviceEvent = Teselagen.event.DeviceEvent;
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'DeviceEditorPanelController'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.grid.Bin', Ext.container.Container, {statics: {forwardButtonIconPath: 'resources/images/ux/right2.gif', reverseButtonIconPath: 'resources/images/ux/left2.gif'}, config: {bin: null, totalRows: 1}, binHeader: null, constructor: function(config) {
@@ -78052,441 +72334,6 @@ function requestMessageProcessor(request, success) {
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'MainMenuController'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.DeviceDesignParsersManager', Ext.Base, {singleton: true, auto_migrate_XML4_to4_1: function(xmlDoc) {
-  var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
-  for (var indexBin in bins) 
-    {
-      if (!bins[indexBin].nodeName) 
-      {
-        continue;
-      }
-      var bin = bins[indexBin];
-      var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
-      if (!Teselagen.constants.SBOLIcons.ICONS[iconID]) 
-      {
-        bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
-      }
-    }
-  return xmlDoc;
-}, auto_migrate_JSON4_to4_1: function(jsonDoc) {
-  var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
-  bins.forEach(function(bin) {
-  var iconID = bin["de:iconID"].toUpperCase();
-  if (!Teselagen.constants.SBOLIcons.ICONS[iconID]) 
-  {
-    bin["de:iconID"] = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
-  }
-});
-  return jsonDoc;
-}, generateDesign: function(binsArray, eugeneRules, cb) {
-  if (typeof (cb) === "function") 
-  {
-    return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray));
-  } else {
-    Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-    var loadDesign = this.loadDesign.bind(this, binsArray, eugeneRules);
-    Ext.Msg.show({title: "Are you sure you want to load example?", msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.", buttons: Ext.Msg.OKCANCEL, cls: "messageBox", fn: loadDesign, icon: Ext.Msg.QUESTION});
-  }
-}, loadDesign: function(binsArray, eugeneRules, evt) {
-  if (evt === "ok") 
-  {
-    var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-    var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign, binsArray);
-    Ext.getCmp("mainAppPanel").getActiveTab().model = design;
-    for (var i = 0; i < eugeneRules.length; i++) 
-      {
-        design.addToRules(eugeneRules[i]);
-      }
-    Vede.application.fireEvent("ReRenderDECanvas");
-    Vede.application.fireEvent("checkj5Ready");
-  }
-}, parseJSON: function(input, cb) {
-  var jsonDoc = JSON.parse(input);
-  jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
-  var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
-  var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
-  var binsArray = [];
-  var fullPartsAssocArray = {};
-  var binsCounter = bins.length;
-  function getSequenceByHash(targetHash, part, cb) {
-    var found = false;
-    sequences.forEach(function(sequence) {
-  if (String(sequence.hash) === String(targetHash) && !found) 
-  {
-    found = true;
-    part.sequence = sequence;
-    return cb(part);
-  }
-});
-  }
-  function getPartByID(targetId, cb) {
-    var parts = jsonDoc["de:design"]["de:partVOs"]["de:partVO"];
-    parts.forEach(function(part) {
-  if (String(part["de:parts"]["de:part"].id) === String(targetId)) 
-  {
-    getSequenceByHash(part["de:sequenceFileHash"], part, cb);
-  } else if (part["de:parts"]["de:part"] instanceof Array) 
-  {
-    if (String(part["de:parts"]["de:part"][0].id) === String(targetId)) 
-    {
-      getSequenceByHash(part["de:sequenceFileHash"], part, cb);
-    }
-  }
-});
-  }
-  for (var indexBin in bins) 
-    {
-      var bin = bins[indexBin];
-      if (!Teselagen.constants.SBOLIcons.ICONS[bin["de:iconID"].toUpperCase()]) 
-      {
-        console.warn(bin["de:iconID"]);
-        console.warn("Invalid iconID");
-      }
-      var newBin = Ext.create("Teselagen.models.J5Bin", {binName: bin["de:binName"], iconID: bin["de:iconID"], directionForward: (bin["de:direction"] === "forward"), dsf: Boolean(bin["de:dsf"])});
-      var parts = bin["de:binItems"]["de:partID"];
-      if (typeof (parts) === "number") 
-      {
-        parts = [];
-        var itemsObj = bin["de:binItems"];
-        for (var prop in itemsObj) 
-          {
-            parts.push(itemsObj[prop]);
-          }
-      }
-      var partsCounter = parts.length;
-      if (indexBin == 1) 
-      {
-      }
-      var tempPartsArray = [];
-      for (var indexPart in parts) 
-        {
-          getPartByID(parts[indexPart], function(part) {
-  var newPart = Ext.create("Teselagen.models.Part", {name: part["de:name"], partSource: part["de:partSource"], genbankStartBP: part["de:startBP"], endBP: part["de:stopBP"], revComp: part["de:revComp"], fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]});
-  newPart.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
-  var partName;
-  partName = part.sequence["name"];
-  if (part.sequence["de:fileName"]) 
-  partName = part.sequence["de:fileName"].replace('.gb', "");
-  var newSequence = Ext.create("Teselagen.models.SequenceFile", {name: partName, sequenceFileContent: part.sequence["de:content"], sequenceFileFormat: part.sequence["de:format"], sequenceFileName: part.sequence["de:fileName"]});
-  newSequence.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
-  newPart.setSequenceFileModel(newSequence);
-  tempPartsArray.push(newPart);
-  fullPartsAssocArray[part.id] = newPart;
-  partsCounter--;
-  if (partsCounter === 0) 
-  {
-    newBin.addToParts(tempPartsArray);
-    binsArray.push(newBin);
-    binsCounter--;
-    if (binsCounter === 0) 
-    {
-      var rulesArray = [];
-      if (typeof (cb) !== "function") 
-      {
-        var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
-        if (eugeneRules["de:eugeneRule"] instanceof Array) 
-        {
-          eugeneRules = eugeneRules["de:eugeneRule"];
-        }
-        if (eugeneRules.eugeneRule instanceof Array) 
-        {
-          if (eugeneRules.eugeneRule.length === 0) 
-          {
-            eugeneRules = [];
-          }
-        }
-        for (var ruleIndex in eugeneRules) 
-          {
-            var rule = eugeneRules[ruleIndex];
-            var operand1 = rule["de:operand1ID"];
-            var operand2 = rule["de:operand2ID"];
-            if (fullPartsAssocArray[operand1]) 
-            {
-              var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule["de:name"], compositionalOperator: rule["de:compositionalOperator"], negationOperator: rule["de:negationOperator"]});
-              fullPartsAssocArray[operand1].save({callback: function() {
-  newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-}});
-              fullPartsAssocArray[operand2].save({callback: function() {
-  newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
-}});
-              rulesArray.push(newEugeneRule);
-            } else {
-            }
-          }
-      }
-      Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
-    }
-  }
-});
-        }
-    }
-}, parseXML: function(input, cb) {
-  var parser = new DOMParser();
-  var xmlDoc = parser.parseFromString(input, "text/xml");
-  xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
-  function getPartByID(targetId) {
-    var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
-    for (var indexPart in parts) 
-      {
-        if (!parts[indexPart].nodeName) 
-        {
-          continue;
-        }
-        var part = parts[indexPart];
-        var id = part.getElementsByTagNameNS("*", "part")[0].attributes[0].value;
-        if (id === targetId) 
-        {
-          return part;
-        }
-      }
-  }
-  function getSequenceByID(targetHash, cb) {
-    var found = false;
-    var sequences = xmlDoc.getElementsByTagNameNS("*", "sequenceFile");
-    for (var sequenceindex in sequences) 
-      {
-        var sequence = sequences[sequenceindex];
-        if (!sequence.nodeName || typeof sequence !== "object") 
-        {
-          continue;
-        }
-        if (String(sequence.getAttribute.hash) === String(targetHash) && !found) 
-        {
-          cb(sequence);
-        }
-      }
-  }
-  var binsArray = [];
-  var fullPartsAssocArray = {};
-  var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
-  for (var indexBin in bins) 
-    {
-      if (!bins[indexBin].nodeName) 
-      {
-        continue;
-      }
-      var bin = bins[indexBin];
-      var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
-      var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
-      var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;
-      var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
-      if (!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) 
-      {
-        console.warn(iconID);
-        console.warn("Invalid iconID");
-      }
-      var newBin = Ext.create("Teselagen.models.J5Bin", {binName: binName, iconID: iconID, directionForward: direction, dsf: (dsf === "true") ? true : false});
-      var parts = bin.getElementsByTagNameNS("*", "partID");
-      var tempPartsArray = [];
-      for (var indexPart in parts) 
-        {
-          if (!parts[indexPart].nodeName) 
-          {
-            continue;
-          }
-          var part = getPartByID(parts[indexPart].textContent);
-          var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
-          var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
-          var newPart = Ext.create("Teselagen.models.Part", {name: part.getElementsByTagNameNS("*", "name")[0].textContent, genbankStartBP: part.getElementsByTagNameNS("*", "startBP")[0].textContent, endBP: part.getElementsByTagNameNS("*", "stopBP")[0].textContent, revComp: part.getElementsByTagNameNS("*", "revComp")[0].textContent, fas: (fas === "") ? "None" : fas});
-          getSequenceByID(hash, function(sequence) {
-  var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent, sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent, sequenceFileName: sequence.getElementsByTagNameNS("*", "fileName")[0].textContent});
-  newPart.setSequenceFileModel(newSequence);
-});
-          tempPartsArray.push(newPart);
-          fullPartsAssocArray[part.getAttribute("id")] = newPart;
-        }
-      newBin.addToParts(tempPartsArray);
-      binsArray.push(newBin);
-    }
-  var eugeneRules = xmlDoc.getElementsByTagNameNS("*", "eugeneRules")[0].getElementsByTagNameNS("*", "eugeneRule");
-  var rulesArray = [];
-  for (var i = 0; i < eugeneRules.length; i++) 
-    {
-      var rule = eugeneRules[i];
-      if (typeof (rule) !== "object") 
-      {
-        continue;
-      }
-      var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
-      var operand2isNumber = false;
-      var operand2Node = rule.getElementsByTagNameNS("*", "operand2ID")[0];
-      var operand2;
-      if (!operand2Node) 
-      {
-        operand2Node = rule.getElementsByTagNameNS("*", "operand2Number")[0];
-        operand2 = parseInt(operand2Node.textContent);
-        operand2isNumber = true;
-      } else operand2 = operand2Node.textContent;
-      var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule.getElementsByTagNameNS("*", "name")[0].textContent, compositionalOperator: rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent, negationOperator: rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent, operand2isNumber: operand2isNumber});
-      newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-      if (operand2isNumber) 
-      newEugeneRule.setOperand2(operand2); else newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
-      rulesArray.push(newEugeneRule);
-    }
-  Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
-}, parseEugeneRules: function(content, filename, design) {
-  var existingRules = design.rules();
-  var partIndex = {};
-  design.getJ5Collection().bins().each(function(bin, binKey) {
-  bin.parts().each(function(part) {
-  partIndex[part.data.name] = part;
-});
-});
-  var lines = content.split("\n");
-  var newRule;
-  var parsedRules = Ext.create('Ext.data.Store', {model: "Teselagen.models.EugeneRule"});
-  var conflictRules = [];
-  var newRules = Ext.create('Ext.data.Store', {model: "Teselagen.models.EugeneRule"});
-  var ignoredLines = [];
-  var repeatedRules = [];
-  lines.forEach(function(line) {
-  if (line !== "") 
-  {
-    var commentLine = false;
-    var notfoundPart = false;
-    newRule = {operand1_id: "", operand2_id: "", negationOperator: "", name: "", compositionalOperator: "", operand2Number: 0, operand2isNumber: false};
-    var parsed = line.match(/Rule (.+)\((NOT|) (.+) (.+) (.+)\);/);
-    if (!parsed) 
-    parsed = line.match(/Rule (.+)\((.+) (.+) (.+)\);/);
-    if (!parsed) 
-    {
-      parsed = line.match(/\/\//);
-      commentLine = true;
-    }
-    if (!parsed) 
-    new Error("Invalid eugene rule line");
-    if (parsed.length === 6) 
-    {
-      newRule.name = parsed[1];
-      newRule.negationOperator = parsed[2];
-      newRule.operand1 = partIndex[parsed[3]];
-      newRule.compositionalOperator = parsed[4];
-      newRule.operand2 = partIndex[parsed[5]];
-    } else if (parsed.length === 5) 
-    {
-      newRule.name = parsed[1];
-      newRule.operand1 = partIndex[parsed[2]];
-      newRule.compositionalOperator = parsed[3];
-      var operand2 = parsed[4];
-      if (isNaN(parseInt(operand2))) 
-      {
-        newRule.operand2 = partIndex[operand2];
-        newRule.operand2isNumber = false;
-        if (operand2 && !newRule.operand2) 
-        notfoundPart = true;
-      } else {
-        newRule.operand2Number = operand2;
-        newRule.operand2isNumber = true;
-      }
-    } else if (commentLine) 
-    {
-      ignoredLines.push(line);
-    } else throw new Error("Invalid eugene rule line");
-    if (notfoundPart) 
-    ignoredLines.push(line);
-    if (!commentLine && !notfoundPart) 
-    {
-      var unsupported = false;
-      try {
-        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: newRule.name, compositionalOperator: newRule.compositionalOperator, negationOperator: newRule.negationOperator, originalRuleLine: line});
-      }      catch (e) {
-  if (e.message.match(/Illegal CompositionalOperator/)) 
-  {
-    unsupported = true;
-    ignoredLines.push(line);
-  }
-}
-      if (!unsupported) 
-      {
-        newEugeneRule.setOperand1(newRule.operand1);
-        if (!newRule.operand2isNumber) 
-        newEugeneRule.setOperand2(newRule.operand2); else {
-          newEugeneRule.set('operand2isNumber', true);
-          newEugeneRule.set('operand2Number', newRule.operand2Number);
-        }
-        parsedRules.add(newEugeneRule);
-      }
-    }
-  }
-});
-  var checkForDuplicatedName = function(parsedRule, cb) {
-  var rulesCounter = existingRules.count();
-  var duplicated = false;
-  existingRules.each(function(existingRule) {
-  if (parsedRule.data.name === existingRule.data.name) 
-  {
-    duplicated = true;
-    rulesCounter--;
-  } else {
-    rulesCounter--;
-  }
-  if (rulesCounter === 0) 
-  cb(duplicated);
-});
-};
-  var checkForConflicts = function(rule, cb) {
-  checkForDuplicatedName(rule, function(dup) {
-  if (dup) 
-  {
-    rule.set('name', rule.data.name + '_1');
-    conflictRules.push("Name conflict, renamed to " + rule.data.name);
-  }
-  return cb(dup);
-});
-};
-  var checkForRepeatedRule = function(parsedRule, cb) {
-  var rulesCounter = existingRules.count();
-  var duplicated = false;
-  existingRules.each(function(existingRule) {
-  if (parsedRule.data.operand1_id === existingRule.data.operand1_id && parsedRule.data.operand2_id === existingRule.data.operand2_id && parsedRule.data.negationOperator === existingRule.data.negationOperator && parsedRule.data.operand2isNumber === existingRule.data.operand2isNumber && parsedRule.data.operand2Number === existingRule.data.operand2Number && parsedRule.data.compositionalOperator === existingRule.data.compositionalOperator) 
-  {
-    duplicated = true;
-    rulesCounter--;
-  } else {
-    rulesCounter--;
-  }
-  if (rulesCounter === 0) 
-  cb(duplicated);
-});
-};
-  var endEugeneRulesProcessing = function() {
-  console.log("------------");
-  console.log("Conflicts");
-  console.log(conflictRules);
-  console.log("------------");
-  console.log("New rules");
-  newRules.each(function(rule) {
-  console.log(rule.data.originalRuleLine);
-});
-  console.log("------------");
-  console.log("Ignored lines");
-  console.log(ignoredLines);
-  console.log("------------");
-  console.log("Repeated rules");
-  console.log(repeatedRules);
-};
-  var processedRules = parsedRules.count();
-  parsedRules.each(function(parsedRule) {
-  checkForRepeatedRule(parsedRule, function(repeated) {
-  if (repeated) 
-  {
-    repeatedRules.push(parsedRule.data.originalRuleLine);
-    processedRules--;
-    if (processedRules === 0) 
-    endEugeneRulesProcessing();
-  } else {
-    checkForConflicts(parsedRule, function(conflicts) {
-  newRules.add(parsedRule);
-  processedRules--;
-  if (processedRules === 0) 
-  endEugeneRulesProcessing();
-});
-  }
-});
-});
-}}, 0, 0, 0, 0, ["DeviceDesignParsersManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'DeviceDesignParsersManager'], 0));
-;
-
 (Ext.cmd.derive('Vede.controller.DeviceEditor.MainToolbarController', Ext.app.Controller, {DeviceDesignManager: null, DeviceEvent: null, onAddRowClick: function() {
   this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
 }, onAddColumnClick: function() {
@@ -78550,467 +72397,6403 @@ function requestMessageProcessor(request, success) {
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'MainToolbarController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.DeviceEditor.DeviceEditorPanelController', Ext.app.Controller, {DeviceDesignManager: null, DeviceEvent: null, onLoadEugeneRulesEvent: function() {
-  var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-  var deproject_id = currentProject.data.id;
-  var self = this;
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/" + currentProject.data.project_id + "/devicedesigns/" + currentProject.data.id + "/eugenerules", ''), method: 'GET', params: {id: deproject_id}, success: function(response) {
-  response = JSON.parse(response.responseText);
-  rules = response.rules;
-  var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject.getDesign());
-  rules.forEach(function(rule) {
-  var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule.name, compositionalOperator: rule.compositionalOperator, negationOperator: rule.negationOperator});
-  if (!rule.operand1_id) 
+(Ext.cmd.derive('Teselagen.event.MenuItemEvent', Ext.Base, {singleton: true, NEW_BLANK_VECTOR_EDITOR: "NewBlankVectorEditor", CUT: "Cut", COPY: "Copy", PASTE: "Paste", UNDO: "Undo", REDO: "Redo", SAFE_EDITING_CHANGED: "SafeEditingChanged", SELECT_ALL: "SelectAll", SELECT_INVERSE: "SelectInverse", FIND_PANEL_OPENED: "FindPanelOpened", GOTO_WINDOW_OPENED: "GoToWindowOpened", SELECT_WINDOW_OPENED: "SelectWindowOpened", REVERSE_COMPLEMENT: "ReverseComplement", REBASE_SEQUENCE: "RebaseSequence"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'MenuItemEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.SequenceManagerEvent', Ext.Base, {singleton: true, SEQUENCE_MANAGER_CHANGED: "SequenceManagerChanged", SEQUENCE_CHANGING: "SequenceChanging", SEQUENCE_CHANGED: "SequenceChanged", KIND_FEATURE_ADD: "FeatureAddSequenceProviderEvent", KIND_FEATURE_REMOVE: "FeatureRemoveSequenceProviderEvent", KIND_FEATURES_ADD: "FeaturesAddSequenceProviderEvent", KIND_FEATURES_REMOVE: "FeaturesRemoveSequenceProviderEvent", KIND_SEQUENCE_INSERT: "SequenceInsertSequenceProviderEvent", KIND_SEQUENCE_REMOVE: "SequenceRemoveSequenceProviderEvent", KIND_MANUAL_UPDATE: "ManualUpdate", KIND_SET_MEMENTO: "SetMemento", KIND_INITIALIZED: "SequenceInitialized"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SequenceManagerEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.ActionStackEvent', Ext.Base, {singleton: true, ACTION_STACK_CHANGED: "ActionStackChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'ActionStackEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.ActionStackManager', Ext.Base, {config: {sequenceManager: null}, ActionStackEvent: null, undoStack: [], redoStack: [], constructor: function(inData) {
+  this.initConfig(inData);
+  this.ActionStackEvent = Teselagen.event.ActionStackEvent;
+}, undo: function() {
+  if (this.undoStack.length == 0) 
   {
-    throw new Error("Operand 1 ID is missing");
+    return;
   }
-  if (!rule.operand2_id && !rule.operand2isNumber) 
+  var item = this.undoStack.pop();
+  this.redoStack.push(this.getSequenceManager().createMemento());
+  this.getSequenceManager().setMemento(item);
+  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
+}, redo: function() {
+  if (this.redoStack.length == 0) 
   {
-    throw new Error("Operand 2 ID is missing");
+    return;
   }
-  newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
-  if (rule.operand2_id) 
-  newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
-  if (rule.operand2isNumber) 
+  var item = this.redoStack.pop();
+  this.undoStack.push(this.getSequenceManager().createMemento());
+  this.getSequenceManager().setMemento(item);
+  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
+}, add: function(memento) {
+  this.undoStack.push(memento);
+  this.redoStack = [];
+  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
+}, clear: function() {
+  this.undoStack = [];
+  this.redoStack = [];
+  Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'ActionStackManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.ActionStackController', Ext.app.Controller, {ActionStackManager: null, SequenceManager: null, MenuItemEvent: null, SequenceManagerEvent: null, init: function() {
+  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+  this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
+  this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGING, this.onSequenceChanging, this);
+  this.application.on(this.MenuItemEvent.UNDO, this.onUndo, this);
+  this.application.on(this.MenuItemEvent.REDO, this.onRedo, this);
+  this.application.on("saveCurrentVEProject", this.onsaveCurrentVEProject, this);
+}, onLaunch: function() {
+  this.ActionStackManager = Ext.create("Teselagen.manager.ActionStackManager");
+}, onSequenceManagerChanged: function(pSeqMan) {
+  this.SequenceManager = pSeqMan;
+  this.ActionStackManager.setSequenceManager(pSeqMan);
+  this.ActionStackManager.clear();
+}, onSequenceChanging: function(kind, memento) {
+  this.ActionStackManager.add(memento);
+}, onUndo: function() {
+  if (this.SequenceManager && this.ActionStackManager.undoStack.length != 0) 
   {
-    newEugeneRule.set('Operand2Number', rule.operand2Number);
-    newEugeneRule.set('Operand2isNumber', true);
+    this.ActionStackManager.undo();
   }
-  currentProject.getDesign().addToRules(newEugeneRule);
-});
-}, failure: function(response, opts) {
-  Ext.MessageBox.alert('Error', 'Problem while loading Eugene Rules');
+}, onRedo: function() {
+  if (this.SequenceManager && this.ActionStackManager.redoStack.length != 0) 
+  {
+    this.ActionStackManager.redo();
+  }
+}, onsaveCurrentVEProject: function() {
+  var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
+  var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();
+  workingSequence.set('sequenceFileFormat', updatedGenbankSequence);
+  workingSequence.save({callback: function() {
+  console.log("Working sequence updated!");
 }});
-}, openProject: function(project) {
-  Ext.getCmp('mainAppPanel').getActiveTab().model = project;
-}, onDeviceEditorRenameBtnClick: function() {
-  var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-  var onPromptClosed = function(answer, text) {
-  deproject.set('name', text);
-  deproject.save({callback: function() {
-  Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | " + text);
-  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
-  parttext.animate({duration: 5000, to: {opacity: 0}});
-  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
-  Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
-});
-}});
-};
-  Ext.MessageBox.prompt("Rename Design", 'New name:', onPromptClosed, this, false, deproject.get("name"));
-}, onDeviceEditorDeleteBtnClick: function() {
-  Ext.Msg.show({title: 'Are you sure you want to delete this design?', msg: 'WARNING: This will remove the current design. This action is not undoable!', cls: 'messageBox', buttons: Ext.Msg.OKCANCEL, fn: DeleteDeviceDesignBtn, icon: Ext.Msg.QUESTION});
-  function DeleteDeviceDesignBtn(btn) {
-    if (btn == 'ok') 
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'ActionStackController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.CaretEvent', Ext.Base, {singleton: true, CARET_POSITION_CHANGED: "CaretPositionChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'CaretEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.MapperEvent', Ext.Base, {singleton: true, AA_MAPPER_UPDATED: "AAMapperUpdated", ORF_MAPPER_UPDATED: "ORFMapperUpdated", RESTRICTION_ENZYME_MAPPER_UPDATED: "RestrictionEnzymeMapperUpdate", TRACE_MAPPER_UPDATED: "TraceMapperUpdated"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'MapperEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.SelectionEvent', Ext.Base, {singleton: true, SELECTION_CHANGED: "SelectionChanged", SELECTION_CANCELED: "SelectionCanceled", HIGHLIGHT: "Highlight", CLEAR_HIGHLIGHT: "ClearHighlight"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SelectionEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.SelectionLayerEvent', Ext.Base, {singleton: true, OVER: "overSelectionEvent", OUT: "outOfSelectionEvent", SELECT: "selectEvent", DESELECT: "deselectEvent", SELECTION_CHANGED: "selectionLayerSelectionChanged", HANDLE_CLICKED: "handleClickedEvent", HANDLE_RELEASED: "handleReleasedEvent"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SelectionLayerEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.VisibilityEvent', Ext.Base, {singleton: true, SHOW_FEATURES_CHANGED: "ShowFeaturesChanged", SHOW_CUTSITES_CHANGED: "ShowCutSitesChanged", SHOW_ORFS_CHANGED: "ShowOrfsChanged", SHOW_COMPLEMENTARY_CHANGED: "ShowComplementaryChanged", SHOW_SPACES_CHANGED: "ShowSpacesChanged", SHOW_SEQUENCE_AA_CHANGED: "ShowSequenceAAChanged", SHOW_REVCOM_AA_CHANGED: "ShowRevcomAAChanged", SHOW_FEATURE_LABELS_CHANGED: "ShowFeatureLabelsChanged", SHOW_CUTSITE_LABELS_CHANGED: "ShowCutSiteLabelsChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'VisibilityEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.mappers.Mapper', Ext.Base, {config: {sequenceManager: null, dirty: true}, updateEventString: null, constructor: function(inData) {
+  var that = this;
+  this.mixins.observable.constructor.call(this, inData);
+  if (inData) 
+  {
+    this.initConfig(inData);
+  }
+}, sequenceChanged: function() {
+  this.dirty = true;
+}, setSequenceManager: function(pSeqMan) {
+  this.dirty = true;
+  this.sequenceManager = pSeqMan;
+}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.mappers, 'Mapper'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.AAManager', Teselagen.mappers.Mapper, {config: {aaSequence: ["", "", ""], aaSequenceSparse: ["", "", ""], aaRevCom: ["", "", ""], aaRevComSparse: ["", "", ""]}, TranslationUtils: null, updateEventString: Teselagen.event.MapperEvent.AA_MAPPER_UPDATED, constructor: function(inData) {
+  this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
+  this.mixins.observable.constructor.call(this, inData);
+  this.callParent([inData]);
+  this.initConfig(inData);
+}, recalculate: function() {
+  if (this.sequenceManager) 
+  {
+    this.recalculateNonCircular();
+  }
+  Vede.application.fireEvent(this.updateEventString);
+}, recalculateNonCircular: function() {
+  var i;
+  var sequence = this.sequenceManager.getSequence();
+  var revCom = this.sequenceManager.getReverseComplementSequence();
+  var seqLen = sequence.seqString().length;
+  var aminoAcid;
+  var aminoAcidRevCom;
+  var aaString;
+  var aaStringRevCom;
+  var codon = [];
+  var codonRevCom = [];
+  var aaSequenceNew = [];
+  var aaSequenceSparseNew = [];
+  var revComNew = [];
+  var revComSparseNew = [];
+  var aaSequenceArray = [[], [], []];
+  var revComArray = [[], [], []];
+  for (i = 0; i < seqLen; i++) 
     {
-      var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-      Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
-      toastr.options.onclick = null;
-      toastr.info("Design Deleted");
+      if (i >= seqLen - 2) 
+      {
+        break;
+      }
+      codon = [sequence.symbolAt(i), sequence.symbolAt(i + 1), sequence.symbolAt(i + 2)];
+      codonRevCom = [revCom.symbolAt(i), revCom.symbolAt(i + 1), revCom.symbolAt(i + 2)];
+      aminoAcid = this.TranslationUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
+      aminoAcidRevCom = this.TranslationUtils.dnaToProteinSymbol(codonRevCom[0], codonRevCom[1], codonRevCom[2]);
+      aaString = "";
+      aaStringRevCom = "";
+      if (aminoAcid instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
+      {
+        if (this.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) 
+        {
+          aaString = ".";
+        }
+      } else {
+        aaString = aminoAcid.getValue();
+      }
+      if (aminoAcidRevCom instanceof Teselagen.bio.sequence.symbols.GapSymbol) 
+      {
+        if (this.TranslationUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) 
+        {
+          aaStringRevCom = ".";
+        }
+      } else {
+        aaStringRevCom = aminoAcidRevCom.getValue();
+      }
+      aaSequenceArray[i % 3].push(aaString);
+      revComArray[i % 3].push(aaStringRevCom);
     }
-  }
-}, onOpenExampleItemBtnClick: function(item, e, eOpts) {
-  var selectedItem = item.text;
-  var examplesMap = {"SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json", "Combinatorial SLIC/Gibson/CPEC": "resources/examples/Combinatorial_SLIC_Gibson_CPEC.json", "Golden Gate": "resources/examples/Golden_Gate.json", "Combinatorial Golden Gate": "resources/examples/Combinatorial_Golden_Gate.json"};
-  Ext.Ajax.request({url: examplesMap[selectedItem], method: 'GET', success: function(response) {
-  Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
-}});
-}, createLoadingMessage: function() {
-  var msgBox = Ext.MessageBox.show({title: 'Please wait', msg: 'Preparing input parameters', progressText: 'Initializing...', width: 300, progress: true, closable: false});
-  return {close: function() {
-  msgBox.close();
-}, update: function(progress, msg) {
-  msgBox.updateProgress(progress / 100, progress + '% completed', msg);
-}};
-}, saveDEProject: function(cb) {
-  Vede.application.fireEvent("suspendPartAlerts");
-  var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-  var deproject = activeTab.model;
-  var design = deproject.getDesign();
-  var saveAssociatedSequence = function(part, cb) {
-  if (!part.data.phantom) 
-  {
-    part.getSequenceFile({callback: function(associatedSequence) {
-  if (associatedSequence) 
-  {
-    var lastSequenceId = associatedSequence.get('id');
-    if (Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id')) 
+  for (i = 0; i < 3; i++) 
     {
-      associatedSequence.save({callback: function(sequencefile) {
-  if (!lastSequenceId) 
+      aaSequenceNew[i] = aaSequenceArray[i].join("");
+      aaSequenceSparseNew[i] = aaSequenceArray[i].join(" ");
+      revComNew[i] = revComArray[i].join("");
+      revComSparseNew[i] = revComArray[i].join(" ");
+    }
+  this.setAaSequence(aaSequenceNew);
+  this.setAaSequenceSparse(aaSequenceSparseNew);
+  this.setAaRevCom(revComNew);
+  this.setAaRevComSparse(revComSparseNew);
+}, getSequenceFrame: function(frame, sparse) {
+  if (this.dirty) 
   {
-    part.set("sequencefile_id", sequencefile.get('id'));
-    part.save({callback: function() {
-  cb();
-}});
-  } else {
-    cb();
+    this.recalculate();
+    this.dirty = false;
   }
-}});
+  if (sparse) 
+  {
+    return this.aaSequenceSparse[frame];
+  } else {
+    return this.aaSequence[frame];
+  }
+}, getRevComFrame: function(frame, sparse) {
+  if (this.dirty) 
+  {
+    this.recalculate();
+    this.dirty = false;
+  }
+  if (sparse) 
+  {
+    return this.aaRevComSparse[frame];
+  } else {
+    return this.aaRevCom[frame];
+  }
+}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'AAManager'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {config: {minORFSize: 300, orfs: null}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, constructor: function(inData) {
+  this.DNATools = Teselagen.bio.sequence.DNATools;
+  this.mixins.observable.constructor.call(this, inData);
+  this.callParent([inData]);
+  this.initConfig(inData);
+  this.orfs = [];
+}, setOrfs: function(pOrfs) {
+  this.orfs = pOrfs;
+}, getOrfs: function() {
+  if (this.dirty) 
+  {
+    this.recalculate();
+    this.dirty = false;
+  }
+  return this.orfs;
+}, setMinORFSize: function(pSize) {
+  if (this.minORFSize != pSize) 
+  {
+    this.minORFSize = pSize;
+    this.dirty = true;
+  }
+}, recalculate: function() {
+  if (this.sequenceManager) 
+  {
+    if (this.sequenceManager.getCircular()) 
+    {
+      this.recalculateCircular();
     } else {
-      cb();
+      this.recalculateNonCircular();
     }
   } else {
-    cb();
+    this.setOrfs(null);
   }
-}});
-  } else cb();
-};
-  var saveDesign = function() {
-  Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
-  var rules = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules();
-  rules.each(function(rule) {
-  rule.setOperand1(rule.getOperand1());
-  rule.setOperand2(rule.getOperand2());
-});
-  design = activeTab.model.getDesign();
-  design.save({callback: function(record, operation) {
-  Vede.application.fireEvent("resumePartAlerts");
-  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
-  Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
-  toastr.options.onclick = null;
-  toastr.info("Design Saved");
-});
-  if (typeof (cb) == "function") 
-  cb();
-}});
-};
-  var countParts = 0;
-  design.getJ5Collection().bins().each(function(bin, binKey) {
-  bin.parts().each(function(part, partIndex) {
-  countParts++;
-});
-});
-  design.getJ5Collection().bins().each(function(bin, binKey) {
-  bin.parts().each(function(part, partIndex) {
-  if (!part.data.project_id) 
-  part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
-  if (part.data.name === "") 
-  part.set('phantom', true); else part.set('phantom', false);
-  if (Object.keys(part.getChanges()).length > 0 || !part.data.id) 
+  Vede.application.fireEvent(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED);
+}, recalculateNonCircular: function() {
+  this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(this.sequenceManager.getSequence(), this.sequenceManager.getReverseComplementSequence(), this.minORFSize));
+}, recalculateCircular: function() {
+  var forwardSequence = this.sequenceManager.getSequence().seqString();
+  var backwardSequence = this.sequenceManager.getReverseComplementSequence().seqString();
+  var doubleForward = this.DNATools.createDNA(forwardSequence + forwardSequence);
+  var doubleBackward = this.DNATools.createDNA(backwardSequence + backwardSequence);
+  var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(doubleForward, doubleBackward, this.minORFSize);
+  var maxLength = forwardSequence.length;
+  var recalcOrfs = [];
+  var normalOrfs = [];
+  var orf = null;
+  Ext.each(orfsSequence, function(orf) {
+  if (orf.getStart() >= maxLength) 
   {
-    part.save({callback: function(part) {
-  saveAssociatedSequence(part, function() {
-  if (countParts == 1) 
-  saveDesign();
-  countParts--;
-});
-}});
-  } else {
-    saveAssociatedSequence(part, function() {
-  if (countParts === 1) 
-  saveDesign();
-  countParts--;
-});
+  } else if (orf.getEnd() <= maxLength) 
+  {
+    normalOrfs.push(orf);
+  } else if (orf.getEnd() > maxLength && orf.getStart() < maxLength) 
+  {
+    orf.setOneEnd(orf.getEnd() - maxLength);
+    var startCodons = orf.getStartCodons();
+    Ext.each(startCodons, function(startCodon) {
+  if (startCodon >= maxLength) 
+  {
+    startCodon -= maxLength;
   }
 });
+    recalcOrfs.push(orf);
+  }
 });
-}, onDeviceEditorSaveBtnClick: function() {
-  var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-  activeTab.el.mask('Loading');
-  this.saveDEProject(function() {
-  activeTab.el.unmask();
+  var normalOrf = null;
+  var circularOrf = null;
+  Ext.each(normalOrfs, function(normalOrf) {
+  var skip = false;
+  Ext.each(recalcOrfs, function(circularOrf) {
+  if (circularOrf.getEnd() == normalOrf.getEnd() && circularOrf.getStrand() == normalOrf.getStrand()) 
+  {
+    skip = true;
+    return false;
+  }
 });
-}, onDeviceEditorSaveEvent: function(arg) {
-  this.saveDEProject(arg);
-}, onAddRowClick: function() {
-  this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
-}, onAddColumnLeftClick: function() {
-  this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_LEFT);
-}, onAddColumnRightClick: function() {
-  this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_RIGHT);
-}, onclearPartMenuItemClick: function() {
-  this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
-}, onRemoveColumnMenuItemClick: function() {
-  this.application.fireEvent(this.DeviceEvent.REMOVE_COLUMN);
-}, onRemoveRowMenuItemClick: function() {
-  this.application.fireEvent(this.DeviceEvent.REMOVE_ROW);
-}, onJ5buttonClick: function(button, e, options) {
-  Vede.application.fireEvent("openj5");
-  toastr.options.onclick = null;
-  toastr.info("Design Saved");
-}, onImportEugeneRulesBtnClick: function() {
-}, onJumpToJ5Run: function(data) {
-  var design_id = data.devicedesign_id;
-  var project_id = data.project_id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+  if (!skip) 
+  {
+    recalcOrfs.push(normalOrf);
+  }
+});
+  this.setOrfs(recalcOrfs);
+}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'ORFManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.SequenceController', Ext.app.Controller, {AAManager: null, ORFManager: null, RestrictionEnzymeManager: null, SequenceManager: null, RestrictionEnzymeGroupManager: null, Managers: null, CaretEvent: null, MapperEvent: null, MenuItemEvent: null, SelectionEvent: null, SelectionLayerEvent: null, SequenceManagerEvent: null, VisibilityEvent: null, WireframeSelectionLayer: null, SelectionLayer: null, DNAAlphabet: null, DNATools: null, mouseIsDown: false, startSelectionIndex: 0, selectionDirection: 0, caretIndex: 0, safeEditing: true, clickedAnnotationStart: null, clickedAnnotationEnd: null, listeners: {}, init: function() {
+  this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+  this.DNATools = Teselagen.bio.sequence.DNATools;
+  this.CaretEvent = Teselagen.event.CaretEvent;
+  this.MapperEvent = Teselagen.event.MapperEvent;
+  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+  this.SelectionEvent = Teselagen.event.SelectionEvent;
+  this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
+  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+  this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+  var listenersObject = {SequenceManagerChanged: this.onSequenceManagerChanged, ActiveEnzymesChanged: this.onActiveEnzymesChanged, VectorPanelAnnotationClicked: this.onVectorPanelAnnotationClicked, AnnotatePanelAnnotationClicked: this.onAnnotatePanelAnnotationClicked, ViewModeChanged: this.onViewModeChanged, scope: this};
+  listenersObject[this.VisibilityEvent.SHOW_FEATURES_CHANGED] = this.onShowFeaturesChanged;
+  listenersObject[this.VisibilityEvent.SHOW_CUTSITES_CHANGED] = this.onShowCutSitesChanged;
+  listenersObject[this.VisibilityEvent.SHOW_ORFS_CHANGED] = this.onShowOrfsChanged;
+  listenersObject[this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED] = this.onShowFeatureLabelsChanged;
+  listenersObject[this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED] = this.onShowCutSiteLabelsChanged;
+  listenersObject[this.MapperEvent.AA_MAPPER_UPDATED] = this.onAAManagerUpdated;
+  listenersObject[this.MapperEvent.ORF_MAPPER_UPDATED] = this.onORFManagerUpdated;
+  listenersObject[this.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED] = this.onRestrictionEnzymeManagerUpdated;
+  listenersObject[this.SelectionEvent.SELECTION_CHANGED] = this.onSelectionChanged;
+  listenersObject[this.SelectionEvent.SELECTION_CANCELED] = this.onSelectionCanceled;
+  listenersObject[this.CaretEvent.CARET_POSITION_CHANGED] = this.onCaretPositionChanged;
+  listenersObject[this.MenuItemEvent.SELECT_ALL] = this.onSelectAll;
+  listenersObject[this.MenuItemEvent.SELECT_INVERSE] = this.onSelectInverse;
+  listenersObject[this.MenuItemEvent.SAFE_EDITING_CHANGED] = this.onSafeEditingChanged;
+  listenersObject[this.MenuItemEvent.REVERSE_COMPLEMENT] = this.onReverseComplementSequence;
+  listenersObject[this.MenuItemEvent.REBASE_SEQUENCE] = this.onRebaseSequence;
+  listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGING] = this.onSequenceChanging;
+  listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGED] = this.onSequenceChanged;
+  this.application.on(listenersObject, this);
+}, onLaunch: function() {
+  this.RestrictionEnzymeGroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+  if (!this.RestrictionEnzymeGroupManager.isInitialized) 
+  {
+    this.RestrictionEnzymeGroupManager.initialize();
+  }
+  this.AAManager = Ext.create("Teselagen.manager.AAManager", {sequenceManager: this.SequenceManager});
+  this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {sequenceManager: this.SequenceManager});
+  this.RestrictionEnzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {sequenceManager: this.SequenceManager, restrictionEnzymeGroup: this.RestrictionEnzymeGroupManager.getActiveGroup()});
+  this.Managers = [this.AAManager, this.RestrictionEnzymeManager, this.ORFManager];
+}, onKeydown: function(event) {
+  var character = String.fromCharCode(event.getCharCode()).toLowerCase();
+  if (event.ctrlKey && event.getKey() === event.LEFT) 
+  {
+    if (this.caretIndex % 10 === 0) 
+    {
+      this.changeCaretPosition(this.caretIndex - 10);
+    } else {
+      this.changeCaretPosition(Math.round(this.caretIndex / 10) * 10);
+    }
+  } else if (event.ctrlKey && event.getKey() === event.RIGHT) 
+  {
+    if (this.caretIndex % 10 === 0) 
+    {
+      this.changeCaretPosition(this.caretIndex + 10);
+    } else {
+      this.changeCaretPosition(Math.round(this.caretIndex / 10 + 1) * 10);
+    }
+  } else if (event.ctrlKey && event.getKey() === event.HOME) 
+  {
+    this.changeCaretPosition(0);
+  } else if (event.ctrlKey && event.getKey() === event.END) 
+  {
+    this.changeCaretPosition(this.SequenceManager.getSequence().toString().length - 1);
+  } else if (event.ctrlKey && event.getKey() === event.X) 
+  {
+    this.cutSelection();
+  } else if (event.ctrlKey && event.getKey() === event.C) 
+  {
+    this.copySelection();
+  } else if (event.ctrlKey && event.getKey() === event.V) 
+  {
+    this.pasteFromClipboard();
+  } else if (event.ctrlKey && event.getKey() === event.Z) 
+  {
+    this.application.fireEvent(this.MenuItemEvent.UNDO);
+  } else if (event.ctrlKey && event.getKey() === event.U) 
+  {
+    this.application.fireEvent(this.MenuItemEvent.REDO);
+  } else if (event.ctrlKey && event.getKey() === event.A) 
+  {
+    this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
+  } else if (event.ctrlKey && event.getKey() === event.I) 
+  {
+    this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
+  } else if (event.getKey() === event.LEFT) 
+  {
+    this.changeCaretPosition(this.caretIndex - 1);
+  } else if (event.getKey() === event.RIGHT) 
+  {
+    this.changeCaretPosition(this.caretIndex + 1);
+  } else if (!event.ctrlKey && !event.altKey) 
+  {
+    if (this.DNAAlphabet.symbolByValue(character)) 
+    {
+      if (this.SelectionLayer.selected) 
+      {
+        if (this.safeEditing) 
+        {
+          this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
+          this.SequenceManager.insertSequence(this.DNATools.createDNA(character), this.caretIndex);
+        } else {
+          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
+          this.SequenceManager.insertSequence(this.DNATools.createDNA(character), this.caretIndex);
+          this.changeCaretPosition(this.caretIndex + 1);
+        }
+      } else {
+        if (this.safeEditing) 
+        {
+          this.safeInsert(character, this.caretIndex);
+        } else {
+          this.SequenceManager.insertSequence(this.DNATools.createDNA(character), this.caretIndex);
+          this.changeCaretPosition(this.caretIndex + 1);
+        }
+      }
+    } else if (event.getKey() === event.DELETE) 
+    {
+      if (this.SelectionLayer.selected) 
+      {
+        if (this.safeEditing) 
+        {
+          this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
+        } else {
+          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
+        }
+      } else {
+        if (this.safeEditing) 
+        {
+          this.safeDelete(this.caretIndex, this.caretIndex + 1);
+        } else {
+          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
+        }
+      }
+    } else if (event.getKey() === event.BACKSPACE && this.caretIndex > 0) 
+    {
+      if (this.SelectionLayer.selected) 
+      {
+        if (this.safeEditing) 
+        {
+          this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
+        } else {
+          this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
+        }
+      } else {
+        if (this.safeEditing) 
+        {
+          this.safeDelete(this.caretIndex - 1, this.caretIndex);
+        } else {
+          this.deleteSequence(this.caretIndex - 1, this.caretIndex);
+        }
+      }
+    }
+  }
+}, safeEditPrompt: function(features, callback) {
   var self = this;
-  var continueCode = function() {
-  self.detailPanel = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel"]')[0];
-  self.detailPanelFill = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel-fill"]')[0];
-  self.detailPanel.show();
-  self.detailPanelFill.hide();
-  var j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
-  j5runs.load({callback: function() {
-  j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
-  self.activeJ5Run = j5runs.getById(data.id);
-  var assemblyMethod = self.activeJ5Run.get('assemblyMethod');
-  var status = self.activeJ5Run.get('status');
-  var startDate = new Date(self.activeJ5Run.get('date'));
-  var endDate = new Date(self.activeJ5Run.get('endDate'));
-  var elapsed = endDate - startDate;
-  elapsed = Math.round(elapsed / 1000);
-  elapsed = self.elapsedDate(elapsed);
-  startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
-  endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
-  var assemblies = self.activeJ5Run.getJ5Results().assemblies();
-  var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-  var j5parameters = self.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
-  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
-  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
-  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
-  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
-  Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
-  if (status == "Completed") 
+  var promptWindow = Ext.create("Vede.view.ve.SafeEditWindow").show();
+  var grid = promptWindow.down("gridpanel");
+  promptWindow.callback = callback;
+  grid.reconfigure(features);
+  grid.columns[grid.columns.length - 1].setText("Remove");
+  grid.columns[0].setWidth(139);
+  grid.columns[grid.columns.length - 1].setWidth(50);
+  promptWindow.on('close', function() {
+  Ext.getCmp("AnnotateContainer").el.focus();
+}, this);
+  promptWindow.down("displayfield").on("click", function() {
+  this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, false);
+  promptWindow.close();
+}, this);
+}, safeInsert: function(sequence, index, insertSequenceManager) {
+  var self = this;
+  var affectedFeatures = this.SequenceManager.featuresAt(index);
+  var sequenceLength;
+  if (affectedFeatures.length > 0) 
   {
-    var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    $("#" + field + " .status-note").removeClass("status-note-warning");
-    $("#" + field + " .status-note").addClass("status-note-completed");
-  } else if (status == "Completed with warnings") 
+    this.safeEditPrompt(affectedFeatures, function() {
+  if (insertSequenceManager) 
   {
-    var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    $("#" + field + " .status-note").removeClass("status-note-completed");
-    $("#" + field + " .status-note").addClass("status-note-warning");
-  }
-  var warnings = self.activeJ5Run.raw.warnings;
-  var warningsStore = Ext.create('Teselagen.store.WarningsStore', {model: 'Teselagen.models.j5Output.Warning', data: warnings});
-  if ((warnings.length > 0) == true) 
-  {
-    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').show();
-    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+    self.SequenceManager.insertSequenceManager(sequence, index);
+    sequenceLength = sequence.getSequence().toString().length;
   } else {
-    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').hide();
-    warnings = null;
-    warningsStore = null;
+    self.SequenceManager.insertSequence(self.DNATools.createDNA(sequence), index);
+    sequenceLength = sequence.length;
   }
-  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
-  Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-  Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
-}});
-};
-  project.designs().load({id: design_id, callback: function(loadedDesign) {
-  Teselagen.manager.ProjectManager.workingProject = project;
-  var design = loadedDesign[0];
-  Teselagen.manager.ProjectManager.openj5Report(design, continueCode);
-}});
-}, elapsedDate: function(seconds) {
-  var numdays = Math.floor((seconds % 31536000) / 86400);
-  var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-  var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-  var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-  if (numdays > 0) 
-  {
-    return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-  } else if (numhours > 0) 
-  {
-    return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-  } else if (numminutes > 0) 
-  {
-    return numminutes + " minutes " + numseconds + " seconds";
+  var selected = this.down('gridpanel').selModel.getSelection();
+  var featureModel;
+  for (var i = 0; i < selected.length; i++) 
+    {
+      featureModel = selected[i];
+      self.SequenceManager.removeFeature(featureModel.data.field1);
+    }
+  self.changeCaretPosition(index + sequenceLength);
+});
   } else {
-    return numseconds + " seconds";
+    if (insertSequenceManager) 
+    {
+      this.SequenceManager.insertSequenceManager(sequence, index);
+      sequenceLength = sequence.getSequence().toString().length;
+    } else {
+      this.SequenceManager.insertSequence(this.DNATools.createDNA(sequence), index);
+      sequenceLength = sequence.length;
+    }
+    self.changeCaretPosition(index + sequenceLength);
   }
+}, safeDelete: function(start, end) {
+  var self = this;
+  var affectedFeatures = this.SequenceManager.featuresByRange(start, end);
+  if (affectedFeatures.length > 0) 
+  {
+    this.safeEditPrompt(affectedFeatures, function() {
+  self.deleteSequence(start, end);
+  var selected = this.down('gridpanel').selModel.getSelection();
+  var featureModel;
+  for (var i = 0; i < selected.length; i++) 
+    {
+      featureModel = selected[i];
+      self.SequenceManager.removeFeature(featureModel.data.field1);
+    }
+});
+  } else {
+    this.deleteSequence(start, end);
+  }
+}, cutSelection: function() {
+  if (this.SelectionLayer.selected) 
+  {
+    this.application.ClipBoardData = this.SequenceManager.subSequenceManager(this.SelectionLayer.start, this.SelectionLayer.end);
+    this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
+  }
+}, copySelection: function() {
+  if (this.SelectionLayer.selected) 
+  {
+    this.application.ClipBoardData = this.SequenceManager.subSequenceManager(this.SelectionLayer.start, this.SelectionLayer.end);
+  }
+}, pasteFromClipboard: function() {
+  if (this.application.ClipBoardData) 
+  {
+    var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
+    confirmationWindow.down("button[cls='pasteConfirmationOkButton']").on("click", function() {
+  var pasteSequenceManager;
+  if (this.SelectionLayer.selected) 
+  {
+    this.changeCaretPosition(this.SelectionLayer.start);
+    this.deleteSequence(this.SelectionLayer.start, this.SelectionLayer.end);
+  }
+  pasteSequenceManager = this.application.ClipBoardData.clone();
+  if (confirmationWindow.down("radiogroup").getValue().pasteFormatField === "reverse") 
+  {
+    pasteSequenceManager.doReverseComplementSequence();
+  }
+  confirmationWindow.close();
+  this.safeInsert(pasteSequenceManager, this.caretIndex, true);
+}, this);
+    confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {
+  confirmationWindow.close();
+});
+  }
+}, deleteSequence: function(start, end) {
+  this.SequenceManager.removeSequence(start, end);
+  this.changeCaretPosition(start);
+  if (this.SelectionLayer.selected) 
+  {
+    this.SelectionLayer.deselect();
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+  }
+}, onActiveEnzymesChanged: function() {
+  this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(this.RestrictionEnzymeGroupManager.getActiveGroup());
+}, onSequenceManagerChanged: function(pSeqMan) {
+  this.SequenceManager = pSeqMan;
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  if (this.SelectionLayer && this.SelectionLayer.selected) 
+  {
+    this.SelectionLayer.deselect();
+  }
+  var manager;
+  for (var i = 0; i < this.Managers.length; i++) 
+    {
+      manager = this.Managers[i];
+      manager.setSequenceManager(pSeqMan);
+    }
+}, onSelectAll: function() {
+  if (this.SequenceManager) 
+  {
+    this.select(0, this.SequenceManager.getSequence().toString().length);
+  }
+}, onSelectInverse: function() {
+  if (this.SequenceManager && this.SelectionLayer) 
+  {
+    this.select(this.SelectionLayer.end, this.SelectionLayer.start);
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+  }
+}, onSafeEditingChanged: function(enabled) {
+  this.safeEditing = enabled;
+}, onRebaseSequence: function() {
+  var selectionEnd;
+  if (this.SequenceManager) 
+  {
+    this.SequenceManager.rebaseSequence(this.caretIndex);
+    this.changeCaretPosition(0);
+    if (this.SelectionLayer.start > this.SelectionLayer.end) 
+    {
+      selectionEnd = this.SequenceManager.getSequence().toString().length - this.SelectionLayer.start + this.SelectionLayer.end;
+    } else {
+      selectionEnd = this.SelectionLayer.end - this.SelectionLayer.start;
+    }
+    this.SelectionLayer.deselect();
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+    this.select(0, selectionEnd);
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, 0, selectionEnd);
+  }
+  return false;
+}, onReverseComplementSequence: function(e) {
+  if (this.SequenceManager) 
+  {
+    this.SequenceManager.doReverseComplementSequence();
+    var seqLen = this.SequenceManager.getSequence().toString().length;
+    var newSelectionEnd = seqLen - this.SelectionLayer.start;
+    var newSelectionStart = seqLen - this.SelectionLayer.end;
+    var oldCaretPosition = this.caretIndex;
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, null, newSelectionStart, newSelectionEnd);
+    this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED, null, seqLen - oldCaretPosition);
+  }
+  return false;
+}, onSequenceChanged: function(kind, obj) {
+  if (!this.SequenceManager) 
+  {
+    return;
+  }
+  var manager;
+  for (var i = 0; i < this.Managers.length; i++) 
+    {
+      manager = this.Managers[i];
+      if (manager.sequenceChanged) 
+      {
+        manager.sequenceChanged();
+      }
+    }
+}, onSequenceChanging: function(kind, obj) {
+}, onAAManagerUpdated: function() {
+}, onORFManagerUpdated: function() {
+}, onRestrictionEnzymeManagerUpdated: function() {
+}, onSelectionChanged: function(scope, start, end) {
+}, onSelectionCanceled: function() {
+  if (this.SelectionLayer && this.SelectionLayer.selected) 
+  {
+    this.SelectionLayer.deselect();
+  }
+}, onCaretPositionChanged: function(scope, index) {
+  if (scope !== this && this.SelectionLayer && !this.SelectionLayer.selecting) 
+  {
+    this.changeCaretPosition(index, true, true);
+  }
+}, onVectorPanelAnnotationClicked: function(start, end) {
+}, onAnnotatePanelAnnotationClicked: function(start, end) {
+}, onShowCutSitesChanged: function(show) {
+}, onShowFeaturesChanged: function(show) {
+}, onShowOrfsChanged: function(show) {
+}, onShowFeatureLabelsChanged: function(show) {
+}, onShowCutSiteLabelsChanged: function(show) {
+}, onViewModeChanged: function(viewMode) {
+}, changeCaretPosition: function(index, silent) {
+  this.caretIndex = index;
+  if (!silent && this.SequenceManager) 
+  {
+    this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED, this, index);
+  }
+}, select: function() {
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'SequenceController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.sequence.Row', Ext.Base, {config: {rowData: null, metrics: {"x": 0, "y": 0, "width": 0, "height": 0}, sequenceMetrics: {"x": 0, "y": 0, "width": 0, "height": 0}, index: null}, constructor: function(inData) {
+  this.initConfig(inData);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.sequence, 'Row'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.sequence.RowData', Ext.Base, {config: {start: null, end: null, sequence: null, oppositeSequence: null, featuresAlignment: null, cutSitesAlignment: null, orfAlignment: null}, constructor: function(inData) {
+  this.initConfig(inData);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.sequence, 'RowData'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.RowManager', Ext.Base, {config: {sequenceAnnotator: null, rows: [], featureToRowMap: null, cutSiteToRowMap: null, orfToRowMap: null, showORFs: false, numRows: 10}, constructor: function(inData) {
+  this.initConfig(inData);
+  this.sequenceAnnotator = inData.sequenceAnnotator;
+}, update: function() {
+  this.rows = [];
+  if (this.sequenceAnnotator.getSequenceManager()) 
+  {
+    var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
+    this.numRows = Number(Math.ceil(((seqString.length + 1) / this.sequenceAnnotator.getBpPerRow())));
+    var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
+    for (var i = 0; i < this.numRows; i++) 
+      {
+        var start = i * this.sequenceAnnotator.getBpPerRow();
+        var end = (i + 1) * this.sequenceAnnotator.getBpPerRow() - 1;
+        var sequence = seqString.substring(start, end + 1);
+        var oppositeSequence = complementSeqString.substring(start, end + 1);
+        var rowData = Ext.create("Teselagen.models.sequence.RowData", {start: start, end: end, sequence: sequence, oppositeSequence: oppositeSequence});
+        var row = Ext.create("Teselagen.models.sequence.Row", {index: i, rowData: rowData});
+        this.rows.push(row);
+      }
+    this.reloadFeatures();
+    this.reloadORFs();
+    this.reloadCutSites();
+  }
+}, reloadFeatures: function() {
+  if (!this.sequenceAnnotator.getSequenceManager().getFeatures()) 
+  {
+    return;
+  }
+  var features = this.sequenceAnnotator.getSequenceManager().getFeatures();
+  var rowsFeatures = this.rowAnnotations(features);
+  this.featureToRowMap = Ext.create("Ext.util.HashMap");
+  var start;
+  var end;
+  var row;
+  var feature;
+  var featuresAlignment;
+  for (var i = 0; i < rowsFeatures.length; i++) 
+    {
+      row = rowsFeatures[i];
+      start = i * this.sequenceAnnotator.getBpPerRow();
+      end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+      featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
+      this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
+      if (!row) 
+      {
+        return true;
+      }
+      for (var j = 0; j < row.length; j++) 
+        {
+          feature = row[j];
+          if (!this.featureToRowMap.get(feature.getName())) 
+          {
+            this.featureToRowMap.add(feature.getName(), []);
+          }
+          this.featureToRowMap.get(feature.getName()).push(i);
+        }
+    }
+}, reloadCutSites: function() {
+  if (!this.sequenceAnnotator.showCutSites || !this.sequenceAnnotator.restrictionEnzymeManager || !this.sequenceAnnotator.restrictionEnzymeManager.getCutSites()) 
+  {
+    return;
+  }
+  var cutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
+  var rowsCutSites = this.rowAnnotations(cutSites);
+  this.cutSiteToRowMap = Ext.create("Ext.util.HashMap");
+  var start;
+  var end;
+  var cutSitesAlignment;
+  Ext.each(rowsCutSites, function(row, i) {
+  start = i * this.sequenceAnnotator.getBpPerRow();
+  end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+  cutSitesAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
+  this.rows[i].getRowData().setCutSitesAlignment(cutSitesAlignment.clone());
+  if (!row) 
+  {
+    return true;
+  }
+  Ext.each(row, function(site) {
+  if (!this.cutSiteToRowMap.get(site)) 
+  {
+    this.cutSiteToRowMap.add(site, []);
+  }
+  this.cutSiteToRowMap.get(site).push(i);
+}, this);
+}, this);
+}, reloadORFs: function() {
+  if (!this.sequenceAnnotator.showOrfs || !this.sequenceAnnotator.orfManager || !this.sequenceAnnotator.orfManager.getOrfs()) 
+  {
+    return;
+  }
+  this.orfToRowMap = Ext.create("Ext.util.HashMap");
+  var orfs = this.sequenceAnnotator.orfManager.getOrfs();
+  var rowsOrfs = this.rowAnnotations(orfs);
+  var start;
+  var end;
+  var orfAlignment;
+  Ext.each(rowsOrfs, function(row, i) {
+  start = i * this.sequenceAnnotator.getBpPerRow();
+  end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+  orfAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
+  this.rows[i].getRowData().setOrfAlignment(orfAlignment.clone());
+  if (!row) 
+  {
+    return true;
+  }
+  Ext.each(row, function(orf) {
+  if (!this.orfToRowMap.get(orf.toString())) 
+  {
+    this.orfToRowMap.add(orf, []);
+  }
+  this.orfToRowMap.get(orf.toString()).push(i);
+}, this);
+}, this);
+}, rowAnnotations: function(pAnnotations) {
+  var rows = [];
+  var numRows = Math.ceil((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length / this.sequenceAnnotator.getBpPerRow()));
+  if (pAnnotations != null) 
+  {
+    for (var j = 0; j < numRows; j++) 
+      {
+        rows.push([]);
+      }
+    var numberOfItems = pAnnotations.length;
+    for (var i = 0; i < numberOfItems; ++i) 
+      {
+        var annotation = pAnnotations[i];
+        var itemStart = annotation.getStart();
+        var itemEnd = annotation.getEnd();
+        if (annotation instanceof Teselagen.bio.enzymes.RestrictionCutSite) 
+        {
+          itemEnd -= 1;
+        }
+        this.pushInRow(itemStart, itemEnd, annotation, rows);
+      }
+  }
+  return rows;
+}, pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows) {
+  var bpPerRow = this.sequenceAnnotator.getBpPerRow();
+  if (pItemStart > pItemEnd) 
+  {
+    var rowStartIndex = Math.floor(pItemStart / bpPerRow);
+    var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1) / bpPerRow);
+    var rowStartIndex2 = 0;
+    var rowEndIndex = Math.round(pItemEnd / this.sequenceAnnotator.getBpPerRow());
+    var rowEndIndex2 = Math.floor(pItemEnd / bpPerRow);
+    for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++) 
+      {
+        pRows[z1].push(pAnnotation);
+      }
+    for (var z2 = rowStartIndex2; z2 < rowEndIndex2 + 1; z2++) 
+      {
+        pRows[z2].push(pAnnotation);
+      }
+  } else {
+    var rowStartIndex = Math.floor(pItemStart / bpPerRow);
+    var rowEndIndex = Math.floor(pItemEnd / bpPerRow);
+    for (var z = rowStartIndex; z < rowEndIndex + 1; z++) 
+      {
+        pRows[z].push(pAnnotation);
+      }
+  }
+  return pRows;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RowManager'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.LineRenderer', Ext.Base, {config: {sequenceMananger: null, svgCanvas: null, panel: null, horizontalLines: null, featureHeight: 10, numFeatures: 2}, constructor: function(inData) {
+  this.initConfig(inData);
+  this.callParent(inData);
+  this.horizontalLines = [];
+}, recalculateLines: function() {
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'LineRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.Rectangle', Ext.Base, {config: {x: 0, y: 0, width: 0, height: 0}, constructor: function(inData) {
+  this.initConfig(inData);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'Rectangle'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.CutSiteRenderer', Ext.Base, {statics: {CURVY_LINE_COLOR: "#FF0000", CURVY_LINE_HEIGHT: 5, CUT_SITE_COLOR: "#625D5D", ONE_CUT_COLOR: "#E57676", MULTIPLE_CUT_COLOR: "#888888", CUTSITE_HEIGHT_OFFSET: 25}, config: {sequenceAnnotator: null, cutSite: []}, sequenceAnnotationManager: null, cutSiteSVG: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
+}, render: function() {
+  this.cutSiteSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "cutSiteSVG");
+  this.cutSiteSVG.append("svg:pattern").attr("id", "curvyLine").attr("width", 5).attr("height", 5).attr("patternUnits", "userSpaceOnUse").append("svg:path").attr("d", "M 0 0 L 2.5 5 L 5 0").attr("stroke", this.self.CURVY_LINE_COLOR).attr("fill", "none");
+  var cutSite = this.cutSite;
+  var cutSiteHeight = this.self.CUTSITE_HEIGHT_OFFSET;
+  var cutSiteRows = this.sequenceAnnotationManager.RowManager.getCutSiteToRowMap().get(cutSite);
+  if (!cutSiteRows) 
+  {
+    return;
+  }
+  var seqLen = this.sequenceAnnotationManager.sequenceManager.getSequence().toString().length;
+  var rowIndex;
+  var startBP;
+  var endBP;
+  var dsForwardPosition;
+  var dsReversePosition;
+  var cutSiteX;
+  var cutSiteY;
+  var currentWidth;
+  var currentHeight;
+  var addToEnd;
+  Ext.each(cutSiteRows, function(rowNumber) {
+  var row = this.sequenceAnnotationManager.RowManager.getRows()[rowNumber];
+  alignmentRowIndex = row.rowData.cutSitesAlignment.get(cutSite);
+  startBP = 0;
+  endBP = 0;
+  addToEnd = false;
+  if (cutSite.getStart() < cutSite.getEnd()) 
+  {
+    if (cutSite.getStart() < row.rowData.getStart() && cutSite.getEnd() <= row.rowData.getStart()) 
+    {
+      return true;
+    } else if (cutSite.getStart() > row.rowData.getEnd() && cutSite.getEnd() > row.rowData.getEnd()) 
+    {
+      return true;
+    } else {
+      if (cutSite.getStart() < row.rowData.getStart()) 
+      {
+        startBP = row.rowData.getStart();
+      } else {
+        startBP = cutSite.getStart();
+      }
+      if (cutSite.getEnd() - 1 < row.rowData.getEnd()) 
+      {
+        endBP = cutSite.getEnd();
+      } else {
+        endBP = row.rowData.getEnd();
+        addToEnd = true;
+      }
+    }
+  } else {
+    if (cutSite.getEnd() >= row.rowData.getStart() && cutSite.getEnd() <= row.rowData.getEnd()) 
+    {
+      endBP = cutSite.getEnd();
+    } else if (row.rowData.getEnd() >= seqLen) 
+    {
+      endBP = seqLen;
+    } else {
+      endBP = row.rowData.getEnd();
+    }
+    if (cutSite.getStart() >= row.rowData.getStart() && cutSite.getStart() <= row.rowData.getEnd()) 
+    {
+      startBP = cutSite.getStart();
+    } else {
+      startBP = row.rowData.getStart();
+    }
+  }
+  if (cutSite.getStrand() == 1) 
+  {
+    dsForwardPosition = cutSite.getStart() + cutSite.getRestrictionEnzyme().getDsForward();
+    dsReversePosition = cutSite.getStart() + cutSite.getRestrictionEnzyme().getDsReverse();
+  } else {
+    dsForwardPosition = cutSite.getEnd() - cutSite.getRestrictionEnzyme().getDsForward();
+    dsReversePosition = cutSite.getEnd() - cutSite.getRestrictionEnzyme().getDsReverse();
+  }
+  if (dsForwardPosition >= seqLen) 
+  {
+    dsForwardPosition -= seqLen;
+  }
+  if (dsReversePosition >= seqLen) 
+  {
+    dsReversePosition -= seqLen;
+  }
+  if (dsForwardPosition < 0) 
+  {
+    dsForwardPosition += seqLen;
+  }
+  if (dsReversePosition < 0) 
+  {
+    dsReversePosition -= seqLen;
+  }
+  if (dsForwardPosition <= row.rowData.getStart() || dsForwardPosition >= row.rowData.getEnd()) 
+  {
+    dsForwardPosition = -1;
+  }
+  if (dsReversePosition <= row.rowData.getStart() || dsReversePosition >= row.rowData.getEnd()) 
+  {
+    dsReversePosition = -1;
+  }
+  cutSiteX = this.sequenceAnnotator.bpMetricsByIndex(startBP).x;
+  cutSiteY = row.metrics.y + alignmentRowIndex * cutSiteHeight;
+  currentWidth = this.sequenceAnnotator.bpMetricsByIndex(endBP).x - cutSiteX - 4;
+  if (addToEnd) 
+  {
+    currentWidth += this.sequenceAnnotator.self.CHAR_WIDTH;
+  }
+  currentHeight = cutSiteHeight;
+  var oneCut = cutSite.getNumCuts() == 1;
+  this.drawName(cutSiteX, cutSiteY + cutSiteHeight, cutSite.getRestrictionEnzyme().getName(), oneCut);
+  if (startBP <= endBP) 
+  {
+    this.drawCurvyLine(cutSiteX, cutSiteY + cutSiteHeight, currentWidth - 2);
+  } else if (endBP >= row.rowData.getStart()) 
+  {
+    this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2);
+    var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
+    var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotator.sequenceManager.sequence.length - 1));
+    var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+    var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.rowData.end, this.sequenceAnnotator.sequenceManager.sequence.length - 1));
+    var cutSiteX1 = bpStartMetrics1.x;
+    var cutSiteY1 = row.metrics.y + alignmentRowIndex * cutSiteHeight;
+    var cutSiteX2 = bpStartMetrics2.x;
+    var cutSiteY2 = cutSiteY1;
+    var currentWidth1 = bpEndMetrics1.x - bpStartMetrics1.x + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+    var currentWidth2 = bpEndMetrics2.x - bpStartMetrics2.x + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+    this.drawCurvyLine(cutSiteX1 + 2, cutSiteY1, currentWidth1 - 2);
+    this.drawCurvyLine(cutSiteX2 + 2, cutSiteY2, currentWidth2 - 2);
+  }
+  if (dsForwardPosition != -1) 
+  {
+    var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
+    var ds1X = dsForwardMetrics.x - 5;
+    var ds1Y = cutSiteY + cutSiteHeight;
+    this.drawDsForwardPosition(ds1X, ds1Y);
+  }
+  if (dsReversePosition != -1) 
+  {
+    var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
+    var ds2X = dsReverseMetrics.x;
+    var ds2Y = cutSiteY + cutSiteHeight + 3;
+    this.drawDsReversePosition(ds2X, ds2Y);
+  }
+  this.addToolTip(cutSite);
+  this.addClickListener(cutSite);
+}, this);
+}, drawName: function(x, y, name, oneCut) {
+  var color;
+  if (oneCut) 
+  {
+    color = this.self.ONE_CUT_COLOR;
+  } else {
+    color = this.self.MULTIPLE_CUT_COLOR;
+  }
+  this.cutSiteSVG.append("svg:text").attr("x", x).attr("y", y - 4).style("fill", color).text(name);
+}, drawCurvyLine: function(x, y, width) {
+  this.cutSiteSVG.append("svg:rect").attr("x", x).attr("y", y).attr("width", width).attr("height", this.self.CURVY_LINE_HEIGHT).attr("fill", "url(#curvyLine)");
+}, drawDsForwardPosition: function(x, y) {
+  this.cutSiteSVG.append("svg:path").attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y - 4) + "L" + (x + 3) + " " + (y - 4)).attr("fill", this.self.CUT_SITE_COLOR);
+}, drawDsReversePosition: function(x, y) {
+  this.cutSiteSVG.append("svg:path").attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y + 4) + "L" + (x + 3) + " " + (y + 4)).attr("fill", this.self.CUT_SITE_COLOR);
+}, addToolTip: function(cutSite) {
+  var complement = ", complement";
+  if (cutSite.getStrand() == 1) 
+  {
+    complement = "";
+  }
+  var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) + complement + ", cuts " + cutSite.getNumCuts() + " times";
+  this.cutSiteSVG.append("svg:title").text(toolTip);
+}, addClickListener: function(cutSite) {
+  this.cutSiteSVG.on("mousedown", function() {
+  Vede.application.fireEvent("AnnotatePanelAnnotationClicked", cutSite.getStart(), cutSite.getEnd());
+});
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'CutSiteRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.FeatureRenderer', Ext.Base, {config: {feature: null, sequenceAnnotationManager: null, sequenceAnnotator: null, topBarY: 20, featureGroupSVG: null, featureColor: null}, statics: {DEFAULT_FEATURE_HEIGHT: 8, DEFAULT_FEATURES_SEQUENCE_GAP: 6, DEFAULT_FEATURES_GAP: 2}, constructor: function(inData) {
+  this.initConfig(inData);
+  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
+  this.sequenceAnnotator = this.sequenceAnnotator;
+}, update: function() {
+}, render: function() {
+  this.featureGroupSVG = this.sequenceAnnotator.featuresSVG.append("svg:g").attr("id", "feature-" + this.feature.getName());
+  this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
+  var g = this.featureGroupSVG;
+  var feature = this.feature;
+  var featureStart = this.feature.getStart();
+  var featureEnd = this.feature.getEnd();
+  g.attr("fill", this.featureColor);
+  var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
+  if (!featureRows) 
+  {
+    return;
+  }
+  for (var i = 0; i < featureRows.length; i++) 
+    {
+      var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
+      var alignmentRowIndex = row.rowData.getFeaturesAlignment().get(feature);
+      var fromSameFeatureIndex = 0;
+      var featuresAlignment = row.getRowData().getFeaturesAlignment();
+      var startBP;
+      var endBP;
+      var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
+      if (this.sequenceAnnotationManager.showComplementarySequence) 
+      {
+        downShift += 4 + this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
+      }
+      if (featureStart > featureEnd) 
+      {
+        if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
+        {
+          endBP = featureEnd - 1;
+        } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length) 
+        {
+        } else {
+          endBP = row.getRowData().getEnd();
+        }
+        if (featureStart >= row.getRowData().getStart() && featureStart < row.getRowData().getEnd()) 
+        {
+          startBP = featureStart;
+        } else {
+          startBP = row.getRowData().getStart();
+        }
+      } else {
+        if (featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()) 
+        {
+          continue;
+        } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()) 
+        {
+          continue;
+        } else {
+          startBP = (featureStart < row.getRowData().getStart()) ? row.getRowData().getStart() : featureStart;
+          endBP = ((featureEnd - 1) < row.getRowData().getEnd()) ? (featureEnd - 1) : row.getRowData().getEnd();
+        }
+      }
+      if (startBP < 0 || endBP < 0) 
+      {
+        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + featureStart + ", ending at " + featureEnd + ", ignoring.");
+        return;
+      }
+      if (startBP > endBP && this.feature.getType() != "misc_feature") 
+      {
+        var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
+        var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
+        var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+        var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
+        var featureX1 = bpStartMetrics1.x + 2;
+        var featureX2 = bpStartMetrics2.x + 2;
+        var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
+        if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
+        {
+          featureYCommon += 3 * 20;
+        }
+        var featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
+        var featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
+        var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
+        if (this.feature.getStrand() === 0) 
+        {
+          drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+          drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+        } else if (this.feature.getStrand() === 1) 
+        {
+          drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+          drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+        } else if (this.feature.getStrand() === -1) 
+        {
+          drawFeatureBackwardRect(g, (featureX1 - 8), featureYCommon, featureRowWidth1, featureRowHeightCommon);
+          drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+        }
+      } else {
+        var bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+        var bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
+        var featureX = bpStartMetrics.x + 2;
+        var featureY = bpStartMetrics.y + downShift;
+        if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
+        {
+          featureY += (3 * 20);
+        }
+        var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 3;
+        var featureRowHeight = 6;
+        if (this.feature.getStrand() == 0) 
+        {
+          drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+        } else if (this.feature.getStrand() == 1) 
+        {
+          if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
+          {
+            drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+          } else {
+            drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+          }
+        } else if (this.feature.getStrand() == -1) 
+        {
+          if (featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()) 
+          {
+            drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+          } else {
+            drawFeatureBackwardRect(g, (featureX - 8), featureY, featureRowWidth, featureRowHeight);
+          }
+        }
+      }
+      for (var j = 0; j < this.feature.getLocations().length; j++) 
+        {
+          var location = this.feature.getLocations()[j];
+          if (location.getStart() > location.getEnd()) 
+          {
+            if (location.getStart() > row.getRowData().getEnd() && location.getEnd() <= row.getRowData().getStart()) 
+            {
+              continue;
+            }
+            if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() <= row.getRowData().getEnd()) 
+            {
+              endBp = location.getEnd() - 1;
+            } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length) 
+            {
+              endBP = this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1;
+            } else {
+              endBP = row.getRowData().getEnd();
+            }
+            if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()) 
+            {
+              startBP = location.getStart();
+            } else {
+              startBP = row.getRowData().getStart();
+            }
+          } else {
+            if (location.getStart() < row.getRowData().getStart() && location.getEnd() <= row.getRowData().getStart()) 
+            {
+              continue;
+            } else if (location.getStart() > row.getRowData().getEnd() && location.getEnd() > row.getRowData().getEnd()) 
+            {
+              continue;
+            } else {
+              startBP = (location.getStart() < row.getRowData().getStart()) ? row.getRowData().getStart() : location.getStart();
+              endBP = (location.getEnd() - 1 < row.getRowData().getEnd()) ? location.getEnd() - 1 : row.getRowData().getEnd();
+            }
+          }
+          if (startBP > endBP && this.feature.getType() != "misc_feature") 
+          {
+            bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
+            bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
+            bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+            bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
+            featureX1 = bpStartMetrics1.x + 2;
+            featureX2 = bpStartMetrics2.x + 2;
+            featureYCommon = bpStartMetrics1.y + downShift;
+            if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
+            {
+              featureYCommon += (3 * 20);
+            }
+            featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
+            featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
+            var featureRowHeightCommon = 6;
+            if (this.feature.getStrand() == 0) 
+            {
+              drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+              drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+            } else if (this.feature.getStrand() == 1) 
+            {
+              drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+              drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+            } else if (this.feature.getStrand() == -1) 
+            {
+              drawFeatureBackwardRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+              drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+            }
+          } else {
+            bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+            bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
+            featureX = bpStartMetrics.x + 2;
+            featureY = bpStartMetrics.y + downShift;
+            if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
+            {
+              featureY += (3 * 20);
+            }
+            featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 10;
+            featureRowHeight = 6;
+            if (this.feature.getStrand() == 0) 
+            {
+              drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+            } else if (this.feature.getStrand() == 1) 
+            {
+              if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1) 
+              {
+                if (featureEnd == location.getEnd()) 
+                {
+                  drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                } else {
+                  drawFeatureForwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                }
+              } else {
+                drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+              }
+            } else if (this.feature.getStrand() == -1) 
+            {
+              if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()) 
+              {
+                if (featureStart == location.getStart()) 
+                {
+                  drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                } else {
+                  drawFeatureBackwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                }
+              } else {
+                drawFeatureBackwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+              }
+            }
+          }
+        }
+      this.addToolTip(this.feature);
+      this.addClickListener(this.feature);
+    }
+  function drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight) {
+    pGraphics.append("svg:rect").attr("x", pX).attr("y", pY + 20).attr("stroke", this.featureColor).attr("width", pWidth).attr("height", 6);
+  }
+  function drawFeatureForwardRect(pGraphics, pX, pY, pWidth, pHeight) {
+    pY += 20;
+    pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) + " L " + (pX + pWidth) + " " + (pY + pHeight) + " L " + (pX + pWidth) + " " + (pY) + " L " + (pX) + " " + (pY));
+  }
+  function drawFeatureBackwardRect(pGraphics, pX, pY, pWidth, pHeight) {
+    pY += 20;
+    pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " L " + (pX) + " " + (pY + pHeight) + " L " + (pX + pWidth) + " " + (pY + pHeight) + " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) + " L " + (pX) + " " + (pY));
+  }
+  function drawFeatureForwardArrow(pGraphics, pX, pY, pWidth, pHeight) {
+    pY += 20;
+    if (pWidth) 
+    {
+      pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " L " + (pX + pWidth - 8) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + " L " + (pX + pWidth - 8) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY + pHeight) + " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
+    } else {
+      pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + " L " + (pX) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY));
+    }
+  }
+  function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight) {
+    pY += 20;
+    if (pWidth) 
+    {
+      pGraphics.append("svg:path").attr("d", " M " + (pX + 8) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY) + " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) + " L " + (pX + 8) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY + pHeight / 2) + " L " + (pX + 8) + " " + (pY));
+    } else {
+      pGraphics.append("svg:path").attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + " L " + (pX + pWidth) + " " + (pY) + " L " + (pX + pWidth) + " " + (pY + pHeight) + " L " + (pX) + " " + (pY + pHeight / 2));
+    }
+  }
+  function drawFeatureForwardCurved(pGraphics, pX, pY, pWidth, pHeight) {
+  }
+  function drawFeatureBackwardCurved(pGraphics, pX, pY, pWidth, pHeight) {
+  }
+}, colorByType: function(type) {
+  var switchObj = {promoter: "#31B440", terminator: "#F51600", cds: "#EF6500", m_rna: "#FFFF00", misc_binding: "#006FEF", misc_feature: "#006FEF", misc_marker: "#8DCEB1", rep_origin: "#878787"};
+  var color = switchObj[type] || "#CCCCCC";
+  return color;
+}, addToolTip: function(feature) {
+  var featureToolTip = this.featureGroupSVG.append("svg:title");
+  var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
+  featureToolTip.text(toolTip);
+}, addClickListener: function(feature) {
+  this.featureGroupSVG.on("mousedown", function() {
+  Vede.application.fireEvent("AnnotatePanelAnnotationClicked", feature.getStart(), feature.getEnd());
+});
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'FeatureRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.ORFRenderer', Ext.Base, {statics: {ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"], ORF_STROKE_WIDTH: 2}, config: {sequenceAnnotator: null, orf: null}, constructor: function(inData) {
+  this.initConfig(inData);
+}, render: function() {
+  this.orfSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "orfSVG");
+  var orf = this.orf;
+  var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap().get(orf);
+  if (!orfRows) 
+  {
+    return;
+  }
+  var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().toString().length;
+  var alignmentRowIndex;
+  var startBP;
+  var endBP;
+  var upShift;
+  Ext.each(orfRows, function(row) {
+  alignmentRowIndex = -1;
+  var row = this.sequenceAnnotator.sequenceAnnotator.RowManager.getRows()[row];
+  Ext.each(row.getRowData().orfAlignment.getKeys(), function(rowOrfs, index) {
+  Ext.each(rowOrfs, function(rowOrf) {
+  if (rowOrf == orf) 
+  {
+    alignmentRowIndex = index;
+    return false;
+  }
+});
+  if (alignmentRowIndex != -1) 
+  {
+    return false;
+  }
+});
+  if (orf.getStart() > orf.getEnd()) 
+  {
+    if (orf.getEnd() >= row.rowData.getStart() && orf.getEnd() <= row.rowData.getEnd()) 
+    {
+      endBP = orf.getEnd() - 1;
+    } else if (row.rowData.getEnd() >= seqLen) 
+    {
+      endBP = seqLen - 1;
+    } else {
+      endBP = row.rowData.getEnd();
+    }
+    if (orf.getStart() >= row.rowData.getStart() && orf.getStart() <= row.rowData.getEnd()) 
+    {
+      startBP = orf.getStart();
+    } else {
+      startBP = row.rowData.getStart();
+    }
+  } else {
+    if (orf.getStart() < row.rowData.getStart()) 
+    {
+      startBP = row.rowData.getStart();
+    } else {
+      startBP = orf.getStart();
+    }
+    if (orf.getEnd() < row.rowData.getEnd()) 
+    {
+      endBP = orf.getEnd() - 1;
+    } else {
+      endBP = row.rowData.getEnd();
+    }
+  }
+  var bpStartPoint = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+  var bpEndPoint = this.sequenceAnnotator.bpMetricsByIndex(endBP);
+  var upShift = alignmentRowIndex * 8 - 6;
+  var color = this.self.ORF_COLOR[orf.getFrame()];
+  var orfY = bpStartPoint.y - upShift;
+  var currentHeight = 6;
+  var textWidth = this.sequenceAnnotator.self.CHAR_WIDTH;
+  if (startBP > endBP) 
+  {
+    var rowStartPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
+    var rowEndPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.end);
+    this.orfSVG.append("svg:path").attr("d", "M" + (rowStartPoint.x + 2) + " " + orfY + "L" + (bpEndPoint.x + bpEndPoint.width) + " " + orfY + "M" + (bpStartPoint.x + 2) + " " + orfY + "L" + (rowEndPoint.x + rowEndPoint.width) + " " + orfY).attr("stroke", color).attr("stroke-width", this.self.ORF_STROKE_WIDTH);
+  } else {
+    this.orfSVG.append("svg:path").attr("d", "M" + (bpStartPoint.x + 2) + " " + orfY + "L" + (bpEndPoint.x + textWidth + 2) + " " + orfY).attr("stroke", color).attr("stroke-width", this.self.ORF_STROKE_WIDTH);
+  }
+  var codonShift = -8;
+  Ext.each(orf.getStartCodons(), function(startCodonIndex) {
+  if (startCodonIndex >= row.rowData.getStart() && startCodonIndex <= row.rowData.end) 
+  {
+    var codonStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startCodonIndex);
+    var codonStartPointX = codonStartMetrics.x;
+    var codonStartPointY = codonStartMetrics.y - upShift;
+    if (orf.getStrand() == -1) 
+    {
+      this.orfSVG.append("svg:circle").attr("cx", codonStartPointX + textWidth + codonShift).attr("cy", codonStartPointY).attr("r", 3.5).attr("fill", color);
+    } else {
+      this.orfSVG.append("svg:circle").attr("cx", codonStartPointX + textWidth + codonShift).attr("cy", codonStartPointY).attr("r", 3.5).attr("fill", color);
+    }
+  }
+}, this);
+  if (orf.getStrand() == 1 && endBP == orf.getEnd() - 1) 
+  {
+    var codonEndPoint1 = this.sequenceAnnotator.bpMetricsByIndex(endBP);
+    var codonEndPointX1 = codonEndPoint1.x + textWidth;
+    var codonEndPointY1 = codonEndPoint1.y - upShift;
+    this.orfSVG.append("svg:path").attr("d", "M" + (codonEndPointX1 - 10) + " " + (codonEndPointY1 - 4) + "L" + codonEndPointX1 + " " + codonEndPointY1 + "L" + (codonEndPointX1 - 10) + " " + (codonEndPointY1 + 4) + "L" + (codonEndPointX1 - 10) + " " + (codonEndPointY1 - 4)).attr("fill", color);
+  } else if (orf.getStrand() == -1 && startBP == orf.getStart()) 
+  {
+    var codonEndPoint2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+    var codonEndPointX2 = codonEndPoint2.x;
+    var codonEndPointY2 = codonEndPoint2.y - upShift;
+    this.orfSVG.append("svg:path").attr("d", "M" + codonEndPointX2 + " " + codonEndPointY2 + "L" + (codonEndPointX2 + 10) + " " + (codonEndPointY2 - 4) + "L" + (codonEndPointX2 + 10) + " " + (codonEndPointY2 + 4) + "L" + codonEndPointX2 + " " + codonEndPointY2).attr("fill", color);
+  }
+  this.addClickListener(orf);
+  this.addToolTip(orf);
+}, this);
+}, addClickListener: function(orf) {
+  var end;
+  if (orf.getStrand() === -1) 
+  {
+    end = orf.getEnd() + 1;
+  } else {
+    end = orf.getEnd();
+  }
+  this.orfSVG.on("mousedown", function() {
+  Vede.application.fireEvent("AnnotatePanelAnnotationClicked", orf.getStart(), end);
+});
+}, addToolTip: function(orf) {
+  var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
+  var aa = Math.floor(bp / 3);
+  var complimentary = "";
+  if (orf.getStrand() == 1 && orf.getStartCodons().length > 1) 
+  {
+    complimentary = ", complimentary";
+  }
+  var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) + ", frame: " + orf.getFrame() + ", length: " + bp + " BP" + ", " + aa + " AA" + complimentary;
+  if (orf.getStartCodons().length > 1) 
+  {
+    tooltipLabel += "\nStart Codons: ";
+    var codonsArray = [];
+    var codonString;
+    Ext.each(orf.getStartCodons(), function(codon, index) {
+  if (index != orf.getStartCodons().length - 1) 
+  {
+    codonString = (codon + 1) + ", ";
+  } else {
+    codonString = codon + 1;
+  }
+  codonsArray.push(codonString);
+});
+    tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
+  }
+  this.orfSVG.append("svg:title").text(tooltipLabel);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'ORFRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.sequenceAnnotationManager = this.sequenceAnnotator;
+  this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
+}, update: function() {
+  this.rows = [];
+  this.numRows = Math.round((Math.ceil(((contentHolder.sequenceProvider.sequence.length + 1) / 50))));
+}, render: function() {
+  var newRows = [];
+  this.aminoAcidsString1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true);
+  this.aminoAcidsString2 = this.sequenceAnnotator.getAaManager().getSequenceFrame(1, true);
+  this.aminoAcidsString3 = this.sequenceAnnotator.getAaManager().getSequenceFrame(2, true);
+  this.aminoAcidsStringRevCom1 = this.sequenceAnnotator.getAaManager().getRevComFrame(0, true);
+  this.aminoAcidsStringRevCom2 = this.sequenceAnnotator.getAaManager().getRevComFrame(1, true);
+  this.aminoAcidsStringRevCom3 = this.sequenceAnnotator.getAaManager().getRevComFrame(2, true);
+  this.totalWidth = 0;
+  this.totalHeight = 0;
+  var sequenceX = 6 * 3;
+  var sequenceY = 0;
+  var sequence = this.sequenceAnnotator.getSequenceManager().getSequence().seqString();
+  var rows = this.sequenceAnnotator.getRowManager().getRows();
+  var sequenceNucleotideMatrix = [];
+  for (var i = 0; i < rows.length; i++) 
+    {
+      var row = rows[i];
+      var rowX = 0;
+      var rowY = this.totalHeight;
+      var sequenceString = "";
+      if (this.sequenceAnnotator.getShowSpaceEvery10Bp()) 
+      {
+        sequenceString += this.splitWithSpaces(row.getRowData().getSequence(), 0, false);
+      } else {
+        sequenceString += row.getRowData().getSequence();
+      }
+      var sequenceStringLength = sequenceString.length;
+      if (this.sequenceAnnotator.getShowCutSites() && row.getRowData().getCutSitesAlignment()) 
+      {
+        if (row.getRowData().getCutSitesAlignment().getCount() > 0) 
+        {
+          this.totalHeight += (Math.max.apply(null, row.getRowData().getCutSitesAlignment().getValues()) + 1) * 30;
+        }
+      }
+      if (this.sequenceAnnotator.getShowOrfs() && row.getRowData().getOrfAlignment()) 
+      {
+        this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
+      }
+      var sequenceX = 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH;
+      var sequenceY = this.totalHeight;
+      if (this.totalWidth < (this.sequenceAnnotationManager.self.CHAR_WIDTH * sequenceStringLength)) 
+      {
+        this.totalWidth = (this.sequenceAnnotationManager.self.CHAR_WIDTH * sequenceStringLength);
+      }
+      this.totalHeight += 20;
+      var sequenceWidth = sequenceStringLength * this.sequenceAnnotationManager.self.CHAR_WIDTH;
+      var sequenceHeight = this.totalHeight - sequenceY;
+      if (this.sequenceAnnotator.getShowAminoAcids()) 
+      {
+        this.renderAA(row);
+        sequenceY += 60;
+      }
+      if (this.sequenceAnnotator.getShowComplementarySequence()) 
+      {
+        this.renderComplementarySequence(row);
+        sequenceHeight = this.totalHeight - sequenceY;
+      }
+      if (this.sequenceAnnotator.showAminoAcidsRevCom) 
+      {
+        this.renderAARevCom(row);
+      }
+      if (this.sequenceAnnotator.showFeatures) 
+      {
+        if (row.getRowData().getFeaturesAlignment() && row.getRowData().getFeaturesAlignment().getCount() > 0) 
+        {
+          this.totalHeight += row.getRowData().getFeaturesAlignment().getCount() * (10) + 2;
+        }
+      }
+      this.totalHeight += 3;
+      var rowWidth = this.totalWidth;
+      var rowHeight = this.totalHeight - rowY;
+      var rowSequence = row.getRowData().getSequence();
+      this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "sequenceSVG").attr("x", sequenceX).attr("y", sequenceY + 20).text(sequenceString);
+      row.metrics.x = rowX;
+      row.metrics.y = rowY;
+      row.metrics.width = rowWidth;
+      row.metrics.height = rowHeight;
+      row.getRowData().sequenceString = sequenceString;
+      var newMetrics = {"x": rowX, "y": rowY, "width": rowWidth, "height": rowHeight};
+      var newSequenceMetrics = {"x": sequenceX, "y": sequenceY, "width": sequenceWidth, "height": sequenceHeight};
+      row.sequenceMetrics.x = sequenceX;
+      row.sequenceMetrics.y = sequenceY;
+      row.sequenceMetrics.width = sequenceWidth;
+      row.sequenceMetrics.height = sequenceHeight;
+      var newRow = Ext.create("Teselagen.models.sequence.Row", {rowData: row.getRowData(), metrics: newMetrics, sequenceMetrics: newSequenceMetrics, index: i});
+      newRows.push(newRow);
+      this.renderBpLabel(row.getRowData().getStart() + 1, rowX + 10, sequenceY + 20);
+    }
+  this.sequenceAnnotator.getRowManager().setRows(newRows);
+  this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll("text").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll(".complementarySequenceSVG").attr("fill", this.self.COMPLEMENTARY_SEQUENCE_FILL);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll(".bpLabelSVG").attr("xml:space", "preserve");
+  this.sequenceAnnotationManager.aminoAcidsSVG.selectAll("text").attr("xml:space", "preserve").attr("fill", "blue").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+}, getUpdatedRows: function() {
+  return this.sequenceAnnotator.getRowManager().getRows();
+}, splitWithSpaces: function(pString, pShift, pSplitLast) {
+  var result = "";
+  var stringLength = pString.length;
+  if (stringLength <= 10 - pShift) 
+  {
+    result += pString;
+  } else {
+    var start = 0;
+    var end = 10 - pShift;
+    while (start < stringLength) 
+      {
+        result += pString.substring(start, end);
+        start = end;
+        end += 10;
+        if (end <= this.sequenceAnnotator.getBpPerRow()) 
+        {
+          result += " ";
+        }
+      }
+  }
+  return result;
+}, renderAA: function(row) {
+  var baseStart;
+  var aaStart = [];
+  var aaEnd = [];
+  var leadingFrame;
+  var aaPadding = [];
+  var frontOffsets = [];
+  var start = row.getRowData().getStart();
+  var end = row.getRowData().getEnd();
+  leadingFrame = start % 3;
+  aaPadding[leadingFrame] = 0;
+  aaPadding[(leadingFrame + 1) % 3] = 1;
+  aaPadding[(leadingFrame + 2) % 3] = 2;
+  if (leadingFrame === 0) 
+  {
+    frontOffsets = [0, 0, 0];
+  } else if (leadingFrame === 2) 
+  {
+    frontOffsets = [1, 1, 0];
+  } else {
+    frontOffsets = [1, 0, 0];
+  }
+  baseStart = Math.floor(start / 3) * 2;
+  aaStart[0] = baseStart + frontOffsets[0] * 2;
+  aaStart[1] = baseStart + frontOffsets[1] * 2;
+  aaStart[2] = baseStart + frontOffsets[2] * 2;
+  aaEnd[leadingFrame] = aaStart[leadingFrame] + Math.ceil((end - start + 1) / 3) * 2;
+  aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + Math.ceil((end - start) / 3) * 2;
+  aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + Math.ceil((end - start - 1) / 3) * 2;
+  var aminoAcids1 = this.aminoAcidsString1.substring(aaStart[0], aaEnd[0]);
+  var aminoAcids2 = this.aminoAcidsString2.substring(aaStart[1], aaEnd[1]);
+  var aminoAcids3 = this.aminoAcidsString3.substring(aaStart[2], aaEnd[2]);
+  aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
+  aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
+  aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
+  if (this.sequenceAnnotator.showSpaceEvery10Bp) 
+  {
+    aminoAcids1 = this.splitWithSpaces(aminoAcids1, aaPadding[0], false);
+    aminoAcids2 = this.splitWithSpaces(aminoAcids2, aaPadding[1], false);
+    aminoAcids3 = this.splitWithSpaces(aminoAcids3, aaPadding[2], false);
+  }
+  var verticalOffset = 0;
+  if (row.getRowData().getOrfAlignment()) 
+  {
+    verticalOffset = row.getRowData().getOrfAlignment().getCount() * 8;
+  }
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids1);
+  this.totalHeight += 20;
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids2);
+  this.totalHeight += 20;
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids3);
+  this.totalHeight += 20;
+}, renderAARevCom: function(row) {
+  var baseStart;
+  var aaStart = [];
+  var aaEnd = [];
+  var leadingFrame;
+  var aaOffsets = [];
+  var aaPadding = [];
+  var frontOffsets = [];
+  var seqLen = this.sequenceAnnotator.getSequenceManager().getSequence().toString().length;
+  var start = seqLen - row.getRowData().getEnd() - 1;
+  var end = seqLen - row.getRowData().getStart() - 1;
+  leadingFrame = Math.abs(start) % 3;
+  if (leadingFrame === 0) 
+  {
+    frontOffsets = [0, 0, 0];
+  } else if (leadingFrame === 2) 
+  {
+    frontOffsets = [1, 1, 0];
+  } else {
+    frontOffsets = [1, 0, 0];
+  }
+  baseStart = Math.floor(start / 3) * 2;
+  aaStart[0] = baseStart + frontOffsets[0] * 2;
+  aaStart[1] = baseStart + frontOffsets[1] * 2;
+  aaStart[2] = baseStart + frontOffsets[2] * 2;
+  if (row.getIndex() !== this.sequenceAnnotator.getRowManager().getRows().length - 1) 
+  {
+    aaEnd[leadingFrame] = aaStart[leadingFrame] + Math.ceil((end - start + 1) / 3) * 2;
+    aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + Math.ceil((end - start) / 3) * 2;
+    aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + Math.ceil((end - start - 1) / 3) * 2;
+  } else {
+    aaEnd[0] = Math.ceil(row.getRowData().getSequence().length / 3) * 2;
+    aaEnd[1] = Math.ceil((row.getRowData().getSequence().length - 1) / 3) * 2;
+    aaEnd[2] = Math.ceil((row.getRowData().getSequence().length - 2) / 3) * 2;
+  }
+  var aminoAcids1 = this.aminoAcidsStringRevCom1.substring(aaStart[0], aaEnd[0]);
+  var aminoAcids2 = this.aminoAcidsStringRevCom2.substring(aaStart[1], aaEnd[1]);
+  var aminoAcids3 = this.aminoAcidsStringRevCom3.substring(aaStart[2], aaEnd[2]);
+  aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
+  aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
+  aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
+  var acids = [aminoAcids1, aminoAcids2, aminoAcids3];
+  aaPadding[leadingFrame] = end - start + 1 - acids[leadingFrame].length;
+  aaPadding[(leadingFrame + 1) % 3] = end - start - acids[(leadingFrame + 1) % 3].length;
+  aaPadding[(leadingFrame + 2) % 3] = end - start - 1 - acids[(leadingFrame + 2) % 3].length;
+  if (row.getIndex() === this.sequenceAnnotator.getRowManager().getRows().length - 1) 
+  {
+    var rowLength = row.getRowData().getSequence().length;
+    var extraBases = 0;
+    if (this.sequenceAnnotator.showSpaceEvery10Bp) 
+    {
+      extraBases = 10 - rowLength % 10;
+    }
+    aaPadding[0] = rowLength - 1 - aminoAcids1.length;
+    aaPadding[1] = rowLength - 2 - aminoAcids2.length;
+    aaPadding[2] = rowLength - 3 - aminoAcids3.length;
+    aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0 + extraBases, false).split("").reverse().join("");
+    aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1 + extraBases, false).split("").reverse().join("");
+    aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2 + extraBases, false).split("").reverse().join("");
+    aminoAcids1 = aminoAcids1.replace(/^\s{2,}/, "   ");
+    aminoAcids2 = aminoAcids2.replace(/^\s{2,}/, "   ");
+    aminoAcids3 = aminoAcids3.replace(/^\s{2,}/, "   ");
+  } else if (this.sequenceAnnotator.showSpaceEvery10Bp) 
+  {
+    aaOffsets[leadingFrame] = 0;
+    aaOffsets[(leadingFrame + 1) % 3] = 1;
+    aaOffsets[(leadingFrame + 2) % 3] = 2;
+    aminoAcids1 = this.splitWithSpaces(aminoAcids1, aaOffsets[0], false).split("").reverse().join("");
+    aminoAcids2 = this.splitWithSpaces(aminoAcids2, aaOffsets[1], false).split("").reverse().join("");
+    aminoAcids3 = this.splitWithSpaces(aminoAcids3, aaOffsets[2], false).split("").reverse().join("");
+  } else {
+    aminoAcids1 = aminoAcids1.split("").reverse().join("");
+    aminoAcids2 = aminoAcids2.split("").reverse().join("");
+    aminoAcids3 = aminoAcids3.split("").reverse().join("");
+  }
+  var verticalOffset = 15;
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids1);
+  this.totalHeight += 20;
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids2);
+  this.totalHeight += 20;
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids3);
+  this.totalHeight += 20;
+}, renderComplementarySequence: function(row) {
+  var sequenceString = ["      "];
+  var stringLength;
+  if (this.sequenceAnnotator.showSpaceEvery10Bp) 
+  {
+    sequenceString = sequenceString.concat([this.splitWithSpaces(row.rowData.oppositeSequence, 0, false)]);
+  } else {
+    sequenceString = sequenceString.concat([row.rowData.oppositeSequence]);
+  }
+  sequenceString = sequenceString.join("");
+  stringLength = sequenceString.length;
+  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "complementarySequenceSVG").attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + this.self.COMPLEMENTARY_VERTICAL_OFFSET).text(sequenceString);
+  this.totalHeight += 20;
+}, renderIndexString: function(pIndex) {
+  var result = String(pIndex);
+  if (pIndex < 10) 
+  {
+    result = "   " + result;
+  } else if (pIndex < 100) 
+  {
+    result = "  " + result;
+  } else if (pIndex < 1000) 
+  {
+    result = " " + result;
+  } else if (pIndex < 10000) 
+  {
+    result = "" + result;
+  }
+  return result;
+}, renderBpLabel: function(basePairs, labelX, labelY) {
+  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "bpLabelSVG").attr("x", labelX).attr("y", labelY).text(this.renderIndexString(basePairs));
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SequenceRenderer'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.annotate.Annotator', Ext.draw.Component, {statics: {CHAR_WIDTH: 9}, autoScroll: true, config: {sequenceAnnotator: null, sequenceSVG: null, annotateSVG: null, bpLabelsSVG: null, linesSVG: null, featureRenderers: null, cutSiteRenderers: null, orfRenderers: null, sequenceRenderer: null, yMax: null, xMax: null, id: null, panel: null, dirty: false, featureRows: 2, BP_PER_LINE: 60, bpPerRow: 60, aminoSequencesShown: 5}, constructor: function(inData) {
+  this.callParent([inData]);
+  this.initConfig(inData);
+  this.id = "AnnotationSurface";
+  if (Ext.isGecko) 
+  {
+    this.self.CHAR_WIDTH = 7.25;
+  }
+  this.sequenceAnnotator = inData.sequenceAnnotator;
+  this.createSequenceRenderer();
 }, init: function() {
+  this.annotateSVG = d3.select("#AnnotateContainer").append("svg:svg").attr("id", "annotateSVG");
+  this.linesSVG = this.annotateSVG.append("svg:g").attr("id", "linesSVG");
+  this.sequenceSVG = this.annotateSVG.append("svg:g").attr("id", "sequenceSVG");
+  this.bpLabelsSVG = this.annotateSVG.append("svg:g").attr("id", "bpLabelsSVG");
+  this.aminoAcidsSVG = this.annotateSVG.append("svg:g").attr("id", "aminoAcidsSVG");
+  this.featuresSVG = this.annotateSVG.append("svg:g").attr("id", "featuresSVG");
+}, sequenceChanged: function() {
+}, render: function() {
+  Ext.suspendLayouts();
+  this.clean();
+  this.panel = Ext.getCmp('AnnotatePanel');
+  this.xMax = this.panel.getBox().width;
+  this.yMax = this.panel.getBox().height;
+  var x1 = 10;
+  var y = 20;
+  if (this.sequenceAnnotator.getSequenceManager()) 
+  {
+    this.renderSequence();
+    this.drawSplitLines();
+    d3.selectAll("#cutSiteSVG").remove();
+    d3.selectAll("#orfSVG").remove();
+    if (this.sequenceAnnotator.getShowFeatures()) 
+    {
+      this.loadFeatureRenderers();
+      this.renderFeatures();
+    }
+    if (this.sequenceAnnotator.getShowCutSites()) 
+    {
+      this.loadCutSiteRenderers();
+      this.renderCutSites();
+    }
+    if (this.sequenceAnnotator.getShowOrfs()) 
+    {
+      this.loadOrfRenderers();
+      this.renderOrfs();
+    }
+    this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
+    this.annotateSVG.attr("width", this.sequenceRenderer.getTotalWidth() + 60);
+  }
+  Ext.resumeLayouts(true);
+}, loadFeatureRenderers: function() {
+  this.removeFeatureRenderers();
+  var retrievedFeatures = this.sequenceAnnotator.getSequenceManager().getFeatures();
+  if (!this.sequenceAnnotator.getShowFeatures() || !retrievedFeatures) 
+  {
+    return;
+  }
+  var that = this;
+  for (var i = 0; i < retrievedFeatures.length; i++) 
+    {
+      var feature = retrievedFeatures[i];
+      var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {sequenceAnnotator: that, feature: feature});
+      this.featureRenderers.push(featureRenderer);
+    }
+}, removeFeatureRenderers: function() {
+  this.featureRenderers = [];
+}, loadCutSiteRenderers: function() {
+  this.removeCutSiteRenderers();
+  var retrievedCutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
+  if (!this.sequenceAnnotator.getShowCutSites() || !retrievedCutSites) 
+  {
+    return;
+  }
+  var that = this;
+  Ext.each(retrievedCutSites, function(site) {
+  var cutSiteRenderer = Ext.create("Teselagen.renderer.annotate.CutSiteRenderer", {sequenceAnnotator: this, cutSite: site});
+  this.cutSiteRenderers.push(cutSiteRenderer);
+}, this);
+}, removeCutSiteRenderers: function() {
+  this.setCutSiteRenderers([]);
+}, loadOrfRenderers: function() {
+  this.removeOrfRenderers();
+  var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
+  if (!this.sequenceAnnotator.getShowOrfs() || !retrievedOrfs) 
+  {
+    return;
+  }
+  Ext.each(retrievedOrfs, function(orf) {
+  var orfRenderer = Ext.create("Teselagen.renderer.annotate.ORFRenderer", {sequenceAnnotator: this, orf: orf});
+  this.orfRenderers.push(orfRenderer);
+}, this);
+}, removeOrfRenderers: function() {
+  this.setOrfRenderers([]);
+}, bpMetricsByIndex: function(pIndex) {
+  if (!this.isValidIndex(pIndex)) 
+  {
+    return null;
+    throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
+  }
+  var row = this.rowByBpIndex(pIndex);
+  var resultsMetrics;
+  if (row == null) 
+  {
+    throw new Error("Can't get bp point for index: " + String(pIndex));
+  } else {
+    var numberOfCharacters = pIndex - row.getIndex() * this.sequenceAnnotator.getBpPerRow();
+    if (this.sequenceAnnotator.showSpaceEvery10Bp) 
+    {
+      numberOfCharacters += Math.floor(numberOfCharacters / 10);
+    }
+    var bpX = row.getSequenceMetrics().x + numberOfCharacters * this.self.CHAR_WIDTH;
+    var bpY = row.getSequenceMetrics().y;
+    resultsMetrics = {x: bpX, y: bpY, width: 2, height: 3};
+  }
+  return resultsMetrics;
+}, rowByBpIndex: function(pIndex) {
+  if (!this.isValidIndex(pIndex)) 
+  {
+    return null;
+    throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
+  }
+  return this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex / this.sequenceAnnotator.getBpPerRow())];
+}, isValidIndex: function(pIndex) {
+  return pIndex >= 0 && pIndex <= this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length;
+}, renderSequence: function() {
+  this.sequenceRenderer.render();
+}, renderFeatures: function() {
+  if (this.sequenceAnnotator.getShowFeatures()) 
+  {
+    for (var i = 0; i < this.featureRenderers.length; ++i) 
+      {
+        var featureRenderer = this.featureRenderers[i];
+        featureRenderer.render();
+      }
+  }
+}, renderCutSites: function() {
+  if (this.sequenceAnnotator.getShowCutSites()) 
+  {
+    Ext.each(this.cutSiteRenderers, function(renderer) {
+  renderer.render();
+});
+  }
+}, renderOrfs: function() {
+  if (this.sequenceAnnotator.getShowOrfs()) 
+  {
+    Ext.each(this.orfRenderers, function(renderer) {
+  renderer.render();
+});
+  }
+}, drawSplitLines: function() {
+  var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
+  for (var i = 0; i < rows.length; ++i) 
+    {
+      var row = rows[i];
+      if (i != rows.length) 
+      {
+        var rowSequenceMetrics = row.getSequenceMetrics();
+        var rowMetrics = row.getMetrics();
+        this.linesSVG.append("svg:line").attr("x1", rowMetrics.x).attr("y1", rowMetrics.y).attr("x2", rowMetrics.x + (row.getRowData().getSequence().length * 20)).attr("y2", rowMetrics.y).attr("stroke", "lightgray");
+      }
+    }
+}, createSequenceRenderer: function() {
+  if (this.sequenceRenderer == null) 
+  {
+    this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.SequenceRenderer", {sequenceAnnotator: this});
+  }
+}, clean: function() {
+  d3.select("#linesSVG").remove();
+  this.linesSVG = this.annotateSVG.append("svg:g").attr("id", "linesSVG");
+  d3.select("#sequenceSVG").remove();
+  this.sequenceSVG = this.annotateSVG.append("svg:g").attr("id", "sequenceSVG");
+  d3.select("#bpLabelsSVG").remove();
+  this.bpLabelsSVG = this.annotateSVG.append("svg:g").attr("id", "bpLabelsSVG");
+  d3.select("#aminoAcidsSVG").remove();
+  this.aminoAcidsSVG = this.annotateSVG.append("svg:g").attr("id", "aminoAcidsSVG");
+  d3.select("#featuresSVG").remove();
+  this.featuresSVG = this.annotateSVG.append("svg:g").attr("id", "featuresSVG");
+}}, 1, ["annotator"], ["draw", "component", "box", "annotator"], {"draw": true, "component": true, "box": true, "annotator": true}, ["widget.annotator"], 0, [Vede.view.annotate, 'Annotator'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.annotate.Caret', Ext.Base, {statics: {CARET_COLOR: "#000000", CARET_WIDTH: 1, TIMER_REFRESH_SPEED: "1s", SINGLE_HEIGHT: 20, DOUBLE_HEIGHT: 40}, config: {position: 0, height: 40, sequenceAnnotator: null}, caretSVG: null, constructor: function(pConfig) {
+  this.initConfig(pConfig);
+}, render: function() {
+  d3.selectAll("#caretSVG").remove();
+  this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "caretSVG");
+  var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
+  if (location) 
+  {
+    this.caretSVG.append("svg:path").attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + "L" + (location.x - 1) + " " + (location.y + this.height)).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH).append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite");
+  }
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.annotate, 'Caret'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.SequenceAnnotationManager', Ext.Base, {config: {sequenceManager: null, orfManager: null, aaManager: null, restrictionEnzymeManager: null, highlights: null, features: null, contentHolder: null, annotator: null, readOnly: null, showFeatures: true, showCutSites: false, showOrfs: false, showComplementarySequence: true, showSpaceEvery10Bp: true, showAminoAcids: false, showAminoAcidsRevCom: false, bpPerRow: 60, sequenceFontSize: 11, labelFontSize: 10, sequenceManagerChanged: false, orfManagerChanged: false, aaManagerChanged: false, restrictionEnzymeManagerChanged: false, bpPerRowChanged: false, sequenceFontSizeChanged: false, labelFontSizeChanged: false, showFeaturesChanged: false, showCutSitesChanged: false, showOrfsChanged: false, showComplementarySequenceChanged: false, showSpaceEvery10BpChanged: false, showAminoAcidsChanged: false, showAminoAcidsRevComChanged: false, editingMode: false, floatingWidthChanged: false, lineRenderer: null, sequenceRenderer: null, complementRenderer: null, renderers: null, RowManager: null}, renderers: [], caret: null, statics: {DEFAULT_BP_PER_ROW: 60}, constructor: function(inData) {
+  this.initConfig(inData);
+  var that = this;
+  this.lineRenderer = Ext.create("Teselagen.renderer.annotate.LineRenderer");
+  this.RowManager = Ext.create("Teselagen.manager.RowManager", {sequenceAnnotator: that});
+  this.annotator = Ext.create("Vede.view.annotate.Annotator", {sequenceAnnotator: that});
+  this.caret = Ext.create("Vede.view.annotate.Caret", {sequenceAnnotator: that.annotator});
+}, setSequenceManager: function(pSeqMan) {
+  this.sequenceManager = pSeqMan;
+  this.RowManager.setSequenceAnnotator(this);
+  this.RowManager.update();
+  this.aaManager.setSequenceManager(this.sequenceManager);
+  this.features = this.sequenceManager.getFeatures();
+  Ext.suspendLayouts();
+  this.annotator.setSequenceAnnotator(this);
+  this.annotator.render();
+  this.caret.render();
+  Ext.resumeLayouts(true);
+}, render: function() {
+  this.RowManager.update();
+  this.annotator.render();
+  this.caret.setPosition(this.caret.getPosition());
+  this.caret.render();
+}, sequenceChanged: function() {
+  this.RowManager.setSequenceAnnotator(this);
+  this.RowManager.update();
+  this.aaManager.setSequenceManager(this.sequenceManager);
+  this.features = this.sequenceManager.getFeatures();
+  this.annotator.setSequenceAnnotator(this);
+  this.annotator.render();
+}, adjustCaret: function(index) {
+  this.caret.setPosition(index);
+  this.caret.render();
+}, bpAtPoint: function(x, y) {
+  var numberOfRows = this.RowManager.rows.length;
+  var bpIndex = -1;
+  for (var i = 0; i < numberOfRows; i++) 
+    {
+      var row = this.RowManager.rows[i];
+      if ((y >= row.metrics.y) && (y <= row.metrics.y + row.metrics.height)) 
+      {
+        bpIndex = i * this.bpPerRow;
+        if (x < row.sequenceMetrics.x) 
+        {
+        } else if (x > row.sequenceMetrics.x + row.sequenceMetrics.width) 
+        {
+          bpIndex += row.rowData.sequence.length;
+        } else {
+          var numberOfCharactersFromBeginning = Math.floor((x - row.sequenceMetrics.x + 15 / 2) / this.annotator.self.CHAR_WIDTH);
+          var numberOfSpaces = 0;
+          if (this.showSpaceEvery10Bp) 
+          {
+            numberOfSpaces = Math.floor(numberOfCharactersFromBeginning / 11);
+          }
+          var numberOfValidCharacters = numberOfCharactersFromBeginning - numberOfSpaces;
+          bpIndex += numberOfValidCharacters;
+        }
+        break;
+      }
+    }
+  return bpIndex;
+}, applySequenceManager: function(pSeqMan) {
+  if (this.SequenceManager !== pSeqMan) 
+  {
+    this.sequenceManagerChanged = true;
+  }
+  return pSeqMan;
+}, applyBpPerRow: function(pBpPerRow) {
+  if (this.bpPerRow !== pBpPerRow) 
+  {
+    this.bpPerRowChanged = true;
+  }
+  return pBpPerRow;
+}, applyShowFeatures: function(pShow) {
+  if (this.showFeatures !== pShow) 
+  {
+    this.showFeaturesChanged = true;
+  }
+  return pShow;
+}, applyShowCutSites: function(pShow) {
+  if (this.showCutSites !== pShow) 
+  {
+    this.showCutSitesChanged = true;
+  }
+  return pShow;
+}, applyShowOrfs: function(pShow) {
+  if (this.showOrfs !== pShow) 
+  {
+    this.showOrfsChanged = true;
+  }
+  return pShow;
+}, applyShowComplementarySequence: function(pShow) {
+  if (this.showComplementarySequence !== pShow) 
+  {
+    this.showComplementarySequenceChanged = true;
+    if (this.caret) 
+    {
+      if (pShow) 
+      {
+        this.caret.setHeight(this.caret.self.DOUBLE_HEIGHT);
+        this.caret.setPosition(this.caret.getPosition());
+        this.caret.render();
+      } else {
+        this.caret.setHeight(this.caret.self.SINGLE_HEIGHT);
+        this.caret.setPosition(this.caret.getPosition());
+        this.caret.render();
+      }
+    }
+  }
+  return pShow;
+}, applyShowSpaceEvery10Bp: function(pShow) {
+  if (this.showSpaceEvery10Bp !== pShow) 
+  {
+    this.showSpaceEvery10BpChanged = true;
+  }
+  return pShow;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SequenceAnnotationManager'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.HighlightLayer', Ext.Base, {statics: {HIGHLIGHT_COLOR: "#009900", HIGHLIGHT_TRANSPARENCY: 0.3}, config: {sequenceManager: null, sequenceAnnotator: null}, highlightSVG: null, sequenceAnnotationManager: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
+}, addHighlight: function(fromIndex, toIndex) {
+  if (fromIndex < 0 || toIndex < 0) 
+  {
+    return;
+  }
+  if (!this.highlightSVG) 
+  {
+    this.highlightSVG = d3.select("#annotateSVG").append("svg:g").attr("id", "highlightSVG");
+  }
+  if (fromIndex > toIndex) 
+  {
+    this.drawHighlight(0, toIndex);
+    this.drawHighlight(fromIndex, this.sequenceManager.getSequence().toString().length);
+  } else {
+    this.drawHighlight(fromIndex, toIndex);
+  }
+}, addAllHighlights: function(indices) {
+  Ext.each(indices, function(index) {
+  this.addHighlight(index.start, index.end);
+}, this);
+}, clearHighlights: function() {
+  if (this.highlightSVG) 
+  {
+    d3.selectAll("#highlightSVG").remove();
+    this.highlightSVG = null;
+  }
+}, drawHighlight: function(fromIndex, toIndex) {
+  var startRow = this.sequenceAnnotator.rowByBpIndex(fromIndex);
+  var endRow = this.sequenceAnnotator.rowByBpIndex(toIndex);
+  if (startRow.getIndex() === endRow.getIndex()) 
+  {
+    this.createHighlightSVG(fromIndex, toIndex);
+  } else if (startRow.getIndex() + 1 <= endRow.getIndex()) 
+  {
+    this.createHighlightSVG(fromIndex, startRow.rowData.getEnd(), true);
+    for (var i = startRow.getIndex() + 1; i < endRow.getIndex(); i++) 
+      {
+        var rowData = this.sequenceAnnotationManager.RowManager.rows[i].rowData;
+        this.createHighlightSVG(rowData.getStart(), rowData.getEnd(), true);
+      }
+    this.createHighlightSVG(endRow.rowData.getStart(), toIndex);
+  }
+}, createHighlightSVG: function(startIndex, endIndex, lastBaseInRow) {
+  var row = this.sequenceAnnotator.rowByBpIndex(startIndex);
+  var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(startIndex);
+  var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(endIndex);
+  if (lastBaseInRow) 
+  {
+    endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
+  }
+  d3.select("#highlightSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 4).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 4).attr("fill", this.self.HIGHLIGHT_COLOR).attr("fill-opacity", this.self.HIGHLIGHT_TRANSPARENCY);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'HighlightLayer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.annotate.SelectionLayer', Ext.Base, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, HANDLE_WIDTH: 9, HANDLE_HEIGHT: 16}, config: {sequenceManager: null, sequenceAnnotator: null}, SelectionLayerEvent: null, sequenceAnnotationManager: null, start: -1, end: -1, selected: false, selecting: false, selectionSVG: null, leftHandleSVG: null, rightHandleSVG: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
+  this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
+}, select: function(fromIndex, toIndex) {
+  if (fromIndex === this.start && toIndex === this.end && this.start !== -1 && this.end !== -1 || fromIndex == toIndex) 
+  {
+    return;
+  }
+  this.selected = false;
+  d3.selectAll("#selectionSVG").remove();
+  this.selectionSVG = d3.select("#annotateSVG").append("svg:g").attr("id", "selectionSVG");
+  if (fromIndex > toIndex) 
+  {
+    this.drawSelection(0, toIndex);
+    this.drawSelection(fromIndex, this.sequenceManager.getSequence().toString().length);
+  } else {
+    this.drawSelection(fromIndex, toIndex);
+  }
+  this.start = fromIndex;
+  this.end = toIndex;
+  this.selected = true;
+}, deselect: function() {
+  this.start = -1;
+  this.end = -1;
+  this.selected = false;
+  this.selecting = false;
+  d3.selectAll("#selectionSVG").remove();
+  this.hideHandles();
+}, refresh: function() {
+  var selectionStart;
+  var selectionEnd;
+  if (this.start > -1 && this.end > -1) 
+  {
+    selectionStart = this.start;
+    selectionEnd = this.end;
+    this.deselect();
+    this.select(selectionStart, selectionEnd);
+  }
+}, startSelecting: function() {
+  this.selecting = true;
+  this.hideHandles();
+}, endSelecting: function() {
+  this.selecting = false;
+}, onMouseover: function() {
+  if (!this.selecting && this.selected) 
+  {
+  }
+}, onMouseout: function(event) {
+  if (!this.selecting && this.selected) 
+  {
+  }
+}, showHandles: function() {
+  var leftMetrics = this.sequenceAnnotator.bpMetricsByIndex(this.start);
+  var rightMetrics = this.sequenceAnnotator.bpMetricsByIndex(this.end);
+  var startRow = this.sequenceAnnotator.rowByBpIndex(this.start);
+  var endRow = this.sequenceAnnotator.rowByBpIndex(this.end);
+  var that = this;
+  this.leftHandleSVG = d3.select("#selectionSVG").append("svg:image").attr("id", "leftHandleSVG").attr("xlink:href", "app/teselagen/renderer/annotate/assets/handle.png").attr("width", this.self.HANDLE_WIDTH).attr("height", this.self.HANDLE_HEIGHT).attr("x", leftMetrics.x - this.self.HANDLE_WIDTH / 2).attr("y", leftMetrics.y + startRow.sequenceMetrics.height / 2 - this.self.HANDLE_HEIGHT / 2);
+  this.rightHandleSVG = d3.select("#selectionSVG").append("svg:image").attr("id", "rightHandleSVG").attr("xlink:href", "app/teselagen/renderer/annotate/assets/handle.png").attr("width", this.self.HANDLE_WIDTH).attr("height", this.self.HANDLE_HEIGHT).attr("x", rightMetrics.x - this.self.HANDLE_WIDTH / 2).attr("y", rightMetrics.y + endRow.sequenceMetrics.height / 2 - this.self.HANDLE_HEIGHT / 2);
+}, hideHandles: function() {
+  d3.selectAll("#leftHandleSVG").remove();
+  d3.selectAll("#rightHandleSVG").remove();
+}, drawSelection: function(fromIndex, toIndex) {
+  var startRow = this.sequenceAnnotator.rowByBpIndex(fromIndex);
+  var endRow = this.sequenceAnnotator.rowByBpIndex(toIndex);
+  if (!startRow || !endRow) 
+  {
+    this.deselect();
+    return;
+  }
+  if (startRow.getIndex() === endRow.getIndex()) 
+  {
+    this.drawRowSelectionRect(fromIndex, toIndex);
+  } else if (startRow.getIndex() + 1 <= endRow.getIndex()) 
+  {
+    this.drawRowSelectionRect(fromIndex, startRow.rowData.getEnd(), true);
+    for (var i = startRow.getIndex() + 1; i < endRow.getIndex(); i++) 
+      {
+        var rowData = this.sequenceAnnotationManager.RowManager.rows[i].rowData;
+        this.drawRowSelectionRect(rowData.getStart(), rowData.getEnd(), true);
+      }
+    this.drawRowSelectionRect(endRow.rowData.getStart(), toIndex);
+  }
+  var that = this;
+  var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(fromIndex);
+  d3.select("#selectionSVG").append("svg:rect").attr("id", "selectionRectangle").attr("x", startMetrics.x - 10).attr("y", startMetrics.y).attr("width", 20).attr("height", this.sequenceAnnotationManager.caret.height).attr("fill-opacity", 0).on("mousedown", function(e) {
+  Vede.application.fireEvent(that.SelectionLayerEvent.HANDLE_CLICKED, "left");
+});
+  var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(toIndex);
+  d3.select("#selectionSVG").append("svg:rect").attr("id", "selectionRectangle").attr("x", endMetrics.x - 10).attr("y", endMetrics.y).attr("width", 20).attr("height", this.sequenceAnnotationManager.caret.height).attr("fill-opacity", 0).on("mousedown", function(e) {
+  Vede.application.fireEvent(that.SelectionLayerEvent.HANDLE_CLICKED, "right");
+});
+}, drawRowSelectionRect: function(startIndex, endIndex, lastBaseInRow) {
+  var row = this.sequenceAnnotator.rowByBpIndex(startIndex);
+  var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(startIndex);
+  var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(endIndex);
+  if (lastBaseInRow) 
+  {
+    endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
+  }
+  d3.select("#selectionSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 4).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 4).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SelectionLayer'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.AnnotatePanelController', Vede.controller.VectorEditor.SequenceController, {statics: {MIN_BP_PER_ROW: 20}, AnnotatePanel: null, SequenceAnnotationManager: null, HighlightLayer: null, startHandleResizing: false, endHandleResizing: false, endSelectionIndex: null, init: function() {
   this.callParent();
-  this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
-  this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
-  this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
-  this.application.on("jumpToJ5Run", this.onJumpToJ5Run, this);
-  this.control({"button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {click: this.onDeviceEditorSaveEvent}, "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {click: this.onDeviceEditorDeleteBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {click: this.onDeviceEditorRenameBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {click: this.onImportEugeneRulesBtnClick}, "button[cls='insertMenu'] > menu > menuitem[text='Row']": {click: this.onAddRowClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {click: this.onAddColumnLeftClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {click: this.onAddColumnRightClick}, "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {click: this.onclearPartMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {click: this.onRemoveColumnMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Row']": {click: this.onRemoveRowMenuItemClick}, "button[cls='examplesMenu'] > menu > menuitem": {click: this.onOpenExampleItemBtnClick}, "button[cls='j5button']": {click: this.onJ5buttonClick}});
-  this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-  this.DeviceEvent = Teselagen.event.DeviceEvent;
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'DeviceEditorPanelController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.AuthEventDispatcherController', Ext.app.Controller, {dispatchLoggedInEvent: function() {
-}, init: function() {
-  this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.dispatchLoggedInEvent, this);
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AuthEventDispatcherController'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.ProjectController', Ext.app.Controller, {openProject: function(project) {
-  Teselagen.manager.ProjectManager.openProject(project);
-}, loadProjectTree: function(cb) {
-  var self = this;
-  var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
-  rootNode.removeAll();
-  rootNode.appendChild({text: "Create project", leaf: true, hrefTarget: "newproj", icon: "resources/images/add.png"});
-  var projects = Teselagen.manager.ProjectManager.projects;
-  projects.each(function(project) {
-  var projectNode = rootNode.appendChild({text: project.data.name, id: project.data.id, hrefTarget: "openproj"});
-  projectNode.appendChild({text: "Create design", leaf: true, hrefTarget: "newde", icon: "resources/images/add.png"});
-  projectNode.appendChild({text: "Create sequence", leaf: true, hrefTarget: "newsequence", icon: "resources/images/add.png"});
-  var designs = project.designs();
-  designs.load({callback: function() {
-  designs.each(function(design) {
-  var designnode = projectNode.appendChild({text: design.data.name, leaf: false, id: design.data.id, hrefTarget: "opende", icon: "resources/images/ux/design-tree-icon-leaf.png", qtip: 'Design ' + design.data.name});
-  designnode.appendChild({text: "J5 Reports", leaf: true, id: design.data.id + 'report', hrefTarget: "j5reports", icon: "resources/images/ux/j5-tree-icon-parent.png", qtip: design.data.name + ' Report'});
-});
-}});
-  Teselagen.manager.ProjectManager.sequenceStore = Ext.create("Ext.data.Store", {model: "Teselagen.models.SequenceFile"});
-  var sequences = project.sequences();
-  sequences.load({callback: function() {
-  sequences.each(function(sequence) {
-  Teselagen.manager.ProjectManager.sequenceStore.add(sequence);
-  projectNode.appendChild({text: sequence.data.name, leaf: true, id: sequence.data.id, hrefTarget: "opensequence", icon: "resources/images/ux/sequence-tree-icon-leaf.png", qtip: 'Sequence ' + sequence.data.name});
-});
-}});
-});
-  if (typeof (cb) === "function") 
+  this.control({"#AnnotateContainer": {render: this.onRender}, "#AnnotatePanel": {resize: this.onResize, beforecollapse: this.onBeforeCollapse}});
+  var listenersObject = {scope: this};
+  listenersObject[this.MenuItemEvent.CUT] = this.cutSelection;
+  listenersObject[this.MenuItemEvent.COPY] = this.copySelection;
+  listenersObject[this.MenuItemEvent.PASTE] = this.pasteFromClipboard;
+  listenersObject[this.MenuItemEvent.GOTO_WINDOW_OPENED] = this.onGoToWindowOpened;
+  listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] = this.onShowComplementaryChanged;
+  listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] = this.onShowSpacesChanged;
+  listenersObject[this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED] = this.onShowSequenceAAChanged;
+  listenersObject[this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED] = this.onShowRevcomAAChanged;
+  listenersObject[this.SelectionLayerEvent.HANDLE_CLICKED] = this.onHandleClicked;
+  listenersObject[this.SelectionLayerEvent.HANDLE_RELEASED] = this.onHandleReleased;
+  listenersObject[this.SelectionEvent.HIGHLIGHT] = this.onHighlight;
+  listenersObject[this.SelectionEvent.CLEAR_HIGHLIGHT] = this.onClearHighlight;
+  this.application.on(listenersObject);
+}, onLaunch: function() {
+  this.callParent();
+  this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
+  this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {sequenceManager: this.SequenceManager, orfManager: this.ORFManager, aaManager: this.AAManager, restrictionEnzymeManager: this.RestrictionEnzymeManager, annotatePanel: this.AnnotatePanel});
+  document.onselectstart = function() {
+  return false;
+};
+  this.Managers.push(this.SequenceAnnotationManager);
+  this.SelectionLayer = Ext.create("Teselagen.renderer.annotate.SelectionLayer", {sequenceAnnotator: this.SequenceAnnotationManager.annotator});
+  this.HighlightLayer = Ext.create("Teselagen.renderer.annotate.HighlightLayer", {sequenceAnnotator: this.SequenceAnnotationManager.annotator});
+}, onRender: function(pCmp) {
+  pCmp.el.on("mousedown", this.onMousedown, this);
+  pCmp.el.on("mouseup", this.onMouseup, this);
+  pCmp.el.on("mousemove", this.onMousemove, this);
+  pCmp.el.dom.setAttribute("tabindex", "0");
+  pCmp.el.on("keydown", this.onKeydown, this);
+  this.SequenceAnnotationManager.annotator.init();
+}, onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
+  var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
+  var selectionStart;
+  var selectionEnd;
+  if (newBpPerRow < this.self.MIN_BP_PER_ROW) 
   {
-    cb();
+    newBpPerRow = this.self.MIN_BP_PER_ROW;
   }
-}, resolveAndopenDeviceDesign: function(record) {
-  var design_id = record.data.id;
-  var project_id = record.parentNode.data.id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  project.designs().load({id: design_id, callback: function(loadedDesign) {
-  Teselagen.manager.ProjectManager.workingProject = project;
-  Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
-}});
-}, resolveAndOpenj5Reports: function(record) {
-  var design_id = record.data.id.replace("report", "");
+  this.SequenceAnnotationManager.setBpPerRow(newBpPerRow);
+  if (this.SequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+    this.SelectionLayer.refresh();
+  }
+}, onKeydown: function(event) {
+  this.callParent(arguments);
+  if (event.getKey() == event.UP) 
+  {
+    this.changeCaretPosition(this.caretIndex - this.SequenceAnnotationManager.bpPerRow, false, true);
+  } else if (event.getKey() == event.DOWN) 
+  {
+    this.changeCaretPosition(this.caretIndex + this.SequenceAnnotationManager.bpPerRow, false, true);
+  }
+}, cutSelection: function() {
+  this.callParent(arguments);
+}, copySelection: function() {
+  this.callParent(arguments);
+}, pasteSelection: function() {
+  this.callParent(arguments);
+}, onGoToWindowOpened: function(goToWindow) {
+  var numberField = goToWindow.down("numberfield");
+  goToWindow.CaretEvent = this.CaretEvent;
+  numberField.on("keyup", function(field, event) {
+  if (event.getKey() === event.ENTER) 
+  {
+    goToWindow.goto();
+  }
+}, this);
+  goToWindow.show();
+  numberField.setValue(this.caretIndex + 1);
+  numberField.setMaxValue(this.SequenceManager.getSequence().getSymbolsLength());
+  numberField.maxText = "Position must be at most " + numberField.maxValue + ".";
+  numberField.focus(true, 10);
+}, onHandleClicked: function(type) {
+  if (type == "left") 
+  {
+    this.startHandleResizing = true;
+  } else {
+    this.endHandleResizing = true;
+  }
+}, onHandleReleased: function() {
+  this.startHandleResizing = false;
+  this.endHandleResizing = false;
+}, onHighlight: function(indices) {
+  this.HighlightLayer.clearHighlights();
+  this.HighlightLayer.addAllHighlights(indices);
+}, onClearHighlight: function() {
+  this.HighlightLayer.clearHighlights();
+}, onVectorPanelAnnotationClicked: function(start, end) {
+  this.select(start, end);
+}, onAnnotatePanelAnnotationClicked: function(start, end) {
+  this.clickedAnnotationStart = start;
+  this.clickedAnnotationEnd = end;
+}, onSelectionChanged: function(scope, start, end) {
+  if (scope !== this) 
+  {
+    this.SelectionLayer.select(start, end);
+    this.changeCaretPosition(start, false, true);
+  }
+}, onSequenceManagerChanged: function(pSeqMan) {
+  this.callParent(arguments);
+  this.SelectionLayer.setSequenceManager(pSeqMan);
+  this.HighlightLayer.setSequenceManager(pSeqMan);
+  this.changeCaretPosition(0, true, true);
+}, onShowFeaturesChanged: function(show) {
+  this.SequenceAnnotationManager.setShowFeatures(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+  }
+}, onShowCutSitesChanged: function(show) {
+  this.SequenceAnnotationManager.setShowCutSites(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+  }
+}, onShowOrfsChanged: function(show) {
+  this.SequenceAnnotationManager.setShowOrfs(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+  }
+}, onMousedown: function(pEvt, pOpts) {
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    var el = Ext.getCmp("AnnotateContainer").el;
+    var adjustedX = pEvt.getX() - el.getX();
+    var adjustedY = pEvt.getY() + el.getScroll().top - el.getY();
+    var index = this.SequenceAnnotationManager.bpAtPoint(adjustedX, adjustedY);
+    this.mouseIsDown = true;
+    this.changeCaretPosition(index, false, true);
+    if (this.SelectionLayer.selected && pEvt.target.id !== "selectionRectangle") 
+    {
+      this.SelectionLayer.deselect();
+      this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+    }
+    if (!this.startHandleResizing && !this.endHandleResizing) 
+    {
+      this.startSelectionIndex = index;
+      this.selectionDirection = 0;
+    }
+  }
+}, onMousemove: function(pEvt, pOpts) {
+  if (this.mouseIsDown) 
+  {
+    var el = Ext.getCmp("AnnotateContainer").el;
+    var x = pEvt.getX() - el.getX();
+    var y = pEvt.getY() + el.getScroll().top - el.getY();
+    var bpIndex = this.SequenceAnnotationManager.bpAtPoint(x, y);
+    if (bpIndex == -1) 
+    {
+      return;
+    }
+    if (this.startHandleResizing) 
+    {
+      this.startSelectionIndex = bpIndex;
+      this.selectionDirection = 1;
+      this.changeCaretPosition(bpIndex, false, false);
+    } else if (this.endHandleResizing) 
+    {
+      this.endSelectionIndex = bpIndex;
+      this.selectionDirection = 1;
+      this.changeCaretPosition(this.startSelectionIndex, false, false);
+    } else {
+      this.endSelectionIndex = bpIndex;
+      this.changeCaretPosition(this.endSelectionIndex, false, false);
+    }
+    if (this.SequenceAnnotationManager.annotator.isValidIndex(this.startSelectionIndex) && this.SequenceAnnotationManager.annotator.isValidIndex(this.endSelectionIndex)) 
+    {
+      var start = this.startSelectionIndex;
+      var end = this.endSelectionIndex;
+      if (this.selectionDirection == 0 && this.startSelectionIndex != this.endSelectionIndex) 
+      {
+        if (this.startSelectionIndex < this.endSelectionIndex) 
+        {
+          this.selectionDirection = 1;
+        } else {
+          this.selectionDirection = -1;
+        }
+      }
+      if (this.selectionDirection === -1) 
+      {
+        start = this.endSelectionIndex;
+        end = this.startSelectionIndex;
+      }
+      this.SelectionLayer.startSelecting();
+      this.SelectionLayer.select(start, end);
+    }
+  }
+}, onMouseup: function(pEvt, pOpts) {
+  if (!(this.mouseIsDown || this.startHandleResizing || this.endHandleResizing)) 
+  {
+    return;
+  }
+  this.startHandleResizing = false;
+  this.endHandleResizing = false;
+  this.mouseIsDown = false;
+  if (this.SelectionLayer.selected && this.SelectionLayer.selecting) 
+  {
+    this.SelectionLayer.endSelecting();
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+    if (this.selectionDirection === 1) 
+    {
+      this.changeCaretPosition(this.SelectionLayer.end, false, false);
+    } else {
+      this.changeCaretPosition(this.SelectionLayer.start, false, false);
+    }
+  } else if (this.clickedAnnotationStart && this.clickedAnnotationEnd) 
+  {
+    this.SelectionLayer.endSelecting();
+    this.select(this.clickedAnnotationStart, this.clickedAnnotationEnd);
+    this.clickedAnnotationStart = null;
+    this.clickedAnnotationEnd = null;
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+  } else {
+    this.SelectionLayer.deselect();
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+  }
+}, select: function(start, end) {
+  this.changeCaretPosition(start, false, true);
+  this.SelectionLayer.select(start, end);
+}, changeCaretPosition: function(index, silent, scrollToCaret) {
+  if (index >= 0 && index <= this.SequenceManager.getSequence().toString().length) 
+  {
+    this.callParent(arguments);
+    this.SequenceAnnotationManager.adjustCaret(index);
+    if (scrollToCaret) 
+    {
+      var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
+      var el = Ext.getCmp("AnnotateContainer").el;
+      if (!(metrics.y < el.getScroll().top + el.getViewSize().height && metrics.y > el.getScroll().top)) 
+      {
+        el.scrollTo("top", metrics.y);
+      }
+    }
+  }
+}, onSequenceChanged: function(kind, obj) {
+  this.callParent(arguments);
+  this.SelectionLayer.refresh();
+  this.changeCaretPosition(this.caretIndex, true, false);
+}, onActiveEnzymesChanged: function() {
+  this.callParent();
+  if (this.SequenceAnnotationManager.sequenceManager && this.SequenceAnnotationManager.showCutSites) 
+  {
+    this.SequenceAnnotationManager.render();
+  }
+}, onSelectionChanged: function(scope, start, end) {
+  if (scope !== this) 
+  {
+    this.select(start, end);
+  }
+}, onSequenceChanging: function(kind, obj) {
+}, onAAManagerUpdated: function() {
+}, onORFManagerUpdated: function() {
+}, onRestrictionEnzymeManagerUpdated: function() {
+}, onShowComplementaryChanged: function(show) {
+  this.SequenceAnnotationManager.setShowComplementarySequence(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+  }
+}, onShowSpacesChanged: function(show) {
+  this.SequenceAnnotationManager.setShowSpaceEvery10Bp(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+  }
+}, onShowSequenceAAChanged: function(show) {
+  var start = this.SelectionLayer.start;
+  var end = this.SelectionLayer.end;
+  this.SequenceAnnotationManager.setShowAminoAcids(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+    this.SelectionLayer.deselect();
+    this.select(start, end);
+  }
+}, onShowRevcomAAChanged: function(show) {
+  var start = this.SelectionLayer.start;
+  var end = this.SelectionLayer.end;
+  this.SequenceAnnotationManager.setShowAminoAcidsRevCom(show);
+  if (this.SequenceAnnotationManager.sequenceManager) 
+  {
+    this.SequenceAnnotationManager.render();
+    this.SelectionLayer.deselect();
+    this.select(start, end);
+  }
+}, onBeforeCollapse: function() {
+  var vectorPanel = Ext.getCmp("VectorPanel");
+  if (vectorPanel.collapsed) 
+  {
+    vectorPanel.expand();
+  }
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'AnnotatePanelController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.CreateNewFeatureWindowController', Ext.app.Controller, {sequenceManager: null, selectedStart: null, selectedEnd: null, onWindowShow: function() {
+  Ext.getCmp("createNewFeatureWindowPositiveCheckBox").setValue(true);
+  var typeBox = Ext.getCmp("createNewFeatureWindowTypeComboBox");
+  typeBox.setValue('misc_feature');
+  var grid = Ext.getCmp("createNewFeatureWindowAttributesGridPanel");
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  if (seqLen == 0) 
+  seqLen = 1;
+  Ext.getCmp("createNewFeatureWindowStartField").setMaxValue(seqLen);
+  Ext.getCmp("createNewFeatureWindowEndField").setMaxValue(seqLen);
+  Ext.getCmp("createNewFeatureWindowStartField").setValue(this.selectedStart + 1);
+  Ext.getCmp("createNewFeatureWindowEndField").setValue(this.selectedEnd);
+}, onSequenceManagerChanged: function(sequenceManager) {
+  this.sequenceManager = sequenceManager;
+}, onSelectionChanged: function(scope, start, end) {
+  this.selectedStart = start;
+  this.selectedEnd = end;
+}, editAttributes: function(editor, e) {
+  var grid = Ext.getCmp("createNewFeatureWindowAttributesGridPanel");
+  if (e.column.dataIndex == 'key') 
+  {
+    if (e.value != e.originalValue && e.originalValue == '' && e.record.data.value == '' && (grid.numberOfLines - 1) == e.rowIdx) 
+    {
+      grid.numberOfLines++;
+      if (grid.numberOfLines > 4) 
+      grid.store.add({key: '', value: ''});
+    }
+  } else if (e.column.dataIndex == 'value') 
+  {
+    if (e.value != e.originalValue && e.originalValue == '' && e.record.data.key == '' && (grid.numberOfLines - 1) == e.rowIdx) 
+    {
+      grid.numberOfLines++;
+      if (grid.numberOfLines > 4) 
+      grid.store.add({key: '', value: ''});
+    }
+  }
+}, onOKButtonClick: function() {
+  var nameField = Ext.getCmp("createNewFeatureWindowNameField");
+  var name = nameField.getValue();
+  var strand = Ext.getCmp("createNewFeatureWindowStrandRadioGroup").getValue().strandSelector;
+  var type = Ext.getCmp("createNewFeatureWindowTypeComboBox").getValue();
+  var start = Ext.getCmp("createNewFeatureWindowStartField").getValue() - 1;
+  var end = Ext.getCmp("createNewFeatureWindowEndField").getValue();
+  if (name == null || name.match(/^\s*$/) || name.length == 0) 
+  {
+    nameField.setFieldStyle("border-color:red");
+  } else {
+    var grid = Ext.getCmp("createNewFeatureWindowAttributesGridPanel");
+    var featureNotes = new Array();
+    for (var i = 0; i < grid.numberOfLines; i++) 
+      {
+        var record = grid.store.getAt(i);
+        var key = record.get('key');
+        var value = record.get('value');
+        if (!(key == null || key.length == 0 || key.match(/^\s*$/)) || !(value == null || value.length == 0 || value.match(/^\s*$/))) 
+        {
+          var newFeatureNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {name: key, value: value});
+          featureNotes.push(newFeatureNote);
+        }
+      }
+    var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", {name: name, type: type, start: start, end: end, strand: strand, notes: featureNotes});
+    this.sequenceManager.addFeature(newFeature);
+    Ext.getCmp("CreateNewFeature").close();
+  }
+}, startFieldBlur: function() {
+  if (!Ext.getCmp("createNewFeatureWindowStartField").isValid()) 
+  {
+    var value = Ext.getCmp("createNewFeatureWindowStartField").getValue();
+    var seqLen = this.sequenceManager.getSequence().toString().length;
+    if (seqLen == 0) 
+    seqLen = 1;
+    if (value > seqLen) 
+    Ext.getCmp("createNewFeatureWindowStartField").setValue(seqLen); else if (value == 0) 
+    Ext.getCmp("createNewFeatureWindowStartField").setValue(1); else if (value == null) 
+    Ext.getCmp("createNewFeatureWindowStartField").setValue(1); else Ext.getCmp("createNewFeatureWindowStartField").setValue(1);
+  }
+}, startFieldChange: function() {
+  this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this, Ext.getCmp("createNewFeatureWindowStartField").getValue() - 1, this.selectedEnd);
+}, endFieldBlur: function() {
+  if (!Ext.getCmp("createNewFeatureWindowEndField").isValid()) 
+  {
+    var value = Ext.getCmp("createNewFeatureWindowEndField").getValue();
+    var seqLen = this.sequenceManager.getSequence().toString().length;
+    if (seqLen == 0) 
+    seqLen = 1;
+    if (value > seqLen) 
+    Ext.getCmp("createNewFeatureWindowEndField").setValue(seqLen); else if (value == 0) 
+    Ext.getCmp("createNewFeatureWindowEndField").setValue(1); else if (value == null) 
+    Ext.getCmp("createNewFeatureWindowEndField").setValue(1); else Ext.getCmp("createNewFeatureWindowEndField").setValue(1);
+  }
+}, endFieldChange: function() {
+  this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this, this.selectedStart, Ext.getCmp("createNewFeatureWindowEndField").getValue());
+}, init: function() {
+  this.control({'#createNewFeatureWindowAttributesGridPanel': {validateedit: this.editAttributes}, '#createNewFeatureWindowOKButton': {click: this.onOKButtonClick}, '#CreateNewFeature': {show: this.onWindowShow}, '#createNewFeatureWindowStartField': {blur: this.startFieldBlur, change: this.startFieldChange}, '#createNewFeatureWindowEndField': {blur: this.endFieldBlur, change: this.endFieldChange}});
+  this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+  this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this.onSelectionChanged, this);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'CreateNewFeatureWindowController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.EditSequenceFeatureWindowController', Ext.app.Controller, {actionStackManager: null, sequenceManager: null, selectedStart: null, selectedEnd: null, selectedFeature: null, onSequenceManagerChanged: function(sequenceManager) {
+  this.sequenceManager = sequenceManager;
+}, onActionStackManagerChanged: function(actionStackManager) {
+  this.actionStackManager = actionStackManager;
+}, onSelectionChanged: function(scope, start, end) {
+  this.selectedStart = start;
+  this.selectedEnd = end;
+}, onWindowShow: function() {
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  if (seqLen == 0) 
+  seqLen = 1;
+  Ext.getCmp("editSequenceFeatureWindowStartField").setMaxValue(seqLen);
+  Ext.getCmp("editSequenceFeatureWindowEndField").setMaxValue(seqLen);
+  Ext.getCmp('editSequenceFeatureWindowNameField').setValue(this.selectedFeature.getName());
+  var strand = this.selectedFeature.getStrand();
+  if (strand == 1) 
+  Ext.getCmp("editSequenceFeatureWindowPositiveCheckBox").setValue(true); else if (strand == -1) 
+  Ext.getCmp("editSequenceFeatureWindowNegativeCheckBox").setValue(true);
+  Ext.getCmp('editSequenceFeatureWindowTypeComboBox').setValue(this.selectedFeature.getType());
+  Ext.getCmp('editSequenceFeatureWindowStartField').setValue(this.selectedFeature.getStart() + 1);
+  Ext.getCmp('editSequenceFeatureWindowEndField').setValue(this.selectedFeature.getEnd());
+  var featureNotes = this.selectedFeature.getNotes();
+  var grid = Ext.getCmp('editSequenceFeatureWindowAttributesGridPanel');
+  grid.store.removeAll();
+  for (var i = 0; i < featureNotes.length; i++) 
+    {
+      grid.store.add({key: featureNotes[i].getName(), value: featureNotes[i].getValue()});
+    }
+  grid.numberOfLines = featureNotes.length + 1;
+  if (featureNotes.length < 4) 
+  {
+    for (var i = 0; i < 4 - featureNotes.length; i++) 
+      {
+        grid.store.add({key: '', value: ''});
+      }
+  } else {
+    grid.store.add({key: '', value: ''});
+  }
+}, editAttributes: function(editor, e) {
+  var grid = Ext.getCmp("editSequenceFeatureWindowAttributesGridPanel");
+  if (e.column.dataIndex == 'key') 
+  {
+    if (e.value != e.originalValue && e.originalValue == '' && e.record.data.value == '' && (grid.numberOfLines - 1) == e.rowIdx) 
+    {
+      grid.numberOfLines++;
+      if (grid.numberOfLines > 4) 
+      grid.store.add({key: '', value: ''});
+    }
+  } else if (e.column.dataIndex == 'value') 
+  {
+    if (e.value != e.originalValue && e.originalValue == '' && e.record.data.key == '' && (grid.numberOfLines - 1) == e.rowIdx) 
+    {
+      grid.numberOfLines++;
+      if (grid.numberOfLines > 4) 
+      grid.store.add({key: '', value: ''});
+    }
+  }
+}, onVectorPanelAnnotationContextMenu: function(feature) {
+  this.selectedFeature = feature;
+  this.selectedStart = feature.getStart();
+  this.selectedEnd = feature.getEnd();
+}, startFieldBlur: function() {
+  if (!Ext.getCmp("editSequenceFeatureWindowStartField").isValid()) 
+  {
+    var value = Ext.getCmp("editSequenceFeatureWindowStartField").getValue();
+    var seqLen = this.sequenceManager.getSequence().toString().length;
+    if (seqLen == 0) 
+    seqLen = 1;
+    if (value > seqLen) 
+    Ext.getCmp("editSequenceFeatureWindowStartField").setValue(seqLen); else if (value == 0) 
+    Ext.getCmp("editSequenceFeatureWindowStartField").setValue(1); else if (value == null) 
+    Ext.getCmp("editSequenceFeatureWindowStartField").setValue(1); else Ext.getCmp("editSequenceFeatureWindowStartField").setValue(1);
+  }
+}, startFieldChange: function() {
+  this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this, Ext.getCmp("editSequenceFeatureWindowStartField").getValue() - 1, this.selectedEnd);
+}, endFieldBlur: function() {
+  if (!Ext.getCmp("editSequenceFeatureWindowEndField").isValid()) 
+  {
+    var value = Ext.getCmp("editSequenceFeatureWindowEndField").getValue();
+    var seqLen = this.sequenceManager.getSequence().toString().length;
+    if (seqLen == 0) 
+    seqLen = 1;
+    if (value > seqLen) 
+    Ext.getCmp("editSequenceFeatureWindowEndField").setValue(seqLen); else if (value == 0) 
+    Ext.getCmp("editSequenceFeatureWindowEndField").setValue(1); else if (value == null) 
+    Ext.getCmp("editSequenceFeatureWindowEndField").setValue(1); else Ext.getCmp("editSequenceFeatureWindowEndField").setValue(1);
+  }
+}, endFieldChange: function() {
+  this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this, this.selectedStart, Ext.getCmp("editSequenceFeatureWindowEndField").getValue());
+}, onEditSequenceFeatureWindowDeleteButton: function() {
+  this.sequenceManager.removeFeature(this.selectedFeature, false);
+  Ext.getCmp("EditSequenceFeature").close();
+}, onEditSequenceFeatureWindowOKButtonClick: function() {
+  var nameField = Ext.getCmp("editSequenceFeatureWindowNameField");
+  var name = nameField.getValue();
+  var strand = Ext.getCmp("editSequenceFeatureWindowStrandRadioGroup").getValue().strandSelector;
+  var type = Ext.getCmp("editSequenceFeatureWindowTypeComboBox").getValue();
+  var start = Ext.getCmp("editSequenceFeatureWindowStartField").getValue() - 1;
+  var end = Ext.getCmp("editSequenceFeatureWindowEndField").getValue();
+  if (name == null || name.match(/^\s*$/) || name.length == 0) 
+  {
+    nameField.setFieldStyle("border-color:red");
+  } else {
+    var grid = Ext.getCmp("editSequenceFeatureWindowAttributesGridPanel");
+    var featureNotes = new Array();
+    for (var i = 0; i < grid.numberOfLines; i++) 
+      {
+        var record = grid.store.getAt(i);
+        var key = record.get('key');
+        var value = record.get('value');
+        if (!(key == null || key.length == 0 || key.match(/^\s*$/)) || !(value == null || value.length == 0 || value.match(/^\s*$/))) 
+        {
+          var newFeatureNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {name: key, value: value});
+          featureNotes.push(newFeatureNote);
+        }
+      }
+    var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", {name: name, type: type, start: start, end: end, strand: strand, notes: featureNotes});
+    var memento = this.sequenceManager.createMemento();
+    this.sequenceManager.removeFeature(this.selectedFeature, true);
+    Vede.application.fireEvent(this.sequenceManager.updateSequenceChanging, this.sequenceManager.updateKindFeatureAdd, memento);
+    this.sequenceManager.features.push(newFeature);
+    Vede.application.fireEvent(this.sequenceManager.updateSequenceChanged, this.sequenceManager.updateKindFeatureAdd, newFeature);
+    Ext.getCmp("EditSequenceFeature").close();
+  }
+}, init: function() {
+  this.control({'#EditSequenceFeature': {show: this.onWindowShow}, '#editSequenceFeatureWindowAttributesGridPanel': {validateedit: this.editAttributes}, '#editSequenceFeatureWindowOKButton': {click: this.onEditSequenceFeatureWindowOKButtonClick}, '#editSequenceFeatureWindowStartField': {blur: this.startFieldBlur, change: this.startFieldChange}, '#editSequenceFeatureWindowEndField': {blur: this.endFieldBlur, change: this.endFieldChange}});
+  this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+  this.application.on("VectorPanelAnnotationContextMenu", this.onVectorPanelAnnotationContextMenu, this);
+  this.application.on("ActionStackChanged", this.onActionStackManagerChanged, this);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'EditSequenceFeatureWindowController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.FindManager', Ext.Base, {config: {sequenceManager: null, AAManager: null}, findAll: function(expression, dataType, searchType) {
+  if (!this.sequenceManager || this.sequenceManager.getSequence().toString().length == 0 || expression.length == 0) 
+  {
+    return null;
+  }
+  expression = expression.toLowerCase();
+  dataType = dataType.toLowerCase();
+  searchType = searchType.toLowerCase();
+  var sequence;
+  var revComSequence;
+  var originalSequence;
+  var result = [];
+  if (dataType === "dna") 
+  {
+    if (searchType === "ambiguous") 
+    {
+      expression = this.makeAmbiguousDNAExpression(expression);
+    }
+    sequence = this.sequenceManager.getSequence().toString();
+    revComSequence = this.sequenceManager.getReverseComplementSequence().toString();
+    originalSequence = sequence;
+    sequence += sequence.slice(0, expression.length - 1);
+    revComSequence += revComSequence.slice(0, expression.length);
+    var regEx = new RegExp(expression, "gi");
+    var found;
+    var findStart;
+    var findEnd;
+    while ((found = regEx.exec(sequence)) !== null) 
+      {
+        findStart = found.index;
+        findEnd = regEx.lastIndex;
+        if (findStart >= originalSequence.length) 
+        {
+          findStart -= originalSequence.length;
+        }
+        if (findEnd >= originalSequence.length) 
+        {
+          findEnd -= originalSequence.length;
+        }
+        result.push({start: findStart, end: findEnd});
+      }
+    while ((found = regEx.exec(revComSequence)) !== null) 
+      {
+        findStart = revComSequence.length - regEx.lastIndex - expression.length;
+        findEnd = revComSequence.length - found.index - expression.length;
+        if (findStart >= originalSequence.length) 
+        {
+          findStart -= originalSequence.length;
+        }
+        if (findEnd >= originalSequence.length) 
+        {
+          findEnd -= originalSequence.length;
+        }
+        result.push({start: findStart, end: findEnd});
+      }
+  } else {
+    if (searchType === "ambiguous") 
+    {
+      expression = this.makeAmbiguousAAExpression(expression);
+    }
+    expression = expression.replace(".", "\\.");
+    this.AAManager.recalculateNonCircular();
+    var aaSequenceFrames = this.AAManager.getAaSequence();
+    var aaRevComSequenceFrames = this.AAManager.getAaRevCom();
+    var originalSequence;
+    var regEx;
+    var aaStart;
+    var found;
+    Ext.each(aaSequenceFrames, function(aaSequence, frame) {
+  originalSequence = aaSequence;
+  aaSequence += aaSequence.slice(0, expression.length - 1);
+  regEx = new RegExp(expression, "gi");
+  while ((found = regEx.exec(aaSequence)) !== null) 
+    {
+      var findStart = found.index;
+      var findEnd = regEx.lastIndex;
+      if (findStart >= originalSequence.length) 
+      {
+        findStart -= originalSequence.length;
+      }
+      if (findEnd >= originalSequence.length) 
+      {
+        findEnd -= originalSequence.length;
+      }
+      result.push({start: findStart * 3 + frame, end: findEnd * 3 + frame});
+    }
+});
+    var offsets;
+    var seqLength = this.sequenceManager.getSequence().toString().length;
+    if (seqLength % 3 === 0) 
+    {
+      offsets = [0, 2, 1];
+    } else if (seqLength % 3 === 1) 
+    {
+      offsets = [1, 0, 2];
+    } else {
+      offsets = [2, 1, 0];
+    }
+    Ext.each(aaRevComSequenceFrames, function(aaSequence, frame) {
+  originalSequence = aaSequence;
+  aaSequence += aaSequence.slice(0, expression.length - 1);
+  regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi");
+  while ((found = regEx.exec(aaSequence)) !== null) 
+    {
+      var findStart = aaSequence.length - regEx.lastIndex;
+      var findEnd = aaSequence.length - found.index;
+      if (findStart >= originalSequence.length) 
+      {
+        findStart -= originalSequence.length;
+      }
+      if (findEnd > originalSequence.length) 
+      {
+        findEnd -= originalSequence.length;
+      }
+      result.push({start: findStart * 3 + offsets[frame], end: findEnd * 3 + offsets[frame]});
+    }
+});
+  }
+  return result;
+}, findOne: function(expression, dataType, searchType, start, aaSearchStart) {
+  if (!this.sequenceManager || this.sequenceManager.getSequence().toString().length == 0 || expression.length == 0) 
+  {
+    return null;
+  }
+  expression = expression.toLowerCase();
+  dataType = dataType.toLowerCase();
+  searchType = searchType.toLowerCase();
+  var sequence;
+  var revComSequence;
+  var originalSequence;
+  var result;
+  if (dataType === "dna") 
+  {
+    if (searchType === "ambiguous") 
+    {
+      expression = this.makeAmbiguousDNAExpression(expression);
+    }
+    sequence = this.sequenceManager.getSequence().toString();
+    revComSequence = this.sequenceManager.getReverseComplementSequence().toString();
+    originalSequence = sequence;
+    sequence += sequence;
+    revComSequence += revComSequence;
+    if (start != 0) 
+    {
+      sequence = sequence.slice(start);
+      revComSequence = revComSequence.substring(0, revComSequence.length - start);
+    }
+    var regEx = new RegExp(expression, "gi");
+    var found = regEx.exec(sequence);
+    var distanceFromCaret;
+    if (found) 
+    {
+      var findStart = found.index + start;
+      var findEnd = regEx.lastIndex + start;
+      distanceFromCaret = found.index;
+      if (findStart >= originalSequence.length) 
+      {
+        findStart -= originalSequence.length;
+      }
+      if (findEnd >= originalSequence.length) 
+      {
+        findEnd -= originalSequence.length;
+      }
+    }
+    regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi");
+    var revComFound = regEx.exec(revComSequence);
+    var revComDistanceFromCaret;
+    if (revComFound) 
+    {
+      var revComStart = revComSequence.length - regEx.lastIndex + start;
+      var revComEnd = revComSequence.length - revComFound.index + start;
+      revComDistanceFromCaret = revComStart - start;
+      if (revComStart >= originalSequence.length) 
+      {
+        revComStart -= originalSequence.length;
+      }
+      if (revComEnd >= originalSequence.length) 
+      {
+        revComEnd -= originalSequence.length;
+      }
+    }
+    if (found && revComFound) 
+    {
+      if (distanceFromCaret < revComDistanceFromCaret) 
+      {
+        return {start: findStart, end: findEnd};
+      } else {
+        return {start: revComStart, end: revComEnd};
+      }
+    } else if (found) 
+    {
+      return {start: findStart, end: findEnd};
+    } else if (revComFound) 
+    {
+      return {start: revComStart, end: revComEnd};
+    } else {
+      return false;
+    }
+  } else {
+    if (searchType === "ambiguous") 
+    {
+      expression = this.makeAmbiguousAAExpression(expression);
+    }
+    expression = expression.replace(".", "\\.");
+    this.AAManager.recalculateNonCircular();
+    var aaSequenceFrames = this.AAManager.getAaSequence();
+    var aaRevComSequenceFrames = this.AAManager.getAaRevCom();
+    var originalSequence;
+    var regEx;
+    var aaStart;
+    var bestResult;
+    var bestRevComResult;
+    var found;
+    var distanceFromCaret;
+    var bestDistanceFromCaret = null;
+    Ext.each(aaSequenceFrames, function(aaSequence, frame) {
+  regEx = new RegExp(expression, "gi");
+  originalSequence = aaSequence;
+  aaSequence = aaSequence + aaSequence;
+  if (start === 0) 
+  {
+    aaStart = 0;
+  } else {
+    aaStart = Math.ceil((start - frame) / 3);
+  }
+  aaSequence = aaSequence.slice(aaStart);
+  found = regEx.exec(aaSequence);
+  if (found) 
+  {
+    var findStart = found.index + aaStart;
+    var findEnd = regEx.lastIndex + aaStart;
+    distanceFromCaret = found.index;
+    if (findStart >= originalSequence.length) 
+    {
+      findStart -= originalSequence.length;
+    }
+    if (findEnd >= originalSequence.length) 
+    {
+      findEnd -= originalSequence.length;
+    }
+    if (bestDistanceFromCaret === null || distanceFromCaret < bestDistanceFromCaret) 
+    {
+      bestResult = {start: findStart * 3 + frame, end: findEnd * 3 + frame};
+      bestDistanceFromCaret = distanceFromCaret;
+    }
+  }
+});
+    if (aaSearchStart) 
+    {
+      start = aaSearchStart;
+    }
+    var offsets;
+    var seqLength = this.sequenceManager.getSequence().toString().length;
+    if (seqLength % 3 === 0) 
+    {
+      offsets = [0, 2, 1];
+    } else if (seqLength % 3 === 1) 
+    {
+      offsets = [1, 0, 2];
+    } else {
+      offsets = [2, 1, 0];
+    }
+    Ext.each(aaRevComSequenceFrames, function(aaSequence, frame) {
+  regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi");
+  originalSequence = aaSequence;
+  aaSequence = aaSequence + aaSequence;
+  if (start === 0) 
+  {
+    aaStart = 0;
+  } else {
+    aaStart = Math.ceil((start - frame) / 3);
+  }
+  aaSequence = aaSequence.substring(0, aaSequence.length - aaStart);
+  found = regEx.exec(aaSequence);
+  if (found) 
+  {
+    var findStart = aaSequence.length - regEx.lastIndex + aaStart;
+    var findEnd = aaSequence.length - found.index + aaStart;
+    distanceFromCaret = findStart - aaStart;
+    if (findStart >= originalSequence.length) 
+    {
+      findStart -= originalSequence.length;
+    }
+    if (findEnd > originalSequence.length) 
+    {
+      findEnd -= originalSequence.length;
+    }
+    if (bestDistanceFromCaret === null || distanceFromCaret < bestDistanceFromCaret) 
+    {
+      bestResult = {start: findStart * 3 + offsets[frame], end: findEnd * 3 + offsets[frame]};
+      bestDistanceFromCaret = distanceFromCaret;
+    }
+  }
+}, this);
+    return bestResult;
+  }
+}, makeAmbiguousDNAExpression: function(expression) {
+  var ambiguous = [];
+  var switchObj = {n: "[ATGC]", k: "[GT]", m: "[AC]", r: "[AG]", y: "[CT]", s: "[CG]", w: "[AT]", b: "[CGT]", v: "[ACG]", h: "[ACT]", d: "[AGT]"};
+  for (var i = 0; i < expression.length; i++) 
+    {
+      var character = expression.charAt(i);
+      if (character.match(/[atcgu]/)) 
+      {
+        ambiguous.push(character);
+      } else {
+        ambiguous.push(switchObj[character]);
+      }
+    }
+  return ambiguous.join("");
+}, makeAmbiguousAAExpression: function(expression) {
+  var ambiguous = [];
+  var switchObj = {b: "[DN]", z: "[QE]", x: "[ARNDCQEGHILKMFPSTWYV.]"};
+  for (var i = 0; i < expression.length; i++) 
+    {
+      var character = expression.charAt(i);
+      if (character.match(/[arndcqeghilkmfpstwyv.]/)) 
+      {
+        ambiguous.push(character);
+      } else {
+        ambiguous.push(switchObj[character]);
+      }
+    }
+  return ambiguous.join("");
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.manager, 'FindManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.FindPanelController', Ext.app.Controller, {CaretEvent: null, MenuItemEvent: null, SelectionEvent: null, SequenceManagerEvent: null, findManager: null, sequenceManager: null, findField: null, findInSelector: null, literalSelector: null, caretIndex: 0, onCaretPositionChanged: function(scope, index) {
+  this.caretIndex = index;
+}, onFindPanelOpened: function() {
+  Ext.getCmp("FindPanel").setVisible(!Ext.getCmp("FindPanel").isVisible());
+  Ext.getCmp("findField").focus(true, 10);
+}, onSequenceManagerChanged: function(pSeqMan) {
+  this.sequenceManager = pSeqMan;
+  this.findManager.setSequenceManager(pSeqMan);
+  this.findManager.getAAManager().setSequenceManager(pSeqMan);
+}, onFindFieldKeyup: function(field, event) {
+  if (field.getValue() && event.getKey() === event.ENTER) 
+  {
+    this.find(this.caretIndex + 1, this.caretIndex + 2);
+  } else if (field.getValue() && event.getKey() !== event.ENTER) 
+  {
+    this.find();
+  } else {
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+    this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
+    this.findField.setFieldStyle("background-color:white");
+  }
+}, onFindFieldValidityChange: function(field, valid) {
+  if (valid) 
+  {
+    Ext.getCmp("findNextBtn").enable();
+  } else {
+    Ext.getCmp("findNextBtn").disable();
+    this.findField.setFieldStyle("background-color:#ff6666");
+  }
+}, onFindNextClick: function() {
+  this.find(this.caretIndex + 1, this.caretIndex + 2);
+}, find: function(startIndex, aaStartIndex) {
+  if (this.findField.isValid()) 
+  {
+    var result = this.findManager.findOne(this.findField.getValue(), this.findInSelector.getValue(), this.literalSelector.getValue(), startIndex || this.caretIndex, aaStartIndex);
+    if (result) 
+    {
+      this.findField.setFieldStyle("background-color:white");
+      this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, result.start, result.end);
+      if (Ext.getCmp("highlightAllBtn").pressed) 
+      {
+        this.highlightMatches();
+      }
+    } else {
+      this.findField.setFieldStyle("background-color:#ff6666");
+      this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+      this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
+    }
+  }
+}, onToggleHighlight: function(button, pressed) {
+  if (pressed) 
+  {
+    this.highlightMatches();
+  } else {
+    this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
+  }
+}, onFindInSelectorChange: function() {
+  this.validateFindField();
+  this.find();
+}, highlightMatches: function() {
+  var matches = this.findManager.findAll(this.findField.getValue(), this.findInSelector.getValue(), this.literalSelector.getValue());
+  if (matches) 
+  {
+    this.application.fireEvent(this.SelectionEvent.HIGHLIGHT, matches);
+  }
+}, validateFindField: function() {
+  this.findField.validate();
+}, init: function() {
+  this.control({"#findField": {keyup: this.onFindFieldKeyup, validitychange: this.onFindFieldValidityChange}, "#findNextBtn": {click: this.onFindNextClick}, "#highlightAllBtn": {toggle: this.onToggleHighlight}, "#findInSelector": {change: this.onFindInSelectorChange}, "#literalSelector": {change: this.validateFindField}});
+  this.CaretEvent = Teselagen.event.CaretEvent;
+  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+  this.SelectionEvent = Teselagen.event.SelectionEvent;
+  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+  this.application.on(this.CaretEvent.CARET_POSITION_CHANGED, this.onCaretPositionChanged, this);
+  this.application.on(this.MenuItemEvent.FIND_PANEL_OPENED, this.onFindPanelOpened, this);
+  this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
+}, onLaunch: function() {
+  this.findField = Ext.getCmp("findField");
+  this.findInSelector = Ext.getCmp("findInSelector");
+  this.literalSelector = Ext.getCmp("literalSelector");
+  this.findManager = Ext.create("Teselagen.manager.FindManager");
+  this.findManager.setAAManager(Ext.create("Teselagen.manager.AAManager"));
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'FindPanelController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.ImportSequenceController', Ext.app.Controller, {detectXMLFormat: function(data, cb) {
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(data, "text/xml");
+  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
+  if (diff.length > 0) 
+  {
+    return cb(data, false);
+  } else {
+    Teselagen.bio.parsers.SbolParser.parse(data, cb);
+  }
+}, parseSequence: function(pFile, pExt, pEvt, cb) {
+  var self = this;
+  var result = pEvt.target.result;
+  var asyncParseFlag = false;
+  switch (pExt) {
+    case "fasta":
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+      break;
+    case "fas":
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+      break;
+    case "json":
+      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
+      break;
+    case "gb":
+      fileContent = result;
+      break;
+    case "xml":
+      asyncParseFlag = true;
+      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
+  var gb;
+  if (isSBOL) 
+  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+  return cb(gb);
   ;
-  var project_id = record.parentNode.parentNode.data.id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  project.designs().load({id: design_id, callback: function(loadedDesign) {
-  Teselagen.manager.ProjectManager.workingProject = project;
-  var design = loadedDesign[0];
-  Teselagen.manager.ProjectManager.openj5Report(design);
-}});
-}, resolveAndCreateDEProject: function(record) {
-  var project_id = record.parentNode.data.id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  var projectNames = [];
-  project.designs().load().each(function(design) {
-  projectNames.push(design.data.name);
 });
-  Teselagen.manager.ProjectManager.workingProject = project;
-  Teselagen.manager.ProjectManager.createNewDeviceDesignAtProject(project, projectNames);
-}, createProject: function() {
-  Teselagen.manager.ProjectManager.createNewProject();
-}, createSequence: function(record) {
-  var project_id = record.parentNode.data.id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  var sequencesNames = [];
-  project.sequences().load().each(function(sequence) {
-  sequencesNames.push(sequence.data.name);
-});
-  Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
-}, promptPartName: function(cb) {
-  var onPromptClosed = function(btn, text) {
-  if (btn === "ok") 
+      break;
+  }
+  if (!asyncParseFlag) 
   {
-    if (text === "") 
+    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
+    return cb(gb);
+    ;
+  }
+}, onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
+  var self = this;
+  performSequenceCreation = function() {
+  self.parseSequence(pFile, pExt, pEvt, function(gb) {
+  seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+  if (Teselagen.manager.ProjectManager.workingSequence) 
+  {
+    var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
+    console.log(name);
+    if (name == "Untitled VEProject") 
     {
-      return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this);
+      console.log(seqMgr.name);
+      Teselagen.manager.ProjectManager.workingSequence.set('name', seqMgr.name);
     } else {
-      return cb(text);
+      seqMgr.setName(name);
     }
   }
+  Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+  sequence.set('sequenceFileContent', gb.toString());
+  sequence.set('sequenceFileFormat', "GENBANK");
+  sequence.set('sequenceFileName', pFile.name);
+  sequence.set('firstTimeImported', true);
+  var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
+  parttext.animate({duration: 5000, to: {opacity: 0}});
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+});
 };
-  Ext.MessageBox.prompt("Name", "Please enter a part name:", onPromptClosed, this);
-}, addPart: function(record) {
-  var project_id = record.parentNode.parentNode.data.id;
-  var veproject_id = record.parentNode.data.id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  var selectedVEProject = project.veprojects().getById(veproject_id);
-  this.promptPartName(function(partName) {
-  var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
-  var newPart = Ext.create("Teselagen.models.Part", {name: partName, genbankStartBP: 1, endBP: 7});
-  newSequenceFile.save({callback: function() {
-  newPart.setSequenceFileModel(newSequenceFile);
-  var selectedVEProjectID = selectedVEProject.data.id;
-  newPart.set("veproject_id", selectedVEProjectID);
-  selectedVEProject.set("id", selectedVEProjectID);
-  newPart.save({callback: function() {
-  selectedVEProject.parts().add(newPart);
-  selectedVEProject.save({callback: function() {
-  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
-  Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + selectedVEProject.data.id);
-});
-  Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-  Vede.application.fireEvent("openVectorEditor", newSequenceFile);
-}});
-}});
-}});
-});
-}, resolveAndOpenSequence: function(record) {
-  var sequence_id = record.data.id;
-  var project_id = record.parentNode.data.id;
-  var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  project.sequences().load({id: sequence_id, callback: function(loadedsequence) {
-  Teselagen.manager.ProjectManager.workingProject = project;
-  Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
-  Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
-}});
-}, expandProject: function(record) {
-  if (record.isExpanded()) 
+  if (sequence.get('firstTimeImported')) 
   {
-    record.collapse();
+    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+    Ext.MessageBox.confirm('Confirm', 'A sequence has been already imported to this file. Are you sure you want to overwrite it?', function(btn) {
+  if (btn === "yes") 
+  {
+    performSequenceCreation();
+  }
+});
   } else {
-    record.expand();
+    performSequenceCreation();
   }
-}, onProjectPanelItemClick: function(store, record) {
-  switch (record.data.hrefTarget) {
-    case "openproj":
-      this.expandProject(record);
-      break;
-    case "newproj":
-      this.createProject(record);
-      break;
-    case "newsequence":
-      this.createSequence(record);
-      break;
-    case "newde":
-      this.resolveAndCreateDEProject(record);
-      break;
-    case "opende":
-      this.resolveAndopenDeviceDesign(record);
-      break;
-    case "opensequence":
-      this.resolveAndOpenSequence(record);
-      break;
-    case "j5reports":
-      this.resolveAndOpenj5Reports(record);
-      break;
-    case "addpart":
-      this.addPart(record);
-      break;
-  }
-}, onProjectPartsPanelItemClick: function(store, record) {
-  switch (record.data.hrefTarget) {
-    case "addpart":
-      this.addPart(record);
-      break;
-    case "openpart":
-      this.resolveAndOpenPart(record);
-      break;
-  }
-}, onNewProjectClick: function() {
-  Teselagen.manager.ProjectManager.createNewProject();
-}, onNewDEClick: function() {
-  if (!Teselagen.manager.ProjectManager.workingProject) 
-  {
-    return Ext.MessageBox.alert("Alert", "First select or create a Project.");
-  }
-  Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
-}, onOpenSequenceFileClick: function() {
-  Teselagen.manager.ProjectManager.openSequenceFile();
-}, onRemoveProjectClick: function() {
 }, init: function() {
-  this.callParent();
-  this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
-  this.application.on(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
-  this.control({"#projectTreePanel": {itemclick: this.onProjectPanelItemClick}, "#projectPartsPanel": {itemclick: this.onProjectPartsPanelItemClick}, "#newProject_Btn": {click: this.onNewProjectClick}, "#newDE_Btn": {click: this.onNewDEClick}, "#openSequenceFile_Btn": {click: this.onOpenSequenceFileClick}, "#removeProject_Btn": {click: this.onRemoveProjectClick}});
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'ProjectController'], 0));
+  this.application.on("ImportFileToSequence", this.onImportFileToSequence, this);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'ImportSequenceController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.DashboardPanelController', Ext.app.Controller, {onLastDEProjectsItemClick: function(item, record) {
-  Teselagen.manager.ProjectManager.openDeviceDesign(record);
+(Ext.cmd.derive('Vede.view.ve.GoToWindow', Ext.window.Window, {title: 'Go To...', modal: true, height: 110, resizable: false, items: [{xtype: 'container', layout: {type: 'vbox'}, height: 110, items: [{xtype: 'numberfield', fieldLabel: 'Position', allowDecimals: false, enableKeyEvents: true, minText: 'Position must be at least 1.', minValue: 1, msgTarget: 'under', value: 1}, {xtype: 'container', layout: {type: 'hbox'}, items: [{xtype: 'button', text: 'Ok', margin: 2, padding: 2, handler: function() {
+  this.up('window').goto();
+}}, {xtype: 'button', text: 'Cancel', margin: 2, padding: 2, handler: function() {
+  this.up('window').close();
+}}]}]}], goto: function() {
+  var field = this.down('numberfield');
+  var index = field.getValue();
+  if (index > field.maxValue) 
+  {
+    index = field.maxValue;
+  } else if (index < field.minValue) 
+  {
+    index = field.minValue - 1;
+  }
+  Vede.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED, this, index - 1);
+  this.close();
+}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'GoToWindow'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.form.ItemSelector', Ext.ux.form.MultiSelect, {hideNavIcons: false, buttons: ['top', 'up', 'add', 'remove', 'down', 'bottom'], buttonsText: {top: "Move to Top", up: "Move Up", add: "Add to Selected", remove: "Remove from Selected", down: "Move Down", bottom: "Move to Bottom"}, doCopy: false, layout: {type: 'hbox', align: 'stretch'}, initComponent: function() {
+  var me = this;
+  if (me.ddReorder) 
+  {
+    me.ddGroup = me.id + '-dd';
+  }
+  me.callParent();
+  me.bindStore(me.store);
+}, createList: function(title) {
+  var me = this;
+  return Ext.create('Ext.ux.form.MultiSelect', {submitValue: false, getSubmitData: function() {
+  return null;
+}, getModelData: function() {
+  return null;
+}, flex: 1, dragGroup: me.ddGroup, dropGroup: me.ddGroup, title: title, store: {model: me.store.model, data: []}, displayField: me.displayField, valueField: me.valueField, disabled: me.disabled, listeners: {boundList: {scope: me, itemdblclick: me.onItemDblClick, drop: me.syncValue}}});
+}, setupItems: function() {
+  var me = this;
+  me.fromField = me.createList(me.fromTitle);
+  me.toField = me.createList(me.toTitle);
+  return [me.fromField, {xtype: 'container', margins: '0 4', layout: {type: 'vbox', pack: 'center'}, items: me.createButtons()}, me.toField];
+}, createButtons: function() {
+  var me = this, buttons = [];
+  if (!me.hideNavIcons) 
+  {
+    Ext.Array.forEach(me.buttons, function(name) {
+  buttons.push({xtype: 'button', tooltip: me.buttonsText[name], handler: me['on' + Ext.String.capitalize(name) + 'BtnClick'], cls: Ext.baseCSSPrefix + 'form-itemselector-btn', iconCls: Ext.baseCSSPrefix + 'form-itemselector-' + name, navBtn: true, scope: me, margin: '4 0 0 0'});
+});
+  }
+  return buttons;
+}, getSelections: function(list) {
+  var store = list.getStore();
+  return Ext.Array.sort(list.getSelectionModel().getSelection(), function(a, b) {
+  a = store.indexOf(a);
+  b = store.indexOf(b);
+  if (a < b) 
+  {
+    return -1;
+  } else if (a > b) 
+  {
+    return 1;
+  }
+  return 0;
+});
+}, onTopBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
+  store.suspendEvents();
+  store.remove(selected, true);
+  store.insert(0, selected);
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onBottomBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
+  store.suspendEvents();
+  store.remove(selected, true);
+  store.add(selected);
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onUpBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = 0, len = selected.length, index = 0;
+  store.suspendEvents();
+  for (; i < len; ++i , index++) 
+    {
+      rec = selected[i];
+      index = Math.max(index, store.indexOf(rec) - 1);
+      store.remove(rec, true);
+      store.insert(index, rec);
+    }
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onDownBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = selected.length - 1, index = store.getCount() - 1;
+  store.suspendEvents();
+  for (; i > -1; --i , index--) 
+    {
+      rec = selected[i];
+      index = Math.min(index, store.indexOf(rec) + 1);
+      store.remove(rec, true);
+      store.insert(index, rec);
+    }
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onAddBtnClick: function() {
+  var me = this, selected = me.getSelections(me.fromField.boundList);
+  me.moveRec(true, selected);
+  me.toField.boundList.getSelectionModel().select(selected);
+}, onRemoveBtnClick: function() {
+  var me = this, selected = me.getSelections(me.toField.boundList);
+  me.moveRec(false, selected);
+  me.fromField.boundList.getSelectionModel().select(selected);
+}, moveRec: function(add, recs) {
+  var me = this, fromField = me.fromField, toField = me.toField, fromStore = add ? fromField.store : toField.store, toStore = add ? toField.store : fromField.store;
+  fromStore.suspendEvents();
+  toStore.suspendEvents();
+  if (!me.doCopy) 
+  {
+    fromStore.remove(recs);
+    toStore.add(recs);
+  } else {
+    if (add) 
+    {
+      toStore.add(recs);
+    } else {
+      fromStore.remove(recs);
+    }
+  }
+  fromStore.resumeEvents();
+  toStore.resumeEvents();
+  fromField.boundList.refresh();
+  toField.boundList.refresh();
+  me.syncValue();
+}, syncValue: function() {
+  var me = this;
+  me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
+}, onItemDblClick: function(view, rec) {
+  this.moveRec(view === this.fromField.boundList, rec);
+}, setValue: function(value) {
+  var me = this, fromField = me.fromField, toField = me.toField, fromStore = fromField.store, toStore = toField.store, selected;
+  if (!me.fromStorePopulated) 
+  {
+    me.fromField.store.on({load: Ext.Function.bind(me.setValue, me, [value]), single: true});
+    return;
+  }
+  value = me.setupValue(value);
+  me.mixins.field.setValue.call(me, value);
+  selected = me.getRecordsForValue(value);
+  fromStore.suspendEvents();
+  toStore.suspendEvents();
+  fromStore.removeAll();
+  toStore.removeAll();
+  me.populateFromStore(me.store);
+  Ext.Array.forEach(selected, function(rec) {
+  if (fromStore.indexOf(rec) > -1) 
+  {
+    fromStore.remove(rec);
+  }
+  toStore.add(rec);
+});
+  fromStore.resumeEvents();
+  toStore.resumeEvents();
+  Ext.suspendLayouts();
+  fromField.boundList.refresh();
+  toField.boundList.refresh();
+  Ext.resumeLayouts(true);
+}, onBindStore: function(store, initial) {
+  var me = this;
+  if (me.fromField) 
+  {
+    me.fromField.store.removeAll();
+    me.toField.store.removeAll();
+    if (store.getCount()) 
+    {
+      me.populateFromStore(store);
+    } else {
+      me.store.on('load', me.populateFromStore, me);
+    }
+  }
+}, populateFromStore: function(store) {
+  var fromStore = this.fromField.store;
+  this.fromStorePopulated = true;
+  fromStore.add(store.getRange());
+  fromStore.fireEvent('load', fromStore);
+}, onEnable: function() {
+  var me = this;
+  me.callParent();
+  me.fromField.enable();
+  me.toField.enable();
+  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
+  btn.enable();
+});
+}, onDisable: function() {
+  var me = this;
+  me.callParent();
+  me.fromField.disable();
+  me.toField.disable();
+  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
+  btn.disable();
+});
+}, onDestroy: function() {
+  this.bindStore(null);
+  this.callParent();
+}}, 0, ["itemselectorvede"], ["itemselectorvede", "component", "multiselectfield", "container", "multiselect", "fieldcontainer", "box"], {"itemselectorvede": true, "component": true, "multiselectfield": true, "container": true, "multiselect": true, "fieldcontainer": true, "box": true}, ["widget.itemselectorvede"], 0, [Vede.view.form, 'ItemSelector'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.RestrictionEnzymesManagerWindow', Ext.window.Window, {height: 474, width: 450, layout: {align: "stretch", type: "vbox"}, title: "Restriction Enzyme Manager", resizable: false, draggable: false, modal: true, initComponent: function() {
+  var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
+  var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], sorters: [{property: "name", direction: "ASC"}]});
+  var me = this;
+  Ext.applyIf(me, {items: [{xtype: "container", layout: {align: "middle", type: "hbox"}, items: [{xtype: "container", layout: {align: "stretch", type: "vbox"}, width: 180, items: [{xtype: "combobox", id: "enzymeGroupSelector", store: groupStore, displayField: "name", fieldLabel: "Enzyme Groups", labelAlign: "top", queryMode: "local", maxWidth: 150, editable: false}, {xtype: "textfield", id: "enzymeSearchField", fieldLabel: "Label", hideLabel: true, emptyText: "Search for Enzyme", maxWidth: 150, enableKeyEvents: true}]}, {xtype: "combobox", id: "enzymeUserGroupSelector", displayField: "name", fieldLabel: "User Enzyme Groups", labelAlign: "top", queryMode: "local", width: 150, editable: false}]}, {xtype: "container", layout: {align: "stretch", type: "hbox"}, flex: 1, items: [{xtype: "itemselectorvede", id: "enzymeSelector", store: enzymeListStore, displayField: "name", width: 330, buttons: ["add", "remove"], buttonsText: {add: "Add to Active", remove: "Remove from Active"}, doCopy: true}, {xtype: "container", layout: {align: "stretch", type: "vbox"}, items: [{xtype: "button", text: "Save as Group", id: "saveGroupButton"}, {xtype: "button", text: "Delete Group", id: "deleteGroupButton"}, {xtype: "button", text: "Make Active", id: "makeActiveButton"}]}]}, {xtype: "container", layout: {align: "stretch", type: "hbox"}, items: [{xtype: "button", id: "restrictionEnzymesManagerOKButton", width: 69, text: "OK"}, {xtype: "button", id: "restrictionEnzymesManagerCancelButton", width: 69, text: "Cancel"}]}]});
+  me.callParent(arguments);
+}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'RestrictionEnzymesManagerWindow'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.ve.SelectWindow', Ext.window.Window, {layout: {align: 'stretch', type: 'vbox'}, title: 'Select...', resizable: false, draggable: false, modal: true, width: 158, initComponent: function() {
+  var me = this;
+  Ext.applyIf(me, {items: [{xtype: 'container', layout: {align: 'stretch', type: 'vbox'}, padding: 2, flex: 1, items: [{xtype: 'textfield', id: 'selectWindowFromField', fieldLabel: 'From', labelAlign: 'right', labelWidth: 50}, {xtype: 'textfield', id: 'selectWindowToField', fieldLabel: 'To', labelAlign: 'right', labelWidth: 50}]}, {xtype: 'container', layout: {pack: 'end', type: 'hbox'}, flex: 0.3, items: [{xtype: 'button', height: 23, id: 'selectWindowOKButton', margin: 2, maxHeight: 28, width: 69, text: 'OK'}, {xtype: 'button', height: 23, id: 'selectWindowCancelButton', margin: 2, maxHeight: 28, width: 69, text: 'Cancel'}]}]});
+  me.callParent(arguments);
+}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'SelectWindow'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.ve.SimulateDigestionWindow', Ext.window.Window, {height: 500, width: 900, layout: {align: "stretch", type: "hbox"}, resizable: true, constrainHeader: true, title: "Gel Digest", modal: true, initComponent: function() {
+  var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
+  var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], autoLoad: true, sorters: [{property: "name", direction: "ASC"}]});
+  var me = this;
+  Ext.applyIf(me, {items: [{xtype: "container", height: "100%", width: "100%", layout: {align: "stretch", type: "hbox"}, items: [{xtype: "panel", width: 300, title: "Enzyme Groups", layout: {align: "stretch", type: "vbox"}, items: [{xtype: "container", layout: {type: "hbox", align: "stretch"}, items: [{xtype: "combobox", hideTrigger: true, valueField: "name", emptyText: "Search for Enzyme in...", id: "enzymeGroupSelector-search", queryMode: "local", disabled: false, maxWidth: 134}, {xtype: "combobox", id: "enzymeGroupSelector-digest", store: groupStore, editable: false, queryMode: "local", value: "All Enzymes", displayField: "name", flex: 1}]}, {xtype: "itemselectorvede", name: "itemselectorvede", flex: 1, id: "enzymeListSelector-digest", store: enzymeListStore, displayField: "name", valueField: "name", buttons: ["add", "remove"], buttonsText: {add: "Add to Active", remove: "Remove from Active"}, msgTarget: "side", fromTitle: "Available", toTitle: "Active", doCopy: true}]}, {xtype: "panel", flex: 1, layout: {align: "stretch", type: "vbox"}, title: "Digest Results", items: [{xtype: "fieldcontainer", height: 40, padding: "10 0 30 10", width: 400, fieldLabel: "", flex: 0, items: [{xtype: "combobox", height: 21, id: "ladderSelector", padding: " 10 0 0 10", width: 425, value: "GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", store: ["GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", "GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", "GeneRuler Low Range DNA Ladder 25-700 bp"], fieldLabel: "Ladder", editable: false}]}, {xtype: "panel", flex: 1, layout: {type: "vbox", align: "stretch"}, bodyStyle: {background: "#000"}, items: [{xtype: "draw", id: "drawingSurface", flex: 1, x: 0, y: 0}]}]}]}]});
+  me.callParent(arguments);
+}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'SimulateDigestionWindow'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.MainMenuController', Ext.app.Controller, {CaretEvent: null, MenuItemEvent: null, ProjectManager: null, VisibilityEvent: null, SequenceManagerEvent: null, onCutMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.CUT);
+}, onCopyMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.COPY);
+}, onPasteMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.PASTE);
+}, onUndoMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.UNDO);
+}, onRedoMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.REDO);
+}, onSafeEditingMenuItemCheckChange: function(checkbox, checked) {
+  this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, checked);
+}, validateSafeEditingMenuItem: function(checked) {
+  Ext.getCmp("safeEditingMenuItem").setChecked(checked);
+}, onFindMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
+}, onGotoMenuItemClick: function() {
+  var gotoWindow = Ext.create("Vede.view.ve.GoToWindow");
+  this.application.fireEvent(this.MenuItemEvent.GOTO_WINDOW_OPENED, gotoWindow);
+}, onSelectMenuItemClick: function() {
+  var selectWindow = Ext.create("Vede.view.ve.SelectWindow");
+  selectWindow.show();
+  selectWindow.center();
+  this.application.fireEvent(this.MenuItemEvent.SELECT_WINDOW_OPENED, selectWindow);
+}, onSelectAllMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
+}, onSelectInverseMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
+}, onReverseComplementMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
+}, onRebaseMenuItemClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.REBASE_SEQUENCE);
+}, onCancelButtonClick: function(button, e, options) {
+  if (button.up('window')) 
+  {
+    button.up('window').close();
+  }
+}, onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
+  var viewMode;
+  if (checked) 
+  {
+    viewMode = "circular";
+  } else {
+    viewMode = "linear";
+  }
+  this.application.fireEvent("ViewModeChanged", viewMode);
+}, onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
+  var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
+  if (checked) 
+  {
+    btn.toggle(true, true);
+  } else {
+    btn.toggle(false, true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED, checked);
+}, onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
+  var btn = Ext.ComponentQuery.query("#cutsitesBtn")[0];
+  if (checked) 
+  {
+    btn.toggle(true, true);
+  } else {
+    btn.toggle(false, true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED, checked);
+}, onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
+  var btn = Ext.ComponentQuery.query("#orfsBtn")[0];
+  if (checked) 
+  {
+    btn.toggle(true, true);
+  } else {
+    btn.toggle(false, true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED, checked);
+}, onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
+  this.application.fireEvent(this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED, checked);
+}, onShowSpacesMenuItemCheckChange: function(menucheckitem, checked) {
+  this.application.fireEvent(this.VisibilityEvent.SHOW_SPACES_CHANGED, checked);
+}, onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
+  this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED, checked);
+}, onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
+  this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED, checked);
+}, onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
+  this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED, checked);
+}, onCutSiteLabelsMenuItemCheckChange: function(menucheckitem, checked) {
+  this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED, checked);
+}, onSimulateDigestionMenuItemClick: function() {
+  var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
+  simulateDigestionWindow.show();
+  simulateDigestionWindow.center();
+  this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+}, onCreateNewFeatureMenuItemClick: function() {
+  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");
+  createNewFeatureWindow.show();
+  createNewFeatureWindow.center();
+}, onRestrictionEnzymesManagerMenuItemClick: function() {
+  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.RestrictionEnzymesManagerWindow");
+  restrictionEnzymesManagerWindow.show();
+  restrictionEnzymesManagerWindow.center();
+  this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
+}, onViewModeChanged: function(viewMode) {
+  var circularMenuItem = Ext.getCmp("circularViewMenuItem");
+  var linearMenuItem = Ext.getCmp("linearViewMenuItem");
+  if (viewMode == "linear") 
+  {
+    circularMenuItem.setChecked(false, true);
+    linearMenuItem.setChecked(true, true);
+  } else {
+    circularMenuItem.setChecked(true, false);
+    linearMenuItem.setChecked(false, true);
+  }
+}, onDownloadGenbankMenuItemClick: function(item, e, options) {
+  console.log("Download genbank called");
+  var saveFile = function(name, gb) {
+  var flag;
+  var text = gb.toString();
+  var filename = name;
+  var bb = new BlobBuilder();
+  bb.append(text);
+  saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+};
+  var sequenceFileManager = Teselagen.manager.ProjectManager.workingSequenceFileManager;
+  var fileName = sequenceFileManager.getName() + ".gb";
+  saveFile(fileName, sequenceFileManager.toGenbank());
+}, onRenameSequenceItemClick: function(item, e, options) {
+  var onPromptClosed = function(answer, text) {
+  Teselagen.manager.ProjectManager.workingSequence.set('name', text);
+  Teselagen.manager.ProjectManager.workingSequence.save({callback: function() {
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+}});
+};
+  Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
+}, onHelpBtnClick: function(button, e, options) {
+  if (!this.helpWindow || !this.helpWindow.body) 
+  this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
+}, onSelectionCancelled: function(scope) {
+  Ext.getCmp("createNewFeatureMenuItem").disable();
+}, onSelectionChanged: function(scope) {
+  Ext.getCmp("createNewFeatureMenuItem").enable();
+}, onSequenceManagerChanged: function(scope) {
+  Ext.getCmp("createNewFeatureMenuItem").disable();
 }, init: function() {
-  this.control({"#designGrid_Panel": {itemclick: this.onLastDEProjectsItemClick}});
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'DashboardPanelController'], 0));
+  this.control({"#cutMenuItem": {click: this.onCutMenuItemClick}, "#copyMenuItem": {click: this.onCopyMenuItemClick}, "#pasteMenuItem": {click: this.onPasteMenuItemClick}, "#undoMenuItem": {click: this.onUndoMenuItemClick}, "#redoMenuItem": {click: this.onRedoMenuItemClick}, "#safeEditingMenuItem": {checkchange: this.onSafeEditingMenuItemCheckChange}, "#findMenuItem": {click: this.onFindMenuItemClick}, "#gotoMenuItem": {click: this.onGotoMenuItemClick}, "#selectMenuItem": {click: this.onSelectMenuItemClick}, "#selectAllMenuItem": {click: this.onSelectAllMenuItemClick}, "#selectInverseMenuItem": {click: this.onSelectInverseMenuItemClick}, "#reverseComplementMenuItem": {click: this.onReverseComplementMenuItemClick}, "#rebaseMenuItem": {click: this.onRebaseMenuItemClick}, "#VectorEditorPanel > button[text=Cancel]": {click: this.onCancelButtonClick}, "#downloadGenbankMenuItem": {click: this.onDownloadGenbankMenuItemClick}, "#renameSequenceItem": {click: this.onRenameSequenceItemClick}, "#circularViewMenuItem": {checkchange: this.onCircularViewMenuItemCheckChange}, "#featuresMenuItem": {checkchange: this.onFeaturesMenuItemCheckChange}, "#cutSitesMenuItem": {checkchange: this.onCutSitesMenuItemCheckChange}, "#orfsMenuItem": {checkchange: this.onOrfsMenuItemCheckChange}, "#showComplementaryMenuItem": {checkchange: this.onShowComplementaryMenuItemCheckChange}, "#showSpacesMenuItem": {checkchange: this.onShowSpacesMenuItemCheckChange}, "#showSequenceAAMenuItem": {checkchange: this.onShowSequenceAAMenuItemCheckChange}, "#showRevcomAAMenuItem": {checkchange: this.onShowRevcomAAMenuItemCheckChange}, "#featureLabelsMenuItem": {checkchange: this.onFeatureLabelsMenuItemCheckChange}, "#cutSiteLabelsMenuItem": {checkchange: this.onCutSiteLabelsMenuItemCheckChange}, "#simulateDigestionMenuItem": {click: this.onSimulateDigestionMenuItemClick}, "#createNewFeatureMenuItem": {click: this.onCreateNewFeatureMenuItemClick}, "#restrictionEnzymesManagerMenuItem": {click: this.onRestrictionEnzymesManagerMenuItemClick}});
+  this.CaretEvent = Teselagen.event.CaretEvent;
+  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+  this.ProjectManager = Teselagen.manager.ProjectManager;
+  this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+  this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED, this.validateSafeEditingMenuItem, this);
+  this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+  this.application.on(Teselagen.event.SelectionEvent.SELECTION_CANCELED, this.onSelectionCancelled, this);
+  this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, this.onSelectionChanged, this);
+  this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'MainMenuController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.MainToolbarController', Ext.app.Controller, {MenuItemEvent: null, VisibilityEvent: null, onImportBtnChange: function(pBtn) {
+  if (typeof window.FileReader !== 'function') 
+  {
+    Ext.Msg.alert('Browser does not support File API.');
+  } else {
+    var fileInput = pBtn.extractFileInput();
+    var file = fileInput.files[0];
+    var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+    if (ext) 
+    {
+      Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
+      var fr = new FileReader();
+      fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
+      fr.onerror = this.onImportFileError;
+      fr.readAsText(file);
+    } else {
+      Ext.MessageBox.alert('Error', 'Invalid file format');
+    }
+  }
+}, onImportFileLoad: function(pFile, pExt, pEvt) {
+  Vede.application.fireEvent("ImportFileToSequence", pFile, pExt, pEvt, Teselagen.manager.ProjectManager.workingSequence);
+}, onImportFileError: function(pEvt) {
+  var err = pEvt.target.error;
+  if (err) 
+  {
+    throw err;
+  }
+}, onCircularViewButtonClick: function(button, e, options) {
+  var viewMode;
+  if (button.pressed) 
+  {
+    viewMode = "circular";
+  } else {
+    viewMode = "linear";
+  }
+  this.application.fireEvent("ViewModeChanged", viewMode);
+}, onUndoButtonClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.UNDO);
+}, onRedoButtonClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.REDO);
+}, onFindButtonClick: function() {
+  this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
+}, onFeaturesButtonClick: function(button, e, options) {
+  var menuItem = Ext.ComponentQuery.query('#featuresMenuItem')[0];
+  if (button.pressed) 
+  {
+    menuItem.setChecked(true, true);
+  } else {
+    menuItem.setChecked(false, true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED, button.pressed);
+}, onCutSitesButtonClick: function(button, e, options) {
+  var menuItem = Ext.ComponentQuery.query('#cutSitesMenuItem')[0];
+  if (button.pressed) 
+  {
+    menuItem.setChecked(true, true);
+  } else {
+    menuItem.setChecked(false, true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED, button.pressed);
+}, onOrfsButtonClick: function(button, e, options) {
+  var menuItem = Ext.ComponentQuery.query('#orfsMenuItem')[0];
+  if (button.pressed) 
+  {
+    menuItem.setChecked(true, true);
+  } else {
+    menuItem.setChecked(false, true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED, button.pressed);
+}, onREButtonClick: function() {
+  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.RestrictionEnzymesManagerWindow");
+  restrictionEnzymesManagerWindow.show();
+  restrictionEnzymesManagerWindow.center();
+  this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
+}, onLinearViewBtnClick: function(button, e, options) {
+  var viewMode;
+  if (button.pressed) 
+  {
+    viewMode = "linear";
+  } else {
+    viewMode = "circular";
+  }
+  this.application.fireEvent("ViewModeChanged", viewMode);
+}, onViewModeChanged: function(viewMode) {
+  var circularButton = Ext.getCmp("circularViewBtn");
+  var linearButton = Ext.getCmp("linearViewBtn");
+  if (viewMode == "linear") 
+  {
+    circularButton.toggle(false, true);
+    linearButton.toggle(true, true);
+  } else {
+    circularButton.toggle(true, false);
+    linearButton.toggle(false, true);
+  }
+}, onSaveToRegistryButtonClick: function() {
+  Ext.create("Vede.view.SaveToRegistryWindow").show();
+}, onSaveToRegistryConfirmationButtonClick: function(button, e, options) {
+  var form = button.up('form').getForm();
+  var name = form.findField('Name');
+  console.log(name.value);
+  var gbMng = Teselagen.bio.parsers.GenbankManager;
+}, hidePanels: function() {
+  Ext.getCmp('ProjectPanel').hide();
+  Ext.get("VectorEditorStatusPanel").hide();
+  Ext.get("FindPanel").hide();
+}, showPanels: function() {
+  Ext.getCmp('ProjectPanel').show();
+  Ext.get("VectorEditorStatusPanel").show();
+  Ext.get("FindPanel").show();
+}, registerFullScreenEventListener: function() {
+  var self = this;
+  document.addEventListener("fullscreenchange", function() {
+  if (!(document.fullscreenElement)) 
+  self.showPanels(); else self.hidePanels();
+}, false);
+  document.addEventListener("mozfullscreenchange", function() {
+  if (!(document.mozFullScreen)) 
+  self.showPanels(); else self.hidePanels();
+}, false);
+  document.addEventListener("webkitfullscreenchange", function() {
+  if (!(document.webkitIsFullScreen)) 
+  self.showPanels(); else self.hidePanels();
+}, false);
+}, onFullscreenButtonClick: function() {
+  if (document.fullscreenElement || document.mozFullScreen || document.webkitIsFullScreen) 
+  {
+    if (document.exitFullscreen) 
+    {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) 
+    {
+      document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) 
+    {
+      document.webkitCancelFullScreen();
+    }
+  } else {
+    var docElm = document.documentElement;
+    if (docElm.requestFullscreen) 
+    {
+      docElm.requestFullscreen();
+    } else if (docElm.mozRequestFullScreen) 
+    {
+      docElm.mozRequestFullScreen();
+    } else if (docElm.webkitRequestFullScreen) 
+    {
+      docElm.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+  }
+}, init: function() {
+  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+  this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+  this.control({"#importBtn": {change: this.onImportBtnChange}, "#circularViewBtn": {click: this.onCircularViewButtonClick}, "#undoViewBtn": {click: this.onUndoButtonClick}, "#redoViewBtn": {click: this.onRedoButtonClick}, "#findBtn": {click: this.onFindButtonClick}, "#featuresBtn": {click: this.onFeaturesButtonClick}, "#cutsitesBtn": {click: this.onCutSitesButtonClick}, "#orfsBtn": {click: this.onOrfsButtonClick}, "#reBtn": {click: this.onREButtonClick}, "#linearViewBtn": {click: this.onLinearViewBtnClick}, "#exportBtn": {}, "#saveToRegistryConfirmation": {click: this.onSaveToRegistryConfirmationButtonClick}, "#fullscreen": {click: this.onFullscreenButtonClick}});
+  this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+  this.registerFullScreenEventListener();
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'MainToolbarController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.common.Label', Ext.Base, {inheritableStatics: {FONT_FAMILY: "sans-serif", FONT_SIZE: "6px"}, config: {labelSVG: null, tooltip: "", click: null, rightClick: null, needsMeasurement: true, annotation: null, includeInView: true, x: 0, y: 0}, StringUtil: null, labelText: function() {
+  return "";
+}, constructor: function(inData) {
+  this.initConfig(inData);
+  this.StringUtil = Teselagen.bio.util.StringUtil;
+  labelString = (typeof (this.labelText()) == "object") ? "" : this.labelText();
+  if (!this.labelText() || !this.StringUtil.trim(labelString)) 
+  {
+    this.setIncludeInView(false);
+  }
+  this.label = this.labelSVG.append("svg:text").attr("fill", inData.color || "black").attr("x", inData.x).attr("y", inData.y).text(this.labelText()).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).on("mousedown", inData.click).on("contextmenu", inData.rightClick);
+  this.label.append("svg:title").text(inData.tooltip);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'Label'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.CutSiteLabel', Teselagen.renderer.common.Label, {config: {center: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+}, labelText: function() {
+  return this.annotation.getRestrictionEnzyme().getName();
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'CutSiteLabel'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.common.Alignment', Ext.Base, {singleton: true, sequenceManager: null, SORT_BY_LENGTH: false, buildAlignmentMap: function(annotations, sequenceManager) {
+  this.sequenceManager = sequenceManager;
+  if (!!annotations) 
+  {
+    if (this.SORT_BY_LENGTH) 
+    {
+      annotations.sort(this.sortByLength);
+    } else {
+      annotations.sort(this.sortByStart);
+    }
+  }
+  var rows = [];
+  var alignmentMap = new Ext.util.HashMap();
+  Ext.each(annotations, function(annotation) {
+  var doesFitInRows = false;
+  var fitRow;
+  Ext.each(rows, function(row, rowIndex) {
+  if (this.doesFitInRow(row, annotation)) 
+  {
+    doesFitInRows = true;
+    fitRow = rowIndex;
+    row.push(annotation);
+    return false;
+  }
+}, this);
+  if (!doesFitInRows) 
+  {
+    rows.push([annotation]);
+    fitRow = rows.length - 1;
+  }
+  alignmentMap.add(annotation, fitRow);
+}, this);
+  return alignmentMap;
+}, sortByStart: function(a1, a2) {
+  var a1Start = a1.getStart();
+  var a2Start = a2.getStart();
+  if (a1Start > a2Start) 
+  {
+    return 1;
+  } else if (a1Start < a2Start) 
+  {
+    return -1;
+  } else {
+    return 0;
+  }
+}, sortByLength: function(a1, a2) {
+  if (a1.getStart() > a1.getEnd()) 
+  {
+    return a1.getEnd() + this.sequenceManager.getSequence().length - a1.getStart() + 1;
+  } else {
+    return a1.getEnd() - a1.getStart() + 1;
+  }
+  if (a2.getStart() > a2.getEnd()) 
+  {
+    return a2.getEnd() + this.sequenceManager.getSequence().length - a2.getStart() + 1;
+  } else {
+    return a2.getEnd() - a2.getStart() + 1;
+  }
+  if (a1Length < a2Length) 
+  {
+    return 1;
+  } else if (a1Length > a2Length) 
+  {
+    return -1;
+  } else {
+    return 0;
+  }
+}, doesFitInRow: function(row, annotation) {
+  var fits = true;
+  Ext.each(row, function(compareAnnotation) {
+  if (this.annotationOverlaps(annotation, compareAnnotation)) 
+  {
+    fits = false;
+    return false;
+  }
+}, this);
+  return fits;
+}, annotationOverlaps: function(annotation1, annotation2) {
+  var overlaps = false;
+  if (annotation1.getStart() > annotation1.getEnd() && annotation2.getStart() > annotation2.getEnd()) 
+  {
+    result = this.doOverlaps(annotation1.getStart(), this.sequenceManager.sequence.length - 1, annotation2.getStart(), this.sequenceManager.sequence.length - 1) || this.doOverlaps(0, annotation1.getStart(), 0, annotation2.getEnd());
+  } else if (annotation1.getStart() > annotation1.getEnd() && annotation2.getStart() <= annotation2.getEnd()) 
+  {
+    result = this.doOverlaps(annotation1.getStart(), this.sequenceManager.sequence.length - 1, annotation2.getStart(), annotation2.getEnd()) || this.doOverlaps(0, annotation1.getEnd(), annotation2.getStart(), annotation2.getEnd());
+  } else if (annotation1.getStart() <= annotation1.getEnd() && annotation2.getStart() > annotation2.getEnd()) 
+  {
+    result = this.doOverlaps(annotation1.getStart(), annotation1.getEnd(), annotation2.getStart(), this.sequenceManager.sequence.length - 1) || this.doOverlaps(annotation1.getStart(), annotation1.getEnd(), 0, annotation2.getEnd());
+  } else {
+    result = this.doOverlaps(annotation1.getStart(), annotation1.getEnd(), annotation2.getStart(), annotation2.getEnd());
+  }
+  return result;
+}, doOverlaps: function(start1, end1, start2, end2) {
+  return ((start1 >= start2) && (start1 < end2)) || ((start2 >= start1) && (start2 < end1));
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'Alignment'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.common.AnnotationRenderer', Ext.Base, {inheritableStatics: {FRAME_COLOR: "#606060"}, config: {sequenceManager: null, needsMeasurement: true}, Alignment: null, StrandType: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.Alignment = Teselagen.renderer.common.Alignment;
+  this.StrandType = Teselagen.bio.sequence.common.StrandType;
+}, applySequenceManager: function(pSeqMan) {
+  this.setNeedsMeasurement(true);
+  return pSeqMan;
+}, applyCenter: function(pCenter) {
+  this.setNeedsMeasurement(true);
+  return pCenter;
+}, addToolTip: function(sprite, tooltip) {
+  sprite.tooltip = tooltip;
+  sprite.on("render", function(me) {
+  var tip = Ext.create("Ext.tip.ToolTip", {target: me.el, html: me.tooltip});
+});
+}, getClickListener: function(start, end) {
+  return function() {
+  Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
+};
+}, getRightClickListener: function(feature) {
+  var sequenceManager = this.sequenceManager;
+  return function() {
+  Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+  d3.event.preventDefault();
+  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Edit Sequence Feature', handler: function() {
+  var editSequenceFeatureWindow = Ext.create("Vede.view.ve.EditSequenceFeatureWindow");
+  editSequenceFeatureWindow.show();
+  editSequenceFeatureWindow.center();
+}}, {text: 'Delete Sequence Feature', handler: function() {
+  sequenceManager.removeFeature(feature, false);
+}}]});
+  contextMenu.show();
+  contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
+};
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'AnnotationRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.utils.GraphicUtils', Ext.Base, {singleton: true, ARC_THRESHOLD: 5, drawArc: function(center, radius, startAngle, endAngle, reverse, returnString, sweep, largeArc) {
+  var sweep = sweep || false;
+  var largeArc = largeArc || false;
+  var reverse = reverse || false;
+  var returnString = returnString || false;
+  var sweepFlag;
+  if (sweep) 
+  {
+    sweepFlag = 1;
+  } else {
+    sweepFlag = 0;
+  }
+  var largeFlag;
+  if (largeArc) 
+  {
+    largeFlag = 1;
+  } else {
+    largeFlag = 0;
+  }
+  var alpha;
+  if (endAngle < startAngle) 
+  {
+    alpha = 2 * Math.PI - startAngle + endAngle;
+  } else {
+    alpha = endAngle - startAngle;
+  }
+  var startPoint = Ext.create("Teselagen.bio.util.Point");
+  var endPoint = Ext.create("Teselagen.bio.util.Point");
+  var sprite;
+  var path;
+  var tempAngle;
+  if (reverse) 
+  {
+    tempAngle = startAngle;
+    startAngle = endAngle;
+    endAngle = tempAngle;
+  }
+  startPoint.x = center.x + radius * Math.sin(startAngle);
+  startPoint.y = center.y - radius * Math.cos(startAngle);
+  endPoint.x = center.x + radius * Math.sin(endAngle);
+  endPoint.y = center.y - radius * Math.cos(endAngle);
+  path = "M" + startPoint.x + " " + startPoint.y + "A" + radius + " " + radius + " 0 " + largeFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + " ";
+  return path;
+}, drawRect: function(xPos, yPos, width, color) {
+  var sprite;
+  var path;
+  var returnString = returnString || false;
+  path = "M" + xPos + " " + yPos + "L" + (xPos + width) + " " + yPos + "L" + (xPos + width) + " " + (yPos + 7) + "L" + xPos + " " + (yPos + 7) + "L" + xPos + " " + yPos + " ";
+  return path;
+}, drawFeaturePositiveArrow: function(xPos, yPos, width, color) {
+  var sprite;
+  var path;
+  if (width > 4) 
+  {
+    path = "M" + xPos + " " + yPos + "L" + (xPos + (width - 4)) + " " + yPos + "L" + (xPos + width) + " " + (yPos + ((8) / 2)) + "L" + (xPos + (width - 4)) + " " + (yPos + 8) + "L" + xPos + " " + (yPos + 8) + "L" + xPos + " " + yPos + " ";
+  } else {
+    path = "M" + xPos + " " + yPos + "L" + (xPos + width) + " " + (yPos + ((8) / 2)) + "L" + xPos + " " + (yPos + 8) + "L" + xPos + " " + yPos + " ";
+  }
+  return path;
+}, drawFeatureNegativeArrow: function(xPos, yPos, width, color) {
+  var sprite;
+  var path;
+  var returnSTring = returnSTring || false;
+  if (width > 4) 
+  {
+    path = "M" + xPos + " " + (yPos + ((8) / 2)) + "L" + (xPos + 4) + " " + yPos + "L" + (xPos + (width)) + " " + yPos + "L" + (xPos + (width)) + " " + (yPos + 8) + "L" + (xPos + 4) + " " + (yPos + 8) + "L" + xPos + " " + (yPos + ((8) / 2)) + " ";
+  } else {
+    path = "M" + xPos + " " + (yPos + ((8) / 2)) + "L" + (xPos + width) + " " + yPos + "L" + (xPos + width) + " " + (yPos + 8) + "L" + xPos + " " + (yPos + ((8) / 2)) + " ";
+  }
+  return path;
+}, drawPiePiece: function(center, radius, thickness, startAngle, endAngle, color) {
+  var outerRadius = radius + thickness / 2;
+  var innerRadius = radius - thickness / 2;
+  var outerCorner = Ext.create("Teselagen.bio.util.Point");
+  var innerCorner = Ext.create("Teselagen.bio.util.Point");
+  var path;
+  outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
+  outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
+  innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
+  innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
+  var sweep = true;
+  if (endAngle < startAngle) 
+  {
+    sweep = false;
+  }
+  var largeFlag = false;
+  if (Math.abs(endAngle - startAngle) > Math.PI) 
+  {
+    largeFlag = true;
+  }
+  path = "M" + outerCorner.x + " " + outerCorner.y + " " + this.drawArc(center, outerRadius, startAngle, endAngle, false, true, sweep, largeFlag) + "L" + innerCorner.x + " " + innerCorner.y + " " + this.drawArc(center, innerRadius, startAngle, endAngle, true, true, !sweep, largeFlag) + "L" + outerCorner.x + " " + outerCorner.y;
+  return path;
+}, drawDirectedPiePiece: function(center, radius, thickness, startAngle, endAngle, direction, color) {
+  var outerRadius = radius + thickness / 2;
+  var innerRadius = radius - thickness / 2;
+  var arcLength;
+  var outerCorner = Ext.create("Teselagen.bio.util.Point");
+  var innerCorner = Ext.create("Teselagen.bio.util.Point");
+  var middlePoint = Ext.create("Teselagen.bio.util.Point");
+  var path;
+  if (direction > 0) 
+  {
+    if (startAngle > endAngle) 
+    {
+      arcLength = radius * (2 * Math.PI - startAngle + endAngle);
+    } else {
+      arcLength = radius * (endAngle - startAngle);
+    }
+    if (arcLength > this.ARC_THRESHOLD) 
+    {
+      var alpha = this.ARC_THRESHOLD / radius;
+      var sweep = true;
+      if (endAngle < startAngle) 
+      {
+        sweep = false;
+      }
+      var largeFlag = false;
+      if (Math.abs(endAngle - startAngle) > Math.PI) 
+      {
+        largeFlag = true;
+      }
+      if (startAngle > endAngle) 
+      {
+        sweep = !sweep;
+        largeFlag = !largeFlag;
+      }
+      if (direction == 1) 
+      {
+        middlePoint.x = center.x + radius * Math.sin(endAngle);
+        middlePoint.y = center.y - radius * Math.cos(endAngle);
+        endAngle -= alpha;
+        outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
+        outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
+        innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
+        innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
+        path = this.drawArc(center, outerRadius, startAngle, endAngle, false, true, sweep, largeFlag) + "L" + middlePoint.x + " " + middlePoint.y + " " + "L" + innerCorner.x + " " + innerCorner.y + " " + this.drawArc(center, innerRadius, startAngle, endAngle, true, true, !sweep, largeFlag) + "L" + outerCorner.x + " " + outerCorner.y;
+      } else if (direction == 2) 
+      {
+        middlePoint.x = center.x + radius * Math.sin(startAngle);
+        middlePoint.y = center.y - radius * Math.cos(startAngle);
+        startAngle += alpha;
+        outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
+        outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
+        innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
+        innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
+        path = "M" + outerCorner.x + " " + outerCorner.y + this.drawArc(center, outerRadius, startAngle, endAngle, false, true, sweep, largeFlag) + "L" + innerCorner.x + " " + innerCorner.y + this.drawArc(center, innerRadius, startAngle, endAngle, true, true, !sweep, largeFlag) + "L" + middlePoint.x + " " + middlePoint.y + "L" + outerCorner.x + " " + outerCorner.y;
+      }
+    } else {
+      if (direction == 1) 
+      {
+        middlePoint.x = center.x + radius * Math.sin(endAngle);
+        middlePoint.y = center.y - radius * Math.cos(endAngle);
+        outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
+        outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
+        innerCorner.x = center.x + innerRadius * Math.sin(startAngle);
+        innerCorner.y = center.y - innerRadius * Math.cos(startAngle);
+        path = "M" + outerCorner.x + " " + outerCorner.y + "L" + middlePoint.x + " " + middlePoint.y + "L" + innerCorner.x + " " + innerCorner.y + "Z";
+      } else if (direction == 2) 
+      {
+        middlePoint.x = center.x + radius * Math.sin(startAngle);
+        middlePoint.y = center.y - radius * Math.cos(startAngle);
+        outerCorner.x = center.x + outerRadius * Math.sin(endAngle);
+        outerCorner.y = center.y - outerRadius * Math.cos(endAngle);
+        innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
+        innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
+        path = "M" + outerCorner.x + " " + outerCorner.y + "L" + innerCorner.x + " " + innerCorner.y + "L" + middlePoint.x + " " + middlePoint.y + "Z";
+      }
+    }
+  } else {
+    outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
+    outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
+    innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
+    innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
+    path = "M" + outerCorner.x + " " + outerCorner.y + this.drawArc(center, outerRadius, startAngle, endAngle, false, true) + "L" + innerCorner.x + " " + innerCorner.y + this.drawArc(center, innerRadius, startAngle, endAngle, false, true) + "L" + outerCorner.x + " " + outerCorner.y;
+  }
+  return path;
+}, pointOnCircle: function(center, angle, radius) {
+  if (angle > 2 * Math.PI) 
+  {
+    angle = angle % (2 * Math.PI);
+  }
+  var point = Ext.create("Teselagen.bio.util.Point");
+  if (angle < Math.PI / 2) 
+  {
+    point.x = center.x + Math.sin(angle) * radius;
+    point.y = center.y - Math.cos(angle) * radius;
+  } else if ((angle >= Math.PI / 2) && (angle < Math.PI)) 
+  {
+    point.x = center.x + Math.sin(Math.PI - angle) * radius;
+    point.y = center.y + Math.cos(Math.PI - angle) * radius;
+  } else if ((angle >= Math.PI) && (angle < 3 * Math.PI / 2)) 
+  {
+    point.x = center.x - Math.sin(angle - Math.PI) * radius;
+    point.y = center.y + Math.cos(angle - Math.PI) * radius;
+  } else if ((angle >= 3 * Math.PI / 2) && (angle <= 2 * Math.PI)) 
+  {
+    point.x = center.x - Math.sin(2 * Math.PI - angle) * radius;
+    point.y = center.y - Math.cos(2 * Math.PI - angle) * radius;
+  }
+  return point;
+}, pointOnRect: function(reference, railwidth, location, gap) {
+  var point = Ext.create("Teselagen.bio.util.Point");
+  point.x = reference.x + ((railwidth / location) * railwidth);
+  point.y = reference.y + gap;
+  return point;
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'GraphicUtils'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.PieRenderer', Teselagen.renderer.common.AnnotationRenderer, {config: {pie: null, center: null, railRadius: 0}, GraphicUtils: null, StrandType: null, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+  this.GraphicUtils = Teselagen.utils.GraphicUtils;
+}, applyRailRadius: function(pRailRadius) {
+  this.setNeedsMeasurement(true);
+  return pRailRadius;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'PieRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.CutSiteRenderer', Teselagen.renderer.pie.PieRenderer, {statics: {CUTSITE_LINE_WIDTH: 0.5}, config: {cutSiteSVG: null, cutSites: [], middlePoints: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+  this.middlePoints = Ext.create("Ext.util.HashMap");
+}, render: function() {
+  Ext.each(this.getCutSites(), function(site) {
+  var angle = site.getStart() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
+  this.middlePoints.add(site, this.GraphicUtils.pointOnCircle(this.center, angle, this.railRadius + 10));
+  var lineStart = Ext.create("Teselagen.bio.util.Point", this.center.x + this.railRadius * Math.sin(angle), this.center.y - this.railRadius * Math.cos(angle));
+  var lineEnd = Ext.create("Teselagen.bio.util.Point", this.center.x + (this.railRadius + 10) * Math.sin(angle), this.center.y - (this.railRadius + 10) * Math.cos(angle));
+  path = "M" + lineStart.x + " " + lineStart.y + " " + "L" + lineEnd.x + " " + lineEnd.y;
+  this.cutSiteSVG.append("svg:path").attr("stroke", this.self.FRAME_COLOR).attr("stroke-width", this.self.CUTSITE_LINE_WIDTH).attr("d", path).on("mousedown", this.getClickListener(site.getStart(), site.getEnd())).append("svg:title").text(this.getToolTip(site));
+}, this);
+}, getToolTip: function(cutSite) {
+  var complement = ", complement";
+  if (cutSite.getStrand() == 1) 
+  {
+    complement = "";
+  }
+  var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) + complement + ", cuts " + cutSite.getNumCuts() + " times";
+  return toolTip;
+}, applyCutSites: function(pCutSites) {
+  this.setNeedsMeasurement(true);
+  return pCutSites;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'CutSiteRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.FeatureLabel', Teselagen.renderer.common.Label, {config: {center: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+}, labelText: function() {
+  var label = [];
+  if (!this.annotation.getName() || !this.StringUtil.trim(this.annotation.getName())) 
+  {
+    var notes = this.annotation.getNotes();
+    Ext.each(notes, function(note) {
+  if (note.getName() == "label") 
+  {
+    label = note.getValue();
+    return false;
+  } else if (note.getName() == "apeinfo_label" || note.getName() == "note" || note.getName() == "gene") 
+  {
+    label = note.getValue();
+  }
+});
+  } else {
+    label = this.annotation.getName();
+  }
+  if (label == null) 
+  {
+    label = "";
+  }
+  return label;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'FeatureLabel'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.FeatureRenderer', Teselagen.renderer.pie.PieRenderer, {statics: {DEFAULT_FEATURE_HEIGHT: 7, DEFAULT_FEATURES_GAP: 3, OUTLINE_COLOR: "black", OUTLINE_WIDTH: 0.5}, config: {featureSVG: null, features: [], middlePoints: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+  this.setMiddlePoints(Ext.create("Ext.util.HashMap"));
+}, render: function() {
+  var path;
+  var featureAlignment = this.Alignment.buildAlignmentMap(this.features, this.sequenceManager);
+  Ext.each(this.features, function(feature) {
+  var featureRadius = this.railRadius - this.self.DEFAULT_FEATURES_GAP - 2 * this.self.DEFAULT_FEATURES_GAP;
+  var index = featureAlignment.get(feature);
+  if (index > 0) 
+  {
+    featureRadius -= index * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
+  }
+  this.calculateAngles(feature, featureRadius);
+  var color = "#ffffff";
+  var direction = 0;
+  if (feature.getStrand() == this.StrandType.FORWARD) 
+  {
+    direction = 1;
+  } else if (feature.getStrand() == this.StrandType.BACKWARD) 
+  {
+    direction = 2;
+  }
+  var startAngle;
+  var endAngle;
+  Ext.each(feature.getLocations(), function(location) {
+  color = this.colorByType(feature.getType().toLowerCase());
+  startAngle = location.getStart() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
+  endAngle = location.getEnd() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
+  if (feature.getStart() == location.getStart() && feature.getStrand() == this.StrandType.BACKWARD) 
+  {
+    path = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
+  } else if (feature.getEnd() == location.getEnd() && feature.getStrand() == this.StrandType.FORWARD) 
+  {
+    path = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
+  } else {
+    path = this.GraphicUtils.drawPiePiece(this.center, featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
+  }
+  this.featureSVG.append("svg:path").attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", color).attr("fill-rule", "evenodd").attr("d", path).on("mousedown", this.getClickListener(feature.getStart(), feature.getEnd())).on("contextmenu", this.getRightClickListener(feature)).append("svg:title").text(this.getToolTip(feature));
+}, this);
+}, this);
+}, calculateAngles: function(feature, featureRadius) {
+  var angle1 = feature.getStart() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
+  var angle2 = feature.getEnd() * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
+  var centralAngle;
+  if (angle1 > angle2) 
+  {
+    var virtualCenter = angle2 - (((2 * Math.PI - angle1) + angle2) / 2);
+    if (virtualCenter > 0) 
+    {
+      centralAngle = virtualCenter;
+    } else {
+      centralAngle = 2 * Math.PI + virtualCenter;
+    }
+  } else {
+    centralAngle = (angle1 + angle2) / 2;
+  }
+  this.middlePoints.add(feature, this.GraphicUtils.pointOnCircle(this.center, centralAngle, featureRadius));
+  return [angle1, angle2];
+}, getToolTip: function(feature) {
+  var nameString = "";
+  if (feature.getName()) 
+  {
+    nameString = " - " + feature.getName();
+  }
+  return feature.getType() + nameString + ": " + (feature.getStart() + 1) + ".." + feature.getEnd();
+}, colorByType: function(type) {
+  var switchObj = {promoter: "#31B440", terminator: "#F51600", cds: "#EF6500", m_rna: "#FFFF00", misc_binding: "#006FEF", misc_feature: "#006FEF", misc_marker: "#8DCEB1", rep_origin: "#878787"};
+  var color = switchObj[type] || "#CCCCCC";
+  return color;
+}, applyFeatures: function(pFeatures) {
+  this.setNeedsMeasurement(true);
+  return pFeatures;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'FeatureRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.ORFRenderer', Teselagen.renderer.pie.PieRenderer, {statics: {DISTANCE_FROM_RAIL: 15, DISTANCE_BETWEEN_ORFS: 5, ORF_FRAME_COLOR: ["#FF0000", "#31B440", "#3366CC"]}, config: {orfSVG: null, orfs: null}, maxAlignmentRow: 0, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+}, render: function() {
+  var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, this.sequenceManager);
+  this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
+  var seqLen = this.sequenceManager.getSequence().seqString().length;
+  Ext.each(this.orfs, function(orf) {
+  var color = this.self.ORF_FRAME_COLOR[orf.getFrame()];
+  var tooltip = this.getToolTip(orf);
+  var index = orfAlignment.get(orf);
+  var orfRadius = this.railRadius + this.self.DISTANCE_FROM_RAIL;
+  if (index > 0) 
+  {
+    orfRadius += index * this.self.DISTANCE_BETWEEN_ORFS;
+  }
+  var startAngle = orf.getStart() * 2 * Math.PI / seqLen;
+  var endAngle = orf.getEnd() * 2 * Math.PI / seqLen;
+  var sweep = true;
+  if (endAngle < startAngle) 
+  {
+    sweep = false;
+  }
+  var largeArc = false;
+  if (Math.abs(endAngle - startAngle) > Math.PI) 
+  {
+    largeArc = true;
+  }
+  if (startAngle > endAngle) 
+  {
+    sweep = !sweep;
+    largeArc = !largeArc;
+  }
+  var selectEnd;
+  if (orf.getStrand() == -1) 
+  {
+    selectEnd = orf.getEnd() + 1;
+  } else {
+    selectEnd = orf.getEnd();
+  }
+  path = this.GraphicUtils.drawArc(this.center, orfRadius, startAngle, endAngle, false, true, sweep, largeArc);
+  this.orfSVG.append("svg:path").attr("stroke", color).attr("fill", "none").attr("d", path).on("mousedown", function() {
+  Vede.application.fireEvent("VectorPanelAnnotationClicked", orf.getStart(), selectEnd);
+}).append("svg:title").text(tooltip);
+  Ext.each(orf.getStartCodons(), function(codonIndex) {
+  var codonAngle = codonIndex * 2 * Math.PI / seqLen;
+  var codonX = this.center.x + orfRadius * Math.sin(codonAngle);
+  var codonY = this.center.y - orfRadius * Math.cos(codonAngle);
+  var codonSprite = Ext.create("Ext.draw.Sprite", {type: "circle", radius: 2, x: codonX, y: codonY, fill: color});
+  this.orfSVG.append("svg:circle").attr("r", 2).attr("cx", codonX).attr("cy", codonY).attr("fill", color).on("mousedown", function() {
+  Vede.application.fireEvent("VectorPanelAnnotationClicked", orf.getStart(), selectEnd);
+}).append("svg:title").text(tooltip);
+}, this);
+  var lastAngle;
+  var arrowShiftAngle;
+  if (orf.getStrand() == this.StrandType.FORWARD) 
+  {
+    arrowShiftAngle = endAngle - 5 / orfRadius;
+    lastAngle = endAngle;
+  } else {
+    arrowShiftAngle = startAngle + 5 / orfRadius;
+    lastAngle = startAngle;
+  }
+  path = "M" + (this.center.x + (orfRadius + 2) * Math.sin(arrowShiftAngle)) + " " + (this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle)) + "L" + (this.center.x + orfRadius * Math.sin(lastAngle)) + " " + (this.center.y - orfRadius * Math.cos(lastAngle)) + "L" + (this.center.x + (orfRadius - 2) * Math.sin(arrowShiftAngle)) + " " + (this.center.y - (orfRadius - 2) * Math.cos(arrowShiftAngle)) + "z";
+  this.orfSVG.append("svg:path").attr("stroke", color).attr("fill", color).attr("d", path).on("mousedown", function() {
+  Vede.application.fireEvent("VectorPanelAnnotationClicked", orf.getStart(), selectEnd);
+}).append("svg:title").text(tooltip);
+}, this);
+}, getToolTip: function(orf) {
+  var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
+  var aa = Math.floor(bp / 3);
+  var complimentary = "";
+  if (orf.getStrand() == 1 && orf.getStartCodons().length > 1) 
+  {
+    complimentary = ", complimentary";
+  }
+  var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) + ", frame: " + orf.getFrame() + ", length: " + bp + " BP" + ", " + aa + " AA" + complimentary;
+  if (orf.getStartCodons().length > 1) 
+  {
+    tooltipLabel += "\nStart Codons: ";
+    var codonsArray = [];
+    var codonString;
+    Ext.each(orf.getStartCodons(), function(codon, index) {
+  if (index != orf.getStartCodons().length - 1) 
+  {
+    codonString = (codon + 1) + ", ";
+  } else {
+    codonString = codon + 1;
+  }
+  codonsArray.push(codonString);
+});
+    tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
+  }
+  return tooltipLabel;
+}, applyOrfs: function(pOrfs) {
+  this.setNeedsMeasurement(true);
+  return pOrfs;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'ORFRenderer'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.pie.Caret', Ext.Base, {config: {pie: null, angle: null, center: null, radius: null}, statics: {CARET_COLOR: 'black', CARET_WIDTH: 1}, constructor: function(pConfig) {
+  this.initConfig(pConfig);
+  var x = pConfig.radius * Math.cos(pConfig.angle - Math.PI / 2) + pConfig.center.x;
+  var y = pConfig.radius * Math.sin(pConfig.angle - Math.PI / 2) + pConfig.center.y;
+  return pConfig.pie.append("svg:line").attr("class", "pieCaret").attr("x1", pConfig.center.x).attr("y1", pConfig.center.y).attr("x2", x).attr("y2", y).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH);
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'Caret'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.pie.Frame', Ext.Base, {statics: {OUTER_RADIUS: 100, INNER_RADIUS: 97, OUTLINE_WIDTH: 0.5, OUTLINE_COLOR: "#8F8F8F", RING_COLOR: "#ffffb3"}, constructor: function(inData) {
+  var center = inData.center;
+  var outerRadius = this.self.OUTER_RADIUS;
+  var innerRadius = this.self.INNER_RADIUS;
+  var outerStartPoint = {x: center.x - outerRadius, y: center.y};
+  var innerStartPoint = {x: center.x - innerRadius, y: center.y};
+  var path = "M" + outerStartPoint.x + " " + outerStartPoint.y + "A" + outerRadius + " " + outerRadius + " 0 1 1 " + outerStartPoint.x + " " + (outerStartPoint.y + 1.0E-4) + "L" + outerStartPoint.x + " " + outerStartPoint.y + "M" + innerStartPoint.x + " " + innerStartPoint.y + "A" + innerRadius + " " + innerRadius + " 0 1 0 " + innerStartPoint.x + " " + (innerStartPoint.y - 1.0E-4);
+  return inData.pie.append("svg:path").attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", this.self.RING_COLOR).attr("fill-rule", "evenodd").attr("d", path);
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'Frame'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.pie.NameBox', Ext.Base, {statics: {FONT_SIZE: "10px", FONT_WEIGHT: "bold"}, config: {pie: null, center: {}, name: "", length: 0}, constructor: function(inData) {
+  this.initConfig(inData);
+  var text1;
+  var text2;
+  var group = inData.pie.append("svg:g").attr("class", "pieNameBox").attr("text-anchor", "middle").attr("font-size", this.self.FONT_SIZE).attr("font-weight", this.self.FONT_WEIGHT);
+  if (!inData.name) 
+  {
+    text1 = '(' + inData.length + ' bp)';
+    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
+  } else {
+    text1 = inData.name;
+    text2 = '(' + inData.length + 'bp)';
+    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
+    group.append("svg:text").attr("dy", "1em").text(text2).attr("x", this.center.x).attr("y", this.center.y);
+  }
+  return group;
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'NameBox'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.PieManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 35, LABEL_HEIGHT: 10, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, center: null, pie: null, railRadius: 0, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railRadiusChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, zoomLevel: 0, constructor: function(inData) {
+  this.initConfig(inData);
+  this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, cutSites: this.cutSites});
+  this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, features: this.features});
+  this.orfRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {orfSVG: this.orfSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, orfs: this.orfs});
+  this.renderers = [this.cutSiteRenderer, this.featureRenderer, this.orfRenderer];
+}, getAnnotationsInRange: function(start, end) {
+  var annotationsInRange = [];
+  var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {start: start, end: end});
+  if (this.showFeatures) 
+  {
+    var feature;
+    for (var i = 0; i < this.features.length; i++) 
+      {
+        feature = this.features[i];
+        if (selectionAnnotation.contains(feature)) 
+        {
+          annotationsInRange.push(feature);
+        }
+      }
+  }
+  if (this.showCutSites) 
+  {
+    var site;
+    for (var i = 0; i < this.cutSites.length; i++) 
+      {
+        site = this.cutSites[i];
+        if (selectionAnnotation.contains(site)) 
+        {
+          annotationsInRange.push(site);
+        }
+      }
+  }
+  if (this.showOrfs) 
+  {
+    var orf;
+    for (var i = 0; i < this.orfs.length; i++) 
+      {
+        orf = this.orfs[i];
+        if (selectionAnnotation.contains(orf)) 
+        {
+          annotationsInRange.push(orf);
+        }
+      }
+  }
+  return annotationsInRange;
+}, render: function() {
+  Ext.suspendLayouts();
+  var renderer;
+  if (this.dirty) 
+  {
+    for (var i = 0; i < this.renderers.length; i++) 
+      {
+        renderer = this.renderers[i];
+        if (this.sequenceManagerChanged) 
+        {
+          renderer.setSequenceManager(this.sequenceManager);
+        }
+        if (this.railRadiusChanged) 
+        {
+          renderer.setRailRadius(this.railRadius);
+        }
+        if (this.centerChanged) 
+        {
+          renderer.setCenter(this.center);
+        }
+      }
+    this.dirty = false;
+    this.sequenceManagerChanged = false;
+    this.railRadiusChanged = false;
+    this.centerChanged = false;
+  }
+  if (this.cutSitesChanged) 
+  {
+    this.cutSiteSVG.remove();
+    this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "pieCutSite");
+    this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+    this.cutSiteRenderer.setCutSites(this.cutSites);
+    this.cutSiteRenderer.render();
+    this.cutSitesChanged = false;
+  }
+  if (this.featuresChanged) 
+  {
+    this.featureSVG.remove();
+    this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
+    this.featureRenderer.setFeatureSVG(this.featureSVG);
+    this.featureRenderer.setFeatures(this.features);
+    this.featureRenderer.render();
+    this.featuresChanged = false;
+  }
+  if (this.orfsChanged) 
+  {
+    this.orfSVG.remove();
+    this.orfSVG = this.parentSVG.append("svg:g").attr("class", "pieOrf");
+    this.orfRenderer.setOrfSVG(this.orfSVG);
+    this.orfRenderer.setOrfs(this.orfs);
+    this.orfRenderer.render();
+    this.orfsChanged = false;
+  }
+  this.renderLabels();
+  if (this.showOrfs) 
+  {
+    this.orfSVG.style("visibility", "visible");
+  } else {
+    this.orfSVG.style("visibility", "hidden");
+  }
+  if (this.showCutSites) 
+  {
+    this.cutSiteSVG.style("visibility", "visible");
+  } else {
+    this.cutSiteSVG.style("visibility", "hidden");
+  }
+  if (this.showFeatures) 
+  {
+    this.featureSVG.style("visibility", "visible");
+  } else {
+    this.featureSVG.style("visibility", "hidden");
+  }
+  Ext.resumeLayouts(true);
+  Ext.defer(function() {
+  this.fitWidthToContent(this);
+}, 10, this);
+}, zoomIn: function() {
+  Ext.suspendLayouts();
+  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+  var scale = [Number(translateValues[0]), Number(translateValues[3])];
+  var translate = [Number(translateValues[4]), Number(translateValues[5])];
+  scale[0] += this.self.ZOOM_INCREMENT;
+  scale[1] += this.self.ZOOM_INCREMENT;
+  this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
+  Ext.resumeLayouts(true);
+  this.fitWidthToContent(this);
+}, zoomOut: function() {
+  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+  var scale = [translateValues[0], translateValues[3]];
+  var translate = [translateValues[4], translateValues[5]];
+  if (scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) 
+  {
+    Ext.suspendLayouts();
+    scale[0] -= this.self.ZOOM_INCREMENT;
+    scale[1] -= this.self.ZOOM_INCREMENT;
+    this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
+    Ext.resumeLayouts(true);
+    this.fitWidthToContent(this);
+  }
+}, fitWidthToContent: function(scope) {
+  var containerSize = Ext.getCmp("PieContainer").getSize();
+  var transX = containerSize.width / 2 - scope.center.x;
+  var transY = containerSize.height / 2 - scope.center.y;
+  var pieBox = scope.pie[0][0].getBBox();
+  var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+  var scale = [Number(translateValues[0]), Number(translateValues[3])];
+  var translate = [Number(translateValues[4]), Number(translateValues[5])];
+  scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + transX + " " + transY + ")");
+  scope.pie.attr("width", pieBox.width + transX).attr("height", pieBox.height + transY);
+}, drawCoordinates: function() {
+  d3.select(".coordinateSVG").remove();
+  var coordSVG = this.parentSVG.append("svg:g").attr("class", "coordinateSVG");
+  for (var i = -50; i < 500; i += 20) 
+    {
+      for (var j = -50; j < 500; j += 20) 
+        {
+          coordSVG.append("svg:text").attr("font-size", "6px").attr("x", i).attr("y", j).text(i + "," + j);
+        }
+    }
+}, showSprites: function(collection) {
+  var sprite;
+  for (var i = 0; i < collection.length; i++) 
+    {
+      sprite = collection.getAt(i);
+      this.pie.surface.add(sprite);
+      sprite.show(true);
+      this.pie.doComponentLayout();
+    }
+}, hideSprites: function(collection) {
+  var sprite;
+  for (var i = 0; i < collection.length; i++) 
+    {
+      sprite = collection.getAt(i);
+      sprite.hide(true);
+    }
+}, renderLabels: function() {
+  var labels = [];
+  var center;
+  var color;
+  this.labelSVG.remove();
+  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "pieLabel");
+  if (this.showCutSites && this.showCutSiteLabels) 
+  {
+    var site;
+    for (var i = 0; i < this.cutSites.length; i++) 
+      {
+        site = this.cutSites[i];
+        center = this.cutSiteRenderer.middlePoints.get(site);
+        if (site.getNumCuts() == 1) 
+        {
+          color = "#E57676";
+        } else {
+          color = "#888888";
+        }
+        label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {labelSVG: this.labelSVG, annotation: site, x: center.x, y: center.y, center: this.annotationCenter(site), color: color, tooltip: this.cutSiteRenderer.getToolTip(site), click: this.cutSiteRenderer.getClickListener(site.getStart(), site.getEnd())});
+        labels.push(label);
+      }
+  }
+  if (this.showFeatures && this.showFeatureLabels) 
+  {
+    var feature;
+    for (var i = 0; i < this.features.length; i++) 
+      {
+        feature = this.features[i];
+        center = this.featureRenderer.middlePoints.get(feature);
+        label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {labelSVG: this.labelSVG, annotation: feature, x: center.x, y: center.y, center: this.annotationCenter(feature), tooltip: this.featureRenderer.getToolTip(feature), click: this.featureRenderer.getClickListener(feature.getStart(), feature.getEnd()), rightClick: this.featureRenderer.getRightClickListener(feature)});
+        labels.push(label);
+      }
+  }
+  labels.sort(this.labelSort);
+  this.adjustLabelPositions(labels);
+}, adjustLabelPositions: function(labels) {
+  var totalNumberOfLabels = labels.length;
+  var totalLength = this.sequenceManager.getSequence().toString().length;
+  var rightTopLabels = [];
+  var rightBottomLabels = [];
+  var leftTopLabels = [];
+  var leftBottomLabels = [];
+  var label;
+  for (var i = 0; i < labels.length; i++) 
+    {
+      label = labels[i];
+      var labelCenter = label.center;
+      if (labelCenter < totalLength / 4) 
+      {
+        rightTopLabels.push(label);
+      } else if ((labelCenter >= totalLength / 4) && (labelCenter < totalLength / 2)) 
+      {
+        rightBottomLabels.push(label);
+      } else if ((labelCenter >= totalLength / 2) && (labelCenter < 3 * totalLength / 4)) 
+      {
+        leftBottomLabels.push(label);
+      } else {
+        leftTopLabels.push(label);
+      }
+    }
+  var labelRadius = this.railRadius + this.self.LABEL_DISTANCE_FROM_RAIL;
+  if (this.showOrfs && this.orfRenderer.maxAlignmentRow > 0) 
+  {
+    labelRadius += this.orfRenderer.maxAlignmentRow * this.orfRenderer.self.DISTANCE_BETWEEN_ORFS;
+  }
+  var lastLabelYPosition = this.center.y - 15;
+  var numberOfRightTopLabels = rightTopLabels.length;
+  var label;
+  for (var i = numberOfRightTopLabels - 1; i >= 0; i--) 
+    {
+      label = rightTopLabels[i];
+      if (label.includeInView) 
+      {
+        var labelCenter = label.center;
+        var angle = labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length;
+        var xPosition = this.center.x + Math.sin(angle) * labelRadius;
+        var yPosition = this.center.y - Math.cos(angle) * labelRadius;
+        if (yPosition < lastLabelYPosition) 
+        {
+          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+        } else {
+          yPosition = lastLabelYPosition;
+          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+        }
+        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")");
+        labels.push(this.drawConnection(label, xPosition, yPosition));
+      }
+    }
+  lastLabelYPosition = this.center.y;
+  var numberOfRightBottomLabels = rightBottomLabels.length;
+  for (var j = 0; j < numberOfRightBottomLabels; j++) 
+    {
+      label = rightBottomLabels[j];
+      if (label.includeInView) 
+      {
+        var labelCenter = label.center;
+        var angle = labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length - Math.PI / 2;
+        var xPosition = this.center.x + Math.cos(angle) * labelRadius;
+        var yPosition = this.center.y + Math.sin(angle) * labelRadius;
+        if (yPosition > lastLabelYPosition) 
+        {
+          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+        } else {
+          yPosition = lastLabelYPosition;
+          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+        }
+        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")");
+        labels.push(this.drawConnection(label, xPosition, yPosition));
+      }
+    }
+  lastLabelYPosition = this.center.y - 15;
+  var numberOfLeftTopLabels = leftTopLabels.length;
+  for (var k = 0; k < numberOfLeftTopLabels; k++) 
+    {
+      label = leftTopLabels[k];
+      if (label.includeInView) 
+      {
+        var labelCenter = label.center;
+        var angle = 2 * Math.PI - labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length;
+        var xPosition = this.center.x - Math.sin(angle) * labelRadius;
+        var yPosition = this.center.y - Math.cos(angle) * labelRadius;
+        if (yPosition < lastLabelYPosition) 
+        {
+          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+        } else {
+          yPosition = lastLabelYPosition;
+          lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+        }
+        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "end");
+        labels.push(this.drawConnection(label, xPosition, yPosition));
+      }
+    }
+  lastLabelYPosition = this.center.y;
+  var numberOfLeftBottomLabels = leftBottomLabels.length;
+  for (var l = numberOfLeftBottomLabels - 1; l >= 0; l--) 
+    {
+      label = leftBottomLabels[l];
+      if (label.includeInView) 
+      {
+        var labelCenter = label.center;
+        var angle = labelCenter * 2 * Math.PI / this.sequenceManager.getSequence().toString().length - Math.PI;
+        var xPosition = this.center.x - Math.sin(angle) * labelRadius;
+        var yPosition = this.center.y + Math.cos(angle) * labelRadius;
+        if (yPosition > lastLabelYPosition) 
+        {
+          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+        } else {
+          yPosition = lastLabelYPosition;
+          lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+        }
+        label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "end");
+        labels.push(this.drawConnection(label, xPosition, yPosition));
+      }
+    }
+}, drawConnection: function(label, labelX, labelY) {
+  var path;
+  if (label.annotation instanceof Teselagen.bio.sequence.dna.Feature) 
+  {
+    path = "M" + labelX + " " + labelY + "L" + this.featureRenderer.middlePoints.get(label.annotation).x + " " + this.featureRenderer.middlePoints.get(label.annotation).y;
+  } else {
+    path = "M" + labelX + " " + labelY + "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y;
+  }
+  return this.labelSVG.append("svg:path").attr("stroke", this.self.LABEL_CONNECTION_COLOR).attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH).attr("d", path);
+}, labelSort: function(label1, label2) {
+  var labelCenter1 = label1.center;
+  var labelCenter2 = label2.center;
+  if (labelCenter1 > labelCenter2) 
+  {
+    return 1;
+  } else if (labelCenter1 < labelCenter2) 
+  {
+    return -1;
+  } else {
+    return 0;
+  }
+}, annotationCenter: function(annotation) {
+  var result;
+  if (annotation.getStart() > annotation.getEnd()) 
+  {
+    var virtualCenter = annotation.getEnd() - ((this.sequenceManager.getSequence().toString().length - annotation.getStart()) + annotation.getEnd()) / 2 + 1;
+    if (virtualCenter >= 0) 
+    {
+      return virtualCenter;
+    } else {
+      return this.sequenceManager.getSequence().toString().length + virtualCenter - 1;
+    }
+  } else {
+    return (annotation.getStart() + annotation.getEnd() - 1) / 2 + 1;
+  }
+}, applySequenceManager: function(pSequenceManager) {
+  if (!this.sequenceManager) 
+  this.sequenceManager = pSequenceManager;
+  this.dirty = true;
+  this.sequenceManagerChanged = true;
+  if (this.pie) 
+  {
+    if (pSequenceManager.getSequence().toString().length > 0) 
+    {
+      this.adjustCaret(0);
+    } else if (this.caret) 
+    {
+      this.caret.remove();
+    }
+    this.nameBox.remove();
+    this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: pSequenceManager.getName(), length: pSequenceManager.getSequence().toString().length});
+  }
+  return pSequenceManager;
+}, applyCenter: function(pCenter) {
+  this.dirty = true;
+  this.centerChanged = true;
+  return pCenter;
+}, applyRailRadius: function(pRailRadius) {
+  this.dirty = true;
+  this.railRadiusChanged = true;
+  return pRailRadius;
+}, applyCutSites: function(pCutSites) {
+  this.cutSitesChanged = true;
+  return pCutSites;
+}, applyFeatures: function(pFeatures) {
+  this.featuresChanged = true;
+  return pFeatures;
+}, applyOrfs: function(pOrfs) {
+  this.orfsChanged = true;
+  return pOrfs;
+}, initPie: function() {
+  this.pie = d3.select("#PieContainer").append("svg:svg").attr("id", "Pie").attr("overflow", "auto");
+  this.parentSVG = this.pie.append("svg:g").attr("class", "pieParent").attr("transform", "matrix(1.5 0 0 1.5 0 0)");
+  this.frame = Ext.create("Vede.view.pie.Frame", {pie: this.parentSVG, center: this.center});
+  this.caret = Ext.create("Vede.view.pie.Caret", {pie: this.parentSVG, angle: 0, center: this.center, radius: this.railRadius + 10});
+  var name = "unknown";
+  var length = 0;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
+  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "pieLabel");
+  this.selectionSVG = this.parentSVG.append("svg:g").attr("class", "pieSelection");
+  this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "pieCutSite");
+  this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+  this.orfSVG = this.parentSVG.append("svg:g").attr("class", "pieOrf");
+  this.orfRenderer.setOrfSVG(this.orfSVG);
+  this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
+  this.featureRenderer.setFeatureSVG(this.featureSVG);
+  this.fitWidthToContent(this);
+}, updateNameBox: function() {
+  var name;
+  var length;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox.remove();
+  this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
+}, adjustCaret: function(bp) {
+  this.caret.remove();
+  if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
+  {
+    var angle = bp * 2 * Math.PI / this.sequenceManager.getSequence().seqString().length;
+    this.caret = Ext.create("Vede.view.pie.Caret", {pie: this.parentSVG, angle: angle, center: this.center, radius: this.railRadius + 10});
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'PieManager'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.Layer', Ext.Base, {inheritableStatics: {STROKE_OPACITY: 0.8}, config: {selectionSVG: null, sequenceManager: null, center: {}, radius: 0}, start: -1, end: -1, startAngle: 0, endAngle: 0, selecting: false, selected: false, constructor: function(inData) {
+  this.initConfig(inData);
+}, select: function(fromIndex, toIndex) {
+  this.drawSelectionPie(fromIndex, toIndex);
+  this.selected = true;
+  this.start = fromIndex;
+  this.end = toIndex;
+}, deselect: function() {
+  this.start = -1;
+  this.end = -1;
+  this.startAngle = 0;
+  this.endAngle = 0;
+  this.selected = false;
+  this.selecting = false;
+}, startSelecting: function() {
+  this.selecting = true;
+}, endSelecting: function() {
+  this.selecting = false;
+}, drawSelectionPie: function(fromIndex, endIndex) {
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'Layer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.SelectionLayer', Teselagen.renderer.pie.Layer, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC"}, deselect: function() {
+  this.callParent();
+  d3.selectAll(".pieSelectionElement").remove();
+}, drawSelectionPie: function(fromIndex, endIndex) {
+  var path;
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  if (seqLen == 0) 
+  {
+    return;
+  }
+  d3.select(".pieSelectionElement").remove();
+  this.startAngle = fromIndex * 2 * Math.PI / seqLen;
+  this.endAngle = endIndex * 2 * Math.PI / seqLen;
+  var startPoint = Ext.create("Teselagen.bio.util.Point");
+  startPoint.x = this.center.x + this.radius * Math.sin(this.startAngle);
+  startPoint.y = this.center.y - this.radius * Math.cos(this.startAngle);
+  var endPoint = Ext.create("Teselagen.bio.util.Point");
+  endPoint.x = this.center.x + this.radius * Math.sin(this.endAngle);
+  endPoint.y = this.center.y - this.radius * Math.cos(this.endAngle);
+  var adjustedEnd = this.endAngle;
+  if (this.endAngle > this.startAngle) 
+  {
+    adjustedEnd -= this.startAngle;
+  } else {
+    adjustedEnd += 2 * Math.PI - this.startAngle;
+  }
+  var adjustedStart = 0;
+  var sweepFlag = 0;
+  if (adjustedEnd > adjustedStart) 
+  {
+    sweepFlag = 1;
+  }
+  var largeArcFlag = 0;
+  if (Math.abs(adjustedEnd - adjustedStart) > Math.PI) 
+  {
+    largeArcFlag = 1;
+  }
+  path = "M" + this.center.x + " " + this.center.y + " " + "L" + startPoint.x + " " + startPoint.y + " " + "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + "L" + this.center.x + " " + this.center.y;
+  this.selectionSVG.append("svg:path").attr("class", "pieSelectionElement").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).attr("d", path).style("pointer-events", "none");
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'SelectionLayer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.pie.WireframeSelectionLayer', Teselagen.renderer.pie.Layer, {statics: {FRAME_COLOR: "#808080", WIREFRAME_OFFSET: 10}, deselect: function() {
+  this.callParent();
+  d3.selectAll(".pieWireframeElement").remove();
+}, drawSelectionPie: function(fromIndex, endIndex) {
+  var path;
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  if (seqLen == 0 || (this.start == fromIndex && this.end == endIndex) || fromIndex == endIndex) 
+  {
+    return;
+  }
+  d3.selectAll(".pieWireframeElement").remove();
+  var startAngle = fromIndex * 2 * Math.PI / seqLen;
+  var endAngle = endIndex * 2 * Math.PI / seqLen;
+  var wireRadius = this.radius + this.self.WIREFRAME_OFFSET;
+  var startPoint = Ext.create("Teselagen.bio.util.Point");
+  startPoint.x = this.center.x + wireRadius * Math.sin(startAngle);
+  startPoint.y = this.center.y - wireRadius * Math.cos(startAngle);
+  var endPoint = Ext.create("Teselagen.bio.util.Point");
+  endPoint.x = this.center.x + wireRadius * Math.sin(endAngle);
+  endPoint.y = this.center.y - wireRadius * Math.cos(endAngle);
+  if (endAngle > startAngle) 
+  {
+    endAngle -= startAngle;
+  } else {
+    endAngle += 2 * Math.PI - startAngle;
+  }
+  startAngle = 0;
+  var sweepFlag = 0;
+  if (endAngle > startAngle) 
+  {
+    sweepFlag = 1;
+  }
+  var largeArcFlag = 0;
+  if (Math.abs(endAngle - startAngle) > Math.PI) 
+  {
+    largeArcFlag = 1;
+  }
+  path = "M" + this.center.x + " " + this.center.y + "L" + startPoint.x + " " + startPoint.y + "A" + wireRadius + " " + wireRadius + " 0 " + largeArcFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + "L" + this.center.x + " " + this.center.y;
+  this.selectionSVG.append("svg:path").attr("class", "pieWireframeElement").attr("stroke", this.self.FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none").attr("d", path);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'WireframeSelectionLayer'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.PieController', Vede.controller.VectorEditor.SequenceController, {refs: [{ref: "pieContainer", selector: "#PieContainer"}], statics: {SELECTION_THRESHOLD: 2 * Math.PI / 360, PIE_CENTER: {x: 100, y: 100}, RAIL_RADIUS: 100}, pieManager: null, pieContainer: null, startSelectionAngle: 0, init: function() {
+  this.callParent();
+  this.control({"#zoomInMenuItem": {click: this.onZoomInMenuItemClick}, "#zoomOutMenuItem": {click: this.onZoomOutMenuItemClick}});
+}, initPie: function() {
+  this.pieManager.initPie();
+  var pie = this.pieManager.getPie();
+  var self = this;
+  pie.on("mousedown", function() {
+  self.onMousedown(self);
+});
+  pie.on("mouseup", function() {
+  self.onMouseup(self);
+});
+  pie.on("mousemove", function() {
+  self.onMousemove(self);
+});
+  this.pieContainer.on("resize", function() {
+  this.pieManager.fitWidthToContent(this.pieManager);
+}, this);
+  this.pieContainer.el.dom.setAttribute("tabindex", "0");
+  this.pieContainer.el.on("keydown", this.onKeydown, this);
+}, onLaunch: function() {
+  var pie;
+  var self = this;
+  this.callParent(arguments);
+  this.pieContainer = this.getPieContainer();
+  this.pieManager = Ext.create("Teselagen.manager.PieManager", {center: this.self.PIE_CENTER, railRadius: this.self.RAIL_RADIUS, showCutSites: Ext.getCmp("cutSitesMenuItem").checked, showFeatures: Ext.getCmp("featuresMenuItem").checked, showOrfs: Ext.getCmp("orfsMenuItem").checked});
+  pie = this.pieManager.getPie();
+  var timeOut = null;
+  window.onresize = function() {
+  if (timeOut != null) 
+  clearTimeout(timeOut);
+  timeOut = setTimeout(function() {
+  self.pieManager.fitWidthToContent(self.pieManager);
+}, 400);
+};
+  this.Managers.push(this.pieManager);
+  this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {center: this.pieManager.center, radius: this.pieManager.railRadius});
+  this.SelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {center: this.pieManager.center, radius: this.pieManager.railRadius});
+}, onKeydown: function(event) {
+  if (event.getKey() === 187) 
+  {
+    this.pieManager.zoomIn();
+  } else if (event.getKey() === 189) 
+  {
+    this.pieManager.zoomOut();
+  } else {
+    this.callParent(arguments);
+  }
+}, onSequenceChanged: function() {
+  if (!this.SequenceManager) 
+  {
+    return;
+  }
+  this.callParent();
+  this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+  this.pieManager.setOrfs(this.ORFManager.getOrfs());
+  this.pieManager.setFeatures(this.SequenceManager.getFeatures());
+  this.pieManager.render();
+  this.pieManager.updateNameBox();
+}, onActiveEnzymesChanged: function() {
+  this.callParent();
+  this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+  if (this.pieManager.sequenceManager && this.pieManager.showCutSites) 
+  {
+    this.pieManager.render();
+  }
+}, onVectorPanelAnnotationClicked: function(start, end) {
+  this.clickedAnnotationStart = start;
+  this.clickedAnnotationEnd = end;
+}, onAnnotatePanelAnnotationClicked: function(start, end) {
+  this.select(start, end);
+}, onViewModeChanged: function(viewMode) {
+  if (viewMode == "linear") 
+  {
+    Ext.getCmp("PieContainer").hide();
+  } else {
+    Ext.getCmp("PieContainer").show();
+  }
+}, onSelectionChanged: function(scope, start, end) {
+  if (scope !== this) 
+  {
+    this.SelectionLayer.select(start, end);
+    this.changeCaretPosition(start);
+  }
+}, onSequenceManagerChanged: function(pSeqMan) {
+  this.callParent(arguments);
+  this.pieManager.setOrfs(this.ORFManager.getOrfs());
+  this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+  this.pieManager.setFeatures(pSeqMan.getFeatures());
+  this.pieManager.render();
+  this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
+  this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+  this.SelectionLayer.setSequenceManager(pSeqMan);
+  this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+}, onShowFeaturesChanged: function(show) {
+  this.pieManager.setShowFeatures(show);
+  if (this.pieManager.sequenceManager) 
+  {
+    this.pieManager.render();
+  }
+}, onShowCutSitesChanged: function(show) {
+  this.pieManager.setShowCutSites(show);
+  if (this.pieManager.sequenceManager) 
+  {
+    this.pieManager.render();
+  }
+}, onShowOrfsChanged: function(show) {
+  this.pieManager.setShowOrfs(show);
+  if (this.pieManager.sequenceManager) 
+  {
+    this.pieManager.render();
+  }
+}, onShowFeatureLabelsChanged: function(show) {
+  this.pieManager.setShowFeatureLabels(show);
+  if (this.pieManager.sequenceManager) 
+  {
+    this.pieManager.render();
+  }
+}, onShowCutSiteLabelsChanged: function(show) {
+  this.pieManager.setShowCutSiteLabels(show);
+  if (this.pieManager.sequenceManager) 
+  {
+    this.pieManager.render();
+  }
+}, onMousedown: function(self) {
+  self.startSelectionAngle = self.getClickAngle();
+  self.mouseIsDown = true;
+  if (self.pieManager.sequenceManager) 
+  {
+    self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
+    self.changeCaretPosition(self.startSelectionIndex);
+  }
+  self.selectionDirection = 0;
+}, onMousemove: function(self) {
+  var endSelectionAngle = self.getClickAngle();
+  var start;
+  var end;
+  if (self.mouseIsDown && Math.abs(self.startSelectionAngle - endSelectionAngle) > self.self.SELECTION_THRESHOLD && self.SequenceManager.getSequence().toString().length > 0 && self.pieManager.sequenceManager) 
+  {
+    var endSelectionIndex = self.bpAtAngle(endSelectionAngle);
+    if (self.selectionDirection == 0) 
+    {
+      if (self.startSelectionAngle < Math.PI) 
+      {
+        self.selectionDirection = -1;
+        if (endSelectionAngle >= self.startSelectionAngle && endSelectionAngle <= (self.startSelectionAngle + Math.PI)) 
+        {
+          self.selectionDirection = 1;
+        }
+      } else {
+        self.selectionDirection = 1;
+        if (endSelectionAngle <= self.startSelectionAngle && endSelectionAngle >= (self.startSelectionAngle - Math.PI)) 
+        {
+          self.selectionDirection = -1;
+        }
+      }
+    }
+    if (self.selectionDirection == -1) 
+    {
+      start = endSelectionIndex;
+      end = self.startSelectionIndex;
+    } else {
+      start = self.startSelectionIndex;
+      end = endSelectionIndex;
+    }
+    self.WireframeSelectionLayer.startSelecting();
+    self.WireframeSelectionLayer.select(start, end);
+    if (d3.event.ctrlKey) 
+    {
+      self.SelectionLayer.startSelecting();
+      self.select(start, end);
+      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
+    } else {
+      self.stickySelect(start, end);
+    }
+    self.changeCaretPosition(start);
+  }
+}, onMouseup: function(self) {
+  if (self.mouseIsDown) 
+  {
+    self.mouseIsDown = false;
+    if (self.WireframeSelectionLayer.selected && self.WireframeSelectionLayer.selecting) 
+    {
+      self.WireframeSelectionLayer.endSelecting();
+      self.WireframeSelectionLayer.deselect();
+      self.SelectionLayer.endSelecting();
+      if (self.SelectionLayer.end != -1) 
+      {
+        self.changeCaretPosition(self.SelectionLayer.start);
+      }
+    } else if (self.clickedAnnotationStart !== null && self.clickedAnnotationEnd !== null) 
+    {
+      self.select(self.clickedAnnotationStart, self.clickedAnnotationEnd);
+      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
+      self.clickedAnnotationStart = null;
+      self.clickedAnnotationEnd = null;
+    } else {
+      self.SelectionLayer.deselect();
+      self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
+    }
+  }
+}, onZoomInMenuItemClick: function() {
+  this.pieManager.zoomIn();
+}, onZoomOutMenuItemClick: function() {
+  this.pieManager.zoomOut();
+}, select: function(start, end) {
+  if (start == 0 && end == this.SequenceManager.getSequence().toString().length) 
+  {
+    this.SelectionLayer.select(start, end - 1);
+  } else {
+    this.SelectionLayer.select(start, end);
+  }
+  this.changeCaretPosition(this.SelectionLayer.start);
+}, getClickAngle: function() {
+  var svg = d3.select(".pieParent");
+  var transformValues;
+  var scrolled = this.pieContainer.el.getScroll();
+  transformValues = svg.attr("transform").match(/[-.\d]+/g);
+  var relX = d3.event.layerX - transformValues[4] - this.pieManager.center.x * transformValues[0] + scrolled.left;
+  var relY = d3.event.layerY - transformValues[5] - this.pieManager.center.y * transformValues[3] + scrolled.top;
+  var angle = Math.atan(relY / relX) + Math.PI / 2;
+  if (relX < 0) 
+  {
+    angle += Math.PI;
+  }
+  return angle;
+}, bpAtAngle: function(angle) {
+  return Math.floor(angle * this.pieManager.sequenceManager.getSequence().seqString().length / (2 * Math.PI));
+}, changeCaretPosition: function(index, silent) {
+  if (index >= 0 && this.SequenceManager && index <= this.SequenceManager.getSequence().toString().length) 
+  {
+    this.callParent(arguments);
+    this.pieManager.adjustCaret(index);
+  }
+}, stickySelect: function(start, end) {
+  var annotations = this.pieManager.getAnnotationsInRange(start, end);
+  if (annotations.length > 0) 
+  {
+    if (start <= end) 
+    {
+      var minStart = annotations[0].getStart();
+      var maxEnd = annotations[0].getEnd();
+      Ext.each(annotations, function(annotation) {
+  if (annotation.getStart() < minStart) 
+  {
+    minStart = annotation.getStart();
+  }
+  if (annotation.getEnd() > maxEnd) 
+  {
+    maxEnd = annotation.getEnd();
+  }
+});
+      this.SelectionLayer.startSelecting();
+      this.select(minStart, maxEnd);
+      this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+    } else {
+      var minStart1 = -1;
+      var maxEnd1 = -1;
+      var minStart2 = -1;
+      var maxEnd2 = -1;
+      Ext.each(annotations, function(annotation) {
+  if (annotation.getStart() > start) 
+  {
+    if (minStart1 == -1) 
+    {
+      minStart1 = annotation.getStart();
+    }
+    if (annotation.getStart() < minStart1) 
+    {
+      minStart1 = annotation.getStart();
+    }
+  } else {
+    if (minStart2 == -1) 
+    {
+      minStart2 = annotation.getStart();
+    }
+    if (annotation.getStart() < minStart2) 
+    {
+      minStart2 = annotation.getStart();
+    }
+  }
+  if (annotation.getEnd() > end) 
+  {
+    if (maxEnd1 == -1) 
+    {
+      maxEnd1 = annotation.getEnd();
+    }
+    if (annotation.getEnd() > maxEnd1) 
+    {
+      maxEnd1 = annotation.getEnd();
+    }
+  } else {
+    if (maxEnd2 == -1) 
+    {
+      maxEnd2 = annotation.getEnd();
+    }
+    if (annotation.getEnd() > maxEnd2) 
+    {
+      maxEnd2 = annotation.getEnd();
+    }
+  }
+});
+      var selStart = minStart1;
+      var selEnd;
+      if (minStart1 == -1 && minStart2 != -1) 
+      {
+        selStart = minStart2;
+      } else if (minStart1 != -1 && minStart2 == -1) 
+      {
+        selStart = minStart1;
+      } else if (minStart1 != -1 && minStart2 != -1) 
+      {
+        selStart = minStart1;
+      }
+      if (maxEnd1 == -1 && maxEnd2 != -1) 
+      {
+        selEnd = maxEnd2;
+      } else if (maxEnd1 != -1 && maxEnd2 == -1) 
+      {
+        selEnd = maxEnd1;
+      } else if (maxEnd1 != -1 && maxEnd2 != -1) 
+      {
+        selEnd = maxEnd2;
+      }
+      if (selEnd == -1 || selStart == -1) 
+      {
+        this.SelectionLayer.deselect();
+        this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+      } else {
+        this.SelectionLayer.startSelecting();
+        this.select(selStart, selEnd);
+        this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+      }
+    }
+  } else {
+    this.SelectionLayer.deselect();
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+  }
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'PieController'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.CutSiteLabel', Teselagen.renderer.common.Label, {config: {start: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+}, labelText: function() {
+  var label = [];
+  label = this.annotation.getRestrictionEnzyme().getName();
+  return label;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'CutSiteLabel'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.RailRenderer', Teselagen.renderer.common.AnnotationRenderer, {config: {references: null, railWidth: 0}, GraphicUtils: null, StrandType: null, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+  this.GraphicUtils = Teselagen.utils.GraphicUtils;
+}, applyRailRadius: function(pRailRadius) {
+  this.setNeedsMeasurement(true);
+  return pRailRadius;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'RailRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.CutSiteRenderer', Teselagen.renderer.rail.RailRenderer, {reqires: ["Teselagen.bio.util.Point"], statics: {CUTSITE_LINE_WIDTH: 0.5}, config: {cutSiteSVG: null, cutSites: [], railWidth: null, railHeight: null, railGap: null, startPoints: null, reference: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+  this.startPoints = Ext.create("Ext.util.HashMap");
+}, render: function() {
+  var labelPos = {};
+  var path;
+  Ext.each(this.getCutSites(), function(site) {
+  var startPos = site.getStart() / this.sequenceManager.getSequence().seqString().length;
+  var xStartPosition = this.reference.x + (startPos * this.railWidth);
+  var yPosition = this.reference.y;
+  labelPos = {x: xStartPosition, y: yPosition};
+  this.startPoints.add(site, labelPos);
+  var lineStart = Ext.create("Teselagen.bio.util.Point", xStartPosition, this.reference.y - this.railHeight);
+  var lineEnd = Ext.create("Teselagen.bio.util.Point", xStartPosition, this.reference.y - (this.railHeight + 8));
+  path = "M" + lineStart.x + " " + lineStart.y + " " + "L" + lineEnd.x + " " + lineEnd.y;
+  this.cutSiteSVG.append("svg:path").attr("stroke", this.self.FRAME_COLOR).attr("stroke-width", this.self.CUTSITE_LINE_WIDTH).attr("d", path).on("mousedown", this.getClickListener(site.getStart(), site.getEnd())).append("svg:title").text(this.getToolTip(site));
+}, this);
+}, getToolTip: function(cutSite) {
+  var complement = ", complement";
+  if (cutSite.getStrand() == 1) 
+  {
+    complement = "";
+  }
+  var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) + complement + ", cuts " + cutSite.getNumCuts() + " times";
+  return toolTip;
+}, applyCutSites: function(pCutSites) {
+  return pCutSites;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'CutSiteRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.FeatureLabel', Teselagen.renderer.common.Label, {config: {start: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+}, labelText: function() {
+  var label = [];
+  if (!this.annotation.getName() || !this.StringUtil.trim(this.annotation.getName())) 
+  {
+    var notes = this.annotation.getNotes();
+    Ext.each(notes, function(note) {
+  if (note.getName() == "label" || note.getName() == "apeinfo_label" || note.getName() == "note" || note.getName() == "gene") 
+  {
+    label = note.getValue();
+    return false;
+  }
+});
+  } else {
+    label = this.annotation.getName();
+  }
+  if (label == null) 
+  {
+    label = "";
+  }
+  return label;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'FeatureLabel'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.FeatureRenderer', Teselagen.renderer.rail.RailRenderer, {statics: {DEFAULT_FEATURE_HEIGHT: 7, DEFAULT_FEATURES_GAP: 5, OUTLINE_COLOR: "black", OUTLINE_WIDTH: 0.5}, config: {featureSVG: null, features: [], railWidth: null, railHeight: null, railGap: null, startPoints: null}, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+  this.setStartPoints(Ext.create("Ext.util.HashMap"));
+}, render: function() {
+  var path;
+  var featureAlignment = this.Alignment.buildAlignmentMap(this.features, this.sequenceManager);
+  Ext.each(this.features, function(feature) {
+  var featureGap = this.railGap - this.self.DEFAULT_FEATURES_GAP - 2 * this.self.DEFAULT_FEATURES_GAP;
+  var index = featureAlignment.get(feature);
+  if (index > 0) 
+  {
+    featureGap -= index * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
+  }
+  var color = "#ffffff";
+  var direction = 0;
+  if (feature.getStrand() == this.StrandType.FORWARD) 
+  {
+    direction = 1;
+  } else if (feature.getStrand() == this.StrandType.BACKWARD) 
+  {
+    direction = 2;
+  }
+  var recSprite;
+  var featureWidth;
+  var startPos;
+  var endPos;
+  var labelPos = {};
+  Ext.each(feature.getLocations(), function(location) {
+  color = this.colorByType(feature.getType().toLowerCase());
+  startPos = location.getStart() / this.sequenceManager.getSequence().seqString().length;
+  endPos = location.getEnd() / this.sequenceManager.getSequence().seqString().length;
+  var xStartPosition = (startPos * this.railWidth);
+  var yEndPosition = (endPos * this.railWidth);
+  var yPosition = -(this.railHeight + this.railGap + featureGap);
+  labelPos.x = xStartPosition;
+  labelPos.y = yPosition;
+  this.startPoints.add(feature, labelPos);
+  if (startPos > endPos) 
+  {
+    featureWidth = (startPos - endPos) * this.railWidth;
+  } else {
+    featureWidth = (endPos - startPos) * this.railWidth;
+  }
+  if (feature.getStart() == location.getStart() && feature.getStrand() == this.StrandType.BACKWARD) 
+  {
+    path = this.GraphicUtils.drawFeatureNegativeArrow(xStartPosition, yPosition, featureWidth, color);
+  } else if (feature.getEnd() == location.getEnd() && feature.getStrand() == this.StrandType.FORWARD) 
+  {
+    path = this.GraphicUtils.drawFeaturePositiveArrow(xStartPosition, yPosition, featureWidth, color);
+  } else {
+    path = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
+  }
+  this.featureSVG.append("svg:path").attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", color).attr("fill-rule", "evenodd").attr("d", path).on("mousedown", this.getClickListener(feature.getStart(), feature.getEnd())).append("svg:title").text(this.getToolTip(feature));
+}, this);
+}, this);
+}, calculateLocations: function(feature, featureGap) {
+  var locate1 = feature.getStart() / this.sequenceManager.getSequence().seqString().length;
+  var locate2 = feature.getEnd() / this.sequenceManager.getSequence().seqString().length;
+  var headLocate = locate1;
+  return [locate1, locate2];
+}, getToolTip: function(feature) {
+  var nameString = "";
+  if (feature.getName()) 
+  {
+    nameString = " - " + feature.getName();
+  }
+  return feature.getType() + nameString + ": " + feature.getStart() + ".." + feature.getEnd();
+}, colorByType: function(type) {
+  var switchObj = {promoter: "#31B440", terminator: "#F51600", cds: "#EF6500", m_rna: "#FFFF00", misc_binding: "#006FEF", misc_feature: "#006FEF", misc_marker: "#8DCEB1", rep_origin: "#878787"};
+  var color = switchObj[type] || "#CCCCCC";
+  return color;
+}, applyFeatures: function(pFeatures) {
+  this.setNeedsMeasurement(true);
+  return pFeatures;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'FeatureRenderer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.ORFRenderer', Teselagen.renderer.rail.RailRenderer, {statics: {DISTANCE_FROM_RAIL: 15, DISTANCE_BETWEEN_ORFS: 5, ORF_FRAME_COLOR: ["#FF0000", "#31B440", "#3366CC"]}, config: {orfSVG: null, orfs: null, railWidth: null, railHeight: null, reference: null}, maxAlignmentRow: 0, constructor: function(inData) {
+  this.callParent(arguments);
+  this.initConfig(inData);
+}, render: function() {
+  var path;
+  var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, this.sequenceManager);
+  this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
+  var seqLen = this.sequenceManager.getSequence().seqString().length;
+  Ext.each(this.orfs, function(orf) {
+  var color = this.self.ORF_FRAME_COLOR[orf.getFrame()];
+  var tooltip = this.getToolTip(orf);
+  var index = orfAlignment.get(orf);
+  var orfHeight = this.reference.y - this.self.DISTANCE_FROM_RAIL;
+  if (index > 0) 
+  {
+    orfHeight += -(index * this.self.DISTANCE_BETWEEN_ORFS);
+  }
+  var startPoint = (orf.getStart() / seqLen) * this.railWidth;
+  var endPoint = (orf.getEnd() / seqLen) * this.railWidth;
+  path = "M" + startPoint + " " + orfHeight + "L" + endPoint + " " + orfHeight;
+  this.orfSVG.append("svg:path").attr("stroke", color).attr("d", path).on("mousedown", this.getClickListener(orf.getStart(), orf.getEnd())).append("svg:title").text(tooltip);
+  Ext.each(orf.getStartCodons(), function(codonIndex) {
+  var codonAngle = codonIndex * 2 * Math.PI / seqLen;
+  var codonX = this.reference.x + ((codonIndex / seqLen) * this.railWidth);
+  var codonY = this.reference.y + orfHeight;
+  this.orfSVG.append("svg:circle").attr("r", 2).attr("cx", codonX).attr("cy", codonY).attr("fill", color).on("mousedown", this.getClickListener(orf.getStart(), orf.getEnd())).append("svg:title").text(tooltip);
+}, this);
+  var lastPoint;
+  var arrowShiftAngle;
+  if (orf.getStrand() == this.StrandType.FORWARD) 
+  {
+    arrowShiftAngle = endPoint + 5;
+    lastPoint = endPoint;
+  } else {
+    arrowShiftAngle = startPoint - 5;
+    lastPoint = startPoint;
+  }
+  path = "M" + (this.reference.x + lastPoint) + " " + (this.reference.y + (orfHeight + 2)) + "L" + (this.reference.x + arrowShiftAngle) + " " + (this.reference.y + orfHeight) + "L" + (this.reference.x + lastPoint) + " " + (this.reference.y + (orfHeight - 2)) + "z";
+  this.orfSVG.append("svg:path").attr("stroke", color).attr("fill", color).attr("d", path).on("mousedown", this.getClickListener(orf.getStart(), orf.getEnd())).append("svg:title").text(tooltip);
+}, this);
+}, getToolTip: function(orf) {
+  var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
+  var aa = Math.floor(bp / 3);
+  var complimentary = "";
+  if (orf.getStrand() == 1 && orf.getStartCodons().length > 1) 
+  {
+    complimentary = ", complimentary";
+  }
+  var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) + ", frame: " + orf.getFrame() + ", length: " + bp + " BP" + ", " + aa + " AA" + complimentary;
+  if (orf.getStartCodons().length > 1) 
+  {
+    tooltipLabel += "<br>Start Codons: ";
+    var codonsArray = [];
+    var codonString;
+    Ext.each(orf.getStartCodons(), function(codon, index) {
+  if (index != orf.getStartCodons().length - 1) 
+  {
+    codonString = codon + ", ";
+  } else {
+    codonString = codon;
+  }
+  codonsArray.push(codonString);
+});
+    tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
+  }
+  return tooltipLabel;
+}, applyOrfs: function(pOrfs) {
+  return pOrfs;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'ORFRenderer'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.rail.Caret', Ext.Base, {config: {rail: null, start: null, reference: null, length: null, railWidth: null}, statics: {CARET_COLOR: 'black', CARET_WIDTH: 1, CARET_HEIGHT: 3}, constructor: function(pConfig) {
+  this.initConfig(pConfig);
+  var x = (this.start * this.railWidth) + pConfig.reference.x;
+  var y = pConfig.reference.y + this.self.CARET_HEIGHT;
+  var path = 'M' + x + ' ' + (-y) + 'L' + x + ' ' + y;
+  return pConfig.rail.append("svg:path").attr("class", "railCaret").attr("stroke", this.self.CARET_COLOR).attr("d", path);
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'Caret'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.rail.Frame', Ext.Base, {statics: {RECT_REFERENCE: {x: 0, y: 0}, RECT_HEIGHT: 3, RECT_GAP: 3, OUTLINE_WIDTH: 0.5, OUTLINE_COLOR: "#dddddd", RING_COLOR: "#ffffb3"}, constructor: function(inData) {
+  var reference = this.self.RECT_REFERENCE;
+  var railWidth = this.self.RECT_WIDTH;
+  var railHeight = this.self.RECT_HEIGHT;
+  var railGap = this.self.RECT_GAP;
+  return inData.rail.append("svg:rect").attr("x", reference.x).attr("y", reference.y).attr("width", inData.railWidth).attr("height", this.self.RECT_HEIGHT).attr("stroke", this.self.OUTLINE_COLOR).attr("stroke-width", this.self.OUTLINE_WIDTH).attr("fill", this.self.RING_COLOR).attr("fill-rule", "evenodd");
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'Frame'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.rail.NameBox', Ext.Base, {statics: {FONT_SIZE: "10px", FONT_WEIGHT: "bold"}, config: {rail: null, center: {x: 150, y: 50}, name: "", length: 0}, constructor: function(inData) {
+  this.initConfig(inData);
+  var text1;
+  var text2;
+  var group = inData.rail.append("svg:g").attr("class", "railNameBox").attr("text-anchor", "middle").attr("font-size", this.self.FONT_SIZE).attr("font-weight", this.self.FONT_WEIGHT);
+  if (!inData.name) 
+  {
+    text1 = '(' + inData.length + ' bp)';
+    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
+  } else {
+    text1 = inData.name;
+    text2 = '(' + inData.length + 'bp)';
+    group.append("svg:text").text(text1).attr("x", this.center.x).attr("y", this.center.y);
+    group.append("svg:text").attr("dy", "1em").text(text2).attr("x", this.center.x).attr("y", this.center.y);
+  }
+  return group;
+}}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'NameBox'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.RailManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 3, LABEL_HEIGHT: 7, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", RAIL_PAD: 100, ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, reference: null, rail: null, nameBox: null, railGap: 0, railWidth: 300, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, startPoints: null, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railGapChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, reference: this.reference, railHeight: this.railHeight, railWidth: this.railWidth, railGap: this.railGap, cutSites: this.cutSites});
+  this.featureRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, railWidth: this.railWidth, railHeight: this.railHeight, reference: this.reference, railGap: this.railGap, features: this.features});
+  this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {orfSVG: this.orfSVG, sequenceManager: this.sequenceManager, reference: this.reference, railHeight: this.railGap, railWidth: this.railWidth, orfs: this.orfs});
+  this.renderers = [this.cutSiteRenderer, this.featureRenderer, this.orfRenderer];
+}, getAnnotationsInRange: function(start, end) {
+  var annotationsInRange = [];
+  var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {start: start, end: end});
+  if (this.showFeatures) 
+  {
+    Ext.each(this.features, function(feature) {
+  if (selectionAnnotation.contains(feature)) 
+  {
+    annotationsInRange.push(feature);
+  }
+});
+  }
+  if (this.showCutSites) 
+  {
+    Ext.each(this.cutSites, function(site) {
+  if (selectionAnnotation.contains(site)) 
+  {
+    annotationsInRange.push(site);
+  }
+});
+  }
+  if (this.showOrfs) 
+  {
+    Ext.each(this.orfs, function(orf) {
+  if (selectionAnnotation.contains(orf)) 
+  {
+    annotationsInRange.push(orf);
+  }
+});
+  }
+  return annotationsInRange;
+}, render: function() {
+  Ext.suspendLayouts();
+  var renderer;
+  if (this.dirty) 
+  {
+    for (var i = 0; i < this.renderers.length; i++) 
+      {
+        renderer = this.renderers[i];
+        if (this.sequenceManagerChanged) 
+        {
+          renderer.setSequenceManager(this.sequenceManager);
+        }
+        if (this.railRadiusChanged) 
+        {
+          renderer.setRailRadius(this.railRadius);
+        }
+        if (this.referenceChanged) 
+        {
+          renderer.setCenter(this.center);
+        }
+      }
+    this.dirty = false;
+    this.sequenceManagerChanged = false;
+    this.railWidthChanged = false;
+    this.referenceChanged = false;
+  }
+  if (this.cutSitesChanged) 
+  {
+    this.cutSiteSVG.remove();
+    this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "railCutSite");
+    this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+    this.cutSiteRenderer.setCutSites(this.cutSites);
+    this.cutSiteRenderer.render();
+    this.cutSitesChanged = false;
+  }
+  if (this.featuresChanged) 
+  {
+    this.featureSVG.remove();
+    this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
+    this.featureRenderer.setFeatureSVG(this.featureSVG);
+    this.featureRenderer.setFeatures(this.features);
+    this.featureRenderer.render();
+    this.featuresChanged = false;
+  }
+  if (this.orfsChanged) 
+  {
+    this.orfSVG.remove();
+    this.orfSVG = this.parentSVG.append("svg:g").attr("class", "railOrf");
+    this.orfRenderer.setOrfSVG(this.orfSVG);
+    this.orfRenderer.setOrfs(this.orfs);
+    this.orfRenderer.render();
+    this.orfsChanged = false;
+  }
+  this.renderLabels();
+  if (this.showOrfs) 
+  {
+    this.orfSVG.style("visibility", "visible");
+  } else {
+    this.orfSVG.style("visibility", "hidden");
+  }
+  if (this.showCutSites) 
+  {
+    this.cutSiteSVG.style("visibility", "visible");
+  } else {
+    this.cutSiteSVG.style("visibility", "hidden");
+  }
+  if (this.showFeatures) 
+  {
+    this.featureSVG.style("visibility", "visible");
+  } else {
+    this.featureSVG.style("visibility", "hidden");
+  }
+  Ext.resumeLayouts(true);
+}, zoomIn: function() {
+  Ext.suspendLayouts();
+  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+  var scale = [Number(translateValues[0]), Number(translateValues[3])];
+  var translate = [Number(translateValues[4]), Number(translateValues[5])];
+  scale[0] += this.self.ZOOM_INCREMENT;
+  scale[1] += this.self.ZOOM_INCREMENT;
+  this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
+  Ext.resumeLayouts(true);
+  this.fitWidthToContent(this);
+}, zoomOut: function() {
+  var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+  var scale = [translateValues[0], translateValues[3]];
+  var translate = [translateValues[4], translateValues[5]];
+  if (scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) 
+  {
+    Ext.suspendLayouts();
+    scale[0] -= this.self.ZOOM_INCREMENT;
+    scale[1] -= this.self.ZOOM_INCREMENT;
+    this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
+    Ext.resumeLayouts(true);
+    this.fitWidthToContent(this);
+  }
+}, fitWidthToContent: function(scope) {
+  var containerSize = Ext.getCmp("RailContainer").getSize();
+  var transY = containerSize.height / 2;
+  var railBox = scope.rail[0][0].getBBox();
+  var parentBox = scope.parentSVG[0][0].getBBox();
+  var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+  var scale = [Number(translateValues[0]), Number(translateValues[3])];
+  var translate = [Number(translateValues[4]), Number(translateValues[5])];
+  scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + transY + ")");
+  scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD).attr("height", railBox.height + transY);
+}, showSprites: function(collection) {
+  var sprite;
+  for (var i = 0; i < collection.length; i++) 
+    {
+      sprite = collection.getAt(i);
+      this.rail.surface.add(sprite);
+      sprite.show(true);
+      this.rail.doComponentLayout();
+    }
+}, hideSprites: function(collection) {
+  for (var i = 0; i < collection.length; i++) 
+    {
+      collection.getAt(i).hide(true);
+    }
+}, renderLabels: function() {
+  var labels = [];
+  var start;
+  var color;
+  this.labelSVG.remove();
+  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "railLabel");
+  if (this.showCutSites && this.showCutSiteLabels) 
+  {
+    var site;
+    for (var i = 0; i < this.cutSites.length; i++) 
+      {
+        site = this.cutSites[i];
+        start = this.cutSiteRenderer.startPoints.get(site);
+        if (site.getNumCuts() == 1) 
+        {
+          color = "#E57676";
+        } else {
+          color = "#888888";
+        }
+        label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {labelSVG: this.labelSVG, annotation: site, x: start.x, y: start.y, start: start, color: color, tooltip: this.cutSiteRenderer.getToolTip(site), click: this.cutSiteRenderer.getClickListener(site.getStart(), site.getEnd())});
+        labels.push(label);
+      }
+  }
+  if (this.showFeatures && this.showFeatureLabels) 
+  {
+    var feature;
+    for (var i = 0; i < this.features.length; i++) 
+      {
+        feature = this.features[i];
+        start = this.featureRenderer.startPoints.get(feature);
+        label = Ext.create("Teselagen.renderer.rail.FeatureLabel", {labelSVG: this.labelSVG, annotation: feature, x: start.x, y: start.y, start: start, tooltip: this.featureRenderer.getToolTip(feature), click: this.featureRenderer.getClickListener(feature.getStart(), feature.getEnd())});
+        labels.push(label);
+      }
+  }
+  labels.sort(this.labelSort);
+  this.adjustLabelPositions(labels);
+}, adjustLabelPositions: function(labels) {
+  var railWidth = this.railWidth;
+  var totalNumberOfLabels = labels.length;
+  var totalLength = this.sequenceManager.getSequence().toString().length;
+  var rightLabels = [];
+  var leftLabels = [];
+  var label;
+  for (var i = 0; i < labels.length; i++) 
+    {
+      label = labels[i];
+      if (i < (totalNumberOfLabels / 2)) 
+      {
+        leftLabels.push(label);
+      } else {
+        rightLabels.push(label);
+      }
+    }
+  var labelHeight = 3 + this.self.LABEL_DISTANCE_FROM_RAIL;
+  if (this.showOrfs && this.orfRenderer.maxAlignmentRow > 0) 
+  {
+    labelHeight += this.orfRenderer.maxAlignmentRow * this.orfRenderer.self.DISTANCE_BETWEEN_ORFS;
+  }
+  var lastLabelYPosition = this.reference.y - 10;
+  var label;
+  var numberOfLeftLabels = leftLabels.length;
+  for (var i = 0; i <= numberOfLeftLabels - 1; i++) 
+    {
+      label = leftLabels[i];
+      if (!label.includeInView) 
+      {
+        continue;
+      }
+      var xPosition = this.reference.x + (label.label.attr("x"));
+      var yPosition = this.reference.y - labelHeight;
+      if (yPosition < lastLabelYPosition) 
+      {
+        lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+      } else {
+        yPosition = lastLabelYPosition;
+        lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+      }
+      label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "end");
+      labels.push(this.drawConnection(label, xPosition, yPosition));
+    }
+  for (var i = 0; i <= totalNumberOfLabels - numberOfLeftLabels - 1; i++) 
+    {
+      label = rightLabels[i];
+      if (!label.includeInView) 
+      {
+        continue;
+      }
+      var xPosition = this.reference.x + (label.label.attr("x"));
+      var yPosition = this.reference.y - labelHeight;
+      if (yPosition < lastLabelYPosition) 
+      {
+        lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+      } else {
+        yPosition = lastLabelYPosition;
+        lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+      }
+      label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) + "," + (yPosition - label.label.attr("y")) + ")").style("text-anchor", "start");
+      labels.push(this.drawConnection(label, xPosition, yPosition));
+    }
+}, drawConnection: function(label, labelX, labelY) {
+  var path;
+  if (label.annotation instanceof Teselagen.bio.sequence.dna.Feature) 
+  {
+    path = "M" + this.featureRenderer.startPoints.get(label.annotation).x + " " + labelY + "L" + this.featureRenderer.startPoints.get(label.annotation).x + " " + this.featureRenderer.startPoints.get(label.annotation).y;
+  } else {
+    path = "M" + labelX + " " + labelY + "L" + this.cutSiteRenderer.startPoints.get(label.annotation).x + " " + this.cutSiteRenderer.startPoints.get(label.annotation).y;
+  }
+  return this.labelSVG.append("svg:path").attr("stroke", this.self.LABEL_CONNECTION_COLOR).attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH).attr("d", path);
+}, labelSort: function(label1, label2) {
+  var labelStart1 = label1.start.x;
+  var labelStart2 = label2.start.x;
+  if (labelStart1 > labelStart2) 
+  {
+    return 1;
+  } else if (labelStart1 < labelStart2) 
+  {
+    return -1;
+  } else {
+    return 0;
+  }
+}, applySequenceManager: function(pSequenceManager) {
+  this.dirty = true;
+  this.sequenceManagerChanged = true;
+  if (this.rail) 
+  {
+    this.nameBox.remove();
+    this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: pSequenceManager.getName(), length: pSequenceManager.getSequence().toString().length});
+  }
+  return pSequenceManager;
+}, applyCenter: function(pCenter) {
+  this.dirty = true;
+  this.centerChanged = true;
+  return pCenter;
+}, applyRailRadius: function(pRailRadius) {
+  this.dirty = true;
+  this.railRadiusChanged = true;
+  return pRailRadius;
+}, applyCutSites: function(pCutSites) {
+  this.cutSitesChanged = true;
+  return pCutSites;
+}, applyFeatures: function(pFeatures) {
+  this.featuresChanged = true;
+  return pFeatures;
+}, applyOrfs: function(pOrfs) {
+  this.orfsChanged = true;
+  return pOrfs;
+}, initRail: function() {
+  this.rail = d3.select("#RailContainer").append("svg:svg").attr("id", "Rail").attr("overflow", "auto");
+  this.parentSVG = this.rail.append("svg:g").attr("class", "railParent").attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
+  this.frame = Ext.create("Vede.view.rail.Frame", {rail: this.parentSVG, railWidth: this.railWidth, center: this.center});
+  this.caret = Ext.create("Vede.view.rail.Caret", {rail: this.parentSVG, start: 0, reference: this.reference, railWidth: this.railWidth, length: 3});
+  var name = "unknown";
+  var length = 0;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
+  this.labelSVG = this.parentSVG.append("svg:g").attr("class", "railLabel");
+  this.selectionSVG = this.parentSVG.append("svg:g").attr("class", "railSelection");
+  this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "railCutSite");
+  this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+  this.orfSVG = this.parentSVG.append("svg:g").attr("class", "railOrf");
+  this.orfRenderer.setOrfSVG(this.orfSVG);
+  this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
+  this.featureRenderer.setFeatureSVG(this.featureSVG);
+  this.fitWidthToContent(this);
+}, updateNameBox: function() {
+  var name;
+  var length;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox.remove();
+  this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
+}, adjustCaret: function(bp) {
+  var start = bp / this.sequenceManager.getSequence().seqString().length;
+  this.caret.remove();
+  if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
+  {
+    this.caret = Ext.create("Vede.view.rail.Caret", {rail: this.parentSVG, start: start, reference: this.reference, railWidth: this.railWidth, length: 3});
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RailManager'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.Layer', Ext.Base, {inheritableStatics: {STROKE_OPACITY: 0.8}, config: {selectionSVG: null, sequenceManager: null, reference: {}, radius: 0, railWidth: null}, start: -1, end: -1, startPos: 0, endPos: 0, selecting: false, selected: false, constructor: function(inData) {
+  this.initConfig(inData);
+}, select: function(fromIndex, toIndex) {
+  this.drawSelectionRail(fromIndex, toIndex);
+  this.selected = true;
+  this.start = fromIndex;
+  this.end = toIndex;
+}, deselect: function() {
+  this.start = -1;
+  this.end = -1;
+  this.startPos = 0;
+  this.endPos = 0;
+  this.selected = false;
+  this.selecting = false;
+}, startSelecting: function() {
+  this.selecting = true;
+}, endSelecting: function() {
+  this.selecting = false;
+}, drawSelectionRail: function(fromIndex, endIndex) {
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'Layer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.SelectionLayer', Teselagen.renderer.rail.Layer, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC", WIREFRAME_OFFSET: 5}, deselect: function() {
+  this.callParent();
+  d3.selectAll(".railSelectionElement").remove();
+}, drawSelectionRail: function(fromIndex, endIndex) {
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  var path;
+  if (seqLen == 0) 
+  {
+    return;
+  }
+  d3.select(".railSelectionElement").remove();
+  this.startAngle = fromIndex / seqLen;
+  this.endAngle = endIndex / seqLen;
+  var wireHeight = this.reference.y + this.self.WIREFRAME_OFFSET;
+  var adjustedEnd = this.endAngle;
+  var startPoint = this.startAngle * this.railWidth;
+  var endPoint = adjustedEnd * this.railWidth;
+  if (endPoint < startPoint) 
+  {
+    path = "M 0" + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L 0" + " " + (-wireHeight) + "L 0" + " " + (wireHeight) + "M" + startPoint + " " + wireHeight + "L" + this.railWidth + " " + (wireHeight) + "L" + this.railWidth + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
+  } else {
+    path = "M" + startPoint + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
+  }
+  this.selectionSVG.append("svg:path").attr("class", "railSelectionElement").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).attr("d", path).style("pointer-events", "none");
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'SelectionLayer'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.renderer.rail.WireframeSelectionLayer', Teselagen.renderer.rail.Layer, {statics: {FRAME_COLOR: "#808080", WIREFRAME_OFFSET: 5}, deselect: function() {
+  this.callParent();
+  d3.selectAll(".railWireframeElement").remove();
+}, drawSelectionRail: function(fromIndex, endIndex) {
+  var path;
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  if (seqLen == 0 || (this.start == fromIndex && this.end == endIndex) || fromIndex == endIndex) 
+  {
+    return;
+  }
+  d3.selectAll(".railWireframeElement").remove();
+  var startAngle = fromIndex / seqLen;
+  var endAngle = endIndex / seqLen;
+  var wireHeight = this.reference.y + this.self.WIREFRAME_OFFSET;
+  var startPoint = startAngle * this.railWidth;
+  var endPoint = endAngle * this.railWidth;
+  var wireWidth = (startAngle - endAngle) * this.railWidth;
+  if (endPoint < startPoint) 
+  {
+    path = "M 0" + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L 0" + " " + (-wireHeight) + "L 0" + " " + (wireHeight) + "M" + startPoint + " " + wireHeight + "L" + this.railWidth + " " + (wireHeight) + "L" + this.railWidth + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
+  } else {
+    path = "M" + startPoint + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
+  }
+  this.selectionSVG.append("svg:path").attr("class", "railWireframeElement").attr("stroke", this.self.FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none").attr("d", path);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'WireframeSelectionLayer'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.RailController', Vede.controller.VectorEditor.SequenceController, {statics: {SELECTION_THRESHOLD: 2 * Math.PI / 360}, refs: [{ref: "railContainer", selector: "#RailContainer"}], railManager: null, mouseIsDown: false, startSelectionAngle: 0, startSelectionIndex: 0, clickedAnnotationStart: null, clickedAnnotationEnd: null, init: function() {
+  this.callParent();
+  this.control({"#zoomInMenuItem": {click: this.onZoomInMenuItemClick}, "#zoomOutMenuItem": {click: this.onZoomOutMenuItemClick}});
+}, initRail: function() {
+  this.railManager.initRail();
+  var rail = this.railManager.getRail();
+  var self = this;
+  rail.on("mousedown", function() {
+  self.onMousedown(self);
+});
+  rail.on("mouseup", function() {
+  self.onMouseup(self);
+});
+  rail.on("mousemove", function() {
+  self.onMousemove(self);
+});
+  this.railContainer.on("resize", function() {
+  this.railManager.fitWidthToContent(this.railManager);
+}, this);
+  this.railContainer.el.dom.setAttribute("tabindex", "0");
+  this.railContainer.el.on("keydown", this.onKeydown, this);
+}, onLaunch: function() {
+  var rail;
+  var self = this;
+  this.callParent(arguments);
+  this.railContainer = this.getRailContainer();
+  this.railManager = Ext.create("Teselagen.manager.RailManager", {reference: {x: 0, y: 0}, railWidth: 400, showCutSites: Ext.getCmp("cutSitesMenuItem").checked, showFeatures: Ext.getCmp("featuresMenuItem").checked, showOrfs: Ext.getCmp("orfsMenuItem").checked});
+  rail = this.railManager.getRail();
+  var timeOut = null;
+  window.onresize = function() {
+  if (timeOut != null) 
+  clearTimeout(timeOut);
+  timeOut = setTimeout(function() {
+  self.railManager.fitWidthToContent(self.railManager);
+}, 400);
+};
+  this.Managers.push(this.railManager);
+  this.railContainer.hide();
+  this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {reference: this.railManager.reference, railWidth: this.railManager.railWidth});
+  this.SelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {reference: this.railManager.reference, railWidth: this.railManager.railWidth});
+}, onKeydown: function(event) {
+  if (event.getKey() === 187) 
+  {
+    this.railManager.zoomIn();
+  } else if (event.getKey() === 189) 
+  {
+    this.railManager.zoomOut();
+  } else {
+    this.callParent(arguments);
+  }
+}, onSequenceChanged: function() {
+  if (!this.SequenceManager) 
+  {
+    return;
+  }
+  this.callParent();
+  this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+  this.railManager.setOrfs(this.ORFManager.getOrfs());
+  this.railManager.setFeatures(this.SequenceManager.getFeatures());
+  this.railManager.render();
+  this.railManager.updateNameBox();
+}, onActiveEnzymesChanged: function() {
+  this.callParent();
+  this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+  if (this.railManager.sequenceManager && this.railManager.showCutSites) 
+  {
+    this.railManager.render();
+  }
+}, onVectorPanelAnnotationClicked: function(start, end) {
+  this.clickedAnnotationStart = start;
+  this.clickedAnnotationEnd = end;
+}, onAnnotatePanelAnnotationClicked: function(start, end) {
+  this.select(start, end);
+}, onViewModeChanged: function(viewMode) {
+  if (viewMode == "circular") 
+  {
+    Ext.getCmp("RailContainer").hide();
+  } else {
+    Ext.getCmp("RailContainer").show();
+  }
+}, onSelectionChanged: function(scope, start, end) {
+  if (scope != this) 
+  {
+    this.SelectionLayer.select(start, end);
+    this.changeCaretPosition(start);
+  }
+}, onSequenceManagerChanged: function(pSeqMan) {
+  this.callParent(arguments);
+  this.railManager.setOrfs(this.ORFManager.getOrfs());
+  this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+  this.railManager.setFeatures(pSeqMan.getFeatures());
+  this.railManager.render();
+  this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
+  this.WireframeSelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
+  this.SelectionLayer.setSequenceManager(pSeqMan);
+  this.SelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
+}, onShowFeaturesChanged: function(show) {
+  this.railManager.setShowFeatures(show);
+  if (this.railManager.sequenceManager) 
+  {
+    this.railManager.render();
+  }
+}, onShowCutSitesChanged: function(show) {
+  this.railManager.setShowCutSites(show);
+  if (this.railManager.sequenceManager) 
+  {
+    this.railManager.render();
+  }
+}, onShowOrfsChanged: function(show) {
+  this.railManager.setShowOrfs(show);
+  if (this.railManager.sequenceManager) 
+  {
+    this.railManager.render();
+  }
+}, onShowFeatureLabelsChanged: function(show) {
+  this.railManager.setShowFeatureLabels(show);
+  if (this.railManager.sequenceManager) 
+  {
+    this.railManager.render();
+  }
+}, onShowCutSiteLabelsChanged: function(show) {
+  this.railManager.setShowCutSiteLabels(show);
+  if (this.railManager.sequenceManager) 
+  {
+    this.railManager.render();
+  }
+}, onMousedown: function(self) {
+  self.startSelectionAngle = self.getClickLocation();
+  self.mouseIsDown = true;
+  if (self.railManager.sequenceManager) 
+  {
+    self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
+    self.changeCaretPosition(self.startSelectionIndex);
+  }
+  self.selectionDirection = 0;
+}, onMousemove: function(self) {
+  var endSelectionAngle = self.getClickLocation();
+  var start;
+  var end;
+  var multirend;
+  if (self.mouseIsDown && Math.abs(self.startSelectionAngle - endSelectionAngle) > self.self.SELECTION_THRESHOLD && self.railManager.sequenceManager) 
+  {
+    self.endSelectionIndex = self.bpAtAngle(endSelectionAngle);
+    if (self.selectionDirection == 0) 
+    {
+      if (self.startSelectionAngle < endSelectionAngle) 
+      {
+        self.selectionDirection = -1;
+        if (endSelectionAngle >= self.startSelectionAngle) 
+        {
+          self.selectionDirection = 1;
+        }
+      } else {
+        self.selectionDirection = 1;
+        if (endSelectionAngle <= self.startSelectionAngle) 
+        {
+          self.selectionDirection = -1;
+        }
+      }
+    }
+    if (self.selectionDirection == -1) 
+    {
+      start = self.endSelectionIndex;
+      end = self.startSelectionIndex;
+    } else {
+      start = self.startSelectionIndex;
+      end = self.endSelectionIndex;
+    }
+    self.WireframeSelectionLayer.startSelecting();
+    self.WireframeSelectionLayer.select(start, end);
+    if (d3.event.ctrlKey) 
+    {
+      self.SelectionLayer.startSelecting();
+      self.select(start, end);
+      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
+    } else {
+      self.stickySelect(start, end);
+    }
+    self.changeCaretPosition(start);
+  }
+}, onMouseup: function(self) {
+  if (self.mouseIsDown) 
+  {
+    self.mouseIsDown = false;
+    if (self.WireframeSelectionLayer.selected && self.WireframeSelectionLayer.selecting) 
+    {
+      self.WireframeSelectionLayer.endSelecting();
+      self.WireframeSelectionLayer.deselect();
+      self.SelectionLayer.endSelecting();
+      if (self.SelectionLayer.end != -1) 
+      {
+        self.changeCaretPosition(self.SelectionLayer.start);
+      }
+    } else if (self.clickedAnnotationStart && self.clickedAnnotationEnd) 
+    {
+      self.select(self.clickedAnnotationStart, self.clickedAnnotationEnd);
+      self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, self, self.SelectionLayer.start, self.SelectionLayer.end);
+      self.clickedAnnotationStart = null;
+      self.clickedAnnotationEnd = null;
+    } else {
+      self.SelectionLayer.deselect();
+      self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
+    }
+  }
+}, onZoomInMenuItemClick: function() {
+  this.railManager.zoomIn();
+}, onZoomOutMenuItemClick: function() {
+  this.railManager.zoomOut();
+}, select: function(start, end) {
+  this.SelectionLayer.select(start, end);
+  this.changeCaretPosition(this.SelectionLayer.start);
+}, getClickLocation: function() {
+  var svg = d3.select(".railParent");
+  var transformValues;
+  var scrolled = this.railContainer.el.getScroll();
+  transformValues = svg.attr("transform").match(/[-.\d]+/g);
+  var fraction = (d3.event.layerX - transformValues[4] + scrolled.left) / (d3.select(".railParent > rect")[0][0].width.baseVal.value * transformValues[0]);
+  if (fraction > 1) 
+  {
+    fraction = 1;
+  }
+  return fraction;
+}, bpAtAngle: function(angle) {
+  return Math.floor(angle * this.railManager.sequenceManager.getSequence().seqString().length);
+}, changeCaretPosition: function(index) {
+  if (index >= 0 && index <= this.SequenceManager.getSequence().toString().length) 
+  {
+    this.callParent(arguments);
+    this.railManager.adjustCaret(index);
+  }
+}, stickySelect: function(start, end) {
+  var annotations = this.railManager.getAnnotationsInRange(start, end);
+  if (annotations.length > 0) 
+  {
+    if (start <= end) 
+    {
+      var minStart = annotations[0].getStart();
+      var maxEnd = annotations[0].getEnd();
+      Ext.each(annotations, function(annotation) {
+  if (annotation.getStart() < minStart) 
+  {
+    minStart = annotation.getStart();
+  }
+  if (annotation.getEnd() > maxEnd) 
+  {
+    maxEnd = annotation.getEnd();
+  }
+});
+      this.SelectionLayer.startSelecting();
+      this.select(minStart, maxEnd);
+      this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+    } else {
+      var minStart1 = -1;
+      var maxEnd1 = -1;
+      var minStart2 = -1;
+      var maxEnd2 = -1;
+      Ext.each(annotations, function(annotation) {
+  if (annotation.getStart() > start) 
+  {
+    if (minStart1 == -1) 
+    {
+      minStart1 = annotation.getStart();
+    }
+    if (annotation.getStart() < minStart1) 
+    {
+      minStart1 = annotation.getStart();
+    }
+  } else {
+    if (minStart2 == -1) 
+    {
+      minStart2 = annotation.getStart();
+    }
+    if (annotation.getStart() < minStart2) 
+    {
+      minStart2 = annotation.getStart();
+    }
+  }
+  if (annotation.getEnd() > end) 
+  {
+    if (maxEnd1 == -1) 
+    {
+      maxEnd1 = annotation.getEnd();
+    }
+    if (annotation.getEnd() > maxEnd1) 
+    {
+      maxEnd1 = annotation.getEnd();
+    }
+  } else {
+    if (maxEnd2 == -1) 
+    {
+      maxEnd2 = annotation.getEnd();
+    }
+    if (annotation.getEnd() > maxEnd2) 
+    {
+      maxEnd2 = annotation.getEnd();
+    }
+  }
+});
+      var selStart = minStart1;
+      var selEnd;
+      if (minStart1 == -1 && minStart2 != -1) 
+      {
+        selStart = minStart2;
+      } else if (minStart1 != -1 && minStart2 == -1) 
+      {
+        selStart = minStart1;
+      } else if (minStart1 != -1 && minStart2 != -1) 
+      {
+        selStart = minStart1;
+      }
+      if (maxEnd1 == -1 && maxEnd2 != -1) 
+      {
+        selEnd = maxEnd2;
+      } else if (maxEnd1 != -1 && maxEnd2 == -1) 
+      {
+        selEnd = maxEnd1;
+      } else if (maxEnd1 != -1 && maxEnd2 != -1) 
+      {
+        selEnd = maxEnd2;
+      }
+      if (selEnd == -1 || selStart == -1) 
+      {
+        this.SelectionLayer.deselect();
+      } else {
+        this.SelectionLayer.startSelecting();
+        this.select(selStart, selEnd);
+        this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, this.SelectionLayer.start, this.SelectionLayer.end);
+      }
+    }
+  } else {
+    this.SelectionLayer.deselect();
+  }
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'RailController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.SelectWindowController', Ext.app.Controller, {MenuItemEvent: null, SelectionEvent: null, selectWindow: null, sequenceManager: null, onSelectWindowOpened: function(window) {
+  this.selectWindow = window;
+}, onSequenceManagerChanged: function(sequenceManager) {
+  this.sequenceManager = sequenceManager;
+}, onOKButtonClick: function() {
+  if (!this.sequenceManager) 
+  {
+    this.selectWindow.close();
+  }
+  var from = Ext.getCmp("selectWindowFromField").getValue();
+  var to = Ext.getCmp("selectWindowToField").getValue();
+  var seqLen = this.sequenceManager.getSequence().toString().length;
+  if (isNaN(from) || from > seqLen || from < 1) 
+  {
+    Ext.getCmp("selectWindowFromField").setFieldStyle("border-color:red");
+  } else if (isNaN(to) || to > seqLen || to < 1) 
+  {
+    Ext.getCmp("selectWindowToField").setFieldStyle("border-color:red");
+  } else {
+    this.selectWindow.close();
+    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, this, Number(from) - 1, Number(to));
+  }
+}, init: function() {
+  this.control({"#selectWindowOKButton": {click: this.onOKButtonClick}});
+  this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+  this.SelectionEvent = Teselagen.event.SelectionEvent;
+  this.application.on(this.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
+  this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'SelectWindowController'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.manager.SequenceManager', Ext.Base, {config: {name: "", circular: false, sequence: null, features: [], complementSequence: null, reverseComplementSequence: null, manualUpdateStarted: false, needsRecalculateComplementSequence: true, needsRecalculateReverseComplementSequence: true}, DNATools: null, updateSequenceChanged: null, updateSequenceChanging: null, updateKindFeatureAdd: null, updateKindFeatureRemove: null, updateKindFeaturesAdd: null, updateKindFeaturesRemove: null, updateKindSequenceInsert: null, updateKindSequenceRemove: null, updateKindKManualUpdate: null, updateKindSetMemento: null, updateKindInitialized: null, constructor: function(inData) {
@@ -79899,6 +79682,534 @@ function requestMessageProcessor(request, success) {
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'SequenceEditingController'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.models.digest.Ladder', Ext.Base, {config: {ladderTypes: null, bandSizes: null}, statics: {BP_LADDER_BANDS: [20000, 10000, 7000, 5000, 4000, 3000, 2000, 1500, 1000, 700, 500, 400, 300, 200, 75], GR_HIGH_RANGE_LADDER_BANDS: [48502, 24508, 20555, 17000, 15258, 13825, 12119, 10171], GR_1KB_LADDER_BANDS: [10000, 8000, 6000, 5000, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 750, 500, 250], GR_1KB_PLUS_LADDER_BANDS: [20000, 10000, 7000, 5000, 4000, 3000, 2000, 1500, 1000, 700, 500, 400, 300, 200, 75], GR_100BP_LADDER_BANDS: [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100], GR_100BP_PLUS_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100], GR_50BP_LADDER_BANDS: [1000, 900, 800, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50], GR_LOW_RANGE_LADDER_BANDS: [700, 500, 400, 300, 200, 150, 100, 75, 50, 25], GR_ULTRA_LOW_RANGE_LADDER_BANDS: [300, 200, 150, 100, 75, 50, 35, 25, 20, 15, 10], PBR322_LADDER_BANDS: [587, 540, 502, 458, 434, 267, 234, 213, 192, 184, 124, 123, 104, 89, 90], LAMBDA_LADDER_BANDS: [21226, 5148, 4973, 4268, 3530, 2027, 1904, 1584, 1375, 947, 831, 564], KB_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]}, fields: [{name: "bandSizes", type: "auto", defaultValue: null}], constructor: function(inData) {
+  this.initConfig(inData);
+  this.statics();
+  this.ladderTypes = new Ext.util.HashMap();
+  this.ladderTypes.add("GeneRuler High Range DNA Ladder 10,171-48,502 bp", this.self.GR_HIGH_RANGE_LADDER_BANDS);
+  this.ladderTypes.add("Generuler 1 kb DNA Ladder 250-10000 bp", this.self.GR_1KB_LADDER_BANDS);
+  this.ladderTypes.add("GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", this.self.GR_1KB_PLUS_LADDER_BANDS);
+  this.ladderTypes.add("GeneRuler 100 bp DNA Ladder 100-1000 bp", this.self.GR_100BP_LADDER_BANDS);
+  this.ladderTypes.add("GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", this.self.GR_100BP_PLUS_LADDER_BANDS);
+  this.ladderTypes.add("GeneRuler 50 bp DNA Ladder, 50-1000 bp", this.self.GR_50BP_LADDER_BANDS);
+  this.ladderTypes.add("GeneRuler Low Range DNA Ladder 25-700 bp", this.self.GR_LOW_RANGE_LADDER_BANDS);
+}, setLadder: function(pLadder) {
+  if (pLadder.indexOf("1kb") > -1) 
+  {
+    this.bandSizes = this.self.BP_LADDER_BANDS;
+  } else {
+    this.bandSizes = this.self.KB_LADDER_BANDS;
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'Ladder'], 0));
+;
+
+Ext.require("Teselagen.bio.tools.DigestionCalculator");
+(Ext.cmd.derive('Teselagen.models.digest.GelLane', Ext.Base, {config: {name: "default", BAND_COLOR: "#fff", CONNECTOR_COLOR: "#999999", ladder: null, ladderDefs: null, min: null, max: null, actualHeight: 400, actualWidth: 400, labelSize: 16, bandSprites: null, bandSizeLabels: null, bandSizeLabelYPositions: null, enzymes: null, sequence: null, digestionCalculator: null, Ladder: null, bands: null, laneType: "ladder", hPad: 0.1, xOffset: 100}, constructor: function(inData) {
+  this.bands = [];
+  this.initConfig(inData);
+  this.digestionCalculator = Teselagen.bio.tools.DigestionCalculator;
+  this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
+  if (inData.ladder !== undefined) 
+  {
+    for (var i = 0; i < inData.ladder.length; ++i) 
+      {
+        this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {size: inData.ladder[i], actualWidth: this.getActualWidth(), xOffset: this.getXOffset(), labelSize: this.getLabelSize()}));
+      }
+  } else {
+    this.laneType = "digest";
+  }
+}, setActualWidth: function(newValue) {
+  for (var i = 0; i < this.bands.length; ++i) 
+    {
+      this.bands[i].setActualWidth(newValue);
+    }
+  this.actualWidth = newValue;
+}, setXOffset: function(newValue) {
+  for (var i = 0; i < this.bands.length; ++i) 
+    {
+      this.bands[i].setXOffset(newValue);
+    }
+  this.xOffset = newValue;
+}, draw: function(totalLogDifference, min) {
+  this.bandSprites = [];
+  this.refreshDigestion();
+  for (var i = 0; i < this.bands.length; ++i) 
+    {
+      var bandSprite = this.bands[i].draw(totalLogDifference, min, this.getActualHeight());
+      this.bandSprites.push(bandSprite);
+      if (this.laneType === "ladder") 
+      {
+        var label = this.bands[i].drawLabels();
+        label.shifted = false;
+        if (this.bandSprites.length > 1) 
+        {
+          var previousLabel = this.bandSprites[this.bandSprites.length - 2];
+          var overlap = previousLabel.y - label.y - this.getLabelSize();
+          if (overlap < 0 && previousLabel.shifted !== true) 
+          {
+            label.setAttributes({translate: {x: this.getLabelSize() / 2 * -6, y: 0}}, true);
+            label.shifted = true;
+            var connector = Ext.create("Ext.draw.Sprite", {type: "rect", fill: this.CONNECTOR_COLOR, height: 1, width: bandSprite.x - label.x + this.getLabelSize() / 2 * (6 - label.text.length), x: label.x - this.getLabelSize() / 2 * (6 - label.text.length), y: label.y});
+            this.bandSprites.push(connector);
+          }
+        }
+        this.bandSprites.push(label);
+      }
+    }
+  if (this.laneType === "digest") 
+  {
+    var laneLabelText;
+    if (this.bands.length > 0) 
+    {
+      laneLabelText = this.bands.length + " fragment";
+      if (this.bands.length > 1) 
+      {
+        laneLabelText = laneLabelText + "s";
+      }
+    } else {
+      if (this.sequence === null) 
+      {
+        laneLabelText = "No Sequence";
+      } else {
+        laneLabelText = "No Digestion";
+      }
+    }
+    var halfWidth = this.actualWidth / 2;
+    var xSpacer = halfWidth + (halfWidth * this.hPad);
+    var xSpacerFactor = 0.25;
+    xSpacer = xSpacer * xSpacerFactor;
+    var laneLabel = Ext.create("Ext.draw.Sprite", {type: "text", text: laneLabelText, fill: this.BAND_COLOR, font: this.labelSize + "px 'monospace'", x: this.xOffset + xSpacer, y: 10});
+    this.bandSprites.push(laneLabel);
+  }
+  return this.bandSprites;
+}, drawLabels: function() {
+  var halfWidth = this.actualWidth / 2;
+  var sizeString = this.size.toString();
+  var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
+  var gelLabel = Ext.create("Ext.draw.Sprite", {type: "text", text: sizeString, fill: this.BAND_COLOR, font: this.labelSize + "px 'monospace'", style: {textAlign: "right", display: "block", width: "50px"}, x: txtOffset + this.xOffset + (halfWidth * this.hPad), y: this.bandYPosition});
+  return gelLabel;
+}, refreshDigestion: function() {
+  if (this.sequence !== null && this.enzymes !== null && this.enzymes.length > 0) 
+  {
+    this.mapFragmentsToBands(this.digestionCalculator.digestSequence(this.sequence, this.enzymes));
+  }
+  this.bands.sort(function(x, y) {
+  return x.size - y.size;
+});
+}, mapFragmentsToBands: function(fragments) {
+  this.bands = [];
+  for (var i = 0; i < fragments.length; ++i) 
+    {
+      this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {digestionFragment: fragments[i], actualWidth: this.getActualWidth(), xOffset: this.getXOffset(), labelSize: this.getLabelSize()}));
+    }
+}, calculateMinMax: function() {
+  this.refreshDigestion();
+  this.max = -Infinity , this.min = +Infinity;
+  for (var i = 0; i < this.getBands().length; i++) 
+    {
+      if (this.getBands()[i].size > this.max) 
+      {
+        this.max = this.getBands()[i].size;
+      }
+      if (this.getBands()[i].size < this.min) 
+      {
+        this.min = this.getBands()[i].size;
+      }
+    }
+}, getMin: function() {
+  this.calculateMinMax();
+  return this.min;
+}, getMax: function() {
+  this.calculateMinMax();
+  return this.max;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'GelLane'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.digest.GelBand', Ext.Base, {config: {BAND_COLOR: "#fff", CONNECTOR_COLOR: "#999999", labelSize: 16, bandHeight: 1, actualWidth: 400, xOffset: 100, bandYPosition: null, bandSizeLabel: null, bandSizeLabelYPosition: null, actualHeight: 800, hPad: 0.1, name: "default", start: null, end: null, size: 0, digestionFragment: null}, constructor: function(inData) {
+  this.initConfig(inData);
+  if (inData.digestionFragment !== undefined) 
+  {
+    this.size = inData.digestionFragment.getLength();
+    if (inData.digestionFragment.getStartRE() !== null) 
+    {
+      this.start = inData.digestionFragment.getStartRE().getName();
+    }
+    if (inData.digestionFragment.getEndRE() !== null) 
+    {
+      this.end = inData.digestionFragment.getEndRE().getName();
+    }
+  }
+}, draw: function(totalLogDifference, min, height) {
+  var ladderHeight = height * 0.8;
+  var currentLogDifference = Math.log(this.size / min);
+  var normalizedLogDifference = currentLogDifference / totalLogDifference;
+  var scalingFactor = -(0.1 * Math.sin(2 * 3.14 * normalizedLogDifference));
+  this.bandYPosition = (0.9 * height - (scalingFactor + normalizedLogDifference) * ladderHeight);
+  var altY = ladderHeight * Math.log(min) / Math.log(this.size);
+  var maxY = ladderHeight * Math.log(min) / Math.log(20000);
+  var scaled = (altY - maxY) * ladderHeight / (ladderHeight - maxY);
+  scaled = scaled + height * 0.1;
+  if (scaled >= height - 4) 
+  {
+    scaled = height - 4;
+  }
+  var halfWidth = this.actualWidth / 2;
+  var xSpacer = halfWidth + (halfWidth * this.hPad);
+  var xSpacerFactor = 0.25;
+  if (this.isDigest()) 
+  {
+    xSpacer = xSpacer * xSpacerFactor;
+  }
+  var gelBand = Ext.create("Ext.draw.Sprite", {type: "rect", fill: this.BAND_COLOR, height: this.bandHeight, width: halfWidth * (1 - 2 * this.hPad), x: this.xOffset + xSpacer, y: this.bandYPosition});
+  if (this.isDigest()) 
+  {
+    gelBand.bandType = "digest";
+    gelBand.size = this.getSize();
+    gelBand.start = this.digestionFragment.getStart();
+    gelBand.end = this.digestionFragment.getEnd();
+    gelBand.startRE = this.digestionFragment.getStartRE().getName();
+    gelBand.endRE = this.digestionFragment.getEndRE().getName();
+  }
+  return gelBand;
+}, drawLabels: function() {
+  var halfWidth = this.actualWidth / 2;
+  var sizeString = this.size.toString();
+  var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
+  var gelLabel = Ext.create("Ext.draw.Sprite", {type: "text", text: sizeString, fill: this.BAND_COLOR, font: this.labelSize + "px 'monospace'", style: {textAlign: "right", display: "block", width: "50px"}, x: txtOffset + this.xOffset + (halfWidth * this.hPad), y: this.bandYPosition});
+  return gelLabel;
+}, isDigest: function() {
+  return (this.digestionFragment !== null);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'GelBand'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.digest.Gel', Ext.Base, {config: {name: "default", BAND_COLOR: "#fff", CONNECTOR_COLOR: "#999999", ladder: null, ladderDefs: null, min: null, max: null, actualHeight: 400, actualWidth: 400}, lanes: null, getLanes: function() {
+  return this.lanes;
+}, constructor: function(inData) {
+  this.initConfig(inData);
+  this.lanes = [];
+  this.ladderDefs = Ext.create("Teselagen.models.digest.Ladder", {ladderName: "1kb"});
+}, setLadder: function(ladderName) {
+  if (ladderName.indexOf("1kb") > -1) 
+  {
+    this.ladder = this.ladderDefs.BP_LADDER_BANDS;
+  } else {
+    this.ladder = this.ladderDefs.KB_LADDER_BANDS;
+  }
+}, createLane: function(newLaneName, index) {
+  var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: newLaneName});
+  this.insertLane(newLane, index);
+}, insertLane: function(newLane, index) {
+  newLane.setActualHeight(this.getActualHeight());
+  if (typeof index === "undefined") 
+  {
+    index = this.getLanes().length;
+  }
+  this.getLanes().splice(index, 0, newLane);
+  var widthUnit = this.actualWidth / this.getLanes().length;
+  for (var i = 0; i < this.getLanes().length; i++) 
+    {
+      this.getLanes()[i].setActualWidth(widthUnit);
+      this.getLanes()[i].setXOffset(i * widthUnit);
+    }
+}, clearLanes: function() {
+  this.lanes = [];
+}, getLane: function(laneName) {
+  var lane = null;
+  for (var i = 0; i < this.getLanes().length; i++) 
+    {
+      if (this.getLanes()[i].name === laneName) 
+      {
+        lane = this.getLanes()[i];
+      }
+    }
+  return lane;
+}, calculateMinMax: function() {
+  this.max = -Infinity , this.min = +Infinity;
+  for (var i = 0; i < this.getLanes().length; i++) 
+    {
+      if (this.getLanes()[i].getMax() > this.max) 
+      {
+        this.max = this.getLanes()[i].getMax();
+      }
+      if (this.getLanes()[i].getMin() < this.min) 
+      {
+        this.min = this.getLanes()[i].getMin();
+      }
+    }
+}, getMin: function() {
+  this.calculateMinMax();
+  return this.min;
+}, getMax: function() {
+  this.calculateMinMax();
+  return this.max;
+}, draw: function() {
+  this.calculateMinMax();
+  var totalLogDifference = Math.log(this.max / this.min);
+  var laneBands = [];
+  for (var i = 0; i < this.getLanes().length; ++i) 
+    {
+      laneBands.push(this.getLanes()[i].draw(totalLogDifference, this.min));
+    }
+  var bands = [].concat.apply([], laneBands);
+  return bands;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models.digest, 'Gel'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.SimulateDigestionManager', Ext.Base, {config: {digestPanel: null, sampleLane: null, groupManager: null, enzymeListSelector: null, gel: null, Ladder: null, enzymes: null, dnaSequence: null}, currentEnzymes: null, constructor: function(inData) {
+  this.initConfig(inData);
+  this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
+}, setDnaSequence: function(dnaSequence) {
+  if (dnaSequence !== null && dnaSequence !== "") 
+  {
+    this.dnaSequence = dnaSequence;
+    dnaSequence.setCircular(true);
+  }
+}, filterEnzymes: function(searchCombo, groupSelector) {
+  this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
+  this.filterEnzymesInternal(searchCombo, groupSelector);
+}, filterEnzymesInternal: function(searchCombo, groupSelector) {
+  var currentList = this.groupManager.groupByName(groupSelector.getValue());
+  var enzymeArray = [];
+  Ext.each(currentList.getEnzymes(), function(enzyme) {
+  enzymeArray.push({name: enzyme.getName()});
+});
+  this.enzymeListSelector.store.loadData(enzymeArray, false);
+  this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
+  if (this.currentEnzymes === null) 
+  {
+    this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
+  }
+  this.enzymeListSelector.toField.store.loadData(this.currentEnzymes, false);
+  this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
+  var list = this.enzymeListSelector.fromField.boundList;
+  var store = list.getStore();
+  store.suspendEvents();
+  this.currentEnzymes = this.enzymeListSelector.toField.store.getRange();
+  this.currentEnzymes.forEach(function(enzyme) {
+  var deleted = store.query("name", enzyme.get("name"));
+  store.remove(deleted.items[0], false);
+});
+  store.resumeEvents();
+  list.refresh();
+  var searchPhrase = ".";
+  if (searchCombo.getValue() !== null) 
+  {
+    searchPhrase = searchCombo.getValue();
+  }
+  try {
+    var regEx = new RegExp(searchPhrase, "i");
+  }  catch (err) {
+  regEx = null;
+}
+  this.enzymeListSelector.fromField.store.filterBy(function(enzyme) {
+  return enzyme.get("name").search(regEx) !== -1;
+}, this);
+}, onClose: function() {
+  this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
+}, updateLadderLane: function(ladder) {
+  this.selectedLadder = this.Ladder.ladderTypes.get(ladder);
+  this.drawGel();
+}, updateSampleLane: function(selectedEnzymes) {
+  var tempEnzymes = [];
+  selectedEnzymes.each(function(enzyme) {
+  tempEnzymes.push(Teselagen.manager.RestrictionEnzymeGroupManager.getEnzymeByName(enzyme.data.name));
+});
+  this.enzymes = tempEnzymes;
+  this.drawGel();
+}, drawGel: function() {
+  if (this.digestPanel === null) 
+  {
+    return;
+  }
+  var tempSurface = this.digestPanel.surface;
+  var height = this.digestPanel.surface.height;
+  var width = this.digestPanel.surface.width;
+  var gel = Ext.create("Teselagen.models.digest.Gel", {name: "Gel", actualHeight: height, actualWidth: width});
+  var ladderLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: this.selectedLadder});
+  gel.insertLane(ladderLane);
+  var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: this.dnaSequence, enzymes: this.enzymes});
+  gel.insertLane(sampleLane);
+  var sprites = gel.draw();
+  if (this.ladderSpriteGroup !== undefined && this.ladderSpriteGroup !== null) 
+  {
+    this.ladderSpriteGroup.destroy();
+  }
+  this.ladderSpriteGroup = Ext.create("Ext.draw.CompositeSprite", {surface: this.digestPanel.surface});
+  for (var i = 0; i < sprites.length; i++) 
+    {
+      this.ladderSpriteGroup.add(sprites[i]);
+    }
+  this.ladderSpriteGroup.each(function(band) {
+  tempSurface.add(band);
+});
+  this.ladderSpriteGroup.show(true);
+  for (i = 0; i < sprites.length; i++) 
+    {
+      if (sprites[i].bandType === "digest") 
+      {
+        Ext.create("Ext.tip.ToolTip", {target: sprites[i].id, showDelay: 0, dismissDelay: 0, html: sprites[i].size + " bp, " + sprites[i].start + "(" + sprites[i].startRE + ").." + sprites[i].end + "(" + sprites[i].endRE + ")"});
+      }
+    }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SimulateDigestionManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.SimulateDigestionController', Ext.app.Controller, {GroupManager: null, DNATools: null, digestManager: null, managerWindow: null, digestPanel: null, dnaSequence: null, groupSelector: null, enzymeListSelector: null, init: function() {
+  this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+  this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
+  this.DNATools = Teselagen.bio.sequence.DNATools;
+  this.filterTaskRunner = new Ext.util.TaskRunner();
+  this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
+  this.control({"#enzymeGroupSelector-digest": {change: this.onEnzymeGroupSelected}, "#ladderSelector": {change: this.updateLadderLane}, "#enzymeGroupSelector-search": {change: this.searchEnzymes}, "#drawingSurface": {resize: this.onGelResize}, "#enzymeListSelector-digest": {change: this.onEnzymeListChange}});
+  this.application.on({SequenceManagerChanged: this.getSequenceManagerData, SimulateDigestionWindowOpened: this.onSimulateDigestionOpened, scope: this});
+}, getSequenceManagerData: function(pSequenceManager) {
+  if (pSequenceManager.getSequence().seqString()) 
+  {
+    this.dnaSequence = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
+  } else {
+    this.dnaSequence = "";
+  }
+  this.digestManager.setDnaSequence(this.dnaSequence);
+}, onSimulateDigestionOpened: function(manager) {
+  this.managerWindow = manager;
+  this.managerWindow.on({beforeclose: this.onSimulateDigestionWindowClosed, scope: this});
+  this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
+  this.digestManager.digestPanel = this.digestPanel;
+  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+  this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
+  if (!this.GroupManager.getIsInitialized()) 
+  {
+    this.GroupManager.initialize();
+  }
+  Ext.each(this.GroupManager.getGroupNames(), function(name) {
+  groupSelector.store.add({"name": name});
+});
+  this.digestManager.setDigestPanel(this.digestPanel);
+  this.digestManager.setGroupManager(this.GroupManager);
+  this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
+  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+  this.digestManager.filterEnzymesInternal(searchCombobox, groupSelector);
+  var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
+  this.updateLadderLane(ladderSelector);
+  this.digestManager.drawGel();
+}, onSimulateDigestionWindowClosed: function() {
+  this.digestManager.onClose();
+}, onGelResize: function(drawingSurface, width, height) {
+  if (this.digestManager === undefined || this.digestManager === null) 
+  {
+    return;
+  }
+  this.digestManager.drawGel(drawingSurface, width, height);
+}, onEnzymeGroupSelected: function() {
+  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+  this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+}, searchEnzymes: function() {
+  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+  this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+}, onEnzymeListChange: function() {
+  this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
+  this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
+}, updateLadderLane: function(combobox) {
+  this.digestManager.updateLadderLane(combobox.getValue());
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'SimulateDigestionController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.StatusBarController', Ext.app.Controller, {DNATools: null, SequenceManager: null, StatusPanel: null, TemperatureCalculator: null, CaretEvent: null, SelectionEvent: null, SequenceManagerEvent: null, onLaunch: function() {
+  this.StatusPanel = Ext.getCmp("VectorEditorStatusPanel");
+}, init: function() {
+  this.DNATools = Teselagen.bio.sequence.DNATools;
+  this.TemperatureCalculator = Teselagen.bio.tools.TemperatureCalculator;
+  this.CaretEvent = Teselagen.event.CaretEvent;
+  this.SelectionEvent = Teselagen.event.SelectionEvent;
+  this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+  this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+  this.application.on(this.CaretEvent.CARET_POSITION_CHANGED, this.onCaretPositionChanged, this);
+  this.application.on(this.SelectionEvent.SELECTION_CHANGED, this.onSelectionChanged, this);
+  this.application.on(this.SelectionEvent.SELECTION_CANCELED, this.onSelectionCanceled, this);
+  this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGED, this.onSequenceChanged, this);
+}, reset: function() {
+  this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(this.SequenceManager.getSequence().toString().length);
+  this.StatusPanel.down("tbtext[cls='caretPositionText']").setText("0");
+  this.onSelectionCanceled();
+  this.onSequenceChanged();
+}, onSequenceManagerChanged: function(newSeqMan) {
+  this.SequenceManager = newSeqMan;
+  console.log("status reset");
+  this.reset();
+}, onCaretPositionChanged: function(scope, index) {
+  this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index.toString());
+}, onSelectionChanged: function(scope, start, end) {
+  if (start != end) 
+  {
+    var selection;
+    var selectionLength;
+    var selectionLabelText;
+    var meltingTemperature;
+    selection = this.SequenceManager.subSequence(start, end).toString();
+    if (start < end) 
+    {
+      selectionLength = end - start;
+    } else {
+      selectionLength = this.SequenceManager.getSequence().toString().length + end - start;
+    }
+    selectionLabelText = [start + 1, " : ", end, " (", selectionLength, ")"].join("");
+    this.StatusPanel.down("tbtext[cls='selectionPositionText']").setText(selectionLabelText);
+    meltingTemperature = this.TemperatureCalculator.calculateTemperature(this.DNATools.createDNASequence("selection", selection));
+    if (meltingTemperature > 0) 
+    {
+      this.StatusPanel.down("tbtext[cls='meltingTemperatureText']").setText(meltingTemperature.toFixed(2) + "&deg;C");
+    }
+  }
+}, onSelectionCanceled: function() {
+  this.StatusPanel.down("tbtext[cls='selectionPositionText']").setText("- : -");
+  this.StatusPanel.down("tbtext[cls='meltingTemperatureText']").setText("");
+}, onSequenceChanged: function() {
+  this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(this.SequenceManager.getSequence().toString().length);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'StatusBarController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.VectorPanelController', Ext.app.Controller, {require: ["Teselagen.manager.ProjectManager"], isRendered: false, onTabChange: function(tabPanel, newTab, oldTab) {
+  var self = this;
+  if (newTab.xtype == "VectorEditorPanel") 
+  {
+    if (!Teselagen.manager.ProjectManager.workingSequence) 
+    {
+      console.log("Opening VE Direct Mode");
+      Teselagen.manager.ProjectManager.directVEEditingMode = true;
+      Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {name: "Untitled VEProject", dateCreated: new Date(), dateModified: new Date()});
+      Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
+      Vede.application.fireEvent("OpenVectorEditor", Teselagen.manager.ProjectManager.workingSequence);
+    }
+  }
+}, init: function() {
+  this.control({"#VectorPanel": {afterrender: this.onRender, resize: this.onResize, collapse: this.onCollapse}});
+}, onLaunch: function() {
+  this.tabPanel = Ext.getCmp("mainAppPanel");
+  this.tabPanel.on("tabchange", this.onTabChange, this);
+}, onRender: function() {
+  if (!this.isRendered) 
+  {
+    Vede.application.getController("VectorEditor.PieController").initPie();
+    Vede.application.getController("VectorEditor.RailController").initRail();
+    this.isRendered = true;
+  }
+}, onResize: function() {
+}, onCollapse: function() {
+  var annotatePanel = Ext.getCmp("AnnotatePanel");
+  if (annotatePanel.collapsed) 
+  {
+    annotatePanel.expand([true]);
+  }
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'VectorPanelController'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.AuthEventDispatcherController', Ext.app.Controller, {dispatchLoggedInEvent: function() {
+}, init: function() {
+  this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.dispatchLoggedInEvent, this);
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AuthEventDispatcherController'], 0));
+;
+
 (Ext.cmd.derive('Vede.controller.J5ReportController', Ext.app.Controller, {activeProject: null, activeJ5Run: null, tabPanel: null, j5runs: null, cls: 'j5ReportTab', onPlasmidsItemClick: function(row, record) {
   var currentTab = Ext.getCmp("mainAppPanel");
   var mask = new Ext.LoadMask(currentTab);
@@ -80138,7 +80449,7 @@ function requestMessageProcessor(request, success) {
 
 var splashscreen;
 Ext.Loader.setConfig({enabled: true, paths: {'Ext.ux': './ext/src/ux', Teselagen: './app/teselagen', Vede: './app', 'Teselagen.bio': '../biojs/src/teselagen/bio'}});
-Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 've.SimulateDigestionWindow'], controllers: ['ActionStackController', 'AppController', 'AnnotatePanelController', 'FindPanelController', 'MainMenuController', 'MainPanelController', 'MainToolbarController', 'PieController', 'RailController', 'RestrictionEnzymeController', 'SelectWindowController', 'SequenceController', 'HeaderPanelController', 'VectorPanelController', 'VectorEditor.SimulateDigestionController', 'VectorEditor.ImportSequenceController', 'AuthWindowController', 'DeviceEditor.GridController', 'DeviceEditor.InspectorController', 'DeviceEditor.J5Controller', 'DeviceEditor.MainMenuController', 'DeviceEditor.MainToolbarController', 'DeviceEditor.DeviceEditorPanelController', 'AuthEventDispatcherController', 'ProjectController', 'DashboardPanelController', 'VectorEditor.SequenceEditingController', 'J5ReportController', 'DeviceEditor.ChangePartDefinitionController'], errorHandler: function(err) {
+Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 've.SimulateDigestionWindow'], controllers: ['AppController', 'AuthWindowController', 'DashboardPanelController', 'HeaderPanelController', 'MainPanelController', 'PartLibraryController', 'ProjectController', 'RestrictionEnzymeController', 'DeviceEditor.DeviceEditorPanelController', 'DeviceEditor.GridController', 'DeviceEditor.InspectorController', 'DeviceEditor.J5Controller', 'DeviceEditor.MainMenuController', 'DeviceEditor.MainToolbarController', 'VectorEditor.ActionStackController', 'VectorEditor.AnnotatePanelController', 'VectorEditor.CreateNewFeatureWindowController', 'VectorEditor.EditSequenceFeatureWindowController', 'VectorEditor.FindPanelController', 'VectorEditor.ImportSequenceController', 'VectorEditor.MainMenuController', 'VectorEditor.MainToolbarController', 'VectorEditor.PieController', 'VectorEditor.RailController', 'VectorEditor.SelectWindowController', 'VectorEditor.SequenceController', 'VectorEditor.SequenceEditingController', 'VectorEditor.SimulateDigestionController', 'VectorEditor.StatusBarController', 'VectorEditor.VectorPanelController', 'Vede.controller.AuthEventDispatcherController', 'Vede.controller.J5ReportController', 'Vede.controller.DeviceEditor.ChangePartDefinitionController'], errorHandler: function(err) {
   console.warn(err);
   return true;
 }, requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager", "Teselagen.constants.Constants", "Teselagen.constants.SBOLIcons", "Teselagen.models.SequenceFile"], init: function() {
@@ -80176,9 +80487,6 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   task.delay(1500);
 });
 }});
-
-(Ext.cmd.derive('Teselagen.store.PartStore', Ext.data.Store, {model: 'Teselagen.models.Part'}, 0, 0, 0, 0, 0, 0, [Teselagen.store, 'PartStore'], 0));
-;
 
 (Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeManager', Teselagen.mappers.Mapper, {config: {restrictionEnzymeGroup: null, allCutSites: [], allCutSitesMap: Ext.create("Ext.util.HashMap"), cutSites: [], cutSitesMap: [], maxCuts: -1}, DNATools: null, constructor: function(inData) {
   this.DNATools = Teselagen.bio.sequence.DNATools;
@@ -80365,6 +80673,9 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 ;
 
 (Ext.cmd.derive('Teselagen.store.WarningsStore', Ext.data.Store, {model: 'Teselagen.models.j5Output.Warning'}, 0, 0, 0, 0, 0, 0, [Teselagen.store, 'WarningsStore'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.PartLibraryWindow', Ext.window.Window, {title: 'Part Library', height: 400, width: 400, layout: 'fit', modal: true, items: {xtype: 'grid', id: 'partLibraryGridList', border: false, columns: {items: {text: "Name", dataIndex: "name"}, defaults: {flex: 1}}}}, 0, ["partLibrary"], ["panel", "window", "partLibrary", "component", "container", "box"], {"panel": true, "window": true, "partLibrary": true, "component": true, "container": true, "box": true}, ["widget.partLibrary"], 0, [Vede.view, 'PartLibraryWindow'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.EugeneRuleDialog', Ext.window.Window, {statics: {FORM_WIDTH: 285}, title: 'Add Eugene Rule', cls: 'addEugeneRuleDialog', closable: false, draggable: true, modal: true, resizable: false, maxWidth: 400, initComponent: function() {

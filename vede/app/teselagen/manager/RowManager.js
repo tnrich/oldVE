@@ -10,7 +10,7 @@ Ext.define("Teselagen.manager.RowManager", {
         cutSiteToRowMap: null,
         orfToRowMap: null,
         showORFs: false,
-        numRows: 10,
+        numRows: 10
     },
 
     constructor: function(inData){
@@ -39,7 +39,7 @@ Ext.define("Teselagen.manager.RowManager", {
                         start: start,
                         end: end,
                         sequence: sequence,
-                        oppositeSequence: oppositeSequence,
+                        oppositeSequence: oppositeSequence
                 });
      
                 //console.log("Row Data: \n Start: " + (start + 1) + " End: " + (end + 1)+ "\n Sequence Length: " + sequence.length);

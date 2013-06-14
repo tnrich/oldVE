@@ -11,7 +11,7 @@ Ext.define("Teselagen.renderer.rail.RailRenderer", {
 
     config: {
         references: null,
-        railWidth: 0,
+        railWidth: 0
     },
 
     GraphicUtils: null,

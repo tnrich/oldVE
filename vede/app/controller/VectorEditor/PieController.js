@@ -1,0 +1,611 @@
+/**
+ * @class Vede.controller.VectorEditor.PieController
+ * Class which handles user input and events specific to the Pie vector view.
+ */
+Ext.define('Vede.controller.VectorEditor.PieController', {
+    extend: 'Vede.controller.VectorEditor.SequenceController',
+
+    requires: ["Teselagen.manager.PieManager",
+               "Teselagen.renderer.pie.SelectionLayer",
+               "Teselagen.renderer.pie.WireframeSelectionLayer",
+               "Teselagen.event.ContextMenuEvent"],
+
+    refs: [
+        {ref: "pieContainer", selector: "#PieContainer"}
+    ],
+    
+    statics: {
+        SELECTION_THRESHOLD: 2 * Math.PI / 360,
+        PIE_CENTER: {x: 100, y: 100},
+        RAIL_RADIUS: 100
+    },
+
+    pieManager: null,
+    pieContainer: null,
+
+    startSelectionAngle: 0,
+
+    /**
+     * @member Vede.controller.VectorEditor.PieController
+     */
+    init: function() {
+        this.callParent();
+
+        this.control({
+            "#zoomInMenuItem": {
+                click: this.onZoomInMenuItemClick
+            },
+            "#zoomOutMenuItem": {
+                click: this.onZoomOutMenuItemClick
+            }
+        });
+    },
+
+    initPie: function() {
+        this.pieManager.initPie();
+        var pie = this.pieManager.getPie();
+        var self = this;
+
+        pie.on("mousedown", function() {
+            self.onMousedown(self);
+        });
+
+        pie.on("mouseup", function() {
+            self.onMouseup(self);
+        });
+
+        pie.on("mousemove", function() {
+            self.onMousemove(self);
+        });
+        pie.on("contextmenu",function() {
+        	return d3.event.preventDefault();
+        });
+
+        // When pie is resized, scale the graphics in the pie.
+        this.pieContainer.on("resize", function() {
+            this.pieManager.fitWidthToContent(this.pieManager);
+        }, this);
+
+        // Set the tabindex attribute in order to receive keyboard events on a div.
+        this.pieContainer.el.dom.setAttribute("tabindex", "0");
+        this.pieContainer.el.on("keydown", this.onKeydown, this);
+    },
+    
+    onLaunch: function() {
+        var pie;
+        var self = this;
+
+        this.callParent(arguments);
+        this.pieContainer = this.getPieContainer();
+
+        this.pieManager = Ext.create("Teselagen.manager.PieManager", {
+            center: this.self.PIE_CENTER,
+            railRadius: this.self.RAIL_RADIUS,
+            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
+            showFeatures: Ext.getCmp("featuresMenuItem").checked,
+            showOrfs: Ext.getCmp("orfsMenuItem").checked
+        });
+
+        pie = this.pieManager.getPie();
+
+        // When window is resized, scale the graphics in the pie.
+        var timeOut = null;
+
+        window.onresize = function(){
+            if (timeOut != null)
+                clearTimeout(timeOut);
+
+            timeOut = setTimeout(function(){
+                self.pieManager.fitWidthToContent(self.pieManager);
+            }, 400);
+        };
+
+        this.Managers.push(this.pieManager);
+
+        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
+            center: this.pieManager.center,
+            radius: this.pieManager.railRadius
+        });
+
+        this.SelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {
+            center: this.pieManager.center,
+            radius: this.pieManager.railRadius
+        });
+    },
+
+    onKeydown: function(event) {
+        // Handle zooming in/out with the +/- keys.
+        if(event.getKey() === 187) {
+            this.pieManager.zoomIn();
+        } else if (event.getKey() === 189) {
+            this.pieManager.zoomOut();
+        } else {
+            this.callParent(arguments);
+        }
+    },
+
+    onSequenceChanged: function() {
+        if(!this.SequenceManager) {
+            return;
+        }
+
+        this.callParent();
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.setOrfs(this.ORFManager.getOrfs());
+        this.pieManager.setFeatures(this.SequenceManager.getFeatures());
+
+        this.pieManager.render();
+
+        this.pieManager.updateNameBox();
+    },
+
+    onActiveEnzymesChanged: function() {
+        this.callParent();
+
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+
+        if(this.pieManager.sequenceManager && this.pieManager.showCutSites) {
+            this.pieManager.render();
+        }
+    },
+
+    /**
+     * Catches events from the vector panel annotation sprites' onclick listeners. 
+     * When a mouseup event is detected, we check to see if 
+     * this.clickedAnnotationStart and end have been defined to see if an 
+     * annotation has been clicked. If it has we can easily select it.
+     */
+    onVectorPanelAnnotationClicked: function(start, end) {
+        this.clickedAnnotationStart = start;
+        this.clickedAnnotationEnd = end;
+    },
+
+    onAnnotatePanelAnnotationClicked: function(start, end) {
+        this.select(start, end);
+    },
+
+    onViewModeChanged: function(viewMode) {
+        if(viewMode == "linear") {
+            Ext.getCmp("PieContainer").hide();
+        } else {
+            Ext.getCmp("PieContainer").show();
+        }
+    },
+
+    onSelectionChanged: function(scope, start, end) {
+        if(scope !== this) {
+            this.SelectionLayer.select(start, end);
+            this.changeCaretPosition(start);
+        }
+    },
+
+    onSequenceManagerChanged: function(pSeqMan) {
+        this.callParent(arguments);
+
+        this.pieManager.setOrfs(this.ORFManager.getOrfs());
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.setFeatures(pSeqMan.getFeatures());
+
+        this.pieManager.render();
+
+        this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
+        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+
+        this.SelectionLayer.setSequenceManager(pSeqMan);
+        this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+    },
+
+    onShowFeaturesChanged: function(show) {
+        this.pieManager.setShowFeatures(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowCutSitesChanged: function(show) {
+        this.pieManager.setShowCutSites(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowOrfsChanged: function(show) {
+        this.pieManager.setShowOrfs(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowFeatureLabelsChanged: function(show) {
+        this.pieManager.setShowFeatureLabels(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowCutSiteLabelsChanged: function(show) {
+        this.pieManager.setShowCutSiteLabels(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    /**
+     * Initiates a click-and-drag sequence and moves the caret to click location.
+     */
+    onMousedown: function(self) {   	    
+    	if(d3.event.button == 2) {
+        	d3.event.preventDefault();
+    		this.onRightMouseDown(self);
+    	} else {
+    		Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
+    		//console.log(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
+    		self.startSelectionAngle = self.getClickAngle();
+	        self.mouseIsDown = true;
+	        
+	
+	        if(self.pieManager.sequenceManager) {
+	            self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
+	
+	            self.changeCaretPosition(self.startSelectionIndex);
+	        }
+	
+	        self.selectionDirection = 0;
+    	}
+    },
+
+    /**
+     * Moves the caret along with the mouse, drawing the wireframe and doing a
+     * sticky select (when the ctrl key is not held) as the mouse moves during a
+     * click-and-drag.
+     */
+    onMousemove: function(self) { 	
+    	if(d3.event.button == 2) {
+    		d3.event.preventDefault();
+    		return;
+    	}
+    	
+    	var endSelectionAngle = self.getClickAngle();
+        var start;
+        var end;
+        
+        if(self.mouseIsDown && Math.abs(self.startSelectionAngle -
+                    endSelectionAngle) > self.self.SELECTION_THRESHOLD &&
+                    self.SequenceManager.getSequence().toString().length > 0 &&
+                    self.pieManager.sequenceManager) {
+
+            var endSelectionIndex = self.bpAtAngle(endSelectionAngle);
+
+            // Set the direction of selection if it has not yet been determined.
+            if(self.selectionDirection == 0) {
+                if(self.startSelectionAngle < Math.PI) {
+                    self.selectionDirection = -1;
+                    if(endSelectionAngle >= self.startSelectionAngle && 
+                       endSelectionAngle <= (self.startSelectionAngle + Math.PI)) {
+                        self.selectionDirection = 1;
+                    }
+                } else {
+                    self.selectionDirection = 1;
+                    if(endSelectionAngle <= self.startSelectionAngle &&
+                       endSelectionAngle >= (self.startSelectionAngle - Math.PI)) {
+                        self.selectionDirection = -1;
+                    }
+                }
+            }
+
+            if(self.selectionDirection == -1) {
+                start = endSelectionIndex;
+                end = self.startSelectionIndex;
+            } else {
+                start = self.startSelectionIndex;
+                end = endSelectionIndex;
+            }
+
+            self.WireframeSelectionLayer.startSelecting();
+            self.WireframeSelectionLayer.select(start, end);
+
+            if(d3.event.ctrlKey) {
+                self.SelectionLayer.startSelecting();
+
+                self.select(start, end);
+
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, 
+                                           self,
+                                           self.SelectionLayer.start, 
+                                           self.SelectionLayer.end);
+            } else {
+                self.stickySelect(start, end);
+            }
+            self.changeCaretPosition(start);
+        }
+    },
+
+    /**
+     * Finalizes a selection at the end of a click-and-drag sequence.
+     */
+    onMouseup: function(self) {
+
+        if(self.mouseIsDown) {
+            self.mouseIsDown = false;
+
+            if(self.WireframeSelectionLayer.selected && 
+                self.WireframeSelectionLayer.selecting) {
+
+                // If self is at the end of a click-and-drag, fire a selection event.
+                self.WireframeSelectionLayer.endSelecting();
+                self.WireframeSelectionLayer.deselect();
+
+                self.SelectionLayer.endSelecting();
+
+                if(self.SelectionLayer.end != -1) {
+                    self.changeCaretPosition(self.SelectionLayer.start);
+                }
+
+            } else if(self.clickedAnnotationStart !== null && 
+                      self.clickedAnnotationEnd !== null){
+                // If we've clicked a sprite, select it.
+                self.select(self.clickedAnnotationStart,
+                            self.clickedAnnotationEnd);
+
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                                           self,
+                                           self.SelectionLayer.start,
+                                           self.SelectionLayer.end);
+
+                self.clickedAnnotationStart = null;
+                self.clickedAnnotationEnd = null;
+            } else {
+                self.SelectionLayer.deselect();
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
+            }
+        } else if(d3.event.button == 2) {
+        	d3.event.preventDefault();
+        	if(self.clickedAnnotationStart !== null && 
+                self.clickedAnnotationEnd !== null){
+    			
+    			self.select(self.clickedAnnotationStart,
+                            self.clickedAnnotationEnd);
+
+    			self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                                           self,
+                                           self.SelectionLayer.start,
+                                           self.SelectionLayer.end);
+
+    			self.clickedAnnotationStart = null;
+    			self.clickedAnnotationEnd = null;
+            }      		
+		}
+    },
+
+    onZoomInMenuItemClick: function() {
+        this.pieManager.zoomIn();
+    },
+
+    onZoomOutMenuItemClick: function() {
+        this.pieManager.zoomOut();
+    },
+
+    select: function(start, end) {
+        if(start == 0 && end == this.SequenceManager.getSequence().toString().length) {
+            this.SelectionLayer.select(start, end-1);
+        } else {
+            this.SelectionLayer.select(start, end);
+        }
+
+        this.changeCaretPosition(this.SelectionLayer.start);
+    },
+
+    /**
+     * Given a click event, converts the document-relative coordinates to an
+     * angle relative to the vertical.
+     */
+    getClickAngle: function() {
+        var svg = d3.select(".pieParent");
+        var transformValues;
+        var scrolled = this.pieContainer.el.getScroll();
+
+        transformValues = svg.attr("transform").match(/[-.\d]+/g);
+
+        var relX = d3.event.layerX - transformValues[4] -
+            this.pieManager.center.x * transformValues[0] + scrolled.left;
+
+        var relY = d3.event.layerY - transformValues[5] -
+            this.pieManager.center.y * transformValues[3] + scrolled.top;
+
+        var angle = Math.atan(relY / relX) + Math.PI / 2;
+        if(relX < 0) {
+            angle += Math.PI;
+        }
+
+        return angle;
+    },
+
+    /**
+     * Returns the nucleotide index of a given angle.
+     * @param {Number} angle The angle to return the index of.
+     */
+    bpAtAngle: function(angle) {
+        return Math.floor(angle * 
+            this.pieManager.sequenceManager.getSequence().seqString().length/ (2 * Math.PI));
+    },
+
+    /**
+     * Changes the caret position to a specified index.
+     * @param {Int} index The nucleotide index to move the caret to.
+     * @param {Boolean} silent If true, don't fire a position changed event.
+     */
+    changeCaretPosition: function(index, silent) {
+        if(index >= 0 &&
+           this.SequenceManager &&
+           index <= this.SequenceManager.getSequence().toString().length) {
+            this.callParent(arguments);
+            this.pieManager.adjustCaret(index);
+        }
+    },
+
+    /**
+     * Performs a "sticky select"- automatically locks the selection to ends of
+     * annotations enclosed in the selection.
+     * @param {Int} start The index of where dragging began.
+     * @param {Int} end The current index of the caret.
+     */
+    stickySelect: function(start, end) {
+        var annotations = this.pieManager.getAnnotationsInRange(start, end);
+
+        if(annotations.length > 0) {
+            if(start <= end) { // Selection doesn't touch beginning of sequence.
+                var minStart = annotations[0].getStart();
+                var maxEnd = annotations[0].getEnd();
+
+                Ext.each(annotations, function(annotation) {
+                    if(annotation.getStart() < minStart) {
+                        minStart = annotation.getStart();
+                    }
+                    if(annotation.getEnd() > maxEnd) {
+                        maxEnd = annotation.getEnd();
+                    }
+
+                });
+
+                this.SelectionLayer.startSelecting();
+                this.select(minStart, maxEnd);
+
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this,
+                                           this.SelectionLayer.start,
+                                           this.SelectionLayer.end);
+            } else { // Selection crosses over the beginning of sequence.
+                var minStart1 = -1;
+                var maxEnd1 = -1;
+                
+                var minStart2 = -1;
+                var maxEnd2 = -1;
+                
+                Ext.each(annotations, function(annotation) {
+                    if(annotation.getStart() > start) {
+                        if(minStart1 == -1) { 
+                            minStart1 = annotation.getStart(); 
+                        }
+                        
+                        if(annotation.getStart() < minStart1) { 
+                            minStart1 = annotation.getStart(); 
+                        }
+                    } else {
+                        if(minStart2 == -1) { 
+                            minStart2 = annotation.getStart(); 
+                        }
+                        
+                        if(annotation.getStart() < minStart2) { 
+                            minStart2 = annotation.getStart(); 
+                        }
+                    }
+                    
+                    if(annotation.getEnd() > end) {
+                        if(maxEnd1 == -1) { 
+                            maxEnd1 = annotation.getEnd(); 
+                        }
+                        
+                        if(annotation.getEnd() > maxEnd1) { 
+                            maxEnd1 = annotation.getEnd(); 
+                        }
+                    } else {
+                        if(maxEnd2 == -1) { 
+                            maxEnd2 = annotation.getEnd(); 
+                        }
+                        
+                        if(annotation.getEnd() > maxEnd2) { 
+                            maxEnd2 = annotation.getEnd(); 
+                        }
+                    }
+                });
+                
+                var selStart = minStart1;
+                var selEnd;
+                
+                if(minStart1 == -1 && minStart2 != -1) {
+                    selStart = minStart2;
+                } else if(minStart1 != -1 && minStart2 == -1) {
+                    selStart = minStart1;
+                } else if(minStart1 != -1 && minStart2 != -1) {
+                    selStart = minStart1;
+                }
+                
+                if(maxEnd1 == -1 && maxEnd2 != -1) {
+                    selEnd = maxEnd2;
+                } else if(maxEnd1 != -1 && maxEnd2 == -1) {
+                    selEnd = maxEnd1;
+                } else if(maxEnd1 != -1 && maxEnd2 != -1) {
+                    selEnd = maxEnd2;
+                }
+                
+                if(selEnd == -1 || selStart == -1) {
+                    this.SelectionLayer.deselect();
+                    this.application.fireEvent(
+                        this.SelectionEvent.SELECTION_CANCELED);
+                } else {
+                    this.SelectionLayer.startSelecting();
+                    this.select(selStart, selEnd);
+
+                    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                               this,
+                                               this.SelectionLayer.start,
+                                               this.SelectionLayer.end);
+                }
+            }
+        } else {
+            this.SelectionLayer.deselect();
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+        }
+    },
+    
+    onRightMouseDown: function(self) {
+    	d3.event.preventDefault();
+    	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+    	//console.log(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+    	
+    	var svg = d3.select(".pieParent");
+        var transformValues;
+        var scrolled = this.pieContainer.el.getScroll();
+
+        transformValues = svg.attr("transform").match(/[-.\d]+/g);
+        
+        // actualRadius will be accurate only if transformValues[0] == transformValues[3], 
+        // (i.e., the pie is scaled equally in the x and y directions)
+        var actualRadius = this.pieManager.railRadius * transformValues[0];
+        
+        var relX = d3.event.layerX - transformValues[4] -
+            this.pieManager.center.x * transformValues[0] + scrolled.left;
+
+        var relY = d3.event.layerY - transformValues[5] -
+            this.pieManager.center.y * transformValues[3] + scrolled.top;
+         
+        var relDist = Math.sqrt(relX*relX+relY*relY);
+        
+        var angle = Math.atan(relY / relX) + Math.PI / 2;
+        if(relX < 0) {
+            angle += Math.PI;
+        }
+        
+        var startAngle = this.SelectionLayer.startAngle;
+        var endAngle = this.SelectionLayer.endAngle;
+        
+        if(angle>=startAngle && angle<=endAngle && relDist<=actualRadius) {
+        	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
+        	//console.log(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
+        }
+        //console.log(angle+":  ["+startAngle+", "+endAngle+"]");       
+        //console.log("("+relX+", "+relY+");  "+relDist);
+    },
+    
+});
+
+
+
+
+
+

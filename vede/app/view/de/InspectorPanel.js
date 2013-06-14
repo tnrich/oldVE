@@ -136,7 +136,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             name: 'fas',
                             queryMode: 'local',
                             anchor: '100%',
-                            store: [],
+                            store: []
                         }
                     ]
                 },
@@ -321,7 +321,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     dataIndex: 'binName',
                                     editor: {
                                         xtype: 'textfield',
-                                        allowBlank: false,
+                                        allowBlank: false
                                     },
                                     renderer: function(value, metadata) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
@@ -380,7 +380,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
                                     dataIndex: 'fro',
                                     editor: {
-                                        xtype: 'textfield',
+                                        xtype: 'textfield'
                                     },
                                     renderer: function(value) {
                                         if(value === 'None') {
@@ -459,7 +459,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             cls: 'columnContentDisplayField',
                             margin: 10,
-                            fieldLabel: '',
+                            fieldLabel: ''
                         }
                     ]
                 }
@@ -496,7 +496,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     margin: '2.5 0 2.5 0',
                     height: 40,
                     border: 0,
-                    hidden: true,
+                    hidden: true
                 },
                 {
                     xtype: 'button',
@@ -506,7 +506,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     margin: '2.5 0 2.5 0',
                     height: 40,
                     border: 0,
-                    hidden: true,
+                    hidden: true
                 },
                 // {
                 //     xtype: 'button',

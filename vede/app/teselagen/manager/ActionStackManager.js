@@ -9,7 +9,7 @@
      requires: ["Teselagen.event.ActionStackEvent"],
 
      config: {
-         sequenceManager: null,
+         sequenceManager: null
      },
 
      ActionStackEvent: null,

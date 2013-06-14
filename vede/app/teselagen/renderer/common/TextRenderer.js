@@ -14,7 +14,7 @@ Ext.define("Teselagen.renderer.common.TextRenderer", {
         fillColor: "black",
         fontFace: "Verdana",
         fontSize: 20,
-        svgGroup: null,
+        svgGroup: null
     },
     constructor: function(inData){
         this.initConfig(inData);
