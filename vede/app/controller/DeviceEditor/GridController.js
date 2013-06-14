@@ -121,27 +121,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         //Commented out to keep named but unmapped part selected
         
-        /*if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-            this.selectedPart = null;
-        }
-
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-            //Logic for selecting part with no sequence file but named
-             if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile()) {
-                if ((this.selectedPart.getPart().get("sequencefile_id") === "") && (this.selectedPart.getPart().get('name') != "")) {
-                    console.log("hey");
-                    this.selectedPart.select();
-                    this.selectedPart.selectAlert();
-
-                }
-            }
-
-            this.selectedPart = null;
-        }*/
+        // if(this.selectedPart && this.selectedPart.down()) {
+        //     this.selectedPart.deselect();
+        //     this.deHighlight(this.selectedPart.getPart());
+        //     this.selectedPart = null;
+        // }
 
         this.selectedBin = gridBin;
         gridBin.select();
@@ -154,7 +138,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         removeColumnMenuItem.enable();
 
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-        console.log('heyo')
 
         Ext.resumeLayouts(true);
     },
@@ -196,7 +179,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
 
         if(j5Part) {
-            console.log("phantom: " + j5Part.phantom);
             if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
                 if (j5Part.get('name') != "") {
@@ -771,9 +753,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedPart.deselect();
             this.deHighlight(this.selectedPart.getPart());
             //Logic for selecting part with no sequence file but named
-             if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile()) {
+             if (this.selectedPart.getPart()) {
                 if ((this.selectedPart.getPart().get("sequencefile_id") === "") && (this.selectedPart.getPart().get('name') != "")) {
-                    console.log("hey");
                     /*this.selectedPart.select();*/
                     this.selectedPart.selectAlert();
 

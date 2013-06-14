@@ -81,9 +81,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             debugger;
             console.warn("No sequence url generated");
-            
-
-
 
         },
     },
