@@ -3,6 +3,8 @@
  * Class which creates sprites to draw all given cut sites.
  */
 Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
+    reqires: ["Teselagen.bio.util.Point"],
+    
     extend: "Teselagen.renderer.rail.RailRenderer",
 
     statics: {
@@ -10,6 +12,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
     },
     
     config: {
+        cutSiteSVG: null,
         cutSites: [],
         railWidth: null,
         railHeight:null,
@@ -35,8 +38,8 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
      * @return {Ext.draw.Sprite[]} Sprites made from cut sites.
      */
     render: function() {
-        var sprites = [];
         var labelPos = {};
+        var path;
         
         Ext.each(this.getCutSites(), function(site) {
             var startPos = site.getStart()  / 
@@ -57,21 +60,18 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
                 this.reference.y - (this.railHeight + 8)
             );
 
-            var siteSprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + lineStart.x + " " + lineStart.y + " " +
-                      "L" + lineEnd.x + " " + lineEnd.y,
-                stroke: this.self.FRAME_COLOR,
-                "stroke-width": this.self.CUTSITE_LINE_WIDTH,
-            });
+            path = "M" + lineStart.x + " " + lineStart.y + " " +
+                   "L" + lineEnd.x + " " + lineEnd.y;
 
-            this.addToolTip(siteSprite, this.getToolTip(site));
-
-            sprites.push(siteSprite);
-            
+            this.cutSiteSVG.append("svg:path")
+                           .attr("stroke", this.self.FRAME_COLOR)
+                           .attr("stroke-width", this.self.CUTSITE_LINE_WIDTH)
+                           .attr("d", path)
+                           .on("mousedown", this.getClickListener(site.getStart(),
+                                                                  site.getEnd()))
+                           .append("svg:title")
+                           .text(this.getToolTip(site));
         }, this);
-
-        return sprites;
     },
 
     /**

@@ -10,7 +10,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getDeviceDesign.json",
+        //url: "/vede/test/data/json/getDeviceDesign.json",
         reader: {
             type: "json",
             root: "designs"
@@ -56,6 +56,72 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         },
         buildUrl: function(request) {
+
+            this.debugFlag = false;
+            if(this.debugFlag) console.log(request);
+
+
+            // CASE 1: READ ALL DEVICE DESIGNS FROM GIVEN PROJECT
+            if(request.action === "read" && request.params)
+            {
+                if(request.operation.filters)
+                {
+                    if(request.operation.filters[0] && !request.params.id)
+                    {
+                        if(request.operation.filters[0].property==="project_id")
+                        {
+                            var url = "/projects"+'/'+request.operation.filters[0].value+"/devicedesigns";
+                            if(this.debugFlag) console.log("READING DEVICE DESIGNS FROM PROJECT: ",url);
+                            delete request.params.filter;
+                            return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+                        }
+                    }
+                }
+            }
+
+            // CASE 2: CREATE A NEW DEVICEDESIGN AT PROJECT
+            if(request.action === "create" && request.records[0].data.project_id!="")
+            {
+                var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns";
+                if(this.debugFlag) console.log("CREATING DEVICE DESIGN AT PROJECT: ",url);
+                delete request.params.filter;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
+
+
+            // CASE 3: UPDATE AN EXISTING DEVICEDESIGN AT PROJECT
+            if(request.action === "update" && request.records[0].data.project_id!="" && request.records[0].data.id!="")
+            {
+                var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns"+'/'+request.records[0].data.id;
+                if(this.debugFlag) console.log("UPDATE DEVICE DESIGN AT PROJECT: ",url);
+                delete request.params.filter;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
+
+
+            // CASE 4: READ SPECIFIC DEVICE DESIGN FROM PROJECT
+            if(request.action === "read" && request.params)
+            {
+                if(request.operation.filters)
+                {
+                    if(request.operation.filters[0] && request.params.id)
+                    {
+                        if(request.operation.filters[0].property==="project_id")
+                        {
+                            var url = "/projects"+'/'+request.operation.filters[0].value+"/devicedesigns/"+request.params.id;
+                            if(this.debugFlag) console.log("READING SPECIFIC DESIGN FROM PROJECT: ",url);
+                            delete request.params.filter;
+                            return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+                        }
+                    }
+                }
+            }
+
+
+            console.log("No devicedesign url generated");
+            debugger;
+
+            /*
             var restParams = "";
             var idParam = "";
             var filter = "";
@@ -93,6 +159,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     }
                 }
             }
+            */
 
 
         },
@@ -105,6 +172,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
         sortParam: undefined,
         limitParam: undefined
     },
+
+    //constructor: function(inData) {
+    //    this.callParent([inData]);
+    //
+    //    this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+    //},
 
     /**
      * Input parameters.

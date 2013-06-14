@@ -5,6 +5,8 @@
  * @author Zinovii Dmytriv (original author of SelectionLayer.as)
  */
 Ext.define("Teselagen.renderer.pie.SelectionLayer", {
+    requires: ["Teselagen.bio.util.Point"],
+    
     extend: "Teselagen.renderer.pie.Layer",
 
     statics: {
@@ -13,18 +15,23 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
         SELECTION_FRAME_COLOR: "#CCCCCC"
     },
 
+    deselect: function() {
+        this.callParent();
+
+        d3.selectAll(".pieSelectionElement").remove();
+    },
+
     /**
      * Draws the shaded wedge-shaped selection area.
      */
-    drawSelectionPie: function(fromIndex, endIndex, pointerEvents) {
+    drawSelectionPie: function(fromIndex, endIndex) {
+        var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
         if(seqLen == 0) {
             return;
         }
-        
-        if(this.selectionSprite) {
-            this.selectionSprite.destroy();
-        }
+
+        d3.select(".pieSelectionElement").remove();
 
         this.startAngle = fromIndex * 2 * Math.PI / seqLen;
         this.endAngle = endIndex * 2 * Math.PI / seqLen;
@@ -59,83 +66,19 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
             largeArcFlag = 1;
         }
 
-        this.selectionSprite = Ext.create("Ext.draw.Sprite", {
-            type: "path",
-            path: "M" + this.center.x + " " + this.center.y + " " +
-                  "L" + startPoint.x + " " + startPoint.y + " " + 
-                  "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag +
-                  " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
-                  "L" + this.center.x + " " + this.center.y,
-            stroke: this.self.SELECTION_FRAME_COLOR,
-            "stroke-opacity": this.self.STROKE_OPACITY,
-            fill: this.self.SELECTION_COLOR,
-            "fill-opacity": this.self.SELECTION_TRANSPARENCY
-        });
-        
-        if(!pointerEvents) {
-	        this.selectionSprite.pointerEvents = "none";
-        	this.selectionSprite.on("render", function(sprite) {
-	        	sprite.setStyle("pointer-events", "none");
-	        	//console.log(sprite.el.getStyle("pointer-events"));
-	        });
-        } else {
-        	this.selectionSprite.pointerEvents = pointerEvents;
-        	this.selectionSprite.on("render", function(sprite) {
-	        	sprite.setStyle("pointer-events", pointerEvents);
-	        	//console.log(sprite.el.getStyle("pointer-events"));
-	        });
-        }
-        
-        if(this.selectionSprite.pointerEvents=="all") {
-	        this.selectionSprite.on("render", function(sprite) {
-	    		var contextMenu = Ext.create('Ext.menu.Menu',{items: [{
-		        	  text: 'Annotate as new Sequence Feature',
-		        	  handler: function() {
-		        		  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");     	
-		        		  createNewFeatureWindow.show();
-		        		  createNewFeatureWindow.center();
-		        	  }
-		        }]});
-	    		
-	    		console.log("SelectionSprite rendered");
-	    		
-	    		Vede.application.on("RightClickedOnFeature", function onRightClickedOnFeature(e, feature) {  			
-	    			Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);      			
-	    			contextMenu.add([{
-	                    xtype: 'menuseparator'
-	                  },{
-	    	    	    text: 'Edit Sequence Feature',
-	    	    	    handler: function() {
-	    	            	var editSequenceFeatureWindow = Ext.create(
-	    	                "Vede.view.ve.EditSequenceFeatureWindow");
-	    	            	
-	    	                editSequenceFeatureWindow.show();
-	    	                editSequenceFeatureWindow.center();
-	    	    	    }
-	    	    	  },{
-	    	      	    text: 'Delete Sequence Feature',
-	    	      	    handler: function() {
-	    	      	    	this.sequenceManager.removeFeature(feature,false);
-	    	      	    }
-	    	      	}]);
-	    			console.log("isRightClickedOnFeature is TRUE & working");
-	    		}, this, {single: true});
-	    		
-	        	sprite.el.on("contextmenu", function(e) {
-	        		e.preventDefault();
-	        		//console.log("### CONTEXT MENU SHOWN ###");
-	        		contextMenu.show();   		
-	                contextMenu.setPagePosition(e.getX()+1,e.getY()-5);
-	                Vede.application.fireEvent("SelectionLayerContextMenu");
-	            }, this);
-	        	
-	        	
-	        }, this, {single: true});
-        }
+        path = "M" + this.center.x + " " + this.center.y + " " +
+               "L" + startPoint.x + " " + startPoint.y + " " + 
+               "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag +
+               " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
+               "L" + this.center.x + " " + this.center.y;
+
+        this.selectionSVG.append("svg:path")
+                         .attr("class", "pieSelectionElement")
+                         .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                         .attr("fill", this.self.SELECTION_COLOR)
+                         .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                         .attr("d", path)
+                         .style("pointer-events", "none");
     }
-    
 });
-
-
-
-

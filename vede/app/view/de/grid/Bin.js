@@ -9,6 +9,9 @@ Ext.define('Vede.view.de.grid.Bin', {
     extend: 'Ext.container.Container',
     alias: 'widget.Bin',
     
+    requires: ["Ext.layout.container.Table",
+               "Ext.tip.ToolTip"],
+
     statics: {
         forwardButtonIconPath: 'resources/images/ux/right2.gif',
         reverseButtonIconPath: 'resources/images/ux/left2.gif'

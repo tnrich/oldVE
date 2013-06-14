@@ -107,7 +107,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 model: selectedDesign,
                 modelId: selectedDesign.data.id
             })).show();
-            Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
+            if(selectedDesign.data.id) Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 
         });
@@ -296,7 +296,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 project.designs().add(design);
 
                                 design.save({
-                                    callback: function () {
+                                    success: function(record, operation) {
                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                             //console.log("Expanding " + "/root/" + project.data.id + "/" + design.data.id);
                                             Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);

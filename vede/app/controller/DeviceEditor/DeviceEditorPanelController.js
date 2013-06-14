@@ -82,7 +82,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     callback: function () {
                         Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | "+text);
 
-                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorStatusPanel').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
+                        //var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorStatusPanel').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
                         parttext.animate({duration: 5000, to: {opacity: 0}});
 
@@ -169,37 +169,41 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         //deproject.save({callback:function(){
 
         var saveAssociatedSequence = function (part, cb) {
-                part.getSequenceFile({callback: function(associatedSequence){
-                    if(associatedSequence)
-                    {
-                        var lastSequenceId = associatedSequence.get('id');
-                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                if(!part.data.phantom && part.data.sequencefile_id)
+                {
+                    part.getSequenceFile({callback: function(associatedSequence){
+                        if(associatedSequence)
                         {
-                            associatedSequence.save({
-                                callback: function (sequencefile) {
-                                    if(!lastSequenceId)
-                                    {
-                                        part.set("sequencefile_id", sequencefile.get('id'));
-                                        part.save({
-                                            callback: function () {
-                                                cb();
-                                            }
-                                        });
+                            var lastSequenceId = associatedSequence.get('id');
+                            if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                            {
+                                associatedSequence.save({
+                                    callback: function (sequencefile) {
+                                        if(!lastSequenceId)
+                                        {
+                                            part.set("sequencefile_id", sequencefile.get('id'));
+                                            part.save({
+                                                callback: function () {
+                                                    cb();
+                                                }
+                                            });
+                                        }
+                                        else { cb(); }
                                     }
-                                    else { cb(); }
-                                }
-                            });
+                                });
+                            }
+                            else
+                            {
+                                cb();
+                            }
                         }
                         else
                         {
                             cb();
                         }
-                    }
-                    else
-                    {
-                        cb();
-                    }
-                }});
+                    }});
+                }
+                else cb();
             };
 
         var saveDesign = function () {

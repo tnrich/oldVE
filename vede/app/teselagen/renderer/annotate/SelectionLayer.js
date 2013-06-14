@@ -245,9 +245,9 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         d3.select("#selectionSVG").append("svg:rect")
             .attr("x", startMetrics.x)
-            .attr("y", startMetrics.y + 4)
+            .attr("y", startMetrics.y + 8)
             .attr("width", endMetrics.x - startMetrics.x)
-            .attr("height", this.sequenceAnnotationManager.caret.height - 4)
+            .attr("height", this.sequenceAnnotationManager.caret.height - 6)
             .attr("fill", this.self.SELECTION_COLOR)
             .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
 

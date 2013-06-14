@@ -36,10 +36,19 @@ Ext.define("Teselagen.manager.SequenceManager", {
     requires: ["Teselagen.bio.sequence.common.Location",
         "Teselagen.bio.sequence.common.SymbolList",
         "Teselagen.event.SequenceManagerEvent",
+        "Teselagen.bio.sequence.dna.Feature",
+        "Teselagen.bio.sequence.dna.FeatureNote",
         "Teselagen.bio.sequence.DNATools",
         "Teselagen.utils.FormatUtils",
         "Teselagen.bio.parsers.ParsersManager",
-        "Teselagen.bio.parsers.GenbankManager"
+        "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.parsers.Genbank",
+        "Teselagen.bio.parsers.GenbankFeatureElement",
+        "Teselagen.bio.parsers.GenbankFeatureLocation",
+        "Teselagen.bio.parsers.GenbankFeatureQualifier",
+        "Teselagen.bio.parsers.GenbankFeaturesKeyword",
+        "Teselagen.bio.parsers.GenbankLocusKeyword",
+        "Teselagen.bio.parsers.GenbankOriginKeyword"
     ],
     /**
      * @cfg {Object} config
@@ -1398,6 +1407,4 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.needsRecalculateReverseComplementSequence = false;
         }
     }
-
-
 });

@@ -68,7 +68,6 @@ Ext.define('Vede.view.de.grid.Part', {
         */
         this.partCell = Ext.create("Ext.container.Container", {
             items: [{
-                //html: html,
                 styleHtmlContent: true,
                 styleHtmlCls: 'gridPartCell',
                 height: 40,

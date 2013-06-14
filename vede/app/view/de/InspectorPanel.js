@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-    requires: ["Teselagen.event.DeviceEvent"],
+    requires: ["Teselagen.event.DeviceEvent","Ext.grid.plugin.RowEditing"],
     cls: 'InspectorPanel',
 
     activeTab: 1,
@@ -156,10 +156,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            plugins: {
-                                ptype: 'rowediting',
+                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2
-                            },
+                            }),
                             columnLines: true,
                             rowLines: true,
                             minHeight: 140,
@@ -310,11 +309,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             allowDeselect: true,
                             columnLines: true,
                             minHeight:132,
-                            plugins: {
-                                ptype: 'rowediting',
+                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2,
                                 errorSummary: false
-                            },
+                            }),
                             columns: [
                                 {
                                     xtype: 'gridcolumn',

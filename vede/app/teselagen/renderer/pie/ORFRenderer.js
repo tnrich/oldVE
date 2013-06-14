@@ -14,6 +14,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
     },
 
     config: {
+        orfSVG: null,
         orfs: null
     },
 
@@ -33,7 +34,6 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
      * @return {Ext.draw.Sprite[]} The sprites created from the orfs.
      */
     render: function() {
-        var sprites = [];
         var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, 
                                                          this.sequenceManager);
         this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
@@ -69,27 +69,29 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 largeArc = !largeArc;
             }
 
-            // Generate the arc of the orf.
-            var arcSprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: this.GraphicUtils.drawArc(this.center, orfRadius,
-                                          startAngle, endAngle, false, true,
-                                          sweep, largeArc),
-                stroke: color
-            });
-
-            sprites.push(arcSprite);
-
-            this.addToolTip(arcSprite, tooltip);
-            
             var selectEnd;
             if(orf.getStrand() == -1) {
                 selectEnd = orf.getEnd() + 1;
             } else {
                 selectEnd = orf.getEnd();
             }
-            this.addClickListener(arcSprite, orf.getStart(), selectEnd);
 
+            path = this.GraphicUtils.drawArc(this.center, orfRadius,
+                                      startAngle, endAngle, false, true,
+                                      sweep, largeArc);
+
+            this.orfSVG.append("svg:path")
+                       .attr("stroke", color)
+                       .attr("fill", "none")
+                       .attr("d", path)
+                       .on("mousedown", function() {
+                           Vede.application.fireEvent("VectorPanelAnnotationClicked",
+                                                      orf.getStart(),
+                                                      selectEnd);
+                       })
+                       .append("svg:title")
+                       .text(tooltip);
+            
             // Render start codons as bold dots.
             Ext.each(orf.getStartCodons(), function(codonIndex) {
                 var codonAngle = codonIndex * 2 * Math.PI / seqLen;
@@ -105,10 +107,18 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                     fill: color
                 });
 
-                this.addToolTip(codonSprite, tooltip);
-                this.addClickListener(codonSprite, orf.getStart(), selectEnd);
-
-                sprites.push(codonSprite);
+                this.orfSVG.append("svg:circle")
+                           .attr("r", 2)
+                           .attr("cx", codonX)
+                           .attr("cy", codonY)
+                           .attr("fill", color)
+                           .on("mousedown", function() {
+                               Vede.application.fireEvent("VectorPanelAnnotationClicked",
+                                                          orf.getStart(),
+                                                          selectEnd);
+                           })
+                           .append("svg:title")
+                           .text(tooltip);
             }, this);
 
             // Render end codons as arrows.
@@ -122,30 +132,30 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 lastAngle = startAngle;
             }
 
-            var stopSprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + (this.center.x + (orfRadius + 2) * 
-                      Math.sin(arrowShiftAngle)) + " " +
-                      (this.center.y - (orfRadius + 2) * 
-                      Math.cos(arrowShiftAngle)) + "L" + 
-                      (this.center.x + orfRadius * Math.sin(lastAngle)) + 
-                      " " + (this.center.y - orfRadius * Math.cos(lastAngle)) + 
-                      "L" + (this.center.x + (orfRadius - 2) * 
-                      Math.sin(arrowShiftAngle)) + " " + 
-                      (this.center.y - (orfRadius - 2) * 
-                      Math.cos(arrowShiftAngle)) + 
-                      "z",
-                stroke: color,
-                fill: color
-            });
+            path = "M" + (this.center.x + (orfRadius + 2) * 
+                   Math.sin(arrowShiftAngle)) + " " +
+                   (this.center.y - (orfRadius + 2) * 
+                   Math.cos(arrowShiftAngle)) + "L" + 
+                   (this.center.x + orfRadius * Math.sin(lastAngle)) + 
+                   " " + (this.center.y - orfRadius * Math.cos(lastAngle)) + 
+                   "L" + (this.center.x + (orfRadius - 2) * 
+                   Math.sin(arrowShiftAngle)) + " " + 
+                   (this.center.y - (orfRadius - 2) * 
+                   Math.cos(arrowShiftAngle)) + 
+                   "z";
 
-            this.addToolTip(stopSprite, tooltip);
-            this.addClickListener(stopSprite, orf.getStart(), selectEnd);
-
-            sprites.push(stopSprite);
+            this.orfSVG.append("svg:path")
+                       .attr("stroke", color)
+                       .attr("fill", color)
+                       .attr("d", path)
+                       .on("mousedown", function() {
+                           Vede.application.fireEvent("VectorPanelAnnotationClicked",
+                                                      orf.getStart(),
+                                                      selectEnd);
+                       })
+                       .append("svg:title")
+                       .text(tooltip);
         }, this);
-        
-        return sprites;
     },
 
     /**
@@ -169,7 +179,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             ", " + aa + " AA" + complimentary;
 
         if(orf.getStartCodons().length > 1) {
-            tooltipLabel += "<br>Start Codons: ";
+            tooltipLabel += "\nStart Codons: ";
             
             var codonsArray = [];
             var codonString;

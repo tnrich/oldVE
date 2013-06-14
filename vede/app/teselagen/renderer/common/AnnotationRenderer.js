@@ -65,55 +65,43 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
     },
     
     /**
-     * Adds an onclick listener to the sprite which fires an application event
+     * Returns a function which fires an application event
      * with the start and end as arguments. This allows the controllers to
      * select the annotation when it is clicked.
      */
-    addClickListener: function(sprite, start, end, feature) {
-        var sequenceManager = this.sequenceManager;
-        var me = this;
-    	sprite.on("mousedown", function() {
+    getClickListener: function(start, end) {
+        return function() {
             Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
-        });
-    	
-    	sprite.on("render", function(sprite) {
-        	sprite.on("mousedown", function(adsfagr, e) { 
-        		if(e.button==2){
-        			e.preventDefault();
-        			//Vede.application.fireEvent("contextmenu",e);
-        			Vede.application.fireEvent("RightClickedOnFeature", e, feature);
-        			//console.log("RightClickedOnFeature");
-        		}
-        	});
-        });
-        	
-        sprite.on("render", function() {       	
-        	sprite.el.on("contextmenu", function(e) { 
-        		//console.log("AnnotationRender: ON ContextMenu");
-        		Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
-                e.preventDefault();
-                var contextMenu = Ext.create('Ext.menu.Menu',{
-                	  items: [{
-                	    text: 'Edit Sequence Feature',
-                	    handler: function() {
-                        	var editSequenceFeatureWindow = Ext.create(
-                            "Vede.view.ve.EditSequenceFeatureWindow");
-                        	
-                            editSequenceFeatureWindow.show();
-                            editSequenceFeatureWindow.center();
-                	    }
-                	  },{
-                  	    text: 'Delete Sequence Feature',
-                  	    handler: function() {
-                  	    	sequenceManager.removeFeature(feature,false);
-                  	    }
-                  	  }]
-                });
-                contextMenu.show(); 
-                contextMenu.setPagePosition(e.getX()+1,e.getY()-5);
-            });
-        });
-        
+        };
+    },
+
+    getRightClickListener: function(feature) {
+        var sequenceManager = this.sequenceManager;
+        return function() {
+            Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+            d3.event.preventDefault();
+            var contextMenu = Ext.create('Ext.menu.Menu',{
+                  items: [{
+                    text: 'Edit Sequence Feature',
+                    //iconCls: 'edit',
+                    handler: function() {
+                        var editSequenceFeatureWindow = Ext.create(
+                        "Vede.view.ve.EditSequenceFeatureWindow");
+                        
+                        editSequenceFeatureWindow.show();
+                        editSequenceFeatureWindow.center();
+                    }
+                  },{
+                    text: 'Delete Sequence Feature',
+                    //iconCls: 'edit',
+                    handler: function() {
+                        sequenceManager.removeFeature(feature,false);
+                    }
+                  }]
+            });                  
+            contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
+        };
     },
 });
 

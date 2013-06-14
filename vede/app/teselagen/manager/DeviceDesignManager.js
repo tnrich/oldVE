@@ -59,7 +59,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Teselagen.models.DeviceDesign}
      */
     clearDesignAndAddBins: function(device,pBins) {
-
         var bins = device.getJ5Collection().bins();
 
         bins.removeAll();
@@ -85,6 +84,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     createDeviceDesignFromBins: function(pBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
+        device.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+
         device.createCollectionFromBins(pBins);
 
         // var combo = this.setCombinatorial(device);

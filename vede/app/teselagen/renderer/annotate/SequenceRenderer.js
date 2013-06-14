@@ -11,11 +11,13 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
                "Teselagen.bio.orf.ORF",
                "Teselagen.bio.sequence.common.Annotation",
+               "Teselagen.models.sequence.Row",
                "Teselagen.utils.SystemUtils"],
 
     statics: {
         FONT_SIZE: 12,
         FONT_FAMILY: "Ubuntu Mono",
+        COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0",
         COMPLEMENTARY_VERTICAL_OFFSET: 16,
         LETTER_SPACING: 3
     },
@@ -57,7 +59,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     },
 
     render: function(){
-        // this.sequenceAnnotator.sequenceSVG.remove();
         var newRows = [];
 
         this.aminoAcidsString1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true);
@@ -146,18 +147,12 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var rowHeight = this.totalHeight - rowY;
             //sequenceY += 20;
 
-            var nucleotideRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
-                .attr("id", "nucleotide-row" +i);
-
-
             var rowSequence = row.getRowData().getSequence();
-            nucleotideRowSVG.append("svg:text")
+            this.sequenceAnnotationManager.sequenceSVG.append("svg:text")
+                .attr("class", "sequenceSVG")
                 .attr("x", sequenceX)
                 .attr("y", sequenceY + 20)
-                .text(sequenceString)
-                .attr("font-family", this.self.FONT_FAMILY)
-                .attr("font-size", this.self.FONT_SIZE)
-                .attr("letter-spacing", this.self.LETTER_SPACING);
+                .text(sequenceString);
 
             row.metrics.x = rowX;
             row.metrics.y = rowY;
@@ -187,6 +182,25 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         
         this.sequenceAnnotator.getRowManager().setRows(newRows);
         this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
+
+        this.sequenceAnnotationManager.sequenceSVG.selectAll("text")
+                        .attr("font-family", this.self.FONT_FAMILY)
+                        .attr("font-size", this.self.FONT_SIZE)
+                        .attr("letter-spacing", this.self.LETTER_SPACING);
+
+        this.sequenceAnnotationManager.sequenceSVG.selectAll(".complementarySequenceSVG")
+                        .attr("fill", this.self.COMPLEMENTARY_SEQUENCE_FILL);
+
+        this.sequenceAnnotationManager.sequenceSVG.selectAll(".bpLabelSVG")
+                        .attr("xml:space", "preserve");
+                        
+
+        this.sequenceAnnotationManager.aminoAcidsSVG.selectAll("text")
+                        .attr("xml:space", "preserve")
+                        .attr("fill", "blue")
+                        .attr("font-family", this.self.FONT_FAMILY)
+                        .attr("font-size", this.self.FONT_SIZE)
+                        .attr("letter-spacing", this.self.LETTER_SPACING);
     },
 
     getUpdatedRows: function(){
@@ -288,37 +302,25 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         }
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("class", "aminoAcidSVG")
             .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight - verticalOffset)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("fill", "blue")
-            .attr("xml:space", "preserve")
-            .attr("letter-spacing", this.self.LETTER_SPACING)
             .text(aminoAcids1);
 
         this.totalHeight += 20;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("class", "aminoAcidSVG")
             .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight - verticalOffset)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("fill", "blue")
-            .attr("xml:space", "preserve")
-            .attr("letter-spacing", this.self.LETTER_SPACING)
             .text(aminoAcids2);
 
         this.totalHeight += 20;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("class", "aminoAcidSVG")
             .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
             .attr("y", this.totalHeight - verticalOffset)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("fill", "blue")
-            .attr("xml:space", "preserve")
-            .attr("letter-spacing", this.self.LETTER_SPACING)
             .text(aminoAcids3);
 
         this.totalHeight += 20;
@@ -436,37 +438,25 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var verticalOffset = 15;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("class", "revComAminoAcidSVG")
             .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight + verticalOffset)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("fill", "blue")
-            .attr("xml:space", "preserve")
-            .attr("letter-spacing", this.self.LETTER_SPACING)
             .text(aminoAcids1);
 
         this.totalHeight += 20;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("class", "revComAminoAcidSVG")
             .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight + verticalOffset)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("fill", "blue")
-            .attr("xml:space", "preserve")
-            .attr("letter-spacing", this.self.LETTER_SPACING)
             .text(aminoAcids2);
 
         this.totalHeight += 20;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("class", "revComAminoAcidSVG")
             .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
             .attr("y", this.totalHeight + verticalOffset)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("fill", "blue")
-            .attr("xml:space", "preserve")
-            .attr("letter-spacing", this.self.LETTER_SPACING)
             .text(aminoAcids3);
 
         this.totalHeight += 20;
@@ -487,17 +477,12 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         sequenceString = sequenceString.join("");
         stringLength = sequenceString.length;
 
-        var complementRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
-            .attr("id", "nucleotide-comp-row" + row.getIndex())
-            .append("svg:text")
+        this.sequenceAnnotationManager.sequenceSVG.append("svg:text")
+            .attr("class", "complementarySequenceSVG")
             .attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight + 
                   this.self.COMPLEMENTARY_VERTICAL_OFFSET)
-            .text(sequenceString)
-            .attr("fill", "#b0b0b0")
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("letter-spacing", this.self.LETTER_SPACING);
+            .text(sequenceString);
 
         this.totalHeight += 20;
     },
@@ -520,12 +505,9 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     renderBpLabel: function(basePairs, labelX, labelY){
         this.sequenceAnnotationManager.sequenceSVG.append("svg:text")
+            .attr("class", "bpLabelSVG")
             .attr("x", labelX)
             .attr("y", labelY)
-            .attr("font-family", this.self.FONT_FAMILY)
-            .attr("font-size", this.self.FONT_SIZE)
-            .attr("letter-spacing", this.self.LETTER_SPACING)
-            .attr("xml:space", "preserve")
             .text(this.renderIndexString(basePairs));
     },
 });

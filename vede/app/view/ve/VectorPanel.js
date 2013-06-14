@@ -14,16 +14,22 @@ Ext.define("Vede.view.ve.VectorPanel", {
     collapsible: true,
     collapseDirection: "left",
     title: "Map",
-    titleCollapse: "true",
+    titleCollapse: true,
     items: [{
         xtype: "container",
         id: "PieContainer",
+        style: {
+            overflow: "auto"
+        },
         layout: {
             type: "fit"
         }
     }, {
         xtype: "container",
         id: "RailContainer",
+        style: {
+            overflow: "auto"
+        },
         layout: {
             type: "fit"
         }

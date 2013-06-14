@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * Provides a container for arranging a group of related Buttons in a tabular manner.
  *
@@ -60,7 +77,7 @@ Ext.define('Ext.container.ButtonGroup', {
     baseCls: Ext.baseCSSPrefix + 'btn-group',
 
     /**
-     * @cfg {Object} layout
+     * @cfg {Ext.enums.Layout/Object} layout
      * @inheritdoc
      */
     layout: {
@@ -75,22 +92,28 @@ Ext.define('Ext.container.ButtonGroup', {
      */
     frame: true,
 
+    /**
+     * @cfg {String} defaultButtonUI
+     * A default {@link Ext.Component#ui ui} to use for {@link Ext.button.Button Button} items
+     */
+
     frameHeader: false,
 
     titleAlign: 'center',
+
+    noTitleCls: 'notitle',
 
     initComponent : function() {
         // Copy the component's columns config to the layout if specified
         var me = this,
             cols = me.columns;
 
-        me.noTitleCls = me.baseCls + '-notitle';
         if (cols) {
             me.layout = Ext.apply({}, {columns: cols}, me.layout);
         }
 
         if (!me.title) {
-            me.addCls(me.noTitleCls);
+            me.addClsWithUI(me.noTitleCls);
         }
         me.callParent(arguments);
     },
@@ -98,7 +121,12 @@ Ext.define('Ext.container.ButtonGroup', {
     // private
     onBeforeAdd: function(component) {
         if (component.isButton) {
-            component.ui = component.ui + '-toolbar';
+            if (this.defaultButtonUI && component.ui === 'default' &&
+                !component.hasOwnProperty('ui')) {
+                component.ui = this.defaultButtonUI;
+            } else {
+                component.ui = component.ui + '-toolbar';
+            }
         }
         this.callParent(arguments);
     },

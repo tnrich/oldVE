@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * @author Ed Spencer
  * @class Ext.ModelManager
@@ -88,6 +105,14 @@ Ext.define('Ext.ModelManager', {
         this.types[name] = model;
         return model;
     },
+    
+    /**
+     * Unregisters a model definition. Generally used by stores with implicit model classes.
+     * @private
+     */
+    unregisterType: function(name) {
+        delete this.types[name];
+    },
 
     /**
      * @private
@@ -128,8 +153,8 @@ Ext.define('Ext.ModelManager', {
     },
 
     /**
-     * Returns the {@link Ext.data.Model} for a given model name
-     * @param {String/Object} id The id of the model or the model instance.
+     * Returns the {@link Ext.data.Model} class for a given model name
+     * @param {String/Object} id The classname of the model or the model class itself.
      * @return {Ext.data.Model} a model class.
      */
     getModel: function(id) {

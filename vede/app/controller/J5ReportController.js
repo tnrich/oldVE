@@ -59,6 +59,7 @@ Ext.define("Vede.controller.J5ReportController", {
         startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
         endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
+        
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
         var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
         //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
@@ -148,8 +149,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel = Ext.getCmp('mainAppPanel').getActiveTab();
             this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
             this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
-            this.detailPanel.hide();
-            this.detailPanelFill.show();
+            // this.detailPanel.hide();
+            // this.detailPanelFill.show();
             this.activeProject = this.tabPanel.model;
             this.loadj5Results();
         }

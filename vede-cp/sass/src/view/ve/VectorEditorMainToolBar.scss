@@ -1,0 +1,64 @@
+// VectorEditorMainToolBar.scss
+#VectorEditorMainToolBar {
+  background: #F8F8F8;
+}
+
+.vetbseparator {
+  border-left: 1px solid rgb(231, 231, 231) !important;
+  border-right: 1px solid rgb(255, 255, 255) !important;
+}
+
+.saveSequenceBtn .x-btn-icon-el{
+  background-size: 20px;
+  background-position: center center;
+}
+
+.importSequenceBtn .x-btn-icon-el{
+  background-size: 22px;
+  background-position: center center;
+}
+
+.createPartBtn .x-btn-icon-el{
+  background-size: 20px;
+  background-position: center center;
+}
+
+.undoBtn .x-btn-icon-el {
+  background-size: 16px;
+  background-position: center center;
+}
+
+.redoBtn .x-btn-icon-el {
+  background-size: 16px;
+  background-position: center center;
+}
+
+.circularBtn .x-btn-icon-el {
+  background-size: 22px;
+  background-position: center center;
+}
+
+.linearBtn .x-btn-icon-el {
+  background-size: 22px;
+  background-position: center center;
+}
+
+.fullscreenBtn .x-btn-icon-el {
+  background-size: 22px;
+  background-position: center center;
+}
+
+.featuresBtn .x-btn-icon-el {
+  background-size: 22px;
+  background-position: center center;
+}
+
+.cutSitesBtn .x-btn-icon-el {
+  background-size: 22px;
+  background-position: center center;
+}
+
+.orfsBtn .x-btn-icon-el {
+  background-size: 22px;
+  background-position: center center;
+}

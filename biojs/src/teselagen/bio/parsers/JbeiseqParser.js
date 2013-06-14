@@ -17,7 +17,14 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
     requires: [
         "Teselagen.bio.util.XmlToJson",
         "Teselagen.bio.util.StringUtil",
-        "Teselagen.bio.util.Sha256"
+        "Teselagen.bio.util.Sha256",
+        "Teselagen.bio.parsers.Genbank",
+        "Teselagen.bio.parsers.GenbankFeatureElement",
+        "Teselagen.bio.parsers.GenbankFeatureLocation",
+        "Teselagen.bio.parsers.GenbankFeatureQualifier",
+        "Teselagen.bio.parsers.GenbankFeaturesKeyword",
+        "Teselagen.bio.parsers.GenbankLocusKeyword",
+        "Teselagen.bio.parsers.GenbankOriginKeyword"
     ],
 
     singleton: true,

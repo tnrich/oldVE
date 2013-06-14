@@ -42,7 +42,7 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         {
             xtype: "tbtext",
             cls: "caretPositionText",
-            text: "0",
+            text: "0"
         }, 
         {
             xtype: "tbseparator"

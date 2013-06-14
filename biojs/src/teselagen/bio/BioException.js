@@ -5,7 +5,6 @@
  * @author Micah Lerner
  */
 Ext.define("Teselagen.bio.BioException", {
-    extend: 'Ext.Error',
     message: null,
     statics: {
         /*

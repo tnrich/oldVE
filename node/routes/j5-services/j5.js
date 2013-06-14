@@ -368,7 +368,8 @@ app.post('/executej5',restrict,function(req,res){
         user_id: req.user._id,
         devicedesign_id : deviceDesignModel._id,
         project_id : deviceDesignModel.project_id,
-        devicedesign_name: deviceDesignModel.name
+        devicedesign_name: deviceDesignModel.name,
+        combinatorialAssembly: []
       });
 
       newj5Run.save(function(err){
@@ -420,11 +421,21 @@ app.post('/sbol',function(req,res){
     //res.json({data:data});
   //});
     var data = {};
-    data["conversion_method"] = "ConvertSBOLXMLToGenBankClean"
+    
     data["encoded_to_be_converted_file"] = req.body.data;
+
+    if(req.body.preserveSBOL==="true")
+    {
+      data["conversion_method"] = "ConvertSBOLXMLToGenBankPreserveSBOLInformation";
+    }
+    else
+    {
+      data["conversion_method"] = "ConvertSBOLXMLToGenBankClean"
+    }
 
     console.log("Running ConvertSBOLXML");
     app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
+      //quicklog(require('util').inspect(value,false,null));
       if(!error && value["encoded_output_file"])
       {
         var encodedFile = value["encoded_output_file"];

@@ -20,48 +20,52 @@ Ext.define("Teselagen.models.SequenceFile", {
             type: "json"
         },
         buildUrl: function(request) {
-            var filter = "";
 
-            // Checks if active filter
-            if(request.operation.filters)
+
+            // GET SEQUENCES FROM PROJECT
+            if( request.action === "read" && request.operation.filters && !request.operation.id)
             {
-                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+                if ( request.operation.filters[0].property === "project_id" )
+                {
+                    var url = "projects/" + request.operation.filters[0].value + "/sequences";
+                    delete request.params;
+                    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+                }
             }
 
-            // Cases
-
-            if(request.operation.params.id)
+            // GET SEQUENCES FROM PROJECT WITH PROJECT_ID
+            if( request.action === "read" && request.operation.filters && request.operation.id)
             {
-                // Get specific sequence using given id
-                var sequence_id = request.operation.params.id;
-                idParam = "/"+sequence_id;
+                if ( request.operation.filters[0].property === "project_id" )
+                {
+                    // PROJECT_ID IS DISCARDED
+                    var url = "sequences/" + request.operation.id;
+                    delete request.params;
+                    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+                }
+            }
+
+            // GET SPECIFIC SEQUENCE WITHOUT PROJECT_ID
+            if( request.operation.action === "read" && !request.operation.filters && request.params.id)
+            {
+                var url = "sequences/"+request.params.id;
                 delete request.params;
-                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
-            if(filter==="project_id")
+            
+            // CREATE A NEW SEQUENCE WITH PROJECT_ID
+            if(request.action === "create" && request.records[0].data.project_id && !request.records[0].data.id)
             {
-                // Get sequences within a project
-                var project_id = request.operation.filters[0].value;
-                var projectParam = "/"+project_id;
+                var url = "sequences";
                 delete request.params;
-                return Teselagen.manager.SessionManager.buildUrl("projects"+projectParam+"/sequences", this.url);
-
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
-            if(request.operation.action==="read"&&!request.operation.filters)
-            {
-                // Get specific sequence using Ext associations
-                var sequence_id = request.params.id;
-                idParam = "/"+sequence_id;
 
-                //if(sequence_id==="") debugger;
+            console.log("No sequence url generated");
+            debugger;
 
-                delete request.params;
-                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
-            }
-
-            return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
 
 
         },

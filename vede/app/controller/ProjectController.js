@@ -22,7 +22,6 @@ Ext.define("Vede.controller.ProjectController", {
      * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
      */
     loadProjectTree: function (cb) {
-
         var self = this;
 
         var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
@@ -34,7 +33,7 @@ Ext.define("Vede.controller.ProjectController", {
             leaf: true,
             hrefTarget: "newproj",
             icon: "resources/images/add.png",
-            id: 0,
+            //id: 0,
         });
 
         var projects = Teselagen.manager.ProjectManager.projects; // Get projects store
@@ -55,7 +54,7 @@ Ext.define("Vede.controller.ProjectController", {
                 leaf: true,
                 hrefTarget: "newde",
                 icon: "resources/images/add.png",
-                id: 0,
+                //id: 0,
             });
 
             // Append sequence to project node
@@ -64,7 +63,7 @@ Ext.define("Vede.controller.ProjectController", {
                 leaf: true,
                 hrefTarget: "newsequence",
                 icon: "resources/images/add.png",
-                id: 0
+                //id: 0
             });
 
             var designs = project.designs(); // Get designs store from current project
@@ -87,7 +86,7 @@ Ext.define("Vede.controller.ProjectController", {
                         designnode.appendChild({
                             text: "J5 Reports",
                             leaf: true,
-                            id: design.data.id,
+                            id: design.data.id+'report',
                             hrefTarget: "j5reports",
                             icon: "resources/images/ux/j5-tree-icon-parent.png",
                             qtip: design.data.name + ' Report'
@@ -158,7 +157,7 @@ Ext.define("Vede.controller.ProjectController", {
     */
 
     resolveAndOpenj5Reports: function (record) {
-        var design_id = record.data.id;
+        var design_id = record.data.id.replace("report","");;
         var project_id = record.parentNode.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         project.designs().load({

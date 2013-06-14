@@ -8,9 +8,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     requires: ["Teselagen.event.DeviceEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
-               "Teselagen.constants.SBOLIcons",
                "Vede.view.de.grid.Bin",
-               "Vede.view.de.grid.Part"],
+               "Vede.view.de.grid.Part",
+               "Teselagen.constants.SBOLIcons"],
 
     statics: {
         DEFAULT_ROWS: 2
@@ -119,11 +119,29 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin.deselect();
         }
 
-        if(this.selectedPart && this.selectedPart.down()) {
+        //Commented out to keep named but unmapped part selected
+        
+        /*if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
             this.deHighlight(this.selectedPart.getPart());
             this.selectedPart = null;
         }
+
+        if(this.selectedPart && this.selectedPart.down()) {
+            this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
+            //Logic for selecting part with no sequence file but named
+             if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile()) {
+                if ((this.selectedPart.getPart().get("sequencefile_id") === "") && (this.selectedPart.getPart().get('name') != "")) {
+                    console.log("hey");
+                    this.selectedPart.select();
+                    this.selectedPart.selectAlert();
+
+                }
+            }
+
+            this.selectedPart = null;
+        }*/
 
         this.selectedBin = gridBin;
         gridBin.select();
@@ -136,6 +154,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         removeColumnMenuItem.enable();
 
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+        console.log('heyo')
 
         Ext.resumeLayouts(true);
     },
@@ -147,6 +166,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellClick: function(partCell) {
         Ext.suspendLayouts();
 
+        if(this.selectedPart) {
+           /* this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
+
+           if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
+                this.selectedPart.deselect();
+            } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
+                this.selectedPart.select();
+                this.selectedPart.leaveselect();
+            }*/
+        }
+
+
         var gridPart = partCell.up().up();
 
         var j5Part = gridPart.getPart();
@@ -156,25 +188,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-
-            if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
-                this.selectedPart.deselect();
-            } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
-                this.selectedPart.select();
-                this.selectedPart.leaveselect();
-            }
-        }
-
         this.selectedPart = gridPart;
 
         gridPart.deselect();
         gridPart.select();
 
 
-         if(j5Part) {
+
+        if(j5Part) {
+            console.log("phantom: " + j5Part.phantom);
             if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
                 if (j5Part.get('name') != "") {
@@ -185,6 +207,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 gridPart.mapSelect();
             }
         } else {
+            console.log("no part associated with cell");
             gridPart.select();
         }
 
@@ -747,6 +770,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
             this.deHighlight(this.selectedPart.getPart());
+            //Logic for selecting part with no sequence file but named
+             if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile()) {
+                if ((this.selectedPart.getPart().get("sequencefile_id") === "") && (this.selectedPart.getPart().get('name') != "")) {
+                    console.log("hey");
+                    /*this.selectedPart.select();*/
+                    this.selectedPart.selectAlert();
+
+                }
+            }
+
             this.selectedPart = null;
         }
 
@@ -933,7 +966,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
                 if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
-                   !gridPart.getPart().phantom) {
+                   !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
             }
@@ -1330,6 +1363,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("validateDuplicatedPartName",
                             this.onValidateDuplicatedPartNameEvent,
                             this);
-
         }
 });

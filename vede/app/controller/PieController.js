@@ -5,20 +5,25 @@
 Ext.define('Vede.controller.PieController', {
     extend: 'Vede.controller.SequenceController',
 
+    requires: ["Teselagen.manager.PieManager",
+               "Teselagen.renderer.pie.SelectionLayer",
+               "Teselagen.renderer.pie.WireframeSelectionLayer"],
+
     refs: [
         {ref: "pieContainer", selector: "#PieContainer"}
     ],
     
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360,
+        PIE_CENTER: {x: 100, y: 100},
+        RAIL_RADIUS: 100
     },
 
     pieManager: null,
     pieContainer: null,
 
     startSelectionAngle: 0,
-    isRightClicked: false,
-    
+
     /**
      * @member Vede.controller.PieController
      */
@@ -26,11 +31,6 @@ Ext.define('Vede.controller.PieController', {
         this.callParent();
 
         this.control({
-            "#Pie" : {
-                mousedown: this.onMousedown,
-                mousemove: this.onMousemove,
-                mouseup: this.onMouseup,
-            },
             "#zoomInMenuItem": {
                 click: this.onZoomInMenuItemClick
             },
@@ -38,13 +38,30 @@ Ext.define('Vede.controller.PieController', {
                 click: this.onZoomOutMenuItemClick
             }
         });
-        
-        this.application.on("RightClickOnPieDrawComponent", 
-        		this.onRightClickOnPieDrawComponent, this);
     },
 
     initPie: function() {
         this.pieManager.initPie();
+        var pie = this.pieManager.getPie();
+        var self = this;
+
+        pie.on("mousedown", function() {
+            self.onMousedown(self);
+        });
+
+        pie.on("mouseup", function() {
+            self.onMouseup(self);
+        });
+
+        pie.on("mousemove", function() {
+            self.onMousemove(self);
+        });
+
+        // When pie is resized, scale the graphics in the pie.
+        this.pieContainer.on("resize", function() {
+            this.pieManager.fitWidthToContent(this.pieManager);
+        }, this);
+
         // Set the tabindex attribute in order to receive keyboard events on a div.
         this.pieContainer.el.dom.setAttribute("tabindex", "0");
         this.pieContainer.el.on("keydown", this.onKeydown, this);
@@ -58,15 +75,14 @@ Ext.define('Vede.controller.PieController', {
         this.pieContainer = this.getPieContainer();
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
-            center: {x: 100, y: 100},
-            railRadius: 100,
+            center: this.self.PIE_CENTER,
+            railRadius: this.self.RAIL_RADIUS,
             showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
             showFeatures: Ext.getCmp("featuresMenuItem").checked,
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
         pie = this.pieManager.getPie();
-        this.pieContainer.add(pie);
 
         // When window is resized, scale the graphics in the pie.
         var timeOut = null;
@@ -79,11 +95,6 @@ Ext.define('Vede.controller.PieController', {
                 self.pieManager.fitWidthToContent(self.pieManager);
             }, 400);
         };
-
-        // When pie is resized, scale the graphics in the pie.
-        pie.on("resize", function() {
-            this.pieManager.fitWidthToContent(this.pieManager);
-        }, this);
 
         this.Managers.push(this.pieManager);
 
@@ -120,6 +131,8 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager.setFeatures(this.SequenceManager.getFeatures());
 
         this.pieManager.render();
+
+        this.pieManager.updateNameBox();
     },
 
     onActiveEnzymesChanged: function() {
@@ -160,9 +173,6 @@ Ext.define('Vede.controller.PieController', {
             this.SelectionLayer.select(start, end);
             this.changeCaretPosition(start);
         }
-
-        this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
-        this.SelectionLayer.selectionSprite.show(true);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -175,7 +185,10 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager.render();
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
+        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+
         this.SelectionLayer.setSequenceManager(pSeqMan);
+        this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
     },
 
     onShowFeaturesChanged: function(show) {
@@ -221,27 +234,18 @@ Ext.define('Vede.controller.PieController', {
     /**
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
-    onMousedown: function(pEvt, pOpts) {
-        
-    	// This makes it so that right clicks don't select/deselect.
-    	//if(pEvt.button==2) return;
-    	
-    	if(pEvt.button!=2) {
-    		this.startSelectionAngle = this.getClickAngle(pEvt);
-    		this.isRightClicked = false;
-    	} else {
-    		this.isRightClicked = true;
-    	}
-        this.mouseIsDown = true;
+    onMousedown: function(self) {
+        self.startSelectionAngle = self.getClickAngle();
+        self.mouseIsDown = true;
 
 
-        if(this.pieManager.sequenceManager&&pEvt.button!=2) {
-            this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
+        if(self.pieManager.sequenceManager) {
+            self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
 
-            this.changeCaretPosition(this.startSelectionIndex);
+            self.changeCaretPosition(self.startSelectionIndex);
         }
 
-        this.selectionDirection = 0;
+        self.selectionDirection = 0;
     },
 
     /**
@@ -249,110 +253,100 @@ Ext.define('Vede.controller.PieController', {
      * sticky select (when the ctrl key is not held) as the mouse moves during a
      * click-and-drag.
      */
-    onMousemove: function(pEvt, pOpts) {
-        
-    	// This makes it so that right clicks don't select/deselect.
-    	if(this.isRightClicked) return;
-    	
-    	var endSelectionAngle = this.getClickAngle(pEvt);
+    onMousemove: function(self) {
+        var endSelectionAngle = self.getClickAngle();
         var start;
         var end;
 
-        if(this.mouseIsDown && Math.abs(this.startSelectionAngle -
-                    endSelectionAngle) > this.self.SELECTION_THRESHOLD &&
-                    this.SequenceManager.getSequence().toString().length > 0 &&
-                    this.pieManager.sequenceManager) {
+        if(self.mouseIsDown && Math.abs(self.startSelectionAngle -
+                    endSelectionAngle) > self.self.SELECTION_THRESHOLD &&
+                    self.SequenceManager.getSequence().toString().length > 0 &&
+                    self.pieManager.sequenceManager) {
 
-            var endSelectionIndex = this.bpAtAngle(endSelectionAngle);
-            this.pieManager.pie.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
+            var endSelectionIndex = self.bpAtAngle(endSelectionAngle);
 
             // Set the direction of selection if it has not yet been determined.
-            if(this.selectionDirection == 0) {
-                if(this.startSelectionAngle < Math.PI) {
-                    this.selectionDirection = -1;
-                    if(endSelectionAngle >= this.startSelectionAngle && 
-                       endSelectionAngle <= (this.startSelectionAngle + Math.PI)) {
-                        this.selectionDirection = 1;
+            if(self.selectionDirection == 0) {
+                if(self.startSelectionAngle < Math.PI) {
+                    self.selectionDirection = -1;
+                    if(endSelectionAngle >= self.startSelectionAngle && 
+                       endSelectionAngle <= (self.startSelectionAngle + Math.PI)) {
+                        self.selectionDirection = 1;
                     }
                 } else {
-                    this.selectionDirection = 1;
-                    if(endSelectionAngle <= this.startSelectionAngle &&
-                       endSelectionAngle >= (this.startSelectionAngle - Math.PI)) {
-                        this.selectionDirection = -1;
+                    self.selectionDirection = 1;
+                    if(endSelectionAngle <= self.startSelectionAngle &&
+                       endSelectionAngle >= (self.startSelectionAngle - Math.PI)) {
+                        self.selectionDirection = -1;
                     }
                 }
             }
 
-            if(this.selectionDirection == -1) {
+            if(self.selectionDirection == -1) {
                 start = endSelectionIndex;
-                end = this.startSelectionIndex;
+                end = self.startSelectionIndex;
             } else {
-                start = this.startSelectionIndex;
+                start = self.startSelectionIndex;
                 end = endSelectionIndex;
             }
 
-            this.WireframeSelectionLayer.startSelecting();
-            this.WireframeSelectionLayer.select(start, end);
+            self.WireframeSelectionLayer.startSelecting();
+            self.WireframeSelectionLayer.select(start, end);
 
-            this.pieManager.pie.surface.add(this.WireframeSelectionLayer.selectionSprite);
-            this.WireframeSelectionLayer.selectionSprite.show(true);
+            if(d3.event.ctrlKey) {
+                self.SelectionLayer.startSelecting();
 
-            if(pEvt.ctrlKey) {
-                this.SelectionLayer.startSelecting();
+                self.select(start, end);
 
-                this.select(start, end);
-
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, 
-                                           this,
-                                           this.SelectionLayer.start, 
-                                           this.SelectionLayer.end);
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, 
+                                           self,
+                                           self.SelectionLayer.start, 
+                                           self.SelectionLayer.end);
             } else {
-                this.stickySelect(start, end);
+                self.stickySelect(start, end);
             }
-            this.changeCaretPosition(start);
+            self.changeCaretPosition(start);
         }
     },
 
     /**
      * Finalizes a selection at the end of a click-and-drag sequence.
      */
-    onMouseup: function(pEvt, pOpts) {
-    	
-        if(this.mouseIsDown) {
-            this.mouseIsDown = false;
+    onMouseup: function(self) {
 
-            if(this.WireframeSelectionLayer.selected && 
-                this.WireframeSelectionLayer.selecting) {                     	
-            	
-                // If this is the end of a click-and-drag, fire a selection event.
-                this.WireframeSelectionLayer.endSelecting();
-                this.WireframeSelectionLayer.deselect();
+        if(self.mouseIsDown) {
+            self.mouseIsDown = false;
 
-                this.SelectionLayer.endSelecting();
+            if(self.WireframeSelectionLayer.selected && 
+                self.WireframeSelectionLayer.selecting) {
 
-                if(this.SelectionLayer.end != -1) {
-                    this.changeCaretPosition(this.SelectionLayer.start);
+                // If self is at the end of a click-and-drag, fire a selection event.
+                self.WireframeSelectionLayer.endSelecting();
+                self.WireframeSelectionLayer.deselect();
+
+                self.SelectionLayer.endSelecting();
+
+                if(self.SelectionLayer.end != -1) {
+                    self.changeCaretPosition(self.SelectionLayer.start);
                 }
 
-            } else if(this.clickedAnnotationStart !== null && 
-                      this.clickedAnnotationEnd !== null){
+            } else if(self.clickedAnnotationStart !== null && 
+                      self.clickedAnnotationEnd !== null){
                 // If we've clicked a sprite, select it.
-                this.select(this.clickedAnnotationStart,
-                            this.clickedAnnotationEnd);
+                self.select(self.clickedAnnotationStart,
+                            self.clickedAnnotationEnd);
 
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
-                                           this,
-                                           this.SelectionLayer.start,
-                                           this.SelectionLayer.end);
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                                           self,
+                                           self.SelectionLayer.start,
+                                           self.SelectionLayer.end);
 
-                this.clickedAnnotationStart = null;
-                this.clickedAnnotationEnd = null;
+                self.clickedAnnotationStart = null;
+                self.clickedAnnotationEnd = null;
             } else {
-            	if(pEvt.button==2) return;
-                this.SelectionLayer.deselect();
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+                self.SelectionLayer.deselect();
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
             }
-            this.isRightClicked = false;
         }
     },
 
@@ -364,27 +358,32 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager.zoomOut();
     },
 
-    select: function(start, end, pointerEvents) {
+    select: function(start, end) {
         if(start == 0 && end == this.SequenceManager.getSequence().toString().length) {
-            this.SelectionLayer.select(start, end-1, pointerEvents);
+            this.SelectionLayer.select(start, end-1);
         } else {
-            this.SelectionLayer.select(start, end, pointerEvents);
+            this.SelectionLayer.select(start, end);
         }
 
-        this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
-        this.SelectionLayer.selectionSprite.show(true);
         this.changeCaretPosition(this.SelectionLayer.start);
     },
 
     /**
      * Given a click event, converts the document-relative coordinates to an
      * angle relative to the vertical.
-     * @param {Ext.direct.Event} event The click event to determine the angle of.
      */
-    getClickAngle: function(event) {
-        var el = this.pieManager.getPie().surface.el;
-        var relX = event.getX() - (Math.round(el.getBox().width / 2) + el.getBox().x);
-        var relY = event.getY() - (Math.round(el.getBox().height / 2) + el.getBox().y);
+    getClickAngle: function() {
+        var svg = d3.select(".pieParent");
+        var transformValues;
+        var scrolled = this.pieContainer.el.getScroll();
+
+        transformValues = svg.attr("transform").match(/[-.\d]+/g);
+
+        var relX = d3.event.layerX - transformValues[4] -
+            this.pieManager.center.x * transformValues[0] + scrolled.left;
+
+        var relY = d3.event.layerY - transformValues[5] -
+            this.pieManager.center.y * transformValues[3] + scrolled.top;
 
         var angle = Math.atan(relY / relX) + Math.PI / 2;
         if(relX < 0) {
@@ -423,7 +422,7 @@ Ext.define('Vede.controller.PieController', {
      * @param {Int} start The index of where dragging began.
      * @param {Int} end The current index of the caret.
      */
-    stickySelect: function(start, end, pointerEvents) {
+    stickySelect: function(start, end) {
         var annotations = this.pieManager.getAnnotationsInRange(start, end);
 
         if(annotations.length > 0) {
@@ -442,7 +441,7 @@ Ext.define('Vede.controller.PieController', {
                 });
 
                 this.SelectionLayer.startSelecting();
-                this.select(minStart, maxEnd, pointerEvents);
+                this.select(minStart, maxEnd);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this,
@@ -518,7 +517,7 @@ Ext.define('Vede.controller.PieController', {
                         this.SelectionEvent.SELECTION_CANCELED);
                 } else {
                     this.SelectionLayer.startSelecting();
-                    this.select(selStart, selEnd, pointerEvents);
+                    this.select(selStart, selEnd);
 
                     this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                                this,
@@ -530,25 +529,5 @@ Ext.define('Vede.controller.PieController', {
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
-    },
-    
-    onRightClickOnPieDrawComponent: function(e) {
-    	e.preventDefault();
-    	
-    	if (this.SelectionLayer.selectionSprite.pointerEvents!="all") {
-    		this.SelectionLayer.selectionSprite.destroy();
-    		this.select(this.SelectionLayer.start,this.SelectionLayer.end,"all");
-    	}
-    	this.application.fireEvent("contextmenu",e);
-    	
-    	this.application.on("SelectionLayerContextMenu", function(){   		   		
-    		this.SelectionLayer.selectionSprite.destroy();
-    		this.select(this.SelectionLayer.start,this.SelectionLayer.end);
-    	}, this, {single: true});
     }
 });
-
-
-
-
-

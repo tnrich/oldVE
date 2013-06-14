@@ -6,7 +6,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     extend: 'Vede.controller.SequenceController',
 
     requires: ["Teselagen.event.SequenceManagerEvent",
-               "Teselagen.event.MapperEvent"],
+               "Teselagen.event.MapperEvent",
+               "Teselagen.manager.SequenceAnnotationManager",
+               "Teselagen.renderer.annotate.HighlightLayer",
+               "Teselagen.renderer.annotate.SelectionLayer"],
 
     statics: {
         MIN_BP_PER_ROW: 20
@@ -24,6 +27,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     endSelectionIndex: null,
 
     init: function(){
+
         this.callParent();
 
         this.control({
@@ -31,7 +35,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 render: this.onRender
             },
             "#AnnotatePanel": {
-                resize: this.onResize
+                resize: this.onResize,
+                beforecollapse: this.onBeforeCollapse
             }
         });
 
@@ -387,9 +392,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
                 var el = Ext.getCmp("AnnotateContainer").el;
 
-                if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
-                     metrics.getY() > el.getScroll().top)) {
-                    el.scrollTo("top", metrics.getY());
+                if(!(metrics.y < el.getScroll().top + el.getViewSize().height &&
+                     metrics.y > el.getScroll().top)) {
+                    el.scrollTo("top", metrics.y);
                 }
             }
         }
@@ -466,6 +471,13 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
             this.SelectionLayer.deselect();
             this.select(start, end);
+        }
+    },
+
+    onBeforeCollapse: function() {
+        var vectorPanel = Ext.getCmp("VectorPanel");
+        if (vectorPanel.collapsed) {
+            vectorPanel.expand()
         }
     },
 });

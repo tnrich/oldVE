@@ -3,8 +3,8 @@
  * Selection line for circular DNA drawing
  */
 Ext.define("Vede.view.pie.Caret", {
-    extend: "Ext.draw.Sprite",
     config: {
+        pie: null,
     	angle: null,
     	center: null,
     	radius: null
@@ -21,17 +21,13 @@ Ext.define("Vede.view.pie.Caret", {
         var y = pConfig.radius * Math.sin(pConfig.angle - Math.PI / 2) + 
                 pConfig.center.y;
 
-        var config = {
-            type: 'path',
-            path: 'M' + pConfig.center.x + ' ' + pConfig.center.y + 
-                  'L' + x + ' ' + y,
-            stroke: pConfig.stroke || this.self.CARET_COLOR
-        }
-    	this.callParent([config]);
-        
-        var me = this;
-        me.on("render", function() {
-            me.setStyle("pointer-events", "none");
-        });
+        return pConfig.pie.append("svg:line")
+                  .attr("class", "pieCaret")
+                  .attr("x1", pConfig.center.x)
+                  .attr("y1", pConfig.center.y)
+                  .attr("x2", x)
+                  .attr("y2", y)
+                  .attr("stroke", this.self.CARET_COLOR)
+                  .attr("stroke-width", this.self.CARET_WIDTH);
     },
 });
