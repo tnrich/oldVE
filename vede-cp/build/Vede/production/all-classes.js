@@ -66419,7 +66419,28 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
-  console.log("No sequence url generated");
+  if (request.operation.action === "create" && !request.operation.filters && !request.params.id) 
+  {
+    console.warn("Trying to read sequence with no given id");
+    var url = "sequences";
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.operation.action === "read" && !request.operation.filters && !request.params.id) 
+  {
+    console.warn("Trying to read sequence with no given id");
+    var url = "sequences";
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.action === "update" && request.records[0].data.id) 
+  {
+    var url = "sequences/" + request.records[0].data.id;
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  debugger;
+  console.warn("No sequence url generated");
 }}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "part_id", type: "long"}, {name: "name", type: "string"}, {name: "sequenceFileFormat", convert: function(v) {
   var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
   var constants = Teselagen.constants.Constants;
@@ -69873,7 +69894,7 @@ function requestMessageProcessor(request, success) {
   var deproject = activeTab.model;
   var design = deproject.getDesign();
   var saveAssociatedSequence = function(part, cb) {
-  if (!part.data.phantom && part.data.sequencefile_id) 
+  if (part.data.phantom === false) 
   {
     part.getSequenceFile({callback: function(associatedSequence) {
   if (associatedSequence) 
@@ -75763,13 +75784,13 @@ function requestMessageProcessor(request, success) {
   if (Teselagen.manager.ProjectManager.workingSequence) 
   {
     var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
-    console.log(name);
-    if (name == "Untitled VEProject") 
+    if (name == "Untitled VEProject" || name == "") 
     {
       console.log(seqMgr.name);
       Teselagen.manager.ProjectManager.workingSequence.set('name', seqMgr.name);
     } else {
-      seqMgr.setName(name);
+      Teselagen.manager.ProjectManager.workingSequence.set('name', seqMgr.name);
+      seqMgr.setName(seqMgr.name);
     }
   }
   Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
