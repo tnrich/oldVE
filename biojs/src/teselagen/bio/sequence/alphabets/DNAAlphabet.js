@@ -9,7 +9,7 @@
  */
 Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
     singleton: true,
-
+    requires: ["Teselagen.bio.sequence.symbols.NucleotideSymbol"],
     alternateClassName: "Teselagen.DNAAlphabet",
     extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet",
     requires: ["Teselagen.bio.sequence.symbols.NucleotideSymbol"],

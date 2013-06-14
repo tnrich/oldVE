@@ -84,6 +84,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     createDeviceDesignFromBins: function(pBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
+        device.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+
         device.createCollectionFromBins(pBins);
 
         // var combo = this.setCombinatorial(device);

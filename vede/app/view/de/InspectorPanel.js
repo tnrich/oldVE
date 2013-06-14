@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-    requires: ["Teselagen.event.DeviceEvent"],
+    requires: ["Teselagen.event.DeviceEvent","Ext.grid.plugin.RowEditing"],
     cls: 'InspectorPanel',
 
     activeTab: 1,

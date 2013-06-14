@@ -434,6 +434,7 @@ app.post('/sbol',function(req,res){
 
     console.log("Running ConvertSBOLXML");
     app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
+      //quicklog(require('util').inspect(value,false,null));
       if(!error && value["encoded_output_file"])
       {
         var encodedFile = value["encoded_output_file"];

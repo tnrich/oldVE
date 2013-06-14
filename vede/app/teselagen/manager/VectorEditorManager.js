@@ -6,6 +6,7 @@
  */
 Ext.define("Teselagen.manager.VectorEditorManager", {
 
+    requires: ["Ext.layout.container.Border"],
     sequenceFileManager: null,
     sequence: null,
 

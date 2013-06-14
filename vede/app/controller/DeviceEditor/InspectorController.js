@@ -6,7 +6,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-    "Vede.view.de.PartDefinitionDialog"],
+    "Vede.view.de.PartDefinitionDialog",
+    "Ext.layout.container.Border"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -876,7 +877,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {String} modified The name of the field that was edited.
      */
     onUpdateParts: function(parts, updatedPart, operation, modified) {
-        if(modified)
+        if( modified && !updatedPart.data.phantom)
         {
             if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
