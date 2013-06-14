@@ -63263,16 +63263,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var result = false;
   var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
   return (triplet === 'atg' || triplet === 'aug' && triplet.indexOf("-") === -1);
-}, isStartCodonString: function(codon) {
-  var result = false;
-  return (codon === 'atg' || codon === 'aug' && codon.indexOf("-") === -1);
 }, isStopCodon: function(pNucleotide1, pNucleotide2, pNucleotide3) {
   var result = false;
   var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
   return (triplet == 'taa' || triplet == 'tag' || triplet == 'tga' || triplet == 'uaa' || triplet == 'uag' || triplet == 'uga');
-}, isStopCodonString: function(codon) {
-  var result = false;
-  return (codon == 'taa' || codon == 'tag' || codon == 'tga' || codon == 'uaa' || codon == 'uag' || codon == 'uga');
 }, initializeAminoAcidsTranslationTable: function() {
   if (this.aminoAcidsTranslationTable != null) 
   {
@@ -65619,11 +65613,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
 }, createDNA: function(pDNASequence) {
   var DNASequence = pDNASequence.toLowerCase();
-  var characters = DNASequence.split("");
   var symbols = [];
   for (var i = 0; i < DNASequence.length; i++) 
     {
-      var symbol = this.DNAAlphabet.symbolMap(characters[i]);
+      var symbol = this.DNAAlphabet.symbolMap(DNASequence.charAt(i));
       if (symbol == null) 
       {
       } else {
@@ -66427,7 +66420,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   console.log("No sequence url generated");
-  debugger;
 }}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "part_id", type: "long"}, {name: "name", type: "string"}, {name: "sequenceFileFormat", convert: function(v) {
   var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
   var constants = Teselagen.constants.Constants;
@@ -70298,7 +70290,6 @@ function requestMessageProcessor(request, success) {
   var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
   removeColumnMenuItem.enable();
   this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-  console.log('heyo');
   Ext.resumeLayouts(true);
 }, onPartCellClick: function(partCell) {
   Ext.suspendLayouts();
@@ -70315,7 +70306,6 @@ function requestMessageProcessor(request, success) {
   gridPart.select();
   if (j5Part) 
   {
-    console.log("phantom: " + j5Part.phantom);
     if (j5Part.get("sequencefile_id") === "") 
     {
       gridPart.select();
@@ -70662,11 +70652,10 @@ function requestMessageProcessor(request, success) {
   {
     this.selectedPart.deselect();
     this.deHighlight(this.selectedPart.getPart());
-    if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile()) 
+    if (this.selectedPart.getPart()) 
     {
       if ((this.selectedPart.getPart().get("sequencefile_id") === "") && (this.selectedPart.getPart().get('name') != "")) 
       {
-        console.log("hey");
         this.selectedPart.selectAlert();
       }
     }
@@ -72501,21 +72490,26 @@ function requestMessageProcessor(request, success) {
 ;
 
 (Ext.cmd.derive('Teselagen.mappers.Mapper', Ext.Base, {config: {sequenceManager: null, dirty: true}, previousCalculatedSequence: null, updateEventString: null, sequenceChanged: function() {
-  if (this.previousCalculatedSequence !== this.getSequenceManager().getSequence().toString()) 
+  if (this.previousCalculatedSequence !== this.sequenceManager.getSequence()) 
   {
-    this.setDirty(true);
-    this.previousCalculatedSequence = this.getSequenceManager().getSequence().toString();
+    console.log(this.$className + " dirty");
+    this.dirty = true;
+    this.previousCalculatedSequence = this.sequenceManager.getSequence();
   }
 }, setSequenceManager: function(pSeqMan) {
   if (pSeqMan) 
   {
     if (this.previousCalculatedSequence !== pSeqMan.getSequence()) 
     {
-      this.setDirty(true);
-      this.previousCalculatedSequence = pSeqMan.getSequence().toString();
+      console.log(this.$className + " dirty");
+      this.dirty = true;
+      if (this.sequenceManager) 
+      {
+        this.previousCalculatedSequence = this.sequenceManager.getSequence();
+      }
     }
   } else {
-    this.setDirty(true);
+    this.dirty = true;
     this.previousCalculatedSequence = null;
   }
   this.sequenceManager = pSeqMan;
@@ -72525,14 +72519,14 @@ function requestMessageProcessor(request, success) {
 (Ext.cmd.derive('Teselagen.manager.AAManager', Teselagen.mappers.Mapper, {singleton: true, config: {aaSequence: ["", "", ""], aaSequenceSparse: ["", "", ""], aaRevCom: ["", "", ""], aaRevComSparse: ["", "", ""]}, TranslationUtils: null, initialize: function() {
   this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
 }, recalculate: function() {
-  if (this.getSequenceManager()) 
+  if (this.sequenceManager) 
   {
     this.recalculateNonCircular();
   }
 }, recalculateNonCircular: function() {
   var i;
-  var sequence = this.getSequenceManager().getSequence();
-  var revCom = this.getSequenceManager().getReverseComplementSequence();
+  var sequence = this.sequenceManager.getSequence();
+  var revCom = this.sequenceManager.getReverseComplementSequence();
   var seqLen = sequence.seqString().length;
   var aminoAcid;
   var aminoAcidRevCom;
@@ -72591,53 +72585,54 @@ function requestMessageProcessor(request, success) {
   this.setAaRevCom(revComNew);
   this.setAaRevComSparse(revComSparseNew);
 }, getSequenceFrame: function(frame, sparse) {
-  if (this.getDirty()) 
+  if (this.dirty) 
   {
     this.recalculate();
-    this.setDirty(false);
+    this.dirty = false;
   }
   if (sparse) 
   {
-    return this.getAaSequenceSparse()[frame];
+    return this.aaSequenceSparse[frame];
   } else {
-    return this.getAaSequence()[frame];
+    return this.aaSequence[frame];
   }
 }, getRevComFrame: function(frame, sparse) {
-  if (this.getDirty()) 
+  if (this.dirty) 
   {
     this.recalculate();
-    this.setDirty(false);
+    this.dirty = false;
   }
   if (sparse) 
   {
-    return this.getAaRevComSparse()[frame];
+    return this.aaRevComSparse[frame];
   } else {
-    return this.getAaRevCom()[frame];
+    return this.aaRevCom[frame];
   }
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.manager, 'AAManager'], 0));
+}}, 0, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'AAManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {singleton: true, config: {minORFSize: 300, orfs: []}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, initialize: function() {
+(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {singleton: true, config: {minORFSize: 300, orfs: null}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, initialize: function() {
   this.DNATools = Teselagen.bio.sequence.DNATools;
+  this.orfs = [];
 }, setOrfs: function(pOrfs) {
   this.orfs = pOrfs;
 }, getOrfs: function() {
-  if (this.getDirty()) 
+  if (this.dirty) 
   {
     this.recalculate();
-    this.setDirty(false);
+    this.dirty = false;
   }
   return this.orfs;
 }, setMinORFSize: function(pSize) {
   if (this.minORFSize != pSize) 
   {
     this.minORFSize = pSize;
-    this.setDirty(true);
+    this.dirty = true;
   }
 }, recalculate: function() {
-  if (this.getSequenceManager()) 
+  if (this.sequenceManager) 
   {
-    if (this.getSequenceManager().getCircular()) 
+    if (this.sequenceManager.getCircular()) 
     {
       this.recalculateCircular();
     } else {
@@ -72648,13 +72643,13 @@ function requestMessageProcessor(request, success) {
   }
   Vede.application.fireEvent(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED);
 }, recalculateNonCircular: function() {
-  this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(this.getSequenceManager().getSequence(), this.getSequenceManager().getReverseComplementSequence(), this.getMinORFSize()));
+  this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(this.sequenceManager.getSequence(), this.sequenceManager.getReverseComplementSequence(), this.minORFSize));
 }, recalculateCircular: function() {
-  var forwardSequence = this.getSequenceManager().getSequence().seqString();
-  var backwardSequence = this.getSequenceManager().getReverseComplementSequence().seqString();
+  var forwardSequence = this.sequenceManager.getSequence().seqString();
+  var backwardSequence = this.sequenceManager.getReverseComplementSequence().seqString();
   var doubleForward = this.DNATools.createDNA(forwardSequence + forwardSequence);
   var doubleBackward = this.DNATools.createDNA(backwardSequence + backwardSequence);
-  var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(doubleForward, doubleBackward, this.getMinORFSize());
+  var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(doubleForward, doubleBackward, this.minORFSize);
   var maxLength = forwardSequence.length;
   var recalcOrfs = [];
   var normalOrfs = [];
@@ -72717,37 +72712,37 @@ function requestMessageProcessor(request, success) {
   this.recalcIfNeeded();
   return this.cutSitesMap;
 }, recalcIfNeeded: function() {
-  if (this.getDirty()) 
+  if (this.dirty) 
   {
     this.recalculate();
-    this.setDirty(false);
+    this.dirty = false;
   }
 }, setMaxCuts: function(pMaxCuts) {
   if (pMaxCuts != this.maxCuts) 
   {
     this.maxCuts = pMaxCuts;
-    this.setDirty(true);
+    this.dirty = true;
   }
 }, recalculate: function() {
-  if (this.getSequenceManager() && this.getRestrictionEnzymeGroup() && this.getRestrictionEnzymeGroup().getEnzymes().length > 0) 
+  if (this.sequenceManager && this.restrictionEnzymeGroup && this.restrictionEnzymeGroup.getEnzymes().length > 0) 
   {
-    if (this.getSequenceManager().getCircular()) 
+    if (this.sequenceManager.getCircular()) 
     {
       this.recalculateCircular();
     } else {
       this.recalculateNonCircular();
     }
   } else {
-    this.setCutSites(null);
-    this.setCutSitesMap(null);
+    this.cutSites = null;
+    this.cutSitesMap = null;
   }
 }, recalculateNonCircular: function() {
-  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.getRestrictionEnzymeGroup().getEnzymes(), this.getSequenceManager().getSequence());
+  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), this.sequenceManager.getSequence());
   this.filterByMaxCuts(newCutSites);
 }, recalculateCircular: function() {
-  var seqLen = this.getSequenceManager().getSequence().seqString().length;
-  var doubleSequence = this.DNATools.createDNA(this.getSequenceManager().getSequence().seqString() + this.getSequenceManager().getSequence().seqString());
-  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.getRestrictionEnzymeGroup().getEnzymes(), doubleSequence);
+  var seqLen = this.sequenceManager.getSequence().seqString().length;
+  var doubleSequence = this.DNATools.createDNA(this.sequenceManager.getSequence().seqString() + this.sequenceManager.getSequence().seqString());
+  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), doubleSequence);
   var editedCutSites = new Ext.util.HashMap();
   Ext.each(newCutSites.getKeys(), function(key) {
   var sitesList = newCutSites.get(key);
@@ -72779,19 +72774,19 @@ function requestMessageProcessor(request, success) {
 });
   newAllCutSites = newAllCutSites.concat(sitesForOneEnzyme);
   newAllCutSitesMap[enzyme] = sitesForOneEnzyme;
-  if (this.getMaxCuts() < 0 || numCuts <= this.getMaxCuts()) 
+  if (this.maxCuts < 0 || numCuts <= this.maxCuts) 
   {
     newCutSitesMap[enzyme] = sitesForOneEnzyme;
     newCutSites = newCutSites.concat(sitesForOneEnzyme);
   }
 }, this);
-  this.setCutSites(newCutSites);
-  this.setCutSitesMap(newCutSitesMap);
-  this.setAllCutSites(newAllCutSites);
-  this.setAllCutSitesMap(newAllCutSitesMap);
+  this.cutSites = newCutSites;
+  this.cutSitesMap = newCutSitesMap;
+  this.allCutSites = newAllCutSites;
+  this.allCutSitesMap = newAllCutSitesMap;
 }, getAllCutsSorted: function(sortCriteria) {
   sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
-  var sortedCutSites = this.getAllCutSites().slice();
+  var sortedCutSites = this.allCutSites.slice();
   if (sortCriteria === "byStart") 
   {
     sortedCutSites.sort(this.sortByStart);
@@ -73355,12 +73350,10 @@ function requestMessageProcessor(request, success) {
   return rows;
 }, pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows) {
   var bpPerRow = this.sequenceAnnotator.getBpPerRow();
-  var seqLength = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;
-  pItemEnd = Math.min(pItemEnd, seqLength - 1);
   if (pItemStart > pItemEnd) 
   {
     var rowStartIndex = Math.floor(pItemStart / bpPerRow);
-    var rowEndIndex = Math.floor((seqLength - 1) / bpPerRow);
+    var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1) / bpPerRow);
     var rowStartIndex2 = 0;
     var rowEndIndex = Math.round(pItemEnd / this.sequenceAnnotator.getBpPerRow());
     var rowEndIndex2 = Math.floor(pItemEnd / bpPerRow);

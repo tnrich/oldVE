@@ -62,11 +62,34 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
+            // GET CREATE SEQUENCE WITHOUT ID!
+            if( request.operation.action === "create" && !request.operation.filters && !request.params.id)
+            {
+                console.warn("Trying to read sequence with no given id");
+                var url = "sequences";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
 
-            console.log("No sequence url generated");
+            // GET SPECIFIC SEQUENCE WITHOUT ID!
+            if( request.operation.action === "read" && !request.operation.filters && !request.params.id)
+            {
+                console.warn("Trying to read sequence with no given id");
+                var url = "sequences";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
+            // UPDATE A SEQUENCE
+            if ( request.action === "update" && request.records[0].data.id)
+            {
+                var url = "sequences/" + request.records[0].data.id;
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
+            }
+
             debugger;
-
-
+            console.warn("No sequence url generated");
 
         },
     },
