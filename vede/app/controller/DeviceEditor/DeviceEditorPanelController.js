@@ -169,7 +169,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         //deproject.save({callback:function(){
 
         var saveAssociatedSequence = function (part, cb) {
-                if(!part.data.phantom)
+                if(!part.data.phantom && part.data.sequencefile_id)
                 {
                     part.getSequenceFile({callback: function(associatedSequence){
                         if(associatedSequence)

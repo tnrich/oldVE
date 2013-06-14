@@ -7,7 +7,7 @@
 Ext.define("Vede.view.annotate.Caret", {
     statics: {
         CARET_COLOR: "#000000",
-        CARET_WIDTH: 1,
+        CARET_WIDTH: 2,
         TIMER_REFRESH_SPEED: "1s", // blink time of the caret, in seconds
         SINGLE_HEIGHT: 20,
         DOUBLE_HEIGHT: 40
@@ -15,7 +15,7 @@ Ext.define("Vede.view.annotate.Caret", {
 
     config: {
         position: 0,
-        height: 40,
+        height: 38,
         sequenceAnnotator: null
     },
 
@@ -34,8 +34,8 @@ Ext.define("Vede.view.annotate.Caret", {
         if(location)
         {
             this.caretSVG.append("svg:path")
-                .attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + 
-                           "L" + (location.x - 1) + " " + (location.y + this.height))
+                .attr("d", "M" + (location.x - 1) + " " + (location.y + 8) + 
+                           "L" + (location.x - 1) + " " + (location.y + this.height + 2))
                 .attr("stroke", this.self.CARET_COLOR)
                 .attr("stroke-width", this.self.CARET_WIDTH)
                 .append("svg:animate")
