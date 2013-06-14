@@ -154,7 +154,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         removeColumnMenuItem.enable();
 
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-        console.log('heyo')
 
         Ext.resumeLayouts(true);
     },
