@@ -62741,6 +62741,40 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.orf, 'ORF'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.bio.sequence.symbols.NucleotideSymbol', Ext.Base, {constructor: function(inData) {
+  var name;
+  var value;
+  var ambiguousMatches;
+  if (inData) 
+  {
+    name = inData.name;
+    value = inData.value;
+    ambiguousMatches = inData.ambiguousMatches;
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getName = function() {
+  return name;
+};
+  this.setName = function(pName) {
+  name = pName;
+};
+  this.getValue = function() {
+  return value;
+};
+  this.setValue = function(pValue) {
+  value = pValue;
+};
+  this.getAmbiguousMatches = function() {
+  return ambiguousMatches;
+};
+  this.setAmbiguousMatches = function(pAmbiguousMatches) {
+  ambiguousMatches = pAmbiguousMatches;
+};
+  return this;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'NucleotideSymbol'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.bio.sequence.symbols.GapSymbol', Ext.Base, {constructor: function(inData) {
   var name;
   var value;
@@ -62797,40 +62831,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 };
   return this;
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'AbstractAlphabet'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.symbols.NucleotideSymbol', Ext.Base, {constructor: function(inData) {
-  var name;
-  var value;
-  var ambiguousMatches;
-  if (inData) 
-  {
-    name = inData.name;
-    value = inData.value;
-    ambiguousMatches = inData.ambiguousMatches;
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getName = function() {
-  return name;
-};
-  this.setName = function(pName) {
-  name = pName;
-};
-  this.getValue = function() {
-  return value;
-};
-  this.setValue = function(pValue) {
-  value = pValue;
-};
-  this.getAmbiguousMatches = function() {
-  return ambiguousMatches;
-};
-  this.setAmbiguousMatches = function(pAmbiguousMatches) {
-  ambiguousMatches = pAmbiguousMatches;
-};
-  return this;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'NucleotideSymbol'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.bio.sequence.alphabets.DNAAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, alternateClassName: "Teselagen.DNAAlphabet", a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a", ambiguousMatches: []}), g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []}), t: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Thymine", value: "t", ambiguousMatches: []}), m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;'}", value: "m", ambiguousMatches: []}), r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;'}", value: "r", ambiguousMatches: []}), w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;'}", value: "w", ambiguousMatches: []}), s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;'}", value: "s", ambiguousMatches: []}), y: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 't;'}", value: "y", ambiguousMatches: []}), k: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'g' or 't;'}", value: "k", ambiguousMatches: []}), v: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'g'}", value: "v", ambiguousMatches: []}), h: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 't'}", value: "h", ambiguousMatches: []}), d: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;' or 't'}", value: "d", ambiguousMatches: []}), b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 't'}", value: "b", ambiguousMatches: []}), n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;' or 'g' or 'c'}", value: "n", ambiguousMatches: []}), symbolsMap: [], constructor: function() {
@@ -67561,7 +67561,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'EugeneRule'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.models.DeviceDesign', Ext.data.Model, {proxy: {type: "rest", url: "/vede/test/data/json/getDeviceDesign.json", reader: {type: "json", root: "designs"}, writer: {type: "json", getRecordData: function(record) {
+(Ext.cmd.derive('Teselagen.models.DeviceDesign', Ext.data.Model, {proxy: {type: "rest", reader: {type: "json", root: "designs"}, writer: {type: "json", getRecordData: function(record) {
   var data = record.getData();
   var associatedData = record.getAssociatedData();
   var j5Collection = associatedData.j5collection;
@@ -67593,40 +67593,38 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 });
   return data;
 }}, buildUrl: function(request) {
-  var restParams = "";
-  var idParam = "";
-  var filter = "";
-  if (request.operation.filters) 
+  console.log(request);
+  if (request.action === "read" && request.params) 
   {
-    if (request.operation.filters[0]) 
-    filter = request.operation.filters[0].property;
-  }
-  if (filter === "project_id") 
-  {
-    var project_id = request.operation.filters[0].value;
-    restParams += "/" + project_id;
-    delete request.params.filter;
-    if (request.operation.id) 
+    if (request.operation.filters) 
     {
-      idParam = "/" + request.operation.id;
-      delete request.params.id;
-    }
-    return Teselagen.manager.SessionManager.buildUserResUrl("/projects" + restParams + "/devicedesigns" + idParam, this.url);
-  } else {
-    if (request.records) 
-    {
-      if (request.records[0]) 
+      if (request.operation.filters[0]) 
       {
-        restParams = "/" + request.records[0].data.project_id;
-        idParam = (request.action === "create") ? "" : "/" + request.records[0].data.id;
-        return Teselagen.manager.SessionManager.buildUserResUrl("/projects" + restParams + "/devicedesigns" + idParam, this.url);
+        if (request.operation.filters[0].property === "project_id") 
+        {
+          var url = "/projects" + '/' + request.operation.filters[0].value + "/devicedesigns";
+          console.log("READING DEVICE DESIGNS FROM PROJECT: ", url);
+          delete request.params.filter;
+          return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+        }
       }
     }
   }
-}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, constructor: function(inData) {
-  this.callParent([inData]);
-  this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
-}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
+  if (request.action === "create" && request.records[0].data.project_id != "") 
+  {
+    var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns";
+    console.log("CREATING DEVICE DESIGN AT PROJECT: ", url);
+    delete request.params.filter;
+    return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+  }
+  if (request.action === "update" && request.records[0].data.project_id != "" && request.records[0].data.id != "") 
+  {
+    var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns" + '/' + request.records[0].data.id;
+    console.log("UPDATE DEVICE DESIGN AT PROJECT: ", url);
+    delete request.params.filter;
+    return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+  }
+}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
   return Ext.getClass(this).load(this.getId(), {success: function(r, o) {
   console.log("record reloaded!");
@@ -67731,7 +67729,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return false;
   }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.Project', Ext.data.Model, {fields: [{name: "id", type: "long"}, {name: "user_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}, {name: "dateCreated", type: "date"}, {name: "dateModified", type: "date"}], associations: [{type: "hasMany", model: "Teselagen.models.DeviceDesign", name: "designs", associationKey: "designs", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.SequenceFile", name: "sequences", associationKey: "sequences", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.Part", name: "parts", associationKey: "parts", foreignKey: "project_id"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], proxy: {type: "rest", url: "/vede/test/data/json/projects.json", reader: {type: "json", root: "projects"}, writer: {type: "json", getRecordData: function(record) {
@@ -67777,6 +67775,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return device;
 }, createDeviceDesignFromBins: function(pBins) {
   var device = Ext.create("Teselagen.models.DeviceDesign");
+  device.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
   device.createCollectionFromBins(pBins);
   var err = device.validate();
   if (err.length > 0) 
@@ -68312,6 +68311,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
   Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
   tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {title: "Device Editor | " + selectedDesign.data.name, model: selectedDesign, modelId: selectedDesign.data.id})).show();
+  if (selectedDesign.data.id) 
   Vede.application.fireEvent("loadEugeneRules");
   Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 });
@@ -68439,7 +68439,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   design.set("name", text);
   design.set("project_id", project.data.id);
   project.designs().add(design);
-  design.save({callback: function() {
+  design.save({success: function(record, operation) {
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
   Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
   Ext.getCmp("projectTreePanel").selectPath("/root/" + project.data.id + "/" + design.data.id);
@@ -74797,7 +74797,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'HeaderPanelController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.VectorPanelController', Ext.app.Controller, {require: ["Teselagen.manager.ProjectManager"], isRendered: false, onTabChange: function(tabPanel, newTab, oldTab) {
+(Ext.cmd.derive('Vede.controller.VectorPanelController', Ext.app.Controller, {isRendered: false, onTabChange: function(tabPanel, newTab, oldTab) {
   var self = this;
   if (newTab.xtype == "VectorEditorPanel") 
   {
@@ -77184,7 +77184,7 @@ function requestMessageProcessor(request, success) {
   this.columnsGrid.getView().refresh();
   this.renderCollectionInfo();
 }, onUpdateParts: function(parts, updatedPart, operation, modified) {
-  if (modified) 
+  if (modified && !updatedPart.data.phantom) 
   {
     if (modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) 
     {
@@ -78564,7 +78564,6 @@ function requestMessageProcessor(request, success) {
   deproject.set('name', text);
   deproject.save({callback: function() {
   Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | " + text);
-  var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorStatusPanel').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
   parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
   parttext.animate({duration: 5000, to: {opacity: 0}});
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
@@ -78603,7 +78602,9 @@ function requestMessageProcessor(request, success) {
   var deproject = activeTab.model;
   var design = deproject.getDesign();
   var saveAssociatedSequence = function(part, cb) {
-  part.getSequenceFile({callback: function(associatedSequence) {
+  if (!part.data.phantom) 
+  {
+    part.getSequenceFile({callback: function(associatedSequence) {
   if (associatedSequence) 
   {
     var lastSequenceId = associatedSequence.get('id');
@@ -78627,6 +78628,7 @@ function requestMessageProcessor(request, success) {
     cb();
   }
 }});
+  } else cb();
 };
   var saveDesign = function() {
   Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
@@ -80129,6 +80131,7 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Ext.Ajax.timeout = 100000;
   Ext.Error.notify = false;
   Ext.Error.handle = this.errorHandler;
+  Vede.application.autoCredentialsFetch = true;
   Teselagen.manager.AuthenticationManager.Login();
   var self = this;
   var task = new Ext.util.DelayedTask(function() {

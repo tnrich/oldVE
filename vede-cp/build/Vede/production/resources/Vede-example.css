@@ -23115,7 +23115,7 @@ img {
 }
 
 /* line 89, ../../../../sass/src/view/AppViewport.scss */
-.x-menu-item-link {
+.x-menu-item {
   margin: 0px;
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23124,7 +23124,7 @@ img {
 }
 
 /* line 97, ../../../../sass/src/view/AppViewport.scss */
-.x-menu-item-active .x-menu-item-link {
+.x-menu-item-active {
   background: #E0E3E6;
   border: 0 none;
 }
