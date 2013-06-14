@@ -10,9 +10,7 @@ Ext.define("Teselagen.mappers.Mapper", {
         dirty: true
     },
 
-    mixins: {
-        observable: "Ext.util.Observable"
-    },
+    previousCalculatedSequence: null,
 
     updateEventString: null,
     
@@ -20,14 +18,6 @@ Ext.define("Teselagen.mappers.Mapper", {
      * @param {Teselagen.manager.SequenceManager} sequenceManager The SequenceManager to listen to for events.
      * @param {Boolean} dirty A flag which signifies that the mapper must recalculate its data. Set when the SequenceManager fires a SequenceChanged event.
      */
-	constructor: function(inData) {
-        var that = this;
-        this.mixins.observable.constructor.call(this, inData);
-		
-        if (inData) {
-			this.initConfig(inData);
-		}
-	},
 
     /**
      * @private
@@ -35,11 +25,28 @@ Ext.define("Teselagen.mappers.Mapper", {
      * telling the mapper to recalculate when it is next accessed.
      */
 	sequenceChanged: function() {
-        this.dirty = true;
+        if(this.previousCalculatedSequence !== this.sequenceManager.getSequence()) {
+            console.log(this.$className + " dirty");
+            this.dirty = true;
+            this.previousCalculatedSequence = this.sequenceManager.getSequence();
+        }
     },
 
     setSequenceManager: function(pSeqMan) {
-        this.dirty = true;
+        if(pSeqMan) {
+            if(this.previousCalculatedSequence !== pSeqMan.getSequence()) {
+                console.log(this.$className + " dirty");
+                this.dirty = true;
+
+                if(this.sequenceManager) {
+                    this.previousCalculatedSequence = this.sequenceManager.getSequence();
+                }
+            }
+        } else {
+            this.dirty = true;
+            this.previousCalculatedSequence = null;
+        }
+
         this.sequenceManager = pSeqMan;
     }
 });
