@@ -215,7 +215,6 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
             });
         
         this.selectionSVG.on("contextmenu", function(data, index) {
-    		//e.preventDefault();
         	d3.event.preventDefault();
     		var contextMenu = Ext.create('Ext.menu.Menu',{items: []});
     		contextMenu.add({

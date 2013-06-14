@@ -28,6 +28,7 @@ Ext.define("Vede.view.pie.Caret", {
                   .attr("x2", x)
                   .attr("y2", y)
                   .attr("stroke", this.self.CARET_COLOR)
-                  .attr("stroke-width", this.self.CARET_WIDTH);
+                  .attr("stroke-width", this.self.CARET_WIDTH)
+                  .style("pointer-events", "none");
     },
 });
