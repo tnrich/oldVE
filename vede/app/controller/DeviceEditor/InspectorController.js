@@ -326,7 +326,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
 
-            if(j5Part.get('sequencefile_id')!=="")
+            if( j5Part.get('sequencefile_id')!=="" && !j5Part.get('phantom') )
             {
                 j5Part.getSequenceFile({
                     callback: function(sequenceFile){
@@ -456,7 +456,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var self = this;
         if(self.selectedPart.data.phantom)
         {
-            self.selectedPart = new Part();
+            self.selectedPart = Ext.create("Teselagen.models.Part");
         }
         Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
             self.selectedPart.set("name", newName);
