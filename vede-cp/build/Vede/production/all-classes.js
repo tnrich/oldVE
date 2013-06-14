@@ -66389,37 +66389,37 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 ;
 
 (Ext.cmd.derive('Teselagen.models.SequenceFile', Ext.data.Model, {proxy: {type: "rest", url: "/vede/test/data/json/sequenceFiles.json", reader: {type: "json", root: "sequences"}, writer: {type: "json"}, buildUrl: function(request) {
-  var filter = "";
-  if (request.operation.filters) 
+  if (request.action === "read" && request.operation.filters && !request.operation.id) 
   {
-    if (request.operation.filters[0]) 
-    filter = request.operation.filters[0].property;
-  }
-  if (request.operation.params) 
-  {
-    if (request.operation.params.id) 
+    if (request.operation.filters[0].property === "project_id") 
     {
-      var sequence_id = request.operation.params.id;
-      idParam = "/" + sequence_id;
+      var url = "projects/" + request.operation.filters[0].value + "/sequences";
       delete request.params;
-      return Teselagen.manager.SessionManager.buildUrl("sequences" + idParam, this.url);
+      return Teselagen.manager.SessionManager.buildUrl(url, this.url);
     }
   }
-  if (filter === "project_id") 
+  if (request.action === "read" && request.operation.filters && request.operation.id) 
   {
-    var project_id = request.operation.filters[0].value;
-    var projectParam = "/" + project_id;
-    delete request.params;
-    return Teselagen.manager.SessionManager.buildUrl("projects" + projectParam + "/sequences", this.url);
+    if (request.operation.filters[0].property === "project_id") 
+    {
+      var url = "sequences/" + request.operation.id;
+      delete request.params;
+      return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+    }
   }
   if (request.operation.action === "read" && !request.operation.filters && request.params.id) 
   {
-    var sequence_id = request.params.id;
-    idParam = "/" + sequence_id;
+    var url = "sequences/" + request.params.id;
     delete request.params;
-    return Teselagen.manager.SessionManager.buildUrl("sequences" + idParam, this.url);
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
-  return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
+  if (request.action === "create" && request.records[0].data.project_id && !request.records[0].data.id) 
+  {
+    var url = "sequences";
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  console.log("No sequence url generated");
 }}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "part_id", type: "long"}, {name: "name", type: "string"}, {name: "sequenceFileFormat", convert: function(v) {
   var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
   var constants = Teselagen.constants.Constants;
@@ -67660,6 +67660,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       }
     }
   }
+  console.log("No devicedesign url generated");
+  debugger;
 }, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
   return Ext.getClass(this).load(this.getId(), {success: function(r, o) {
@@ -69871,7 +69873,7 @@ function requestMessageProcessor(request, success) {
   var deproject = activeTab.model;
   var design = deproject.getDesign();
   var saveAssociatedSequence = function(part, cb) {
-  if (!part.data.phantom) 
+  if (!part.data.phantom && part.data.sequencefile_id) 
   {
     part.getSequenceFile({callback: function(associatedSequence) {
   if (associatedSequence) 
@@ -70281,12 +70283,6 @@ function requestMessageProcessor(request, success) {
   {
     this.selectedBin.deselect();
   }
-  if (this.selectedPart && this.selectedPart.down()) 
-  {
-    this.selectedPart.deselect();
-    this.deHighlight(this.selectedPart.getPart());
-    this.selectedPart = null;
-  }
   this.selectedBin = gridBin;
   gridBin.select();
   this.toggleCutCopyPastePartOptions(false);
@@ -70297,30 +70293,19 @@ function requestMessageProcessor(request, success) {
   Ext.resumeLayouts(true);
 }, onPartCellClick: function(partCell) {
   Ext.suspendLayouts();
+  if (this.selectedPart) 
+  {
+  }
   var gridPart = partCell.up().up();
   var j5Part = gridPart.getPart();
   var j5Bin = gridPart.up("Bin").getBin();
   this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
   var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, j5Bin);
-  if (this.selectedPart && this.selectedPart.down()) 
-  {
-    this.selectedPart.deselect();
-    this.deHighlight(this.selectedPart.getPart());
-    if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name") == "") 
-    {
-      this.selectedPart.deselect();
-    } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource") == "") 
-    {
-      this.selectedPart.select();
-      this.selectedPart.leaveselect();
-    }
-  }
   this.selectedPart = gridPart;
   gridPart.deselect();
   gridPart.select();
   if (j5Part) 
   {
-    console.log("phantom: " + j5Part.phantom);
     if (j5Part.get("sequencefile_id") === "") 
     {
       gridPart.select();
@@ -70667,6 +70652,13 @@ function requestMessageProcessor(request, success) {
   {
     this.selectedPart.deselect();
     this.deHighlight(this.selectedPart.getPart());
+    if (this.selectedPart.getPart()) 
+    {
+      if ((this.selectedPart.getPart().get("sequencefile_id") === "") && (this.selectedPart.getPart().get('name') != "")) 
+      {
+        this.selectedPart.selectAlert();
+      }
+    }
     this.selectedPart = null;
   }
   this.selectedBin = gridBin;
@@ -71041,6 +71033,7 @@ function requestMessageProcessor(request, success) {
   j5ready = true;
   var tmpJ = 0;
   var cnt = j5collection.bins().getCount();
+  var names = 0;
   j5collection.bins().each(function(bin, binKey) {
   bin.parts().each(function(part) {
   if (part != undefined) 
@@ -71050,8 +71043,15 @@ function requestMessageProcessor(request, success) {
       tmpJ++;
     }
   }
+  if (part != undefined) 
+  {
+    if (part.get('name') != "") 
+    {
+      names++;
+    }
+  }
 });
-  if (tmpJ < cnt) 
+  if (tmpJ < cnt || names != tmpJ) 
   {
     j5ready = false;
   } else {
@@ -71176,7 +71176,7 @@ function requestMessageProcessor(request, success) {
   if (j5Part) 
   {
     partPropertiesForm.loadRecord(j5Part);
-    if (j5Part.get('sequencefile_id') !== "") 
+    if (j5Part.get('sequencefile_id') !== "" && !j5Part.get('phantom')) 
     {
       j5Part.getSequenceFile({callback: function(sequenceFile) {
   if (sequenceFile) 
@@ -71263,7 +71263,7 @@ function requestMessageProcessor(request, success) {
   var self = this;
   if (self.selectedPart.data.phantom) 
   {
-    self.selectedPart = new Part();
+    self.selectedPart = Ext.create("Teselagen.models.Part");
   }
   Vede.application.fireEvent("validateDuplicatedPartName", this.selectedPart, newName, function() {
   self.selectedPart.set("name", newName);
@@ -72489,32 +72489,40 @@ function requestMessageProcessor(request, success) {
 (Ext.cmd.derive('Teselagen.event.VisibilityEvent', Ext.Base, {singleton: true, SHOW_FEATURES_CHANGED: "ShowFeaturesChanged", SHOW_CUTSITES_CHANGED: "ShowCutSitesChanged", SHOW_ORFS_CHANGED: "ShowOrfsChanged", SHOW_COMPLEMENTARY_CHANGED: "ShowComplementaryChanged", SHOW_SPACES_CHANGED: "ShowSpacesChanged", SHOW_SEQUENCE_AA_CHANGED: "ShowSequenceAAChanged", SHOW_REVCOM_AA_CHANGED: "ShowRevcomAAChanged", SHOW_FEATURE_LABELS_CHANGED: "ShowFeatureLabelsChanged", SHOW_CUTSITE_LABELS_CHANGED: "ShowCutSiteLabelsChanged"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'VisibilityEvent'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.mappers.Mapper', Ext.Base, {config: {sequenceManager: null, dirty: true}, updateEventString: null, constructor: function(inData) {
-  var that = this;
-  this.mixins.observable.constructor.call(this, inData);
-  if (inData) 
+(Ext.cmd.derive('Teselagen.mappers.Mapper', Ext.Base, {config: {sequenceManager: null, dirty: true}, previousCalculatedSequence: null, updateEventString: null, sequenceChanged: function() {
+  if (this.previousCalculatedSequence !== this.sequenceManager.getSequence()) 
   {
-    this.initConfig(inData);
+    console.log(this.$className + " dirty");
+    this.dirty = true;
+    this.previousCalculatedSequence = this.sequenceManager.getSequence();
   }
-}, sequenceChanged: function() {
-  this.dirty = true;
 }, setSequenceManager: function(pSeqMan) {
-  this.dirty = true;
+  if (pSeqMan) 
+  {
+    if (this.previousCalculatedSequence !== pSeqMan.getSequence()) 
+    {
+      console.log(this.$className + " dirty");
+      this.dirty = true;
+      if (this.sequenceManager) 
+      {
+        this.previousCalculatedSequence = this.sequenceManager.getSequence();
+      }
+    }
+  } else {
+    this.dirty = true;
+    this.previousCalculatedSequence = null;
+  }
   this.sequenceManager = pSeqMan;
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.mappers, 'Mapper'], 0));
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.mappers, 'Mapper'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.AAManager', Teselagen.mappers.Mapper, {config: {aaSequence: ["", "", ""], aaSequenceSparse: ["", "", ""], aaRevCom: ["", "", ""], aaRevComSparse: ["", "", ""]}, TranslationUtils: null, updateEventString: Teselagen.event.MapperEvent.AA_MAPPER_UPDATED, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.manager.AAManager', Teselagen.mappers.Mapper, {singleton: true, config: {aaSequence: ["", "", ""], aaSequenceSparse: ["", "", ""], aaRevCom: ["", "", ""], aaRevComSparse: ["", "", ""]}, TranslationUtils: null, initialize: function() {
   this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
-  this.mixins.observable.constructor.call(this, inData);
-  this.callParent([inData]);
-  this.initConfig(inData);
 }, recalculate: function() {
   if (this.sequenceManager) 
   {
     this.recalculateNonCircular();
   }
-  Vede.application.fireEvent(this.updateEventString);
 }, recalculateNonCircular: function() {
   var i;
   var sequence = this.sequenceManager.getSequence();
@@ -72600,14 +72608,11 @@ function requestMessageProcessor(request, success) {
   } else {
     return this.aaRevCom[frame];
   }
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'AAManager'], 0));
+}}, 0, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'AAManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {config: {minORFSize: 300, orfs: null}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {singleton: true, config: {minORFSize: 300, orfs: null}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, initialize: function() {
   this.DNATools = Teselagen.bio.sequence.DNATools;
-  this.mixins.observable.constructor.call(this, inData);
-  this.callParent([inData]);
-  this.initConfig(inData);
   this.orfs = [];
 }, setOrfs: function(pOrfs) {
   this.orfs = pOrfs;
@@ -72685,7 +72690,139 @@ function requestMessageProcessor(request, success) {
   }
 });
   this.setOrfs(recalcOrfs);
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'ORFManager'], 0));
+}}, 0, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'ORFManager'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeManager', Teselagen.mappers.Mapper, {singleton: true, config: {restrictionEnzymeGroup: null, allCutSites: [], allCutSitesMap: Ext.create("Ext.util.HashMap"), cutSites: [], cutSitesMap: [], maxCuts: -1}, DNATools: null, initialize: function() {
+  this.DNATools = Teselagen.bio.sequence.DNATools;
+}, setRestrictionEnzymeGroup: function(pRestrictionEnzymeGroup) {
+  this.restrictionEnzymeGroup = pRestrictionEnzymeGroup;
+  this.recalculate();
+  dirty = false;
+}, getAllCutSites: function() {
+  this.recalcIfNeeded();
+  return this.allCutSites;
+}, getCutSites: function() {
+  this.recalcIfNeeded();
+  return this.cutSites;
+}, getAllCutSitesMap: function() {
+  this.recalcIfNeeded();
+  return this.allCutSitesMap;
+}, getCutSitesMap: function() {
+  this.recalcIfNeeded();
+  return this.cutSitesMap;
+}, recalcIfNeeded: function() {
+  if (this.dirty) 
+  {
+    this.recalculate();
+    this.dirty = false;
+  }
+}, setMaxCuts: function(pMaxCuts) {
+  if (pMaxCuts != this.maxCuts) 
+  {
+    this.maxCuts = pMaxCuts;
+    this.dirty = true;
+  }
+}, recalculate: function() {
+  if (this.sequenceManager && this.restrictionEnzymeGroup && this.restrictionEnzymeGroup.getEnzymes().length > 0) 
+  {
+    if (this.sequenceManager.getCircular()) 
+    {
+      this.recalculateCircular();
+    } else {
+      this.recalculateNonCircular();
+    }
+  } else {
+    this.cutSites = null;
+    this.cutSitesMap = null;
+  }
+}, recalculateNonCircular: function() {
+  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), this.sequenceManager.getSequence());
+  this.filterByMaxCuts(newCutSites);
+}, recalculateCircular: function() {
+  var seqLen = this.sequenceManager.getSequence().seqString().length;
+  var doubleSequence = this.DNATools.createDNA(this.sequenceManager.getSequence().seqString() + this.sequenceManager.getSequence().seqString());
+  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), doubleSequence);
+  var editedCutSites = new Ext.util.HashMap();
+  Ext.each(newCutSites.getKeys(), function(key) {
+  var sitesList = newCutSites.get(key);
+  var sitesForOneEnzyme = [];
+  Ext.each(sitesList, function(site) {
+  if (site.getStart() >= seqLen) 
+  {
+  } else if (site.getEnd() <= seqLen) 
+  {
+    sitesForOneEnzyme.push(site);
+  } else {
+    site.setOneEnd(site.getEnd() - seqLen);
+    sitesForOneEnzyme.push(site);
+  }
+});
+  editedCutSites.add(key, sitesForOneEnzyme);
+});
+  this.filterByMaxCuts(editedCutSites);
+}, filterByMaxCuts: function(pCutSites) {
+  var newCutSites = [];
+  var newCutSitesMap = new Ext.util.HashMap();
+  var newAllCutSites = [];
+  var newAllCutSitesMap = pCutSites;
+  Ext.each(pCutSites.getKeys(), function(enzyme) {
+  var sitesForOneEnzyme = pCutSites.get(enzyme);
+  var numCuts = sitesForOneEnzyme.length;
+  Ext.each(sitesForOneEnzyme, function(site) {
+  site.setNumCuts(numCuts);
+});
+  newAllCutSites = newAllCutSites.concat(sitesForOneEnzyme);
+  newAllCutSitesMap[enzyme] = sitesForOneEnzyme;
+  if (this.maxCuts < 0 || numCuts <= this.maxCuts) 
+  {
+    newCutSitesMap[enzyme] = sitesForOneEnzyme;
+    newCutSites = newCutSites.concat(sitesForOneEnzyme);
+  }
+}, this);
+  this.cutSites = newCutSites;
+  this.cutSitesMap = newCutSitesMap;
+  this.allCutSites = newAllCutSites;
+  this.allCutSitesMap = newAllCutSitesMap;
+}, getAllCutsSorted: function(sortCriteria) {
+  sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
+  var sortedCutSites = this.allCutSites.slice();
+  if (sortCriteria === "byStart") 
+  {
+    sortedCutSites.sort(this.sortByStart);
+  } else {
+    sortedCutSites.sort(this.sortByEnd);
+  }
+  return sortedCutSites;
+}, getFirstCut: function(sortCriteria) {
+  sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
+  var sortedCutSites = this.getAllCutsSorted(sortCriteria);
+  return sortedCutSites[0];
+}, getLastCut: function(sortCriteria) {
+  sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byEnd";
+  var sortedCutSites = this.getAllCutsSorted(sortCriteria);
+  return sortedCutSites.pop();
+}, sortByStart: function(x, y) {
+  if (x.start < y.start) 
+  {
+    return -1;
+  } else if (x.start > y.start) 
+  {
+    return 1;
+  } else {
+    return 0;
+  }
+}, sortByEnd: function(x, y) {
+  if (x.end < y.end) 
+  {
+    return -1;
+  } else if (x.end > y.end) 
+  {
+    return 1;
+  } else {
+    return 0;
+  }
+}}, 0, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'RestrictionEnzymeManager'], 0));
 ;
 
 (Ext.cmd.derive('Vede.controller.VectorEditor.SequenceController', Ext.app.Controller, {AAManager: null, ORFManager: null, RestrictionEnzymeManager: null, SequenceManager: null, RestrictionEnzymeGroupManager: null, Managers: null, CaretEvent: null, MapperEvent: null, MenuItemEvent: null, SelectionEvent: null, SelectionLayerEvent: null, SequenceManagerEvent: null, VisibilityEvent: null, WireframeSelectionLayer: null, SelectionLayer: null, DNAAlphabet: null, DNATools: null, mouseIsDown: false, startSelectionIndex: 0, selectionDirection: 0, caretIndex: 0, safeEditing: true, clickedAnnotationStart: null, clickedAnnotationEnd: null, listeners: {}, init: function() {
@@ -72724,9 +72861,16 @@ function requestMessageProcessor(request, success) {
   {
     this.RestrictionEnzymeGroupManager.initialize();
   }
-  this.AAManager = Ext.create("Teselagen.manager.AAManager", {sequenceManager: this.SequenceManager});
-  this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {sequenceManager: this.SequenceManager});
-  this.RestrictionEnzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {sequenceManager: this.SequenceManager, restrictionEnzymeGroup: this.RestrictionEnzymeGroupManager.getActiveGroup()});
+  this.AAManager = Teselagen.manager.AAManager;
+  this.ORFManager = Teselagen.manager.ORFManager;
+  this.RestrictionEnzymeManager = Teselagen.manager.RestrictionEnzymeManager;
+  this.AAManager.initialize();
+  this.ORFManager.initialize();
+  this.RestrictionEnzymeManager.initialize();
+  this.AAManager.setSequenceManager(this.SequenceManager);
+  this.ORFManager.setSequenceManager(this.SequenceManager);
+  this.RestrictionEnzymeManager.setSequenceManager(this.SequenceManager);
+  this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(this.RestrictionEnzymeGroupManager.getActiveGroup());
   this.Managers = [this.AAManager, this.RestrictionEnzymeManager, this.ORFManager];
 }, onKeydown: function(event) {
   var character = String.fromCharCode(event.getCharCode()).toLowerCase();
@@ -74330,7 +74474,7 @@ function requestMessageProcessor(request, success) {
 }}, 1, ["annotator"], ["draw", "component", "box", "annotator"], {"draw": true, "component": true, "box": true, "annotator": true}, ["widget.annotator"], 0, [Vede.view.annotate, 'Annotator'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.annotate.Caret', Ext.Base, {statics: {CARET_COLOR: "#000000", CARET_WIDTH: 1, TIMER_REFRESH_SPEED: "1s", SINGLE_HEIGHT: 20, DOUBLE_HEIGHT: 40}, config: {position: 0, height: 40, sequenceAnnotator: null}, caretSVG: null, constructor: function(pConfig) {
+(Ext.cmd.derive('Vede.view.annotate.Caret', Ext.Base, {statics: {CARET_COLOR: "#000000", CARET_WIDTH: 2, TIMER_REFRESH_SPEED: "1s", SINGLE_HEIGHT: 20, DOUBLE_HEIGHT: 40}, config: {position: 0, height: 38, sequenceAnnotator: null}, caretSVG: null, constructor: function(pConfig) {
   this.initConfig(pConfig);
 }, render: function() {
   d3.selectAll("#caretSVG").remove();
@@ -74338,7 +74482,7 @@ function requestMessageProcessor(request, success) {
   var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
   if (location) 
   {
-    this.caretSVG.append("svg:path").attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + "L" + (location.x - 1) + " " + (location.y + this.height)).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH).append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite");
+    this.caretSVG.append("svg:path").attr("d", "M" + (location.x - 1) + " " + (location.y + 8) + "L" + (location.x - 1) + " " + (location.y + this.height + 2)).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH).append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite");
   }
 }}, 1, 0, 0, 0, 0, 0, [Vede.view.annotate, 'Caret'], 0));
 ;
@@ -74620,7 +74764,7 @@ function requestMessageProcessor(request, success) {
   {
     endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
   }
-  d3.select("#selectionSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 4).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 4).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
+  d3.select("#selectionSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 8).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 6).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SelectionLayer'], 0));
 ;
 
@@ -75563,7 +75707,7 @@ function requestMessageProcessor(request, success) {
   this.findInSelector = Ext.getCmp("findInSelector");
   this.literalSelector = Ext.getCmp("literalSelector");
   this.findManager = Ext.create("Teselagen.manager.FindManager");
-  this.findManager.setAAManager(Ext.create("Teselagen.manager.AAManager"));
+  this.findManager.setAAManager(Teselagen.manager.AAManager);
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'FindPanelController'], 0));
 ;
 
@@ -77992,6 +78136,7 @@ function requestMessageProcessor(request, success) {
 
 (Ext.cmd.derive('Vede.view.rail.NameBox', Ext.Base, {statics: {FONT_SIZE: "10px", FONT_WEIGHT: "bold"}, config: {rail: null, center: {x: 150, y: 50}, name: "", length: 0}, constructor: function(inData) {
   this.initConfig(inData);
+  this.callParent([{type: "text", text: inData.name, "font-size": "10px", "font-weight": "bold", x: this.center.x, y: this.center.y, "text-anchor": "middle"}]);
   var text1;
   var text2;
   var group = inData.rail.append("svg:g").attr("class", "railNameBox").attr("text-anchor", "middle").attr("font-size", this.self.FONT_SIZE).attr("font-weight", this.self.FONT_WEIGHT);
@@ -80487,141 +80632,6 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   task.delay(1500);
 });
 }});
-
-(Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeManager', Teselagen.mappers.Mapper, {config: {restrictionEnzymeGroup: null, allCutSites: [], allCutSitesMap: Ext.create("Ext.util.HashMap"), cutSites: [], cutSitesMap: [], maxCuts: -1}, DNATools: null, constructor: function(inData) {
-  this.DNATools = Teselagen.bio.sequence.DNATools;
-  this.mixins.observable.constructor.call(this, inData);
-  this.callParent([inData]);
-  this.initConfig(inData);
-}, setRestrictionEnzymeGroup: function(pRestrictionEnzymeGroup) {
-  this.restrictionEnzymeGroup = pRestrictionEnzymeGroup;
-  this.recalculate();
-  dirty = false;
-}, getAllCutSites: function() {
-  this.recalcIfNeeded();
-  return this.allCutSites;
-}, getCutSites: function() {
-  this.recalcIfNeeded();
-  return this.cutSites;
-}, getAllCutSitesMap: function() {
-  this.recalcIfNeeded();
-  return this.allCutSitesMap;
-}, getCutSitesMap: function() {
-  this.recalcIfNeeded();
-  return this.cutSitesMap;
-}, recalcIfNeeded: function() {
-  if (this.dirty) 
-  {
-    this.recalculate();
-    this.dirty = false;
-  }
-}, setMaxCuts: function(pMaxCuts) {
-  if (pMaxCuts != this.maxCuts) 
-  {
-    this.maxCuts = pMaxCuts;
-    this.dirty = true;
-  }
-}, recalculate: function() {
-  if (this.sequenceManager && this.restrictionEnzymeGroup && this.restrictionEnzymeGroup.getEnzymes().length > 0) 
-  {
-    if (this.sequenceManager.getCircular()) 
-    {
-      this.recalculateCircular();
-    } else {
-      this.recalculateNonCircular();
-    }
-  } else {
-    this.cutSites = null;
-    this.cutSitesMap = null;
-  }
-}, recalculateNonCircular: function() {
-  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), this.sequenceManager.getSequence());
-  this.filterByMaxCuts(newCutSites);
-}, recalculateCircular: function() {
-  var seqLen = this.sequenceManager.getSequence().seqString().length;
-  var doubleSequence = this.DNATools.createDNA(this.sequenceManager.getSequence().seqString() + this.sequenceManager.getSequence().seqString());
-  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), doubleSequence);
-  var editedCutSites = new Ext.util.HashMap();
-  Ext.each(newCutSites.getKeys(), function(key) {
-  var sitesList = newCutSites.get(key);
-  var sitesForOneEnzyme = [];
-  Ext.each(sitesList, function(site) {
-  if (site.getStart() >= seqLen) 
-  {
-  } else if (site.getEnd() <= seqLen) 
-  {
-    sitesForOneEnzyme.push(site);
-  } else {
-    site.setOneEnd(site.getEnd() - seqLen);
-    sitesForOneEnzyme.push(site);
-  }
-});
-  editedCutSites.add(key, sitesForOneEnzyme);
-});
-  this.filterByMaxCuts(editedCutSites);
-}, filterByMaxCuts: function(pCutSites) {
-  var newCutSites = [];
-  var newCutSitesMap = new Ext.util.HashMap();
-  var newAllCutSites = [];
-  var newAllCutSitesMap = pCutSites;
-  Ext.each(pCutSites.getKeys(), function(enzyme) {
-  var sitesForOneEnzyme = pCutSites.get(enzyme);
-  var numCuts = sitesForOneEnzyme.length;
-  Ext.each(sitesForOneEnzyme, function(site) {
-  site.setNumCuts(numCuts);
-});
-  newAllCutSites = newAllCutSites.concat(sitesForOneEnzyme);
-  newAllCutSitesMap[enzyme] = sitesForOneEnzyme;
-  if (this.maxCuts < 0 || numCuts <= this.maxCuts) 
-  {
-    newCutSitesMap[enzyme] = sitesForOneEnzyme;
-    newCutSites = newCutSites.concat(sitesForOneEnzyme);
-  }
-}, this);
-  this.cutSites = newCutSites;
-  this.cutSitesMap = newCutSitesMap;
-  this.allCutSites = newAllCutSites;
-  this.allCutSitesMap = newAllCutSitesMap;
-}, getAllCutsSorted: function(sortCriteria) {
-  sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
-  var sortedCutSites = this.allCutSites.slice();
-  if (sortCriteria === "byStart") 
-  {
-    sortedCutSites.sort(this.sortByStart);
-  } else {
-    sortedCutSites.sort(this.sortByEnd);
-  }
-  return sortedCutSites;
-}, getFirstCut: function(sortCriteria) {
-  sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
-  var sortedCutSites = this.getAllCutsSorted(sortCriteria);
-  return sortedCutSites[0];
-}, getLastCut: function(sortCriteria) {
-  sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byEnd";
-  var sortedCutSites = this.getAllCutsSorted(sortCriteria);
-  return sortedCutSites.pop();
-}, sortByStart: function(x, y) {
-  if (x.start < y.start) 
-  {
-    return -1;
-  } else if (x.start > y.start) 
-  {
-    return 1;
-  } else {
-    return 0;
-  }
-}, sortByEnd: function(x, y) {
-  if (x.end < y.end) 
-  {
-    return -1;
-  } else if (x.end > y.end) 
-  {
-    return 1;
-  } else {
-    return 0;
-  }
-}}, 1, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'RestrictionEnzymeManager'], 0));
-;
 
 (Ext.cmd.derive('Teselagen.manager.SequenceManagerMemento', Ext.util.Memento, {config: {name: "", circular: null, sequence: null, features: []}, constructor: function(inData) {
   if (inData) 
