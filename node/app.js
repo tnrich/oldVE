@@ -23,6 +23,7 @@ app.soap = require("soap");
 app.xml2js = require('xml2js');
 app.program = require('commander');
 app.nodemailer = require("nodemailer");
+app._ = require("underscore");
 app.winston = require('winston');
 
 // CONFIGURATION

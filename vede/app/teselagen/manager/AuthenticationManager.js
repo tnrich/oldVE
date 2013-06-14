@@ -5,7 +5,8 @@
  **/
 
 Ext.define("Teselagen.manager.AuthenticationManager", {
-    requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor"],
+    requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor",
+               "Teselagen.manager.UserManager"],
     alias: "AuthenticationManager",
     singleton: true,
     mixins: {
@@ -89,6 +90,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
+                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user);
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {

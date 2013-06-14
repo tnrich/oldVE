@@ -4,8 +4,8 @@
  */
 
 /*global beforeEach, describe, expect, it*/
-//Ext.require("Teselagen.models.J5Bin");
-//Ext.require("Teselagen.models.Part");
+Ext.require("Teselagen.models.J5Bin");
+Ext.require("Teselagen.models.Part");
 Ext.onReady(function() {
     var modelProxy = {
         type: "memory",

@@ -102,7 +102,7 @@ Ext.define("Teselagen.models.J5Bin", {
 //        {
 //            field: "iconID",
 //            type: "inclusion",
-//            list: Teselagen.constants.SBOLIcons.ICON_LIST
+//            list: Teselagen.constants.SBOLIcons.ICON_LIST  // This causes a loading problem in debugger
 //        }
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},

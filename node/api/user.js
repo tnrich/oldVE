@@ -5,9 +5,9 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
     /**
-     * GET USER
+     * Delete all users
      * @memberof module:./routes/api
-     * @method GET "/users/:username"
+     * @method DELETE "/users/:username"
      */
     app.delete("/users", restrict, function(req, res) {
         userManager.deleteAll(function(err) {
@@ -42,8 +42,10 @@ module.exports = function(app) {
      * @method PUT "/users/:username"
      */
     app.put("/users/:username", restrict, function(req, res) {
-        req.user.username = req.body.username || req.user.username;
-        userManager.updateUser(req.user, function(err, pUser) {
+        if (!app._.isUndefined(req.body.username)) {
+            req.user.username = req.body.username;
+        }
+        userManager.update(req.user, function(err, pUser) {
             if (err) {
                 app.errorHandler(err, req, res);
             } else {

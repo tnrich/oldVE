@@ -3,18 +3,27 @@
 var UserManager = require("../manager/UserManager")();
 var userManager;
 
-describe("User tests.", function() {
+describe("UserManager tests.", function() {
     var user;
     before(function() {
         userManager = new UserManager(dbManager.mongoose);
     });
-    xit("User.deleteAll", function(done) {
+    it("UserManager.deleteAll", function(done) {
         userManager.deleteAll(function(err) {
             expect(err).to.be.null;
             done();
         });
     });
-    it("User.getUserByName", function(done) {
+    it("UserManager.create", function(done) {
+        var user = {username:"mfero"};
+        userManager.create(user, function(pErr, pUser) {
+            expect(pErr).to.be.null;
+            expect(pUser).not.to.be.null;
+            expect(pUser.id).not.to.be.null;
+            done();
+        });
+    });
+    it("UserManager.getUserByName", function(done) {
         userManager.getUserByName("mfero", function(pErr, pUser) {
             expect(pErr).to.be.null;
             expect(pUser).not.to.be.null;
@@ -23,7 +32,7 @@ describe("User tests.", function() {
             done();
         });
     });
-    it("User.getUserById", function(done) {
+    it("UserManager.getUserById", function(done) {
         userManager.getUserById(user.id, function(pErr, pUser) {
             expect(pErr).to.be.null;
             expect(pUser).not.to.be.null;
@@ -31,14 +40,14 @@ describe("User tests.", function() {
             done();
         });
     });
-    it("User.updateUser", function(done) {
+    it("UserManager.update", function(done) {
         user.username = "mike.fero";
         user.firstName = "Mike";
         user.lastName = "Fero";
         user.email = "mike@teselagen.com";
         var group = {name:"group1", userRestrictionEnzymes:[{name:"enzyme1"}, {name:"enzyme2"}]};
         user.userRestrictionEnzymeGroups.push(group);
-        userManager.updateUser(user, function(pErr, pUser) {
+        userManager.update(user, function(pErr, pUser) {
             expect(pErr).to.be.null;
             expect(pUser.username).to.equal("mike.fero");
             expect(pUser.firstName).to.equal("Mike");

@@ -32,7 +32,9 @@ describe("API tests.", function() {
             function(err, res, body) {
                 expect(err).to.be.null;
                 expect(res.statusCode).to.equal(200);
-                expect(body.msg).to.equal("Welcome back mfero!");
+                expect(body.user).not.to.be.null;
+                expect(body.user.id).not.to.be.null;
+                expect(body.user.username).to.equal("mfero");
                 done();
             });
         });
@@ -51,11 +53,10 @@ describe("API tests.", function() {
             });
          });
         it("Put /users/:username", function(done) {
-            user.username="mike.fero1";
             request({
                 uri: API_URL+"users/mfero",
                 method: "put",
-                json: {user:user}
+                json: {username:"mike.fero1"}
             },
             function(err, res) {
                 expect(res.statusCode).to.equal(200);

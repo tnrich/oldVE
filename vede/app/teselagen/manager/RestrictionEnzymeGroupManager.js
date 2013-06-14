@@ -20,6 +20,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     RestrictionEnzymeManager: null,
+    UserManager: null,
 
     /**
      * @member Teselagen.manager.RestrictionEnzymeGroupManager
@@ -31,6 +32,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      */
     constructor: function(inData) {
         this.RestrictionEnzymeManager = Teselagen.bio.enzymes.RestrictionEnzymeManager;
+        this.UserManager = Teselagen.manager.UserManager;
         this.initConfig(inData);
     },
 
@@ -185,6 +187,18 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         });
     },
 
+   /**
+     * Creates a RestrictionEnzymeGroup, given a name and a list of enzyme names.
+     * @param {String} name The name of the group.
+     * @param {String[]} enzymeNames A list of enzyme names. Will be used to search the database
+     * to get each enzyme object.
+     * @return {Teselagen.models.RestrictionEnzymeGroup} The newly created group.
+     */
+    createUserGroup: function(pName, enzymeNames) {
+        Ext.create("Teselagen.models.UserRestrictionEnzymeGroup", {name: pName});
+        
+    },
+    
     /**
      * Returns a list of all group names.
      */

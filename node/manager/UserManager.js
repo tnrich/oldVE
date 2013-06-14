@@ -18,6 +18,15 @@ module.exports = function() {
     }
 
    /**
+     * Create user
+     */
+    UserManager.prototype.create = function(pUser, pNext) {
+        this.User.create(pUser, function(pErr, user) {
+            pNext(pErr, user);
+        });
+    };
+
+    /**
      * Delete all users
      */
     UserManager.prototype.deleteAll = function(pNext) {
@@ -51,7 +60,7 @@ module.exports = function() {
     UserManager.prototype.getUserByName = function(pName, pNext) {
         this.User.findOne({username:pName}).populate("projects").exec(function(pErr, pUser) {
             if (!pErr) {
-                if (pUser.projects) {
+                if (pUser && pUser.projects) {
                     pUser.projects.forEach(function(pProj) {
                         pProj.deprojects = undefined;
                         pProj.veprojects = undefined;
@@ -66,7 +75,7 @@ module.exports = function() {
      * Update user
      * @param name username
      */
-    UserManager.prototype.updateUser = function(pReqUser, pNext) {
+    UserManager.prototype.update = function(pReqUser, pNext) {
         this.getUserById(pReqUser._id, function(pErr, pUser) {
             if (!pErr) {
                 pUser.username = pReqUser.username;
