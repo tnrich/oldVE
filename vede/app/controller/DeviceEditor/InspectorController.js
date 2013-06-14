@@ -90,16 +90,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             j5ready = true;
             var tmpJ = 0;
             var cnt = j5collection.bins().getCount();
+            var names = 0;
 
             j5collection.bins().each(function(bin,binKey){
                 bin.parts().each(function(part) {
                     if(part != undefined) {
                         if(part.get('sequencefile_id') != "") {
-                            tmpJ++;
+                                tmpJ++;
+                        }
+                    }
+                    if(part != undefined) {
+                        if (part.get('name') != "") {
+                            names++;
                         }
                     }
                 });
-                if (tmpJ<cnt) {j5ready = false;} else {j5ready = true;}
+                if (tmpJ<cnt || names != tmpJ) {j5ready = false;} else {j5ready = true;}
             });
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
@@ -326,7 +332,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
 
-            if(j5Part.get('sequencefile_id')!=="")
+            if( j5Part.get('sequencefile_id')!=="" && !j5Part.get('phantom') )
             {
                 j5Part.getSequenceFile({
                     callback: function(sequenceFile){
@@ -456,7 +462,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var self = this;
         if(self.selectedPart.data.phantom)
         {
-            self.selectedPart = new Part();
+            self.selectedPart = Ext.create("Teselagen.models.Part");
         }
         Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
             self.selectedPart.set("name", newName);
