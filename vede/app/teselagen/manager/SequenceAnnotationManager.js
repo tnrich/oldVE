@@ -1,5 +1,4 @@
 Ext.define("Teselagen.manager.SequenceAnnotationManager", {
-
     config: {
         sequenceManager: null,
         orfManager: null,

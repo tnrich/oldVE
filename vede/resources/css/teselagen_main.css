@@ -847,6 +847,10 @@ border-radius: 4px;
     border-color: #4A4B4C;
 }
 
+.gridPartCell-alert:hover {
+    border-color: rgb(225, 0, 0);
+}
+
 .gridPartCell-selected {
     background-color: #ECF0F1;
     border-color: #4A4B4C;

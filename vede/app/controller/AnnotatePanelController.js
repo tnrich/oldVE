@@ -6,7 +6,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     extend: 'Vede.controller.SequenceController',
 
     requires: ["Teselagen.event.SequenceManagerEvent",
-               "Teselagen.event.MapperEvent"],
+               "Teselagen.event.MapperEvent",
+               "Teselagen.manager.SequenceAnnotationManager"],
 
     statics: {
         MIN_BP_PER_ROW: 20
