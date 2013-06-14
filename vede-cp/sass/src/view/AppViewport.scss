@@ -252,7 +252,7 @@ border-color: #E0E3E6;
 }
 
 .x-grid-tree-node-expanded   .x-tree-icon-parent {
-  background-image: url(../images/ux/tree-node-parent.png);
+  background-image: url(images/ux/tree-node-parent.png);
 }
 
 .x-grid-row .x-grid-cell {
@@ -269,15 +269,19 @@ border-color: #E0E3E6;
 }
 
 .x-tab-close-btn {
-  background-image: url(../images/ux/tab-default-close.png);
+  background-image: url(images/ux/tab-default-close.png);
 }
 
 .x-tab-close-btn:hover {
-  background-image: url(../images/ux/tab-default-close-active.png);
+  background-image: url(images/ux/tab-default-close-active.png);
 }
 
 .x-toolbar {
   border-top: 0px none;
+}
+
+.x-window-header-default .x-tool-img {
+  background-color: none;
 }
 
 .x-form-trigger {

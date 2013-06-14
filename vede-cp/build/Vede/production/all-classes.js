@@ -67646,7 +67646,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       }
     }
   }
-}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
+}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, constructor: function(inData) {
+  this.callParent([inData]);
+  this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
   return Ext.getClass(this).load(this.getId(), {success: function(r, o) {
   console.log("record reloaded!");
@@ -67751,7 +67754,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return false;
   }
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.Project', Ext.data.Model, {fields: [{name: "id", type: "long"}, {name: "user_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}, {name: "dateCreated", type: "date"}, {name: "dateModified", type: "date"}], associations: [{type: "hasMany", model: "Teselagen.models.DeviceDesign", name: "designs", associationKey: "designs", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.SequenceFile", name: "sequences", associationKey: "sequences", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.Part", name: "parts", associationKey: "parts", foreignKey: "project_id"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], proxy: {type: "rest", url: "/vede/test/data/json/projects.json", reader: {type: "json", root: "projects"}, writer: {type: "json", getRecordData: function(record) {
