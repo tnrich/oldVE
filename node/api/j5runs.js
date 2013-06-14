@@ -18,6 +18,7 @@ module.exports = function(app) {
                 j5run.j5Input.j5Parameters = j5parameters;
                 //delete j5run.j5Results.j5parameters;
             });
+            //console.log( JSON.stringify(j5runs) );
             res.json({
                 'j5runs': j5runs
             });

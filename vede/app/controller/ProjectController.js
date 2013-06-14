@@ -86,7 +86,7 @@ Ext.define("Vede.controller.ProjectController", {
                         designnode.appendChild({
                             text: "J5 Reports",
                             leaf: true,
-                            id: design.data.id,
+                            id: design.data.id+'report',
                             hrefTarget: "j5reports",
                             icon: "resources/images/ux/j5-tree-icon-parent.png",
                             qtip: design.data.name + ' Report'
@@ -157,7 +157,7 @@ Ext.define("Vede.controller.ProjectController", {
     */
 
     resolveAndOpenj5Reports: function (record) {
-        var design_id = record.data.id;
+        var design_id = record.data.id.replace("report","");;
         var project_id = record.parentNode.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         project.designs().load({
