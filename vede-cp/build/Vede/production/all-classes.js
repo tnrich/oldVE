@@ -62741,6 +62741,40 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.orf, 'ORF'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.bio.sequence.symbols.NucleotideSymbol', Ext.Base, {constructor: function(inData) {
+  var name;
+  var value;
+  var ambiguousMatches;
+  if (inData) 
+  {
+    name = inData.name;
+    value = inData.value;
+    ambiguousMatches = inData.ambiguousMatches;
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getName = function() {
+  return name;
+};
+  this.setName = function(pName) {
+  name = pName;
+};
+  this.getValue = function() {
+  return value;
+};
+  this.setValue = function(pValue) {
+  value = pValue;
+};
+  this.getAmbiguousMatches = function() {
+  return ambiguousMatches;
+};
+  this.setAmbiguousMatches = function(pAmbiguousMatches) {
+  ambiguousMatches = pAmbiguousMatches;
+};
+  return this;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'NucleotideSymbol'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.bio.sequence.symbols.GapSymbol', Ext.Base, {constructor: function(inData) {
   var name;
   var value;
@@ -62797,40 +62831,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 };
   return this;
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'AbstractAlphabet'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.symbols.NucleotideSymbol', Ext.Base, {constructor: function(inData) {
-  var name;
-  var value;
-  var ambiguousMatches;
-  if (inData) 
-  {
-    name = inData.name;
-    value = inData.value;
-    ambiguousMatches = inData.ambiguousMatches;
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getName = function() {
-  return name;
-};
-  this.setName = function(pName) {
-  name = pName;
-};
-  this.getValue = function() {
-  return value;
-};
-  this.setValue = function(pValue) {
-  value = pValue;
-};
-  this.getAmbiguousMatches = function() {
-  return ambiguousMatches;
-};
-  this.setAmbiguousMatches = function(pAmbiguousMatches) {
-  ambiguousMatches = pAmbiguousMatches;
-};
-  return this;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'NucleotideSymbol'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.bio.sequence.alphabets.DNAAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, alternateClassName: "Teselagen.DNAAlphabet", a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a", ambiguousMatches: []}), g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []}), t: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Thymine", value: "t", ambiguousMatches: []}), m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;'}", value: "m", ambiguousMatches: []}), r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;'}", value: "r", ambiguousMatches: []}), w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;'}", value: "w", ambiguousMatches: []}), s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;'}", value: "s", ambiguousMatches: []}), y: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 't;'}", value: "y", ambiguousMatches: []}), k: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'g' or 't;'}", value: "k", ambiguousMatches: []}), v: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'g'}", value: "v", ambiguousMatches: []}), h: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 't'}", value: "h", ambiguousMatches: []}), d: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;' or 't'}", value: "d", ambiguousMatches: []}), b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 't'}", value: "b", ambiguousMatches: []}), n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;' or 'g' or 'c'}", value: "n", ambiguousMatches: []}), symbolsMap: [], constructor: function() {
@@ -67561,7 +67561,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'EugeneRule'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.models.DeviceDesign', Ext.data.Model, {proxy: {type: "rest", url: "/vede/test/data/json/getDeviceDesign.json", reader: {type: "json", root: "designs"}, writer: {type: "json", getRecordData: function(record) {
+(Ext.cmd.derive('Teselagen.models.DeviceDesign', Ext.data.Model, {proxy: {type: "rest", reader: {type: "json", root: "designs"}, writer: {type: "json", getRecordData: function(record) {
   var data = record.getData();
   var associatedData = record.getAssociatedData();
   var j5Collection = associatedData.j5collection;
@@ -67593,33 +67593,56 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 });
   return data;
 }}, buildUrl: function(request) {
-  var restParams = "";
-  var idParam = "";
-  var filter = "";
-  if (request.operation.filters) 
+  this.debugFlag = false;
+  if (this.debugFlag) 
+  console.log(request);
+  if (request.action === "read" && request.params) 
   {
-    if (request.operation.filters[0]) 
-    filter = request.operation.filters[0].property;
-  }
-  if (filter === "project_id") 
-  {
-    var project_id = request.operation.filters[0].value;
-    restParams += "/" + project_id;
-    delete request.params.filter;
-    if (request.operation.id) 
+    if (request.operation.filters) 
     {
-      idParam = "/" + request.operation.id;
-      delete request.params.id;
-    }
-    return Teselagen.manager.SessionManager.buildUserResUrl("/projects" + restParams + "/devicedesigns" + idParam, this.url);
-  } else {
-    if (request.records) 
-    {
-      if (request.records[0]) 
+      if (request.operation.filters[0] && !request.params.id) 
       {
-        restParams = "/" + request.records[0].data.project_id;
-        idParam = (request.action === "create") ? "" : "/" + request.records[0].data.id;
-        return Teselagen.manager.SessionManager.buildUserResUrl("/projects" + restParams + "/devicedesigns" + idParam, this.url);
+        if (request.operation.filters[0].property === "project_id") 
+        {
+          var url = "/projects" + '/' + request.operation.filters[0].value + "/devicedesigns";
+          if (this.debugFlag) 
+          console.log("READING DEVICE DESIGNS FROM PROJECT: ", url);
+          delete request.params.filter;
+          return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+        }
+      }
+    }
+  }
+  if (request.action === "create" && request.records[0].data.project_id != "") 
+  {
+    var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns";
+    if (this.debugFlag) 
+    console.log("CREATING DEVICE DESIGN AT PROJECT: ", url);
+    delete request.params.filter;
+    return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+  }
+  if (request.action === "update" && request.records[0].data.project_id != "" && request.records[0].data.id != "") 
+  {
+    var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns" + '/' + request.records[0].data.id;
+    if (this.debugFlag) 
+    console.log("UPDATE DEVICE DESIGN AT PROJECT: ", url);
+    delete request.params.filter;
+    return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+  }
+  if (request.action === "read" && request.params) 
+  {
+    if (request.operation.filters) 
+    {
+      if (request.operation.filters[0] && request.params.id) 
+      {
+        if (request.operation.filters[0].property === "project_id") 
+        {
+          var url = "/projects" + '/' + request.operation.filters[0].value + "/devicedesigns/" + request.params.id;
+          if (this.debugFlag) 
+          console.log("READING SPECIFIC DESIGN FROM PROJECT: ", url);
+          delete request.params.filter;
+          return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+        }
       }
     }
   }
@@ -67774,6 +67797,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return device;
 }, createDeviceDesignFromBins: function(pBins) {
   var device = Ext.create("Teselagen.models.DeviceDesign");
+  device.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
   device.createCollectionFromBins(pBins);
   var err = device.validate();
   if (err.length > 0) 
@@ -68309,6 +68333,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
   Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
   tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {title: "Device Editor | " + selectedDesign.data.name, model: selectedDesign, modelId: selectedDesign.data.id})).show();
+  if (selectedDesign.data.id) 
   Vede.application.fireEvent("loadEugeneRules");
   Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 });
@@ -68436,7 +68461,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   design.set("name", text);
   design.set("project_id", project.data.id);
   project.designs().add(design);
-  design.save({callback: function() {
+  design.save({success: function(record, operation) {
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
   Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
   Ext.getCmp("projectTreePanel").selectPath("/root/" + project.data.id + "/" + design.data.id);
@@ -69274,8 +69299,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.rows = [];
   if (this.sequenceAnnotator.getSequenceManager()) 
   {
-    this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())));
     var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
+    this.numRows = Number(Math.ceil(((seqString.length + 1) / this.sequenceAnnotator.getBpPerRow())));
     var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
     for (var i = 0; i < this.numRows; i++) 
       {
@@ -69301,24 +69326,30 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureToRowMap = Ext.create("Ext.util.HashMap");
   var start;
   var end;
+  var row;
+  var feature;
   var featuresAlignment;
-  Ext.each(rowsFeatures, function(row, i) {
-  start = i * this.sequenceAnnotator.getBpPerRow();
-  end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
-  featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
-  this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
-  if (!row) 
-  {
-    return true;
-  }
-  Ext.each(row, function(feature) {
-  if (!this.featureToRowMap.get(feature.getName())) 
-  {
-    this.featureToRowMap.add(feature.getName(), []);
-  }
-  this.featureToRowMap.get(feature.getName()).push(i);
-}, this);
-}, this);
+  for (var i = 0; i < rowsFeatures.length; i++) 
+    {
+      row = rowsFeatures[i];
+      start = i * this.sequenceAnnotator.getBpPerRow();
+      end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+      featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
+      this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
+      if (!row) 
+      {
+        return true;
+      }
+      for (var j = 0; j < row.length; j++) 
+        {
+          feature = row[j];
+          if (!this.featureToRowMap.get(feature.getName())) 
+          {
+            this.featureToRowMap.add(feature.getName(), []);
+          }
+          this.featureToRowMap.get(feature.getName()).push(i);
+        }
+    }
 }, reloadCutSites: function() {
   if (!this.sequenceAnnotator.showCutSites || !this.sequenceAnnotator.restrictionEnzymeManager || !this.sequenceAnnotator.restrictionEnzymeManager.getCutSites()) 
   {
@@ -69628,6 +69659,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
   var g = this.featureGroupSVG;
   var feature = this.feature;
+  var featureStart = this.feature.getStart();
+  var featureEnd = this.feature.getEnd();
   g.attr("fill", this.featureColor);
   var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
   if (!featureRows) 
@@ -69647,37 +69680,37 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       {
         downShift += 4 + this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
       }
-      if (this.feature.getStart() > this.feature.getEnd()) 
+      if (featureStart > featureEnd) 
       {
-        if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()) 
+        if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
         {
-          endBP = this.feature.getEnd() - 1;
+          endBP = featureEnd - 1;
         } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length) 
         {
         } else {
           endBP = row.getRowData().getEnd();
         }
-        if (this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() < row.getRowData().getEnd()) 
+        if (featureStart >= row.getRowData().getStart() && featureStart < row.getRowData().getEnd()) 
         {
-          startBP = this.feature.getStart();
+          startBP = featureStart;
         } else {
           startBP = row.getRowData().getStart();
         }
       } else {
-        if (this.feature.getStart() < row.getRowData().getStart() && this.feature.getEnd() < row.getRowData().getStart()) 
+        if (featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()) 
         {
           continue;
-        } else if (this.feature.getStart() > row.getRowData().getEnd() && this.feature.getEnd() > row.getRowData().getEnd()) 
+        } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()) 
         {
           continue;
         } else {
-          startBP = (this.feature.getStart() < row.getRowData().getStart()) ? row.getRowData().getStart() : this.feature.getStart();
-          endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
+          startBP = (featureStart < row.getRowData().getStart()) ? row.getRowData().getStart() : featureStart;
+          endBP = ((featureEnd - 1) < row.getRowData().getEnd()) ? (featureEnd - 1) : row.getRowData().getEnd();
         }
       }
       if (startBP < 0 || endBP < 0) 
       {
-        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + feature.getStart() + ", ending at " + feature.getEnd() + ", ignoring.");
+        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + featureStart + ", ending at " + featureEnd + ", ignoring.");
         return;
       }
       if (startBP > endBP && this.feature.getType() != "misc_feature") 
@@ -69686,15 +69719,15 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
         var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
         var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
         var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-        var featureX1 = bpStartMetrics1.getX() + 2;
-        var featureX2 = bpStartMetrics2.getX() + 2;
-        var featureYCommon = bpStartMetrics1.getY() + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
+        var featureX1 = bpStartMetrics1.x + 2;
+        var featureX2 = bpStartMetrics2.x + 2;
+        var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
         if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
         {
           featureYCommon += 3 * 20;
         }
-        var featureRowWidth1 = (bpEndMetrics1.getX() - bpStartMetrics1.getX()) * 16;
-        var featureRowWidth2 = (bpEndMetrics2.getX() - bpStartMetrics2.getX()) * 16;
+        var featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
+        var featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
         var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
         if (this.feature.getStrand() === 0) 
         {
@@ -69725,7 +69758,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
         } else if (this.feature.getStrand() == 1) 
         {
-          if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()) 
+          if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
           {
             drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
           } else {
@@ -69733,7 +69766,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           }
         } else if (this.feature.getStrand() == -1) 
         {
-          if (this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() <= row.getRowData().getEnd()) 
+          if (featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()) 
           {
             drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
           } else {
@@ -69824,7 +69857,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
             {
               if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1) 
               {
-                if (this.feature.getEnd() == location.getEnd()) 
+                if (featureEnd == location.getEnd()) 
                 {
                   drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else {
@@ -69837,7 +69870,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
             {
               if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()) 
               {
-                if (this.feature.getStart() == location.getStart()) 
+                if (featureStart == location.getStart()) 
                 {
                   drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else {
@@ -69890,7 +69923,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var color = switchObj[type] || "#CCCCCC";
   return color;
 }, addToolTip: function(feature) {
-  var featureToolTip = this.featureGroupSVG.append("svg:title").attr("id", "feature-tooltip-" + feature.getName());
+  var featureToolTip = this.featureGroupSVG.append("svg:title");
   var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
   featureToolTip.text(toolTip);
 }, addClickListener: function(feature) {
@@ -70048,7 +70081,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'ORFRenderer'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
   this.initConfig(inData);
   this.sequenceAnnotationManager = this.sequenceAnnotator;
   this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
@@ -70127,9 +70160,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       this.totalHeight += 3;
       var rowWidth = this.totalWidth;
       var rowHeight = this.totalHeight - rowY;
-      var nucleotideRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g").attr("id", "nucleotide-row" + i);
       var rowSequence = row.getRowData().getSequence();
-      nucleotideRowSVG.append("svg:text").attr("x", sequenceX).attr("y", sequenceY + 20).text(sequenceString).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+      this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "sequenceSVG").attr("x", sequenceX).attr("y", sequenceY + 20).text(sequenceString);
       row.metrics.x = rowX;
       row.metrics.y = rowY;
       row.metrics.width = rowWidth;
@@ -70147,6 +70179,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     }
   this.sequenceAnnotator.getRowManager().setRows(newRows);
   this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll("text").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll(".complementarySequenceSVG").attr("fill", this.self.COMPLEMENTARY_SEQUENCE_FILL);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll(".bpLabelSVG").attr("xml:space", "preserve");
+  this.sequenceAnnotationManager.aminoAcidsSVG.selectAll("text").attr("xml:space", "preserve").attr("fill", "blue").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
 }, getUpdatedRows: function() {
   return this.sequenceAnnotator.getRowManager().getRows();
 }, splitWithSpaces: function(pString, pShift, pSplitLast) {
@@ -70216,11 +70252,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     verticalOffset = row.getRowData().getOrfAlignment().getCount() * 8;
   }
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids1);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids1);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids2);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids2);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids3);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids3);
   this.totalHeight += 20;
 }, renderAARevCom: function(row) {
   var baseStart;
@@ -70298,11 +70334,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     aminoAcids3 = aminoAcids3.split("").reverse().join("");
   }
   var verticalOffset = 15;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids1);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids1);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids2);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids2);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids3);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids3);
   this.totalHeight += 20;
 }, renderComplementarySequence: function(row) {
   var sequenceString = ["      "];
@@ -70315,7 +70351,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   sequenceString = sequenceString.join("");
   stringLength = sequenceString.length;
-  var complementRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g").attr("id", "nucleotide-comp-row" + row.getIndex()).append("svg:text").attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + this.self.COMPLEMENTARY_VERTICAL_OFFSET).text(sequenceString).attr("fill", "#b0b0b0").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "complementarySequenceSVG").attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + this.self.COMPLEMENTARY_VERTICAL_OFFSET).text(sequenceString);
   this.totalHeight += 20;
 }, renderIndexString: function(pIndex) {
   var result = String(pIndex);
@@ -70334,7 +70370,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   return result;
 }, renderBpLabel: function(basePairs, labelX, labelY) {
-  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("x", labelX).attr("y", labelY).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING).attr("xml:space", "preserve").text(this.renderIndexString(basePairs));
+  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "bpLabelSVG").attr("x", labelX).attr("y", labelY).text(this.renderIndexString(basePairs));
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SequenceRenderer'], 0));
 ;
 
@@ -70451,7 +70487,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     }
     var bpX = row.getSequenceMetrics().x + numberOfCharacters * this.self.CHAR_WIDTH;
     var bpY = row.getSequenceMetrics().y;
-    resultsMetrics = Ext.create("Teselagen.models.Rectangle", {x: bpX, y: bpY, width: 2, height: 3});
+    resultsMetrics = {x: bpX, y: bpY, width: 2, height: 3};
   }
   return resultsMetrics;
 }, rowByBpIndex: function(pIndex) {
@@ -71047,9 +71083,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     {
       var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
       var el = Ext.getCmp("AnnotateContainer").el;
-      if (!(metrics.getY() < el.getScroll().top + el.getViewSize().height && metrics.getY() > el.getScroll().top)) 
+      if (!(metrics.y < el.getScroll().top + el.getViewSize().height && metrics.y > el.getScroll().top)) 
       {
-        el.scrollTo("top", metrics.getY());
+        el.scrollTo("top", metrics.y);
       }
     }
   }
@@ -72245,7 +72281,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   sequenceManager.removeFeature(feature, false);
 }}]});
   contextMenu.show();
-  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
+  contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
 };
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'AnnotationRenderer'], 0));
 ;
@@ -73167,6 +73203,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
   this.fitWidthToContent(this);
+}, updateNameBox: function() {
+  var name;
+  var length;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox.remove();
+  this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
 }, adjustCaret: function(bp) {
   this.caret.remove();
   if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
@@ -73342,6 +73388,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.pieManager.setOrfs(this.ORFManager.getOrfs());
   this.pieManager.setFeatures(this.SequenceManager.getFeatures());
   this.pieManager.render();
+  this.pieManager.updateNameBox();
 }, onActiveEnzymesChanged: function() {
   this.callParent();
   this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
@@ -74212,6 +74259,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
   this.fitWidthToContent(this);
+}, updateNameBox: function() {
+  var name;
+  var length;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox.remove();
+  this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
 }, adjustCaret: function(bp) {
   var start = bp / this.sequenceManager.getSequence().seqString().length;
   this.caret.remove();
@@ -74358,6 +74415,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.railManager.setOrfs(this.ORFManager.getOrfs());
   this.railManager.setFeatures(this.SequenceManager.getFeatures());
   this.railManager.render();
+  this.railManager.updateNameBox();
 }, onActiveEnzymesChanged: function() {
   this.callParent();
   this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
@@ -74761,7 +74819,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'HeaderPanelController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.VectorPanelController', Ext.app.Controller, {require: ["Teselagen.manager.ProjectManager"], isRendered: false, onTabChange: function(tabPanel, newTab, oldTab) {
+(Ext.cmd.derive('Vede.controller.VectorPanelController', Ext.app.Controller, {isRendered: false, onTabChange: function(tabPanel, newTab, oldTab) {
   var self = this;
   if (newTab.xtype == "VectorEditorPanel") 
   {
@@ -77148,7 +77206,7 @@ function requestMessageProcessor(request, success) {
   this.columnsGrid.getView().refresh();
   this.renderCollectionInfo();
 }, onUpdateParts: function(parts, updatedPart, operation, modified) {
-  if (modified) 
+  if (modified && !updatedPart.data.phantom) 
   {
     if (modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) 
     {
@@ -78528,7 +78586,6 @@ function requestMessageProcessor(request, success) {
   deproject.set('name', text);
   deproject.save({callback: function() {
   Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | " + text);
-  var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorStatusPanel').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
   parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
   parttext.animate({duration: 5000, to: {opacity: 0}});
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
@@ -78567,7 +78624,9 @@ function requestMessageProcessor(request, success) {
   var deproject = activeTab.model;
   var design = deproject.getDesign();
   var saveAssociatedSequence = function(part, cb) {
-  part.getSequenceFile({callback: function(associatedSequence) {
+  if (!part.data.phantom) 
+  {
+    part.getSequenceFile({callback: function(associatedSequence) {
   if (associatedSequence) 
   {
     var lastSequenceId = associatedSequence.get('id');
@@ -78591,6 +78650,7 @@ function requestMessageProcessor(request, success) {
     cb();
   }
 }});
+  } else cb();
 };
   var saveDesign = function() {
   Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
@@ -78781,7 +78841,7 @@ function requestMessageProcessor(request, success) {
   designs.load({callback: function() {
   designs.each(function(design) {
   var designnode = projectNode.appendChild({text: design.data.name, leaf: false, id: design.data.id, hrefTarget: "opende", icon: "resources/images/ux/design-tree-icon-leaf.png", qtip: 'Design ' + design.data.name});
-  designnode.appendChild({text: "J5 Reports", leaf: true, id: design.data.id, hrefTarget: "j5reports", icon: "resources/images/ux/j5-tree-icon-parent.png", qtip: design.data.name + ' Report'});
+  designnode.appendChild({text: "J5 Reports", leaf: true, id: design.data.id + 'report', hrefTarget: "j5reports", icon: "resources/images/ux/j5-tree-icon-parent.png", qtip: design.data.name + ' Report'});
 });
 }});
   Teselagen.manager.ProjectManager.sequenceStore = Ext.create("Ext.data.Store", {model: "Teselagen.models.SequenceFile"});
@@ -78806,7 +78866,8 @@ function requestMessageProcessor(request, success) {
   Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
 }});
 }, resolveAndOpenj5Reports: function(record) {
-  var design_id = record.data.id;
+  var design_id = record.data.id.replace("report", "");
+  ;
   var project_id = record.parentNode.parentNode.data.id;
   var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
   project.designs().load({id: design_id, callback: function(loadedDesign) {
@@ -80093,6 +80154,7 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Ext.Ajax.timeout = 100000;
   Ext.Error.notify = false;
   Ext.Error.handle = this.errorHandler;
+  Vede.application.autoCredentialsFetch = true;
   Teselagen.manager.AuthenticationManager.Login();
   var self = this;
   var task = new Ext.util.DelayedTask(function() {

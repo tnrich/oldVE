@@ -368,7 +368,8 @@ app.post('/executej5',restrict,function(req,res){
         user_id: req.user._id,
         devicedesign_id : deviceDesignModel._id,
         project_id : deviceDesignModel.project_id,
-        devicedesign_name: deviceDesignModel.name
+        devicedesign_name: deviceDesignModel.name,
+        combinatorialAssembly: []
       });
 
       newj5Run.save(function(err){
