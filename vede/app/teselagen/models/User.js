@@ -5,7 +5,7 @@
  */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
-    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.Preferences", "Teselagen.models.Project"],
+    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.Preferences", "Teselagen.models.Project", "Teselagen.models.UserRestrictionEnzymeGroup"],
     fields: [{
         name: "id",
         type: "long"
@@ -35,6 +35,7 @@ Ext.define("Teselagen.models.User", {
         model: "Teselagen.models.UserRestrictionEnzymeGroup",
         name: "userRestrictionEnzymeGroups",
         associationKey: "userRestrictionEnzymeGroups",
+        autoLoad: true,
         foreignKey: "user_id"
     }],
     proxy: {
