@@ -66419,7 +66419,21 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
-  console.log("No sequence url generated");
+  if (request.operation.action === "read" && !request.operation.filters && !request.params.id) 
+  {
+    console.warn("Trying to read sequence with no given id");
+    var url = "sequences";
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.action === "update" && request.records[0].data.id) 
+  {
+    var url = "sequences/" + request.records[0].data.id;
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  debugger;
+  console.warn("No sequence url generated");
 }}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "part_id", type: "long"}, {name: "name", type: "string"}, {name: "sequenceFileFormat", convert: function(v) {
   var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
   var constants = Teselagen.constants.Constants;

@@ -272,7 +272,7 @@ border-color: #E0E3E6;
   background: #ECF0F1;
 }
 
-.x-tab-close-btn {
+.x-tab-default .x-tab-close-btn {
   background-image: url(images/ux/tab-default-close.png);
 }
 
@@ -381,6 +381,8 @@ border-color: #E0E3E6;
   background-image: none;
   background: #E0E3E6;
 }
+
+
 
 /*Header*/
 #headerPanel, #headerPanel-body {
@@ -577,6 +579,10 @@ border-color: #E0E3E6;
     border-color: #4A4B4C;
 }
 
+.gridPartCell-alert:hover {
+  border-color: rgb(225, 0, 0);
+}
+
 .gridPartCell-selected {
     background-color: #ECF0F1;
     border-color: #4A4B4C;
@@ -585,6 +591,18 @@ border-color: #E0E3E6;
 
 .gridPartCell-highlighted {
     border-color: #006CAB !important;
+}
+
+.gridPartCell-alert {
+  border-color: rgb(225, 0, 0);
+}
+
+.mapAlert {
+  color: white;
+  background: rgb(255, 115, 115);
+  padding: 3px;
+  font-size: 10px;
+  border-radius: 4px;
 }
 
 .fasConflictIndicator {
@@ -602,6 +620,7 @@ border-color: #E0E3E6;
 .DeviceEditorTab {
   border: 1px solid #E9E9E9;
   border-top: none;
+  width:1400px !important;
 }
 
 .DeviceEditorBody {
@@ -703,20 +722,12 @@ background: #F8F8F8;
   font-weight: 600;
 }
 
-.DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit  {
+.DeviceEditorCanvas, .DeviceEditorCanvas .x-layout-fit  {
   width: auto ! important;
 }
 
-.gridPartCell-alert {
-  border-color: rgb(225, 0, 0);
-}
-
-.mapAlert {
-  color: white;
-  background: rgb(255, 115, 115);
-  padding: 3px;
-  font-size: 10px;
-  border-radius: 4px;
+.DeviceEditorCanvas .x-panel-body-default {
+  font-size: 13px;
 }
 
 .j5Parameters_Window label {
@@ -856,12 +867,12 @@ background: #F8F8F8;
   color: white;
 }
 
-.j5ReportsPanel .x-menu-item-active .x-menu-item-link{
+.j5ReportsPanel .x-menu-item-active{
   background: black;
   color: rgb(0, 183, 255);
   border-color: black;
-
 }
+
 
 .j5ReportsPanel .x-menu-icon-separator {
   border: 0 none;
