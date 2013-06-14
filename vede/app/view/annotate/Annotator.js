@@ -87,8 +87,6 @@ Ext.define("Vede.view.annotate.Annotator", {
      * Renders all annotations.
      */
     render: function(){
-        Ext.suspendLayouts();
-
         this.clean();
         this.panel = Ext.getCmp('AnnotatePanel');
         this.xMax = this.panel.getBox().width;
@@ -122,8 +120,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
             this.annotateSVG.attr("width", this.sequenceRenderer.getTotalWidth() + 60);
         }
-
-        Ext.resumeLayouts(true);
     },
 
     /**

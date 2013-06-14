@@ -221,6 +221,17 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 		return (triplet === 'atg' || triplet === 'aug' && triplet.indexOf("-") === -1);
 	},
+
+    /**
+	 * Calculates whether a three character string is a start codon.
+	 * @param  {String} codon a three character string.
+	 * @return {Boolean} shows whether the nucleotides make up a start codon
+	 */
+	isStartCodonString: function (codon) {
+		var result = false;
+
+		return (codon === 'atg' || codon === 'aug' && codon.indexOf("-") === -1);
+	},
 	
 	/**
 	 * Calculates whether three nucleotides make up a stop codon
@@ -240,6 +251,22 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			|| triplet == 'uaa'
 			|| triplet == 'uag'
 			|| triplet == 'uga');
+	},
+
+    /**
+	 * Calculates whether a three character string is a stop codon.
+	 * @param  {String} codon a three character string.
+	 * @return {Boolean} shows whether the nucleotides make up a stop codon
+	 */
+	isStopCodonString: function (codon) {
+		var result = false;
+
+		return (codon == 'taa'
+			|| codon == 'tag'
+			|| codon == 'tga'
+			|| codon == 'uaa'
+			|| codon == 'uag'
+			|| codon == 'uga');
 	},
 
 	initializeAminoAcidsTranslationTable: function(){

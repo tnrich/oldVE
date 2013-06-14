@@ -219,7 +219,11 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
+        Ext.suspendLayouts();
+
         Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento, null);
+
+        Ext.resumeLayouts(true);
     },
 
     // to AnnotatePanelController.js
@@ -365,7 +369,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.features.push(pFeature);
 
         if (!quiet && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureAdd, pFeature);
+            Ext.resumeLayouts(true);
         }
     },
 

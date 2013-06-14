@@ -25,25 +25,23 @@ Ext.define("Teselagen.mappers.Mapper", {
      * telling the mapper to recalculate when it is next accessed.
      */
 	sequenceChanged: function() {
-        if(this.previousCalculatedSequence !== this.sequenceManager.getSequence()) {
-            console.log(this.$className + " dirty");
-            this.dirty = true;
-            this.previousCalculatedSequence = this.sequenceManager.getSequence();
+        if(this.previousCalculatedSequence !== this.getSequenceManager().getSequence().toString()) {
+            //console.log(this.$className + " dirty");
+            this.setDirty(true);
+            this.previousCalculatedSequence = this.getSequenceManager().getSequence().toString();
         }
     },
 
     setSequenceManager: function(pSeqMan) {
         if(pSeqMan) {
             if(this.previousCalculatedSequence !== pSeqMan.getSequence()) {
-                console.log(this.$className + " dirty");
-                this.dirty = true;
-
-                if(this.sequenceManager) {
-                    this.previousCalculatedSequence = this.sequenceManager.getSequence();
-                }
+                //console.log(this.$className + " dirty");
+                this.setDirty(true);
+                this.previousCalculatedSequence = pSeqMan.getSequence().toString();
             }
         } else {
-            this.dirty = true;
+            //console.log(this.$className + " dirty");
+            this.setDirty(true);
             this.previousCalculatedSequence = null;
         }
 
