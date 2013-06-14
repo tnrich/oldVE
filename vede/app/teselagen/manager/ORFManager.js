@@ -7,6 +7,8 @@
 Ext.define("Teselagen.manager.ORFManager", {
     extend: "Teselagen.mappers.Mapper",
 
+    singleton: true,
+
     requires: ["Teselagen.bio.orf.ORFFinder",
                "Teselagen.bio.sequence.DNATools"],
 
@@ -26,16 +28,10 @@ Ext.define("Teselagen.manager.ORFManager", {
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to observe for sequence changes.
      */
-    constructor: function(inData) {
+    initialize: function() {
         this.DNATools = Teselagen.bio.sequence.DNATools;
 
-        this.mixins.observable.constructor.call(this, inData);
-
-        this.callParent([inData]);
-        this.initConfig(inData);
-
         this.orfs = [];
-
     },
 
     setOrfs: function(pOrfs) {

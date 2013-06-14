@@ -68,7 +68,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     xtype: 'menuitem',
                     text: 'Remove Row',
                     cls: 'removeRowMenuItem',
-                    disabled: true,
+                    disabled: true
                 }, {
                     text: 'Cut Part',
                     cls: 'cutPartMenuItem',

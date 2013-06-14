@@ -13,7 +13,7 @@ Ext.define("Vede.view.rail.Caret", {
     statics: {
         CARET_COLOR : 'black',
         CARET_WIDTH : 1,
-        CARET_HEIGHT: 3,
+        CARET_HEIGHT: 3
     },
     constructor: function(pConfig) {
         this.initConfig(pConfig);

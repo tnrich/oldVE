@@ -7,6 +7,8 @@
 Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     extend: "Teselagen.mappers.Mapper",
 
+    singleton: true,
+
     requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper",
                "Teselagen.bio.sequence.DNATools"],
 
@@ -16,7 +18,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         allCutSitesMap: Ext.create("Ext.util.HashMap"), 
         cutSites: [],
         cutSitesMap: [],
-        maxCuts: -1,
+        maxCuts: -1
     },
 
     mixins: {
@@ -33,13 +35,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
      * @param {Ext.util.HashMap} cutSitesMap A map of the cut sites filtered by maximum cuts.
      * @param {Int} maxCuts The maximum number of cuts an enzyme can make before its cut sites are not returned. Defaults to -1, meaning no limit.
      */
-    constructor: function(inData) {
+    initialize: function() {
         this.DNATools = Teselagen.bio.sequence.DNATools;
-
-        this.mixins.observable.constructor.call(this, inData);
-        
-        this.callParent([inData]);
-        this.initConfig(inData);
     },
 
     /**

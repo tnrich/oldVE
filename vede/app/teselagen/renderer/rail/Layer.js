@@ -14,7 +14,7 @@ Ext.define("Teselagen.renderer.rail.Layer", {
         sequenceManager: null,
         reference: {},
         radius: 0,
-        railWidth: null,
+        railWidth: null
     },
 
     start: -1,

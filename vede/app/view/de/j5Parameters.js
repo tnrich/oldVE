@@ -347,7 +347,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         labelWidth: 200,
                         emptyText: '100',
                         minValue: 0,
-                        step: 0.01,
+                        step: 0.01
                     }, {
                         xtype: 'numberfield',
                         cls: 'misprimingOligoConcValue',

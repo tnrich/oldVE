@@ -16,7 +16,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
     config: {
         sequenceManager: null,
-        sequenceAnnotator: null,
+        sequenceAnnotator: null
     },
 
     SelectionLayerEvent: null,

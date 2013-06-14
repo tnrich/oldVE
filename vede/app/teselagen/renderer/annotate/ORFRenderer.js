@@ -12,7 +12,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 
     config: {
         sequenceAnnotator: null,
-        orf: null,
+        orf: null
     },
 
     constructor: function(inData) {

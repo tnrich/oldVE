@@ -36,7 +36,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         drawingPanel: null,
         sequenceAnnotationManager: null,
 
-        needsMeasurement: false,
+        needsMeasurement: false
     },
 
     aminoAcidsString1: null,
@@ -172,7 +172,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 rowData: row.getRowData(),
                 metrics: newMetrics,
                 sequenceMetrics: newSequenceMetrics,
-                index: i,
+                index: i
             });
             newRows.push(newRow);
 

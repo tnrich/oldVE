@@ -6,7 +6,7 @@
 Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
     statics: {
         HIGHLIGHT_COLOR: "#009900",
-        HIGHLIGHT_TRANSPARENCY: 0.3,
+        HIGHLIGHT_TRANSPARENCY: 0.3
     },
 
     config: {

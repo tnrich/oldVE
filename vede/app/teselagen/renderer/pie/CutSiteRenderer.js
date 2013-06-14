@@ -8,7 +8,7 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
     extend: "Teselagen.renderer.pie.PieRenderer",
 
     statics: {
-        CUTSITE_LINE_WIDTH: 0.5,
+        CUTSITE_LINE_WIDTH: 0.5
     },
     
     config: {

@@ -10,7 +10,7 @@ Ext.define("Teselagen.models.sequence.RowData", {
         oppositeSequence: null,
         featuresAlignment: null,
         cutSitesAlignment: null,
-        orfAlignment: null,
+        orfAlignment: null
     },
 
     constructor: function(inData){
