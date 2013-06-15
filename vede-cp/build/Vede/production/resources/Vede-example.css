@@ -23301,7 +23301,7 @@ img {
 }
 
 /* line 266, ../../../../sass/src/view/AppViewport.scss */
-.x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-end-plus {
+.x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-plus, .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-end-plus {
   background-image: url(images/tree/arrow-down.png);
 }
 
