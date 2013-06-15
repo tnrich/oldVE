@@ -255,8 +255,16 @@ border-color: #E0E3E6;
   border: 0 none;
 }
 
-.x-grid-tree-node-expanded   .x-tree-icon-parent {
-  background-image: url(images/ux/tree-node-parent.png);
+.x-tree-icon-parent, .x-grid-tree-node-expanded .x-tree-icon-parent {
+  background-image: url(images/tree/cube.png);
+}
+
+.x-tree-lines .x-tree-elbow-end-plus, .x-tree-lines .x-tree-elbow-plus {
+  background-image: url(images/tree/arrow-right.png);
+}
+
+.x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-end-plus {
+  background-image: url(images/tree/arrow-down.png);
 }
 
 .x-grid-row .x-grid-cell {
