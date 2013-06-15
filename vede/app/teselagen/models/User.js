@@ -40,7 +40,6 @@ Ext.define("Teselagen.models.User", {
     }],
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getUser.json",
         reader: {
             type: "json",
             root: "user"

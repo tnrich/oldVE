@@ -7,7 +7,7 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
-    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager"],
+    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager", "Teselagen.manager.UserManager"],
 
     singleton: true,
 
@@ -195,8 +195,10 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * @return {Teselagen.models.RestrictionEnzymeGroup} The newly created group.
      */
     createUserGroup: function(pName, enzymeNames) {
-        Ext.create("Teselagen.models.UserRestrictionEnzymeGroup", {name: pName});
-        
+        var group = Ext.create("Teselagen.models.UserRestrictionEnzymeGroup", {name: pName});
+        var user = this.UserManager.getUser();
+        user.userRestrictionEnzymeGroups().add(group);
+        this.UserManager.update(user);
     },
     
     /**

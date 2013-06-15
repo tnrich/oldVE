@@ -4,20 +4,16 @@
  */
 /*global describe, expect, it, runs, waitsFor*/
 
-Ext.require("Teselagen.manager.SessionManager");
 Ext.require("Teselagen.manager.UserManager");
 Ext.require("Teselagen.models.User");
 Ext.onReady(function() {
-//    var SessionManager = Teselagen.manager.SessionManager;
     var UserManager = Teselagen.manager.UserManager;
     var User = Teselagen.models.User;
-    describe("Teselagen.models.User", function() {
+    describe("Teselagen.manager.UserManager", function() {
         var user;
         it("Get user", function() {
             runs(function() {
                 var username = "mfero";
-                var proxy = User.getProxy();
-                proxy.url = "";
                 UserManager.getUserByName(username, function(pSuccess, pUser){
                     expect(pSuccess).toBe(true);
                     expect(Ext.isDefined(pUser)).toBe(true);
@@ -36,6 +32,16 @@ Ext.onReady(function() {
                     expect(pSuccess).toBe(true);
                 });
             });
+        });
+        it("Set user", function() {
+            var userdata = {user: {username:"mfero", userRestrictionEnzymeGroups: [{name:"group1"}]}};
+            UserManager.setUserFromJson(userdata);
+            var user = UserManager.user;
+            expect(user).not.toBe(null);
+            expect(user.get("username")).toBe("mfero");
+            var userRestrictionEnzymeGroups = user.userRestrictionEnzymeGroups();
+            expect(userRestrictionEnzymeGroups).not.toBe(undefined);
+            expect(userRestrictionEnzymeGroups.first().get("name")).toBe("group1");
         });
     });
 });

@@ -27,7 +27,6 @@ Ext.onReady(function () {
     describe("Authentication tests.", function() {
         beforeEach(function() {
             Ext.Ajax.cors = true; // Allow CORS
-            sessionManager.setEnv(constants.ENV_PROD);
         });
 
        it("Login using mfero/nopassword", function () {

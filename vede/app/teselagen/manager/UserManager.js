@@ -6,7 +6,7 @@
  * @author Yuri Bendana
  */
 Ext.define("Teselagen.manager.UserManager", {
-    requires:["Teselagen.models.User"],
+    requires:["Teselagen.models.User", "Teselagen.store.UserStore"],
     singleton: true,
     config: {
         user: null
@@ -20,7 +20,11 @@ Ext.define("Teselagen.manager.UserManager", {
     getUserByName: function(pUsername, pNext) {
         Teselagen.models.User.load(null, {
             callback: function(pUser, pOp){
-                pNext(pOp.wasSuccessful(), pUser);
+                var success = pOp.wasSuccessful();
+                if (!success) {
+                    console.error("Error getting user:", pUsername);
+                }
+                pNext(success, pUser);
             }
         });
     },
@@ -30,7 +34,14 @@ Ext.define("Teselagen.manager.UserManager", {
      * @param {Object} user
      */
     setUserFromJson: function(pUser) {
-        var user = Ext.create("Teselagen.models.User", pUser);
+        var userStore = Ext.create("Teselagen.store.UserStore", {
+            data: pUser,
+            proxy: {
+                type: "memory",
+                reader: {type:"json", root: "user"}
+            }
+        });
+        var user = userStore.first();
         this.setUser(user);
     },
     
@@ -47,16 +58,22 @@ Ext.define("Teselagen.manager.UserManager", {
     },
 
     /**
-     * Update existing user
+     * Update an existing user
      * @param {Teselagen.model.User} user
-     * @param {Function} next Callback
-     * @returns {Boolean} True if update was successful
+     * @param {Function} [next] Callback
      */
     update: function(pUser, pNext) {
         pUser.save({
             callback: function(pUser, pOp){
-                pNext(pOp.wasSuccessful());
+                var success = pOp.wasSuccessful();
+                if (!success) {
+                    console.error("Error saving user:", pUser);
+                }
+                if (pNext) {
+                    pNext(success, pUser);
+                }
             }
         });
     }
+    
 });

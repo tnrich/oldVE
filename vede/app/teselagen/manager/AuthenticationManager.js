@@ -70,7 +70,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         var self = this;
 
         if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
-        if(params.username) {Teselagen.manager.SessionManager.config.baseUser = params.username; } //Set base Username
+        if(params.username) {Teselagen.manager.SessionManager.setBaseUser(params.username); } //Set base Username
         else {console.warn("Warning, username not defined"); }
 
         self.updateSplashScreenMessage("Authenticating to server");

@@ -390,7 +390,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             }
         }
 
-        console.log(ready);
+//        console.log(ready);
         collection.set("j5Ready", ready);
         return ready;
     },
