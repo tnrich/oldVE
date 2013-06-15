@@ -65,7 +65,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             // GET CREATE SEQUENCE WITHOUT ID!
             if( request.operation.action === "create" && !request.operation.filters && !request.params.id)
             {
-                console.warn("Trying to read sequence with no given id");
                 var url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
@@ -88,7 +87,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
             }
 
-            debugger;
             console.warn("No sequence url generated");
 
         },
@@ -118,6 +116,8 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "sequenceFileFormat",
         convert: function(v) {
             var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
+            format = format.toUpperCase().replace("-", "");
+            format = format.toUpperCase().replace("JBEISEQ", "JBEISEQXML");
             var constants = Teselagen.constants.Constants;
 
             if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
