@@ -174,9 +174,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * @return {Ext.draw.Sprite[]} A list of sprites aggregated from all
      * renderers.
      */
-    render: function() {
-        Ext.suspendLayouts();
-        
+    render: function() {        
         var renderer;
         if(this.dirty) {
             for(var i = 0; i < this.renderers.length; i++) {
@@ -203,7 +201,6 @@ Ext.define("Teselagen.manager.PieManager", {
             this.cutSiteSVG = this.parentSVG.append("svg:g")
                                       .attr("class", "pieCutSite");
             this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-
 
             this.cutSiteRenderer.setCutSites(this.cutSites);
             this.cutSiteRenderer.render();
@@ -254,8 +251,6 @@ Ext.define("Teselagen.manager.PieManager", {
         } else {
             this.featureSVG.style("visibility", "hidden");
         }
-
-        Ext.resumeLayouts(true);
 
         Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },

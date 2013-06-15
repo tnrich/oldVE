@@ -18,10 +18,6 @@ Ext.define("Teselagen.manager.AAManager", {
         aaRevComSparse: ["", "", ""]
     },
 
-    mixins: {
-        observable: "Ext.util.Observable"
-    },
-
     TranslationUtils: null,
 
     /**
@@ -36,7 +32,7 @@ Ext.define("Teselagen.manager.AAManager", {
      * Recalculates amino acid sequences.
      */
     recalculate: function() {
-        if(this.sequenceManager) {
+        if(this.getSequenceManager()) {
             this.recalculateNonCircular();
         }
     },
@@ -47,8 +43,8 @@ Ext.define("Teselagen.manager.AAManager", {
      */
     recalculateNonCircular: function() {
         var i;
-        var sequence = this.sequenceManager.getSequence();
-        var revCom = this.sequenceManager.getReverseComplementSequence();
+        var sequence = this.getSequenceManager().getSequence();
+        var revCom = this.getSequenceManager().getReverseComplementSequence();
         var seqLen = sequence.seqString().length;
         var aminoAcid;
         var aminoAcidRevCom;
@@ -125,15 +121,15 @@ Ext.define("Teselagen.manager.AAManager", {
      * @param {Boolean} sparse Whether to return the sparse version of the sequence.
      */
     getSequenceFrame: function(frame, sparse) {
-        if(this.dirty) {
+        if(this.getDirty()) {
             this.recalculate();
-            this.dirty = false;
+            this.setDirty(false);
         }
 
         if(sparse) {
-            return this.aaSequenceSparse[frame];
+            return this.getAaSequenceSparse()[frame];
         } else {
-            return this.aaSequence[frame];
+            return this.getAaSequence()[frame];
         }
     },
 
@@ -143,15 +139,15 @@ Ext.define("Teselagen.manager.AAManager", {
      * @param {Boolean} sparse Whether to return the sparse version of the sequence.
      */
     getRevComFrame: function(frame, sparse) {
-        if(this.dirty) {
+        if(this.getDirty()) {
             this.recalculate();
-            this.dirty = false;
+            this.setDirty(false);
         }
 
         if(sparse) {
-            return this.aaRevComSparse[frame];
+            return this.getAaRevComSparse()[frame];
         } else {
-            return this.aaRevCom[frame];
+            return this.getAaRevCom()[frame];
         }
     }
 });

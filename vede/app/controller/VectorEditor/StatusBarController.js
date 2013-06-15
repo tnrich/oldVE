@@ -55,6 +55,8 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
 
         this.StatusPanel.down("tbtext[cls='caretPositionText']").setText("0");
 
+        this.StatusPanel.down("tbtext[cls='permissionText']").setText("Editable");
+
         this.onSelectionCanceled();
         this.onSequenceChanged();
     },

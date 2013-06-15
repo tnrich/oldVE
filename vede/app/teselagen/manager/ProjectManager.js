@@ -279,7 +279,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                             var tempParts = [];
                             for(var i = 0; i < 2; i++) {
                                 var newPart = Ext.create("Teselagen.models.Part", {
-                                    name: ""
+                                    name: "",
+                                    phantom: true
                                 });
                                 parts.push(newPart);
                                 tempParts.push(newPart);

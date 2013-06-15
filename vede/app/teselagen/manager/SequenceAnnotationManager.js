@@ -84,14 +84,10 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.aaManager.setSequenceManager(this.sequenceManager);
         this.features = this.sequenceManager.getFeatures();
 
-        Ext.suspendLayouts();
-
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
 
         this.caret.render();
-
-        Ext.resumeLayouts(true);
     },
 
     render: function() {
