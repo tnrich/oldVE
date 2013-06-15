@@ -1150,7 +1150,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.activeBins.each(function(bin) {
             bin.parts().each(function(part){
                 //console.log(part.get('id'));
-                if(part.get('id')!=pPart.get('id') && part.get('name')===name) duplicated = true;
+                if(part.get('id')!=pPart.get('id') && part.get('name')===name && part.get("sequencefile_id") != "") duplicated = true;
             });
         });
 
