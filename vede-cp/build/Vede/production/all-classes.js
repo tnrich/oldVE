@@ -63262,11 +63262,15 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }, isStartCodon: function(pNucleotide1, pNucleotide2, pNucleotide3) {
   var result = false;
   var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
-  return (triplet === 'atg' || triplet === 'aug' && triplet.indexOf("-") === -1);
+  return /(aug|atg)/.test(codon);
+}, isStartCodonString: function(codon) {
+  return /(aug|atg)/.test(codon);
 }, isStopCodon: function(pNucleotide1, pNucleotide2, pNucleotide3) {
   var result = false;
   var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
-  return (triplet == 'taa' || triplet == 'tag' || triplet == 'tga' || triplet == 'uaa' || triplet == 'uag' || triplet == 'uga');
+  return /[tu](aa|ag|ga)/.test(triplet);
+}, isStopCodonString: function(codon) {
+  return /[tu](aa|ag|ga)/.test(codon);
 }, initializeAminoAcidsTranslationTable: function() {
   if (this.aminoAcidsTranslationTable != null) 
   {
@@ -63374,28 +63378,34 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     var strand = Teselagen.bio.sequence.common.StrandType.FORWARD;
   }
+  var TranslationUtils = Teselagen.TranslationUtils;
   var orfs = [];
-  var sequenceLength = dnaSymbolList.seqString().length;
+  var sequenceArray = dnaSymbolList.seqString().split("");
+  var sequenceLength = sequenceArray.length;
   var index = frame;
+  var triplet;
+  var aaSymbol;
   var startIndex = -1;
   var endIndex = -1;
   var startCodonIndexes = [];
   var possibleStopCodon = false;
   while (index + 2 < sequenceLength) 
     {
-      var n1 = dnaSymbolList.symbolAt(index);
-      var n2 = dnaSymbolList.symbolAt(index + 1);
-      var n3 = dnaSymbolList.symbolAt(index + 2);
-      var aaSymbol = Teselagen.TranslationUtils.dnaToProteinSymbol(n1, n2, n3);
-      possibleStopCodon = false;
-      if (aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap() && !Teselagen.TranslationUtils.isStartCodon(n1, n2, n3)) 
+      triplet = sequenceArray.slice(index, index + 3).join("");
+      aaSymbol = TranslationUtils.aminoAcidsTranslationTable[triplet];
+      if (!aaSymbol) 
       {
-        if (this.evaluatePossibleStop(n1, n2, n3)) 
+        aaSymbol = TranslationUtils.ProteinAlphabet.gap;
+      }
+      possibleStopCodon = false;
+      if (aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap() && !TranslationUtils.isStartCodonString(triplet)) 
+      {
+        if (this.evaluatePossibleStop(dnaSymbolList.symbolAt(index), dnaSymbolList.symbolAt(index + 1), dnaSymbolList.symbolAt(index + 2))) 
         {
           possibleStopCodon = true;
         }
       }
-      if (!possibleStopCodon && Teselagen.TranslationUtils.isStartCodon(n1, n2, n3)) 
+      if (!possibleStopCodon && TranslationUtils.isStartCodonString(triplet)) 
       {
         if (startIndex == -1) 
         {
@@ -63409,7 +63419,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
         index += 3;
         continue;
       }
-      if (possibleStopCodon || Teselagen.TranslationUtils.isStopCodon(n1, n2, n3)) 
+      if (possibleStopCodon || TranslationUtils.isStopCodonString(triplet)) 
       {
         if (startIndex != -1) 
         {
@@ -65613,10 +65623,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
 }, createDNA: function(pDNASequence) {
   var DNASequence = pDNASequence.toLowerCase();
+  var characters = DNASequence.split("");
   var symbols = [];
   for (var i = 0; i < DNASequence.length; i++) 
     {
-      var symbol = this.DNAAlphabet.symbolMap(DNASequence.charAt(i));
+      var symbol = this.DNAAlphabet.symbolMap(characters[i]);
       if (symbol == null) 
       {
       } else {
@@ -66419,7 +66430,28 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
-  console.log("No sequence url generated");
+  if (request.operation.action === "create" && !request.operation.filters && !request.params.id) 
+  {
+    console.warn("Trying to read sequence with no given id");
+    var url = "sequences";
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.operation.action === "read" && !request.operation.filters && !request.params.id) 
+  {
+    console.warn("Trying to read sequence with no given id");
+    var url = "sequences";
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.action === "update" && request.records[0].data.id) 
+  {
+    var url = "sequences/" + request.records[0].data.id;
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  debugger;
+  console.warn("No sequence url generated");
 }}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "part_id", type: "long"}, {name: "name", type: "string"}, {name: "sequenceFileFormat", convert: function(v) {
   var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
   var constants = Teselagen.constants.Constants;
@@ -66687,7 +66719,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.view.ve.VectorEditorMainMenuPanel', Ext.panel.Panel, {id: "VectorEditorMainMenuPanel", dock: "top", layout: {align: "stretch", type: "vbox"}, items: [{xtype: "VectorEditorMainMenuBar", flex: 1}, {xtype: "VectorEditorMainToolBar", flex: 2}]}, 0, ["VectorEditorMainMenuPanel"], ["panel", "component", "container", "box", "VectorEditorMainMenuPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorEditorMainMenuPanel": true}, ["widget.VectorEditorMainMenuPanel"], 0, [Vede.view.ve, 'VectorEditorMainMenuPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.VectorEditorStatusPanel', Ext.panel.Panel, {id: "VectorEditorStatusPanel", dock: "bottom", border: '0 1 1 1', height: 23, layout: {type: "fit"}, headerPosition: "bottom", dockedItems: [{xtype: "toolbar", dock: "top", id: "VectorEditorStatusBar", items: [{xtype: "tbfill"}, {xtype: "tbtext", id: "VectorEditorStatusBarAlert"}, {xtype: "tbtext", cls: "meltingTemperatureText", text: ""}, {xtype: "tbseparator"}, {xtype: "tbtext", text: "Read only"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "caretPositionText", text: "0"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "selectionPositionText", text: "- : -"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "sequenceLengthText", text: "0"}]}]}, 0, ["VectorEditorStatusPanel"], ["panel", "component", "container", "VectorEditorStatusPanel", "box"], {"panel": true, "component": true, "container": true, "VectorEditorStatusPanel": true, "box": true}, ["widget.VectorEditorStatusPanel"], 0, [Vede.view.ve, 'VectorEditorStatusPanel'], 0));
+(Ext.cmd.derive('Vede.view.ve.VectorEditorStatusPanel', Ext.panel.Panel, {id: "VectorEditorStatusPanel", dock: "bottom", border: '0 1 1 1', height: 23, layout: {type: "fit"}, headerPosition: "bottom", dockedItems: [{xtype: "toolbar", dock: "top", layout: "hbox", id: "VectorEditorStatusBar", items: [{xtype: "tbfill"}, {xtype: "tbtext", id: "VectorEditorStatusBarAlert", shrinkWrap: false}, {xtype: "tbtext", cls: "meltingTemperatureText", text: "", width: 50, shrinkWrap: false}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "permissionText", width: 50, shrinkWrap: false}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "caretPositionText", text: "0", width: 30, shrinkWrap: false}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "selectionPositionText", text: "- : -"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "sequenceLengthText", text: "0", width: 30, shrinkWrap: false}]}]}, 0, ["VectorEditorStatusPanel"], ["panel", "component", "container", "VectorEditorStatusPanel", "box"], {"panel": true, "component": true, "container": true, "VectorEditorStatusPanel": true, "box": true}, ["widget.VectorEditorStatusPanel"], 0, [Vede.view.ve, 'VectorEditorStatusPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.VectorPanel', Ext.panel.Panel, {id: "VectorPanel", scrollable: false, collapsible: true, collapseDirection: "left", title: "Map", titleCollapse: true, items: [{xtype: "container", id: "PieContainer", style: {overflow: "auto"}, layout: {type: "fit"}}, {xtype: "container", id: "RailContainer", style: {overflow: "auto"}, layout: {type: "fit"}}]}, 0, ["VectorPanel"], ["panel", "component", "container", "box", "VectorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorPanel": true}, ["widget.VectorPanel"], 0, [Vede.view.ve, 'VectorPanel'], 0));
@@ -68465,7 +68497,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           var tempParts = [];
           for (var i = 0; i < 2; i++) 
             {
-              var newPart = Ext.create("Teselagen.models.Part", {name: ""});
+              var newPart = Ext.create("Teselagen.models.Part", {name: "", phantom: true});
               parts.push(newPart);
               tempParts.push(newPart);
               newBin.parts().add(newPart);
@@ -69873,7 +69905,7 @@ function requestMessageProcessor(request, success) {
   var deproject = activeTab.model;
   var design = deproject.getDesign();
   var saveAssociatedSequence = function(part, cb) {
-  if (!part.data.phantom && part.data.sequencefile_id) 
+  if (part.data.phantom === false) 
   {
     part.getSequenceFile({callback: function(associatedSequence) {
   if (associatedSequence) 
@@ -70238,7 +70270,7 @@ function requestMessageProcessor(request, success) {
 }}, 1, ["Part"], ["component", "container", "box", "Part"], {"component": true, "container": true, "box": true, "Part": true}, ["widget.Part"], 0, [Vede.view.de.grid, 'Part'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.DeviceEditor.GridController', Ext.app.Controller, {statics: {DEFAULT_ROWS: 2}, DeviceEvent: null, ProjectEvent: null, DeviceDesignManager: null, activeBins: null, activeProject: null, grid: null, tabPanel: null, selectedBin: null, selectedPart: null, selectedClipboardPart: null, ClipboardCutFlag: false, totalRows: 2, totalColumns: 1, onReRenderDECanvasEvent: function() {
+(Ext.cmd.derive('Vede.controller.DeviceEditor.GridController', Ext.app.Controller, {statics: {DEFAULT_ROWS: 2}, DeviceEvent: null, ProjectEvent: null, DeviceDesignManager: null, activeBins: null, activeProject: null, grid: null, tabPanel: null, selectedBin: null, selectedPart: null, selectedClipboardPart: null, ClipboardCutFlag: false, skipPadOnRemovePart: false, totalRows: 2, totalColumns: 1, onReRenderDECanvasEvent: function() {
   var tab = Ext.getCmp('mainAppPanel').getActiveTab();
   this.onTabChange(tab, tab, tab);
 }, renderDevice: function() {
@@ -70345,7 +70377,7 @@ function requestMessageProcessor(request, success) {
       var j5Part = gridPart.getPart();
       if (!j5Part) 
       {
-        var newPart = Ext.create("Teselagen.models.Part");
+        var newPart = Ext.create("Teselagen.models.Part", {phantom: true});
         var j5Bin = selectedBin;
         var binIndex = selectedBinIndex;
         this.DeviceDesignManager.addPartToBin(this.activeProject, newPart, binIndex);
@@ -70433,7 +70465,10 @@ function requestMessageProcessor(request, success) {
   }
   this.grid.remove(this.grid.query("Bin")[index]);
 }, onAddToParts: function(parts, addedParts, index) {
+  var parentJ5Bin = this.DeviceDesignManager.getBinByPartsStore(this.activeProject, parts);
+  var parentGridBin = this.getGridBinFromJ5Bin(parentJ5Bin);
   Ext.each(addedParts, function(addedPart) {
+  parentGridBin.insert(index + 1, Ext.create("Vede.view.de.grid.Part", {part: addedPart}));
   this.renderFasConflicts(parts, addedPart);
 }, this);
   this.totalRows = this.DeviceDesignManager.findMaxNumParts(this.activeProject);
@@ -70469,7 +70504,11 @@ function requestMessageProcessor(request, success) {
           this.selectedPart = null;
         }
       }
-    this.updateBinsWithTotalRows();
+    if (!this.skipPadOnRemovePart) 
+    {
+      this.updateBinsWithTotalRows();
+    }
+    this.skipPadOnRemovePart = false;
   }
 }, onAddToEugeneRules: function(rules, addedRules, index) {
   Ext.each(addedRules, function(addedRule) {
@@ -70616,8 +70655,11 @@ function requestMessageProcessor(request, success) {
   if (this.selectedPart) 
   {
     selectedIndex = selectedGridBin.query("Part").indexOf(this.selectedPart);
+    this.skipPadOnRemovePart = true;
     selectedJ5Bin.parts().removeAt(selectedIndex);
     selectedJ5Bin.parts().insert(selectedIndex, j5Part);
+    this.selectedPart.setPart(j5Part);
+    this.renderFasConflicts(selectedJ5Bin.parts(), j5Part);
   }
 }, onClearPart: function() {
   var j5Part = this.selectedPart.getPart();
@@ -70762,8 +70804,8 @@ function requestMessageProcessor(request, success) {
       var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, ownerIndices[i]);
       gridBin = this.getGridBinFromJ5Bin(ownerBin);
       var partIndex = ownerBin.parts().indexOf(j5Part);
-      gridPart = gridBin.items[partIndex];
-      if (!targetGridParts.indexOf(gridPart)) 
+      gridPart = gridBin.query("Part")[partIndex];
+      if (targetGridParts.indexOf(gridPart) < 0) 
       {
         targetGridParts.push(gridPart);
       }
@@ -71252,24 +71294,27 @@ function requestMessageProcessor(request, success) {
   var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
   var contentArray = [];
   j5Bin.parts().each(function(part, i) {
-  contentArray.push(part.get("name"));
-  contentArray.push(": ");
-  contentArray.push(part.get("fas"));
-  contentArray.push("<br>");
+  if (!part.get("phantom")) 
+  {
+    contentArray.push(part.get("name"));
+    contentArray.push(": ");
+    contentArray.push(part.get("fas"));
+    contentArray.push("<br>");
+  }
 });
   contentField.setValue(contentArray.join(""));
 }, onPartNameFieldChange: function(nameField) {
   var newName = nameField.getValue();
   var self = this;
-  if (self.selectedPart.data.phantom) 
+  Vede.application.fireEvent("validateDuplicatedPartName", this.selectedPart, newName, function() {
+  if (self.selectedPart.get("phantom") || self.DeviceDesignManager.getBinAssignment(self.activeProject, self.selectedPart) < 0) 
   {
     self.selectedPart = Ext.create("Teselagen.models.Part");
-  }
-  Vede.application.fireEvent("validateDuplicatedPartName", this.selectedPart, newName, function() {
-  self.selectedPart.set("name", newName);
-  if (self.DeviceDesignManager.getBinAssignment(self.activeProject, self.selectedPart) < 0) 
-  {
-    self.DeviceDesignManager.addPartToBin(self.activeProject, self.selectedPart, self.selectedBinIndex);
+    self.selectedPart.set("phantom", false);
+    self.selectedPart.set("name", newName);
+    self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
+  } else {
+    self.selectedPart.set("name", newName);
   }
 });
 }, onPartAssemblyStrategyChange: function(box) {
@@ -72490,26 +72535,21 @@ function requestMessageProcessor(request, success) {
 ;
 
 (Ext.cmd.derive('Teselagen.mappers.Mapper', Ext.Base, {config: {sequenceManager: null, dirty: true}, previousCalculatedSequence: null, updateEventString: null, sequenceChanged: function() {
-  if (this.previousCalculatedSequence !== this.sequenceManager.getSequence()) 
+  if (this.previousCalculatedSequence !== this.getSequenceManager().getSequence().toString()) 
   {
-    console.log(this.$className + " dirty");
-    this.dirty = true;
-    this.previousCalculatedSequence = this.sequenceManager.getSequence();
+    this.setDirty(true);
+    this.previousCalculatedSequence = this.getSequenceManager().getSequence().toString();
   }
 }, setSequenceManager: function(pSeqMan) {
   if (pSeqMan) 
   {
     if (this.previousCalculatedSequence !== pSeqMan.getSequence()) 
     {
-      console.log(this.$className + " dirty");
-      this.dirty = true;
-      if (this.sequenceManager) 
-      {
-        this.previousCalculatedSequence = this.sequenceManager.getSequence();
-      }
+      this.setDirty(true);
+      this.previousCalculatedSequence = pSeqMan.getSequence().toString();
     }
   } else {
-    this.dirty = true;
+    this.setDirty(true);
     this.previousCalculatedSequence = null;
   }
   this.sequenceManager = pSeqMan;
@@ -72519,14 +72559,14 @@ function requestMessageProcessor(request, success) {
 (Ext.cmd.derive('Teselagen.manager.AAManager', Teselagen.mappers.Mapper, {singleton: true, config: {aaSequence: ["", "", ""], aaSequenceSparse: ["", "", ""], aaRevCom: ["", "", ""], aaRevComSparse: ["", "", ""]}, TranslationUtils: null, initialize: function() {
   this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
 }, recalculate: function() {
-  if (this.sequenceManager) 
+  if (this.getSequenceManager()) 
   {
     this.recalculateNonCircular();
   }
 }, recalculateNonCircular: function() {
   var i;
-  var sequence = this.sequenceManager.getSequence();
-  var revCom = this.sequenceManager.getReverseComplementSequence();
+  var sequence = this.getSequenceManager().getSequence();
+  var revCom = this.getSequenceManager().getReverseComplementSequence();
   var seqLen = sequence.seqString().length;
   var aminoAcid;
   var aminoAcidRevCom;
@@ -72585,54 +72625,53 @@ function requestMessageProcessor(request, success) {
   this.setAaRevCom(revComNew);
   this.setAaRevComSparse(revComSparseNew);
 }, getSequenceFrame: function(frame, sparse) {
-  if (this.dirty) 
+  if (this.getDirty()) 
   {
     this.recalculate();
-    this.dirty = false;
+    this.setDirty(false);
   }
   if (sparse) 
   {
-    return this.aaSequenceSparse[frame];
+    return this.getAaSequenceSparse()[frame];
   } else {
-    return this.aaSequence[frame];
+    return this.getAaSequence()[frame];
   }
 }, getRevComFrame: function(frame, sparse) {
-  if (this.dirty) 
+  if (this.getDirty()) 
   {
     this.recalculate();
-    this.dirty = false;
+    this.setDirty(false);
   }
   if (sparse) 
   {
-    return this.aaRevComSparse[frame];
+    return this.getAaRevComSparse()[frame];
   } else {
-    return this.aaRevCom[frame];
+    return this.getAaRevCom()[frame];
   }
-}}, 0, 0, 0, 0, 0, [['observable', Ext.util.Observable]], [Teselagen.manager, 'AAManager'], 0));
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.manager, 'AAManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {singleton: true, config: {minORFSize: 300, orfs: null}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, initialize: function() {
+(Ext.cmd.derive('Teselagen.manager.ORFManager', Teselagen.mappers.Mapper, {singleton: true, config: {minORFSize: 300, orfs: []}, updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED, DNATools: null, initialize: function() {
   this.DNATools = Teselagen.bio.sequence.DNATools;
-  this.orfs = [];
 }, setOrfs: function(pOrfs) {
   this.orfs = pOrfs;
 }, getOrfs: function() {
-  if (this.dirty) 
+  if (this.getDirty()) 
   {
     this.recalculate();
-    this.dirty = false;
+    this.setDirty(false);
   }
   return this.orfs;
 }, setMinORFSize: function(pSize) {
   if (this.minORFSize != pSize) 
   {
     this.minORFSize = pSize;
-    this.dirty = true;
+    this.setDirty(true);
   }
 }, recalculate: function() {
-  if (this.sequenceManager) 
+  if (this.getSequenceManager()) 
   {
-    if (this.sequenceManager.getCircular()) 
+    if (this.getSequenceManager().getCircular()) 
     {
       this.recalculateCircular();
     } else {
@@ -72643,13 +72682,13 @@ function requestMessageProcessor(request, success) {
   }
   Vede.application.fireEvent(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED);
 }, recalculateNonCircular: function() {
-  this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(this.sequenceManager.getSequence(), this.sequenceManager.getReverseComplementSequence(), this.minORFSize));
+  this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(this.getSequenceManager().getSequence(), this.getSequenceManager().getReverseComplementSequence(), this.getMinORFSize()));
 }, recalculateCircular: function() {
-  var forwardSequence = this.sequenceManager.getSequence().seqString();
-  var backwardSequence = this.sequenceManager.getReverseComplementSequence().seqString();
+  var forwardSequence = this.getSequenceManager().getSequence().seqString();
+  var backwardSequence = this.getSequenceManager().getReverseComplementSequence().seqString();
   var doubleForward = this.DNATools.createDNA(forwardSequence + forwardSequence);
   var doubleBackward = this.DNATools.createDNA(backwardSequence + backwardSequence);
-  var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(doubleForward, doubleBackward, this.minORFSize);
+  var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(doubleForward, doubleBackward, this.getMinORFSize());
   var maxLength = forwardSequence.length;
   var recalcOrfs = [];
   var normalOrfs = [];
@@ -72712,37 +72751,37 @@ function requestMessageProcessor(request, success) {
   this.recalcIfNeeded();
   return this.cutSitesMap;
 }, recalcIfNeeded: function() {
-  if (this.dirty) 
+  if (this.getDirty()) 
   {
     this.recalculate();
-    this.dirty = false;
+    this.setDirty(false);
   }
 }, setMaxCuts: function(pMaxCuts) {
   if (pMaxCuts != this.maxCuts) 
   {
     this.maxCuts = pMaxCuts;
-    this.dirty = true;
+    this.setDirty(true);
   }
 }, recalculate: function() {
-  if (this.sequenceManager && this.restrictionEnzymeGroup && this.restrictionEnzymeGroup.getEnzymes().length > 0) 
+  if (this.getSequenceManager() && this.getRestrictionEnzymeGroup() && this.getRestrictionEnzymeGroup().getEnzymes().length > 0) 
   {
-    if (this.sequenceManager.getCircular()) 
+    if (this.getSequenceManager().getCircular()) 
     {
       this.recalculateCircular();
     } else {
       this.recalculateNonCircular();
     }
   } else {
-    this.cutSites = null;
-    this.cutSitesMap = null;
+    this.setCutSites(null);
+    this.setCutSitesMap(null);
   }
 }, recalculateNonCircular: function() {
-  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), this.sequenceManager.getSequence());
+  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.getRestrictionEnzymeGroup().getEnzymes(), this.getSequenceManager().getSequence());
   this.filterByMaxCuts(newCutSites);
 }, recalculateCircular: function() {
-  var seqLen = this.sequenceManager.getSequence().seqString().length;
-  var doubleSequence = this.DNATools.createDNA(this.sequenceManager.getSequence().seqString() + this.sequenceManager.getSequence().seqString());
-  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.restrictionEnzymeGroup.getEnzymes(), doubleSequence);
+  var seqLen = this.getSequenceManager().getSequence().seqString().length;
+  var doubleSequence = this.DNATools.createDNA(this.getSequenceManager().getSequence().seqString() + this.getSequenceManager().getSequence().seqString());
+  var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(this.getRestrictionEnzymeGroup().getEnzymes(), doubleSequence);
   var editedCutSites = new Ext.util.HashMap();
   Ext.each(newCutSites.getKeys(), function(key) {
   var sitesList = newCutSites.get(key);
@@ -72774,19 +72813,19 @@ function requestMessageProcessor(request, success) {
 });
   newAllCutSites = newAllCutSites.concat(sitesForOneEnzyme);
   newAllCutSitesMap[enzyme] = sitesForOneEnzyme;
-  if (this.maxCuts < 0 || numCuts <= this.maxCuts) 
+  if (this.getMaxCuts() < 0 || numCuts <= this.getMaxCuts()) 
   {
     newCutSitesMap[enzyme] = sitesForOneEnzyme;
     newCutSites = newCutSites.concat(sitesForOneEnzyme);
   }
 }, this);
-  this.cutSites = newCutSites;
-  this.cutSitesMap = newCutSitesMap;
-  this.allCutSites = newAllCutSites;
-  this.allCutSitesMap = newAllCutSitesMap;
+  this.setCutSites(newCutSites);
+  this.setCutSitesMap(newCutSitesMap);
+  this.setAllCutSites(newAllCutSites);
+  this.setAllCutSitesMap(newAllCutSitesMap);
 }, getAllCutsSorted: function(sortCriteria) {
   sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
-  var sortedCutSites = this.allCutSites.slice();
+  var sortedCutSites = this.getAllCutSites().slice();
   if (sortCriteria === "byStart") 
   {
     sortedCutSites.sort(this.sortByStart);
@@ -73101,6 +73140,7 @@ function requestMessageProcessor(request, success) {
 }, onSequenceManagerChanged: function(pSeqMan) {
   this.SequenceManager = pSeqMan;
   Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  Ext.suspendLayouts();
   if (this.SelectionLayer && this.SelectionLayer.selected) 
   {
     this.SelectionLayer.deselect();
@@ -73111,6 +73151,7 @@ function requestMessageProcessor(request, success) {
       manager = this.Managers[i];
       manager.setSequenceManager(pSeqMan);
     }
+  Ext.resumeLayouts(true);
 }, onSelectAll: function() {
   if (this.SequenceManager) 
   {
@@ -73159,6 +73200,8 @@ function requestMessageProcessor(request, success) {
   {
     return;
   }
+  console.log("sequence changed");
+  Ext.suspendLayouts();
   var manager;
   for (var i = 0; i < this.Managers.length; i++) 
     {
@@ -73168,6 +73211,7 @@ function requestMessageProcessor(request, success) {
         manager.sequenceChanged();
       }
     }
+  Ext.resumeLayouts(true);
 }, onSequenceChanging: function(kind, obj) {
 }, onAAManagerUpdated: function() {
 }, onORFManagerUpdated: function() {
@@ -73350,10 +73394,12 @@ function requestMessageProcessor(request, success) {
   return rows;
 }, pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows) {
   var bpPerRow = this.sequenceAnnotator.getBpPerRow();
+  var seqLength = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;
+  pItemEnd = Math.min(pItemEnd, seqLength - 1);
   if (pItemStart > pItemEnd) 
   {
     var rowStartIndex = Math.floor(pItemStart / bpPerRow);
-    var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1) / bpPerRow);
+    var rowEndIndex = Math.floor((seqLength - 1) / bpPerRow);
     var rowStartIndex2 = 0;
     var rowEndIndex = Math.round(pItemEnd / this.sequenceAnnotator.getBpPerRow());
     var rowEndIndex2 = Math.floor(pItemEnd / bpPerRow);
@@ -74312,7 +74358,6 @@ function requestMessageProcessor(request, success) {
   this.featuresSVG = this.annotateSVG.append("svg:g").attr("id", "featuresSVG");
 }, sequenceChanged: function() {
 }, render: function() {
-  Ext.suspendLayouts();
   this.clean();
   this.panel = Ext.getCmp('AnnotatePanel');
   this.xMax = this.panel.getBox().width;
@@ -74343,7 +74388,6 @@ function requestMessageProcessor(request, success) {
     this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
     this.annotateSVG.attr("width", this.sequenceRenderer.getTotalWidth() + 60);
   }
-  Ext.resumeLayouts(true);
 }, loadFeatureRenderers: function() {
   this.removeFeatureRenderers();
   var retrievedFeatures = this.sequenceAnnotator.getSequenceManager().getFeatures();
@@ -74500,11 +74544,9 @@ function requestMessageProcessor(request, success) {
   this.RowManager.update();
   this.aaManager.setSequenceManager(this.sequenceManager);
   this.features = this.sequenceManager.getFeatures();
-  Ext.suspendLayouts();
   this.annotator.setSequenceAnnotator(this);
   this.annotator.render();
   this.caret.render();
-  Ext.resumeLayouts(true);
 }, render: function() {
   this.RowManager.update();
   this.annotator.render();
@@ -77041,7 +77083,6 @@ function requestMessageProcessor(request, success) {
   }
   return annotationsInRange;
 }, render: function() {
-  Ext.suspendLayouts();
   var renderer;
   if (this.dirty) 
   {
@@ -77112,7 +77153,6 @@ function requestMessageProcessor(request, success) {
   } else {
     this.featureSVG.style("visibility", "hidden");
   }
-  Ext.resumeLayouts(true);
   Ext.defer(function() {
   this.fitWidthToContent(this);
 }, 10, this);
@@ -78192,7 +78232,6 @@ function requestMessageProcessor(request, success) {
   }
   return annotationsInRange;
 }, render: function() {
-  Ext.suspendLayouts();
   var renderer;
   if (this.dirty) 
   {
@@ -78263,7 +78302,6 @@ function requestMessageProcessor(request, success) {
   } else {
     this.featureSVG.style("visibility", "hidden");
   }
-  Ext.resumeLayouts(true);
 }, zoomIn: function() {
   Ext.suspendLayouts();
   var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
@@ -79003,7 +79041,9 @@ function requestMessageProcessor(request, success) {
   this.features = sequenceManagerMemento.features;
   this.needsRecalculateComplementSequence = true;
   this.needsRecalculateReverseComplementSequence = true;
+  Ext.suspendLayouts();
   Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento, null);
+  Ext.resumeLayouts(true);
 }, addEventListener: function(type, listener) {
 }, removeEventListener: function(type, listener) {
 }, dispatchEvent: function(event) {
@@ -79083,7 +79123,9 @@ function requestMessageProcessor(request, success) {
   this.features.push(pFeature);
   if (!quiet && !this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureAdd, pFeature);
+    Ext.resumeLayouts(true);
   }
 }, addFeatures: function(pFeaturesToAdd, quiet) {
   if (!pFeaturesToAdd || pFeaturesToAdd.length === 0) 
@@ -79100,7 +79142,9 @@ function requestMessageProcessor(request, success) {
     }
   if (!quiet && !this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesAdd, pFeaturesToAdd);
+    Ext.resumeLayouts(true);
   }
   return true;
 }, removeFeature: function(pFeature, quiet) {
@@ -79114,7 +79158,9 @@ function requestMessageProcessor(request, success) {
     Ext.Array.remove(this.features, pFeature);
     if (!quiet && !this.manualUpdateStarted) 
     {
+      Ext.suspendLayouts();
       Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureRemove, pFeature);
+      Ext.resumeLayouts(true);
     }
     return true;
   } else {
@@ -79138,7 +79184,9 @@ function requestMessageProcessor(request, success) {
     }
   if (!pFeaturesToRemove && !this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesRemove, pFeaturesToRemove);
+    Ext.resumeLayouts(true);
   }
   return true;
 }, hasFeature: function(pFeature) {
@@ -79163,7 +79211,9 @@ function requestMessageProcessor(request, success) {
     }
   if (!pQuiet && !this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequenceProvider: pSequenceManager, position: pPosition});
+    Ext.resumeLayouts(true);
   }
 }, insertSequence: function(pInsertSequence, pPosition, pQuiet) {
   var lengthBefore, insertSequence, insertSequenceLength;
@@ -79186,7 +79236,9 @@ function requestMessageProcessor(request, success) {
     }
   if (!pQuiet && !this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequence: pInsertSequence, position: pPosition});
+    Ext.resumeLayouts(true);
   }
   return true;
 }, removeSequence: function(pStartIndex, pEndIndex, quiet) {
@@ -79250,7 +79302,9 @@ function requestMessageProcessor(request, success) {
   }
   if (!quiet && !this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength});
+    Ext.resumeLayouts(true);
   }
   return true;
   function normFeatureNormSelection() {
@@ -79553,7 +79607,9 @@ function requestMessageProcessor(request, success) {
 }, manualUpdateEnd: function() {
   if (this.manualUpdateStarted) 
   {
+    Ext.suspendLayouts();
     Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindKManualUpdate, null);
+    Ext.resumeLayouts(true);
     this.manualUpdateStarted = false;
   }
 }, clone: function() {
@@ -80276,6 +80332,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, reset: function() {
   this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(this.SequenceManager.getSequence().toString().length);
   this.StatusPanel.down("tbtext[cls='caretPositionText']").setText("0");
+  this.StatusPanel.down("tbtext[cls='permissionText']").setText("Editable");
   this.onSelectionCanceled();
   this.onSequenceChanged();
 }, onSequenceManagerChanged: function(newSeqMan) {

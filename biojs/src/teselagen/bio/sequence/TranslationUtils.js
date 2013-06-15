@@ -228,8 +228,6 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	 * @return {Boolean} shows whether the nucleotides make up a start codon
 	 */
 	isStartCodonString: function (codon) {
-		var result = false;
-
 		return (codon === 'atg' || codon === 'aug' && codon.indexOf("-") === -1);
 	},
 	
@@ -259,8 +257,6 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	 * @return {Boolean} shows whether the nucleotides make up a stop codon
 	 */
 	isStopCodonString: function (codon) {
-		var result = false;
-
 		return (codon == 'taa'
 			|| codon == 'tag'
 			|| codon == 'tga'

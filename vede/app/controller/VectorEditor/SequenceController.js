@@ -440,6 +440,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
+        this.SequenceManager = pSeqMan;
+
         Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
 
         Ext.suspendLayouts();
@@ -453,6 +455,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
             manager = this.Managers[i];
             manager.setSequenceManager(pSeqMan);
         }
+
+        Ext.resumeLayouts(true);
     },
 
     onSelectAll: function() {
@@ -529,6 +533,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         if(!this.SequenceManager) {
             return;
         }
+
+        console.log("sequence changed");
 
         Ext.suspendLayouts();
 
