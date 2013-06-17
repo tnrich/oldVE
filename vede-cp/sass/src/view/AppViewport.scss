@@ -255,16 +255,23 @@ border-color: #E0E3E6;
   border: 0 none;
 }
 
+.x-tree-icon-leaf {
+  background-size: 16px;
+}
+
 .x-tree-icon-parent, .x-grid-tree-node-expanded .x-tree-icon-parent {
   background-image: url(images/tree/cube.png);
+  background-size: 16px;
 }
 
 .x-tree-lines .x-tree-elbow-end-plus, .x-tree-lines .x-tree-elbow-plus {
   background-image: url(images/tree/arrow-right.png);
+  background-size: 16px;
 }
 
 .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-plus, .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-end-plus {
   background-image: url(images/tree/arrow-down.png);
+  background-size: 16px;
 }
 
 .x-grid-row .x-grid-cell {
@@ -554,7 +561,7 @@ border-color: #E0E3E6;
     border-right-width: 1px ! important;
 }
 
-.binHeader {
+.binHeader, .binHeader .x-panel-body-default {
     background-color: #fefefe;
     border-color: #ECF0F1;
     text-overflow: ellipsis;
@@ -565,16 +572,16 @@ border-color: #E0E3E6;
     -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-.binHeader:hover {    
+.binHeader:hover, .binHeader .x-panel-body-default:hover {    
     border-color: #4A4B4C;
 }
 
-.binHeader-selected {
+.binHeader-selected, .binHeader-selected .x-panel-body-default {
     background-color: rgb(240,240,240);
     border-color: #006CAB;
 }
 
-.gridPartCell {
+.gridPartCell, .gridPartCell .x-panel-body-default {
   font-size:13px;
   background-color: #fefefe;
   border-color: #ECF0F1;
@@ -583,25 +590,26 @@ border-color: #E0E3E6;
   -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-.gridPartCell:hover {
-    border-color: #4A4B4C;
+.gridPartCell:hover, .gridPartCell .x-panel-body-default:hover{
+    border-color: #4A4B4C !important;
 }
 
-.gridPartCell-alert:hover {
+
+.gridPartCell-alert:hover, .gridPartCell-alert .x-panel-body-default:hover {
   border-color: rgb(225, 0, 0);
 }
 
-.gridPartCell-selected {
-    background-color: #ECF0F1;
-    border-color: #4A4B4C;
+.gridPartCell-selected, .gridPartCell-selected .x-panel-body-default {
+    background-color: #ECF0F1 !important;
+    border-color: #4A4B4C !important;
     /*border-color: #006CAB;*/
 }
 
-.gridPartCell-highlighted {
+.gridPartCell-highlighted, .gridPartCell-highlighted .x-panel-body-default {
     border-color: #006CAB !important;
 }
 
-.gridPartCell-alert {
+.gridPartCell-alert, .gridPartCell-alert .x-panel-body-default {
   border-color: rgb(225, 0, 0);
 }
 
