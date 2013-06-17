@@ -297,7 +297,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   console.log(j5run);
   readFile(o_id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
-      var filename = "j5Results-"+j5run.date;
+      var filename = "j5Results-"+j5run.date+'-'+req.user.username;
       res.set({
         'Content-Type': 'application/zip',
         'Content-Length': file.length,
