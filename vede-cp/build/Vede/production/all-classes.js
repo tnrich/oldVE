@@ -70898,7 +70898,7 @@ function requestMessageProcessor(request, success) {
   duplicated = false;
   this.activeBins.each(function(bin) {
   bin.parts().each(function(part) {
-  if (part.get('id') != pPart.get('id') && part.get('name') === name) 
+  if (part.get('id') != pPart.get('id') && part.get('name') === name && part.get("sequencefile_id") != "") 
   duplicated = true;
 });
 });

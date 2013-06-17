@@ -257,14 +257,17 @@ border-color: #E0E3E6;
 
 .x-tree-icon-parent, .x-grid-tree-node-expanded .x-tree-icon-parent {
   background-image: url(images/tree/cube.png);
+  background-size: 16px;
 }
 
 .x-tree-lines .x-tree-elbow-end-plus, .x-tree-lines .x-tree-elbow-plus {
   background-image: url(images/tree/arrow-right.png);
+  background-size: 16px;
 }
 
 .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-plus, .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-end-plus {
   background-image: url(images/tree/arrow-down.png);
+  background-size: 16px;
 }
 
 .x-grid-row .x-grid-cell {
@@ -583,8 +586,8 @@ border-color: #E0E3E6;
   -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-.gridPartCell:hover {
-    border-color: #4A4B4C;
+.gridPartCell:hover, .gridPartContainer:hover {
+    border-color: #4A4B4C !important;
 }
 
 .gridPartCell-alert:hover {
