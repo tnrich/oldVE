@@ -322,8 +322,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var bin = bins[indexBin];
             var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
-            var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;
+            var direction = (bin.getElementsByTagNameNS("*", "direction")[0].textContent === "forward");
             var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
+            
+            var fro = "";
+            if( bin.getElementsByTagNameNS("*", "fro") ) fro = (bin.getElementsByTagNameNS("*", "fro").length > 0) ? bin.getElementsByTagNameNS("*", "fro")[0].textContent : "";
+            var extra3PrimeBps = "";
+            if ( bin.getElementsByTagNameNS("*", "extra3PrimeBps") ) extra3PrimeBps = (bin.getElementsByTagNameNS("*", "extra3PrimeBps").length > 0) ? bin.getElementsByTagNameNS("*", "extra3PrimeBps")[0].textContent : "";
+            var extra5PrimeBps = "";
+            if( bin.getElementsByTagNameNS("*", "extra5PrimeBps") ) extra5PrimeBps = (bin.getElementsByTagNameNS("*", "extra5PrimeBps").length > 0) ? bin.getElementsByTagNameNS("*", "extra5PrimeBps")[0].textContent : "";
 
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) { console.warn(iconID); console.warn("Invalid iconID"); }
 
@@ -331,7 +338,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 binName: binName,
                 iconID: iconID,
                 directionForward: direction,
-                dsf: (dsf === "true") ? true : false
+                dsf: (dsf === "true") ? true : false,
+                fro: fro,
+                extra3PrimeBps: extra3PrimeBps,
+                extra5PrimeBps: extra5PrimeBps
             });
 
             var parts = bin.getElementsByTagNameNS("*", "partID");

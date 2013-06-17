@@ -112,6 +112,7 @@ img {
 }
 
 .x-grid-row-selected .x-grid-cell, .x-grid-row-selected .x-grid-rowwrap-div, .x-grid-row-selected .x-grid-cell-rowbody {
+  border:0 none;
   background: #ECF0F1 !important;
 }
 
@@ -218,6 +219,12 @@ border-color: #E0E3E6;
   background: #E0E3E6;
 }
 
+.x-btn-default-toolbar-medium-focused {
+  border-color: none;
+  background-image:none;
+  background: none;
+}
+
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 500;
@@ -277,9 +284,20 @@ border-color: #E0E3E6;
 .x-grid-row .x-grid-cell {
   padding:5px;
   border-color: #E0E3E6;
+  border: 0 none !important;
   transition: all .3s ease-in-out;
    -moz-transition: all .3s ease-in-out;
    -webkit-transition: all .3s ease-in-out;
+}
+
+.x-grid-no-row-lines .x-grid-row-focused .x-grid-cell-inner {
+  padding-top: 5px;
+  padding-bottom:5px;
+}
+
+.x-grid-cell-inner-treecolumn {
+  padding-top:5px;
+  padding-bottom:5px;
 }
 
 .x-grid-header-ct {
@@ -292,7 +310,7 @@ border-color: #E0E3E6;
 }
 
 .x-tab-close-btn:hover {
-  background-image: url(images/ux/tab-default-close-active.png);
+  background-image: url(images/ux/tab-default-close.png);
 }
 
 .x-toolbar {
@@ -577,8 +595,8 @@ border-color: #E0E3E6;
 }
 
 .binHeader-selected, .binHeader-selected .x-panel-body-default {
-    background-color: rgb(240,240,240);
-    border-color: #006CAB;
+    background-color: rgb(240,240,240) !important;
+    border-color: #006CAB !important;
 }
 
 .gridPartCell, .gridPartCell .x-panel-body-default {
@@ -690,6 +708,10 @@ background: #F8F8F8;
   transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
+}
+
+.designGrid {
+  width: 5000px !important;
 }
 
 .InspectorPanel {
@@ -1133,4 +1155,12 @@ background: #F8F8F8;
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner:hover{
   color: blue;
   text-decoration: underline;
+}
+
+.gridcolumn-wrap-text {
+  white-space: normal;
+}
+
+.x-grid-cell-inner, .x-grid-hd-inner {
+  white-space: normal; /* changed from nowrap */
 }

@@ -38,6 +38,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         console.log("Starting Ajax Request");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
 
         var self = this;
         Ext.Ajax.request({
@@ -47,8 +48,14 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                var downloadBtn = currentTab.j5Window.query('button[cls=downloadCondenseAssemblyResultsBtn]')[0];
-                downloadBtn.show();
+
+                // toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",j5run);}
+                // toastr.options.timeOut = 0;
+                // toastr.success("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});
+                // toastr.options.timeOut = 5000;
+                
+                var condenseAssembliesBtn = inspector.down("button[cls='downloadCondenseAssemblyResultsBtn']");
+                condenseAssembliesBtn.show();
                 self.condenseAssemblyFilesResults = response;
                 return cb(true);
             },
@@ -78,6 +85,12 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
+                
+                toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",j5run);}
+                toastr.options.timeOut = 0;
+                toastr.success("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});
+                toastr.options.timeOut = 5000;
+
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadDownstreamAutomationBtn]')[0];
                 downloadBtn.show();
                 self.designDownstreamAutomationResults = response;
