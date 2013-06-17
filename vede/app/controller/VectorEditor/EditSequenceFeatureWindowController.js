@@ -178,6 +178,8 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
                 this.onSequenceManagerChanged, this);
     	this.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, 
                 this.onPieAnnotationRightClicked, this);
+    	this.application.on("VectorPanelAnnotationContextMenu", 
+                this.onPieAnnotationRightClicked, this);
     	this.application.on("ActionStackChanged", 
                 this.onActionStackManagerChanged, this);
     }

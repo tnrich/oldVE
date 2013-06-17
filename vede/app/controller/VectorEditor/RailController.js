@@ -59,6 +59,10 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         rail.on("mousemove", function() {
             self.onMousemove(self);
         });
+        
+        rail.on("contextmenu", function() {
+            self.onRightMouseDown(self);
+        });
 
         // When rail is resized, scale the graphics in the rail.
         this.railContainer.on("resize", function() {
@@ -239,8 +243,14 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
     onMousedown: function(self) {
-        self.startSelectionAngle = self.getClickLocation();
-        self.mouseIsDown = true;
+    	
+    	if(d3.event.button == 2) {				//
+    		d3.event.preventDefault();			//
+    		return;								//
+    	}										//
+    	
+    	self.startSelectionAngle = self.getClickLocation();  	
+		self.mouseIsDown = true;
 
         if(self.railManager.sequenceManager) {
             self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
@@ -256,7 +266,11 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
      * click-and-drag.
      */
     onMousemove: function(self) {
-        var endSelectionAngle = self.getClickLocation();
+    	if(d3.event.button == 2) {
+    		d3.event.preventDefault();
+    		return;
+    	}
+    	var endSelectionAngle = self.getClickLocation();
         var start;
         var end;
         var multirend;
@@ -346,7 +360,23 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
                 self.SelectionLayer.deselect();
                 self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
             }
-        }
+        } else if(d3.event.button == 2) {
+        	d3.event.preventDefault();
+        	if(self.clickedAnnotationStart !== null && 
+                self.clickedAnnotationEnd !== null){
+    			
+    			self.select(self.clickedAnnotationStart,
+                            self.clickedAnnotationEnd);
+
+    			self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                                           self,
+                                           self.SelectionLayer.start,
+                                           self.SelectionLayer.end);
+
+    			self.clickedAnnotationStart = null;
+    			self.clickedAnnotationEnd = null;
+            }      		
+		}
     },
 
     onZoomInMenuItemClick: function() {
@@ -517,5 +547,46 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         } else {
             this.SelectionLayer.deselect();
         }
-    }
+    },
+    
+    onRightMouseDown: function(self) {
+    	d3.event.preventDefault();
+    	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+		var svg = d3.select(".railParent");
+	    var transformValues;
+	    var scrolled = this.railContainer.el.getScroll();
+	
+	    transformValues = svg.attr("transform").match(/[-.\d]+/g);
+	    
+	    var relX = d3.event.layerX - transformValues[4] + scrolled.left;
+	    var relY = d3.event.layerY - transformValues[5] + scrolled.top; 
+	    var fraction = (d3.event.layerX - transformValues[4] + scrolled.left) / 
+        (d3.select(".railParent > rect")[0][0].width.baseVal.value * transformValues[0]);
+	    
+	    var wireHeight = (this.SelectionLayer.reference.y + this.SelectionLayer.self.WIREFRAME_OFFSET)* transformValues[3];
+	    
+	    var startAngle = this.SelectionLayer.startAngle;
+        var endAngle = this.SelectionLayer.endAngle;
+        if(fraction>=startAngle&&fraction<=endAngle&&relY>=-wireHeight&&relY<=wireHeight+2) {
+        	d3.event.preventDefault();
+    		var contextMenu = Ext.create('Ext.menu.Menu',{items: []});
+    		contextMenu.add({
+        	  text: 'Annotate as new Sequence Feature',
+        	  handler: function() {
+        		  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");     	
+        		  createNewFeatureWindow.show();
+        		  createNewFeatureWindow.center();
+        	  }
+    		});
+    		
+    		contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+        }
+    },
 });
+
+
+
+
+
+
