@@ -345,6 +345,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 changePartDefinitionBtn.enable();
                                 deletePartBtn.enable();
                                 deletePartBtn.removeCls('btnDisabled');
+                                deletePartBtn.removeCls('selectPartFocus');
                                 clearPartMenuItem.enable();
                                 partSourceNameField.setValue(sequenceFile.get('partSource'));
                             } else {
@@ -354,11 +355,21 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 changePartDefinitionBtn.addCls('btnDisabled');     
                                 deletePartBtn.disable();
                                 clearPartMenuItem.disable();
+                                deletePartBtn.removeCls('selectPartFocus');
                                 deletePartBtn.addCls('btnDisabled');
                             }
                         }
                     }
                 });
+            } else if (j5Part.get('sequencefile_id') == "" && j5Part.get('name') != ""){
+                changePartDefinitionBtn.disable();
+                openPartLibraryBtn.setText("Select Part From Library");
+                openPartLibraryBtn.addCls('selectPartFocus');
+                changePartDefinitionBtn.addCls('btnDisabled');
+                deletePartBtn.enable();
+                deletePartBtn.removeCls('btnDisabled');
+                deletePartBtn.addCls('selectPartFocus');
+                clearPartMenuItem.enable();  
             } else {
                 changePartDefinitionBtn.disable();
                 openPartLibraryBtn.setText("Select Part From Library");
@@ -366,6 +377,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 changePartDefinitionBtn.addCls('btnDisabled');     
                 deletePartBtn.disable();
                 clearPartMenuItem.disable();
+                deletePartBtn.removeCls('selectPartFocus');
                 deletePartBtn.addCls('btnDisabled');
             }
 
