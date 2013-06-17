@@ -161,7 +161,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         
         numberField.on("keyup", function(field, event) {
             if(event.getKey() === event.ENTER) {
-                goToWindow.goto();
+                goToWindow.moveto();
             }
         }, this);
 

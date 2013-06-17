@@ -441,11 +441,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
         var contentArray = [];
         j5Bin.parts().each(function(part, i) {
-            contentArray.push(part.get("name"));
-            contentArray.push(": ");
-            contentArray.push(part.get("fas"));
-//            contentArray.push(j5Bin.getFas(i));
-            contentArray.push("<br>");
+            if(!part.get("phantom")) {
+                contentArray.push(part.get("name"));
+                contentArray.push(": ");
+                contentArray.push(part.get("fas"));
+                contentArray.push("<br>");
+            }
         });
 
         contentField.setValue(contentArray.join(""));
@@ -460,19 +461,21 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartNameFieldChange: function (nameField) {
         var newName = nameField.getValue();
         var self = this;
-        if(self.selectedPart.data.phantom)
-        {
-            self.selectedPart = Ext.create("Teselagen.models.Part");
-        }
-        Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
-            self.selectedPart.set("name", newName);
 
-            if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
+        Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
+            // If the selected part is not in the device already, add it.
+            if(self.selectedPart.get("phantom") || 
+               self.DeviceDesignManager.getBinAssignment(self.activeProject,
                                                          self.selectedPart) < 0) {
-                self.DeviceDesignManager.addPartToBin(self.activeProject,
-                                                      self.selectedPart,
-                                                      self.selectedBinIndex);
+                self.selectedPart = Ext.create("Teselagen.models.Part");
+                self.selectedPart.set("phantom", false);
+                self.selectedPart.set("name", newName);
+
+                self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
+            } else {
+                self.selectedPart.set("name", newName);
             }
+
         });
     },
 

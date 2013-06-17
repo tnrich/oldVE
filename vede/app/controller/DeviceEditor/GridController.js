@@ -31,6 +31,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedClipboardPart: null,
     ClipboardCutFlag: false,
 
+    skipPadOnRemovePart: false,
+
     totalRows: 2,
     totalColumns: 1,
 
@@ -228,7 +230,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var gridPart = partCells[i];
             var j5Part = gridPart.getPart();
             if (!j5Part) {
-                var newPart = Ext.create("Teselagen.models.Part");
+                var newPart = Ext.create("Teselagen.models.Part",{phantom:true});
                 var j5Bin = selectedBin;
                 var binIndex =  selectedBinIndex;
                 this.DeviceDesignManager.addPartToBin(this.activeProject, newPart, binIndex);
@@ -386,8 +388,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the parts were added.
      */
     onAddToParts: function(parts, addedParts, index) {
+        var parentJ5Bin = this.DeviceDesignManager.getBinByPartsStore(this.activeProject, parts);
+        var parentGridBin = this.getGridBinFromJ5Bin(parentJ5Bin);
+
         // For each part added, insert it to the part's bin.
         Ext.each(addedParts, function(addedPart) {
+            parentGridBin.insert(index + 1, Ext.create("Vede.view.de.grid.Part", {
+                part: addedPart
+            }));
+
             this.renderFasConflicts(parts, addedPart);
         }, this);
 
@@ -449,7 +458,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 }
             }
 
-            this.updateBinsWithTotalRows();
+            // Only add empty rows to the design if the skipPad flag is not set.
+            if(!this.skipPadOnRemovePart) {
+                this.updateBinsWithTotalRows();
+            }
+
+            // Reset the skipPad flag.
+            this.skipPadOnRemovePart = false;
         }
     },
 
@@ -692,8 +707,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var selectedJ5Bin = this.selectedBin.getBin();
         if(this.selectedPart) {
             selectedIndex = selectedGridBin.query("Part").indexOf(this.selectedPart);
+
+            this.skipPadOnRemovePart = true;
             selectedJ5Bin.parts().removeAt(selectedIndex);
             selectedJ5Bin.parts().insert(selectedIndex, j5Part);
+
+            this.selectedPart.setPart(j5Part);
+            this.renderFasConflicts(selectedJ5Bin.parts(), j5Part);
         }
     },
 
@@ -957,9 +977,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                                                   ownerIndices[i]);
             gridBin = this.getGridBinFromJ5Bin(ownerBin);
             var partIndex = ownerBin.parts().indexOf(j5Part);
-            gridPart = gridBin.items[partIndex];
+            gridPart = gridBin.query("Part")[partIndex];
 
-            if(!targetGridParts.indexOf(gridPart)) {
+            if(targetGridParts.indexOf(gridPart) < 0) {
                 targetGridParts.push(gridPart);
             }
         }
