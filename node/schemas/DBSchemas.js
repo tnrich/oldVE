@@ -40,13 +40,20 @@ module.exports = function(db) {
 		name: String,
 		file_id: oIDRef,
 		date: Date,
-		j5Results: Mixed,
-		j5Input: Mixed,
+		j5Results: {
+			assemblies: [],
+			combinatorialAssembly: { type: Mixed, default: {"Info":"No data"} },
+			j5parameters: { type: Mixed, default: {"Info":"No data"} },
+			processedData: Mixed
+		},
+		j5Input: {
+			j5Parameters: { type: Mixed, default: {"Info":"No data"} },
+		},
 		assemblyType: String,
 		assemblyMethod: String,
 		endDate: Date,
 		status: String,
-		warnings: Mixed,
+		warnings: [],
 		user_id: { type: oIDRef, ref: 'user' },
 		project_id: { type: oIDRef, ref: 'project' },
 		devicedesign_id: { type: oIDRef, ref: 'devicedesign' },
