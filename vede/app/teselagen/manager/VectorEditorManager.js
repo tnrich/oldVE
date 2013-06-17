@@ -111,7 +111,22 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                                         }
                                     });
                                     */
-                                }
+                                },
+
+                                "destroy": function(selectWindow) {
+                                    currentTabPanel.setLoading(false);
+                                },
+
+
+                                /*"hide":function(currentTabPanel){
+                                          console.log('just hidden');
+                                          currentTabPanel.setLoading(false);
+                                  }*/
+
+
+
+
+
                             }
                         }
                     }).show();
