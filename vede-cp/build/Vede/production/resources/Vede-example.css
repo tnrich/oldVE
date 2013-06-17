@@ -24362,7 +24362,7 @@ img {
 }
 
 /* line 1164, ../../../../sass/src/view/AppViewport.scss */
-.x-grid3-cell-inner, .x-grid3-hd-inner {
+.x-grid-cell-inner, .x-grid-hd-inner {
   white-space: normal;
   /* changed from nowrap */
 }
