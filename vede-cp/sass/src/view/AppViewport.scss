@@ -219,6 +219,12 @@ border-color: #E0E3E6;
   background: #E0E3E6;
 }
 
+.x-btn-default-toolbar-medium-focused {
+  border-color: none;
+  background-image:none;
+  background: none;
+}
+
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 500;
@@ -304,7 +310,7 @@ border-color: #E0E3E6;
 }
 
 .x-tab-close-btn:hover {
-  background-image: url(images/ux/tab-default-close-active.png);
+  background-image: url(images/ux/tab-default-close.png);
 }
 
 .x-toolbar {
@@ -1149,4 +1155,12 @@ background: #F8F8F8;
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner:hover{
   color: blue;
   text-decoration: underline;
+}
+
+.gridcolumn-wrap-text {
+  white-space: normal;
+}
+
+.x-grid3-cell-inner, .x-grid3-hd-inner {
+  white-space: normal; /* changed from nowrap */
 }

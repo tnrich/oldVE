@@ -34,6 +34,7 @@ Ext.define('Vede.view.de.EugeneRulesImportDialog', {
             columns: [{
                     xtype: 'gridcolumn',
                     dataIndex: 'originalRuleLine',
+                    cls: 'gridcolumn-wrap-text',
                     text: '',
                     forceFit: true,
                     flex: 1,
