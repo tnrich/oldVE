@@ -255,6 +255,10 @@ border-color: #E0E3E6;
   border: 0 none;
 }
 
+.x-tree-icon-leaf {
+  background-size: 16px;
+}
+
 .x-tree-icon-parent, .x-grid-tree-node-expanded .x-tree-icon-parent {
   background-image: url(images/tree/cube.png);
   background-size: 16px;
