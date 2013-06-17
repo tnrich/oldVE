@@ -23,7 +23,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         for (var indexBin in bins) {
             if (!bins[indexBin].nodeName) { continue; }
             var bin = bins[indexBin];
-            var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
+            var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent.toUpperCase();
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
             {
                 bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
@@ -196,7 +196,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     var partName;
                     partName = part.sequence["name"];
                     if(part.sequence["de:fileName"]) partName = part.sequence["de:fileName"].replace('.gb',"");
-
+                    if(newPart.get('partSource')===""&&!newPart.get('partSource')) newPart.set('partSource',partName);
                     // Sequence processing
                     var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                         name: partName,

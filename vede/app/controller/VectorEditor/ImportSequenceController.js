@@ -167,15 +167,15 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                 if(Teselagen.manager.ProjectManager.workingSequence)
                 {
                     var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
-                    if(name == "Untitled VEProject" || name == "")
+                    if(name == "Untitled VEProject" || name == "" || sequence.get("project_id") == "")
                     {
                         console.log(seqMgr.name);
                         Teselagen.manager.ProjectManager.workingSequence.set('name',seqMgr.name);
                     }
                     else
                     {   
-                        Teselagen.manager.ProjectManager.workingSequence.set('name',seqMgr.name);
-                        seqMgr.setName(seqMgr.name);
+                        Teselagen.manager.ProjectManager.workingSequence.set('name',name);
+                        seqMgr.setName(name);
                     }
                 }
                 Vede.application.fireEvent("SequenceManagerChanged", seqMgr);

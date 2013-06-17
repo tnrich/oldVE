@@ -151,6 +151,10 @@ Ext.define('Vede.view.de.grid.Part', {
         this.partCell.down().addBodyCls("gridPartCell-highlighted");
     },
 
+    unHighlight: function() {
+        this.partCell.down().removeBodyCls("gridPartCell-highlighted");
+    },
+
     /**
      * Removes the 'selected' CSS class from the part when it is deselected.
      */

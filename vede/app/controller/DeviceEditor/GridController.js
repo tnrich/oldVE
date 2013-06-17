@@ -183,6 +183,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 gridPart.select();
                 if (j5Part.get('name') != "") {
                     gridPart.selectAlert();
+                    gridPart.unHighlight();
                 }
             } else {
                 gridPart.deselect();
@@ -1043,7 +1044,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // Select all gridParts with the same source, unless the j5Part is empty.
         if(j5Part) {
-            if(j5Part.get("sequence_id") !== "") {
+            if(j5Part.get("sequencefile_id") !== "") {
                 for(var i = 0; i < gridParts.length; i++) {
                     gridParts[i].highlight();
                 }
