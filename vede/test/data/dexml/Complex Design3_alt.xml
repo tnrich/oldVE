@@ -1,0 +1,1787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <de:version>4.1</de:version>
+  <de:sequenceFiles>
+    <de:sequenceFile hash="5fb2c4c68f13e1561423adbe940b50f1d5060c210038115b619cfe0d26483e71">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       AmpR                     970 bp ds-DNA     linear       3-AUG-2012
+ACCESSION   AmpR
+VERSION     AmpR
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    90..950
+                     /label="Ampicillin R"
+     misc_feature    41..46
+                     /label="  bla promoter -10 sequence"
+     misc_feature    20..25
+                     /label="bla promoter -35 sequence"
+ORIGIN      
+        1 gtttattttt ctaaatacat tcaaatatgt atccgctcat gagacaataa ccctgataaa
+       61 tgcttcaata atattgaaaa aggaagagta tgagtattca acatttccgt gtcgccctta
+      121 ttcccttttt tgcggcattt tgccttcctg tttttgctca cccagaaacg ctggtgaaag
+      181 taaaagatgc tgaagatcag ttgggtgcac gagtgggtta catcgaactg gatctcaaca
+      241 gcggtaagat ccttgagagt tttcgccccg aagaacgttt tccaatgatg agcactttta
+      301 aagttctgct atgtggcgcg gtattatccc gtattgacgc cgggcaagag caactcggtc
+      361 gccgcataca ctattctcag aatgacttgg ttgagtactc accagtcaca gaaaagcatc
+      421 ttacggatgg catgacagta agagaattat gcagtgctgc cataaccatg agtgataaca
+      481 ctgcggccaa cttacttctg acaacgatcg gaggaccgaa ggagctaacc gcttttttgc
+      541 acaacatggg ggatcatgta actcgccttg atcgttggga accggagctg aatgaagcca
+      601 taccaaacga cgagcgtgac accacgatgc ctgtagcaat ggcaacaacg ttgcgcaaac
+      661 tattaactgg cgaactactt actctagctt cccggcaaca attaatagac tggatggagg
+      721 cggataaagt tgcaggacca cttctgcgct cggcccttcc ggctggctgg tttattgctg
+      781 ataaatctgg agccggtgag cgtgggtctc gcggtatcat tgcagcactg gggccagatg
+      841 gtaagccctc ccgtatcgta gttatctaca cgacggggag tcaggcaact atggatgaac
+      901 gaaatagaca gatcgctgag ataggtgcct cactgattaa gcattggtaa ctgtcagacc
+      961 aagtttactc     
+//
+]]></de:content>
+      <de:fileName>AmpR-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="68c2b3665aa29069643f59a034a11bbb791652a9137a86e39531fa5800b1d6d8">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[5260_5879]       620 bp                         17-JUL-2012
+UNIMARK     region [5260 5879] annotations
+            region [5260 5879]
+FEATURES             Location/Qualifiers
+     rep_origin      1..620
+                     /note="pBR322 Ori"
+     misc_feature    93..114
+                     /pair=""
+                     /primer="TATAAAGATACCAGGCGTTTCC"
+                     /current=0
+                     /ugene_name="PCR_primer"
+     misc_feature    complement(308..327)
+                     /pair=""
+                     /primer="TCAAGACGATAGTTACCGGA"
+                     /current=0
+                     /ugene_name="PCR_primer"
+ORIGIN
+        1 CGCGTTGCTG GCGTTTTTCC ATAGGCTCCG CCCCCCTGAC GAGCATCACA AAAATCGACG
+       61 CTCAAGTCAG AGGTGGCGAA ACCCGACAGG ACTATAAAGA TACCAGGCGT TTCCCCCTGG
+      121 AAGCTCCCTC GTGCGCTCTC CTGTTCCGAC CCTGCCGCTT ACCGGATACC TGTCCGCCTT
+      181 TCTCCCTTCG GGAAGCGTGG CGCTTTCTCA TAGCTCACGC TGTAGGTATC TCAGTTCGGT
+      241 GTAGGTCGTT CGCTCCAAGC TGGGCTGTGT GCACGAACCC CCCGTTCAGC CCGACCGCTG
+      301 CGCCTTATCC GGTAACTATC GTCTTGAGTC CAACCCGGTA AGACACGACT TATCGCCACT
+      361 GGCAGCAGCC ACTGGTAACA GGATTAGCAG AGCGAGGTAT GTAGGCGGTG CTACAGAGTT
+      421 CTTGAAGTGG TGGCCTAACT ACGGCTACAC TAGAAGAACA GTATTTGGTA TCTGCGCTCT
+      481 GCTGAAGCCA GTTACCTTCG GAAAAAGAGT TGGTAGCTCT TGATCCGGCA AACAAACCAC
+      541 CGCTGGTAGC GGTGGTTTTT TTGTTTGCAA GCAGCAGATT ACGCGCAGAA AAAAAGGATC
+      601 TCAAGAAGAT CCTTTGATCT
+//
+]]></de:content>
+      <de:fileName>pBR322.gb</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="f6df78ada648baf2d93f57edad47f31b0ab916ae899271962e65e711e978e1ec">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       TN7R                     265 bp ds-DNA     linear       3-AUG-2012
+ACCESSION   TN7R
+VERSION     TN7R
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    21..245
+                     /label=Tn7R
+ORIGIN      
+          1 ggatgccctg cgtaagcggg tgtgggcgga caataaagtc ttaaactgaa caaaatagat
+         61 ctaaactatg acaataaagt cttaaactag acagaatagt tgtaaactga aatcagtcca
+        121 gttatgctgt gaaaaagcat actggacttt tgttatggct aaagcaaact cttcattttc
+        181 tgaagtgcaa attgcccgtc gtattaaaga ggggcgtggc caagggcatg gtaaagacta
+        241 tattcgcggc gttgtgacaa tttac
+//
+
+]]></de:content>
+      <de:fileName>TN7R-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="105e5e30725aed1d4ba1b2eb4a45fc99a0362fafbf5daa92eb18fa89907fede5">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       GentR-cassette           792 bp ds-DNA     linear       3-AUG-2012
+ACCESSION   GentR-cassette
+VERSION     GentR-cassette
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    238..771
+                     /label=Gentamycin R
+     misc_feature    163..201
+                     /label=complement -10 & -35 signal GentR
+     misc_feature    21..49
+                     /label=Promoter GentR -10 & -35
+ORIGIN      
+          1 ggatgaaggc acgaacccag ttgacataag cctgttcggt tcgtaaactg taatgcaagt
+         61 agcgtatgcg ctcacgcaac tggtccagaa ccttgaccga acgcagcggt ggtaacggcg
+        121 cagtggcggt tttcatggct tgttatgact gtttttttgt acagtctatg cctcgggcat
+        181 ccaagcagca agcgcgttac gccgtgggtc gatgtttgat gttatggagc agcaacgatg
+        241 ttacgcagca gcaacgatgt tacgcagcag ggcagtcgcc ctaaaacaaa gttaggtggc
+        301 tcaagtatgg gcatcattcg cacatgtagg ctcggccctg accaagtcaa atccatgcgg
+        361 gctgctcttg atcttttcgg tcgtgagttc ggagacgtag ccacctactc ccaacatcag
+        421 ccggactccg attacctcgg gaacttgctc cgtagtaaga cattcatcgc gcttgctgcc
+        481 ttcgaccaag aagcggttgt tggcgctctc gcggcttacg ttctgcccaa gtttgagcag
+        541 ccgcgtagtg agatctatat ctatgatctc gcagtctccg gcgagcaccg gaggcagggc
+        601 attgccaccg cgctcatcaa tctcctcaag catgaggcca acgcgcttgg tgcttatgtg
+        661 atctacgtgc aagcagatta cggtgacgat cccgcagtgg ctctctatac aaagttgggc
+        721 atacgggaag aagtgatgca ctttgatatc gacccaagta ccgccaccta acaattcgtt
+        781 caagccgaga tc
+//
+
+]]></de:content>
+      <de:fileName>GentR-cassetteVE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="59bbf651e282bb077282a0740302e85f09a54ad353f3789e8fe55783a647da72">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       A                         36 bp    DNA     linear       28-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /note="Spacer A"
+ORIGIN      
+          1 CTGTTAGATT AGGTGTTGTT CAATATTGGG TGTCTT
+//
+
+]]></de:content>
+      <de:fileName>A.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="29e7fbfc6266cfce258b3235b264bde9433d6d1ffa888bd7cb9e1738ae10a3c6">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[4030_4147]       118 bp                         17-JUL-2012
+UNIMARK     region [4030 4147] annotations
+            region [4030 4147]
+FEATURES             Location/Qualifiers
+     misc_feature    1..118
+                     /note="Polyhedrin Promotor"
+     misc_feature    112..116
+                     /note="Kozak???"
+ORIGIN
+        1 ATGGAGATAA TTAAAATGAT AACCATCTCG CAAATAAATA AGTATTTTAC TGTTTTCGTA
+       61 ACAGTTTTGT AATAAAAAAA CCTATAAATA TTCCGGATTA TTCATACCGT CCCACCAT
+//
+]]></de:content>
+      <de:fileName>polyhedrin.gb</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="9b0263b5b90d53405eb39cef8b7a40766c95ebab1ed8fac2a935bef8b361686e">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       hr5+IE1                 1033 bp ds-DNA     circular     28-AUG-2012
+ACCESSION   hr5+IE1
+VERSION     hr5+IE1
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..1033
+                     /label="pHR5-IE1"
+ORIGIN      
+        1 cgcgtaaaac acaatcaagt atgagtcata agctgatgtc atgttttgca cacggctcat
+       61 aaccgaactg gctttacgag tagaattcta cttgtaacgc acgatcagtg gatgatgtca
+      121 tttgtttttc aaatcgagat gatgtcatgt tttgcacacg gctcataaac tcgctttacg
+      181 agtagaattc tacgtgtaac gcacgatcga ttgatgagtc atttgttttg caatatgata
+      241 tcatacaata tgactcattt gtttttcaaa accgaacttg atttacgggt agaattctac
+      301 ttgtaaagca caatcaaaaa gatgatgtca tttgtttttc aaaactgaac tcgctttacg
+      361 agtagaattc tacgtgtaaa acacaatcaa gaaatgatgt catttgttat aaaaataaaa
+      421 gctgatgtca tgttttgcac atggctcata actaaactcg ctttacgggt agaattctac
+      481 gcgcgtcgat gtctttgtga tgcgcgcgac atttttgtag gttattgata aaatgaacgg
+      541 atacgttgcc cgacattatc attaaatcct tggcgtagaa tttgtcgggt ccattgtccg
+      601 tgtgcgctag catgcccgta acggacctcg tacttttggc ttcaaaggtt ttgcgcacag
+      661 acaaaatgtg ccacacttgc agctctgcat gtgtgcgcgt taccacaaat cccaacggcg
+      721 cagtgtactt gttgtatgca aataaatctc gataaaggcg cggcgcgcga atgcagctga
+      781 tcacgtacgt ccctcgtgtt ccgttcaagg acggtgttat cgacctcaga ttaatgttta
+      841 tcggccgact gttttcgtat ccgctcacca aacgcgtttt tgcattaaca ttgtatgtcg
+      901 gcggatgttc tatatctaat ttgaataaat aaacgataac cgcgttggtt ttagagggca
+      961 taataaaaga aatattgtta tcgtgttcgc cattagggca gtataaattg acgttcatgt
+     1021 tggatattgt ttc    
+//
+]]></de:content>
+      <de:fileName>hr5-IE1-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="e966b9eef0023c0c1d0020c2e7825231f0ef4c897a534db493b0b61760617127">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[3877_399         122 bp ds-DNA     circular     28-AUG-2012
+ACCESSION   region_[3877_3998]
+VERSION     region_[3877_3998]
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..122
+                     /label="p10"
+ORIGIN      
+        1 atacggacct ttaattcaac ccaacacaat atattatagt taaataagaa ttattatcaa
+       61 atcatttgta tattaattaa aatactatac tgtaaattac attttattta caatcactcg
+      121 ac     
+//
+]]></de:content>
+      <de:fileName>p10-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="c086ff4a04208394ebdb608c7b73075785bdd4ad5ab6bbb11a17b3228fe47eac">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       B                         36 bp    DNA     linear       28-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /note="SpacerB"
+ORIGIN      
+          1 ATTTATCGAT TTCGCATACA ATGACTTATA GCCACC
+//
+
+]]></de:content>
+      <de:fileName>B.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="625c5a2a975f01f0e3cfd08db36f2b7c26a5233aef7c178f1b279b9b53e2c631">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       4_HB-C_opt.txt           558 bp    DNA     linear       23-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..552
+                     /note="HB-Core_opt"
+ORIGIN      
+          1 ATGGATATCG ACCCCTATAA GGAGTTTGGA GCCAGCGTGG AACTGCTCTC TTTCCTTCCC
+         61 TCGGACTTCT TCCCGAGCAT TAGGGACCTG CTTGATACGG CTTCTGCACT CTACCGCGAG
+        121 GCTCTTGAGT CTCCAGAACA CTGCTCACCA CACCATACCG CACTCAGGCA AGCTATCCTG
+        181 TGTTGGGGTG AGCTGATGAA TCTGGCCACA TGGGTGGGAA GTAACCTTGA AGACCCTGCG
+        241 TCAAGGGAAC TGGTAGTCTC CTACGTCAAC GTAAATATGG GCCTGAAGAT CCGACAGCTC
+        301 TTGTGGTTCC ACATCTCCTG CCTGACCTTT GGAAGAGAGA CCGTCCTTGA GTACTTGGTC
+        361 TCCTTCGGAG TTTGGATTCG CACACCTCCC GCCTACAGAC CACCAAACGC TCCTATCTTG
+        421 AGCACGCTTC CCGAGACTAC TGTTGTTAGA AGGCGCGGCA GATCACCCAG AAGAAGAACT
+        481 CCTTCACCTC GCAGACGAAG GAGTCAATCC CCGAGACGCA GACGCTCACA ATCTAGGGAA
+        541 TCGCAGTGCT GA
+//
+
+]]></de:content>
+      <de:fileName>HB-C_opt.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="5a29ae9f9794e386aec1d7800fc86940e29f78375fa51db1c0ac3fe3a9e83def">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[4178_567        1503 bp ds-DNA     circular     28-AUG-2012
+ACCESSION   region_[4178_5677]
+VERSION     region_[4178_5677]
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..1503
+                     /label="HIVgag"
+ORIGIN      
+        1 atgggtgctc gtgcttcagt gctgtccggt ggcgagctgg acaagtggga gaagatccgt
+       61 ctgcgtcccg gtggcaagaa gcagtacaag ctgaagcaca tcgtgtgggc ttcccgcgag
+      121 ctggaacgtt tcgctgtgaa ccccggcctg ctggaaacct ccgagggttg ccgtcagatc
+      181 ctgggccagc tgcagccctc cctgcagacc ggttccgagg aactgcgttc cctgtacaac
+      241 actatcgctg tgctgtactg cgtgcaccag cgtatcgacg tgaaggacac caaggaagct
+      301 ctggacaaga tcgaggaaga acagaacaag tccaagaaga aggcccagca ggctgctgct
+      361 gacaccggca acaactccca ggtgtcccag aactacccca tcgtgcagaa cctgcagggc
+      421 cagatggtgc accaggctat ctccccccgt accctgaacg cttgggtcaa ggtggtggaa
+      481 gagaaggctt tcagccccga agtgatcccc atgttctccg ctctgtccga gggtgctacc
+      541 ccccaggacc tgaacaccat gctgaacacc gtgggtggtc accaggctgc tatgcagatg
+      601 ctgaaggaaa ccatcaacga agaggctgct gagtgggacc gtctgcaccc cgtgcacgct
+      661 ggtcctatcg ctcccggaca gatgcgcgag ccccgtggtt ccgacatcgc tggaaccacc
+      721 tccaccctgc aagagcagat cggctggatg acccacaacc cccccatccc cgtgggcgag
+      781 atctacaagc gttggatcat cctgggcctg aacaagatcg tgcgtatgta ctcccccacc
+      841 tccatcctgg acatccgtca gggtcccaag gaacccttcc gtgactacgt ggaccgtttc
+      901 tacaagaccc tgcgtgccga gcaggcttcc caagaggtca agaactggat gaccgagact
+      961 ctgctggtgc agaacgctaa ccccgactgc aagaccatcc tgaaggctct gggtcccggt
+     1021 gctaccctgg aagagatgat gaccgcttgc cagggtgtcg gtggtcccgg tcacaaggct
+     1081 cgtgtgctgg ctgaggctat gtcccaagtg accaaccccg ctaccatcat gatccagaag
+     1141 ggcaacttcc gtaaccagcg caagaccgtg aagtgcttca actgcggcaa ggaaggccac
+     1201 atcgctaaga actgccgtgc tccccgcaag aagggctgct ggaagtgcgg aaaggaagga
+     1261 caccagatga aggactgcac cgagcgtcag gctaacttcc tgggcaagat ctggccctcc
+     1321 cacaagggtc gtcccggcaa cttcctgcag tcccgtcccg agcccaccgc tcccccagag
+     1381 gaatccttcc gtttcggcga ggaaaccacc accccatccc agaagcaaga gcccatcgac
+     1441 aaggaactgt accccctggc ttccctgcgc tccctgttcg gttccgaccc atcctcccag
+     1501 taa     
+//
+]]></de:content>
+      <de:fileName>HIVgagVE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="0a136d25c312758fc8f1de1eb59f899a2c9749ec47552ee66f3eed33be5ecc72">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       MoMuLV_Pr65Gag_opt       1617 bp    DNA     linear       27-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..1617
+                     /note="pr65 Gag"
+ORIGIN      
+          1 ATGGGCCAGA CCGTTACCAC TCCCTTGAGT TTGACCCTGG ATCACTGGAA GGACGTCGAG
+         61 AGGATCGCTC ACAACCAGTC CGTAGATGTC AAGAAGAGGC GTTGGGTTAC CTTCTGCAGT
+        121 GCGGAATGGC CGACCTTTAA CGTCGGCTGG CCTAGAGACG GCACCTTCAA CAGGGACCTG
+        181 ATCACGCAGG TGAAGATCAA AGTGTTCTCA CCTGGCCCTC ATGGACACCC CGATCAAGTC
+        241 CCCTACATCG TGACCTGGGA AGCACTGGCT TTTGATCCAC CTCCCTGGGC CAAGCCCTTC
+        301 GTACACCCTA AACCTCCGCC TCCACTTCCT CCATCTGCTC CCTCTCTGCC ACTTGAACCA
+        361 CCTCTTTCGA CACCGAGTCG CAGCTCCCTT TATCCTGCAC TCACTCCTTC TCTGGGCGCC
+        421 AAGCCGAAGC CTCAAGTACT CTCTGACAGC GAGGGTCCCC TGATTGACTT GCTGACGGAA
+        481 GATCCCCCGC CTTATAGAGA CCCCAGACCA CCCCCTTCAG ACGGTGACGG AAATTCGGGA
+        541 GAAGCGACTC CTGCCGGAGA AGCTCCAGAC CCCTCACCAA TGGCCTCTCG CTTGCGTGGT
+        601 AGACGCGAAC CCCCTGTGGC GGACTCCACT ACCTCGCAAG CATTCCCACT GCGCACAGGA
+        661 GGCAACGGAC AGCTGCAATA CTGGCCATTC TCCTCAAGCG ACCTCTACAA CTGGAAGAAC
+        721 AACAATCCCA GCTTCTCGGA GGACCCTGGT AAACTGACAG CGCTGATCGA ATCCGTCCTC
+        781 ATCACACATC AGCCCACCTG GGACGACTGT CAACAGCTGT TGGGAACGCT GCTTACCGGA
+        841 GAAGAGAAGC AGCGCGTGCT CTTGGAGGCT AGAAAAGCGG TGAGAGGCGA TGATGGACGC
+        901 CCGACACAAC TGCCGAACGA AGTAGATGCC GCTTTTCCCC TGGAACGCCC AGACTGGGAA
+        961 TACACTACCC AGGCAGGTAG GAACCACCTC GTCCAATACC GCCAATTGCT CCTGGCTGGT
+       1021 CTCCAAAACG CTGGCAGATC ACCGACCAAT TTGGCGAAGG TGAAGGGAAT CACGCAGGGA
+       1081 CCTAATGAGT CTCCGAGCGC TTTCCTGGAG AGACTTAAGG AGGCCTACCG CAGATACACA
+       1141 CCCTACGACC CTGAGGACCC AGGACAAGAA ACGAACGTGG CTATGTCCTT CATTTGGCAG
+       1201 TCTGCCCCAG ACATTGGCAG AAAGCTGGAG AGGCTGGAAG ATCTCAAGAA CAAGACGCTC
+       1261 GGAGATCTGG TCAGAGAGGC TGAGAGGATC TTCAACAAGC GAGAGACACC GGAGGAAAGG
+       1321 GAGGAACGTA TCAGGCGAGA GACCGAGGAA AAGGAGGAAC GACGCAGGAC AGAGGACGAG
+       1381 CAGAAAGAGA AAGAGCGCGA CCGTAGACGC CATAGGGAGA TGAGCAAGCT GCTTGCCACT
+       1441 GTCGTGAGTG GACAGAGACA GGATAGACAG GGTGGCGAAC GCAGGAGATC CCAACTGGAT
+       1501 AGAGACCAGT GTGCCTACTG CAAAGAGAAG GGACACTGGG CTAAAGACTG TCCCAAGAAA
+       1561 CCACGAGGAC CTCGTGGACC AAGACCGCAG ACTTCCCTCT TGACTCTGGA TGACTGA
+//
+
+]]></de:content>
+      <de:fileName>MoMuLV_Pr65Gag_opt.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="a8726c4c7c8b3433ac99da5e9755d832f0ee2c8fb3df0bf8371cb9e5df056d0d">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       3_HBsAg_opt.txt          687 bp    DNA     linear       23-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..681
+                     /note="HBsAg_opt"
+ORIGIN      
+          1 ATGGAAAACA TCGCATCCGG ATTGCTGGGA CCGCTGCTCG TACTCCAAGC GGGATTCTTC
+         61 TTGTTGACGA AGATCCTGAC AATTCCCCAG AGTCTCGATT CGTGGTGGAC TTCCCTGAAC
+        121 TTTCTTGGCG GAACACCCGT GTGCCTTGGC CAGAATAGCC AGAGTCAAAT CTCCTCGCAC
+        181 TCACCCACCT GTTGTCCACC AATTTGCCCT GGTTACCGCT GGATGTGCCT GAGACGTTTT
+        241 ATCATCTTCC TCTGCATCCT GCTCCTGTGC CTGATCTTCT TGCTGGTGCT CCTGGACTAT
+        301 CAAGGTATGC TGCCCGTTTG CCCTCTGATT CCAGGATCTT CAACGACCAG CACCGGACCT
+        361 TGCAAGACTT GCACAACTCC AGCTCAGGGA ACCTCTATGT TCCCCTCTTG TTGCTGTACC
+        421 AAGCCTACGG ACGGAAACTG CACCTGTATT CCTATCCCAA GCTCCTGGGC CTTCGCCAAA
+        481 TACTTGTGGG AGTGGGCTTC AGTCCGTTTC TCTTGGCTGA GTCTGCTGGT GCCGTTCGTT
+        541 CAGTGGTTCG TTGGCCTTTC GCCTACTGTC TGGCTTTCCG TTATCTGGAT GATGTGGTAC
+        601 TGGGGACCGA GCCTCTACAA CATCTTGTCT CCCTTTATGC CTCTGCTCCC GATCTTCTTT
+        661 TGCCTTTGGG TCTACATCTA A
+//
+
+]]></de:content>
+      <de:fileName>HBsAg_opt.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="a88eaf851bbf2a6f36b102b602b593c6aee7ba189c3746bac913bc2d25e42910">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       HB-C_opt-Zipper_Basic        726 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..549
+                     /note="HB-Core_opt"
+     misc_feature    592..723
+                     /note="basic leucine zipper"
+     misc_feature    550..591
+                     /note="linker"
+ORIGIN      
+          1 ATGGATATCG ACCCCTATAA GGAGTTTGGA GCCAGCGTGG AACTGCTCTC TTTCCTTCCC
+         61 TCGGACTTCT TCCCGAGCAT TAGGGACCTG CTTGATACGG CTTCTGCACT CTACCGCGAG
+        121 GCTCTTGAGT CTCCAGAACA CTGCTCACCA CACCATACCG CACTCAGGCA AGCTATCCTG
+        181 TGTTGGGGTG AGCTGATGAA TCTGGCCACA TGGGTGGGAA GTAACCTTGA AGACCCTGCG
+        241 TCAAGGGAAC TGGTAGTCTC CTACGTCAAC GTAAATATGG GCCTGAAGAT CCGACAGCTC
+        301 TTGTGGTTCC ACATCTCCTG CCTGACCTTT GGAAGAGAGA CCGTCCTTGA GTACTTGGTC
+        361 TCCTTCGGAG TTTGGATTCG CACACCTCCC GCCTACAGAC CACCAAACGC TCCTATCTTG
+        421 AGCACGCTTC CCGAGACTAC TGTTGTTAGA AGGCGCGGCA GATCACCCAG AAGAAGAACT
+        481 CCTTCACCTC GCAGACGAAG GAGTCAATCC CCGAGACGCA GACGCTCACA ATCTAGGGAA
+        541 TCGCAGTGCG GTGGTGGTGG CTCCGGTGGT TCCTCAGGTG GCGGAGGTAG TGCCCAGCTG
+        601 AAGAAGAAGC TCCAGGCTCT CAAGAAGAAG AACGCCCAAC TGAAATGGAA GCTGCAAGCC
+        661 TTGAAGAAGA AGTTGGCCCA ATTGAAGAAG AAGAACCAAG CCCTGAAGTG GAAGTTGGCT
+        721 CAGTAA
+//
+
+]]></de:content>
+      <de:fileName>HB-C_opt-Zipper_Basic.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="f6024c1e284f1561c0c627567b2256a786756ae89b99f05068767aadfd79a0e0">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       HBsAg_opt-Zipper_Basic        855 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..678
+                     /note="HBsAg_opt"
+     misc_feature    721..852
+                     /note="basic leucine zipper"
+     misc_feature    679..720
+                     /note="linker"
+ORIGIN      
+          1 ATGGAAAACA TCGCATCCGG ATTGCTGGGA CCGCTGCTCG TACTCCAAGC GGGATTCTTC
+         61 TTGTTGACGA AGATCCTGAC AATTCCCCAG AGTCTCGATT CGTGGTGGAC TTCCCTGAAC
+        121 TTTCTTGGCG GAACACCCGT GTGCCTTGGC CAGAATAGCC AGAGTCAAAT CTCCTCGCAC
+        181 TCACCCACCT GTTGTCCACC AATTTGCCCT GGTTACCGCT GGATGTGCCT GAGACGTTTT
+        241 ATCATCTTCC TCTGCATCCT GCTCCTGTGC CTGATCTTCT TGCTGGTGCT CCTGGACTAT
+        301 CAAGGTATGC TGCCCGTTTG CCCTCTGATT CCAGGATCTT CAACGACCAG CACCGGACCT
+        361 TGCAAGACTT GCACAACTCC AGCTCAGGGA ACCTCTATGT TCCCCTCTTG TTGCTGTACC
+        421 AAGCCTACGG ACGGAAACTG CACCTGTATT CCTATCCCAA GCTCCTGGGC CTTCGCCAAA
+        481 TACTTGTGGG AGTGGGCTTC AGTCCGTTTC TCTTGGCTGA GTCTGCTGGT GCCGTTCGTT
+        541 CAGTGGTTCG TTGGCCTTTC GCCTACTGTC TGGCTTTCCG TTATCTGGAT GATGTGGTAC
+        601 TGGGGACCGA GCCTCTACAA CATCTTGTCT CCCTTTATGC CTCTGCTCCC GATCTTCTTT
+        661 TGCCTTTGGG TCTACATCGG TGGTGGTGGC TCCGGTGGTT CCTCAGGTGG CGGAGGTAGT
+        721 GCCCAGCTGA AGAAGAAGCT CCAGGCTCTC AAGAAGAAGA ACGCCCAACT GAAATGGAAG
+        781 CTGCAAGCCT TGAAGAAGAA GTTGGCCCAA TTGAAGAAGA AGAACCAAGC CCTGAAGTGG
+        841 AAGTTGGCTC AGTAA
+//
+
+]]></de:content>
+      <de:fileName>HBsAg_opt-Zipper_Basic.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="05222c7ae6e34a21255b393546b284036f33e855ebdb131a3127aaf8248cc3e5">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       MoMuLV_Pr65Gag_opt-Zipper_Basic       1791 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..1614
+                     /note="pr65 Gag"
+                     /dnas_title="pr65 Gag"
+     misc_feature    1657..1788
+                     /note="basic leucine zipper"
+     misc_feature    1615..1656
+                     /note="linker"
+ORIGIN      
+          1 ATGGGCCAGA CCGTTACCAC TCCCTTGAGT TTGACCCTGG ATCACTGGAA GGACGTCGAG
+         61 AGGATCGCTC ACAACCAGTC CGTAGATGTC AAGAAGAGGC GTTGGGTTAC CTTCTGCAGT
+        121 GCGGAATGGC CGACCTTTAA CGTCGGCTGG CCTAGAGACG GCACCTTCAA CAGGGACCTG
+        181 ATCACGCAGG TGAAGATCAA AGTGTTCTCA CCTGGCCCTC ATGGACACCC CGATCAAGTC
+        241 CCCTACATCG TGACCTGGGA AGCACTGGCT TTTGATCCAC CTCCCTGGGC CAAGCCCTTC
+        301 GTACACCCTA AACCTCCGCC TCCACTTCCT CCATCTGCTC CCTCTCTGCC ACTTGAACCA
+        361 CCTCTTTCGA CACCGAGTCG CAGCTCCCTT TATCCTGCAC TCACTCCTTC TCTGGGCGCC
+        421 AAGCCGAAGC CTCAAGTACT CTCTGACAGC GAGGGTCCCC TGATTGACTT GCTGACGGAA
+        481 GATCCCCCGC CTTATAGAGA CCCCAGACCA CCCCCTTCAG ACGGTGACGG AAATTCGGGA
+        541 GAAGCGACTC CTGCCGGAGA AGCTCCAGAC CCCTCACCAA TGGCCTCTCG CTTGCGTGGT
+        601 AGACGCGAAC CCCCTGTGGC GGACTCCACT ACCTCGCAAG CATTCCCACT GCGCACAGGA
+        661 GGCAACGGAC AGCTGCAATA CTGGCCATTC TCCTCAAGCG ACCTCTACAA CTGGAAGAAC
+        721 AACAATCCCA GCTTCTCGGA GGACCCTGGT AAACTGACAG CGCTGATCGA ATCCGTCCTC
+        781 ATCACACATC AGCCCACCTG GGACGACTGT CAACAGCTGT TGGGAACGCT GCTTACCGGA
+        841 GAAGAGAAGC AGCGCGTGCT CTTGGAGGCT AGAAAAGCGG TGAGAGGCGA TGATGGACGC
+        901 CCGACACAAC TGCCGAACGA AGTAGATGCC GCTTTTCCCC TGGAACGCCC AGACTGGGAA
+        961 TACACTACCC AGGCAGGTAG GAACCACCTC GTCCAATACC GCCAATTGCT CCTGGCTGGT
+       1021 CTCCAAAACG CTGGCAGATC ACCGACCAAT TTGGCGAAGG TGAAGGGAAT CACGCAGGGA
+       1081 CCTAATGAGT CTCCGAGCGC TTTCCTGGAG AGACTTAAGG AGGCCTACCG CAGATACACA
+       1141 CCCTACGACC CTGAGGACCC AGGACAAGAA ACGAACGTGG CTATGTCCTT CATTTGGCAG
+       1201 TCTGCCCCAG ACATTGGCAG AAAGCTGGAG AGGCTGGAAG ATCTCAAGAA CAAGACGCTC
+       1261 GGAGATCTGG TCAGAGAGGC TGAGAGGATC TTCAACAAGC GAGAGACACC GGAGGAAAGG
+       1321 GAGGAACGTA TCAGGCGAGA GACCGAGGAA AAGGAGGAAC GACGCAGGAC AGAGGACGAG
+       1381 CAGAAAGAGA AAGAGCGCGA CCGTAGACGC CATAGGGAGA TGAGCAAGCT GCTTGCCACT
+       1441 GTCGTGAGTG GACAGAGACA GGATAGACAG GGTGGCGAAC GCAGGAGATC CCAACTGGAT
+       1501 AGAGACCAGT GTGCCTACTG CAAAGAGAAG GGACACTGGG CTAAAGACTG TCCCAAGAAA
+       1561 CCACGAGGAC CTCGTGGACC AAGACCGCAG ACTTCCCTCT TGACTCTGGA TGACGGTGGT
+       1621 GGTGGCTCCG GTGGTTCCTC AGGTGGCGGA GGTAGTGCCC AGCTGAAGAA GAAGCTCCAG
+       1681 GCTCTCAAGA AGAAGAACGC CCAACTGAAA TGGAAGCTGC AAGCCTTGAA GAAGAAGTTG
+       1741 GCCCAATTGA AGAAGAAGAA CCAAGCCCTG AAGTGGAAGT TGGCTCAGTA A
+//
+
+]]></de:content>
+      <de:fileName>MoMuLV_Pr65Gag_opt-Zipper_Basic.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="410417a3d51fd4acb83826fbee0c080bac013970ef971605b2a99891ecb1fce8">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[4178_5677]      1500 bp                         17-JUL-2012
+UNIMARK     region [4178 5677] annotations
+            region [4178 5677]
+FEATURES             Location/Qualifiers
+     misc_feature    1..1500
+                     /note="HIVgag"
+     misc_feature    1543..1674
+                     /note="basic leucine zipper"
+     misc_feature    1501..1542
+                     /note="linker"
+ORIGIN      
+          1 ATGGGTGCTC GTGCTTCAGT GCTGTCCGGT GGCGAGCTGG ACAAGTGGGA GAAGATCCGT
+         61 CTGCGTCCCG GTGGCAAGAA GCAGTACAAG CTGAAGCACA TCGTGTGGGC TTCCCGCGAG
+        121 CTGGAACGTT TCGCTGTGAA CCCCGGCCTG CTGGAAACCT CCGAGGGTTG CCGTCAGATC
+        181 CTGGGCCAGC TGCAGCCCTC CCTGCAGACC GGTTCCGAGG AACTGCGTTC CCTGTACAAC
+        241 ACTATCGCTG TGCTGTACTG CGTGCACCAG CGTATCGACG TGAAGGACAC CAAGGAAGCT
+        301 CTGGACAAGA TCGAGGAAGA ACAGAACAAG TCCAAGAAGA AGGCCCAGCA GGCTGCTGCT
+        361 GACACCGGCA ACAACTCCCA GGTGTCCCAG AACTACCCCA TCGTGCAGAA CCTGCAGGGC
+        421 CAGATGGTGC ACCAGGCTAT CTCCCCCCGT ACCCTGAACG CTTGGGTCAA GGTGGTGGAA
+        481 GAGAAGGCTT TCAGCCCCGA AGTGATCCCC ATGTTCTCCG CTCTGTCCGA GGGTGCTACC
+        541 CCCCAGGACC TGAACACCAT GCTGAACACC GTGGGTGGTC ACCAGGCTGC TATGCAGATG
+        601 CTGAAGGAAA CCATCAACGA AGAGGCTGCT GAGTGGGACC GTCTGCACCC CGTGCACGCT
+        661 GGTCCTATCG CTCCCGGACA GATGCGCGAG CCCCGTGGTT CCGACATCGC TGGAACCACC
+        721 TCCACCCTGC AAGAGCAGAT CGGCTGGATG ACCCACAACC CCCCCATCCC CGTGGGCGAG
+        781 ATCTACAAGC GTTGGATCAT CCTGGGCCTG AACAAGATCG TGCGTATGTA CTCCCCCACC
+        841 TCCATCCTGG ACATCCGTCA GGGTCCCAAG GAACCCTTCC GTGACTACGT GGACCGTTTC
+        901 TACAAGACCC TGCGTGCCGA GCAGGCTTCC CAAGAGGTCA AGAACTGGAT GACCGAGACT
+        961 CTGCTGGTGC AGAACGCTAA CCCCGACTGC AAGACCATCC TGAAGGCTCT GGGTCCCGGT
+       1021 GCTACCCTGG AAGAGATGAT GACCGCTTGC CAGGGTGTCG GTGGTCCCGG TCACAAGGCT
+       1081 CGTGTGCTGG CTGAGGCTAT GTCCCAAGTG ACCAACCCCG CTACCATCAT GATCCAGAAG
+       1141 GGCAACTTCC GTAACCAGCG CAAGACCGTG AAGTGCTTCA ACTGCGGCAA GGAAGGCCAC
+       1201 ATCGCTAAGA ACTGCCGTGC TCCCCGCAAG AAGGGCTGCT GGAAGTGCGG AAAGGAAGGA
+       1261 CACCAGATGA AGGACTGCAC CGAGCGTCAG GCTAACTTCC TGGGCAAGAT CTGGCCCTCC
+       1321 CACAAGGGTC GTCCCGGCAA CTTCCTGCAG TCCCGTCCCG AGCCCACCGC TCCCCCAGAG
+       1381 GAATCCTTCC GTTTCGGCGA GGAAACCACC ACCCCATCCC AGAAGCAAGA GCCCATCGAC
+       1441 AAGGAACTGT ACCCCCTGGC TTCCCTGCGC TCCCTGTTCG GTTCCGACCC ATCCTCCCAG
+       1501 GGTGGTGGTG GCTCCGGTGG TTCCTCAGGT GGCGGAGGTA GTGCCCAGCT GAAGAAGAAG
+       1561 CTCCAGGCTC TCAAGAAGAA GAACGCCCAA CTGAAATGGA AGCTGCAAGC CTTGAAGAAG
+       1621 AAGTTGGCCC AATTGAAGAA GAAGAACCAA GCCCTGAAGT GGAAGTTGGC TCAGTAA
+//
+
+]]></de:content>
+      <de:fileName>HIVgag-Zipper_Basic.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="8cb458a630d490aa1ba8da1873d92fcdee1483a15acba99f6abd55e108353d95">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       C                         36 bp    DNA     linear       28-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /note="SpacerC"
+ORIGIN      
+          1 CCATAAGACC GCTTTGTTTC GACATCATCA TAATAA
+//
+
+]]></de:content>
+      <de:fileName>C.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="4a095fb3c9eec2a8eede2d379b04f247b7b2125cec3b567e41ee45bb14000cea">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[4271_4510]       240 bp                         17-JUL-2012
+UNIMARK     region [4271 4510] annotations
+            region [4271 4510]
+FEATURES             Location/Qualifiers
+     misc_feature    1..240
+                     /note="SV40 polyadenylation signal"
+     misc_feature    complement(34..53)
+                     /note="Pol Primer intern rev"
+ORIGIN
+        1 GATCATAATC AGCCATACCA CATTTGTAGA GGTTTTACTT GCTTTAAAAA ACCTCCCACA
+       61 CCTCCCCCTG AACCTGAAAC ATAAAATGAA TGCAATTGTT GTTGTTAACT TGTTTATTGC
+      121 AGCTTATAAT GGTTACAAAT AAAGCAATAG CATCACAAAT TTCACAAATA AAGCATTTTT
+      181 TTCACTGCAT TCTAGTTGTG GTTTGTCCAA ACTCATCAAT GTATCTTATC ATGTCTGGAT
+//
+]]></de:content>
+      <de:fileName>SV40.gb</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="659e38d80d167bab83e111fc4388698af68cad5921158d6e21ec9979271e18e0">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       RandomJunk                70 bp    DNA     linear       28-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..70
+                     /note="RandomJunk"
+ORIGIN      
+          1 CGGAAAACTT CCGTTCAGGA GGCGGACACT GATTGACACG GTTTAGCAGA AGGTTTGAGG
+         61 AATAGGTTAA
+//
+
+]]></de:content>
+      <de:fileName>RandomJunk.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="657633fab35ba4dc26e3ae19333671d9e1de6fa0527be114ce9ad8b2da8c099d">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       SpacerG                   36 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   SpacerG
+VERSION     SpacerG
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /label="SpacerG"
+ORIGIN      
+        1 tatacattta ctgcgagtct gaataattcg gactaa  
+//
+]]></de:content>
+      <de:fileName>SpacerG-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="956247fd0b4d388c728f087fd56addf8280eab8bded4359daf1ce2fb5f83637b">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       SpacerL                   36 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   SpacerL
+VERSION     SpacerL
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /label="SpacerL"
+ORIGIN      
+        1 ctatagccct tgaacactac atacatgaaa gccacc  
+//
+]]></de:content>
+      <de:fileName>SpacerL-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="951e044bc3ac94ae9909838bed9ea8be7426cd7a16da0a19b35734e4b7e7b22d">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       CXCR3opt                1107 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..1107
+                     /note="CXCr3opt"
+ORIGIN      
+          1 atggtcctcg aggtgtccga ccaccaggtg ctgaacgacg ctgaagtggc tgctctgctc
+         61 gagaacttct cctcctccta cgactacggc gagaacgagt ccgactcctg ctgcacctct
+        121 ccaccctgcc ctcaggactt ctccctgaac ttcgaccgtg ctttcctgcc cgctctgtac
+        181 tccctgctgt tcctgctggg actgctgggc aacggtgctg tggctgctgt gttgctgtcc
+        241 cgtcgtaccg ctctgtcctc taccgacacc ttcctgctcc acctggctgt cgctgacacc
+        301 ctgctggtgc tgactctgcc tctgtgggct gtggacgctg ctgtgcagtg ggtgttcggt
+        361 tccggcttgt gcaaggtggc cggtgctctg ttcaacatca acttctacgc tggtgctctg
+        421 ctgctggctt gcatctcctt cgaccgctac ctgaacatcg tgcacgctac ccagctgtac
+        481 cgtcgtggtc ctcctgctcg tgtgaccctg acttgcctgg ctgtgtgggg actgtgcctc
+        541 ctgttcgctc tgcccgactt catcttcctg tccgctcacc acgacgagcg tctgaacgct
+        601 actcactgcc agtacaactt cccccaagtg ggccgcaccg ctctgcgtgt gttgcaactg
+        661 gtggctggtt tcctgctgcc tctgctggtc atggcttact gctacgctca catcctggcc
+        721 gtgctgctgg tgtcccgtgg tcaaagacgt ctgcgtgcta tgcgtctggt ggtggtcgtg
+        781 gtcgtcgctt tcgctctgtg ctggaccccc taccacctgg tcgtgctggt ggacatcctg
+        841 atggacctgg gtgctctggc tcgtaactgc ggacgcgagt cccgtgtgga cgtggccaag
+        901 tctgtgacct ccggcctggg ttacatgcac tgctgcctga accccctgct gtacgctttc
+        961 gtgggtgtca agttccgcga gcgtatgtgg atgctgctcc tgcgtctggg ttgccccaac
+       1021 cagagaggac tgcagcgtca gccttcctcc tcccgtcgtg actcctcttg gagcgagact
+       1081 tccgaggctt cctactccgg actgtaa
+//
+
+]]></de:content>
+      <de:fileName>CXCR3opt.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="af9aed2b46e002e661ef3b100a0d7a0aded7ff5f38b4e04b3c1618a7ee77a23d">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       CXCR3opt-Linker-ZipperAcidic       1293 bp    DNA     linear       24-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..1104
+                     /note="CXCR3 human"
+     misc_feature    1105..1158
+                     /note="linker"
+     misc_feature    1159..1290
+                     /note="acidic leucine zipper"
+ORIGIN      
+          1 ATGGTCCTCG AGGTGTCCGA CCACCAGGTG CTGAACGACG CTGAAGTGGC TGCTCTGCTC
+         61 GAGAACTTCT CCTCCTCCTA CGACTACGGC GAGAACGAGT CCGACTCCTG CTGCACCTCT
+        121 CCACCCTGCC CTCAGGACTT CTCCCTGAAC TTCGACCGTG CTTTCCTGCC CGCTCTGTAC
+        181 TCCCTGCTGT TCCTGCTGGG ACTGCTGGGC AACGGTGCTG TGGCTGCTGT GTTGCTGTCC
+        241 CGTCGTACCG CTCTGTCCTC TACCGACACC TTCCTGCTCC ACCTGGCTGT CGCTGACACC
+        301 CTGCTGGTGC TGACTCTGCC TCTGTGGGCT GTGGACGCTG CTGTGCAGTG GGTGTTCGGT
+        361 TCCGGCTTGT GCAAGGTGGC CGGTGCTCTG TTCAACATCA ACTTCTACGC TGGTGCTCTG
+        421 CTGCTGGCTT GCATCTCCTT CGACCGCTAC CTGAACATCG TGCACGCTAC CCAGCTGTAC
+        481 CGTCGTGGTC CTCCTGCTCG TGTGACCCTG ACTTGCCTGG CTGTGTGGGG ACTGTGCCTC
+        541 CTGTTCGCTC TGCCCGACTT CATCTTCCTG TCCGCTCACC ACGACGAGCG TCTGAACGCT
+        601 ACTCACTGCC AGTACAACTT CCCCCAAGTG GGCCGCACCG CTCTGCGTGT GTTGCAACTG
+        661 GTGGCTGGTT TCCTGCTGCC TCTGCTGGTC ATGGCTTACT GCTACGCTCA CATCCTGGCC
+        721 GTGCTGCTGG TGTCCCGTGG TCAAAGACGT CTGCGTGCTA TGCGTCTGGT GGTGGTCGTG
+        781 GTCGTCGCTT TCGCTCTGTG CTGGACCCCC TACCACCTGG TCGTGCTGGT GGACATCCTG
+        841 ATGGACCTGG GTGCTCTGGC TCGTAACTGC GGACGCGAGT CCCGTGTGGA CGTGGCCAAG
+        901 TCTGTGACCT CCGGCCTGGG TTACATGCAC TGCTGCCTGA ACCCCCTGCT GTACGCTTTC
+        961 GTGGGTGTCA AGTTCCGCGA GCGTATGTGG ATGCTGCTCC TGCGTCTGGG TTGCCCCAAC
+       1021 CAGAGAGGAC TGCAGCGTCA GCCTTCCTCC TCCCGTCGTG ACTCCTCTTG GAGCGAGACT
+       1081 TCCGAGGCTT CCTACTCCGG ACTGGGTTCC TCCGGTGGCG CCGGTGGCTC CGGTTCCTCT
+       1141 GGCGGTTCTG GTTCCTCCGC TCAACTTGAG AAAGAACTGC AGGCTCTCGA AAAAGAAAAC
+       1201 GCCCAACTCG AATGGGAGCT GCAAGCCTTG GAAAAAGAAC TGGCCCAATT GGAAAAAGAA
+       1261 AACCAGGCTT TGGAATGGGA GCTGGCTCAG TAA
+//
+
+]]></de:content>
+      <de:fileName>CXCR3opt-Linker-ZipperAcidic.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="8dacdb02ed2c8b89a16851333794b9859863961dd27af497f986a63360c92f89">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       CXCR7opt                1089 bp    DNA     linear       24-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..1089
+                     /note="human CXCR7opt"
+ORIGIN      
+          1 ATGGACCTGC ATCTTTTCGA CTACTCAGAG CCAGGCAACT TCTCGGATAT CTCCTGGCCT
+         61 TGCAATTCCT CTGACTGCAT CGTAGTGGAC ACAGTGATGT GTCCCAATAT GCCGAACAAA
+        121 AGCGTCCTGC TCTACACTCT CAGCTTCATC TACATCTTCA TCTTCGTCAT CGGCATGATC
+        181 GCTAACAGCG TCGTAGTCTG GGTCAATATC CAAGCGAAGA CGACAGGCTA TGACACGCAC
+        241 TGCTACATCT TGAACTTGGC CATTGCGGAT CTGTGGGTTG TACTCACTAT CCCAGTCTGG
+        301 GTTGTCTCAC TCGTGCAACA TAACCAGTGG CCAATGGGAG AACTGACTTG CAAAGTCACT
+        361 CACCTGATCT TCTCGATCAA CCTCTTCGGC AGCATTTTCT TTCTGACGTG CATGAGCGTT
+        421 GACCGCTATC TCTCGATCAC CTACTTTACC AACACCCCCT CTAGCAGGAA GAAGATGGTA
+        481 CGCCGAGTCG TCTGCATTCT TGTGTGGCTG CTGGCTTTCT GCGTTTCTCT GCCTGACACC
+        541 TACTATCTGA AGACCGTCAC CTCTGCTTCC AACAATGAGA CCTATTGCCG TTCCTTCTAT
+        601 CCGGAGCACT CTATCAAGGA GTGGCTGATC GGAATGGAAC TCGTGTCCGT TGTCTTGGGA
+        661 TTTGCCGTTC CCTTCAGCAT TATCGCTGTC TTCTACTTCC TGCTGGCAAG AGCGATTTCT
+        721 GCCTCCTCAG ATCAGGAGAA ACACAGCTCG CGCAAGATCA TCTTTTCCTA CGTCGTTGTC
+        781 TTCCTTGTCT GCTGGCTTCC CTACCATGTA GCAGTGCTGT TGGACATCTT CTCCATCCTG
+        841 CACTACATCC CTTTCACTTG TCGCCTTGAA CACGCTCTCT TCACAGCTCT TCACGTCACA
+        901 CAGTGCCTGA GCCTGGTGCA CTGCTGCGTT AACCCTGTCC TCTACAGCTT TATCAACCGC
+        961 AACTACAGGT ACGAGCTGAT GAAGGCCTTC ATCTTTAAGT ACTCGGCCAA GACTGGCCTT
+       1021 ACCAAGCTCA TTGATGCCTC CAGAGTCTCA GAAACGGAGT ACTCAGCACT GGAACAGAGC
+       1081 ACCAAATGA
+//
+
+]]></de:content>
+      <de:fileName>CXCR7opt.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="b2d7ec3fd674204edad1fc2166dd9e79ec438e9f49d0c75af8bcfd1b9eaa571f">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       CXCR7opt-ZipperAcidic       1275 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..1086
+                     /note="human CXCR7opt"
+     misc_feature    1087..1140
+                     /note="linker"
+     misc_feature    1141..1272
+                     /note="acidic leucine zipper"
+ORIGIN      
+          1 ATGGACCTGC ATCTTTTCGA CTACTCAGAG CCAGGCAACT TCTCGGATAT CTCCTGGCCT
+         61 TGCAATTCCT CTGACTGCAT CGTAGTGGAC ACAGTGATGT GTCCCAATAT GCCGAACAAA
+        121 AGCGTCCTGC TCTACACTCT CAGCTTCATC TACATCTTCA TCTTCGTCAT CGGCATGATC
+        181 GCTAACAGCG TCGTAGTCTG GGTCAATATC CAAGCGAAGA CGACAGGCTA TGACACGCAC
+        241 TGCTACATCT TGAACTTGGC CATTGCGGAT CTGTGGGTTG TACTCACTAT CCCAGTCTGG
+        301 GTTGTCTCAC TCGTGCAACA TAACCAGTGG CCAATGGGAG AACTGACTTG CAAAGTCACT
+        361 CACCTGATCT TCTCGATCAA CCTCTTCGGC AGCATTTTCT TTCTGACGTG CATGAGCGTT
+        421 GACCGCTATC TCTCGATCAC CTACTTTACC AACACCCCCT CTAGCAGGAA GAAGATGGTA
+        481 CGCCGAGTCG TCTGCATTCT TGTGTGGCTG CTGGCTTTCT GCGTTTCTCT GCCTGACACC
+        541 TACTATCTGA AGACCGTCAC CTCTGCTTCC AACAATGAGA CCTATTGCCG TTCCTTCTAT
+        601 CCGGAGCACT CTATCAAGGA GTGGCTGATC GGAATGGAAC TCGTGTCCGT TGTCTTGGGA
+        661 TTTGCCGTTC CCTTCAGCAT TATCGCTGTC TTCTACTTCC TGCTGGCAAG AGCGATTTCT
+        721 GCCTCCTCAG ATCAGGAGAA ACACAGCTCG CGCAAGATCA TCTTTTCCTA CGTCGTTGTC
+        781 TTCCTTGTCT GCTGGCTTCC CTACCATGTA GCAGTGCTGT TGGACATCTT CTCCATCCTG
+        841 CACTACATCC CTTTCACTTG TCGCCTTGAA CACGCTCTCT TCACAGCTCT TCACGTCACA
+        901 CAGTGCCTGA GCCTGGTGCA CTGCTGCGTT AACCCTGTCC TCTACAGCTT TATCAACCGC
+        961 AACTACAGGT ACGAGCTGAT GAAGGCCTTC ATCTTTAAGT ACTCGGCCAA GACTGGCCTT
+       1021 ACCAAGCTCA TTGATGCCTC CAGAGTCTCA GAAACGGAGT ACTCAGCACT GGAACAGAGC
+       1081 ACCAAAGGTT CCTCCGGTGG CGCCGGTGGC TCCGGTTCCT CTGGCGGTTC TGGTTCCTCC
+       1141 GCTCAACTTG AGAAAGAACT GCAGGCTCTC GAAAAAGAAA ACGCCCAACT CGAATGGGAG
+       1201 CTGCAAGCCT TGGAAAAAGA ACTGGCCCAA TTGGAAAAAG AAAACCAGGC TTTGGAATGG
+       1261 GAGCTGGCTC AGTAA
+//
+
+]]></de:content>
+      <de:fileName>CXCR7opt-ZipperAcidic.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="13203cf62feda8ab7686b34c14a988957e2602645e62e71ed961161db4f6c84c">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       SpacerH                   36 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   SpacerH
+VERSION     SpacerH
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /label="SpacerH"
+ORIGIN      
+        1 cagagaactt ataaaagtta atcgtagtcc atctaa  
+//
+]]></de:content>
+      <de:fileName>SpacerH-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="bd65b6d260e1b682ef40e1e914849d5858d1c88a4a6d6c5402b49fcebfe13c4b">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       SpacerI                   36 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   SpacerI
+VERSION     SpacerI
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /label="SpacerI"
+ORIGIN      
+        1 tattttagtg atcataagtt ttagtttgct cgagta  
+//
+]]></de:content>
+      <de:fileName>SpacerI-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="dc67735b83119272691e9776e06c025ce5ab777d07646811e35348378bd1f15f">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       SpacerM                   36 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   SpacerM
+VERSION     SpacerM
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /label="SpacerM"
+ORIGIN      
+        1 tagaatatct tccaatccct ttaactaatt gccacc  
+//
+]]></de:content>
+      <de:fileName>SpacerM-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="cf92661bc69e93c401c7d2bbdc09a19c4f0427f255169b1ed82f2a4184e90ab9">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       HisSnapMB                855 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   HisSnapMB
+VERSION     HisSnapMB
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    136..678
+                     /label="SNAP Tag"
+     misc_feature    1..69
+                     /label="gp64 Signalpeptide"
+     misc_feature    70..75
+                     /label="Spacer"
+     misc_feature    76..99
+                     /label="8xHIS Tag"
+     misc_feature    100..135
+                     /label="Linker I"
+     misc_feature    679..696
+                     /label="Linker II"
+     misc_feature    760..828
+                     /label="gp64 TM"
+     misc_feature    697..759
+                     /label="gp64 Membrane proximal region"
+     misc_feature    829..852
+                     /label="gp64 CTD"
+ORIGIN      
+        1 atggtaagcg ctattgtttt atatgtgctt ttggcggcgg cggcgcattc tgcctttgcg
+       61 gcggagcacg gcgcccatca tcatcatcac caccaccacg gttccggtgg tggtggctct
+      121 ggtggcggtg gttctgacaa ggactgcgag atgaagcgta ccaccctgga ctccccactg
+      181 ggcaagctgg aactgtccgg ttgcgagcag ggcctgcacc gtatcatctt cctcggcaag
+      241 ggcacctccg ctgctgacgc tgtggaagtg cctgctcctg ctgctgtgct gggtggtcct
+      301 gagcctctga tgcaggctac cgcttggctg aacgcttact tccaccagcc cgaggctatc
+      361 gaagagttcc ccgtccctgc tctgcaccac cccgtgttcc agcaagaatc cttcaccagg
+      421 caggtcctgt ggaagctgct gaaggtggtc aagttcggcg aagtgatctc ctactcccac
+      481 ctggctgctc tggctggcaa ccctgctgct accgctgctg tcaagaccgc tctgtccgga
+      541 aaccccgtgc ccatcctgat cccttgccac cgtgtggtgc aaggcgacct ggacgtcggt
+      601 ggttacgagg gtggactggc tgtgaaggaa tggctgctgg ctcacgaggg tcaccgtctg
+      661 ggaaagcctg gattgggcgc gccgggtggt ggttctgtcg gcaccagtct gagcgacatc
+      721 acttccatgg ctgaaggcga attggccgct aaattgactt cgttcatgtt tggtcatgta
+      781 gttaactttg taattatatt aattgtgatt ttatttttgt actgtatgat tagaaaccgt
+      841 aatagacaat attaa    
+//
+]]></de:content>
+      <de:fileName>HisSnapMB-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="92b1115a00373d029d03d71dbc0f59d646167b1142b71955706cd46ff167a039">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       SpacerJ                   36 bp ds-DNA     linear       29-AUG-2012
+ACCESSION   SpacerJ
+VERSION     SpacerJ
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    1..36
+                     /label="SpacerJ"
+ORIGIN      
+        1 taatagcacc actgtgagcc taatataccc ttttca  
+//
+]]></de:content>
+      <de:fileName>SpacerJ-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="feeaab62566ca52d6750b0f5f7e5d6c2fd3ec9f574ff38a352fe5f72004b1b85">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       RandomJunk2               70 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..70
+                     /note="RandomJunk2"
+ORIGIN      
+          1 CGTACACAGT ATGATCGGAC GCCTCATGAG ATCAATACGT ATACCAAGTG TCCTGTGAGC
+         61 AACAAAAGCT
+//
+
+]]></de:content>
+      <de:fileName>RandomJunk2.gbk</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="63c86f1f700d9bf237bea4ce40534f74e3ce2723f6c131d75474a67613c36c2d">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       region_[4621_478         228 bp ds-DNA     circular     28-AUG-2012
+ACCESSION   region_[4621_4786]
+VERSION     region_[4621_4786]
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    21..186
+                     /label="Tn7L"
+ORIGIN      
+        1 cataacccct aggagatccg aaccagataa gtgaaatcta gttccaaact attttgtcat
+       61 ttttaatttt cgtattagct tacgacgcta cacccagttc ccatctattt tgtcactctt
+      121 ccctaaataa tccttaaaaa ctccatttcc acccctccca gttcccaact attttgtccg
+      181 cccacagcgg ggcatttttc ttcctgttat gtttttaatc aaacatcc 
+//
+]]></de:content>
+      <de:fileName>TN7L-VE</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="aa474a4e2b2a8879486245c46987245e0c3dc067783f3030f4264a8df1aae631">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS       RandomJunk3               70 bp    DNA     linear       29-AUG-2012
+FEATURES             Location/Qualifiers
+     misc_feature    1..70
+                     /note="Randomjunk3"
+ORIGIN      
+          1 TGGATTTCGT ATTTGCTGCT TGTCTGTACT TTCAGAATCT TGACCTGCAT GGTAAAAAGA
+         61 CACTTTTTAT
+//
+
+]]></de:content>
+      <de:fileName>RandomJunk3.gbk</de:fileName>
+    </de:sequenceFile>
+  </de:sequenceFiles>
+  <de:partVOs>
+    <de:partVO id="1350404343494241">
+      <de:name>AmpR</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>970</de:stopBP>
+      <de:sequenceFileHash>5fb2c4c68f13e1561423adbe940b50f1d5060c210038115b619cfe0d26483e71</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343509058">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343495875">
+      <de:name>Ori_pBR322</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>620</de:stopBP>
+      <de:sequenceFileHash>68c2b3665aa29069643f59a034a11bbb791652a9137a86e39531fa5800b1d6d8</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343516952">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496074">
+      <de:name>TN7R</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>265</de:stopBP>
+      <de:sequenceFileHash>f6df78ada648baf2d93f57edad47f31b0ab916ae899271962e65e711e978e1ec</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343523738">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496640">
+      <de:name>GentR</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>792</de:stopBP>
+      <de:sequenceFileHash>105e5e30725aed1d4ba1b2eb4a45fc99a0362fafbf5daa92eb18fa89907fede5</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343530792">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496321">
+      <de:name>SpacerA</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>59bbf651e282bb077282a0740302e85f09a54ad353f3789e8fe55783a647da72</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343546766">
+          <de:fas>Embed_in_primer_forward</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496531">
+      <de:name>pH</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>118</de:stopBP>
+      <de:sequenceFileHash>29e7fbfc6266cfce258b3235b264bde9433d6d1ffa888bd7cb9e1738ae10a3c6</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343552982">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496382">
+      <de:name>HR5-IE1</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1033</de:stopBP>
+      <de:sequenceFileHash>9b0263b5b90d53405eb39cef8b7a40766c95ebab1ed8fac2a935bef8b361686e</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343552767">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496217">
+      <de:name>p10</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>122</de:stopBP>
+      <de:sequenceFileHash>e966b9eef0023c0c1d0020c2e7825231f0ef4c897a534db493b0b61760617127</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343552728">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496625">
+      <de:name>SpacerB</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>c086ff4a04208394ebdb608c7b73075785bdd4ad5ab6bbb11a17b3228fe47eac</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343559147">
+          <de:fas>Embed_in_primer_forward</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343496375">
+      <de:name>HB-C</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>552</de:stopBP>
+      <de:sequenceFileHash>625c5a2a975f01f0e3cfd08db36f2b7c26a5233aef7c178f1b279b9b53e2c631</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566320">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343497728">
+      <de:name>HIV-1Gag</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1503</de:stopBP>
+      <de:sequenceFileHash>5a29ae9f9794e386aec1d7800fc86940e29f78375fa51db1c0ac3fe3a9e83def</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566530">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343497612">
+      <de:name>MoMuLV_Pr65Gag</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1617</de:stopBP>
+      <de:sequenceFileHash>0a136d25c312758fc8f1de1eb59f899a2c9749ec47552ee66f3eed33be5ecc72</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566912">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343498403">
+      <de:name>HBsAG</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>681</de:stopBP>
+      <de:sequenceFileHash>a8726c4c7c8b3433ac99da5e9755d832f0ee2c8fb3df0bf8371cb9e5df056d0d</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566710">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343498912">
+      <de:name>HB-CZipB</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>726</de:stopBP>
+      <de:sequenceFileHash>a88eaf851bbf2a6f36b102b602b593c6aee7ba189c3746bac913bc2d25e42910</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566545">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343498884">
+      <de:name>HBsAgZipB</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>855</de:stopBP>
+      <de:sequenceFileHash>f6024c1e284f1561c0c627567b2256a786756ae89b99f05068767aadfd79a0e0</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566288">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343498815">
+      <de:name>MoMuLV_Pr65GagZipB</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1791</de:stopBP>
+      <de:sequenceFileHash>05222c7ae6e34a21255b393546b284036f33e855ebdb131a3127aaf8248cc3e5</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566660">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343499240">
+      <de:name>HIV-1GagZipB</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1677</de:stopBP>
+      <de:sequenceFileHash>410417a3d51fd4acb83826fbee0c080bac013970ef971605b2a99891ecb1fce8</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343566344">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343499652">
+      <de:name>SpacerC</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>8cb458a630d490aa1ba8da1873d92fcdee1483a15acba99f6abd55e108353d95</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343572565">
+          <de:fas>Embed_in_primer_reverse</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343499771">
+      <de:name>Sv40pA</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>240</de:stopBP>
+      <de:sequenceFileHash>4a095fb3c9eec2a8eede2d379b04f247b7b2125cec3b567e41ee45bb14000cea</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343579124">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343499964">
+      <de:name>RandomJunk1</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>70</de:stopBP>
+      <de:sequenceFileHash>659e38d80d167bab83e111fc4388698af68cad5921158d6e21ec9979271e18e0</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343585967">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343499061">
+      <de:name>SpacerG</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>657633fab35ba4dc26e3ae19333671d9e1de6fa0527be114ce9ad8b2da8c099d</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343592753">
+          <de:fas>Embed_in_primer_forward</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343500596">
+      <de:name>pH-2</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>118</de:stopBP>
+      <de:sequenceFileHash>29e7fbfc6266cfce258b3235b264bde9433d6d1ffa888bd7cb9e1738ae10a3c6</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343598923">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343500646">
+      <de:name>HR5-IE1-2</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1033</de:stopBP>
+      <de:sequenceFileHash>9b0263b5b90d53405eb39cef8b7a40766c95ebab1ed8fac2a935bef8b361686e</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343598771">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343500428">
+      <de:name>p10-2</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>122</de:stopBP>
+      <de:sequenceFileHash>e966b9eef0023c0c1d0020c2e7825231f0ef4c897a534db493b0b61760617127</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343598577">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343500258">
+      <de:name>SpacerL</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>956247fd0b4d388c728f087fd56addf8280eab8bded4359daf1ce2fb5f83637b</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343605779">
+          <de:fas>Embed_in_primer_forward</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343500790">
+      <de:name>CXCR3</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1107</de:stopBP>
+      <de:sequenceFileHash>951e044bc3ac94ae9909838bed9ea8be7426cd7a16da0a19b35734e4b7e7b22d</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343612800">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343500793">
+      <de:name>CXCR3ZipA</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1293</de:stopBP>
+      <de:sequenceFileHash>af9aed2b46e002e661ef3b100a0d7a0aded7ff5f38b4e04b3c1618a7ee77a23d</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343612335">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343501978">
+      <de:name>CXCR7</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1089</de:stopBP>
+      <de:sequenceFileHash>8dacdb02ed2c8b89a16851333794b9859863961dd27af497f986a63360c92f89</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343612007">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343501164">
+      <de:name>CXC7ZipA</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1275</de:stopBP>
+      <de:sequenceFileHash>b2d7ec3fd674204edad1fc2166dd9e79ec438e9f49d0c75af8bcfd1b9eaa571f</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343612324">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343501732">
+      <de:name>SpacerH</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>13203cf62feda8ab7686b34c14a988957e2602645e62e71ed961161db4f6c84c</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343618536">
+          <de:fas>Embed_in_primer_reverse</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343501046">
+      <de:name>Sv40pA-2</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>240</de:stopBP>
+      <de:sequenceFileHash>4a095fb3c9eec2a8eede2d379b04f247b7b2125cec3b567e41ee45bb14000cea</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343625809">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502695">
+      <de:name>SpacerI</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>bd65b6d260e1b682ef40e1e914849d5858d1c88a4a6d6c5402b49fcebfe13c4b</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343631971">
+          <de:fas>Embed_in_primer_forward</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502243">
+      <de:name>pH-3</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>118</de:stopBP>
+      <de:sequenceFileHash>29e7fbfc6266cfce258b3235b264bde9433d6d1ffa888bd7cb9e1738ae10a3c6</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343638396">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502950">
+      <de:name>HR5-IE1-3</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1033</de:stopBP>
+      <de:sequenceFileHash>9b0263b5b90d53405eb39cef8b7a40766c95ebab1ed8fac2a935bef8b361686e</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343638236">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502276">
+      <de:name>p10-3</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>122</de:stopBP>
+      <de:sequenceFileHash>e966b9eef0023c0c1d0020c2e7825231f0ef4c897a534db493b0b61760617127</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343638193">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502344">
+      <de:name>SpacerM</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>dc67735b83119272691e9776e06c025ce5ab777d07646811e35348378bd1f15f</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343644464">
+          <de:fas>Embed_in_primer_forward</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502959">
+      <de:name>HisSnapMB</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>855</de:stopBP>
+      <de:sequenceFileHash>cf92661bc69e93c401c7d2bbdc09a19c4f0427f255169b1ed82f2a4184e90ab9</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343651287">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502211">
+      <de:name>SpacerJ</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>36</de:stopBP>
+      <de:sequenceFileHash>92b1115a00373d029d03d71dbc0f59d646167b1142b71955706cd46ff167a039</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343657371">
+          <de:fas>Embed_in_primer_reverse</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502495">
+      <de:name>Sv40pA-3</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>240</de:stopBP>
+      <de:sequenceFileHash>4a095fb3c9eec2a8eede2d379b04f247b7b2125cec3b567e41ee45bb14000cea</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343664085">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502027">
+      <de:name>RandomJunk2</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>70</de:stopBP>
+      <de:sequenceFileHash>feeaab62566ca52d6750b0f5f7e5d6c2fd3ec9f574ff38a352fe5f72004b1b85</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343670619">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343502772">
+      <de:name>TN7L</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>228</de:stopBP>
+      <de:sequenceFileHash>63c86f1f700d9bf237bea4ce40534f74e3ce2723f6c131d75474a67613c36c2d</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343677365">
+          <de:fas>PCR</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1350404343503545">
+      <de:name>RandomJunk3</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>70</de:stopBP>
+      <de:sequenceFileHash>aa474a4e2b2a8879486245c46987245e0c3dc067783f3030f4264a8df1aae631</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1350404343684736">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+  </de:partVOs>
+  <de:eugeneRules>
+    <de:eugeneRule>
+      <de:name>rule1</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496382</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343497728</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule2</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496382</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343500646</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule3</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496382</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343500793</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule4</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496382</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343502950</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule5</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496217</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343500428</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule7</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496217</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343501978</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule8</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496217</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343502276</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule9</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343498403</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496531</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule10</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343498403</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343501164</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule11</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343498912</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496531</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule12</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343498884</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496531</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule13</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343498815</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496531</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule14</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343499240</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496531</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule15</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343497728</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496382</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule16</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343500646</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496382</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule17</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343500793</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496382</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule18</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343502950</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496382</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule20</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343497612</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496217</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule21</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343500428</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496217</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule22</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343501978</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496217</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule23</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343502276</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343496217</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule24</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343501164</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343498403</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule6</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1350404343496217</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1350404343497612</de:operand2ID>
+    </de:eugeneRule>
+  </de:eugeneRules>
+  <de:j5Collection>
+    <de:isCircular>true</de:isCircular>
+    <de:j5Bins>
+      <de:j5Bin>
+        <de:binName>No_Name0</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343509058</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name1</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343516952</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name2</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343523738</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name3</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343530792</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name4</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343546766</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name5</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343552982</de:partID>
+          <de:partID>1350404343552767</de:partID>
+          <de:partID>1350404343552728</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name6</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343559147</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name7</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343566320</de:partID>
+          <de:partID>1350404343566530</de:partID>
+          <de:partID>1350404343566912</de:partID>
+          <de:partID>1350404343566710</de:partID>
+          <de:partID>1350404343566545</de:partID>
+          <de:partID>1350404343566288</de:partID>
+          <de:partID>1350404343566660</de:partID>
+          <de:partID>1350404343566344</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name8</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343572565</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name9</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343579124</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name10</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343585967</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name11</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343592753</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name12</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343598923</de:partID>
+          <de:partID>1350404343598771</de:partID>
+          <de:partID>1350404343598577</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name13</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343605779</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name14</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343612800</de:partID>
+          <de:partID>1350404343612335</de:partID>
+          <de:partID>1350404343612007</de:partID>
+          <de:partID>1350404343612324</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name15</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343618536</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name16</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343625809</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name17</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343631971</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name18</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343638396</de:partID>
+          <de:partID>1350404343638236</de:partID>
+          <de:partID>1350404343638193</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name19</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343644464</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name20</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343651287</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name21</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343657371</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name22</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343664085</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name23</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343670619</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name24</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343677365</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name25</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1350404343684736</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+    </de:j5Bins>
+  </de:j5Collection>
+</de:design>
