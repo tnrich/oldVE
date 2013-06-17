@@ -420,12 +420,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
+        var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+        var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
 
         partPropertiesForm.getForm().reset();
         fasForm.getForm().reset();
 
+        changePartDefinitionBtn.disable();
+        changePartDefinitionBtn.addCls('btnDisabled');
+        deletePartBtn.disable();
         clearPartMenuItem.disable();
+        deletePartBtn.addCls('btnDisabled');
+        deletePartBtn.removeCls('selectedPartFocus');
+        openPartLibraryBtn.setText("Select Part From Library");
+        openPartLibraryBtn.addCls('selectPartFocus');
         //this.eugeneRulesGrid.reconfigure();
     },
 
@@ -471,6 +481,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
     onPartNameFieldChange: function (nameField) {
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var newName = nameField.getValue();
         var self = this;
 
@@ -489,6 +501,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
         });
+
+        if (self.selectedPart.get('sequencefile_id') == "" && self.selectedPart.get('name') != ""){
+            deletePartBtn.enable();
+            deletePartBtn.removeCls('btnDisabled');
+            deletePartBtn.addCls('selectPartFocus');
+            clearPartMenuItem.enable();
+        }
+        else if (self.selectedPart.get('sequencefile_id') == "" && self.selectedPart.get('name') == ""){
+            deletePartBtn.disable();
+            deletePartBtn.addCls('btnDisabled');
+            deletePartBtn.removeCls('selectPartFocus');
+            clearPartMenuItem.disable();
+
+        }
     },
 
     /**
