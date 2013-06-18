@@ -39,6 +39,7 @@ Ext.application({
         'VectorEditor.CreateNewFeatureWindowController',
         'VectorEditor.EditSequenceFeatureWindowController',
         'VectorEditor.PieContextMenuController',
+        'VectorEditor.SaveAsWindowController',
         'AuthWindowController',
         'DeviceEditor.DeviceEditorPanelController',
         'DeviceEditor.GridController',

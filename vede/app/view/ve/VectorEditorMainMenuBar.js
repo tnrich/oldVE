@@ -53,7 +53,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 	            	width: 120,
 	            	items []
             	}*/
-            /*},
+            },
             {
                 xtype: 'menuitem',
                 text: 'Close',
