@@ -30,7 +30,7 @@ Ext.define("Teselagen.manager.UserManager", {
     },
 
     /**
-     * Set user from JSON response
+     * Set user from JSON response after login
      * @param {Object} user
      */
     setUserFromJson: function(pUser) {

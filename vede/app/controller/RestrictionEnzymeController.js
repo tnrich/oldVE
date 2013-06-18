@@ -7,7 +7,7 @@
 Ext.define("Vede.controller.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.RestrictionEnzymeGroupManager"],
+    requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.RestrictionEnzymeGroupManager"],
 
     GroupManager: null,
     managerWindow: null,
@@ -40,6 +40,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
         this.application.on({
             RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened,
+            Teselagen.event.AuthenticationEvent.LOGGED_IN: this.onLoggedIn,
             scope: this
         });
     },
@@ -123,6 +124,13 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
          this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
      },
 
+     /**
+      * Initializing after login
+      */
+     onLoggedIn: function() {
+         this.GroupManager.initActive();
+     },
+     
      /**
      * Saves the active enzymes to a group.
      * Not implemented in the flex version.

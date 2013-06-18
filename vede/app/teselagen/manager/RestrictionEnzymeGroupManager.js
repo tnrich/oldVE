@@ -7,7 +7,8 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
-    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager", "Teselagen.manager.UserManager"],
+    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager", "Teselagen.manager.UserManager",
+               "Teselagen.models.RestrictionEnzymeGroup"],
 
     singleton: true,
 
@@ -63,6 +64,13 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         this.initializeDefaultActiveGroup();
     },
 
+    /**
+     * Initialize the active group
+     */
+    initActive: function() {
+        
+    },
+    
     /**
      * SHOULD BE IRRELEVANT IN JS VERSION
      * Given a Teselagen.models.User object, creates

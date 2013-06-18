@@ -87,10 +87,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 self.authResponse = JSON.parse(response.responseText);
                 self.updateSplashScreenMessage(self.authResponse.msg);
                 if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
+                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user);
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
-                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user);
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {

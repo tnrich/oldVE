@@ -2,53 +2,48 @@
  * UserManager tests.
  * @author Yuri Bendana
  */
-/*global describe, expect, it, runs, waitsFor*/
+/*global describe, expect, it*/
 
 Ext.require("Teselagen.manager.UserManager");
-Ext.require("Teselagen.models.User");
 Ext.onReady(function() {
     var UserManager = Teselagen.manager.UserManager;
-    var User = Teselagen.models.User;
     var username = "mfero";
     describe("Teselagen.manager.UserManager", function() {
         var user;
-        it("Get user", function() {
-            runs(function() {
-                UserManager.getLoggedInUser(function(pSuccess, pUser){
-                    expect(pSuccess).toBe(true);
-                    expect(Ext.isDefined(pUser)).toBe(true);
-                    expect(pUser.get("username")).toBe(username);
-                    user = pUser;
-                });
+        it("Get user", function(pDone) {
+            UserManager.getLoggedInUser(function(pSuccess, pUser){
+                expect(pSuccess).to.be.true;
+                expect(pUser).to.be.defined;
+                expect(pUser.get("username")).to.equal(username);
+                user = pUser;
+                pDone();
             });
         });
-        xit("Put user", function() { // Create a separate user to avoid problem with other test or use Mocha
-            waitsFor(function() {
-                return user;
-            });
-            runs(function() {
-                user.set("username", "dummy");
-                UserManager.update(user, function(pSuccess) {
-                    expect(pSuccess).toBe(true);
-                    UserManager.getLoggedInUser(function(pSuccess, pUser){
-                        expect(pSuccess).toBe(true);
-                        expect(pUser.get("username")).toBe("dummy");
-                        pUser.set("username", username);
-                        UserManager.update(pUser);
+        it("Put user", function(pDone) {
+            user.set("username", "dummy");
+            UserManager.update(user, function(pSuccess) {
+                expect(pSuccess).to.be.true;
+                UserManager.getLoggedInUser(function(pSuccess, pUser){
+                    expect(pSuccess).to.be.true;
+                    expect(pUser.get("username")).to.equal("dummy");
+                    pUser.set("username", username);
+                    UserManager.update(pUser, function(pSuccess) {
+                        expect(pSuccess).to.be.true;
+                        pDone();
                     });
                 });
             });
         });
         it("Set user", function() {
             var groupname = "group1";
-            var userdata = {user: {username:username, userRestrictionEnzymeGroups: [{name:groupname}]}};
+            var userdata = {"username":username, "userRestrictionEnzymeGroups": [{"name":groupname}]};
             UserManager.setUserFromJson(userdata);
             var user = UserManager.getUser();
-            expect(user).not.toBe(null);
-            expect(user.get("username")).toBe(username);
+            expect(user).not.to.be.null;
+            expect(user.get("username")).to.equal(username);
             var userRestrictionEnzymeGroups = user.userRestrictionEnzymeGroups();
-            expect(userRestrictionEnzymeGroups).not.toBe(undefined);
-            expect(userRestrictionEnzymeGroups.first().get("name")).toBe(groupname);
+            expect(userRestrictionEnzymeGroups).not.to.be.undefined;
+            expect(userRestrictionEnzymeGroups.first().get("name")).to.equal(groupname);
         });
     });
 });
