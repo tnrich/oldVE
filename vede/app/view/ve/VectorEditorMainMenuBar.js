@@ -33,30 +33,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 text: 'New Blank Vector Editor',
                 id: 'newBlankVectorEditorMenuItem'
-            },
+            },                  
             {
-                xtype: 'menuitem',
-                text: 'New from Existing...',
-                id: 'newFromExistingMenuItem'
-            },
-            {
-                xtype: 'menuitem',
-                text: 'Open...',
-                id: 'openMenuItem'
-            },
-            {
-                xtype: 'menuitem',
-                text: 'Open Recent',
-                id: 'openRecentMenuItem'//,
-                /*menu: {
-	            	xtype: 'menu',
-	            	width: 120,
-	            	items []
-            	}*/
-            },
-            {
-                xtype: 'menuitem',
+                //Disabled until VE is refactored to open multiple tabs.
+            	xtype: 'menuitem',
                 text: 'Close',
+                disabled: true,
                 id: 'closeMenuItem'
             },
             {
@@ -90,26 +72,47 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             },
             {
                 xtype: 'menuitem',
-                text: 'Permissions',
-                id: 'permissionsMenuItem'//,
-                /*menu: {
-            		xtype: 'menu',
-            		width: 120,
-            		items []
-            	}*/
+                id: 'importFileMenuItem',
+                text: 'Import File'
             },
+            {
+                xtype: 'menuitem',
+                id: 'exportToFileMenuItem',
+                text: 'Export to File'
+            },                                
+            /*{ //Move 'Permissions' functionality to inside of 'Properties' window.
+                xtype: 'menuitem',
+                text: 'Permissions',
+                id: 'permissionsMenuItem'
+            },*/
             {
                 xtype: 'menuseparator'
             },
-            {
+            /*{ //Commented out until we learn what to put in 'Print Setup...'.
             	xtype: 'menuitem',
                 text: 'Print Setup...',
                 id: 'printSetupMenuItem'
-            },
+            },*/
             {
-            	xtype: 'menuitem',
-                text: 'Print...',
-                id: 'printMenuItem'
+                xtype: 'menuitem',
+                text: 'Print',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menuitem',
+                        id: 'printSequenceViewMenuItem',
+                        text: 'Sequence'
+                    }, {
+                        xtype: 'menuitem',
+                        id: 'printCircularViewMenuItem',
+                        text: 'Circular View'
+                    }, {
+                        xtype: 'menuitem',
+                        id: 'printLinearViewMenuItem',
+                        text: 'Linear View'
+                    }]
+                }
             },
             {
                 xtype: 'menuseparator'
@@ -119,25 +122,6 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Properties...',
                 id: 'propertiesMenuItem'
             }
-            /*{
-                xtype: 'menuitem',
-                text: 'Print',
-                menu: {
-                    xtype: 'menu',
-                    width: 120,
-                    items: [{
-                        xtype: 'menuitem',
-                        text: 'Sequence'
-                    }, {
-                        xtype: 'menuitem',
-                        text: 'Circular View'
-                    }, {
-                        xtype: 'menuitem',
-                        text: 'Linear View'
-                    }]
-                }
-            }*/
-
              ]
          }
      },
@@ -322,7 +306,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'simulateDigestionMenuItem',
                 text: 'Simulate Digestion'
-            },
+            }
 //            {
 //                xtype: 'menuitem',
 //                text: 'Properties'
@@ -332,11 +316,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //                xtype: 'menuitem',
 //                text: 'Preferences'
 //            },
-            {
-                xtype: 'menuitem',
-                id: 'exportToFileMenuItem',
-                text: 'Export to File'
-            }]
+            ]
         }
     }
     ]

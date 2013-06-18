@@ -267,6 +267,22 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     	Ext.getCmp("createNewFeatureMenuItem").disable();
     },
     
+    onImportFileMenuItemClick: function() {
+    	
+    },
+    
+    onPrintCircularViewMenuItemClick: function() {
+    	var svgHtml = d3.select(".pieParent").node().parentNode.parentElement.innerHTML;
+        var myWindow = window.open('', '', 'width=200,height=100');      
+        myWindow.document.write('<html><head>');
+        myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
+        myWindow.document.write('<script type="text/javascript" src="../../../resources/js/d3.v2.min.js"></script>');
+        myWindow.document.write('</head><body>');
+        myWindow.document.write(svgHtml);
+        myWindow.document.write('</body></html>');
+        myWindow.print();
+    },
+    
     init: function() {
         this.control({
             "#cutMenuItem": {
@@ -358,7 +374,13 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             },
             "#newBlankVectorEditorMenuItem": {
                 click: this.onNewBlankVectorEditorMenuItemClick
-            },           
+            },
+            "#importFileMenuItem": {
+                click: this.onImportFileMenuItemClick
+            },
+            "#printCircularViewMenuItem": {
+                click: this.onPrintCircularViewMenuItemClick
+            },
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;
