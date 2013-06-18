@@ -8,7 +8,8 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     requires: ["Teselagen.manager.PieManager",
                "Teselagen.renderer.pie.SelectionLayer",
                "Teselagen.renderer.pie.WireframeSelectionLayer",
-               "Teselagen.event.ContextMenuEvent"],
+               "Teselagen.event.ContextMenuEvent",
+               "Teselagen.event.VisibilityEvent"],
 
     refs: [
         {ref: "pieContainer", selector: "#PieContainer"}
@@ -30,7 +31,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      */
     init: function() {
         this.callParent();
-
+        this.application.on("ShowMapCaretChanged", this.onShowMapCaretChanged, this);
         this.control({
             "#zoomInMenuItem": {
                 click: this.onZoomInMenuItemClick
@@ -59,6 +60,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         });
         pie.on("contextmenu",function() {
         	return d3.event.preventDefault();
+        });
+        this.pieManager.nameBox.on("click", function() {
+            self.onNameBoxClick;
         });
 
         // When pie is resized, scale the graphics in the pie.
@@ -232,6 +236,18 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
         if(this.pieManager.sequenceManager) {
             this.pieManager.render();
+        }
+    },
+
+    onShowMapCaretChanged: function(show) {
+        var showMapCaret = Ext.getCmp("mapCaretMenuItem").checked;
+        var angle = this.startSelectionAngle;
+        var bp = this.bpAtAngle(angle);
+        if (showMapCaret) {
+            this.pieManager.adjustCaret(bp);
+        }
+        else {
+            this.pieManager.caret.remove();
         }
     },
 
@@ -601,6 +617,12 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         //console.log(angle+":  ["+startAngle+", "+endAngle+"]");       
         //console.log("("+relX+", "+relY+");  "+relDist);
     },
+
+    onNameBoxClick: function() {
+        console.log('hey');
+        this.application.fireEvent(this.VisibilityEvent.SHOW_MAP_CARET_CHANGED,
+                                    checked);
+    }
     
 });
 
