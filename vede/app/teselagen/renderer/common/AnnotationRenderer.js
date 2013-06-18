@@ -9,7 +9,8 @@
  */
 Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
     requires: ["Teselagen.renderer.common.Alignment",
-               "Teselagen.bio.sequence.common.StrandType"],
+               "Teselagen.bio.sequence.common.StrandType",
+               "Teselagen.event.ContextMenuEvent"],
 
     inheritableStatics: {
         FRAME_COLOR: "#606060"
@@ -78,12 +79,12 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
     getRightClickListener: function(feature) {
         var sequenceManager = this.sequenceManager;
         return function() {
-            Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
-            d3.event.preventDefault();
-            var contextMenu = Ext.create('Ext.menu.Menu',{
+        	d3.event.preventDefault();
+        	//console.log("Annotation Rendered did 'getRightClickListener'")
+            Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, feature);
+            /*var contextMenu = Ext.create('Ext.menu.Menu',{
                   items: [{
                     text: 'Edit Sequence Feature',
-                    //iconCls: 'edit',
                     handler: function() {
                         var editSequenceFeatureWindow = Ext.create(
                         "Vede.view.ve.EditSequenceFeatureWindow");
@@ -93,14 +94,13 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
                     }
                   },{
                     text: 'Delete Sequence Feature',
-                    //iconCls: 'edit',
                     handler: function() {
                         sequenceManager.removeFeature(feature,false);
                     }
                   }]
             });                  
             contextMenu.show(); 
-            contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
+            contextMenu.setPagePosition(d3.event.pageX+1, d3.event.pageY - 5);*/
         };
     },
 });

@@ -158,7 +158,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                             border: 0,
                             dockedItems: [
                                 {
-                                    xtype: 'toolbar',
+                                    xtype: 'panel',
                                     dock: 'top',
                                     layout: {
                                         pack: 'end',

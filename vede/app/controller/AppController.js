@@ -4,6 +4,7 @@
  */
 Ext.define('Vede.controller.AppController', {
     extend: 'Ext.app.Controller',
+    requires: ["Teselagen.event.ContextMenuEvent"],
     init: function() {
         Vede.application = Vede.app;
     },
@@ -20,6 +21,9 @@ Ext.define('Vede.controller.AppController', {
 
                 e.preventDefault();
             }
-        }); 
+        });
+        Ext.EventManager.addListener(Ext.getBody(), 'mousedown', function(e){
+        	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, e);
+        });
     }
 });

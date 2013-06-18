@@ -7,7 +7,8 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
     requires: ["Teselagen.manager.PieManager",
                "Teselagen.renderer.pie.SelectionLayer",
-               "Teselagen.renderer.pie.WireframeSelectionLayer"],
+               "Teselagen.renderer.pie.WireframeSelectionLayer",
+               "Teselagen.event.ContextMenuEvent"],
 
     refs: [
         {ref: "pieContainer", selector: "#PieContainer"}
@@ -55,6 +56,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
         pie.on("mousemove", function() {
             self.onMousemove(self);
+        });
+        pie.on("contextmenu",function() {
+        	return d3.event.preventDefault();
         });
 
         // When pie is resized, scale the graphics in the pie.
@@ -234,18 +238,25 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     /**
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
-    onMousedown: function(self) {
-        self.startSelectionAngle = self.getClickAngle();
-        self.mouseIsDown = true;
-
-
-        if(self.pieManager.sequenceManager) {
-            self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
-
-            self.changeCaretPosition(self.startSelectionIndex);
-        }
-
-        self.selectionDirection = 0;
+    onMousedown: function(self) {   	    
+    	if(d3.event.button == 2) {
+        	d3.event.preventDefault();
+    		this.onRightMouseDown(self);
+    	} else {
+    		Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
+    		//console.log(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
+    		self.startSelectionAngle = self.getClickAngle();
+	        self.mouseIsDown = true;
+	        
+	
+	        if(self.pieManager.sequenceManager) {
+	            self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
+	
+	            self.changeCaretPosition(self.startSelectionIndex);
+	        }
+	
+	        self.selectionDirection = 0;
+    	}
     },
 
     /**
@@ -253,11 +264,16 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * sticky select (when the ctrl key is not held) as the mouse moves during a
      * click-and-drag.
      */
-    onMousemove: function(self) {
-        var endSelectionAngle = self.getClickAngle();
+    onMousemove: function(self) { 	
+    	if(d3.event.button == 2) {
+    		d3.event.preventDefault();
+    		return;
+    	}
+    	
+    	var endSelectionAngle = self.getClickAngle();
         var start;
         var end;
-
+        
         if(self.mouseIsDown && Math.abs(self.startSelectionAngle -
                     endSelectionAngle) > self.self.SELECTION_THRESHOLD &&
                     self.SequenceManager.getSequence().toString().length > 0 &&
@@ -347,7 +363,23 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 self.SelectionLayer.deselect();
                 self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
             }
-        }
+        } else if(d3.event.button == 2) {
+        	d3.event.preventDefault();
+        	if(self.clickedAnnotationStart !== null && 
+                self.clickedAnnotationEnd !== null){
+    			
+    			self.select(self.clickedAnnotationStart,
+                            self.clickedAnnotationEnd);
+
+    			self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                                           self,
+                                           self.SelectionLayer.start,
+                                           self.SelectionLayer.end);
+
+    			self.clickedAnnotationStart = null;
+    			self.clickedAnnotationEnd = null;
+            }      		
+		}
     },
 
     onZoomInMenuItemClick: function() {
@@ -529,5 +561,51 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
-    }
+    },
+    
+    onRightMouseDown: function(self) {
+    	d3.event.preventDefault();
+    	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+    	//console.log(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+    	
+    	var svg = d3.select(".pieParent");
+        var transformValues;
+        var scrolled = this.pieContainer.el.getScroll();
+
+        transformValues = svg.attr("transform").match(/[-.\d]+/g);
+        
+        // actualRadius will be accurate only if transformValues[0] == transformValues[3], 
+        // (i.e., the pie is scaled equally in the x and y directions)
+        var actualRadius = this.pieManager.railRadius * transformValues[0];
+        
+        var relX = d3.event.layerX - transformValues[4] -
+            this.pieManager.center.x * transformValues[0] + scrolled.left;
+
+        var relY = d3.event.layerY - transformValues[5] -
+            this.pieManager.center.y * transformValues[3] + scrolled.top;
+         
+        var relDist = Math.sqrt(relX*relX+relY*relY);
+        
+        var angle = Math.atan(relY / relX) + Math.PI / 2;
+        if(relX < 0) {
+            angle += Math.PI;
+        }
+        
+        var startAngle = this.SelectionLayer.startAngle;
+        var endAngle = this.SelectionLayer.endAngle;
+        
+        if(angle>=startAngle && angle<=endAngle && relDist<=actualRadius) {
+        	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
+        	//console.log(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
+        }
+        //console.log(angle+":  ["+startAngle+", "+endAngle+"]");       
+        //console.log("("+relX+", "+relY+");  "+relDist);
+    },
+    
 });
+
+
+
+
+
+

@@ -120,10 +120,16 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
                                .attr("d", path)
                                .on("mousedown", this.getClickListener(feature.getStart(),
                                                                       feature.getEnd()))
+                               .on("contextmenu", this.getRightClickListener(
+                                                        feature))                                       
                                .append("svg:title")
                                .text(this.getToolTip(feature));
+                
             }, this);
+            //this.addContextMenuListener(feature);
         }, this);
+        
+        
     },
 
     /**
@@ -195,4 +201,63 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
 
         return pFeatures;
     },
+    
+    addContextMenuListener: function(feature) {
+    	var sequenceManager = this.getSequenceManager();
+    	this.featureSVG.on("contextmenu", function(data,index) {
+    		Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+			d3.event.preventDefault();
+            var contextMenu = Ext.create('Ext.menu.Menu',{
+            	  items: [{
+            	    text: 'Edit Sequence Feature',
+            	    handler: function() {
+                    	var editSequenceFeatureWindow = Ext.create(
+                        "Vede.view.ve.EditSequenceFeatureWindow");
+                    	
+                        editSequenceFeatureWindow.show();
+                        editSequenceFeatureWindow.center();
+            	    }
+            	  },{
+              	    text: 'Delete Sequence Feature',
+              	    handler: function() {
+              	    	sequenceManager.removeFeature(feature,false);
+              	    }
+              	  }]
+            });                  
+            contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+        });
+    },
+    
+    onContextMenu: function(feature) {
+    	return function() {
+	    	var sequenceManager = this.getSequenceManager();
+	    	Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+			d3.event.preventDefault();
+	        var contextMenu = Ext.create('Ext.menu.Menu',{
+	        	  items: [{
+	        	    text: 'Edit Sequence Feature',
+	        	    handler: function() {
+	                	var editSequenceFeatureWindow = Ext.create(
+	                    "Vede.view.ve.EditSequenceFeatureWindow");
+	                	
+	                    editSequenceFeatureWindow.show();
+	                    editSequenceFeatureWindow.center();
+	        	    }
+	        	  },{
+	          	    text: 'Delete Sequence Feature',
+	          	    handler: function() {
+	          	    	sequenceManager.removeFeature(feature,false);
+	          	    }
+	          	  }]
+	        });                  
+	        contextMenu.show(); 
+	        contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+    	}
+    },
 });
+
+
+
+
+

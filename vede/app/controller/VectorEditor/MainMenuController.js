@@ -9,6 +9,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
+               'Teselagen.manager.VectorEditorManager',
                'Teselagen.utils.FormatUtils',
                "Vede.view.ve.GoToWindow",
                "Vede.view.RestrictionEnzymesManagerWindow",
@@ -20,6 +21,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     ProjectManager: null,
     VisibilityEvent: null,
     SequenceManagerEvent: null,
+    VEManager: null,
     
     onCutMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.CUT);
@@ -246,21 +248,17 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },
     
-    /*onNewBlankVectorEditorMenuItemClick: function() {
-    	this.application.fireEvent(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, Ext.create("Teselagen.manager.SequenceManager",
-    			{sequence: Teselagen.bio.sequence.DNATools.createDNA('')}));
-    	this.application.fireEvent(this.MenuItemEvent.NEW_BLANK_VECTOR_EDITOR);
-    	//Add something to deselect sequence part in Panel Menu or something
-    	
-    	
-    	//Ext.getCmp('projectTreePanel').activeItem=0;
-    	/*listenersObject[this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED] =
-            this.onSequenceManagerChanged;*/   	
-//    },
+    onNewBlankVectorEditorMenuItemClick: function() {
+    	var project = Teselagen.manager.ProjectManager.workingProject;
+    	var sequencesNames = [];
+        project.sequences().load().each(function (sequence) {
+            sequencesNames.push(sequence.data.name);
+        });
+        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);  	
+    },
     
     onSelectionCancelled: function(scope) {
     	Ext.getCmp("createNewFeatureMenuItem").disable();
-    	//console.log("dfadsfadsfadsg");
     },
     onSelectionChanged: function(scope) {
     	Ext.getCmp("createNewFeatureMenuItem").enable();
@@ -358,9 +356,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             },
-            /*"#newBlankVectorEditorMenuItem": {
+            "#newBlankVectorEditorMenuItem": {
                 click: this.onNewBlankVectorEditorMenuItemClick
-            }*/
+            },           
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;

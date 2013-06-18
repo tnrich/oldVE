@@ -31,7 +31,7 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
 
         if(!this.highlightSVG) {
             this.highlightSVG = d3.select("#annotateSVG").append("svg:g")
-                .attr("id", "highlightSVG");
+                .attr("id", "highlightSVG");           
         }
 
         if(fromIndex > toIndex) {
@@ -41,6 +41,7 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
         } else {
             this.drawHighlight(fromIndex, toIndex);
         }
+        
     },
 
     addAllHighlights: function(indices) {
@@ -94,5 +95,11 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
             .attr("height", this.sequenceAnnotationManager.caret.height - 4)
             .attr("fill", this.self.HIGHLIGHT_COLOR)
             .attr("fill-opacity", this.self.HIGHLIGHT_TRANSPARENCY);
-    }
+    },
+    
+    
 });
+
+
+
+

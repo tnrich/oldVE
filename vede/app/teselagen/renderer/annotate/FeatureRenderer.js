@@ -419,9 +419,37 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
 
     addClickListener: function(feature){
-        this.featureGroupSVG.on("mousedown", function(){
+    	var sequenceManager = this.sequenceAnnotationManager.getSequenceManager();
+    	this.featureGroupSVG.on("mousedown", function(){
             Vede.application.fireEvent("AnnotatePanelAnnotationClicked", feature.getStart(), feature.getEnd());
+        });
+    	this.featureGroupSVG.on("contextmenu", function(data,index) {
+			Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+			d3.event.preventDefault();
+            var contextMenu = Ext.create('Ext.menu.Menu',{
+            	  items: [{
+            	    text: 'Edit Sequence Feature',
+            	    handler: function() {
+                    	var editSequenceFeatureWindow = Ext.create(
+                        "Vede.view.ve.EditSequenceFeatureWindow");
+                    	
+                        editSequenceFeatureWindow.show();
+                        editSequenceFeatureWindow.center();
+            	    }
+            	  },{
+              	    text: 'Delete Sequence Feature',
+              	    handler: function() {
+              	    	sequenceManager.removeFeature(feature,false);
+              	    }
+              	  }]
+            });                  
+            contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
         });
     },
 });
+
+
+
+
 

@@ -92,6 +92,7 @@ img {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  padding: 0px;
 }
 
 .x-tab-default .x-tab-inner {
@@ -1159,8 +1160,4 @@ background: #F8F8F8;
 
 .gridcolumn-wrap-text {
   white-space: normal;
-}
-
-.x-grid-cell-inner {
-  white-space: normal; /* changed from nowrap */
 }
