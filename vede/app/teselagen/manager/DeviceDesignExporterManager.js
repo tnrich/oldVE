@@ -136,6 +136,28 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
     },
 
 
+    toTitleCase: function (str) {
+        return str.replace(/([\w&`'â€˜â€™"â€œ.@:\/\{\(\[<>_]+-? *)/g, function(match, p1, index, title){ // ' fix syntax highlighting
+            if (index > 0 && title.charAt(index - 2) != ":" && 
+                match.search(/^(a(nd?|s|t)?|b(ut|y)|en|for|i[fn]|o[fnr]|t(he|o)|vs?\.?|via)[ -]/i) > -1)
+                return match.toLowerCase();
+            if (title.substring(index - 1, index + 1).search(/['"_{([]/) > -1)
+                return match.charAt(0) + match.charAt(1).toUpperCase() + match.substr(2);
+            if (match.substr(1).search(/[A-Z]+|&|[\w]+[._][\w]+/) > -1 ||
+                title.substring(index - 1, index + 1).search(/[\])}]/) > -1)
+                return match;
+            return match.charAt(0).toUpperCase() + match.substr(1);
+        });
+    },
+
+    stripTags: function(str){
+        return str.replace(/(<([^>]+)>)/ig,"");
+    },
+
+    addCDATA: function(str){
+        return "<![CDATA["+ str +"]]>";
+    },
+
     /**
      * Generate XML Structure
      * @param {Model} DEProject.
@@ -197,17 +219,27 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             // Sequences Processing
             json["de:sequenceFiles"]["de:sequenceFile"].forEach(function(sequence){
                 var sequenceFile = sequenceFiles.appendChild(doc.createElement("de:sequenceFile"));
-
+                
                 for(var prop in sequence)
                 {
-                    if(typeof(sequence[prop]) !== "object" && prop!=="hash")
+                    if(typeof(sequence[prop]) !== "object" && prop!=="hash" && prop!=="de:format" && prop!=="de:content")
                     {
                         var propNode = sequenceFile.appendChild(doc.createElement(prop));
                         if(sequence[prop]) { propNode.textContent = sequence[prop]; }
                     }
-
-                    sequenceFile.setAttribute("hash", sequence.hash);
                 }
+
+                sequenceFile.setAttribute("hash", sequence.hash);
+
+                // Setting customized properties (which need transformation)
+                var propNode = sequenceFile.appendChild(doc.createElement("de:format"));
+                if(sequence["de:format"]) { propNode.textContent = self.toTitleCase(sequence["de:format"].toLowerCase()); }
+
+                var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
+                if(sequence["de:content"]) { propNode.textContent = "<![CDATA[" + sequence["de:content"] +"]]>"; }
+
+                // CDATA
+                
             });
 
             var eugeneRules = doc.documentElement.appendChild(doc.createElement("de:eugeneRules"));
@@ -231,6 +263,9 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             //sequenceFile.textContent = "hello";
 
             var fileContent = (new XMLSerializer()).serializeToString(doc);
+            fileContent = fileContent.replace(/&lt;|&gt;/g,function(s){return s==="&lt;"?"<":">"});
+            fileContent = fileContent.replace(/&quot;/g,'"');
+            debugger;
             self.saveToFile(fileName,fileContent);
         });
     }
