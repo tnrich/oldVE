@@ -24,11 +24,11 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		 */
 		createDNA: function(pDNASequence){
 			var DNASequence = pDNASequence.toLowerCase();
+            var characters = DNASequence.split("");
 			var symbols = [];
 
 			for (var i = 0; i < DNASequence.length; i++) {
-
-				var symbol = this.DNAAlphabet.symbolMap(DNASequence.charAt(i));
+				var symbol = this.DNAAlphabet.symbolMap(characters[i]);
 				if (symbol == null) {
 					//Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
 				} else {

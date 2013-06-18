@@ -175,8 +175,6 @@ Ext.define("Teselagen.manager.RailManager", {
      * renderers.
      */
     render: function() {
-        Ext.suspendLayouts();
-
         var renderer;
         if(this.dirty) {
             for(var i = 0; i < this.renderers.length; i++) {
@@ -253,8 +251,6 @@ Ext.define("Teselagen.manager.RailManager", {
         } else {
             this.featureSVG.style("visibility", "hidden");
         }
-
-        Ext.resumeLayouts(true);
     },
 
     /**

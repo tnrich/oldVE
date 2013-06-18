@@ -14,7 +14,7 @@ Ext.define("Teselagen.manager.ORFManager", {
 
     config: {
         minORFSize: 300,
-        orfs: null
+        orfs: []
     },
 
     mixins: {
@@ -30,8 +30,6 @@ Ext.define("Teselagen.manager.ORFManager", {
      */
     initialize: function() {
         this.DNATools = Teselagen.bio.sequence.DNATools;
-
-        this.orfs = [];
     },
 
     setOrfs: function(pOrfs) {
@@ -43,9 +41,9 @@ Ext.define("Teselagen.manager.ORFManager", {
      * @return {Teselagen.bio.orf.ORF[]} Array of ORFs in DNA sequence.
      */
     getOrfs: function() {
-        if(this.dirty) {
+        if(this.getDirty()) {
             this.recalculate();
-            this.dirty = false;
+            this.setDirty(false);
         } 
 
         return this.orfs;
@@ -59,7 +57,7 @@ Ext.define("Teselagen.manager.ORFManager", {
     setMinORFSize: function(pSize) {
         if(this.minORFSize != pSize) {
             this.minORFSize = pSize;
-            this.dirty = true;
+            this.setDirty(true);
         }
     },
 
@@ -68,8 +66,8 @@ Ext.define("Teselagen.manager.ORFManager", {
      * Handles recalculation depending on whether the sequence is linear or circular.
      */
     recalculate: function() {
-        if(this.sequenceManager) {
-            if(this.sequenceManager.getCircular()) {
+        if(this.getSequenceManager()) {
+            if(this.getSequenceManager().getCircular()) {
                 this.recalculateCircular();
             } else {
                 this.recalculateNonCircular();
@@ -87,9 +85,9 @@ Ext.define("Teselagen.manager.ORFManager", {
      */
     recalculateNonCircular: function() {
         this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(
-                                this.sequenceManager.getSequence(),
-                                this.sequenceManager.getReverseComplementSequence(),
-                                this.minORFSize));
+                                this.getSequenceManager().getSequence(),
+                                this.getSequenceManager().getReverseComplementSequence(),
+                                this.getMinORFSize()));
     },
 
     /**
@@ -97,8 +95,8 @@ Ext.define("Teselagen.manager.ORFManager", {
      * Recalculates ORFs for circular DNA.
      */
     recalculateCircular: function() {
-        var forwardSequence = this.sequenceManager.getSequence().seqString();
-        var backwardSequence = this.sequenceManager.getReverseComplementSequence().seqString();
+        var forwardSequence = this.getSequenceManager().getSequence().seqString();
+        var backwardSequence = this.getSequenceManager().getReverseComplementSequence().seqString();
 
         var doubleForward = this.DNATools.createDNA(forwardSequence +
                                                forwardSequence);
@@ -108,7 +106,7 @@ Ext.define("Teselagen.manager.ORFManager", {
         var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(
                                                                 doubleForward,
                                                                 doubleBackward,
-                                                                this.minORFSize);
+                                                                this.getMinORFSize());
 
         var maxLength = forwardSequence.length;
 

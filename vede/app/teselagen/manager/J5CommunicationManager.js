@@ -35,9 +35,12 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     },
 
     condenseAssemblyFiles: function(data,cb){
-        console.log("Starting Ajax Request");
+
+        toastr.options.onclick = null;
+        toastr.info("Condensing Assembly Files...");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
 
         var self = this;
         Ext.Ajax.request({
@@ -47,10 +50,17 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                var downloadBtn = currentTab.j5Window.query('button[cls=downloadCondenseAssemblyResultsBtn]')[0];
-                downloadBtn.show();
+                
+                var condenseAssembliesBtn = inspector.down("button[cls='downloadCondenseAssemblyResultsBtn']");
+                condenseAssembliesBtn.show();
+
+
+                toastr.options.onclick = null;
+                toastr.success("Assembly Files Ready to Download");
+
                 self.condenseAssemblyFilesResults = response;
                 return cb(true);
+
             },
             failure: function(response, opts) {
                 return cb(false,response);
@@ -59,9 +69,11 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     },
 
     distributePCRRequest: function(data,cb){
-        console.log("Starting Ajax Request");
+        toastr.options.onclick = null;
+        toastr.info("Distributing PCR Reactions...");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
 
         var files = {};
         files.encoded_plate_list_file = data.sourcePlateFileText;
@@ -78,10 +90,17 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                var downloadBtn = currentTab.j5Window.query('button[cls=downloadDownstreamAutomationBtn]')[0];
+
+                var downloadBtn = inspector.down('button[cls=downloadDownstreamAutomationBtn]');
                 downloadBtn.show();
                 self.designDownstreamAutomationResults = response;
+
+
+                toastr.options.onclick = null;
+                toastr.success("PCR Distribution Complete");
+
                 return cb(true);
+
             },
             failure: function(response, opts) {
                 return cb(false,response);

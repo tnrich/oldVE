@@ -763,16 +763,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             ]
                                         },
                                         {
-                                            xtype: 'panel',
+                                            xtype: 'button',
                                             margin: '20 0 0 0',
-                                            border: false,
-                                            // items: [
-                                            //  {
-                                            //     xtype: 'button',
-                                            //     cls: 'downloadCondenseAssemblyResultsBtn',
-                                            //     text: 'Download Results'
-                                            // }
-                                            // ]
+                                            cls: 'downloadCondenseAssemblyResultsBtn',
+                                            text: 'Download Results',
+                                            hidden:true
                                         }
                                     ]   
                                 },
@@ -843,16 +838,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             margin: '20 0 0 0',
                                             height: 30,
                                             text: 'Customize Automation Parameters'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            cls: 'downloadDownstreamAutomationBtn',
+                                            pressed: false,
+                                            text: 'Download Results',
+                                            hidden: true,
+                                            margin: '15 0 0 0'
                                         }
-                                        // {
-                                        //     xtype: 'button',
-                                        //     cls: 'downloadDownstreamAutomationBtn',
-                                        //     enableToggle: true,
-                                        //     pressed: false,
-                                        //     text: 'Download Results',
-                                        //     hidden: true,
-                                        //     margin: '15 0 0 0'
-                                        // }
                                         ]
                                     }
                                     ]

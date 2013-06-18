@@ -62,6 +62,14 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
+            // GET CREATE SEQUENCE WITHOUT ID!
+            if( request.operation.action === "create" && !request.operation.filters && !request.params.id)
+            {
+                var url = "sequences";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
             // GET SPECIFIC SEQUENCE WITHOUT ID!
             if( request.operation.action === "read" && !request.operation.filters && !request.params.id)
             {
@@ -79,7 +87,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
             }
 
-            debugger;
             console.warn("No sequence url generated");
 
         },
@@ -109,6 +116,8 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "sequenceFileFormat",
         convert: function(v) {
             var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
+            format = format.toUpperCase().replace("-", "");
+            format = format.toUpperCase().replace("JBEISEQ", "JBEISEQXML");
             var constants = Teselagen.constants.Constants;
 
             if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {

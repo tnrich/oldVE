@@ -239,9 +239,11 @@ Ext.define("Teselagen.manager.RowManager", {
     pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows){
         //console.log("Push in Row annotations before: " + pRows);
         var bpPerRow = this.sequenceAnnotator.getBpPerRow();
+        var seqLength = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;
+        pItemEnd = Math.min(pItemEnd, seqLength - 1);
         if (pItemStart > pItemEnd){
             var rowStartIndex = Math.floor(pItemStart/bpPerRow);
-            var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1)/bpPerRow);
+            var rowEndIndex = Math.floor((seqLength - 1)/bpPerRow);
 
             var rowStartIndex2 = 0;
             var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());

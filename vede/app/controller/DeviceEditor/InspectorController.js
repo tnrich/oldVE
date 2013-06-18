@@ -345,6 +345,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 changePartDefinitionBtn.enable();
                                 deletePartBtn.enable();
                                 deletePartBtn.removeCls('btnDisabled');
+                                deletePartBtn.removeCls('selectPartFocus');
                                 clearPartMenuItem.enable();
                                 partSourceNameField.setValue(sequenceFile.get('partSource'));
                             } else {
@@ -354,11 +355,21 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 changePartDefinitionBtn.addCls('btnDisabled');     
                                 deletePartBtn.disable();
                                 clearPartMenuItem.disable();
+                                deletePartBtn.removeCls('selectPartFocus');
                                 deletePartBtn.addCls('btnDisabled');
                             }
                         }
                     }
                 });
+            } else if (j5Part.get('sequencefile_id') == "" && j5Part.get('name') != ""){
+                changePartDefinitionBtn.disable();
+                openPartLibraryBtn.setText("Select Part From Library");
+                openPartLibraryBtn.addCls('selectPartFocus');
+                changePartDefinitionBtn.addCls('btnDisabled');
+                deletePartBtn.enable();
+                deletePartBtn.removeCls('btnDisabled');
+                deletePartBtn.addCls('selectPartFocus');
+                clearPartMenuItem.enable();  
             } else {
                 changePartDefinitionBtn.disable();
                 openPartLibraryBtn.setText("Select Part From Library");
@@ -366,6 +377,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 changePartDefinitionBtn.addCls('btnDisabled');     
                 deletePartBtn.disable();
                 clearPartMenuItem.disable();
+                deletePartBtn.removeCls('selectPartFocus');
                 deletePartBtn.addCls('btnDisabled');
             }
 
@@ -408,12 +420,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
+        var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+        var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
 
         partPropertiesForm.getForm().reset();
         fasForm.getForm().reset();
 
+        changePartDefinitionBtn.disable();
+        changePartDefinitionBtn.addCls('btnDisabled');
+        deletePartBtn.disable();
         clearPartMenuItem.disable();
+        deletePartBtn.addCls('btnDisabled');
+        deletePartBtn.removeCls('selectedPartFocus');
+        openPartLibraryBtn.setText("Select Part From Library");
+        openPartLibraryBtn.addCls('selectPartFocus');
         //this.eugeneRulesGrid.reconfigure();
     },
 
@@ -441,11 +463,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
         var contentArray = [];
         j5Bin.parts().each(function(part, i) {
-            contentArray.push(part.get("name"));
-            contentArray.push(": ");
-            contentArray.push(part.get("fas"));
-//            contentArray.push(j5Bin.getFas(i));
-            contentArray.push("<br>");
+            if(!part.get("phantom")) {
+                contentArray.push(part.get("name"));
+                contentArray.push(": ");
+                contentArray.push(part.get("fas"));
+                contentArray.push("<br>");
+            }
         });
 
         contentField.setValue(contentArray.join(""));
@@ -458,22 +481,40 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
     onPartNameFieldChange: function (nameField) {
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var newName = nameField.getValue();
         var self = this;
-        if(self.selectedPart.data.phantom)
-        {
-            self.selectedPart = Ext.create("Teselagen.models.Part");
-        }
-        Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
-            self.selectedPart.set("name", newName);
 
-            if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
+        Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
+            // If the selected part is not in the device already, add it.
+            if(self.selectedPart.get("phantom") || 
+               self.DeviceDesignManager.getBinAssignment(self.activeProject,
                                                          self.selectedPart) < 0) {
-                self.DeviceDesignManager.addPartToBin(self.activeProject,
-                                                      self.selectedPart,
-                                                      self.selectedBinIndex);
+                self.selectedPart = Ext.create("Teselagen.models.Part");
+                self.selectedPart.set("phantom", false);
+                self.selectedPart.set("name", newName);
+
+                self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
+            } else {
+                self.selectedPart.set("name", newName);
             }
+
         });
+
+        if (self.selectedPart.get('sequencefile_id') == "" && self.selectedPart.get('name') != ""){
+            deletePartBtn.enable();
+            deletePartBtn.removeCls('btnDisabled');
+            deletePartBtn.addCls('selectPartFocus');
+            clearPartMenuItem.enable();
+        }
+        else if (self.selectedPart.get('sequencefile_id') == "" && self.selectedPart.get('name') == ""){
+            deletePartBtn.disable();
+            deletePartBtn.addCls('btnDisabled');
+            deletePartBtn.removeCls('selectPartFocus');
+            clearPartMenuItem.disable();
+
+        }
     },
 
     /**

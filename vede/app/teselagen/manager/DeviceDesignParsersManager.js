@@ -23,7 +23,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         for (var indexBin in bins) {
             if (!bins[indexBin].nodeName) { continue; }
             var bin = bins[indexBin];
-            var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
+            var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent.toUpperCase();
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
             {
                 bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
@@ -196,7 +196,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     var partName;
                     partName = part.sequence["name"];
                     if(part.sequence["de:fileName"]) partName = part.sequence["de:fileName"].replace('.gb',"");
-
+                    if(newPart.get('partSource')===""&&!newPart.get('partSource')) newPart.set('partSource',partName);
                     // Sequence processing
                     var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                         name: partName,
@@ -306,7 +306,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             for (var sequenceindex in sequences) {
                 var sequence = sequences[sequenceindex];
                 if (!sequence.nodeName || typeof sequence !== "object") { continue; }
-                if (String(sequence.getAttribute.hash) === String(targetHash) && !found ) { cb(sequence); }
+                if (String(sequence.getAttribute("hash")) === String(targetHash) && !found ) { cb(sequence); }
             }
         }
 
@@ -322,8 +322,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var bin = bins[indexBin];
             var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
-            var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;
+            var direction = (bin.getElementsByTagNameNS("*", "direction")[0].textContent === "forward");
             var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
+            
+            var fro = "";
+            if( bin.getElementsByTagNameNS("*", "fro") ) fro = (bin.getElementsByTagNameNS("*", "fro").length > 0) ? bin.getElementsByTagNameNS("*", "fro")[0].textContent : "";
+            var extra3PrimeBps = "";
+            if ( bin.getElementsByTagNameNS("*", "extra3PrimeBps") ) extra3PrimeBps = (bin.getElementsByTagNameNS("*", "extra3PrimeBps").length > 0) ? bin.getElementsByTagNameNS("*", "extra3PrimeBps")[0].textContent : "";
+            var extra5PrimeBps = "";
+            if( bin.getElementsByTagNameNS("*", "extra5PrimeBps") ) extra5PrimeBps = (bin.getElementsByTagNameNS("*", "extra5PrimeBps").length > 0) ? bin.getElementsByTagNameNS("*", "extra5PrimeBps")[0].textContent : "";
 
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) { console.warn(iconID); console.warn("Invalid iconID"); }
 
@@ -331,7 +338,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 binName: binName,
                 iconID: iconID,
                 directionForward: direction,
-                dsf: (dsf === "true") ? true : false
+                dsf: (dsf === "true") ? true : false,
+                fro: fro,
+                extra3PrimeBps: extra3PrimeBps,
+                extra5PrimeBps: extra5PrimeBps
             });
 
             var parts = bin.getElementsByTagNameNS("*", "partID");
@@ -357,6 +367,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
                         sequenceFileName: sequence.getElementsByTagNameNS("*", "fileName")[0].textContent
                     });
+
+                    newSequence.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
+                    newSequence.set('name',newPart.get('name'));
 
                     newPart.setSequenceFileModel(newSequence);
                 });
@@ -491,11 +504,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
                 else if(commentLine)
                 {
-                    ignoredLines.push(line);
+                    ignoredLines.push({"originalRuleLine":line});
                 }
                 else throw new Error("Invalid eugene rule line");
                 
-                if(notfoundPart) ignoredLines.push(line);
+                if(notfoundPart) ignoredLines.push({"originalRuleLine":line});
 
                 if(!commentLine && !notfoundPart)
                 {
@@ -511,12 +524,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     }
                     catch(e)
                     {
-                        //debugger;
                         if( e.message.match( /Illegal CompositionalOperator/ ) )
                         {
                             //console.log("Unsupported operator");
                             unsupported = true;
-                            ignoredLines.push(line);
+                            ignoredLines.push({"originalRuleLine":line});
                         }
                     }
                     
@@ -560,8 +572,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             checkForDuplicatedName(rule,function(dup){
                 if(dup) { 
+                    
+                    conflictRules.push({"originalRuleLine":"Name conflict, renamed from "+rule.data.name+" to "+rule.data.name+'_1'});
                     rule.set('name',rule.data.name+'_1');
-                    conflictRules.push("Name conflict, renamed to "+rule.data.name); 
                 }
                 return cb(dup)
             })
@@ -594,20 +607,49 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
 
         var endEugeneRulesProcessing = function(){
-                        console.log("------------");
-                        console.log("Conflicts");
-                        console.log(conflictRules);
-                        console.log("------------");
-                        console.log("New rules");
-                        newRules.each(function(rule){
-                            console.log(rule.data.originalRuleLine);
-                        });
-                        console.log("------------");
-                        console.log("Ignored lines");
-                        console.log(ignoredLines);
-                        console.log("------------");
-                        console.log("Repeated rules");
-                        console.log(repeatedRules);
+
+        var eugeneRulesImportWindow = Ext.create('Vede.view.de.EugeneRulesImportDialog').show();
+
+        eugeneRulesImportWindow.down('grid[name="new"]').reconfigure(newRules)
+
+        var conflictRulesStore = new Ext.data.ArrayStore({
+                fields: [
+                   {name: 'originalRuleLine'}
+                ]
+            });
+        conflictRulesStore.loadData(conflictRules);
+        eugeneRulesImportWindow.down('grid[name="conflict"]').reconfigure(conflictRulesStore);
+
+        var ignoredRulesStore = new Ext.data.ArrayStore({
+                fields: [
+                   {name: 'originalRuleLine'}
+                ]
+            });
+        ignoredRulesStore.loadData(ignoredLines);
+        eugeneRulesImportWindow.down('grid[name="ignored"]').reconfigure(ignoredRulesStore);
+
+        var repeatedRulesStore = new Ext.data.ArrayStore({
+                fields: [
+                   {name: 'originalRuleLine'}
+                ]
+            });
+        repeatedRulesStore.loadData(repeatedRules);
+        eugeneRulesImportWindow.down('grid[name="repeated"]').reconfigure(repeatedRulesStore);
+
+        eugeneRulesImportWindow.down('button[text="Ok"]').on('click', function() {
+            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
+            // Load the Eugene Rules in the Design
+            newRules.each(function(rule){
+                design.addToRules(rule);
+            });
+            eugeneRulesImportWindow.close();
+        });
+
+        eugeneRulesImportWindow.down('button[text="Cancel"]').on('click', function() {
+            eugeneRulesImportWindow.close();
+        });
+
         };
 
         var processedRules = parsedRules.count();
@@ -618,7 +660,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             checkForRepeatedRule(parsedRule,function(repeated){
                 if(repeated) 
                 {
-                    repeatedRules.push(parsedRule.data.originalRuleLine);
+                    repeatedRules.push({"originalRuleLine":parsedRule.data.originalRuleLine});
                     processedRules--;
                     if(processedRules === 0) endEugeneRulesProcessing();
                 }

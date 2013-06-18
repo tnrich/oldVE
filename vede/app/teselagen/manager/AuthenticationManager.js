@@ -31,6 +31,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
+
+
+        var updateServerPath = function(){
+            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+        };
+
         var self = this;
         if(Vede.application.autoCredentialsFetch)
         {
@@ -46,14 +53,14 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 },
                 failure: function() {
                     Ext.create("Vede.view.AuthWindow").show();
+                    updateServerPath();
                 }
             });
         }
         else
         {
            Ext.create("Vede.view.AuthWindow").show();
-           var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-           Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+           updateServerPath();
         }
     },
 

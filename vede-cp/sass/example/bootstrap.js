@@ -27,6 +27,7 @@ Ext.Loader.addClassPathMappings({
   "Teselagen.manager.PartManager": "../../../vede/app/teselagen/manager/deprecated/PartManager.js"
 });
 Ext.ClassManager.addNameAlternateMappings({
+  "Vede.view.de.EugeneRulesImportDialog": [],
   "Teselagen.bio.parsers.GenbankOriginKeyword": [],
   "Teselagen.renderer.pie.FeatureLabel": [],
   "Teselagen.bio.sequence.dna.DNASequence": [],
@@ -378,6 +379,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.ve.VectorEditorMainMenuBar": []
 });
 Ext.ClassManager.addNameAliasMappings({
+  "Vede.view.de.EugeneRulesImportDialog": [],
   "Teselagen.bio.parsers.GenbankOriginKeyword": [],
   "Teselagen.renderer.pie.FeatureLabel": [],
   "Teselagen.bio.sequence.dna.DNASequence": [],

@@ -297,7 +297,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   console.log(j5run);
   readFile(o_id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
-      var filename = "j5Results-"+j5run.date;
+      var filename = "j5Results-"+j5run.date+'-'+req.user.username;
       res.set({
         'Content-Type': 'application/zip',
         'Content-Length': file.length,
@@ -340,8 +340,6 @@ var resolveSequences = function(devicedesign,cb){
 app.post('/executej5',restrict,function(req,res){
 
   // Variables definition
-  var j5Params = {};
-  var execParams = {};
   var DeviceDesign = app.db.model("devicedesign");
 
   //Find the DeviceDesign in the Database populating the parts
@@ -369,7 +367,11 @@ app.post('/executej5',restrict,function(req,res){
         devicedesign_id : deviceDesignModel._id,
         project_id : deviceDesignModel.project_id,
         devicedesign_name: deviceDesignModel.name,
-        combinatorialAssembly: []
+        combinatorialAssembly: [],
+        j5Input :
+          {
+            j5parameters: JSON.parse(req.body.parameters)
+          }
       });
 
       newj5Run.save(function(err){
@@ -384,7 +386,9 @@ app.post('/executej5',restrict,function(req,res){
         {
           // Catch error during j5 RPC execution
           console.log(error);
-          res.send(error["faultString"], 500);
+          newj5Run.status = "Error";
+          newj5Run.warnings.push({"error":error})
+          newj5Run.save();
         }
         else
         {

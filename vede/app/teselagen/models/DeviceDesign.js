@@ -119,7 +119,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
 
             console.log("No devicedesign url generated");
-            debugger;
 
             /*
             var restParams = "";
