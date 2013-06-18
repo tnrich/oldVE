@@ -3,7 +3,7 @@
  * @author Yuri Bendana
  */
 
-/*global beforeEach, describe, it, expect, runs, waitsFor*/
+/*global describe, it, expect*/
 
 Ext.require([
      "Ext.Ajax",
@@ -15,9 +15,6 @@ Ext.onReady(function () {
     var authResponse;
     var authenticationManager = Teselagen.manager.AuthenticationManager;
     var constants = Teselagen.constants.Constants;
-    var sessionManager = Teselagen.manager.SessionManager;
-    var isLoggedIn = false;
-    var isUsersDeleted = false;
     var params = {
             username: "mfero",
             password: "",
@@ -25,59 +22,32 @@ Ext.onReady(function () {
     };
 
     describe("Authentication tests.", function() {
-        beforeEach(function() {
-            Ext.Ajax.cors = true; // Allow CORS
+       it("Login using mfero/nopassword", function (pDone) {
+           authenticationManager.sendAuthRequest(params,  function(pSuccess) {
+               if (pSuccess) {
+                   authResponse = authenticationManager.authResponse;
+                   expect(authResponse).to.be.defined;
+                   pDone();
+               }
+           });
         });
-
-       it("Login using mfero/nopassword", function () {
-            runs(function() {
-                authenticationManager.sendAuthRequest(params,  function(pSuccess) {
-                    if (pSuccess) {
-                        isLoggedIn = true;
-                    }
-                });
-            });
-            waitsFor(function() {
-                return isLoggedIn;
-            }, "authentication", 500);
-            runs(function() {
-                authResponse = authenticationManager.authResponse;
-                expect(Ext.isDefined(authResponse)).toBe(true);
+        it("Clear users", function(pDone) {
+            Ext.Ajax.request({
+                url: "/api/users",
+                method: "DELETE",
+                success: function() {
+                    pDone();
+                }
             });
         });
-        it("Clear users", function() {
-            waitsFor(function() {
-                return isLoggedIn;
-            }, "users deleted", 500);
-            runs(function() {
-                Ext.Ajax.request({
-                    url: "/api/users",
-                    method: "DELETE",
-                    success: function() {
-                        isUsersDeleted = true;
-                        isLoggedIn = false;
-                    }
-                });
-            });
-        });
-       it("Login using mfero/nopassword", function () {
-            waitsFor(function() {
-                return isUsersDeleted;
-            }, "users deleted", 500);
-            runs(function() {
-                authenticationManager.sendAuthRequest(params,  function(pSuccess) {
-                    if (pSuccess) {
-                        isLoggedIn = true;
-                    }
-                });
-            });
-            waitsFor(function() {
-                return isLoggedIn;
-            }, "authentication", 500);
-            runs(function() {
-                authResponse = authenticationManager.authResponse;
-                expect(Ext.isDefined(authResponse)).toBe(true);
-            });
-        });
+       it("Login using mfero/nopassword", function (pDone) {
+           authenticationManager.sendAuthRequest(params,  function(pSuccess) {
+               if (pSuccess) {
+                   authResponse = authenticationManager.authResponse;
+                   expect(authResponse).to.be.defined;
+                   pDone();
+               }
+           });
+       });
     });
 });

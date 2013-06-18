@@ -188,7 +188,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
    /**
-     * Creates a RestrictionEnzymeGroup, given a name and a list of enzyme names.
+     * Creates a user RestrictionEnzymeGroup, given a name and a list of enzyme names.
      * @param {String} name The name of the group.
      * @param {String[]} enzymeNames A list of enzyme names. Will be used to search the database
      * to get each enzyme object.
@@ -196,9 +196,35 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      */
     createUserGroup: function(pName, enzymeNames) {
         var group = Ext.create("Teselagen.models.UserRestrictionEnzymeGroup", {name: pName});
+        var enzymes = group.userRestrictionEnzymes();
         var user = this.UserManager.getUser();
+        var rebase = this.getRebaseEnzymesDatabase();
+        for (var i = 0; i < enzymeNames.length; i++) {
+            var enzymeName = enzymeNames[i];
+            var enzyme = rebase.get(enzymeName.toLowerCase());
+            if(enzyme) {
+                enzymes.add(Ext.create("Teselagen.models.UserRestrictionEnzyme", {name: enzymeName}));
+            }
+            else {
+                console.warn("Enzyme not found in database: ", enzymeName);
+            }
+        }
         user.userRestrictionEnzymeGroups().add(group);
-        this.UserManager.update(user);
+    },
+    
+   /**
+     * Removes a user Restriction Enzyme Group.
+     * @param {String} name The name of the group.
+     */
+    removeUserGroup: function(pName) {
+        var groups = this.UserManager.getUser().userRestrictionEnzymeGroups();
+        var index = groups.findExact("name", pName);
+        if (index !== -1) {
+            groups.removeAt(index);
+        }
+        else {
+            console.warn("User group not found: ", pName);
+        }
     },
     
     /**

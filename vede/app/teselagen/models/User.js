@@ -45,7 +45,14 @@ Ext.define("Teselagen.models.User", {
             root: "user"
         },
         writer: {
-            type: "json"
+            type: "json",
+            getRecordData: function(record) {
+                var data = record.getData();
+                var associatedData = record.getAssociatedData();
+//                console.log(data, associatedData);
+                data.userRestrictionEnzymeGroups = associatedData.userRestrictionEnzymeGroups;
+                return data;
+            }
         },
         buildUrl: function () {
             var url = Teselagen.manager.SessionManager.buildUserResUrl("", this.url);

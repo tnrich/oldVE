@@ -56,7 +56,8 @@ describe("API tests.", function() {
             request({
                 uri: API_URL+"users/mfero",
                 method: "put",
-                json: {username:"mike.fero1"}
+                json: {username:"mike.fero1",
+                    userRestrictionEnzymeGroups:[{name:"group1"}]}
             },
             function(err, res) {
                 expect(res.statusCode).to.equal(200);
@@ -64,6 +65,7 @@ describe("API tests.", function() {
                     expect(pErr).to.be.null;
                     expect(pUser).not.to.be.null;
                     expect(pUser.username).to.equal("mike.fero1");
+                    expect(pUser.userRestrictionEnzymeGroups[0].name).to.equal("group1");
                     done();
                 });
             });

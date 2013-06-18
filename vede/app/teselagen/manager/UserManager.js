@@ -13,16 +13,16 @@ Ext.define("Teselagen.manager.UserManager", {
     },
 
     /**
-     * Get user by username
+     * Get user that logged in
      * @param {String} username
      * @param {Function} next Callback
      */
-    getUserByName: function(pUsername, pNext) {
+    getLoggedInUser: function(pNext) {
         Teselagen.models.User.load(null, {
             callback: function(pUser, pOp){
                 var success = pOp.wasSuccessful();
                 if (!success) {
-                    console.error("Error getting user:", pUsername);
+                    console.error("Error getting user.");
                 }
                 pNext(success, pUser);
             }
@@ -38,7 +38,7 @@ Ext.define("Teselagen.manager.UserManager", {
             data: pUser,
             proxy: {
                 type: "memory",
-                reader: {type:"json", root: "user"}
+                reader: {type:"json"}
             }
         });
         var user = userStore.first();
