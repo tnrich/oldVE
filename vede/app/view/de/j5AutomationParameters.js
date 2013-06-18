@@ -9,6 +9,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
     padding: 5,
     width: 490,
     title: 'Downstream Automation Parameters',
+    id: 'j5AutomationParameters',
     resizable: false,
     draggable: false,
     modal: true,

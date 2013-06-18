@@ -11,6 +11,7 @@ var parser = new xml2js.Parser();
 
 module.exports = function (app) {
 
+var restrict = app.auth.restrict;
 var j5rpcEncode = require('./j5rpc');
 var processJ5Response = require('./j5parser');
 
@@ -29,52 +30,6 @@ function quicklog(s) {
   fs.writeSync(fd, s + '\n');
   fs.closeSync(fd);
 }
-
-/**
- *  Login Auth Method : Find User in DB
- */
-function authenticate(username, pass, fn) {
-  var User = app.db.model("User");
-  User.findOne({
-    'username': username
-  }, function (err, user) {
-    if(err) return fn(new Error('cannot find user'));
-    return fn(null, user);
-  });
-};
-
-/**
- * Authentication Restriction.
- * If user session is active then find the user in DB.
- */
-function restrict(req, res, next) {
-  if(req.session.user) {
-    var User = app.db.model("User");
-    User.findOne({
-      'username': req.session.user.username
-    }, function (err, user) {
-      req.user = user;
-      next();
-    });
-  } else {
-    if(!app.testing.enabled) {
-      res.send('Wrong credentials');
-    } else {
-      /*
-      console.log("Logged as Guest user");
-      authenticate("Guest", "", function (err, user) {
-        req.session.regenerate(function () {
-          req.session.user = user;
-          req.user = user;
-          next();
-        });
-
-      });
-      */
-      res.send("Wrong credentials",401);
-    }
-  }
-};
 
 // Get Last Updated User Files
 app.all('/GetLastUpdatedUserFiles',function(req,res){
@@ -121,7 +76,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 });
 
 //Design Downstream Automation
-app.post('/DesignDownstreamAutomation',function(req,res){
+app.post('/DesignDownstreamAutomation', restrict, function(req,res){
 
   var data = JSON.parse(req.body.files);
   var params = JSON.parse(req.body.params);
@@ -153,13 +108,13 @@ app.post('/DesignDownstreamAutomation',function(req,res){
     }
     else
     {
-      res.send(value);
+      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
     }
   });
 });
 
 // Condense AssemblyFiles
-app.post('/condenseAssemblyFiles',function(req,res){
+app.post('/condenseAssemblyFiles',restrict, function(req,res){
 
   var params = JSON.parse(req.body.data);
   var data = {};
@@ -177,7 +132,7 @@ app.post('/condenseAssemblyFiles',function(req,res){
     }
     else
     {
-      res.send(value);
+      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
     }
   });
 });
