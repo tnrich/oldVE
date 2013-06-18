@@ -154,7 +154,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var newBin = Ext.create("Teselagen.models.J5Bin", {
                 binName: bin["de:binName"],
-                iconID: bin["de:iconID"],
+                iconID: bin["de:iconID"].toUpperCase(),
                 directionForward: (bin["de:direction"] === "forward"),
                 dsf: Boolean(bin["de:dsf"])
             });
@@ -552,29 +552,31 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var rulesCounter = existingRules.count();
             var duplicated = false;
+            var duplicatedRule;
             existingRules.each(function(existingRule){
                 if(
                     parsedRule.data.name === existingRule.data.name
                 )
                 {
                     duplicated = true;
+                    duplicatedRule = existingRule;
                     rulesCounter--;
                 }
                 else
                 {
                     rulesCounter--;
                 }
-                if(rulesCounter === 0) cb(duplicated);
+                if(rulesCounter === 0) cb(duplicated,duplicatedRule);
             });
         };
     
         var checkForConflicts = function(rule,cb){
 
-            checkForDuplicatedName(rule,function(dup){
+            checkForDuplicatedName(rule,function(dup,existingRule){
                 if(dup) { 
-                    
-                    conflictRules.push({"originalRuleLine":"Name conflict, renamed from "+rule.data.name+" to "+rule.data.name+'_1'});
+                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+existingRule.getOperand2().data.name+" )"+"and the rule to be imported, "+rule.data.originalRuleLine +"Renaming the rule to be imported: "+rule.data.name+'_1'});
                     rule.set('name',rule.data.name+'_1');
+                    rule.set('originalRuleLine',rule.get('originalRuleLine').replace(existingRule.get('name'),rule.get('name')));
                 }
                 return cb(dup)
             })
