@@ -265,7 +265,6 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             var fileContent = (new XMLSerializer()).serializeToString(doc);
             fileContent = fileContent.replace(/&lt;|&gt;/g,function(s){return s==="&lt;"?"<":">"});
             fileContent = fileContent.replace(/&quot;/g,'"');
-            debugger;
             self.saveToFile(fileName,fileContent);
         });
     }
