@@ -199,7 +199,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                 click: this.onSaveMenuItemClick
             },
             "#saveAsMenuItem": {
-                click: this.onSaveAsMenuItemClick
+                //click: this.onSaveAsMenuItemClick
             }
         });
 
