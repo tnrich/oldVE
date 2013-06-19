@@ -893,6 +893,10 @@ background: #F8F8F8;
 .status-note-warning {
   background: #FFD24D;
 }
+
+.status-note-failed {
+  background: #e74c3c;
+}
 /*j5 Reports*/
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body, .j5ReportsPanel .x-menu {
   background: #333234 !important;
