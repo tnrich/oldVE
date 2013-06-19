@@ -441,24 +441,23 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
     populateAutomationParametersDialog: function () {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var inspector = currentTab.down('InspectorPanel');
+        var automationWindow = Ext.getCmp('j5AutomationParameters');
 
         this.automationParameters.fields.eachKey(function (key) {
-            console.log(key);
             if(key !== "id" && key !== "j5run_id") {
-                inspector.down("component[cls='" + key + "']").setValue(
+                automationWindow.down("component[cls='" + key + "']").setValue(
                 this.automationParameters.get(key));
             }
         }, this);
     },
 
-    saveAutomationParams: function () {
+    saveAutomationParams: function (window) {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var inspector = currentTab.down('InspectorPanel');
+        var automationWindow = Ext.getCmp('j5AutomationParameters');
 
         this.automationParameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
-                this.automationParameters.set(key, inspector.down("component[cls='" + key + "']").getValue());
+                this.automationParameters.set(key, automationWindow.down("component[cls='" + key + "']").getValue());
             }
         }, this);
     },

@@ -31,6 +31,7 @@ Ext.define("Teselagen.manager.RailManager", {
         nameBox: null,
         railGap: 0,
         railWidth: 300,
+        showMapCaret: true,
         cutSites: [],
         features: [],
         orfs: [],
@@ -251,6 +252,12 @@ Ext.define("Teselagen.manager.RailManager", {
         } else {
             this.featureSVG.style("visibility", "hidden");
         }
+
+        /*if(this.showMapCaret) {
+            this.caretSVG.style("visibility", "visible");
+        } else {
+            this.caretSVG.style("visibility", "hidden");
+        }*/
     },
 
     /**

@@ -756,6 +756,7 @@ Ext.define("Teselagen.manager.PieManager", {
             center: this.center
         });
 
+        
         this.caret = Ext.create("Vede.view.pie.Caret", {
             pie: this.parentSVG,
             angle: 0,
@@ -835,12 +836,15 @@ Ext.define("Teselagen.manager.PieManager", {
             var angle = bp * 2 * Math.PI / 
                 this.sequenceManager.getSequence().seqString().length;
 
-            this.caret = Ext.create("Vede.view.pie.Caret", {
-                pie: this.parentSVG,
-                angle: angle,
-                center: this.center,
-                radius: this.railRadius + 10
-            });
+            var showMapCaret = Ext.getCmp("mapCaretMenuItem").checked;
+            if (showMapCaret) {
+                this.caret = Ext.create("Vede.view.pie.Caret", {
+                    pie: this.parentSVG,
+                    angle: angle,
+                    center: this.center,
+                    radius: this.railRadius + 10
+                });
+            }
         }
     },
 });

@@ -292,7 +292,6 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
             });
             fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">','<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.1</de:version>');
-
             self.saveToFile(fileName,fileContent);
         });
     }
