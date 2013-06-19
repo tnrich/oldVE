@@ -63,6 +63,24 @@ Ext.onReady(function() {
                 });
             });
         });
+
+        it("Initialize active group", function() {
+            regm.initActive();
+            var groups = UserManager.getUser().userRestrictionEnzymeGroups();
+            var activeGroup = groups.findRecord("name", "Active");
+            expect(activeGroup).to.be.defined;
+            expect(activeGroup.userRestrictionEnzymes().count()).to.be.above(0);
+        });
+        
+        it("Copy a user group", function() {
+            var groups = UserManager.getUser().userRestrictionEnzymeGroups();
+            regm.copyUserGroup("Active", "NewActive");
+            var oldGroup = groups.first();
+            var newGroup = groups.last();
+            expect(oldGroup.get("name")).to.equal("Active");
+            expect(newGroup.get("name")).to.equal("NewActive");
+            expect(oldGroup.userRestrictionEnzymes().count()).to.equal(newGroup.userRestrictionEnzymes().count());
+        });
         
             //        var user;
 //        var group;

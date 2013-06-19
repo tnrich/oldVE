@@ -74,8 +74,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                         },
                         {
                             xtype: "combobox",
-                            id: "enzymeUserGroupSelector",
-//                                  store: groupStore,
+                            id: "userEnzymeGroupSelector",
                             displayField: "name",
                             fieldLabel: "User Enzyme Groups",
                             labelAlign: "top",

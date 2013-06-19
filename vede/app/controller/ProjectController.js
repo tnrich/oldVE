@@ -202,8 +202,8 @@ Ext.define("Vede.controller.ProjectController", {
     promptPartName: function(cb){
         var onPromptClosed = function (btn, text) {
             if(btn === "ok") {
-                if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this); }
-                else { return cb(text); }
+                if(text === "") {return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this); }
+                else {return cb(text); }
             }
         };
 

@@ -22,6 +22,10 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
     RestrictionEnzymeManager: null,
     UserManager: null,
+    
+    COMMON_ENZYMES: ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV",
+                     "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI",
+                     "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"],
 
     /**
      * @member Teselagen.manager.RestrictionEnzymeGroupManager
@@ -65,10 +69,14 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
-     * Initialize the active group
+     * Initialize the active user group
      */
     initActive: function() {
-        
+        var user = this.UserManager.getUser();
+        var groups = user.userRestrictionEnzymeGroups();
+        if (groups.findExact("name", "Active") === -1) {
+            this.createUserGroup("Active", this.COMMON_ENZYMES);
+        }
     },
     
     /**
@@ -221,11 +229,35 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
     
    /**
+     * Copy an existing user RestrictionEnzymeGroup.
+     * @param {String} name The name of the group to copy.
+     * @param {String} newName The name of the new group.
+     * @return {Teselagen.models.RestrictionEnzymeGroup} The newly created group.
+     */
+    copyUserGroup: function(pName, pNewName) {
+        var groups = this.getUserEnzymeGroups();
+        var group = groups.findRecord("name", pName);
+        var retVal = null;
+        if (group) {
+            // Clone group
+            var rec = {};
+            Ext.Object.merge(rec, group);
+            rec.set("name", pNewName);
+            Ext.data.Model.id(rec);
+            retVal = groups.add(rec);
+        }
+        else {
+            console.warn("User Restriction Enzyme group not found: ", pName);
+        }
+        return retVal;
+    },
+    
+    /**
      * Removes a user Restriction Enzyme Group.
      * @param {String} name The name of the group.
      */
     removeUserGroup: function(pName) {
-        var groups = this.UserManager.getUser().userRestrictionEnzymeGroups();
+        var groups = this.getUserEnzymeGroups();
         var index = groups.findExact("name", pName);
         if (index !== -1) {
             groups.removeAt(index);
@@ -247,6 +279,13 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
+     * Returns a list of all group names.
+     */
+    getUserEnzymeGroups: function() {
+        return this.UserManager.getUser().userRestrictionEnzymeGroups();
+    },
+
+    /**
      * @private
      * Initializes activeGroup by loading the first system group, the "common" group enzymes, into it.
      */
@@ -263,10 +302,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         var newSystemGroups = this.getSystemGroups();
         
         // 1. Common
-        var commonGroup = this.createGroupByEnzymes("Common Enzymes",
-            ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV",
-             "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI",
-             "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"]);
+        var commonGroup = this.createGroupByEnzymes("Common Enzymes", this.COMMON_ENZYMES);
         newSystemGroups.push(commonGroup);
         
         // 2. REBASE
