@@ -342,7 +342,7 @@ app.post('/executej5',restrict,function(req,res){
           // Catch error during j5 RPC execution
           console.log(error);
           newj5Run.status = "Error";
-          newj5Run.warnings.push({"error":error})
+          newj5Run.error_list.push({"error":error});
           newj5Run.save();
         }
         else
