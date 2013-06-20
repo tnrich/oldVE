@@ -57,8 +57,8 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonBin["de:dsf"] = bin.get("dsf");
             jsonBin["de:fas"] = (bin.get("fas") === "None") ? "" : bin.get("fas");
             jsonBin["de:fro"] = bin.get("fro");
-            jsonBin["de:extra3PrimeBps"] = bin.get("extra3PrimeBps");
-            jsonBin["de:extra5PrimeBps"] = bin.get("extra5PrimeBps");
+            jsonBin["de:extra3PrimeBps"] = parseInt( bin.get("extra3PrimeBps") );
+            jsonBin["de:extra5PrimeBps"] = parseInt( bin.get("extra5PrimeBps") );
 
             // Parts structure
             jsonBin["de:binItems"] = {};
@@ -180,8 +180,11 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 {
                     if(typeof(bin[prop]) !== "object" && prop!="de:iconID" && prop!="de:fro")
                     {
-                        var propNode = j5Bin.appendChild(doc.createElement(prop));
-                        if(bin[prop]) { propNode.textContent = bin[prop]; }
+                        if(bin[prop])
+                        {
+                            var propNode = j5Bin.appendChild(doc.createElement(prop));
+                            propNode.textContent = bin[prop];
+                        }
                     }
                 }
 
@@ -210,8 +213,11 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 {
                     if(typeof(part[prop]) !== "object" && prop !== "id")
                     {
-                        var propNode = partV0.appendChild(doc.createElement(prop));
-                        if(part[prop]) { propNode.textContent = part[prop]; }
+                        if(part[prop])
+                        {
+                            var propNode = partV0.appendChild(doc.createElement(prop));
+                            propNode.textContent = part[prop];
+                        }
                     }
                 }
 
@@ -248,8 +254,11 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 {
                     if(typeof(sequence[prop]) !== "object" && prop!=="hash" && prop!=="de:format" && prop!=="de:content")
                     {
-                        var propNode = sequenceFile.appendChild(doc.createElement(prop));
-                        if(sequence[prop]) { propNode.textContent = sequence[prop]; }
+                        if(sequence[prop])
+                        {
+                            var propNode = sequenceFile.appendChild(doc.createElement(prop));
+                            propNode.textContent = sequence[prop];
+                        }
                     }
                 }
 
@@ -287,10 +296,20 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             //sequenceFile.textContent = "hello";
 
             var fileContent = (new XMLSerializer()).serializeToString(doc);
-            fileContent = fileContent.replace(/&lt;|&gt;/g,function(s){return s==="&lt;"?"<":">"});
-            fileContent = fileContent.replace(/&(lt|gt|quot);/g, function (m, p) { 
-                return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
-            });
+            
+            //fileContent = fileContent.replace(/&lt;|&gt;/g,function(s){return s==="&lt;"?"<":">"});
+            //fileContent = fileContent.replace(/&(lt|gt|quot);/g, function (m, p) { 
+            //    return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
+            //});
+            //
+            fileContent = fileContent.replace(/&lt;/g,'<');
+            fileContent = fileContent.replace(/&gt;/g,'>');
+            fileContent = fileContent.replace(/&amp;/g,'');
+            fileContent = fileContent.replace(/amp;/g,'');
+            fileContent = fileContent.replace(/&quot;/g,'"');
+            fileContent = fileContent.replace(/quot;/g,'"');
+
+
             fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">','<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.1</de:version>');
             self.saveToFile(fileName,fileContent);
         });

@@ -571,7 +571,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onAddRow: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
-    },
+     },
 
     onRemoveRow: function() {
         Ext.Msg.show({
@@ -1300,12 +1300,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on("rerenderPart",this.rerenderPart, this);
 
-        this.application.on(this.DeviceEvent.ADD_ROW,
-                            this.onAddRow,
+        this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
+                            this.onAddRowAbove,
                             this);
 
-        this.application.on(this.DeviceEvent.ADD_COLUMN_LEFT,
-                            this.onAddColumnLeft,
+        this.application.on(this.DeviceEvent.ADD_ROW,
+                            this.onAddRow,
                             this);
 
         this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,

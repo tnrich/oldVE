@@ -8,6 +8,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
     requires: ['Teselagen.bio.parsers.GenbankManager',
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
+               'Teselagen.event.ProjectEvent',
                'Teselagen.utils.FormatUtils',
                'Teselagen.bio.parsers.ParsersManager',
                "Teselagen.manager.ProjectManager",
@@ -157,9 +158,12 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
     },
 
 
-    onImportFileToSequence: function(pFile, pExt, pEvt,sequence) {
+    onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
         var self = this;
-        performSequenceCreation = function(){
+        performSequenceCreation = function(newSequence,cb){
+
+            if(newSequence) {sequence = newSequence;}
+
             self.parseSequence(pFile, pExt, pEvt,function(gb){
 
                 //var gb      = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
@@ -188,25 +192,68 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                 parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
                 parttext.animate({duration: 5000, to: {opacity: 0}});
                 Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-
+                if(typeof (cb) === "function") { cb(sequence); }
             });
         };
 
-        if(sequence.get('firstTimeImported'))
+        if (sequence.get("project_id") == "") {
+            performSequenceCreation();
+        }
+        else if (sequence.get('firstTimeImported'))
         {
             Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-            Ext.MessageBox.confirm('Confirm', 'A sequence has been already imported to this file. Are you sure you want to overwrite it?', function(btn){
-                if(btn==="yes")
-                {
-                    performSequenceCreation();
+            Ext.MessageBox.show({
+                title: "Import Preferences",
+                msg: "Would you like to create a new file, or overwrite the current sequence?",
+                buttons: Ext.Msg.YESNOCANCEL,
+                buttonText: {yes: "Create a new file",no: "Overwrite"},
+                icon: Ext.Msg.QUESTION,
+                fn: function (btn) {
+                    if (btn==="yes") {
+                        var project_id = sequence.get("project_id");
+                        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+                        var sequencesNames = [];
+                        project.sequences().load().each(function (sequence) {
+                            sequencesNames.push(sequence.data.name);
+                        });
+
+                        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", function(btn,text){
+                            if(btn==="ok") {
+                                var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                                    sequenceFileFormat: "GENBANK",
+                                    sequenceFileContent: "LOCUS      "+text+"                 0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                                    sequenceFileName: "untitled.gb",
+                                    partSource: "Untitled sequence",
+                                    name: text
+                                });
+
+                                project.sequences().add(newSequenceFile);
+                                newSequenceFile.set("project_id",project.data.id);
+
+                                newSequenceFile.save({
+                                    callback: function () {
+                                        performSequenceCreation(newSequenceFile,function(){
+                                            sequence.save({callback:function(){
+                                                Teselagen.manager.ProjectManager.openSequence(sequence);
+                                            }});
+                                            
+                                        });
+                                        $(".saveSequenceBtn span span").trigger("click");
+                                    }
+                                });
+                            }
+                        });
+                    } else if (btn==="no") {
+                        performSequenceCreation();
+                    }
                 }
             });
+            
         }
         else
         {
             performSequenceCreation();
         }
-
     },
     init: function() {
         this.application.on("ImportFileToSequence",this.onImportFileToSequence, this);
