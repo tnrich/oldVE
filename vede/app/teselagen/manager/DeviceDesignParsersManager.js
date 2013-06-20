@@ -290,14 +290,41 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
 
+
+        // Build part Index
+        var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
+        for (var indexPart in parts) {
+            if (!parts[indexPart].nodeName) { continue; }
+
+            var part = parts[indexPart];
+            var instances = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part");
+
+            for (var instanceIndex in instances)
+            {
+                var instance = instances[instanceIndex];
+            }
+
+            var id = part.getElementsByTagNameNS("*", "part")[0].attributes[0].value;
+            if (id === targetId) {
+                partfound = true;
+                return part; 
+            }
+        }
+
+
         function getPartByID(targetId) {
-            var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
+            var partfound = false;
+            //var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
             for (var indexPart in parts) {
                 if (!parts[indexPart].nodeName) { continue; }
                 var part = parts[indexPart];
                 var id = part.getElementsByTagNameNS("*", "part")[0].attributes[0].value;
-                if (id === targetId) { return part; }
+                if (id === targetId) {
+                    partfound = true;
+                    return part; 
+                }
             }
+            if(!partfound) debugger;
         }
 
         function getSequenceByID(targetHash, cb) {
