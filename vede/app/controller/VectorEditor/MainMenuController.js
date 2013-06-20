@@ -8,6 +8,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     requires: ['Teselagen.event.CaretEvent',
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
+               'Teselagen.manager.PrintManager',
                'Teselagen.manager.ProjectManager',
                'Teselagen.manager.VectorEditorManager',
                'Teselagen.utils.FormatUtils',
@@ -268,11 +269,28 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onImportFileMenuItemClick: function() {
+    	// Add something here eventually.
     	
+    	debugger; // This debugger is here just for debugging util purposes.   	
+    },
+    
+    onPrintSequenceViewMenuItemClick: function() {
+    	
+    	/*var svgHtml = Ext.getCmp("AnnotateContainer").el.getHTML();
+    	var myWindow = window.open('', '', 'width=200,height=100');
+        myWindow.document.write('<html><head>');
+        myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
+        myWindow.document.write('<script type="text/javascript" src="../../../resources/js/d3.v2.min.js"></script>');
+        myWindow.document.write('</head><body>');
+        myWindow.document.write(svgHtml);
+        myWindow.document.write('</body></html>');
+        myWindow.print();
+        myWindow.close();*/
     },
     
     onPrintCircularViewMenuItemClick: function() {
-    	var svgHtml = d3.select(".pieParent").node().parentNode.parentElement.innerHTML;
+    	Teselagen.manager.PrintManager.printCircularView();
+    	/*var svgHtml = d3.select(".pieParent").node().parentNode.parentElement.innerHTML;
         var myWindow = window.open('', '', 'width=200,height=100');      
         myWindow.document.write('<html><head>');
         myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
@@ -281,6 +299,27 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         myWindow.document.write(svgHtml);
         myWindow.document.write('</body></html>');
         myWindow.print();
+        myWindow.close();*/
+    },
+    
+    onPrintLinearViewMenuItemClick: function() {
+    	var svgHtml = Ext.getCmp("RailContainer").el.getHTML();
+    	var myWindow = window.open('', '', 'width=200,height=100');      
+        myWindow.document.write('<html><head>');
+        myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
+        myWindow.document.write('<script type="text/javascript" src="../../../resources/js/d3.v2.min.js"></script>');
+        myWindow.document.write('</head><body>');
+        myWindow.document.write(svgHtml);
+        myWindow.document.write('</body></html>');
+        myWindow.print();
+        myWindow.close();
+    },
+    
+    onPropertiesMenuItemClick: function() {
+    	var propertiesWindow = Ext.create("Vede.view.ve.PropertiesWindow");
+    	
+    	propertiesWindow.show();
+    	propertiesWindow.center();
     },
     
     init: function() {
@@ -378,8 +417,17 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             "#importFileMenuItem": {
                 click: this.onImportFileMenuItemClick
             },
+            "#printSequenceViewMenuItem": {
+                click: this.onPrintSequenceViewMenuItemClick
+            },
             "#printCircularViewMenuItem": {
                 click: this.onPrintCircularViewMenuItemClick
+            },
+            "#printLinearViewMenuItem": {
+                click: this.onPrintLinearViewMenuItemClick
+            },
+            "#propertiesMenuItem": {
+                click: this.onPropertiesMenuItemClick
             },
         });
 

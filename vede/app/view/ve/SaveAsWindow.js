@@ -1,6 +1,3 @@
-/**
- * Needs a lot of work.
- */
 Ext.define('Vede.view.ve.SaveAsWindow', {
     extend: 'Ext.window.Window',
     requires: ["Teselagen.manager.ProjectManager"],
