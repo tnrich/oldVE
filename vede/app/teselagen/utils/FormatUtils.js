@@ -54,6 +54,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         "Teselagen.bio.sequence.alphabets.DNAAlphabet",
         "Teselagen.bio.sequence.dna.DNASequence",
+        "Teselagen.bio.sequence.dna.Feature",
+        "Teselagen.bio.sequence.dna.FeatureNote",
         "Teselagen.bio.sequence.DNATools",
 
         "Teselagen.utils.SequenceUtils"//,

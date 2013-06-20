@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * Represents a 2D point with x and y properties, useful for comparison and instantiation
  * from an event:
@@ -15,10 +32,11 @@ Ext.define('Ext.util.Point', {
         /**
          * Returns a new instance of Ext.util.Point base on the pageX / pageY values of the given event
          * @static
-         * @param {Event} e The event
+         * @param {Ext.EventObject/Event} e The event
          * @return {Ext.util.Point}
          */
         fromEvent: function(e) {
+            e = e.browserEvent || e;
             e = (e.changedTouches && e.changedTouches.length > 0) ? e.changedTouches[0] : e;
             return new this(e.pageX, e.pageY);
         }
@@ -46,7 +64,7 @@ Ext.define('Ext.util.Point', {
 
     /**
      * Compare this point and another point
-     * @param {Ext.util.Point/Object} The point to compare with, either an instance
+     * @param {Ext.util.Point/Object} p The point to compare with, either an instance
      * of Ext.util.Point or an object with left and top properties
      * @return {Boolean} Returns whether they are equivalent
      */
@@ -71,6 +89,19 @@ Ext.define('Ext.util.Point', {
 
         return (this.x <= p.x + threshold.x && this.x >= p.x - threshold.x &&
                 this.y <= p.y + threshold.y && this.y >= p.y - threshold.y);
+    },
+
+    /**
+     * Determins whether this Point contained by the passed Region, Component or element.
+     * @param {Ext.util.Region/Ext.Component/Ext.dom.Element/HTMLElement} region
+     * The rectangle to check that this Point is within.
+     * @return {Boolean}
+     */
+    isContainedBy: function(region) {
+        if (!(region instanceof Ext.util.Region)) {
+            region = Ext.get(region.el || region).getRegion();
+        }
+        return region.contains(this);
     },
 
     /**

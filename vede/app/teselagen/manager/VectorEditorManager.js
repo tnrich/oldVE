@@ -6,6 +6,7 @@
  */
 Ext.define("Teselagen.manager.VectorEditorManager", {
 
+    requires: ["Ext.layout.container.Border"],
     sequenceFileManager: null,
     sequence: null,
 
@@ -39,8 +40,9 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             currentTabPanel.setLoading(false);
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on '+ nowDate);
+            toastr.options.onclick = null;
+            toastr.info ("Sequence Successfully Saved");
             if(typeof (cb) === "function") { cb(); }
-            $.jGrowl ("Sequence Successfully Saved");
         };
 
         var saveToServer = function(){
@@ -109,7 +111,22 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                                         }
                                     });
                                     */
-                                }
+                                },
+
+                                "destroy": function(selectWindow) {
+                                    currentTabPanel.setLoading(false);
+                                },
+
+
+                                /*"hide":function(currentTabPanel){
+                                          console.log('just hidden');
+                                          currentTabPanel.setLoading(false);
+                                  }*/
+
+
+
+
+
                             }
                         }
                     }).show();

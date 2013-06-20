@@ -143,7 +143,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		var symbol = this.aminoAcidsTranslationTable[triplet];
 
 		if (symbol == null) {
-			return this.ProteinAlphabet.getGap();
+			return this.ProteinAlphabet.gap;
 		};
 
 		return symbol;
@@ -159,21 +159,21 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	dnaToProteinSymbol: function(pNucleotide1, pNucleotide2, pNucleotide3) {
 		this.initializeAminoAcidsTranslationTable();
 
-        if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+        /*if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
            pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
            pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
 			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
 										name: "Gap",
 										value: "-"
 								});
-		};
+		};*/
 
 		var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
 
 		var symbol = this.aminoAcidsTranslationTable[triplet];
 
-		if(symbol == null) {
-			return this.ProteinAlphabet.getGap();
+		if(!symbol) {
+			return this.ProteinAlphabet.gap;
 		}
 
 		return symbol;
@@ -217,15 +217,18 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	isStartCodon: function (pNucleotide1, pNucleotide2, pNucleotide3) {
 		var result = false;
 
-        if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
-           pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
-           pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
-			return result;
-		};
-
 		var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
 
-		return (triplet === 'atg' || triplet === 'aug');
+		return (triplet === 'atg' || triplet === 'aug' && triplet.indexOf("-") === -1);
+	},
+
+    /**
+	 * Calculates whether a three character string is a start codon.
+	 * @param  {String} codon a three character string.
+	 * @return {Boolean} shows whether the nucleotides make up a start codon
+	 */
+	isStartCodonString: function (codon) {
+		return (codon === 'atg' || codon === 'aug' && codon.indexOf("-") === -1);
 	},
 	
 	/**
@@ -238,12 +241,6 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	isStopCodon: function(pNucleotide1, pNucleotide2, pNucleotide3){
 		var result = false;
 
-        if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
-           pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
-           pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
-			return result;
-		};
-
 		var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
 
 		return (triplet == 'taa'
@@ -254,107 +251,122 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			|| triplet == 'uga');
 	},
 
+    /**
+	 * Calculates whether a three character string is a stop codon.
+	 * @param  {String} codon a three character string.
+	 * @return {Boolean} shows whether the nucleotides make up a stop codon
+	 */
+	isStopCodonString: function (codon) {
+		return (codon == 'taa'
+			|| codon == 'tag'
+			|| codon == 'tga'
+			|| codon == 'uaa'
+			|| codon == 'uag'
+			|| codon == 'uga');
+	},
+
 	initializeAminoAcidsTranslationTable: function(){
 			if (this.aminoAcidsTranslationTable != null) {
 				return;
 			};
-			this.aminoAcidsTranslationTable = [];
 
-			this.aminoAcidsTranslationTable['gct'] = this.ProteinAlphabet.getAlanine();
-			this.aminoAcidsTranslationTable['gcc'] = this.ProteinAlphabet.getAlanine();
-			this.aminoAcidsTranslationTable['gca'] = this.ProteinAlphabet.getAlanine();
-			this.aminoAcidsTranslationTable['gcg'] = this.ProteinAlphabet.getAlanine();
-			this.aminoAcidsTranslationTable['gcu'] = this.ProteinAlphabet.getAlanine();
-			this.aminoAcidsTranslationTable['cgt'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['cgc'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['cga'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['cgg'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['aga'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['agg'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['cgu'] = this.ProteinAlphabet.getArginine();
-			this.aminoAcidsTranslationTable['aat'] = this.ProteinAlphabet.getAsparagine();
-			this.aminoAcidsTranslationTable['aac'] = this.ProteinAlphabet.getAsparagine();
-			this.aminoAcidsTranslationTable['aau'] = this.ProteinAlphabet.getAsparagine();
-			this.aminoAcidsTranslationTable['gat'] = this.ProteinAlphabet.getAspartic();
-			this.aminoAcidsTranslationTable['gac'] = this.ProteinAlphabet.getAspartic();
-			this.aminoAcidsTranslationTable['gau'] = this.ProteinAlphabet.getAspartic();
-			this.aminoAcidsTranslationTable['tgt'] = this.ProteinAlphabet.getCysteine();
-			this.aminoAcidsTranslationTable['tgc'] = this.ProteinAlphabet.getCysteine();
-			this.aminoAcidsTranslationTable['ugu'] = this.ProteinAlphabet.getCysteine();
-			this.aminoAcidsTranslationTable['ugc'] = this.ProteinAlphabet.getCysteine();
-			this.aminoAcidsTranslationTable['gaa'] = this.ProteinAlphabet.getGlutamic();
-			this.aminoAcidsTranslationTable['gag'] = this.ProteinAlphabet.getGlutamic();
-			this.aminoAcidsTranslationTable['caa'] = this.ProteinAlphabet.getGlutamine();
-			this.aminoAcidsTranslationTable['cag'] = this.ProteinAlphabet.getGlutamine();
-			this.aminoAcidsTranslationTable['ggt'] = this.ProteinAlphabet.getGlycine();
-			this.aminoAcidsTranslationTable['ggc'] = this.ProteinAlphabet.getGlycine();
-			this.aminoAcidsTranslationTable['gga'] = this.ProteinAlphabet.getGlycine();
-			this.aminoAcidsTranslationTable['ggg'] = this.ProteinAlphabet.getGlycine();
-			this.aminoAcidsTranslationTable['ggu'] = this.ProteinAlphabet.getGlycine();
-			this.aminoAcidsTranslationTable['cat'] = this.ProteinAlphabet.getHistidine();
-			this.aminoAcidsTranslationTable['cac'] = this.ProteinAlphabet.getHistidine();
-			this.aminoAcidsTranslationTable['cau'] = this.ProteinAlphabet.getHistidine();
-			this.aminoAcidsTranslationTable['att'] = this.ProteinAlphabet.getIsoleucine();
-			this.aminoAcidsTranslationTable['atc'] = this.ProteinAlphabet.getIsoleucine();
-			this.aminoAcidsTranslationTable['ata'] = this.ProteinAlphabet.getIsoleucine();
-			this.aminoAcidsTranslationTable['auu'] = this.ProteinAlphabet.getIsoleucine();
-			this.aminoAcidsTranslationTable['auc'] = this.ProteinAlphabet.getIsoleucine();
-			this.aminoAcidsTranslationTable['aua'] = this.ProteinAlphabet.getIsoleucine();
-			this.aminoAcidsTranslationTable['ctt'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['ctc'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['cta'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['ctg'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['tta'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['ttg'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['cuu'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['cuc'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['cua'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['cug'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['uua'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['uug'] = this.ProteinAlphabet.getLeucine();
-			this.aminoAcidsTranslationTable['aaa'] = this.ProteinAlphabet.getLysine();
-			this.aminoAcidsTranslationTable['aag'] = this.ProteinAlphabet.getLysine();
-			this.aminoAcidsTranslationTable['atg'] = this.ProteinAlphabet.getMethionine();
-			this.aminoAcidsTranslationTable['aug'] = this.ProteinAlphabet.getMethionine();
-			this.aminoAcidsTranslationTable['ttt'] = this.ProteinAlphabet.getPhenylalanine();
-			this.aminoAcidsTranslationTable['ttc'] = this.ProteinAlphabet.getPhenylalanine();
-			this.aminoAcidsTranslationTable['uuu'] = this.ProteinAlphabet.getPhenylalanine();
-			this.aminoAcidsTranslationTable['uuc'] = this.ProteinAlphabet.getPhenylalanine();
-			this.aminoAcidsTranslationTable['cct'] = this.ProteinAlphabet.getProline();
-			this.aminoAcidsTranslationTable['ccc'] = this.ProteinAlphabet.getProline();
-			this.aminoAcidsTranslationTable['cca'] = this.ProteinAlphabet.getProline();
-			this.aminoAcidsTranslationTable['ccg'] = this.ProteinAlphabet.getProline();
-			this.aminoAcidsTranslationTable['ccu'] = this.ProteinAlphabet.getProline();
-			this.aminoAcidsTranslationTable['tct'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['tcc'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['tca'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['tcg'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['agt'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['agc'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['ucu'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['ucc'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['uca'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['ucg'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['agu'] = this.ProteinAlphabet.getSerine();
-			this.aminoAcidsTranslationTable['act'] = this.ProteinAlphabet.getThreonine();
-			this.aminoAcidsTranslationTable['acc'] = this.ProteinAlphabet.getThreonine();
-			this.aminoAcidsTranslationTable['aca'] = this.ProteinAlphabet.getThreonine();
-			this.aminoAcidsTranslationTable['acg'] = this.ProteinAlphabet.getThreonine();
-			this.aminoAcidsTranslationTable['acu'] = this.ProteinAlphabet.getThreonine();
-			this.aminoAcidsTranslationTable['tgg'] = this.ProteinAlphabet.getTryptophan();
-			this.aminoAcidsTranslationTable['ugg'] = this.ProteinAlphabet.getTryptophan();
-			this.aminoAcidsTranslationTable['tat'] = this.ProteinAlphabet.getTyrosine();
-			this.aminoAcidsTranslationTable['tac'] = this.ProteinAlphabet.getTyrosine();
-			this.aminoAcidsTranslationTable['uau'] = this.ProteinAlphabet.getTyrosine();
-			this.aminoAcidsTranslationTable['uac'] = this.ProteinAlphabet.getTyrosine();
-			this.aminoAcidsTranslationTable['gtt'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['gtc'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['gta'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['gtg'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['guu'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['guc'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['gua'] = this.ProteinAlphabet.getValine();
-			this.aminoAcidsTranslationTable['gug'] = this.ProteinAlphabet.getValine();
+            this.aminoAcidsTranslationTable = {
+                gct: this.ProteinAlphabet.getAlanine(),
+                gcc: this.ProteinAlphabet.getAlanine(),
+                gca: this.ProteinAlphabet.getAlanine(),
+                gcg: this.ProteinAlphabet.getAlanine(),
+                gcu: this.ProteinAlphabet.getAlanine(),
+                cgt: this.ProteinAlphabet.getArginine(),
+                cgc: this.ProteinAlphabet.getArginine(),
+                cga: this.ProteinAlphabet.getArginine(),
+                cgg: this.ProteinAlphabet.getArginine(),
+                aga: this.ProteinAlphabet.getArginine(),
+                agg: this.ProteinAlphabet.getArginine(),
+                cgu: this.ProteinAlphabet.getArginine(),
+                aat: this.ProteinAlphabet.getAsparagine(),
+                aac: this.ProteinAlphabet.getAsparagine(),
+                aau: this.ProteinAlphabet.getAsparagine(),
+                gat: this.ProteinAlphabet.getAspartic(),
+                gac: this.ProteinAlphabet.getAspartic(),
+                gau: this.ProteinAlphabet.getAspartic(),
+                tgt: this.ProteinAlphabet.getCysteine(),
+                tgc: this.ProteinAlphabet.getCysteine(),
+                ugu: this.ProteinAlphabet.getCysteine(),
+                ugc: this.ProteinAlphabet.getCysteine(),
+                gaa: this.ProteinAlphabet.getGlutamic(),
+                gag: this.ProteinAlphabet.getGlutamic(),
+                caa: this.ProteinAlphabet.getGlutamine(),
+                cag: this.ProteinAlphabet.getGlutamine(),
+                ggt: this.ProteinAlphabet.getGlycine(),
+                ggc: this.ProteinAlphabet.getGlycine(),
+                gga: this.ProteinAlphabet.getGlycine(),
+                ggg: this.ProteinAlphabet.getGlycine(),
+                ggu: this.ProteinAlphabet.getGlycine(),
+                cat: this.ProteinAlphabet.getHistidine(),
+                cac: this.ProteinAlphabet.getHistidine(),
+                cau: this.ProteinAlphabet.getHistidine(),
+                att: this.ProteinAlphabet.getIsoleucine(),
+                atc: this.ProteinAlphabet.getIsoleucine(),
+                ata: this.ProteinAlphabet.getIsoleucine(),
+                auu: this.ProteinAlphabet.getIsoleucine(),
+                auc: this.ProteinAlphabet.getIsoleucine(),
+                aua: this.ProteinAlphabet.getIsoleucine(),
+                ctt: this.ProteinAlphabet.getLeucine(),
+                ctc: this.ProteinAlphabet.getLeucine(),
+                cta: this.ProteinAlphabet.getLeucine(),
+                ctg: this.ProteinAlphabet.getLeucine(),
+                tta: this.ProteinAlphabet.getLeucine(),
+                ttg: this.ProteinAlphabet.getLeucine(),
+                cuu: this.ProteinAlphabet.getLeucine(),
+                cuc: this.ProteinAlphabet.getLeucine(),
+                cua: this.ProteinAlphabet.getLeucine(),
+                cug: this.ProteinAlphabet.getLeucine(),
+                uua: this.ProteinAlphabet.getLeucine(),
+                uug: this.ProteinAlphabet.getLeucine(),
+                aaa: this.ProteinAlphabet.getLysine(),
+                aag: this.ProteinAlphabet.getLysine(),
+                atg: this.ProteinAlphabet.getMethionine(),
+                aug: this.ProteinAlphabet.getMethionine(),
+                ttt: this.ProteinAlphabet.getPhenylalanine(),
+                ttc: this.ProteinAlphabet.getPhenylalanine(),
+                uuu: this.ProteinAlphabet.getPhenylalanine(),
+                uuc: this.ProteinAlphabet.getPhenylalanine(),
+                cct: this.ProteinAlphabet.getProline(),
+                ccc: this.ProteinAlphabet.getProline(),
+                cca: this.ProteinAlphabet.getProline(),
+                ccg: this.ProteinAlphabet.getProline(),
+                ccu: this.ProteinAlphabet.getProline(),
+                tct: this.ProteinAlphabet.getSerine(),
+                tcc: this.ProteinAlphabet.getSerine(),
+                tca: this.ProteinAlphabet.getSerine(),
+                tcg: this.ProteinAlphabet.getSerine(),
+                agt: this.ProteinAlphabet.getSerine(),
+                agc: this.ProteinAlphabet.getSerine(),
+                ucu: this.ProteinAlphabet.getSerine(),
+                ucc: this.ProteinAlphabet.getSerine(),
+                uca: this.ProteinAlphabet.getSerine(),
+                ucg: this.ProteinAlphabet.getSerine(),
+                agu: this.ProteinAlphabet.getSerine(),
+                act: this.ProteinAlphabet.getThreonine(),
+                acc: this.ProteinAlphabet.getThreonine(),
+                aca: this.ProteinAlphabet.getThreonine(),
+                acg: this.ProteinAlphabet.getThreonine(),
+                acu: this.ProteinAlphabet.getThreonine(),
+                tgg: this.ProteinAlphabet.getTryptophan(),
+                ugg: this.ProteinAlphabet.getTryptophan(),
+                tat: this.ProteinAlphabet.getTyrosine(),
+                tac: this.ProteinAlphabet.getTyrosine(),
+                uau: this.ProteinAlphabet.getTyrosine(),
+                uac: this.ProteinAlphabet.getTyrosine(),
+                gtt: this.ProteinAlphabet.getValine(),
+                gtc: this.ProteinAlphabet.getValine(),
+                gta: this.ProteinAlphabet.getValine(),
+                gtg: this.ProteinAlphabet.getValine(),
+                guu: this.ProteinAlphabet.getValine(),
+                guc: this.ProteinAlphabet.getValine(),
+                gua: this.ProteinAlphabet.getValine(),
+                gug: this.ProteinAlphabet.getValine()
+        };
 	},
 
 	initializeDNAToRNATranslationTable: function(){

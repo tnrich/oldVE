@@ -1,5 +1,10 @@
 Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
+    requires: ["Teselagen.manager.RowManager",
+               "Teselagen.renderer.annotate.LineRenderer",
+               "Vede.view.annotate.Annotator",
+               "Vede.view.annotate.Caret"],
+
     config: {
         sequenceManager: null,
         orfManager: null,
@@ -47,30 +52,23 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         complementRenderer: null,
         renderers: null,
 
-        RowManager: null,
+        RowManager: null
     },
     renderers: [],
     caret: null,
     statics: {
-       DEFAULT_BP_PER_ROW: 60,
+       DEFAULT_BP_PER_ROW: 60
     },
 
     constructor: function(inData){
         this.initConfig(inData);
         var that = this;
         this.lineRenderer = Ext.create("Teselagen.renderer.annotate.LineRenderer");
-        //this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.TextRenderer");
         this.RowManager = Ext.create("Teselagen.manager.RowManager", {
-            sequenceAnnotator: that,
+            sequenceAnnotator: that
         });
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
-            sequenceAnnotator: that,
-            items: [
-//                Ext.create("Ext.draw.Sprite", {
-//                    type: "path",
-//                    path: ""
-//                })
-            ]
+            sequenceAnnotator: that
         });
         this.caret = Ext.create("Vede.view.annotate.Caret", {
             sequenceAnnotator: that.annotator
@@ -86,14 +84,10 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.aaManager.setSequenceManager(this.sequenceManager);
         this.features = this.sequenceManager.getFeatures();
 
-        Ext.suspendLayouts();
-
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
 
         this.caret.render();
-
-        Ext.resumeLayouts(true);
     },
 
     render: function() {

@@ -10,8 +10,9 @@ Ext.define("Teselagen.renderer.pie.PieRenderer", {
     requires: "Teselagen.utils.GraphicUtils",
 
     config: {
+        pie: null,
         center: null,
-        railRadius: 0,
+        railRadius: 0
     },
 
     GraphicUtils: null,

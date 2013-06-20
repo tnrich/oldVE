@@ -11,10 +11,13 @@ var parser = new xml2js.Parser();
 
 module.exports = function (app) {
 
+var restrict = app.auth.restrict;
 var j5rpcEncode = require('./j5rpc');
 var processJ5Response = require('./j5parser');
 
 var j5Runs = app.db.model("j5run");
+
+var fs = require("fs");
 
 /**
  * Write to quick.log
@@ -27,52 +30,6 @@ function quicklog(s) {
   fs.writeSync(fd, s + '\n');
   fs.closeSync(fd);
 }
-
-/**
- *  Login Auth Method : Find User in DB
- */
-function authenticate(username, pass, fn) {
-  var User = app.db.model("User");
-  User.findOne({
-    'username': username
-  }, function (err, user) {
-    if(err) return fn(new Error('cannot find user'));
-    return fn(null, user);
-  });
-};
-
-/**
- * Authentication Restriction.
- * If user session is active then find the user in DB.
- */
-function restrict(req, res, next) {
-  if(req.session.user) {
-    var User = app.db.model("User");
-    User.findOne({
-      'username': req.session.user.username
-    }, function (err, user) {
-      req.user = user;
-      next();
-    });
-  } else {
-    if(!app.testing.enabled) {
-      res.send('Wrong credentials');
-    } else {
-      /*
-      console.log("Logged as Guest user");
-      authenticate("Guest", "", function (err, user) {
-        req.session.regenerate(function () {
-          req.session.user = user;
-          req.user = user;
-          next();
-        });
-
-      });
-      */
-      res.send("Wrong credentials",401);
-    }
-  }
-};
 
 // Get Last Updated User Files
 app.all('/GetLastUpdatedUserFiles',function(req,res){
@@ -119,7 +76,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 });
 
 //Design Downstream Automation
-app.post('/DesignDownstreamAutomation',function(req,res){
+app.post('/DesignDownstreamAutomation', restrict, function(req,res){
 
   var data = JSON.parse(req.body.files);
   var params = JSON.parse(req.body.params);
@@ -151,13 +108,13 @@ app.post('/DesignDownstreamAutomation',function(req,res){
     }
     else
     {
-      res.send(value);
+      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
     }
   });
 });
 
 // Condense AssemblyFiles
-app.post('/condenseAssemblyFiles',function(req,res){
+app.post('/condenseAssemblyFiles',restrict, function(req,res){
 
   var params = JSON.parse(req.body.data);
   var data = {};
@@ -175,7 +132,7 @@ app.post('/condenseAssemblyFiles',function(req,res){
     }
     else
     {
-      res.send(value);
+      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
     }
   });
 });
@@ -295,7 +252,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   console.log(j5run);
   readFile(o_id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
-      var filename = "j5Results-"+j5run.date;
+      var filename = "j5Results-"+j5run.date+'-'+req.user.username;
       res.set({
         'Content-Type': 'application/zip',
         'Content-Length': file.length,
@@ -338,8 +295,6 @@ var resolveSequences = function(devicedesign,cb){
 app.post('/executej5',restrict,function(req,res){
 
   // Variables definition
-  var j5Params = {};
-  var execParams = {};
   var DeviceDesign = app.db.model("devicedesign");
 
   //Find the DeviceDesign in the Database populating the parts
@@ -366,7 +321,12 @@ app.post('/executej5',restrict,function(req,res){
         user_id: req.user._id,
         devicedesign_id : deviceDesignModel._id,
         project_id : deviceDesignModel.project_id,
-        devicedesign_name: deviceDesignModel.name
+        devicedesign_name: deviceDesignModel.name,
+        combinatorialAssembly: [],
+        j5Input :
+          {
+            j5parameters: JSON.parse(req.body.parameters)
+          }
       });
 
       newj5Run.save(function(err){
@@ -381,7 +341,9 @@ app.post('/executej5',restrict,function(req,res){
         {
           // Catch error during j5 RPC execution
           console.log(error);
-          res.send(error["faultString"], 500);
+          newj5Run.status = "Error";
+          newj5Run.error_list.push({"error":error});
+          newj5Run.save();
         }
         else
         {
@@ -408,6 +370,43 @@ app.post('/executej5',restrict,function(req,res){
     });
 
   });
+});
+
+// Design Assembly RPC
+app.post('/sbol',function(req,res){
+  /* For testing */
+  //fs.readFile('./resources/sbol/ConvertSBOLXML_query0.json', encoding='utf8', function (err, rawData) {
+    //var data = JSON.parse(rawData);
+    //res.json({data:data});
+  //});
+    var data = {};
+    
+    data["encoded_to_be_converted_file"] = req.body.data;
+
+    if(req.body.preserveSBOL==="true")
+    {
+      data["conversion_method"] = "ConvertSBOLXMLToGenBankPreserveSBOLInformation";
+    }
+    else
+    {
+      data["conversion_method"] = "ConvertSBOLXMLToGenBankClean"
+    }
+
+    console.log("Running ConvertSBOLXML");
+    app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
+      //quicklog(require('util').inspect(value,false,null));
+      if(!error && value["encoded_output_file"])
+      {
+        var encodedFile = value["encoded_output_file"];
+        var zip = new require('node-zip')(encodedFile, {base64: true, checkCRC32: true});
+        var file = zip.files["inputsequencefile.gb"].data;
+        res.json({error:error,data:file});
+      }
+      else
+      {
+        res.send({error:error,details:value},500);
+      }
+    });
 });
 
 };

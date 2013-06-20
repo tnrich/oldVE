@@ -15,5 +15,6 @@ Ext.define("Teselagen.event.VisibilityEvent", {
     SHOW_SEQUENCE_AA_CHANGED: "ShowSequenceAAChanged",
     SHOW_REVCOM_AA_CHANGED: "ShowRevcomAAChanged",
     SHOW_FEATURE_LABELS_CHANGED: "ShowFeatureLabelsChanged",
-    SHOW_CUTSITE_LABELS_CHANGED: "ShowCutSiteLabelsChanged"
+    SHOW_CUTSITE_LABELS_CHANGED: "ShowCutSiteLabelsChanged",
+    SHOW_MAP_CARET_CHANGED: "ShowMapCaretChanged"
 });

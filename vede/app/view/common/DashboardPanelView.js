@@ -19,6 +19,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
             flex: 1,
             border: 0,
             padding: 50,
+            layout: {
+                type: 'fit'
+            },
             items: [
                 {
                 xtype: 'panel',
@@ -26,7 +29,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 id: 'welcome_splash',
                 border: 0,
                 html: '<div class="welcome_text">Welcome back!<div id="welcomeUserIcon"></div></div><div class="welcome_sub">Get started by selecting one of the options below.</div>',
-                padding: 50, 
+                padding: 50 
                 },
                 {
                 xtype: 'panel',
@@ -34,6 +37,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 flex: 1,
                 border: 0,
                 padding: 50,
+                layout: {
+                    type: 'fit'
+                },
                 items: [
                 {
                     xtype: 'button',

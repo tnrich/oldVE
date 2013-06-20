@@ -1,0 +1,7 @@
+Rule rule1(GFPuv NOTMORETHAN 2);
+Rule rule2(GFPuv THEN double_terminator);
+Rule rule3(BBR1_ori NOTWITH GFPuv);
+Rule rule4(double_terminator NOTMORETHAN 1);
+// Comment: rule5 concerns other_part
+Rule rule5(GFPuv WITH other_part);
+Rule rule6(GFPuv CONTAINS double_terminator);

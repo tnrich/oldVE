@@ -56,6 +56,8 @@ Ext.define("Teselagen.models.EugeneRule", {
         },
 
         
+        {name: "originalRuleLine",      type: "String",    defaultValue: ""},
+
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
 
         {
@@ -114,7 +116,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand1",
 //            associationKey: "operand1",
             instanceName: "operand1",
-            foreignKey: "operand1_id", 
+            foreignKey: "operand1_id" 
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -124,7 +126,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand2Part",
 //            associationKey: "operand2Part",
             instanceName: "operand2",
-            foreignKey: "operand2_id", 
+            foreignKey: "operand2_id" 
 
         },
         //Needed to find the parent of a child

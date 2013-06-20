@@ -9,7 +9,7 @@
      requires: ["Teselagen.event.ActionStackEvent"],
 
      config: {
-         sequenceManager: null,
+         sequenceManager: null
      },
 
      ActionStackEvent: null,
@@ -81,3 +81,7 @@
          Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
      }
  });
+
+ 
+ 
+ 

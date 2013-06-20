@@ -68,7 +68,6 @@ Ext.define('Vede.view.de.grid.Part', {
         */
         this.partCell = Ext.create("Ext.container.Container", {
             items: [{
-                //html: html,
                 styleHtmlContent: true,
                 styleHtmlCls: 'gridPartCell',
                 height: 40,
@@ -138,6 +137,10 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        // this.partCell.down().addBodyCls("gridPartCell-alert");
+    },
+
+    selectAlert: function () {
         this.partCell.down().addBodyCls("gridPartCell-alert");
     },
 
@@ -146,6 +149,10 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     highlight: function() {
         this.partCell.down().addBodyCls("gridPartCell-highlighted");
+    },
+
+    unHighlight: function() {
+        this.partCell.down().removeBodyCls("gridPartCell-highlighted");
     },
 
     /**
@@ -162,8 +169,8 @@ Ext.define('Vede.view.de.grid.Part', {
     },
 
     mapSelect: function() {
-        this.partCell.down().removeBodyCls("gridPartCell-alert");
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        this.partCell.down().removeBodyCls("gridPartCell-alert");
     },
     /**
      * If the fas is set, add either a red or blue rectangle, depending on

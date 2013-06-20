@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * This class is intended to be extended or created via the {@link Ext.Component#componentLayout layout}
  * configuration property.  See {@link Ext.Component#componentLayout} for additional details.
@@ -112,7 +129,7 @@ Ext.define('Ext.layout.component.Component', {
         var me = this,
             elementChildren = ownerContext.children,
             owner = me.owner,
-            len, i, elContext, lastBox, props, v;
+            len, i, elContext, lastBox, props;
 
         // NOTE: In the code below we cannot use getProp because that will generate a layout dependency
 
@@ -131,28 +148,16 @@ Ext.define('Ext.layout.component.Component', {
 
         // Cache the currently layed out size
         me.lastComponentSize = owner.el.lastBox = props = ownerContext.props;
-
+        
         // lastBox is a copy of the defined props to allow save/restore of these (panel
         // collapse needs this)
-        owner.lastBox = lastBox = {};
-
-        v = props.x;
-        if (v !== undefined) {
-            lastBox.x = v;
-        }
-        v = props.y;
-        if (v !== undefined) {
-            lastBox.y = v;
-        }
-        v = props.width;
-        if (v !== undefined) {
-            lastBox.width = v;
-        }
-        v = props.height;
-        if (v !== undefined) {
-            lastBox.height = v;
-        }
-
+        lastBox = owner.lastBox || (owner.lastBox = {});
+        lastBox.x = props.x;
+        lastBox.y = props.y;
+        lastBox.width = props.width;
+        lastBox.height = props.height;
+        lastBox.invalid = false;
+        
         me.callParent(arguments);
     },
     
@@ -263,7 +268,7 @@ Ext.define('Ext.layout.component.Component', {
                 } else {
                     if (zeroWidth) {
                         ready = true;
-                    } else if (!ownerContext.hasDomProp('containerChildrenDone')) {
+                    } else if (!ownerContext.hasDomProp('containerChildrenSizeDone')) {
                         ready = false;
                     } else if (isBoxParent || !boxParent || boxParent.widthModel.shrinkWrap) {
                         // if we have no boxParent, we are ready, but a shrinkWrap boxParent
@@ -352,7 +357,7 @@ Ext.define('Ext.layout.component.Component', {
                 } else {
                     if (zeroHeight) {
                         ready = true;
-                    } else if (!ownerContext.hasDomProp('containerChildrenDone')) {
+                    } else if (!ownerContext.hasDomProp('containerChildrenSizeDone')) {
                         ready = false;
                     } else if (owner.noWrap) {
                         ready = true;

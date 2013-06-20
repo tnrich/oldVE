@@ -6,6 +6,9 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
+    requires: ["Teselagen.bio.sequence.dna.Feature",
+               "Teselagen.bio.sequence.dna.FeatureNote"],
+    
     singleton: true,
 
     /**
@@ -45,7 +48,7 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
                 convertedLocations.push(Ext.create("Teselagen.models.DNAFeatureLocation", {
                     // I've left the '+ 1' to ensure the behavior is consistent with old code, but I'm not sure why it's necessary.
                     genbankStart: feature.getStart() + 1, 
-                    end: feature.getEnd(),
+                    end: feature.getEnd()
                 }));
             });
 
@@ -106,7 +109,7 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
                 end: convertedLocations[0].getEnd(),
                 type: feature.get("type"),
                 strand: feature.get("strand"),
-                notes: convertedNotes,
+                notes: convertedNotes
             });
 
             convertedFeature.setLocations(convertedLocations);

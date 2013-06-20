@@ -5,7 +5,7 @@
 Ext.define("Teselagen.manager.FindManager", {
     config: {
         sequenceManager: null,
-        AAManager: null,
+        AAManager: null
     },
 
     /**

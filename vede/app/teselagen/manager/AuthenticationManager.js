@@ -6,7 +6,7 @@
 
 Ext.define("Teselagen.manager.AuthenticationManager", {
     requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor",
-               "Teselagen.manager.UserManager"],
+               "Teselagen.manager.UserManager", "Teselagen.utils.SystemUtils"],
     alias: "AuthenticationManager",
     singleton: true,
     mixins: {
@@ -33,6 +33,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
+
+
+        var updateServerPath = function(){
+            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+        };
+
         var self = this;
         if(Vede.application.autoCredentialsFetch)
         {
@@ -48,12 +55,14 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 },
                 failure: function() {
                     Ext.create("Vede.view.AuthWindow").show();
+                    updateServerPath();
                 }
             });
         }
         else
         {
            Ext.create("Vede.view.AuthWindow").show();
+           updateServerPath();
         }
     },
 

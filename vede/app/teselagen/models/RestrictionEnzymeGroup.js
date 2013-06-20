@@ -6,7 +6,7 @@
 Ext.define("Teselagen.models.RestrictionEnzymeGroup", {
     config: {
         name: "",
-        enzymes: [],
+        enzymes: []
     },
 
     /**

@@ -59,6 +59,7 @@ Ext.define("Vede.controller.J5ReportController", {
         startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
         endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
+        
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
         var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
         //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
@@ -74,18 +75,31 @@ Ext.define("Vede.controller.J5ReportController", {
         if(status=="Completed") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             $("#" + field + " .status-note").removeClass("status-note-completed");
-            $("#" + field + " .status-note").addClass("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-failed")
+            $("#" + field + " .status-note").addClass("status-note-warning");;
+        } else if (status=="Error") {
+            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").addClass("status-note-failed");
         }
 
         var warnings = this.activeJ5Run.raw.warnings;
+        var errors = this.activeJ5Run.raw.error_list[0];
 
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
             model: 'Teselagen.models.j5Output.Warning',
-            data: warnings,
+            data: warnings
+        });
+
+        var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
+            model: 'Teselagen.models.j5Output.Error',
+            data: errors.error
         });
 
         if ((warnings.length>0)==true) {
@@ -95,6 +109,18 @@ Ext.define("Vede.controller.J5ReportController", {
              this.tabPanel.down('gridpanel[name="warnings"]').hide();
              warnings = null;
              warningsStore = null;
+        }
+
+        if (errors) {
+            this.tabPanel.down('gridpanel[name="errors"]').show();
+            this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
+            this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
+            this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
+            this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
+        } else {
+             this.tabPanel.down('gridpanel[name="errors"]').hide();
+             errors = null;
+             errorsStore = null;
         }
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
@@ -132,12 +158,15 @@ Ext.define("Vede.controller.J5ReportController", {
 
     loadj5Results: function () {
         var self = this;
+
         this.activeProject.j5runs().load({
             callback: function (runs) {
-                self.j5runs = runs;
+                self.j5runs = runs.reverse();
                 self.renderMenu();
             }
         });
+
+
     },
 
     onTabChange: function (tabPanel, newTab, oldTab) {
@@ -145,8 +174,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel = Ext.getCmp('mainAppPanel').getActiveTab();
             this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
             this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
-            this.detailPanel.hide();
-            this.detailPanelFill.show();
+            // this.detailPanel.hide();
+            // this.detailPanelFill.show();
             this.activeProject = this.tabPanel.model;
             this.loadj5Results();
         }

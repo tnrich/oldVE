@@ -10,6 +10,7 @@ Ext.define("Teselagen.renderer.pie.Layer", {
     },
 
     config: {
+        selectionSVG: null,
         sequenceManager: null,
         center: {},
         radius: 0
@@ -23,8 +24,6 @@ Ext.define("Teselagen.renderer.pie.Layer", {
 
     selecting: false,
     selected: false,
-
-    selectionSprite: null,
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
@@ -41,8 +40,8 @@ Ext.define("Teselagen.renderer.pie.Layer", {
      * @param {Int} fromIndex The index where selection started.
      * @param {Int} toIndex The index where selection ended.
      */
-    select: function(fromIndex, toIndex) {
-        this.drawSelectionPie(fromIndex, toIndex);
+    select: function(fromIndex, toIndex, pointerEvents) {
+        this.drawSelectionPie(fromIndex, toIndex, pointerEvents);
 
         this.selected = true;
         this.start = fromIndex;
@@ -62,10 +61,6 @@ Ext.define("Teselagen.renderer.pie.Layer", {
         
         this.selected = false;
         this.selecting = false;
-
-        if(this.selectionSprite) {
-            this.selectionSprite.destroy();
-        }
     },
 
     startSelecting: function() {

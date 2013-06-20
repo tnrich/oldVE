@@ -32,6 +32,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         frameHeader: false,
         hideCollapseTool: false,
         overlapHeader: false,
+        autoScroll:true,
         titleCollapse: false,
         plain: false,
         removePanelHeader: false,
@@ -44,7 +45,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             xtype: 'menu',
             cls: 'j5RunsMenu',
             floating: false,
-            autoScroll: true,
+            autoScroll: false,
             width: 291,
             items: []
         }]
@@ -160,6 +161,29 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                 },
                 {
                     xtype: 'gridpanel',
+                    name: 'errors',
+                    cls: 'errorsGrid',
+                    hidden: true,
+                    margin: '10 10 20 10',
+                    title: 'Errors',
+                    minHeight: 80,
+                    layout: 'fit',
+                    hideHeaders: true,
+                    columns: [
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'faultString',
+                            autoHeight: true,
+                            forceFit: true,
+                            flex: 1,
+                            renderer: function(val) {
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'gridpanel',
                     name: 'assemblies',
                     margin: '10 10 20 10',
                     title: 'Output Plasmids',
@@ -196,6 +220,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     xtype: 'gridpanel',
                     name: 'j5parameters',
                     margin: '10 10 20 10',
+                    collapsible: true,
+                    collapseDirection: 'top',
+                    collapsed: true,
                     title: 'j5 Parameters',
                     minHeight: 100,
                     layout: 'fit',

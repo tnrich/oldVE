@@ -6,6 +6,8 @@
  * @author Zinovii Dmytriv (original author of WireframeSelectionLayer.as)
  */
 Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
+    requires: ["Teselagen.bio.util.Point"],
+    
     extend: "Teselagen.renderer.pie.Layer",
 
     statics: {
@@ -13,13 +15,23 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
         WIREFRAME_OFFSET: 10 // Distance of wireframe from rail edge.
     },
 
+    deselect: function() {
+        this.callParent();
+
+        d3.selectAll(".pieWireframeElement").remove();
+    },
+
     drawSelectionPie: function(fromIndex, endIndex) {
+        var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
+
         if(seqLen == 0 || (this.start == fromIndex && this.end == endIndex) ||
            fromIndex == endIndex) {
 
             return;
         }
+
+        d3.selectAll(".pieWireframeElement").remove();
 
         var startAngle = fromIndex * 2 * Math.PI / seqLen;
         var endAngle = endIndex * 2 * Math.PI / seqLen;
@@ -55,15 +67,17 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
             largeArcFlag = 1;
         }
 
-        this.selectionSprite = Ext.create("Ext.draw.Sprite", {
-            type: "path",
-            path: "M" + this.center.x + " " + this.center.y + 
-                  "L" + startPoint.x + " " + startPoint.y + 
-                  "A" + wireRadius + " " + wireRadius + " 0 " + largeArcFlag +
-                  " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
-                  "L" + this.center.x + " " + this.center.y,
-            stroke: this.self.FRAME_COLOR,
-            "stroke-opacity": this.self.STROKE_OPACITY,
-        });
+        path = "M" + this.center.x + " " + this.center.y + 
+               "L" + startPoint.x + " " + startPoint.y + 
+               "A" + wireRadius + " " + wireRadius + " 0 " + largeArcFlag +
+               " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
+               "L" + this.center.x + " " + this.center.y;
+
+        this.selectionSVG.append("svg:path")
+                         .attr("class", "pieWireframeElement")
+                         .attr("stroke", this.self.FRAME_COLOR)
+                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                         .attr("fill", "none")
+                         .attr("d", path);
     }
 });

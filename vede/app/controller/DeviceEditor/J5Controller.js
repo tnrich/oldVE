@@ -1,11 +1,18 @@
-/**
+    /**
  * j5 controller
  * @class Vede.controller.DeviceEditor.J5Controller
  */
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox","Teselagen.manager.TasksMonitor"],
+    requires: ["Teselagen.constants.Constants", 
+               "Teselagen.manager.DeviceDesignManager", 
+               "Teselagen.utils.J5ControlsUtils", 
+               "Teselagen.manager.J5CommunicationManager", 
+               "Teselagen.manager.ProjectManager", 
+               "Teselagen.bio.parsers.GenbankManager", 
+               "Ext.window.MessageBox",
+               "Teselagen.manager.TasksMonitor"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -93,21 +100,44 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * the mainAppPanel which hides the j5Window when the tab is switched away,
      * and re-shows it when the tab is switched back.
      */
-    onTabChange: function(mainAppPanel, newTab, oldTab) {
-        /*
-        if(oldTab)
-        {
-            if(oldTab) {
-                oldTab.hide();
-            }
-        }
 
-        if(newTab) {
-            if(newTab) {
-                newTab.show();
-            }
+     onTabChange: function(j5AdvancedTab, newTab, oldTab) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+        var runj5Btn = inspector.down("button[cls='runj5Btn']");
+        var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
+        var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
+
+        if(newTab.initialCls == "j5InfoTab-Basic") {
+                runj5Btn.show();
+                distributePCRBtn.hide();
+                condenseAssembliesBtn.hide();
+        } else {
+            j5AdvancedTab.getActiveTab().setActiveTab(0);
+            runj5Btn.hide();
+            distributePCRBtn.hide();
+            condenseAssembliesBtn.show();
         }
-        */
+        
+    },
+
+    onTabChangeSub: function(j5AdvancedTab, newTab, oldTab) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+        var runj5Btn = inspector.down("button[cls='runj5Btn']");
+        var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
+        var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
+
+        if(newTab.initialCls == "condenseAssemblyFiles-box") {
+                runj5Btn.hide();
+                distributePCRBtn.hide();
+                condenseAssembliesBtn.show();
+            }else if(newTab.initialCls == "downstreamAutomation-box") {                    
+                runj5Btn.hide();
+                distributePCRBtn.show();
+                condenseAssembliesBtn.hide();
+            }
+        
     },
 
     onEditJ5ParamsBtnClick: function () {
@@ -411,24 +441,23 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
     populateAutomationParametersDialog: function () {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var inspector = currentTab.down('InspectorPanel');
+        var automationWindow = Ext.getCmp('j5AutomationParameters');
 
         this.automationParameters.fields.eachKey(function (key) {
-            console.log(key);
             if(key !== "id" && key !== "j5run_id") {
-                inspector.down("component[cls='" + key + "']").setValue(
+                automationWindow.down("component[cls='" + key + "']").setValue(
                 this.automationParameters.get(key));
             }
         }, this);
     },
 
-    saveAutomationParams: function () {
+    saveAutomationParams: function (window) {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var inspector = currentTab.down('InspectorPanel');
+        var automationWindow = Ext.getCmp('j5AutomationParameters');
 
         this.automationParameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
-                this.automationParameters.set(key, inspector.down("component[cls='" + key + "']").getValue());
+                this.automationParameters.set(key, automationWindow.down("component[cls='" + key + "']").getValue());
             }
         }, this);
     },
@@ -540,10 +569,13 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
-            Teselagen.manager.TasksMonitor.start();
+            if (!Teselagen.manager.TasksMonitor.disabled) {
+                Teselagen.manager.TasksMonitor.start();
+            }
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    $.jGrowl("j5 Run Submitted");
+                    toastr.options.onclick = null;
+                    toastr.info("j5 Run Submitted");
                 } else {
                     //loadingMessage.hide();
                     //responseMessage.hide();
@@ -576,7 +608,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
         data.assemblyFileText = this.assemblyFileText;
         data.params = this.automationParameters.data;
-        data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
+        // data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
 
         // var loadingMessage = this.createLoadingMessage();
 
@@ -753,13 +785,16 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDownloadCondenseAssemblyResultsBtnClick: function(button){
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.inspector.j5comm.downloadCondenseAssemblyResults(button);
- 
+        var inspector = currentTab.down('InspectorPanel');
+        inspector.j5comm.downloadCondenseAssemblyResults(button);
     },
 
     init: function () {
         this.control({
-            "#mainAppPanel": {
+            "panel[cls='j5InfoTab-Sub-Advanced']": {
+                tabchange: this.onTabChangeSub
+            },
+            "panel[cls='j5InfoTab-Sub']": {
                 tabchange: this.onTabChange
             },
             "button[cls='editj5ParamsBtn']": {

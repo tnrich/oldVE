@@ -16,7 +16,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
     config: {
         sequenceManager: null,
-        sequenceAnnotator: null,
+        sequenceAnnotator: null
     },
 
     SelectionLayerEvent: null,
@@ -213,6 +213,22 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
                 Vede.application.fireEvent(
                     that.SelectionLayerEvent.HANDLE_CLICKED, "right");
             });
+        
+        this.selectionSVG.on("contextmenu", function(data, index) {
+        	d3.event.preventDefault();
+    		var contextMenu = Ext.create('Ext.menu.Menu',{items: []});
+    		contextMenu.add({
+        	  text: 'Annotate as new Sequence Feature',
+        	  handler: function() {
+        		  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");     	
+        		  createNewFeatureWindow.show();
+        		  createNewFeatureWindow.center();
+        	  }
+    		});
+    		
+    		contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+    	});
     },
 
     drawRowSelectionRect: function(startIndex, endIndex, lastBaseInRow) {
@@ -228,9 +244,9 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         d3.select("#selectionSVG").append("svg:rect")
             .attr("x", startMetrics.x)
-            .attr("y", startMetrics.y + 4)
+            .attr("y", startMetrics.y + 8)
             .attr("width", endMetrics.x - startMetrics.x)
-            .attr("height", this.sequenceAnnotationManager.caret.height - 4)
+            .attr("height", this.sequenceAnnotationManager.caret.height - 6)
             .attr("fill", this.self.SELECTION_COLOR)
             .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
 

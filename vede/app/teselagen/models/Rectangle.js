@@ -7,7 +7,7 @@ Ext.define("Teselagen.models.Rectangle", {
         x: 0,
         y: 0,
         width: 0,
-        height: 0,
+        height: 0
     },
 
     constructor: function(inData){
