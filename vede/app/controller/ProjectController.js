@@ -21,7 +21,7 @@ Ext.define("Vede.controller.ProjectController", {
      * @param {callback} Callback function (optional).
      * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
      */
-    loadProjectTree: function (cb) {
+    loadProjectTree: function (cb,cb2) {
         var self = this;
 
         var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
@@ -120,6 +120,8 @@ Ext.define("Vede.controller.ProjectController", {
                             qtip: 'Sequence ' + sequence.data.name
                         });
                     });
+                    
+                    if(typeof (cb2) === "function") { cb2(); }
                 }
             });
             

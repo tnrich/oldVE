@@ -125,7 +125,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         designs.remove(devicedesign);
         devicedesign.destroy(true);
         designs.sync();
-        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE,null, function () {
             Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
         });
@@ -152,6 +152,15 @@ Ext.define("Teselagen.manager.ProjectManager", {
         //console.log("Opening Sequence");
         this.workingSequence = sequence;
         Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
+
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+            new Ext.util.DelayedTask(function() {
+                var sequence = Teselagen.manager.ProjectManager.workingSequence;
+                Ext.getCmp("projectTreePanel").expandPath('/root/'+sequence.data.project_id,null,null,function(item,item2){
+                    Ext.getCmp("projectTreePanel").getSelectionModel().select(item2.findChild('id',sequence.data.id,true));
+                });
+            }).delay(500);
+        });
     },
 
     /**

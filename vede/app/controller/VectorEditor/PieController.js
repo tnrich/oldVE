@@ -61,9 +61,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         pie.on("contextmenu",function() {
         	return d3.event.preventDefault();
         });
-        this.pieManager.nameBox.on("click", function() {
+        /*this.pieManager.nameBox.on("click", function() {
             self.onNameBoxClick;
-        });
+        });*/
 
         // When pie is resized, scale the graphics in the pie.
         this.pieContainer.on("resize", function() {
@@ -618,11 +618,11 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         //console.log("("+relX+", "+relY+");  "+relDist);
     },
 
-    onNameBoxClick: function() {
+    /*onNameBoxClick: function() {
         console.log('hey');
         this.application.fireEvent(this.VisibilityEvent.SHOW_MAP_CARET_CHANGED,
                                     checked);
-    }
+    }*/
     
 });
 

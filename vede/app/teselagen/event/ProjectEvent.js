@@ -8,5 +8,6 @@ Ext.define("Teselagen.event.ProjectEvent", {
     OPEN_PROJECT: "openProject",
     SAVE_PROJECT: "saveProject",
     CLOSE_PROJECT: "closeProject",
-    LOAD_PROJECT_TREE: "loadProjectTree"
+    LOAD_PROJECT_TREE: "loadProjectTree",
+    LOAD_IMPORT_SEQUENCE: "loadImportSequence"
 });
