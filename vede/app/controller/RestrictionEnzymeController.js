@@ -8,7 +8,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.RestrictionEnzymeGroupManager",
-               "Teselagen.manager.UserManager"],
+               "Teselagen.manager.UserManager", "Vede.view.RestrictionEnzymesManagerWindow"],
 
     GroupManager: null,
     UserManager: null,
@@ -34,8 +34,8 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             "#enzymeSearchField": {
                 keyup: this.onEnzymeSearchFieldKeyup
             },
-            "#restrictionEnzymesManagerOKButton": {
-                click: this.onOKButtonClick
+            "#restrictionEnzymesManagerSaveButton": {
+                click: this.onSaveButtonClick
             },
             "#restrictionEnzymesManagerCancelButton": {
                 click: this.onCancelButtonClick
@@ -51,6 +51,9 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             },
             "#enzymeSelector": {
                  change: this.onEnzymeListChange
+             },
+             "window[cls=restrictionEnzymeManager]": {
+                 close: this.onWindowClose
              }
         });
 
@@ -160,11 +163,13 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     },
 
      /**
-      * Resorts the enzyme lists
+      * When the enzyme list is changed.
       */
      onEnzymeListChange: function(){
-//         this.enzymeSelector.fromField.boundList.getStore().sort("name", "ASC");
          this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
+         if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
+             this.GroupManager.setActiveEnzymesChanged(true);
+         }
      },
 
      /**
@@ -227,9 +232,9 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     },
         
     /**
-     * Saves to database, fires event and closes the window.
+     * Saves to database and closes the window.
      */
-    onOKButtonClick: function() {
+    onSaveButtonClick: function() {
 //        var names = [];
 //        this.enzymeSelector.toField.store.each(function(obj) {
 //            names.push(obj.data.name);
@@ -237,11 +242,16 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 //        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active",
 //                                                                    names);
         this.managerWindow.close();
+        this.UserManager.update(function(pSuccess) {
+            if (!pSuccess) {
+                console.warn("Unable to save restriction enzymes");
+            }
+        });
 
-        if(newActiveGroup !== this.GroupManager.getActiveGroup()){
-            this.GroupManager.setActiveGroup(newActiveGroup);
-            this.application.fireEvent("ActiveEnzymesChanged");
-        }
+//        if(newActiveGroup !== this.GroupManager.getActiveGroup()){
+//            this.GroupManager.setActiveGroup(newActiveGroup);
+//            this.application.fireEvent("ActiveEnzymesChanged");
+//        }
     },
     
     /**
@@ -249,5 +259,14 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onCancelButtonClick: function() {
         this.managerWindow.close();
+    },
+    
+    /**
+     * After window is closed.
+     */
+    onWindowClose: function() {
+        if (this.GroupManager.getActiveEnzymesChanged()) {
+            this.application.fireEvent("ActiveEnzymesChanged");
+        }
     }
 });

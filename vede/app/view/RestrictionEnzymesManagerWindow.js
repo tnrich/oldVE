@@ -18,6 +18,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
     resizable: false,
     draggable: false,
     modal: true,
+    cls: "restrictionEnzymeManager",
 
     initComponent: function() {
         var groupStore = Ext.create("Ext.data.Store", {
@@ -139,9 +140,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                     items: [
                         {
                             xtype: "button",
-                            id: "restrictionEnzymesManagerOKButton",
+                            id: "restrictionEnzymesManagerSaveButton",
                             width: 69,
-                            text: "OK"
+                            text: "Save"
                         },
                         {
                             xtype: "button",

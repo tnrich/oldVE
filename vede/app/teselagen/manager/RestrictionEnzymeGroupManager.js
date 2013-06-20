@@ -17,7 +17,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         userGroups: [],
         activeGroup: null,
         rebaseEnzymesDatabase: Ext.create("Ext.util.HashMap"),
-        isInitialized: false
+        isInitialized: false,
+        activeEnzymesChanged: false
     },
 
     RestrictionEnzymeManager: null,
@@ -78,7 +79,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         if (groups.findExact("name", this.ACTIVE) === -1) {
             this.createUserGroup(this.ACTIVE, this.COMMON_ENZYMES);
         }
-    },    
+    },
     
     /**
      * SHOULD BE IRRELEVANT IN JS VERSION
@@ -298,6 +299,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         var names = group.userRestrictionEnzymes().collect("name");
         var activeGroup = this.getUserEnzymeGroupByName(this.ACTIVE);
         this.loadEnzymes(activeGroup.userRestrictionEnzymes(), names);
+        this.setActiveEnzymesChanged(true);
     },
 
     /**

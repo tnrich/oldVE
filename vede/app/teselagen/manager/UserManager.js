@@ -13,11 +13,10 @@ Ext.define("Teselagen.manager.UserManager", {
     },
 
     /**
-     * Get user that logged in
-     * @param {String} username
+     * Get the current user from database.
      * @param {Function} next Callback
      */
-    getLoggedInUser: function(pNext) {
+    getUserFromDb: function(pNext) {
         Teselagen.models.User.load(null, {
             callback: function(pUser, pOp){
                 var success = pOp.wasSuccessful();
@@ -30,7 +29,7 @@ Ext.define("Teselagen.manager.UserManager", {
     },
 
     /**
-     * Set user from JSON response after login
+     * Set current user from JSON response after login
      * @param {Object} user
      */
     setUserFromJson: function(pUser) {
@@ -58,12 +57,11 @@ Ext.define("Teselagen.manager.UserManager", {
     },
 
     /**
-     * Update an existing user
-     * @param {Teselagen.model.User} user
+     * Update the current user in the database.
      * @param {Function} [next] Callback
      */
-    update: function(pUser, pNext) {
-        pUser.save({
+    update: function(pNext) {
+        this.getUser().save({
             callback: function(pUser, pOp){
                 var success = pOp.wasSuccessful();
                 if (!success) {

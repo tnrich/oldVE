@@ -52,9 +52,9 @@ Ext.onReady(function() {
             var userRestrictionEnzymeGroups = user.userRestrictionEnzymeGroups();
             userRestrictionEnzymeGroups.removeAll();
             regm.createUserGroup("group1", ["AatII", "BamHI"]);
-            UserManager.update(user, function(pSuccess) {
+            UserManager.update(function(pSuccess) {
                 expect(pSuccess).to.be.true;
-                UserManager.getLoggedInUser(function(pSuccess, pUser){
+                UserManager.getUserFromDb(function(pSuccess, pUser){
                     expect(pSuccess).to.be.true;
                     var group = pUser.userRestrictionEnzymeGroups().first();
                     expect(group).not.to.be.undefined;
@@ -70,9 +70,9 @@ Ext.onReady(function() {
         it("Remove user group", function(pDone) {
             user = UserManager.getUser();
             regm.removeUserGroup("group1");
-            UserManager.update(user, function(pSuccess) {
+            UserManager.update(function(pSuccess) {
                 expect(pSuccess).to.be.true;
-                UserManager.getLoggedInUser(function(pSuccess, pUser){
+                UserManager.getUserFromDb(function(pSuccess, pUser){
                     expect(pSuccess).to.be.true;
                     expect(pUser.userRestrictionEnzymeGroups().count()).to.equal(0);
                     pDone();
