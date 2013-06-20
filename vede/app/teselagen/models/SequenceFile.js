@@ -141,6 +141,12 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "hash",
         convert: function(v, record) {
             var content = record.get("sequenceFileContent");
+
+            content = content.replace(/&amp;/g,'');
+            content = content.replace(/amp;/g,'');
+            content = content.replace(/&quot;/g,'"');
+            content = content.replace(/quot;/g,'"');
+
             return Teselagen.bio.util.Sha256.hex_sha256(content);
         }
     },

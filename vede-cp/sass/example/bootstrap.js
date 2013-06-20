@@ -203,6 +203,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
+  "Teselagen.store.ErrorsStore": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Ext.ux.grid.TransformGrid": [],
   "Vede.controller.DeviceEditor.ChangePartDefinitionController": [],
@@ -371,6 +372,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.form.ItemSelector": [],
   "Teselagen.manager.SequenceFileManager": [],
   "Teselagen.event.ContextMenuEvent": [],
+  "Teselagen.models.j5Output.Error": [],
   "Ext.ux.ajax.JsonSimlet": [],
   "Teselagen.manager.AuthenticationManager": [],
   "Teselagen.renderer.pie.WireframeSelectionLayer": [],
@@ -631,6 +633,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
+  "Teselagen.store.ErrorsStore": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Ext.ux.grid.TransformGrid": [],
   "Vede.controller.DeviceEditor.ChangePartDefinitionController": [],
@@ -830,6 +833,7 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Teselagen.manager.SequenceFileManager": [],
   "Teselagen.event.ContextMenuEvent": [],
+  "Teselagen.models.j5Output.Error": [],
   "Ext.ux.ajax.JsonSimlet": [
     "simlet.json"
   ],
