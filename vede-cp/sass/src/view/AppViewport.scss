@@ -361,6 +361,12 @@ border-color: #E0E3E6;
   border-width: 0 !important;
 }
 
+.x-window-header-default {
+  border-color: #333234;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
 .x-tool img {
   border-radius: 4px;
 }
@@ -372,6 +378,9 @@ border-color: #E0E3E6;
 .x-window-default {
   background: #F8F8F8;
   box-shadow: none;
+  border-radius:3px;
+  border-color: #F8F8F8;
+  border: 0 none !important;
 }
 
 .x-window-body-default, .x-message-box .x-window-body {

@@ -1278,10 +1278,10 @@
     },
     {
       "border": {
-        "b": 1,
-        "l": 1,
-        "r": 1,
-        "t": 1
+        "b": 0,
+        "l": 0,
+        "r": 0,
+        "t": 0
       },
       "box": {
         "h": 200,
@@ -1291,10 +1291,10 @@
       },
       "id": "window-1049",
       "radius": {
-        "bl": 5,
-        "br": 5,
-        "tl": 5,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window/window-default-corners.gif",
@@ -1316,10 +1316,10 @@
       },
       "id": "window-1054_header",
       "radius": {
-        "bl": 0,
-        "br": 0,
-        "tl": 5,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-top-corners.gif",
@@ -1341,10 +1341,10 @@
       },
       "id": "window-1055_header",
       "radius": {
-        "bl": 5,
-        "br": 5,
-        "tl": 0,
-        "tr": 0
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-bottom-corners.gif",
@@ -1366,10 +1366,10 @@
       },
       "id": "window-1056_header",
       "radius": {
-        "bl": 5,
-        "br": 0,
-        "tl": 5,
-        "tr": 0
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-left-corners.gif",
@@ -1392,10 +1392,10 @@
       },
       "id": "window-1057_header",
       "radius": {
-        "bl": 0,
-        "br": 5,
-        "tl": 0,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-right-corners.gif",
@@ -1418,10 +1418,10 @@
       },
       "id": "window-1058_header",
       "radius": {
-        "bl": 5,
-        "br": 5,
-        "tl": 5,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-collapsed-top-corners.gif",
@@ -1443,10 +1443,10 @@
       },
       "id": "window-1059_header",
       "radius": {
-        "bl": 5,
-        "br": 5,
-        "tl": 5,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-collapsed-bottom-corners.gif",
@@ -1468,10 +1468,10 @@
       },
       "id": "window-1060_header",
       "radius": {
-        "bl": 5,
-        "br": 5,
-        "tl": 5,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-collapsed-left-corners.gif",
@@ -1494,10 +1494,10 @@
       },
       "id": "window-1061_header",
       "radius": {
-        "bl": 5,
-        "br": 5,
-        "tl": 5,
-        "tr": 5
+        "bl": 3,
+        "br": 3,
+        "tl": 3,
+        "tr": 3
       },
       "slices": {
         "corners": "images/window-header/window-header-default-collapsed-right-corners.gif",
