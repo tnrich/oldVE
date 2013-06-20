@@ -275,7 +275,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onPrintSequenceViewMenuItemClick: function() {
-    	
+    	Teselagen.manager.PrintManager.printSequenceView();
     	/*var svgHtml = Ext.getCmp("AnnotateContainer").el.getHTML();
     	var myWindow = window.open('', '', 'width=200,height=100');
         myWindow.document.write('<html><head>');
@@ -303,7 +303,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onPrintLinearViewMenuItemClick: function() {
-    	var svgHtml = Ext.getCmp("RailContainer").el.getHTML();
+    	Teselagen.manager.PrintManager.printLinearView();
+    	/*var svgHtml = Ext.getCmp("RailContainer").el.getHTML();
     	var myWindow = window.open('', '', 'width=200,height=100');      
         myWindow.document.write('<html><head>');
         myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
@@ -312,7 +313,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         myWindow.document.write(svgHtml);
         myWindow.document.write('</body></html>');
         myWindow.print();
-        myWindow.close();
+        myWindow.close();*/
     },
     
     onPropertiesMenuItemClick: function() {

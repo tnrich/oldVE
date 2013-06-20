@@ -2,7 +2,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     extend: "Vede.controller.VectorEditor.SequenceEditingController",
     
     requires: ["Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager",
-               "Teselagen.manager.VectorEditorManager", "Teselagen.event.ProjectEvent"],
+               "Teselagen.manager.VectorEditorManager", "Teselagen.event.ProjectEvent",
+               "Teselagen.bio.parsers.ParsersManager", "Teselagen.constants.Constants"],
                
     sequenceManager: null,
    
@@ -98,6 +99,22 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     				return;
     			}
     		}
+    		
+    		/*var parser = Teselagen.bio.parsers.ParsersManager;
+    		var constants = Teselagen.constants.Constants;
+    		var format = workingSequence.data.sequenceFileFormat;
+    		
+    		if (format === constants.GENBANK) {
+    			
+    		} else if (format === constants.FASTA) {
+    			
+    		} else if (format === constants.JBEISEQ) {
+    			
+    		} else if (format === constants.SBOLXML) {
+    			
+            } else {
+            	console.error("ERROR: Invalid file format");
+            }*/
     		
     		// May not work with non-genbank files.
     		var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
