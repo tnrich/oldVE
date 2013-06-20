@@ -171,6 +171,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                 if(Teselagen.manager.ProjectManager.workingSequence)
                 {
                     var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
+                    //ebugger;
                     if(name == "Untitled VEProject" || name == "" || sequence.get("project_id") == "")
                     {
                         console.log(seqMgr.name);
@@ -183,7 +184,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     }
                 }
                 Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
-                sequence.set('sequenceFileContent',gb.toString());
+                sequence.set('sequenceFileContent',seqMgr.toGenbank().toString());
                 sequence.set('sequenceFileFormat',"GENBANK");
                 sequence.set('sequenceFileName',pFile.name);
                 sequence.set('firstTimeImported',true);
@@ -232,6 +233,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
 
                                 newSequenceFile.save({
                                     callback: function () {
+                                        Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
+
                                         performSequenceCreation(newSequenceFile,function(){
                                             sequence.save({callback:function(){
                                                 Teselagen.manager.ProjectManager.openSequence(sequence);
