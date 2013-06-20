@@ -79,12 +79,13 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects', restrict, function(req, res) {
         var User = app.db.model("User");
-        User.findById(req.user._id).populate('projects')
-            .exec(function(err, user) {
-            user.projects.forEach(function(proj) {
-                proj.deprojects = undefined;
-                proj.veprojects = undefined;
-            });
+        User.findById(req.user._id).populate('projects').exec(function(err, user) {
+                if (user.projects) {
+                    user.projects.forEach(function(proj) {
+                        proj.deprojects = undefined;
+                        proj.veprojects = undefined;
+                    });
+                }
             //console.log("Returning "+user.projects.length+" projects");
             res.json({
                 "projects": user.projects

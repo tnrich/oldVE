@@ -31,18 +31,34 @@ Ext.onReady(function() {
             expect(ag).to.equal(sg[0]);
         });
 
+        it("Initialize user groups", function() {
+            regm.getUserEnzymeGroups().removeAll();
+            regm.initActive();
+        });
+        
+        it("Get user enzyme groups", function() {
+            var groups = regm.getUserEnzymeGroups();
+            expect(groups.count()).to.equal(1);
+            expect(groups.first().get("name")).to.equal(regm.ACTIVE);
+        });
+
+        it("Get user enzyme group by name", function() {
+            var group = regm.getUserEnzymeGroupByName(regm.ACTIVE);
+            expect(group.get("name")).to.equal(regm.ACTIVE);
+        });
+
         it("Create user group", function(pDone) {
             user = UserManager.getUser();
             var userRestrictionEnzymeGroups = user.userRestrictionEnzymeGroups();
             userRestrictionEnzymeGroups.removeAll();
-            regm.createUserGroup("group2", ["AatII", "BamHI"]);
+            regm.createUserGroup("group1", ["AatII", "BamHI"]);
             UserManager.update(user, function(pSuccess) {
                 expect(pSuccess).to.be.true;
                 UserManager.getLoggedInUser(function(pSuccess, pUser){
                     expect(pSuccess).to.be.true;
                     var group = pUser.userRestrictionEnzymeGroups().first();
                     expect(group).not.to.be.undefined;
-                    expect(group.get("name")).to.equal("group2");
+                    expect(group.get("name")).to.equal("group1");
                     var enzymes = group.userRestrictionEnzymes();
                     expect(enzymes.first().get("name")).to.equal("AatII");
                     expect(enzymes.last().get("name")).to.equal("BamHI");
@@ -53,7 +69,7 @@ Ext.onReady(function() {
         
         it("Remove user group", function(pDone) {
             user = UserManager.getUser();
-            regm.removeUserGroup("group2");
+            regm.removeUserGroup("group1");
             UserManager.update(user, function(pSuccess) {
                 expect(pSuccess).to.be.true;
                 UserManager.getLoggedInUser(function(pSuccess, pUser){
@@ -80,6 +96,16 @@ Ext.onReady(function() {
             expect(oldGroup.get("name")).to.equal("Active");
             expect(newGroup.get("name")).to.equal("NewActive");
             expect(oldGroup.userRestrictionEnzymes().count()).to.equal(newGroup.userRestrictionEnzymes().count());
+            expect(oldGroup.id).not.to.equal(newGroup.id);
+        });
+        
+        it("Make a group active", function() {
+            regm.createUserGroup("group2", ["AatII", "BamHI"]);
+            var active = regm.getUserEnzymeGroupByName(regm.ACTIVE);
+            var activeEnzymes = active.userRestrictionEnzymes();
+            expect(activeEnzymes.count()).to.equal(regm.COMMON_ENZYMES.length);
+            regm.makeActive("group2");
+            expect(activeEnzymes.count()).to.equal(2);
         });
         
             //        var user;

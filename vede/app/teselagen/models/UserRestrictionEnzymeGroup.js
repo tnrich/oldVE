@@ -18,7 +18,6 @@
       * @param {String} name The name assigned to the group of enzymes.
       */
      fields: [
-         { name: "user_id", type: "long"},
          {name: "name", type: "string", defaultValue: ""}
      ],
 
@@ -28,14 +27,6 @@
              model: "Teselagen.models.UserRestrictionEnzyme",
              name: "userRestrictionEnzymes",
              associationKey: "userRestrictionEnzymes"
-         },
-         {
-             type: "belongsTo",
-             model: "Teselagen.models.User",
-             getterName: "getUser",
-             setterName: "setUser",
-             associationKey: "user",
-             foreignKey: "user_id"
          }
      ]
  });

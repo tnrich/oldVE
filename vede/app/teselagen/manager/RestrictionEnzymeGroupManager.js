@@ -26,6 +26,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     COMMON_ENZYMES: ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV",
                      "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI",
                      "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"],
+    ACTIVE: "Active",
 
     /**
      * @member Teselagen.manager.RestrictionEnzymeGroupManager
@@ -74,10 +75,10 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     initActive: function() {
         var user = this.UserManager.getUser();
         var groups = user.userRestrictionEnzymeGroups();
-        if (groups.findExact("name", "Active") === -1) {
-            this.createUserGroup("Active", this.COMMON_ENZYMES);
+        if (groups.findExact("name", this.ACTIVE) === -1) {
+            this.createUserGroup(this.ACTIVE, this.COMMON_ENZYMES);
         }
-    },
+    },    
     
     /**
      * SHOULD BE IRRELEVANT IN JS VERSION
@@ -226,6 +227,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
             }
         }
         user.userRestrictionEnzymeGroups().add(group);
+        return group;
     },
     
    /**
@@ -235,16 +237,11 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * @return {Teselagen.models.RestrictionEnzymeGroup} The newly created group.
      */
     copyUserGroup: function(pName, pNewName) {
-        var groups = this.getUserEnzymeGroups();
-        var group = groups.findRecord("name", pName);
         var retVal = null;
+        var group = this.getUserEnzymeGroupByName(pName);
         if (group) {
-            // Clone group
-            var rec = {};
-            Ext.Object.merge(rec, group);
-            rec.set("name", pNewName);
-            Ext.data.Model.id(rec);
-            retVal = groups.add(rec);
+            var names = group.userRestrictionEnzymes().collect("name");
+            retVal = this.createUserGroup(pNewName, names);
         }
         else {
             console.warn("User Restriction Enzyme group not found: ", pName);
@@ -258,9 +255,9 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      */
     removeUserGroup: function(pName) {
         var groups = this.getUserEnzymeGroups();
-        var index = groups.findExact("name", pName);
-        if (index !== -1) {
-            groups.removeAt(index);
+        var group = this.getUserEnzymeGroupByName(pName);
+        if (group) {
+            groups.remove(group);
         }
         else {
             console.warn("User group not found: ", pName);
@@ -279,12 +276,51 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
-     * Returns a list of all group names.
+     * Returns all user groups.
      */
     getUserEnzymeGroups: function() {
         return this.UserManager.getUser().userRestrictionEnzymeGroups();
     },
 
+    /**
+     * Returns a user group given the name.
+     */
+    getUserEnzymeGroupByName: function(pName) {
+        var groups = this.getUserEnzymeGroups();
+        return groups.findRecord("name", pName);
+    },
+
+   /**
+     * Make the given user group's enzymes active.
+     */
+    makeActive: function(pName) {
+        var group = this.getUserEnzymeGroupByName(pName);
+        var names = group.userRestrictionEnzymes().collect("name");
+        var activeGroup = this.getUserEnzymeGroupByName(this.ACTIVE);
+        this.loadEnzymes(activeGroup.userRestrictionEnzymes(), names);
+    },
+
+    /**
+     * @private
+     * Loads enzymes into a store, clearing it first.  Checks that enzymes exist in database.
+     * @param {Ext.data.Store} store Restriction enzyme store
+     * @param {Array} names Enzyme names
+     */
+    loadEnzymes: function(pStore, pNames) {
+        var rebase = this.getRebaseEnzymesDatabase();
+        pStore.removeAll();
+        for (var i = 0; i < pNames.length; i++) {
+            var enzymeName = pNames[i];
+            var enzyme = rebase.get(enzymeName.toLowerCase());
+            if(enzyme) {
+                pStore.add(Ext.create("Teselagen.models.UserRestrictionEnzyme", {name: enzymeName}));
+            }
+            else {
+                console.warn("Enzyme not found in database: ", enzymeName);
+            }
+        }
+    },
+    
     /**
      * @private
      * Initializes activeGroup by loading the first system group, the "common" group enzymes, into it.
