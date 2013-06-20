@@ -32,16 +32,14 @@ Ext.onReady(function() {
         });
 
         it("Initialize user groups", function() {
-            regm.getUserEnzymeGroups().removeAll();
-            regm.initActive();
+            var groups = regm.getUserEnzymeGroups();
+            groups.removeAll();
+            regm.initActiveUserGroup();
+            var activeGroup = groups.findRecord("name", "Active");
+            expect(activeGroup).to.be.defined;
+            expect(activeGroup.userRestrictionEnzymes().count()).to.equal(regm.COMMON_ENZYMES.length);
         });
         
-        it("Get user enzyme groups", function() {
-            var groups = regm.getUserEnzymeGroups();
-            expect(groups.count()).to.equal(1);
-            expect(groups.first().get("name")).to.equal(regm.ACTIVE);
-        });
-
         it("Get user enzyme group by name", function() {
             var group = regm.getUserEnzymeGroupByName(regm.ACTIVE);
             expect(group.get("name")).to.equal(regm.ACTIVE);
@@ -68,7 +66,6 @@ Ext.onReady(function() {
         });
         
         it("Remove user group", function(pDone) {
-            user = UserManager.getUser();
             regm.removeUserGroup("group1");
             UserManager.update(function(pSuccess) {
                 expect(pSuccess).to.be.true;
@@ -80,16 +77,9 @@ Ext.onReady(function() {
             });
         });
 
-        it("Initialize active group", function() {
-            regm.initActive();
-            var groups = UserManager.getUser().userRestrictionEnzymeGroups();
-            var activeGroup = groups.findRecord("name", "Active");
-            expect(activeGroup).to.be.defined;
-            expect(activeGroup.userRestrictionEnzymes().count()).to.be.above(0);
-        });
-        
         it("Copy a user group", function() {
-            var groups = UserManager.getUser().userRestrictionEnzymeGroups();
+            regm.initActiveUserGroup();
+            var groups = regm.getUserEnzymeGroups();
             regm.copyUserGroup("Active", "NewActive");
             var oldGroup = groups.first();
             var newGroup = groups.last();

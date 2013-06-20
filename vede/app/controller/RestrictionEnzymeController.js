@@ -76,6 +76,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         if(!this.GroupManager.getIsInitialized()) {
             this.GroupManager.initialize();
         }
+        this.GroupManager.setActiveEnzymesChanged(false);
 
         var groupSelector = this.managerWindow.query("#enzymeGroupSelector")[0];
 
@@ -176,7 +177,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
       * Initializing after login
       */
      onLoggedIn: function() {
-         this.GroupManager.initActive();
+         this.GroupManager.initActiveUserGroup();
      },
      
      /**
@@ -266,6 +267,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onWindowClose: function() {
         if (this.GroupManager.getActiveEnzymesChanged()) {
+            this.GroupManager.changeActiveGroup();
             this.application.fireEvent("ActiveEnzymesChanged");
         }
     }
