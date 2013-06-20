@@ -115,9 +115,15 @@ Ext.define("Teselagen.models.SequenceFile", {
     }, {
         name: "sequenceFileFormat",
         convert: function(v) {
-            var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
-            format = format.toUpperCase().replace("-", "");
-            format = format.toUpperCase().replace("JBEISEQ", "JBEISEQXML");
+            var format = v;
+
+            if(format==="GENBANK") format = "Genbank";
+            if(format==="Fasta") format = "FASTA";
+            if(format==="JBEISEQXML") format = "jbei-seq";
+
+            //var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
+            //format = format.toUpperCase().replace("-", "");
+            //format = format.toUpperCase().replace("JBEISEQ", "JBEISEQXML");
             var constants = Teselagen.constants.Constants;
 
             if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {

@@ -288,8 +288,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
 
-    onAddRowClick: function () {
-        this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
+    onAddRowAboveClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
+    },
+
+    onAddRowBelowClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_ROW_BELOW);
     },
 
     onAddColumnLeftClick: function () {
@@ -460,8 +464,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {
                 click: this.onImportEugeneRulesBtnClick
             },
-            "button[cls='insertMenu'] > menu > menuitem[text='Row']": {
-                click: this.onAddRowClick
+            "button[cls='insertMenu'] > menu > menuitem[text='Row Above']": {
+                click: this.onAddRowAboveClick
+            },
+            "button[cls='insertMenu'] > menu > menuitem[text='Row Below']": {
+                click: this.onAddRowBelowClick
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {
                 click: this.onAddColumnLeftClick
