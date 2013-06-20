@@ -12,7 +12,13 @@ Ext.define("Vede.view.pie.NameBox", {
         pie: null,
         center: {},
         name: "",
-        length: 0
+        length: 0,
+        // listeners: {
+        //     click: {
+        //         element: "pieNameBox",
+        //         fn: function(){ console.log('hey pieNameBox'); }
+        //     }
+        // }
     },
 
     constructor: function(inData) {

@@ -8,14 +8,45 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
         "Teselagen.manager.DeviceDesignExporterManager"
     ],
 
+    preloadResources: function(cb){
+        var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
+        
+        var finishedPreloadingResources = function(){
+            console.log("finished preloading resources");
+            return cb(model);
+        };
+
+
+        var countParts = 0;
+
+        model.getJ5Collection().bins().each(function (bin, binKey) {
+            bin.parts().each(function (part, partIndex) {
+                countParts++;
+            });
+        });
+
+        model.getJ5Collection().bins().each(function (bin, binKey) {
+            bin.parts().each(function (part, partIndex) {
+                part.getSequenceFile({
+                    callback: function (part) {
+                        if(countParts === 1) finishedPreloadingResources();
+                        countParts--;
+                    }
+                });
+            });
+        });
+    },
+
     onExportToJSONClick: function () {
-        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-        Teselagen.manager.DeviceDesignExporterManager.exportToJSON(currentTab.model);
+        this.preloadResources(function(model){
+            Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);
+        });
     },
 
     onExportToXMLClick: function () {
-        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-        Teselagen.manager.DeviceDesignExporterManager.exportToXML(currentTab.model);
+        this.preloadResources(function(model){
+            Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);
+        });
     },
 
     onNewDesignClick: function() {
