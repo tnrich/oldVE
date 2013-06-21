@@ -174,8 +174,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel = Ext.getCmp('mainAppPanel').getActiveTab();
             this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
             this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
-            // this.detailPanel.hide();
-            // this.detailPanelFill.show();
+            // this.detailPanelFill.hide();
+            // this.detailPanel.show();
             this.activeProject = this.tabPanel.model;
             this.loadj5Results();
         }
@@ -187,6 +187,10 @@ Ext.define("Vede.controller.J5ReportController", {
 
     onLaunch: function () {
         this.tabPanel = Ext.getCmp("mainAppPanel");
+        this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
+        this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
+        // this.detailPanel.hide();
+        // this.detailPanelFill.show();
         this.tabPanel.on("tabchange", this.onTabChange, this);
     },
 

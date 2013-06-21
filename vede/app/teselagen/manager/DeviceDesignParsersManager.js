@@ -348,7 +348,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
 
             }
-            if(!partfound) debugger;
         }
 
         function getSequenceByID(targetHash, cb) {
