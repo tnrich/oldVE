@@ -92,15 +92,19 @@ Ext.define("Vede.controller.J5ReportController", {
         var warnings = this.activeJ5Run.raw.warnings;
         var errors = this.activeJ5Run.raw.error_list[0];
 
+        if (warnings) {
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
             model: 'Teselagen.models.j5Output.Warning',
             data: warnings
         });
+        }
 
+        if (errors) {
         var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
             model: 'Teselagen.models.j5Output.Error',
             data: errors.error
         });
+        }   
 
         if ((warnings.length>0)==true) {
             this.tabPanel.down('gridpanel[name="warnings"]').show();
@@ -114,9 +118,9 @@ Ext.define("Vede.controller.J5ReportController", {
         if (errors) {
             this.tabPanel.down('gridpanel[name="errors"]').show();
             this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
-            this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
-            this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
-            this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
+            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
+            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
+            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
         } else {
              this.tabPanel.down('gridpanel[name="errors"]').hide();
              errors = null;
