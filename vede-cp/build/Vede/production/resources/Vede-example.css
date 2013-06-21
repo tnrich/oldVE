@@ -13265,10 +13265,10 @@ body.x-nbr .x-window-default-frameInfo {
 /* */
 /* line 195, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
 .x-window-body-default {
-  border-color: #f8f8f8;
+  border-color: #bcb1b0;
   border-width: 1px;
   border-style: solid;
-  background: #f8f8f8;
+  background: #e0e0e0;
   color: black;
 }
 
@@ -13277,11 +13277,11 @@ body.x-nbr .x-window-default-frameInfo {
   font-size: 11px;
   border-color: #a9a9a9;
   zoom: 1;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 /* line 212, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
 .x-window-header-default .x-tool-img {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 223, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
@@ -13297,8 +13297,8 @@ body.x-nbr .x-window-default-frameInfo {
 }
 /* line 36, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/rotate-element.scss */
 .x-ie9m .x-window-header-default-vertical .x-window-header-text-container {
-  background-color: #333234;
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1), progid:DXImageTransform.Microsoft.Chroma(color=#333234);
+  background-color: #e8e8e8;
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1), progid:DXImageTransform.Microsoft.Chroma(color=#e8e8e8);
 }
 
 /* line 228, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
@@ -13314,8 +13314,8 @@ body.x-nbr .x-window-default-frameInfo {
 }
 /* line 36, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/rotate-element.scss */
 .x-ie9m .x-window-header-default-vertical .x-rtl.x-window-header-text-container {
-  background-color: #333234;
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3), progid:DXImageTransform.Microsoft.Chroma(color=#333234);
+  background-color: #e8e8e8;
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3), progid:DXImageTransform.Microsoft.Chroma(color=#e8e8e8);
 }
 
 /* line 233, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
@@ -13346,12 +13346,12 @@ body.x-nbr .x-window-default-frameInfo {
   padding: 4px 5px 0 5px;
   border-width: 1px 1px 0 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-top-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -13494,12 +13494,12 @@ body.x-nbr .x-window-header-default-top-frameInfo {
   padding: 5px 4px 5px 0;
   border-width: 1px 1px 1px 0;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-right-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -13647,12 +13647,12 @@ body.x-nbr .x-window-header-default-right-frameInfo {
   padding: 0 5px 4px 5px;
   border-width: 0 1px 1px 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-bottom-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -13795,12 +13795,12 @@ body.x-nbr .x-window-header-default-bottom-frameInfo {
   padding: 5px 0 5px 4px;
   border-width: 1px 0 1px 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-left-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -13941,12 +13941,12 @@ body.x-nbr .x-window-header-default-left-frameInfo {
   padding: 4px 5px 4px 5px;
   border-width: 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-collapsed-top-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -14082,12 +14082,12 @@ body.x-nbr .x-window-header-default-collapsed-top-frameInfo {
   padding: 5px 4px 5px 4px;
   border-width: 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-collapsed-right-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -14228,12 +14228,12 @@ body.x-nbr .x-window-header-default-collapsed-right-frameInfo {
   padding: 4px 5px 4px 5px;
   border-width: 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-collapsed-bottom-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -14369,12 +14369,12 @@ body.x-nbr .x-window-header-default-collapsed-bottom-frameInfo {
   padding: 5px 4px 5px 4px;
   border-width: 1px;
   border-style: solid;
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-window-header-default-collapsed-left-mc {
-  background-color: #333234;
+  background-color: #e8e8e8;
 }
 
 /* line 235, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -14551,7 +14551,7 @@ body.x-nbr .x-window-header-default-collapsed-left-frameInfo {
 }
 /* line 380, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
 .x-ie8m .x-window-header-default .x-window-header-glyph {
-  color: #333233;
+  color: #8d8d8d;
 }
 
 /* line 388, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
