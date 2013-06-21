@@ -348,7 +348,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
 
             }
-            if(!partfound) debugger;
         }
 
         function getSequenceByID(targetHash, cb) {
@@ -609,7 +608,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     }
                     catch(e)
                     {
-                        if( e.message.match( /Illegal CompositionalOperator/ ) )
+                        if( e.message.match( /Illegal CompositionalOperator/ ) || e.message.match( /Using deprecated compositionalOperator/ ) )
                         {
                             //console.log("Unsupported operator");
                             unsupported = true;
@@ -659,7 +658,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             checkForDuplicatedName(rule,function(dup,existingRule){
                 if(dup) { 
-                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+existingRule.getOperand2().data.name+" )"+"and the rule to be imported, "+rule.data.originalRuleLine +"Renaming the rule to be imported: "+rule.data.name+'_1'});
+                    var rule2 = existingRule.get('operand2isNumber') ? existingRule.get('operand2Number') : existingRule.getOperand2().data.name;
+                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+"and the rule to be imported, "+rule.data.originalRuleLine +"Renaming the rule to be imported: "+rule.data.name+'_1'});
                     rule.set('name',rule.data.name+'_1');
                     rule.set('originalRuleLine',rule.get('originalRuleLine').replace(existingRule.get('name'),rule.get('name')));
                 }

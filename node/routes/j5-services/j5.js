@@ -55,6 +55,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
     {
       console.log(error);
       res.send(error["faultString"], 500);
+      // res.json(500, {"error":error["faultString"], "endDate": Date.now()});
     }
     else
     {
@@ -105,6 +106,7 @@ app.post('/DesignDownstreamAutomation', restrict, function(req,res){
     {
       console.log(error);
       res.send(error["faultString"], 500);
+      // res.json(500, {"error":error["faultString"], "endDate": Date.now()});
     }
     else
     {
@@ -129,6 +131,7 @@ app.post('/condenseAssemblyFiles',restrict, function(req,res){
     {
       console.log(error);
       res.send(error["faultString"], 500);
+      // res.json(500, {"error":error["faultString"], "endDate": Date.now()});
     }
     else
     {
@@ -342,6 +345,7 @@ app.post('/executej5',restrict,function(req,res){
           // Catch error during j5 RPC execution
           console.log(error);
           newj5Run.status = "Error";
+          newj5Run.endDate = Date.now();
           newj5Run.error_list.push({"error":error});
           newj5Run.save();
         }
