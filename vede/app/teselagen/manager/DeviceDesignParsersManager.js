@@ -608,7 +608,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     }
                     catch(e)
                     {
-                        if( e.message.match( /Illegal CompositionalOperator/ ) )
+                        if( e.message.match( /Illegal CompositionalOperator/ ) || e.message.match( /Using deprecated compositionalOperator/ ) )
                         {
                             //console.log("Unsupported operator");
                             unsupported = true;
