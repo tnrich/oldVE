@@ -618,11 +618,11 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         //console.log("("+relX+", "+relY+");  "+relDist);
     },
 
-    /*onNameBoxClick: function() {
+    onPieNameBoxClick: function() {
         console.log('hey');
         this.application.fireEvent(this.VisibilityEvent.SHOW_MAP_CARET_CHANGED,
                                     checked);
-    }*/
+    }
     
 });
 

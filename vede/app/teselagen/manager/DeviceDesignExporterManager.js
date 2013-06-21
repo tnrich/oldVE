@@ -266,7 +266,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
                 // Setting customized properties (which need transformation)
                 var propNode = sequenceFile.appendChild(doc.createElement("de:format"));
-                if(sequence["de:format"]) { propNode.textContent = self.toTitleCase(sequence["de:format"].toLowerCase()); }
+                if(sequence["de:format"]) { propNode.textContent = sequence["de:format"]; }
 
                 var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
                 if(sequence["de:content"]) { propNode.textContent = "<![CDATA[" + sequence["de:content"] +"]]>"; }
@@ -302,6 +302,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             //    return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
             //});
             //
+            fileContent = fileContent.replace(/ &amp; /g,' & ');
             fileContent = fileContent.replace(/&lt;/g,'<');
             fileContent = fileContent.replace(/&gt;/g,'>');
             fileContent = fileContent.replace(/&amp;/g,'');

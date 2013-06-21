@@ -9,7 +9,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
 
     ADD_COLUMN_LEFT: "AddColumnLeft",
     ADD_COLUMN_RIGHT: "AddColumnRight",
-    ADD_ROW: "AddRow",
+    ADD_ROW_ABOVE: "AddRowAbove",
+    ADD_ROW_BELOW: "AddRowBelow",
 
     SELECT_BIN: "SelectBin",
     SELECT_PART: "SelectPart",

@@ -154,12 +154,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-            new Ext.util.DelayedTask(function() {
+//            new Ext.util.DelayedTask(function() {
                 var sequence = Teselagen.manager.ProjectManager.workingSequence;
                 Ext.getCmp("projectTreePanel").expandPath('/root/'+sequence.data.project_id,null,null,function(item,item2){
                     Ext.getCmp("projectTreePanel").getSelectionModel().select(item2.findChild('id',sequence.data.id,true));
                 });
-            }).delay(500);
+ //           }).delay(500);
         });
     },
 
