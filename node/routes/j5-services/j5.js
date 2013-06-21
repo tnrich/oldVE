@@ -309,6 +309,8 @@ app.post('/executej5',restrict,function(req,res){
       // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
       var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
 
+      quicklog(JSON.stringify(data));
+
       // Credentials for RPC communication
       data["username"] = 'node';
       data["api_key"] = 'teselarocks';
