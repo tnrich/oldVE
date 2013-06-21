@@ -374,19 +374,36 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         if(status=="Completed") {
             var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-warning");
+        } else if (status=="Error") {
+            var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").addClass("status-note-failed");
         }
 
         var warnings = self.activeJ5Run.raw.warnings;
+        var errors = self.activeJ5Run.raw.error_list[0];
 
+        if (warnings) {
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
             model: 'Teselagen.models.j5Output.Warning',
             data: warnings
         });
+        }
+
+        if (errors) {
+        var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
+            model: 'Teselagen.models.j5Output.Error',
+            data: errors.error
+        });
+        }   
 
         if ((warnings.length>0)==true) {
             Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').show();
@@ -397,9 +414,22 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              warningsStore = null;
         }
 
+        if (errors) {
+            Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').show();
+            Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').reconfigure(errorsStore);
+            // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
+            // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
+            // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
+        } else {
+             Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').hide();
+             errors = null;
+             errorsStore = null;
+        }
+
         Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+
         
         Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
         // Ext.getCmp('mainAppPanel').getActiveTab().down('button[cls="downloadResults"]').href = '/api/getfile/'+self.activeJ5Run.data.file_id;

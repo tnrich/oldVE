@@ -16,6 +16,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     items: [
             {
             xtype: 'panel',
+            hidden: true,
             flex: 1,
             border: 0,
             padding: 50,
