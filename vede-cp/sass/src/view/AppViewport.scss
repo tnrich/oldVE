@@ -220,10 +220,10 @@ border-color: #E0E3E6;
   background: #E0E3E6;
 }
 
-.x-btn-default-toolbar-medium-focused {
-  border-color: none;
-  background-image:none;
-  background: none;
+.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-small-focus {
+  border-color: white;
+  background-image:none !important;
+  background: none !important;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {

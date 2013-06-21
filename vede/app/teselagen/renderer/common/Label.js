@@ -53,7 +53,7 @@ Ext.define("Teselagen.renderer.common.Label", {
         }
 
         this.label = this.labelSVG.append("svg:text")
-                     .attr("fill", inData.color || "black")
+                     .attr("fill", inData.color || "#333234")
                      .attr("x", inData.x)
                      .attr("y", inData.y)
                      .text(this.labelText())

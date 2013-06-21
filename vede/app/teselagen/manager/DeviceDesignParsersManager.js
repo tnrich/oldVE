@@ -324,7 +324,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     return part; 
                 }
             }
-            if(!partfound) debugger;
         }
 
         function getSequenceByID(targetHash, cb) {

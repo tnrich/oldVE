@@ -518,7 +518,6 @@
         "x": 10,
         "y": 735
       },
-      "gradient": "top",
       "id": "button-1020",
       "radius": {
         "bl": 3,
@@ -1316,8 +1315,8 @@
       },
       "id": "window-1054_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 0,
+        "br": 0,
         "tl": 3,
         "tr": 3
       },
@@ -1341,8 +1340,8 @@
       },
       "id": "window-1055_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 5,
+        "br": 5,
         "tl": 3,
         "tr": 3
       },
@@ -1366,8 +1365,8 @@
       },
       "id": "window-1056_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 5,
+        "br": 0,
         "tl": 3,
         "tr": 3
       },
@@ -1392,8 +1391,8 @@
       },
       "id": "window-1057_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 0,
+        "br": 5,
         "tl": 3,
         "tr": 3
       },
@@ -1418,8 +1417,8 @@
       },
       "id": "window-1058_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 5,
+        "br": 5,
         "tl": 3,
         "tr": 3
       },
@@ -1443,8 +1442,8 @@
       },
       "id": "window-1059_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 5,
+        "br": 5,
         "tl": 3,
         "tr": 3
       },
@@ -1468,8 +1467,8 @@
       },
       "id": "window-1060_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 5,
+        "br": 5,
         "tl": 3,
         "tr": 3
       },
@@ -1494,8 +1493,8 @@
       },
       "id": "window-1061_header",
       "radius": {
-        "bl": 3,
-        "br": 3,
+        "bl": 5,
+        "br": 5,
         "tl": 3,
         "tr": 3
       },
