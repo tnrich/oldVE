@@ -286,6 +286,15 @@ border-color: #E0E3E6;
   background:none;
 }
 
+.x-menu-icon-separator {
+  border: 0 none;
+  width: 0px;
+}
+
+.x-menu-icon-separator {
+  height: 1px;
+  border: solid 1px rgb(221, 229, 231);
+}
 
 .x-grid-row .x-grid-cell {
   padding:5px;
