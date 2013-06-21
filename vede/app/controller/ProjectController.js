@@ -299,7 +299,6 @@ Ext.define("Vede.controller.ProjectController", {
                 Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
             }
         });
-
     },
 
     expandProject: function (record) {
