@@ -137,6 +137,7 @@ Ext.define("Vede.controller.ProjectController", {
         // PRELOAD DATA
         projects.load({
             callback: function(){
+                if(projects.count()===0) finishedPreloading();
                 projects.each(function(project){
                     storesCounter++;
                     project.designs().load({
