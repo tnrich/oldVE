@@ -39,7 +39,7 @@ module.exports = function() {
      * Get user by id
      * @param id User id
      */
-    UserManager.prototype.getUserById = function(pId, pNext) {
+    UserManager.prototype.getById = function(pId, pNext) {
         this.User.findById(pId).populate("projects").exec(function(pErr, pUser) {
             if (!pErr) {
                 if (pUser && pUser.projects) {
@@ -57,7 +57,7 @@ module.exports = function() {
      * Get user by name
      * @param name username
      */
-    UserManager.prototype.getUserByName = function(pName, pNext) {
+    UserManager.prototype.getByName = function(pName, pNext) {
         this.User.findOne({username:pName}).populate("projects").exec(function(pErr, pUser) {
             if (!pErr) {
                 if (pUser && pUser.projects) {
@@ -73,20 +73,25 @@ module.exports = function() {
 
     /**
      * Update user
-     * @param name username
+     * @param user user
      */
-    UserManager.prototype.update = function(pReqUser, pNext) {
-        this.getUserById(pReqUser._id, function(pErr, pUser) {
+    UserManager.prototype.update = function(pUser, pNext) {
+        this.getById(pUser._id, function(pErr, user) {
             if (!pErr) {
-                pUser.username = pReqUser.username;
-                pUser.firstName = pReqUser.firstName;
-                pUser.lastName = pReqUser.lastName;
-                pUser.email = pReqUser.email;
-                pUser.preferences = pReqUser.preferences;
-                pUser.groupName = pReqUser.groupName;
-                pUser.groupType = pReqUser.groupType;
-                pUser.userRestrictionEnzymeGroups = pReqUser.userRestrictionEnzymeGroups;
-                pUser.save(function(pErr, pUser) {
+                user.username = pUser.username || user.username;
+                user.firstName = pUser.firstName || user.firstName;
+                user.lastName = pUser.lastName || user.lastName;
+                user.email = pUser.email || user.email;
+                user.preferences = pUser.preferences || user.preferences;
+                user.groupName = pUser.groupName || user.groupName;
+                user.groupType = pUser.groupType || user.groupType;
+                user.userRestrictionEnzymeGroups = pUser.userRestrictionEnzymeGroups || 
+                    user.userRestrictionEnzymeGroups;
+                user.projects = pUser.projects || user.projects;
+                user.sequences = pUser.sequences || user.sequences;
+                user.parts = pUser.parts || user.parts;
+                user.designs = pUser.designs || user.designs;
+                user.save(function(pErr, pUser) {
                     pNext(pErr, pUser);
                 });
             }

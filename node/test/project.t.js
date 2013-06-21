@@ -1,29 +1,42 @@
 /*global before, dbManager, describe, expect, it */
 
+var ProjectManager = require("../manager/ProjectManager")();
 var UserManager = require("../manager/UserManager")();
-var userManager;
+var projectManager, userManager;
 
-describe("UserManager tests.", function() {
+describe("ProjectManager tests.", function() {
     var user;
     before(function() {
+        projectManager = new ProjectManager(dbManager.mongoose);
         userManager = new UserManager(dbManager.mongoose);
     });
-    it("UserManager.deleteAll", function(done) {
-        userManager.deleteAll(function(err) {
+    it("ProjectManager.deleteAll", function(done) {
+        projectManager.deleteAll(function(err) {
             expect(err).to.be.null;
             done();
         });
     });
-    it("UserManager.create", function(done) {
-        var user = {username:"mfero"};
-        userManager.create(user, function(pErr, pUser) {
+    it("ProjectManager.create", function(done) {
+        userManager.getByName("mfero", function(pErr, pUser) {
             expect(pErr).to.be.null;
-            expect(pUser).not.to.be.null;
-            expect(pUser.id).not.to.be.null;
-            done();
+            var date = new Date().toISOString();
+            var project = {name:"MyProject1", dateCreated:date, dateModified:date, user_id:pUser.id};
+            projectManager.create(project, function(pErr, pProject) {
+                expect(pErr).to.be.null;
+                expect(pProject).not.to.be.null;
+                expect(pProject.id).not.to.be.null;
+                expect(pProject.user_id.toString()).to.equal(pUser.id);
+                userManager.getById(pProject.user_id, function(pErr, pUser) {
+                    expect(pErr).to.be.null;
+                    expect(pUser).not.to.be.null;
+                    expect(pUser.projects).not.to.be.null;
+                    expect(pUser.projects[0].id).to.equal(pProject.id)
+                    done();
+                })
+            });
         });
     });
-    it("UserManager.getByName", function(done) {
+    it.skip("ProjectManager.getByName", function(done) {
         userManager.getByName("mfero", function(pErr, pUser) {
             expect(pErr).to.be.null;
             expect(pUser).not.to.be.null;
@@ -32,7 +45,7 @@ describe("UserManager tests.", function() {
             done();
         });
     });
-    it("UserManager.getById", function(done) {
+    it.skip("ProjectManager.getById", function(done) {
         userManager.getById(user.id, function(pErr, pUser) {
             expect(pErr).to.be.null;
             expect(pUser).not.to.be.null;
@@ -40,7 +53,7 @@ describe("UserManager tests.", function() {
             done();
         });
     });
-    it("UserManager.update", function(done) {
+    it.skip("ProjectManager.update", function(done) {
         user.firstName = "Mike";
         user.lastName = "Fero";
         user.email = "mike@teselagen.com";

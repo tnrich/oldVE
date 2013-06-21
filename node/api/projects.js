@@ -1,6 +1,7 @@
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
+    var projectManager = new app.ProjectManager(app.db);
 
     /**
      * POST Project
@@ -8,21 +9,21 @@ module.exports = function(app) {
      * @method POST '/users/:username/projects'
      */
     app.post('/users/:username/projects', restrict, function(req, res) {
-        var Project = app.db.model("project");
-        var newProject = new Project({
+        projectManager.create({
             name: req.body.name,
-            user_id: req.user,
+            user_id: req.user.id,
             dateCreated: req.body.dateCreated,
             dateModified: req.body.dateModified
-        });
-        newProject.save(function() {
-            req.user.projects.push(newProject);
-            req.user.save(function() {
-                console.log("New project Saved");
+        }, function(err, project) {
+            if (!err) {
+//                console.log("New project Saved");
                 res.json({
-                    "projects": newProject
+                    "projects": project
                 });
-            });
+            }
+            else {
+                app.errorHandler(err, req, res);
+            }
         });
     });
 
