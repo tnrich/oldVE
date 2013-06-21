@@ -1,3 +1,4 @@
+
 /**
  * Main toolbar controller
  * @class Vede.controller.DeviceEditor.MainToolbarController

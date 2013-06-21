@@ -55,7 +55,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             xtype: 'panel',
             title: 'Detail',
             cls: 'j5detailpanel-fill',
-            hidden: true,
+            hidden: false,
             border: 0,
             items: [{
                 xtype: 'container',
@@ -70,7 +70,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         xtype: 'panel',
         title: 'Detail',
         cls: 'j5detailpanel',
-        hidden: false,
+        hidden: true,
         autoScroll: true,
         border: 0,
         dockedItems: [{

@@ -168,8 +168,13 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 width: 140,
                 items: [{
                     xtype: 'menuitem',
-                    cls: 'row',
-                    text: 'Row',
+                    cls: 'row-above',
+                    text: 'Row Above',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'row-below',
+                    text: 'Row Below',
                     disabled: true
                 }, {
                     xtype: 'menuitem',
