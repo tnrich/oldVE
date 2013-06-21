@@ -282,6 +282,11 @@ border-color: #E0E3E6;
   background-size: 16px;
 }
 
+.x-tree-lines .x-tree-elbow-line, .x-tree-lines .x-tree-elbow, .x-tree-lines .x-tree-elbow-end {
+  background:none;
+}
+
+
 .x-grid-row .x-grid-cell {
   padding:5px;
   border-color: #E0E3E6;
@@ -289,6 +294,7 @@ border-color: #E0E3E6;
   transition: all .3s ease-in-out;
    -moz-transition: all .3s ease-in-out;
    -webkit-transition: all .3s ease-in-out;
+   cursor:pointer;
 }
 
 .x-grid-no-row-lines .x-grid-row-focused .x-grid-cell-inner {
