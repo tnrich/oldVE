@@ -61,9 +61,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         pie.on("contextmenu",function() {
         	return d3.event.preventDefault();
         });
-        /*this.pieManager.nameBox.on("click", function() {
-            self.onNameBoxClick;
-        });*/
 
         // When pie is resized, scale the graphics in the pie.
         this.pieContainer.on("resize", function() {

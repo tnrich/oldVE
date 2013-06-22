@@ -123,16 +123,22 @@ function encoded_parts_list_file(model)
                 if(sequenceFile)
                 {
                     var sequenceName = "";
-                    if (sequenceFile["sequenceFileFormat"]=="GENBANK")
+                    if (sequenceFile["sequenceFileFormat"]=="Genbank")
                         {
                             sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
                             if(sequenceName) sequenceName = sequenceName[1];
-                            else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                            else 
+                            {
+                                sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+([[a-zA-Z0-9~@#\^\$&\*\(\)-_\+=\[\]\{\}\|\\,\.\?]*|\-]+)/);
+                                if(!sequenceName) console.log(JSON.stringify(sequenceFile['sequenceFileContent']));
+                                else sequenceName = sequenceName[1];
+                            }
+                                //sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
                         }
 
-                    if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+                    if (sequenceFile["sequenceFileFormat"]=="jbei-seq") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
                     if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
-
+                    //console.log(part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n');
                     out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
