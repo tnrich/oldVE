@@ -100,8 +100,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                             displayField: "name",
 //                            flex: 1,
                             width: 330,
-                            buttons: ["add", "remove"],
-                            buttonsText: {add:"Add to Active", remove:"Remove from Active"},
+                            buttons: ["addAll", "add", "remove", "removeAll"],
+                            buttonsText: {add:"Add", addAll:"Add All", remove:"Remove",
+                                removeAll:"Remove All"},
                             doCopy: true
                         },
                         {
