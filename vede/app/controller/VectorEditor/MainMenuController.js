@@ -22,6 +22,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     ProjectManager: null,
     VisibilityEvent: null,
     SequenceManagerEvent: null,
+    sequenceManager: null,
     VEManager: null,
     
     onCutMenuItemClick: function() {
@@ -264,8 +265,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onSelectionChanged: function(scope) {
     	Ext.getCmp("createNewFeatureMenuItem").enable();
     },
-    onSequenceManagerChanged: function(scope) {
+    onSequenceManagerChanged: function(sequenceManager) {
     	Ext.getCmp("createNewFeatureMenuItem").disable();
+    	this.sequenceManager = sequenceManager;
     },
     
     onImportFileMenuItemClick: function() {
@@ -318,9 +320,64 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     
     onPropertiesMenuItemClick: function() {
     	var propertiesWindow = Ext.create("Vede.view.ve.PropertiesWindow");
+    	Ext.getCmp('propertiesWindowOwnerField').setFieldStyle('border-color:transparent;background-color:transparent');
+    	Ext.getCmp('propertiesWindowCreatedField').setFieldStyle('border-color:transparent;background-color:transparent');
+    	Ext.getCmp('propertiesWindowLastModifiedField').setFieldStyle('border-color:transparent;background-color:transparent');
+    	
+    	Ext.getCmp('propertiesWindowSequenceNameField').setValue(this.sequenceManager.toGenbank().getLocus().locusName);
+    	
     	
     	propertiesWindow.show();
     	propertiesWindow.center();
+    },
+    
+    onPropertiesWindowOKButtonClick: function() {
+    	var name = Ext.getCmp('propertiesWindowSequenceNameField').getValue();
+    	if(name==null || name.match(/^\s*$/) || name.length==0) {
+    		Ext.getCmp('propertiesWindowSequenceNameField').setFieldStyle("border-color:red");
+    	} else {
+    		var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
+    		var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
+    		var selectedProj = Teselagen.manager.ProjectManager.workingProject;
+    		
+    		var oldName = workingSequence.data.name;
+    		// It is very likely that the following code contains inconsistencies in what the name means.
+    		
+    		var idx = -1;
+    		//Maybe make more efficient in the future.
+    		for(var i=0;i<sequenceStore.data.items.length;i++) {
+    			if(name==sequenceStore.data.items[i].data.name && selectedProj.internalId==sequenceStore.data.items[i].data.project_id) {
+    				if(name!=oldName) {
+	    				// Put better way of alerting user. The following line of code is just temporary.
+	    				// Following code isn't completely correct. It's just in place for testing purposes.
+	    				alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+						return;
+    				}
+    			}
+    		}
+    		var format = workingSequence.data.sequenceFileFormat;
+    		var genbank = this.sequenceManager.toGenbank();
+    		var locus = genbank.getLocus();
+    		locus.locusName = name;
+    		genbank.setLocus(locus);
+    		
+    		workingSequence.data.name = name;
+    		workingSequence.data.sequenceFileContent = genbank.toString();
+    		selectedProj.sequences().add(workingSequence);	
+    		workingSequence.save({
+                callback: function () {
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                        Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
+                        //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                    });
+                }
+            });
+    		
+    		// Needs something to re-render pie.
+    		
+    		//debugger;
+    		Ext.getCmp('PropertiesWindow').close();
+    	}
     },
     
     init: function() {
@@ -429,6 +486,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             },
             "#propertiesMenuItem": {
                 click: this.onPropertiesMenuItemClick
+            },
+            "#propertiesWindowOKButton": {
+                click: this.onPropertiesWindowOKButtonClick
             },
         });
 

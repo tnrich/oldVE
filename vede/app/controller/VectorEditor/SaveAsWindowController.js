@@ -116,10 +116,15 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
             	console.error("ERROR: Invalid file format");
             }*/
     		
+    		var genbank = this.sequenceManager.toGenbank();
+    		var locus = genbank.getLocus();
+    		locus.locusName = name;
+    		genbank.setLocus(locus);
+    		
     		// May not work with non-genbank files.
     		var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: workingSequence.data.sequenceFileFormat,
-                sequenceFileContent: this.sequenceManager.toGenbank().toString(),
+                sequenceFileContent: genbank.toString(),
                 sequenceFileName: workingSequence.data.sequenceFileName,
                 partSource: workingSequence.data.partSource,
                 name: name
