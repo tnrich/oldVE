@@ -7,8 +7,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     layout: {
-        align: 'stretch',
-        type: 'vbox'
+        type: 'fit'
     },
     frameHeader: false,
     border: 0,
@@ -16,72 +15,75 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     items: [
             {
             xtype: 'panel',
-            hidden: true,
-            flex: 1,
             border: 0,
-            padding: 50,
             layout: {
-                type: 'fit'
+                type: 'vbox',
+                align: 'stretch'
             },
             items: [
                 {
-                xtype: 'panel',
-                flex: 1,
+                xtype: 'container',
+                flex: 0.1,
                 id: 'welcome_splash',
                 border: 0,
-                html: '<div class="welcome_text">Welcome back!<div id="welcomeUserIcon"></div></div><div class="welcome_sub">Get started by selecting one of the options below.</div>',
-                padding: 50 
                 },
                 {
-                xtype: 'panel',
+                xtype: 'container',
                 id: 'dashboardButtons',
                 flex: 1,
                 border: 0,
-                padding: 50,
                 layout: {
-                    type: 'fit'
+                    type: 'hbox'
                 },
                 items: [
-                {
-                    xtype: 'button',
-                    cls: 'dashBtn',
-                    id: 'projectStartBtn',
-                    text: 'Start a New Project',
-                    scale: 'large',
-                    overCls: 'projectStartBtn-over',
-                    height: '120px',
-                    icon: 'resources/images/projectstart.png',
-                    iconAlign: 'top',
-                    listeners: {
-                        click: function () {
-                            Teselagen.manager.ProjectManager.createNewProject();
-                    }
-                }
+                    {
+                        xtype: 'button',
+                        cls: 'dashBtn',
+                        flex: 1,
+                        id: 'projectStartBtn',
+                        text: 'Start a New Project',
+                        scale: 'medium',
+                        overCls: 'projectStartBtn-over',
+                        iconAlign: 'top',
+                        listeners: {
+                            click: function () {
+                                Teselagen.manager.ProjectManager.createNewProject();
+                            }
+                        }
 
-                },
-                {
-                    xtype: 'button',
-                    cls: 'dashBtn',
-                    id: 'watchTutorialBtn',
-                    scale: 'large',
-                    overCls: 'watchTutorialBtn-over',
-                    height: '120px',
-                    icon: 'resources/images/watchtut.png',
-                    iconAlign: 'top',
-                    text: 'Watch a Tutorial',       
-                },
-                {
-                    xtype: 'button',
-                    cls: 'dashBtn',
-                    id: 'readManualsBtn',
-                    scale: 'large',
-                    overCls: 'readManualsBtn-over',
-                    height: '120px',
-                    icon: 'resources/images/readman.png',
-                    iconAlign: 'top',
-                    text: 'Read the Manuals',
-                    href: 'http://help.teselagen.com/manual/'
-                }
+                    },
+                    {
+                        xtype: 'button',
+                        cls: 'dashBtn',
+                        id: 'create',
+                        scale: 'medium',
+                        flex: 1,
+                        overCls: 'watchTutorialBtn-over',
+                        iconAlign: 'top',
+                        text: 'Watch a Tutorial',       
+                    },
+                    {
+                        xtype: 'button',
+                        cls: 'dashBtn',
+                        id: 'readManualsBtn',
+                        scale: 'medium',
+                        flex: 1,
+                        overCls: 'readManualsBtn-over',
+                        iconAlign: 'top',
+                        text: 'Read the Manuals',
+                        href: 'http://help.teselagen.com/manual/'
+                    },
+                    // {
+                    //     xtype: 'button',
+                    //     cls: 'dashBtn',
+                    //     id: 'readManualsBtn',
+                    //     scale: 'medium',
+                    //     flex: 1,
+                    //     overCls: 'readManualsBtn-over',
+                    //     iconAlign: 'top',
+                    //     text: 'Read the Manuals',
+                    //     href: 'http://help.teselagen.com/manual/'
+                    // }
                 ]
                 }
                 ]

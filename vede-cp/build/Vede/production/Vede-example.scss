@@ -1,4 +1,4 @@
-$image-search-path: '/Users/ybendana/proj/ve/vede-cp/build/Vede/production/resources';
+$image-search-path: '/Users/tim98210/Sites/Teselagen/ve/vede-cp/build/Vede/production/resources';
 $theme-name:  'teselagen' !default;
 $include-ext-abstractcomponent: true;
 $include-ext-abstractmanager: true;
@@ -838,6 +838,7 @@ $include-vede-view-ve-vectorpanel: true;
 /* including package teselagen */
 @import '../../../packages/teselagen/sass/var/Component';
 @import '../../../packages/teselagen/sass/var/panel/Panel';
+@import '../../../packages/teselagen/sass/var/window/Window';
 /* including package ext-theme-gray */
 @import '../../../ext/packages/ext-theme-gray/sass/var/Component';
 @import '../../../ext/packages/ext-theme-gray/sass/var/ProgressBar';
@@ -1096,3 +1097,4 @@ $relative-image-path-for-uis: $Vede-resource-path;
 @import '../../../sass/src/view/ve/VectorEditorMainToolBar';
 @import '../../../sass/src/view/ve/VectorEditorPanel';
 @import '../../../sass/src/view/AppViewport';
+@import '../../../sass/src/view/RestrictionEnzymesManagerWindow';

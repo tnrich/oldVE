@@ -131,8 +131,8 @@ Ext.define('Vede.view.form.ItemSelector', {
                     xtype: 'button',
                     tooltip: me.buttonsText[name],
                     handler: me['on' + Ext.String.capitalize(name) + 'BtnClick'],
-                    cls: Ext.baseCSSPrefix + 'form-itemselector-btn',
-                    iconCls: Ext.baseCSSPrefix + 'form-itemselector-' + name,
+                    cls: 'enzymeSelector-btn',
+                    iconCls: 'enzymeSelector-btn-' + name,
                     navBtn: true,
                     scope: me,
                     margin: '4 0 0 0'
