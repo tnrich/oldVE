@@ -249,6 +249,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.sequence.symbols.IllegalSymbolException": [],
   "Teselagen.manager.EugeneRuleManager": [],
   "Teselagen.bio.sequence.common.Sequence": [],
+  "Teselagen.manager.PrintManager": [],
   "Teselagen.models.j5Output.Incompatibility": [],
   "Teselagen.event.ProjectEvent": [],
   "Vede.view.de.j5Controls": [],
@@ -301,6 +302,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.AppViewport": [],
   "Teselagen.bio.sequence.symbols.NucleotideSymbol": [],
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
+  "Vede.view.ve.PropertiesWindow": [],
   "Teselagen.utils.NullableInt": [],
   "Teselagen.models.J5Results": [],
   "Teselagen.bio.util.StringUtil": [
@@ -695,6 +697,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.sequence.symbols.IllegalSymbolException": [],
   "Teselagen.manager.EugeneRuleManager": [],
   "Teselagen.bio.sequence.common.Sequence": [],
+  "Teselagen.manager.PrintManager": [
+    "PrintManager"
+  ],
   "Teselagen.models.j5Output.Incompatibility": [],
   "Teselagen.event.ProjectEvent": [],
   "Vede.view.de.j5Controls": [],
@@ -753,6 +758,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.AppViewport": [],
   "Teselagen.bio.sequence.symbols.NucleotideSymbol": [],
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
+  "Vede.view.ve.PropertiesWindow": [],
   "Teselagen.utils.NullableInt": [],
   "Teselagen.models.J5Results": [],
   "Teselagen.bio.util.StringUtil": [],

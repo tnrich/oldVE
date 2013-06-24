@@ -1,0 +1,78 @@
+/* This class is basically a placeholder. Its contents are dynamically loaded
+ * and deleted, so many changes made to this file are likely to get deleted when
+ * this class is used. Most changes to print CSS should be added dynamically added
+ * in PrintManager.
+ */  
+
+@page {
+  /*size:8.5in 11in; 
+  margin: 0.5in;*/
+}
+
+.x-viewport {
+	/*height: 10in;
+	width: 7.5in;*/
+	/*height: 7950px;
+	width: 348px;*/
+}
+
+body {
+	/*visibility: hidden;
+	overflow: visible;*/
+	
+	/*height: 10in;
+	width: 7.5in;*/
+}
+
+
+#annotateSVG {
+	/*visibility: visible;
+	overflow: visible;
+	position: fixed;	
+	left: 0px;
+	top: 0px;*/
+}
+
+#Pie {
+	/*visibility: visible;
+	overflow: visible;
+	position: fixed;
+	left: 0in;
+	top: 0in;*/
+	
+	/*height: 10in;
+	width: 7.5in;
+	size: contain;*/
+    /*transform: scale(3,3);
+	-ms-transform: scale(3,3);
+	-webkit-transform: scale(3,3);
+	-o-transform: scale(3,3);
+	-moz-transform: scale(3,3);*/
+
+	
+	/*height: 372px;
+	width: 447px;*/
+}
+
+.pieParent {
+	
+}
+
+.pieSelection {
+	
+}
+
+.pieWireframeElement {
+	
+}
+
+.pieCaret {
+	
+}
+
+#Rail {
+	
+}
+
+
+
