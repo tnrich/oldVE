@@ -56,7 +56,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
 
         Ext.resumeLayouts(true);
-        /*this.renderFasConflicts(fasbins, j5Bin);*/
     },
 
     /**
