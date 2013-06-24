@@ -5,8 +5,9 @@
  */
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
-    requires: [
-        "Teselagen.models.J5Collection","Teselagen.models.EugeneRule"],
+    requires: ["Teselagen.constants.Constants",
+               "Teselagen.models.J5Collection",
+               "Teselagen.models.EugeneRule"],
 
     proxy: {
         type: "rest",
@@ -372,10 +373,16 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
+        var constants = Teselagen.constants.Constants;
+
         this.rules().clearFilter();
 
         this.rules().filterBy(function(rule) {
-            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
+            if (rule.getOperand1() === pPart) {
+                return true;
+            } else if(rule.getOperand2() === pPart && 
+                      rule.get("compositionalOperator") !== constants.THEN &&
+                      rule.get("compositionalOperator") !== constants.NEXTTO) {
                 return true;
             } else {
                 return false;
