@@ -56,7 +56,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
 
         Ext.resumeLayouts(true);
-        /*this.renderFasConflicts(fasbins, j5Bin);*/
     },
 
     /**
@@ -98,7 +97,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }, this);
     },
 
-    addPartCellClickEvent: function(partCell) {
+    addPartCellEvents: function(partCell) {
         partCell.body.on("click", function() {
             this.application.fireEvent("PartCellClick", partCell);
         },this);
@@ -106,6 +105,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         partCell.body.on("dblclick", function() {
             this.application.fireEvent("PartCellVEEditClick", partCell);
         },this);
+
+        partCell.body.on("mouseover", function() {
+            this.application.fireEvent("PartCellMouseover", partCell);
+        }, this);
+
+        partCell.body.on("mouseout", function() {
+            this.application.fireEvent("PartCellMouseout", partCell);
+        }, this);
     },
 
     /**
@@ -209,10 +216,45 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     /**
+     * Highlights linked parts when a partCell is hovered over.
+     * @param {Ext.container.Container} partCell The hovered part cell.
+     */
+    onPartCellMouseover: function(partCell) {
+        var j5Part = partCell.up().up().getPart();
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        // Highlight all gridParts with the same source, unless the j5Part is empty.
+        if(j5Part) {
+            if(j5Part.get("sequencefile_id") !== "") {
+                for(var i = 0; i < gridParts.length; i++) {
+                    gridParts[i].highlight();
+                }
+            }
+        }
+    },
+
+    /**
+     * Dehighlights linked parts when the mouse moves out of a partCell.
+     * @param {Ext.container.Container} partCell The partCell.
+     */
+    onPartCellMouseout: function(partCell) {
+        var j5Part = partCell.up().up().getPart();
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        // Dehighlight all gridParts with the same source, unless the j5Part is selected.
+        if(j5Part) {
+            if(!this.selectedPart || (this.selectedPart && this.selectedPart.getPart() !== j5Part)) {
+                for(var i = 0; i < gridParts.length; i++) {
+                    gridParts[i].unHighlight();
+                }
+            }
+        }
+    },
+
+    /**
      * Handles the event where there are empty cells that need blank parts associated to them.
      * Is called through an event that opens the Part Library. 
      */
-
     onfillBlankCells: function() {
         var bins = this.activeProject.getJ5Collection().bins();
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -1384,7 +1426,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 render: this.addBinHeaderClickEvent
             },
             "component[cls='gridPartCell']": {
-                render: this.addPartCellClickEvent
+                render: this.addPartCellEvents
             },
             "button[cls='editMenu'] > menu > menuitem[text='Copy Part']": {
                 click: this.onCopyPartMenuItemClick
@@ -1461,6 +1503,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on("PartCellClick",
                             this.onPartCellClick,
+                            this);
+
+        this.application.on("PartCellMouseover",
+                            this.onPartCellMouseover,
+                            this);
+
+        this.application.on("PartCellMouseout",
+                            this.onPartCellMouseout,
                             this);
 
         this.application.on("ReRenderDECanvas",
