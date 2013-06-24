@@ -160,8 +160,19 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         if(this.selectedBinIndex!=-1) {
             Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
-            toastr.options.onclick = null;
-            toastr.info("Part Definition Changed");
+
+            Vede.application.fireEvent("saveDesignEvent",function(){
+                toastr.options.onclick = null;
+                toastr.info("Part Definition Changed");
+            });
+            /*
+            this.selectedPart.save({
+                callback: function(){
+
+                }
+            });
+            */
+
         }
         else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
 
