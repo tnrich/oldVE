@@ -168,7 +168,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
             self.parseSequence(pFile, pExt, pEvt,function(gb){
 
                 //var gb      = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
-                seqMgr =  Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+                var seqMgr =  Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
 
                 if (newSequence) {
                     name = newSequence.get('name');
@@ -196,6 +196,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     
                     Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
                     sequence.set('sequenceFileContent',seqMgr.toGenbank().toString());
+                    sequence.set('partSource',gb.getLocus().locusName);
                     sequence.set('sequenceFileFormat',"GENBANK");
                     sequence.set('sequenceFileName',pFile.name);
                     sequence.set('firstTimeImported',true);

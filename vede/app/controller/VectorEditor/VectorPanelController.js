@@ -107,6 +107,8 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
 
     onRender: function () {
         if(!this.isRendered) {
+            this.tabPanel = Ext.getCmp("mainAppPanel");
+            this.tabPanel.setActiveTab(0);
             Vede.application.getController("VectorEditor.PieController").initPie();
             Vede.application.getController("VectorEditor.RailController").initRail();
             this.isRendered = true;
