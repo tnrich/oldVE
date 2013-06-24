@@ -278,7 +278,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onImportFileMenuItemClick: function() {
     	// Add something here eventually.
     	
-    	// debugger; // This debugger is here just for debugging util purposes.   	
+//    	debugger; // This debugger is here just for debugging util purposes.   	
     },
     
     onPrintSequenceViewMenuItemClick: function() {

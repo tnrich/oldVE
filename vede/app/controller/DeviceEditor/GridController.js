@@ -245,7 +245,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(j5Part) {
             if(!this.selectedPart || (this.selectedPart && this.selectedPart.getPart() !== j5Part)) {
                 for(var i = 0; i < gridParts.length; i++) {
-                    gridParts[i].unHighlight();
+                    if(gridParts[i]) gridParts[i].unHighlight();
                 }
             }
         }
