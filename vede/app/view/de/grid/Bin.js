@@ -121,10 +121,10 @@ Ext.define('Vede.view.de.grid.Bin', {
         if(this.getBin()) {
 
             for (var i = 0; i < this.getBin().parts().getRange().length; i++) {
-                console.log(this.getBin().parts().getRange().length);
+                //console.log(this.getBin().parts().getRange().length);
                 if (this.getBin().parts().getRange()[i] && this.getBin().parts().getRange()[i].get("sequencefile_id")) {
                     firstFas = this.getBin().parts().getRange()[i].get("fas");
-                    console.log(firstFas);
+                    //console.log(firstFas);
                 }
             }
 
