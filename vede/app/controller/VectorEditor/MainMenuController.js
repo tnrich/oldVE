@@ -176,6 +176,11 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                                    checked);
     },
 
+    onMapCaretMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_MAP_CARET_CHANGED,
+                                    checked);
+    },
+
     onSimulateDigestionMenuItemClick: function() {
         var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
         simulateDigestionWindow.show();
@@ -459,6 +464,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             },
             "#cutSiteLabelsMenuItem": {
                 checkchange: this.onCutSiteLabelsMenuItemCheckChange
+            },
+            "#mapCaretMenuItem": {
+                checkchange: this.onMapCaretMenuItemCheckChange
             },
             "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick

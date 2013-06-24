@@ -239,6 +239,14 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         }
     },
 
+    onShowMapCaretChanged: function(show) {
+        this.railManager.setShowMapCaret(show);
+
+        if(this.railManager.sequenceManager) {
+            this.railManager.render();
+        }
+    },
+
     /**
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */

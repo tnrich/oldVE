@@ -233,6 +233,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menucheckitem',
+                id: 'mapCaretMenuItem',
+                text: 'Map Caret',
+                checked: true
+            }, {
+                xtype: 'menucheckitem',
                 id: 'featuresMenuItem',
                 text: 'Features',
                 checked: true

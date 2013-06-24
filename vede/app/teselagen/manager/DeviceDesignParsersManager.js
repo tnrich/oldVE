@@ -154,7 +154,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var newBin = Ext.create("Teselagen.models.J5Bin", {
                 binName: bin["de:binName"],
-                iconID: bin["de:iconID"],
+                iconID: bin["de:iconID"].toUpperCase(),
                 directionForward: (bin["de:direction"] === "forward"),
                 dsf: Boolean(bin["de:dsf"])
             });
@@ -290,13 +290,63 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
 
+
+        // Build part Index
+
+        var partIndex = [];
+        var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
+        for (var indexPart in parts) {
+            if (!parts[indexPart].nodeName) { continue; }
+
+            var part = parts[indexPart];
+            partIndex.push(part);
+            var instances = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part");
+
+            for (var instanceIndex in instances)
+            {
+                if (!instances[instanceIndex].nodeName) { continue; }
+                var newPart = part.cloneNode(true);
+                newPart.setAttribute("id", instances[instanceIndex].getAttribute("id"));
+                newPart.appendChild(xmlDoc.createElement("de:fas")).textContent = instances[instanceIndex].getElementsByTagNameNS("*","fas")[0].textContent;
+                partIndex.push(newPart);
+            }
+        }
+
+
         function getPartByID(targetId) {
+            var partfound = false;
             var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
             for (var indexPart in parts) {
                 if (!parts[indexPart].nodeName) { continue; }
                 var part = parts[indexPart];
                 var id = part.getElementsByTagNameNS("*", "part")[0].attributes[0].value;
-                if (id === targetId) { return part; }
+                if (id === targetId) {
+                    partfound = true;
+                    return {
+                        "part":part,
+                        "linked":false
+                        };
+                }
+
+                var instances = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part");
+
+                for (var instanceIndex in instances)
+                {
+                    if (!instances[instanceIndex].nodeName) { continue; }
+                    if ( instances[instanceIndex].getAttribute("id") === targetId )
+                    {
+                        partfound = true;
+                        return {
+                            "part":part,
+                            "linked":true,
+                            "fas":instances[instanceIndex].getElementsByTagNameNS("*","fas")[0].textContent
+                        };
+                    }
+                    //var newPart = part.cloneNode(true);
+                    //newPart.setAttribute("id", instances[instanceIndex].getAttribute("id"));
+                    //newPart.appendChild(xmlDoc.createElement("de:fas")).textContent = instances[instanceIndex].getElementsByTagNameNS("*","fas")[0].textContent;
+                }
+
             }
         }
 
@@ -347,37 +397,71 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var parts = bin.getElementsByTagNameNS("*", "partID");
 
             var tempPartsArray = [];
+            var delayedLinkedPartsLookup = [];
+            var binFases = [];
+
             for (var indexPart in parts) {
                 if (!parts[indexPart].nodeName) { continue; }
-                var part = getPartByID(parts[indexPart].textContent);
-                var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
-                var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
-                var newPart = Ext.create("Teselagen.models.Part", {
-                    name: part.getElementsByTagNameNS("*", "name")[0].textContent,
-                    genbankStartBP: part.getElementsByTagNameNS("*", "startBP")[0].textContent,
-                    endBP: part.getElementsByTagNameNS("*", "stopBP")[0].textContent,
-                    revComp: part.getElementsByTagNameNS("*", "revComp")[0].textContent,
-                    fas: (fas === "") ? "None" : fas
-                });
+                var partLookup = getPartByID(parts[indexPart].textContent);
+                var part = partLookup.part;
 
-                getSequenceByID(hash, function (sequence) {
-                    // Sequence processing
-                    var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                        sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
-                        sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                        sequenceFileName: sequence.getElementsByTagNameNS("*", "fileName")[0].textContent
+                if(partLookup.linked)
+                {
+                    delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
+                    binFases.push(partLookup.fas);
+                }
+                else
+                {  
+                    var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
+                    var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+                    var newPart = Ext.create("Teselagen.models.Part", {
+                        name: part.getElementsByTagNameNS("*", "name")[0].textContent,
+                        genbankStartBP: part.getElementsByTagNameNS("*", "startBP")[0].textContent,
+                        endBP: part.getElementsByTagNameNS("*", "stopBP")[0].textContent,
+                        revComp: part.getElementsByTagNameNS("*", "revComp")[0].textContent,
+                        fas: (fas === "") ? "None" : fas
                     });
 
-                    newSequence.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
-                    newSequence.set('name',newPart.get('name'));
+                    getSequenceByID(hash, function (sequence) {
+                        // Sequence processing
+                        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                            sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
+                            sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
+                            sequenceFileName: sequence.getElementsByTagNameNS("*", "fileName")[0].textContent
+                        });
 
-                    newPart.setSequenceFileModel(newSequence);
-                });
+                        newSequence.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
+                        newSequence.set('name',newPart.get('name'));
 
-                tempPartsArray.push(newPart);
-                fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                        newPart.setSequenceFileModel(newSequence);
+                    });
+
+                    binFases.push(newPart.get('fas'));
+
+                    tempPartsArray.push(newPart);
+                    fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                }
+
             }
+
+            for(var delayedIndexPart in delayedLinkedPartsLookup)
+            {
+                var delayed = delayedLinkedPartsLookup[delayedIndexPart];
+                var originalPart = fullPartsAssocArray[delayed.part.getAttribute("id")];
+                if(originalPart)
+                {
+                    tempPartsArray.splice(delayed.position,0,originalPart);
+                    fullPartsAssocArray[delayed.part.getAttribute("id")] = originalPart;
+                }
+                else
+                {
+                    console.log("Part not linked!");
+                }
+            }
+
+
             newBin.addToParts(tempPartsArray);
+            newBin.set('fases',binFases);
             binsArray.push(newBin);
         }
 
@@ -552,29 +636,32 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var rulesCounter = existingRules.count();
             var duplicated = false;
+            var duplicatedRule;
             existingRules.each(function(existingRule){
                 if(
                     parsedRule.data.name === existingRule.data.name
                 )
                 {
                     duplicated = true;
+                    duplicatedRule = existingRule;
                     rulesCounter--;
                 }
                 else
                 {
                     rulesCounter--;
                 }
-                if(rulesCounter === 0) cb(duplicated);
+                if(rulesCounter === 0) cb(duplicated,duplicatedRule);
             });
         };
     
         var checkForConflicts = function(rule,cb){
 
-            checkForDuplicatedName(rule,function(dup){
+            checkForDuplicatedName(rule,function(dup,existingRule){
                 if(dup) { 
-                    
-                    conflictRules.push({"originalRuleLine":"Name conflict, renamed from "+rule.data.name+" to "+rule.data.name+'_1'});
+                    var rule2 = existingRule.get('operand2isNumber') ? existingRule.get('operand2Number') : existingRule.getOperand2().data.name;
+                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+"and the rule to be imported, "+rule.data.originalRuleLine +"Renaming the rule to be imported: "+rule.data.name+'_1'});
                     rule.set('name',rule.data.name+'_1');
+                    rule.set('originalRuleLine',rule.get('originalRuleLine').replace(existingRule.get('name'),rule.get('name')));
                 }
                 return cb(dup)
             })

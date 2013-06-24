@@ -9,8 +9,9 @@ Ext.define("Teselagen.renderer.common.Label", {
     requires: ["Teselagen.bio.util.StringUtil"],
 
     inheritableStatics: {
-        FONT_FAMILY: "sans-serif",
-        FONT_SIZE: "6px"
+        FONT_FAMILY: "Maven Pro",
+        FONT_SIZE: "8px",
+        FILL: "#DDDDDD"
     },
 
     config: {
@@ -52,7 +53,7 @@ Ext.define("Teselagen.renderer.common.Label", {
         }
 
         this.label = this.labelSVG.append("svg:text")
-                     .attr("fill", inData.color || "black")
+                     .attr("fill", inData.color || "#333234")
                      .attr("x", inData.x)
                      .attr("y", inData.y)
                      .text(this.labelText())

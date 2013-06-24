@@ -107,7 +107,7 @@ app.post('/DesignDownstreamAutomation',function(req,res){
     }
     else
     {
-      res.send(value);
+      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
     }
   })
 });
@@ -131,7 +131,7 @@ app.post('/condenseAssemblyFiles',function(req,res){
     }
     else
     {
-      res.send(value);
+      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
     }
   })
 });

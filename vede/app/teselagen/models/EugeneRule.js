@@ -70,7 +70,18 @@ Ext.define("Teselagen.models.EugeneRule", {
                 if (compOp === constants.AFTER || compOp === constants.BEFORE || compOp === constants.WITH || compOp === constants.THEN || compOp === constants.NEXTTO || compOp === constants.MORETHAN ) {
                     // These check out
                 } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) {
-                    // These are ok, just deprecated
+                    console.warn("Using deprecated compositionalOperator: ",compOp);
+                    if(compOp === constants.NOTMORETHAN)
+                    {
+                        compOp = constants.MORETHAN;
+                        this.set('negationOperator',true);
+                        console.warn("Compositional operator updated to MORE and NOT? True");
+                    }
+                    if(compOp === constants.NOTMOREWITH)
+                    {
+                        compOp = constants.MOREWITH;
+                        cconsole.warn("Compositional operator updated to WITH and NOT? True");
+                    }
                 } else {
                     // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
                     console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);

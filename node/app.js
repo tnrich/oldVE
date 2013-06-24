@@ -23,13 +23,14 @@ app.soap = require("soap");
 app.xml2js = require('xml2js');
 app.program = require('commander');
 app.nodemailer = require("nodemailer");
+app._ = require("underscore");
 app.winston = require('winston');
 
 // CONFIGURATION
 require('./config.js')(app, express);
 
 // API
-require('./routes/api.js')(app, express);
+require('./routes/api.js')(app);
 
 // Services
 require('./routes/j5-services/j5.js')(app);

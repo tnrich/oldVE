@@ -135,6 +135,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // DE-Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(false);
         this.toggleInsertOptions(true);
+        this.toggleInsertRowAboveOptions(false);
+        this.toggleInsertRowBelowOptions(true);
 
         var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
         removeColumnMenuItem.enable();
@@ -197,6 +199,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(true);
         this.toggleInsertOptions(true);
+        this.toggleInsertRowAboveOptions(true);
+        this.toggleInsertRowBelowOptions(true);
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
 
@@ -336,7 +340,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the bins were added.
      */
     onAddToBins: function(activeBins, addedBins, index) {
-        Ext.each(addedBins, function(j5Bin) {
+        Ext.suspendLayouts();
+
+        var j5Bin;
+        for(var i = 0; i < addedBins.length; i++) {
+            j5Bin = addedBins[i];
+
             this.addJ5Bin(j5Bin, index);
 
             // Add event listeners to the parts store of this bin.
@@ -344,12 +353,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("add", this.onAddToParts, this);
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
-        }, this);
+        }
 
         if(this.selectedBin){
             this.selectedBin.deselect();
             this.selectedBin = null;
         }
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -476,27 +487,40 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the rules were added.
      */
     onAddToEugeneRules: function(rules, addedRules, index) {
-        Ext.each(addedRules, function(addedRule) {
+        var constants = Teselagen.constants;
+        var addedRule;
+        var gridOperand1;
+        var gridOperand2;
+
+        for(var i = 0; i < addedRules.length; i++) {
+            addedRule = addedRules[i];
             var operand1 = addedRule.getOperand1();
             var operand2 = addedRule.getOperand2();
 
             var gridOperands1 = this.getGridPartsFromJ5Part(operand1);
 
-            Ext.each(gridOperands1, function(gridOperand1) {
+            for(var j = 0; j < gridOperands1.length; j++) {
+                gridOperand1 = gridOperands1[j];
+
                 if(!gridOperand1.partCell.down("image[cls='eugeneRuleIndicator']")) {
                     gridOperand1.addEugeneRuleIndicator();
                 }
 
-                if(!addedRule.get("operand2isNumber")) {
+                if(!addedRule.get("operand2isNumber") &&
+                   addedRule.get("compositionalOperator") !== constants.THEN &&
+                   addedRule.get("compositionalOperator") !== constants.NEXTTO) {
+
                     var gridOperands2 = this.getGridPartsFromJ5Part(operand2);
-                    Ext.each(gridOperands2, function(gridOperand2) {
+                    for(var k = 0; k < gridOperands2.length; k++) {
+                        gridOperand2 = gridOperands2[k];
+
                         if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
                             gridOperand2.addEugeneRuleIndicator();
                         }
-                    }, this);
+                    }
                 }
-            }, this);
-        }, this);
+            }
+        }
     },
 
     /**
@@ -568,9 +592,80 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     /**
      * Handler for the Insert Row button.
      */
-    onAddRow: function() {
+    onAddRowAbove: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
+
+        var PartIndex = null;
+        var bins = this.activeProject.getJ5Collection().bins();
+
+        if (this.selectedPart) {
+            var gridPart = this.selectedPart;
+            partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
+
+            bins.each(function (bin,binIndex) {
+                bin.parts().insert(partIndex, "Teselagen.models.sequence.Row")
+            });
+           
+            this.selectedBin.deselect();
+            this.selectedPart.deselect();
+            this.selectedBin = null;
+            this.selectedPart = null;
+        }
+
+        else {
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+            bins.each(function (bin,binIndex) {
+                bin.parts().insert(0, "Teselagen.models.sequence.Row")
+            });
+        }
+
+        this.grid.removeAll();
+        this.renderDevice();
+
+        this.toggleCutCopyPastePartOptions(false);
+        this.toggleInsertOptions(false);
+        this.toggleInsertRowAboveOptions(false);
+        this.toggleInsertRowBelowOptions(false);
+    },
+
+    onAddRowBelow: function() {
+        this.totalRows += 1;
+        this.updateBinsWithTotalRows();
+
+        var PartIndex = null;
+        var bins = this.activeProject.getJ5Collection().bins();
+
+        if (this.selectedPart) {
+            var gridPart = this.selectedPart;
+            partIndex = (gridPart.up("Bin").items.indexOf(gridPart));
+
+            bins.each(function (bin,binIndex) {
+                bin.parts().insert(partIndex, "Teselagen.models.sequence.Row")
+            });
+           
+            this.selectedBin.deselect();
+            this.selectedPart.deselect();
+            this.selectedBin = null;
+            this.selectedPart = null;
+        }
+
+        else {
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+            bins.each(function (bin,binIndex) {
+                bin.parts().insert(0, "Teselagen.models.sequence.Row")
+            });
+        }
+
+        this.grid.removeAll();
+        this.renderDevice();
+
+        this.toggleCutCopyPastePartOptions(false);
+        this.toggleInsertOptions(false);
+        this.toggleInsertRowAboveOptions(false);
+        this.toggleInsertRowBelowOptions(false);
     },
 
     onRemoveRow: function() {
@@ -627,6 +722,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
              this.toggleCutCopyPastePartOptions(false);
              this.toggleInsertOptions(false);
+             this.toggleInsertRowAboveOptions(false);
+             this.toggleInsertRowBelowOptions(false);
         }
     },
 
@@ -660,6 +757,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleCutCopyPastePartOptions(false);
 
         this.toggleInsertOptions(false);
+        this.toggleInsertRowAboveOptions(false);
+        this.toggleInsertRowBelowOptions(false);
 
         // toastr.info("Added Column Left");
 
@@ -695,6 +794,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.toggleCutCopyPastePartOptions(false);
         this.toggleInsertOptions(false);
+        this.toggleInsertRowAboveOptions(false);
+        this.toggleInsertRowBelowOptions(false);
         
         // toastr.info("Added Column Right");
     },
@@ -886,7 +987,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The location to add the bin to on the grid.
      */
     addJ5Bin: function(j5Bin, index) {
-
         var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
@@ -1169,16 +1269,22 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Cut Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Copy Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Paste Part"]')[0].setDisabled(!state||false);
-
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Row"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Clear Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Column"]')[0].setDisabled(!state||false);
-        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Row"]')[0].setDisabled(!state||false);
     },
 
     toggleInsertOptions: function(state) {
-        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Row"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Column Left"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Column Right"]')[0].setDisabled(!state||false);
+    },
+
+    toggleInsertRowAboveOptions: function(state) {
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Row Above"]')[0].setDisabled(!state||false);
+    },
+
+    toggleInsertRowBelowOptions: function(state) {
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Row Below"]')[0].setDisabled(!state||false);
     },
 
     reRenderGrid: function(){
@@ -1300,8 +1406,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on("rerenderPart",this.rerenderPart, this);
 
-        this.application.on(this.DeviceEvent.ADD_ROW,
-                            this.onAddRow,
+        this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
+                            this.onAddRowAbove,
+                            this);
+
+        this.application.on(this.DeviceEvent.ADD_ROW_BELOW,
+                            this.onAddRowBelow,
                             this);
 
         this.application.on(this.DeviceEvent.ADD_COLUMN_LEFT,

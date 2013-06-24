@@ -54,6 +54,7 @@ module.exports = function(db) {
 		endDate: Date,
 		status: String,
 		warnings: [],
+		error_list: [],
 		user_id: { type: oIDRef, ref: 'user' },
 		project_id: { type: oIDRef, ref: 'project' },
 		devicedesign_id: { type: oIDRef, ref: 'devicedesign' },
@@ -201,6 +202,12 @@ module.exports = function(db) {
 		designs: [{
 			type: oIDRef,
 			ref: 'devicedesign'
+		}],
+		userRestrictionEnzymeGroups: [{
+		    name: String,
+		    userRestrictionEnzymes: [{
+		        name: String
+		    }]
 		}]
 	});
 

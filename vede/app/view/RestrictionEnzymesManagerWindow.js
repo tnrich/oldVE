@@ -18,6 +18,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
     resizable: false,
     draggable: false,
     modal: true,
+    cls: "restrictionEnzymeManager",
 
     initComponent: function() {
         var groupStore = Ext.create("Ext.data.Store", {
@@ -74,8 +75,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                         },
                         {
                             xtype: "combobox",
-                            id: "enzymeUserGroupSelector",
-//                                  store: groupStore,
+                            id: "userEnzymeGroupSelector",
                             displayField: "name",
                             fieldLabel: "User Enzyme Groups",
                             labelAlign: "top",
@@ -100,8 +100,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                             displayField: "name",
 //                            flex: 1,
                             width: 330,
-                            buttons: ["add", "remove"],
-                            buttonsText: {add:"Add to Active", remove:"Remove from Active"},
+                            buttons: ["addAll", "add", "remove", "removeAll"],
+                            buttonsText: {add:"Add", addAll:"Add All", remove:"Remove",
+                                removeAll:"Remove All"},
                             doCopy: true
                         },
                         {
@@ -140,9 +141,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                     items: [
                         {
                             xtype: "button",
-                            id: "restrictionEnzymesManagerOKButton",
+                            id: "restrictionEnzymesManagerSaveButton",
                             width: 69,
-                            text: "OK"
+                            text: "Save"
                         },
                         {
                             xtype: "button",

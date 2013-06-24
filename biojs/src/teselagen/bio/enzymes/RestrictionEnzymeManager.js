@@ -95,7 +95,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
         var localHashMap = this.enzymeHashMap;
         
         // Define an Ext model "Enzyme" to make reading from XML data possible.
-        Ext.define("Enzyme", {
+        Ext.define("Teselagen.bio.enzymes.Enzyme", {
             extend: "Ext.data.Model",
             fields: [{name: "name", mapping: "n"},
                      {name: "site", mapping: "s"},
@@ -113,7 +113,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
         // Define a store which will hold the data read from XML.
         var memstore = new Ext.data.Store({
             autoLoad: true,
-            model: "Enzyme",
+            model: "Teselagen.bio.enzymes.Enzyme",
             data : doc,
             proxy: {
                 type: "memory",

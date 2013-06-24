@@ -22,7 +22,11 @@ Ext.define('Vede.view.de.EugeneRulesImportDialog', {
                     draggable: false,
                     sortable: false,
                     hideable: false,
-                    menuDisabled: true
+                    menuDisabled: true,
+                    renderer: function(val) {
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
+
                 }
             ],
             viewConfig: {}
@@ -50,7 +54,7 @@ Ext.define('Vede.view.de.EugeneRulesImportDialog', {
             hideHeaders: true,
             height: 122,
             name: 'ignored',
-            title: 'Ignored rules',
+            title: 'Ignored statements',
             columns: [{
                     xtype: 'gridcolumn',
                     dataIndex: 'originalRuleLine',
