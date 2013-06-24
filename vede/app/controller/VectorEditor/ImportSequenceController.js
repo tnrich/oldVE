@@ -223,40 +223,73 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                 icon: Ext.Msg.QUESTION,
                 fn: function (btn) {
                     if (btn==="yes") {
-                        var project_id = sequence.get("project_id");
-                        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-                        var sequencesNames = [];
-                        project.sequences().load().each(function (sequence) {
-                            sequencesNames.push(sequence.data.name);
-                        });
-
-                        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", function(btn,text){
-                            if(btn==="ok") {
-                                var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                                    sequenceFileFormat: "GENBANK",
-                                    sequenceFileContent: "LOCUS      "+text+"                 0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                                    sequenceFileName: "untitled.gb",
-                                    partSource: "Untitled sequence",
-                                    name: text
-                                });
-
-                                project.sequences().add(newSequenceFile);
-                                newSequenceFile.set("project_id",project.data.id);
-
-                                newSequenceFile.save({
-                                    callback: function () {
-                                        Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-
-                                        performSequenceCreation(newSequenceFile,function(){
-                                            newSequenceFile.save({callback:function(){
-                                                Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
-                                            }});
-                                        });
-                                        /*$(".saveSequenceBtn span span").trigger("click");*/
+                        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+                        var currentTabEl = (currentTab.getEl());
+                        var selectWindow = Ext.create("Ext.window.Window", {
+                            title: "Please choose a project",
+                            height: 200,
+                            width: 400,
+                            layout: "fit",
+                            renderTo: currentTabEl,
+                            items: {
+                                xtype: "grid",
+                                border: false,
+                                columns: {
+                                    items: {
+                                        dataIndex: "name"
+                                    },
+                                    defaults: {
+                                        flex: 1
                                     }
-                                });
+                                },
+                                store: Teselagen.manager.ProjectManager.projects,
+                                listeners: {
+                                    "itemclick": function(grid, project){
+                                        selectWindow.close();
+                                        Teselagen.manager.ProjectManager.workingProject = project;
+                                        var sequencesNames = [];
+                                        project.sequences().load().each(function (sequence) {
+                                            sequencesNames.push(sequence.data.name);
+                                        });
+                                        var onSequencePromptClosed = function(btn, text) {
+                                            if(btn==="ok") {
+                                                if(text === "") {return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this); }
+                                                for (var j=0; j < sequencesNames.length; j++) {
+                                                    if (sequencesNames[j].match(text)) {return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onSequencePromptClosed, this); }
+                                                }
+                                                var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                                                    sequenceFileFormat: "GENBANK",
+                                                    sequenceFileContent: "LOCUS      "+text+"                 0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                                                    sequenceFileName: "untitled.gb",
+                                                    partSource: "Untitled sequence",
+                                                    name: text
+                                                });
+
+                                                project.sequences().add(newSequenceFile);
+                                                newSequenceFile.set("project_id",project.data.id);
+
+                                                newSequenceFile.save({
+                                                    callback: function () {
+                                                        Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
+
+                                                        performSequenceCreation(newSequenceFile,function(){
+                                                            newSequenceFile.save({callback:function(){
+                                                                Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
+                                                            }});
+                                                        });
+                                                        /*$(".saveSequenceBtn span span").trigger("click");*/
+                                                    }
+                                                });
+                                            }
+                                        };
+                                        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this);
+                                    },
+                                    "destroy": function(selectWindow) {
+                                        currentTabPanel.setLoading(false);
+                                    }
+                                }
                             }
-                        });
+                        }).show();
                     } else if (btn==="no") {
                         performSequenceCreation();
                     }
