@@ -23255,7 +23255,7 @@ img {
 }
 
 /* line 227, ../../../../sass/src/view/AppViewport.scss */
-.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-small-focus {
+.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-small-focus, .x-btn-default-toolbar-medium-focus {
   border-color: white;
   background-image: none !important;
   background: none !important;
@@ -23635,7 +23635,7 @@ img {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-  background-image: url(../images/projectstart-over.png) !important;
+  background-image: url(images/projectstart-over.png) !important;
 }
 
 /* line 552, ../../../../sass/src/view/AppViewport.scss */
@@ -23643,7 +23643,7 @@ img {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-  background-image: url(../images/watchtut-over.png) !important;
+  background-image: url(images/watchtut-over.png) !important;
 }
 
 /* line 559, ../../../../sass/src/view/AppViewport.scss */
@@ -23651,7 +23651,7 @@ img {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-  background-image: url(../images/readman-over.png) !important;
+  background-image: url(images/readman-over.png) !important;
 }
 
 /* line 566, ../../../../sass/src/view/AppViewport.scss */
