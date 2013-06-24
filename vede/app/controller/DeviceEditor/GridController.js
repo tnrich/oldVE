@@ -340,7 +340,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the bins were added.
      */
     onAddToBins: function(activeBins, addedBins, index) {
-        Ext.each(addedBins, function(j5Bin) {
+        Ext.suspendLayouts();
+
+        var j5Bin;
+        for(var i = 0; i < addedBins.length; i++) {
+            j5Bin = addedBins[i];
+
             this.addJ5Bin(j5Bin, index);
 
             // Add event listeners to the parts store of this bin.
@@ -348,12 +353,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("add", this.onAddToParts, this);
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
-        }, this);
+        }
 
         if(this.selectedBin){
             this.selectedBin.deselect();
             this.selectedBin = null;
         }
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -967,7 +974,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The location to add the bin to on the grid.
      */
     addJ5Bin: function(j5Bin, index) {
-
         var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
