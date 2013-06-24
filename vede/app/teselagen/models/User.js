@@ -5,12 +5,12 @@
  */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
-    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.ApplicationPreferences", "Teselagen.models.Project"],
+    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.Preferences", "Teselagen.models.Project", "Teselagen.models.UserRestrictionEnzymeGroup"],
     fields: [{
         name: "id",
         type: "long"
     }, {
-        name: "applicationpreferences_id",
+        name: "preferences_id",
         type: "long"
     }, {
         name: "username",
@@ -25,30 +25,38 @@ Ext.define("Teselagen.models.User", {
         foreignKey: "user_id"
     }, {
         type: "hasOne",
-        model: "Teselagen.models.ApplicationPreferences",
-        associationKey: "applicationPreferences",
-        getterName: "getApplicationPreferences",
-        setterName: "setApplicationPreferences",
-        foreignKey: "applicationpreferences_id"
+        model: "Teselagen.models.Preferences",
+        associationKey: "preferences",
+        getterName: "getPreferences",
+        setterName: "setPreferences",
+        foreignKey: "preferences_id"
     }, {
         type: "hasMany",
         model: "Teselagen.models.UserRestrictionEnzymeGroup",
         name: "userRestrictionEnzymeGroups",
         associationKey: "userRestrictionEnzymeGroups",
+        autoLoad: true,
         foreignKey: "user_id"
     }],
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getUser.json",
         reader: {
             type: "json",
             root: "user"
         },
         writer: {
-            type: "json"
+            type: "json",
+            getRecordData: function(record) {
+                var data = record.getData();
+                var associatedData = record.getAssociatedData();
+//                console.log(data, associatedData);
+                data.userRestrictionEnzymeGroups = associatedData.userRestrictionEnzymeGroups;
+                return data;
+            }
         },
         buildUrl: function () {
-            return Teselagen.manager.SessionManager.buildUserResUrl("/", this.url);
+            var url = Teselagen.manager.SessionManager.buildUserResUrl("", this.url);
+            return url;
         },
         appendId: true,
         noCache: false,

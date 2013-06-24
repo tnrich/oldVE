@@ -341,7 +341,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the bins were added.
      */
     onAddToBins: function(activeBins, addedBins, index) {
-        Ext.each(addedBins, function(j5Bin) {
+        Ext.suspendLayouts();
+
+        var j5Bin;
+        for(var i = 0; i < addedBins.length; i++) {
+            j5Bin = addedBins[i];
+
             this.addJ5Bin(j5Bin, index);
 
             // Add event listeners to the parts store of this bin.
@@ -349,12 +354,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("add", this.onAddToParts, this);
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
-        }, this);
+        }
 
         if(this.selectedBin){
             this.selectedBin.deselect();
             this.selectedBin = null;
         }
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -481,27 +488,40 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the rules were added.
      */
     onAddToEugeneRules: function(rules, addedRules, index) {
-        Ext.each(addedRules, function(addedRule) {
+        var constants = Teselagen.constants;
+        var addedRule;
+        var gridOperand1;
+        var gridOperand2;
+
+        for(var i = 0; i < addedRules.length; i++) {
+            addedRule = addedRules[i];
             var operand1 = addedRule.getOperand1();
             var operand2 = addedRule.getOperand2();
 
             var gridOperands1 = this.getGridPartsFromJ5Part(operand1);
 
-            Ext.each(gridOperands1, function(gridOperand1) {
+            for(var j = 0; j < gridOperands1.length; j++) {
+                gridOperand1 = gridOperands1[j];
+
                 if(!gridOperand1.partCell.down("image[cls='eugeneRuleIndicator']")) {
                     gridOperand1.addEugeneRuleIndicator();
                 }
 
-                if(!addedRule.get("operand2isNumber")) {
+                if(!addedRule.get("operand2isNumber") &&
+                   addedRule.get("compositionalOperator") !== constants.THEN &&
+                   addedRule.get("compositionalOperator") !== constants.NEXTTO) {
+
                     var gridOperands2 = this.getGridPartsFromJ5Part(operand2);
-                    Ext.each(gridOperands2, function(gridOperand2) {
+                    for(var k = 0; k < gridOperands2.length; k++) {
+                        gridOperand2 = gridOperands2[k];
+
                         if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
                             gridOperand2.addEugeneRuleIndicator();
                         }
-                    }, this);
+                    }
                 }
-            }, this);
-        }, this);
+            }
+        }
     },
 
     /**
@@ -968,7 +988,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The location to add the bin to on the grid.
      */
     addJ5Bin: function(j5Bin, index) {
-
         var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
         var newBin = Ext.create("Vede.view.de.grid.Bin", {

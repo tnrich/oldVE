@@ -1,28 +1,29 @@
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
+    var projectManager = new app.ProjectManager(app.db);
 
     /**
      * POST Project
      * @memberof module:./routes/api
-     * @method GET '/users/:username/projects'
+     * @method POST '/users/:username/projects'
      */
     app.post('/users/:username/projects', restrict, function(req, res) {
-        var Project = app.db.model("project");
-        var newProject = new Project({
+        projectManager.create({
             name: req.body.name,
-            user_id: req.user,
+            user_id: req.user.id,
             dateCreated: req.body.dateCreated,
             dateModified: req.body.dateModified
-        });
-        newProject.save(function() {
-            req.user.projects.push(newProject);
-            req.user.save(function() {
-                console.log("New project Saved");
+        }, function(err, project) {
+            if (!err) {
+//                console.log("New project Saved");
                 res.json({
-                    "projects": newProject
+                    "projects": project
                 });
-            });
+            }
+            else {
+                app.errorHandler(err, req, res);
+            }
         });
     });
 
@@ -79,12 +80,13 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects', restrict, function(req, res) {
         var User = app.db.model("User");
-        User.findById(req.user._id).populate('projects')
-            .exec(function(err, user) {
-            user.projects.forEach(function(proj) {
-                proj.deprojects = undefined;
-                proj.veprojects = undefined;
-            });
+        User.findById(req.user._id).populate('projects').exec(function(err, user) {
+                if (user.projects) {
+                    user.projects.forEach(function(proj) {
+                        proj.deprojects = undefined;
+                        proj.veprojects = undefined;
+                    });
+                }
             //console.log("Returning "+user.projects.length+" projects");
             res.json({
                 "projects": user.projects

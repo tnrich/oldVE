@@ -5,7 +5,8 @@
  **/
 
 Ext.define("Teselagen.manager.AuthenticationManager", {
-    requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor","Teselagen.utils.SystemUtils"],
+    requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor",
+               "Teselagen.manager.UserManager", "Teselagen.utils.SystemUtils"],
     alias: "AuthenticationManager",
     singleton: true,
     mixins: {
@@ -15,7 +16,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     username: null,
 
     updateSplashScreenMessage: function(message, stop) {
-        if (splashscreen) { Ext.get("splash-text").update(message); }
+        var splashscreen;
+        if (splashscreen) {Ext.get("splash-text").update(message); }
         if (stop) {
             Ext.select(".x-mask-msg.splashscreen div:nth(2)").setStyle("background-image", "url()");
             if (splashscreen) Ext.get("splash-retry").show();
@@ -77,8 +79,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         var self = this;
 
         if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
-        if(params.username) { Teselagen.manager.SessionManager.config.baseUser = params.username; } //Set base Username
-        else { console.warn("Warning, username not defined"); }
+        if(params.username) {Teselagen.manager.SessionManager.setBaseUser(params.username); } //Set base Username
+        else {console.warn("Warning, username not defined"); }
 
         self.updateSplashScreenMessage("Authenticating to server");
 
@@ -90,10 +92,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 sessionId: params.sessionId || ""
             },
             success: function(response) {
-                if (params.username) { self.username = params.username; }
+                if (params.username) {self.username = params.username; }
                 self.authResponse = JSON.parse(response.responseText);
                 self.updateSplashScreenMessage(self.authResponse.msg);
                 if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
+                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user);
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
@@ -101,7 +104,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             },
             failure: function(response) {
                 self.updateSplashScreenMessage(response.statusText, true);
-                if (cb) { return cb(false, response.statusText); }
+                if (cb) {return cb(false, response.statusText); }
             }
         });
     }

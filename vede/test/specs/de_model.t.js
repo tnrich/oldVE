@@ -117,18 +117,19 @@ Ext.onReady(function() {
             expect(user.getBoss().getId()).toBe(20);
             expect(user.getBoss().get("name")).toBe("myboss2");
         });
-        describe("File store tests.", function() {
-            var proj, veprojs;
-            it("Project", function() {
-                proj = Ext.create("Teselagen.models.Project", {id:1, name: "Project Z"});
+        it("User model loads data via store and memory proxy", function() {
+            var userdata = {user: {username:"mfero", userRestrictionEnzymeGroups: [{name:"group1"}]}};
+            var userStore = Ext.create("Ext.data.Store", {
+                model: "Teselagen.models.User",
+                data: userdata,
+                proxy: {
+                    type: "memory",
+                    reader: {type:"json", root: "user"}
+                }
             });
-            it("VEProjects store", function() {
-                veprojs = proj.veprojects();
-                veprojs.on("load", function() {
-                    expect(veprojs).toBeDefined();
-                    expect(veprojs.count()).toBe(2);
-                });
-            });
+            var user = userStore.first();
+            expect(user).not.toBe(undefined);
+            expect(user.userRestrictionEnzymeGroups()).not.toBe(undefined);
         });
     });
 });

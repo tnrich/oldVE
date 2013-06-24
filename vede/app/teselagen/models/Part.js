@@ -14,7 +14,6 @@ Ext.define("Teselagen.models.Part", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
             root: "parts"
@@ -90,7 +89,7 @@ Ext.define("Teselagen.models.Part", {
     // Fields from PartVO
     {
         name: "name",
-        sortType: Ext.data.SortTypes.asUCString,
+        //sortType: Ext.data.SortTypes.asUCString,
         convert: function(v, record) {
             var name;
             /*

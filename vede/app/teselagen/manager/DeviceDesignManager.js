@@ -63,10 +63,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         bins.removeAll();
 
-        pBins.forEach(function(bin){
-            bins.add(bin);
-        });
-        
+        bins.add(pBins);
 
         var err = device.validate();
         if (err.length > 0) {
@@ -391,7 +388,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             }
         }
 
-        console.log(ready);
+//        console.log(ready);
         collection.set("j5Ready", ready);
         return ready;
     },

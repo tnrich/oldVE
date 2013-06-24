@@ -7,41 +7,62 @@
 Ext.define("Vede.controller.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.RestrictionEnzymeGroupManager"],
+    requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.RestrictionEnzymeGroupManager",
+               "Teselagen.manager.UserManager", "Vede.view.RestrictionEnzymesManagerWindow"],
 
     GroupManager: null,
+    UserManager: null,
     managerWindow: null,
 
     enzymeSelector: null,
+    userEnzymeGroupSelector: null,
+    
+    refs: [{ref:"deleteGroupBtn", selector:"#deleteGroupButton"},
+           {ref:"makeActiveBtn", selector:"#makeActiveButton"}],
     
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+        this.UserManager = Teselagen.manager.UserManager;
 
         this.control({
             "#enzymeGroupSelector": {
-                change: this.onEnzymeGroupSelected
+                change: this.onEnzymeGroupChange
+            },
+            "#userEnzymeGroupSelector": {
+                change: this.onUserEnzymeGroupChange
             },
             "#enzymeSearchField": {
                 keyup: this.onEnzymeSearchFieldKeyup
             },
-            "#restrictionEnzymesManagerOKButton": {
-                click: this.onOKButtonClick
+            "#restrictionEnzymesManagerSaveButton": {
+                click: this.onSaveButtonClick
+            },
+            "#restrictionEnzymesManagerCancelButton": {
+                click: this.onCancelButtonClick
             },
             "#saveGroupButton": {
-                click: this.onSaveButtonClick
+                click: this.onSaveGroupButtonClick
             },
             "#deleteGroupButton": {
                 click: this.onDeleteGroupButtonClick
             },
+            "#makeActiveButton": {
+                click: this.onMakeActiveButtonClick
+            },
             "#enzymeSelector": {
                  change: this.onEnzymeListChange
+             },
+             "window[cls=restrictionEnzymeManager]": {
+                 close: this.onWindowClose
              }
         });
 
-        this.application.on({
+        var listeners = {
             RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened,
             scope: this
-        });
+        };
+        listeners[Teselagen.event.AuthenticationEvent.LOGGED_IN] = this.onLoggedIn;
+        this.application.on(listeners);
     },
     
     /**
@@ -55,6 +76,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         if(!this.GroupManager.getIsInitialized()) {
             this.GroupManager.initialize();
         }
+        this.GroupManager.setActiveEnzymesChanged(false);
 
         var groupSelector = this.managerWindow.query("#enzymeGroupSelector")[0];
 
@@ -74,7 +96,12 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector.store.loadData(groupArray);
         this.enzymeSelector.bindStore(this.enzymeSelector.store);
 
-        this.displayActiveGroup();
+//        this.displayActiveGroup();
+        
+        // Set user enzyme selector
+        this.userEnzymeGroupSelector = this.managerWindow.query("#userEnzymeGroupSelector")[0];
+        this.userEnzymeGroupSelector.bindStore(this.UserManager.getUser().userRestrictionEnzymeGroups());
+        this.userEnzymeGroupSelector.setValue(this.GroupManager.ACTIVE);
     },
 
     displayActiveGroup: function() {
@@ -90,10 +117,10 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     },
 
     /**
-     * Populates the itemselector field with enzyme names.
+     * Populates the itemselector fromField with enzyme names.
      * Called when the user selects a new group in the combobox.
      */
-    onEnzymeGroupSelected: function(combobox) {
+    onEnzymeGroupChange: function(combobox) {
         var newGroup = this.GroupManager.groupByName(combobox.getValue());
         var enzymeArray = [];
 
@@ -105,6 +132,27 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
     },
 
+    /**
+     * Populates the itemselector toField with enzyme names.
+     * Called when the user selects a new group in the combobox.
+     */
+    onUserEnzymeGroupChange: function(combobox) {
+        var groupName = combobox.getValue();
+        var record = combobox.findRecordByValue(groupName);
+        this.enzymeSelector.toField.bindStore(record.userRestrictionEnzymes());
+        if (groupName === this.GroupManager.ACTIVE) {
+            this.getDeleteGroupBtn().disable();
+            this.getMakeActiveBtn().disable();
+        }
+        else {
+            this.getDeleteGroupBtn().enable();
+            this.getMakeActiveBtn().enable();
+        }
+    },
+
+    /**
+     * Filters the itemselector fromField based on input in the search field.
+     */
     onEnzymeSearchFieldKeyup: function(field) {
         this.enzymeSelector.fromField.store.filterBy(function(rec) {
             if(rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) {
@@ -116,44 +164,110 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     },
 
      /**
-      * Resorts the enzyme lists
+      * When the enzyme list is changed.
       */
      onEnzymeListChange: function(){
-//         this.enzymeSelector.fromField.boundList.getStore().sort("name", "ASC");
          this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
+         if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
+             this.GroupManager.setActiveEnzymesChanged(true);
+         }
      },
 
      /**
-     * Saves the active enzymes to a group.
-     * Not implemented in the flex version.
+      * Initializing after login
+      */
+     onLoggedIn: function() {
+         this.GroupManager.initActiveUserGroup();
+     },
+     
+     /**
+     * Saves the current user group to a new group.
      */
-    onSaveButtonClick: function() {
-		alert("save button clicked, no function yet");
+    onSaveGroupButtonClick: function() {
+        this.saveGroupPrompt();
     },
 
+     /**
+     * Shows a prompt for naming the group
+     */
+    saveGroupPrompt: function() {
+        return Ext.MessageBox.prompt("Group Name", "Please enter a unique group name:", this.onSaveGroupPrompt, this);
+    },
+    
     /**
-     * Deletes the current active enzyme group.
-     * Also not implemented in the flex version.
+     * Handler for the save group prompt
+     */
+    onSaveGroupPrompt: function(pBtnId, pText) {
+        if (pBtnId==="ok") {
+            if (this.userEnzymeGroupSelector.findRecordByValue(pText)) {
+                // Name is not unique so show prompt again.
+                var msgbox = this.saveGroupPrompt();
+                // For some reason the prompt will be placed behind the manager window.
+                // This is a hacky way of moving the prompt but for some reason accessing the Ext.WindowManager
+                // here does not work.
+                Ext.defer(function () {
+                    msgbox.zIndexManager.bringToFront(msgbox);
+                }, 100);
+            }
+            else {
+                this.GroupManager.copyUserGroup(this.userEnzymeGroupSelector.getValue(), pText);
+                this.userEnzymeGroupSelector.setValue(pText);
+            }
+        }
+    },
+    
+    /**
+     * Deletes the currently shown user enzyme group.
      */
     onDeleteGroupButtonClick: function() {
-		alert("delete button clicked, no function yet");
+        var name = this.userEnzymeGroupSelector.getValue();
+        this.GroupManager.removeUserGroup(name);
+        this.userEnzymeGroupSelector.setValue(this.GroupManager.ACTIVE);
     },
 
     /**
-     * Saves active enzymes and closes the window.
+     * Makes active the currently shown user enzyme group.
      */
-    onOKButtonClick: function() {
-        var names = [];
-        this.enzymeSelector.toField.store.each(function(obj) {
-            names.push(obj.data.name);
+    onMakeActiveButtonClick: function() {
+        this.GroupManager.makeActive(this.userEnzymeGroupSelector.getValue());
+    },
+        
+    /**
+     * Saves to database and closes the window.
+     */
+    onSaveButtonClick: function() {
+//        var names = [];
+//        this.enzymeSelector.toField.store.each(function(obj) {
+//            names.push(obj.data.name);
+//        });
+//        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active",
+//                                                                    names);
+        this.managerWindow.close();
+        this.UserManager.update(function(pSuccess) {
+            if (!pSuccess) {
+                console.warn("Unable to save restriction enzymes");
+            }
         });
 
-        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active",
-                                                                    names);
+//        if(newActiveGroup !== this.GroupManager.getActiveGroup()){
+//            this.GroupManager.setActiveGroup(newActiveGroup);
+//            this.application.fireEvent("ActiveEnzymesChanged");
+//        }
+    },
+    
+    /**
+     * Closes the window and does not save to database.
+     */
+    onCancelButtonClick: function() {
         this.managerWindow.close();
-
-        if(newActiveGroup !== this.GroupManager.getActiveGroup()){
-            this.GroupManager.setActiveGroup(newActiveGroup);
+    },
+    
+    /**
+     * After window is closed.
+     */
+    onWindowClose: function() {
+        if (this.GroupManager.getActiveEnzymesChanged()) {
+            this.GroupManager.changeActiveGroup();
             this.application.fireEvent("ActiveEnzymesChanged");
         }
     }
