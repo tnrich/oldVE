@@ -360,7 +360,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin = null;
         }
 
-        console.log("resuming layouts");
         Ext.resumeLayouts(true);
     },
 
