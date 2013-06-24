@@ -89,6 +89,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             else specifiedSequence.setValue('Specified sequence');
         }
 
+        partSource.disable();
+
         startBP.setMaxValue(sequenceLength);
         stopBP.setMaxValue(sequenceLength);
 
@@ -119,7 +121,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
 
-        console.log(this.selectedStartBP);
+        //console.log(this.selectedStartBP);
         startBP.setValue(this.selectedStartBP);
         stopBP.setValue(this.selectedStopBP);
 
