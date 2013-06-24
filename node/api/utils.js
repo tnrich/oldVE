@@ -126,6 +126,29 @@ module.exports = function(app) {
                     j5runs: j5runs
                 });
             });
+    });   
+
+    app.get('/getStats', restrict, function(req, res) {
+        //var numProjects = req.user.projects.length;    
+
+        var User = app.db.model("User");
+        User.findById(req.user._id).populate('projects')
+        .exec(function(err, user) {
+            var countDesigns = 0;
+            var countProjects = 0;
+            var countSequences = 0;
+            var countParts = 0;
+            user.projects.forEach(function(project){
+                countDesigns += project.designs.length;
+                countSequences += project.sequences.length;
+                countParts += project.parts.length;
+                countProjects++;
+            });
+            res.json({"numberProjects":countProjects, "numberDesigns":countDesigns, "numberSequences":countSequences, "numberParts":countParts});
+        });
+
+
+
     });
 
 };
