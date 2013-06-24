@@ -122,9 +122,6 @@ Ext.define('Vede.view.de.grid.Bin', {
             for (var i = 0; i <= this.getBin().parts().getRange().length; i++) {
                 if (this.getBin().parts().getRange()[i] && this.getBin().parts().getRange()[i].get("phantom") == false && (firstFas == undefined || firstFas == "None")) {
                     firstFas = this.getBin().parts().getRange()[i].get("fas");
-            for (var i = 0; i < this.getBin().parts().getRange().length; i++) {
-                if (this.getBin().parts().getRange()[i] && this.getBin().parts().getRange()[i].get("sequencefile_id")) {
-                    firstFas = this.getBin().parts().getRange()[i].get("fas");
                 }
             }
 
