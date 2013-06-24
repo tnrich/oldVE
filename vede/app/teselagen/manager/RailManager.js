@@ -316,26 +316,28 @@ Ext.define("Teselagen.manager.RailManager", {
      * called by the window onresize event.
      */
     fitWidthToContent: function(scope) {
-        var containerSize = Ext.getCmp("RailContainer").getSize();
-        var transY = containerSize.height / 2;
+        if(Ext.getCmp("RailContainer").el) {
+            var containerSize = Ext.getCmp("RailContainer").getSize();
+            var transY = containerSize.height / 2;
 
-        var railBox = scope.rail[0][0].getBBox();
-        var parentBox = scope.parentSVG[0][0].getBBox();
+            var railBox = scope.rail[0][0].getBBox();
+            var parentBox = scope.parentSVG[0][0].getBBox();
 
-        // Get previous values for scale and transform.
-        var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-        var scale = [Number(translateValues[0]), Number(translateValues[3])];
-        var translate = [Number(translateValues[4]), Number(translateValues[5])];
+            // Get previous values for scale and transform.
+            var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+            var scale = [Number(translateValues[0]), Number(translateValues[3])];
+            var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-        /*if(railBox.y > parentBox.y) {
-            transY += railBox.y - parentBox.y;
-        }*/
+            /*if(railBox.y > parentBox.y) {
+                transY += railBox.y - parentBox.y;
+            }*/
 
-        scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
-                                                 " " + translate[0] + " " + transY + ")");
+            scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                     " " + translate[0] + " " + transY + ")");
 
-        scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD)
-                  .attr("height", railBox.height + transY);
+            scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD)
+                      .attr("height", railBox.height + transY);
+        }
     },
 
     /**

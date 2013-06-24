@@ -343,16 +343,10 @@ Ext.define("Vede.controller.ProjectController", {
     	e.preventDefault();
         var contextMenu = Ext.create('Ext.menu.Menu',{
         	  items: [{
-        	    text: 'Rename'/*,
-        	    handler: function() {
-                	var editSequenceFeatureWindow = Ext.create(
-                    "Vede.view.ve.EditSequenceFeatureWindow");
-                	
-                    editSequenceFeatureWindow.show();
-                    editSequenceFeatureWindow.center();
-        	    }*/
+        	    text: 'Open',
+        	    //handler: this.resolveAndOpenSequence(record)
         	  },{
-          	    text: 'Delete'/*,
+          	    text: 'Open in New Tab'/*,
           	    handler: function() {
           	    	sequenceManager.removeFeature(feature,false);
           	    }*/
@@ -400,7 +394,7 @@ Ext.define("Vede.controller.ProjectController", {
         this.control({
             "#projectTreePanel": {
                 itemclick: this.onProjectPanelItemClick,
-                //itemcontextmenu: this.onProjectPanelItemContextMenu
+                itemcontextmenu: this.onProjectPanelItemContextMenu
             },
             "#projectPartsPanel": {
                 itemclick: this.onProjectPartsPanelItemClick

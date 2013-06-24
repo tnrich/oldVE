@@ -8,6 +8,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent",
                "Teselagen.manager.SequenceAnnotationManager",
+               "Teselagen.manager.PrintManager",
                "Teselagen.renderer.annotate.HighlightLayer",
                "Teselagen.renderer.annotate.SelectionLayer"],
 
@@ -95,6 +96,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.HighlightLayer = Ext.create("Teselagen.renderer.annotate.HighlightLayer", {
             sequenceAnnotator: this.SequenceAnnotationManager.annotator
         });
+        Teselagen.manager.PrintManager.sequenceViewConfig(this.SequenceAnnotationManager);
     },
 
     onRender: function(pCmp) {

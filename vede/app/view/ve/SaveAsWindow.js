@@ -1,6 +1,3 @@
-/**
- * Needs a lot of work.
- */
 Ext.define('Vede.view.ve.SaveAsWindow', {
     extend: 'Ext.window.Window',
     requires: ["Teselagen.manager.ProjectManager"],
@@ -43,7 +40,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                             id: 'saveAsWindowSequencesGrid',
                             scroll: 'vertical',
                             flex: 0.7,
-                            store: Teselagen.manager.ProjectManager.projects.getAt(0).sequencesStore,
+                            //store: Teselagen.manager.ProjectManager.projects.getAt(0).sequencesStore,
                             columns: [
                                 {header: 'Sequences', dataIndex: 'name'},
                             ],
@@ -71,6 +68,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                               items: [										
 									{
 									    xtype: 'button',
+									    id: 'saveAsWindowNewProjectButton',
 									    margin: 10,
 									    padding: 5,
 									    text: 'New Project',
@@ -87,6 +85,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                                   },
                                   {
                                       xtype: 'button',
+                                      id: 'saveAsWindowOKButton',
                                       margin: 10,
                                       padding: 5,
                                       text: 'Ok'                                          
