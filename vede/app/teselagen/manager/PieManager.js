@@ -311,21 +311,23 @@ Ext.define("Teselagen.manager.PieManager", {
      * called by the window onresize event.
      */
     fitWidthToContent: function(scope) {
-        var containerSize = Ext.getCmp("PieContainer").getSize();
-        var transX = containerSize.width / 2 - scope.center.x;
-        var transY = containerSize.height / 2 - scope.center.y;
-        var pieBox = scope.pie[0][0].getBBox();
+        if(Ext.getCmp("PieContainer").el) {
+            var containerSize = Ext.getCmp("PieContainer").getSize();
+            var transX = containerSize.width / 2 - scope.center.x;
+            var transY = containerSize.height / 2 - scope.center.y;
+            var pieBox = scope.pie[0][0].getBBox();
 
-        // Get previous values for scale and transform.
-        var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-        var scale = [Number(translateValues[0]), Number(translateValues[3])];
-        var translate = [Number(translateValues[4]), Number(translateValues[5])];
+            // Get previous values for scale and transform.
+            var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+            var scale = [Number(translateValues[0]), Number(translateValues[3])];
+            var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-        scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
-                                                 " " + transX + " " + transY + ")");
+            scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                     " " + transX + " " + transY + ")");
 
-        scope.pie.attr("width", pieBox.width + transX)
-                 .attr("height", pieBox.height + transY);
+            scope.pie.attr("width", pieBox.width + transX)
+                     .attr("height", pieBox.height + transY);
+        }
     },
 
     /**
