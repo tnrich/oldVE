@@ -120,8 +120,12 @@ Ext.define('Vede.view.de.grid.Bin', {
 
         if(this.getBin()) {
 
-            if(this.getBin().parts().getRange()[0]) {
-                firstFas = this.getBin().parts().getRange()[0].get("fas");
+            for (var i = 0; i < this.getBin().parts().getRange().length; i++) {
+                //console.log(this.getBin().parts().getRange().length);
+                if (this.getBin().parts().getRange()[i] && this.getBin().parts().getRange()[i].get("sequencefile_id")) {
+                    firstFas = this.getBin().parts().getRange()[i].get("fas");
+                    //console.log(firstFas);
+                }
             }
 
             // Add each part in the bin to the bin view object.
@@ -181,6 +185,7 @@ Ext.define('Vede.view.de.grid.Bin', {
         }
 
         return pTotalRows;
+        console.log(pTotalRows);
     },
 
     /**

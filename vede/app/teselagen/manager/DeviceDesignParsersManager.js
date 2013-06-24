@@ -561,7 +561,23 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     newRule.negationOperator = parsed[2];
                     newRule.operand1 = partIndex[parsed[3]];
                     newRule.compositionalOperator = parsed[4];
-                    newRule.operand2 = partIndex[parsed[5]];
+                    //newRule.operand2 = partIndex[parsed[5]];
+
+                    var operand2 = parsed[5];
+                    if( isNaN ( parseInt( operand2 ) ) )
+                    {
+                        // Operand 2 is a part
+                        newRule.operand2 = partIndex[operand2];
+                        newRule.operand2isNumber = false;
+                        if(operand2 && !newRule.operand2) notfoundPart = true;
+                    }
+                    else
+                    {
+                        // Operand 2 is a number
+                        newRule.operand2Number = operand2;
+                        newRule.operand2isNumber = true;
+                    }
+
                 }
                 else if(parsed.length===5)
                 {

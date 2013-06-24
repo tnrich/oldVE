@@ -89,7 +89,7 @@ Ext.define("Teselagen.models.Part", {
     // Fields from PartVO
     {
         name: "name",
-        //sortType: Ext.data.SortTypes.asUCString,
+        sortType: Ext.data.SortTypes.asUCString,
         convert: function(v, record) {
             var name;
             /*
