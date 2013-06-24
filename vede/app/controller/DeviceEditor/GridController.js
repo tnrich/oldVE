@@ -56,6 +56,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
 
         Ext.resumeLayouts(true);
+        /*this.renderFasConflicts(fasbins, j5Bin);*/
     },
 
     /**
@@ -556,13 +557,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                    part.get("fas") != updatedPart.get("fas")) {
                     this.rerenderPart(part, true);
                 } else if(part.get("fas") == updatedPart.get("fas") ||
-                          updatedPart.get("fas") == "None") {
+                    updatedPart.get("fas") == "None") {
                     this.rerenderPart(part, false);
                 }
             }, this);
 
             this.rerenderPart(updatedPart, false);
-        } else if(partsArray[0].get("fas") != updatedPart.get("fas")) {
+        } else if(partsArray[0].get("fas") != updatedPart.get("fas") && partsArray[0].get('sequencefile_id')) {
             this.rerenderPart(updatedPart, true);
         } else {
             this.rerenderPart(updatedPart, false);
