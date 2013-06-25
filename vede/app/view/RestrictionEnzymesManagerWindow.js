@@ -98,7 +98,6 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                             cls: "enzymeSelector",
                             store: enzymeListStore,
                             displayField: "name",
-//                            flex: 1,
                             width: 330,
                             buttons: ["addAll", "add", "remove", "removeAll"],
                             buttonsText: {add:"Add", addAll:"Add All", remove:"Remove",
@@ -108,10 +107,10 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                         {
                             xtype: "container",
                             layout: {
+                                type: "vbox",
                                 align: "stretch",
-                                type: "vbox"
+                                defaultMargins: 5
                             },
-//                            flex: 1,
                             items: [
                                 {
                                     xtype: "button",
@@ -140,8 +139,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                 {
                     xtype: "container",
                     layout: {
-                        align: "stretch",
-                        type: "hbox"
+                        type: "hbox",
+                        defaultMargins: 10,
+                        pack: "center"
                     },
                     items: [
                         {

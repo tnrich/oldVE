@@ -167,7 +167,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      /**
       * When the enzyme list is changed.
       */
-     onEnzymeListChange: function(){
+     onEnzymeListChange: function(pThis, pNewValue, pOldValue){
          this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
          if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
              this.GroupManager.setActiveEnzymesChanged(true);
