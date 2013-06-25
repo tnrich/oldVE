@@ -18,7 +18,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                "Teselagen.manager.AAManager",
                "Teselagen.manager.ORFManager",
                "Teselagen.manager.RestrictionEnzymeGroupManager",
-               "Teselagen.manager.RestrictionEnzymeManager"],
+               "Teselagen.manager.RestrictionEnzymeManager",
+               "Vede.view.ve.SafeEditWindow"],
     
     AAManager: null,
     ORFManager: null,

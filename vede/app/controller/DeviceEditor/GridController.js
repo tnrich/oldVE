@@ -413,10 +413,25 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bins.
      * @param {Teselagen.models.J5Bin} updatedBin The bin that has been updated.
      * @param {String} operation The type of update that occurred.
-     * @param {String} modified The name of the field that was edited.
+     * @param {String[]} modified The names of the fields that were edited.
      */
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
-        this.rerenderBin(updatedBin);
+        if(modified.length === 1 && modified[0] === "fases") {
+            var gridBin = this.getGridBinFromJ5Bin(updatedBin);
+            var gridParts = gridBin.query("Part");
+            var j5Parts = updatedBin.parts();
+            var j5Part;
+
+            for(var i = 0; i < gridParts.length; i++) {
+                j5Part = gridParts[i].getPart();
+
+                if(j5Parts.indexOf(j5Part) < 0) {
+                    gridBin.remove(gridParts[i]);
+                }
+            }
+        } else {
+            this.rerenderBin(updatedBin);
+        }
     },
 
     /**
@@ -443,20 +458,29 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index where the parts were added.
      */
     onAddToParts: function(parts, addedParts, index) {
+        Ext.suspendLayouts();
+
         var parentJ5Bin = this.DeviceDesignManager.getBinByPartsStore(this.activeProject, parts);
         var parentGridBin = this.getGridBinFromJ5Bin(parentJ5Bin);
+        var addedPart;
 
         // For each part added, insert it to the part's bin.
-        Ext.each(addedParts, function(addedPart) {
+        for(var i = 0; i < addedParts.length; i++) {
+            addedPart = addedParts[i];
+
             parentGridBin.insert(index + 1, Ext.create("Vede.view.de.grid.Part", {
                 part: addedPart
             }));
 
-            this.renderFasConflicts(parts, addedPart);
-        }, this);
+            if(!addedPart.get("phantom")) {
+                this.renderFasConflicts(parts, addedPart);
+            }
+        }
 
         this.totalRows = this.DeviceDesignManager.findMaxNumParts(this.activeProject);
         this.updateBinsWithTotalRows();
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -488,6 +512,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index of the removed part.
      */
     onRemoveFromParts: function(parts, removedPart, index) {
+        Ext.suspendLayouts();
+
         var j5Bin;
         var gridBin;
         var childGridParts;
@@ -507,8 +533,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 if(gridPart.getPart() === removedPart) {
                     gridBin.remove(gridPart);
 
-                    this.application.fireEvent("ReRenderCollectionInfo");
-
                     this.selectedPart = null;
                 }
             }
@@ -521,6 +545,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             // Reset the skipPad flag.
             this.skipPadOnRemovePart = false;
         }
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -991,8 +1017,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * fas conflict indicator or not.
      */
     rerenderPart: function(j5Part, fasConflict) {
-        Ext.suspendLayouts();
-
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
         var gridPart;
 
@@ -1021,8 +1045,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             newPart.select();
         }
-
-        Ext.resumeLayouts(true);
     },
 
     /**

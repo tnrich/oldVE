@@ -58,16 +58,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     checkCombinatorial:function(j5collection,cb){
         var tmpC = 0;
+        var bins = j5collection.bins().getRange();
+        var parts;
+        var part;
         combinatorial = false;
-        j5collection.bins().each(function(bin,binKey){
-            if(bin.parts().getCount()>1) {
-                bin.parts().each(function(part) {
-                    if(part.get("sequencefile_id")!="") {
+
+        for(var i = 0; i < bins.length; i++) {
+            parts = bins[i].parts().getRange();
+            if(parts.length > 1) {
+                for(var j = 0; j < parts.length; j++) {
+                    if(parts[j].get("sequencefile_id")!="") {
                         tmpC++;
                     }
-                });
+                }
             }
-        });
+        }
+
         if (tmpC>1) {
             combinatorial = true;
         }
@@ -90,11 +96,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
             var tmpJ = 0;
-            var cnt = j5collection.bins().getCount();
+            var bins = j5collection.bins().getRange();
+            var cnt = bins.length;
+            var parts;
+            var part;
             var names = 0;
-            j5collection.bins().each(function(bin,binKey){
+
+            for(var i = 0; i < cnt; i++) {
                 var tmpC = 0;
-                bin.parts().each(function(part) {
+                parts = bins[i].parts().getRange();
+
+                for(var j = 0; j < parts.length; j++) {
+                    part = parts[j];
+
                     if(part != undefined) {
                         if(part.get('sequencefile_id') != "" && !part.get('phantom') ) {
                                 tmpJ++;
@@ -112,12 +126,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     if(tmpC<0) {
                         j5ready = false;
                     }
-                });
-            });
+                }
+            }
+
             if (tmpJ<=cnt || names != tmpJ) {j5ready = false;}
 
-            tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
-            tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
+            tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
+            tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
             if (j5ready ==  true) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
                     runj5Btn.enable();
@@ -972,6 +987,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Fills in the Collection Info tab's various fields.
      */
     renderCollectionInfo: function () {
+        Ext.suspendLayouts();
+
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
         var circularPlasmidField = this.inspector.down("radiofield[cls='circular_plasmid_radio']");
@@ -1012,6 +1029,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.updateColumnContentDisplayField(selectedBin);
             }
         }
+
+        Ext.resumeLayouts(true);
     },
 
     onLaunch: function () {

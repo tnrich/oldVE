@@ -48,7 +48,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
         "Teselagen.bio.parsers.GenbankFeatureQualifier",
         "Teselagen.bio.parsers.GenbankFeaturesKeyword",
         "Teselagen.bio.parsers.GenbankLocusKeyword",
-        "Teselagen.bio.parsers.GenbankOriginKeyword"
+        "Teselagen.bio.parsers.GenbankOriginKeyword",
+        "Teselagen.manager.SequenceManagerMemento"
     ],
     /**
      * @cfg {Object} config
@@ -130,16 +131,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.addEvents(this.updateKindSetMemento);
         this.addEvents(this.updateKindInitialized);*/
 
-        this.callParent([inData]);
-        this.initConfig(inData);
+        //this.callParent([inData]);
+        //this.initConfig(inData);
 
 
+        // Manually set config values. If we use initConfig, manualUpdateStart
+        // and End will be called every time one of the values is set.
         if (inData) {
             this.name     = inData.name     || "";
             this.circular = inData.circular || false;
             this.sequence = inData.sequence || Teselagen.bio.sequence.DNATools.createDNA("");
             this.features = inData.features || [];
+
+            this.complementSequence = inData.complementSequence || null;
+            this.reverseComplementSequence = inData.reverseComplementSequence || null;
+            this.manualUpdateStarted = inData.manualUpdateStarted || false;
+            this.needsRecalculateComplementSequence = inData.needsRecalculateComplementSequence || true;
+            this.needsRecalculateReverseComplementSequence = inData.needsRecalculateReverseComplementSequence || true;
         }
+
         /**
          * @param {String} name
          */
