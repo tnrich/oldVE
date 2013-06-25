@@ -20,12 +20,14 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
      * @param  {Integer} start stranded annotation start
      * @param {Integer} end stranded annotation end
      * @param {Integer} Strand strand directionality
+     * @param {Integer} Index unique index
      */
     constructor: function (inData) {
         if (inData) {
             var name = inData.name || "";
             var type = inData.type || "";
             var notes = inData.notes || [];
+            var index = inData.index || 0;
             this.callParent([inData]);
         } else {
             Teselagen.bio.BioException.raise("Arguments needed");
@@ -93,6 +95,23 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             notes = pNotes;
         }
 
+        /**
+         * Get Index
+         * @method getIndex
+         * @return {Teselagen.bio.sequence.dna.FeatureNote[]} Index
+         */
+        this.getIndex = function(){
+            return index;
+        }
+
+        /**
+         * Set Index
+         * @method setIndex
+         * @param {Teselagen.bio.sequence.dna.FeatureNote[]} pIndex
+         */
+        this.setIndex = function(pIndex){
+            index = pIndex;
+        }
         /**
          * Clones the feature
          * @method clone

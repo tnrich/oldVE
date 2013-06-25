@@ -224,7 +224,7 @@ border-color: #E0E3E6;
   background: #E0E3E6;
 }
 
-.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-small-focus {
+.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-small-focus, .x-btn-default-toolbar-medium-focus {
   border-color: white;
   background-image:none !important;
   background: none !important;
@@ -546,21 +546,21 @@ border-color: #E0E3E6;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-  background-image: url(../images/projectstart-over.png) !important;
+  background-image: url(images/projectstart-over.png) !important;
 }
 
 .watchTutorialBtn-over #watchTutorialBtn-btnIconEl {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-  background-image: url(../images/watchtut-over.png) !important;
+  background-image: url(images/watchtut-over.png) !important;
 }
 
 .readManualsBtn-over #readManualsBtn-btnIconEl {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-  background-image: url(../images/readman-over.png) !important;
+  background-image: url(images/readman-over.png) !important;
 }
 
 .welcome_text {

@@ -687,6 +687,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                 "seq:label" : label, //ft.findLabel(),
                 "seq:complement" : ft.getComplement(),
                 "seq:type" : ft.getKeyword(),
+                "seq:index" : ft.getIndex(),
                 "seq:location" : newLoc,
                 "seq:attribute" : newAttr,
                 "seq:seqHash" : seqHash

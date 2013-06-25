@@ -53,6 +53,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.clearPartInfo();
         toastr.options.onclick = null;
         toastr.info("Part Cleared");
+        this.application.fireEvent("checkj5Ready");
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -91,12 +92,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var tmpJ = 0;
             var cnt = j5collection.bins().getCount();
             var names = 0;
-
             j5collection.bins().each(function(bin,binKey){
+                var tmpC = 0;
                 bin.parts().each(function(part) {
                     if(part != undefined) {
-                        if(part.get('sequencefile_id') != "") {
+                        if(part.get('sequencefile_id') != "" && !part.get('phantom') ) {
                                 tmpJ++;
+                                tmpC++;
+                        }
+                        else if (part.get('phantom')){
+                            tmpC--;
                         }
                     }
                     if(part != undefined) {
@@ -104,9 +109,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             names++;
                         }
                     }
+                    if(tmpC<0) {
+                        j5ready = false;
+                    }
                 });
-                if (tmpJ<cnt || names != tmpJ) {j5ready = false;} else {j5ready = true;}
             });
+            if (tmpJ<=cnt || names != tmpJ) {j5ready = false;}
+
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
             if (j5ready ==  true) {
@@ -251,8 +260,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part, item){
                                 Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    part.getSequenceFile({
-                                        callback: function(sequence){
+                                    //part.getSequenceFile({
+                                    //    callback: function(sequence){
                                             if(bin)
                                             {
                                                 self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
@@ -266,8 +275,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                             {
                                                 Ext.MessageBox.alert('Error','Failed mapping part from library');
                                             }
-                                        }
-                                    });
+                                    //    }
+                                    //});
                                 });
                             }
                         }

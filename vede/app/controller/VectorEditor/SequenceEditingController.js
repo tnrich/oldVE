@@ -22,7 +22,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         var self = this;
 
         executeRequest = function(){
-            /*
+            
+          part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
+
             Ext.Ajax.request({
                 url: Teselagen.manager.SessionManager.buildUrl("checkDuplicatedPartName", ''),
                 method: 'GET',
@@ -31,13 +33,13 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     part: JSON.stringify(part.data)
                 },
                 success: function (response) {
-            */
+            
             self.VEManager.saveSequence(function(){
                     //sequence.save({
                       //  callback: function () {
                             part.setSequenceFileModel(sequence);
                             part.set('sequencefile_id', sequence.data.id);
-                            part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
+                            
                             part.save({
                                 callback: function () {
                                     var now = new Date();
@@ -52,7 +54,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     //    }
                     //});
             });
-            /*
+            
                 },
                 failure: function(response){
                     response = JSON.parse(response.responseText);
@@ -77,7 +79,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     }
                 }
             });
-            */
+            
         };
 
         executeRequest();
