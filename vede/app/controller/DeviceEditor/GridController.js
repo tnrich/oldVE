@@ -1400,6 +1400,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.resumeLayouts(true);
     },
 
+    onReloadDesign: function(targetId){
+        var self = this;
+        Teselagen.manager.ProjectManager.workingProject.designs().load({
+            id:this.activeProject.data.id,
+            callback: function(loadedDesign){
+            self.activeProject = loadedDesign[0];
+            self.reRenderGrid();
+        }});
+    },
+
     onLaunch: function() {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
@@ -1524,5 +1534,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("validateDuplicatedPartName",
                             this.onValidateDuplicatedPartNameEvent,
                             this);
+
+        this.application.on("onReloadDesign",
+                            this.onReloadDesign,
+                            this);
+
         }
 });

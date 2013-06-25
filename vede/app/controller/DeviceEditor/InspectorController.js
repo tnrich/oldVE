@@ -251,8 +251,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part, item){
                                 Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    part.getSequenceFile({
-                                        callback: function(sequence){
+                                    //part.getSequenceFile({
+                                    //    callback: function(sequence){
                                             if(bin)
                                             {
                                                 self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
@@ -266,8 +266,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                             {
                                                 Ext.MessageBox.alert('Error','Failed mapping part from library');
                                             }
-                                        }
-                                    });
+                                    //    }
+                                    //});
                                 });
                             }
                         }
