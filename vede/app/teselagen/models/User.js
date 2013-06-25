@@ -49,7 +49,6 @@ Ext.define("Teselagen.models.User", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-//                console.log(data, associatedData);
                 data.userRestrictionEnzymeGroups = associatedData.userRestrictionEnzymeGroups;
                 return data;
             }

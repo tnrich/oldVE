@@ -17,10 +17,14 @@ Ext.define("Teselagen.manager.UserManager", {
      * @param {Function} next Callback
      */
     loadUser: function(pNext) {
+        var me = this;
         Teselagen.models.User.load(null, {
             callback: function(pUser, pOp){
                 var success = pOp.wasSuccessful();
-                if (!success) {
+                if (success) {
+                    me.setUser(pUser);
+                }
+                else {
                     console.error("Error loading user.");
                 }
                 pNext(success, pUser);
