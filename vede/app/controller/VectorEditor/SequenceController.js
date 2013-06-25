@@ -534,7 +534,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
             return;
         }
 
-        console.log("sequence changed");
+        //console.log("sequence changed");
 
         Ext.suspendLayouts();
 
