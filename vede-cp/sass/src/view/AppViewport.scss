@@ -519,6 +519,9 @@ border-color: #E0E3E6;
 
 .dashBtn {
   margin: 10px;
+  background: #f8f8f8;
+  box-shadow: none;
+  border: #ECF0F1;
 }
 
 #dashboardButtons .x-btn-default-large {
@@ -528,11 +531,11 @@ border-color: #E0E3E6;
 }
 
 #dashboardButtons .x-btn-inner {
-  padding-top: 64px;
+  padding-top: 30px;
 }
 
 #dashboardButtons .x-btn-icon {
-  height: 64px;
+  height: 25px;
 }
 
 .projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {

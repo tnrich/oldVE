@@ -235,10 +235,6 @@ Ext.define("Teselagen.manager.RowManager", {
         return rows;
     },
     pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows){
-        if(pAnnotation.toString() === "Feature  of type promoter from 1035 to 6") {
-            debugger;
-        }
-
         //console.log("Push in Row annotations before: " + pRows);
         var bpPerRow = this.sequenceAnnotator.getBpPerRow();
         var seqLength = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;

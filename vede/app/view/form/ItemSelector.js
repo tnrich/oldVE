@@ -247,6 +247,20 @@ Ext.define('Vede.view.form.ItemSelector', {
         me.toField.boundList.getSelectionModel().select(selected);
     },
 
+    onAddAllBtnClick : function() {
+        var recs = this.fromField.boundList.getStore().getRange();
+        var toStore = this.toField.boundList.getStore();
+        var recsUnique = [];
+        // Filter out duplicates
+        for (var i=0; i < recs.length; i++) {
+            if (toStore.findExact(this.displayField, recs[i].get(this.displayField)) 
+                    === -1) {
+                recsUnique.push(recs[i]);
+            }
+        }
+        this.moveRec(true, recsUnique);
+    },
+
     onRemoveBtnClick : function() {
         var me = this,
             selected = me.getSelections(me.toField.boundList);
@@ -255,6 +269,14 @@ Ext.define('Vede.view.form.ItemSelector', {
         me.fromField.boundList.getSelectionModel().select(selected);
     },
 
+    onRemoveAllBtnClick : function() {
+        var recs = this.toField.boundList.getStore().getRange();
+        this.moveRec(false, recs);
+    },
+
+    /**
+     * @param {Boolean} add True if adding records to the rightside list
+     */
     moveRec: function(add, recs) {
         var me = this,
             fromField = me.fromField,

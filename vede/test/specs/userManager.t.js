@@ -10,7 +10,7 @@ Ext.onReady(function() {
     var username = "mfero";
     describe("Teselagen.manager.UserManager", function() {
         it("Get user from database", function(pDone) {
-            UserManager.getUserFromDb(function(pSuccess, pUser){
+            UserManager.loadUser(function(pSuccess, pUser){
                 expect(pSuccess).to.be.true;
                 expect(pUser).to.be.defined;
                 expect(pUser.get("username")).to.equal(username);
@@ -21,7 +21,7 @@ Ext.onReady(function() {
             UserManager.getUser().set("username", "dummy");
             UserManager.update(function(pSuccess) {
                 expect(pSuccess).to.be.true;
-                UserManager.getUserFromDb(function(pSuccess, pUser){
+                UserManager.loadUser(function(pSuccess, pUser){
                     expect(pSuccess).to.be.true;
                     expect(pUser.get("username")).to.equal("dummy");
                     pUser.set("username", username);
