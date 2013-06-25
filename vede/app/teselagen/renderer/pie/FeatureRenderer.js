@@ -40,14 +40,16 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      */
     render: function() {
         var path;
+        var feature;
         var featureAlignment = this.Alignment.buildAlignmentMap(this.features, 
                                                          this.sequenceManager);
 
+        for(var i = 0; i < this.features.length; i++) {
+            feature = this.features[i];
 
-        Ext.each(this.features, function(feature) {
             var featureRadius = this.railRadius - this.self.DEFAULT_FEATURES_GAP - 
                                 2 * this.self.DEFAULT_FEATURES_GAP;
-            var index = featureAlignment.get(feature);
+            var index = featureAlignment.get(feature.getIndex());
 
             if(index > 0) {
                 featureRadius -= index * (this.self.DEFAULT_FEATURE_HEIGHT + 
@@ -67,6 +69,10 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
             // Draw a pie slice for each location in the feature.
             var startAngle;
             var endAngle;
+
+            /*if(feature.getLocations().length > 1) {
+                console.log(feature.toString());
+            }*/
 
             Ext.each(feature.getLocations(), function(location) {
                 color = this.colorByType(feature.getType().toLowerCase());
@@ -109,7 +115,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                                .append("svg:title")
                                .text(this.getToolTip(feature));
             }, this);
-        }, this);
+        }
     },
 
     /**

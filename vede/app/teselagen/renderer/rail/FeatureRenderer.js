@@ -49,7 +49,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
         Ext.each(this.features, function(feature) {
             var featureGap = this.railGap - this.self.DEFAULT_FEATURES_GAP - 
                                 2 * this.self.DEFAULT_FEATURES_GAP;
-            var index = featureAlignment.get(feature);
+            var index = featureAlignment.get(feature.getIndex());
 
             if(index > 0) {
                 featureGap -= index * (this.self.DEFAULT_FEATURE_HEIGHT + 
