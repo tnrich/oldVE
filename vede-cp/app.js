@@ -119,6 +119,14 @@ Ext.application({
          */
         Vede.application.autoCredentialsFetch = true;
 
+        //if (document.location.href.split('?').length > 0 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).autoauth === "false") Vede.application.autoCredentialsFetch = false;
+        if (document.location.href.split('?').length > 1 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).authurl)
+            {
+                Vede.application.autoCredentialsFetch = true;
+                Teselagen.manager.AuthenticationManager.autoAuthURL = Ext.Object.fromQueryString(document.location.href.split('?')[1]).authurl;
+            }
+
+
         Teselagen.manager.AuthenticationManager.Login(); // Start Authentication process
 
         var self = this;

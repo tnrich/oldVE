@@ -124,7 +124,7 @@ module.exports = function(app){
             }
 
             // Login using sessionID
-            if (sessionId && app.prod) {
+            if (sessionId && app.program.prod) {
 
                 query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id=" + sessionId + ";";
 

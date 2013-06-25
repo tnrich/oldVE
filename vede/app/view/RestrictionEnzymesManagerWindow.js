@@ -53,7 +53,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                             items: [
                                 {
                                     xtype: "combobox",
-                                    id: "enzymeGroupSelector",
+                                    cls: "enzymeGroupSelector",
                                     store: groupStore,
                                     displayField: "name",
                                     fieldLabel: "Enzyme Groups",
@@ -64,7 +64,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                                 },
                                 {
                                     xtype: "textfield",
-                                    id: "enzymeSearchField",
+                                    cls: "enzymeSearchField",
                                     fieldLabel: "Label",
                                     hideLabel: true,
                                     emptyText: "Search for Enzyme",
@@ -75,7 +75,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                         },
                         {
                             xtype: "combobox",
-                            id: "userEnzymeGroupSelector",
+                            cls: "userEnzymeGroupSelector",
                             displayField: "name",
                             fieldLabel: "User Enzyme Groups",
                             labelAlign: "top",
@@ -95,10 +95,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                     items: [
                         {
                             xtype: "itemselectorvede",
-                            id: "enzymeSelector",
+                            cls: "enzymeSelector",
                             store: enzymeListStore,
                             displayField: "name",
-//                            flex: 1,
                             width: 330,
                             buttons: ["addAll", "add", "remove", "removeAll"],
                             buttonsText: {add:"Add", addAll:"Add All", remove:"Remove",
@@ -108,25 +107,30 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                         {
                             xtype: "container",
                             layout: {
+                                type: "vbox",
                                 align: "stretch",
-                                type: "vbox"
+                                defaultMargins: 5
                             },
-//                            flex: 1,
                             items: [
                                 {
                                     xtype: "button",
-                                    text: "Save as Group",
-                                    id: "saveGroupButton"
+                                    text: "New Group",
+                                    cls: "newGroupButton"
+                                },
+                                {
+                                    xtype: "button",
+                                    text: "Copy Group",
+                                    cls: "copyGroupButton"
                                 },
                                 {
                                     xtype: "button",
                                     text: "Delete Group",
-                                    id: "deleteGroupButton"
+                                    cls: "deleteGroupButton"
                                 },
                                 {
                                     xtype: "button",
                                     text: "Make Active",
-                                    id: "makeActiveButton"
+                                    cls: "makeActiveButton"
                                 }
                             ]
                         }
@@ -135,19 +139,20 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                 {
                     xtype: "container",
                     layout: {
-                        align: "stretch",
-                        type: "hbox"
+                        type: "hbox",
+                        defaultMargins: 10,
+                        pack: "center"
                     },
                     items: [
                         {
                             xtype: "button",
-                            id: "restrictionEnzymesManagerSaveButton",
+                            cls: "restrictionEnzymesManagerSaveButton",
                             width: 69,
                             text: "Save"
                         },
                         {
                             xtype: "button",
-                            id: "restrictionEnzymesManagerCancelButton",
+                            cls: "restrictionEnzymesManagerCancelButton",
                             width: 69,
                             text: "Cancel"
                         }

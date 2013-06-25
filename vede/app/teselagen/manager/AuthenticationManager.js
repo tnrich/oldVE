@@ -14,10 +14,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     },
     authResponse: null,
     username: null,
+    autoAuthURL : null,
 
     updateSplashScreenMessage: function(message, stop) {
-        var splashscreen;
-        if (splashscreen) {Ext.get("splash-text").update(message); }
+        if (Ext.get("splash-text")) {Ext.get("splash-text").update(message); }
         if (stop) {
             Ext.select(".x-mask-msg.splashscreen div:nth(2)").setStyle("background-image", "url()");
             if (splashscreen) Ext.get("splash-retry").show();
@@ -33,7 +33,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
-
+        if(!this.autoAuthURL) this.autoAuthURL = Teselagen.utils.SystemUtils.getBaseURL() + "deviceeditor";
 
         var updateServerPath = function(){
             var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
@@ -43,15 +43,23 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         var self = this;
         if(Vede.application.autoCredentialsFetch)
         {
-            self.updateSplashScreenMessage("Getting authentication parameters");
+            self.updateSplashScreenMessage("Connecting...",false);
             Ext.Ajax.request({
-                url: Teselagen.utils.SystemUtils.getBaseURL() + "deviceeditor",
-                params: {},
+                url: self.autoAuthURL + "?_nocache="+Math.random(),
+                params: {
+                    cors_url : Teselagen.utils.SystemUtils.getBaseURL()
+                },
                 method: "GET",
                 success: function(response) {
+                    //console.log(response);
                     var session = JSON.parse(response.responseText);
                     self.username = session.username;
-                    self.sendAuthRequest(session, cb);
+                    if(session.userId) self.sendAuthRequest(session, cb);
+                    else
+                    {
+                        Ext.create("Vede.view.AuthWindow").show();
+                        updateServerPath();                        
+                    }
                 },
                 failure: function() {
                     Ext.create("Vede.view.AuthWindow").show();

@@ -294,7 +294,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
-     * Change the activeGroup by setting it to the user active group.
+     * Change the activeGroup config by setting it to the user active group.
      */
     changeActiveGroup: function() {
         var userActiveGroup = this.getUserEnzymeGroupByName(this.ACTIVE);
