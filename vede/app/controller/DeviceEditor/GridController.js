@@ -895,9 +895,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
                 parentBins[0].parts().remove(j5Part);
             }
-
+            this.onfillBlankCells();
             this.selectedPart = null;
         }
+        Ext.resumeLayouts(true);
     },
 
     /**
