@@ -45,7 +45,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
         g.attr("fill", this.featureColor);
 
-        var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
+        var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getIndex());
         if (!featureRows){
             return;
         }
@@ -53,7 +53,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         for (var i = 0; i < featureRows.length; i++){
             var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
 
-            var alignmentRowIndex = row.rowData.getFeaturesAlignment().get(feature);
+            var alignmentRowIndex = row.rowData.getFeaturesAlignment().get(feature.getIndex());
             var fromSameFeatureIndex = 0;
 
             //for each row, get the features alignment

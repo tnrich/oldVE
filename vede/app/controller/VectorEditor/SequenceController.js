@@ -297,9 +297,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         grid.reconfigure(features);
 
         // Add a label to the checkbox column.
-        grid.columns[grid.columns.length - 1].setText("Remove");
-        grid.columns[0].setWidth(139);
-        grid.columns[grid.columns.length - 1].setWidth(50);
+        grid.columns[0].setWidth(160);
 
         promptWindow.on('close', function() {
             Ext.getCmp("AnnotateContainer").el.focus();
@@ -534,7 +532,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
             return;
         }
 
-        console.log("sequence changed");
+        //console.log("sequence changed");
 
         Ext.suspendLayouts();
 

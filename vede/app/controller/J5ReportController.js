@@ -15,7 +15,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
     onPlasmidsItemClick: function(row,record){
         var currentTab = Ext.getCmp("mainAppPanel");
-        var mask = new Ext.LoadMask(currentTab);
+        var mask = new Ext.LoadMask({target: currentTab});
 
         mask.setVisible(true, false);
 

@@ -61,6 +61,12 @@ module.exports = function(app) {
         });
     });
 
+/*
+
+*/
+
+
+
     /**
      * GET Result of Check for diplicated part names
      * @memberof module:./routes/api
@@ -73,39 +79,47 @@ module.exports = function(app) {
         var reqSequence = req.query.sequence;
 
         var Part = app.db.model("part");
+        var Project = app.db.model("project");
 
-        var duplicatedName = false;
-        var identical = false;
+        Project.findById(reqPart.project_id,function(err,project){
 
-        Part.find(function(err, parts) {
-            counter = parts.length;
-            parts.forEach(function(part, key) {
+            var FQDN_candidate = req.user.FQDN+'.'+project.name+'.'+reqPart.name;
 
-                if (part.name === reqPart.name) duplicatedName = true;
+            
+            var duplicatedName = false;
+            var identical = false;
 
-                if (
-                part.genbankStartBP === reqPart.genbankStartBP.toString() && part.endBP === reqPart.endBP.toString() && part.revComp === reqPart.revComp.toString() && part.fas === reqPart.fas.toString() && part.directionForward === reqPart.directionForward.toString()) {
-                    identical = true;
-                }
+            Part.find(function(err, parts) {
+                counter = parts.length;
+                parts.forEach(function(part, key) {
 
-                if (duplicatedName && !identical) {
-                    res.json({
-                        'msg': 'Duplicated part name.',
-                        'type': 'warning'
-                    }, 500);
-                } else if (duplicatedName && identical) {
-                    res.json({
-                        'msg': 'The part already exist.',
-                        'type': 'error'
-                    }, 500);
-                } else {
-                    counter--;
-                }
+                    if (part.FQDN === FQDN_candidate) duplicatedName = true;
+
+                    if (
+                    part.genbankStartBP === reqPart.genbankStartBP.toString() && part.endBP === reqPart.endBP.toString() && part.revComp === reqPart.revComp.toString() && part.fas === reqPart.fas.toString() && part.directionForward === reqPart.directionForward.toString()) {
+                        identical = true;
+                    }
+
+                    if (duplicatedName && !identical) {
+                        res.json({
+                            'msg': 'Duplicated part name.',
+                            'type': 'warning'
+                        }, 500);
+                    } else if (duplicatedName && identical) {
+                        res.json({
+                            'msg': 'The part already exist.',
+                            'type': 'error'
+                        }, 500);
+                    } else {
+                        counter--;
+                    }
+                    if (counter === 0) res.json({});
+                });
                 if (counter === 0) res.json({});
             });
-            if (counter === 0) res.json({});
-        });
+            
 
+        });
 
     });
 

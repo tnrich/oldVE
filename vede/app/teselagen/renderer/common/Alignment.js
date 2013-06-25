@@ -48,7 +48,12 @@ Ext.define("Teselagen.renderer.common.Alignment", {
                 fitRow = rows.length - 1;
             } 
 
-            alignmentMap.add(annotation, fitRow);
+            // If the annotation is a feature, save it by its unique index.
+            if(annotation.getIndex) {
+                alignmentMap.add(annotation.getIndex(), fitRow);
+            } else {
+                alignmentMap.add(annotation, fitRow);
+            }
         }, this);
 
         return alignmentMap;

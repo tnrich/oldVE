@@ -702,7 +702,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onPlasmidsItemClick: function (grid, record) {
         var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
         var j5Window = DETab;
-        var mask = new Ext.LoadMask(j5Window);
+        var mask = new Ext.LoadMask({target: j5Window});
 
         mask.setVisible(true, false);
 
