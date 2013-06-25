@@ -85,11 +85,11 @@ Ext.define("Teselagen.manager.RowManager", {
 
             for(var j = 0; j < row.length; j++) {
                 feature = row[j];
-                if(!this.featureToRowMap.get(feature.getName())){
-                    this.featureToRowMap.add(feature.getName(), []);
+                if(!this.featureToRowMap.get(feature.getIndex())){
+                    this.featureToRowMap.add(feature.getIndex(), []);
                 }
 
-                this.featureToRowMap.get(feature.getName()).push(i);
+                this.featureToRowMap.get(feature.getIndex()).push(i);
             }
         }
         /*//console.log("Feature to row Map: " + this.featureToRowMap.getKeys());
@@ -128,8 +128,6 @@ Ext.define("Teselagen.manager.RowManager", {
                 this.featureToRowMap[rowFeature.getName()].push(i);
             }
         }*/
-
-
     },
 
     reloadCutSites: function(){
@@ -246,7 +244,7 @@ Ext.define("Teselagen.manager.RowManager", {
             var rowEndIndex = Math.floor((seqLength - 1)/bpPerRow);
 
             var rowStartIndex2 = 0;
-            var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
+            //var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
             var rowEndIndex2 = Math.floor(pItemEnd/bpPerRow);
 
             for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++){
