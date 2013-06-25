@@ -53,6 +53,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         LASTTYPE: false
     },
 
+    lastLineWasLocation: false,
+
     /**
      * Loads a Genbank File.
      * @param {FileInputHTMLElement} fileInput
@@ -115,6 +117,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var flag;           // Flags and Fields to keep track of cases
         var genArr;
 
+        console.log(genbankFileString);
 
         gb = Ext.create("Teselagen.bio.parsers.Genbank");
         if (genbankFileString.match(/[\t]/) !== null) {
@@ -125,6 +128,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         for (var i=0 ; i < genArr.length; i++) {
             this.lineParser(genArr[i], gb);
         }
+
         return gb;
     },
 
@@ -421,11 +425,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         // FOR LOCATION && QUALIFIER LINES
 
         var isQual		= this.isQualifier(line);
-        var isQualRunon	= this.isQualifierRunon(line);
-        var isLocRunon	= this.isLocationRunon(line);
+        var isLineRunon	= this.isLineRunon(line);
         result = gb.getFeatures();
 
-        if ( !isLocRunon && !isQualRunon ) {    // New Element/Qualifier lines. Not runon lines.
+        if (!isLineRunon) {    // New Element/Qualifier lines. Not runon lines.
 
             if ( !isQual ) {    // is a new Feature Element (e.g. source, CDS) in the form of  "[\s] KEY  SEQLOCATION"
                 //strand = val.replace(/\(|\)|[\d]+|[.]+|,|>|</g, "");
@@ -434,37 +437,44 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 } else {
                     strand = 1;
                 }
+
+                if(key === "RBS") {
+                    debugger;
+                }
+
                 featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
                     keyword: key,
                     strand: strand,
                     complement: false,
-                    join: false
+                    join: false,
+                    index: result.getFeaturesElements().length
                 }); // set complement and join correctly when parsing FeatureLocation
                 // Could be multiple locations per Element; Parses true/false complement||join
                 this.parseFeatureLocation(featElm, val);
+
                 result.addElement(featElm);
                 lastObj = featElm;
+
+                this.lastLineWasLocation = true;
 
             } else {    // is a FeatureQualifier in the /KEY="BLAH" format; could be multiple per Element
                 featQual = this.parseFeatureQualifier(line);
                 lastElm  = result.getLastElement();
                 lastElm.addFeatureQualifier(featQual);
                 lastObj  = featQual;
+
+                this.lastLineWasLocation = false;
             }
 
         } else {
-            //console.log(Ext.getClassName(result));
-            if ( isLocRunon) {
-                //console.log(Ext.getClassName(lastObj));
-                //parseFeatureLocation(lastObj, Ext.String.trim(line));
-
+            if(this.lastLineWasLocation) {
                 this.parseFeatureLocation( result.getLastElement() , Ext.String.trim(line));
-            }
-            if ( isQualRunon) {
-                //console.log(Ext.getClassName(lastObj));
-                //lastObj.appendValue(Ext.String.trim(line).replace(/\"/g, ""));
 
+                this.lastLineWasLocation = true;
+            } else {
                 result.getLastElement().getLastFeatureQualifier().appendValue(Ext.String.trim(line).replace(/\"/g, ""));
+
+                this.lastLineWasLocation = false;
             }
         }
 
@@ -671,6 +681,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      *  @param {String} line
      *  @returns {Boolean} runon
      *  @private
+     *  @deprecated
      */
     isQualifierRunon: function(line) {
         var runon = false;
@@ -690,10 +701,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      *  @returns {Boolean} runon
      *  @private
      */
-    isLocationRunon: function(line) {
+    isLineRunon: function(line) {
         var runon = false;
         //if ( Ext.String.trim(line.substr(0,20)) === ""  && Ext.String.trim(line).charAt(0).match(/[\d]/) && line.match(/[.]{2}/g) ) {
-        if ( Ext.String.trim(line.substr(0,10)) === "" && ( Ext.String.trim(line).charAt(0).match(/[\d]/) ||  Ext.String.trim(line).match(/complement/g) || Ext.String.trim(line).match(/join/g) ) ) {
+        if ( Ext.String.trim(line.substr(0,10)) === "" && ( !Ext.String.trim(line).charAt(0).match(/\//) ||  Ext.String.trim(line).match(/complement/g) || Ext.String.trim(line).match(/join/g) ) ) {
             runon = true;
         }
         return runon;
