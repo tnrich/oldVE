@@ -32,6 +32,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     init: function() {
         this.callParent();
         this.application.on("ShowMapCaretChanged", this.onShowMapCaretChanged, this);
+        this.application.on("PieNameBoxClick", this.onPieNameBoxClick);
         this.control({
             "#zoomInMenuItem": {
                 click: this.onZoomInMenuItemClick
@@ -61,7 +62,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         pie.on("contextmenu",function() {
         	return d3.event.preventDefault();
         });
-
         // When pie is resized, scale the graphics in the pie.
         this.pieContainer.on("resize", function() {
             this.pieManager.fitWidthToContent(this.pieManager);
@@ -616,11 +616,15 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     onPieNameBoxClick: function() {
-        console.log('hey');
-        this.application.fireEvent(this.VisibilityEvent.SHOW_MAP_CARET_CHANGED,
-                                    checked);
+        var checked = Ext.getCmp("mapCaretMenuItem").checked
+        var menuItem = Ext.getCmp("mapCaretMenuItem")
+        if (checked) {
+            menuItem.setChecked(false);
+        }
+        else {
+            menuItem.setChecked(true);
+        }
     }
-    
 });
 
 
