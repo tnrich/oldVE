@@ -117,8 +117,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var flag;           // Flags and Fields to keep track of cases
         var genArr;
 
-        console.log(genbankFileString);
-
         gb = Ext.create("Teselagen.bio.parsers.Genbank");
         if (genbankFileString.match(/[\t]/) !== null) {
             console.warn("Parsing GenBank File: '\t' detected in file. Replacing with 4 spaces.");
@@ -436,10 +434,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                     strand = -1;
                 } else {
                     strand = 1;
-                }
-
-                if(key === "RBS") {
-                    debugger;
                 }
 
                 featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
