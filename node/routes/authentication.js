@@ -127,7 +127,7 @@ module.exports = function(app){
             if (sessionId && app.program.prod) {
 
                 query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id='" + sessionId + "';";
-
+                console.log(query);
                 if (app.mysql) {
                     app.mysql.query(query, function(err, rows) {
                         if (err||!rows) return res.json({
