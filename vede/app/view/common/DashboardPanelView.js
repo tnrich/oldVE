@@ -31,8 +31,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         id: 'dashboardButtons',
                         margin: '0 100 0 100',
-                        flex: 0.4,
+                        flex: 0.2,
                         border: 0,
+                        style: {
+                            borderColor: '#E0E3E6',
+                            borderStyle: 'solid'
+                        },
                         layout: {
                             type: 'hbox'
                         },
@@ -65,7 +69,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 iconAlign: 'top',
                                 listeners: {
                                     click: function () {
-                                        Teselagen.manager.ProjectManager.createNewProject();
+                                        Vede.application.fireEvent("TabOpen");
                                     }
                                 }
 
@@ -99,37 +103,315 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     {
                         xtype: 'container',
                         id: 'dashboardStats',
-                        margin: '10 100 40 100',
-                        flex: 0.6,
+                        margin: '10 100 50 100',
+                        flex: 1,
                         border: 0,
+                        style: {
+                            borderColor: '#E0E3E6',
+                            borderStyle: 'solid',
+                        },
                         layout: {
-                            type: 'hbox'
+                            type: 'hbox',
+                            align: 'stretch'
                         },
                         items: [ 
                             {
                                 xtype: 'container',
                                 cls: 'dashboardStats-container',
-                                margin: '0 50 0 0',
+                                margin: '0 0 0 0',
                                 border: 0,
+                                style: {
+                                    borderColor: '#E0E3E6',
+                                    borderStyle: 'solid'
+                                },
+                                flex: 0.5,
+                                maxHeight: 320,
                                 layout: {
-                                    type: 'vbox'
+                                    type: 'vbox',
+                                    align: 'stretch'
                                 },
                                 items: [
                                     {
                                         xtype: 'container',
-                                        cls: 'dashStatBox',
-                                        height: 100,
+                                        cls: 'dashProjectsData',
+                                        margin: '10 10 10 10',
+                                        border: 1,
+                                        width: 430,
+                                        flex: 0.5,
+                                        style: {
+                                            borderColor: 'rgb(0, 116, 194)',
+                                            borderStyle: 'solid'
+                                        },
                                         id: 'projectsCountBox',
-                                        flex: 1
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'projectsCountBox-icon',
+                                                border: 1,
+                                                flex: .6,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                }
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'projectsCountBox-data',
+                                                border: 1,
+                                                flex: 1,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                },
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'projectsCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'projectsCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     },
                                     {
                                         xtype: 'container',
-                                        cls: 'dashStatBox',
-                                        height: 100,
+                                        cls: 'dashDesignsData',
+                                        margin: '10 10 10 10',
+                                        border: 1,
+                                        width: 430,
+                                        flex: 0.5,
+                                        style: {
+                                            borderColor: 'rgb(0, 116, 194)',
+                                            borderStyle: 'solid'
+                                        },
                                         id: 'designsCountBox',
-                                        flex: 1
-                                    }
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'designsCountBox-icon',
+                                                border: 1,
+                                                flex: .6,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                }
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'designsCountBox-data',
+                                                border: 1,
+                                                flex: 1,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                },
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'designsCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'designsCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+
                                 ]
+                            },
+                            {
+                              xtype: 'container',
+                                cls: 'dashboardStats-container2',
+                                margin: '0 0 0 0',
+                                border: 0,
+                                style: {
+                                    borderColor: '#E0E3E6',
+                                    borderStyle: 'solid'
+                                },
+                                flex: 0.5,
+                                maxHeight: 320,
+                                layout: {
+                                    type: 'vbox',
+                                    align: 'stretch'
+                                },
+                                items: [
+                                    {
+                                        xtype: 'container',
+                                        cls: 'dashSequencesData',
+                                        margin: '10 10 10 10',
+                                        border: 1,
+                                        flex: 0.5,
+                                        style: {
+                                            borderColor: 'rgb(0, 116, 194)',
+                                            borderStyle: 'solid'
+                                        },
+                                        id: 'sequencesCountBox',
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'sequencesCountBox-icon',
+                                                border: 1,
+                                                flex: .6,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                }
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'sequencesCountBox-data',
+                                                border: 1,
+                                                flex: 1,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                },
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'sequencesCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'sequencesCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        xtype: 'container',
+                                        cls: 'dashPartsData',
+                                        margin: '10 10 10 10',
+                                        border: 1,
+                                        flex: 0.5,
+                                        style: {
+                                            borderColor: 'rgb(0, 116, 194)',
+                                            borderStyle: 'solid'
+                                        },
+                                        id: 'partsCountBox',
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'partsCountBox-icon',
+                                                border: 1,
+                                                flex: .6,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                }
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'partsCountBox-data',
+                                                border: 1,
+                                                flex: 1,
+                                                style: {
+                                                    borderColor: 'rgb(0, 116, 194)',
+                                                    borderStyle: 'solid'
+                                                },
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'partsCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'partsCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                        style: {
+                                                            borderColor: 'rgb(0, 116, 194)',
+                                                            borderStyle: 'solid'
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                ]  
                             }
                         ]
                     }

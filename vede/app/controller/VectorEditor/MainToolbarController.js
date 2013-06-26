@@ -73,9 +73,9 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
     },
 
-    onFeaturesButtonClick: function(button, e, options) {
+    onFeaturesButtonToggle: function(button, pressed, options) {
         var menuItem = Ext.ComponentQuery.query('#featuresMenuItem')[0];
-        if (button.pressed) {
+        if (pressed) {
             menuItem.setChecked(true, true);
         }
         else {
@@ -83,31 +83,31 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
-                                   button.pressed);
+                                   pressed);
     },
 
-    onCutSitesButtonClick: function(button, e, options) {
+    onCutSitesButtonToggle: function(button, pressed, options) {
         var menuItem = Ext.ComponentQuery.query('#cutSitesMenuItem')[0];
-        if (button.pressed) {
+        if (pressed) {
             menuItem.setChecked(true, true);
         }
         else {
             menuItem.setChecked(false, true);
         }
         this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
-                                   button.pressed);
+                                   pressed);
     },
 
-    onOrfsButtonClick: function(button, e, options) {
+    onOrfsButtonToggle: function(button, pressed, options) {
         var menuItem = Ext.ComponentQuery.query('#orfsMenuItem')[0];
-        if (button.pressed) {
+        if (pressed) {
             menuItem.setChecked(true, true);
         }
         else {
             menuItem.setChecked(false, true);
         }
         this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
-                                   button.pressed);
+                                   pressed);
     },
 
     onREButtonClick: function() {
@@ -233,6 +233,9 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
             "#importBtn": {
                 change: this.onImportBtnChange
             },
+            "#importSequenceMenuItem": {
+                change: this.onImportBtnChange
+            },
             "#circularViewBtn": {
                 click: this.onCircularViewButtonClick
             },
@@ -246,13 +249,13 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
                 click: this.onFindButtonClick
             },
             "#featuresBtn": {
-                click: this.onFeaturesButtonClick
+                toggle: this.onFeaturesButtonToggle
             },
             "#cutsitesBtn": {
-                click: this.onCutSitesButtonClick
+                toggle: this.onCutSitesButtonToggle
             },
             "#orfsBtn": {
-                click: this.onOrfsButtonClick
+                toggle: this.onOrfsButtonToggle
             },
             "#reBtn": {
                 click: this.onREButtonClick

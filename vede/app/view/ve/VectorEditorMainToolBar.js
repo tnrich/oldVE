@@ -171,6 +171,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         cls: 'featuresBtn',
         id: 'featuresBtn',
         enableToggle: true,
+        focusCls: '', // Without this, the button will not be toggled until it loses focus for some reason.
         icon: 'resources/images/features.png',
         pressed: true,
         scale: 'medium',
@@ -186,6 +187,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         cls: 'cutSitesBtn',
         id: 'cutsitesBtn',
         enableToggle: true,
+        focusCls: '', // Without this, the button will not be toggled until it loses focus for some reason.
         icon: 'resources/images/cut_sites.png',
         scale: 'medium',
         tooltip: 'Show Cut Sites'
@@ -200,6 +202,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         id: 'orfsBtn',
         cls: 'orfsBtn',
         enableToggle: true,
+        focusCls: '', // Without this, the button will not be toggled until it loses focus for some reason.
         icon: 'resources/images/orf.png',
         scale: 'medium',
         tooltip: 'Show ORF'

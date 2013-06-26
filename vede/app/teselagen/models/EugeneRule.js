@@ -8,7 +8,8 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.Part"
+        "Teselagen.models.Part",
+        "Teselagen.constants.Constants"
     ],
 
     proxy: {
@@ -110,11 +111,13 @@ Ext.define("Teselagen.models.EugeneRule", {
         //{field: "negationOperator", type: "presence"},
         //{field: "operand1",         type: "presence"},
         {field: "compositionalOperator",    type: "presence"},
+        /*
         {
             field: "compositionalOperator",
             type: "inclusion",
-            list: Teselagen.constants.Constants.COMPOP_LIST
+            list: Teselagen.constants.Constants.COMPOP_LIST // Its NOT possible using constants on class definition context.
         },
+        */
         {field: "operand2Number",         type: "presence"}
     ],
 

@@ -40,11 +40,12 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     cls: 'importEugeneRulesBtn',
                     buttonConfig: {
                         text: 'Import Eugene Rules',
-                        scale: 'small',
                         tooltip: 'Import EugeneRules',
-                        margin: '0 0 0 0',
-                    },
-                    border: 0
+                        border: false,
+                        style: {
+                            left: "-2px"
+                        }
+                    }
                 }
                 ]
             }

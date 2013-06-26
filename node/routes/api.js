@@ -6,7 +6,6 @@ module.exports = function(app) {
 
     require('../routes/constants')(app);
 
-    require('../api/rest.js')(app);
     require('./authentication.js')(app);
 
     require('../api/user.js')(app);
