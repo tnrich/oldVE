@@ -71,10 +71,10 @@ Ext.define('Vede.view.AuthWindow', {
 						name: 'Config'
 					}, {
 						xtype: 'fieldset',
-						hidden: true,
+						//hidden: true,
 						id: 'auth-config',
 						margin: 10,
-						width: 400,
+						width: 370,
 						items: [{
 							xtype: 'combobox',
 							anchor: '100%',
@@ -84,8 +84,12 @@ Ext.define('Vede.view.AuthWindow', {
 							fieldLabel: 'Server to connect:',
 							name: 'server',
 							store: [
-								['Local', 'http://teselagen.local/api/'],
-								['Dev', 'http://dev.teselagen.com/api/']
+								['Server', 'http://teselagen.local/api/'],
+								['Server', 'http://teselagen.production/api/'],
+								['Server', 'http://dev.teselagen.com/api/'],
+								['Server', 'http://test.teselagen.com/api/'],
+								['Server', 'http://production.teselagen.com/api/']
+
 							]
 						}, {
 							xtype: 'fieldcontainer',
@@ -97,6 +101,12 @@ Ext.define('Vede.view.AuthWindow', {
 								id: 'checkbox1'
 							}]
 						}]
+					},
+					{
+						xtype: 'container',
+						id: 'auth-response',
+						border: 0,
+						width: 350
 					}
 
 					]

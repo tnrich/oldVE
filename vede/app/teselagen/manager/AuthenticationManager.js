@@ -33,7 +33,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
-        if(!this.autoAuthURL) this.autoAuthURL = Teselagen.utils.SystemUtils.getBaseURL() + "deviceeditor";
+        if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
 
         var updateServerPath = function(){
             var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
@@ -111,7 +111,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
-                self.updateSplashScreenMessage(response.statusText, true);
+                //self.updateSplashScreenMessage(response.statusText, true);
+                var response = JSON.parse(response.responseText);
+                if(response) Ext.getCmp('auth-response').update(response.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
         });

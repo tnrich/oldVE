@@ -26,7 +26,7 @@ function restrict(req, res, next) {
       next();
     });
   } else {
-    if(!app.testing.enabled)
+    if(!app.program.debug)
     {
       req.session.error = 'Access denied!';
       res.redirect('/login');
@@ -53,7 +53,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 
   var data = {}
   data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  if(app.program.debug) data["j5_session_id"] = app.testing.sessionId;
 
   app.j5client.methodCall('GetLastUpdatedUserFiles', [data], function (error, value) {
 
@@ -96,7 +96,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 app.post('/DesignDownstreamAutomation',function(req,res){
 
   var data = JSON.parse(req.body.params);
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  if(app.program.debug) data["j5_session_id"] = app.testing.sessionId;
 
   app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
 
@@ -120,7 +120,7 @@ app.post('/condenseAssemblyFiles',function(req,res){
   data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
   data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];  
   data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  if(app.program.debug) data["j5_session_id"] = app.testing.sessionId;
 
   app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
 
@@ -301,7 +301,7 @@ app.post('/fullRPC',restrict,function(req,res){
   
   function processFullRPC(model){
     var data = j5rpcEncode(model["payload"],j5Params,execParams);
-    if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+    if(app.program.debug) data["j5_session_id"] = app.testing.sessionId;
     console.log("Using sessionId: "+data["j5_session_id"]);
 
     app.j5client.methodCall('DesignAssembly', [data], function (error, value) {

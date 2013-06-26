@@ -64,18 +64,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
         });
 	},
 
-	onRender: function () {
-		this.populateStatisticts();
-	},
-
 	init: function () {
+    this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
 		this.control({
 			"#designGrid_Panel": {
 				itemclick: this.onLastDEProjectsItemClick
-			},
-            "#DashboardPanel": {
-                afterrender: this.onRender
-            }
+			}
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}
