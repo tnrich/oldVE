@@ -97,6 +97,10 @@ Ext.define('Vede.view.AuthWindow', {
 								id: 'checkbox1'
 							}]
 						}]
+					},
+					{
+						xtype: 'textfield',
+						id: 'auth-response'
 					}
 
 					]

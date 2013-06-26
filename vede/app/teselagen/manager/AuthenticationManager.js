@@ -111,7 +111,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
-                self.updateSplashScreenMessage(response.statusText, true);
+                //self.updateSplashScreenMessage(response.statusText, true);
+                Ext.getCmp('auth-response').setValue(response.statusText);
                 if (cb) {return cb(false, response.statusText); }
             }
         });
