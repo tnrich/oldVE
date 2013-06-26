@@ -77,7 +77,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * Initialize the active user group if it doesn't exist.  Set the active group to its value.
      */
     initActiveUserGroup: function() {
-        var userActiveGroup = this.getUserEnzymeGroupByName(this.ACTIVE);
+        var userActiveGroup = this.getActiveUserGroup();
         if (!userActiveGroup) {
             this.createUserGroup(this.ACTIVE, this.COMMON_ENZYMES);
         }
@@ -151,14 +151,12 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         Ext.each(this.getSystemGroups(), function(systemGroup) {
             if(systemGroup.getName() === name) {
                 resultGroup = systemGroup;
-//                return false;
             }
         });
 
         Ext.each(this.getUserGroups(), function(userGroup) {
             if(userGroup.getName() === name) {
                 resultGroup = userGroup;
-//                return false;
             }
         });
 
@@ -282,13 +280,20 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         return groups.findRecord("name", pName);
     },
 
-   /**
+    /**
+     * Returns the active user group.
+     */
+    getActiveUserGroup: function() {
+        return this.getUserEnzymeGroupByName(this.ACTIVE);
+    },
+    
+    /**
      * Make the given user group's enzymes active.
      */
     makeActive: function(pName) {
         var group = this.getUserEnzymeGroupByName(pName);
         var names = group.userRestrictionEnzymes().collect("name");
-        var activeGroup = this.getUserEnzymeGroupByName(this.ACTIVE);
+        var activeGroup = this.getActiveUserGroup();
         this.loadUserEnzymes(activeGroup.userRestrictionEnzymes(), names);
         this.setActiveEnzymesChanged(true);
     },
@@ -297,7 +302,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * Change the activeGroup config by setting it to the user active group.
      */
     changeActiveGroup: function() {
-        var userActiveGroup = this.getUserEnzymeGroupByName(this.ACTIVE);
+        var userActiveGroup = this.getActiveUserGroup();
         var activeGroup = this.createGroupByEnzymes(this.ACTIVE, 
                 userActiveGroup.userRestrictionEnzymes().collect("name"))
         this.setActiveGroup(activeGroup);
