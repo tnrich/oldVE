@@ -7,14 +7,12 @@
 Ext.define("Teselagen.manager.SimulateDigestionManager", {
     requires: ["Ext.draw.CompositeSprite",
                "Ext.tip.ToolTip",
+               "Teselagen.manager.RestrictionEnzymeGroupManager",
                "Teselagen.models.digest.Gel",
                "Teselagen.models.digest.GelLane",
                "Teselagen.models.digest.Ladder"],
     config: {
-        digestPanel: null,
         sampleLane: null,
-        groupManager: null,
-        enzymeListSelector: null,
         /**
          * The {Teselagen.models.digest.Gel} which represents this digestion gel
          */
@@ -36,6 +34,9 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      * holds the list of currently selected enzymes for persistance after the window is closed
      */
     currentEnzymes: null,
+    digestPanel: null,
+    enzymeListSelector: null,
+    GroupManager: null,
     
     /**
      * @member Teselagen.manager.SimulateDigestionManager
@@ -43,6 +44,7 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
     constructor: function(inData){
         this.initConfig(inData);
         this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
+        this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
         //this.initializeDigestDrawingPanel();
     },
     /**
@@ -78,30 +80,28 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      */
     filterEnzymesInternal: function(searchCombo, groupSelector){
         //First we populate the store with the right enzymes
-        var currentList = this.groupManager.groupByName(groupSelector.getValue());
+        var currentGroup = this.GroupManager.groupByName(groupSelector.getValue());
         var enzymeArray = [];
-        Ext.each(currentList.getEnzymes(), function(enzyme) {
+        var fromList = this.enzymeListSelector.fromField.boundList;
+        var fromStore = fromList.getStore();
+        var toList = this.enzymeListSelector.toField.boundList;
+        Ext.each(currentGroup.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
-        this.enzymeListSelector.store.loadData(enzymeArray, false);
-        this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
-        if (this.currentEnzymes === null){
-            //loadData throws an error is currentEnzymes is null so lets just initialize it with an empty list
-            this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
-        }
-        this.enzymeListSelector.toField.store.loadData(this.currentEnzymes, false);
-        this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
+        fromStore.loadData(enzymeArray);
+//        this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
+        toList.bindStore(this.GroupManager.getActiveUserGroup().userRestrictionEnzymes());
+        
         //remove any items on the left that are on the right
-        var list = this.enzymeListSelector.fromField.boundList;
-        var store = list.getStore();
-        store.suspendEvents();
-        this.currentEnzymes = this.enzymeListSelector.toField.store.getRange();
+        fromStore.suspendEvents();
+        this.currentEnzymes = toList.getStore().getRange();
         this.currentEnzymes.forEach(function(enzyme) {
-           var deleted = store.query("name",enzyme.get("name"));
-           store.remove(deleted.items[0], false);
+           var deleted = fromStore.query("name",enzyme.get("name"));
+           fromStore.remove(deleted.items[0], false);
         });
-        store.resumeEvents();
-        list.refresh();
+        fromStore.resumeEvents();
+        fromList.refresh();
+        
         //Now we filter based on the search input
         //the default searchphrase will match anything
         var searchPhrase = ".";
@@ -114,7 +114,7 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
             //We can safely ignore errors in the regex. they'll just result in not getting what you are looking for
             regEx = null;
         }
-        this.enzymeListSelector.fromField.store.filterBy(function(enzyme){
+        fromStore.filterBy(function(enzyme){
             return enzyme.get("name").search(regEx) !== -1;
         }, this);
     },
@@ -143,7 +143,7 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         //Have to use local scope because calls to this in the each loop refer to the selectedEnzymes object, not this
         var tempEnzymes = [];
         selectedEnzymes.each(function(enzyme){
-            tempEnzymes.push(Teselagen.manager.RestrictionEnzymeGroupManager.getEnzymeByName(enzyme.data.name));
+            tempEnzymes.push(this.GroupManager.getEnzymeByName(enzyme.data.name));
         });
         this.enzymes = tempEnzymes;
         this.drawGel();

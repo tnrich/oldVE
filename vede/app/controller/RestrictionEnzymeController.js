@@ -201,23 +201,12 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Saves to database and closes the window.
      */
     onSaveButtonClick: function() {
-//        var names = [];
-//        this.enzymeSelector.toField.store.each(function(obj) {
-//            names.push(obj.data.name);
-//        });
-//        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active",
-//                                                                    names);
         this.managerWindow.close();
         this.UserManager.update(function(pSuccess) {
             if (!pSuccess) {
                 console.warn("Unable to save restriction enzymes");
             }
         });
-
-//        if(newActiveGroup !== this.GroupManager.getActiveGroup()){
-//            this.GroupManager.setActiveGroup(newActiveGroup);
-//            this.application.fireEvent("ActiveEnzymesChanged");
-//        }
     },
     
     /**
