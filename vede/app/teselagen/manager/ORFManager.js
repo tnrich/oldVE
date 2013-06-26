@@ -21,8 +21,6 @@ Ext.define("Teselagen.manager.ORFManager", {
         observable: "Ext.util.Observable"
     },
 
-    updateEventString: Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED,
-
     DNATools: null,
 
     /**

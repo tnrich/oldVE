@@ -61,12 +61,6 @@ module.exports = function(app) {
         });
     });
 
-/*
-
-*/
-
-
-
     /**
      * GET Result of Check for diplicated part names
      * @memberof module:./routes/api
@@ -75,52 +69,68 @@ module.exports = function(app) {
     app.get('/checkDuplicatedPartName', restrict, function(req, res) {
 
         var reqPart = JSON.parse(req.query.part);
-        console.log(reqPart);
         var reqSequence = req.query.sequence;
+
+        console.log(reqPart);
 
         var Part = app.db.model("part");
         var Project = app.db.model("project");
 
-        Project.findById(reqPart.project_id,function(err,project){
-
+        Project.findById(reqPart.project_id, function(err,project){
             var FQDN_candidate = req.user.FQDN+'.'+project.name+'.'+reqPart.name;
 
-            
             var duplicatedName = false;
             var identical = false;
+            var part;
 
+            //Part.find({project_id: reqPart.project_id}, function(err, parts) {
             Part.find(function(err, parts) {
                 counter = parts.length;
-                parts.forEach(function(part, key) {
+                console.log(parts);
+                for(var i = 0; i < parts.length; i++) {
+                    part = parts[i];
 
-                    if (part.FQDN === FQDN_candidate) duplicatedName = true;
+                    if (part.FQDN === FQDN_candidate) {
+                        duplicatedName = true;
+                    }
 
-                    if (
-                    part.genbankStartBP === reqPart.genbankStartBP.toString() && part.endBP === reqPart.endBP.toString() && part.revComp === reqPart.revComp.toString() && part.fas === reqPart.fas.toString() && part.directionForward === reqPart.directionForward.toString()) {
+                    if (part.genbankStartBP     === reqPart.genbankStartBP.toString() && 
+                        part.endBP              === reqPart.endBP.toString() && 
+                        part.revComp            === reqPart.revComp.toString() && 
+                        part.fas                === reqPart.fas.toString() && 
+                        part.directionForward   === reqPart.directionForward.toString()) {
+
                         identical = true;
                     }
 
                     if (duplicatedName && !identical) {
-                        res.json({
+                        return res.json({
                             'msg': 'Duplicated part name.',
                             'type': 'warning'
-                        }, 500);
+                        });
                     } else if (duplicatedName && identical) {
-                        res.json({
+                        return res.json({
                             'msg': 'The part already exist.',
                             'type': 'error'
-                        }, 500);
+                        });
                     } else {
                         counter--;
                     }
-                    if (counter === 0) res.json({});
-                });
-                if (counter === 0) res.json({});
+
+                    if (counter === 0) {
+                        return res.json({
+                            'type': 'success'
+                        });
+                    }
+                }
+
+                if (counter === 0) {
+                    return res.json({
+                        'type': 'success'
+                    });
+                }
             });
-            
-
         });
-
     });
 
 

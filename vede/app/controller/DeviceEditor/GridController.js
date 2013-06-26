@@ -1310,7 +1310,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
-        //console.log("Checking for duplicate part with id:"+pPart.get('id'));
         duplicated = false;
         this.activeBins.each(function(bin) {
             bin.parts().each(function(part){
@@ -1321,12 +1320,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(duplicated)
         {
-                Ext.MessageBox.show({
-                    title: 'Error',
-                    msg: 'Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.',
-                    buttons: Ext.MessageBox.OK,
-                    icon:Ext.MessageBox.ERROR
-                });
+            Ext.MessageBox.show({
+                title: 'Error',
+                msg: 'Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.',
+                buttons: Ext.MessageBox.OK,
+                icon:Ext.MessageBox.ERROR
+            });
         }
         else return cb();
     },
