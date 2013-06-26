@@ -1,6 +1,10 @@
 /**
  * @class Vede.controller.VectorEditor.StatusBarController
  * Handles the rendering of the VE status bar.
+ * NOTE: Uses setHTML on text display elements. Using this instead of setText
+ * avoids (extremely) expensive layout runs every time the text is updated. It
+ * also means we must set each text field to a fixed width, as their widths are
+ * not adjusted automatically when using setHTML.
  */
 Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     extend: "Ext.app.Controller",
@@ -21,8 +25,17 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     SelectionEvent: null,
     SequenceManagerEvent: null,
 
+    caretPositionText: null,
+    permissionText: null,
+    sequenceLengthText: null,
+
     onLaunch: function() {
         this.StatusPanel = Ext.getCmp("VectorEditorStatusPanel");
+        this.caretPositionText = this.StatusPanel.down("tbtext[cls='caretPositionText']");
+        this.meltingTemperatureText = this.StatusPanel.down("tbtext[cls='meltingTemperatureText']");
+        this.permissionText = this.StatusPanel.down("tbtext[cls='permissionText']");
+        this.selectionPositionText = this.StatusPanel.down("tbtext[cls='selectionPositionText']");
+        this.sequenceLengthText = this.StatusPanel.down("tbtext[cls='sequenceLengthText']");
     },
 
     init: function() {
@@ -50,12 +63,12 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     },
 
     reset: function() {
-        this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(
+        this.sequenceLengthText.el.setHTML(
                         this.SequenceManager.getSequence().toString().length);
 
-        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText("0");
+        this.caretPositionText.el.setHTML("0");
 
-        this.StatusPanel.down("tbtext[cls='permissionText']").setText("Editable");
+        this.permissionText.el.setHTML("Editable");
 
         this.onSelectionCanceled();
         this.onSequenceChanged();
@@ -63,12 +76,15 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
 
     onSequenceManagerChanged: function(newSeqMan) {
         this.SequenceManager = newSeqMan;
-        console.log("status reset");
         this.reset();
     },
     
     onCaretPositionChanged: function(scope, index) {
-        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index.toString());
+        var stringIndex = index.toString();
+
+        if(this.caretPositionText.el.getHTML() !== stringIndex) {
+            this.caretPositionText.el.setHTML(stringIndex);
+        }
     },
 
     onSelectionChanged: function(scope, start, end) {
@@ -78,7 +94,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
             var selectionLabelText;
             var meltingTemperature;
 
-            selection = this.SequenceManager.subSequence(start, end).toString();
+            selection = this.SequenceManager.getSequence().toString().substr(start, end);
 
             if(start < end) {
                 selectionLength = end - start;
@@ -89,27 +105,26 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
 
             selectionLabelText = [start + 1, " : ", end, " (", selectionLength, ")"].join("");
 
-            this.StatusPanel.down("tbtext[cls='selectionPositionText']")
-                .setText(selectionLabelText);
+            this.selectionPositionText.el.setHTML(selectionLabelText);
 
-            meltingTemperature = this.TemperatureCalculator.calculateTemperature(
-                this.DNATools.createDNASequence("selection", selection));
+            meltingTemperature = this.TemperatureCalculator.calculateTemperature(selection);
+                
 
             if(meltingTemperature > 0) {
-                this.StatusPanel.down("tbtext[cls='meltingTemperatureText']")
-                    .setText(meltingTemperature.toFixed(2) + "&deg;C");
+                this.meltingTemperatureText.el.setHTML(meltingTemperature.toFixed(2) + "&deg;C");
+                this.meltingTemperatureText.el.setStyle("top", "1px");
             }
         }
     },
 
     onSelectionCanceled: function() {
-        this.StatusPanel.down("tbtext[cls='selectionPositionText']").setText("- : -");
-
-        this.StatusPanel.down("tbtext[cls='meltingTemperatureText']").setText("");
+        this.selectionPositionText.el.setHTML("- : -");
+        this.meltingTemperatureText.el.setHTML("");
+        this.meltingTemperatureText.el.setStyle("top", "1px");
     },
 
     onSequenceChanged: function() {
-        this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(
+        this.sequenceLengthText.el.setHTML(
             this.SequenceManager.getSequence().toString().length);
     },
 });

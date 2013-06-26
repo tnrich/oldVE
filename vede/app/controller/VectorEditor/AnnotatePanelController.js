@@ -327,6 +327,9 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
                 this.SelectionLayer.startSelecting();
                 this.SelectionLayer.select(start, end);
+
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this, start, end);
             }
         }
     },

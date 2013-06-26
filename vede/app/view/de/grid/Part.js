@@ -125,10 +125,12 @@ Ext.define('Vede.view.de.grid.Part', {
         }
 
         // If the part is associated with a Eugene rule, add the indicator.
-        var rules = this.DeviceDesignManager.getRulesInvolvingPart(activeProject,
-                                                                   this.getPart());
-        if(rules.getRange().length > 0) {
-            this.addEugeneRuleIndicator();
+        if(this.getPart()) {
+            var rules = this.DeviceDesignManager.getRulesInvolvingPart(activeProject,
+                                                                       this.getPart());
+            if(rules.getRange().length > 0) {
+                this.addEugeneRuleIndicator();
+            }
         }
     },
 

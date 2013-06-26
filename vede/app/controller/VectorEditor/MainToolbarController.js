@@ -233,6 +233,9 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
             "#importBtn": {
                 change: this.onImportBtnChange
             },
+            "#importSequenceMenuItem": {
+                change: this.onImportBtnChange
+            },
             "#circularViewBtn": {
                 click: this.onCircularViewButtonClick
             },

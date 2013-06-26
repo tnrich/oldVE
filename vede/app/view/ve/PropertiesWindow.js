@@ -6,92 +6,74 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
     modal: true,
     layout: {
     	type: 'vbox',
-    	align: 'stretch'
+    	//align: 'stretch'
     },
-    height: 435,
     width: 400,
-    
-    
+    resizable: false,
     initComponent: function() {
     	var me = this;
     	Ext.applyIf(me, {
     		items: [
-		        {
-		        	xtype: 'textfield',
-                    fieldLabel: 'Sequence Name',
-                    id: 'propertiesWindowSequenceNameField',
-                    allowBlank: false,
-		        },
-		        {
-		            xtype: 'textareafield',
-		            fieldLabel: 'Description',
-                    id: 'propertiesWindowDescriptionArea',
-                    height: 100
-		        },
-		        {
-		        	xtype: 'textfield',
-                    fieldLabel: 'Owner',
-                    id: 'propertiesWindowOwnerField',
-                    disabled: true,
-                    disabledCls: 'x-panel',
-		        },
-		        {
-		        	xtype: 'textfield',
-                    fieldLabel: 'Created',
-                    id: 'propertiesWindowCreatedField',
-                    disabled: true,
-                    disabledCls: 'x-panel',
-		        },
-		        {
-		        	xtype: 'textfield',
-                    fieldLabel: 'Last Modified',
-                    id: 'propertiesWindowLastModifiedField',
-                    disabled: true,
-                    disabledCls: 'x-panel',
-		        },
-		        /*{
-		        	xtype: 'gridpanel',
-                    forceFit: true,
-                    id: 'propertiesWindowPermissionsGrid',
-                    
-		        },*/
-		        {
-                    xtype: 'panel',
-                    dock: 'bottom',
-                    border: 0,
-                    height: 50,
-                    dockedItems: [
+                {
+                    xtype: 'container',
+                    layout: 'vbox',
+                    items: [{
+                            xtype: 'textfield',
+                            fieldLabel: 'Sequence Name',
+                            id: 'propertiesWindowSequenceNameField',
+                            allowBlank: false,
+                        }, {
+                            xtype: 'textareafield',
+                            fieldLabel: 'Description',
+                            id: 'propertiesWindowDescriptionArea',
+                            height: 100
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Owner',
+                            id: 'propertiesWindowOwnerField',
+                            disabled: true,
+                            disabledCls: 'x-panel',
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Created',
+                            id: 'propertiesWindowCreatedField',
+                            disabled: true,
+                            disabledCls: 'x-panel',
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Last Modified',
+                            id: 'propertiesWindowLastModifiedField',
+                            disabled: true,
+                            disabledCls: 'x-panel',
+                        },
+                        /*{
+                            xtype: 'gridpanel',
+                            forceFit: true,
+                            id: 'propertiesWindowPermissionsGrid',
+                            
+                        },*/
                         {
-                            xtype: 'panel',
-                            dock: 'top',
-                            layout: {
-                                pack: 'end',
-                                type: 'hbox'
-                            },
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    margin: 10,
-                                    padding: 5,
-                                    text: 'Cancel',
-                                    handler: function() {me.close();}
-                                },
-                                {
-                                    xtype: 'tbseparator'
-                                },
-                                {
+                            xtype: 'container',
+                            layout: "hbox",
+                            items: [{
                                     xtype: 'button',
                                     id: 'propertiesWindowOKButton',
-                                    margin: 10,
-                                    padding: 5,
+                                    margin: 2,
+                                    padding: 2,
                                     text: 'Ok',                                    
+                                }, {
+                                    xtype: 'button',
+                                    margin: 2,
+                                    padding: 2,
+                                    text: 'Cancel',
+                                    handler: function() {me.close();}
                                 }
                             ]
                         }
                     ]
-                }
+                },
 	        ]
     	});
     	me.callParent(arguments);
-    },
+    }
 });
