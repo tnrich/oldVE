@@ -1,4 +1,4 @@
-$image-search-path: '/Users/tim98210/Sites/Teselagen/ve/vede-cp/build/Vede/production/resources';
+$image-search-path: '/Users/eamato/Sites/ve/vede-cp/build/Vede/production/resources';
 $theme-name:  'teselagen' !default;
 $include-ext-abstractcomponent: true;
 $include-ext-abstractmanager: true;
@@ -1059,6 +1059,7 @@ $Vede-resource-path: 'images' !default;
 $relative-image-path-for-uis: $Vede-resource-path;
 @import '../../../sass/src/view/common/ProjectPanelView';
 @import '../../../sass/src/view/common/HeaderPanelView';
+@import '../../../sass/src/view/common/DashboardPanelView';
 @import '../../../sass/src/view/ve/VectorEditorMainToolBar';
 @import '../../../sass/src/view/ve/VectorEditorPanel';
 @import '../../../sass/src/view/AppViewport';

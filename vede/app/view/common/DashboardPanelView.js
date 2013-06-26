@@ -31,7 +31,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         id: 'dashboardButtons',
                         margin: '0 100 0 100',
-                        flex: 0.2,
+                        minHeight: 200,
+                        minWidth: 800,
+                        flex: 0.4,
                         border: 0,
                         style: {
                             borderColor: '#E0E3E6',
@@ -105,11 +107,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         id: 'dashboardStats',
                         margin: '10 100 50 100',
                         flex: 1,
+                        minHeight: 400,
+                        minWidth: 800,
                         border: 0,
-                        style: {
-                            borderColor: '#E0E3E6',
-                            borderStyle: 'solid',
-                        },
                         layout: {
                             type: 'hbox',
                             align: 'stretch'
@@ -120,10 +120,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 cls: 'dashboardStats-container',
                                 margin: '0 0 0 0',
                                 border: 0,
-                                style: {
-                                    borderColor: '#E0E3E6',
-                                    borderStyle: 'solid'
-                                },
                                 flex: 0.5,
                                 maxHeight: 320,
                                 layout: {
@@ -135,13 +131,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'container',
                                         cls: 'dashProjectsData',
                                         margin: '10 10 10 10',
-                                        border: 1,
                                         width: 430,
                                         flex: 0.5,
-                                        style: {
-                                            borderColor: 'rgb(0, 116, 194)',
-                                            borderStyle: 'solid'
-                                        },
                                         id: 'projectsCountBox',
                                         layout: {
                                             type: 'hbox',
@@ -151,22 +142,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             {
                                                 xtype: 'container',
                                                 cls: 'projectsCountBox-icon',
-                                                border: 1,
                                                 flex: .6,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                }
                                             },
                                             {
                                                 xtype: 'container',
                                                 cls: 'projectsCountBox-data',
-                                                border: 1,
                                                 flex: 1,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                },
                                                 layout: {
                                                     type: 'vbox',
                                                     align: 'stretch'
@@ -176,22 +157,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         xtype: 'textfield',
                                                         cls: 'projectsCountBox-num',
                                                         border: 0,
-                                                        flex: 1,
-                                                        text: null,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
+                                                        flex: .8,
+                                                        text: null
                                                     },
                                                     {
                                                         xtype: 'textfield',
                                                         cls: 'projectsCountBox-desc',
-                                                        border: 0,
                                                         flex: .6,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
+                                                        border: 0,
                                                     }
                                                 ]
                                             }
@@ -201,13 +174,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'container',
                                         cls: 'dashDesignsData',
                                         margin: '10 10 10 10',
-                                        border: 1,
                                         width: 430,
                                         flex: 0.5,
-                                        style: {
-                                            borderColor: 'rgb(0, 116, 194)',
-                                            borderStyle: 'solid'
-                                        },
                                         id: 'designsCountBox',
                                         layout: {
                                             type: 'hbox',
@@ -217,22 +185,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             {
                                                 xtype: 'container',
                                                 cls: 'designsCountBox-icon',
-                                                border: 1,
                                                 flex: .6,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                }
                                             },
                                             {
                                                 xtype: 'container',
                                                 cls: 'designsCountBox-data',
-                                                border: 1,
                                                 flex: 1,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                },
                                                 layout: {
                                                     type: 'vbox',
                                                     align: 'stretch'
@@ -244,19 +202,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         border: 0,
                                                         flex: 1,
                                                         text: null,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }                                                    },
+                                                    },                         
                                                     {
                                                         xtype: 'textfield',
                                                         cls: 'designsCountBox-desc',
                                                         border: 0,
                                                         flex: .6,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
                                                     }
                                                 ]
                                             }
@@ -270,10 +221,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 cls: 'dashboardStats-container2',
                                 margin: '0 0 0 0',
                                 border: 0,
-                                style: {
-                                    borderColor: '#E0E3E6',
-                                    borderStyle: 'solid'
-                                },
                                 flex: 0.5,
                                 maxHeight: 320,
                                 layout: {
@@ -285,12 +232,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'container',
                                         cls: 'dashSequencesData',
                                         margin: '10 10 10 10',
-                                        border: 1,
                                         flex: 0.5,
-                                        style: {
-                                            borderColor: 'rgb(0, 116, 194)',
-                                            borderStyle: 'solid'
-                                        },
                                         id: 'sequencesCountBox',
                                         layout: {
                                             type: 'hbox',
@@ -300,22 +242,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             {
                                                 xtype: 'container',
                                                 cls: 'sequencesCountBox-icon',
-                                                border: 1,
                                                 flex: .6,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                }
                                             },
                                             {
                                                 xtype: 'container',
                                                 cls: 'sequencesCountBox-data',
-                                                border: 1,
                                                 flex: 1,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                },
                                                 layout: {
                                                     type: 'vbox',
                                                     align: 'stretch'
@@ -327,20 +259,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         border: 0,
                                                         flex: 1,
                                                         text: null,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
                                                     },
                                                     {
                                                         xtype: 'textfield',
                                                         cls: 'sequencesCountBox-desc',
                                                         border: 0,
                                                         flex: .6,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
                                                     }
                                                 ]
                                             }
@@ -350,12 +274,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'container',
                                         cls: 'dashPartsData',
                                         margin: '10 10 10 10',
-                                        border: 1,
                                         flex: 0.5,
-                                        style: {
-                                            borderColor: 'rgb(0, 116, 194)',
-                                            borderStyle: 'solid'
-                                        },
                                         id: 'partsCountBox',
                                         layout: {
                                             type: 'hbox',
@@ -365,22 +284,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             {
                                                 xtype: 'container',
                                                 cls: 'partsCountBox-icon',
-                                                border: 1,
                                                 flex: .6,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                }
                                             },
                                             {
                                                 xtype: 'container',
                                                 cls: 'partsCountBox-data',
-                                                border: 1,
                                                 flex: 1,
-                                                style: {
-                                                    borderColor: 'rgb(0, 116, 194)',
-                                                    borderStyle: 'solid'
-                                                },
                                                 layout: {
                                                     type: 'vbox',
                                                     align: 'stretch'
@@ -392,20 +301,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         border: 0,
                                                         flex: 1,
                                                         text: null,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
                                                     },
                                                     {
                                                         xtype: 'textfield',
                                                         cls: 'partsCountBox-desc',
                                                         border: 0,
                                                         flex: .6,
-                                                        style: {
-                                                            borderColor: 'rgb(0, 116, 194)',
-                                                            borderStyle: 'solid'
-                                                        }
                                                     }
                                                 ]
                                             }

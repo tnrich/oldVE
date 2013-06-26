@@ -258,7 +258,6 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                                 for (var j=0; j < sequencesNames.length; j++) {
                                                     if (sequencesNames[j].match(text)) {
                                                         var conflictName = sequencesNames[j];
-                                                        
                                                             Ext.MessageBox.show({
                                                                 title: "Name",
                                                                 msg: "A sequence with the name  <i> <q>"+ conflictName +"</q> </i>  already exists in this project. <p> Please enter another name:",
@@ -276,8 +275,6 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                                                 items: [
                                                                     {
                                                                         xtype: "textfield",
-                                                                        cls: "sequencePrompt-box-field",
-                                                                        fieldCls: "sequencePrompt-box-field",
                                                                         layout: {
                                                                             align: "center"
                                                                         },
