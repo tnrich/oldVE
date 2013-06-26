@@ -116,8 +116,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             {
             	xtype: 'menuitem',
                 text: 'Properties...',
-                id: 'propertiesMenuItem',
-                disabled: true
+                id: 'propertiesMenuItem'
             }]
          }
      },
@@ -180,6 +179,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'selectInverseMenuItem',
                 text: 'Select Inverse'
+            }, {
+                xtype: 'menuseparator'
+            }, {
+                xtype: 'menucheckitem',
+                id: 'sequenceLinearMenuItem',
+                text: 'Sequence Linear'
             }, {
                 xtype: 'menuseparator'
             }, {

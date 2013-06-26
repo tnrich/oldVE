@@ -87,6 +87,10 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
     },
 
+    onSequenceLinearMenuItemCheckChange: function(checkitem, checked) {
+        this.sequenceManager.setCircular(!checked);
+    },
+
     onReverseComplementMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
     },
@@ -277,6 +281,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     onSequenceManagerChanged: function(sequenceManager) {
     	Ext.getCmp("createNewFeatureMenuItem").disable();
+        Ext.getCmp("sequenceLinearMenuItem").setChecked(
+                                        !sequenceManager.getCircular(), true);
+
     	this.sequenceManager = sequenceManager;
     },
     
@@ -298,7 +305,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     	Ext.getCmp('propertiesWindowCreatedField').setFieldStyle('border-color:transparent;background-color:transparent');
     	Ext.getCmp('propertiesWindowLastModifiedField').setFieldStyle('border-color:transparent;background-color:transparent');
     	
-    	Ext.getCmp('propertiesWindowSequenceNameField').setValue(this.sequenceManager.toGenbank().getLocus().locusName);
+    	Ext.getCmp('propertiesWindowSequenceNameField').setValue(
+            Teselagen.manager.ProjectManager.workingSequence.get("name"));
 
     	propertiesWindow.show();
     	propertiesWindow.center();
@@ -306,7 +314,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     
     onPropertiesWindowOKButtonClick: function() {
     	var name = Ext.getCmp('propertiesWindowSequenceNameField').getValue();
-    	if(name==null || name.match(/^\s*$/) || name.length==0) {
+    	if(name == null || name.match(/^\s*$/) || name.length==0) {
     		Ext.getCmp('propertiesWindowSequenceNameField').setFieldStyle("border-color:red");
     	} else {
     		var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
@@ -323,20 +331,14 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     				if(name!=oldName) {
 	    				// Put better way of alerting user. The following line of code is just temporary.
 	    				// Following code isn't completely correct. It's just in place for testing purposes.
-	    				alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+	    				Ext.alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
 						return;
     				}
     			}
     		}
-    		var format = workingSequence.data.sequenceFileFormat;
-    		var genbank = this.sequenceManager.toGenbank();
-    		var locus = genbank.getLocus();
-    		locus.locusName = name;
-    		genbank.setLocus(locus);
-    		
-    		workingSequence.data.name = name;
-    		workingSequence.data.sequenceFileContent = genbank.toString();
-    		selectedProj.sequences().add(workingSequence);	
+
+            this.sequenceManager.setName(name);
+            workingSequence.set("name", name);
     		workingSequence.save({
                 callback: function () {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
@@ -346,9 +348,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                 }
             });
     		
-    		// Needs something to re-render pie.
-    		
-    		//debugger;
     		Ext.getCmp('PropertiesWindow').close();
     	}
     },
@@ -387,6 +386,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             },
             "#selectInverseMenuItem": {
                 click: this.onSelectInverseMenuItemClick
+            },
+            "#sequenceLinearMenuItem": {
+                checkchange: this.onSequenceLinearMenuItemCheckChange
             },
             "#reverseComplementMenuItem": {
                 click: this.onReverseComplementMenuItemClick

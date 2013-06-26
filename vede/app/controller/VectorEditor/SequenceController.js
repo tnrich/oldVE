@@ -54,9 +54,6 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
 
-    listeners:{
-    },
-
     init: function() {
         this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
         this.DNATools = Teselagen.bio.sequence.DNATools;

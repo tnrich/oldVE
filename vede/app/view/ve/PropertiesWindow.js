@@ -21,7 +21,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                             xtype: 'textfield',
                             fieldLabel: 'Sequence Name',
                             id: 'propertiesWindowSequenceNameField',
-                            allowBlank: false,
+                            allowBlank: false
                         }, {
                             xtype: 'textareafield',
                             fieldLabel: 'Description',
