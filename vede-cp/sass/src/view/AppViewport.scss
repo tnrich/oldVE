@@ -571,6 +571,14 @@ border-color: #E0E3E6;
   font-weight: bold;
 }
 
+.sequencePrompt-box input {
+  width: 200px;
+}
+
+.sequencePrompt-box table {
+  margin: 0 auto;
+}
+
 #DashboardPanel-body {
   border-top: none;
   background: rgba(255,255,255,0.5);
