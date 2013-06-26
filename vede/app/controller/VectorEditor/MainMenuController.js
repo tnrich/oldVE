@@ -280,7 +280,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     	Ext.getCmp("createNewFeatureMenuItem").enable();
     },
     onSequenceManagerChanged: function(sequenceManager) {
-    	Ext.getCmp("createNewFeatureMenuItem").disable();
         Ext.getCmp("sequenceLinearMenuItem").setChecked(
                                         !sequenceManager.getCircular(), true);
 

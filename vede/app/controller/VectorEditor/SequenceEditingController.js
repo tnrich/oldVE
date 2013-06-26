@@ -13,7 +13,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     VEManager: null,
 
     onPartCreated: function (sequence, part) {
-
         processPrompt = function(btn,text){
             part.set('name',text);
             executeRequest();
@@ -32,11 +31,11 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     name: part.get('name'),
                     part: JSON.stringify(part.data)
                 },
-                success: function (response) {
-            
-            self.VEManager.saveSequence(function(){
-                    //sequence.save({
-                      //  callback: function () {
+                success: function (res) {
+                    var response = JSON.parse(res.responseText);
+
+                    if(response.type === 'success') {
+                        self.VEManager.saveSequence(function(){
                             part.setSequenceFileModel(sequence);
                             part.set('sequencefile_id', sequence.data.id);
                             
@@ -51,35 +50,31 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     toastr.info("Part Sucessfully Created");
                                 }
                             });
-                    //    }
-                    //});
-            });
-            
-                },
-                failure: function(response){
-                    response = JSON.parse(response.responseText);
-                    if(response.type==='error') Ext.MessageBox.prompt('Name', 'There\'s another part in the library using the same name. Please choose a different name', processPrompt);
-                    if(response.type==='warning')
-                    {
-                        Ext.MessageBox.confirm('Confirm', 'The part already exist. Are you sure you want to do that?',
-                        function(btn){
-                            if(btn==='yes')
-                            {
+                        });
+                    } else if(response.type === 'error') {
+                        Ext.Msg.alert('Duplicate Part', 'That exact part already exists in the Part Library.');
+                    } else if(response.type === 'warning') {
+                        Ext.Msg.confirm('Duplicate Part Name', 'A different part with the same name ("' + part.get("name") + '") already exists in the Part Library. Continue to create a new part using this name?', function(btn) {
+                            if(btn === 'yes') {
                                 part.setSequenceFileModel(sequence);
                                 part.set('sequencefile_id', sequence.data.id);
+
                                 part.save({
                                     callback: function () {
+                                        var now = new Date();
+                                        nowTime = Ext.Date.format(now, "g:i:s A  ");
+                                        nowDate = Ext.Date.format(now, "l, F d, Y");
                                         var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-                                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
-                                        parttext.animate({duration: 5000, to: {opacity: 0}});
+                                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
+                                        toastr.options.onclick = null;
+                                        toastr.info("Part Sucessfully Created");
                                     }
                                 });
                             }
                         });
                     }
-                }
+                },
             });
-            
         };
 
         executeRequest();

@@ -1,17 +1,6 @@
 /*
  * @author Doug Hershberger
  */
-Ext.Loader.setConfig({
-    enabled: true,
-    paths: {
-        Ext: '.',
-        'Ext.ux': '../extjs/examples/ux',
-//        Teselagen: './app/teselagen',
-        Vede: './app',
-        'Teselagen.bio': '../biojs/src/teselagen/bio'
-    }
-});
-
 
 Ext.require('Ext.app.Application');
 
@@ -70,7 +59,7 @@ Ext.onReady(function() {
 //		        expect(ctlr.GroupManager.getIsInitialized()).toBeTruthy();
 //		    });
 		});
-		describe("Can work with enzyme groups", function() {
+		xdescribe("Can work with enzyme groups", function() {
 			beforeEach(function(){
 				runs( function(){
 			        simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");

@@ -51,7 +51,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 }
                 else {
                		sequencesLabel.setValue("Sequences");
-                }if (response.numberProjects == 1) {
+                }if (response.numberParts == 1) {
                 	partsLabel.setValue("Part");
                 }
                 else {
