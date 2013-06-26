@@ -94,7 +94,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var inspector = this.inspector;
 
         this.checkCombinatorial(j5collection,function(combinatorial){
-            j5ready = true;
+            var j5ready = true;
             var tmpJ = 0;
             var bins = j5collection.bins().getRange();
             var cnt = bins.length;
@@ -129,7 +129,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
             }
 
-            if (tmpJ<=cnt || names != tmpJ) {j5ready = false;}
+            if (tmpJ < cnt || names != tmpJ) {
+                j5ready = false;
+            }
 
             tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
             tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);

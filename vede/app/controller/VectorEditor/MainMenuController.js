@@ -14,6 +14,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                'Teselagen.utils.FormatUtils',
                "Vede.view.ve.GoToWindow",
                "Vede.view.RestrictionEnzymesManagerWindow",
+               "Vede.view.ve.PropertiesWindow",
                "Vede.view.ve.SelectWindow",
                "Vede.view.ve.SimulateDigestionWindow"],
 
@@ -24,6 +25,10 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     SequenceManagerEvent: null,
     sequenceManager: null,
     VEManager: null,
+
+    onImportBtnChange: function(pBtn) {
+        alert("hi");
+    },
     
     onCutMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.CUT);
@@ -275,52 +280,16 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     	this.sequenceManager = sequenceManager;
     },
     
-    onImportFileMenuItemClick: function() {
-    	// Add something here eventually.
-    	
-//    	debugger; // This debugger is here just for debugging util purposes.   	
-    },
-    
     onPrintSequenceViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printSequenceView();
-    	/*var svgHtml = Ext.getCmp("AnnotateContainer").el.getHTML();
-    	var myWindow = window.open('', '', 'width=200,height=100');
-        myWindow.document.write('<html><head>');
-        myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
-        myWindow.document.write('<script type="text/javascript" src="../../../resources/js/d3.v2.min.js"></script>');
-        myWindow.document.write('</head><body>');
-        myWindow.document.write(svgHtml);
-        myWindow.document.write('</body></html>');
-        myWindow.print();
-        myWindow.close();*/
     },
     
     onPrintCircularViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printCircularView();
-    	/*var svgHtml = d3.select(".pieParent").node().parentNode.parentElement.innerHTML;
-        var myWindow = window.open('', '', 'width=200,height=100');      
-        myWindow.document.write('<html><head>');
-        myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
-        myWindow.document.write('<script type="text/javascript" src="../../../resources/js/d3.v2.min.js"></script>');
-        myWindow.document.write('</head><body>');
-        myWindow.document.write(svgHtml);
-        myWindow.document.write('</body></html>');
-        myWindow.print();
-        myWindow.close();*/
     },
     
     onPrintLinearViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printLinearView();
-    	/*var svgHtml = Ext.getCmp("RailContainer").el.getHTML();
-    	var myWindow = window.open('', '', 'width=200,height=100');      
-        myWindow.document.write('<html><head>');
-        myWindow.document.write('<title>' + this.ProjectManager.workingSequence.data.name + '</title>');
-        myWindow.document.write('<script type="text/javascript" src="../../../resources/js/d3.v2.min.js"></script>');
-        myWindow.document.write('</head><body>');
-        myWindow.document.write(svgHtml);
-        myWindow.document.write('</body></html>');
-        myWindow.print();
-        myWindow.close();*/
     },
     
     onPropertiesMenuItemClick: function() {
@@ -330,8 +299,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     	Ext.getCmp('propertiesWindowLastModifiedField').setFieldStyle('border-color:transparent;background-color:transparent');
     	
     	Ext.getCmp('propertiesWindowSequenceNameField').setValue(this.sequenceManager.toGenbank().getLocus().locusName);
-    	
-    	
+
     	propertiesWindow.show();
     	propertiesWindow.center();
     },
@@ -479,9 +447,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             },
             "#newBlankVectorEditorMenuItem": {
                 click: this.onNewBlankVectorEditorMenuItemClick
-            },
-            "#importFileMenuItem": {
-                click: this.onImportFileMenuItemClick
             },
             "#printSequenceViewMenuItem": {
                 click: this.onPrintSequenceViewMenuItemClick
