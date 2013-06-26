@@ -110,7 +110,7 @@ module.exports = function(app){
                 var hash = crypto.createHash("md5").update(password).digest("hex");
 
                 // Check the user in Mysql
-                query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password=" + hash + " order by j5sessions.id desc limit 1;";
+                query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password='" + hash + "' order by j5sessions.id desc limit 1;";
 
                 app.mysql.query(query, function(err, rows) {
                     if (err||!rows) return res.json({
@@ -126,7 +126,7 @@ module.exports = function(app){
             // Login using sessionID
             if (sessionId && app.program.prod) {
 
-                query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id=" + sessionId + ";";
+                query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id='" + sessionId + "';";
 
                 if (app.mysql) {
                     app.mysql.query(query, function(err, rows) {
