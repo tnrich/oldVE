@@ -256,7 +256,41 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                             if(btn==="ok") {
                                                 if(text === "") {return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this); }
                                                 for (var j=0; j < sequencesNames.length; j++) {
-                                                    if (sequencesNames[j].match(text)) {return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onSequencePromptClosed, this); }
+                                                    if (sequencesNames[j].match(text)) {
+                                                        var conflictName = sequencesNames[j];
+                                                        
+                                                            Ext.MessageBox.show({
+                                                                title: "Name",
+                                                                msg: "A sequence with the name  <i> <q>"+ conflictName +"</q> </i>  already exists in this project. <p> Please enter another name:",
+                                                                buttons: Ext.MessageBox.OKCANCEL,
+                                                                fn: onSequencePromptClosed,
+                                                                prompt: true,
+                                                                value: null,
+                                                                cls: "sequencePrompt-box",
+                                                                style: {
+                                                                    "text-align": "center"
+                                                                },
+                                                                layout: {
+                                                                    align: "center"
+                                                                },
+                                                                items: [
+                                                                    {
+                                                                        xtype: "textfield",
+                                                                        cls: "sequencePrompt-box-field",
+                                                                        fieldCls: "sequencePrompt-box-field",
+                                                                        layout: {
+                                                                            align: "center"
+                                                                        },
+                                                                        width: 50
+                                                                    }
+                                                                ]
+                                                            });
+                                                            return Ext.MessageBox;
+                                                        
+
+                                                        // })
+                                                        // return Ext.MessageBox.prompt("Name", "A sequence with the name  <i> <q>"+ conflictName +"</q> </i>  already exists in this project. <p> Please enter another name:", onSequencePromptClosed, this); }
+                                                    }
                                                 }
                                                 var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                                                     sequenceFileFormat: "GENBANK",
