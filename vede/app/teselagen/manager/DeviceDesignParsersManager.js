@@ -99,8 +99,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             }
 
             Vede.application.fireEvent("ReRenderDECanvas");
-            Vede.application.fireEvent("checkj5Ready");
-
         }
     },
 
