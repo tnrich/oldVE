@@ -17,7 +17,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
              items: [
             {
                 xtype: 'menuitem',
-                text: 'New Blank Vector Editor',
+                text: 'New Sequence',
                 id: 'newBlankVectorEditorMenuItem'
             },                  
             {
