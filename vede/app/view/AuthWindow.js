@@ -99,9 +99,10 @@ Ext.define('Vede.view.AuthWindow', {
 						}]
 					},
 					{
-						xtype: 'textfield',
+						xtype: 'container',
 						id: 'auth-response',
-						border: 0
+						border: 0,
+						width: 350
 					}
 
 					]
