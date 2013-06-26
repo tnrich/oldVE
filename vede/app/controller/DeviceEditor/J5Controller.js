@@ -5,14 +5,15 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", 
+    requires: ["Ext.window.MessageBox",
+               "Teselagen.bio.parsers.GenbankManager", 
+               "Teselagen.constants.Constants", 
                "Teselagen.manager.DeviceDesignManager", 
-               "Teselagen.utils.J5ControlsUtils", 
                "Teselagen.manager.J5CommunicationManager", 
                "Teselagen.manager.ProjectManager", 
-               "Teselagen.bio.parsers.GenbankManager", 
-               "Ext.window.MessageBox",
-               "Teselagen.manager.TasksMonitor"],
+               "Teselagen.manager.TasksMonitor",
+               "Teselagen.utils.J5ControlsUtils", 
+               "Vede.view.de.j5Parameters"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -21,6 +22,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5ParamsWindow: null,
     automationParamsWindow: null,
     inspector: null,
+
+    previousJ5ParameterData: null,
 
     j5Parameters: null,
     j5ParameterFields: [],
@@ -146,6 +149,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         
         this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
 
+        this.previousJ5ParameterData = this.j5Parameters.getData();
         this.populateJ5ParametersDialog();
     },
 
@@ -154,31 +158,22 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.populateJ5ParametersDialog();
     },
 
-    loadServerj5Params: function(){
-        
-    },
-
     resetServerj5Params: function () {
-
-        // var loadingMessage = this.createLoadingMessage();
-
-        // loadingMessage.update(60, "Executing request");
+        this.j5ParamsWindow.setLoading(true);
 
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("GetLastUpdatedUserFiles", ''),
             success: function (response) {
-                // loadingMessage.update(100, "Completed");
-                // loadingMessage.close();
+                self.j5ParamsWindow.setLoading(false);
                 response = JSON.parse(response.responseText);
-                self.j5Parameters.loadValues(response.j5parameters);
+                self.j5Parameters.set(response.j5parameters);
                 self.populateJ5ParametersDialog();
                 isCircular = response.j5parameters.ASSEMBLY_PRODUCT_TYPE == 'circular' ? true : false;
                 Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign().getJ5Collection().set('isCircular',isCircular);
-
             },
             failure: function(responseData, opts) {
-                // loadingMessage.close();
+                self.j5ParamsWindow.setLoading(false);
                 if(responseData)
                 {
                     if(responseData.responseText)
@@ -200,6 +195,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onj5ParamsCancelBtnClick: function () {
+        this.j5Parameters.set(this.previousJ5ParameterData);
         this.j5ParamsWindow.close();
     },
 

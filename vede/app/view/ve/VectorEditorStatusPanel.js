@@ -39,7 +39,7 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         {
             xtype: "tbtext",
             cls: "permissionText",
-            width: 50,
+            width: 60,
             shrinkWrap: false
         }, 
         {
@@ -58,7 +58,11 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         {
             xtype: "tbtext",
             cls: "selectionPositionText",
-            text: "- : -"
+            text: "- : -",
+            style: {
+                "text-align": "center"
+            },
+            width: 110
         }, 
         {
             xtype: "tbseparator"
@@ -67,7 +71,7 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
             xtype: "tbtext",
             cls: "sequenceLengthText",
             text: "0",
-            width: 30,
+            width: 40,
             shrinkWrap: false
         }]
     }]

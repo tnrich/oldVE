@@ -182,7 +182,6 @@ Ext.define('Vede.view.de.grid.Bin', {
         }
 
         return pTotalRows;
-        console.log(pTotalRows);
     },
 
     /**

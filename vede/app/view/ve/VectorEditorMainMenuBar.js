@@ -15,23 +15,9 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
              id: 'veFileMenu',
              minWidth: 140,
              items: [
-                 /*{
-                 xtype: 'filefield',
-                 buttonOnly: true,
-                 id: 'importMenuItem',
-                 buttonConfig: {
-                     border: false,
-                     text: 'Import from File',
-                    listeners: {
-                        click: function() {
-                            Ext.getCmp('veFileMenu').hide();
-                        }
-                    }
-                 }
-             },*/
             {
                 xtype: 'menuitem',
-                text: 'New Blank Vector Editor',
+                text: 'New Sequence',
                 id: 'newBlankVectorEditorMenuItem'
             },                  
             {
@@ -60,7 +46,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             {
                 xtype: 'menuitem',
                 text: 'Share',
-                id: 'shareItem'//,
+                id: 'shareItem',
+                disabled: true
                 /*menu: {
                 	xtype: 'menu',
                 	width: 120,
@@ -71,9 +58,18 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuseparator'
             },
             {
-                xtype: 'menuitem',
-                id: 'importFileMenuItem',
-                text: 'Import File'
+                xtype: 'filefield',
+                buttonOnly: true,
+                cls: 'importSequenceBtn',
+                id: 'importSequenceMenuItem',
+                text: 'Import File',
+                buttonConfig: {
+                    border: false,
+                    text: 'Open a Sequence File',
+                    style: {
+                        left: "-6px"
+                    }
+                }
             },
             {
                 xtype: 'menuitem',
@@ -121,8 +117,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             	xtype: 'menuitem',
                 text: 'Properties...',
                 id: 'propertiesMenuItem'
-            }
-             ]
+            }]
          }
      },
     {
@@ -184,6 +179,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'selectInverseMenuItem',
                 text: 'Select Inverse'
+            }, {
+                xtype: 'menuseparator'
+            }, {
+                xtype: 'menucheckitem',
+                id: 'sequenceLinearMenuItem',
+                text: 'Sequence Linear'
             }, {
                 xtype: 'menuseparator'
             }, {

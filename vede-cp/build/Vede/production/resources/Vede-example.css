@@ -23664,55 +23664,65 @@ img {
 }
 
 /* line 574, ../../../../sass/src/view/AppViewport.scss */
+.sequencePrompt-box input {
+  width: 200px;
+}
+
+/* line 578, ../../../../sass/src/view/AppViewport.scss */
+.sequencePrompt-box table {
+  margin: 0 auto;
+}
+
+/* line 582, ../../../../sass/src/view/AppViewport.scss */
 #DashboardPanel-body {
   border-top: none;
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* line 579, ../../../../sass/src/view/AppViewport.scss */
+/* line 587, ../../../../sass/src/view/AppViewport.scss */
 #projectGrid_Panel_header, #designGrid_Panel_header, #dashboard_StatsPanel_header {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-/* line 584, ../../../../sass/src/view/AppViewport.scss */
+/* line 592, ../../../../sass/src/view/AppViewport.scss */
 #projectGrid_Panel-body, #designGrid_Panel-body, #dashboard_StatsPanel-body {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-/* line 589, ../../../../sass/src/view/AppViewport.scss */
+/* line 597, ../../../../sass/src/view/AppViewport.scss */
 #designGrid_Panel .x-panel-header-default, .x-toolbar-default, #dashboard_BottomPanel .x-panel-header-default {
   border: 0;
   background: none;
   box-shadow: none;
 }
 
-/* line 595, ../../../../sass/src/view/AppViewport.scss */
+/* line 603, ../../../../sass/src/view/AppViewport.scss */
 #designGrid_Panel_header {
   top: 30px !important;
   z-index: 100;
 }
 
-/* line 600, ../../../../sass/src/view/AppViewport.scss */
+/* line 608, ../../../../sass/src/view/AppViewport.scss */
 #designGrid_Panel .x-toolbar-default {
   z-index: 110;
 }
 
 /*Device Editor*/
-/* line 604, ../../../../sass/src/view/AppViewport.scss */
+/* line 612, ../../../../sass/src/view/AppViewport.scss */
 .j5runPanel .x-field-label-cell {
   vertical-align: middle !important;
 }
 
-/* line 608, ../../../../sass/src/view/AppViewport.scss */
+/* line 616, ../../../../sass/src/view/AppViewport.scss */
 .grid-DSF {
   border-right-color: red !important;
   border-right-style: solid !important;
   border-right-width: 1px !important;
 }
 
-/* line 614, ../../../../sass/src/view/AppViewport.scss */
+/* line 622, ../../../../sass/src/view/AppViewport.scss */
 .binHeader, .binHeader .x-panel-body-default {
   background-color: #fefefe;
   border-color: #ECF0F1;
@@ -23724,18 +23734,18 @@ img {
   -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-/* line 625, ../../../../sass/src/view/AppViewport.scss */
+/* line 633, ../../../../sass/src/view/AppViewport.scss */
 .binHeader:hover, .binHeader .x-panel-body-default:hover {
   border-color: #4A4B4C;
 }
 
-/* line 629, ../../../../sass/src/view/AppViewport.scss */
+/* line 637, ../../../../sass/src/view/AppViewport.scss */
 .binHeader-selected, .binHeader-selected .x-panel-body-default {
   background-color: #f0f0f0 !important;
   border-color: #006CAB !important;
 }
 
-/* line 634, ../../../../sass/src/view/AppViewport.scss */
+/* line 642, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell, .gridPartCell .x-panel-body-default {
   font-size: 13px;
   background-color: #fefefe;
@@ -23745,34 +23755,34 @@ img {
   -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-/* line 643, ../../../../sass/src/view/AppViewport.scss */
+/* line 651, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell:hover, .gridPartCell .x-panel-body-default:hover {
   border-color: #4A4B4C !important;
 }
 
-/* line 648, ../../../../sass/src/view/AppViewport.scss */
+/* line 656, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-alert:hover, .gridPartCell-alert .x-panel-body-default:hover {
   border-color: #e10000;
 }
 
-/* line 652, ../../../../sass/src/view/AppViewport.scss */
+/* line 660, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-selected, .gridPartCell-selected .x-panel-body-default {
   background-color: #ECF0F1 !important;
   border-color: #4A4B4C !important;
   /*border-color: #006CAB;*/
 }
 
-/* line 658, ../../../../sass/src/view/AppViewport.scss */
+/* line 666, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-highlighted, .gridPartCell-highlighted .x-panel-body-default {
   border-color: #006CAB !important;
 }
 
-/* line 662, ../../../../sass/src/view/AppViewport.scss */
+/* line 670, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-alert, .gridPartCell-alert .x-panel-body-default {
   border-color: #e10000;
 }
 
-/* line 666, ../../../../sass/src/view/AppViewport.scss */
+/* line 674, ../../../../sass/src/view/AppViewport.scss */
 .mapAlert {
   color: white;
   background: #ff7373;
@@ -23781,82 +23791,82 @@ img {
   border-radius: 4px;
 }
 
-/* line 674, ../../../../sass/src/view/AppViewport.scss */
+/* line 682, ../../../../sass/src/view/AppViewport.scss */
 .fasConflictIndicator {
   position: absolute;
   top: 2px;
   left: 2px;
 }
 
-/* line 680, ../../../../sass/src/view/AppViewport.scss */
+/* line 688, ../../../../sass/src/view/AppViewport.scss */
 .eugeneRuleIndicator {
   position: absolute;
   bottom: 2px;
   right: 2px;
 }
 
-/* line 686, ../../../../sass/src/view/AppViewport.scss */
+/* line 694, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorTab {
   border: 1px solid #E9E9E9;
   border-top: none;
 }
 
-/* line 691, ../../../../sass/src/view/AppViewport.scss */
+/* line 699, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorBody {
   border: 0px;
 }
 
-/* line 695, ../../../../sass/src/view/AppViewport.scss */
+/* line 703, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorTitlePanel .x-toolbar-default {
   background: #FDFDFD;
 }
 
-/* line 699, ../../../../sass/src/view/AppViewport.scss */
+/* line 707, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorMenuPanel .x-toolbar-default {
   background: #FDFDFD;
 }
 
-/* line 703, ../../../../sass/src/view/AppViewport.scss */
+/* line 711, ../../../../sass/src/view/AppViewport.scss */
 #DeviceEditorMainToolPanel {
   background: #F8F8F8;
 }
 
-/* line 707, ../../../../sass/src/view/AppViewport.scss */
+/* line 715, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorToolPanel .x-toolbar-default {
   background: #F8F8F8;
 }
 
-/* line 711, ../../../../sass/src/view/AppViewport.scss */
+/* line 719, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorPartsBar {
   background: #125B85;
 }
 
-/* line 715, ../../../../sass/src/view/AppViewport.scss */
+/* line 723, ../../../../sass/src/view/AppViewport.scss */
 .x-toolbar .x-toolbar-separator-horizontal {
   border-left: 1px solid #035363;
   border-right: 1px solid #05628D;
 }
 
-/* line 720, ../../../../sass/src/view/AppViewport.scss */
+/* line 728, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
   background: rgba(0, 0, 0, 0.3);
   box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.5);
   border: black;
 }
 
-/* line 725, ../../../../sass/src/view/AppViewport.scss */
+/* line 733, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorCanvas .x-layout-fit {
   border: none;
 }
 
-/* line 729, ../../../../sass/src/view/AppViewport.scss */
+/* line 737, ../../../../sass/src/view/AppViewport.scss */
 .flipBinButton {
   background: #ECF0F1;
   border: 1px solid #E0E3E6;
   border-radius: 2px;
 }
 
-/* line 735, ../../../../sass/src/view/AppViewport.scss */
+/* line 743, ../../../../sass/src/view/AppViewport.scss */
 .flipImage {
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
@@ -23866,59 +23876,59 @@ img {
   -webkit-transform: rotate(180deg);
 }
 
-/* line 744, ../../../../sass/src/view/AppViewport.scss */
+/* line 752, ../../../../sass/src/view/AppViewport.scss */
 .designGrid {
   width: 5000px !important;
 }
 
-/* line 748, ../../../../sass/src/view/AppViewport.scss */
+/* line 756, ../../../../sass/src/view/AppViewport.scss */
 .InspectorPanel {
   border: 0px !important;
   background: #ECF0F1;
 }
 
-/* line 753, ../../../../sass/src/view/AppViewport.scss */
+/* line 761, ../../../../sass/src/view/AppViewport.scss */
 .InspectorPanel .x-panel-header-default-framed-top {
   border-radius: 0px;
 }
 
-/* line 757, ../../../../sass/src/view/AppViewport.scss */
+/* line 765, ../../../../sass/src/view/AppViewport.scss */
 .InspectorPanel .x-panel-body-default-framed {
   z-index: 1000;
   background: #ECF0F1;
 }
 
-/* line 762, ../../../../sass/src/view/AppViewport.scss */
+/* line 770, ../../../../sass/src/view/AppViewport.scss */
 .PartPropertiesForm .x-panel-header-default, .forcedAssemblyStrategyForm .x-panel-header-default, .eugeneRulesForm .x-panel-header-default, .collectionInfoTab .x-panel-header-default {
   background: #ECF0F1 !important;
   border: #ECF0F1;
 }
 
-/* line 767, ../../../../sass/src/view/AppViewport.scss */
+/* line 775, ../../../../sass/src/view/AppViewport.scss */
 .PartPropertiesForm .x-panel-body-default, .forcedAssemblyStrategyForm .x-panel-body-default, .eugeneRulesForm .x-panel-body-default {
   background: #FFF !important;
   border-radius: 4px;
   border: 0px;
 }
 
-/* line 773, ../../../../sass/src/view/AppViewport.scss */
+/* line 781, ../../../../sass/src/view/AppViewport.scss */
 .partInfoTab .x-panel-body-default {
   background: #ECF0F1;
 }
 
-/* line 777, ../../../../sass/src/view/AppViewport.scss */
+/* line 785, ../../../../sass/src/view/AppViewport.scss */
 .collectionInfoTab .x-panel-body-default {
   border-radius: 4px;
   border: 0px;
 }
 
-/* line 782, ../../../../sass/src/view/AppViewport.scss */
+/* line 790, ../../../../sass/src/view/AppViewport.scss */
 .inspectorGrid, .eugeneRulesGrid {
   border: 1px solid #E0E3E6;
   border-radius: 2px;
 }
 
-/* line 787, ../../../../sass/src/view/AppViewport.scss */
+/* line 795, ../../../../sass/src/view/AppViewport.scss */
 .inspectorGrid .x-grid-row-selected .x-grid-cell {
   background: #E0E3E6 !important;
   border-color: #E0E3E6 !important;
@@ -23926,37 +23936,37 @@ img {
   font-weight: 600;
 }
 
-/* line 794, ../../../../sass/src/view/AppViewport.scss */
+/* line 802, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorCanvas, .DeviceEditorCanvas .x-layout-fit {
   width: auto !important;
 }
 
-/* line 798, ../../../../sass/src/view/AppViewport.scss */
+/* line 806, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorCanvas .x-panel-body-default {
   font-size: 13px;
 }
 
-/* line 802, ../../../../sass/src/view/AppViewport.scss */
+/* line 810, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Window label {
   font-size: 10px !important;
 }
 
-/* line 806, ../../../../sass/src/view/AppViewport.scss */
+/* line 814, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Window, .j5Parameters_Window .x-window-body {
   background: #F8F8F8;
 }
 
-/* line 810, ../../../../sass/src/view/AppViewport.scss */
+/* line 818, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Buttons {
   background: #F8F8F8;
 }
 
-/* line 814, ../../../../sass/src/view/AppViewport.scss */
+/* line 822, ../../../../sass/src/view/AppViewport.scss */
 .warning-wrap {
   margin-bottom: 15px;
 }
 
-/* line 818, ../../../../sass/src/view/AppViewport.scss */
+/* line 826, ../../../../sass/src/view/AppViewport.scss */
 .warning-note {
   height: 10px;
   width: 10px;
@@ -23966,7 +23976,7 @@ img {
   margin: 10px;
 }
 
-/* line 827, ../../../../sass/src/view/AppViewport.scss */
+/* line 835, ../../../../sass/src/view/AppViewport.scss */
 .openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
@@ -23974,17 +23984,17 @@ img {
   -webkit-transition: background .2s ease-in-out;
 }
 
-/* line 834, ../../../../sass/src/view/AppViewport.scss */
+/* line 842, ../../../../sass/src/view/AppViewport.scss */
 .openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner {
   color: white;
 }
 
-/* line 838, ../../../../sass/src/view/AppViewport.scss */
+/* line 846, ../../../../sass/src/view/AppViewport.scss */
 .x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
   background: #006CAB;
 }
 
-/* line 842, ../../../../sass/src/view/AppViewport.scss */
+/* line 850, ../../../../sass/src/view/AppViewport.scss */
 .addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn {
   background: #4A4B4C;
   transition: background .2s ease-in-out;
@@ -23992,43 +24002,43 @@ img {
   -webkit-transition: background .2s ease-in-out;
 }
 
-/* line 849, ../../../../sass/src/view/AppViewport.scss */
+/* line 857, ../../../../sass/src/view/AppViewport.scss */
 .addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner {
   color: white;
 }
 
-/* line 853, ../../../../sass/src/view/AppViewport.scss */
+/* line 861, ../../../../sass/src/view/AppViewport.scss */
 .x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over {
   background: #333234;
 }
 
-/* line 857, ../../../../sass/src/view/AppViewport.scss */
+/* line 865, ../../../../sass/src/view/AppViewport.scss */
 .selectPartFocus {
   background: #e74c3c;
 }
 
-/* line 861, ../../../../sass/src/view/AppViewport.scss */
+/* line 869, ../../../../sass/src/view/AppViewport.scss */
 .selectPartFocus:hover {
   background: #d70000;
 }
 
-/* line 865, ../../../../sass/src/view/AppViewport.scss */
+/* line 873, ../../../../sass/src/view/AppViewport.scss */
 .btnDisabled {
   background: #E0E3E6;
   color: #FFF;
 }
 
-/* line 870, ../../../../sass/src/view/AppViewport.scss */
+/* line 878, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-body {
   background: #ECF0F1;
 }
 
-/* line 877, ../../../../sass/src/view/AppViewport.scss */
+/* line 885, ../../../../sass/src/view/AppViewport.scss */
 .j5button .x-toolbar .x-toolbar-item {
   margin-left: 10px !important;
 }
 
-/* line 881, ../../../../sass/src/view/AppViewport.scss */
+/* line 889, ../../../../sass/src/view/AppViewport.scss */
 .j5button {
   position: relative !important;
   left: 0 !important;
@@ -24040,7 +24050,7 @@ img {
   margin: 0px 10px 0px 0px !important;
 }
 
-/* line 892, ../../../../sass/src/view/AppViewport.scss */
+/* line 900, ../../../../sass/src/view/AppViewport.scss */
 .importEugeneRulesBtn {
   margin: 4px 0px 0px 27px;
   border: 0 !important;
@@ -24048,22 +24058,22 @@ img {
   background: none;
 }
 
-/* line 899, ../../../../sass/src/view/AppViewport.scss */
+/* line 907, ../../../../sass/src/view/AppViewport.scss */
 .importEugeneRulesBtn .x-btn-inner {
   font-size: 11px !important;
 }
 
-/* line 903, ../../../../sass/src/view/AppViewport.scss */
+/* line 911, ../../../../sass/src/view/AppViewport.scss */
 .j5button .x-btn-inner {
   color: white;
 }
 
-/* line 907, ../../../../sass/src/view/AppViewport.scss */
+/* line 915, ../../../../sass/src/view/AppViewport.scss */
 .x-form-file-btn .x-btn-inner {
   padding-top: 0px !important;
 }
 
-/* line 911, ../../../../sass/src/view/AppViewport.scss */
+/* line 919, ../../../../sass/src/view/AppViewport.scss */
 .status-note {
   height: 10px;
   width: 10px;
@@ -24073,120 +24083,120 @@ img {
   margin-top: 3px;
 }
 
-/* line 920, ../../../../sass/src/view/AppViewport.scss */
+/* line 928, ../../../../sass/src/view/AppViewport.scss */
 .status-note-completed {
   background: #77FF73;
 }
 
-/* line 924, ../../../../sass/src/view/AppViewport.scss */
+/* line 932, ../../../../sass/src/view/AppViewport.scss */
 .status-note-warning {
   background: #FFD24D;
 }
 
-/* line 928, ../../../../sass/src/view/AppViewport.scss */
+/* line 936, ../../../../sass/src/view/AppViewport.scss */
 .status-note-failed {
   background: #e74c3c;
 }
 
 /*j5 Reports*/
-/* line 932, ../../../../sass/src/view/AppViewport.scss */
+/* line 940, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body, .j5ReportsPanel .x-menu {
   background: #333234 !important;
   border: 0 none;
   color: white;
 }
 
-/* line 938, ../../../../sass/src/view/AppViewport.scss */
+/* line 946, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel .x-menu-item-text {
   background: none;
   color: white;
 }
 
-/* line 943, ../../../../sass/src/view/AppViewport.scss */
+/* line 951, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel .x-menu-item-active {
   background: black;
   color: #00b7ff;
   border-color: black;
 }
 
-/* line 950, ../../../../sass/src/view/AppViewport.scss */
+/* line 958, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel .x-menu-icon-separator {
   border: 0 none;
   width: 0px;
 }
 
-/* line 955, ../../../../sass/src/view/AppViewport.scss */
+/* line 963, ../../../../sass/src/view/AppViewport.scss */
 .j5ResponseTextField {
   top: 50px !important;
   left: 11px !important;
   width: 410px !important;
 }
 
-/* line 961, ../../../../sass/src/view/AppViewport.scss */
+/* line 969, ../../../../sass/src/view/AppViewport.scss */
 .j5ResponseTextField .x-form-display-field {
   color: white;
 }
 
-/* line 965, ../../../../sass/src/view/AppViewport.scss */
+/* line 973, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub .x-tab-default-top .x-tab-inner {
   font-weight: 500;
 }
 
-/* line 969, ../../../../sass/src/view/AppViewport.scss */
+/* line 977, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub .x-tab-top-active .x-tab-inner {
   font-weight: bold;
 }
 
-/* line 973, ../../../../sass/src/view/AppViewport.scss */
+/* line 981, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub .x-tab-top-active, .j5InfoTab-Sub .x-tab-default-top {
   background: none;
   border: 0 none !important;
   border-bottom: 0 none !important;
 }
 
-/* line 979, ../../../../sass/src/view/AppViewport.scss */
+/* line 987, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub-Advanced .x-tab-default-top {
   background: none !important;
   border: 0 none !important;
   border-bottom-width: 0 none !important;
 }
 
-/* line 985, ../../../../sass/src/view/AppViewport.scss */
+/* line 993, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub-Advanced .x-tab-top-active {
   background: #ECF0F1 !important;
   border: 0 none !important;
   border-bottom-width: 0 none !important;
 }
 
-/* line 991, ../../../../sass/src/view/AppViewport.scss */
+/* line 999, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub-Advanced-Body {
   border: 0 none;
 }
 
-/* line 995, ../../../../sass/src/view/AppViewport.scss */
+/* line 1003, ../../../../sass/src/view/AppViewport.scss */
 .j5detailpanel-fillcontent {
   text-align: center;
   border-radius: 4px;
   background: #ECF0F1;
 }
 
-/* line 1001, ../../../../sass/src/view/AppViewport.scss */
+/* line 1009, ../../../../sass/src/view/AppViewport.scss */
 .assembly-label {
   position: relative;
   top: 4px;
 }
 
-/* line 1006, ../../../../sass/src/view/AppViewport.scss */
+/* line 1014, ../../../../sass/src/view/AppViewport.scss */
 .x-box-scroller-top .x-menu-scroll-top {
   display: none;
 }
 
-/* line 1010, ../../../../sass/src/view/AppViewport.scss */
+/* line 1018, ../../../../sass/src/view/AppViewport.scss */
 .x-box-scroller-bottom .x-menu-scroll-bottom {
   display: none;
 }
 
-/* line 1014, ../../../../sass/src/view/AppViewport.scss */
+/* line 1022, ../../../../sass/src/view/AppViewport.scss */
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {
   background: #f54242;
   color: white;
@@ -24198,7 +24208,7 @@ img {
   left: 420px !important;
 }
 
-/* line 1025, ../../../../sass/src/view/AppViewport.scss */
+/* line 1033, ../../../../sass/src/view/AppViewport.scss */
 .progress {
   overflow: hidden;
   height: 18px;
@@ -24219,7 +24229,7 @@ img {
   border-radius: 3px;
 }
 
-/* line 1045, ../../../../sass/src/view/AppViewport.scss */
+/* line 1053, ../../../../sass/src/view/AppViewport.scss */
 .progress .bar {
   width: 0%;
   height: 18px;
@@ -24252,7 +24262,7 @@ img {
   transition: width 0.6s ease;
 }
 
-/* line 1077, ../../../../sass/src/view/AppViewport.scss */
+/* line 1085, ../../../../sass/src/view/AppViewport.scss */
 .progress-striped .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24267,14 +24277,14 @@ img {
   background-size: 40px 40px;
 }
 
-/* line 1091, ../../../../sass/src/view/AppViewport.scss */
+/* line 1099, ../../../../sass/src/view/AppViewport.scss */
 .progress.active .bar {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
   -moz-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
-/* line 1097, ../../../../sass/src/view/AppViewport.scss */
+/* line 1105, ../../../../sass/src/view/AppViewport.scss */
 .progress-danger .bar {
   background-color: #dd514c;
   background-image: -moz-linear-gradient(top, #ee5f5b, #c43c35);
@@ -24287,7 +24297,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
 }
 
-/* line 1109, ../../../../sass/src/view/AppViewport.scss */
+/* line 1117, ../../../../sass/src/view/AppViewport.scss */
 .progress-danger.progress-striped .bar {
   background-color: #ee5f5b;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24298,7 +24308,7 @@ img {
   background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 1119, ../../../../sass/src/view/AppViewport.scss */
+/* line 1127, ../../../../sass/src/view/AppViewport.scss */
 .progress-success .bar {
   background-color: #5eb95e;
   background-image: -moz-linear-gradient(top, #62c462, #57a957);
@@ -24311,7 +24321,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
 
-/* line 1131, ../../../../sass/src/view/AppViewport.scss */
+/* line 1139, ../../../../sass/src/view/AppViewport.scss */
 .progress-success.progress-striped .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24322,7 +24332,7 @@ img {
   background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 1141, ../../../../sass/src/view/AppViewport.scss */
+/* line 1149, ../../../../sass/src/view/AppViewport.scss */
 .progress-info .bar {
   background-color: #4bb1cf;
   background-image: -moz-linear-gradient(top, #5bc0de, #339bb9);
@@ -24338,7 +24348,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bc0de', endColorstr='#339bb9', GradientType=0);
 }
 
-/* line 1156, ../../../../sass/src/view/AppViewport.scss */
+/* line 1164, ../../../../sass/src/view/AppViewport.scss */
 .progress-info.progress-striped .bar {
   background-color: #5bc0de;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24350,54 +24360,54 @@ img {
 }
 
 @-webkit-keyframes progress-bar-stripes {
-  /* line 1167, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1175, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1169, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1177, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @-moz-keyframes progress-bar-stripes {
-  /* line 1173, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1181, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1175, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1183, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @keyframes progress-bar-stripes {
-  /* line 1179, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1187, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1181, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1189, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
-/* line 1185, ../../../../sass/src/view/AppViewport.scss */
+/* line 1193, ../../../../sass/src/view/AppViewport.scss */
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner {
   color: black;
   text-decoration: underline;
 }
 
-/* line 1190, ../../../../sass/src/view/AppViewport.scss */
+/* line 1198, ../../../../sass/src/view/AppViewport.scss */
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner:hover {
   color: blue;
   text-decoration: underline;
 }
 
-/* line 1195, ../../../../sass/src/view/AppViewport.scss */
+/* line 1203, ../../../../sass/src/view/AppViewport.scss */
 .gridcolumn-wrap-text {
   white-space: normal;
 }
