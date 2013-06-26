@@ -140,7 +140,7 @@ module.exports = function(app, express) {
             return;
         }
         setInterval(keepAlive, 60000);
-        if (app.testing.enabled) {
+        if (app.program.debug) {
             console.log("Retrieving a valid sessionId");
             var query = 'select * from j5sessions order by id desc limit 1;';
             connection.query(query, function(err, rows, fields) {
