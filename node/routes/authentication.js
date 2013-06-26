@@ -113,7 +113,7 @@ module.exports = function(app){
                 query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password=" + hash + " order by j5sessions.id desc limit 1;";
 
                 app.mysql.query(query, function(err, rows) {
-                    if (err||!rows) res.json({
+                    if (err||!rows) return res.json({
                         "msg": "Invalid session"
                     }, 405);
                     if (rows[0]) getOrCreateUser(req, res, rows[0].username);
@@ -130,7 +130,7 @@ module.exports = function(app){
 
                 if (app.mysql) {
                     app.mysql.query(query, function(err, rows) {
-                        if (err||!rows) res.json({
+                        if (err||!rows) return res.json({
                             "msg": "Invalid session"
                         }, 405);
                         getOrCreateUser(req, res, rows[0].username);
