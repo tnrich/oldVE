@@ -73,7 +73,14 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
              },
              "#enzymeListSelector-digest": {
                  change: this.onEnzymeListChange
-             }
+             },
+             "button[cls=simulateDigestionSaveButton]": {
+                click: this.onSaveButtonClick
+            },
+            "button[cls=simulateDigestionCancelButton]": {
+                click: this.onCancelButtonClick
+            },
+
          });
          this.application.on({
              SequenceManagerChanged: this.getSequenceManagerData,
@@ -104,10 +111,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
          var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
          var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
-         this.managerWindow.on({
-             beforeclose: this.onSimulateDigestionWindowClosed,
-             scope: this
-             });
          this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
          this.digestManager.digestPanel = this.digestPanel;
          this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
@@ -121,7 +124,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
                  Ext.each(me.GroupManager.getGroupNames(), function(name) {
                      groupSelector.store.add({"name": name});
                  });
-                 me.digestManager.filterEnzymesInternal(searchCombobox, groupSelector);
+                 me.digestManager.filterEnzymes(searchCombobox, groupSelector);
                  me.updateLadderLane(ladderSelector);
                  me.digestManager.drawGel();
              }
@@ -130,13 +133,25 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
             }
          });
      },
+
      /**
-      * Calls the manager to save the currently selected enzymes
-      * @param {Ext.panel.Panel} the window that is closed
-      */
-     onSimulateDigestionWindowClosed: function(){
-         this.digestManager.onClose();
-     },
+     * Saves to database.
+     */
+    onSaveButtonClick: function() {
+        this.UserManager.update(function(pSuccess) {
+            if (!pSuccess) {
+                console.warn("Unable to save restriction enzymes");
+            }
+        });
+    },
+    
+    /**
+     * Closes the window.
+     */
+    onCancelButtonClick: function() {
+        this.managerWindow.close();
+    },
+
      /**
       * Redraws the gel when the window is resized
       * @param {Ext.draw.Surface} drawingSurface the surface the gel is drawn on
