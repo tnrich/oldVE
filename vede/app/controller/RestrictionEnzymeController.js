@@ -201,7 +201,6 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Saves to database and closes the window.
      */
     onSaveButtonClick: function() {
-        this.managerWindow.close();
         this.UserManager.update(function(pSuccess) {
             if (!pSuccess) {
                 console.warn("Unable to save restriction enzymes");
