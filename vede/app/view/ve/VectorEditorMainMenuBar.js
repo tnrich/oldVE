@@ -20,13 +20,13 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'New Sequence',
                 id: 'newBlankVectorEditorMenuItem'
             },                  
-            {
+            /*{
                 //Disabled until VE is refactored to open multiple tabs.
             	xtype: 'menuitem',
                 text: 'Close',
                 disabled: true,
                 id: 'closeMenuItem'
-            },
+            },*/
             {
                 xtype: 'menuseparator'
             },
@@ -40,7 +40,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Save As...',
                 id: 'saveAsMenuItem'
             },
-            {
+            /*{
                 xtype: 'menuseparator'
             },
             {
@@ -48,12 +48,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Share',
                 id: 'shareItem',
                 disabled: true
-                /*menu: {
+                menu: {
                 	xtype: 'menu',
                 	width: 120,
                 	items []
-                }*/
-            },
+                }
+            },*/
             {
                 xtype: 'menuseparator'
             },
@@ -110,14 +110,14 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                     }]
                 }
             },
-            {
+            /*{
                 xtype: 'menuseparator'
             },
             {
             	xtype: 'menuitem',
                 text: 'Properties...',
                 id: 'propertiesMenuItem'
-            }]
+            }*/]
          }
      },
     {
@@ -196,7 +196,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'rebaseMenuItem',
                 text: 'Rotate to Here'
-            },{
+            }/*,{
                 xtype: 'menuseparator'
             },
             {
@@ -204,12 +204,6 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 id: 'createNewFeatureMenuItem',
                 text: 'Annotate as new Sequence Feature',
                 disabled: true
-            }/*, Removed in favor of a context menu.
-            {
-                xtype: 'menuitem',
-                id: 'editSequenceFeatureMenuItem',
-                text: 'Edit Sequence Feature'//,
-                //disabled: true
             }*/
             ]
         }
