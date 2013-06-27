@@ -69,7 +69,10 @@ Ext.define('Vede.view.ve.SelectWindow', {
                             margin: 2,
                             maxHeight: 28,
                             width: 69,
-                            text: 'Cancel'
+                            text: 'Cancel',
+                            handler: function() {
+                                this.up('window').close();
+                            }
                         }
                     ]
                 }

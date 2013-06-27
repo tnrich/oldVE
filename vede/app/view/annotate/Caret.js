@@ -28,7 +28,8 @@ Ext.define("Vede.view.annotate.Caret", {
     render: function() {
         d3.selectAll("#caretSVG").remove();
         this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
-                            .attr("id", "caretSVG");
+                            .attr("id", "caretSVG")
+                            .style("pointer-events", "none");
 
         var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
         if(location)
@@ -43,7 +44,8 @@ Ext.define("Vede.view.annotate.Caret", {
                 .attr("from", "hidden")
                 .attr("to", "visible")
                 .attr("dur", this.self.TIMER_REFRESH_SPEED)
-                .attr("repeatCount", "indefinite");
+                .attr("repeatCount", "indefinite")
+                .style("pointer-events", "none");
         }
     },
  });

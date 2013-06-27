@@ -14,6 +14,7 @@
 module.exports = function(db) {
 
 	var mongoose = require("mongoose");
+    var crypto = require("crypto");
 
 	var registerSchema = function(name, schema) {
 		db.model(name, schema);
@@ -89,7 +90,8 @@ module.exports = function(db) {
 	registerSchema('sequence', SequenceSchema);
 
 	var PartSchema = new Schema({
-		FQDN: { type : String, index: { unique: true, dropDups: true }}, 
+		FQDN: {type : String},
+        definitionHash: {type: String},
 		project_id : { type: oIDRef, ref: 'project' },
 		user_id : { type: oIDRef, ref: 'user' },
 		name: String,
@@ -109,10 +111,26 @@ module.exports = function(db) {
 		phantom           :  Boolean
 	});
 
+    PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});
+
 	PartSchema.pre('save', function(next) {
 		this.id = this._id;
 		next();
 	});
+
+    PartSchema.statics.generateDefinitionHash = function(user, project, part, cb) {
+        db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
+            var hashArray = [part.genbankStartBP,
+                             part.endBP,
+                             part.revComp];
+
+            if(file) {
+                hashArray.concat([file.FQDN, file.hash]);
+            }
+
+            return cb(crypto.createHash('md5').update(hashArray.join("")).digest("hex"));
+        });
+    };
 
 	db.model('part', PartSchema);
 

@@ -29,6 +29,8 @@ Ext.define('Vede.controller.AuthWindowController', {
         Ext.getCmp('AuthWindow').destroy();
     },
     onLogoutClick: function (button, e, options) {
+        
+        Ext.util.Cookies.clear('session');
         var self = this;
         Ext.Ajax.request({
             url: '/api/logout',
@@ -42,6 +44,25 @@ Ext.define('Vede.controller.AuthWindowController', {
 
     onReconnectClick: function(){
         Teselagen.manager.AuthenticationManager.Login();
+    },
+
+    onRemember: function(el, newValue, oldValue, eOpts){
+        if(newValue) 
+        {
+            // Remember case
+            //Ext.util.Cookies.set( name, value, [expires], [path], [domain], [secure] )
+            //var date = new Date();
+            //date.setTime(date.getTime()+(30*1000));
+            
+            var sampleSession = JSON.parse('{"username":"eabeliuk","sessionId":"ccbd7666da980471870af9a232e9a6c5","userId":"3"}');
+            console.warn("Setting test sampleSession");
+            Ext.util.Cookies.set( "session", JSON.stringify(sampleSession) );            
+        }
+        else
+        {
+            // Not remember case
+            Ext.util.Cookies.clear('session');
+        }
     },
 
     init: function () {
@@ -78,6 +99,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             "#auth-config-btn": {
                 click: this.onConfigClick
             },
+            "#rememberSession": {
+                change: this.onRemember
+            }
         });
     },
 
