@@ -667,8 +667,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
                 // SET THE LABEL FIELD. DO NOT STORE AS AN ATTRIBUTE
 
-                if (k===0 && this.isALabel(key) ) { //HERE 8/20
-                    //console.log("found a label: " + key );
+                if (this.isALabel(key) ) {
                     label = value;
                     //don't add as attribute
                 } else {
@@ -680,7 +679,6 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                         //}
                     });
                 }
-                //console.log(label);
             }
 
             newFt = {
@@ -697,7 +695,6 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                 "seq:feature" : newFt
             });
         }
-        //console.log(pGenbank.getLocus().getLinear());
 
         // MAKE JSON
         json = {

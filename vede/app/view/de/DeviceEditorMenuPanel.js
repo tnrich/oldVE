@@ -191,8 +191,8 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
             }
         }, {
             xtype: 'button',
-            text: 'Make DNA',
-            cls: 'makednabutton j5button',
+            text: 'J5 Optimize',
+            cls: 'j5button',
             menuAlign: 'tr-br?'
         }]
     }]

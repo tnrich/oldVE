@@ -527,11 +527,31 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         };
     },
 
+    onRunJ5Event: function() {
+        this.onRunJ5BtnClick();
+    },
 
+    onJ5RunStatusChanged: function(runId, runStatus) {
+        var buttonsToEnable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
+        buttonsToEnable = buttonsToEnable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+        var button;
 
-    onRunJ5BtnClick: function (btn) {
+        for(var i = 0; i < buttonsToEnable.length; i++) {
+            button = buttonsToEnable[i];
+            button.enable();
+            button.setLoading(false);
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Submit Run to j5");
+            }
+        }
+    },
+
+    onRunJ5BtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
+
+        this.onOpenJ5();
 
         // var loadingMessage = currentTab.down('container[cls="j5progressContainer"]').show();
         // var responseMessage = currentTab.down('displayfield[cls="j5ResponseTextField"]').show();
@@ -605,6 +625,26 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         //responseMessage.setValue("Saving design");
 
+        var buttonsToDisable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
+        buttonsToDisable = buttonsToDisable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+        var button;
+
+        for(var i = 0; i < buttonsToDisable.length; i++) {
+            button = buttonsToDisable[i];
+
+            button.disable();
+
+            if(button.cls === "runj5Btn") {
+                button.setLoading({msg: "Running J5"});
+
+                button.loadMask.el.setStyle("background-color", "transparent");
+                button.loadMask.msgEl.setStyle("background-color", "transparent");
+                button.loadMask.msgTextEl.setStyle("background-color", "transparent");
+
+                button.setText("");
+            }
+        }
+
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
             if (!Teselagen.manager.TasksMonitor.disabled) {
@@ -634,8 +674,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDistributePCRBtn: function () {
 
-        console.log("Distribute PCR Reactions");
-
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -656,7 +694,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 // loadingMessage.update(100, "Completed");
                 // loadingMessage.close();
             } else {
-                console.log(responseData.responseText);
                 // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
@@ -779,7 +816,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onCondenseAssembliesBtnClick: function (btn) {
 
-        console.log("Condense Assembly Files");
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -804,7 +840,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 // loadingMessage.update(100, "Completed");
                 // loadingMessage.close();
             } else {
-                console.log(responseData.responseText);
                 // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
@@ -933,7 +968,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         });
         
-        this.application.on("openj5", this.onOpenJ5, this);
+        this.application.on("runj5", this.onRunJ5Event, this);
+        this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
