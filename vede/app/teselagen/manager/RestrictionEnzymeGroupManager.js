@@ -344,7 +344,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
                     Vede.application.fireEvent("ActiveEnzymesChanged");
                     me.setActiveEnzymesChanged(false);
                 }
-                this.Logger.info("User restriction enzyme groups saved", true, {});
+                me.Logger.notifyInfo("User restriction enzyme groups saved");
             }
         });
     },

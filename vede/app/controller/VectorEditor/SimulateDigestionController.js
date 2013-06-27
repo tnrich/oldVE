@@ -11,7 +11,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          "Teselagen.bio.sequence.DNATools",
          "Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.manager.SimulateDigestionManager",
-         "Teselagen.manager.UserManager",
          "Ext.util.TaskRunner"],
     /*
      * The enzymeGroupManager that manages the groups of enzymes in this control
@@ -46,14 +45,11 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       */
      enzymeListSelector: null,
      
-     UserManager: null,
-
      /**
       * @member Vede.controller.SimulateDigestionController
       */
      init: function() {
          this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-         this.UserManager = Teselagen.manager.UserManager;
          this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
          this.DNATools = Teselagen.bio.sequence.DNATools;
          this.filterTaskRunner = new Ext.util.TaskRunner();
@@ -126,7 +122,8 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          });
          me.digestManager.filterEnzymes(searchCombobox, groupSelector);
          me.updateLadderLane(ladderSelector);
-         me.digestManager.drawGel();
+         this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
+//         me.digestManager.drawGel();
      },
 
      /**
@@ -176,8 +173,8 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       * Redigests your sequence with selected enzymes from the enzymeListSelector
       */
      onEnzymeListChange: function(){
-         this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
-         this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
+         this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
+         this.enzymeListSelector.toField.getStore().sort("name", "ASC");
          // Add if statement when other user groups are added
          //if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
              this.GroupManager.setActiveEnzymesChanged(true);

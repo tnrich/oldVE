@@ -11,6 +11,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
                "Teselagen.manager.UserManager", "Vede.view.RestrictionEnzymesManagerWindow"],
 
     GroupManager: null,
+    Logger: null,
     UserManager: null,
     managerWindow: null,
 
@@ -25,6 +26,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+        this.Logger = Teselagen.utils.Logger;
         this.UserManager = Teselagen.manager.UserManager;
 
         this.control({
@@ -232,7 +234,11 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onGroupPrompt: function(pIsNew, pBtnId, pText) {
         if (pBtnId==="ok") {
-            if (!pText || this.userEnzymeGroupSelector.findRecordByValue(pText)) {
+            var foundRec = this.userEnzymeGroupSelector.findRecordByValue(pText);
+            if (!pText || foundRec) {
+                if (foundRec) {
+                    this.Logger.notifyWarn(Ext.String.format("The group '{0}' already exists.", pText));
+                }
                 // Name is not unique so show prompt again.
                 var msgbox = this.groupPrompt();
                 // For some reason the prompt will be placed behind the manager window.

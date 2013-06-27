@@ -18,23 +18,95 @@ Ext.define("Teselagen.utils.Logger", {
     },
 
     /**
-     * Logs and/or notifies an informational message
+     * Logs and notifies an informational message
      * @param {String} msg Output message
-     * @param {Boolean} [log] True (default) if this message will go to the log.
      * @param {Object} [notify] Notification options. If defined, this message will go to the notifier.
      */
-    info: function(pMsg, pLog, pNotify) {
-        var log = pLog || true;
-        var notify = pNotify || null;
-        if (log) {
-            this.logger.info(pMsg);
-        }
-        if (notify) {
-            this.reset();
-            this.notifier.info(pMsg, notify.title, notify);
-        }
+    info: function(pMsg, pNotify) {
+        this.logInfo(pMsg);
+        this.notifyInfo(pMsg, pNotify);
     },
     
+    /**
+     * Logs an informational message
+     * @param {String} msg Output message
+     */
+    logInfo: function(pMsg) {
+        this.logger.info(pMsg);
+    },
+    
+    /**
+     * Notifies an informational message
+     * @param {String} msg Output message
+     * @param {Object} [opts] Notification options.
+     */
+    notifyInfo: function(pMsg, pOpts) {
+        var opts = pOpts || {};
+        this.reset();
+        this.notifier.info(pMsg, opts.title, opts);
+    },
+
+    /**
+     * Logs and notifies a warning
+     * @param {String} msg Output message
+     * @param {Object} [notify] Notification options. If defined, this message will go to the notifier.
+     */
+    warn: function(pMsg, pNotify) {
+        this.logWarn(pMsg);
+        this.notifyWarn(pMsg, pNotify);
+    },
+    
+    /**
+     * Logs a warning
+     * @param {String} msg Output message
+     */
+    logWarn: function(pMsg) {
+        this.logger.warn(pMsg);
+    },
+    
+    /**
+     * Notifies a warning
+     * @param {String} msg Output message
+     * @param {Object} [opts] Notification options.
+     */
+    notifyWarn: function(pMsg, pOpts) {
+        var opts = pOpts || {};
+        this.reset();
+        this.notifier.warning(pMsg, opts.title, opts);
+    },
+
+    /**
+     * Logs and notifies an error
+     * @param {String} msg Output message
+     * @param {Object} [notify] Notification options. If defined, this message will go to the notifier.
+     */
+    error: function(pMsg, pNotify) {
+        this.logError(pMsg);
+        this.notifyError(pMsg, pNotify);
+    },
+    
+    /**
+     * Logs an error
+     * @param {String} msg Output message
+     */
+    logError: function(pMsg) {
+        this.logger.error(pMsg);
+    },
+    
+    /**
+     * Notifies an error
+     * @param {String} msg Output message
+     * @param {Object} [opts] Notification options.
+     */
+    notifyError: function(pMsg, pOpts) {
+        var opts = pOpts || {};
+        this.reset();
+        this.notifier.error(pMsg, opts.title, opts);
+    },
+
+    /**
+     * Reset the notifier
+     */
     reset: function() {
         this.notifier.options.onclick = null;
     }
