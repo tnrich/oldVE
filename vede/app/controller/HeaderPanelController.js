@@ -9,6 +9,9 @@ Ext.define('Vede.controller.HeaderPanelController', {
     header: null,
 
     helpWindow : null,
+    onHomeBtnClick: function () {
+        Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN)
+    },
     onHelpBtnClick: function(button, e, options) {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },
@@ -62,6 +65,9 @@ Ext.define('Vede.controller.HeaderPanelController', {
             "#headerPanel": {
                 afterrender: this.onRender
             },
+            "#home_btn": {
+                click: this.onHomeBtnClick
+            },
      		"#help_btn": {
      			click: this.onHelpBtnClick
      		},
@@ -77,5 +83,6 @@ Ext.define('Vede.controller.HeaderPanelController', {
 
     onRender: function() {
         Ext.get("help_btn").on('click', this.onHelpBtnClick);
+        Ext.get("home_btn").on('click', this.onHomeBtnClick);
     }
 });

@@ -17,7 +17,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     autoAuthURL : null,
 
     updateSplashScreenMessage: function(message, stop) {
-        if (Ext.get("splash-text")) {Ext.get("splash-text").update(message); }
+        if (Ext.get("splash-text")) {Ext.get("splash-text").update(message);}
         if (stop) {
             Ext.select(".x-mask-msg.splashscreen div:nth(2)").setStyle("background-image", "url()");
             if (splashscreen) Ext.get("splash-retry").show();
@@ -58,7 +58,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     else
                     {
                         Ext.create("Vede.view.AuthWindow").show();
-                        updateServerPath();                        
+                        updateServerPath();
                     }
                 },
                 failure: function() {
@@ -105,7 +105,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 self.updateSplashScreenMessage(self.authResponse.msg);
                 if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
                 Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user);
-                Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
                 if (cb) { return cb(true); }// for Testing
