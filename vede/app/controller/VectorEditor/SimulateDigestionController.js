@@ -80,7 +80,9 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
             "button[cls=simulateDigestionCancelButton]": {
                 click: this.onCancelButtonClick
             },
-
+            "window[cls=simulateDigestion]": {
+                 close: this.onWindowClose
+             }
          });
          this.application.on({
              SequenceManagerChanged: this.getSequenceManagerData,
@@ -120,6 +122,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
                  if(!me.GroupManager.getIsInitialized()) {
                      me.GroupManager.initialize();
                  }
+                 me.GroupManager.setActiveEnzymesChanged(false);
                  //Add names of groups to combobox
                  Ext.each(me.GroupManager.getGroupNames(), function(name) {
                      groupSelector.store.add({"name": name});
@@ -187,6 +190,10 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      onEnzymeListChange: function(){
          this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
          this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
+         // Add if statement when other user groups are added
+         //if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
+             this.GroupManager.setActiveEnzymesChanged(true);
+         //}
      },
      /**
       * Updates the Ladder based on the selection in the ladder drop down.
@@ -194,6 +201,16 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       */
      updateLadderLane: function(combobox){
          this.digestManager.updateLadderLane(combobox.getValue());
-     }
+     },
+     
+     /**
+     * After window is closed.
+     */
+    onWindowClose: function() {
+        if (this.GroupManager.getActiveEnzymesChanged()) {
+            this.GroupManager.changeActiveGroup();
+            this.application.fireEvent("ActiveEnzymesChanged");
+        }
+    }
 
 });
