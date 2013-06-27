@@ -22860,46 +22860,6 @@ body.x-nbr .x-tab-default-right-frameInfo {
   border-radius: 4px;
 }
 
-/* line 3, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.dashProjectsData, .dashDesignsData, .dashSequencesData, .dashPartsData {
-  border: 2px solid #006CAB;
-  border-radius: 3px;
-  background: #006CAB;
-}
-
-/* line 9, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.projectsCountBox-icon, .designsCountBox-icon, .sequencesCountBox-icon, .partsCountBox-icon {
-  border: 1px solid #006CAB;
-  background: #006CAB;
-}
-
-/* line 14, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.projectsCountBox-data, .designsCountBox-data, .sequencesCountBox-data, .partsCountBox-data {
-  background: #1585C5;
-  border: 1px solid #1585C5;
-}
-
-/* line 19, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.projectsCountBox-num input, .designsCountBox-num input, .sequencesCountBox-num input, .partsCountBox-num input {
-  background: #1585C5;
-  font-size: 54px;
-  color: white;
-  padding: 1px 12px 2px 3px;
-  text-align: right;
-  border: none;
-}
-
-/* line 28, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.projectsCountBox-desc input, .designsCountBox-desc input, .sequencesCountBox-desc input, .partsCountBox-desc input {
-  background: #1585C5;
-  font-size: 28px;
-  color: white;
-  text-transform: uppercase;
-  padding: 1px 12px 2px 3px;
-  text-align: right;
-  border: none;
-}
-
 /* line 2, ../../../../sass/src/view/ve/VectorEditorMainToolBar.scss */
 #VectorEditorMainToolBar {
   background: #F8F8F8;
@@ -24017,7 +23977,7 @@ img {
 }
 
 /* line 835, ../../../../sass/src/view/AppViewport.scss */
-.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn {
+.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
@@ -24025,12 +23985,12 @@ img {
 }
 
 /* line 842, ../../../../sass/src/view/AppViewport.scss */
-.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner {
+.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .buildBtn .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner {
   color: white;
 }
 
 /* line 846, ../../../../sass/src/view/AppViewport.scss */
-.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
+.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
   background: #006CAB;
 }
 

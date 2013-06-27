@@ -98,7 +98,7 @@ Ext.define('Vede.view.AuthWindow', {
 							items: [{
 								name: 'remember',
 								inputValue: '1',
-								id: 'checkbox1'
+								id: 'rememberSession'
 							}]
 						}]
 					},

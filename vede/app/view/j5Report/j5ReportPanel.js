@@ -75,15 +75,42 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         border: 0,
         dockedItems: [{
                     xtype: 'toolbar',
-                    layout: 'fit',
-                    height: 50,
+                    height: 100,
                     dock: 'top',
-                    items: [{
-                        xtype: 'button',
-                        margin: 10,
-                        text: 'Download Results',
-                        cls: 'downloadResults',
-                        overCls: 'downloadResults-over'
+                    layout:'vbox',
+                    margin: '5 0 0 0',
+                    items: [
+                    {
+                        xtype: 'container',
+                        height:50,
+                        width: '100%',
+                        flex: 1,
+                        layout: 'fit',
+                        items: [
+                            {
+                               xtype: 'button',
+                                margin: '0 0 5 0',
+                                layout:'fit',
+                                text: 'Build',
+                                cls: 'buildBtn',
+                                overCls: 'buildBtn-over' 
+                            }
+                        ]
+                    },{
+                        xtype: 'container',
+                        height:50,
+                        flex: 1,
+                        width: '100%',
+                        layout: 'fit',
+                        items: [
+                            {
+                                xtype: 'button',
+                                margin: '0 0 5 0',
+                                text: 'Download Results',
+                                cls: 'downloadResults',
+                                overCls: 'downloadResults-over'
+                            }
+                        ]
                     }]
                 }],
         items: [

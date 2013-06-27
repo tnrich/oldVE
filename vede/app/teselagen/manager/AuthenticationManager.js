@@ -6,7 +6,7 @@
 
 Ext.define("Teselagen.manager.AuthenticationManager", {
     requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor",
-               "Teselagen.manager.UserManager", "Teselagen.utils.SystemUtils"],
+               "Teselagen.manager.UserManager", "Teselagen.utils.SystemUtils","Ext.util.Cookies"],
     alias: "AuthenticationManager",
     singleton: true,
     mixins: {
@@ -33,6 +33,17 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
+
+        if(Ext.util.Cookies.get("session"))
+        {
+            console.log("Authenticating using cookies");
+            var session = JSON.parse(Ext.util.Cookies.get("session"));
+            this.username = session.username;
+            if(session.userId) return this.sendAuthRequest(session, cb);
+        }
+
+        // Then, check Teselagen Platform credentials
+
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
 
         var updateServerPath = function(){
@@ -54,9 +65,14 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     //console.log(response);
                     var session = JSON.parse(response.responseText);
                     self.username = session.username;
-                    if(session.userId) self.sendAuthRequest(session, cb);
+                    if(session.userId)
+                    {
+                        console.log("Authenticating using dev2.teselagen.com");
+                        self.sendAuthRequest(session, cb);
+                    }
                     else
                     {
+                        console.log("Authenticating using login form");
                         Ext.create("Vede.view.AuthWindow").show();
                         updateServerPath();
                     }

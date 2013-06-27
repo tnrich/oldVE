@@ -317,7 +317,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onJ5buttonClick: function (button, e, options) {
-        Vede.application.fireEvent("openj5");
+        Vede.application.fireEvent("runj5");
         toastr.options.onclick = null;
         toastr.info("Design Saved");
     },
