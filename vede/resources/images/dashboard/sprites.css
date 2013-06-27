@@ -1,0 +1,13 @@
+.icon-stack,.icon-cube {
+	display: inline-block;
+	width: 96px;
+	height: 96px;
+	background-image: url(sprites.png);
+	background-repeat: no-repeat;
+}
+.icon-stack {
+	background-position: 0 0;
+}
+.icon-cube {
+	background-position: -192px 0;
+}

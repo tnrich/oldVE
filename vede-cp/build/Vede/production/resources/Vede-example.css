@@ -22861,25 +22861,108 @@ body.x-nbr .x-tab-default-right-frameInfo {
 }
 
 /* line 3, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.home-dash-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url(images/dashboard/home.png);
+  background-repeat: no-repeat;
+}
+
+/* line 11, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.tour-icon, .manuals-icon, .newProject-icon {
+  display: inline-block;
+  width: 32px !important;
+  height: 32px !important;
+  background-image: url(images/dashboard/top_sprites.png);
+  background-repeat: no-repeat;
+  top: 16px;
+  margin: 0 auto;
+}
+
+/* line 21, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.manuals-icon {
+  background-position: 0 0 !important;
+}
+
+/* line 25, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.tour-icon {
+  background-position: -64px 0 !important;
+}
+
+/* line 29, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.newProject-icon {
+  background-position: -128px 0 !important;
+}
+
+/* line 33, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.newSequence-icon {
+  display: inline-block;
+  width: 32px !important;
+  height: 32px !important;
+  background-image: url(images/dashboard/sequence-add-icon.png);
+  background-repeat: no-repeat;
+  top: 16px;
+  margin: 0 auto;
+}
+
+/* line 43, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.projects-icon, .designs-icon {
+  display: inline-block;
+  width: 64px !important;
+  height: 64px !important;
+  background-image: url(images/dashboard/stat_sprites.png);
+  background-repeat: no-repeat;
+}
+
+/* line 51, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.sequences-icon {
+  display: inline-block;
+  width: 64px !important;
+  height: 64px !important;
+  background-image: url(images/dashboard/sequence-icon.png);
+  background-repeat: no-repeat;
+}
+
+/* line 59, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.parts-icon {
+  display: inline-block;
+  width: 64px !important;
+  height: 64px !important;
+  background-image: url(images/dashboard/part-icon.png);
+  background-repeat: no-repeat;
+}
+
+/* line 67, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.projects-icon {
+  background-position: -128px 0 !important;
+}
+
+/* line 71, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.designs-icon {
+  background-position: 0 0 !important;
+}
+
+/* line 75, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .dashProjectsData, .dashDesignsData, .dashSequencesData, .dashPartsData {
   border: 2px solid #006CAB;
   border-radius: 3px;
   background: #006CAB;
 }
 
-/* line 9, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 81, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-icon, .designsCountBox-icon, .sequencesCountBox-icon, .partsCountBox-icon {
   border: 1px solid #006CAB;
   background: #006CAB;
 }
 
-/* line 14, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 86, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-data, .designsCountBox-data, .sequencesCountBox-data, .partsCountBox-data {
   background: #1585C5;
   border: 1px solid #1585C5;
 }
 
-/* line 19, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 91, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-num input, .designsCountBox-num input, .sequencesCountBox-num input, .partsCountBox-num input {
   background: #1585C5;
   font-size: 54px;
@@ -22889,12 +22972,12 @@ body.x-nbr .x-tab-default-right-frameInfo {
   border: none;
 }
 
-/* line 28, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 100, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-desc input, .designsCountBox-desc input, .sequencesCountBox-desc input, .partsCountBox-desc input {
   background: #1585C5;
   font-size: 28px;
   color: white;
-  text-transform: uppercase;
+  text-transform: lowercase;
   padding: 1px 12px 2px 3px;
   text-align: right;
   border: none;
