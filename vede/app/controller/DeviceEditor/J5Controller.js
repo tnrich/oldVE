@@ -528,14 +528,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onRunJ5Event: function() {
-        this.onOpenJ5();
         this.onRunJ5BtnClick();
     },
 
     onJ5RunStatusChanged: function(runId, runStatus) {
-        console.log(runId);
-        console.log(runStatus);
-
         var buttonsToEnable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
         buttonsToEnable = buttonsToEnable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
         var button;
@@ -554,6 +550,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onRunJ5BtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
+
+        this.onOpenJ5();
 
         // var loadingMessage = currentTab.down('container[cls="j5progressContainer"]').show();
         // var responseMessage = currentTab.down('displayfield[cls="j5ResponseTextField"]').show();
@@ -676,8 +674,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDistributePCRBtn: function () {
 
-        console.log("Distribute PCR Reactions");
-
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -698,7 +694,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 // loadingMessage.update(100, "Completed");
                 // loadingMessage.close();
             } else {
-                console.log(responseData.responseText);
                 // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
@@ -821,7 +816,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onCondenseAssembliesBtnClick: function (btn) {
 
-        console.log("Condense Assembly Files");
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -846,7 +840,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 // loadingMessage.update(100, "Completed");
                 // loadingMessage.close();
             } else {
-                console.log(responseData.responseText);
                 // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
