@@ -117,35 +117,23 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.digestManager.digestPanel = this.digestPanel;
          this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
          this.digestManager.enzymeListSelector = this.enzymeListSelector;
-         this.UserManager.loadUser(function(pSuccess) {
-             if (pSuccess) {
-                 if(!me.GroupManager.getIsInitialized()) {
-                     me.GroupManager.initialize();
-                 }
-                 me.GroupManager.setActiveEnzymesChanged(false);
-                 //Add names of groups to combobox
-                 Ext.each(me.GroupManager.getGroupNames(), function(name) {
-                     groupSelector.store.add({"name": name});
-                 });
-                 me.digestManager.filterEnzymes(searchCombobox, groupSelector);
-                 me.updateLadderLane(ladderSelector);
-                 me.digestManager.drawGel();
-             }
-             else {
-                console.error("Error launching Simulate Digestion");
-            }
+         if(!me.GroupManager.getIsInitialized()) {
+             me.GroupManager.initialize();
+         }
+         //Add names of groups to combobox
+         Ext.each(me.GroupManager.getGroupNames(), function(name) {
+             groupSelector.store.add({"name": name});
          });
+         me.digestManager.filterEnzymes(searchCombobox, groupSelector);
+         me.updateLadderLane(ladderSelector);
+         me.digestManager.drawGel();
      },
 
      /**
      * Saves to database.
      */
     onSaveButtonClick: function() {
-        this.UserManager.update(function(pSuccess) {
-            if (!pSuccess) {
-                console.warn("Unable to save restriction enzymes");
-            }
-        });
+        this.GroupManager.saveUserGroups();
     },
     
     /**
@@ -207,10 +195,8 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      * After window is closed.
      */
     onWindowClose: function() {
-        if (this.GroupManager.getActiveEnzymesChanged()) {
-            this.GroupManager.changeActiveGroup();
-            this.application.fireEvent("ActiveEnzymesChanged");
-        }
+        // Reload user to rollback any unsaved changes
+        this.GroupManager.loadUserGroups();
     }
 
 });

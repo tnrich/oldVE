@@ -81,41 +81,31 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector = this.getEnzymeSelector();
         var groupSelector = this.getEnzymeGroupSelector();
         
-        this.UserManager.loadUser(function(pSuccess) {
-            if (pSuccess) {
-                if(!me.GroupManager.getIsInitialized()) {
-                    me.GroupManager.initialize();
-                }
-                me.GroupManager.setActiveEnzymesChanged(false);
+        if(!me.GroupManager.getIsInitialized()) {
+            me.GroupManager.initialize();
+        }
 
-
-                Ext.each(me.GroupManager.getGroupNames(), function(name) {
-                    groupSelector.store.add({name: name});
-                });
-
-                // Set the value in the combobox to the first element by default.
-                groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
-
-                // Load data into the enzyme selector.
-                var startGroup = me.GroupManager.groupByName(groupSelector.getValue());
-                var groupArray = [];
-                Ext.each(startGroup.getEnzymes(), function(enzyme) {
-                    groupArray.push({name: enzyme.getName()});
-                });
-                me.enzymeSelector.store.loadData(groupArray);
-                me.enzymeSelector.bindStore(me.enzymeSelector.store);
-
-                // Set user enzyme selector
-                me.GroupManager.initActiveUserGroup();
-                me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
-                me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
-                me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
-            }
-            else {
-                console.error("Error launching Restriction Enzyme Manager");
-            }
+        Ext.each(me.GroupManager.getGroupNames(), function(name) {
+            groupSelector.store.add({name: name});
         });
 
+        // Set the value in the combobox to the first element by default.
+        groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
+
+        // Load data into the enzyme selector.
+        var startGroup = me.GroupManager.groupByName(groupSelector.getValue());
+        var groupArray = [];
+        Ext.each(startGroup.getEnzymes(), function(enzyme) {
+            groupArray.push({name: enzyme.getName()});
+        });
+        me.enzymeSelector.store.loadData(groupArray);
+        me.enzymeSelector.bindStore(me.enzymeSelector.store);
+
+        // Set user enzyme selector
+        me.GroupManager.initActiveUserGroup();
+        me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
+        me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
+        me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
     },
     
     /**
@@ -210,11 +200,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Saves to database and closes the window.
      */
     onSaveButtonClick: function() {
-        this.UserManager.update(function(pSuccess) {
-            if (!pSuccess) {
-                console.warn("Unable to save restriction enzymes");
-            }
-        });
+        this.GroupManager.saveUserGroups();
     },
     
     /**
@@ -272,9 +258,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * After window is closed.
      */
     onWindowClose: function() {
-        if (this.GroupManager.getActiveEnzymesChanged()) {
-            this.GroupManager.changeActiveGroup();
-            this.application.fireEvent("ActiveEnzymesChanged");
-        }
+        // Reload user to rollback any unsaved changes
+        this.GroupManager.loadUserGroups();
     }
 });
