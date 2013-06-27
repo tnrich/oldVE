@@ -518,6 +518,7 @@
         "x": 10,
         "y": 735
       },
+      "gradient": "top",
       "id": "button-1020",
       "radius": {
         "bl": 3,
