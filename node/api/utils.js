@@ -79,28 +79,23 @@ module.exports = function(app) {
         Project.findById(reqPart.project_id, function(err,project){
             var FQDN_candidate = req.user.FQDN+'.'+project.name+'.'+reqPart.name;
 
-            var duplicatedName = false;
-            var identical = false;
-            var part;
+            Part.generateDefinitionHash(req.user, project, reqPart, function(hash_candidate) {
+                var duplicatedName = false;
+                var identical = false;
+                var part;
 
-            //Part.find({project_id: reqPart.project_id}, function(err, parts) {
-            Part.find(function(err, parts) {
-                counter = parts.length;
-                console.log(parts);
-                for(var i = 0; i < parts.length; i++) {
-                    part = parts[i];
+                Part.find({"project_id": reqPart.project_id, "user_id": reqPart.user_id}, function(err, parts) {
+                    counter = parts.length;
+                    for(var i = 0; i < parts.length; i++) {
+                        part = parts[i];
 
-                    if (part.FQDN === FQDN_candidate) {
-                        duplicatedName = true;
-                    }
+                        if (part.FQDN === FQDN_candidate) {
+                            duplicatedName = true;
+                        }
 
-                    if (part.genbankStartBP     === reqPart.genbankStartBP.toString() && 
-                        part.endBP              === reqPart.endBP.toString() && 
-                        part.revComp            === reqPart.revComp.toString() && 
-                        part.fas                === reqPart.fas.toString() && 
-                        part.directionForward   === reqPart.directionForward.toString()) {
-
-                        identical = true;
+                        if (part.definitionHash === hash_candidate) {
+                            identical = true;
+                        }
                     }
 
                     if (duplicatedName && !identical) {
@@ -114,21 +109,11 @@ module.exports = function(app) {
                             'type': 'error'
                         });
                     } else {
-                        counter--;
-                    }
-
-                    if (counter === 0) {
                         return res.json({
                             'type': 'success'
                         });
                     }
-                }
-
-                if (counter === 0) {
-                    return res.json({
-                        'type': 'success'
-                    });
-                }
+                });
             });
         });
     });
