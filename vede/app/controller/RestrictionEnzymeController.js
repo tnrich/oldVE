@@ -67,6 +67,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened,
             scope: this
         };
+        listeners[Teselagen.event.AuthenticationEvent.LOGGED_IN] = this.onLoggedIn;
         this.application.on(listeners);
     },
     
@@ -116,6 +117,14 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         });
 
     },
+    
+    /**
+     * Initializing after login
+     */
+    onLoggedIn: function() {
+         this.GroupManager.initActiveUserGroup();
+     },
+
 
     /**
      * Populates the itemselector fromField with enzyme names.
@@ -167,7 +176,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      /**
       * When the enzyme list is changed.
       */
-     onEnzymeListChange: function(pThis, pNewValue, pOldValue){
+     onEnzymeListChange: function(){
          this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
          if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
              this.GroupManager.setActiveEnzymesChanged(true);

@@ -80,6 +80,11 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         var userActiveGroup = this.getActiveUserGroup();
         if (!userActiveGroup) {
             this.createUserGroup(this.ACTIVE, this.COMMON_ENZYMES);
+            this.UserManager.update(function(pSuccess) {
+                if (!pSuccess) {
+                    console.warn("Unable to save active restriction enzymes");
+                }
+            });
         }
         this.changeActiveGroup();
     },
