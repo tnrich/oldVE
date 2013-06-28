@@ -1287,7 +1287,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
                 }});
             }, 1);
-    } else {
+    } else { 
         Vede.application.fireEvent("OpenPartLibrary");
     }
 

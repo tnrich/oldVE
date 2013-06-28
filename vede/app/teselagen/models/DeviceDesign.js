@@ -118,6 +118,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 }
             }
 
+            // CASE 4: READ SPECIFIC DEVICE DESIGN FROM PROJECT
+            if(request.action === "destroy" && request.records[0].data.id)
+            {
+                var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns/"+request.records[0].data.id;
+                if(this.debugFlag) console.log("DESTROYING SPECIFIC DESIGN FROM PROJECT: ",url);
+                delete request.params.filter;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
 
             console.log("No devicedesign url generated");
 
