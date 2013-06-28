@@ -185,8 +185,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'booleancolumn',
                                     text: 'NOT?',
                                     dataIndex: 'negationOperator',
-                                    trueText: 'Yes',
-                                    falseText: 'No',
+                                    trueText: 'NOT',
+                                    falseText: null,
                                     editor: {
                                         xtype: 'checkbox'
                                     }
@@ -204,6 +204,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: 'Operand 2',
                                     dataIndex: 'operand2_id',
+                                    cls: "operand2_field",
+                                    editor: {
+                                        xtype: 'combobox',
+                                        store: [],
+                                        cls: "operand2_combobox"
+                                    },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
                                             return rule.get("operand2Number");
@@ -863,7 +869,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
             {   
                 Vede.application.fireEvent("openj5");
             }
-        }
+        },
+    },
+
+    init: function () {
+        console.log(workingProject);
+        
     }
 }
 

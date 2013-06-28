@@ -4,6 +4,7 @@
  */
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.panel.Panel',
+    require: ["Teselagen.manager.ProjectManager"],
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     layout: {
@@ -57,12 +58,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     click: function () {
                                         Teselagen.manager.ProjectManager.createNewProject();
-                                    },
-                                    afterrender: function(cmp) {
-                                        cmp.getEl().set({
-                                            "data-intro": 'Click here to Start a Project',
-                                            "data-step": 1
-                                        });
                                     }
                                 }
 
@@ -79,13 +74,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 overCls: 'createSequence-over',
                                 listeners: {
                                     click: function () {
-                                        Vede.application.fireEvent("TabOpen");
-                                    },
-                                    afterrender: function(cmp) {
-                                        cmp.getEl().set({
-                                            "data-intro": 'You can start with a blank sequence by clicking here.',
-                                            "data-step": 2
-                                        });
+                                        Vede.application.fireEvent("createSequence");
                                     }
                                 }
 
@@ -115,11 +104,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 iconCls: 'tour-icon',
                                 iconAlign: 'top',
                                 text: 'Take a Tour',
-                                listeners: {
-                                    click: function () {
-                                        introJs().start();
-                                    }
-                                }
+                                href: 'http://help.teselagen.com/manual/'
                             }
                         ]
                     }, 
@@ -134,15 +119,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         layout: {
                             type: 'hbox',
                             align: 'stretch'
-                        },
-                        listeners: {
-                            afterrender: function(cmp) {
-                                        cmp.getEl().set({
-                                            "data-intro": 'Here are some awesome stats to keep you up to date.',
-                                            "data-position": 'top',
-                                            "data-step": 3
-                                        });
-                                    }
                         },
                         items: [ 
                             {
@@ -396,15 +372,15 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     }
                 ]
             }
-        ],
 
-
-            // require: ["Teselagen.event.AuthenticationEvent"],
+            // require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
             // listeners: {
-            //     tabchange: function(tabPanel, tab) {
-            //         Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.POPULATE_STATS);;
+            //     itemclick: function (view, record, item, index, e, eOpts) {
+            //         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_PROJECT, record);;
             //     }
             // }
+        
+            ]
 
     
 
