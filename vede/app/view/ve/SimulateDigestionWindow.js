@@ -17,6 +17,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
     constrainHeader: true,
     title: "Gel Digest",
     modal: true,
+    cls: "simulateDigestion",
     initComponent: function() {
         var groupStore = Ext.create("Ext.data.Store",{
             fields: [ {name: "name", type: "string"} ],

@@ -2,10 +2,12 @@
 
 .home-dash-icon {
 	display: inline-block;
-	width: 16px;
-	height: 16px;
-	background-image: url(images/dashboard/home.png);
+	width: 14px !important; 
+	height: 14px !important;
+	background-image: url(images/dashboard/home-14.png);
 	background-repeat: no-repeat;
+	margin-top: 1px;
+	margin-left: 1px;
 }
 
 .tour-icon, .manuals-icon, .newProject-icon {
