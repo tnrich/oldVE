@@ -40,9 +40,6 @@ Ext.define('Vede.controller.AuthWindowController', {
             success: function (response) {
                 Teselagen.manager.SessionManager.maskApp();
                 Ext.create("Vede.view.AuthWindow").show();
-                //Ext.getBody().mask();
-                //window.open('','_self',''); 
-                //window.close();
             }
         });
     },
