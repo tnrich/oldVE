@@ -44,6 +44,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       * The object that represents the multiSelect control for selecting enzymes
       */
      enzymeListSelector: null,
+     addAllBtn: null,
      
      /**
       * @member Vede.controller.SimulateDigestionController
@@ -106,21 +107,22 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      onSimulateDigestionOpened: function(manager) {
          var me = this;
          this.managerWindow = manager;
-         var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-         var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+         this.groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+         this.searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
          var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
          this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
-         this.digestManager.digestPanel = this.digestPanel;
          this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
+         this.addAllBtn = this.enzymeListSelector.down("button[cls=enzymeSelector-btn]");
+         this.digestManager.digestPanel = this.digestPanel;
          this.digestManager.enzymeListSelector = this.enzymeListSelector;
          if(!me.GroupManager.getIsInitialized()) {
              me.GroupManager.initialize();
          }
          //Add names of groups to combobox
          Ext.each(me.GroupManager.getGroupNames(), function(name) {
-             groupSelector.store.add({"name": name});
+             me.groupSelector.store.add({"name": name});
          });
-         me.digestManager.filterEnzymes(searchCombobox, groupSelector);
+         me.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
          me.updateLadderLane(ladderSelector);
          this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
 //         me.digestManager.drawGel();
@@ -156,17 +158,21 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       * Called when the user selects a new group in the combobox.
       */
      onEnzymeGroupSelected: function() {
-         var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-         var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-         this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+         this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
+         var count = this.enzymeListSelector.fromField.getStore().getCount();
+         // Disable Add All button for large enzyme groups
+         if (count > 50) {
+             this.addAllBtn.disable();
+         }
+         else {
+             this.addAllBtn.enable();
+         }
      },
      /**
       * Searches the itemselector fromField for enzyme names
       */
      searchEnzymes: function() {
-         var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-         var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-         this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+         this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
      },
 
      /**
