@@ -162,10 +162,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.suspendLayouts();
 
         if(this.selectedPart) {
-           /* this.selectedPart.deselect();
+            /*this.selectedPart.deselect();
             this.deHighlight(this.selectedPart.getPart());
 
-           if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
+            if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
                 this.selectedPart.deselect();
             } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
                 this.selectedPart.select();
@@ -897,12 +897,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var parentBins = this.DeviceDesignManager.getParentBins(
                                                             this.activeProject,
                                                             j5Part);
+            var partIndex;
+            var parentBin;
 
             this.deHighlight(j5Part);
+            this.skipPadOnRemovePart = true;
 
             // Remove associated rules if the part is only contained in one bin.
             if(parentBins.length > 1) {
-                this.selectedPart.up('Bin').getBin().parts().remove(j5Part);
+                parentBin = this.selectedPart.up('Bin').getBin();
+
+                index = parentBin.parts().indexOf(j5Part);
+                parentBin.parts().remove(j5Part);
+                parentBin.parts().insert(index, Ext.create("Teselagen.models.Part"));
             } else {
                 var rule;
                 var involvedRules = this.DeviceDesignManager.getRulesInvolvingPart(
@@ -918,10 +925,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                                             j5Part);
                 }
 
+                index = parentBins[0].parts().indexOf(j5Part);
                 parentBins[0].parts().remove(j5Part);
+                parentBins[0].parts().insert(index, Ext.create("Teselagen.models.Part"));
             }
             this.onfillBlankCells();
-            this.selectedPart = null;
         }
         Ext.resumeLayouts(true);
     },

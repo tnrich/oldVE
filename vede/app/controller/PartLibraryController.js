@@ -10,7 +10,6 @@ Ext.define("Vede.controller.PartLibraryController", {
     callbackFn: null,
 
     fetchPartLibrary: function() {
-
         var self = this;
         var loadingMsgBox = Ext.MessageBox.show({
             title: 'Loading Part',
@@ -25,7 +24,6 @@ Ext.define("Vede.controller.PartLibraryController", {
             url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''),
             method: 'GET',
             success: function(response) {
-
                 loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
 
                 response = JSON.parse(response.responseText);
@@ -44,8 +42,8 @@ Ext.define("Vede.controller.PartLibraryController", {
                 });
 
                 self.partLibraryWindow.show();
-
                 self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
+
                 loadingMsgBox.close();
             }
         });
@@ -80,9 +78,8 @@ Ext.define("Vede.controller.PartLibraryController", {
 
         this.partLibraryStore = Teselagen.manager.ProjectManager.partLibrary;
 
-        this.application.on("openPartLibrary", this.onOpenPartLibrary, this);
+        //this.application.on("openPartLibrary", this.onOpenPartLibrary, this);
 
         this.callParent();
-
     }
 });
