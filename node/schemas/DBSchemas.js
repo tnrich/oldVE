@@ -172,6 +172,30 @@ module.exports = function(db) {
 			ref: 'j5run'
 		}]
 	});
+
+	DeviceDesignSchema.pre('remove',function (next) {
+	  
+	  // Remove from Projects
+	  console.log("Trying to remove "+this._id);
+	  db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
+	  	console.log(numberAffected+" projects updated");
+	  });
+
+	  // Remove from Users
+	  // Currently user.designs is not being used
+	  //db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
+	  //	console.log(numberAffected+" users updated");
+	  //});
+
+	  
+	  // Remove from j5reports and associated j5reports
+	  db.model('j5run').remove({devicedesign_id: this}).exec(function(err, numberAffected){
+	  	console.log(numberAffected+" j5runs removed");
+	  });
+
+	  next();
+	});
+
 	registerSchema('devicedesign', DeviceDesignSchema);
 
 	var ProjectSchema = new Schema({
