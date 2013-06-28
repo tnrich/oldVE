@@ -23,6 +23,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
     pieManager: null,
     pieContainer: null,
+    pieParent: null,
 
     startSelectionAngle: 0,
 
@@ -241,10 +242,10 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         var angle = this.startSelectionAngle;
         var bp = this.bpAtAngle(angle);
         if (showMapCaret) {
-            this.pieManager.adjustCaret(bp);
+            this.pieManager.caret.svgObject.style("visibility", "visible");
         }
         else {
-            this.pieManager.caret.svgObject.remove();
+            this.pieManager.caret.svgObject.style("visibility", "hidden");
         }
     },
 
@@ -409,7 +410,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             this.SelectionLayer.select(start, end);
         }
 
-        this.changeCaretPosition(this.SelectionLayer.start);
+        // Don't fire a caretPositionChanged event, since controllers will
+        // move their caret positions when the select event is fired.
+        this.changeCaretPosition(this.SelectionLayer.start, true);
     },
 
     /**
@@ -417,7 +420,13 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * angle relative to the vertical.
      */
     getClickAngle: function() {
-        var svg = d3.select(".pieParent");
+        var svg;
+
+        if(!this.pieParent) {
+            this.pieParent = d3.select(".pieParent");
+        }
+
+        svg = this.pieParent;
         var transformValues;
         var scrolled = this.pieContainer.el.getScroll();
 
@@ -579,8 +588,14 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     	d3.event.preventDefault();
     	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
     	//console.log(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+        
+        var svg;
     	
-    	var svg = d3.select(".pieParent");
+        if(!this.pieParent) {
+            this.pieParent = d3.select(".pieParent");
+        }
+
+    	svg = this.pieParent;
         var transformValues;
         var scrolled = this.pieContainer.el.getScroll();
 

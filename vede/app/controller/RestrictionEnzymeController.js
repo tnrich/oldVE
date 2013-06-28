@@ -11,6 +11,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
                "Teselagen.manager.UserManager", "Vede.view.RestrictionEnzymesManagerWindow"],
 
     GroupManager: null,
+    Logger: null,
     UserManager: null,
     managerWindow: null,
 
@@ -25,6 +26,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+        this.Logger = Teselagen.utils.Logger;
         this.UserManager = Teselagen.manager.UserManager;
 
         this.control({
@@ -81,41 +83,31 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector = this.getEnzymeSelector();
         var groupSelector = this.getEnzymeGroupSelector();
         
-        this.UserManager.loadUser(function(pSuccess) {
-            if (pSuccess) {
-                if(!me.GroupManager.getIsInitialized()) {
-                    me.GroupManager.initialize();
-                }
-                me.GroupManager.setActiveEnzymesChanged(false);
+        if(!me.GroupManager.getIsInitialized()) {
+            me.GroupManager.initialize();
+        }
 
-
-                Ext.each(me.GroupManager.getGroupNames(), function(name) {
-                    groupSelector.store.add({name: name});
-                });
-
-                // Set the value in the combobox to the first element by default.
-                groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
-
-                // Load data into the enzyme selector.
-                var startGroup = me.GroupManager.groupByName(groupSelector.getValue());
-                var groupArray = [];
-                Ext.each(startGroup.getEnzymes(), function(enzyme) {
-                    groupArray.push({name: enzyme.getName()});
-                });
-                me.enzymeSelector.store.loadData(groupArray);
-                me.enzymeSelector.bindStore(me.enzymeSelector.store);
-
-                // Set user enzyme selector
-                me.GroupManager.initActiveUserGroup();
-                me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
-                me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
-                me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
-            }
-            else {
-                console.error("Error launching Restriction Enzyme Manager");
-            }
+        Ext.each(me.GroupManager.getGroupNames(), function(name) {
+            groupSelector.store.add({name: name});
         });
 
+        // Set the value in the combobox to the first element by default.
+        groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
+
+        // Load data into the enzyme selector.
+        var startGroup = me.GroupManager.groupByName(groupSelector.getValue());
+        var groupArray = [];
+        Ext.each(startGroup.getEnzymes(), function(enzyme) {
+            groupArray.push({name: enzyme.getName()});
+        });
+        me.enzymeSelector.store.loadData(groupArray);
+        me.enzymeSelector.bindStore(me.enzymeSelector.store);
+
+        // Set user enzyme selector
+        me.GroupManager.initActiveUserGroup();
+        me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
+        me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
+        me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
     },
     
     /**
@@ -210,11 +202,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Saves to database and closes the window.
      */
     onSaveButtonClick: function() {
-        this.UserManager.update(function(pSuccess) {
-            if (!pSuccess) {
-                console.warn("Unable to save restriction enzymes");
-            }
-        });
+        this.GroupManager.saveUserGroups();
     },
     
     /**
@@ -246,7 +234,11 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onGroupPrompt: function(pIsNew, pBtnId, pText) {
         if (pBtnId==="ok") {
-            if (!pText || this.userEnzymeGroupSelector.findRecordByValue(pText)) {
+            var foundRec = this.userEnzymeGroupSelector.findRecordByValue(pText);
+            if (!pText || foundRec) {
+                if (foundRec) {
+                    this.Logger.notifyWarn(Ext.String.format("The group '{0}' already exists.", pText));
+                }
                 // Name is not unique so show prompt again.
                 var msgbox = this.groupPrompt();
                 // For some reason the prompt will be placed behind the manager window.
@@ -272,9 +264,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * After window is closed.
      */
     onWindowClose: function() {
-        if (this.GroupManager.getActiveEnzymesChanged()) {
-            this.GroupManager.changeActiveGroup();
-            this.application.fireEvent("ActiveEnzymesChanged");
-        }
+        // Reload user to rollback any unsaved changes
+        this.GroupManager.loadUserGroups();
     }
 });

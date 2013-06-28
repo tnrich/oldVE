@@ -19,6 +19,49 @@ Ext.define("Teselagen.manager.SessionManager", {
 
     constants: null,
 
+
+    maskApp: function(){
+        // Start the mask on the body and get a reference to the mask
+        splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span><span id="splash-retry" style="visibility: hidden;"><button id="retry-btn">Retry</button></span>', 'splashscreen');
+
+        Ext.get('retry-btn').on("click",function(){
+            Ext.get('splash-retry').hide();
+            Teselagen.manager.AuthenticationManager.Login();
+        });
+
+        // Add a new class to this mask as we want it to look different from the default.
+        splashscreen.addCls('splashscreen');
+
+        Ext.select('.x-mask-msg').setStyle('top','60px');
+
+
+        // Insert a new div before the loading icon where we can place our logo.
+        Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
+            cls: 'x-splash-icon'
+        });        
+    },
+
+    unmaskApp: function(){
+            if(splashscreen)
+                {
+                splashscreen.fadeOut({
+                    duration: 1000,
+                    remove: true
+                });
+                splashscreen.next().fadeOut({
+                    duration: 1000,
+                    remove: true,
+                    listeners: {
+                        afteranimate: function() {
+                            splashscreen = null;
+                            //Teselagen.manager.ProjectManager.loadUser();
+                        }
+                    }
+                });
+            }
+            //else { Teselagen.manager.ProjectManager.loadUser(); }       
+    },
+
     /**
      * @member Teselagen.manager.SessionManager
      */

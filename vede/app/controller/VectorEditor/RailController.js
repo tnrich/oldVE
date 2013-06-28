@@ -398,7 +398,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     select: function(start, end) {
         this.SelectionLayer.select(start, end);
 
-        this.changeCaretPosition(this.SelectionLayer.start);
+        this.changeCaretPosition(this.SelectionLayer.start, true);
     },
 
     /**
@@ -436,8 +436,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     /**
      * Changes the caret position to a specified index.
      * @param {Int} index The nucleotide index to move the caret to.
+     * @param {Boolean} silent If true, don't fire a position changed event.
      */
-    changeCaretPosition: function(index) {
+    changeCaretPosition: function(index, silent) {
         if(index >= 0 && 
            index <= this.SequenceManager.getSequence().toString().length) {
             this.callParent(arguments);
