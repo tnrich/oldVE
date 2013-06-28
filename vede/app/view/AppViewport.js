@@ -43,7 +43,9 @@ Ext.define('Vede.view.AppViewport', {
                     items: [
                         {
                             xtype: 'DashboardPanelView',
-                            hidden: true
+                            title: '',
+                            iconCls: 'home-dash-icon',
+                            iconAlign: 'top'
                         },
 
                         {

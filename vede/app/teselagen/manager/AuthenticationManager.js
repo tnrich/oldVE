@@ -39,6 +39,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             console.log("Authenticating using cookies");
             var session = JSON.parse(Ext.util.Cookies.get("session"));
             this.username = session.username;
+            //debugger;
             if(session.userId) return this.sendAuthRequest(session, cb);
         }
 
@@ -99,7 +100,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      * For Manual Auth use params.username, params.password, params.server (optional)
      */
 
-    sendAuthRequest: function(params, cb) {
+    sendAuthRequest: function(params, cb, remember) {
         var self = this;
 
         if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
@@ -124,6 +125,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
+                if(remember) self.rememberSession(self.authResponse);
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
@@ -133,5 +135,21 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (cb) {return cb(false, response.statusText); }
             }
         });
+    },
+
+    rememberSession: function(session){
+            //Ext.util.Cookies.set( name, value, [expires], [path], [domain], [secure] )
+            //var date = new Date();
+            //date.setTime(date.getTime()+(30*1000));
+            
+            //var form = Ext.getCmp('auth-form').getForm();
+            //var username = form.findField('username').getRawValue();
+            var coookieSession = {
+                username: session.user.username,
+                userId: 1,
+                sessionId: 1
+            }
+
+            Ext.util.Cookies.set( "session", JSON.stringify(coookieSession) );   
     }
 });
