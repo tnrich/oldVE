@@ -280,7 +280,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     for (var j=0; j<projectNames.length; j++) {
                         if (projectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Generating Design");
+                    var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+                    oldTab.el.mask("Generating Design");
                     var self = this;
                     if(project) {
 
@@ -316,6 +317,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                             //console.log("Expanding " + "/root/" + project.data.id + "/" + design.data.id);
                                             Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
+                                            oldTab.el.unmask();
                                             Ext.getCmp("projectTreePanel").selectPath("/root/" + project.data.id + "/" + design.data.id);
                                         });
                                         self.openDeviceDesign(design);
