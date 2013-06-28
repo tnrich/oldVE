@@ -68576,6 +68576,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var onPromptClosed = function(btn, text) {
   if (btn === "ok") 
   {
+    text = Ext.String.trim(text);
     if (text === "") 
     {
       return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this);
@@ -68600,13 +68601,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var onPromptClosed = function(btn, text) {
   if (btn === "ok") 
   {
+    text = Ext.String.trim(text);
     if (text === "") 
     {
       return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
     }
     for (var j = 0; j < veprojectNames.length; j++) 
       {
-        if (veprojectNames[j].match(text)) 
+        if (veprojectNames[j] === text) 
         {
           return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this);
         }
@@ -68633,13 +68635,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var onPromptClosed = function(btn, text) {
   if (btn === "ok") 
   {
+    text = Ext.String.trim(text);
     if (text === "") 
     {
       return Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
     }
     for (var j = 0; j < projectNames.length; j++) 
       {
-        if (projectNames[j].match(text)) 
+        if (projectNames[j] === text) 
         {
           return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this);
         }
@@ -75447,7 +75450,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     var fileInput = pBtn.extractFileInput();
     var file = fileInput.files[0];
-    var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+    var ext = file.name.match(/^.*\.(xml|json)$/i);
     if (ext) 
     {
       Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
@@ -75457,12 +75460,19 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       fr.readAsText(file);
     } else {
       Ext.MessageBox.alert('Error', 'Invalid file format');
+      Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
     }
   }
 }, onImportFileLoad: function(pFile, pExt, pEvt) {
-  if (pExt === 'json' || pExt === 'JSON') 
-  Teselagen.manager.DeviceDesignParsersManager.parseJSON(pEvt.target.result, pFile.name); else if (pExt === 'xml' || pExt === 'XML') 
-  Teselagen.manager.DeviceDesignParsersManager.parseXML(pEvt.target.result, pFile.name); else Ext.MessageBox.alert('Error', 'Invalid file format');
+  try {
+    if (pExt === 'json' || pExt === 'JSON') 
+    Teselagen.manager.DeviceDesignParsersManager.parseJSON(pEvt.target.result, pFile.name); else if (pExt === 'xml' || pExt === 'XML') 
+    Teselagen.manager.DeviceDesignParsersManager.parseXML(pEvt.target.result, pFile.name); else Ext.MessageBox.alert('Error', 'Invalid file format');
+  }  catch (exception) {
+  console.log(exception);
+  Ext.MessageBox.alert('Error', "Error parsing file");
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+}
 }, onImportEugeneRulesFileLoad: function(pFile, pExt, pEvt) {
   var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
   Teselagen.manager.DeviceDesignParsersManager.parseEugeneRules(pEvt.target.result, pFile.name, design);
@@ -82141,6 +82151,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
   this.detailPanel.show();
   this.detailPanelFill.hide();
+  for (var i = 0; i < this.tabPanel.query("menuitem").length; i++) 
+    {
+      this.tabPanel.query("menuitem")[i].removeCls("j5-menuitem-active");
+    }
+  item.addCls("j5-menuitem-active");
   this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
   var assemblyMethod = this.activeJ5Run.get('assemblyMethod');
   var status = this.activeJ5Run.get('status');

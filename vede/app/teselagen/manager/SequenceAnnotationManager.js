@@ -70,6 +70,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that
         });
+
         this.caret = Ext.create("Vede.view.annotate.Caret", {
             sequenceAnnotator: that.annotator
         });
@@ -86,8 +87,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
-
-        this.caret.render();
     },
 
     render: function() {
@@ -95,7 +94,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.annotator.render();
 
         this.caret.setPosition(this.caret.getPosition());
-        this.caret.render();
     },
 
     sequenceChanged: function(){
@@ -111,7 +109,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
     adjustCaret: function(index) {
         this.caret.setPosition(index);
-        this.caret.render();
     },
 
     bpAtPoint: function(x, y) {
@@ -193,11 +190,9 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
                 if(pShow) {
                     this.caret.setHeight(this.caret.self.DOUBLE_HEIGHT);
                     this.caret.setPosition(this.caret.getPosition());
-                    this.caret.render();
                 } else {
                     this.caret.setHeight(this.caret.self.SINGLE_HEIGHT);
                     this.caret.setPosition(this.caret.getPosition());
-                    this.caret.render();
                 }
             }
         }

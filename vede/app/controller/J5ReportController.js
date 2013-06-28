@@ -48,6 +48,12 @@ Ext.define("Vede.controller.J5ReportController", {
             this.detailPanel.show();
             this.detailPanelFill.hide();
 
+        for(var i=0; i<this.tabPanel.query("menuitem").length; i++) {
+            this.tabPanel.query("menuitem")[i].removeCls("j5-menuitem-active");
+        }
+
+        item.addCls("j5-menuitem-active");
+
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
         var assemblyMethod = this.activeJ5Run.get('assemblyMethod');
         var status = this.activeJ5Run.get('status');

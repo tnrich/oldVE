@@ -949,9 +949,18 @@ background: #F8F8F8;
 }
 
 .j5ReportsPanel .x-menu-item-active{
-  background: black;
+  background: rgba(0,0,0,0.3);
   color: rgb(0, 183, 255);
   border-color: black;
+}
+
+
+.j5-menuitem-active {
+  background:black;
+}
+
+.j5-menuitem-active .x-menu-item-text{
+  color: rgb(31, 168, 248);
 }
 
 
@@ -1203,3 +1212,4 @@ background: #F8F8F8;
 .gridcolumn-wrap-text {
   white-space: normal;
 }
+
