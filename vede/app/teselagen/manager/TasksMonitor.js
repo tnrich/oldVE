@@ -58,10 +58,11 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     monitorServerTasks: function(cb){
         var self = this;
         Ext.Ajax.request({
-            url: '/api/monitorTasks',
+            url: Teselagen.manager.SessionManager.buildUrl('monitorTasks', ''),
             params: {
             },
             method: 'GET',
+            withCredentials: true,
             success: function(response){
                 var parsedResponse = JSON.parse(response.responseText);
                 self.observeChanges(parsedResponse.j5runs);
