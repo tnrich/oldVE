@@ -20,7 +20,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
             // },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                console.log(response);
                	var projectsData = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-num"]');
                	var projectsLabel = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-desc"]');
                	var designsData = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-num"]');
@@ -64,8 +63,16 @@ Ext.define("Vede.controller.DashboardPanelController", {
         });
 	},
 
+    onLaunch: function () {
+        this.tabPanel = Ext.getCmp("mainAppPanel");
+        this.tabPanel.on("tabchange", this.populateStatisticts);
+    },
+
+
 	init: function () {
     this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
+    this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
+
 		this.control({
 			"#designGrid_Panel": {
 				itemclick: this.onLastDEProjectsItemClick
