@@ -6,6 +6,8 @@ Ext.define('Vede.controller.AuthWindowController', {
     extend: 'Ext.app.Controller',
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
 
+    rememberSession: false,
+
     onRegisterClick: function(){
         console.log("Register");  
     },
@@ -21,7 +23,7 @@ Ext.define('Vede.controller.AuthWindowController', {
         params.password = form.findField('password').getRawValue();
         if(form.findField('server')) params.server = form.findField('server').getRawValue();
 
-        Teselagen.manager.AuthenticationManager.sendAuthRequest(params);
+        Teselagen.manager.AuthenticationManager.sendAuthRequest(params,null,this.rememberSession);
     },
     onNoSessionClick: function (button, e, options) {
         console.log('no auth');
@@ -29,6 +31,8 @@ Ext.define('Vede.controller.AuthWindowController', {
         Ext.getCmp('AuthWindow').destroy();
     },
     onLogoutClick: function (button, e, options) {
+        
+        Ext.util.Cookies.clear('session');
         var self = this;
         Ext.Ajax.request({
             url: '/api/logout',
@@ -42,6 +46,19 @@ Ext.define('Vede.controller.AuthWindowController', {
 
     onReconnectClick: function(){
         Teselagen.manager.AuthenticationManager.Login();
+    },
+
+    onRemember: function(el, newValue, oldValue, eOpts){
+        if(newValue) 
+        {
+            this.rememberSession = true;
+            // Remember case         
+        }
+        else
+        {
+            // Not remember case
+            Ext.util.Cookies.clear('session');
+        }
     },
 
     init: function () {
@@ -78,6 +95,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             "#auth-config-btn": {
                 click: this.onConfigClick
             },
+            "#rememberSession": {
+                change: this.onRemember
+            }
         });
     },
 

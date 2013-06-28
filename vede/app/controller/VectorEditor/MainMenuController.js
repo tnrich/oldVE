@@ -197,15 +197,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
     },    
 
-    onCreateNewFeatureMenuItemClick: function() {
-        var createNewFeatureWindow = Ext.create(
-            "Vede.view.ve.CreateNewFeatureWindow");
-
-        createNewFeatureWindow.show();
-        createNewFeatureWindow.center();
-
-    },
-
     onRestrictionEnzymesManagerMenuItemClick: function() {
         var restrictionEnzymesManagerWindow = Ext.create(
             "Vede.view.RestrictionEnzymesManagerWindow");
@@ -273,12 +264,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);  	
     },
     
-    onSelectionCancelled: function(scope) {
-    	Ext.getCmp("createNewFeatureMenuItem").disable();
-    },
-    onSelectionChanged: function(scope) {
-    	Ext.getCmp("createNewFeatureMenuItem").enable();
-    },
     onSequenceManagerChanged: function(sequenceManager) {
         Ext.getCmp("sequenceLinearMenuItem").setChecked(
                                         !sequenceManager.getCircular(), true);
@@ -440,9 +425,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
             },
-            "#createNewFeatureMenuItem": {
-                click: this.onCreateNewFeatureMenuItemClick
-            },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             },
@@ -476,10 +458,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                             this.validateSafeEditingMenuItem, this);
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-        this.application.on(Teselagen.event.SelectionEvent.SELECTION_CANCELED, 
-                this.onSelectionCancelled,this);
-        this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, 
-                this.onSelectionChanged,this);
         this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
                 this.onSequenceManagerChanged,this);
     }

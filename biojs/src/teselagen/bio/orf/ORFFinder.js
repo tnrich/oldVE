@@ -109,7 +109,11 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
             var strand = Teselagen.bio.sequence.common.StrandType.FORWARD;
         }
 
-        var TranslationUtils = Teselagen.TranslationUtils;
+        var TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
+
+        if(!TranslationUtils.aminoAcidsTranslationTable) {
+            TranslationUtils.initializeAminoAcidsTranslationTable();
+        }
 
         var orfs = [];
         var sequenceArray = dnaSymbolList.seqString().split("");

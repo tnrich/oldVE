@@ -711,18 +711,19 @@ Ext.define("Teselagen.manager.RailManager", {
         var start = bp / 
             this.sequenceManager.getSequence().seqString().length;
 
-        this.caret.remove();
+        //this.caret.remove();
 
         if(this.sequenceManager &&
            this.sequenceManager.getSequence().toString().length > 0) {
 
-            this.caret = Ext.create("Vede.view.rail.Caret", {
+            this.caret.setStart(start);
+            /*this.caret = Ext.create("Vede.view.rail.Caret", {
                 rail: this.parentSVG,
                 start: start,
                 reference: this.reference,
                 railWidth: this.railWidth,
                 length: 3
-            });
+            });*/
         }
     }
 });

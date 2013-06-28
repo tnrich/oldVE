@@ -1,0 +1,111 @@
+// DashboardPanelView
+
+.home-dash-icon {
+	display: inline-block;
+	width: 14px !important; 
+	height: 14px !important;
+	background-image: url(images/dashboard/home-14.png);
+	background-repeat: no-repeat;
+	margin-top: 1px;
+	margin-left: 1px;
+}
+
+.tour-icon, .manuals-icon, .newProject-icon {
+	display: inline-block;
+	width: 32px !important;
+	height: 32px !important;
+	background-image: url(images/dashboard/top_sprites.png);
+	background-repeat: no-repeat;
+	top: 16px;
+	margin: 0 auto;
+}
+
+.manuals-icon {
+	background-position: 0 0 !important;
+}
+
+.tour-icon {
+	background-position: -64px 0 !important;
+}
+
+.newProject-icon {
+	background-position: -128px 0 !important;
+}
+
+.newSequence-icon {
+	display: inline-block;
+	width: 32px !important;
+	height: 32px !important;
+	background-image: url(images/dashboard/sequence-add-icon.png);
+	background-repeat: no-repeat;
+	top: 16px;
+	margin: 0 auto;
+}
+
+.projects-icon, .designs-icon, {
+	display: inline-block;
+	width: 64px !important;
+	height: 64px !important;
+	background-image: url(images/dashboard/stat_sprites.png);
+	background-repeat: no-repeat;
+}
+
+.sequences-icon, {
+	display: inline-block;
+	width: 64px !important;
+	height: 64px !important;
+	background-image: url(images/dashboard/sequence-icon.png);
+	background-repeat: no-repeat;
+}
+
+.parts-icon, {
+	display: inline-block;
+	width: 64px !important;
+	height: 64px !important;
+	background-image: url(images/dashboard/part-icon.png);
+	background-repeat: no-repeat;
+}
+
+.projects-icon {
+	background-position: -128px 0 !important;
+}
+
+.designs-icon {
+	background-position: 0 0 !important;
+}
+
+.dashProjectsData, .dashDesignsData, .dashSequencesData, .dashPartsData {
+	border: 2px solid #006CAB;
+	border-radius: 3px;
+	background: #006CAB;
+}
+
+.projectsCountBox-icon, .designsCountBox-icon, .sequencesCountBox-icon, .partsCountBox-icon {
+	border: 1px solid #006CAB;
+	background: #006CAB;
+}
+
+.projectsCountBox-data, .designsCountBox-data, .sequencesCountBox-data, .partsCountBox-data {
+	background: #1585C5;
+	border: 1px solid #1585C5;
+}
+
+.projectsCountBox-num input, .designsCountBox-num input, .sequencesCountBox-num input, .partsCountBox-num input {
+	background: #1585C5;
+	font-size: 54px;
+	color: white;
+	padding: 1px 12px 2px 3px;
+	text-align: right;
+	border: none;
+}
+
+.projectsCountBox-desc input, .designsCountBox-desc input, .sequencesCountBox-desc input, .partsCountBox-desc input {
+	background: #1585C5;
+	font-size: 28px;
+	color: white;
+	text-transform: lowercase;
+	padding: 1px 12px 2px 3px;
+	text-align: right;
+	border: none;
+}
+
