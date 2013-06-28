@@ -6,10 +6,8 @@
 /*global describe, it, expect*/
 
 Ext.require([
-     "Ext.Ajax",
      "Teselagen.constants.Constants",
-     "Teselagen.manager.AuthenticationManager",
-     "Teselagen.manager.SessionManager"]);
+     "Teselagen.manager.AuthenticationManager"]);
 
 Ext.onReady(function () {
     var authResponse;
@@ -21,7 +19,7 @@ Ext.onReady(function () {
             server: constants.API_URL
     };
 
-    describe("Authentication tests.", function() {
+    describe("Authentication", function() {
        it("Login using mfero/nopassword", function (pDone) {
            authenticationManager.sendAuthRequest(params,  function(pSuccess) {
                if (pSuccess) {
@@ -31,23 +29,5 @@ Ext.onReady(function () {
                }
            });
         });
-        it("Clear users", function(pDone) {
-            Ext.Ajax.request({
-                url: "/api/users",
-                method: "DELETE",
-                success: function() {
-                    pDone();
-                }
-            });
-        });
-       it("Login using mfero/nopassword", function (pDone) {
-           authenticationManager.sendAuthRequest(params,  function(pSuccess) {
-               if (pSuccess) {
-                   authResponse = authenticationManager.authResponse;
-                   expect(authResponse).to.be.defined;
-                   pDone();
-               }
-           });
-       });
     });
 });
