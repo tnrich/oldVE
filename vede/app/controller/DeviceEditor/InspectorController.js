@@ -676,11 +676,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     ruleForm.down("displayfield[cls='operand1Field']").setValue(
                                                 self.selectedPart.get("name"));
 
+
                     operand2Field.bindStore(partsStore);
                     operand2Field.setValue(partsStore[0]);
             //    }
             //});
-
         }
     },
 
@@ -1023,6 +1023,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 linearPlasmidField.setValue(true);
             }
 
+            var allParts = this.DeviceDesignManager.getAllParts(
+                                this.activeProject, this.selectedPart);
+            
+            var partsStore = [];
+            Ext.each(allParts, function(part) {
+                partsStore = partsStore.concat([part.get("name")]);
+            });
+
+            var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
+            operand2Field.store = partsStore;
             this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
 
             var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
