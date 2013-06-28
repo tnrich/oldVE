@@ -43,9 +43,9 @@ Ext.define("Vede.controller.PartLibraryController", {
                     autoLoad: true
                 });
 
-                self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
-
                 self.partLibraryWindow.show();
+
+                self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
                 loadingMsgBox.close();
             }
         });
