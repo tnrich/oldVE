@@ -38,9 +38,11 @@ Ext.define('Vede.controller.AuthWindowController', {
             url: '/api/logout',
             method: 'POST',
             success: function (response) {
-                Ext.getBody().mask();
-                window.open('','_self',''); 
-                window.close();
+                Teselagen.manager.SessionManager.maskApp();
+                Ext.create("Vede.view.AuthWindow").show();
+                //Ext.getBody().mask();
+                //window.open('','_self',''); 
+                //window.close();
             }
         });
     },
