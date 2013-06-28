@@ -129,46 +129,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
             console.log("No devicedesign url generated");
 
-            /*
-            var restParams = "";
-            var idParam = "";
-            var filter = "";
-            if(request.operation.filters)
-            {
-                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
-            }
-            //console.log(request);
-            if(filter==="project_id")
-            {
-                //console.log("By project");
-                var project_id = request.operation.filters[0].value;
-                restParams+= "/"+project_id;
-                delete request.params.filter;
-                if(request.operation.id)
-                {
-                    idParam = "/"+request.operation.id;
-                    delete request.params.id;
-                }
-                return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
-            }
-            else
-            {
-                // Execute operation on specific record
-                //console.log("Specific record");
-                //console.log(request);
-                if(request.records)
-                {
-                    if(request.records[0])
-                    {
-                        //console.log(request.records[0]);
-                        restParams = "/" + request.records[0].data.project_id;
-                        idParam = (request.action === "create")? "" : "/" + request.records[0].data.id;
-                        return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);                        
-                    }
-                }
-            }
-            */
-
 
         },
         appendId: true,
