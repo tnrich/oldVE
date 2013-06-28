@@ -244,7 +244,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             this.pieManager.adjustCaret(bp);
         }
         else {
-            this.pieManager.caret.remove();
+            this.pieManager.caret.svgObject.remove();
         }
     },
 
@@ -334,7 +334,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             } else {
                 self.stickySelect(start, end);
             }
-            self.changeCaretPosition(start);
         }
     },
 

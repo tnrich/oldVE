@@ -17,7 +17,7 @@ module.exports = function(app){
             return res.end();
         } else {
             res.header("Access-Control-Allow-Origin", req.headers.origin);
-            res.header("Access-Control-Allow-Headers", "X-Requested-With");
+            res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
             res.header("Access-Control-Allow-Credentials", 'true');
             next();
         }
