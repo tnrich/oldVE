@@ -23,6 +23,7 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         Ladder: null,
         /**
          * The {Teselagen.bio.enzyme.RestrictionEnzyme[]} which contains the enzymes to use to digest the
+         * sequence
          */
         enzymes: null,
         /**
