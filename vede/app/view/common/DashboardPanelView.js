@@ -371,15 +371,15 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     }
                 ]
             }
+        ],
 
-            // require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
+
+            // require: ["Teselagen.event.AuthenticationEvent"],
             // listeners: {
-            //     itemclick: function (view, record, item, index, e, eOpts) {
-            //         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_PROJECT, record);;
+            //     tabchange: function(tabPanel, tab) {
+            //         Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.POPULATE_STATS);;
             //     }
             // }
-        
-            ]
 
     
 
