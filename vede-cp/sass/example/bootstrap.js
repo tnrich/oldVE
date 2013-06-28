@@ -91,6 +91,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.enzymes.RestrictionEnzyme": [],
   "Teselagen.bio.parsers.Keyword": [],
   "Teselagen.renderer.sequence.ORFRenderer": [],
+  "Teselagen.manager.PrinterMonitor": [],
   "Ext.ux.form.SearchField": [],
   "Teselagen.renderer.pie.CutSiteLabel": [],
   "Vede.view.de.j5ControlsMin": [],
@@ -477,6 +478,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.enzymes.RestrictionEnzyme": [],
   "Teselagen.bio.parsers.Keyword": [],
   "Teselagen.renderer.sequence.ORFRenderer": [],
+  "Teselagen.manager.PrinterMonitor": [],
   "Ext.ux.form.SearchField": [
     "widget.searchfield"
   ],
