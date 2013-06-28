@@ -39,7 +39,8 @@ Ext.define('Vede.controller.AuthWindowController', {
             method: 'POST',
             success: function (response) {
                 Ext.getBody().mask();
-                self.window.close();
+                window.open('','_self',''); 
+                window.close();
             }
         });
     },
