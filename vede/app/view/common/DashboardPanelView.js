@@ -23,7 +23,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
             items: [
                     {
                         xtype: 'container',
-                        flex: 0.1,
+                        flex: 0.3,
                         id: 'welcome_splash',
                         border: 0,
                     },
@@ -52,6 +52,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 text: 'New Project',
                                 scale: 'medium',
                                 overCls: 'projectStartBtn-over',
+                                iconCls: 'newProject-icon',
                                 iconAlign: 'top',
                                 listeners: {
                                     click: function () {
@@ -67,8 +68,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 id: 'createSequence',
                                 text: 'Create Sequence',
                                 scale: 'medium',
-                                overCls: 'createSequence-over',
+                                iconCls: 'newSequence-icon',
                                 iconAlign: 'top',
+                                overCls: 'createSequence-over',
                                 listeners: {
                                     click: function () {
                                         Vede.application.fireEvent("TabOpen");
@@ -85,6 +87,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 flex: 1,
                                 overCls: 'readManualsBtn-over',
                                 iconAlign: 'top',
+                                iconCls: 'manuals-icon',
                                 text: 'Manuals',
                                 href: 'http://help.teselagen.com/manual/'
                             },
@@ -96,6 +99,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 scale: 'medium',
                                 flex: 1,
                                 overCls: 'tourBtn-over',
+                                iconAlign: 'top',
+                                iconCls: 'tour-icon',
                                 iconAlign: 'top',
                                 text: 'Take a Tour',
                                 href: 'http://help.teselagen.com/manual/'
@@ -143,6 +148,18 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 xtype: 'container',
                                                 cls: 'projectsCountBox-icon',
                                                 flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center',
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'projects-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0'
+                                                    }
+                                                ]
                                             },
                                             {
                                                 xtype: 'container',
@@ -186,6 +203,18 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 xtype: 'container',
                                                 cls: 'designsCountBox-icon',
                                                 flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'designs-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0',
+                                                    }
+                                                ]
                                             },
                                             {
                                                 xtype: 'container',
@@ -243,6 +272,18 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 xtype: 'container',
                                                 cls: 'sequencesCountBox-icon',
                                                 flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'sequences-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0',
+                                                    }
+                                                ]
                                             },
                                             {
                                                 xtype: 'container',
@@ -285,6 +326,18 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 xtype: 'container',
                                                 cls: 'partsCountBox-icon',
                                                 flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'parts-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0',
+                                                    }
+                                                ]
                                             },
                                             {
                                                 xtype: 'container',
