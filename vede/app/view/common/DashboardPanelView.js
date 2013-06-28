@@ -4,6 +4,7 @@
  */
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.panel.Panel',
+    require: ["Teselagen.manager.ProjectManager"],
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     layout: {
@@ -73,7 +74,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 overCls: 'createSequence-over',
                                 listeners: {
                                     click: function () {
-                                        Vede.application.fireEvent("TabOpen");
+                                        Vede.application.fireEvent("createSequence");
                                     }
                                 }
 
