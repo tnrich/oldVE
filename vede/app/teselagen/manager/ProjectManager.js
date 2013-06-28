@@ -192,7 +192,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this); }
+                	text = Ext.String.trim(text);
+                	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this); }
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project");
                     var self = this;
                     var project = Ext.create("Teselagen.models.Project", {
