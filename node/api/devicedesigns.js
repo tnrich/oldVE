@@ -165,10 +165,11 @@ module.exports = function(app) {
 
     app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
-        DeviceDesign.findByIdAndRemove(req.params.devicedesign_id,function(err,devicedesigns) {
-            if(err) return res.json(500,{"error":err});
+        DeviceDesign.findById(req.params.devicedesign_id,function(err,devicedesign) {
+            if(err||!devicedesign) return res.json(500,{"error":err});
+            devicedesign.remove();
             res.json({
-                "designs": devicedesigns
+                "designs": devicedesign
             });
         });
     });
