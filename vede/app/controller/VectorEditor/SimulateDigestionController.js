@@ -11,7 +11,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          "Teselagen.bio.sequence.DNATools",
          "Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.manager.SimulateDigestionManager",
-         "Teselagen.manager.UserManager",
          "Ext.util.TaskRunner"],
     /*
      * The enzymeGroupManager that manages the groups of enzymes in this control
@@ -45,15 +44,13 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       * The object that represents the multiSelect control for selecting enzymes
       */
      enzymeListSelector: null,
+     addAllBtn: null,
      
-     UserManager: null,
-
      /**
       * @member Vede.controller.SimulateDigestionController
       */
      init: function() {
          this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-         this.UserManager = Teselagen.manager.UserManager;
          this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
          this.DNATools = Teselagen.bio.sequence.DNATools;
          this.filterTaskRunner = new Ext.util.TaskRunner();
@@ -110,42 +107,32 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      onSimulateDigestionOpened: function(manager) {
          var me = this;
          this.managerWindow = manager;
-         var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-         var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+         this.groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+         this.searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
          var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
          this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
-         this.digestManager.digestPanel = this.digestPanel;
          this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
+         this.addAllBtn = this.enzymeListSelector.down("button[cls=enzymeSelector-btn]");
+         this.digestManager.digestPanel = this.digestPanel;
          this.digestManager.enzymeListSelector = this.enzymeListSelector;
-         this.UserManager.loadUser(function(pSuccess) {
-             if (pSuccess) {
-                 if(!me.GroupManager.getIsInitialized()) {
-                     me.GroupManager.initialize();
-                 }
-                 me.GroupManager.setActiveEnzymesChanged(false);
-                 //Add names of groups to combobox
-                 Ext.each(me.GroupManager.getGroupNames(), function(name) {
-                     groupSelector.store.add({"name": name});
-                 });
-                 me.digestManager.filterEnzymes(searchCombobox, groupSelector);
-                 me.updateLadderLane(ladderSelector);
-                 me.digestManager.drawGel();
-             }
-             else {
-                console.error("Error launching Simulate Digestion");
-            }
+         if(!me.GroupManager.getIsInitialized()) {
+             me.GroupManager.initialize();
+         }
+         //Add names of groups to combobox
+         Ext.each(me.GroupManager.getGroupNames(), function(name) {
+             me.groupSelector.store.add({"name": name});
          });
+         me.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
+         me.updateLadderLane(ladderSelector);
+         this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
+//         me.digestManager.drawGel();
      },
 
      /**
      * Saves to database.
      */
     onSaveButtonClick: function() {
-        this.UserManager.update(function(pSuccess) {
-            if (!pSuccess) {
-                console.warn("Unable to save restriction enzymes");
-            }
-        });
+        this.GroupManager.saveUserGroups();
     },
     
     /**
@@ -171,25 +158,29 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       * Called when the user selects a new group in the combobox.
       */
      onEnzymeGroupSelected: function() {
-         var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-         var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-         this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+         this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
+         var count = this.enzymeListSelector.fromField.getStore().getCount();
+         // Disable Add All button for large enzyme groups
+         if (count > 50) {
+             this.addAllBtn.disable();
+         }
+         else {
+             this.addAllBtn.enable();
+         }
      },
      /**
       * Searches the itemselector fromField for enzyme names
       */
      searchEnzymes: function() {
-         var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-         var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-         this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+         this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
      },
 
      /**
       * Redigests your sequence with selected enzymes from the enzymeListSelector
       */
      onEnzymeListChange: function(){
-         this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
-         this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
+         this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
+         this.enzymeListSelector.toField.getStore().sort("name", "ASC");
          // Add if statement when other user groups are added
          //if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
              this.GroupManager.setActiveEnzymesChanged(true);
@@ -207,10 +198,8 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      * After window is closed.
      */
     onWindowClose: function() {
-        if (this.GroupManager.getActiveEnzymesChanged()) {
-            this.GroupManager.changeActiveGroup();
-            this.application.fireEvent("ActiveEnzymesChanged");
-        }
+        // Reload user to rollback any unsaved changes
+        this.GroupManager.loadUserGroups();
     }
 
 });
