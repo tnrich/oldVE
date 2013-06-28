@@ -160,7 +160,10 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     resolveAndopenDeviceDesign: function (record) {
-        var design_id = record.data.id;
+    	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+    	oldTab.el.mask("Loading design");
+    	
+    	var design_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         project.designs().load({
@@ -168,9 +171,9 @@ Ext.define("Vede.controller.ProjectController", {
             callback: function (loadedDesign) {
                 Teselagen.manager.ProjectManager.workingProject = project;
                 Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+                oldTab.el.unmask();
             }
         });
-
     },
     /*
     resolveAndOpenj5Report: function (record) {
@@ -187,7 +190,10 @@ Ext.define("Vede.controller.ProjectController", {
     */
 
     resolveAndOpenj5Reports: function (record) {
-        var design_id = record.data.id.replace("report","");;
+    	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+    	oldTab.el.mask("Loading j5 report");
+    	
+    	var design_id = record.data.id.replace("report","");;
         var project_id = record.parentNode.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         project.designs().load({
@@ -198,6 +204,7 @@ Ext.define("Vede.controller.ProjectController", {
                 //console.log(design);
                 //var j5report = loadedDesign[0].j5runs();
                 Teselagen.manager.ProjectManager.openj5Report(design);
+                oldTab.el.unmask();
             }
         });
     },
@@ -287,8 +294,9 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     resolveAndOpenSequence: function (record) {
-        // Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Sequence");
-
+    	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+    	oldTab.el.mask("Loading sequence");
+    	
         var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
@@ -298,6 +306,7 @@ Ext.define("Vede.controller.ProjectController", {
                 Teselagen.manager.ProjectManager.workingProject = project;
                 Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
                 Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
+                oldTab.el.unmask();
             }
         });
     },
