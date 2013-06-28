@@ -5,7 +5,7 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel'],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -220,6 +220,10 @@ Ext.define("Vede.controller.J5ReportController", {
 
             var streamingWindow = showStreaming();
 
+            streamingWindow.on('close',function(){
+                Teselagen.manager.PrinterMonitor.stopMonitoring();
+            });
+
             Ext.Ajax.request({
                 url: printDNA_URL,
                 params: {
@@ -234,6 +238,9 @@ Ext.define("Vede.controller.J5ReportController", {
                         streamingWindow.down('panel[name="feedback"]').update('<h3 style="margin-left: 20px;">Connected. Build in progress.</h3>');
                     });
                     task.delay(1000);
+                    Teselagen.manager.PrinterMonitor.startMonitoring(function(update){
+                        streamingWindow.down('panel[name="feedback"]').update('<h3 style="margin-left: 20px;">'+update+'</h3>');                        
+                    });
                 }
             });
         
