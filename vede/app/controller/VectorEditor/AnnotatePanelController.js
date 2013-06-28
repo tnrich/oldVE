@@ -253,7 +253,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         if(this.SequenceAnnotationManager.sequenceManager) {
             var el = Ext.getCmp("AnnotateContainer").el;
             var adjustedX = pEvt.getX() - el.getX();
-            var adjustedY = pEvt.getY() + el.getScroll().top - el.getY();
+            var adjustedY = pEvt.getY() + el.dom.scrollTop - el.getY();
 
             var index = this.SequenceAnnotationManager.bpAtPoint(adjustedX,
                                                                  adjustedY);
@@ -282,7 +282,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         if(this.mouseIsDown && this.mouseButton!=2) {
             var el = Ext.getCmp("AnnotateContainer").el;
             var x = pEvt.getX() - el.getX();
-            var y = pEvt.getY() + el.getScroll().top - el.getY();
+            var y = pEvt.getY() + el.dom.scrollTop - el.getY();
 
             var bpIndex = this.SequenceAnnotationManager.bpAtPoint(x, y);
 
@@ -397,8 +397,8 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
                 var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
                 var el = Ext.getCmp("AnnotateContainer").el;
 
-                if(!(metrics.y < el.getScroll().top + el.getViewSize().height &&
-                     metrics.y > el.getScroll().top)) {
+                if(!(metrics.y < el.dom.scrollTop + el.getViewSize().height &&
+                     metrics.y > el.dom.scrollTop)) {
                     el.scrollTo("top", metrics.y);
                 }
             }
