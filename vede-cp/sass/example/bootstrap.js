@@ -317,6 +317,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.DataView.LabelEditor": [],
   "Teselagen.models.SequenceFile": [],
   "Teselagen.models.digest.GelLane": [],
+  "Vede.view.j5Report.buildDNAPanel": [],
   "Ext.ux.grid.filter.StringFilter": [],
   "Vede.view.ve.SimulateDigestionWindow": [],
   "Vede.view.ve.SelectWindow": [],
@@ -374,6 +375,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.manager.UserManager": [],
   "Teselagen.manager.SequenceFileManager": [],
   "Vede.view.form.ItemSelector": [],
+  "Vede.view.ve.PasteConfirmationWindow": [],
   "Teselagen.event.ContextMenuEvent": [],
   "Teselagen.models.j5Output.Error": [],
   "Ext.ux.ajax.JsonSimlet": [],
@@ -771,6 +773,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.DataView.LabelEditor": [],
   "Teselagen.models.SequenceFile": [],
   "Teselagen.models.digest.GelLane": [],
+  "Vede.view.j5Report.buildDNAPanel": [],
   "Ext.ux.grid.filter.StringFilter": [
     "gridfilter.string"
   ],
@@ -840,6 +843,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.form.ItemSelector": [
     "widget.itemselectorvede"
   ],
+  "Vede.view.ve.PasteConfirmationWindow": [],
   "Teselagen.event.ContextMenuEvent": [],
   "Teselagen.models.j5Output.Error": [],
   "Ext.ux.ajax.JsonSimlet": [

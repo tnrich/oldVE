@@ -200,7 +200,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 gridPart.mapSelect();
             }
         } else {
-            console.log("no part associated with cell");
             gridPart.select();
         }
 
@@ -990,7 +989,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             iconSource: icon.url_large
         });
 
-        // If false flip, otherwise do nothing;
+        // If false, flip. Otherwise, do nothing.
         var flip = !j5Bin.get("directionForward");
         if(flip)
         {
@@ -1246,7 +1245,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 if(associatedSequence.get("partSource")!="") {
                     if(associatedSequence) 
                     {
-                        console.log("onPartCellVEEditClick");
                         j5Part.getSequenceFile({
                             callback: function (seq) {
                                 Vede.application.fireEvent("OpenVectorEditor",seq);
@@ -1255,7 +1253,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     }
                     else
                     {
-                        console.log("This part doesn't have an associated sequence, creating new empty sequence");
                         var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                             sequenceFileFormat: "Genbank",
                             sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
@@ -1289,7 +1286,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     suspendPartAlerts: function(){
-        //console.log("suspending part alerts");
         this.activeBins.each(function(bin) {
             var parts = bin.parts();
 
@@ -1299,7 +1295,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }, this);
     },
     resumePartAlerts: function(){
-        //console.log("resuming part alerts");
         this.activeBins.each(function(bin) {
             var parts = bin.parts();
 
@@ -1313,7 +1308,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         duplicated = false;
         this.activeBins.each(function(bin) {
             bin.parts().each(function(part){
-                //console.log(part.get('id'));
                 if(part.get('id')!=pPart.get('id') && part.get('name')===name && part.get("sequencefile_id") != "") duplicated = true;
             });
         });
@@ -1361,7 +1355,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onCutPartMenuItemClick: function(){
-        console.log("Cutting Part",this.selectedPart.getPart());
         this.selectedClipboardPart = this.selectedPart.getPart();
         var index = this.selectedPart.up("Bin").query("Part").indexOf(this.selectedPart);
         var parentGridBin = this.selectedPart.up("Bin");
@@ -1371,7 +1364,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onCopyPartMenuItemClick: function(){
-        console.log("Copying Part",this.selectedPart.getPart());
         this.selectedClipboardPart = this.selectedPart.getPart();
         ClipboardCutFlag = false;
     },
