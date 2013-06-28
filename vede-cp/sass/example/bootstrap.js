@@ -47,8 +47,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.grid.menu.ListMenu": [],
   "Teselagen.bio.sequence.symbols.AminoAcidSymbol": [],
   "Teselagen.models.j5Output.SuggestedAssembly": [],
-  "Vede.view.de.j5Parameters": [],
   "Teselagen.models.SBOLvIconInfo": [],
+  "Vede.view.de.j5Parameters": [],
   "Teselagen.models.DeviceEditorProject": [],
   "Teselagen.bio.parsers.ParsersManager": [],
   "Vede.view.pie.Caret": [],
@@ -91,6 +91,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.enzymes.RestrictionEnzyme": [],
   "Teselagen.bio.parsers.Keyword": [],
   "Teselagen.renderer.sequence.ORFRenderer": [],
+  "Teselagen.manager.PrinterMonitor": [],
   "Ext.ux.form.SearchField": [],
   "Teselagen.renderer.pie.CutSiteLabel": [],
   "Vede.view.de.j5ControlsMin": [],
@@ -317,6 +318,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.DataView.LabelEditor": [],
   "Teselagen.models.SequenceFile": [],
   "Teselagen.models.digest.GelLane": [],
+  "Vede.view.j5Report.buildDNAPanel": [],
   "Ext.ux.grid.filter.StringFilter": [],
   "Vede.view.ve.SimulateDigestionWindow": [],
   "Vede.view.ve.SelectWindow": [],
@@ -374,6 +376,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.manager.UserManager": [],
   "Teselagen.manager.SequenceFileManager": [],
   "Vede.view.form.ItemSelector": [],
+  "Vede.view.ve.PasteConfirmationWindow": [],
   "Teselagen.event.ContextMenuEvent": [],
   "Teselagen.models.j5Output.Error": [],
   "Ext.ux.ajax.JsonSimlet": [],
@@ -415,8 +418,8 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.grid.menu.ListMenu": [],
   "Teselagen.bio.sequence.symbols.AminoAcidSymbol": [],
   "Teselagen.models.j5Output.SuggestedAssembly": [],
-  "Vede.view.de.j5Parameters": [],
   "Teselagen.models.SBOLvIconInfo": [],
+  "Vede.view.de.j5Parameters": [],
   "Teselagen.models.DeviceEditorProject": [],
   "Teselagen.bio.parsers.ParsersManager": [],
   "Vede.view.pie.Caret": [],
@@ -475,6 +478,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.enzymes.RestrictionEnzyme": [],
   "Teselagen.bio.parsers.Keyword": [],
   "Teselagen.renderer.sequence.ORFRenderer": [],
+  "Teselagen.manager.PrinterMonitor": [],
   "Ext.ux.form.SearchField": [
     "widget.searchfield"
   ],
@@ -771,6 +775,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.DataView.LabelEditor": [],
   "Teselagen.models.SequenceFile": [],
   "Teselagen.models.digest.GelLane": [],
+  "Vede.view.j5Report.buildDNAPanel": [],
   "Ext.ux.grid.filter.StringFilter": [
     "gridfilter.string"
   ],
@@ -840,6 +845,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.form.ItemSelector": [
     "widget.itemselectorvede"
   ],
+  "Vede.view.ve.PasteConfirmationWindow": [],
   "Teselagen.event.ContextMenuEvent": [],
   "Teselagen.models.j5Output.Error": [],
   "Ext.ux.ajax.JsonSimlet": [

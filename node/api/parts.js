@@ -36,23 +36,26 @@ module.exports = function(app) {
             if(!project) return res.json(500,{"error":"project not found"});
             
             newPart.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
+            Part.generateDefinitionHash(req.user, project, newPart, function(hash){
+                newPart.definitionHash = hash;
 
-            newPart.save(function(err){
-                if(err)
-                {
-                    if(err.code===11000)
+                newPart.save(function(err){
+                    if(err)
                     {
-                        // Duplicated Part
-                        Part.findOne({"FQDN":newPart.FQDN}).exec(function(err,part){
-                            res.json({'parts': part,"duplicated":true});
-                        });
+                        if(err.code===11000)
+                        {
+                            // Duplicated Part
+                            Part.findOne({"FQDN":newPart.FQDN, "definitionHash": newPart.definitionHash}).exec(function(err,part){
+                                res.json({'parts': part,"duplicated":true});
+                            });
+                        }
+                        else
+                        {
+                            return res.json(500,{"error":err});
+                        }
                     }
-                    else
-                    {
-                        return res.json(500,{"error":err});
-                    }
-                }
-                else res.json({'parts': newPart,"duplicated":false,"err":err});
+                    else res.json({'parts': newPart,"duplicated":false,"err":err});
+                });
             });
         });
     };

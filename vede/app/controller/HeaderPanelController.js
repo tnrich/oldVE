@@ -9,6 +9,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
     header: null,
 
     helpWindow : null,
+    
     onHelpBtnClick: function(button, e, options) {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },

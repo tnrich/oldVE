@@ -685,8 +685,8 @@ Ext.define("Teselagen.manager.PieManager", {
         if(this.pie) {
             if(pSequenceManager.getSequence().toString().length > 0) {
                 this.adjustCaret(0);
-            } else if(this.caret) {
-                this.caret.remove();
+            } else if(this.caret.svgObject) {
+                this.caret.svgObject.remove();
             }
 
             this.nameBox.remove();
@@ -830,7 +830,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Int} angle The angle of the caret to reposition to.
      */
     adjustCaret: function(bp) {
-        this.caret.remove();
+        //this.caret.remove();
 
         if(this.sequenceManager &&
            this.sequenceManager.getSequence().toString().length > 0) {
@@ -840,12 +840,13 @@ Ext.define("Teselagen.manager.PieManager", {
 
             var showMapCaret = Ext.getCmp("mapCaretMenuItem").checked;
             if (showMapCaret) {
-                this.caret = Ext.create("Vede.view.pie.Caret", {
+                this.caret.setAngle(angle);
+                /*this.caret = Ext.create("Vede.view.pie.Caret", {
                     pie: this.parentSVG,
                     angle: angle,
                     center: this.center,
                     radius: this.railRadius + 10
-                });
+                });*/
             }
         }
     },

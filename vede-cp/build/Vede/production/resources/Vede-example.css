@@ -22861,25 +22861,110 @@ body.x-nbr .x-tab-default-right-frameInfo {
 }
 
 /* line 3, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.home-dash-icon {
+  display: inline-block;
+  width: 14px !important;
+  height: 14px !important;
+  background-image: url(images/dashboard/home-14.png);
+  background-repeat: no-repeat;
+  margin-top: 1px;
+  margin-left: 1px;
+}
+
+/* line 13, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.tour-icon, .manuals-icon, .newProject-icon {
+  display: inline-block;
+  width: 32px !important;
+  height: 32px !important;
+  background-image: url(images/dashboard/top_sprites.png);
+  background-repeat: no-repeat;
+  top: 16px;
+  margin: 0 auto;
+}
+
+/* line 23, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.manuals-icon {
+  background-position: 0 0 !important;
+}
+
+/* line 27, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.tour-icon {
+  background-position: -64px 0 !important;
+}
+
+/* line 31, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.newProject-icon {
+  background-position: -128px 0 !important;
+}
+
+/* line 35, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.newSequence-icon {
+  display: inline-block;
+  width: 32px !important;
+  height: 32px !important;
+  background-image: url(images/dashboard/sequence-add-icon.png);
+  background-repeat: no-repeat;
+  top: 16px;
+  margin: 0 auto;
+}
+
+/* line 45, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.projects-icon, .designs-icon {
+  display: inline-block;
+  width: 64px !important;
+  height: 64px !important;
+  background-image: url(images/dashboard/stat_sprites.png);
+  background-repeat: no-repeat;
+}
+
+/* line 53, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.sequences-icon {
+  display: inline-block;
+  width: 64px !important;
+  height: 64px !important;
+  background-image: url(images/dashboard/sequence-icon.png);
+  background-repeat: no-repeat;
+}
+
+/* line 61, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.parts-icon {
+  display: inline-block;
+  width: 64px !important;
+  height: 64px !important;
+  background-image: url(images/dashboard/part-icon.png);
+  background-repeat: no-repeat;
+}
+
+/* line 69, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.projects-icon {
+  background-position: -128px 0 !important;
+}
+
+/* line 73, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.designs-icon {
+  background-position: 0 0 !important;
+}
+
+/* line 77, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .dashProjectsData, .dashDesignsData, .dashSequencesData, .dashPartsData {
   border: 2px solid #006CAB;
   border-radius: 3px;
   background: #006CAB;
 }
 
-/* line 9, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 83, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-icon, .designsCountBox-icon, .sequencesCountBox-icon, .partsCountBox-icon {
   border: 1px solid #006CAB;
   background: #006CAB;
 }
 
-/* line 14, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 88, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-data, .designsCountBox-data, .sequencesCountBox-data, .partsCountBox-data {
   background: #1585C5;
   border: 1px solid #1585C5;
 }
 
-/* line 19, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 93, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-num input, .designsCountBox-num input, .sequencesCountBox-num input, .partsCountBox-num input {
   background: #1585C5;
   font-size: 54px;
@@ -22889,12 +22974,12 @@ body.x-nbr .x-tab-default-right-frameInfo {
   border: none;
 }
 
-/* line 28, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 102, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-desc input, .designsCountBox-desc input, .sequencesCountBox-desc input, .partsCountBox-desc input {
   background: #1585C5;
   font-size: 28px;
   color: white;
-  text-transform: uppercase;
+  text-transform: lowercase;
   padding: 1px 12px 2px 3px;
   text-align: right;
   border: none;
@@ -24017,7 +24102,7 @@ img {
 }
 
 /* line 835, ../../../../sass/src/view/AppViewport.scss */
-.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn {
+.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
@@ -24025,12 +24110,12 @@ img {
 }
 
 /* line 842, ../../../../sass/src/view/AppViewport.scss */
-.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner {
+.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .buildBtn .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner {
   color: white;
 }
 
 /* line 846, ../../../../sass/src/view/AppViewport.scss */
-.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
+.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
   background: #006CAB;
 }
 
