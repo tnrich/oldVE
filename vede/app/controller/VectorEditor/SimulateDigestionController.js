@@ -125,7 +125,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          me.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
          me.updateLadderLane(ladderSelector);
          this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
-//         me.digestManager.drawGel();
+         this.setAddAllBtnState();
      },
 
      /**
@@ -159,14 +159,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       */
      onEnzymeGroupSelected: function() {
          this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
-         var count = this.enzymeListSelector.fromField.getStore().getCount();
-         // Disable Add All button for large enzyme groups
-         if (count > 50) {
-             this.addAllBtn.disable();
-         }
-         else {
-             this.addAllBtn.enable();
-         }
+         this.setAddAllBtnState();
      },
      /**
       * Searches the itemselector fromField for enzyme names
@@ -200,6 +193,19 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
     onWindowClose: function() {
         // Reload user to rollback any unsaved changes
         this.GroupManager.loadUserGroups();
+    },
+    
+    /**
+     * Disable Add All button for large enzyme groups
+     */
+    setAddAllBtnState: function() {
+        var count = this.enzymeListSelector.fromField.getStore().getCount();
+         if (count > 50) {
+             this.addAllBtn.disable();
+         }
+         else {
+             this.addAllBtn.enable();
+         }
     }
 
 });
