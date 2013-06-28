@@ -185,8 +185,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'booleancolumn',
                                     text: 'NOT?',
                                     dataIndex: 'negationOperator',
-                                    trueText: 'Yes',
-                                    falseText: 'No',
+                                    trueText: 'NOT',
+                                    falseText: null,
                                     editor: {
                                         xtype: 'checkbox'
                                     }
