@@ -226,9 +226,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
     createNewSequence: function (project, veprojectNames) {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
+                    text = Ext.String.trim(text);
+                	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
                     for (var j=0; j<veprojectNames.length; j++) {
-                        if (veprojectNames[j].match(text)) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
+                        if (veprojectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence");
                     var self = this;
@@ -243,7 +244,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                     project.sequences().add(newSequenceFile);
                     newSequenceFile.set("project_id",project.data.id);
-
+                    
                     newSequenceFile.save({
                         callback: function () {
                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
@@ -271,9 +272,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
     createNewDeviceDesignAtProject: function (project, projectNames) {
         var onPromptClosed = function (btn, text) {
                 if(btn ==="ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this); }
+                	text = Ext.String.trim(text);
+                	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this); }
                     for (var j=0; j<projectNames.length; j++) {
-                        if (projectNames[j].match(text)) { return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
+                        if (projectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Generating Design");
                     var self = this;
