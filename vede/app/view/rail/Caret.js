@@ -37,6 +37,8 @@ Ext.define("Vede.view.rail.Caret", {
                            .attr("d", path);
         }
 
+        //console.log("changing rail caret position");
+
         return pStart;
     }
 });

@@ -10,8 +10,10 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
-    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager", "Teselagen.manager.UserManager",
-               "Teselagen.models.RestrictionEnzymeGroup"],
+    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager", 
+               "Teselagen.manager.UserManager",
+               "Teselagen.models.RestrictionEnzymeGroup",
+               "Teselagen.utils.Logger"],
 
     singleton: true,
 
@@ -24,6 +26,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         activeEnzymesChanged: false
     },
 
+    Logger: null,
     RestrictionEnzymeManager: null,
     UserManager: null,
     
@@ -41,6 +44,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * @param {Boolean} isInitialized Whether the database has already been read from the xml file.
      */
     constructor: function(inData) {
+        this.Logger = Teselagen.utils.Logger;
         this.RestrictionEnzymeManager = Teselagen.bio.enzymes.RestrictionEnzymeManager;
         this.UserManager = Teselagen.manager.UserManager;
         this.initConfig(inData);
@@ -308,14 +312,46 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      */
     changeActiveGroup: function() {
         var userActiveGroup = this.getActiveUserGroup();
-        var activeGroup = this.createGroupByEnzymes(this.ACTIVE, 
-                userActiveGroup.userRestrictionEnzymes().collect("name"))
+        var activeGroup = this.createGroupByEnzymes(this.ACTIVE,
+                userActiveGroup.userRestrictionEnzymes().collect("name"));
         this.setActiveGroup(activeGroup);
+    },
+    
+   /**
+    * Save user groups
+    */
+    loadUserGroups: function() {
+        this.UserManager.loadUser(function(pSuccess) {
+            if (!pSuccess) {
+                console.error("Error loading user restriction enzyme groups");
+            }
+        });
+        this.setActiveEnzymesChanged(false);
+    },
+    
+    /**
+    * Save user groups
+    */
+    saveUserGroups: function() {
+        var me = this;
+        this.UserManager.update(function(pSuccess) {
+            if (!pSuccess) {
+                console.error("Unable to save user restriction enzyme groups");
+            }
+            else {
+                if (me.getActiveEnzymesChanged()) {
+                    me.changeActiveGroup();
+                    Vede.application.fireEvent("ActiveEnzymesChanged");
+                    me.setActiveEnzymesChanged(false);
+                }
+                me.Logger.notifyInfo("User restriction enzyme groups saved");
+            }
+        });
     },
     
     /**
      * @private
-     * Loads user enzymes into a store, clearing it first.  Checks that enzymes 
+     * Loads user enzymes into a store, clearing it first.  Checks that enzymes
      * exist in enzyme database.
      * @param {Ext.data.Store} store User restriction enzyme store
      * @param {Array} names Enzyme names

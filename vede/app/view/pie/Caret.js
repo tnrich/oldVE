@@ -43,6 +43,8 @@ Ext.define("Vede.view.pie.Caret", {
 
         }
 
+        //console.log("changing pie caret position");
+
         return pAngle;
     }
 });
