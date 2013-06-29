@@ -129,9 +129,9 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
-
-        this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
-        this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+        var fromStore = this.enzymeSelector.fromField.getStore();
+        fromStore.loadData(enzymeArray);
+        fromStore.sort("name", "ASC");
     },
 
     /**
