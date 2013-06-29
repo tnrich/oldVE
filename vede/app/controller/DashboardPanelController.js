@@ -20,7 +20,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
             // },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                console.log(response);
                	var projectsData = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-num"]');
                	var projectsLabel = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-desc"]');
                	var designsData = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-num"]');
@@ -64,34 +63,16 @@ Ext.define("Vede.controller.DashboardPanelController", {
         });
 	},
 
-//Logic for clicking the 'create new sequence' button from the dashboard.
+    onLaunch: function () {
+        this.tabPanel = Ext.getCmp("mainAppPanel");
+        this.tabPanel.on("tabchange", this.populateStatisticts);
+    },
 
-  onDashNewSequence: function () {
-        var self = this;
-            console.log("Opening VE Direct Mode");
-            Teselagen.manager.ProjectManager.directVEEditingMode = true;
-
-            //Create empty VEProject/Sequence
-            Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {
-                name: "Untitled VEProject",
-                dateCreated: new Date(),
-                dateModified: new Date()
-            });
-
-            Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileFormat: "GENBANK",
-                sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                sequenceFileName: "untitled.gb",
-                partSource: "Untitled sequence"
-            });
-
-            //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-            Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
-  },
 
 	init: function () {
     this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
-    this.application.on("createSequence", this.onDashNewSequence);
+    this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
+
 		this.control({
 			"#designGrid_Panel": {
 				itemclick: this.onLastDEProjectsItemClick
