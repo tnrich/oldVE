@@ -38,8 +38,8 @@ Ext.define('Vede.controller.AuthWindowController', {
             url: '/api/logout',
             method: 'POST',
             success: function (response) {
-                Ext.getBody().mask();
-                self.window.close();
+                Teselagen.manager.SessionManager.maskApp();
+                Ext.create("Vede.view.AuthWindow").show();
             }
         });
     },

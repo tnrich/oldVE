@@ -118,48 +118,16 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 }
             }
 
+            // CASE 4: READ SPECIFIC DEVICE DESIGN FROM PROJECT
+            if(request.action === "destroy" && request.records[0].data.id)
+            {
+                var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns/"+request.records[0].data.id;
+                if(this.debugFlag) console.log("DESTROYING SPECIFIC DESIGN FROM PROJECT: ",url);
+                delete request.params.filter;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
 
             console.log("No devicedesign url generated");
-
-            /*
-            var restParams = "";
-            var idParam = "";
-            var filter = "";
-            if(request.operation.filters)
-            {
-                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
-            }
-            //console.log(request);
-            if(filter==="project_id")
-            {
-                //console.log("By project");
-                var project_id = request.operation.filters[0].value;
-                restParams+= "/"+project_id;
-                delete request.params.filter;
-                if(request.operation.id)
-                {
-                    idParam = "/"+request.operation.id;
-                    delete request.params.id;
-                }
-                return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
-            }
-            else
-            {
-                // Execute operation on specific record
-                //console.log("Specific record");
-                //console.log(request);
-                if(request.records)
-                {
-                    if(request.records[0])
-                    {
-                        //console.log(request.records[0]);
-                        restParams = "/" + request.records[0].data.project_id;
-                        idParam = (request.action === "create")? "" : "/" + request.records[0].data.id;
-                        return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);                        
-                    }
-                }
-            }
-            */
 
 
         },
