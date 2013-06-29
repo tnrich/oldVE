@@ -32,7 +32,7 @@ Ext.onReady(function() {
                 });
             });
         });
-        it("Set user", function() {
+        it("Set user", function(pDone) {
             var groupname = "group1";
             var userdata = {"username":username, "userRestrictionEnzymeGroups": [{"name":groupname}]};
             UserManager.setUserFromJson(userdata);
@@ -42,6 +42,10 @@ Ext.onReady(function() {
             var userRestrictionEnzymeGroups = user.userRestrictionEnzymeGroups();
             expect(userRestrictionEnzymeGroups).not.to.be.undefined;
             expect(userRestrictionEnzymeGroups.first().get("name")).to.equal(groupname);
+            UserManager.loadUser(function(pSuccess, pUser){
+                expect(pSuccess).to.be.true;
+                pDone();
+            });
         });
     });
 });

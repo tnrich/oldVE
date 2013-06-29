@@ -4,11 +4,11 @@
  * @ignore
  * @author Nick Elsbree
  */
-Ext.define("Vede.controller.RestrictionEnzymeController", {
+Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.RestrictionEnzymeGroupManager",
-               "Teselagen.manager.UserManager", "Vede.view.RestrictionEnzymesManagerWindow"],
+               "Teselagen.manager.UserManager", "Vede.view.ve.RestrictionEnzymesManagerWindow"],
 
     GroupManager: null,
     Logger: null,
