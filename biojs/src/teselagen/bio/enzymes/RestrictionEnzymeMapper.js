@@ -36,6 +36,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
      */
     cutSequenceByRestrictionEnzyme: function(restrictionEnzyme, symbolList) {
         var restrictionCutSites = new Array();
+        var restrictionCutSite;
 
         var forwardRegExpPattern = new RegExp(restrictionEnzyme.getForwardRegex().toLowerCase(), "g");
         var reverseRegExpPattern = new RegExp(restrictionEnzyme.getReverseRegex().toLowerCase(), "g");

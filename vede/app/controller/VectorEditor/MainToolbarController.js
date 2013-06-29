@@ -8,7 +8,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     requires: ['Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
                'Teselagen.bio.parsers.GenbankManager',
-               'Vede.view.RestrictionEnzymesManagerWindow'],
+               'Vede.view.ve.RestrictionEnzymesManagerWindow'],
 
     MenuItemEvent: null,
     VisibilityEvent: null,
@@ -112,7 +112,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
 
     onREButtonClick: function() {
         var restrictionEnzymesManagerWindow = Ext.create(
-            "Vede.view.RestrictionEnzymesManagerWindow");
+            "Vede.view.ve.RestrictionEnzymesManagerWindow");
 
         restrictionEnzymesManagerWindow.show();
         restrictionEnzymesManagerWindow.center();
