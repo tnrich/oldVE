@@ -44,7 +44,7 @@ task("startNode", ["log"], function() {
     //var cmd = util.format("forever start --plain -w --watchDirectory . " +
     //        "-a -p /var/log/forever -l %s -o ../log/out.log -e ../log/err.log %s %s", 
     //foreverLog, nodeApp, nodeOpts);
-    var pm2 = "pm2 start app.js -i max";
+    var cmd = "pm2 start app.js -i max";
     JakeUtil.exec(cmd);
 });
 
