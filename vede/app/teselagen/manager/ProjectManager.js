@@ -344,6 +344,28 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     },
 
+    createDirectVESession: function() {
+        this.directVEEditingMode = true;
+
+                //Create empty VEProject/Sequence
+                this.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {
+                    name: "Untitled VEProject",
+                    dateCreated: new Date(),
+                    dateModified: new Date()
+                });
+
+                this.workingSequence = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "GENBANK",
+                    sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                    sequenceFileName: "untitled.gb",
+                    partSource: "Untitled sequence"
+                });
+
+                Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
+
+                var menuItem = Ext.ComponentQuery.query('#saveSequenceBtn')[0];
+    },
+
     /*
     * Creates a new VEProject based on an existing sequence
     * DEPRECATED
