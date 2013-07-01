@@ -88,7 +88,22 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	if(name==null || name.match(/^\s*$/) || name.length==0) {
     		Ext.getCmp('saveAsWindowSequenceNameField').setFieldStyle("border-color:red");
     	} else {
-    		var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
+    		var project_id = selectedProj.internalId;
+    		var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+            var sequencesNames = [];
+            project.sequences().load().each(function (sequence) {
+                sequencesNames.push(sequence.data.name);
+            });
+            
+            for (var j=0; j<sequencesNames.length; j++) {
+                if (sequencesNames[j]===name) {
+                	alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+    				return;
+                }
+                	//{ return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
+            }
+            
+    		/*var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
     		for(var i=0;i<sequenceStore.data.items.length;i++) {
     			if(name==sequenceStore.data.items[i].data.name && selectedProj.internalId==sequenceStore.data.items[i].data.project_id) {
     				//Actually, just do the same thing here as regular "save" file. (I think)
@@ -98,7 +113,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     				alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
     				return;
     			}
-    		}
+    		}*/
     		
     		/*var parser = Teselagen.bio.parsers.ParsersManager;
     		var constants = Teselagen.constants.Constants;
