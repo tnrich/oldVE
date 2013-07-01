@@ -76,6 +76,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
     	
     	var name = Ext.getCmp('saveAsWindowSequenceNameField').getValue();
+    	name = Ext.String.trim(name);
     	var selectedProjs = Ext.getCmp('saveAsWindowProjectsGrid').getSelectionModel().getSelection();
     	if(selectedProjs.length<1) {
     		console.error("ERROR: No project selected when OK button clicked. ["+this.$className+"]");
