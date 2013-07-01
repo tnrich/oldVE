@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <de:version>4.1</de:version>
+  <de:sequenceFiles>
+    <de:sequenceFile hash="16b00736b6afb8da473297eaa5f5d39e24203e82af2aeff2a39d3c766a99fd89">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>SOK201</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>cgtaatcatgtcatagctgtttcctgtgtgaaattgttatccgctcacaattccacacaacatacgagccggaagcataaagtgtaaagcctggggtgcctaatgagtgagctaactcacattaattgcgttgcgctcactgcccgctttccagtcgggaaacctgtcgtgccagctgcattaatgaatcggccaacgcgcggggagaggcggtttgcgtattgggcgctcttccgcttcctcgctcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccggtaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaagaacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacgttaagggattttggtcatgagattatcaaaaaggatcttcacctagatccttttggttcatgtgcagctccatcagcaaaaggggatgataagtttatcaccaccgactatttgcaacagtgccgttgatcgtgctatgatcgactgatgtcatcagcggtggagtgcaatgtcgtgcaatacgaatggcgaaaagccgagctcatcggtcagcttctcaaccttggggttacccccggcggtgtgctgctggtccacagctccttccgtagcgtccggcccctcgaagatgggccacttggactgatcgaggccctgcgtgctgcgctgggtccgggagggacgctcgtcatgccctcgtggtcaggtctggacgacgagccgttcgatcctgccacgtcgcccgttacaccggaccttggagttgtctctgacacattctggcgcctgccaaatgtaaagcgcagcgcccatccatttgcctttgcggcagcggggccacaggcagagcagatcatctctgatccattgcccctgccacctcactcgcctgcaagcccggtcgcccgtgtccatgaactcgatgggcaggtacttctcctcggcgtgggacacgatgccaacacgacgctgcatcttgccgagttgatggcaaaggttccctatggggtgccgagacactgcaccattcttcaggatggcaagttggtacgcgtcgattatctcgagaatgaccactgctgtgagcgctttgccttggcggacaggtggctcaaggagaagagccttcagaaggaaggtccagtcggtcatgcctttgctcggttgatccgctcccgcgacattgtggcgacagccctgggtcaactgggccgagatccgttgatcttcctgcatccgccagaggcgggatgcgaagaatgcgatgccgctcgccagtcgattggctgagctcatgagcggagaacgagatgacgttggaggggcaaggtcgcgctgattgctggggcaacacgtggagcggatcggggattgtctttcttcagctcgctgatgatatgctgacgctcaatgccgtttggcctccgactaacgaaaatcccgcatttggacggctgatccgattggcacggcggacggcgaatggcggagcagacgctcgtccgggggcaatgagatatgaaaaagcctgaactcaccgcgacgtatcgggccctggccagctagctagagtcgacctgcaggtccccggggatcggtcttgccttgctcgtcggtgatgtacttcaccagctccgcgaagtcgctcttcttgatggagcgcatggggacgtgcttggcaatcacgcgcaccccccggccgttttagcggctaaaaaagtcatggctctgccctcgggcggaccacgcccatcatgaccttgccaagctcgtcctgcttctcttcgatcttcgccagcagggcgaggatcgtggcatcaccgaaccgcgccgtgcgcgggtcgtcggtgagccagagtttcagcaggccgcccaggcggcccaggtcgccattgatgcgggccagctcgcggacgtgctcatagtccacgacgcccgtgattttgtagccctggccgacggccagcaggtaggccgacaggctcatgccggccgccgccgccttttcctcaatcgctcttcgttcgtctggaaggcagtacaccttgataggtgggctgcccttcctggttggcttggtttcatcagccatccgcttgccctcatctgttacgccggcggtagccggccagcctcgcagagcaggattcccgttgagcaccgccaggtgcgaataagggacagtgaagaaggaacacccgctcgcgggtgggcctacttcacctatcctgcccggctgacgccgttggatacaccaaggaaagtctacacgaaccctttggcaaaatcctgtatatcgtgcgaaaaaggatggatataccgaaaaaatcgctataatgaccccgaagcagggttatgcagcggaaaagatccgtcgacct</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>AmR</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1231</seq:genbankStart>
+            <seq:end>2007</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >aac (3) IV apramycin resistance gene</seq:attribute>
+        <seq:seqHash>96b23079d8588f838fd0551bc3b4f2b7cdc6496ce48be4d9ec9087eff2fb8e08</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>RP4 ori</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2842</seq:genbankStart>
+            <seq:end>2953</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >RP4 origin of ssDNA transfer</seq:attribute>
+        <seq:seqHash>802bbf1167e97e336bc7e1d1574466db744c7021efe0f0ff01ff7e352c44f56b</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>SOK201.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="ad1b99fe40fa7da8d28f3f13519f6970035fb0a17c4f1606bf15d38ad27b98c6">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>CmlDel1</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>gttgctatgttgagaggtatgtcgagtcctgaggcggaaagaagcgagccaccggtgatccggtggctgatcgcgtaaccctctgacgaccctgcttcccccggcctctgccgccgagcagcgcgtcgcgcattcgccacggatcaaccgcatcgcgggatcacgtccggatctctccgggacgtctcccacgccacgcacggcctttcgtcctgcgtcgcgtctcccctttctgcgatgtagttggagctttttcatgccattcgccatctacgttctcgggctggccgtattcgcccagggaacgtcggaattcatgctgtccgggctcgtggaggacatggccgccgatttcggcgtgtccctccaggccgtcggctcactcacctcggccttcgcggtcggaatgatcatcggcgcaccgctggtcgcgatgctgagcctgcgctggccgcgccgccgggcgctgctcgcgttcctcatcacgttcctcctcgcgcacgtcgtcggcgctctcaccaacagcttcgaagtcctcttcgtcacgcgggtgatcgccgcactggccaacgcgggcttcctcgccgtcggcctcgccaccgcggcgagcatggccgggccgcaggcgaagggccgggcgacgtcgatcctgctcagcggcgtcaccctcgcctgcatcgccggtgtcccgctcggcgccgtcctcagcgaggtctggggctggcgctcggcgttctggggggtcgcgatcatctccgcccccgcggtcttcgcggtgctgtggtccgtgccggcgacgcccgtcgacccctcggctcccagcgtccgccacgaactgcgggcgctccgcacgcccaaggtgggcgtgacgctgctgctcggggcgctggtcaacggcgcgacgttctgctcgttcacgtacctcgcgccggtcatcaccaacgtgacggagctgagctccggttgggtgccggccacgctcgcgctgttcggcattggttccttcgtcggggtcaacgtcggcggccggctcgcggacacccgtcccggccaggtcctcgcggtcggtggtgcggccctcctcgccggctggctggtgttcgccctcacggccgggaacccggtcgtggcgctcgtcctcgtcttcgtccagggcgcgctgtcgttcggcgtgggctccacgctgatcgcgcaggccctctacacggcgtcggacgcccccacgctcgccggtggcttcgccaccgccgcgctgaacgtcggcgccgccgccgggcccgccctgggcggtctcgccctgggcgccgagttcggttaccgctcgccgctggtggtgagcgccgtgctcgtcgcgaccgcgctcgtcctggcgggcgtggcccgggccgccggtgtcaccggcgccaaggccgacgccgccgccacggagaacccgcccaccgggcgtccggtggaggcccgttcctgactgtccgtacggtcggtccttcccgtccgtcccgtctccggtggcccgtccccctcgtgggggcgggccaccggccgtccggggtggacggcacgggagccggtcagagcagggagaggaaatgggtgaccatgtccgccgactgctcggggttcagccgggggtcgcaggtggaccggtagtccgtgaaccgcggcggccggtcgagctccgacacgcattcggtgaccgggtccggggtgagctccaggtggaggcccgcgggccactgcccgtgctcccggagcgtccgtacgaaggcggcggtctcggcgcgcatcggctcgatcagccgggtcttgtgaccggccagtttcagcccgttgccgtgcatcgggtcgcagagccagacgaccggtgcgccgtgccgggcgaccgcacggacgaccggcggcaggagctcgtccacctccttggcgccgaagcgcacgatgaacgtcagccgtcccggtacgccctccgggttcagcgaccggctcagggcgaccgcgtcctccggcgacaccgtcggccccagcttgacgcctacggggttgtgtacggcctgggcgagggcgacgtgggcgccgtcctcccggcgggtgcgctcgccgatccagccgaaatgcgcggaaccgctgtacgtaccgtgggcgccctcgcgcaccagcggccgctcgtacggcagcagcagcaactcgtg</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>cmlF</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>257</seq:genbankStart>
+            <seq:end>1468</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >Major Facilitator Superfamily transportewr</seq:attribute>
+        <seq:seqHash>cfb153012a62e4981930cfe9ed687a8188579a562d9f5e06252a4421964cdbbb</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>'cmlE</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1572</seq:genbankStart>
+            <seq:end>2189</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >3-deoxy-D-arabino-heptulosonate 7-phosphate (DAHP) synthase</seq:attribute>
+        <seq:seqHash>b5afda9531d50eca02d7e10dd6a5e5a9346ef452f1aea17049b4acf84be62641</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>CmlDel1.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="2eabaeb97efd885d1a95cae977520c7e602762733d4c179a77202b3d31edb1f6">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>CmlDel2</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>ctacgagcagtaccaccagttcctcgcctccttctacaccttcgcctccttcacggagcccgactccgagttctggcggaagcggcgcatcacggagtccgacgacgaccggctgacccgaaagaagtggttcgagagcctggcgggcaacggcccggaggacccctccgggaccgtggcgtccttccgcgaccgggcatccacgatgatcgcgatcggccgccaccagcgtccggaactcagcgacgacttcagcgaggccgagctgaacccggcccgggtccgctggatcagcgacctcaccaagcggctgaacagcatcacccgcttcaagtggaccggcggcaaggccgtgctcaagcagcactaccgcgtcgagccgatcggcttccggctggaacagcgcgaggtcctcgccaacggggaagggctcgacatggcccagtacccgatggacgacgaggcccggcagatcttccaggacctcgccgaggaggagttcggctacaagacgctggtcaagcgcctcggcgcggtcggccggcaggagctgagcacccagatcgtcgtccggctgatggaggcgggcctcctcaccggctacgacgcgcagggcgagaaggtcttcgtccagggccggctccacttcggcggcgtcggggtcgagtacgaggtctgaccgccgccgcacgaccacccgccgggcagccccgtcccgttcacgggagcggacgggacgggccccggcgggctcgggggccggtgcacccaccggccaccacccaccggccaccgcccaccggccaccgggcnnnnnnnnnnnnnnnnnnnnacccccacccctcatccaccctcgcgccccgaaggaggcggtccgatgcggcacacgagattgcgggacctggaggtctcccggatcggcctggggaccatgggcatgtccttcggctacacgggctccggctcggacgacgcgggctccgtccgcgccctgcaccgcgccctcgacctcggcgtcaccttcctcgacaccgccgagatctacgggccctacaccaacgaacggctcgtcggccgagcgctcggcgcccgccgcgaccaggtggtgctcgccacgaagttcggcctcgtctcgcacgcgggcggcggccccggacagctcgacagcagccccgcgaacgtccgtaccgccgtggagggttcgctgcggcggctcgggaccgaccacatcgacctctgctaccagcaccgcgtcgaccccggcacccccatcgaggacaccgtcggcgccctcgccgagctggtcgccgagggcaagatccgccacatcggcctctccgaggcgggccccgccacgatccgccgcgcgcacgccgtccacccggtcaccgcggtccagtccgagtactccctgtggacccgcgaccccgaggaggcggtcctgccggtcctgcgcgaactgggcatcggcttcgtggcgtactccccgctcggccacggcttcctcaccggcacggtccgcgcggccggccgcttcgacgcctcggacctccgggcggacaacccccgcttcaccgcggagaacctgccccggaacctgcgcatcgccgacgagatcgccgccgtcgccgccgaggcggacgccaccccggcgcaggtcgccctcgcctggctgctcacccggggggacgacgtcgtgccgattcccggcagccggcgggccgcccgcgtcgaggagaacacgacggccgccgaggtccgcctgagcgcggggcaactcgcccgcctcgacgccctgccccccgccgcgggcgagcaccacactgaggagcagatggcgatgatggaccgcgtgtagcggctgcccgggcgctcgccccgccgagagcgaacatccttggccacggggcgagttgcggcaaggctgtgggggtcacatcccgcatcctggaggcgttccatgaccgccgagcacgcgaacaccctgtacgaggccgtgggcggcgccgacgcgctgcgcaggctctccgagaccttctaccagggggtcctcgccgaccccctcctcgcccccgtcttcgccgacttcaccgccgcccacgtggagcacgtcgccgtgtggctggcggaggtgttctcggggcccgccgacttcaccgcggagctcggcgggcaccaggcactgctcagggcccatctcgggctcggcatcaccgaggaacagcggctgcgctggatggagctgatgacggcggccgtggagaaggaactgccggacgacgaactgctg</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>'cmlS</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>2</seq:genbankStart>
+            <seq:end>679</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >alkyl halogenase</seq:attribute>
+        <seq:seqHash>3893c122a235d76ac34b7853ae88aae7b72c2785f12e0e5ba05506aa89f4cf6c</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>orf11</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>878</seq:genbankStart>
+            <seq:end>1858</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >aldo/keto reductase </seq:attribute>
+        <seq:seqHash>11b7b4a9eb25f790fcd4ca0326a1029f167b1e984d0072a204ba7a3022251ede</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>hbs'</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1898</seq:genbankStart>
+            <seq:end>2290</seq:end>
+        </seq:location>
+        <seq:attribute name="product" quoted="true" >truncate globin protein</seq:attribute>
+        <seq:seqHash>66d5f66c7b45782e3d7adc07c86ea260765c24e1d83c71af009a4dd9e1eef3e5</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>CmlDel2.xml</de:fileName>
+    </de:sequenceFile>
+  </de:sequenceFiles>
+  <de:partVOs>
+    <de:partVO id="1369985623775908">
+      <de:name>SOK201</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>3098</de:stopBP>
+      <de:sequenceFileHash>16b00736b6afb8da473297eaa5f5d39e24203e82af2aeff2a39d3c766a99fd89</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1369985623775968">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1369985657866245">
+      <de:name>Cml_D1</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>2189</de:stopBP>
+      <de:sequenceFileHash>ad1b99fe40fa7da8d28f3f13519f6970035fb0a17c4f1606bf15d38ad27b98c6</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1369985657866088">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1369985695629586">
+      <de:name>Cml_D2</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>2290</de:stopBP>
+      <de:sequenceFileHash>2eabaeb97efd885d1a95cae977520c7e602762733d4c179a77202b3d31edb1f6</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1369985695629902">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+  </de:partVOs>
+  <de:eugeneRules/>
+  <de:j5Collection>
+    <de:isCircular>true</de:isCircular>
+    <de:j5Bins>
+      <de:j5Bin>
+        <de:binName>No_Name0</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1369985623775968</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name1</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1369985657866088</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name2</de:binName>
+        <de:iconID>user-defined</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1369985695629902</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+    </de:j5Bins>
+  </de:j5Collection>
+</de:design>

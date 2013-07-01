@@ -9,6 +9,9 @@ Ext.define('Vede.view.de.grid.Bin', {
     extend: 'Ext.container.Container',
     alias: 'widget.Bin',
     
+    requires: ["Ext.layout.container.Table",
+               "Ext.tip.ToolTip"],
+
     statics: {
         forwardButtonIconPath: 'resources/images/ux/right2.gif',
         reverseButtonIconPath: 'resources/images/ux/left2.gif'
@@ -116,9 +119,10 @@ Ext.define('Vede.view.de.grid.Bin', {
         var firstFas;
 
         if(this.getBin()) {
-
-            if(this.getBin().parts().getRange()[0]) {
-                firstFas = this.getBin().parts().getRange()[0].get("fas");
+            for (var i = 0; i <= this.getBin().parts().getRange().length; i++) {
+                if (this.getBin().parts().getRange()[i] && this.getBin().parts().getRange()[i].get("phantom") == false && (firstFas == undefined || firstFas == "None")) {
+                    firstFas = this.getBin().parts().getRange()[i].get("fas");
+                }
             }
 
             // Add each part in the bin to the bin view object.

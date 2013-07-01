@@ -8,7 +8,8 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.Part"
+        "Teselagen.models.Part",
+        "Teselagen.constants.Constants"
     ],
 
     proxy: {
@@ -70,7 +71,18 @@ Ext.define("Teselagen.models.EugeneRule", {
                 if (compOp === constants.AFTER || compOp === constants.BEFORE || compOp === constants.WITH || compOp === constants.THEN || compOp === constants.NEXTTO || compOp === constants.MORETHAN ) {
                     // These check out
                 } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) {
-                    // These are ok, just deprecated
+                    console.warn("Using deprecated compositionalOperator: ",compOp);
+                    if(compOp === constants.NOTMORETHAN)
+                    {
+                        compOp = constants.MORETHAN;
+                        this.set('negationOperator',true);
+                        console.warn("Compositional operator updated to MORE and NOT? True");
+                    }
+                    if(compOp === constants.NOTMOREWITH)
+                    {
+                        compOp = constants.MOREWITH;
+                        cconsole.warn("Compositional operator updated to WITH and NOT? True");
+                    }
                 } else {
                     // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
                     console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
@@ -99,11 +111,13 @@ Ext.define("Teselagen.models.EugeneRule", {
         //{field: "negationOperator", type: "presence"},
         //{field: "operand1",         type: "presence"},
         {field: "compositionalOperator",    type: "presence"},
+        /*
         {
             field: "compositionalOperator",
             type: "inclusion",
-            list: Teselagen.constants.Constants.COMPOP_LIST
+            list: Teselagen.constants.Constants.COMPOP_LIST // Its NOT possible using constants on class definition context.
         },
+        */
         {field: "operand2Number",         type: "presence"}
     ],
 
@@ -116,7 +130,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand1",
 //            associationKey: "operand1",
             instanceName: "operand1",
-            foreignKey: "operand1_id", 
+            foreignKey: "operand1_id" 
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -126,7 +140,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand2Part",
 //            associationKey: "operand2Part",
             instanceName: "operand2",
-            foreignKey: "operand2_id", 
+            foreignKey: "operand2_id" 
 
         },
         //Needed to find the parent of a child

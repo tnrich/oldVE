@@ -6,6 +6,8 @@
 Ext.define('Vede.view.AppViewport', {
     extend: 'Ext.container.Viewport',
 
+    requires: ["Ext.layout.container.Border"],
+
     layout: {
         type: 'border'
     },
@@ -41,7 +43,9 @@ Ext.define('Vede.view.AppViewport', {
                     items: [
                         {
                             xtype: 'DashboardPanelView',
-                            hidden: true
+                            title: null,
+                            iconCls: 'home-dash-icon',
+                            iconAlign: 'top'
                         },
 
                         {

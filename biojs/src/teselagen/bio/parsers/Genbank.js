@@ -7,6 +7,10 @@
  */
 
 Ext.define("Teselagen.bio.parsers.Genbank", {
+    requires: ["Teselagen.bio.parsers.GenbankLocusKeyword",
+               "Teselagen.bio.parsers.GenbankKeyword",
+               "Teselagen.bio.parsers.GenbankFeaturesKeyword",
+               "Teselagen.bio.parsers.GenbankOriginKeyword"],
 
     /**
      * @cfg {Object} config

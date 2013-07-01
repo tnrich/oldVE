@@ -56,7 +56,6 @@ Ext.define("Teselagen.models.Project", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/projects.json",
         reader: {
             type: "json",
             root: "projects"
@@ -72,7 +71,8 @@ Ext.define("Teselagen.models.Project", {
             }
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUserResUrl("/projects", this.url);
+            var url = Teselagen.manager.SessionManager.buildUserResUrl("/projects", this.url);
+            return url;
         },
         appendId: true,
         noCache: false,

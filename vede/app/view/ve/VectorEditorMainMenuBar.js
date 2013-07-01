@@ -7,67 +7,119 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     id: 'VectorEditorMainMenuBar',
     alias: 'widget.VectorEditorMainMenuBar',
     items: [
-    // {
-    //     xtype: 'button',
-    //     text: 'File',
-    //     menu: {
-    //         xtype: 'menu',
-    //         id: 'veFileMenu',
-    //         minWidth: 140,
-    //         items: [
-    //             {
-    //             xtype: 'filefield',
-    //             buttonOnly: true,
-    //             id: 'importMenuItem',
-    //             buttonConfig: {
-    //                 border: false,
-    //                 text: 'Import from File',
-    //                listeners: {
-    //                    click: function() {
-    //                        Ext.getCmp('veFileMenu').hide();
-    //                    }
-    //                }
-    //             }
-    //         },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Download Genbank',
-    //            id: 'downloadGenbankMenuItem'
-    //        },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Rename Sequence',
-    //            id: 'renameSequenceItem'
-    //        },
-    //        {
-    //            xtype: 'menuseparator'
-    //        },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Project Properties'
-    //        },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Print',
-    //            menu: {
-    //                xtype: 'menu',
-    //                width: 120,
-    //                items: [{
-    //                    xtype: 'menuitem',
-    //                    text: 'Sequence'
-    //                }, {
-    //                    xtype: 'menuitem',
-    //                    text: 'Circular View'
-    //                }, {
-    //                    xtype: 'menuitem',
-    //                    text: 'Linear View'
-    //                }]
-    //            }
-    //        }
-
-    //         ]
-    //     }
-    // }, 
+     {
+         xtype: 'button',
+         text: 'File',
+         menu: {
+             xtype: 'menu',
+             id: 'veFileMenu',
+             minWidth: 140,
+             items: [
+            {
+                xtype: 'menuitem',
+                text: 'New Sequence',
+                id: 'newBlankVectorEditorMenuItem'
+            },                  
+            /*{
+                //Disabled until VE is refactored to open multiple tabs.
+            	xtype: 'menuitem',
+                text: 'Close',
+                disabled: true,
+                id: 'closeMenuItem'
+            },*/
+            {
+                xtype: 'menuseparator'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Save',
+                id: 'saveMenuItem'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Save As...',
+                id: 'saveAsMenuItem'
+            },
+            /*{
+                xtype: 'menuseparator'
+            },
+            {
+                xtype: 'menuitem',
+                text: 'Share',
+                id: 'shareItem',
+                disabled: true
+                menu: {
+                	xtype: 'menu',
+                	width: 120,
+                	items []
+                }
+            },*/
+            {
+                xtype: 'menuseparator'
+            },
+            {
+                xtype: 'filefield',
+                buttonOnly: true,
+                cls: 'importSequenceBtn',
+                id: 'importSequenceMenuItem',
+                text: 'Import File',
+                buttonConfig: {
+                    border: false,
+                    text: 'Open a Sequence File',
+                    style: {
+                        left: "-6px"
+                    }
+                }
+            },
+            {
+                xtype: 'menuitem',
+                id: 'exportToFileMenuItem',
+                text: 'Export to File'
+            },                                
+            /*{ //Move 'Permissions' functionality to inside of 'Properties' window.
+                xtype: 'menuitem',
+                text: 'Permissions',
+                id: 'permissionsMenuItem'
+            },*/
+            {
+                xtype: 'menuseparator'
+            },
+            /*{ //Commented out until we learn what to put in 'Print Setup...'.
+            	xtype: 'menuitem',
+                text: 'Print Setup...',
+                id: 'printSetupMenuItem'
+            },*/
+            {
+                xtype: 'menuitem',
+                text: 'Print',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menuitem',
+                        id: 'printSequenceViewMenuItem',
+                        text: 'Sequence'
+                    }, {
+                        xtype: 'menuitem',
+                        id: 'printCircularViewMenuItem',
+                        text: 'Circular View'
+                    }, {
+                        xtype: 'menuitem',
+                        id: 'printLinearViewMenuItem',
+                        text: 'Linear View'
+                    }]
+                }
+            },
+            /*{
+                xtype: 'menuseparator'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Properties...',
+                id: 'propertiesMenuItem'
+            }*/]
+         }
+     },
     {
         xtype: 'button',
         text: 'Edit',
@@ -130,6 +182,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }, {
                 xtype: 'menuseparator'
             }, {
+                xtype: 'menucheckitem',
+                id: 'sequenceLinearMenuItem',
+                text: 'Sequence Linear'
+            }, {
+                xtype: 'menuseparator'
+            }, {
                 xtype: 'menuitem',
                 itemId: 'reverseComplementMenuItem',
                 text: 'Reverse Complement Entire Sequence'
@@ -138,7 +196,15 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'rebaseMenuItem',
                 text: 'Rotate to Here'
-            }
+            }/*,{
+                xtype: 'menuseparator'
+            },
+            {
+                xtype: 'menuitem',
+                id: 'createNewFeatureMenuItem',
+                text: 'Annotate as new Sequence Feature',
+                disabled: true
+            }*/
             ]
         }
     }, {
@@ -160,6 +226,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 group: 'lineType'
             }, {
                 xtype: 'menuseparator'
+            }, {
+                xtype: 'menucheckitem',
+                id: 'mapCaretMenuItem',
+                text: 'Map Caret',
+                checked: true
             }, {
                 xtype: 'menucheckitem',
                 id: 'featuresMenuItem',
@@ -224,12 +295,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 140,
-            items: [
-             {
-                xtype: 'menuitem',
-                id: 'createNewFeatureMenuItem',
-                text: 'Annotate'
-            },
+            items: [     
+             
             {
                 xtype: 'menuitem',
                 id: 'restrictionEnzymesManagerMenuItem',
@@ -239,7 +306,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'simulateDigestionMenuItem',
                 text: 'Simulate Digestion'
-            },
+            }
 //            {
 //                xtype: 'menuitem',
 //                text: 'Properties'
@@ -249,11 +316,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //                xtype: 'menuitem',
 //                text: 'Preferences'
 //            },
-            {
-                xtype: 'menuitem',
-                id: 'exportToFileMenuItem',
-                text: 'Export to File'
-            }]
+            ]
         }
     }
     ]

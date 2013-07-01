@@ -3,6 +3,12 @@
  * Class which handles rendering in the annotate panel.
  */
 Ext.define("Vede.view.annotate.Annotator", {
+    requires: ["Teselagen.models.Rectangle",
+               "Teselagen.renderer.annotate.CutSiteRenderer",
+               "Teselagen.renderer.annotate.FeatureRenderer",
+               "Teselagen.renderer.annotate.ORFRenderer",
+               "Teselagen.renderer.annotate.SequenceRenderer"],
+    
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
 
@@ -30,7 +36,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         featureRows: 2,
         BP_PER_LINE: 60,
         bpPerRow: 60,
-        aminoSequencesShown: 5,
+        aminoSequencesShown: 5
     },
 
     /**
@@ -81,8 +87,6 @@ Ext.define("Vede.view.annotate.Annotator", {
      * Renders all annotations.
      */
     render: function(){
-        Ext.suspendLayouts();
-
         this.clean();
         this.panel = Ext.getCmp('AnnotatePanel');
         this.xMax = this.panel.getBox().width;
@@ -116,8 +120,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
             this.annotateSVG.attr("width", this.sequenceRenderer.getTotalWidth() + 60);
         }
-
-        Ext.resumeLayouts(true);
     },
 
     /**
@@ -134,6 +136,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         var that = this;
         for (var i = 0; i < retrievedFeatures.length; i++){
             var feature = retrievedFeatures[i];
+            //console.log("feature " + feature.getName() + " starts at " + feature.getStart() + " and ends at " + feature.getEnd());
             var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {
                 sequenceAnnotator: that,
                 feature: feature
@@ -232,12 +235,13 @@ Ext.define("Vede.view.annotate.Annotator", {
                 this.self.CHAR_WIDTH;
 
             var bpY = row.getSequenceMetrics().y;
-            resultsMetrics = Ext.create("Teselagen.models.Rectangle", {
+
+            resultsMetrics = {
                 x: bpX,
                 y: bpY,
                 width: 2, //fix to make resizable
-                height: 3,
-            });
+                height: 3
+            };
         }
         return resultsMetrics;
     },
@@ -345,7 +349,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         if (this.sequenceRenderer == null){
             this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.SequenceRenderer",
                     {
-                        sequenceAnnotator: this,
+                        sequenceAnnotator: this
                     }
             );
         }

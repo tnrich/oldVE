@@ -69,44 +69,53 @@ module.exports = function(app) {
     app.get('/checkDuplicatedPartName', restrict, function(req, res) {
 
         var reqPart = JSON.parse(req.query.part);
-        console.log(reqPart);
         var reqSequence = req.query.sequence;
 
+        console.log(reqPart);
+
         var Part = app.db.model("part");
+        var Project = app.db.model("project");
 
-        var duplicatedName = false;
-        var identical = false;
+        Project.findById(reqPart.project_id, function(err,project){
+            var FQDN_candidate = req.user.FQDN+'.'+project.name+'.'+reqPart.name;
 
-        Part.find(function(err, parts) {
-            counter = parts.length;
-            parts.forEach(function(part, key) {
+            Part.generateDefinitionHash(req.user, project, reqPart, function(hash_candidate) {
+                var duplicatedName = false;
+                var identical = false;
+                var part;
 
-                if (part.name === reqPart.name) duplicatedName = true;
+                Part.find({"project_id": reqPart.project_id, "user_id": reqPart.user_id}, function(err, parts) {
+                    counter = parts.length;
+                    for(var i = 0; i < parts.length; i++) {
+                        part = parts[i];
 
-                if (
-                part.genbankStartBP === reqPart.genbankStartBP.toString() && part.endBP === reqPart.endBP.toString() && part.revComp === reqPart.revComp.toString() && part.fas === reqPart.fas.toString() && part.directionForward === reqPart.directionForward.toString()) {
-                    identical = true;
-                }
+                        if (part.FQDN === FQDN_candidate) {
+                            duplicatedName = true;
+                        }
 
-                if (duplicatedName && !identical) {
-                    res.json({
-                        'msg': 'Duplicated part name.',
-                        'type': 'warning'
-                    }, 500);
-                } else if (duplicatedName && identical) {
-                    res.json({
-                        'msg': 'The part already exist.',
-                        'type': 'error'
-                    }, 500);
-                } else {
-                    counter--;
-                }
-                if (counter === 0) res.json({});
+                        if (part.definitionHash === hash_candidate) {
+                            identical = true;
+                        }
+                    }
+
+                    if (duplicatedName && !identical) {
+                        return res.json({
+                            'msg': 'Duplicated part name.',
+                            'type': 'warning'
+                        });
+                    } else if (duplicatedName && identical) {
+                        return res.json({
+                            'msg': 'The part already exist.',
+                            'type': 'error'
+                        });
+                    } else {
+                        return res.json({
+                            'type': 'success'
+                        });
+                    }
+                });
             });
-            if (counter === 0) res.json({});
         });
-
-
     });
 
 
@@ -126,6 +135,29 @@ module.exports = function(app) {
                     j5runs: j5runs
                 });
             });
+    });   
+
+    app.get('/getStats', restrict, function(req, res) {
+        //var numProjects = req.user.projects.length;    
+
+        var User = app.db.model("User");
+        User.findById(req.user._id).populate('projects')
+        .exec(function(err, user) {
+            var countDesigns = 0;
+            var countProjects = 0;
+            var countSequences = 0;
+            var countParts = 0;
+            user.projects.forEach(function(project){
+                countDesigns += project.designs.length;
+                countSequences += project.sequences.length;
+                countParts += project.parts.length;
+                countProjects++;
+            });
+            res.json({"numberProjects":countProjects, "numberDesigns":countDesigns, "numberSequences":countSequences, "numberParts":countParts});
+        });
+
+
+
     });
 
 };

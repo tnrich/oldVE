@@ -5,7 +5,15 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox","Teselagen.manager.TasksMonitor"],
+    requires: ["Ext.window.MessageBox",
+               "Teselagen.bio.parsers.GenbankManager", 
+               "Teselagen.constants.Constants", 
+               "Teselagen.manager.DeviceDesignManager", 
+               "Teselagen.manager.J5CommunicationManager", 
+               "Teselagen.manager.ProjectManager", 
+               "Teselagen.manager.TasksMonitor",
+               "Teselagen.utils.J5ControlsUtils", 
+               "Vede.view.de.j5Parameters"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -14,6 +22,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5ParamsWindow: null,
     automationParamsWindow: null,
     inspector: null,
+
+    previousJ5ParameterData: null,
 
     j5Parameters: null,
     j5ParameterFields: [],
@@ -139,6 +149,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         
         this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
 
+        this.previousJ5ParameterData = this.j5Parameters.getData();
         this.populateJ5ParametersDialog();
     },
 
@@ -147,31 +158,64 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.populateJ5ParametersDialog();
     },
 
-    loadServerj5Params: function(){
-        
-    },
-
     resetServerj5Params: function () {
-
-        // var loadingMessage = this.createLoadingMessage();
-
-        // loadingMessage.update(60, "Executing request");
+        this.j5ParamsWindow.setLoading(true);
 
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("GetLastUpdatedUserFiles", ''),
             success: function (response) {
-                // loadingMessage.update(100, "Completed");
-                // loadingMessage.close();
-                response = JSON.parse(response.responseText);
-                self.j5Parameters.loadValues(response.j5parameters);
-                self.populateJ5ParametersDialog();
-                isCircular = response.j5parameters.ASSEMBLY_PRODUCT_TYPE == 'circular' ? true : false;
-                Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign().getJ5Collection().set('isCircular',isCircular);
+                self.j5ParamsWindow.setLoading(false);
+                var r = JSON.parse(response.responseText).j5parameters;
 
+                // The most tedious block of code I've ever written.
+                // If there are any errors in resetting server parameters, they're
+                // probably due to a typo in here somewhere.
+                self.j5Parameters.set({
+                    masterOligoNumberOfDigitsValue: r.MASTEROLIGONUMBEROFDIGITS,
+                    masterPlasmidNumberOfDigitsValue: r.MASTERPLASMIDNUMBEROFDIGITS,
+                    gibsonOverlapBPsValue: r.GIBSONOVERLAPBPS,
+                    gibsonOverlapMinTmValue: r.GIBSONOVERLAPMINTM,
+                    gibsonOverlapMaxTmValue: r.GIBSONOVERLAPMAXTM,
+                    maxOligoLengthBPsValue: r.MAXIMUMOLIGOLENGTHBPS,
+                    minFragmentSizeGibsonBPsValue: r.MINIMUMFRAGMENTSIZEGIBSONBPS,
+                    goldenGateOverhangBPsValue: r.GOLDENGATEOVERHANGBPS,
+                    goldenGateRecognitionSeqValue: r.GOLDENGATERECOGNITIONSEQ,
+                    goldenGateTerminiExtraSeqValue: r.GOLDENGATETERMINIEXTRASEQ,
+                    maxIdentitiesGoldenGateOverhangsCompatibleValue: r.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE,
+                    oligoSynthesisCostPerBPUSDValue: r.OLIGOSYNTHESISCOSTPERBPUSD,
+                    oligoPagePurificationCostPerPieceUSDValue: r.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD,
+                    oligoMaxLengthNoPagePurificationRequiredBPsValue: r.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS,
+                    minPCRProductBPsValue: r.MINIMUMPCRPRODUCTBPS,
+                    directSynthesisCostPerBPUSDValue: r.DIRECTSYNTHESISCOSTPERBPUSD,
+                    directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIMUMCOSTPERPIECEUSD,
+                    primerGCClampValue: r.PRIMER_GC_CLAMP,
+                    primerMinSizeValue: r.PRIMER_MIN_SIZE,
+                    primerMaxSizeValue: r.PRIMER_MAX_SIZE,
+                    primerMinTmValue: r.PRIMER_MIN_TM,
+                    primerMaxTmValue: r.PRIMER_MAX_TM,
+                    primerMaxDiffTmValue: r.PRIMER_MAX_DIFF_TM,
+                    primerMaxSelfAnyThValue: r.PRIMER_MAX_SELF_ANY_TH,
+                    primerMaxSelfEndThValue: r.PRIMER_MAX_SELF_END_TH,
+                    primerPairMaxComplAnyThValue: r.PRIMER_PAIR_MAX_COMPL_ANY_TH,
+                    primerPairMaxComplEndThValue: r.PRIMER_PAIR_MAX_COMPL_END_TH,
+                    primerTmSantaluciaValue: r.PRIMER_TM_SANTALUCIA,
+                    primerSaltCorrectionsValue: r.PRIMER_SALT_CORRECTIONS,
+                    primerDnaConcValue: r.PRIMER_DNA_CONC,
+                    mispriming3PrimeBoundaryBPToWarnIfHitValue: r.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT,
+                    misprimingMinTmValue: r.MISPRIMING_MIN_TM,
+                    misprimingSaltConcValue: r.MISPRIMING_SALT_CONC,
+                    misprimingOligoConcValue: r.MISPRIMING_OLIGO_CONC,
+                    outputSequenceFormatValue: r.OUTPUT_SEQUENCE_FORMAT,
+                    suppressPurePrimersValue: r.SUPPRESS_PURE_PRIMERS,
+                });
+
+                self.populateJ5ParametersDialog();
+                isCircular = r.ASSEMBLY_PRODUCT_TYPE == 'circular' ? true : false;
+                Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign().getJ5Collection().set('isCircular',isCircular);
             },
             failure: function(responseData, opts) {
-                // loadingMessage.close();
+                self.j5ParamsWindow.setLoading(false);
                 if(responseData)
                 {
                     if(responseData.responseText)
@@ -193,6 +237,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onj5ParamsCancelBtnClick: function () {
+        this.j5Parameters.set(this.previousJ5ParameterData);
         this.j5ParamsWindow.close();
     },
 
@@ -434,24 +479,23 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
     populateAutomationParametersDialog: function () {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var inspector = currentTab.down('InspectorPanel');
+        var automationWindow = Ext.getCmp('j5AutomationParameters');
 
         this.automationParameters.fields.eachKey(function (key) {
-            console.log(key);
             if(key !== "id" && key !== "j5run_id") {
-                inspector.down("component[cls='" + key + "']").setValue(
+                automationWindow.down("component[cls='" + key + "']").setValue(
                 this.automationParameters.get(key));
             }
         }, this);
     },
 
-    saveAutomationParams: function () {
+    saveAutomationParams: function (window) {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var inspector = currentTab.down('InspectorPanel');
+        var automationWindow = Ext.getCmp('j5AutomationParameters');
 
         this.automationParameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
-                this.automationParameters.set(key, inspector.down("component[cls='" + key + "']").getValue());
+                this.automationParameters.set(key, automationWindow.down("component[cls='" + key + "']").getValue());
             }
         }, this);
     },
@@ -483,11 +527,31 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         };
     },
 
+    onRunJ5Event: function() {
+        this.onRunJ5BtnClick();
+    },
 
+    onJ5RunStatusChanged: function(runId, runStatus) {
+        var buttonsToEnable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
+        buttonsToEnable = buttonsToEnable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+        var button;
 
-    onRunJ5BtnClick: function (btn) {
+        for(var i = 0; i < buttonsToEnable.length; i++) {
+            button = buttonsToEnable[i];
+            button.enable();
+            button.setLoading(false);
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Submit Run to j5");
+            }
+        }
+    },
+
+    onRunJ5BtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
+
+        this.onOpenJ5();
 
         // var loadingMessage = currentTab.down('container[cls="j5progressContainer"]').show();
         // var responseMessage = currentTab.down('displayfield[cls="j5ResponseTextField"]').show();
@@ -561,9 +625,31 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         //responseMessage.setValue("Saving design");
 
+        var buttonsToDisable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
+        buttonsToDisable = buttonsToDisable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+        var button;
+
+        for(var i = 0; i < buttonsToDisable.length; i++) {
+            button = buttonsToDisable[i];
+
+            button.disable();
+
+            if(button.cls === "runj5Btn") {
+                button.setLoading({msg: "Running J5"});
+
+                button.loadMask.el.setStyle("background-color", "transparent");
+                button.loadMask.msgEl.setStyle("background-color", "transparent");
+                button.loadMask.msgTextEl.setStyle("background-color", "transparent");
+
+                button.setText("");
+            }
+        }
+
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
-            Teselagen.manager.TasksMonitor.start();
+            if (!Teselagen.manager.TasksMonitor.disabled) {
+                Teselagen.manager.TasksMonitor.start();
+            }
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     toastr.options.onclick = null;
@@ -588,8 +674,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDistributePCRBtn: function () {
 
-        console.log("Distribute PCR Reactions");
-
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -600,7 +684,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
         data.assemblyFileText = this.assemblyFileText;
         data.params = this.automationParameters.data;
-        data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
+        // data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
 
         // var loadingMessage = this.createLoadingMessage();
 
@@ -610,7 +694,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 // loadingMessage.update(100, "Completed");
                 // loadingMessage.close();
             } else {
-                console.log(responseData.responseText);
                 // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
@@ -694,7 +777,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onPlasmidsItemClick: function (grid, record) {
         var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
         var j5Window = DETab;
-        var mask = new Ext.LoadMask(j5Window);
+        var mask = new Ext.LoadMask({target: j5Window});
 
         mask.setVisible(true, false);
 
@@ -733,7 +816,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onCondenseAssembliesBtnClick: function (btn) {
 
-        console.log("Condense Assembly Files");
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -758,7 +840,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 // loadingMessage.update(100, "Completed");
                 // loadingMessage.close();
             } else {
-                console.log(responseData.responseText);
                 // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
@@ -777,8 +858,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDownloadCondenseAssemblyResultsBtnClick: function(button){
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.inspector.j5comm.downloadCondenseAssemblyResults(button);
- 
+        var inspector = currentTab.down('InspectorPanel');
+        inspector.j5comm.downloadCondenseAssemblyResults(button);
     },
 
     init: function () {
@@ -887,7 +968,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         });
         
-        this.application.on("openj5", this.onOpenJ5, this);
+        this.application.on("runj5", this.onRunJ5Event, this);
+        this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;

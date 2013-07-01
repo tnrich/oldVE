@@ -17,12 +17,11 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 		xtype: 'container',
 		id: 'headerPanel-navbar',
 		cls: 'navbar-inner',
-		html: '<ul class="nav"><li id="headerUserIcon"><a href="" class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul>',
+		html: '<ul class="nav"><li id="headerUserIcon"><a href="" class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>',
 		items: [{
 			xtype: 'image',
 			id: 'headerIcon',
 			src: 'resources/images/teselagen_toplogo_alt.png'
 		}]
-	}
-	]
+	}]
 });

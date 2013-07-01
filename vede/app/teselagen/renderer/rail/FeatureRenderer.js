@@ -10,14 +10,17 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
     statics: {
         DEFAULT_FEATURE_HEIGHT: 7,
         DEFAULT_FEATURES_GAP: 5,
+        OUTLINE_COLOR: "black",
+        OUTLINE_WIDTH: 0.5
     },
 
     config: {
+        featureSVG: null,
         features: [],
         railWidth: null,
         railHeight:null,
         railGap: null,
-        startPoints:null,
+        startPoints:null
     },
 
     /**
@@ -39,15 +42,14 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
      * @return {Ext.draw.Sprite[]} The array of sprites.
      */
     render: function() {
-        var sprites = [];
+        var path;
         var featureAlignment = this.Alignment.buildAlignmentMap(this.features, 
                                                          this.sequenceManager);
-
         
         Ext.each(this.features, function(feature) {
             var featureGap = this.railGap - this.self.DEFAULT_FEATURES_GAP - 
                                 2 * this.self.DEFAULT_FEATURES_GAP;
-            var index = featureAlignment.get(feature);
+            var index = featureAlignment.get(feature.getIndex());
 
             if(index > 0) {
                 featureGap -= index * (this.self.DEFAULT_FEATURE_HEIGHT + 
@@ -99,27 +101,35 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
                 if(feature.getStart() == location.getStart() &&
                    feature.getStrand() == this.StrandType.BACKWARD) {
 
-                    recSprite = this.GraphicUtils.drawFeatureNegativeArrow(xStartPosition, yPosition, featureWidth, color);
+                    path = this.GraphicUtils.drawFeatureNegativeArrow(xStartPosition, yPosition, featureWidth, color);
 
                 } else if(feature.getEnd() == location.getEnd() && 
                           feature.getStrand() == this.StrandType.FORWARD) {
 
-                    recSprite = this.GraphicUtils.drawFeaturePositiveArrow(xStartPosition, yPosition, featureWidth, color);
+                    path = this.GraphicUtils.drawFeaturePositiveArrow(xStartPosition, yPosition, featureWidth, color);
 
                 } else {
-                    recSprite = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
+                    path = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
                 }
 
-                this.addToolTip(recSprite, this.getToolTip(feature));
-
-                sprites.push(recSprite);
+                this.featureSVG.append("svg:path")
+                               .attr("stroke", this.self.OUTLINE_COLOR)
+                               .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                               .attr("fill", color)
+                               .attr("fill-rule", "evenodd")
+                               .attr("d", path)
+                               .on("mousedown", this.getClickListener(feature.getStart(),
+                                                                      feature.getEnd()))
+                               .on("contextmenu", this.getRightClickListener(
+                                                        feature))                                       
+                               .append("svg:title")
+                               .text(this.getToolTip(feature));
                 
             }, this);
+            //this.addContextMenuListener(feature);
         }, this);
         
-
-//        console.log("All sprites calculated.");
-        return sprites;
+        
     },
 
     /**
@@ -191,4 +201,63 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
 
         return pFeatures;
     },
+    
+    addContextMenuListener: function(feature) {
+    	var sequenceManager = this.getSequenceManager();
+    	this.featureSVG.on("contextmenu", function(data,index) {
+    		Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+			d3.event.preventDefault();
+            var contextMenu = Ext.create('Ext.menu.Menu',{
+            	  items: [{
+            	    text: 'Edit Sequence Feature',
+            	    handler: function() {
+                    	var editSequenceFeatureWindow = Ext.create(
+                        "Vede.view.ve.EditSequenceFeatureWindow");
+                    	
+                        editSequenceFeatureWindow.show();
+                        editSequenceFeatureWindow.center();
+            	    }
+            	  },{
+              	    text: 'Delete Sequence Feature',
+              	    handler: function() {
+              	    	sequenceManager.removeFeature(feature,false);
+              	    }
+              	  }]
+            });                  
+            contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+        });
+    },
+    
+    onContextMenu: function(feature) {
+    	return function() {
+	    	var sequenceManager = this.getSequenceManager();
+	    	Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+			d3.event.preventDefault();
+	        var contextMenu = Ext.create('Ext.menu.Menu',{
+	        	  items: [{
+	        	    text: 'Edit Sequence Feature',
+	        	    handler: function() {
+	                	var editSequenceFeatureWindow = Ext.create(
+	                    "Vede.view.ve.EditSequenceFeatureWindow");
+	                	
+	                    editSequenceFeatureWindow.show();
+	                    editSequenceFeatureWindow.center();
+	        	    }
+	        	  },{
+	          	    text: 'Delete Sequence Feature',
+	          	    handler: function() {
+	          	    	sequenceManager.removeFeature(feature,false);
+	          	    }
+	          	  }]
+	        });                  
+	        contextMenu.show(); 
+	        contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+    	}
+    },
 });
+
+
+
+
+

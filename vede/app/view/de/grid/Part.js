@@ -68,7 +68,6 @@ Ext.define('Vede.view.de.grid.Part', {
         */
         this.partCell = Ext.create("Ext.container.Container", {
             items: [{
-                //html: html,
                 styleHtmlContent: true,
                 styleHtmlCls: 'gridPartCell',
                 height: 40,
@@ -126,10 +125,12 @@ Ext.define('Vede.view.de.grid.Part', {
         }
 
         // If the part is associated with a Eugene rule, add the indicator.
-        var rules = this.DeviceDesignManager.getRulesInvolvingPart(activeProject,
-                                                                   this.getPart());
-        if(rules.getRange().length > 0) {
-            this.addEugeneRuleIndicator();
+        if(this.getPart()) {
+            var rules = this.DeviceDesignManager.getRulesInvolvingPart(activeProject,
+                                                                       this.getPart());
+            if(rules.getRange().length > 0) {
+                this.addEugeneRuleIndicator();
+            }
         }
     },
 
@@ -150,6 +151,10 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     highlight: function() {
         this.partCell.down().addBodyCls("gridPartCell-highlighted");
+    },
+
+    unHighlight: function() {
+        this.partCell.down().removeBodyCls("gridPartCell-highlighted");
     },
 
     /**

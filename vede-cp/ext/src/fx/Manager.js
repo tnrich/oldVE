@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * @class Ext.fx.Manager
  * Animation Manager which keeps track of all current animations and manages them on a frame by frame basis.
@@ -27,8 +44,13 @@ Ext.define('Ext.fx.Manager', {
     /* End Definitions */
 
     constructor: function() {
-        this.items = new Ext.util.MixedCollection();
-        this.mixins.queue.constructor.call(this);
+        var me = this;
+        me.items = new Ext.util.MixedCollection();
+        me.mixins.queue.constructor.call(me);
+        
+        // Do not use fireIdleEvent: false. Each tick of the TaskRunner needs to fire the idleEvent
+        // in case an animation callback/listener adds a listener.
+        me.taskRunner = new Ext.util.TaskRunner();
 
         // this.requestAnimFrame = (function() {
         //     var raf = window.requestAnimationFrame ||
@@ -115,8 +137,9 @@ Ext.define('Ext.fx.Manager', {
      * @param {Ext.fx.Anim} anim
      */
     addAnim: function(anim) {
-        var items = this.items,
-            task = this.task;
+        var me = this,
+            items = me.items,
+            task = me.task;
 
         // Make sure we use the anim's id, not the anim target's id here. The anim id will be unique on
         // each call to addAnim. `anim.target` is the DOM element being targeted, and since multiple animations
@@ -126,13 +149,13 @@ Ext.define('Ext.fx.Manager', {
 
         // Start the timer if not already running
         if (!task && items.length) {
-            task = this.task = {
-                run: this.runner,
-                interval: this.interval,
-                scope: this
+            task = me.task = {
+                run: me.runner,
+                interval: me.interval,
+                scope: me
             };
             //Ext.log('--->> Starting task');
-            Ext.TaskManager.start(task);
+            me.taskRunner.start(task);
         }
     },
 
@@ -151,7 +174,7 @@ Ext.define('Ext.fx.Manager', {
         // Stop the timer if there are no more managed Anims
         if (task && !items.length) {
             //Ext.log('[]--- Stopping task');
-            Ext.TaskManager.stop(task);
+            me.taskRunner.stop(task);
             delete me.task;
         }
     },
@@ -230,7 +253,6 @@ Ext.define('Ext.fx.Manager', {
             return;
         }
         var me = this,
-            targetId = anim.target.getId(),
             useCSS3 = me.useCSS3 && anim.target.type == 'element',
             elapsedTime = me.timestamp - anim.startTime,
             lastFrame = (elapsedTime >= anim.duration),

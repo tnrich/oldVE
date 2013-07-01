@@ -29,9 +29,9 @@ Ext.define("Teselagen.constants.Constants", {
         "jbei-seq"
     ],
     
-    GENBANK:                "GENBANK",
-    FASTA:                  "FASTA",
-    JBEISEQ:                "JBEISEQXML", //Implicitly XML
+    GENBANK:                "Genbank", // Acording to http://j5.jbei.org/DeviceEditor_manual/attachments/design.xsd
+    FASTA:                  "FASTA", // Acording to http://j5.jbei.org/DeviceEditor_manual/attachments/design.xsd
+    JBEISEQ:                "jbei-seq", // Acording to http://j5.jbei.org/DeviceEditor_manual/attachments/design.xsd
     JBEISEQJSON:            "JBEISEQJSON",  //JSON format. Not included as a case for some device models
     SBOLXML:                "SBOLXML",
     INIT:                   "INIT",

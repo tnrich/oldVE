@@ -9,12 +9,12 @@ Ext.define("Teselagen.models.Part", {
 
     requires: [
         "Teselagen.models.SequenceFile",
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Ext.data.SortTypes"
     ],
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
             root: "parts"
@@ -90,6 +90,9 @@ Ext.define("Teselagen.models.Part", {
     // Fields from PartVO
     {
         name: "name",
+        sortType: function (s) {
+            return String(s).toUpperCase();
+        },
         convert: function(v, record) {
             var name;
             /*

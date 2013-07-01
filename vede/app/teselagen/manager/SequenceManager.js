@@ -36,10 +36,20 @@ Ext.define("Teselagen.manager.SequenceManager", {
     requires: ["Teselagen.bio.sequence.common.Location",
         "Teselagen.bio.sequence.common.SymbolList",
         "Teselagen.event.SequenceManagerEvent",
+        "Teselagen.bio.sequence.dna.Feature",
+        "Teselagen.bio.sequence.dna.FeatureNote",
         "Teselagen.bio.sequence.DNATools",
         "Teselagen.utils.FormatUtils",
         "Teselagen.bio.parsers.ParsersManager",
-        "Teselagen.bio.parsers.GenbankManager"
+        "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.parsers.Genbank",
+        "Teselagen.bio.parsers.GenbankFeatureElement",
+        "Teselagen.bio.parsers.GenbankFeatureLocation",
+        "Teselagen.bio.parsers.GenbankFeatureQualifier",
+        "Teselagen.bio.parsers.GenbankFeaturesKeyword",
+        "Teselagen.bio.parsers.GenbankLocusKeyword",
+        "Teselagen.bio.parsers.GenbankOriginKeyword",
+        "Teselagen.manager.SequenceManagerMemento"
     ],
     /**
      * @cfg {Object} config
@@ -121,16 +131,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.addEvents(this.updateKindSetMemento);
         this.addEvents(this.updateKindInitialized);*/
 
-        this.callParent([inData]);
-        this.initConfig(inData);
+        //this.callParent([inData]);
+        //this.initConfig(inData);
 
 
+        // Manually set config values. If we use initConfig, manualUpdateStart
+        // and End will be called every time one of the values is set.
         if (inData) {
             this.name     = inData.name     || "";
             this.circular = inData.circular || false;
             this.sequence = inData.sequence || Teselagen.bio.sequence.DNATools.createDNA("");
             this.features = inData.features || [];
+
+            this.complementSequence = inData.complementSequence || null;
+            this.reverseComplementSequence = inData.reverseComplementSequence || null;
+            this.manualUpdateStarted = inData.manualUpdateStarted || false;
+            this.needsRecalculateComplementSequence = inData.needsRecalculateComplementSequence || true;
+            this.needsRecalculateReverseComplementSequence = inData.needsRecalculateReverseComplementSequence || true;
         }
+
         /**
          * @param {String} name
          */
@@ -210,7 +229,11 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
+        Ext.suspendLayouts();
+
         Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento, null);
+
+        Ext.resumeLayouts(true);
     },
 
     // to AnnotatePanelController.js
@@ -356,7 +379,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.features.push(pFeature);
 
         if (!quiet && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureAdd, pFeature);
+            Ext.resumeLayouts(true);
         }
     },
 
@@ -378,7 +403,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.addFeature(pFeaturesToAdd[i], true);
         }
         if (!quiet && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesAdd, pFeaturesToAdd);
+            Ext.resumeLayouts(true);
         }
         return true;
     },
@@ -399,7 +426,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             Ext.Array.remove(this.features, pFeature);
 
             if (!quiet && !this.manualUpdateStarted) {
+                Ext.suspendLayouts();
                 Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureRemove, pFeature);
+                Ext.resumeLayouts(true);
             }
             return true;
         } else {
@@ -428,7 +457,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             if (!success) console.warn("Could not remove Feature[" + i  + "] from Sequence.");
         }
         if (!pFeaturesToRemove && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesRemove, pFeaturesToRemove);
+            Ext.resumeLayouts(true);
         }
         return true;
     },
@@ -442,7 +473,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //return this.features.contains(feature);
         return Ext.Array.contains(this.features, pFeature);
     },
-
+      
     /**
      * Insert another sequence manager at position. This method is used on sequence paste.
      *
@@ -476,7 +507,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
 
         if(!pQuiet && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequenceProvider: pSequenceManager, position: pPosition});
+            Ext.resumeLayouts(true);
         }
 
     },
@@ -515,7 +548,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.features[i].insertAt(pPosition, insertSequenceLength, lengthBefore, this.circular);
         }
         if(!pQuiet && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequence: pInsertSequence, position: pPosition});
+            Ext.resumeLayouts(true);
         }
         return true;
     },
@@ -615,7 +650,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         
         if(!quiet && !this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength});
+            Ext.resumeLayouts(true);
             //DW orig length was length...wrong?
         }
 
@@ -1033,7 +1070,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     manualUpdateEnd: function() {
         if(this.manualUpdateStarted) {
+            Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindKManualUpdate, null);
+            Ext.resumeLayouts(true);
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_MANUAL_UPDATE, null));
 
             this.manualUpdateStarted = false;
@@ -1318,7 +1357,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 var tmpNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
                     name:   gbFeats[i].getFeatureQualifier()[k].getName(),
                     value:  gbFeats[i].getFeatureQualifier()[k].getValue(),
-                    quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted(),
+                    quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted()
                 });
                 notes.push(tmpNote);
             }
@@ -1346,7 +1385,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             name: name,
             sequence: sequence.seqString(),
             isCircular: isCirc,
-            features: features,
+            features: features
         });
 
         this.name = name;
@@ -1398,6 +1437,4 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.needsRecalculateReverseComplementSequence = false;
         }
     }
-
-
 });

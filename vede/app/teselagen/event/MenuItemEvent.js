@@ -4,7 +4,9 @@
  */
 Ext.define("Teselagen.event.MenuItemEvent", {
     singleton: true,
-
+    
+    NEW_BLANK_VECTOR_EDITOR: "NewBlankVectorEditor",
+    
     CUT: "Cut",
     COPY: "Copy",
     PASTE: "Paste",
@@ -22,5 +24,5 @@ Ext.define("Teselagen.event.MenuItemEvent", {
     SELECT_WINDOW_OPENED: "SelectWindowOpened",
 
     REVERSE_COMPLEMENT: "ReverseComplement",
-    REBASE_SEQUENCE: "RebaseSequence",
+    REBASE_SEQUENCE: "RebaseSequence"
 });

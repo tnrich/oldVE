@@ -56,7 +56,7 @@ function encoded_sequences_list_file(model)
     var sequences = [];
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
-            sequences.push(part["SequenceFile"]);
+            if(!part.phantom) sequences.push(part["SequenceFile"]);
         });
     });
 
@@ -84,6 +84,7 @@ function encoded_zipped_sequences_file(model)
 
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
+            if(!part.phantom) {
             if(part)
             {
                 var sequenceFile = part["SequenceFile"];
@@ -93,6 +94,7 @@ function encoded_zipped_sequences_file(model)
             else
             {
                 console.log("Warning: Part not found");
+            }
             }
         });
     });
@@ -115,25 +117,34 @@ function encoded_parts_list_file(model)
 
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
-            var sequenceFile = part["SequenceFile"];
-            if(sequenceFile)
+            if(!part.phantom)
             {
-                var sequenceName = "";
-                if (sequenceFile["sequenceFileFormat"]=="GENBANK")
-                    {
-                        sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
-                        if(sequenceName) sequenceName = sequenceName[1];
-                        else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
-                    }
+                var sequenceFile = part["SequenceFile"];
+                if(sequenceFile)
+                {
+                    var sequenceName = "";
+                    if (sequenceFile["sequenceFileFormat"]=="Genbank")
+                        {
+                            sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
+                            if(sequenceName) sequenceName = sequenceName[1];
+                            else 
+                            {
+                                sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+([[a-zA-Z0-9~@#\^\$&\*\(\)-_\+=\[\]\{\}\|\\,\.\?]*|\-]+)/);
+                                if(!sequenceName) console.log(JSON.stringify(sequenceFile['sequenceFileContent']));
+                                else sequenceName = sequenceName[1];
+                            }
+                                //sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                        }
 
-                if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
-                if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
-
-                out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-            }
-            else
-            {
-                console.log("Warning: Sequence file not found");
+                    if (sequenceFile["sequenceFileFormat"]=="jbei-seq") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+                    if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
+                    //console.log(part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n');
+                    out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+                }
+                else
+                {
+                    console.log("Warning: Sequence file not found");
+                }
             }
         });
     });
@@ -182,16 +193,18 @@ function encoded_target_part_order_list_file(model,method)
             var dsfFirewall = '';
             var fas;
             bin.parts.forEach(function(part,partKey){
-                //fas = (part["fas"] == 'None') ? '' : part["fas"];
-                fas = bin.fases[partKey];
-                if(fas === 'None') fas = '';
-                fro = (bin['fro'] === 'None') ? '' : bin['fro'];
-                direction = (part["directionForward"] === 'true') ? 'forward' : '';
-                dsf = (bin['dsf'] === false) ? '' : '';
-                extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
-                extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
+                if(!part.phantom)
+                {
+                    fas = bin.fases[partKey];
+                    if(fas === 'None') fas = '';
+                    fro = (bin['fro'] === 'None') ? '' : bin['fro'];
+                    direction = (part["directionForward"] === 'true') ? 'forward' : '';
+                    dsf = (bin['dsf'] === false) ? '' : '';
+                    extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
+                    extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
 
-                tempOut += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
+                    tempOut += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
+                }
             });
 
             tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';

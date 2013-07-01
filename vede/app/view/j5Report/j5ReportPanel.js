@@ -55,7 +55,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             xtype: 'panel',
             title: 'Detail',
             cls: 'j5detailpanel-fill',
-            hidden: true,
+            hidden: false,
             border: 0,
             items: [{
                 xtype: 'container',
@@ -70,20 +70,47 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         xtype: 'panel',
         title: 'Detail',
         cls: 'j5detailpanel',
-        hidden: false,
+        hidden: true,
         autoScroll: true,
         border: 0,
         dockedItems: [{
                     xtype: 'toolbar',
-                    layout: 'fit',
-                    height: 50,
+                    height: 100,
                     dock: 'top',
-                    items: [{
-                        xtype: 'button',
-                        margin: 10,
-                        text: 'Download Results',
-                        cls: 'downloadResults',
-                        overCls: 'downloadResults-over'
+                    layout:'vbox',
+                    margin: '5 0 0 0',
+                    items: [
+                    {
+                        xtype: 'container',
+                        height:50,
+                        width: '100%',
+                        flex: 1,
+                        layout: 'fit',
+                        items: [
+                            {
+                               xtype: 'button',
+                                margin: '0 0 5 0',
+                                layout:'fit',
+                                text: 'Build',
+                                cls: 'buildBtn',
+                                overCls: 'buildBtn-over' 
+                            }
+                        ]
+                    },{
+                        xtype: 'container',
+                        height:50,
+                        flex: 1,
+                        width: '100%',
+                        layout: 'fit',
+                        items: [
+                            {
+                                xtype: 'button',
+                                margin: '0 0 5 0',
+                                text: 'Download Results',
+                                cls: 'downloadResults',
+                                overCls: 'downloadResults-over'
+                            }
+                        ]
                     }]
                 }],
         items: [
@@ -154,6 +181,29 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             flex: 1,
                             renderer: function(val) {
                                 val = val.substring(1, val.length - 1);
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'gridpanel',
+                    name: 'errors',
+                    cls: 'errorsGrid',
+                    hidden: true,
+                    margin: '10 10 20 10',
+                    title: 'Errors',
+                    minHeight: 80,
+                    layout: 'fit',
+                    hideHeaders: true,
+                    columns: [
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'faultString',
+                            autoHeight: true,
+                            forceFit: true,
+                            flex: 1,
+                            renderer: function(val) {
                                 return '<div style="white-space:normal !important;">'+ val +'</div>';
                             }
                         }

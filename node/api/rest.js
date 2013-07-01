@@ -14,10 +14,10 @@ module.exports = function(app){
             headers["Access-Control-Max-Age"] = '86400'; // 24 hours
             headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
             res.writeHead(200, headers);
-            res.end();
+            return res.end();
         } else {
             res.header("Access-Control-Allow-Origin", req.headers.origin);
-            res.header("Access-Control-Allow-Headers", "X-Requested-With");
+            res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
             res.header("Access-Control-Allow-Credentials", 'true');
             next();
         }

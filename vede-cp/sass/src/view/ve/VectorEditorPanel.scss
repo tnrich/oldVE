@@ -1,0 +1,43 @@
+// VectorEditorPanel.scss
+
+#VectorEditorMainMenuPanel-body {
+  border: 0px;
+  border-left: 1px solid #EBEBEB  ;
+}
+
+#VectorPanel_header, #AnnotatePanel_header {
+  border-top: 0px;
+  box-shadow: none;
+  border-color: #E0E3E6;
+  background: #E0E3E6;
+}
+
+#VectorEditorPanel-body {
+  border:0px;
+}
+
+#VectorEditorMainMenuBar{
+  background: #FDFDFD;
+}
+
+#VectorEditorMainToolBar {
+  background: #F8F8F8;
+}
+
+.vetbseparator {
+  border-left: 1px solid rgb(231, 231, 231) !important;
+  border-right: 1px solid rgb(255, 255, 255) !important;
+}
+
+#RailContainer {
+  position: relative;
+  top: 100px;
+}
+
+#RailContainer svg {
+  height: 600px !important;
+}
+
+#VectorEditorStatusBarAlert {
+  left: 10px !important;
+}

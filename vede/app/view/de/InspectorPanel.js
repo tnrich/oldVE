@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-    requires: ["Teselagen.event.DeviceEvent"],
+    requires: ["Teselagen.event.DeviceEvent","Ext.grid.plugin.RowEditing"],
     cls: 'InspectorPanel',
 
     activeTab: 1,
@@ -136,7 +136,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             name: 'fas',
                             queryMode: 'local',
                             anchor: '100%',
-                            store: [],
+                            store: []
                         }
                     ]
                 },
@@ -156,10 +156,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            plugins: {
-                                ptype: 'rowediting',
+                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2
-                            },
+                            }),
                             columnLines: true,
                             rowLines: true,
                             minHeight: 140,
@@ -305,16 +304,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            layout: 'fit',                            
-                            autoScroll: true,
+                            layout: 'fit',
                             allowDeselect: true,
                             columnLines: true,
                             minHeight:132,
-                            plugins: {
-                                ptype: 'rowediting',
+                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2,
                                 errorSummary: false
-                            },
+                            }),
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -323,7 +320,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     dataIndex: 'binName',
                                     editor: {
                                         xtype: 'textfield',
-                                        allowBlank: false,
+                                        allowBlank: false
                                     },
                                     renderer: function(value, metadata) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
@@ -382,7 +379,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
                                     dataIndex: 'fro',
                                     editor: {
-                                        xtype: 'textfield',
+                                        xtype: 'textfield'
                                     },
                                     renderer: function(value) {
                                         if(value === 'None') {
@@ -461,7 +458,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             cls: 'columnContentDisplayField',
                             margin: 10,
-                            fieldLabel: '',
+                            fieldLabel: ''
                         }
                     ]
                 }
@@ -498,7 +495,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     margin: '2.5 0 2.5 0',
                     height: 40,
                     border: 0,
-                    hidden: true,
+                    hidden: true
                 },
                 {
                     xtype: 'button',
@@ -508,7 +505,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     margin: '2.5 0 2.5 0',
                     height: 40,
                     border: 0,
-                    hidden: true,
+                    hidden: true
                 },
                 // {
                 //     xtype: 'button',
@@ -765,16 +762,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             ]
                                         },
                                         {
-                                            xtype: 'panel',
+                                            xtype: 'button',
                                             margin: '20 0 0 0',
-                                            border: false,
-                                            // items: [
-                                            //  {
-                                            //     xtype: 'button',
-                                            //     cls: 'downloadCondenseAssemblyResultsBtn',
-                                            //     text: 'Download Results'
-                                            // }
-                                            // ]
+                                            cls: 'downloadCondenseAssemblyResultsBtn',
+                                            text: 'Download Results',
+                                            hidden:true
                                         }
                                     ]   
                                 },
@@ -845,16 +837,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             margin: '20 0 0 0',
                                             height: 30,
                                             text: 'Customize Automation Parameters'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            cls: 'downloadDownstreamAutomationBtn',
+                                            pressed: false,
+                                            text: 'Download Results',
+                                            hidden: true,
+                                            margin: '15 0 0 0'
                                         }
-                                        // {
-                                        //     xtype: 'button',
-                                        //     cls: 'downloadDownstreamAutomationBtn',
-                                        //     enableToggle: true,
-                                        //     pressed: false,
-                                        //     text: 'Download Results',
-                                        //     hidden: true,
-                                        //     margin: '15 0 0 0'
-                                        // }
                                         ]
                                     }
                                     ]

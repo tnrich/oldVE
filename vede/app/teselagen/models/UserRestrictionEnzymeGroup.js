@@ -9,13 +9,15 @@
      
      requires: ["Teselagen.models.UserRestrictionEnzyme"],
 
-     /**
+     proxy: {
+         type: "memory"
+     },
+
+    /**
       * Input parameters.
       * @param {String} name The name assigned to the group of enzymes.
       */
      fields: [
-         { name: "id", type: "long"},
-         { name: "user_id", type: "long"},
          {name: "name", type: "string", defaultValue: ""}
      ],
 
@@ -24,16 +26,7 @@
              type: "hasMany",
              model: "Teselagen.models.UserRestrictionEnzyme",
              name: "userRestrictionEnzymes",
-             associationKey: "userRestrictionEnzymes",
-             foreignKey: "uregroup_id"
-         },
-         {
-             type: "belongsTo",
-             model: "Teselagen.models.User",
-             getterName: "getUser",
-             setterName: "setUser",
-             associationKey: "user",
-             foreignKey: "user_id"
+             associationKey: "userRestrictionEnzymes"
          }
      ]
  });

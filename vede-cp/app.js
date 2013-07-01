@@ -1,109 +1,69 @@
+//@require @packageOverrides
 var splashscreen;
 
 /*global console*/
 Ext.Loader.setConfig({
     enabled: true,
     paths: {
-        Ext: '.',
-        'Ext.ux': '../extjs/examples/ux',
+        //Ext: './ext',
+        'Ext.ux': './ext/src/ux',
         Teselagen: './app/teselagen',
         Vede: './app',
         'Teselagen.bio': '../biojs/src/teselagen/bio'
-    }
+    },
+    //disableCaching: false
 });
-
-Ext.Loader.syncRequire([
-        //Sync requires
-        'Ext.Error'
-        ,'Teselagen.constants.Constants'
-        ,'Teselagen.bio.sequence.symbols.GapSymbol'
-        ,'Teselagen.bio.sequence.symbols.NucleotideSymbol'
-        ,'Teselagen.bio.sequence.symbols.AminoAcidSymbol'
-        ,'Ext.layout.container.Border'
-        ,'Ext.toolbar.Spacer'
-        ,'Ext.tree.Panel'
-        ,'Ext.toolbar.TextItem'
-        ,'Ext.form.field.ComboBox'
-        ,'Ext.layout.container.Column'
-        ,'Ext.form.Panel'
-        ,'Ext.form.RadioGroup'
-        ,'Ext.form.field.Radio'
-        ,'Ext.grid.Panel'
-        ,'Ext.grid.plugin.RowEditing'
-        ,'Ext.grid.column.Number'
-        ,'Ext.grid.column.Boolean'
-        ,'Ext.form.Label'
-        ,'Ext.button.Split'
-        ,'Ext.grid.column.Date'
-        ,'Ext.form.FieldSet'
-        ,'Teselagen.manager.ActionStackManager'
-        ,'Teselagen.models.RestrictionEnzymeGroup'
-        ,'Teselagen.event.MapperEvent'
-        ,'Teselagen.manager.ORFManager'
-        ,'Teselagen.manager.RestrictionEnzymeManager'
-        ,'Teselagen.manager.SequenceAnnotationManager'
-        ,'Teselagen.renderer.annotate.LineRenderer'
-        ,'Teselagen.manager.RowManager'
-        ,'Vede.view.annotate.Annotator'
-        ,'Teselagen.renderer.annotate.SequenceRenderer'
-        ,'Vede.view.annotate.Caret'
-        ,'Teselagen.renderer.annotate.SelectionLayer'
-        ,'Teselagen.manager.FindManager'
-        ,'Teselagen.manager.PieManager'
-        ,'Vede.view.pie.Frame'
-        ,'Vede.view.pie.Pie'
-        ,'Teselagen.renderer.pie.CutSiteRenderer'
-        ,'Teselagen.renderer.pie.FeatureRenderer'
-        ,'Teselagen.renderer.pie.ORFRenderer'
-        ,'Teselagen.renderer.pie.WireframeSelectionLayer'
-        ,'Teselagen.renderer.pie.SelectionLayer'
-        ,'Teselagen.manager.RailManager'
-        ,'Vede.view.rail.Frame'
-        ,'Vede.view.rail.Rail'
-        ,'Teselagen.renderer.rail.CutSiteRenderer'
-        ,'Teselagen.renderer.rail.FeatureRenderer'
-        ,'Teselagen.renderer.rail.ORFRenderer'
-        ,'Teselagen.renderer.rail.WireframeSelectionLayer'
-        ,'Teselagen.renderer.rail.SelectionLayer'
-        ,'Teselagen.manager.AAManager'
-]);
 
 Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
     views: [
         'AppViewport',
-        'FileImportWindow',
-        'SimulateDigestionWindow'
+        've.SimulateDigestionWindow'
     ],
     controllers: [
-        'ActionStackController',
         'AppController',
-        'AnnotatePanelController',
-        'FindPanelController',
-        'MainMenuController',
-        'MainPanelController',
-        'MainToolbarController',
-        'PieController',
-        'RailController',
-        'RestrictionEnzymeController',
-        'SelectWindowController',
-        'SequenceController',
+        'AuthWindowController',
+        'DashboardPanelController',
         'HeaderPanelController',
-        'VectorPanelController',
-        'SimulateDigestionController',
-        'VectorEditor.ImportSequenceWindowController',
-        'Vede.controller.AuthWindowController',
+        'MainPanelController',
+        'PartLibraryController',
+        'ProjectController',
+        'RestrictionEnzymeController',
+        //'SelectWindowController',
+        //'SequenceController',
+        'HeaderPanelController',
+        //'VectorPanelController',
+        'VectorEditor.SimulateDigestionController',
+        'VectorEditor.ImportSequenceController',
+        'VectorEditor.CreateNewFeatureWindowController',
+        'VectorEditor.EditSequenceFeatureWindowController',
+        'VectorEditor.PieContextMenuController',
+        'VectorEditor.SaveAsWindowController',
+        'AuthWindowController',
+        'DeviceEditor.DeviceEditorPanelController',
         'DeviceEditor.GridController',
         'DeviceEditor.InspectorController',
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
-        'DeviceEditor.DeviceEditorPanelController',
+        'VectorEditor.ActionStackController',
+        'VectorEditor.AnnotatePanelController',
+        'VectorEditor.CreateNewFeatureWindowController',
+        'VectorEditor.EditSequenceFeatureWindowController',
+        'VectorEditor.FindPanelController',
+        'VectorEditor.ImportSequenceController',
+        'VectorEditor.MainMenuController',
+        'VectorEditor.MainToolbarController',
+        'VectorEditor.PieController',
+        'VectorEditor.RailController',
+        'VectorEditor.SelectWindowController',
+        'VectorEditor.SequenceController',
+        'VectorEditor.SequenceEditingController',
+        'VectorEditor.SimulateDigestionController',
+        'VectorEditor.StatusBarController',
+        'VectorEditor.VectorPanelController',
         'Vede.controller.AuthEventDispatcherController',
-        'ProjectController',
-        'DashboardPanelController',
-        'Vede.controller.VectorEditor.SequenceEditingController',
         'Vede.controller.J5ReportController',
         'Vede.controller.DeviceEditor.ChangePartDefinitionController'
     ],
@@ -146,17 +106,32 @@ Ext.application({
 
         Vede.application = this;
 
-        Ext.Ajax.cors = true; // Allow CORS
-        Ext.Ajax.withCredentials = true;
-        Ext.Ajax.timeout = 100000;
+        Ext.Ajax.cors = true; // Allow CORS (Cross-Origin Resource Sharing)
+        Ext.Ajax.withCredentials = true; // Allow cross-domain cookie-based authentication
+        Ext.Ajax.timeout = 100000; // Ajax timeout
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        Teselagen.manager.AuthenticationManager.Login(); // Start Auth process
+        /*
+         * autoCredentialsFetch
+         * This option enable fetching username and password from /deviceeditor file
+         * to be used for automatic login (for testing).
+         */
+        Vede.application.autoCredentialsFetch = true;
+
+        //if (document.location.href.split('?').length > 0 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).autoauth === "false") Vede.application.autoCredentialsFetch = false;
+        if (document.location.href.split('?').length > 1 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).authurl)
+            {
+                Vede.application.autoCredentialsFetch = true;
+                Teselagen.manager.AuthenticationManager.autoAuthURL = Ext.Object.fromQueryString(document.location.href.split('?')[1]).authurl;
+            }
+
+
+        Teselagen.manager.AuthenticationManager.Login(); // Start Authentication process
 
         var self = this;
 
-        // Setup a task to fadeOut the splashscreen
+        // Task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             if(splashscreen)
                 {
@@ -178,7 +153,8 @@ Ext.application({
             else { Teselagen.manager.ProjectManager.loadUser(); }
         });
 
-        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});
+        // After logged in execute task to fadeOut the splashscreen
+        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});        
 
     }
 });

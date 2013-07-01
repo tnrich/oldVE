@@ -1,8 +1,8 @@
 /**
  * Select window
- * @class Vede.view.SelectWindow
+ * @class Vede.view.ve.SelectWindow
  */
-Ext.define('Vede.view.SelectWindow', {
+Ext.define('Vede.view.ve.SelectWindow', {
     extend: 'Ext.window.Window',
 
     layout: {
@@ -69,7 +69,10 @@ Ext.define('Vede.view.SelectWindow', {
                             margin: 2,
                             maxHeight: 28,
                             width: 69,
-                            text: 'Cancel'
+                            text: 'Cancel',
+                            handler: function() {
+                                this.up('window').close();
+                            }
                         }
                     ]
                 }

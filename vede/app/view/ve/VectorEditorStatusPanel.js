@@ -16,25 +16,31 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
     dockedItems: [{
         xtype: "toolbar",
         dock: "top",
+        layout: "hbox",
         id: "VectorEditorStatusBar",
         items: [{
             xtype: "tbfill"
         },
         {
             xtype: "tbtext",
-            id: "VectorEditorStatusBarAlert"
+            id: "VectorEditorStatusBarAlert",
+            shrinkWrap: false
         },
         {
             xtype: "tbtext",
             cls: "meltingTemperatureText",
-            text: ""
+            text: "",
+            width: 50,
+            shrinkWrap: false
         },
         {
             xtype: "tbseparator"
         }, 
         {
             xtype: "tbtext",
-            text: "Read only"
+            cls: "permissionText",
+            width: 60,
+            shrinkWrap: false
         }, 
         {
             xtype: "tbseparator"
@@ -43,6 +49,8 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
             xtype: "tbtext",
             cls: "caretPositionText",
             text: "0",
+            width: 30,
+            shrinkWrap: false
         }, 
         {
             xtype: "tbseparator"
@@ -50,7 +58,11 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         {
             xtype: "tbtext",
             cls: "selectionPositionText",
-            text: "- : -"
+            text: "- : -",
+            style: {
+                "text-align": "center"
+            },
+            width: 110
         }, 
         {
             xtype: "tbseparator"
@@ -58,7 +70,9 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         {
             xtype: "tbtext",
             cls: "sequenceLengthText",
-            text: "0"
+            text: "0",
+            width: 40,
+            shrinkWrap: false
         }]
     }]
 });

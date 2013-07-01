@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title id="page-title">Mocha Tester</title>
+
+    <link rel="stylesheet" type="text/css" href="/lib/mocha-1.11.0/mocha.css">
+     
+    <script type="text/javascript" src="../../extjs/ext-all-dev.js"></script>
+    <script type="text/javascript" src="/resources/js/toastr.js"></script>
+    
+    <!-- Setup environment -->
+    <script type="text/javascript" src="js/setup.js"></script>
+ 	       
+    <!-- include specs here -->
+    <script type="text/javascript" src="specs/backend/authenticate.t.js"></script>
+	<script type="text/javascript" src="specs/manager/userManager.t.js"></script>
+    <script type="text/javascript" src="specs/manager/restrictionEnzymeGroupManager.t.js"></script>
+    <script type="text/javascript" src="specs/model/gel.t.js"></script>
+
+    <!-- test launcher -->
+    <script type="text/javascript" src="js/app_test.js"></script>
+</head>
+<body>
+  <div id="mocha"></div>
+  <script type="text/javascript" src="/lib/chai.js"></script>
+  <script type="text/javascript" src="/lib/mocha-1.11.0/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script>
+    window.onload = function() {
+        expect = chai.expect;
+        mocha.checkLeaks();
+        mocha.run();
+    }
+  </script>
+</body>
+</html>

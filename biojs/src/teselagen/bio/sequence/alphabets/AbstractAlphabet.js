@@ -8,19 +8,20 @@
  * @author Timothy Ham (original author)
  */ 
  Ext.define("Teselagen.bio.sequence.alphabets.AbstractAlphabet", {
-	require: ["Teselagen.bio.sequence.symbols.GapSymbol", "Teselagen.bio.BioException"],
+	requires: ["Teselagen.bio.sequence.symbols.GapSymbol", "Teselagen.bio.BioException"],
 
 	symbolsMap: [],
 
-	constructor: function(inData){
-		var gap = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
-			name: "Gap",
-			value: "-"
-		});
-		//var symbolsMap = [];
-		var key = gap.getValue();
+    gap: Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+        name: "Gap",
+        value: "-"
+    }),
 
-		this.symbolsMap[key] = gap;
+	constructor: function(inData){
+		//var symbolsMap = [];
+		var key = this.gap.getValue();
+
+		this.symbolsMap[key] = this.gap;
 
 		/**
 		 * Returns the list of the alphabet's symbols.
@@ -69,7 +70,7 @@
 		 * @return {Gap Symbol} the gap symbol of the alphabet
 		 */
 		this.getGap = function(){
-			return gap;
+			return this.gap;
 		}
 
 		return this;

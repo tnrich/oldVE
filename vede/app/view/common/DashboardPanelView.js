@@ -7,8 +7,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     layout: {
-        align: 'stretch',
-        type: 'vbox'
+        type: 'fit'
     },
     frameHeader: false,
     border: 0,
@@ -16,207 +15,372 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     items: [
             {
             xtype: 'panel',
-            flex: 1,
             border: 0,
-            padding: 50,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
             items: [
-                {
-                xtype: 'panel',
-                flex: 1,
-                id: 'welcome_splash',
-                border: 0,
-                html: '<div class="welcome_text">Welcome back!<div id="welcomeUserIcon"></div></div><div class="welcome_sub">Get started by selecting one of the options below.</div>',
-                padding: 50, 
-                },
-                {
-                xtype: 'panel',
-                id: 'dashboardButtons',
-                flex: 1,
-                border: 0,
-                padding: 50,
-                items: [
-                {
-                    xtype: 'button',
-                    cls: 'dashBtn',
-                    id: 'projectStartBtn',
-                    text: 'Start a New Project',
-                    scale: 'large',
-                    overCls: 'projectStartBtn-over',
-                    height: '120px',
-                    icon: 'resources/images/projectstart.png',
-                    iconAlign: 'top',
-                    listeners: {
-                        click: function () {
-                            Teselagen.manager.ProjectManager.createNewProject();
-                    }
-                }
+                    {
+                        xtype: 'container',
+                        flex: 0.3,
+                        id: 'welcome_splash',
+                        border: 0,
+                    },
+                    {
+                        xtype: 'container',
+                        id: 'dashboardButtons',
+                        margin: '0 100 0 100',
+                        minHeight: 200,
+                        minWidth: 800,
+                        flex: 0.4,
+                        border: 0,
+                        style: {
+                            borderColor: '#E0E3E6',
+                            borderStyle: 'solid'
+                        },
+                        layout: {
+                            type: 'hbox'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                height: 100,
+                                cls: 'dashBtn',
+                                flex: 1,
+                                id: 'projectStartBtn',
+                                text: 'New Project',
+                                scale: 'medium',
+                                overCls: 'projectStartBtn-over',
+                                iconCls: 'newProject-icon',
+                                iconAlign: 'top',
+                                listeners: {
+                                    click: function () {
+                                        Teselagen.manager.ProjectManager.createNewProject();
+                                    }
+                                }
 
-                },
-                {
-                    xtype: 'button',
-                    cls: 'dashBtn',
-                    id: 'watchTutorialBtn',
-                    scale: 'large',
-                    overCls: 'watchTutorialBtn-over',
-                    height: '120px',
-                    icon: 'resources/images/watchtut.png',
-                    iconAlign: 'top',
-                    text: 'Watch a Tutorial',       
-                },
-                {
-                    xtype: 'button',
-                    cls: 'dashBtn',
-                    id: 'readManualsBtn',
-                    scale: 'large',
-                    overCls: 'readManualsBtn-over',
-                    height: '120px',
-                    icon: 'resources/images/readman.png',
-                    iconAlign: 'top',
-                    text: 'Read the Manuals',
-                    href: 'http://help.teselagen.com/manual/'
-                }
-                ]
-                }
+                            },{
+                                xtype: 'button',
+                                cls: 'dashBtn',
+                                height: 100,
+                                flex: 1,
+                                id: 'createSequence',
+                                text: 'Create Sequence',
+                                scale: 'medium',
+                                iconCls: 'newSequence-icon',
+                                iconAlign: 'top',
+                                overCls: 'createSequence-over',
+                                listeners: {
+                                    click: function () {
+                                        Vede.application.fireEvent("TabOpen");
+                                    }
+                                }
+
+                            },
+                            {
+                                xtype: 'button',
+                                cls: 'dashBtn',
+                                height: 100,
+                                id: 'readManualsBtn',
+                                scale: 'medium',
+                                flex: 1,
+                                overCls: 'readManualsBtn-over',
+                                iconAlign: 'top',
+                                iconCls: 'manuals-icon',
+                                text: 'Manuals',
+                                href: 'http://help.teselagen.com/manual/'
+                            },
+                            {
+                                xtype: 'button',
+                                cls: 'dashBtn',
+                                height: 100,
+                                id: 'tourBtn',
+                                scale: 'medium',
+                                flex: 1,
+                                overCls: 'tourBtn-over',
+                                iconAlign: 'top',
+                                iconCls: 'tour-icon',
+                                iconAlign: 'top',
+                                text: 'Take a Tour',
+                                href: 'http://help.teselagen.com/manual/'
+                            }
+                        ]
+                    }, 
+                    {
+                        xtype: 'container',
+                        id: 'dashboardStats',
+                        margin: '10 100 50 100',
+                        flex: 1,
+                        minHeight: 400,
+                        minWidth: 800,
+                        border: 0,
+                        layout: {
+                            type: 'hbox',
+                            align: 'stretch'
+                        },
+                        items: [ 
+                            {
+                                xtype: 'container',
+                                cls: 'dashboardStats-container',
+                                margin: '0 0 0 0',
+                                border: 0,
+                                flex: 0.5,
+                                maxHeight: 320,
+                                layout: {
+                                    type: 'vbox',
+                                    align: 'stretch'
+                                },
+                                items: [
+                                    {
+                                        xtype: 'container',
+                                        cls: 'dashProjectsData',
+                                        margin: '10 10 10 10',
+                                        width: 430,
+                                        flex: 0.5,
+                                        id: 'projectsCountBox',
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'projectsCountBox-icon',
+                                                flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center',
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'projects-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0'
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'projectsCountBox-data',
+                                                flex: 1,
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'projectsCountBox-num',
+                                                        border: 0,
+                                                        flex: .8,
+                                                        text: null
+                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'projectsCountBox-desc',
+                                                        flex: .6,
+                                                        border: 0,
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        xtype: 'container',
+                                        cls: 'dashDesignsData',
+                                        margin: '10 10 10 10',
+                                        width: 430,
+                                        flex: 0.5,
+                                        id: 'designsCountBox',
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'designsCountBox-icon',
+                                                flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'designs-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0',
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'designsCountBox-data',
+                                                flex: 1,
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'designsCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                    },                         
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'designsCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+
+                                ]
+                            },
+                            {
+                              xtype: 'container',
+                                cls: 'dashboardStats-container2',
+                                margin: '0 0 0 0',
+                                border: 0,
+                                flex: 0.5,
+                                maxHeight: 320,
+                                layout: {
+                                    type: 'vbox',
+                                    align: 'stretch'
+                                },
+                                items: [
+                                    {
+                                        xtype: 'container',
+                                        cls: 'dashSequencesData',
+                                        margin: '10 10 10 10',
+                                        flex: 0.5,
+                                        id: 'sequencesCountBox',
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'sequencesCountBox-icon',
+                                                flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'sequences-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0',
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'sequencesCountBox-data',
+                                                flex: 1,
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'sequencesCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'sequencesCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        xtype: 'container',
+                                        cls: 'dashPartsData',
+                                        margin: '10 10 10 10',
+                                        flex: 0.5,
+                                        id: 'partsCountBox',
+                                        layout: {
+                                            type: 'hbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                cls: 'partsCountBox-icon',
+                                                flex: .6,
+                                                layout: {
+                                                    type: 'hbox',
+                                                    pack: 'center'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'image',
+                                                        imgCls: 'parts-icon',
+                                                        border: 0,
+                                                        margin: '32 0 0 0',
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                cls: 'partsCountBox-data',
+                                                flex: 1,
+                                                layout: {
+                                                    type: 'vbox',
+                                                    align: 'stretch'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'partsCountBox-num',
+                                                        border: 0,
+                                                        flex: 1,
+                                                        text: null,
+                                                    },
+                                                    {
+                                                        xtype: 'textfield',
+                                                        cls: 'partsCountBox-desc',
+                                                        border: 0,
+                                                        flex: .6,
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                ]  
+                            }
+                        ]
+                    }
                 ]
             }
+
+            // require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
+            // listeners: {
+            //     itemclick: function (view, record, item, index, e, eOpts) {
+            //         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_PROJECT, record);;
+            //     }
+            // }
         
             ]
-    /*
-    items: [{
-        xtype: 'panel',
-        flex: 1,
-        id: 'dashboard_Panel',
-        layout: {
-            align: 'stretch',
-            type: 'vbox'
-        },
-        items: [{
-            xtype: 'panel',
-            flex: 1,
-            border: 0,
-            id: 'dashboard_TopPanel',
-            layout: {
-                align: 'stretch',
-                type: 'hbox'
-            },
-            items: [{
-                xtype: 'gridpanel',
-                flex: 1,
-                id: 'designGrid_Panel',
-                margin: 10,
-                width: 100,
-                title: 'Recent Designs',
-                forceFit: true,
-                columns: [{
-                    xtype: 'gridcolumn',
-                    id: 'designGrid_Name',
-                    dataIndex: 'name',
-                    text: 'Name'
-                }, {
-                    xtype: 'datecolumn',
-                    id: 'designGrid_DateCreated',
-                    dataIndex: 'dateCreated',
-                    text: 'Date Created'
-                }, {
-                    xtype: 'datecolumn',
-                    id: 'designGrid_DateModified',
-                    dataIndex: 'dateModified',
-                    text: 'Last Modified'
-                }],
-                viewConfig: {
-                    id: 'designGridView'
-                },
-                dockedItems: [{
-                    xtype: 'toolbar',
-                    dock: 'top',
-                    height: 40,
-                    layout: {
-                        pack: 'end',
-                        type: 'hbox'
-                    }
-                }]
-            }]
-        }, {
-            xtype: 'panel',
-            flex: 1,
-            border: 0,
-            id: 'dashboard_BottomPanel',
-            layout: {
-                type: 'fit'
-            },
-            items: [{
-                xtype: 'panel',
-                id: 'dashboard_StatsPanel',
-                margin: 10,
-                layout: {
-                    type: 'fit'
-                },
-                title: 'Analytics'
-            }]
-        }]
-    }, {
-        xtype: 'panel',
-        flex: 1,
-        border: 0,
-        id: 'dashboard_TaskPanel',
-        hidden: true,
-        maxWidth: 250,
-        width: 250,
-        layout: {
-            align: 'stretch',
-            type: 'vbox'
-        },
-        items: [{
-            xtype: 'menu',
-            border: 0,
-            floating: false,
-            width: 120,
-            title: 'Common Tasks',
-            items: [{
-                xtype: 'menuitem',
-                text: 'New Project'
-            }, {
-                xtype: 'menuitem',
-                id: 'openSequenceFile_Btn',
-                text: 'Open Sequence File'
-            }, {
-                xtype: 'menuitem',
-                text: 'New Design'
-            }]
-        }, {
-            xtype: 'menu',
-            flex: 2,
-            border: 0,
-            floating: false,
-            width: 120,
-            title: 'Help',
-            items: [{
-                xtype: 'menuitem',
-                text: 'j5 Manual'
-            }, {
-                xtype: 'menuitem',
-                text: 'Vector Editor Manual'
-            }, {
-                xtype: 'menuitem',
-                text: 'Device Editor Manual'
-            }, {
-                xtype: 'menuitem',
-                text: 'Tutorials'
-            }, {
-                xtype: 'menuitem',
-                text: 'Get Support'
-            }, {
-                xtype: 'menuitem',
-                text: 'Submit Feedback'
-            }]
-        }]
-    }],
-    require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
-    listeners: {
-        itemclick: function (view, record, item, index, e, eOpts) {
-            Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_PROJECT, record);;
-        }
-    }
-    */
+
+    
 
 });

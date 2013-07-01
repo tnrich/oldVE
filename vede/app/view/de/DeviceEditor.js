@@ -38,7 +38,7 @@ Ext.define('Vede.view.de.DeviceEditor', {
         border: 0,
         items: [{
             xtype: 'DeviceEditorCanvasPanel',
-            border: 0,
+            border: 0
         }
         ]
     }],

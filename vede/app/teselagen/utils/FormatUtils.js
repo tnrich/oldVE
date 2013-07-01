@@ -54,6 +54,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         "Teselagen.bio.sequence.alphabets.DNAAlphabet",
         "Teselagen.bio.sequence.dna.DNASequence",
+        "Teselagen.bio.sequence.dna.Feature",
+        "Teselagen.bio.sequence.dna.FeatureNote",
         "Teselagen.bio.sequence.DNATools",
 
         "Teselagen.utils.SequenceUtils"//,
@@ -326,6 +328,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
             var label      = ft["seq:label"];
             var type       = ft["seq:type"];
             var complement = ft["seq:complement"];
+            var index      = ft["seq:index"];
 
             //===============
             // LOCATION
@@ -363,7 +366,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
                 name:               label,
                 type:               type,
                 strand:             strand,
-                notes:              notes
+                notes:              notes,
+                index:              index
             });
             feat.setLocations(locations);
             features.push(feat);

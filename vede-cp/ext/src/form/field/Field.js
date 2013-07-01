@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * @docauthor Jason Johnston <jason@sencha.com>
  *
@@ -102,6 +119,22 @@ Ext.define('Ext.form.field.Field', {
         );
 
         this.initValue();
+        
+        //<debug>
+        var badNames = [
+            'tagName',
+            'nodeName',
+            'children',
+            'childNodes'
+        ], name = this.name;
+            
+        if (name && Ext.Array.indexOf(badNames, name) > -1) {
+            Ext.log.warn(
+                ['It is recommended to not use "', name, '" as a field name, because it ',
+                'can cause naming collisions during form submission.'].join('')
+            );
+        }
+        //</debug>
     },
 
     /**
@@ -131,9 +164,7 @@ Ext.define('Ext.form.field.Field', {
      * @param {Object} value The initial value
      * @return {Object} The modified initial value
      */
-    transformOriginalValue: function(value){
-        return value;
-    },
+    transformOriginalValue: Ext.identityFn,
 
     /**
      * Returns the {@link Ext.form.field.Field#name name} attribute of the field. This is used as the parameter name

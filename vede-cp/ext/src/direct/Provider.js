@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * Ext.direct.Provider is an abstract class meant to be extended.
  *
@@ -14,16 +31,13 @@
  * @abstract
  */
 Ext.define('Ext.direct.Provider', {
-
-    /* Begin Definitions */
-
    alias: 'direct.provider',
 
     mixins: {
         observable: 'Ext.util.Observable'
     },
-
-    /* End Definitions */
+    
+    isProvider: true,
 
    /**
      * @cfg {String} id
@@ -31,66 +45,85 @@ Ext.define('Ext.direct.Provider', {
      * You should assign an id if you need to be able to access the provider later and you do
      * not have an object reference available, for example:
      *
-     *     Ext.direct.Manager.addProvider({
-     *         type: 'polling',
-     *         url:  'php/poll.php',
-     *         id:   'poll-provider'
-     *     });
-     *     var p = {@link Ext.direct.Manager}.{@link Ext.direct.Manager#getProvider getProvider}('poll-provider');
+     *      Ext.direct.Manager.addProvider({
+     *          type: 'polling',
+     *          url:  'php/poll.php',
+     *          id:   'poll-provider'
+     *      });
+     *      var p = {@link Ext.direct.Manager}.{@link Ext.direct.Manager#getProvider getProvider}('poll-provider');
      *     p.disconnect();
      *
      */
-
-    constructor : function(config){
+    
+    /**
+     * @cfg {String[]} relayedEvents
+     * List of Provider events that should be relayed by {@link Ext.direct.Manager}.
+     * 'data' event is always relayed.
+     */
+    
+    constructor: function(config) {
         var me = this;
-
+        
         Ext.apply(me, config);
+        
+        Ext.applyIf(me, {
+            id: Ext.id(null, 'provider-')
+        });
+
         me.addEvents(
             /**
              * @event connect
              * Fires when the Provider connects to the server-side
+             *
              * @param {Ext.direct.Provider} provider The {@link Ext.direct.Provider Provider}.
              */
             'connect',
+            
             /**
              * @event disconnect
              * Fires when the Provider disconnects from the server-side
+             *
              * @param {Ext.direct.Provider} provider The {@link Ext.direct.Provider Provider}.
              */
             'disconnect',
+            
             /**
              * @event data
              * Fires when the Provider receives data from the server-side
+             *
              * @param {Ext.direct.Provider} provider The {@link Ext.direct.Provider Provider}.
              * @param {Ext.direct.Event} e The Ext.direct.Event type that occurred.
              */
             'data',
+            
             /**
              * @event exception
              * Fires when the Provider receives an exception from the server-side
              */
             'exception'
         );
+
         me.mixins.observable.constructor.call(me, config);
     },
 
     /**
      * Returns whether or not the server-side is currently connected.
      * Abstract method for subclasses to implement.
+     * @template
      */
-    isConnected: function(){
+    isConnected: function() {
         return false;
     },
 
     /**
-     * Abstract methods for subclasses to implement.
-     * @method
+     * Abstract method for subclasses to implement.
+     * @template
      */
     connect: Ext.emptyFn,
 
     /**
-     * Abstract methods for subclasses to implement.
-     * @method
+     * Abstract method for subclasses to implement.
+     * @template
      */
     disconnect: Ext.emptyFn
 });

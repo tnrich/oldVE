@@ -5,36 +5,47 @@
     <title>TeselaGen</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="/resources/css/ext-all-gray.css"/>
-    <link rel="stylesheet" href="resources/css/teselagen_main.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/resources/css/ext-all-gray.css"/> -->
+    <!--<link rel="stylesheet" href="resources/css/teselagen_main.css"> -->
     <!-- Enabling the Bootstrap CSS styles causes some ExtJS components to display incorrectly. -->
     <!--<link href="resources/twitter-bootstrap/css/bootstrap.css" rel="stylesheet">-->
     <link href="resources/styles/icons.css" rel="stylesheet">
-    <link href="resources/styles/deviceEditor.css" rel="stylesheet">
     <link href="resources/styles/splash.css" rel="stylesheet">
+    <link rel="stylesheet" href="resources/css/toastr.css">
 
     <!-- ExtJS, APP, RAPHAEL, D3 -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="resources/js/raphael-min.js"></script>
+    <script type="text/javascript" src="resources/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="resources/js/async.min.js"></script>
+    <script type="text/javascript" src="resources/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="resources/js/toastr.js"></script>
 
     <!-- <x-compile> -->
         <!-- <x-bootstrap> -->
-        <script type="text/javascript" src="ext/ext-dev.js"></script>
-        <script src="bootstrap.js"></script>
+            <link rel="stylesheet" href="bootstrap.css">
+            <script src="ext/ext-dev.js"></script>
+            <script src="bootstrap.js"></script>
         <!-- </x-bootstrap> -->
-    <script type="text/javascript" src="app.js"></script>
+        <script src="app.js"></script>
     <!-- </x-compile> -->
 
     <script type="text/javascript" src="resources/js/raphael-min.js"></script>
     <script type="text/javascript" src="resources/js/d3.v2.min.js"></script>
     <script type="text/javascript" src="resources/js/async.min.js"></script>
     
+    <!-- Include Print CSS -->
+	<link rel="stylesheet" href="resources/css/print.css" type="text/css" media="print" />
+
     <!--Additional Resources-->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand:400,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Maven+Pro:500,700">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu+Mono">
 
     <!--File API-->
-    <script type="text/javascript" src="https://raw.github.com/eligrey/BlobBuilder.js/master/BlobBuilder.min.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/eligrey/FileSaver.js/master/FileSaver.js"></script>
-
+    <script type="text/javascript" src="resources/js/BlobBuilder.min.js"></script>
+    <script type="text/javascript" src="resources/js/FileSaver.js"></script>
+    <script type="text/javascript" src="resources/js/base64.js"></script>
 </head>
 <body></body>
 </html>

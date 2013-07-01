@@ -40,11 +40,12 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     cls: 'importEugeneRulesBtn',
                     buttonConfig: {
                         text: 'Import Eugene Rules',
-                        scale: 'small',
                         tooltip: 'Import EugeneRules',
-                        margin: '0 0 0 0',
-                    },
-                    border: 0
+                        border: false,
+                        style: {
+                            left: "-2px"
+                        }
+                    }
                 }
                 ]
             }
@@ -68,7 +69,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     xtype: 'menuitem',
                     text: 'Remove Row',
                     cls: 'removeRowMenuItem',
-                    disabled: true,
+                    disabled: true
                 }, {
                     text: 'Cut Part',
                     cls: 'cutPartMenuItem',
@@ -168,8 +169,13 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 width: 140,
                 items: [{
                     xtype: 'menuitem',
-                    cls: 'row',
-                    text: 'Row',
+                    cls: 'row-above',
+                    text: 'Row Above',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'row-below',
+                    text: 'Row Below',
                     disabled: true
                 }, {
                     xtype: 'menuitem',
@@ -185,7 +191,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
             }
         }, {
             xtype: 'button',
-            text: 'Make DNA',
+            text: 'J5 Optimize',
             cls: 'j5button',
             menuAlign: 'tr-br?'
         }]

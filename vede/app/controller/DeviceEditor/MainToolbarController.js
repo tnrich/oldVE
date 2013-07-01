@@ -1,3 +1,4 @@
+
 /**
  * Main toolbar controller
  * @class Vede.controller.DeviceEditor.MainToolbarController
@@ -31,7 +32,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         else {
             var fileInput = pBtn.extractFileInput();
             var file = fileInput.files[0];
-            var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+            var ext = file.name.match(/^.*\.(xml|json)$/i);
             if (ext) {
                 Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
                 var fr = new FileReader();
@@ -41,6 +42,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             }
             else {
                 Ext.MessageBox.alert('Error', 'Invalid file format');
+                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
             }
         }
     },

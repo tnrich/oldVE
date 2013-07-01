@@ -81,11 +81,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 deproject.save({
                     callback: function () {
                         Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | "+text);
-
-                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorStatusPanel').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
-                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
-                        parttext.animate({duration: 5000, to: {opacity: 0}});
-
+                        toastr.options.onclick = null;
+                        toastr.info("Design renamed");
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
                         });
@@ -169,37 +166,42 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         //deproject.save({callback:function(){
 
         var saveAssociatedSequence = function (part, cb) {
-                part.getSequenceFile({callback: function(associatedSequence){
-                    if(associatedSequence)
-                    {
-                        var lastSequenceId = associatedSequence.get('id');
-                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+            if(part.data.phantom === false)
+                {
+                    part.getSequenceFile({callback: function(associatedSequence){
+                        if(associatedSequence)
                         {
-                            associatedSequence.save({
-                                callback: function (sequencefile) {
-                                    if(!lastSequenceId)
-                                    {
-                                        part.set("sequencefile_id", sequencefile.get('id'));
-                                        part.save({
-                                            callback: function () {
-                                                cb();
-                                            }
-                                        });
+                            var lastSequenceId = associatedSequence.get('id');
+                            if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                            {
+                                associatedSequence.save({
+                                    callback: function (sequencefile) {
+                                        if(!lastSequenceId)
+                                        {
+                                            part.set("sequencefile_id", sequencefile.get('id'));
+                                            part.save({
+                                                callback: function () {
+                                                    cb();
+                                                }
+                                            });
+                                        }
+                                        else { cb(); }
                                     }
-                                    else { cb(); }
-                                }
-                            });
+                                });
+                            }
+                            else
+                            {
+                                cb();
+                            }
                         }
                         else
                         {
                             cb();
                         }
-                    }
-                    else
-                    {
-                        cb();
-                    }
-                }});
+                    }});
+                }
+                else cb();
+                
             };
 
         var saveDesign = function () {
@@ -283,8 +285,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
 
-    onAddRowClick: function () {
-        this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
+    onAddRowAboveClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
+    },
+
+    onAddRowBelowClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_ROW_BELOW);
     },
 
     onAddColumnLeftClick: function () {
@@ -308,7 +314,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onJ5buttonClick: function (button, e, options) {
-        Vede.application.fireEvent("openj5");
+        Vede.application.fireEvent("runj5");
         toastr.options.onclick = null;
         toastr.info("Design Saved");
     },
@@ -365,19 +371,36 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         if(status=="Completed") {
             var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-warning");
+        } else if (status=="Error") {
+            var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").addClass("status-note-failed");
         }
 
         var warnings = self.activeJ5Run.raw.warnings;
+        var errors = self.activeJ5Run.raw.error_list[0];
 
+        if (warnings) {
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
             model: 'Teselagen.models.j5Output.Warning',
-            data: warnings,
+            data: warnings
         });
+        }
+
+        if (errors) {
+        var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
+            model: 'Teselagen.models.j5Output.Error',
+            data: errors.error
+        });
+        }   
 
         if ((warnings.length>0)==true) {
             Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').show();
@@ -388,9 +411,22 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              warningsStore = null;
         }
 
+        if (errors) {
+            Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').show();
+            Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').reconfigure(errorsStore);
+            // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
+            // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
+            // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
+        } else {
+             Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').hide();
+             errors = null;
+             errorsStore = null;
+        }
+
         Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+
         
         Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
         // Ext.getCmp('mainAppPanel').getActiveTab().down('button[cls="downloadResults"]').href = '/api/getfile/'+self.activeJ5Run.data.file_id;
@@ -455,8 +491,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {
                 click: this.onImportEugeneRulesBtnClick
             },
-            "button[cls='insertMenu'] > menu > menuitem[text='Row']": {
-                click: this.onAddRowClick
+            "button[cls='insertMenu'] > menu > menuitem[text='Row Above']": {
+                click: this.onAddRowAboveClick
+            },
+            "button[cls='insertMenu'] > menu > menuitem[text='Row Below']": {
+                click: this.onAddRowBelowClick
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {
                 click: this.onAddColumnLeftClick

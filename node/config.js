@@ -97,20 +97,78 @@ module.exports = function(app, express) {
         host: 'localhost'
     });
 
-    // Load Manager classes
+
+    // MYSQL CONNECTION
+    if (app.program.beta || app.program.prod) {
+        // Init MYSQL
+        var connection = app.mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'tesela#rocks',
+            database: 'teselagen',
+            insecureAuth: true
+        });
+
+        function handleDisconnect(connection) {
+            connection.on('error', function(err) {
+                if (!err.fatal) {
+                    return;
+                }
+
+                if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+                    throw err;
+                }
+
+                console.log('Re-connecting lost connection: ' + err.stack);
+
+                connection = app.mysql.createConnection(connection.config);
+                handleDisconnect(connection);
+                connection.connect();
+            });
+        }
+
+        handleDisconnect(connection);
+
+        // We will only connect to mysql and check for credetentials on production environment
+        connection.connect();
+        console.log('OPTIONS: MYSQL started');
+        app.mysql.connection = connection;
+
+        function keepAlive() {
+            connection.query('SELECT 1');
+            console.log("Fired Keep-Alive");
+            return;
+        }
+        setInterval(keepAlive, 60000);
+        if (app.program.debug) {
+            console.log("Retrieving a valid sessionId");
+            var query = 'select * from j5sessions order by id desc limit 1;';
+            connection.query(query, function(err, rows, fields) {
+                if (err) throw err;
+                app.testing.sessionId = rows[0].session_id;
+                console.log("Using sessionId: " + app.testing.sessionId);
+            });
+        }
+    } else {
+        console.log('OPTIONS: MYSQL OMITTED');
+    }
+    app.mysql = connection;
+
+    // Error handler
+    app.errorHandler = express.errorHandler();
+
+    
     /*
-     * Managers to interact with models
-     * Not fully implemented, work in progress
-     * @author: Yuri Bendana
+     * Load Manager classes
+     * Managers interact with models
      */
 
-    app.ApiManager = require("./manager/ApiManager")(app.db);
-    app.DEProjectManager = require("./manager/DEProjectManager")(app.db);
-    app.J5RunManager = require("./manager/J5RunManager")(app.db);
-    app.PartManager = require("./manager/PartManager")(app.db);
-    app.ProjectManager = require("./manager/ProjectManager")(app.db);
-    app.SequenceManager = require("./manager/SequenceManager")(app.db);
-    app.UserManager = require("./manager/UserManager")(app.db);
-    app.VEProjectManager = require("./manager/VEProjectManager")(app.db);
+    app.ApiManager = require("./manager/ApiManager")();
+    app.DeviceDesignManager = require("./manager/DeviceDesignManager")();
+    app.J5RunManager = require("./manager/J5RunManager")();
+    app.PartManager = require("./manager/PartManager")();
+    app.ProjectManager = require("./manager/ProjectManager")();
+    app.SequenceManager = require("./manager/SequenceManager")();
+    app.UserManager = require("./manager/UserManager")();
 
 };

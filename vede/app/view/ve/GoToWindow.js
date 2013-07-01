@@ -34,7 +34,7 @@ Ext.define('Vede.view.ve.GoToWindow', {
                 margin: 2,
                 padding: 2,
                 handler: function() {
-                    this.up('window').goto()
+                    this.up('window').moveto()
                 }
             }, {
                 xtype: 'button',
@@ -47,7 +47,7 @@ Ext.define('Vede.view.ve.GoToWindow', {
             }]
         }]
     }],
-    goto: function() {
+    moveto: function() {
         var field = this.down('numberfield');
         var index = field.getValue();
 

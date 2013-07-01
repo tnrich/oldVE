@@ -2,14 +2,10 @@
  * TeselaGen API
  * @module ./routes/api
  */
-module.exports = function(app, express) {
-
-    var errorHandler = express.errorHandler();
-    var apiManager = new app.ApiManager();
+module.exports = function(app) {
 
     require('../routes/constants')(app);
 
-    require('../api/rest.js')(app);
     require('./authentication.js')(app);
 
     require('../api/user.js')(app);

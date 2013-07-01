@@ -8,5 +8,8 @@ Ext.define('Vede.view.pie.Pie', {
     constructor: function(pConfig) {
         this.callParent([pConfig]);
         this.id = "Pie";
+        this.on("mousedown", function(e){      	
+        	//if (e.button==2) Vede.application.fireEvent("RightClickOnPieDrawComponent",e);
+        });
     }
 });

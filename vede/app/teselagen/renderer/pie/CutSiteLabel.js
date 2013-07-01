@@ -8,7 +8,7 @@ Ext.define("Teselagen.renderer.pie.CutSiteLabel", {
     extend: "Teselagen.renderer.common.Label",
 
     config: {
-        center: null,
+        center: null
     },
 
     constructor: function(inData) {

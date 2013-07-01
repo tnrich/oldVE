@@ -11,6 +11,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     requires: ["Ext.data.Store"],
 
     debugFlag : false,
+    disabled : false,
     runFlag : true,
 
     mon: {}, // Object to observe
@@ -57,14 +58,15 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     monitorServerTasks: function(cb){
         var self = this;
         Ext.Ajax.request({
-            url: '/api/monitorTasks',
+            url: Teselagen.manager.SessionManager.buildUrl('monitorTasks', ''),
             params: {
             },
             method: 'GET',
+            withCredentials: true,
             success: function(response){
                 var parsedResponse = JSON.parse(response.responseText);
                 self.observeChanges(parsedResponse.j5runs);
-                if(typeof (cb) === "function") { cb(parsedResponse); }
+                if(typeof (cb) === "function") {cb(parsedResponse); }
             }
         });
     },
@@ -92,7 +94,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                                 // Fire change
-                    // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
+                    Vede.application.fireEvent("j5RunStatusChanged", j5run._id, j5run.status);
                     toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",j5run);}
                     toastr.options.timeOut = 0;
                     toastr.success("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});

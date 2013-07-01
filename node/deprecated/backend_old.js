@@ -52,7 +52,7 @@ module.exports = function (app) {
         next();
       });
     } else {
-      if(!app.testing.enabled) {
+      if(!app.program.debug) {
         res.send('Wrong credentials');
       } else {
         console.log("Logged as Guest user");

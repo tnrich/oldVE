@@ -6,14 +6,24 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.renderer.common.Label", {
-    extend: "Ext.draw.Sprite",
-
     requires: ["Teselagen.bio.util.StringUtil"],
 
+    inheritableStatics: {
+        FONT_FAMILY: "Maven Pro",
+        FONT_SIZE: "8px",
+        FILL: "#DDDDDD"
+    },
+
     config: {
+        labelSVG: null,
+        tooltip: "",
+        click: null,
+        rightClick: null,
         needsMeasurement: true,
         annotation: null,
         includeInView: true,
+        x: 0,
+        y: 0
     },
 
     StringUtil: null,
@@ -32,15 +42,6 @@ Ext.define("Teselagen.renderer.common.Label", {
         this.initConfig(inData);
         this.StringUtil = Teselagen.bio.util.StringUtil;
 
-        this.callParent([Ext.create("Ext.draw.Sprite", {
-            type: "text",
-            text: this.labelText(),
-            fill: inData.color || "black",
-            "font-size": "6px",
-            x: inData.x,
-            y: inData.y
-        })]);
-
         /*
             Line 48 fix: this.StringUtil.trim fails because it used to receive this.labelText() of type Object
         */
@@ -51,5 +52,18 @@ Ext.define("Teselagen.renderer.common.Label", {
             this.setIncludeInView(false);
         }
 
+        this.label = this.labelSVG.append("svg:text")
+                     .attr("fill", inData.color || "#333234")
+                     .attr("x", inData.x)
+                     .attr("y", inData.y)
+                     .text(this.labelText())
+                     .attr("font-family", this.self.FONT_FAMILY)
+                     .attr("font-size", this.self.FONT_SIZE)
+                     .on("mousedown", inData.click)
+                     .on("contextmenu", inData.rightClick);
+
+
+        this.label.append("svg:title")
+                  .text(inData.tooltip);
     }
 });

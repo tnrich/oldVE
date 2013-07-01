@@ -17,7 +17,14 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
     requires: [
         "Teselagen.bio.util.XmlToJson",
         "Teselagen.bio.util.StringUtil",
-        "Teselagen.bio.util.Sha256"
+        "Teselagen.bio.util.Sha256",
+        "Teselagen.bio.parsers.Genbank",
+        "Teselagen.bio.parsers.GenbankFeatureElement",
+        "Teselagen.bio.parsers.GenbankFeatureLocation",
+        "Teselagen.bio.parsers.GenbankFeatureQualifier",
+        "Teselagen.bio.parsers.GenbankFeaturesKeyword",
+        "Teselagen.bio.parsers.GenbankLocusKeyword",
+        "Teselagen.bio.parsers.GenbankOriginKeyword"
     ],
 
     singleton: true,
@@ -660,8 +667,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
                 // SET THE LABEL FIELD. DO NOT STORE AS AN ATTRIBUTE
 
-                if (k===0 && this.isALabel(key) ) { //HERE 8/20
-                    //console.log("found a label: " + key );
+                if (this.isALabel(key) ) {
                     label = value;
                     //don't add as attribute
                 } else {
@@ -673,13 +679,13 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                         //}
                     });
                 }
-                //console.log(label);
             }
 
             newFt = {
                 "seq:label" : label, //ft.findLabel(),
                 "seq:complement" : ft.getComplement(),
                 "seq:type" : ft.getKeyword(),
+                "seq:index" : ft.getIndex(),
                 "seq:location" : newLoc,
                 "seq:attribute" : newAttr,
                 "seq:seqHash" : seqHash
@@ -689,7 +695,6 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                 "seq:feature" : newFt
             });
         }
-        //console.log(pGenbank.getLocus().getLinear());
 
         // MAKE JSON
         json = {

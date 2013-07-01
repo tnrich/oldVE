@@ -18,26 +18,21 @@ Ext.define('Vede.view.ve.SafeEditWindow', {
             xtype: 'gridpanel',
             cls: 'safeEditGrid',
             width: 400,
-            layout: 'fit',
-            title: 'Features Affected By Edit',
+            title: 'Select Features to Remove',
             columnLines: true,
             rowLines: true,
             sortableColumns: false,
-            plugins: {
-                ptype: 'cellediting',
-                clicksToEdit: 1
-            },
             selModel: {
                 selType: 'checkboxmodel',
                 injectCheckbox: 'last',
-                showHeaderCheckbox: false,
+                showHeaderCheckbox: true,
                 checkOnly: true,
-                mode: 'MULTI'
+                mode: 'MULTI',
+                headerWidth: 33
             },
             columns: [{
                 xtype: 'gridcolumn',
                 text: 'Name',
-                columnWidth: 200,
                 dataIndex: 'name',
                 renderer: function(id, metaData, featureModel) {
                     // ExtJS puts features into a store and makes them into a

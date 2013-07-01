@@ -23,7 +23,8 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
-    requires: ["Teselagen.bio.util.StringUtil"],
+    requires: ["Teselagen.bio.util.StringUtil",
+               "Teselagen.bio.parsers.GenbankFeatureQualifier"],
 
     /**
      * @cfg {Object} config
@@ -41,7 +42,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         complement: false,
         join: false,
         featureQualifier: [],
-        featureLocation: []
+        featureLocation: [],
+        index: 0
     },
 
     /**
@@ -65,6 +67,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
             this.join = inData.join || false;
             this.featureQualifier = inData.featureQualifier || [];
             this.featureLocation = inData.featureLocation || [];
+            this.index = inData.index || 0;
         }
         return this;
     },

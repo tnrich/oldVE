@@ -7,6 +7,7 @@ Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
 Ext.require("Teselagen.bio.sequence.common.StrandType");
 Ext.require("Teselagen.bio.sequence.DNATools");
+Ext.require("Teselagen.bio.sequence.dna.Feature");
 Ext.require("Teselagen.bio.sequence.TranslationUtils");
 Ext.require("Teselagen.bio.parsers.GenbankManager");
 Ext.require("Teselagen.bio.parsers.ParsersManager");

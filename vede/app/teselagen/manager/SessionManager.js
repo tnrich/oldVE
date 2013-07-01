@@ -24,18 +24,18 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     constructor: function() {
         this.constants = Teselagen.constants.Constants;
-        this.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + "api/";
-        this.env = this.constants.ENV_DEV;
+        this.setBaseURL(location.href.substring(0,location.href.indexOf("/",7)+1) + "api/");
+        this.setEnv(this.constants.ENV_DEV);
     },
 
     /**
      * Builds a URL for Proxies.
      * @param {String} pAction The action to be added to base URL.
-     * @param {String} pDefault The default URL used for testing environment.
+     * @param {String} [pDefault] The default URL used for testing environment.
      */
     buildUrl: function(pAction, pDefault) {
-        var url = this.baseURL + pAction;
-        if (this.getEnv() === this.constants.ENV_TEST) {
+        var url = this.getBaseURL() + pAction;
+        if (pDefault && this.getEnv() === this.constants.ENV_TEST) {
             url = pDefault;
         }
         return url;
@@ -44,11 +44,11 @@ Ext.define("Teselagen.manager.SessionManager", {
     /**
      * Builds a URL for User specific Resources
      * @param {String} pAction The action to be added to base URL.
-     * @param {String} pDefault The default URL used for testing environment.
+     * @param {String} [pDefault] The default URL used for testing environment.
      */
     buildUserResUrl: function(pAction, pDefault) {
-        var url = this.baseURL + "users/" + this.config.baseUser + pAction;
-        if (this.getEnv() === this.constants.ENV_TEST) {
+        var url = this.getBaseURL() + "users/" + this.getBaseUser() + pAction;
+        if (pDefault && this.getEnv() === this.constants.ENV_TEST) {
             url = pDefault;
         }
         return url;

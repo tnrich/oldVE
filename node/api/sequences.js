@@ -107,8 +107,8 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method PUT '/sequences'
      */
-    app.put('/sequences', restrict,  function(req, res) {
-        Sequence.findById(req.body.id, function(err, newSequence) {
+    app.put('/sequences/:sequence_id', restrict,  function(req, res) {
+        Sequence.findById(req.params.sequence_id, function(err, newSequence) {
             if(err) return res.json(500,{"error":err});
             if(!newSequence) return res.json(500,{"error":"Sequence not found!"});
             saveSequence(newSequence,req,res);
@@ -152,7 +152,7 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
-            return res.json({"sequences":[]});
+            return res.json({"sequences":app.constants.defaultEmptyPart});
         }
     );
 

@@ -7,7 +7,7 @@
 Ext.define("Vede.view.annotate.Caret", {
     statics: {
         CARET_COLOR: "#000000",
-        CARET_WIDTH: 1,
+        CARET_WIDTH: 2,
         TIMER_REFRESH_SPEED: "1s", // blink time of the caret, in seconds
         SINGLE_HEIGHT: 20,
         DOUBLE_HEIGHT: 40
@@ -15,35 +15,75 @@ Ext.define("Vede.view.annotate.Caret", {
 
     config: {
         position: 0,
-        height: 40,
+        height: 38,
         sequenceAnnotator: null
     },
 
     caretSVG: null,
 
     constructor: function(pConfig) {
+        this.position = pConfig.position || 0;
+        this.height = pConfig.height || 38;
         this.initConfig(pConfig);
     },
 
-    render: function() {
-        d3.selectAll("#caretSVG").remove();
-        this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
-                            .attr("id", "caretSVG");
+    applyPosition: function(pPosition) {
+        if(this.getSequenceAnnotator().getSequenceAnnotator().getSequenceManager()) {
+            var location = this.getSequenceAnnotator().bpMetricsByIndex(pPosition);
+            var path = "M" + (location.x - 1) + " " + (location.y + 8) + 
+                       "L" + (location.x - 1) + " " + (location.y + this.height + 2);
+                           
+            if(!this.caretSVG) {
+                this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:path")
+                                    .attr("id", "caretSVG")
+                                    .style("pointer-events", "none")
+                                    .attr("d", path)
+                                    .attr("stroke", this.self.CARET_COLOR)
+                                    .attr("stroke-width", this.self.CARET_WIDTH);
 
-        var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
-        if(location)
-        {
-            this.caretSVG.append("svg:path")
-                .attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + 
-                           "L" + (location.x - 1) + " " + (location.y + this.height))
-                .attr("stroke", this.self.CARET_COLOR)
-                .attr("stroke-width", this.self.CARET_WIDTH)
-                .append("svg:animate")
-                .attr("attributeName", "visibility")
-                .attr("from", "hidden")
-                .attr("to", "visible")
-                .attr("dur", this.self.TIMER_REFRESH_SPEED)
-                .attr("repeatCount", "indefinite");
+                this.caretSVG.append("svg:animate")
+                                    .attr("attributeName", "visibility")
+                                    .attr("from", "hidden")
+                                    .attr("to", "visible")
+                                    .attr("dur", this.self.TIMER_REFRESH_SPEED)
+                                    .attr("repeatCount", "indefinite")
+                                    .style("pointer-events", "none");
+            } else {
+                this.caretSVG.attr("d", path);
+            }
         }
+
+        //console.log("changing annotate caret position");
+
+        return pPosition;
     },
+
+    applyHeight: function(pHeight) {
+        if(this.getSequenceAnnotator().getSequenceAnnotator().getSequenceManager()) {
+            var location = this.getSequenceAnnotator().bpMetricsByIndex(this.position);
+            var path = "M" + (location.x - 1) + " " + (location.y + 8) + 
+                       "L" + (location.x - 1) + " " + (location.y + pHeight + 2);
+                           
+            if(!this.caretSVG) {
+                this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:path")
+                                    .attr("id", "caretSVG")
+                                    .style("pointer-events", "none")
+                                    .attr("d", path)
+                                    .attr("stroke", this.self.CARET_COLOR)
+                                    .attr("stroke-width", this.self.CARET_WIDTH);
+                
+                this.caretSVG.append("svg:animate")
+                                    .attr("attributeName", "visibility")
+                                    .attr("from", "hidden")
+                                    .attr("to", "visible")
+                                    .attr("dur", this.self.TIMER_REFRESH_SPEED)
+                                    .attr("repeatCount", "indefinite")
+                                    .style("pointer-events", "none");
+            } else {
+                this.caretSVG.attr("d", path);
+            }
+        }
+
+        return pHeight;
+    }
  });
