@@ -610,7 +610,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterDirectSynthesesList"] = Base64.encode(masterDirectSynthesesList);
         masterFiles["masterDirectSynthesesListFileName"] = masterDirectSynthesesListFileName;
 
-        var assemblyMethod = inspector.down("component[cls='assemblyMethodSelector']").getValue()
+        var assemblyMethod = inspector.down("component[cls='assemblyMethodSelector']").getValue();
 
         if(assemblyMethod == "Mock Assembly") assemblyMethod = "Mock";
         if(assemblyMethod == "SLIC/Gibson/CPEC") assemblyMethod = "SLIC/Gibson/CPEC";
