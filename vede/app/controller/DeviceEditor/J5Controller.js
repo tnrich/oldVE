@@ -62,37 +62,48 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     messagebox.zIndexManager.bringToFront(messagebox);
                 }, 100);
             } else {
+                inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
+                inspector.setActiveTab(2);
 
-            inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
-            inspector.setActiveTab(2);
-
-            var store;
-            if(combinatorial)
-            {
-                store = new Ext.data.ArrayStore({
-                    fields: ['assemblyMethod'],
-                    data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
-                });
-            }
-            else
-            {
-                store = new Ext.data.ArrayStore({
-                    fields: ['assemblyMethod'],
-                    data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
-                });            }
-
-            var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
-            combobox.bindStore(store);
-            combobox.setValue(store.first());
+                var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
+                if(!combobox.getValue()) {
+                    self.loadAssemblyMethodSelector(combinatorial);
+                }
             }
         });
+    },
 
-        // Set the currentTab's j5Window property to null when the window is closed.
-        // This tells the onTabChange function whether the window should be open
-        // or closed when the tab is switched.
-        // this.on("close", function() {
-        //     currentTab = null;
-        // }, this);
+    loadAssemblyMethodSelector: function(combinatorial) {
+        var store;
+        var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
+        var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
+
+        if(combinatorial) {
+            store = new Ext.data.ArrayStore({
+                fields: ['assemblyMethod'],
+                data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
+            });
+        } else {
+            store = new Ext.data.ArrayStore({
+                fields: ['assemblyMethod'],
+                data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
+            });
+        }
+
+        combobox.bindStore(store);
+        combobox.setValue(store.first());
+    },
+
+    onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
+        var self = this;
+        if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
+            var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
+            if(!combobox.getValue()) {
+                Vede.application.fireEvent("checkj5Ready", function(combinatorial,j5ready) {
+                    self.loadAssemblyMethodSelector(combinatorial);
+                });
+            }
+        } 
     },
 
     /**
@@ -103,7 +114,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * the mainAppPanel which hides the j5Window when the tab is switched away,
      * and re-shows it when the tab is switched back.
      */
-
      onTabChange: function(j5AdvancedTab, newTab, oldTab) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
@@ -121,7 +131,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             distributePCRBtn.hide();
             condenseAssembliesBtn.show();
         }
-        
     },
 
     onTabChangeSub: function(j5AdvancedTab, newTab, oldTab) {
@@ -862,6 +871,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     init: function () {
         this.control({
+            "#mainAppPanel": {
+                tabchange: this.onMainAppPanelTabChange
+            },
             "panel[cls='j5InfoTab-Sub-Advanced']": {
                 tabchange: this.onTabChangeSub
             },
