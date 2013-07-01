@@ -543,6 +543,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
             if(button.cls === "runj5Btn") {
                 button.setText("Submit Run to j5");
+                $(".loader-mini").hide();
             }
         }
     },
@@ -635,13 +636,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             button.disable();
 
             if(button.cls === "runj5Btn") {
-                button.setLoading({msg: "Running J5"});
 
-                button.loadMask.el.setStyle("background-color", "transparent");
-                button.loadMask.msgEl.setStyle("background-color", "transparent");
-                button.loadMask.msgTextEl.setStyle("background-color", "transparent");
+                $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
 
-                button.setText("");
+                button.setText("Running J5...");
             }
         }
 
