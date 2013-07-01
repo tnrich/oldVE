@@ -558,6 +558,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onRunJ5BtnClick: function () {
+        $(".toast-success").hide();
+        
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
