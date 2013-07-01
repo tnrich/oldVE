@@ -65,7 +65,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
                 inspector.setActiveTab(2);
 
-                self.loadAssemblyMethodSelector(combinatorial);
+                var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
+                if(!combobox.getValue()) {
+                    self.loadAssemblyMethodSelector(combinatorial);
+                }
             }
         });
     },
@@ -94,9 +97,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
         var self = this;
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
-            Vede.application.fireEvent("checkj5Ready", function(combinatorial,j5ready) {
-                self.loadAssemblyMethodSelector(combinatorial);
-            });
+            var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
+            if(!combobox.getValue()) {
+                Vede.application.fireEvent("checkj5Ready", function(combinatorial,j5ready) {
+                    self.loadAssemblyMethodSelector(combinatorial);
+                });
+            }
         } 
     },
 
