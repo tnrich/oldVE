@@ -41,19 +41,22 @@ task("patchNode", function() {
 directory("log");
 
 task("startNode", ["log"], function() {
-    var cmd = util.format("forever start --plain -w --watchDirectory . " +
-            "-a -p /var/log/forever -l %s -o ../log/out.log -e ../log/err.log %s %s", 
-    foreverLog, nodeApp, nodeOpts);
+    //var cmd = util.format("forever start --plain -w --watchDirectory . " +
+    //        "-a -p /var/log/forever -l %s -o ../log/out.log -e ../log/err.log %s %s", 
+    //foreverLog, nodeApp, nodeOpts);
+    var cmd = "pm2 start app.js -i max";
     JakeUtil.exec(cmd);
 });
 
 task("stopNode", function() {
-    var cmd = "forever stop -p /var/log/forever --plain " + nodeApp;
+    //var cmd = "forever stop -p /var/log/forever --plain " + nodeApp;
+    var cmd = "pm2 kill";
     JakeUtil.exec(cmd);
 });
 
 task("restartNode", function() {
-    var cmd = "forever restart -p /var/log/forever --plain " + nodeApp;
+    //var cmd = "forever restart -p /var/log/forever --plain " + nodeApp;
+    var cmd = "pm2 kill && pm2 start app.js -i max";
     JakeUtil.exec(cmd);
 });
 
