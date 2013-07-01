@@ -79,7 +79,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 overCls: 'createSequence-over',
                                 listeners: {
                                     click: function () {
-                                        Teselagen.manager.ProjectManager.createDirectVESession();
+                                        Vede.application.fireEvent("createSequence");
                                     },
                                     afterrender: function(cmp) {
                                         cmp.getEl().set({
