@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*globals Ext, Teselagen, XmlToJson, DNATools*/
+<span id='Teselagen-bio-parsers-ParsersManager'>/**
+</span> *
+ * @class Teselagen.bio.parsers.ParsersManager
+ *
+ * DW: NOTE NOT ALL HAVE BEEN TESTED THOROUGHLY
+ *
+ * This class has file conversions between FASTA, GenBank, JbeiSeqXML/JbeiSeqJSON, and SBOL XML/JSON.
+ *
+ * Contains some helper functions such as todayDate() and isALabel().
+ *
+ * The JbeiSeqJSON structure is the central structure to conver between GenBank, JbeiSeqXml, and SBOLXML.
+ *
+ * FASTA/GenBank:
+ *      FASTA &lt;--&gt; Genbank
+ *
+ * JbeiSeq/Genbank: (Calls methods from {@link Teselagen.bio.parsers.JbeiseqParser})
+ *      jbeiseqXMLs (more than one) --&gt; ArrayList&lt;jbeiseqXml&gt;
+ *      jbeiseqXML &lt;--&gt; jbeiseqJSON &lt;--&gt; Genbank
+ *
+ * SBOL/JbeiSeq: (Calls methods from {@link Teselagen.bio.parsers.SbolParser})
+ *      sbolXML &lt;--&gt; sbolJSON &lt;--&gt; jbeiJSON
+ *
+ * @author Diana Wong
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.ParsersManager&quot;, {
+    requires:  [
+        &quot;Teselagen.bio.util.XmlToJson&quot;,
+        &quot;Teselagen.bio.util.StringUtil&quot;,
+        &quot;Teselagen.bio.util.Sha256&quot;,
+
+        &quot;Teselagen.bio.parsers.Genbank&quot;,
+        &quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;,
+        &quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;,
+        &quot;Teselagen.bio.parsers.SbolParser&quot;,
+        &quot;Teselagen.bio.parsers.JbeiseqParser&quot;,
+        &quot;Teselagen.bio.sequence.DNATools&quot;,
+
+        &quot;Ext.Ajax&quot;,
+        &quot;Ext.data.Store&quot;,
+        &quot;Ext.data.XmlStore&quot;,
+        &quot;Ext.data.reader.Xml&quot;
+    ],
+
+    singleton: true,
+
+    //XmlToJson: null,
+    //DNATools: null,
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-constructor'>    /**
+</span>     * @member Teselagen.bio.parsers.ParsersManager
+     */
+    constructor: function() {
+        XmlToJson   = Teselagen.bio.util.XmlToJson;
+        DNATools    = Teselagen.bio.sequence.DNATools;
+        SbolParser  = Teselagen.bio.parsers.SbolParser;
+        Sha256      = Teselagen.bio.util.Sha256;
+    },
+
+    // ===========================================================================
+    //  Fasta &amp; Genbank Conversions
+    // ===========================================================================
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-fastaToGenbank'>    /**
+</span>     * Converts a FASTA file into a Genbank form of the data.
+     * @param {String} pFasta FASTA formated string
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     */
+    fastaToGenbank: function(pFasta) {
+        var result; // original wants this to be a FeaturedDNASequence NOT SeqMgr!
+
+        var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
+        var seqArr  = [];
+        var name    = &quot;&quot;;
+        var sequence = &quot;&quot;;
+
+        if (Ext.String.trim(lineArr[0]).charAt(0) === &quot;&gt;&quot;) {
+            var nameArr = lineArr[0].match(/^&gt;[\s]*[\S]*/);
+            if (nameArr !== null &amp;&amp; nameArr.length &gt;= 1) {
+                name = nameArr[0].replace(/^&gt;/, &quot;&quot;);
+            }
+        }
+
+        for (var i=0; i &lt; lineArr.length; i++) {
+            if ( !lineArr[i].match(/^\&gt;/) ) {
+                sequence += Ext.String.trim(lineArr[i]);
+            }
+        }
+        sequence = sequence.replace(/[\d]|[\s]/g, &quot;&quot;).toLowerCase(); //remove whitespace and digits
+        if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
+            //illegalcharacters
+            return null;
+        }
+
+        var locus = Ext.create(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
+            locusName: name,
+            sequenceLength: sequence.length,
+            date: Teselagen.bio.parsers.ParsersManager.todayDate()
+        });
+
+        var origin =  Ext.create(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
+            sequence: sequence
+        });
+
+        result = Ext.create(&quot;Teselagen.bio.parsers.Genbank&quot;, {});
+
+        result.addKeyword(locus);
+        result.addKeyword(origin);
+
+        return result;
+    },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-genbankToFasta'>    /**
+</span>     * Converts a Genbank model into a FASTA string.
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     * @param {String} pFasta FASTA formated string
+     */
+     genbankToFasta: function(pGenbank) {
+
+        var name = pGenbank.getLocus().getLocusName();
+        var sequence = pGenbank.getOrigin().getSequence();
+
+        var result = &quot;&gt;&quot; + name + &quot;\n&quot; + sequence;
+        return result;
+    },
+
+    // ===========================================================================
+    //   Jbeiseq &amp; Genbank Conversions
+    //      jbeiseqXMLs (more than one) --&gt; ArrayList&lt;jbeiseqXml&gt;
+    //
+    //      jbeiseqXML &lt;--&gt; jbeiseqJSON &lt;--&gt; Genbank
+    // ===========================================================================
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-jbeiseqXmlsToXmlArray'>    /**
+</span>     * Converts an JbeiSeqXML in string format with multiple records to array of Genbank models
+     * Currently eliminates the &quot;seq:&quot; namespace by replaceing it with &quot;seq&quot;.
+     * @param {String} xml XML file with one or more records in String format
+     * @returns {Teselagen.bio.parsers.Genbank[]} Array of Genbank models
+     */
+     jbeiseqXmlsToXmlArray: function (xml) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlsToXmlArray(xml);
+     },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-validateJbeiseqJson'>     /**  DOES NOT HAVE TEST CODE YET
+</span>      * Scans through a JbeiSeq JSON object to see if it has the minimum structure
+      * requirements.
+      * @param {Object} json JbeiSeq JSON object
+      * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
+      */
+     validateJbeiseqJson: function (json) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.validateJbeiseqJson(json);
+     },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-jbeiseqXmlToJson'>    /**
+</span>     * Converts an JbeiSeqXML in string format to JSON format.
+     * This checks for valid entries in the XML file.
+     * If a required entry is not recognized, an error is thrown.
+     * If a non-required entry is not recognized, a default value is used.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     *
+     * @param {String} xml XML file in String format
+     * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
+     */
+     jbeiseqXmlToJson: function (xmlStr) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToJson(xmlStr);
+     },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-jbeiseqJsonToXml'>    /**
+</span>     * Converts an JbeiSeqXML in string format to JSON format.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * @param {Object} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {String} xml XML file in String format
+     */
+     jbeiseqJsonToXml: function(json) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToXml(json);
+     },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-jbeiseqJsonToGenbank'>     /**
+</span>     * Converts a JbeiSeq JSON object into a Genbank model of the data.
+     * Only one record per json.
+     * @param {Object} json JbeiSeq JSON object with ONE record
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     */
+    jbeiseqJsonToGenbank: function(json) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToGenbank(json);
+    },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-jbeiseqXmlToGenbank'>    /**
+</span>     * Converts a JbeiSeq XML file into a Genbank model of the data.
+     * Only one record per xmlStr. Parse approriately with &lt;seq:seq&gt; RECORD &lt;/seq:seq&gt; tags.
+     * @param {String} xml JbeiSeq XML file  with ONE record in String format
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     */
+    jbeiseqXmlToGenbank: function(xmlStr) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToGenbank(xmlStr);
+    },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-genbankToJbeiseqJson'>    /**
+</span>     * Converts a Genbank model into a JbeiSeq JSON formatted file.
+     * Only one Genbank model at a time.
+     * This is code adapted from IceXmlUtils.as
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     * @param {String} xml JbeiSeq JSON string with ONE record in String format
+     */
+    genbankToJbeiseqJson: function(pGenbank) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqJson(pGenbank);
+    },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-genbankToJbeiseqXml'>    /**
+</span>     * Converts a Genbank model into a JbeiSeq XML formatted file.
+     * Only one Genbank model at a time.
+     * This is code adapted from IceXmlUtils.as
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     * @param {String} xml JbeiSeq XML string with ONE record in String format
+     */
+    genbankToJbeiseqXml: function(pGenbank) {
+
+        return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqXml(pGenbank);
+    },
+
+//    /**
+//     * Creates a Sequence Hash, from a sequence. Uses Sha256.js to create this id.
+//     * @param {Teselagen.} pSequence Sequence string
+//     * @returns {String} seqHash Hash of the sequence using sha256
+//     *
+//    makeSeqHash: function(pSequence) {
+//        Teselagen.bio.util.Sha256
+//    },*/
+
+    // ===========================================================================
+    //   SBOL &amp; JbeiSeq Conversions
+    //
+    //      sbolXML &lt;--&gt; sbolJSON &lt;--&gt; jbeiJSON
+    // ===========================================================================
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-sbolXmlToJson'>    /** THIS DOES NOT WORK YET
+</span>     * Converts an SbolXML in string format to JSON format.
+     * This checks for valid entries in the XML file.
+     * If a required entry is not recognized, an error is thrown.
+     * If a non-required entry is not recognized, a default value is used.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * @param {String} xml Sbol XML file in String format
+     * @returns {Object} json Cleaned JSON object of the Sbol XML
+     */
+    sbolXmlToJson: function(xmlStr) {
+        return Teselagen.bio.parsers.SbolParser.sbolXmlToJson(xmlStr);
+        
+
+    },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-sbolJsonToJbeiJson'>    /** NOT WRITTEN ON SbolParser Side
+</span>     */
+    sbolJsonToJbeiJson: function(sbol) {
+        return Teselagen.bio.parsers.SbolParser.sbolJsonToJbeiJson(sbol);
+    },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-jbeiJsonToSbolJson'>    /** NOT WRITTEN ON SbolParser Side
+</span>     */
+    jbeiJsonToSbolJson: function(jbei) {
+        return Teselagen.bio.parsers.SbolParser.jbeiJsonToSbolJson(jbei);
+    },
+
+    // ===========================================================================
+    //      UTILITY FUNCTIONS
+    // ===========================================================================
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-loadFile'>    /** TO BE MOVED TO Teselagen.util.FileUtils.js.
+</span>     * @param {String} url The url to retrieve data from.
+     * @returns {String} xml XML string
+     */
+    loadFile: function(url) {
+        // Doing XMLHttpRequest leads to loading from cache
+
+        var str;
+
+        Ext.Ajax.request({
+            url: url,
+            async: false,
+            disableCaching: true,
+            success: function(response) {
+                str = response.responseText;
+                //console.dir(xmlStr);
+            },
+            failure: function(response, opts) {
+                console.warn('Could not load: ' + url + '\nServer-side failure with status code ' + response.status);
+                throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                    message: 'Could not load: ' + url + '\nServer-side failure with status code ' + response.status
+                });
+            }
+        });
+        return str;
+     },
+
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-todayDate'>    /**
+</span>     * Today's date
+     * @returns {String} date Today's date in string format
+     */
+    todayDate: function() {
+        var date    = (new Date()).toDateString().split(&quot; &quot;);
+        var dateStr = date[2] + &quot;-&quot; + date[1].toUpperCase() + &quot;-&quot; + date[3];
+        return dateStr;
+     },
+
+<span id='Teselagen-bio-parsers-ParsersManager-method-isALabel'>    /**
+</span>     * isALabel
+     * @param {String} name Name of a attribute or qualifier
+     * @return {Boolean} isALabel
+     */
+    isALabel: function(name) {
+        return Teselagen.bio.parsers.JbeiseqParser.isALabel(name);
+    }
+
+});</pre>
+</body>
+</html>

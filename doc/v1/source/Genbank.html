@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+<span id='Teselagen-bio-parsers-Genbank'>/**
+</span> * @class Teselagen.bio.parsers.Genbank
+ * Sets up an empty shell object with Genbank information and methods that is later populated by {@link Teselagen.bio.parsers.GenbankManager#parseGenbankFile}.
+ * @author Diana Wong
+ * @author Timothy Ham (original author of GenbankFileModel.js)
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.Genbank&quot;, {
+    requires: [&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;,
+               &quot;Teselagen.bio.parsers.GenbankKeyword&quot;,
+               &quot;Teselagen.bio.parsers.GenbankFeaturesKeyword&quot;,
+               &quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;],
+
+<span id='Teselagen-bio-parsers-Genbank-cfg-config'>    /**
+</span>     * @cfg {Object} config
+     * @cfg {String[]} keywordTags Array of all the GenbankKeyword names in a Genbank class.
+     * @cfg {Teselagen.bio.parsers.GenbankKeywords[]} keywords] Array of all the GenbankKeyword objects in a Genbank class which also include:
+     * {@link Teselagen.bio.parsers.GenbankLocusKeyword},
+     * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword},
+     * {@link Teselagen.bio.parsers.GenbankOriginKeyword} which inherit from
+     * {@link Teselagen.bio.parsers.GenbankKeyword}).
+     */
+    config: {
+        keywordsTag: [],
+        keywords: []
+    },
+
+<span id='Teselagen-bio-parsers-Genbank-method-constructor'>    /**
+</span>     * Creates new Genbank
+     * @returns {Genbank}
+     * @member Teselagen.bio.parsers.Genbank
+     * */
+    constructor: function () {
+
+        this.keywords = [];
+        this.keywordsTag = [];
+        
+        return this;
+    },
+
+
+
+<span id='Teselagen-bio-parsers-Genbank-method-findKeyword'>    /**
+</span>     * Finds and gets Keyword Model.
+     * @param {String} key Keyword name. (e.g. &quot;LOCUS&quot;, or &quot;ORIGIN&quot;)
+     * @return {Teselagen.bio.parsers.GenbankKeyword} entry
+     */
+    findKeyword: function(key) {
+        var entry = null;
+        for (var i=0; i &lt; this.keywords.length; i++) {
+            if (this.keywords[i].keyword === key) {
+                entry = this.keywords[i];
+            }
+        }
+        return entry;
+    },
+
+<span id='Teselagen-bio-parsers-Genbank-method-getLocus'>    /**
+</span>     * Same as GB.findKeyword(&quot;LOCUS&quot;)
+     * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
+     */
+    getLocus: function() {
+        return this.findKeyword(&quot;LOCUS&quot;);
+    },
+<span id='Teselagen-bio-parsers-Genbank-method-setLocus'>    /**
+</span>     * Same as GB.addKeyword(GenbankLocusKeyword}
+     * @param {Teselagen.bio.parsers.GenbankLocusKeyword} locus
+     */
+    setLocus: function(pLocus) {
+        this.keywords.push(pLocus);
+    },
+<span id='Teselagen-bio-parsers-Genbank-method-getOrigin'>    /**
+</span>     * Same as GB.findKeyword(&quot;ORIGIN&quot;)
+     * @returns {Teselagen.bio.parsers.GenbankOriginKeyword}
+     */
+    getOrigin: function() {
+        return this.findKeyword(&quot;ORIGIN&quot;);
+    },
+<span id='Teselagen-bio-parsers-Genbank-method-setOrigin'>    /**
+</span>     * Same as GB.addKeyword(GenbankOriginKeyword}
+     * @param {Teselagen.bio.parsers.GenbankOriginKeyword} origin
+     */
+    setOrigin: function(pOrigin) {
+        this.keywords.push(pOrigin);
+    },
+<span id='Teselagen-bio-parsers-Genbank-method-getFeatures'>    /**
+</span>     * Same as GB.findKeyword(&quot;FEATURES&quot;)
+     * @returns {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureKeyword]
+     */
+    getFeatures: function() {
+        return this.findKeyword(&quot;FEATURES&quot;);
+    },
+
+
+
+
+    // Specialized Set/Add methods that are not defined by config.
+<span id='Teselagen-bio-parsers-Genbank-method-setFeatures'>    /**
+</span>     * Sets the Features array
+     * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
+     */
+    setFeatures: function(pFeatures) {
+        this.keywords.push(pFeatures);
+    },
+
+//    /**
+//     * Same as genbank.addKeyword(GenbankFeaturesKeyword}
+//     * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
+//     *
+//    addFeature: function(pFeature) {
+//        this.keywords.push(pFeatures);
+//    },*/
+
+<span id='Teselagen-bio-parsers-Genbank-method-addKeyword'>    /**
+</span>     * Add a single GenbankKeyword to Genbank.keywords
+     * @param {Teselagen.bio.parsers.GenbankKeyword} keyword
+     */
+    addKeyword: function(pAddKeyword) {
+        this.keywords.push(pAddKeyword);
+    },
+<span id='Teselagen-bio-parsers-Genbank-method-getLastKeyword'>    /**
+</span>     * Gets the last GenbankKeyword on the Keywords ArrayList
+     * @return {Teselagen.bio.parsers.GenbankKeyword} keyword
+     */
+    getLastKeyword: function() {
+        return this.keywords[this.keywords.length-1];
+    },
+
+<span id='Teselagen-bio-parsers-Genbank-method-addKeywordTag'>    /**
+</span>     * Add a single keyword name (String) to Genbank.KeywordTag
+     * @param {String} addKeywordsTag
+     */
+    addKeywordTag: function(pAddKeywordsTag) {
+        this.keywordsTag.push(pAddKeywordsTag);
+    },
+
+<span id='Teselagen-bio-parsers-Genbank-method-toString'>    /**
+</span>     * Converts this GenbankSubKeywords to Genbank file format string
+     * @returns {String} gbStr
+     */
+    toString: function() {
+        var gbStr = &quot;&quot;;
+        var entry;
+        for (var i=0; i &lt; this.getKeywords().length; i++) {
+            entry = this.getKeywords()[i];
+            //gbStr.push(this.getKeywords()[i].toString() + &quot;\n&quot;);
+            gbStr += this.getKeywords()[i].toString() + &quot;\n&quot;;
+        }
+        gbStr += &quot;//&quot;;
+        return gbStr;
+    },
+
+<span id='Teselagen-bio-parsers-Genbank-method-toJSON'>    /**
+</span>     * Converts to JSON format. Overloads for JSON.stringify()
+     * This version includes a redundant Keyword in the key-value pair.
+     * @returns {Object} json
+     */
+    toJSON: function() {
+        var json = {};
+        for (var i=0; i &lt; this.getKeywords().length; i++) {
+            var key = this.getKeywords()[i].getKeyword();
+            json[key] = this.getKeywords()[i].toJSON();
+
+            //json.push(keywords[i]); //if you don't want the redundant keywords, but need to change json = []
+        }
+
+        return json;
+    },
+
+<span id='Teselagen-bio-parsers-Genbank-method-fromJSON'>    /**
+</span>     * Converts GenBank JSON back to GenBank model
+     * @param {Object} json Genbank in JSON form
+     * @returns {Teselagen.bio.parsers.Genbank}
+     */
+    fromJSON: function(json) {
+        var keyword;
+
+        //console.log(&quot;Genbank.fromJSON&quot;);
+        for (var key in json) {
+            var obj = json[key];
+            
+            switch (key) {
+            case &quot;LOCUS&quot;: //this.self.LOCUS_TAG:
+                keyword = Ext.create(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;);
+                //console.log(obj);
+                keyword.fromJSON(obj);
+                this.addKeyword(keyword);
+                this.addKeywordTag(key);
+                break;
+            case &quot;FEATURES&quot;: //this.self.FEATURES_TAG:
+                keyword = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeaturesKeyword&quot;);
+                //console.log(obj);
+                keyword.fromJSON(obj);
+                //console.log(keyword);
+                this.addKeyword(keyword);
+                this.addKeywordTag(key);
+                break;
+            case &quot;ORIGIN&quot;: //this.self.ORIGIN_TAG:
+                keyword = Ext.create(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;);
+                //console.log(obj);
+                keyword.fromJSON(obj);
+                this.addKeyword(keyword);
+                this.addKeywordTag(key);
+                break;
+            default:
+                keyword = Ext.create(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;);
+                //console.log(obj);
+                keyword.fromJSON(obj);
+                //console.log(keyword);
+                this.addKeyword(keyword);
+                this.addKeywordTag(key);
+            }
+        }
+
+    }
+
+
+
+});</pre>
+</body>
+</html>

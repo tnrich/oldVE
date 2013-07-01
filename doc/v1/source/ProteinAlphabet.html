@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet'>/**
+</span> * @class Teselagen.bio.sequence.alphabets.ProteinAlphabet
+ * 
+ * Protein alphabet. Most general alphabet to build Protein sequences.  See Teselagen.bio.sequence.symbols.AminoAcidSymbol.
+ * 
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ * @author Timothy Ham (original author)
+ */
+Ext.define(&quot;Teselagen.bio.sequence.alphabets.ProteinAlphabet&quot;, {
+	extend: &quot;Teselagen.bio.sequence.alphabets.AbstractAlphabet&quot;,
+
+	requires: &quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;,
+
+	singleton: true,
+	
+	a: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Alanine', threeLettersName: 'Ala', value: 'A'}),
+	r: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Arginine', threeLettersName: 'Arg', value: 'R'}),
+	n: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Asparagine', threeLettersName: 'Asn', value: 'N'}),
+	d: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Aspartic acid', threeLettersName: 'Asp', value: 'D'}),
+	c: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Cysteine', threeLettersName: 'Cys', value: 'C'}),
+	e: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Glutamic acid', threeLettersName: 'Glu', value: 'E'}),
+	q: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Glutamine', threeLettersName: 'Gln', value: 'Q'}),
+	g: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Glycine', threeLettersName: 'Gly', value: 'G'}),
+	h: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Histidine', threeLettersName: 'His', value: 'H'}),
+	i: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Isoleucine ', threeLettersName: 'Ile', value: 'I'}),
+	l: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Leucine', threeLettersName: 'Leu', value: 'L'}),
+	k: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Lysine', threeLettersName: 'Lys', value: 'K'}),
+	m: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Methionine', threeLettersName: 'Met', value: 'M'}),
+	f: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Phenylalanine', threeLettersName: 'Phe', value: 'F'}),
+	p: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Proline', threeLettersName: 'Pro', value: 'P'}),
+	s: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Serine', threeLettersName: 'Ser', value: 'S'}),
+	t: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Threonine', threeLettersName: 'Thr', value: 'T'}),
+	w: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Tryptophan', threeLettersName: 'Try', value: 'W'}),
+	y: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Tyrosine', threeLettersName: 'Tyr', value: 'Y'}),
+	v: Ext.create(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;, {name:'Valine ', threeLettersName: 'Val', value: 'V'}),
+	
+	/* -----------------------------------------------------
+	 * GETTERS - Get amino acid by Value
+	 * -----------------------------------------------------*/
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getA'>	/**
+</span>	* Returns data about the Alanine AminoAcidSymbol
+	* @return AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getA: function() { return this.a; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getR'>	/**
+</span>	* Returns data about the Arginine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getR: function() { return this.r; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getN'>	/**
+</span>	* Returns data about the Asparagine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getN: function() { return this.n; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getD'>	/**
+</span>	* Returns data about the Aspartic Acid AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getD: function() { return this.d; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getC'>	/**
+</span>	* Returns data about the Cysteine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getC: function() { return this.c; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getE'>	/**
+</span>	* Returns data about the Glutamic Acid AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getE: function() { return this.e; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getQ'>	/**
+</span>	* Returns data about the Glutamine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getQ: function() { return this.q; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getG'>	/**
+</span>	* Returns data about the Glycine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getG: function() { return this.g; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getH'>	/**
+</span>	* Returns data about the Histidine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getH: function() { return this.h; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getI'>	/**
+</span>	* Returns data about the IsoLeucine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getI: function() { return this.i; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getL'>	/**
+</span>	* Returns data about the Leucine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getL: function() { return this.l; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getK'>	/**
+</span>	* Returns data about the Lysine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getK: function() { return this.k; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getM'>	/**
+</span>	* Returns data about the Methionine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getM: function() { return this.m; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getF'>	/**
+</span>	* Returns data about the Phenylalanine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getF: function() { return this.f; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getP'>	/**
+</span>	* Returns data about the Proline AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getP: function() { return this.p; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getS'>	/**
+</span>	* Returns data about the Serine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getS: function() { return this.s; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getT'>	/**
+</span>	* Returns data about the Threonine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getT: function() { return this.t; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getW'>	/**
+</span>	* Returns data about the Tryptophan AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getW: function() { return this.w; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getY'>	/**
+</span>	* Returns data about the Tyrosine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getY: function() { return this.y; },
+	
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getV'>	/**
+</span>	* Returns data about the Valine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getV: function() { return this.v; },
+	
+	/* -----------------------------------------------------
+	 * GETTERS - Get amino acid by Name
+	 * -----------------------------------------------------*/
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getAlanine'>	 	/**
+</span>	* Returns data about the Alanine AminoAcidSymbol
+	* @return AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getAlanine:  function (){ return this.a; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getArginine'>		/**
+</span>	* Returns data about the Arginine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getArginine: function (){ return this.r; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getAsparagine'>		/**
+</span>	* Returns data about the Asparagine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getAsparagine:  function (){ return this.n; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getAspartic'>		/**
+</span>	* Returns data about the Aspartic Acid AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getAspartic: function (){ return this.d; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getCysteine'>		/**
+</span>	* Returns data about the Cysteine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getCysteine:  function (){ return this.c; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getGlutamic'>		/**
+</span>	* Returns data about the Glutamic Acid AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getGlutamic:  function (){ return this.e; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getGlutamine'>		/**
+</span>	* Returns data about the Glutamine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getGlutamine:  function (){ return this.q; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getGlycine'>		/**
+</span>	* Returns data about the Glycine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getGlycine:  function (){ return this.g; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getHistidine'>		/**
+</span>	* Returns data about the Histidine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getHistidine:  function (){ return this.h; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getIsoleucine'>		/**
+</span>	* Returns data about the IsoLeucine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getIsoleucine:  function (){ return this.i; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getLeucine'>		/**
+</span>	* Returns data about the Leucine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getLeucine:  function (){ return this.l; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getLysine'>	/**
+</span>	* Returns data about the Lysine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getLysine:  function (){ return this.k; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getMethionine'>		/**
+</span>	* Returns data about the Methionine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getMethionine:  function (){ return this.m; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getPhenylalanine'>		/**
+</span>	* Returns data about the Phenylalanine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getPhenylalanine:  function (){ return this.f; },
+
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getProline'>	/**
+</span>	* Returns data about the Proline AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getProline:  function (){ return this.p; },
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getSerine'>	/**
+</span>	* Returns data about the Serine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getSerine:  function (){ return this.s; },
+
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getThreonine'>	/**
+</span>	* Returns data about the Threonine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getThreonine:  function (){ return this.t; },
+
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getTryptophan'>	/**
+</span>	* Returns data about the Tryptophan AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getTryptophan:  function (){ return this.w; },
+
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getTyrosine'>	/**
+</span>	* Returns data about the Tyrosine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getTyrosine:  function (){ return this.y; },
+
+
+<span id='Teselagen-bio-sequence-alphabets-ProteinAlphabet-method-getValine'>	/**
+</span>	* Returns data about the Valine AminoAcidSymbol
+	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
+	*/
+	getValine:  function (){ return this.v; },
+	
+});</pre>
+</body>
+</html>

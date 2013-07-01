@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-dna-DigestionFragment'>/**
+</span>* @class Teselagen.bio.sequence.dna.DigestionFragment
+* Digestion fragment holder. See Teselagen.bio.tools.DigestionCalculator.
+* 
+* @author Micah Lerner
+* @author Joanna Chen (original author)
+*/
+Ext.define(&quot;Teselagen.bio.sequence.dna.DigestionFragment&quot;, {
+	requires: [&quot;Teselagen.bio.enzymes.RestrictionEnzyme&quot;],
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-constructor'>	/**
+</span>	* Contructor
+	* 
+	* @param start Fragment start position
+	* @param end Fragment start position
+	* @param length Fragment length
+	* @param startRE Fragment start restriction enzyme
+	* @param endRE Fragment end restriction enzyme
+	*/
+	constructor: function (inData) {
+		if (inData) {
+			var start = inData.start || 0;
+			var end = inData.end || 0;
+			var length = inData.length || 0;
+			var startRE = inData.startRE || null;
+			var endRE = inData.endRE || null;
+		} else {
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-getStart'>		/**
+</span>		 * Returns start
+		 * @return {Integer} returns pStart
+		 */				
+		this.getStart = function(){
+			return start;
+		}
+	
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-setStart'>		/**
+</span>		 * Sets Start
+		 * @method setStart
+		 * @param {Integer} pStart set pStart
+		 */
+		this.setStart = function (pStart){
+			start = pStart;
+		}
+		
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-getEnd'>		/**
+</span>		 * Returns end
+		 * @method getEnd
+		 * @return {Integer} returns pEnd
+		 */
+		this.getEnd = function(){
+			return end;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-setEnd'>		/**
+</span>		 * Sets end
+		 * @method setEnd
+		 * @param {Integer} pEnd sets pEnd
+		 */
+		this.setEnd = function(pEnd){
+			end = pEnd;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-getLength'>		/**
+</span>		 * Returns _length
+		 * @method getLength
+		 * @return {Integer} Returns _length
+		 */
+		this.getLength = function(){
+			return length;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-setLength'>		/**
+</span>		 * Sets pLength
+		 * @method setLength
+		 * @param {Integer} pLength sets pLength
+		 */
+		this.setLength = function(pLength){
+			length = pLength;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-getStartRE'>		/**
+</span>		 * Returns Start Restriction Enzyme
+		 * @method getStartRE
+		 * @return {RestrictionEnzyme} Returns start restriction enzyme
+		 */
+		this.getStartRE = function(){
+			return startRE;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-setStartRE'>		/**
+</span>		 * Sets start restriction enzyme
+		 * @method setStartRE
+		 * @param {RestrictionEnzyme} pStartRE sets start restriction Enzyme
+		 */
+		this.setStartRE = function(pStartRE){
+			startRE = pStartRE;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-getEndRE'>		/**
+</span>		 * Returns End Restriction Enzyme
+		 * @method getEndRE
+		 * @return {RestrictionEnzyme} returns end restriction enzyme
+		 */
+		this.getEndRE = function(){
+			return endRE;
+		}
+
+<span id='Teselagen-bio-sequence-dna-DigestionFragment-method-setEndRE'>		/**
+</span>		 * Sets end Restriction Enzyme
+		 * @method setEndRE
+		 * @param {RestrictionEnzyme} pEndRE sets end restriction enzyme
+		 */
+		this.setEndRE = function(pEndRE){
+			endRE = pEndRE;
+		}
+		
+		return this;
+	}
+});
+</pre>
+</body>
+</html>
