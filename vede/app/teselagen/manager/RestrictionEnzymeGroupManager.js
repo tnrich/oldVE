@@ -94,61 +94,6 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
     
     /**
-     * SHOULD BE IRRELEVANT IN JS VERSION
-     * Given a Teselagen.models.User object, creates
-     * Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
-     * @param {Teselagen.models.UserRestrictionEnzyme} userEnzymes The UserRestrictionEnzyme object to load from.
-     */
-    loadUserRestrictionEnzymes: function(user) {
-        this.setUserGroups([]);
-        var newUserGroups = [];
-        var newUserGroup, userEnzymes;
-        var newActiveGroup = [];
-       
-        Ext.each(user.restrictionEnzymeGroups(), function(group) {
-            if(!group || !group.get("groupName") || group.get("enzymeNames").length === 0) {
-                return true; // This simply tells Ext.each to continue to the next iteration.
-            }
-
-            newUserGroup = this.createGroupByEnzymes(group.get("groupName"),
-                                                     group.get("enzymeNames"));
-
-            newUserGroups.push(newUserGroup);
-        }, this);
-
-        // Load the UserRestrictionEnzymeGroup's active enzymes.
-        if(userEnzymes.get("activeEnzymeNames").length > 0) {
-            this.setActiveGroup([]);
- 
-            var activeEnzymeNames = this.createGroupByEnzymes("active",
-                                            userEnzymes.get("activeEnzymeNames"));
-            
-            // Get each active enzyme out of the database and put it in newActiveGroup.
-            Ext.each(activeEnzymeNames, function(enzymeName) {
-                newActiveGroup.push(this.getRebaseEnzymesDatabase().get(enzymeName));
-            }, this);
-        }
-
-        this.setUserGroups(newUserGroups);
-        this.setActiveGroup(newActiveGroup);
-    },
-
-    /**
-     * Removes a given RestrictionEnzymeGroup from userGroups.
-     * @param {Teselagen.models.RestrictionEnzymeGroup} enzymeGroup The group to remove from userGroups.
-     */
-    removeGroup: function(enzymeGroup) {
-        var newUserGroups = this.getUserGroups();
-        var index = newUserGroups.indexOf(enzymeGroup);
-
-        if(index !== -1) {
-            newUserGroups.splice(index, 1);
-        }
-
-        this.setUserGroups(newUserGroups);
-    },
-
-    /**
      * Returns a group from userGroups by its name.
      * @param {String} name The name of the group to return.
      * @return {Teselagen.models.RestrictionEnzymeGroup} The desired group, or null if it is not found.
