@@ -165,52 +165,13 @@ module.exports = function(app) {
 
     app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
-        DeviceDesign.findByIdAndRemove(req.params.devicedesign_id,function(err,devicedesigns) {
-            if(err) return res.json(500,{"error":err});
+        DeviceDesign.findById(req.params.devicedesign_id,function(err,devicedesign) {
+            if(err||!devicedesign) return res.json(500,{"error":err});
+            devicedesign.remove();
             res.json({
-                "designs": devicedesigns
+                "designs": devicedesign
             });
         });
     });
-
-    // CODE BEING DEPREACTED
-    /*
-    app.get('/users/:username/devicedesigns', restrict, function(req, res) {
-        var DeviceDesign = app.db.model("devicedesign");
-        var Project = app.db.model("project");
-
-        if (req.query.id) {
-            //console.log("DE by id");
-            DeviceDesign.findById(req.query.id).populate('j5collection.bins.parts').exec(function(err, design) {
-                // Eugene rules to be send on a different request
-                delete design.rules;
-
-                if (err) {
-                    errorHandler(err, req, res);
-                } else {
-                    res.json({
-                        "designs": design
-                    });
-                }
-            });
-        } else if (req.query.filter) {
-            //console.log("DE's by project_id");
-            var project_id = JSON.parse(req.query.filter)[0].value;
-            Project.findById(project_id).populate({path:'designs', select:'name id project_id'}).exec(function(err, project) {
-                res.json({
-                    "designs": project.designs
-                });
-                
-                DeviceDesign.populate(project.designs,{path:'j5collection.bins.parts'},function(err,designs){
-                    res.json({
-                        "design": designs
-                    });
-                });
-                
-            });
-        }
-
-    });
-    */
 
 };

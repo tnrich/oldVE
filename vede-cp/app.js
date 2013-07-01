@@ -29,7 +29,6 @@ Ext.application({
         'MainPanelController',
         'PartLibraryController',
         'ProjectController',
-        'RestrictionEnzymeController',
         //'SelectWindowController',
         //'SequenceController',
         'HeaderPanelController',
@@ -39,6 +38,7 @@ Ext.application({
         'VectorEditor.CreateNewFeatureWindowController',
         'VectorEditor.EditSequenceFeatureWindowController',
         'VectorEditor.PieContextMenuController',
+        'VectorEditor.RestrictionEnzymeController',
         'VectorEditor.SaveAsWindowController',
         'AuthWindowController',
         'DeviceEditor.DeviceEditorPanelController',
@@ -78,28 +78,12 @@ Ext.application({
         // Stuff that may not be wise to put here
         "Teselagen.constants.Constants",
         "Teselagen.constants.SBOLIcons",
-        "Teselagen.models.SequenceFile"
+        "Teselagen.models.SequenceFile",
+        "Teselagen.manager.SessionManager"
     ],
 
     init: function(){
-        // Start the mask on the body and get a reference to the mask
-        splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span><span id="splash-retry" style="visibility: hidden;"><button id="retry-btn">Retry</button></span>', 'splashscreen');
-
-        Ext.get('retry-btn').on("click",function(){
-            Ext.get('splash-retry').hide();
-            Teselagen.manager.AuthenticationManager.Login();
-        });
-
-        // Add a new class to this mask as we want it to look different from the default.
-        splashscreen.addCls('splashscreen');
-
-        Ext.select('.x-mask-msg').setStyle('top','60px');
-
-
-        // Insert a new div before the loading icon where we can place our logo.
-        Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
-            cls: 'x-splash-icon'
-        });
+        Teselagen.manager.SessionManager.maskApp();
     },
 
     launch: function() {
@@ -133,24 +117,8 @@ Ext.application({
 
         // Task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
-            if(splashscreen)
-                {
-                splashscreen.fadeOut({
-                    duration: 1000,
-                    remove: true
-                });
-                splashscreen.next().fadeOut({
-                    duration: 1000,
-                    remove: true,
-                    listeners: {
-                        afteranimate: function() {
-                            splashscreen = null;
-                            Teselagen.manager.ProjectManager.loadUser();
-                        }
-                    }
-                });
-            }
-            else { Teselagen.manager.ProjectManager.loadUser(); }
+            Teselagen.manager.SessionManager.unmaskApp();
+            Teselagen.manager.ProjectManager.loadUser();
         });
 
         // After logged in execute task to fadeOut the splashscreen

@@ -4,11 +4,11 @@
  * @ignore
  * @author Nick Elsbree
  */
-Ext.define("Vede.controller.RestrictionEnzymeController", {
+Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.RestrictionEnzymeGroupManager",
-               "Teselagen.manager.UserManager", "Vede.view.RestrictionEnzymesManagerWindow"],
+               "Teselagen.manager.UserManager", "Vede.view.ve.RestrictionEnzymesManagerWindow"],
 
     GroupManager: null,
     Logger: null,
@@ -129,9 +129,9 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
-
-        this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
-        this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+        var fromStore = this.enzymeSelector.fromField.getStore();
+        fromStore.loadData(enzymeArray);
+        fromStore.sort("name", "ASC");
     },
 
     /**

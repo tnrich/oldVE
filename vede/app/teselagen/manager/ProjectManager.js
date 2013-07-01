@@ -100,8 +100,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
      */
     openDeviceDesign: function (selectedDesign) {
         this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
-            Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
-            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+            //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
+            //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
                 title: "Device Editor | " + selectedDesign.data.name,
                 model: selectedDesign,
@@ -149,16 +149,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {model} Receives a j5Report model (already loaded)
      */
     openSequence: function (sequence) {
-        //console.log("Opening Sequence");
-        this.workingSequence = sequence;
+    	//console.log("Opening Sequence");
+    	this.workingSequence = sequence;
         Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
 //            new Ext.util.DelayedTask(function() {
-                var sequence = Teselagen.manager.ProjectManager.workingSequence;
+        		
+        		var sequence = Teselagen.manager.ProjectManager.workingSequence;
                 Ext.getCmp("projectTreePanel").expandPath('/root/'+sequence.data.project_id,null,null,function(item,item2){
-                    Ext.getCmp("projectTreePanel").getSelectionModel().select(item2.findChild('id',sequence.data.id,true));
+                    Ext.getCmp("projectTreePanel").getSelectionModel().select(item2.findChild('id',sequence.data.id,true));                    
                 });
+                
  //           }).delay(500);
         });
     },
@@ -278,7 +280,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     for (var j=0; j<projectNames.length; j++) {
                         if (projectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Generating Design");
+                    var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+                    oldTab.el.mask("Generating Design");
                     var self = this;
                     if(project) {
 
@@ -314,6 +317,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                             //console.log("Expanding " + "/root/" + project.data.id + "/" + design.data.id);
                                             Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
+                                            oldTab.el.unmask();
                                             Ext.getCmp("projectTreePanel").selectPath("/root/" + project.data.id + "/" + design.data.id);
                                         });
                                         self.openDeviceDesign(design);

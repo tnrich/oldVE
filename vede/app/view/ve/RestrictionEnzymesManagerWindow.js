@@ -1,10 +1,10 @@
 /**
  * Restriction enzymes manager window
  * @ignore
- * @class Vede.view.RestrictionEnzymesManagerWindow
+ * @class Vede.view.ve.RestrictionEnzymesManagerWindow
  * @author Nick Elsbree
  */
-Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
+Ext.define("Vede.view.ve.RestrictionEnzymesManagerWindow", {
     extend: "Ext.window.Window",
     requires: ["Vede.view.form.ItemSelector"],
 

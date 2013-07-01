@@ -345,6 +345,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
                 self.activeJ5Run = j5runs.getById(data.id);
 
+         for(var i=0; i<Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem").length; i++) {
+            Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
+        }
+
+        var item =  Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='"+data.id+"']")[0]
+
+        item.addCls("j5-menuitem-active");
 
         var assemblyMethod = self.activeJ5Run.get('assemblyMethod');
         var status = self.activeJ5Run.get('status');

@@ -1,7 +1,5 @@
 /**
- * Restriction enzymes manager window
- * @class Vede.view.RestrictionEnzymesManagerWindow
- * @author Jenhan Tao
+ * @class Vede.view.ve.CreateNewFeatureWindow
  */
 Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
     extend: 'Ext.window.Window',

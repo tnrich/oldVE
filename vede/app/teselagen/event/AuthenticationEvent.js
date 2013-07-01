@@ -6,5 +6,6 @@
 Ext.define("Teselagen.event.AuthenticationEvent", {
     singleton: true,
     
-    LOGGED_IN: "LoggedIn"
+    LOGGED_IN: "LoggedIn",
+    POPULATE_STATS: "PopulateStats"
 });

@@ -115,6 +115,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.addAllBtn = this.enzymeListSelector.down("button[cls=enzymeSelector-btn]");
          this.digestManager.digestPanel = this.digestPanel;
          this.digestManager.enzymeListSelector = this.enzymeListSelector;
+         this.enzymeListSelector.toField.bindStore(this.GroupManager.getActiveUserGroup().userRestrictionEnzymes());
          if(!me.GroupManager.getIsInitialized()) {
              me.GroupManager.initialize();
          }
@@ -122,10 +123,9 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          Ext.each(me.GroupManager.getGroupNames(), function(name) {
              me.groupSelector.store.add({"name": name});
          });
-         me.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
+         this.onEnzymeGroupSelected();
          me.updateLadderLane(ladderSelector);
          this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
-         this.setAddAllBtnState();
      },
 
      /**
@@ -153,19 +153,29 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          if (this.digestManager === undefined || this.digestManager === null) {return;}
          this.digestManager.drawGel(drawingSurface, width, height);
      },
+     
      /**
       * Populates the itemselector fromField with enzyme names.
       * Called when the user selects a new group in the combobox.
       */
      onEnzymeGroupSelected: function() {
-         this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
-         this.setAddAllBtnState();
+        var currentGroup = this.GroupManager.groupByName(this.groupSelector.getValue());
+        var enzymeArray = [];
+        var fromStore = this.enzymeListSelector.fromField.getStore();
+        Ext.each(currentGroup.getEnzymes(), function(enzyme) {
+            enzymeArray.push({name: enzyme.getName()});
+        });
+        fromStore.loadData(enzymeArray);
+        fromStore.sort("name", "ASC");
+        this.setAddAllBtnState();
      },
+     
      /**
       * Searches the itemselector fromField for enzyme names
       */
      searchEnzymes: function() {
-         this.digestManager.filterEnzymes(this.searchCombobox, this.groupSelector);
+         this.digestManager.filterEnzymes(this.searchCombobox.getValue(),
+                 this.enzymeListSelector.fromField.getStore());
      },
 
      /**
@@ -179,6 +189,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
              this.GroupManager.setActiveEnzymesChanged(true);
          //}
      },
+     
      /**
       * Updates the Ladder based on the selection in the ladder drop down.
       * @param {Object} combobox the calling object
