@@ -32,7 +32,7 @@ Ext.define('Vede.controller.AuthWindowController', {
     },
     onLogoutClick: function (button, e, options) {
         
-        Ext.util.Cookies.clear('session');
+        Ext.util.Cookies.clear('sessioname');
         var self = this;
         Ext.Ajax.request({
             url: '/api/logout',

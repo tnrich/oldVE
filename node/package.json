@@ -25,5 +25,6 @@
     , "xmlbuilder":"0.4.2"
     , "xmlrpc": "1.0.2"
     , "winston":"0.7.1"
+    , "connect-mongo":"0.3.2"
   }
 }

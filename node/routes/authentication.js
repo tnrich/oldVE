@@ -30,7 +30,7 @@ module.exports = function(app){
      *  Create new entry in DB if User doesn"t exist
      *  or retrieve existing user.
      */
-    var getOrCreateUser = function(req, res, username) {
+    var getOrCreateUser = function(req, res, username, remember) {
         // Check if user exist on mongoDB
         var User = app.db.model("User");
         User.findOne({
@@ -44,6 +44,10 @@ module.exports = function(app){
                     groupType: "com"
                 });
                 User.create(newuser, function(err, user) {
+
+                if(remember) res.cookie('sessionname', username, { signed: true });
+                else res.clearCookie('sessionname');
+
                     console.log(username + " user created!");
                     req.session.regenerate(function() {
                         req.session.user = user;
@@ -56,6 +60,10 @@ module.exports = function(app){
                     });
                 });
             } else {
+
+                if(remember) res.cookie('sessionname', username, { signed: true });
+                else res.clearCookie('sessionname');
+
                 console.log("LOGIN: " + username);
                 req.session.regenerate(function() {
                     req.session.user = results;
@@ -76,23 +84,35 @@ module.exports = function(app){
     });
 
 
+    app.all("/checkcookies", function(req, res) {
+        res.json(req.signedCookies);
+    });
+
     app.all("/login", function(req, res) {
 
         // Get parameters
         var sessionId = req.body.sessionId;
         var username = req.body.username;
         var password = req.body.password;
+        var remember = req.body.remember;
+
+        remember = true;
+
         var query;
         //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
-
 
         if (!app.program.prod) {
             // TESTING AUTH
 
+            if(req.signedCookies.sessionname)
+            {
+                return getOrCreateUser(req, res, req.signedCookies.sessionname, remember);                
+            }
+
             // Login using fake sessionId (For Testing)
-            if (username) getOrCreateUser(req, res, username);
-            else if (sessionId) getOrCreateUser(req, res, username);
-            else getOrCreateUser(req, res, "guest");
+            if (username) getOrCreateUser(req, res, username, remember);
+            else if (sessionId) getOrCreateUser(req, res, username, remember);
+            else getOrCreateUser(req, res, "guest", remember);
         }
 
         if (app.program.prod) {
@@ -116,7 +136,7 @@ module.exports = function(app){
                     if (err||!rows) return res.json({
                         "msg": "Invalid session"
                     }, 405);
-                    if (rows[0]) getOrCreateUser(req, res, rows[0].username);
+                    if (rows[0]) getOrCreateUser(req, res, rows[0].username, remember);
                     else return res.json({
                         "msg": "Username or password invalid"
                     }, 405);
@@ -133,7 +153,7 @@ module.exports = function(app){
                         if (err||!rows) return res.json({
                             "msg": "Invalid session"
                         }, 405);
-                        getOrCreateUser(req, res, rows[0].username);
+                        getOrCreateUser(req, res, rows[0].username, remember);
                     });
                 } else res.json({
                     "msg": "Unexpected error."

@@ -34,13 +34,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
     Login: function(cb) {
 
-        if(Ext.util.Cookies.get("session"))
+        if(Ext.util.Cookies.get("sessionname"))
         {
             console.log("Authenticating using cookies");
-            var session = JSON.parse(Ext.util.Cookies.get("session"));
-            this.username = session.username;
-            //debugger;
-            if(session.userId) return this.sendAuthRequest(session, cb);
+            return this.sendAuthRequest({}, cb, true);
         }
 
         // Then, check Teselagen Platform credentials
@@ -104,8 +101,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         var self = this;
 
         if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
-        if(params.username) {Teselagen.manager.SessionManager.setBaseUser(params.username); } //Set base Username
-        else {console.warn("Warning, username not defined"); }
 
         self.updateSplashScreenMessage("Authenticating to server");
 
@@ -114,18 +109,19 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             params: {
                 username: params.username || "",
                 password: params.password || "",
-                sessionId: params.sessionId || ""
+                sessionId: params.sessionId || "",
+                remember: remember
             },
             success: function(response) {
-                if (params.username) {self.username = params.username; }
                 self.authResponse = JSON.parse(response.responseText);
+                self.username = self.authResponse.user.username;
+                Teselagen.manager.SessionManager.setBaseUser(self.username);
                 self.updateSplashScreenMessage(self.authResponse.msg);
                 if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
                 Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user);
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
-                if(remember) self.rememberSession(self.authResponse);
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
@@ -135,21 +131,5 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (cb) {return cb(false, response.statusText); }
             }
         });
-    },
-
-    rememberSession: function(session){
-            //Ext.util.Cookies.set( name, value, [expires], [path], [domain], [secure] )
-            //var date = new Date();
-            //date.setTime(date.getTime()+(30*1000));
-            
-            //var form = Ext.getCmp('auth-form').getForm();
-            //var username = form.findField('username').getRawValue();
-            var coookieSession = {
-                username: session.user.username,
-                userId: 1,
-                sessionId: 1
-            }
-
-            Ext.util.Cookies.set( "session", JSON.stringify(coookieSession) );   
     }
 });
