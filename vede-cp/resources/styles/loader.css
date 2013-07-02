@@ -51,7 +51,7 @@
   margin: -35% 0 0 -35% !important;
   width: 70% !important;
   height: 70% !important;
-  background-color: #e0e3e6 !important;
+  background-color: rgb(235, 235, 235) !important;
   border-radius: 100%;
   z-index: 3;
 }
