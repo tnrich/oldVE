@@ -1,87 +1,206 @@
 /* 
  * This is a nice full CSS3 loader made with LESS 
 */
-
 /* u can custom almost everything u need with these variables just bellow */
-
-@loaderSize       : 20px;
-@radThickness     : @loaderSize/10;
-@spinSpeed        : 750ms;
-@backgroundColor  : #eee;
-@forgroundColor   : #ccc;
-@masksColor       : #fff;
-@middleCircleSize : 68%;
-
-
 /* but from here u'll have to understand what u'r dealing with */
-
 /* mixins */
-.animation (@params) {
-  -webkit-animation:@params;
-     -moz-animation:@params;
-          animation:@params;
-}
-
 /* animations */
 .spin {
-  .animation(spin @spinSpeed infinite linear);
+  -webkit-animation: spin 1000ms infinite linear;
+  -moz-animation: spin 1000ms infinite linear;
+  animation: spin 1000ms infinite linear;
 }
-  @-webkit-keyframes spin {
-    to { -webkit-transform: rotate(360deg); } }
-  @-moz-keyframes spin {
-    to { -moz-transform: rotate(360deg); } }
-
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spin {
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
 .rspin {
-  .animation(rspin @spinSpeed*3 infinite linear) !important;
+  -webkit-animation: rspin 3000ms infinite linear !important;
+  -moz-animation: rspin 3000ms infinite linear !important;
+  animation: rspin 3000ms infinite linear !important;
 }
-  @-webkit-keyframes rspin {
-    to { -webkit-transform: rotate(-360deg); } }
-  @-moz-keyframes rspin {
-    to { -moz-transform: rotate(-360deg); } }
-
-
+@-webkit-keyframes rspin {
+  to {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+@-moz-keyframes rspin {
+  to {
+    -moz-transform: rotate(-360deg);
+  }
+}
 /* let's style that thing */
 .loader {
-  background-color:@backgroundColor !important;
-  border-radius:100% !important;
-  position:relative !important;
-  height:@loaderSize !important;
-  width:@loaderSize !important;
-  overflow:hidden !important; 
-  .c {
-    position:absolute; left:50%; top:50% !important;
-    margin:-@middleCircleSize/2 0 0 -@middleCircleSize/2 !important;
-    width:@middleCircleSize !important;
-    height:@middleCircleSize !important;
-    background-color:@masksColor !important;
-    border-radius:100%;
-    z-index:3;
+  background-color: #1585c5 !important;
+  border-radius: 100% !important;
+  position: relative !important;
+  height: 55px !important;
+  width: 55px !important;
+  overflow: hidden !important;
+}
+.loader .c {
+  position: absolute;
+  left: 50%;
+  top: 50% !important;
+  margin: -35% 0 0 -35% !important;
+  width: 70% !important;
+  height: 70% !important;
+  background-color: #e0e3e6 !important;
+  border-radius: 100%;
+  z-index: 3;
+}
+.loader .d {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.loader .d .e {
+  z-index: 10;
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  margin: 0 0 0 -5.5px;
+  border-top: 11px solid #003f66;
+  border-left: 3.3px solid transparent;
+  border-right: 3.3px solid transparent;
+  height: 0;
+  width: 11px;
+  -webkit-transform: rotate(10deg);
+  -moz-transform: rotate(10deg);
+  border-radius: 5px 5px 0 0;
+}
+.loader .r {
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  top: -1px;
+  bottom: -1px;
+  margin-left: -1px;
+  background-color: #e0e3e6;
+  width: 2px;
+}
+.loader .r1 {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+}
+.loader .r2 {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+.loader .r3 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+}
+.loader .r4 {
+  -webkit-transform: rotate(135deg);
+  -moz-transform: rotate(135deg);
+}
+/*Mini*/
+/* animations */
+.spin-mini {
+  -webkit-animation: spin-mini 1000ms infinite linear;
+  -moz-animation: spin-mini 1000ms infinite linear;
+  animation: spin-mini 1000ms infinite linear;
+}
+@-webkit-keyframes spin-mini {
+  to {
+    -webkit-transform: rotate(360deg);
   }
-  
-  .d {
-    position:absolute; top:0; bottom:0; left:0; right:0; 
-    .e { 
-      @thisWidth : @loaderSize*0.2;
-      z-index:10;
-      position:absolute; top:1%; left:50%; 
-      margin:0 0 0 -@thisWidth/2;
-      border-top:@thisWidth solid @forgroundColor;
-      border-left:@thisWidth*0.3 solid transparent;
-      border-right:@thisWidth*0.3 solid transparent;
-      height:0; width:@thisWidth;
-      -webkit-transform:rotate(10deg); -moz-transform:rotate(10deg);
-      border-radius:5px 5px 0 0;
-     }
+}
+@-moz-keyframes spin-mini {
+  to {
+    -moz-transform: rotate(360deg);
   }
-  .r {
-    z-index:2;
-    position:absolute; left:50%; top:-1px; bottom:-1px;
-    margin-left:-(@radThickness)/2;
-    background-color:@masksColor;
-    width:(@radThickness); 
+}
+.rspin-mini {
+  -webkit-animation: rspin-mini 3000ms infinite linear !important;
+  -moz-animation: rspin-mini 3000ms infinite linear !important;
+  animation: rspin-mini 3000ms infinite linear !important;
+}
+@-webkit-keyframes rspin-mini {
+  to {
+    -webkit-transform: rotate(-360deg);
   }
-  .r1 { -webkit-transform:rotate(0deg); -moz-transform:rotate(0deg); }
-  .r2 { -webkit-transform:rotate(45deg); -moz-transform:rotate(45deg); }
-  .r3 { -webkit-transform:rotate(90deg); -moz-transform:rotate(90deg); }
-  .r4 { -webkit-transform:rotate(135deg); -moz-transform:rotate(135deg); }
+}
+@-moz-keyframes rspin-mini {
+  to {
+    -moz-transform: rotate(-360deg);
+  }
+}
+/* let's style that thing */
+.loader-mini {
+  background-color: #ffffff !important;
+  border-radius: 100% !important;
+  position: relative !important;
+  height: 21px !important;
+  width: 21px !important;
+  overflow: hidden !important;
+  margin: 6px 82px !important;
+}
+.loader-mini .c {
+  position: absolute;
+  left: 50%;
+  top: 50% !important;
+  margin: -35% 0 0 -35% !important;
+  width: 70% !important;
+  height: 70% !important;
+  background-color: #1585c5 !important;
+  border-radius: 100%;
+  z-index: 3;
+}
+.loader-mini .d-mini {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.loader-mini .d-mini .e {
+  z-index: 10;
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  margin: 0 0 0 -2.1px;
+  border-top: 4.2px solid transparent;
+  border-left: 1.26px solid transparent;
+  border-right: 1.26px solid transparent;
+  height: 0;
+  width: 4.2px;
+  -webkit-transform: rotate(10deg);
+  -moz-transform: rotate(10deg);
+  border-radius: 5px 5px 0 0;
+}
+.loader-mini .r-mini {
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  top: -1px;
+  bottom: -1px;
+  margin-left: -1px;
+  background-color: #1585c5;
+  width: 2px;
+}
+.loader-mini .r1-mini {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+}
+.loader-mini .r2-mini {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+.loader-mini .r3-mini {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+}
+.loader-mini .r4-mini {
+  -webkit-transform: rotate(135deg);
+  -moz-transform: rotate(135deg);
 }

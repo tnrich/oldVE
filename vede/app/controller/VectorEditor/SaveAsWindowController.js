@@ -45,7 +45,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
         var onPromptClosed = function (btn, text) {
             if(btn === "ok") {
                 if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, Teselagen.manager.ProjectManager); }
-                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project");
+                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project", "loader rspin");
+                $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
                 var self = Teselagen.manager.ProjectManager;
                 var project = Ext.create("Teselagen.models.Project", {
                     name: text,

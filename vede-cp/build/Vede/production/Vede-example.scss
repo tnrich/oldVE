@@ -1,4 +1,4 @@
-$image-search-path: '/Users/tim98210/Sites/Teselagen/ve/vede-cp/build/Vede/production/resources';
+$image-search-path: '/Users/ybendana/proj/ve/vede-cp/build/Vede/production/resources';
 $theme-name:  'teselagen' !default;
 $include-ext-abstractcomponent: true;
 $include-ext-abstractmanager: true;
@@ -785,6 +785,7 @@ $include-vede-view-de-deviceeditortitlepanel: true;
 $include-vede-view-de-deviceeditortoolpanel: true;
 $include-vede-view-de-eugeneruledialog: true;
 $include-vede-view-de-eugenerulesimportdialog: true;
+$include-vede-view-de-inspectorcollectioninfogrid: true;
 $include-vede-view-de-inspectorpanel: true;
 $include-vede-view-de-partdefinitiondialog: true;
 $include-vede-view-de-grid-bin: true;
@@ -1102,3 +1103,4 @@ $relative-image-path-for-uis: $Vede-resource-path;
 @import '../../../sass/src/view/ve/VectorEditorMainToolBar';
 @import '../../../sass/src/view/ve/VectorEditorPanel';
 @import '../../../sass/src/view/AppViewport';
+@import '../../../sass/src/view/ve/RestrictionEnzymesManagerWindow';

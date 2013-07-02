@@ -67088,6 +67088,23 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     }
   }
   return gb;
+}, convertEugeneRule: function(v, n) {
+  var compOp = v.toUpperCase();
+  var negationOperator = v;
+  var constants = Teselagen.constants.Constants;
+  if (compOp === constants.NOTMORETHAN) 
+  {
+    compOp = constants.MORETHAN;
+    negationOperator = true;
+    console.warn("Compositional operator updated to MORE and NOT? True");
+  }
+  if (compOp === constants.NOTMOREWITH) 
+  {
+    compOp = constants.MOREWITH;
+    negationOperator = true;
+    cconsole.warn("Compositional operator updated to WITH and NOT? True");
+  }
+  return {"compOp": compOp, "negOp": negationOperator};
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.utils, 'FormatUtils'], 0));
 ;
 
@@ -67363,17 +67380,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) 
   {
     console.warn("Using deprecated compositionalOperator: ", compOp);
-    if (compOp === constants.NOTMORETHAN) 
-    {
-      compOp = constants.MORETHAN;
-      this.set('negationOperator', true);
-      console.warn("Compositional operator updated to MORE and NOT? True");
-    }
-    if (compOp === constants.NOTMOREWITH) 
-    {
-      compOp = constants.MOREWITH;
-      cconsole.warn("Compositional operator updated to WITH and NOT? True");
-    }
   } else {
     console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
     throw Ext.create("Teselagen.bio.BioException", {message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp});
@@ -67855,16 +67861,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", MAP_PART_SELECT: "MapPartSelect", MAP_PART_NOTSELECT: "MapPartNotSelect", FILL_BLANK_CELLS: "FillBlankCells", OPEN_LIBRARY: "OpenPartLibrary"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', floatable: true, frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, plain: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, autoScroll: true, width: 100, layout: {deferredRender: false, type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
-  return rule.getOperand1().get("name");
-}}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', cls: "operand2_field", editor: {xtype: 'combobox', store: [], cls: "operand2_combobox"}, renderer: function(id, metaData, rule) {
-  if (rule.get("operand2isNumber")) 
-  {
-    return rule.get("operand2Number");
-  } else {
-    return rule.getOperand2().get("name");
-  }
-}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', autoScroll: true, margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', viewConfig: {markDirty: false}, layout: 'fit', allowDeselect: true, autoScroll: true, columnLines: true, minHeight: 132, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
+(Ext.cmd.derive('Vede.view.de.InspectorCollectionInfoGrid', Ext.grid.Panel, {initComponent: function() {
+  Ext.apply(this, {viewConfig: {markDirty: false}, layout: 'fit', allowDeselect: true, autoScroll: true, columnLines: true, minHeight: 132, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
   metadata.tdAttr = 'data-qtip="' + value + '"';
   return value;
 }}, {xtype: 'gridcolumn', text: '<div data-qtip="Direction">Direction</div>', dataIndex: 'directionForward', editor: {xtype: 'combobox', store: [[true, "Forward"], [false, "Reverse"]]}, renderer: function(forward) {
@@ -67893,7 +67891,21 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return value;
   }
-}}, {xtype: 'numbercolumn', text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>', dataIndex: 'extra5PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}, {xtype: 'numbercolumn', text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>', dataIndex: 'extra3PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}]}]}, {xtype: 'form', autoScroll: true, flex: 1, title: 'Column Content', margin: '5px 0px 5px 0px', cls: 'columnContentForm', items: [{xtype: 'displayfield', cls: 'columnContentDisplayField', margin: 10, fieldLabel: ''}]}]}, {xtype: 'panel', cls: 'j5InfoTab', title: 'j5', bodyCls: 'j5InfoTab-body', disabled: true, preventHeader: true, autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, margin: "5px 0px 5px 0px", items: [{xtype: 'button', text: 'Submit Run to j5', cls: 'runj5Btn', overCls: 'runj5Btn-over', margin: '2.5 0 2.5 0', height: 40, border: 0}, {xtype: 'button', text: 'Condense Assemblies', cls: 'condenseAssembliesBtn', overCls: 'condenseAssembliesBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'button', text: 'Distribute PCR Reactions', cls: 'distributePCRBtn', overCls: 'distributePCRBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub', animCollapse: false, collapsible: false, removePanelHeader: true, margin: '10 0 0 0', items: [{xtype: 'form', flex: 1, cls: 'j5InfoTab-Basic', width: 287, layout: {align: 'stretch', type: 'vbox'}, bodyPadding: 10, title: 'Basic', margin: '5px 0px 5px 0px', items: [{xtype: 'combobox', cls: 'assemblyMethodSelector', fieldLabel: '<b>Assembly Method:</b>', labelCls: 'assembly-label', labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'assemblyMethod', valueField: 'assemblyMethod'}, {xtype: 'container', html: '<b>Master Plasmids List</b>', cls: 'masterPlasmidsList-box', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'plasmidsListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}]}, {xtype: 'container', html: '<b>Master Oligos List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerOligosRadioBtn', name: 'oligosListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyOligosRadioBtn', name: 'oligosListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'oligosListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'container', html: '<b>Master Direct Syntheses List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerSynthesesRadioBtn', name: 'directSynthesesListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptySynthesesRadioBtn', name: 'directSynthesesListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'directSynthesesFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'button', text: 'Edit J5 Parameters', cls: 'editj5ParamsBtn', margin: '15 0 0 0', height: 30, border: 0}]}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub-Advanced', animCollapse: false, collapsible: false, removePanelHeader: true, bodyPadding: 10, title: 'Advanced', border: 0, bodyCls: 'j5InfoTab-Sub-Advanced-Body', margin: '5px 0px 0px 0px', items: [{xtype: 'container', title: 'Condense Assembly Files', cls: 'condenseAssemblyFiles-box', margin: '0 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: 'Assembly Files To Condense List:', margin: '10 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'condenseAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'container', html: 'Zipped Assembly Files:', cls: 'condenseAssemblyFiles-box', margin: '15 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'zippedAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'button', margin: '20 0 0 0', cls: 'downloadCondenseAssemblyResultsBtn', text: 'Download Results', hidden: true}]}, {xtype: 'container', title: 'Downstream Automation', cls: 'downstreamAutomation-box', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: '', cls: 'downstreamAutomationParameters-box', margin: '5 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'sourcePlateListSelector', margin: '30 0 0 0', validateOnChange: false, fieldLabel: 'Source Plate List:', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'zippedPlateFilesSelector', fieldLabel: 'Zipped Plate Files:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'assemblyFileSelector', validateOnChange: false, fieldLabel: 'j5 Assembly File:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'button', cls: 'customizeAutomationParamsBtn', margin: '20 0 0 0', height: 30, text: 'Customize Automation Parameters'}, {xtype: 'button', cls: 'downloadDownstreamAutomationBtn', pressed: false, text: 'Download Results', hidden: true, margin: '15 0 0 0'}]}]}]}]}]}], listeners: {'tabchange': function(tabPanel, tab) {
+}}, {xtype: 'numbercolumn', text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>', dataIndex: 'extra5PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}, {xtype: 'numbercolumn', text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>', dataIndex: 'extra3PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}]});
+  this.callParent(arguments);
+}}, 0, ["collectioninfogrid"], ["panel", "component", "tablepanel", "container", "grid", "box", "gridpanel", "collectioninfogrid"], {"panel": true, "component": true, "tablepanel": true, "container": true, "grid": true, "box": true, "gridpanel": true, "collectioninfogrid": true}, ["widget.collectioninfogrid"], 0, [Vede.view.de, 'InspectorCollectionInfoGrid'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', floatable: true, frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, plain: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, autoScroll: true, width: 100, layout: {deferredRender: false, type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
+  return rule.getOperand1().get("name");
+}}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', cls: "operand2_field", editor: {xtype: 'combobox', store: [], cls: "operand2_combobox"}, renderer: function(id, metaData, rule) {
+  if (rule.get("operand2isNumber")) 
+  {
+    return rule.get("operand2Number");
+  } else {
+    return rule.getOperand2().get("name");
+  }
+}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', autoScroll: true, margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'collectioninfogrid', cls: 'inspectorGrid'}]}, {xtype: 'form', autoScroll: true, flex: 1, title: 'Column Content', margin: '5px 0px 5px 0px', cls: 'columnContentForm', items: [{xtype: 'displayfield', cls: 'columnContentDisplayField', margin: 10, fieldLabel: ''}]}]}, {xtype: 'panel', cls: 'j5InfoTab', title: 'j5', bodyCls: 'j5InfoTab-body', disabled: true, preventHeader: true, autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, margin: "5px 0px 5px 0px", items: [{xtype: 'button', text: 'Submit Run to j5', cls: 'runj5Btn', overCls: 'runj5Btn-over', margin: '2.5 0 2.5 0', height: 40, border: 0}, {xtype: 'button', text: 'Condense Assemblies', cls: 'condenseAssembliesBtn', overCls: 'condenseAssembliesBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'button', text: 'Distribute PCR Reactions', cls: 'distributePCRBtn', overCls: 'distributePCRBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub', animCollapse: false, collapsible: false, removePanelHeader: true, margin: '10 0 0 0', items: [{xtype: 'form', flex: 1, cls: 'j5InfoTab-Basic', width: 287, layout: {align: 'stretch', type: 'vbox'}, bodyPadding: 10, title: 'Basic', margin: '5px 0px 5px 0px', items: [{xtype: 'combobox', cls: 'assemblyMethodSelector', fieldLabel: '<b>Assembly Method:</b>', labelCls: 'assembly-label', labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'assemblyMethod', valueField: 'assemblyMethod'}, {xtype: 'container', html: '<b>Master Plasmids List</b>', cls: 'masterPlasmidsList-box', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'plasmidsListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}]}, {xtype: 'container', html: '<b>Master Oligos List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerOligosRadioBtn', name: 'oligosListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyOligosRadioBtn', name: 'oligosListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'oligosListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'container', html: '<b>Master Direct Syntheses List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerSynthesesRadioBtn', name: 'directSynthesesListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptySynthesesRadioBtn', name: 'directSynthesesListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'directSynthesesFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'button', text: 'Edit J5 Parameters', cls: 'editj5ParamsBtn', margin: '15 0 0 0', height: 30, border: 0}]}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub-Advanced', animCollapse: false, collapsible: false, removePanelHeader: true, bodyPadding: 10, title: 'Advanced', border: 0, bodyCls: 'j5InfoTab-Sub-Advanced-Body', margin: '5px 0px 0px 0px', items: [{xtype: 'container', title: 'Condense Assembly Files', cls: 'condenseAssemblyFiles-box', margin: '0 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: 'Assembly Files To Condense List:', margin: '10 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'condenseAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'container', html: 'Zipped Assembly Files:', cls: 'condenseAssemblyFiles-box', margin: '15 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'zippedAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'button', margin: '20 0 0 0', cls: 'downloadCondenseAssemblyResultsBtn', text: 'Download Results', hidden: true}]}, {xtype: 'container', title: 'Downstream Automation', cls: 'downstreamAutomation-box', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: '', cls: 'downstreamAutomationParameters-box', margin: '5 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'sourcePlateListSelector', margin: '30 0 0 0', validateOnChange: false, fieldLabel: 'Source Plate List:', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'zippedPlateFilesSelector', fieldLabel: 'Zipped Plate Files:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'assemblyFileSelector', validateOnChange: false, fieldLabel: 'j5 Assembly File:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'button', cls: 'customizeAutomationParamsBtn', margin: '20 0 0 0', height: 30, text: 'Customize Automation Parameters'}, {xtype: 'button', cls: 'downloadDownstreamAutomationBtn', pressed: false, text: 'Download Results', hidden: true, margin: '15 0 0 0'}]}]}]}]}]}], listeners: {'tabchange': function(tabPanel, tab) {
   if (tab.cls == 'j5InfoTab') 
   {
     Vede.application.fireEvent("openj5");
@@ -67986,7 +67998,13 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}]}, {xtype: 'gridpanel', name: 'errors', cls: 'errorsGrid', hidden: true, margin: '10 10 20 10', title: 'Errors', minHeight: 80, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'faultString', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
   return '<div style="white-space:normal !important;">' + val + '</div>';
-}}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Plasmids', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'size', flex: 1, text: 'Size'}, {xtype: 'gridcolumn', dataIndex: 'fileType', flex: 1, text: 'Type'}, {xtype: 'gridcolumn', dataIndex: 'fileContent', flex: 2, text: 'Content'}]}, {xtype: 'gridpanel', name: 'j5parameters', margin: '10 10 20 10', collapsible: true, collapseDirection: 'top', collapsed: true, title: 'j5 Parameters', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'value', flex: 1, text: 'Value'}]}, {xtype: 'fieldset', margin: '10 10 10 10', layout: 'fit', title: 'Combinatorial Mock Assembly Output', items: [{xtype: 'textareafield', name: 'combinatorialAssembly', margin: '10 10 20 10', fieldLabel: ''}]}]}], listeners: {}}, 0, ["j5ReportPanel"], ["panel", "component", "container", "box", "j5ReportPanel"], {"panel": true, "component": true, "container": true, "box": true, "j5ReportPanel": true}, ["widget.j5ReportPanel"], 0, [Vede.view.j5Report, 'j5ReportPanel'], 0));
+}}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Plasmids', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name', renderer: function(val, metadata) {
+  metadata.tdAttr = 'data-qtip = "Click to open"';
+  return val;
+}}, {xtype: 'gridcolumn', dataIndex: 'size', flex: 1, text: 'Size'}, {xtype: 'gridcolumn', dataIndex: 'fileType', flex: 1, text: 'Type'}, {xtype: 'gridcolumn', dataIndex: 'fileContent', flex: 2, text: 'Content', renderer: function(val) {
+  var content_limited = val.slice(0, (val.lastIndexOf("bp") + 2));
+  return content_limited + "...";
+}}]}, {xtype: 'gridpanel', name: 'j5parameters', margin: '10 10 20 10', collapsible: true, collapseDirection: 'top', collapsed: true, title: 'j5 Parameters', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'value', flex: 1, text: 'Value'}]}, {xtype: 'fieldset', margin: '10 10 10 10', layout: 'fit', title: 'Combinatorial Mock Assembly Output', items: [{xtype: 'textareafield', name: 'combinatorialAssembly', margin: '10 10 20 10', fieldLabel: ''}]}]}], listeners: {}}, 0, ["j5ReportPanel"], ["panel", "component", "container", "box", "j5ReportPanel"], {"panel": true, "component": true, "container": true, "box": true, "j5ReportPanel": true}, ["widget.j5ReportPanel"], 0, [Vede.view.j5Report, 'j5ReportPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.HelpWindow', Ext.window.Window, {height: 360, width: 771, title: 'Help', autodestoy: true, items: [{xtype: 'form', height: 361, bodyPadding: 10, title: '', items: [{xtype: 'fieldset', height: 115, title: 'Send feedback', items: [{xtype: 'textareafield', anchor: '100%', name: 'feedback', emptyText: 'Enter feedback or comments here.'}, {xtype: 'button', text: 'Send', id: 'reportFeedbackBtn'}]}, {xtype: 'fieldset', height: 185, title: 'Report Error', items: [{xtype: 'textareafield', anchor: '100%', name: 'error', emptyText: 'Enter specific error here.'}, {xtype: 'textareafield', anchor: '100%', name: 'error_feedback', emptyText: 'Enter additional feedback here.'}, {xtype: 'button', text: 'Report Error', id: 'reportErrorBtn'}]}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'HelpWindow'], 0));
@@ -70222,6 +70240,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on ' + nowDate);
   toastr.options.onclick = null;
   toastr.info("Sequence Successfully Saved");
+  project = Teselagen.manager.ProjectManager.workingProject;
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
+  Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
+  Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+  Vede.application.fireEvent("PopulateStats");
+});
   if (typeof (cb) === "function") 
   {
     cb();
@@ -70406,11 +70430,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
   performSequenceCreation(newSequenceFile, function() {
   newSequenceFile.save({callback: function() {
-  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
-  Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedProj.data.id + "/" + newSequenceFile.data.id);
-  Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
   Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
-});
 }});
 });
 }});
@@ -72483,12 +72503,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       var unsupported = false;
       try {
-        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: newRule.name, compositionalOperator: newRule.compositionalOperator, negationOperator: newRule.negationOperator, originalRuleLine: line});
+        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: newRule.name, compositionalOperator: Teselagen.utils.FormatUtils.convertEugeneRule(newRule.compositionalOperator).compOp, negationOperator: Teselagen.utils.FormatUtils.convertEugeneRule(newRule.negationOperator).negOp, originalRuleLine: line});
       }      catch (e) {
   if (e.message.match(/Illegal CompositionalOperator/)) 
   {
     unsupported = true;
     ignoredLines.push({"originalRuleLine": line});
+  } else {
+    throw new Error("Error while processing eugeneRules");
   }
 }
       if (!unsupported) 
@@ -72526,7 +72548,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (dup) 
   {
     var rule2 = existingRule.get('operand2isNumber') ? existingRule.get('operand2Number') : existingRule.getOperand2().data.name;
-    conflictRules.push({"originalRuleLine": "There is a conflict between the existing rule " + existingRule.data.name + " ( " + existingRule.getOperand1().data.name + " " + existingRule.data.compositionalOperator + " " + rule2 + " )" + "and the rule to be imported, " + rule.data.originalRuleLine + "Renaming the rule to be imported: " + rule.data.name + '_1'});
+    conflictRules.push({"originalRuleLine": "There is a conflict between the existing rule " + existingRule.data.name + " ( " + existingRule.getOperand1().data.name + " " + existingRule.data.compositionalOperator + " " + rule2 + " )" + " and the rule to be imported, " + rule.data.originalRuleLine + " Renaming the rule to be imported: " + rule.data.name + '_1'});
     rule.set('name', rule.data.name + '_1');
     rule.set('originalRuleLine', rule.get('originalRuleLine').replace(existingRule.get('name'), rule.get('name')));
   }
@@ -74034,7 +74056,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var j5collection = tab.model.getDesign().getJ5Collection();
   var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
   var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
-  var runj5Btn = this.inspector.down("button[cls='runj5Btn']");
+  var runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
+  var runj5Btn2 = tab.down("button[cls='j5button']");
   var inspector = this.inspector;
   this.checkCombinatorial(j5collection, function(combinatorial) {
   var j5ready = true;
@@ -74079,18 +74102,23 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     j5ready = false;
   }
+  Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
   tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
   tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
   if (j5ready == true) 
   {
     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
-    runj5Btn.enable();
-    runj5Btn.removeCls('btnDisabled');
+    runj5Btn1.enable();
+    runj5Btn1.removeCls('btnDisabled');
+    runj5Btn2.enable();
+    runj5Btn2.removeCls('btnDisabled');
     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
   } else {
     j5ReadyField.setFieldStyle("color:red");
-    runj5Btn.disable();
-    runj5Btn.addCls('btnDisabled');
+    runj5Btn1.disable();
+    runj5Btn1.addCls('btnDisabled');
+    runj5Btn2.disable();
+    runj5Btn2.addCls('btnDisabled');
     inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
   }
   if (combinatorial == true) 
@@ -74762,7 +74790,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5Parameters'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.DeviceEditor.J5Controller', Ext.app.Controller, {DeviceDesignManager: null, J5ControlsUtils: null, j5Window: null, j5ParamsWindow: null, automationParamsWindow: null, inspector: null, previousJ5ParameterData: null, j5Parameters: null, j5ParameterFields: [], automationParameters: null, automationParameterFields: [], plasmidsListText: null, oligosListText: null, directSynthesesListText: null, onOpenJ5: function() {
+(Ext.cmd.derive('Vede.controller.DeviceEditor.J5Controller', Ext.app.Controller, {DeviceDesignManager: null, J5ControlsUtils: null, j5Window: null, j5ParamsWindow: null, automationParamsWindow: null, inspector: null, previousJ5ParameterData: null, j5Parameters: null, j5ParameterFields: [], automationParameters: null, automationParameterFields: [], plasmidsListText: null, oligosListText: null, directSynthesesListText: null, j5Running: false, onOpenJ5: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var currentTabEl = (currentTab.getEl());
   var inspector = currentTab.down('InspectorPanel');
@@ -74807,6 +74835,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   self.loadAssemblyMethodSelector(combinatorial);
 });
     }
+  }
+  if (this.j5Running) 
+  {
+    this.disableAllJ5RunButtons(true);
   }
 }, onTabChange: function(j5AdvancedTab, newTab, oldTab) {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -75077,8 +75109,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onRunJ5Event: function() {
   this.onRunJ5BtnClick();
 }, onJ5RunStatusChanged: function(runId, runStatus) {
-  var buttonsToEnable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
-  buttonsToEnable = buttonsToEnable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+  var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+  buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
   var button;
   for (var i = 0; i < buttonsToEnable.length; i++) 
     {
@@ -75091,6 +75123,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
         $(".loader-mini").hide();
       }
     }
+  this.j5Running = false;
 }, onRunJ5BtnClick: function() {
   $(".toast-success").hide();
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -75161,19 +75194,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   assemblyMethod = "CombinatorialGoldenGate";
   inspector.j5comm = Teselagen.manager.J5CommunicationManager;
   inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
-  var buttonsToDisable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
-  buttonsToDisable = buttonsToDisable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
-  var button;
-  for (var i = 0; i < buttonsToDisable.length; i++) 
-    {
-      button = buttonsToDisable[i];
-      button.disable();
-      if (button.cls === "runj5Btn") 
-      {
-        $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
-        button.setText("Running J5...");
-      }
-    }
+  this.j5Running = true;
+  this.disableAllJ5RunButtons();
   Vede.application.fireEvent("saveDesignEvent", function() {
   if (!Teselagen.manager.TasksMonitor.disabled) 
   {
@@ -75192,6 +75214,23 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 });
 });
+}, disableAllJ5RunButtons: function(skipAppendLoader) {
+  var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+  buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+  var button;
+  if (!skipAppendLoader) 
+  {
+    $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+  }
+  for (var i = 0; i < buttonsToDisable.length; i++) 
+    {
+      button = buttonsToDisable[i];
+      button.disable();
+      if (button.cls === "runj5Btn") 
+      {
+        button.setText("Running J5...");
+      }
+    }
 }, onDistributePCRBtn: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
@@ -75303,6 +75342,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.control({"#mainAppPanel": {tabchange: this.onMainAppPanelTabChange}, "panel[cls='j5InfoTab-Sub-Advanced']": {tabchange: this.onTabChangeSub}, "panel[cls='j5InfoTab-Sub']": {tabchange: this.onTabChange}, "button[cls='editj5ParamsBtn']": {click: this.onEditJ5ParamsBtnClick}, "button[cls='resetj5DefaultParamsBtn']": {click: this.resetDefaultj5Params}, "button[cls='resetj5ServerParamsBtn']": {click: this.resetServerj5Params}, "button[cls='j5ParamsCancelBtn']": {click: this.onj5ParamsCancelBtnClick}, "button[cls='j5ParamsOKBtn']": {click: this.onj5ParamsOKBtnClick}, "radio[cls='useServerPlasmidsRadioBtn']": {change: this.onUseServerPlasmidsRadioBtnChange}, "radio[cls='useEmptyPlasmidsRadioBtn']": {change: this.onUseEmptyPlasmidsRadioBtnChange}, "component[cls='plasmidsListFileSelector']": {change: this.onPlasmidsListFileSelectorChange}, "radio[cls='useServerOligosRadioBtn']": {change: this.onUseServerOligosRadioBtnChange}, "radio[cls='useEmptyOligosRadioBtn']": {change: this.onUseEmptyOligosRadioBtnChange}, "component[cls='oligosListFileSelector']": {change: this.onOligosListFileSelectorChange}, "radio[cls='useServerSynthesesRadioBtn']": {change: this.onUseServerSynthesesRadioBtnChange}, "radio[cls='useEmptySynthesesRadioBtn']": {change: this.onUseEmptySynthesesRadioBtnChange}, "component[cls='directSynthesesFileSelector']": {change: this.onDirectSynthesesFileSelectorChange}, "button[cls='customizeAutomationParamsBtn']": {click: this.onCustomizeAutomationParamsBtnClick}, "button[cls='runj5Btn']": {click: this.onRunJ5BtnClick}, "button[cls='loadAssemblyBtn']": {click: this.onLoadAssemblyBtnClick}, "button[cls='automationParamsCancelBtn']": {click: this.onAutomationParamsCancelClick}, "button[cls='automationParamsOKBtn']": {click: this.onAutomationParamsOKClick}, "button[cls='automationParamsResetBtn']": {click: this.onResetAutomationParamsBtnClick}, "button[cls='downloadj5Btn']": {click: this.onDownloadj5Btn}, "button[cls='downloadDownstreamAutomationBtn']": {click: this.onDownloadDownstreamAutomationBtn}, "component[cls='sourcePlateListSelector']": {change: this.onSourcePlateListFileSelectorChange}, "component[cls='zippedPlateFilesSelector']": {change: this.onZippedPlateFilesSelectorChange}, "component[cls='assemblyFileSelector']": {change: this.onAssemblyFileSelectorChange}, "button[cls='distributePCRBtn']": {click: this.onDistributePCRBtn}, "gridpanel[title=Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='condenseAssembliesBtn']": {click: this.onCondenseAssembliesBtnClick}, "component[cls='condenseAssemblyFilesSelector']": {change: this.onCondenseAssemblyFilesSelectorChange}, "component[cls='zippedAssemblyFilesSelector']": {change: this.onZippedAssemblyFilesSelectorChange}, "button[cls='downloadCondenseAssemblyResultsBtn']": {click: this.onDownloadCondenseAssemblyResultsBtnClick}, "button[cls='stopj5runBtn']": {click: this.abortJ5Run}});
   this.application.on("runj5", this.onRunJ5Event, this);
   this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
+  this.application.on("ReLoadAssemblyMethods", this.loadAssemblyMethodSelector, this);
   this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
   this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
   this.j5Parameters = Ext.create("Teselagen.models.J5Parameters");
@@ -82635,7 +82675,7 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'EugeneRuleDialog'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.EugeneRulesImportDialog', Ext.window.Window, {height: 558, width: 593, title: 'Import Eugene Rules', autoScroll: true, items: [{xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'conflict', title: 'Conflict rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', cls: 'gridcolumn-wrap-text', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true, renderer: function(val) {
+(Ext.cmd.derive('Vede.view.de.EugeneRulesImportDialog', Ext.window.Window, {height: 558, width: 593, title: 'Import Eugene Rules', autoScroll: true, items: [{xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'conflict', title: 'Conflicting rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', cls: 'gridcolumn-wrap-text', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true, renderer: function(val) {
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'new', title: 'New rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'ignored', title: 'Ignored statements', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'repeated', title: 'Repeated rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'button', margin: '10 0 0 10', text: 'Ok'}, {xtype: 'button', margin: '10 0 0 10', text: 'Cancel'}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'EugeneRulesImportDialog'], 0));
 ;
