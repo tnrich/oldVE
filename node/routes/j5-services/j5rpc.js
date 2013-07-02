@@ -206,6 +206,7 @@ function encoded_target_part_order_list_file(model,method)
                 }
             });
 
+            fas = "";
             tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';
             out += tempBinHeader;
             out += tempOut;
@@ -225,7 +226,7 @@ function encoded_target_part_order_list_file(model,method)
             out += bin.parts[0]["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
         }
     });
-
+    quicklog(out);
     return new Buffer(out).toString('base64');
 }
 
