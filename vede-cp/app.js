@@ -101,7 +101,7 @@ Ext.application({
          * This option enable fetching username and password from /deviceeditor file
          * to be used for automatic login (for testing).
          */
-        Vede.application.autoCredentialsFetch = true;
+        Vede.application.autoCredentialsFetch = false;
 
         //if (document.location.href.split('?').length > 0 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).autoauth === "false") Vede.application.autoCredentialsFetch = false;
         if (document.location.href.split('?').length > 1 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).authurl)

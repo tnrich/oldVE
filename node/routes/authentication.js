@@ -46,7 +46,7 @@ module.exports = function(app){
                 User.create(newuser, function(err, user) {
 
                 if(remember) res.cookie('sessionname', username, { signed: true });
-                else res.clearCookie('sessionname');
+                else { res.clearCookie('sessionname'); }
 
                     console.log(username + " user created!");
                     req.session.regenerate(function() {
@@ -55,14 +55,15 @@ module.exports = function(app){
                         return res.json({
                             "firstTime": true,
                             "msg": "Welcome back " + username + "!",
-                            "user": user
+                            "user": user,
+                            "remember":remember
                         });
                     });
                 });
             } else {
 
                 if(remember) res.cookie('sessionname', username, { signed: true });
-                else res.clearCookie('sessionname');
+                else { res.clearCookie('sessionname'); }
 
                 console.log("LOGIN: " + username);
                 req.session.regenerate(function() {
@@ -71,7 +72,8 @@ module.exports = function(app){
                     return res.json({
                         "firstTime": false,
                         "msg": "Welcome back " + username + "!",
-                        "user": results
+                        "user": results,
+                        "remember":remember
                     });
                 });
             }
@@ -80,7 +82,8 @@ module.exports = function(app){
 
     app.all("/logout", function(req, res) {
         req.session.destroy();
-        res.send();
+        res.clearCookie('sessionname');
+        return res.send();
     });
 
 
@@ -94,9 +97,7 @@ module.exports = function(app){
         var sessionId = req.body.sessionId;
         var username = req.body.username;
         var password = req.body.password;
-        var remember = req.body.remember;
-
-        remember = true;
+        var remember = req.body.remember === "true" ? true : false;
 
         var query;
         //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
