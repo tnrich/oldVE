@@ -196,7 +196,31 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             console.warn("Teselagen.manager.DeviceDesignManager.generateRuleText(): No rule '" + pRuleName +"'.");
             return null;
         }
-        
+    },
+
+    /**
+     * Generates the default name for a new rule. Gets rules in the same design
+     * with names in the form rule.self.prefix + (number), and returns a string in
+     * the form rule.self.prefix + (highest_number+1).
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @returns {String}
+     */
+    generateDefaultRuleName: function(pDevice) {
+        var prefix = Teselagen.models.EugeneRule.defaultNamePrefix;
+        var rules = pDevice.rules().getRange();
+        var re = new RegExp("^" + prefix + "(\\d+)$");
+        var highestRuleNameNumber = -1;
+        var match;
+
+        for(var i = 0; i < rules.length; i++) {
+            match = re.exec(rules[i].get("name"));
+
+            if(match && Number(match[1]) > highestRuleNameNumber) {
+                highestRuleNameNumber = Number(match[1]);
+            }
+        }
+
+        return prefix + (highestRuleNameNumber + 1);
     },
 
     //================================================================

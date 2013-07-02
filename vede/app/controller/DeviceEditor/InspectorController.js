@@ -671,8 +671,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                name: this.DeviceDesignManager.generateDefaultRuleName(this.activeProject),
                 compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
             });
+
             var ruleForm = newEugeneRuleDialog.down("form");
             var operand2Field = ruleForm.down("combobox[cls='operand2PartField']");
 
@@ -693,7 +695,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     ruleForm.loadRecord(newEugeneRule);
                     ruleForm.down("displayfield[cls='operand1Field']").setValue(
                                                 self.selectedPart.get("name"));
-
 
                     operand2Field.bindStore(partsStore);
                     operand2Field.setValue(partsStore[0]);

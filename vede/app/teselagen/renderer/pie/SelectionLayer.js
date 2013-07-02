@@ -18,7 +18,7 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
     deselect: function() {
         this.callParent();
 
-        d3.selectAll(".pieSelectionElement").remove();
+        this.selectionSVG.selectAll(".pieSelectionElement").remove();
     },
 
     /**
@@ -30,8 +30,6 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
         if(seqLen == 0) {
             return;
         }
-
-        d3.select(".pieSelectionElement").remove();
 
         this.startAngle = fromIndex * 2 * Math.PI / seqLen;
         this.endAngle = endIndex * 2 * Math.PI / seqLen;
@@ -72,13 +70,19 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
                " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
                "L" + this.center.x + " " + this.center.y;
 
-        this.selectionSVG.append("svg:path")
-                         .attr("class", "pieSelectionElement")
-                         .attr("stroke", this.self.SELECTION_FRAME_COLOR)
-                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                         .attr("fill", this.self.SELECTION_COLOR)
-                         .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
-                         .attr("d", path)
-                         .style("pointer-events", "none");
+        var selectionElement = this.selectionSVG.select(".pieSelectionElement");
+
+        if(selectionElement[0][0] === null) {
+            this.selectionSVG.append("svg:path")
+                             .attr("class", "pieSelectionElement")
+                             .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                             .attr("fill", this.self.SELECTION_COLOR)
+                             .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                             .attr("d", path)
+                             .style("pointer-events", "none");
+        } else {
+            selectionElement.attr("d", path);
+        }
     }
 });
