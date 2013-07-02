@@ -17,7 +17,7 @@ Ext.define("Teselagen.renderer.rail.SelectionLayer", {
     deselect: function() {
         this.callParent();
 
-        d3.selectAll(".railSelectionElement").remove();
+        this.selectionSVG.selectAll(".railSelectionElement").remove();
     },
 
     /**
@@ -30,8 +30,6 @@ Ext.define("Teselagen.renderer.rail.SelectionLayer", {
         if(seqLen == 0) {
             return;
         }
-
-        d3.select(".railSelectionElement").remove();
 
         this.startAngle = fromIndex / seqLen;
         this.endAngle = endIndex / seqLen;
@@ -64,14 +62,20 @@ Ext.define("Teselagen.renderer.rail.SelectionLayer", {
                    "L" + startPoint  + " " + wireHeight;
         }
 
-        this.selectionSVG.append("svg:path")
-                         .attr("class", "railSelectionElement")
-                         .attr("stroke", this.self.SELECTION_FRAME_COLOR)
-                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                         .attr("fill", this.self.SELECTION_COLOR)
-                         .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
-                         .attr("d", path)
-                         .style("pointer-events", "none");
+        var selectionElement = this.selectionSVG.select(".railSelectionElement");
+
+        if(selectionElement[0][0] === null) {
+            this.selectionSVG.append("svg:path")
+                             .attr("class", "railSelectionElement")
+                             .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                             .attr("fill", this.self.SELECTION_COLOR)
+                             .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                             .attr("d", path)
+                             .style("pointer-events", "none");
+        } else {
+            selectionElement.attr("d", path);
+        }
     }
 });
     
