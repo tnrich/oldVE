@@ -1244,7 +1244,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if (j5Part) {
 
-            DETab.setLoading(true);
+            DETab.el.mask("loading", "loader rspin");
+            $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
 
             setTimeout(function() {
                 j5Part.getSequenceFile({
@@ -1274,14 +1276,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                 j5Part.save({
                                     callback: function(){
                                         Vede.application.fireEvent("openVectorEditor",newSequenceFile);
-                                        DETab.setLoading(false);
+                                        DETab.el.unmask();
                                     }
                                 });
                             }
                         });
                     }
                 } else {
-                    DETab.setLoading(false);
+                    DETab.el.unmask();
                     Vede.application.fireEvent("OpenPartLibrary");
                 }
 
