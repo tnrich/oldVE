@@ -371,7 +371,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             var direction = (bin.getElementsByTagNameNS("*", "direction")[0].textContent === "forward");
-            var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
+            var dsf = bin.getElementsByTagNameNS("*", "dsf")[0] ? bin.getElementsByTagNameNS("*", "dsf")[0].textContent : false;
             
             var fro = "";
             if( bin.getElementsByTagNameNS("*", "fro") ) fro = (bin.getElementsByTagNameNS("*", "fro").length > 0) ? bin.getElementsByTagNameNS("*", "fro")[0].textContent : "";
@@ -416,7 +416,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         name: part.getElementsByTagNameNS("*", "name")[0].textContent,
                         genbankStartBP: part.getElementsByTagNameNS("*", "startBP")[0].textContent,
                         endBP: part.getElementsByTagNameNS("*", "stopBP")[0].textContent,
-                        revComp: part.getElementsByTagNameNS("*", "revComp")[0].textContent,
+                        revComp: part.getElementsByTagNameNS("*", "revComp")[0] ? part.getElementsByTagNameNS("*", "revComp")[0].textContent :  false,
                         fas: (fas === "") ? "None" : fas
                     });
 
