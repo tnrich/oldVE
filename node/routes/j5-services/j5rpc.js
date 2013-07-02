@@ -138,8 +138,7 @@ function encoded_parts_list_file(model)
 
                     if (sequenceFile["sequenceFileFormat"]=="jbei-seq") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
                     if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
-                    //console.log(part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n');
-                    out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+                    out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
                 {

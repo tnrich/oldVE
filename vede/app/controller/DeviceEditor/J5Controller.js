@@ -156,7 +156,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
         
-        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
+        //this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
+        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
 
         this.previousJ5ParameterData = this.j5Parameters.getData();
         this.populateJ5ParametersDialog();
@@ -197,7 +198,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     oligoMaxLengthNoPagePurificationRequiredBPsValue: r.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS,
                     minPCRProductBPsValue: r.MINIMUMPCRPRODUCTBPS,
                     directSynthesisCostPerBPUSDValue: r.DIRECTSYNTHESISCOSTPERBPUSD,
-                    directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIMUMCOSTPERPIECEUSD,
+                    directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD,
                     primerGCClampValue: r.PRIMER_GC_CLAMP,
                     primerMinSizeValue: r.PRIMER_MIN_SIZE,
                     primerMaxSizeValue: r.PRIMER_MAX_SIZE,
