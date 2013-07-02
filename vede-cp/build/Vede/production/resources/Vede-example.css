@@ -24548,7 +24548,7 @@ img {
 }
 
 /*Restriction Enzymes Manager Window*/
-/* line 2, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 2, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-addAll {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: -29px 0;
@@ -24558,7 +24558,7 @@ img {
   background-repeat: no-repeat;
 }
 
-/* line 11, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 11, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-removeAll {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: 3px 0;
@@ -24568,7 +24568,7 @@ img {
   background-repeat: no-repeat;
 }
 
-/* line 20, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 20, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-add {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: -91px 0;
@@ -24578,7 +24578,7 @@ img {
   background-repeat: no-repeat;
 }
 
-/* line 29, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 29, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-remove {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: -60px 0;
