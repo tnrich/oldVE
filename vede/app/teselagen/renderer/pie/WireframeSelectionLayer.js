@@ -18,7 +18,7 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
     deselect: function() {
         this.callParent();
 
-        d3.selectAll(".pieWireframeElement").remove();
+        this.selectionSVG.selectAll(".pieWireframeElement").remove();
     },
 
     drawSelectionPie: function(fromIndex, endIndex) {
@@ -30,8 +30,6 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
 
             return;
         }
-
-        d3.selectAll(".pieWireframeElement").remove();
 
         var startAngle = fromIndex * 2 * Math.PI / seqLen;
         var endAngle = endIndex * 2 * Math.PI / seqLen;
@@ -73,11 +71,17 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
                " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
                "L" + this.center.x + " " + this.center.y;
 
-        this.selectionSVG.append("svg:path")
-                         .attr("class", "pieWireframeElement")
-                         .attr("stroke", this.self.FRAME_COLOR)
-                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                         .attr("fill", "none")
-                         .attr("d", path);
+        var selectionElement = this.selectionSVG.select(".pieWireframeElement");
+
+        if(selectionElement[0][0] === null) {
+            this.selectionSVG.append("svg:path")
+                             .attr("class", "pieWireframeElement")
+                             .attr("stroke", this.self.FRAME_COLOR)
+                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                             .attr("fill", "none")
+                             .attr("d", path);
+        } else {
+            selectionElement.attr("d", path);
+        }
     }
 });

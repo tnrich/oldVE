@@ -1001,7 +1001,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var flip = !j5Bin.get("directionForward");
         if(flip)
         {
-            var imageBinIcon = newBin.query('image[cls="binIcon"]')[0];
+            var imageBinIcon = newBin.down('image[cls="binIcon"]');
             imageBinIcon.addCls('flipImage');
         }
 
