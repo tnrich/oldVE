@@ -457,8 +457,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * @param {Boolean} silent If true, don't fire a position changed event.
      */
     changeCaretPosition: function(index, silent) {
-        if(index >= 0 &&
-           this.SequenceManager &&
+        if(index >= 0 && this.SequenceManager && this.caretIndex !== index &&
            index <= this.SequenceManager.getSequence().toString().length) {
             this.callParent(arguments);
             this.pieManager.adjustCaret(index);

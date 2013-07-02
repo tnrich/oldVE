@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-parsers-SbolParser'>/**
+</span> * @class Teselagen.bio.parsers.SbolParser
+ * Converts SBOL formats.
+ * Specifications for SBOL can be found at http://www.sbolstandard.org/specification/core-data-model
+ *
+ * The hierarcy of the components in an SBOL object is:
+ *
+ *          The hierarchy is Collection -&gt; DnaComponent -&gt; DnaSequence
+ *
+ * Check for each level and parse downward from there.
+ *
+ * @author Rodrigo Pavez
+ * @author Diana Wong
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.SbolParser&quot;, {
+
+
+    requires: [
+        &quot;Teselagen.bio.util.StringUtil&quot;,
+        &quot;Teselagen.bio.util.XmlToJson&quot;
+    ],
+
+    singleton: true,
+
+    namespace: null,
+
+    constructor: function() {
+        XmlToJson = Teselagen.bio.util.XmlToJson;
+        namespace = &quot;&quot;;
+    },
+
+    parse: function(data, cb){
+        console.log(&quot;Parsing using j5&quot;);
+        var self = this;
+
+        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+
+        var performOperation = function(preserveSBOL){
+
+            var messageBox = Ext.MessageBox.wait(
+                &quot;Converting XML...&quot;,
+                &quot;Waiting for the server&quot;
+            );
+            
+            /*
+            var task = new Ext.util.DelayedTask(function() {
+                messageBox.updateProgress(100,&quot;Done!&quot;,&quot;done&quot;);
+                messageBox.close();
+            });
+
+            task.delay(5000);
+            */
+
+            Ext.Ajax.request({
+                url: Teselagen.manager.SessionManager.buildUrl(&quot;sbol&quot;, ''),
+                params: {
+                    filename: 'example.xml',
+                    data: Base64.encode(data),
+                    preserveSBOL: preserveSBOL
+                },
+                success: function (response) {
+                    response = JSON.parse(response.responseText);
+                    messageBox.close();
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                    cb(response.data,true);
+                },
+                failure: function(response, opts) {
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                    messageBox.close();
+                    Ext.MessageBox.alert('Failed','Conversion failed');
+                }
+            });
+
+        };
+
+        Ext.Msg.show({
+            title: 'Alert',
+            msg: &quot;Do you want to preserve SBOL information during import process?&quot;,
+            width: 300,
+            buttons: Ext.Msg.YESNOCANCEL,
+            buttonText: ['','Yes','No','Cancel'],
+            fn: function(buttonId){
+                if(buttonId==='yes')
+                {
+                    performOperation(true);
+                }
+                else if(buttonId==='no')
+                {
+                    performOperation(false);
+                }
+            },
+            icon: Ext.MessageBox.ALERT
+        });
+
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-jbeiseqJsonToXml'>    /** NOT WRITTEN NOT TESTED
+</span>     * Converts an JbeiSeqXML in string format to JSON format.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * @param {Object} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {String} xml XML file in String format
+     */
+     jbeiseqJsonToXml: function(json) {
+
+     },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-sbolXmlToJson'>    /**
+</span>     * Converts an SbolXML in string format to JSON format.
+     * This checks for valid entries in the XML file.
+     * If a required entry is not recognized, an error is thrown.
+     * If a non-required entry is not recognized, a default value is used.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * @param {String} xml Sbol XML file in String format
+     * @param {String} pRootNameSpace e.g. &quot;rdf:RDF&quot; would have a namespace of &quot;RDF&quot;; Default is &quot;RDF&quot;
+     * @returns {Object} json Cleaned JSON object of the Sbol XML
+     */
+    sbolXmlToJson: function(xmlStr, pRootNamespace) {
+        var result = {};
+
+        var i, j;
+
+        var json = XmlToJson.xml_str2json(xmlStr);
+        json     = this.checkRawSbolJson(json);
+
+        var name = pRootNamespace || &quot;RDF&quot;;
+
+        if (json[name] === undefined) {
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid SBOL-XML file. No root or record tag&quot; + name
+            });
+        }
+
+        // Header Information
+        var prefix  = json[name][&quot;__prefix&quot;]; //use a variable for the prefix
+        var namespace;
+        if (prefix === &quot;&quot;) {
+            namespace = name;
+        } else {
+            namespace = prefix + &quot;:&quot; + name;
+        }
+
+        console.warn(&quot;sbolXmlToJson: Namespace used is: '&quot; + namespace + &quot;'. No error at this time.&quot;);
+
+        var xmlns   = json[name][&quot;_xmlns&quot;];
+        var xrdf    = json[name][&quot;_xmlns:rdf&quot;];
+        var xrdfs   = json[name][&quot;_xmlns:rdfs&quot;];
+        var so      = json[name][&quot;_xmlns:so&quot;];
+
+        // Check Top Level: Collection || DnaComponent || DnaSequence ?
+        // The hierarchy is Collection -&gt; DnaComponent -&gt; DnaSequence
+        var top = [];
+        var topName = &quot;&quot;;
+
+        if ( json[name][&quot;Collection&quot;] !== undefined) {
+            topName = &quot;Collection&quot;;
+
+            console.warn(&quot;sbolXmlToJson: Collection Detected&quot;);
+
+            if (json[name][&quot;Collection&quot;] === &quot;HASH&quot;) {
+                console.warn(&quot;sbolXmlToJson: Found 'HASH'. Not handling.&quot;);
+                //top = {
+                //    &quot;Collection&quot; : this.collectionXmlToJson(json[&quot;RDF&quot;][&quot;Collection&quot;])
+                //}
+            }
+
+            if (json[name][&quot;Collection_asArray&quot;] !== undefined) {
+                for (i = 0; i &lt; json[name][&quot;Collection_asArray&quot;].length; i++) {
+                    top.push(
+                        this.parseRawCollection(json[name][&quot;Collection_asArray&quot;][i], prefix)
+                    );
+                }
+            }
+
+        } else if ( json[name][&quot;DnaComponent&quot;] !== undefined) {
+            topName = &quot;DnaComponent&quot;;
+
+            console.warn(&quot;sbolXmlToJson: DnaComponent Detected.&quot;);
+
+            if (json[name][&quot;DnaComponent_asArray&quot;] !== undefined) {
+                top = [];
+                for (i = 0; i &lt; json[name][&quot;DnaComponent_asArray&quot;].length; i++) {
+                    top.push(
+                        this.parseRawDnaComponent(json[name][&quot;DnaComponent_asArray&quot;][i], prefix)
+                    );
+                }
+            }
+
+        } else if ( json[name][&quot;DnaSequence&quot;] !== undefined) {
+            topName = &quot;DnaSequence&quot;;
+
+            console.warn(&quot;sbolXmlToJson: DnaSequence Detected.&quot;);
+
+            if (json[name][&quot;DnaSequence_asArray&quot;] !== undefined) {
+                top = [];
+                for (i = 0; i &lt; json[name][&quot;DnaSequence_asArray&quot;].length; i++) {
+                    top.push(
+                        this.parseRawDnaSequence(json[name][&quot;DnaSequence_asArray&quot;][i], prefix)
+                    );
+                }
+            }
+
+        } else {
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid SBOL-XML file. Top level is not either a Collection, a DnaComponent, or a DnaSequence. Exiting... \n&quot;
+            });
+        }
+
+        // Fill in Result output
+        result[namespace]                           = {};
+        result[namespace][&quot;_xmlns&quot;]                 = xmlns;
+        result[namespace][&quot;_xmlns:&quot; + prefix]       = xrdf;
+        result[namespace][&quot;_xmlns:&quot; + prefix + &quot;s&quot;] = xrdfs;
+        result[namespace][&quot;_xmlns_so&quot;]              = so;
+
+        result[namespace][topName]                  = top;
+
+        return result;
+    },
+
+
+<span id='Teselagen-bio-parsers-SbolParser-method-checkRawSbolJson'>    /** NOTE DONE &amp;&amp; NOT TESTED
+</span>      * Checks if a structure of the XML2JSON data structure has the minimal structure requirements.
+      * Inserts blank entries for entries that are needed.
+      *
+      * @param {Object} json a Raw SBOL-XML2JSON object
+      * @returns {Object} json Repaired raw SBOL-JSON object.
+      */
+    checkRawSbolJson: function(json) {
+
+        if (json[&quot;RDF&quot;] === undefined) {
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid SBOL-XML file. No root or record tag 'RDF'&quot;
+            });
+        }
+
+        if (json[&quot;RDF&quot;][&quot;Collection&quot;] !== undefined) {
+            //json[&quot;RDF&quot;] = { &quot;Collection&quot; : [] };
+        }
+
+        return json;
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-sbolJsonToJbeiJson'>    /** NOT WRITTEN; LAST HERE DW 2012.12_07 (last day)
+</span>     */
+    sbolJsonToJbeiJson: function(json, prefix) {
+        var name = json[&quot;rdf:RDF&quot;][&quot;DnaComponent&quot;][0][&quot;displayId&quot;];
+        var seq  = json[&quot;rdf:RDF&quot;][&quot;DnaComponent&quot;][0][&quot;dnaSequence&quot;][&quot;DnaSequence&quot;][&quot;nucleotides&quot;];
+        var seqHash = Teselagen.bio.util.Sha256.hex_sha256(seq);
+
+        var circ = true; // DONT KNOW HOW TO SET YET
+
+        var feats = json[&quot;rdf:RDF&quot;][&quot;DnaComponent&quot;][0][&quot;annotation&quot;][&quot;SequenceAnnotation&quot;];
+
+        for (var i=0; i &lt; feats.length; i++) {
+            var ft = feats[0];
+        }
+
+        var features= [];
+
+        /*var features = {
+            &quot;seq:feature&quot; : {
+                &quot;seq:label&quot; : label,
+                &quot;seq:complement&quot; : complement,
+                &quot;seq:type&quot; : type,
+                &quot;seq:location&quot;: locations,
+                &quot;seq:attribute&quot; : attributes //this should not be saved as a subset
+            }
+        };*/
+
+        var jbei = {
+            &quot;seq:seq&quot; : {
+                &quot;seq:name&quot; : name,
+                &quot;seq:circular&quot; : circ,
+                &quot;seq:sequence&quot; : seq,
+                &quot;seq:features&quot; : features,
+                &quot;seq:seqHash&quot;  : seqHash,
+                &quot;_xmlns:seq&quot;: &quot;http://jbei.org/sequence&quot;,
+                &quot;_xmlns:xsi&quot;: &quot;http://www.w3.org/2001/XMLSchema-instance&quot;,
+                &quot;_xsi:schemaLocation&quot;: &quot;http://jbei.org/sequence seq.xsd&quot;
+            }
+        };
+
+        return jbei;
+
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-jbeiJsonToSbolJson'>    /** NOT WRITTEN
+</span>     */
+    jbeiJsonToSbolJson: function(json, prefix) {
+
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-parseRawCollection'>    /** NOT TESTED
+</span>     * Parses a Raw Collection JSON to something more readable.
+     * @param {Object} coll
+     * @param {String} prefix
+     * @returns {Object}
+     */
+    parseRawCollection: function(coll, prefix) {
+        var result = {};
+
+        var uri         = coll[&quot;_&quot;+prefix+&quot;:about&quot;];
+        var displayId   = coll[&quot;displayId&quot;];
+        var name        = coll[&quot;name&quot;]; //[0..1]
+        var description = coll[&quot;description&quot;]; //[0..1]
+
+        var components;
+        if ( coll[&quot;components&quot;] !== undefined) {
+            components  = this.parseRawDnaComponent(coll[&quot;components&quot;][&quot;DnaComponent&quot;]);
+        }
+
+        // Fill in Result ouput
+        result[&quot;_&quot;+prefix+&quot;:about&quot;] = uri;
+        result[&quot;displayId&quot;]         = displayId;
+        result[&quot;name&quot;]              = name;
+        result[&quot;description&quot;]       = description;
+
+        result[&quot;components&quot;]        = components;
+
+        return result;
+
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-parseRawDnaComponent'>    /** NOT TESTED
+</span>     * Parses a Raw DnaComponent JSON to something more readable.
+     * @param {Object} comp
+     * @param {String} prefix
+     * @returns {Object}
+     */
+    parseRawDnaComponent: function(comp, prefix) {
+        var result      = {};
+
+        // SBOL sequences are never circular
+        var circ        = false;
+
+        // Name space -- direct port, not sure how to use yet
+        var uri         = comp[&quot;_&quot; + prefix + &quot;:about&quot;];
+        /*var namespace, accession_number;
+        if (tmp.match(/^(.*)#(-*)/)) {
+            namespace           = about.split(/^(.*)#(-*)/)[0];
+            accession_number    = about.split(/^(.*)#(-*)/)[1];
+        } else {
+            namespace           = about.split(/^(.*)#(-*)$/)[0];
+            accession_number    = about.split(/^(.*)#(-*)$/)[1];
+        }*/
+
+        // Other Header info
+        var displayId   = comp[&quot;displayId&quot;];
+        var primaryId   = comp[&quot;name&quot;];
+        var description = comp[&quot;description&quot;];
+        
+        // Fill in Result ouput
+        result[&quot;_&quot;+prefix+&quot;:about&quot;] = uri;
+        result[&quot;displayId&quot;]         = displayId;
+        result[&quot;name&quot;]              = primaryId;
+        result[&quot;description&quot;]       = description;
+
+        // Type
+        var type = comp[&quot;_&quot; + prefix + &quot;:type&quot;];
+        if (type !== undefined) {
+            result[prefix + &quot;:type&quot;] = {};
+            result[prefix + &quot;:type&quot;][&quot;_&quot; + prefix + &quot;:resource&quot;] = type[&quot;_&quot; + prefix + &quot;:resource&quot;];
+        }
+
+        // DnaSequence -- Contains 0..1
+        if (comp[&quot;dnaSequence&quot;] !== undefined) {
+            result[&quot;dnaSequence&quot;] = this.parseRawDnaSequence(comp[&quot;dnaSequence&quot;], prefix);
+        }
+
+        // SequenceAnnotation -- Contains 0..*
+        if (comp[&quot;annotation_asArray&quot;] !== undefined) {
+            result[&quot;annotation&quot;] = {&quot;SequenceAnnotation&quot; : [] };
+            for (var i=0; i &lt; comp[&quot;annotation_asArray&quot;].length; i++) {
+                result[&quot;annotation&quot;][&quot;SequenceAnnotation&quot;].push(this.parseRawSequenceAnnotation(comp[&quot;annotation_asArray&quot;][i], prefix));
+            }
+        }
+        return result;
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-parseRawDnaSequence'>    /** NOT TESTED
+</span>     * Parses a Raw RawDnaSequence JSON to something more readable.
+     * @param {Object} seq
+     * @param {String} prefix
+     * @returns {Object}
+     */
+    parseRawDnaSequence: function(seq, prefix) {
+        var result;
+
+        var about       = seq[&quot;DnaSequence&quot;][&quot;_&quot; + prefix + &quot;:about&quot;];
+        var nucleotides = seq[&quot;DnaSequence&quot;][&quot;nucleotides&quot;];
+
+        // Fill in Result ouput
+        result = {
+            &quot;DnaSequence&quot; : {}
+        };
+
+        result[&quot;DnaSequence&quot;][&quot;_&quot; + prefix + &quot;:about&quot;]  = about;
+        result[&quot;DnaSequence&quot;][&quot;nucleotides&quot;]            = nucleotides;
+
+        return result;
+    },
+
+<span id='Teselagen-bio-parsers-SbolParser-method-parseRawSequenceAnnotation'>    /** NOT TESTED
+</span>     * Parses a Raw SequenceAnnotation JSON to something more readable.
+     * @param {Object} annotation
+     * @param {String} prefix
+     * @returns {Object}
+     */
+    parseRawSequenceAnnotation: function(annotation, prefix) {
+        var result = {};
+
+        var uri         = annotation[&quot;SequenceAnnotation&quot;][&quot;_&quot; + prefix + &quot;:about&quot;];
+        var annot       = annotation[&quot;SequenceAnnotation&quot;];//_asArray&quot;];
+        //var seqAnnot    = {};//[];
+
+        var bioStart    = parseInt(annot[&quot;bioStart&quot;]);
+        var bioEnd      = parseInt(annot[&quot;bioEnd&quot;]);
+        var strand      = annot[&quot;strand&quot;] || &quot;+&quot;;
+        
+        // DnaComponent -- Contains Exactly 1
+        var subComp     = this.parseRawDnaComponent(annot[&quot;subComponent&quot;][&quot;DnaComponent&quot;], prefix);
+
+        // Sequence Annotation -- Contains 0..*
+        var precedes;
+        if (annot[&quot;precedes&quot;] !== undefined ) {
+            precedes = [];
+            preSeqAn = annot[&quot;precedes&quot;][&quot;SequenceAnnotation&quot;];
+            for (var j=0; j &lt; preSeqAn.length; j++) {
+                precedes.push(this.parseRawSequenceAnnotation(preSeqAn[j], prefix));
+            }
+        }
+
+        // Fill in Result ouput
+        result[&quot;_&quot;+prefix+&quot;:about&quot;] = uri;
+        result[&quot;bioStart&quot;]          = bioStart;
+        result[&quot;bioEnd&quot;]            = bioEnd;
+        result[&quot;strand&quot;]            = strand;
+        result[&quot;subComponent&quot;]      = subComp;
+        result[&quot;precedes&quot;]          = precedes;
+        
+        return result;
+    }
+
+
+});</pre>
+</body>
+</html>

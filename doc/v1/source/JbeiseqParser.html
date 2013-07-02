@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-parsers-JbeiseqParser'>/**
+</span> * @class Teselagen.bio.parsers.JbeiseqParser
+ * Converts JbeiSeq (XML and JSON) formats.
+ * Performs:
+ *          jbeiseqXMLs (more than one) --&gt; ArrayList&lt;jbeiseqXml&gt;
+ *
+ *          jbeiseqXML &lt;--&gt; jbeiseqJSON &lt;--&gt; Genbank
+ *
+ * Specifications for JbeiSeq (XML) can be found at http://j5.jbei.org/j5manual/pages/94.html
+ *
+ * @author Diana Wong
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.JbeiseqParser&quot;, {
+
+
+    requires: [
+        &quot;Teselagen.bio.util.XmlToJson&quot;,
+        &quot;Teselagen.bio.util.StringUtil&quot;,
+        &quot;Teselagen.bio.util.Sha256&quot;,
+        &quot;Teselagen.bio.parsers.Genbank&quot;,
+        &quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;,
+        &quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;,
+        &quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;,
+        &quot;Teselagen.bio.parsers.GenbankFeaturesKeyword&quot;,
+        &quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;,
+        &quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;
+    ],
+
+    singleton: true,
+
+    namespace: null,
+
+    constructor: function() {
+        XmlToJson = Teselagen.bio.util.XmlToJson;
+        Sha256    = Teselagen.bio.util.Sha256;
+        namespace = &quot;&quot;;
+    },
+
+    // ===========================================================================
+    //   Jbeiseq &amp; Genbank Conversions
+    //      jbeiseqXMLs (more than one) --&gt; ArrayList&lt;jbeiseqXml&gt;
+    //
+    //      jbeiseqXML &lt;--&gt; jbeiseqJSON &lt;--&gt; Genbank
+    // ===========================================================================
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-jbeiseqXmlsToXmlArray'>    /**
+</span>     * Converts an JbeiSeqXML in string format with multiple records to array of Genbank models
+     * Currently eliminates the &quot;seq:&quot; namespace by replaceing it with &quot;seq&quot;.
+     * @param {String} xml XML file with one or more records in String format
+     * @returns {Teselagen.bio.parsers.Genbank[]} genbank
+     */
+     jbeiseqXmlsToXmlArray: function (xml) {
+        var xmlArray = [];
+        var newxml = xml;
+
+        //newxml = newxml.replace(/\&lt;seq\:name/gi, &quot;BREAKRECORD&lt;seq:name&quot;);
+        newxml = newxml.replace(/\&lt;\/seq\:seq\&gt;/gi, &quot;&lt;\/seq:seq&gt;BREAKRECORD&quot;);
+
+        var xmlArr = newxml.split(&quot;BREAKRECORD&quot;);
+
+        for (var i=0; i&lt;xmlArr.length; i++) {
+            if (xmlArr[i].match(/\&lt;seq\:seq/g)) {
+                xmlArray.push(xmlArr[i].replace(/^[\n]*/g, &quot;&quot;));
+            }
+        }
+        return xmlArray;
+     },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-validateJbeiseqJson'>     /**  DOES NOT HAVE TEST CODE YET
+</span>      * Scans through a JbeiSeq JSON object to see if it has the minimum structure
+      * requirements.
+      * @param {Object} json JbeiSeq JSON object
+      * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
+      */
+     validateJbeiseqJson: function (json) {
+        var i, j;
+        var result = false;
+
+        if (json[&quot;seq:seq&quot;] === undefined) {
+            console.warn(&quot;Invalid JbeiSeqXML file. No root or record tag 'seq'&quot;);
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid JbeiSeqXML file. No root or record tag 'seq'&quot;
+            });
+            //return result;
+        }
+
+        //===============
+        // HEADER INFO
+
+        var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
+
+        if (json[&quot;seq:seq&quot;][&quot;seq:name&quot;] === undefined) {
+            console.warn(&quot;jbeiseqXmlToJson: No sequence name detected&quot;);
+            return result;
+        }
+
+        if (json[&quot;seq:seq&quot;][&quot;seq:circular&quot;] === undefined) {
+            console.warn(&quot;jbeiseqXmlToJson: No linear status detected; default to linear&quot;);
+            return result;
+        }
+
+        if (json[&quot;seq:seq&quot;][&quot;seq:sequence&quot;] === undefined) {
+            console.warn(&quot;jbeiseqXmlToJson: No sequence detected&quot;);
+            //throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+            //    message: &quot;Invalid JbeiSeqXML file. No sequence detected&quot;
+            //});
+            return result;
+        }
+
+        if (json[&quot;seq:seq&quot;][&quot;seq:seqHash&quot;] === undefined) {
+            //return result;
+        }
+
+        //===============
+        // FEATURES
+
+        var features = [];
+        var jFeats;
+
+        if (json[&quot;seq:seq&quot;][&quot;seq:features&quot;] === undefined) {
+            console.warn(&quot;Invalid JbeiSeqXML file. No Features detected&quot;);
+            //throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+            //    message: &quot;Invalid JbeiSeqXML file. No Features detected&quot;
+            //});
+            return result;
+        } else {
+            jFeats  = json[&quot;seq:seq&quot;][&quot;seq:features&quot;];
+        }
+
+        for (i=0; i &lt; jFeats.length; i++) {
+
+            var locations   = [];
+            var attributes  = []; //qualifiers  = [];
+            
+            var ft = jFeats[i][&quot;seq:feature&quot;];
+
+            if (ft[&quot;seq:type&quot;] === undefined) {
+                //return result;
+            }
+
+            if (ft[&quot;seq:complement&quot;] === undefined) {
+                //return result;
+            }
+
+            //===============
+            // LOCATIONS
+            // asArray will detect if there are locations; ie length=0 means no locations
+
+            for (j=0; j &lt; ft[&quot;seq:location&quot;].length; j++) {
+
+                if (ft[&quot;seq:location&quot;][j][&quot;seq:genbankStart&quot;] === undefined) {
+                    console.warn(&quot;feature['seq:location'][&quot; + j +&quot;]['seq:genbankStart'] undefined&quot;);
+                    return result;
+                }
+            }
+            //===============
+            // ATTRIBUTES
+
+            if (ft[&quot;seq:label&quot;] === undefined ) {
+                console.warn(&quot;json['seq:seq']['seq:features'][&quot;+i+&quot;]'seq:feature][seq:label'] undefined&quot;);
+                return result;
+            }
+
+            for (j=0; j &lt; ft[&quot;seq:attribute&quot;].length; j++) {
+                //
+            }
+
+        }
+        result = true;
+        return result;
+     },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-jbeiseqXmlToJson'>    /**
+</span>     * Converts an JbeiSeqXML in string format to JSON format.
+     * This checks for valid entries in the XML file.
+     * If a required entry is not recognized, an error is thrown.
+     * If a non-required entry is not recognized, a default value is used.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * XXXXCurrently eliminates the &quot;seq:&quot; namespace by replaceing it with &quot;seq&quot;.
+     * @param {String} xml XML file in String format
+     * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
+     */
+     jbeiseqXmlToJson: function (xmlStr) {
+        var result = {};
+        var i, j, k;
+
+        var json = XmlToJson.xml_str2json(xmlStr);
+        //console.log(JSON.stringify(json, null, &quot;  &quot;));
+
+        if (json[&quot;seq&quot;] === undefined) {
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid JbeiSeqXML file. No root or record tag 'seq'&quot;
+            });
+            //eturn result;
+        } else if (json[&quot;seq&quot;] === undefined) {
+            return result;
+        }
+
+        //===============
+        // HEADER INFO
+
+        var schema = json[&quot;seq&quot;][&quot;_xsi:schemaLocation&quot;];
+        var xmlns  = json[&quot;seq&quot;][&quot;_xmlns:seq&quot;];
+        var xsi    = json[&quot;seq&quot;][&quot;_xmlns:xsi&quot;];
+
+        var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
+
+        var name;
+        if (json[&quot;seq&quot;][&quot;name&quot;] !== undefined) {
+            name    = json[&quot;seq&quot;][&quot;name&quot;][&quot;__text&quot;];
+        } else {
+            name = &quot;no_name&quot;;
+            console.warn(&quot;jbeiseqXmlToJson: No sequence name detected&quot;);
+        }
+
+        var circ;
+        if (json[&quot;seq&quot;][&quot;circular&quot;] !== undefined) {
+            circ  = (json[&quot;seq&quot;][&quot;circular&quot;][&quot;__text&quot;].toLowerCase() === &quot;true&quot;);
+        } else {
+            circ  = false;
+            console.warn(&quot;jbeiseqXmlToJson: No linear status detected; default to linear&quot;);
+        }
+        var linear = !circ;
+
+        var seq;
+        if (json[&quot;seq&quot;][&quot;sequence&quot;] !== undefined) {
+            seq     = json[&quot;seq&quot;][&quot;sequence&quot;][&quot;__text&quot;] || &quot;no_sequence&quot;;
+        } else {
+            seq     = &quot;&quot;;
+            console.warn(&quot;jbeiseqXmlToJson: No sequence detected&quot;);
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid JbeiSeqXML file. No sequence detected&quot;
+            });
+        }
+
+        var seqHash;
+        if (json[&quot;seq&quot;][&quot;seqHash&quot;] !== undefined) {
+            seqHash = json[&quot;seq&quot;][&quot;seqHash&quot;][&quot;__text&quot;];
+        } else {
+            seqHash = &quot;&quot;;
+        }
+
+
+        //===============
+        // FEATURES
+
+        var features = [];
+
+        var jFeats;
+        if (json[&quot;seq&quot;][&quot;features&quot;][&quot;feature_asArray&quot;] === undefined) {
+            throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+                message: &quot;Invalid JbeiSeqXML file. No Features detected&quot;
+            });
+            //return result;
+        } else {
+            jFeats  = json[&quot;seq&quot;][&quot;features&quot;][&quot;feature_asArray&quot;];
+        }
+
+        for (i=0; i &lt; jFeats.length; i++) {
+
+            var locations   = [];
+            var attributes  = []; //qualifiers  = [];
+            
+            var ft = jFeats[i];
+
+            var type = &quot;unsure&quot;; //using seq.xsd
+            if (ft[&quot;type&quot;] !== undefined) {
+                type = ft[&quot;type&quot;][&quot;__text&quot;];
+            }
+
+            var complement = false;
+            if (ft[&quot;complement&quot;] !== undefined) {
+                complement = (ft[&quot;complement&quot;][&quot;__text&quot;].toLowerCase() === &quot;true&quot;);
+            }
+
+            //===============
+            // LOCATIONS
+            // asArray will detect if there are locations; ie length=0 means no locations
+
+            for (j=0; j &lt; ft[&quot;location_asArray&quot;].length; j++) {
+                //console.log(ft[&quot;location_asArray&quot;][j]);
+                var start = ft[&quot;location_asArray&quot;][j][&quot;genbankStart&quot;][&quot;__text&quot;];
+
+                var end;
+                if (ft[&quot;location_asArray&quot;][j][&quot;end&quot;] === undefined) {
+                    end   = start;
+                } else {
+                    end   = ft[&quot;location_asArray&quot;][j][&quot;end&quot;][&quot;__text&quot;];
+                }
+                var to    = &quot;..&quot;;
+
+                var loc = {
+                    &quot;seq:genbankStart&quot; : parseInt(start),
+                    &quot;seq:end&quot; : parseInt(end)
+                };
+                locations.push(loc);
+            }
+            //===============
+            // ATTRIBUTES
+
+            var label = &quot;name_unknown&quot;;
+            if (ft[&quot;label&quot;] !== undefined ) {
+                label = ft[&quot;label&quot;][&quot;__text&quot;];
+            }
+
+            /*var attr = {
+                &quot;seq:attribute&quot; : {
+                    &quot;_name&quot; : &quot;label&quot;,
+                    &quot;_quoted&quot; : true,
+                    &quot;__text&quot; : label //USE __text
+                }
+            }*/
+            //attributes.push(qual);
+
+            //console.log(ft[&quot;attribute_asArray&quot;]);
+            for (j=0; j &lt; ft[&quot;attribute_asArray&quot;].length; j++) {
+                /*var attr = {
+                    &quot;seq:attribute&quot; : {
+                        &quot;_name&quot; : ft[&quot;attribute_asArray&quot;][j][&quot;_name&quot;],
+                        &quot;_quoted&quot; : true,
+                        &quot;__text&quot; : ft[&quot;attribute_asArray&quot;][j][&quot;__text&quot;], //USE __text
+                    }
+                }*/
+                var attr = {
+                    //&quot;seq:attribute&quot; : {
+                        &quot;_name&quot; : ft[&quot;attribute_asArray&quot;][j][&quot;_name&quot;],
+                        &quot;_quoted&quot; : true,
+                        &quot;__text&quot; : ft[&quot;attribute_asArray&quot;][j][&quot;__text&quot;] //USE __text
+                    //}
+                };
+
+                attributes.push(attr);
+            }
+
+            // POST CALCULATIONS
+            var strand = 1;
+            if (complement === true) {
+                strand = -1;
+            }
+
+            var feat = {
+                &quot;seq:feature&quot; : {
+                    &quot;seq:label&quot; : label,
+                    &quot;seq:complement&quot; : complement,
+                    &quot;seq:type&quot; : type,
+                    &quot;seq:location&quot;: locations,
+                    &quot;seq:attribute&quot; : attributes //this should not be saved as a subset
+                }
+            };
+
+            features.push(feat);
+        }
+        // Setting final JSON object
+        result = {
+            &quot;seq:seq&quot; : {
+                &quot;seq:name&quot; : name,
+                &quot;seq:circular&quot; : circ,
+                &quot;seq:sequence&quot; : seq,
+                &quot;seq:features&quot; : features,
+                &quot;seq:seqHash&quot;  : seqHash,
+                &quot;_xmlns:seq&quot;: xmlns, //&quot;http://jbei.org/sequence&quot;,
+                &quot;_xmlns:xsi&quot;: xsi, //&quot;http://www.w3.org/2001/XMLSchema-instance&quot;,
+                &quot;_xsi:schemaLocation&quot;: schema //&quot;http://jbei.org/sequence seq.xsd&quot;
+            }
+        };
+
+        return result;
+     },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-jbeiseqJsonToXml'>    /**
+</span>     * Converts an JbeiSeq JSON to JbeiSeq XML format.
+     *
+     * @param {Object} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {String} xml XML file in String format
+     */
+     jbeiseqJsonToXml: function(json) {
+
+        if (json === null) {
+            return null;
+        }
+
+        var isJSON;
+        try {
+            isJSON = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
+        } catch (e) {
+            console.warn(&quot;jbeiseqJsonToSequenceManager() failed: &quot; + e.message);
+            return null; // jbeiSeq Structure is bad.
+        }
+
+        var xml = [];
+
+        xml.push(&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n&quot;);
+        xml.push(&quot;&lt;seq:seq\n&quot;);
+
+        xml.push(&quot;  xmlns:seq=\&quot;http://jbei.org/sequence\&quot;\n&quot;);
+        xml.push(&quot;  xmlns:xsi=\&quot;http://www.w3.org/2001/XMLSchema-instance\&quot;\n&quot;);
+        xml.push(&quot;  xsi:schemaLocation=\&quot;http://jbei.org/sequence seq.xsd\&quot;\n&quot;);
+        xml.push(&quot;&gt;\n&quot;);
+        
+        xml.push(&quot;&lt;seq:name&gt;&quot; +     json[&quot;seq:seq&quot;][&quot;seq:name&quot;] +       &quot;&lt;/seq:name&gt;\n&quot;);
+        xml.push(&quot;&lt;seq:circular&gt;&quot; + json[&quot;seq:seq&quot;][&quot;seq:circular&quot;] +   &quot;&lt;/seq:circular&gt;\n&quot;);
+        xml.push(&quot;&lt;seq:sequence&gt;&quot; + json[&quot;seq:seq&quot;][&quot;seq:sequence&quot;] +   &quot;&lt;/seq:sequence&gt;\n&quot;);
+        xml.push(&quot;&lt;seq:features&gt;\n&quot;);
+
+        var feat        = json[&quot;seq:seq&quot;][&quot;seq:features&quot;];
+        var sequence    = json[&quot;seq:seq&quot;][&quot;seq:sequence&quot;];
+
+        for (var i=0; i &lt; feat.length; i++) {
+            var ft = feat[i][&quot;seq:feature&quot;];
+
+            // FEATURE Label/Complement/type population
+            xml.push(&quot;    &lt;seq:feature&gt;\n&quot;);
+            xml.push(&quot;        &lt;seq:label&gt;&quot; +        ft[&quot;seq:label&quot;] +       &quot;&lt;/seq:label&gt;\n&quot;);
+            xml.push(&quot;        &lt;seq:complement&gt;&quot; +   ft[&quot;seq:complement&quot;] +  &quot;&lt;/seq:complement&gt;\n&quot;);
+            xml.push(&quot;        &lt;seq:type&gt;&quot; +         ft[&quot;seq:type&quot;] +        &quot;&lt;/seq:type&gt;\n&quot;);
+
+            // LOCATIONS
+            for (var j=0; j &lt; ft[&quot;seq:location&quot;].length; j++) {
+                var start = ft[&quot;seq:location&quot;][j][&quot;seq:genbankStart&quot;];
+                var end   = ft[&quot;seq:location&quot;][j][&quot;seq:end&quot;];
+                //console.log(start + &quot; : &quot; + end );
+                xml.push(&quot;        &lt;seq:location&gt;\n&quot;);
+                xml.push(&quot;            &lt;seq:genbankStart&gt;&quot; + start + &quot;&lt;/seq:genbankStart&gt;\n&quot;);
+                xml.push(&quot;            &lt;seq:end&gt;&quot; + end + &quot;&lt;/seq:end&gt;\n&quot;);
+                xml.push(&quot;        &lt;/seq:location&gt;\n&quot;);
+            }
+
+            // ATTRIBUTES
+            //var labelFlag = false;
+            for (var k=0; k &lt; ft[&quot;seq:attribute&quot;].length; k++) {
+                var att    = ft[&quot;seq:attribute&quot;][k]; //[&quot;seq:attribute&quot;];
+                var key    = att[&quot;_name&quot;];
+                var quoted = att[&quot;_quoted&quot;];
+                var value  = att[&quot;__text&quot;];
+
+                xml.push(&quot;        &lt;seq:attribute name=\&quot;&quot; + key + &quot;\&quot; quoted=\&quot;&quot; + quoted + &quot;\&quot;&gt;&quot; + value + &quot;&lt;/seq:attribute&gt;\n&quot;);
+            }
+
+            xml.push(&quot;        &lt;seq:seqHash&gt;&quot; + json[&quot;seq:seq&quot;][&quot;seq:seqHash&quot;] + &quot;&lt;/seq:seqHash&gt;\n&quot;);
+            xml.push(&quot;    &lt;/seq:feature&gt;\n&quot;);
+        }
+
+        xml.push(&quot;&lt;/seq:features&gt;\n&quot;);
+        xml.push(&quot;&lt;/seq:seq&gt;\n&quot;);
+
+        return xml.join(&quot;&quot;);
+     },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-jbeiseqJsonToGenbank'>     /**
+</span>     * Converts a JbeiSeq JSON object into a Genbank model of the data.
+     * Only one record per json.
+     * @param {Object} json JbeiSeq JSON object with ONE record
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     */
+    jbeiseqJsonToGenbank: function(json) {
+        var result = Ext.create(&quot;Teselagen.bio.parsers.Genbank&quot;, {});
+
+        //===============
+        // LOCUSKEYWORD
+
+        var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
+        var name    = json[&quot;seq:seq&quot;][&quot;seq:name&quot;];
+        var circ    = (json[&quot;seq:seq&quot;][&quot;seq:circular&quot;] === &quot;true&quot; || json[&quot;seq:seq&quot;][&quot;seq:circular&quot;] === true);
+        var seq     = json[&quot;seq:seq&quot;][&quot;seq:sequence&quot;];
+
+        var locus   = Ext.create(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
+            locusName: name,
+            linear: !circ,
+            sequenceLength: seq.length,
+            naType: na,
+            date: date
+        });
+
+        result.addKeyword(locus);
+
+        //===============
+        // FEATURESKEYWORD
+
+        var features = [];
+
+        var feats = json[&quot;seq:seq&quot;][&quot;seq:features&quot;];
+
+        for (var i=0; i &lt; feats.length; i++) {
+            var ft = feats[i][&quot;seq:feature&quot;];
+
+            var locations   = [];
+            var qualifiers  = [];
+            
+            var type       = ft[&quot;seq:type&quot;];
+            var complement = ft[&quot;seq:complement&quot;];
+
+            //===============
+            // LOCATION
+            for (var j=0; j &lt; ft[&quot;seq:location&quot;].length; j++) {
+                var start = ft[&quot;seq:location&quot;][j][&quot;seq:genbankStart&quot;];
+                var end   = ft[&quot;seq:location&quot;][j][&quot;seq:end&quot;];
+                var to    = &quot;..&quot;;
+
+                var loc = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
+                    start:  start,
+                    end:    end,
+                    to:     to
+                });
+                locations.push(loc);
+            }
+
+            //===============
+            // ATTRIBUTES -&gt; QUALIFIERS
+            var label = ft[&quot;seq:label&quot;];
+
+            var qual = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
+                name:      &quot;label&quot;,
+                value:      label,
+                quoted:     true
+            });
+            qualifiers.push(qual);
+
+            for (var j=0; j &lt; ft[&quot;seq:attribute&quot;].length; j++) {
+                var qual = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
+                    name:   ft[&quot;seq:attribute&quot;][j][&quot;_name&quot;],
+                    value:  ft[&quot;seq:attribute&quot;][j][&quot;__text&quot;],
+                    //quoted: true
+                    quoted: ft[&quot;seq:attribute&quot;][j][&quot;_quoted&quot;]
+                });
+                qualifiers.push(qual);
+            }
+
+            // POST CALCULATIONS
+            var strand;
+            if (complement === true) {
+                strand = -1;
+            } else {
+                strand = 1;
+            }
+
+            var join;
+            if (locations.length&gt;1) {
+                join = true;
+            } else {
+                join = false;
+            }
+
+            // THIS DOESNT WORK YET
+            var na;
+            if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) {
+                na = &quot;DNA&quot;;
+            } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) {
+                na = &quot;RNA&quot;;
+            } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) {
+                na = &quot;PRO&quot;;
+            } else {
+                na = &quot;NAN&quot;;
+            }
+            
+            var feat = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
+                keyword:            type,
+                strand:             strand,
+                complement:         complement,
+                join:               join,
+                featureLocation:    locations,
+                featureQualifier:   qualifiers
+            });
+            features.push(feat);
+        }
+
+        var featureKW =  Ext.create(&quot;Teselagen.bio.parsers.GenbankFeaturesKeyword&quot;);
+        featureKW.setFeaturesElements(features);
+        
+        result.addKeyword(featureKW);
+
+        //===============
+        // ORIGINKEYWORD
+
+        var origin =  Ext.create(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
+            sequence: seq
+        });
+        result.addKeyword(origin);
+
+        return result;
+    },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-jbeiseqXmlToGenbank'>    /**
+</span>     * Converts a JbeiSeq XML file into a Genbank model of the data.
+     * Only one record per xmlStr. Parse approriately with &lt;seq:seq&gt; RECORD &lt;/seq:seq&gt; tags.
+     * @param {String} xml JbeiSeq XML file  with ONE record in String format
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     */
+    jbeiseqXmlToGenbank: function(xmlStr) {
+        //var json = XmlToJson.xml_str2json(xmlStr); // DO NOT USE THIS TO GET JSON!!!
+
+        // Use clean JSON version of the XML, NOT the XmlToJson.xml_str2json() version
+        // This checks and returns a useable KNOWN format.
+        var json = this.jbeiseqXmlToJson(xmlStr);
+
+        var result = this.jbeiseqJsonToGenbank(json);
+
+        return result;
+    },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-genbankToJbeiseqJson'>    /**
+</span>     * Converts a Genbank model into a JbeiSeq JSON formatted file.
+     * Only one Genbank model at a time.
+     * This is code adapted from IceXmlUtils.as
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     * @param {String} xml JbeiSeq JSON string with ONE record in String format
+     */
+    genbankToJbeiseqJson: function(pGenbank) {
+
+        if (Ext.getClassName(pGenbank) !== &quot;Teselagen.bio.parsers.Genbank&quot; ) {
+            return null;
+        }
+        var json = {};
+
+        var feat      = pGenbank.getFeatures() ? pGenbank.getFeatures().getFeaturesElements() : &quot;&quot;;
+        var sequence = &quot;&quot;;
+        if(pGenbank.getOrigin()) sequence = pGenbank.getOrigin().getSequence();
+        // FEATURES Label/Complement/type population
+        var newFeatures = [];
+
+        for (var i=0; i &lt; feat.length; i++) {
+            var label, start, end, key, value, quoted;
+            var j, k;
+
+            var ft    = feat[i];
+            var newFt = [];
+
+            // SEQHASH
+            //Code to turn ftSeq into unique id/hash goes here //DO SEQHASH HERE!
+            var seqHash = &quot;&quot;;
+            var seqHashStr = &quot;&quot;;
+            for (j=0; j &lt; ft.getFeatureLocation().length; j++) {
+                start = ft.getFeatureLocation()[j].getStart();
+                end   = ft.getFeatureLocation()[j].getEnd();
+
+                if (end &lt; start) {
+                    seqHashStr += sequence.substring(start, sequence.length) + sequence.substring(0, end);
+                } else {
+                    seqHashStr += sequence.substring(start, end);
+                }
+            }
+            if (feat[i].getStrand() === -1 || feat[i].getComplement()) {
+                seqHashStr = DNATools.reverseComplement(DNATools.createDNA(seqHashStr)).seqString();
+            }
+            seqHash = Teselagen.bio.util.Sha256.hex_sha256(seqHashStr);
+            //console.log(seqHashStr);
+            //console.log(seqHash);
+
+
+            // LOCATIONS
+            var newLoc = [];
+            for (j=0; j &lt; ft.getFeatureLocation().length; j++) {
+                start = ft.getFeatureLocation()[j].getStart();
+                end   = ft.getFeatureLocation()[j].getEnd();
+
+                newLoc.push( {
+                    &quot;seq:genbankStart&quot; : start,
+                    &quot;seq:end&quot; : end
+                });
+            }
+            // QUALIFIERS -&gt; ATTRIBUTES
+            var newAttr = [];
+            for (k=0; k &lt; ft.getFeatureQualifier().length; k++) {
+                key    = ft.getFeatureQualifier()[k].getName();
+                value  = ft.getFeatureQualifier()[k].getValue();
+                quoted = ft.getFeatureQualifier()[k].getQuoted();
+
+                // SET THE LABEL FIELD. DO NOT STORE AS AN ATTRIBUTE
+
+                if (k===0 &amp;&amp; this.isALabel(key) ) { //HERE 8/20
+                    //console.log(&quot;found a label: &quot; + key );
+                    label = value;
+                    //don't add as attribute
+                } else {
+                    newAttr.push( {
+                        //&quot;seq:attribute&quot; : {
+                            &quot;_name&quot; : key,
+                            &quot;_quoted&quot; : quoted,
+                            &quot;__text&quot; : value //USE __text
+                        //}
+                    });
+                }
+                //console.log(label);
+            }
+
+            newFt = {
+                &quot;seq:label&quot; : label, //ft.findLabel(),
+                &quot;seq:complement&quot; : ft.getComplement(),
+                &quot;seq:type&quot; : ft.getKeyword(),
+                &quot;seq:location&quot; : newLoc,
+                &quot;seq:attribute&quot; : newAttr,
+                &quot;seq:seqHash&quot; : seqHash
+            };
+
+            newFeatures.push( {
+                &quot;seq:feature&quot; : newFt
+            });
+        }
+        //console.log(pGenbank.getLocus().getLinear());
+
+        // MAKE JSON
+        json = {
+            &quot;seq:seq&quot; : {
+                &quot;seq:name&quot; : pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : &quot;&quot;,
+                &quot;seq:circular&quot; : pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : &quot;&quot;,
+                &quot;seq:sequence&quot; : pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : &quot;&quot;,
+                &quot;seq:features&quot; : newFeatures,
+                &quot;_xmlns:seq&quot;: &quot;http://jbei.org/sequence&quot;,
+                &quot;_xmlns:xsi&quot;: &quot;http://www.w3.org/2001/XMLSchema-instance&quot;,
+                &quot;_xsi:schemaLocation&quot;: &quot;http://jbei.org/sequence seq.xsd&quot;
+            }
+        };
+
+        return json;
+    },
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-genbankToJbeiseqXml'>    /**
+</span>     * Converts a Genbank model into a JbeiSeq XML formatted file.
+     * Only one Genbank model at a time.
+     * This is code adapted from IceXmlUtils.as
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     * @param {String} xml JbeiSeq XML string with ONE record in String format
+     */
+    genbankToJbeiseqXml: function(pGenbank) {
+
+        if (pGenbank === null) {
+            return null;
+        }
+        var json = this.genbankToJbeiseqJson(pGenbank);
+
+        var xml  = this.jbeiseqJsonToXml(json);
+
+        return xml;
+    },
+
+    // ===========================================================================
+    //      UTILITY FUNCTIONS
+    // ===========================================================================
+
+<span id='Teselagen-bio-parsers-JbeiseqParser-method-isALabel'>    /**
+</span>     * isALabel
+     * @param {String} name Name of a attribute or qualifier
+     * @return {Boolean} isALabel
+     */
+    isALabel: function(name) {
+        if (name === &quot;label&quot; || name === &quot;name&quot;|| name === &quot;ApEinfo_label&quot; ||
+            name === &quot;note&quot; || name === &quot;gene&quot; || name === &quot;organism&quot;  ) {
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+});</pre>
+</body>
+</html>

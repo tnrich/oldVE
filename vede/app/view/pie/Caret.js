@@ -27,7 +27,7 @@ Ext.define("Vede.view.pie.Caret", {
         var y = this.getRadius() * Math.sin(pAngle - Math.PI / 2) + 
                 this.getCenter().y;
 
-        if(this.svgObject) {
+        if(this.pie.select(".pieCaret")[0][0] !== null) {
             this.svgObject.attr("x2", x)
                           .attr("y2", y);
         } else {

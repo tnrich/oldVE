@@ -13,7 +13,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                'Teselagen.manager.VectorEditorManager',
                'Teselagen.utils.FormatUtils',
                "Vede.view.ve.GoToWindow",
-               "Vede.view.RestrictionEnzymesManagerWindow",
+               "Vede.view.ve.RestrictionEnzymesManagerWindow",
                "Vede.view.ve.PropertiesWindow",
                "Vede.view.ve.SelectWindow",
                "Vede.view.ve.SimulateDigestionWindow"],
@@ -199,7 +199,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
         var restrictionEnzymesManagerWindow = Ext.create(
-            "Vede.view.RestrictionEnzymesManagerWindow");
+            "Vede.view.ve.RestrictionEnzymesManagerWindow");
 
         restrictionEnzymesManagerWindow.show();
         restrictionEnzymesManagerWindow.center();

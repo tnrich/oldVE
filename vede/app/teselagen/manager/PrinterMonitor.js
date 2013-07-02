@@ -17,11 +17,11 @@ Ext.define("Teselagen.manager.PrinterMonitor", {
     disabled: true,
 
     constructor: function(){
-        console.log("Printer Monitor created!");
+        // console.log("Printer Monitor created!");
     },
 
     stopMonitoring: function(){
-        console.log("Printer monitor stopped");
+        // console.log("Printer monitor stopped");
         this.disabled = true;
     },
 
@@ -41,7 +41,7 @@ Ext.define("Teselagen.manager.PrinterMonitor", {
     monitorServerTasks: function(){
         var self = this;
         Ext.Ajax.request({
-            url: 'http://localhost:8090/feedback',
+            url: 'http://lab001.teselagen.com:8090/feedback',
             method: 'GET',
             success: function(response){
                 var parsedResponse = response.responseText;

@@ -45,7 +45,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
         var onPromptClosed = function (btn, text) {
             if(btn === "ok") {
                 if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, Teselagen.manager.ProjectManager); }
-                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project");
+                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project", "loader rspin");
+                $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
                 var self = Teselagen.manager.ProjectManager;
                 var project = Ext.create("Teselagen.models.Project", {
                     name: text,
@@ -76,6 +77,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
     	
     	var name = Ext.getCmp('saveAsWindowSequenceNameField').getValue();
+    	name = Ext.String.trim(name);
     	var selectedProjs = Ext.getCmp('saveAsWindowProjectsGrid').getSelectionModel().getSelection();
     	if(selectedProjs.length<1) {
     		console.error("ERROR: No project selected when OK button clicked. ["+this.$className+"]");
@@ -88,7 +90,22 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	if(name==null || name.match(/^\s*$/) || name.length==0) {
     		Ext.getCmp('saveAsWindowSequenceNameField').setFieldStyle("border-color:red");
     	} else {
-    		var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
+    		var project_id = selectedProj.internalId;
+    		var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+            var sequencesNames = [];
+            project.sequences().load().each(function (sequence) {
+                sequencesNames.push(sequence.data.name);
+            });
+            
+            for (var j=0; j<sequencesNames.length; j++) {
+                if (sequencesNames[j]===name) {
+                	alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+    				return;
+                }
+                	//{ return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
+            }
+            
+    		/*var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
     		for(var i=0;i<sequenceStore.data.items.length;i++) {
     			if(name==sequenceStore.data.items[i].data.name && selectedProj.internalId==sequenceStore.data.items[i].data.project_id) {
     				//Actually, just do the same thing here as regular "save" file. (I think)
@@ -98,7 +115,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     				alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
     				return;
     			}
-    		}
+    		}*/
     		
     		/*var parser = Teselagen.bio.parsers.ParsersManager;
     		var constants = Teselagen.constants.Constants;
@@ -129,7 +146,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 partSource: workingSequence.data.partSource,
                 name: name
             });
-    		//debugger;
+
     		selectedProj.sequences().add(newSequenceFile);
             newSequenceFile.set("project_id",selectedProj.data.id);
             

@@ -24,7 +24,8 @@ module.exports = function(app) {
 
     var savePart = function(req,res,existingPart){
         var newPart = existingPart;
-        if(!existingPart) newPart = new Part();
+        var saveToProject = false;
+        if(!existingPart) { newPart = new Part(); saveToProject = true; }
         for (var prop in req.body) {
             if(prop!=="project_id") newPart[prop] = req.body[prop];
         }
@@ -54,7 +55,14 @@ module.exports = function(app) {
                             return res.json(500,{"error":err});
                         }
                     }
-                    else res.json({'parts': newPart,"duplicated":false,"err":err});
+                    else 
+                        {
+                            if(saveToProject) {
+                                project.parts.push(newPart);
+                                project.save();
+                            }
+                            res.json({'parts': newPart,"duplicated":false,"err":err});
+                        }
                 });
             });
         });

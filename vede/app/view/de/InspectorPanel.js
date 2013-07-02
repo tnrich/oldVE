@@ -25,6 +25,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
     titleCollapse: false,
     removePanelHeader: false,
     resizable: true,
+    autoScroll: true,
     width: 100,
     layout: {
         deferredRender: false,
@@ -134,6 +135,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
                             name: 'fas',
+                            editable: false,
                             queryMode: 'local',
                             anchor: '100%',
                             store: []
@@ -185,8 +187,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'booleancolumn',
                                     text: 'NOT?',
                                     dataIndex: 'negationOperator',
-                                    trueText: 'Yes',
-                                    falseText: 'No',
+                                    trueText: 'NOT',
+                                    falseText: null,
                                     editor: {
                                         xtype: 'checkbox'
                                     }
@@ -204,6 +206,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: 'Operand 2',
                                     dataIndex: 'operand2_id',
+                                    cls: "operand2_field",
+                                    editor: {
+                                        xtype: 'combobox',
+                                        store: [],
+                                        cls: "operand2_combobox"
+                                    },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
                                             return rule.get("operand2Number");
@@ -304,7 +312,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            layout: 'fit',
                             allowDeselect: true,
                             columnLines: true,
                             minHeight:132,
@@ -354,6 +361,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
                                     dataIndex: 'fas',
+                                    readOnly: true,
                                     renderer: function(value, metadata, record) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
@@ -471,11 +479,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
             bodyCls: 'j5InfoTab-body',
             disabled: true,
             preventHeader: true,
+            autoScroll: true,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            autoScroll: false,
             margin: "5px 0px 5px 0px",
             items: [
                 {
@@ -546,6 +554,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     cls: 'assemblyMethodSelector',
                                     fieldLabel: '<b>Assembly Method:</b>',
                                     labelCls: 'assembly-label',
+                                    editable: false,
                                     labelSeparator: ' ',
                                     labelWidth: 110,
                                     width:350,
@@ -863,7 +872,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
             {   
                 Vede.application.fireEvent("openj5");
             }
-        }
+        },
+    },
+
+    init: function () {
+        console.log(workingProject);
+        
     }
 }
 

@@ -17,6 +17,8 @@ module.exports = function(app, express) {
     require('./environments').configEnvironments(app, express);
 
 
+    var MongoStore = app.mongostore(express);
+
     // Express Framework Configuration
     app.configure(function() {
         app.set('views', __dirname + '/views');
@@ -25,12 +27,16 @@ module.exports = function(app, express) {
             layout: false
         }); // This opt allow extends
         app.use(express.bodyParser()); // Use express response body parser (recommended)
-        app.use(express.cookieParser()); // Use express response cookie parser (recommended)
-        app.use(express.session({
+        app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
+        app.use(express.session({ 
             secret: 'j5',
-            cookie: {
-                httpOnly: false
-            }
+            store: new MongoStore(
+                {
+                    db: app.dbname,
+                    host: 'localhost',
+                    collection: 'sessions'
+                }
+            )
         })); // Sessions managed using cookies
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system

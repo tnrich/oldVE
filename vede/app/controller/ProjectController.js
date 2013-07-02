@@ -161,8 +161,9 @@ Ext.define("Vede.controller.ProjectController", {
 
     resolveAndopenDeviceDesign: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
-    	oldTab.el.mask("Loading design");
-    	
+    	oldTab.el.mask("Loading design", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
     	var design_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
@@ -191,8 +192,10 @@ Ext.define("Vede.controller.ProjectController", {
 
     resolveAndOpenj5Reports: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
-    	oldTab.el.mask("Loading j5 report");
+    	oldTab.el.mask("Loading j5 report", "loader rspin");
     	
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
     	var design_id = record.data.id.replace("report","");;
         var project_id = record.parentNode.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
@@ -295,7 +298,8 @@ Ext.define("Vede.controller.ProjectController", {
 
     resolveAndOpenSequence: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
-    	oldTab.el.mask("Loading sequence");
+    	oldTab.el.mask("Loading sequence", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
     	
         var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;

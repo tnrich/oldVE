@@ -31,7 +31,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         id: 'dashboardButtons',
                         margin: '0 100 0 100',
-                        minHeight: 200,
+                        minHeight: 125,
                         minWidth: 800,
                         flex: 0.4,
                         border: 0,
@@ -79,7 +79,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 overCls: 'createSequence-over',
                                 listeners: {
                                     click: function () {
-                                        Vede.application.fireEvent("TabOpen");
+                                        Vede.application.fireEvent("createSequence");
                                     },
                                     afterrender: function(cmp) {
                                         cmp.getEl().set({
@@ -128,7 +128,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         id: 'dashboardStats',
                         margin: '10 100 50 100',
                         flex: 1,
-                        minHeight: 400,
+                        minHeight: 320,
                         minWidth: 800,
                         border: 0,
                         layout: {
@@ -197,6 +197,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 items: [
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'projectsCountBox-num',
                                                         border: 0,
                                                         flex: .8,
@@ -204,6 +205,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     },
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'projectsCountBox-desc',
                                                         flex: .6,
                                                         border: 0,
@@ -252,6 +254,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 items: [
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'designsCountBox-num',
                                                         border: 0,
                                                         flex: 1,
@@ -259,6 +262,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     },                         
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'designsCountBox-desc',
                                                         border: 0,
                                                         flex: .6,
@@ -321,6 +325,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 items: [
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'sequencesCountBox-num',
                                                         border: 0,
                                                         flex: 1,
@@ -328,6 +333,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     },
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'sequencesCountBox-desc',
                                                         border: 0,
                                                         flex: .6,
@@ -375,6 +381,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 items: [
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'partsCountBox-num',
                                                         border: 0,
                                                         flex: 1,
@@ -382,6 +389,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     },
                                                     {
                                                         xtype: 'textfield',
+                                                        readOnly: true,
                                                         cls: 'partsCountBox-desc',
                                                         border: 0,
                                                         flex: .6,

@@ -35,6 +35,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     oligosListText: null,
     directSynthesesListText: null,
 
+    j5Running: false,
+
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
@@ -62,37 +64,53 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     messagebox.zIndexManager.bringToFront(messagebox);
                 }, 100);
             } else {
+                inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
+                inspector.setActiveTab(2);
 
-            inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
-            inspector.setActiveTab(2);
-
-            var store;
-            if(combinatorial)
-            {
-                store = new Ext.data.ArrayStore({
-                    fields: ['assemblyMethod'],
-                    data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
-                });
-            }
-            else
-            {
-                store = new Ext.data.ArrayStore({
-                    fields: ['assemblyMethod'],
-                    data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
-                });            }
-
-            var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
-            combobox.bindStore(store);
-            combobox.setValue(store.first());
+                var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
+                if(!combobox.getValue()) {
+                    self.loadAssemblyMethodSelector(combinatorial);
+                }
             }
         });
+    },
 
-        // Set the currentTab's j5Window property to null when the window is closed.
-        // This tells the onTabChange function whether the window should be open
-        // or closed when the tab is switched.
-        // this.on("close", function() {
-        //     currentTab = null;
-        // }, this);
+    loadAssemblyMethodSelector: function(combinatorial) {
+        var store;
+        var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
+        var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
+
+        if(combinatorial) {
+            store = new Ext.data.ArrayStore({
+                fields: ['assemblyMethod'],
+                data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
+            });
+        } else {
+            store = new Ext.data.ArrayStore({
+                fields: ['assemblyMethod'],
+                data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
+            });
+        }
+
+        combobox.bindStore(store);
+        combobox.setValue(store.first());
+    },
+
+    onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
+        var self = this;
+
+        if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
+            var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
+            if(!combobox.getValue()) {
+                Vede.application.fireEvent("checkj5Ready", function(combinatorial,j5ready) {
+                    self.loadAssemblyMethodSelector(combinatorial);
+                });
+            }
+        } 
+
+        if(this.j5Running) {
+            this.disableAllJ5RunButtons(true);
+        }
     },
 
     /**
@@ -103,7 +121,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * the mainAppPanel which hides the j5Window when the tab is switched away,
      * and re-shows it when the tab is switched back.
      */
-
      onTabChange: function(j5AdvancedTab, newTab, oldTab) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
@@ -121,7 +138,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             distributePCRBtn.hide();
             condenseAssembliesBtn.show();
         }
-        
     },
 
     onTabChangeSub: function(j5AdvancedTab, newTab, oldTab) {
@@ -147,7 +163,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
         
-        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
+        //this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
+        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
 
         this.previousJ5ParameterData = this.j5Parameters.getData();
         this.populateJ5ParametersDialog();
@@ -188,7 +205,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     oligoMaxLengthNoPagePurificationRequiredBPsValue: r.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS,
                     minPCRProductBPsValue: r.MINIMUMPCRPRODUCTBPS,
                     directSynthesisCostPerBPUSDValue: r.DIRECTSYNTHESISCOSTPERBPUSD,
-                    directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIMUMCOSTPERPIECEUSD,
+                    directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD,
                     primerGCClampValue: r.PRIMER_GC_CLAMP,
                     primerMinSizeValue: r.PRIMER_MIN_SIZE,
                     primerMaxSizeValue: r.PRIMER_MAX_SIZE,
@@ -366,7 +383,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         fr.onload = processPlasmidsFile;
         fr.readAsText(plasmidsFile.files[0]);
-
     },
 
     onUseServerOligosRadioBtnChange: function (e) {
@@ -532,8 +548,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onJ5RunStatusChanged: function(runId, runStatus) {
-        var buttonsToEnable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
-        buttonsToEnable = buttonsToEnable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+        var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
         var button;
 
         for(var i = 0; i < buttonsToEnable.length; i++) {
@@ -543,11 +559,16 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
             if(button.cls === "runj5Btn") {
                 button.setText("Submit Run to j5");
+                $(".loader-mini").hide();
             }
         }
+
+        this.j5Running = false;
     },
 
     onRunJ5BtnClick: function () {
+        $(".toast-success").hide();
+        
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -610,7 +631,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterDirectSynthesesList"] = Base64.encode(masterDirectSynthesesList);
         masterFiles["masterDirectSynthesesListFileName"] = masterDirectSynthesesListFileName;
 
-        var assemblyMethod = inspector.down("component[cls='assemblyMethodSelector']").getValue()
+        var assemblyMethod = inspector.down("component[cls='assemblyMethodSelector']").getValue();
 
         if(assemblyMethod == "Mock Assembly") assemblyMethod = "Mock";
         if(assemblyMethod == "SLIC/Gibson/CPEC") assemblyMethod = "SLIC/Gibson/CPEC";
@@ -623,27 +644,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm = Teselagen.manager.J5CommunicationManager;
         inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
+        this.j5Running = true;
+
         //responseMessage.setValue("Saving design");
 
-        var buttonsToDisable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
-        buttonsToDisable = buttonsToDisable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
-        var button;
-
-        for(var i = 0; i < buttonsToDisable.length; i++) {
-            button = buttonsToDisable[i];
-
-            button.disable();
-
-            if(button.cls === "runj5Btn") {
-                button.setLoading({msg: "Running J5"});
-
-                button.loadMask.el.setStyle("background-color", "transparent");
-                button.loadMask.msgEl.setStyle("background-color", "transparent");
-                button.loadMask.msgTextEl.setStyle("background-color", "transparent");
-
-                button.setText("");
-            }
-        }
+        this.disableAllJ5RunButtons();
 
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
@@ -670,6 +675,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
+    },
+
+    disableAllJ5RunButtons: function(skipAppendLoader) {
+        var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+        var button;
+
+        if(!skipAppendLoader) {
+            $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+        }
+
+        for(var i = 0; i < buttonsToDisable.length; i++) {
+            button = buttonsToDisable[i];
+            button.disable();
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Running J5...");
+            }
+        }
     },
 
     onDistributePCRBtn: function () {
@@ -864,6 +888,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     init: function () {
         this.control({
+            "#mainAppPanel": {
+                tabchange: this.onMainAppPanelTabChange
+            },
             "panel[cls='j5InfoTab-Sub-Advanced']": {
                 tabchange: this.onTabChangeSub
             },
@@ -970,6 +997,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         
         this.application.on("runj5", this.onRunJ5Event, this);
         this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
+        this.application.on("ReLoadAssemblyMethods", this.loadAssemblyMethodSelector, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;

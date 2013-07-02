@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	
+	layout="absolute" 
+	width="100%" 
+	height="300"
+	
+	showCloseButton="true"
+	close="onCloseButtonClick()"
+	
+	title="Specify Part Definition"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+            public static const DONE:String = "Done";
+            public static const CANCEL:String = "Cancel";
+            
+            [Bindable]
+			private var _sequence:String;
+			
+            public function get sequence():String
+            {
+                return _sequence;
+            }
+            
+            public function set sequence(s:String):void
+            {
+                _sequence = s;
+            }
+			
+			private function comboBoxChange(event:Event):void
+			{
+				genbankStartBPInput.value = ComboBox(event.target).selectedItem.start;
+				endBPInput.value = ComboBox(event.target).selectedItem.end;
+				genbankStartBPInput.enabled = false;
+				endBPInput.enabled = false;
+				
+				if(ComboBox(event.target).selectedIndex == 1)
+				{
+					genbankStartBPInput.enabled = true;
+					endBPInput.enabled = true;
+				}		
+			}
+            
+            private function onStartBPClick():void
+            {
+                if (!genbankStartBPInput.enabled) {
+                    featureNameInput.selectedIndex = 1;
+                    genbankStartBPInput.enabled = true;
+                    endBPInput.enabled = true;
+                    genbankStartBPInput.setFocus();
+                }
+            }
+
+            private function onStopBPClick():void
+            {
+                if (!endBPInput.enabled) {
+                    featureNameInput.selectedIndex = 1;
+                    genbankStartBPInput.enabled = true;
+                    endBPInput.enabled = true;
+                    endBPInput.setFocus();
+                }
+            }
+
+	        private function onDoneButtonClick():void
+            {
+                dispatchEvent(new Event(DONE));
+            }
+            
+            private function onCancelButtonClick():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+            
+            private function onCloseButtonClick():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+            
+        ]]>
+	</mx:Script>
+    
+    <mx:VBox paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" height="100%" width="100%">
+        <mx:HBox>
+            <mx:Label text="Part Name:"/>
+            <mx:TextInput id="partNameInput"/>
+        </mx:HBox>
+        <mx:HBox>
+            <mx:Label text="Part Source:"/>
+            <mx:TextInput id="partSourceInput"/>
+        </mx:HBox>
+        <mx:Label text="Source Data" fontWeight="bold"/>
+        <mx:TextArea id="seqTextArea" height="100%" width="100%" editable="false"/>
+        <mx:HBox>
+            <mx:Label text="Sequence" />
+            <mx:ComboBox id="featureNameInput" change="comboBoxChange(event)" labelField="name" paddingLeft="5" paddingRight="5"/>
+            <mx:Label text="StartBP"/>
+            <mx:NumericStepper id="genbankStartBPInput" click="onStartBPClick()" minimum="1" maximum="{_sequence.length}"/>
+            <mx:Label text="StopBP"/>
+            <mx:NumericStepper id="endBPInput" click="onStopBPClick()" minimum="1" maximum="{_sequence.length}"/>
+        </mx:HBox>
+        <mx:CheckBox label="Reverse Complement" id="reverseComplementCheckBox"/>
+        <mx:HRule width="100%"/>
+        <mx:HBox>		
+            <mx:Button label="Done" click="onDoneButtonClick()"/>
+            <mx:Button label="Cancel" click="onCancelButtonClick()"/>
+        </mx:HBox>
+    </mx:VBox>
+    
+</mx:TitleWindow>

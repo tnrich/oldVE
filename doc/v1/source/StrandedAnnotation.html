@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-common-StrandedAnnotation'>/**
+</span> * @class Teselagen.bio.sequence.common.StrandedAnnotation
+ * Annotation with defined read direction. See Teselagen.bio.sequence.common.StrandType.
+ *
+ * @extends {Teselagen.bio.sequence.common.Annotation}
+ * @author Micah Lerner
+ */
+Ext.define(&quot;Teselagen.bio.sequence.common.StrandedAnnotation&quot;, {
+	extend: 'Teselagen.bio.sequence.common.Annotation',
+	
+<span id='Teselagen-bio-sequence-common-StrandedAnnotation-method-constructor'>	/**
+</span>	 * Constructor
+	 * @param  {Integer} start stranded annotaiton start
+	 * @param {Integer} end stranded annotaiton end
+	 * @param {Integer} Strand strand directionality
+	 */
+	constructor: function(inData){
+		var start;
+		var end;
+		var strand;
+		
+		if (inData) {	
+			start  = inData.start || 0 ;
+			end    = inData.end || 0;
+			strand = inData.strand || Teselagen.StrandType.FORWARD;
+		} else{
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+
+		this.callParent([inData]);
+
+<span id='Teselagen-bio-sequence-common-StrandedAnnotation-method-getStrand'>		/**
+</span>		 * Returns strand directionality
+		 * @return {Integer} strand directionality
+		 */
+		this.getStrand = function(){
+			return strand;
+		}
+
+<span id='Teselagen-bio-sequence-common-StrandedAnnotation-method-setStrand'>		/**
+</span>		 * Sets strand directionality
+		 * @method setStrand
+		 * @param {Integer} pStrand strand directionality
+		 */
+		this.setStrand= function(pStrand){
+			strand = pStrand;
+		}
+
+		return this;
+	},
+});</pre>
+</body>
+</html>

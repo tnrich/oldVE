@@ -47,7 +47,12 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         var sequences = [];
         var rules = [];
 
-        design.getJ5Collection().bins().each(function(bin){
+        design.getJ5Collection().bins().each(function(bin,binKey){
+
+            //bin.fases = [];
+            //for (var i= 0; i < bin.parts().count(); i++) {
+            //    bin.fases[i] = bin.parts().getAt(i).data.fas;
+            //}
             //console.log(bin);
             var jsonBin = {};
             jsonBin = {};
@@ -85,7 +90,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 jsonPart["de:parts"]["de:part"] = {};
                 //jsonPart["de:parts"]["de:part"].id = part.get("id");
                 jsonPart["de:parts"]["de:part"].id = part.internalId;
-                var fas = bin.data.fases[partIndex];
+                var fas = part.data.fas;
                 jsonPart["de:parts"]["de:part"]["de:fas"] = (fas === "None") ? "" : fas;
 
                 parts.push(jsonPart);
@@ -109,7 +114,16 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonEugene["de:negationOperator"] = rule.get("negationOperator");
             jsonEugene["de:operand1ID"] = rule.getOperand1().internalId;
             jsonEugene["de:compositionalOperator"] = rule.get("compositionalOperator");
-            jsonEugene["de:operand2ID"] = rule.getOperand2().internalId;
+            jsonEugene["de:operand2isNumber"] = rule.get('operand2isNumber');
+            if(rule.get('operand2isNumber'))
+            {
+                jsonEugene["de:operand2Number"] = rule.get('operand2Number');
+            }
+            else
+            {
+                jsonEugene["de:operand2ID"] = rule.getOperand2().internalId;   
+            }
+
 
             rules.push(jsonEugene);
         });
@@ -207,6 +221,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
             // Parts Processing
             json["de:partVOs"]["de:partVO"].forEach(function(part){
+
                 var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
 
                 for(var prop in part)

@@ -57,38 +57,15 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         }
     },
     /**
-     * Filters the list of enzymes in the itemSelector based on the enzyme group selected and the search term
+     * Filters the list of enzymes in the itemSelector based on the search term
      * @param {Object} searchCombo which contains the search term
-     * @param {Object} groupSelector which contains the restriction enzyme group to be searched
+     * @param {Object} store Store which will be filtered
      */
-    filterEnzymes: function(searchCombo, groupSelector){
-        //First we populate the store with the right enzymes
-        var currentGroup = this.GroupManager.groupByName(groupSelector.getValue());
-        var enzymeArray = [];
-        var fromField = this.enzymeListSelector.fromField;
-        var fromStore = fromField.getStore();
-        var toField = this.enzymeListSelector.toField;
-        Ext.each(currentGroup.getEnzymes(), function(enzyme) {
-            enzymeArray.push({name: enzyme.getName()});
-        });
-        fromStore.loadData(enzymeArray);
-        toField.bindStore(this.GroupManager.getActiveUserGroup().userRestrictionEnzymes());
-        
-        //remove any items on the left that are on the right
-//        fromStore.suspendEvents();
-//        this.currentEnzymes = toList.getStore().getRange();
-//        this.currentEnzymes.forEach(function(enzyme) {
-//           var deleted = fromStore.query("name",enzyme.get("name"));
-//           fromStore.remove(deleted.items[0], false);
-//        });
-//        fromStore.resumeEvents();
-//        fromList.refresh();
-        
-        //Now we filter based on the search input
-        //the default searchphrase will match anything
+    filterEnzymes: function(searchTerm, store){
+        //The default searchphrase will match anything
         var searchPhrase = ".";
-        if (searchCombo.getValue() !== null){
-            searchPhrase = searchCombo.getValue();
+        if (searchTerm !== null){
+            searchPhrase = searchTerm;
         }
         try {
             var regEx = new RegExp(searchPhrase, "i");
@@ -96,10 +73,10 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
             //We can safely ignore errors in the regex. they'll just result in not getting what you are looking for
             regEx = null;
         }
-        fromStore.filterBy(function(enzyme){
+        store.filterBy(function(enzyme){
             return enzyme.get("name").search(regEx) !== -1;
         }, this);
-        fromStore.sort("name", "ASC");
+        store.sort("name", "ASC");
     },
 
     /**
