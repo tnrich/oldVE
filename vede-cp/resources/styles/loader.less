@@ -4,13 +4,21 @@
 
 /* u can custom almost everything u need with these variables just bellow */
 
-@loaderSize       : 20px;
-@radThickness     : @loaderSize/10;
-@spinSpeed        : 750ms;
-@backgroundColor  : #eee;
-@forgroundColor   : #ccc;
-@masksColor       : #fff;
-@middleCircleSize : 68%;
+@loaderSize       : 55px;
+@radThickness     : 2px;
+@spinSpeed        : 1000ms;
+@backgroundColor  : #1585C5;
+@forgroundColor   : #003f66;
+@masksColor       : #E0E3E6;
+@middleCircleSize : 70%;
+
+@loaderSize-mini       : 21px;
+@radThickness-mini     : 2px;
+@spinSpeed-mini        : 1000ms;
+@backgroundColor-mini  : white;
+@forgroundColor-mini   : transparent;
+@masksColor-mini       : #1585c5;
+@middleCircleSize-mini : 70%;
 
 
 /* but from here u'll have to understand what u'r dealing with */
@@ -84,4 +92,76 @@
   .r2 { -webkit-transform:rotate(45deg); -moz-transform:rotate(45deg); }
   .r3 { -webkit-transform:rotate(90deg); -moz-transform:rotate(90deg); }
   .r4 { -webkit-transform:rotate(135deg); -moz-transform:rotate(135deg); }
+}
+
+/*Mini*/
+.animation (@params) {
+  -webkit-animation:@params;
+     -moz-animation:@params;
+          animation:@params;
+}
+
+/* animations */
+.spin-mini {
+  .animation(spin-mini @spinSpeed-mini infinite linear);
+}
+  @-webkit-keyframes spin-mini {
+    to { -webkit-transform: rotate(360deg); } }
+  @-moz-keyframes spin-mini {
+    to { -moz-transform: rotate(360deg); } }
+
+.rspin-mini {
+  .animation(rspin-mini @spinSpeed-mini*3 infinite linear) !important;
+}
+  @-webkit-keyframes rspin-mini {
+    to { -webkit-transform: rotate(-360deg); } }
+  @-moz-keyframes rspin-mini {
+    to { -moz-transform: rotate(-360deg); } }
+
+
+/* let's style that thing */
+.loader-mini {
+  background-color:@backgroundColor-mini !important;
+  border-radius:100% !important;
+  position:relative !important;
+  height:@loaderSize-mini !important;
+  width:@loaderSize-mini !important;
+  overflow:hidden !important;
+  margin: 6px 82px !important;
+  .c {
+    position:absolute; left:50%; top:50% !important;
+    margin:-(@middleCircleSize-mini)/2 0 0 -(@middleCircleSize-mini)/2 !important;
+    width:@middleCircleSize-mini !important;
+    height:@middleCircleSize-mini !important;
+    background-color:@masksColor-mini !important;
+    border-radius:100%;
+    z-index:3;
+  }
+  
+  .d-mini {
+    position:absolute; top:0; bottom:0; left:0; right:0; 
+    .e { 
+      @thisWidth : @loaderSize-mini*0.2 !important;
+      z-index:10;
+      position:absolute; top:1%; left:50%; 
+      margin:0 0 0 -@thisWidth/2;
+      border-top:@thisWidth solid @forgroundColor-mini;
+      border-left:@thisWidth*0.3 solid transparent;
+      border-right:@thisWidth*0.3 solid transparent;
+      height:0; width:@thisWidth;
+      -webkit-transform:rotate(10deg); -moz-transform:rotate(10deg);
+      border-radius:5px 5px 0 0;
+     }
+  }
+  .r-mini {
+    z-index:2;
+    position:absolute; left:50%; top:-1px; bottom:-1px;
+    margin-left:-(@radThickness-mini)/2;
+    background-color:@masksColor-mini;
+    width:(@radThickness-mini); 
+  }
+  .r1-mini { -webkit-transform:rotate(0deg); -moz-transform:rotate(0deg); }
+  .r2-mini { -webkit-transform:rotate(45deg); -moz-transform:rotate(45deg); }
+  .r3-mini { -webkit-transform:rotate(90deg); -moz-transform:rotate(90deg); }
+  .r4-mini { -webkit-transform:rotate(135deg); -moz-transform:rotate(135deg); }
 }
