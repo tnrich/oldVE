@@ -201,10 +201,6 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.HighlightLayer.clearHighlights();
     },
 
-    onVectorPanelAnnotationClicked: function(start, end) {
-        this.select(start, end);
-    },
-
     onAnnotatePanelAnnotationClicked: function(start, end) {
         this.clickedAnnotationStart = start;
         this.clickedAnnotationEnd = end;

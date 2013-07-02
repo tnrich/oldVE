@@ -10,17 +10,9 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
     
     extend: "Teselagen.renderer.pie.Layer",
 
-    statics: {
-        FRAME_COLOR: "#808080",
-        WIREFRAME_OFFSET: 10 // Distance of wireframe from rail edge.
-    },
-
-    deselect: function() {
-        this.callParent();
-
-        d3.selectAll(".pieWireframeElement").remove();
-    },
-
+    /**
+     * Draws the shaded wedge-shaped selection area.
+     */
     drawSelectionPie: function(fromIndex, endIndex) {
         var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
@@ -31,18 +23,16 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
             return;
         }
 
-        d3.selectAll(".pieWireframeElement").remove();
-
         var startAngle = fromIndex * 2 * Math.PI / seqLen;
         var endAngle = endIndex * 2 * Math.PI / seqLen;
 
         var wireRadius = this.radius + this.self.WIREFRAME_OFFSET;
 
-        var startPoint = Ext.create("Teselagen.bio.util.Point");
+        var startPoint = {};
         startPoint.x = this.center.x + wireRadius * Math.sin(startAngle);
         startPoint.y = this.center.y - wireRadius * Math.cos(startAngle);
 
-        var endPoint = Ext.create("Teselagen.bio.util.Point");
+        var endPoint = {};
         endPoint.x = this.center.x + wireRadius * Math.sin(endAngle);
         endPoint.y = this.center.y - wireRadius * Math.cos(endAngle);
 
@@ -73,11 +63,6 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
                " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
                "L" + this.center.x + " " + this.center.y;
 
-        this.selectionSVG.append("svg:path")
-                         .attr("class", "pieWireframeElement")
-                         .attr("stroke", this.self.FRAME_COLOR)
-                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                         .attr("fill", "none")
-                         .attr("d", path);
+        this.selectionSVG.attr("d", path);
     }
 });

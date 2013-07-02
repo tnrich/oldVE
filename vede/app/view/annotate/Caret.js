@@ -52,9 +52,6 @@ Ext.define("Vede.view.annotate.Caret", {
                 this.caretSVG.attr("d", path);
             }
         }
-
-        //console.log("changing annotate caret position");
-
         return pPosition;
     },
 

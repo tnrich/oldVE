@@ -5,16 +5,16 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.renderer.rail.Layer", {
-    inheritableStatics: {
-        STROKE_OPACITY: 0.8
-    },
-
     config: {
         selectionSVG: null,
         sequenceManager: null,
         reference: {},
         radius: 0,
         railWidth: null
+    },
+
+    inheritableStatics: {
+        WIREFRAME_OFFSET: 5 // Distance of wireframe from rail edge.
     },
 
     start: -1,
@@ -44,6 +44,8 @@ Ext.define("Teselagen.renderer.rail.Layer", {
     select: function(fromIndex, toIndex) {
         this.drawSelectionRail(fromIndex, toIndex);
 
+        this.selectionSVG.style("visibility", "visible");
+
         this.selected = true;
         this.start = fromIndex;
         this.end = toIndex;
@@ -62,6 +64,8 @@ Ext.define("Teselagen.renderer.rail.Layer", {
         
         this.selected = false;
         this.selecting = false;
+
+        this.selectionSVG.style("visibility", "hidden");
     },
 
     startSelecting: function() {

@@ -162,10 +162,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.clickedAnnotationEnd = end;
     },
 
-    onAnnotatePanelAnnotationClicked: function(start, end) {
-        this.select(start, end);
-    },
-
     onViewModeChanged: function(viewMode) {
         if(viewMode == "linear") {
             Ext.getCmp("PieContainer").hide();
@@ -177,7 +173,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start);
+            this.changeCaretPosition(start, true);
         }
     },
 
@@ -191,7 +187,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.pieManager.render();
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.wireframeSVG);
 
         this.SelectionLayer.setSequenceManager(pSeqMan);
         this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
@@ -320,9 +316,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 end = endSelectionIndex;
             }
 
-            self.WireframeSelectionLayer.startSelecting();
-            self.WireframeSelectionLayer.select(start, end);
-
             if(d3.event.ctrlKey) {
                 self.SelectionLayer.startSelecting();
 
@@ -335,6 +328,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             } else {
                 self.stickySelect(start, end);
             }
+
+            self.WireframeSelectionLayer.startSelecting();
+            self.WireframeSelectionLayer.select(start, end);
         }
     },
 

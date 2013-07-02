@@ -36,9 +36,6 @@ Ext.define("Vede.view.rail.Caret", {
                            .attr("stroke", this.self.CARET_COLOR)
                            .attr("d", path);
         }
-
-        //console.log("changing rail caret position");
-
         return pStart;
     }
 });

@@ -164,10 +164,6 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.clickedAnnotationEnd = end;
     },
 
-    onAnnotatePanelAnnotationClicked: function(start, end) {
-        this.select(start, end);
-    },
-
     onViewModeChanged: function(viewMode) {
         if(viewMode == "circular") {
             Ext.getCmp("RailContainer").hide();
@@ -179,7 +175,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope != this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start);
+            this.changeCaretPosition(start, true);
         }
     },
 
@@ -193,7 +189,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.railManager.render();
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.WireframeSelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
+        this.WireframeSelectionLayer.setSelectionSVG(this.railManager.wireframeSVG);
 
         this.SelectionLayer.setSequenceManager(pSeqMan);
         this.SelectionLayer.setSelectionSVG(this.railManager.selectionSVG);

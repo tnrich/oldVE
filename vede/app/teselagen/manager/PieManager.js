@@ -10,6 +10,12 @@ Ext.define("Teselagen.manager.PieManager", {
         LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2",
+        SELECTION_COLOR: "#0099FF",
+        SELECTION_TRANSPARENCY: 0.3,
+        SELECTION_FRAME_COLOR: "#CCCCCC",
+        STROKE_OPACITY: 0.8, // Selection and wireframe outline opacity.
+        WIREFRAME_COLOR: "#808080",
+        WIREFRAME_OFFSET: 10, // Distance of wireframe from rail edge.
         ZOOM_INCREMENT: 0.25
     },
 
@@ -46,6 +52,7 @@ Ext.define("Teselagen.manager.PieManager", {
     orfSVG: null,
     featureSVG: null,
     selectionSVG: null,
+    wireframeSVG: null,
 
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -783,8 +790,19 @@ Ext.define("Teselagen.manager.PieManager", {
         this.labelSVG = this.parentSVG.append("svg:g")
                                 .attr("class", "pieLabel");
 
-        this.selectionSVG = this.parentSVG.append("svg:g")
-                                    .attr("class", "pieSelection");
+        this.selectionSVG = this.parentSVG.append("svg:path")
+                                .attr("class", "pieSelection")
+                                .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                                .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                                .attr("fill", this.self.SELECTION_COLOR)
+                                .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                                .style("pointer-events", "none");
+
+        this.wireframeSVG = this.parentSVG.append("svg:path")
+                                .attr("class", "pieWireframe")
+                                .attr("stroke", this.self.WIREFRAME_COLOR)
+                                .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                                .attr("fill", "none");
 
         this.cutSiteSVG = this.parentSVG.append("svg:g")
                                   .attr("class", "pieCutSite");

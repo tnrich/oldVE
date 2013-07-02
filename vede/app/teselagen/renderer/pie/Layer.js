@@ -5,15 +5,15 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.renderer.pie.Layer", {
-    inheritableStatics: {
-        STROKE_OPACITY: 0.8
-    },
-
     config: {
         selectionSVG: null,
         sequenceManager: null,
         center: {},
         radius: 0
+    },
+
+    inheritableStatics: {
+        WIREFRAME_OFFSET: 10 // Distance of wireframe from rail edge.
     },
 
     start: -1,
@@ -43,6 +43,8 @@ Ext.define("Teselagen.renderer.pie.Layer", {
     select: function(fromIndex, toIndex, pointerEvents) {
         this.drawSelectionPie(fromIndex, toIndex, pointerEvents);
 
+        this.selectionSVG.style("visibility", "visible");
+
         this.selected = true;
         this.start = fromIndex;
         this.end = toIndex;
@@ -61,6 +63,8 @@ Ext.define("Teselagen.renderer.pie.Layer", {
         
         this.selected = false;
         this.selecting = false;
+
+        this.selectionSVG.style("visibility", "hidden");
     },
 
     startSelecting: function() {
