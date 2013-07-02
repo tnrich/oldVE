@@ -512,10 +512,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var newName = nameField.getValue();
         var self = this;
 
+        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
+
         Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
             // If the selected part is not in the device already, add it.
-            if(self.selectedPart.get("phantom") || 
-               self.DeviceDesignManager.getBinAssignment(self.activeProject,
+            //if(self.selectedPart.get("phantom") || 
+            if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
                                                          self.selectedPart) < 0) {
                 self.selectedPart = Ext.create("Teselagen.models.Part");
                 self.selectedPart.set("phantom", false);
@@ -523,6 +525,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
             } else {
+                if(self.selectedPart.get("phantom")) {
+                    self.selectedPart.set("phantom", false);
+                }
+
                 self.selectedPart.set("name", newName);
             }
 

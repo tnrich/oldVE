@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-symbols-NucleotideSymbol'>    /**
+</span>    * @class Teselagen.bio.sequence.symbols.NucleotideSymbol
+    * This class sets up a Nucleotide Symbol class
+    * @author Micah Lerner
+    */
+   
+Ext.define(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;,{
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-constructor'>	/**
+</span>	* Contructor
+	* 
+	* @param name Symbol full name
+	* @param value One letter symbol value
+	* @param ambiguousMatches List of ambiguos matches for this symbol. For example nucleotide symbol 'M' can by either 'A' or 'C', so abiguous matches are {'A', 'C'}
+	*/
+	constructor: function(inData){
+		var name;
+		var value
+		var ambiguousMatches;
+
+		if (inData) {
+			name = inData.name;
+			value = inData.value;
+			ambiguousMatches = inData.ambiguousMatches;
+		} else {
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-getName'>		/**
+</span>		 * getName
+		 * @return {String} get Name
+		 */
+		this.getName = function(){
+			return name;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-setName'>		/**
+</span>		 * Set name
+		 * @method setName
+		 * @param {String} pName sets name
+		 */
+		this.setName = function(pName){
+			name = pName;
+		}
+
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-getValue'>		/**
+</span>		 * Gets value
+		 * @method getValue
+		 * @return {String} gets Value
+		 */
+		this.getValue = function(){
+			return value;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-setValue'>		/**
+</span>		 * Sets Value
+		 * @method setValue
+		 * @param {String} pValue sets value
+		 */
+		this.setValue = function(pValue){
+			value = pValue;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-getAmbiguousMatches'>		/**
+</span>		 * Gets ambigous matches
+		 * @method getAmbiguousMatches
+		 * @return {Symbols[]} Returns an array of the ambiguous matches
+		 */		
+		this.getAmbiguousMatches = function(){
+			return ambiguousMatches;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-NucleotideSymbol-method-setAmbiguousMatches'>		/**
+</span>		 * Sets ambiguous matches
+		 * @method setAmbiguousMatches
+		 * @param {Symbols[]} pAmbiguousMatches sets ambiguous matches
+		 */
+		this.setAmbiguousMatches = function(pAmbiguousMatches){
+			ambiguousMatches = pAmbiguousMatches;
+		}
+
+		return this;
+	},
+
+});</pre>
+</body>
+</html>

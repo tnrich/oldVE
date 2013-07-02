@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    layout="absolute"
+    width="100%" 
+    height="100%"
+    title="Paste"
+    showCloseButton="true"
+    close="onCloseButtonClick()">
+    
+    <mx:VBox paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+        <mx:RadioButtonGroup id="pasteOptionsRadioButtons"/>
+        <mx:RadioButton groupName="pasteOptionsRadioButtons" id="regularPasteRadioButton" value="regularPaste" label="Paste"/>
+        <mx:HBox>
+            <mx:Spacer width="{regularPasteRadioButton.height}"/>
+            <mx:Label id="nameLabel" text="Name: "/>
+            <mx:TextInput id="nameTextInput" click="onNameTextInputClick()"/>
+        </mx:HBox>
+        <mx:Spacer width="100%"/>
+        <mx:RadioButton groupName="pasteOptionsRadioButtons" id="linkedPasteRadioButton" value="linkedPaste" label="Linked Paste"/>
+        
+        <mx:HRule width="100%"/>
+        <mx:HBox>
+            <mx:Button label="Done" click="onDoneButtonClick()"/>
+            <mx:Button label="Cancel" click="onCancelButtonClick()"/>
+        </mx:HBox>
+    </mx:VBox>
+    
+    <mx:Script>
+        <![CDATA[
+            public static const PASTE_PART:String = "PastePart";
+            public static const CANCEL:String = "Cancel";
+            
+            private function onNameTextInputClick():void
+            {
+                regularPasteRadioButton.selected = true;
+            }
+            
+            private function onDoneButtonClick():void
+            {
+                dispatchEvent(new Event(PASTE_PART));
+            }
+            
+            private function onCancelButtonClick():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+            
+            private function onCloseButtonClick():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+        ]]>
+    </mx:Script> 
+    
+</mx:TitleWindow>

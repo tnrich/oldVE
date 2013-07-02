@@ -204,7 +204,17 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "misprimingOligoConcValue",                         type: "Float",      defaultValue: this.self.MOC_Default},
         {name: "outputSequenceFormatValue",                        type: "String",     defaultValue: this.self.OSF_Default},
 
-        {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default}
+        {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default,
+         convert: function(value, record) {
+             if(Ext.isBoolean(value)) {
+                 return value;
+             } else if(Ext.isString(value)) {
+                 return (/^(true|1)$/i).test(value);
+             } else {
+                 return false;
+             }
+         }
+        }
     ],
 
     validation: [

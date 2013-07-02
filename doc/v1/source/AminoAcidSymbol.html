@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol'>/**
+</span> * @class Teselagen.bio.sequence.symbols.AminoAcidSymbol
+ * This class sets up the data structure for Amino Acids.
+ * @author Micah Lerner
+ */
+Ext.define(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;,{
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-constructor'>	/**
+</span>	* Constructor
+	* @param  {String} name Full Name
+	* @param  {String} value One Letter Symbol
+	* @param  {String} threeLettersName Three letter symbol abbreviation
+	*/
+
+	constructor: function(inData){
+		var name;
+		var value;
+		var threeLettersName;
+
+
+		if (inData) {
+			name = inData.name;
+			value = inData.value
+			threeLettersName = inData.threeLettersName;
+		}else {
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-getName'>		/**
+</span>		 * Get name.
+		 * @return {String} Name
+		 */
+		this.getName =function(){
+			return name;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-setName'>		/**
+</span>		 * Set Name
+		 * @method setName
+		 * @param {String} pName input name
+		 */
+		this.setName = function(pName){
+			name = pName;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-getThreeLettersName'>		/**
+</span>		 * Get threeLettersName
+		 * @method getThreeLettersName
+		 * @return {String} returns threelettername
+		 */
+		this.getThreeLettersName = function(){
+			return threeLettersName;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-setThreeLettersName'>		/**
+</span>		 * Set threeLettersName
+		 * @method setThreeLettersName
+		 * @param {String} pThreeLettersName input threelettersname
+		 */
+		this.setThreeLettersName = function(pThreeLettersName){
+			threeLettersName = pThreeLettersName;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-getValue'>		/**
+</span>		 * Get value
+		 * @method getValue
+		 * @return {String} returns value
+		 */
+		this.getValue = function() {
+			return value;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-setValue'>		/**
+</span>		 * Set value
+		 * @method setValue
+		 * @param {String} pValue input value
+		 */
+		this.setValue = function(pValue) {
+			value = pValue;
+		}
+
+		return this;
+
+	}
+});</pre>
+</body>
+</html>

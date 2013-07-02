@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-tools-DigestionCalculator'>/**
+</span> * @class Teselagen.bio.tools.DigestionCalculator
+ * Digestion calculator class.
+ * @author Nick Elsbree
+ * @author unknown (original author)
+ */
+Ext.define(&quot;Teselagen.bio.tools.DigestionCalculator&quot;, {
+    singleton: true,
+
+    requires: [&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;,
+        &quot;Teselagen.bio.enzymes.RestrictionEnzyme&quot;,
+        &quot;Teselagen.bio.enzymes.RestrictionEnzymeMapper&quot;,
+        &quot;Teselagen.bio.sequence.dna.DNASequence&quot;,
+        &quot;Teselagen.bio.sequence.dna.DigestionFragment&quot;],
+
+<span id='Teselagen-bio-tools-DigestionCalculator-method-digestSequence'>    /**
+</span>     * Calculates position where enzyme cuts sequence and lists digestion fragments.
+     * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence DNA sequence to digest.
+     * @param  {Teselagen.bio.enzymes.RestrictionEnzyme[]} enzymes List of enzymes that participate in digestion.
+     * @return {Teselagen.bio.sequence.dna.DigestionFragment[]} List of resulting digestion fragments.
+     */
+    digestSequence: function(dnaSequence, enzymes) {
+        var seqLength = dnaSequence.toString().length;
+        var reSitesMap = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(enzymes, dnaSequence);
+        var reSitesList = new Array();
+
+        for(var i = 0; i &lt; reSitesMap.getKeys().length; i++) {
+            var enz = reSitesMap.getKeys()[i];
+            var sites = reSitesMap.get(enz);
+            while(sites.length &gt; 0) {
+                reSitesList.push(sites.pop());
+            }
+        }
+        reSitesList.sort(this.sortByStart);
+
+        var fragments = new Array();
+
+        if(reSitesList.length == 0) {
+            return fragments;
+        }
+
+        for(var i = 0; i &lt; reSitesList.length - 1; i++) {
+            var fragment = Ext.create(&quot;Teselagen.bio.sequence.dna.DigestionFragment&quot;, {
+                start: reSitesList[i].getStart(),
+                end: reSitesList[i+1].getEnd(),
+                length: reSitesList[i+1].getEnd() - reSitesList[i].getStart(),
+                startRE: reSitesList[i].getRestrictionEnzyme(),
+                endRE: reSitesList[i+1].getRestrictionEnzyme()
+            });
+            fragments.push(fragment);
+        }
+
+        if(dnaSequence.getCircular()) {
+            var fragLength = reSitesList[0].end - reSitesList[reSitesList.length-1].start + seqLength;
+            var fragment = Ext.create(&quot;Teselagen.bio.sequence.dna.DigestionFragment&quot;, {
+                start: reSitesList[reSitesList.length-1].getStart(),
+                end: reSitesList[0].getEnd(),
+                length: fragLength,
+                startRE: reSitesList[reSitesList.length-1].getRestrictionEnzyme(),
+                endRE: reSitesList[0].getRestrictionEnzyme()
+            });
+            fragments.push(fragment);
+        } else {
+            var fragment = Ext.create(&quot;Teselagen.bio.sequence.dna.DigestionFragment&quot;, {
+                start: 0,
+                end: reSitesList[0].getEnd(),
+                length: reSitesList[0].getEnd(),
+                startRE: null,
+                endRE: reSitesList[0].getRestrictionEnzyme()
+            });
+            fragments.push(fragment);
+
+            fragment = Ext.create(&quot;Teselagen.bio.sequence.dna.DigestionFragment&quot;, {
+                start: reSitesList[reSitesList.length-1].getStart(),
+                end: seqLength,
+                length: seqLength - reSitesList[reSitesList.length-1].getStart(),
+                startRE: reSitesList[reSitesList.length-1].getRestrictionEnzyme(),
+                endRE: null
+            });
+            fragments.push(fragment);
+        }
+
+        return fragments;
+    },
+
+<span id='Teselagen-bio-tools-DigestionCalculator-method-sortByStart'>    /**
+</span>     * @private
+     * Helper function for sorting two restriction cut sites.
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} x
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} y
+     * @return {Int} The sort order.
+     */
+    sortByStart: function(x, y) {
+        if(x.start &lt; y.start) {
+            return -1;
+        } else if(x.start &gt; y.start) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+});
+</pre>
+</body>
+</html>

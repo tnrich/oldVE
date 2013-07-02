@@ -138,8 +138,7 @@ function encoded_parts_list_file(model)
 
                     if (sequenceFile["sequenceFileFormat"]=="jbei-seq") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
                     if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
-                    //console.log(part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n');
-                    out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+                    out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
                 {
@@ -198,7 +197,7 @@ function encoded_target_part_order_list_file(model,method)
                     fas = bin.fases[partKey];
                     if(fas === 'None') fas = '';
                     fro = (bin['fro'] === 'None') ? '' : bin['fro'];
-                    direction = (part["directionForward"] === 'true') ? 'forward' : '';
+                    direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
                     dsf = (bin['dsf'] === false) ? '' : '';
                     extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
                     extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
@@ -214,7 +213,7 @@ function encoded_target_part_order_list_file(model,method)
         }
         else
         {
-            direction = (bin.parts[0]["directionForward"] === 'true') ? 'forward' : '';
+            direction = (bin["directionForward"] === 'true') ? 'forward' : '';
             //fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
             fas = bin.fases[0];
             if(fas === 'None') fas = '';

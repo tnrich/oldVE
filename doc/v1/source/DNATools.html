@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+<span id='Teselagen-bio-sequence-DNATools'>/**
+</span> * @class Teselagen.bio.sequence.DNATools
+ * Main class used to create DNA sequences. See Teselagen.bio.sequence.symbols.NucleotideSymbol.
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ */
+Ext.define(&quot;Teselagen.bio.sequence.DNATools&quot;, {
+	requires: [&quot;Teselagen.bio.sequence.alphabets.DNAAlphabet&quot;, 
+		    &quot;Teselagen.bio.sequence.common.Sequence&quot;, 
+		    &quot;Teselagen.bio.sequence.common.SymbolList&quot;, 
+		    &quot;Teselagen.bio.sequence.dna.DNASequence&quot;, 
+		    &quot;Teselagen.bio.sequence.symbols.IllegalSymbolException&quot;],
+
+        singleton: true,
+
+        constructor: function() {
+            this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+        },
+<span id='Teselagen-bio-sequence-DNATools-method-createDNA'>		/**
+</span>		 * Creates SymbolList from DNA sequence
+		 * @param  {String} pDNASequence A DNA sequence
+		 * @return {SymbolList}              A symbol lits
+		 */
+		createDNA: function(pDNASequence){
+			var DNASequence = pDNASequence.toLowerCase();
+            var characters = DNASequence.split(&quot;&quot;);
+			var symbols = [];
+
+			for (var i = 0; i &lt; DNASequence.length; i++) {
+				var symbol = this.DNAAlphabet.symbolMap(characters[i]);
+				if (symbol == null) {
+					//Teselagen.bio.sequence.symbols.IllegalSymbolException.raise(&quot;Failed to find complement for symbol '&quot; + symbol.value + &quot;.'&quot;);
+				} else {
+					symbols.push(symbol);
+				}
+			};
+
+			return Ext.create(&quot;Teselagen.bio.sequence.common.SymbolList&quot;, {
+				symbols: symbols,
+				alphabet: &quot;Teselagen.bio.sequence.alphabets.DNAAlphabet&quot;
+			});
+		},
+
+<span id='Teselagen-bio-sequence-DNATools-method-createDNASequence'>		/**
+</span>		 * Creates a DNA Sequence from an input Sequence
+		 * @param  {String} pName        The name of the Sequence
+		 * @param  {String} pDNASequence the DNA sequence
+		 * @return {DNASequence}              A created DNA sequence
+		 */
+		createDNASequence: function(pName, pDNASequence){
+			return Ext.create(&quot;Teselagen.bio.sequence.dna.DNASequence&quot;, {
+				symbolList: this.createDNA(pDNASequence),
+				name: pName
+			});
+		},
+
+<span id='Teselagen-bio-sequence-DNATools-method-complementSymbol'>		/**
+</span>		 * Retrieves the symbol's complement
+		 * @param  {Symbol} pSymbol An input symbol
+		 * @return {Symbol}         The input symbol's complement
+		 */
+		complementSymbol: function(pSymbol){
+			switch(pSymbol.getValue()) {
+				case this.DNAAlphabet.a.getValue():
+					return this.DNAAlphabet.t;
+				case this.DNAAlphabet.t.getValue():
+					return this.DNAAlphabet.a;
+				case this.DNAAlphabet.g.getValue():
+					return this.DNAAlphabet.c;
+				case this.DNAAlphabet.c.getValue():
+					return this.DNAAlphabet.g;
+				case this.DNAAlphabet.y.getValue():
+					return this.DNAAlphabet.r;
+				case this.DNAAlphabet.r.getValue():
+					return this.DNAAlphabet.y;
+				case this.DNAAlphabet.s.getValue():
+					return this.DNAAlphabet.s;
+				case this.DNAAlphabet.w.getValue():
+					return this.DNAAlphabet.w;
+				case this.DNAAlphabet.k.getValue():
+					return this.DNAAlphabet.m;
+				case this.DNAAlphabet.m.getValue():
+					return this.DNAAlphabet.k;
+				case this.DNAAlphabet.b.getValue():
+					return this.DNAAlphabet.v;
+				case this.DNAAlphabet.v.getValue():
+					return this.DNAAlphabet.b;
+				case this.DNAAlphabet.d.getValue():
+					return this.DNAAlphabet.h;
+				case this.DNAAlphabet.h.getValue():
+					return this.DNAAlphabet.d;
+				case this.DNAAlphabet.n.getValue():
+					return this.DNAAlphabet.n;
+				case this.DNAAlphabet.getGap().getValue():
+					return this.DNAAlphabet.getGap();
+				default:
+					Teselagen.bio.sequence.symbols.IllegalSymbolException.raise(&quot;Failed to find complement for symbol '&quot; + symbol.value + &quot;.'&quot;);
+			}
+		},
+
+<span id='Teselagen-bio-sequence-DNATools-method-complement'>		/**
+</span>		 * Retrieves the complement for a SymbolList
+		 * @param  {SymbolList} pSymbolList an input symbol list
+		 * @return {SymbolList}             The input's complement strand.
+		 */
+		complement: function(pSymbolList){
+			var symbols = pSymbolList.getSymbols();
+			var complementSymbols = [];
+
+			if (symbols.length &gt; 0) {
+				for (var i = 0; i &lt; symbols.length; i++) {
+
+					complementSymbols.push(this.complementSymbol(symbols[i]));
+				};
+			};
+
+			return Ext.create(&quot;Teselagen.bio.sequence.common.SymbolList&quot;, {
+				symbols: complementSymbols,
+				alphabet: &quot;Teselagen.bio.sequence.alphabets.DNAAlphabet&quot;
+			});
+		},
+
+<span id='Teselagen-bio-sequence-DNATools-method-reverseComplement'>		/**
+</span>		 * Reverse complement of the input symbol list
+		 * @param  {SymbolList} pSymbolList An input symbol List
+		 * @return {SymbolList}            The reverse complement of the
+		 */
+		reverseComplement: function(pSymbolList){
+			var symbols = pSymbolList.getSymbols();
+			var reverseComplementSymbols = [];
+			for (var i = symbols.length - 1; i &gt;= 0; --i){
+				reverseComplementSymbols.push(this.complementSymbol(symbols[i]));
+			}
+
+
+			return Ext.create(&quot;Teselagen.bio.sequence.common.SymbolList&quot;, {
+				symbols: reverseComplementSymbols,
+				alphabet: &quot;Teselagen.bio.sequence.alphabets.DNAAlphabet&quot;
+			});
+		},	
+});
+</pre>
+</body>
+</html>

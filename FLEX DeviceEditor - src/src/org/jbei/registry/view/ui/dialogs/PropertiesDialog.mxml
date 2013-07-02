@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="{Math.min(725, parentApplication.width)}" 
+	height="200"
+    title="Properties"
+	showCloseButton="true"
+	close="exit()">
+    
+    <mx:HBox width="100%" height="100%"  left="10" right="10" top="10" bottom="10">
+        <mx:VBox width="50%" height="100%">
+            <mx:CheckBox id="digestRuleCheckBox" label="Enable digest rule" selected="true" mouseOver="showDigestRuleInfo()" click="onDigestRuleCheckBoxClicked()"/>
+            <mx:Spacer height="100%"/>
+            <mx:HRule width="100%"/>
+            <mx:TextArea borderThickness="0" editable="false" width="100%" verticalScrollPolicy="off" text="Mouse over a property to display information about it in the text area to the right."/>
+        </mx:VBox>
+        <mx:TextArea id="ruleDescriptionArea" width="50%" height="100%" editable="false" paddingRight="5" paddingBottom="5"/>
+    </mx:HBox>
+    
+	<mx:Script>
+		<![CDATA[
+            import mx.managers.PopUpManager;
+            
+            public static const DIGEST_RULE_PROPERTY_CHANGED:String = "EnableDigestRuleClicked";
+            
+            private function showDigestRuleInfo():void
+            {
+                ruleDescriptionArea.text = "The digest rule prevents parts with forced assembly strategy " +
+                    "set to \"DIGEST\" from being in any column but the first column of a collection.";
+            }
+            
+            private function onDigestRuleCheckBoxClicked():void
+            {
+                dispatchEvent(new Event(DIGEST_RULE_PROPERTY_CHANGED));
+            }
+	
+			private function exit():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+	
+			]]>
+	</mx:Script>
+	
+		
+</mx:TitleWindow>

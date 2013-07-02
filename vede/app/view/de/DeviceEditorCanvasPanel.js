@@ -21,6 +21,7 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
         cls: 'designGrid',
         minWidth: 3000,
         autoScroll: true,
+        overflow: 'auto',
         border: 0,
         layout: {
             type: 'column'

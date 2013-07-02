@@ -25,6 +25,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
     titleCollapse: false,
     removePanelHeader: false,
     resizable: true,
+    autoScroll: true,
     width: 100,
     layout: {
         deferredRender: false,
@@ -312,6 +313,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             layout: 'fit',
                             allowDeselect: true,
+                            autoScroll: true,
                             columnLines: true,
                             minHeight:132,
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
@@ -477,11 +479,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
             bodyCls: 'j5InfoTab-body',
             disabled: true,
             preventHeader: true,
+            autoScroll: true,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            autoScroll: false,
             margin: "5px 0px 5px 0px",
             items: [
                 {

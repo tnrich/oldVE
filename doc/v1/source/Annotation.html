@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-common-Annotation'>/**
+</span> * @class Teselagen.bio.sequence.common.Annotation
+ * 
+ * The Annotation class contains functions that processes data about locations
+ * indices are [start, end)
+ * 
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ * @author Timothy Ham (original author)
+ */
+Ext.define(&quot;Teselagen.bio.sequence.common.Annotation&quot;, {
+	requires: [&quot;Teselagen.bio.sequence.common.Location&quot;, &quot;Teselagen.bio.BioException&quot;],
+    circularAdjustment: 0,	
+<span id='Teselagen-bio-sequence-common-Annotation-method-constructor'>	/**
+</span>	 * Constructor
+	 * @param start Annotation start
+	 * @param  end Annotation end
+	 */
+	constructor: function(inData){
+		var start;
+		var end;
+        start = inData.start || 0;
+        end = inData.end || 0;	
+
+		var initialLocation = Ext.create(&quot;Teselagen.bio.sequence.common.Location&quot;, {
+			start: start,
+			end: end
+		});
+
+		var locations = [];
+		locations.push(initialLocation);
+
+		var BioException = Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+					message : &quot;Cannot set start when multiple Locations exist&quot;
+				}); 
+<span id='Teselagen-bio-sequence-common-Annotation-method-getStart'>		/**
+</span>		 * Returns the start of the annotation
+		 * @return {Integer} the start of the annotation
+		 */
+		this.getStart = function(){
+			if ( locations.length &gt; 0 ) {
+				return locations[0].getStart();
+			} else {
+				return -1;
+			}
+		}
+		
+<span id='Teselagen-bio-sequence-common-Annotation-method-setStart'>		/**
+</span>		 * Allows one to set the start of the annotation
+         * @method setStart
+		 * @param {Integer} pStart is the new start.
+		 */
+		this.setStart = function(pStart){
+			start = pStart;
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-setOneStart'>		/**
+</span>		 * Allows one to set the first start in an annotation, unless there is more than one start.
+		 * @method setOneStart
+		 * @param {Integer} pStart sets the new start of the annotation only if there is one location.
+		 */
+		this.setOneStart = function(pStart){
+			if ( locations.length === 1 ) {
+				locations[0].setStart(pStart);
+			} else {	
+				console.log(&quot;You've found an error!&quot;);		
+				
+		throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+					message : &quot;Cannot set start when multiple Locations exist&quot;
+				}); 
+			}
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-getEnd'>		/**
+</span>		 * Returns the end of the annotation.
+		 * @method getEnd
+		 * @return {Integer} returns the end of the annotation.
+		 */
+		this.getEnd = function(){
+			if (locations.length &gt; 0){
+				return locations[locations.length - 1].getEnd();
+			}
+			else {
+				return 1;
+			}
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-setEnd'>		/**
+</span>		 * Allows one to set the end of the annotation.
+		 * @method setEnd
+		 * @param {Integer} pEnd sets the end of the annotation.
+		 */
+		this.setEnd= function(pEnd){
+			end = pEnd;
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-setOneEnd'>		/**
+</span>		 * Allows one to set the end of the annotation.
+		 * @method setOneEnd
+		 * @param {Integer} pEnd sets the end of the annotation only if there is one location.
+		 */
+		this.setOneEnd = function(pEnd){
+			if  ( locations.length === 1 ) {
+				locations[0].setEnd(pEnd);
+			} else{
+		throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+					message : &quot;Cannot set start when multiple Locations exist&quot;
+				}); 
+			}
+
+		}
+<span id='Teselagen-bio-sequence-common-Annotation-method-getLocations'>		/**
+</span>		 * Returns the locations within the annotation.
+		 * @method getLocations
+		 * @return {Locations} returns a list of the annotation's locations.
+		 */
+		this.getLocations = function(){
+			return locations;
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-setLocations'>		/**
+</span>		 * Allows one to set the locations of the annotation.
+		 * @method setLocations
+		 * @param {Location[]} pLocations sets the new list of locations.
+		 */
+		this.setLocations = function(pLocations){
+		    locations = [];	
+            locations = pLocations;
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-contains'>		/**
+</span>		 * Calculates whether one annotation is contained within another.
+		 * @method contains
+		 * @param  {Annotation} pAnnotation is an input annotation.
+		 * @return {Boolean} returns a boolean representing whether one annotation is contained within another.
+		 */
+		this.contains = function(pAnnotation){
+			var result = false; 
+			//First comparison tests whether this annotation is non-circular. 
+			//Second comparison tests whether the input annotations is non-circular.
+			//Non-circular pieces of DNA will have their starts before their ends.
+			
+			//case 1
+			if (this.getStart() &lt;= this.getEnd()) {
+				//case 1a
+				if (pAnnotation.getStart() &lt;= pAnnotation.getEnd()) {
+					//case 1a result 
+					result = ((this.getStart() &lt;= pAnnotation.getStart()) &amp;&amp; (this.getEnd() &gt;= pAnnotation.getEnd()));
+					//console.log(this.getStart() + &quot;  should be less than or equal to  &quot; + pAnnotation.getEnd() + &quot; . And &quot; + this.getEnd() + &quot; should be greather than or equal to &quot; + pAnnotation.getEnd());
+				};
+			//case 2
+			} else {
+				//case 2a
+				//if annotation start is less than annotation end, 
+				//determine whether the input end is inside the end or the input start is inside the start
+				if (pAnnotation.getStart() &lt;= pAnnotation.getEnd()) {
+					result = ((pAnnotation.getEnd() &lt;= this.getEnd()) || (pAnnotation.getStart() &gt;= this.getStart()));
+					//console.log(pAnnotation.getEnd() + &quot;  should be less than or equal to  &quot; + this.getEnd() + &quot;  or  &quot; + pAnnotation.getStart() + &quot; should be greather than or equal to &quot; + this.getStart());
+				//case 2b
+				} else{ 
+					//if the start is less than the input start and the end is larger than the input end, input is inside
+					result = ((start &lt;= pAnnotation.getStart()) &amp;&amp; (end &gt;= pAnnotation.getEnd()));
+					//console.log(this.getStart() + &quot;  should be less than or equal to  &quot; + pAnnotation.getStart() + &quot;  and  &quot; + this.getEnd() + &quot; should be greather than or equal to &quot; + pAnnotation.getEnd());
+				}
+			}
+			
+
+			return result;
+		}
+		
+<span id='Teselagen-bio-sequence-common-Annotation-method-isMultiLocation'>		/**
+</span>		 * Calculates whether an annotation has more than one location.
+		 * @method isMultiLocation
+		 * @return {Boolean} returns a boolean representing whether the annotation contains more than one annotation.
+		 */
+		this.isMultiLocation = function(){
+			if ( locations.length &gt;= 2 ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+<span id='Teselagen-bio-sequence-common-Annotation-method-shift'>		/**
+</span>		 * Shifts the locations.
+		 * @method shift
+		 * @param  {Integer} pShiftBy represents amount by which you want to shift the locations
+		 * @param  {Integer} pMaxLength is the maximum length of the sequence
+		 * @param  {Boolean} pCircular is whether the sequence is circular or not
+		 */
+		this.shift = function (pShiftBy, pMaxLength, pCircular){
+			if ( pShiftBy &gt; (pMaxLength - 1)) {
+				throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+					message : &quot;Cannot shift by greater than maximum length&quot;
+				}); 
+			}
+
+			var offset = locations[0].getStart();
+			var tempLocations = getNormalizedLocations(pMaxLength);
+          
+			 for (var i = 0; i &lt; tempLocations.length; ++i ){
+                var newStart = tempLocations[i].getStart() + pShiftBy;
+				tempLocations[i].setStart(newStart);
+                
+                var newEnd = tempLocations[i].getEnd() + pShiftBy;
+				tempLocations[i].setEnd(newEnd);
+            }
+
+			locations = deNormalizeLocations(tempLocations, locations[0].getStart(), pMaxLength, pCircular, 0);
+		}
+			 
+		
+<span id='Teselagen-bio-sequence-common-Annotation-method-insertAt'>		/**
+</span>		 * Inserts basepairs and updates locations. Alters only the affected locations.
+		 * @method insertAt
+		 * @param  {Integer} pPosition is the position of the insert
+		 * @param  {Integer} pInsertLength is the length of the insert
+		 * @param  {Integer} pMaxLength the max length of the locations
+		 * @param  {Integer} pCircular whether the annotation is circular or not
+		 */
+		this.insertAt = function (pPosition, pInsertLength, pMaxLength, pCircular){
+			var shifting = 0;
+			var tempEnd;
+			var offset = locations[0].getStart();
+
+			var normalizedPosition = pPosition - offset;
+			var circularAdjustment = 0;
+
+			if (end &lt; start &amp;&amp; pPosition &lt; end) {
+				// insert is happening at wrapped around tail end of feature
+				normalizedPosition += pMaxLength;
+				circularAdjustment = -insertLength;
+			}
+
+			var tempLocations = getNormalizedLocations(pMaxLength);
+
+			/* For each location, if insertion position is before the location, shift the current 
+			location and all the locations after that. If the position is within the 
+			location, resize that location and shift back the rest.
+			*/
+			for (var i = 0; i &lt; tempLocations.length; i++ ){
+				var currentLocation = tempLocations[i];
+				if ( shifting == 0 ) { //search phase
+
+					if (normalizedPosition &gt; currentLocation.getStart() &amp;&amp; normalizedPosition &lt; currentLocation.getEnd() ) {
+						//the position is within the location. change this location and shift the rest.
+						//Note: if the location is at the start, it isn't &quot;within&quot; the location
+						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
+						shifting = pInsertLength;
+						continue;
+					} else if ( normalizedPosition &lt;= currentLocation.getStart() ){ //DW 7/25 added = sign
+						//shift this and the rest
+						tempLocations[i].setStart(currentLocation.getStart() + pInsertLength);
+						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
+						shifting = pInsertLength;
+						continue;
+					}
+				} else {//shifting locations
+					tempLocations[i].setStart(currentLocation.getStart() + pInsertLength);
+					tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
+				}
+			}
+
+			locations = deNormalizeLocations(tempLocations, offset, pMaxLength + pInsertLength, pCircular, circularAdjustment);
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-deleteAt'>		/**
+</span>		 * Delete basepairs and change locations. Alter only the affected location
+		 * @method deleteAt
+		 * @param  {Integer} pCutStart  the start of the cut
+		 * @param  {Integer} pCutLength the length of the cut
+		 * @param  {Integer} pMaxLength the max length of the locations
+		 * @param  {Boolean} pCircular  whether the annotation is circular
+		 */
+		this.deleteAt = function(pCutStart, pCutLength, pMaxLength, pCircular){
+			if (pCutLength &lt; 1) {
+                return;
+			}
+
+			var expectedNewLength = -1;
+
+			var shifting = 0;
+			var offset = locations[0].getStart();
+			var normalizedCutStart = pCutStart - offset;
+			var circularAdjustment = 0;
+
+            var hasCircularLocation = [];  
+            hasCircularLocation = Ext.Array.filter(locations, function(location){
+                //console.log(&quot;The location properties (start, end): &quot; + location.getStart()+ &quot;, &quot; + location.getEnd());
+                    return location.getStart() &gt; location.getEnd();
+            });
+            /*
+            console.log(&quot;pCircular is: &quot; + pCircular);
+            console.log(hasCircularLocation);
+            console.log(pCutStart);
+            */
+
+			if (pCircular &amp;&amp; pCutStart &gt;= 0 &amp;&amp; hasCircularLocation &amp;&amp; hasCircularLocation.length &gt; 0 &amp;&amp; pCutStart &lt; hasCircularLocation[0].getEnd()) {
+				normalizedCutStart += pMaxLength;
+				circularAdjustment = pCutLength;
+             			}
+            //console.log(&quot;Setting circularAdjustment to: &quot; + circularAdjustment);
+            
+            this.circularAdjustment = circularAdjustment;
+
+			var newMinimum = 0;
+			var normalizedCutEnd = normalizedCutStart + pCutLength;
+            			var tempLocations = getNormalizedLocations(pMaxLength);
+            //console.log(&quot;normalized cut end: &quot; + normalizedCutEnd);
+
+			var normalizedStart = tempLocations[0].getStart();
+			var normalizedEnd  = tempLocations[tempLocations.length - 1].getEnd();
+
+			if (normalizedCutStart &lt; normalizedStart &amp;&amp; normalizedCutEnd &lt;= normalizedStart) {
+				expectedNewLength = normalizedEnd - normalizedStart;
+			} else if (normalizedCutStart &lt; normalizedStart &amp;&amp; normalizedCutEnd &lt;= normalizedEnd) {
+				expectedNewLength = normalizedEnd - (normalizedCutEnd);
+			} else if (normalizedCutStart &gt;= normalizedStart &amp;&amp; normalizedCutEnd &lt;= normalizedEnd) {
+				expectedNewLength = normalizedEnd -normalizedStart - pCutLength;
+			} else if (normalizedCutStart &lt;= normalizedEnd &amp;&amp; normalizedCutEnd &gt;= normalizedEnd) {
+				expectedNewLength = normalizedCutStart - normalizedStart;
+			}
+
+			if (normalizedCutStart &lt; tempLocations[0].getStart()) {
+				if (normalizedCutStart + pCutLength &gt;= tempLocations[0].getStart()) {
+					newMinimum = normalizedCutStart;
+				} else if (normalizedCutStart + pCutLength &lt;= tempLocations[0].getStart()) {
+					newMinimum = tempLocations[0].getStart() - pCutLength;
+				}
+			} else {
+				newMinimum = tempLocations[0].getStart();
+			}
+
+            //console.log(&quot;Normalized cut end &quot; + normalizedCutEnd + &quot; and location start&quot; + tempLocations[0].getStart());
+			// if deletion happened before feature, shift only, no delete
+			if (normalizedCutEnd &lt;= tempLocations[0].getStart()) {
+				for (var j = 0; j &lt; tempLocations.length; j++) {
+					//console.log(&quot;Location (&quot;+j + &quot;, End before: &quot; + tempLocations[j].getEnd()); //DW
+					tempLocations[j].setStart( tempLocations[j].getStart() - pCutLength);
+					tempLocations[j].setEnd( tempLocations[j].getEnd() - pCutLength);
+					//console.log(&quot;End after: &quot; + tempLocations[j].getEnd()); //DW
+				}
+			} else {
+				// do deletions
+				var currentLocation;
+	
+				shifting = 0;
+				
+				for (var i = 0; i &lt; tempLocations.length; i++) {
+					var currentLocation = tempLocations[i];
+                    //console.log(&quot;Templocation end: &quot; + tempLocations[i].getEnd());
+					if (shifting == 0) {
+						if (normalizedCutStart &gt;= tempLocations[i].getEnd()) {
+							continue;
+						} else if (normalizedCutEnd &lt;= tempLocations[i].getStart() &amp;&amp; normalizedCutStart &lt;= tempLocations[i].getStart() &amp;&amp; pCutLength &gt; 0) { 
+							// cuts are left, but is all before this location. Switch to shifting
+							tempLocations[i].setStart( tempLocations[i].getStart() - pCutLength);
+							tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
+							shifting = pCutLength;
+						} else if (normalizedCutEnd &lt;=tempLocations[i].getEnd()) {
+							if (normalizedCutStart &lt; tempLocations[i].getStart()) {
+                                //console.log(&quot;Making last cut&quot;);
+                                logFeatures();
+                                //console.log(&quot;Cut start before and ends within this location&quot;);
+								// cut starts before and ends within this location
+								tempLocations[i].setStart( normalizedCutStart );
+								// currentLocation.start = normalizedCutStart;
+								tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
+								// currentLocation.end -= pCutLength;
+                                //console.log(&quot;Deletion made&quot;);
+                                logFeatures();
+
+								shifting = pCutLength;
+							} else if (normalizedCutStart &gt;= tempLocations[i].getStart()) { 
+								// cut entirely within this location
+								// currentLocation.end -= pCutLength;
+                                //console.log(&quot;Cut entirely within this location&quot;);
+								tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
+								shifting = pCutLength;
+							}
+						} else if (normalizedCutEnd &gt; currentLocation.getEnd()) { 
+							if (normalizedCutStart &lt; currentLocation.getStart()) { 
+								// cut starts before this location, and ends after this location
+								tempLocations[i].setStart( normalizedCutStart );
+								tempLocations[i].setEnd( normalizedCutStart );
+							} else if (normalizedCutStart &gt;= currentLocation.getStart()) { 
+								// cut starts within this location and continues after this location
+								tempLocations[i].setEnd( normalizedCutStart );
+							}
+						}
+					} else { // shifting
+						tempLocations[i].setStart( tempLocations[i].getStart() - shifting);
+						tempLocations[i].setEnd( tempLocations[i].getEnd() - shifting);
+					}
+				} // end for (var i = 0; i &lt; tempLocations.length; i++) {
+			}
+
+			// remove zero length locations and combine locations that are next to each other
+			var combinedLocations = [];
+			for (i = 0; i &lt; tempLocations.length; i++) {
+				if (combinedLocations.length == 0) {
+					if (tempLocations[i].getLength() &gt;= 0) {
+						combinedLocations.push(tempLocations[i]);	
+					}
+					continue;
+				}
+				if (combinedLocations[combinedLocations.length - 1].getEnd() == tempLocations[i].getStart()) {
+					combinedLocations[combinedLocations.length - 1].setEnd( tempLocations[i].getEnd() );
+				} else if (tempLocations[i].getLength() &gt; 0) {
+					combinedLocations.push(tempLocations[i]);
+				}
+			}
+			
+			// first and last location must fill the length of the feature.
+			if (combinedLocations[0].getStart() &gt; newMinimum) {
+				combinedLocations[0].setStart( newMinimum );
+			}
+			
+			if (combinedLocations[combinedLocations.length - 1].getEnd() != (newMinimum + expectedNewLength) ){
+				combinedLocations[combinedLocations.length - 1].setEnd( newMinimum + expectedNewLength );
+			}
+			var changedLength = pMaxLength - pCutLength;
+			locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, this.circularAdjustment);
+            //console.log(&quot;Locations denormalized&quot;);
+            logFeatures(locations);
+          function logFeatures(pLocations){ Ext.each(pLocations, function(location){
+                //console.log(&quot;The location properties (start, end): &quot; + location.getStart()+ &quot;, &quot; + location.getEnd());
+            });}
+ 
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-reverseLocations'>		/**
+</span>		 * Reverses the locations
+		 * @method reverseLocations
+		 * @param  {Integer} pNewStartIndex the new start index of teh locationz
+		 * @param  {Integer} pNewMaxLength the max length of the locations
+		 * @param  {Boolean} pCircular whether the annotations are circular
+		 */
+		this.reverseLocations = function (pNewStartIndex, pNewMaxLength, pCircular){
+			var tempLocations = getNormalizedLocations(pNewMaxLength);
+			tempLocations = reverseNormalizedLocations(tempLocations);
+			tempLocations = deNormalizeLocations(tempLocations, pNewStartIndex, pNewMaxLength, pCircular, 0);
+			
+			locations = tempLocations;
+		}
+
+		var getNormalizedLocations = function(maxLength){
+			if (locations.length == 0) {
+				return null;
+			}
+			
+			var normalizedLocations = [];
+			var offset = locations[0].getStart();
+			var newStart = 0;
+			var newEnd = 0;
+			var location;
+			
+			for (var i= 0; i &lt; locations.length; i++) {
+				location = locations[i];	
+				newStart = location.getStart() - offset;
+				if (newStart &lt; 0) {
+					newStart += maxLength;
+				}
+				newEnd = location.getEnd() - offset;
+				if (newEnd &lt; 0) {
+					newEnd += maxLength;
+				}
+				normalizedLocations.push(Ext.create(&quot;Teselagen.bio.sequence.common.Location&quot;, {
+					start: newStart,
+					end: newEnd
+				}));
+
+			}
+			return normalizedLocations;
+		}
+<span id='Teselagen-bio-sequence-common-Annotation-method-deNormalizeLocations'>		/**
+</span>		 * Denormalize the location form zero-based to offset. Calculates circularity (if needed)
+		 * @method deNormalizeLocations
+		 * @param  {Location[]} pTempLocations is the array of locations you want to denormalize
+		 * @param  {Integer} pOffset the offset of the locations
+		 * @param  {Integer} pMaxLength is the max length of the locations   
+		 * @param  {Boolean} pCircular if the annotation is circular
+		 * @param  {Integer} pCircularAdjustment is adjustment that needs to be made because of circularity
+		 * @return {Location[]} returns denormalized locations
+		 */
+		function deNormalizeLocations(pTempLocations, pOffset, pMaxLength, pCircular, pCircularAdjustment){
+			if (pTempLocations.length === 0) {
+				return null;
+			}
+
+			var result = [];
+			var newStart;
+			var newEnd;
+			var location;
+
+			for (var i = 0; i &lt; pTempLocations.length; i++) {
+				location = pTempLocations[i];
+				newStart = pTempLocations[i].getStart() + pOffset;
+                /*
+			    console.log(&quot;Location start: &quot; + location.getStart());
+			    console.log(&quot;Offset: &quot; + pOffset);
+                */
+                //console.log(&quot;newStart: &quot; + newStart);
+                /*
+                console.log(&quot;pMaxLength = &quot; + pMaxLength);
+                console.log(&quot;pCircularAdjustment = &quot; + pCircularAdjustment);*/
+	            if (pCircular &amp;&amp; newStart &gt; pMaxLength) {
+					newStart = newStart - (pMaxLength + pCircularAdjustment);
+				} else if (pCircular) {
+					newStart -= pCircularAdjustment;
+				} else if (newStart == pMaxLength){
+                    newStart -= pMaxLength;
+                } 
+				
+				newEnd = location.getEnd() + pOffset;
+                if (pCircular &amp;&amp; newEnd &gt; pMaxLength) {
+					newEnd = newEnd - (pMaxLength + pCircularAdjustment);
+                    
+				} else if (pCircular) {
+					newEnd -= pCircularAdjustment;
+				}
+				
+				// On rare occasions, the calculated value is two circular distances away. Handle this case.
+				if ( ( pCircular &amp;&amp; (location.getStart() + pOffset == pMaxLength ) )&amp;&amp; ( (location.getEnd() + pOffset) == (pMaxLength + pMaxLength )  ) ) {
+					newStart = 0;
+					newEnd = pMaxLength;
+				}
+				
+				if (pCircular &amp;&amp; newStart &lt; 0) {
+					newStart += pMaxLength;
+				}
+				
+				if (pCircular &amp;&amp; newEnd &lt; 0) {
+					newEnd += pMaxLength;
+				}
+
+                //console.log(&quot;The newEnd is: &quot; + newEnd);
+                //console.log(&quot;The newStart is: &quot; + newStart);
+				result.push(Ext.create(&quot;Teselagen.bio.sequence.common.Location&quot;, {
+					start: newStart,
+					end: newEnd	
+				}));
+			}
+			return result;
+
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-reverseNormalizedLocations'>		/**
+</span>		 * Reverses locations. This function assumes normalized locations, meaning it will not
+		 * handle locations that go over zero properly, although it will calculate non-zero
+		 * offset.
+		 * @private 
+		 */
+		function reverseNormalizedLocations(tempLocations){
+			if (tempLocations.length === 0 ){
+				return null;
+			}
+
+			var result = [];
+			var offset = tempLocations[0].getStart();
+			var location;
+			var locationLength;
+			var featureLength = tempLocations[tempLocations.length - 1].getEnd() - offset;
+			var newStart;
+
+			for (var i = tempLocations.length - 1; i &gt; -1; i--) {
+				location = tempLocations[i];
+				locationLength = location.getEnd() - location.getStart();
+				newStart = featureLength - location.getEnd();
+				newEnd   = newStart + locationLength; //DW ADDED THIS LINE 7/25/2012
+
+				result.push(Ext.create(&quot;Teselagen.bio.sequence.common.Location&quot;, {
+					start: newStart,
+					end: newEnd	
+				}));
+			}
+			
+			return result;
+
+		}
+
+<span id='Teselagen-bio-sequence-common-Annotation-method-getOverlappingIndex'>		/**
+</span>		 * Gets the index of the location
+		 * @private
+		 * @param  {Integer} index the index
+		 * @return {Integer} The index of Location. -1 if not within a Location.
+		 */
+		function getOverlappingIndex (index){
+			var result = -1;
+			for (var index; index &lt; locations.length; index++) {
+				var location = locations[index];
+				if (index &gt;= location.getStart() &amp;&amp; index &lt;= location.getEnd()) {
+					result = index;
+					break;
+				} 
+			}
+			
+			return result;
+
+		} 
+
+		return this;
+	},
+
+});
+</pre>
+</body>
+</html>

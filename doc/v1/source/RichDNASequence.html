@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-dna-RichDNASequence'>/**
+</span> * Rich DNA sequence
+ * @class Teselagen.bio.sequence.dna.RichDNASequence
+ */
+Ext.define(&quot;Teselagen.bio.sequence.dna.RichDNASequence&quot;, {
+	extend: &quot;Teselagen.bio.sequence.dna.DNASequence&quot;,
+	require: [&quot;Teselagen.bio.sequence.common.SymbolList&quot;, &quot;Teselagen.bio.BioException&quot;, &quot;Teselagen.bio.sequence.dna.Feature&quot;],
+
+<span id='Teselagen-bio-sequence-dna-RichDNASequence-method-constructor'>	/**
+</span>	 * @param {Object} inData inData.features : Teselagen.bio.sequence.dna.Feature[]
+	 */
+	constructor: function(inData){
+		var features;
+		if (inData) {
+			features = inData.features;
+			this.callParent([inData]);
+		} else{
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+
+		this.getFeatures = function(){
+			return features;
+		}
+
+		this.numberOfFeatures = function(){
+			return features.length;
+		}
+
+		this.addFeature = function(pFeature){
+			features.push(pFeature);
+		}
+
+		this.containsFeature= function(pFeature){
+			return features.indexOf(pFeature) &gt;= 0;
+		}
+
+		this.removeFeature = function(pFeature){
+			var index = features.indexOf(pFeature);
+			if (index == -1) {
+				Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+			};
+
+			features.splice(index, 1);
+		}
+	}
+});</pre>
+</body>
+</html>
