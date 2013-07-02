@@ -23286,7 +23286,7 @@ img {
 
 /* line 145, ../../../../sass/src/view/AppViewport.scss */
 .x-column-header-over {
-  background: #ECF0F1;
+  background: #F8F8F8;
 }
 
 /* line 149, ../../../../sass/src/view/AppViewport.scss */
@@ -23295,6 +23295,11 @@ img {
 }
 
 /* line 153, ../../../../sass/src/view/AppViewport.scss */
+.x-grid-body .x-grid-table-focused-first, .x-grid-with-row-lines .x-grid-table-selected-first {
+  border-top: 0 none !important;
+}
+
+/* line 157, ../../../../sass/src/view/AppViewport.scss */
 .x-tab-inner {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 700;
@@ -23302,12 +23307,12 @@ img {
   color: #333234;
 }
 
-/* line 160, ../../../../sass/src/view/AppViewport.scss */
+/* line 164, ../../../../sass/src/view/AppViewport.scss */
 .x-panel-body-default {
   border-color: #ECF0F1;
 }
 
-/* line 170, ../../../../sass/src/view/AppViewport.scss */
+/* line 174, ../../../../sass/src/view/AppViewport.scss */
 .x-btn,
 .x-btn-center,
 .x-btn .x-btn-center .x-btn-inner,
@@ -23320,7 +23325,7 @@ img {
   font-size: 12px;
 }
 
-/* line 176, ../../../../sass/src/view/AppViewport.scss */
+/* line 180, ../../../../sass/src/view/AppViewport.scss */
 .x-btn-default-small {
   background: #ECF0F1;
   border: 1px solid #E0E3E6;
@@ -23331,13 +23336,13 @@ img {
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-/* line 186, ../../../../sass/src/view/AppViewport.scss */
+/* line 190, ../../../../sass/src/view/AppViewport.scss */
 .x-btn-default-small-over {
   background: #E0E3E6;
   border-color: #E0E3E6;
 }
 
-/* line 191, ../../../../sass/src/view/AppViewport.scss */
+/* line 195, ../../../../sass/src/view/AppViewport.scss */
 .x-btn-default-toolbar-small {
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23345,48 +23350,41 @@ img {
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-/* line 198, ../../../../sass/src/view/AppViewport.scss */
+/* line 202, ../../../../sass/src/view/AppViewport.scss */
 .x-btn-default-toolbar-small-over {
   border: 1px solid #FDFDFD;
   background: #ECF0F1;
 }
 
-/* line 203, ../../../../sass/src/view/AppViewport.scss */
+/* line 207, ../../../../sass/src/view/AppViewport.scss */
 .x-btn-default-toolbar-small-menu-active {
   border: 1px solid #E0E3E6;
   background: #E0E3E6;
 }
 
-/* line 208, ../../../../sass/src/view/AppViewport.scss */
-.x-btn-default-toolbar-medium-over {
+/* line 212, ../../../../sass/src/view/AppViewport.scss */
+#VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-/* line 215, ../../../../sass/src/view/AppViewport.scss */
-.x-btn-default-toolbar-medium-over {
+/* line 219, ../../../../sass/src/view/AppViewport.scss */
+#VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
   border-color: #1585C5;
   background-image: none;
   background: #ECF0F1;
 }
 
-/* line 221, ../../../../sass/src/view/AppViewport.scss */
-.x-btn-default-toolbar-medium-active, .x-btn-default-toolbar-medium-menu-active, .x-btn-default-toolbar-medium-pressed {
+/* line 225, ../../../../sass/src/view/AppViewport.scss */
+#VectorEditorMainToolBar .x-btn-default-toolbar-medium-active, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-menu-active, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-pressed, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-focused, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-focus {
   border-color: #1585C5;
   background-image: none;
   background: #E0E3E6;
 }
 
-/* line 227, ../../../../sass/src/view/AppViewport.scss */
-.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-medium-focus {
-  border-color: white;
-  background-image: none !important;
-  background: none !important;
-}
-
-/* line 233, ../../../../sass/src/view/AppViewport.scss */
+/* line 231, ../../../../sass/src/view/AppViewport.scss */
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 500;
@@ -23394,7 +23392,7 @@ img {
   color: #111;
 }
 
-/* line 240, ../../../../sass/src/view/AppViewport.scss */
+/* line 238, ../../../../sass/src/view/AppViewport.scss */
 .x-form-text, textarea.x-form-field {
   background-image: none;
   border-color: #E0E3E6;
@@ -23404,12 +23402,12 @@ img {
   -webkit-transition: border-color .2s ease-in-out;
 }
 
-/* line 249, ../../../../sass/src/view/AppViewport.scss */
+/* line 247, ../../../../sass/src/view/AppViewport.scss */
 .x-form-focus, textarea.x-form-focus {
   border-color: #006CAB;
 }
 
-/* line 253, ../../../../sass/src/view/AppViewport.scss */
+/* line 251, ../../../../sass/src/view/AppViewport.scss */
 .x-boundlist-item {
   border-style: none;
   transition: all .2s ease-in-out;
@@ -23417,59 +23415,59 @@ img {
   -webkit-transition: all .2s ease-in-out;
 }
 
-/* line 260, ../../../../sass/src/view/AppViewport.scss */
+/* line 258, ../../../../sass/src/view/AppViewport.scss */
 .x-boundlist-item-over {
   background: #ECF0F1;
   border: 0 none;
 }
 
-/* line 265, ../../../../sass/src/view/AppViewport.scss */
+/* line 263, ../../../../sass/src/view/AppViewport.scss */
 .x-boundlist-selected {
   background: #E0E3E6;
   border: 0 none;
 }
 
-/* line 270, ../../../../sass/src/view/AppViewport.scss */
+/* line 268, ../../../../sass/src/view/AppViewport.scss */
 .x-tree-icon-leaf {
   background-size: 16px;
 }
 
-/* line 274, ../../../../sass/src/view/AppViewport.scss */
+/* line 272, ../../../../sass/src/view/AppViewport.scss */
 .x-tree-icon-parent, .x-grid-tree-node-expanded .x-tree-icon-parent {
   background-image: url(images/tree/cube.png);
   background-size: 16px;
 }
 
-/* line 279, ../../../../sass/src/view/AppViewport.scss */
+/* line 277, ../../../../sass/src/view/AppViewport.scss */
 .x-tree-lines .x-tree-elbow-end-plus, .x-tree-lines .x-tree-elbow-plus {
   background-image: url(images/tree/arrow-right.png);
   background-size: 16px;
 }
 
-/* line 284, ../../../../sass/src/view/AppViewport.scss */
+/* line 282, ../../../../sass/src/view/AppViewport.scss */
 .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-plus, .x-tree-lines .x-grid-tree-node-expanded .x-tree-elbow-end-plus {
   background-image: url(images/tree/arrow-down.png);
   background-size: 16px;
 }
 
-/* line 289, ../../../../sass/src/view/AppViewport.scss */
+/* line 287, ../../../../sass/src/view/AppViewport.scss */
 .x-tree-lines .x-tree-elbow-line, .x-tree-lines .x-tree-elbow, .x-tree-lines .x-tree-elbow-end {
   background: none;
 }
 
-/* line 293, ../../../../sass/src/view/AppViewport.scss */
+/* line 291, ../../../../sass/src/view/AppViewport.scss */
 .x-menu-icon-separator {
   border: 0 none;
   width: 0px;
 }
 
-/* line 298, ../../../../sass/src/view/AppViewport.scss */
+/* line 296, ../../../../sass/src/view/AppViewport.scss */
 .x-menu-icon-separator {
   height: 1px;
   border: solid 1px #dde5e7;
 }
 
-/* line 303, ../../../../sass/src/view/AppViewport.scss */
+/* line 301, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-row .x-grid-cell {
   padding: 5px;
   border-color: #E0E3E6;
@@ -23480,63 +23478,63 @@ img {
   cursor: pointer;
 }
 
-/* line 313, ../../../../sass/src/view/AppViewport.scss */
+/* line 311, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-no-row-lines .x-grid-row-focused .x-grid-cell-inner {
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-/* line 318, ../../../../sass/src/view/AppViewport.scss */
+/* line 316, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-cell-inner-treecolumn {
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-/* line 323, ../../../../sass/src/view/AppViewport.scss */
+/* line 321, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-header-ct {
   border: 0px;
   background: #ECF0F1;
 }
 
-/* line 328, ../../../../sass/src/view/AppViewport.scss */
+/* line 326, ../../../../sass/src/view/AppViewport.scss */
 .x-tab-default .x-tab-close-btn {
   background-image: url(images/ux/tab-default-close.png);
 }
 
-/* line 332, ../../../../sass/src/view/AppViewport.scss */
+/* line 330, ../../../../sass/src/view/AppViewport.scss */
 .x-tab-close-btn:hover {
   background-image: url(images/ux/tab-default-close.png);
 }
 
-/* line 336, ../../../../sass/src/view/AppViewport.scss */
+/* line 334, ../../../../sass/src/view/AppViewport.scss */
 .x-toolbar {
   border-top: 0px none;
 }
 
-/* line 340, ../../../../sass/src/view/AppViewport.scss */
+/* line 338, ../../../../sass/src/view/AppViewport.scss */
 .x-window-header-default .x-tool-img {
   background-color: none;
 }
 
-/* line 344, ../../../../sass/src/view/AppViewport.scss */
+/* line 342, ../../../../sass/src/view/AppViewport.scss */
 .x-form-trigger {
   border-bottom: 0px;
 }
 
-/* line 348, ../../../../sass/src/view/AppViewport.scss */
+/* line 346, ../../../../sass/src/view/AppViewport.scss */
 .x-column-header {
   border-right-color: #E0E3E6;
-  background: #ECF0F1;
+  background: #F8F8F8;
 }
 
-/* line 353, ../../../../sass/src/view/AppViewport.scss */
+/* line 351, ../../../../sass/src/view/AppViewport.scss */
 .x-column-header-text {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 600;
   color: #333234;
 }
 
-/* line 359, ../../../../sass/src/view/AppViewport.scss */
+/* line 357, ../../../../sass/src/view/AppViewport.scss */
 .x-mask-msg, .x-mask-msg div {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 500;
@@ -23548,12 +23546,12 @@ img {
   border-radius: 2px;
 }
 
-/* line 370, ../../../../sass/src/view/AppViewport.scss */
+/* line 368, ../../../../sass/src/view/AppViewport.scss */
 .x-mask {
   background: #E0E3E6;
 }
 
-/* line 374, ../../../../sass/src/view/AppViewport.scss */
+/* line 372, ../../../../sass/src/view/AppViewport.scss */
 .x-window-header-default-top {
   background: #333234 !important;
   box-shadow: none !important;
@@ -23563,24 +23561,24 @@ img {
   border-width: 0 !important;
 }
 
-/* line 383, ../../../../sass/src/view/AppViewport.scss */
+/* line 381, ../../../../sass/src/view/AppViewport.scss */
 .x-window-header-default {
   border-color: #333234;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
 
-/* line 389, ../../../../sass/src/view/AppViewport.scss */
+/* line 387, ../../../../sass/src/view/AppViewport.scss */
 .x-tool img {
   border-radius: 4px;
 }
 
-/* line 393, ../../../../sass/src/view/AppViewport.scss */
+/* line 391, ../../../../sass/src/view/AppViewport.scss */
 .x-tab-bar-top .x-tab-bar-body {
   border: 0 none;
 }
 
-/* line 397, ../../../../sass/src/view/AppViewport.scss */
+/* line 395, ../../../../sass/src/view/AppViewport.scss */
 .x-window-default {
   background: #F8F8F8;
   box-shadow: none;
@@ -23589,82 +23587,82 @@ img {
   border: 0 none !important;
 }
 
-/* line 405, ../../../../sass/src/view/AppViewport.scss */
+/* line 403, ../../../../sass/src/view/AppViewport.scss */
 .x-window-body-default, .x-message-box .x-window-body {
   border: 0;
   background: #F8F8F8;
 }
 
-/* line 410, ../../../../sass/src/view/AppViewport.scss */
+/* line 408, ../../../../sass/src/view/AppViewport.scss */
 .x-tip {
   background-color: rgba(51, 51, 51, 0.85);
   border: 0 none;
 }
 
-/* line 415, ../../../../sass/src/view/AppViewport.scss */
+/* line 413, ../../../../sass/src/view/AppViewport.scss */
 .x-tip-header, .x-tip-body, .x-form-invalid-tip-body {
   color: white;
 }
 
-/* line 419, ../../../../sass/src/view/AppViewport.scss */
+/* line 417, ../../../../sass/src/view/AppViewport.scss */
 .x-tip-header-text {
   color: #00b7ff;
 }
 
-/* line 423, ../../../../sass/src/view/AppViewport.scss */
+/* line 421, ../../../../sass/src/view/AppViewport.scss */
 .x-css-shadow {
   box-shadow: none !important;
 }
 
-/* line 427, ../../../../sass/src/view/AppViewport.scss */
+/* line 425, ../../../../sass/src/view/AppViewport.scss */
 .x-resizable-over .x-resizable-handle-east, .x-resizable-over .x-resizable-handle-west, .x-resizable-pinned .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-west {
   background-image: none;
   background: #E0E3E6;
 }
 
-/* line 432, ../../../../sass/src/view/AppViewport.scss */
+/* line 430, ../../../../sass/src/view/AppViewport.scss */
 .x-resizable-over .x-resizable-handle-south, .x-resizable-over .x-resizable-handle-north, .x-resizable-pinned .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-north {
   background-image: none;
   background: #E0E3E6;
 }
 
-/* line 437, ../../../../sass/src/view/AppViewport.scss */
+/* line 435, ../../../../sass/src/view/AppViewport.scss */
 .x-resizable-over .x-resizable-handle-northwest, .x-resizable-pinned .x-resizable-handle-northwest {
   background-image: none;
   background: #E0E3E6;
 }
 
-/* line 442, ../../../../sass/src/view/AppViewport.scss */
+/* line 440, ../../../../sass/src/view/AppViewport.scss */
 .x-resizable-over .x-resizable-handle-southwest, .x-resizable-pinned .x-resizable-handle-southwest {
   background-image: none;
   background: #E0E3E6;
 }
 
 /*Header*/
-/* line 450, ../../../../sass/src/view/AppViewport.scss */
+/* line 448, ../../../../sass/src/view/AppViewport.scss */
 #headerPanel, #headerPanel-body {
   height: 120px !important;
 }
 
-/* line 454, ../../../../sass/src/view/AppViewport.scss */
+/* line 452, ../../../../sass/src/view/AppViewport.scss */
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;
   background: none;
   color: rgba(109, 109, 109, 0.66);
 }
 
-/* line 460, ../../../../sass/src/view/AppViewport.scss */
+/* line 458, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel {
   margin-left: 10px;
 }
 
-/* line 464, ../../../../sass/src/view/AppViewport.scss */
+/* line 462, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel .x-tab-bar-top .x-tab-bar-body, .x-tab-bar, .x-tab-bar-strip-default {
   background: none;
   border: 0 none;
 }
 
-/* line 469, ../../../../sass/src/view/AppViewport.scss */
+/* line 467, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel .x-tab-default-top {
   background: #F8F8F8;
   font-size: 12px;
@@ -23676,7 +23674,7 @@ img {
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-/* line 480, ../../../../sass/src/view/AppViewport.scss */
+/* line 478, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel .x-tab-top-active {
   background: #E0E3E6;
   border-color: #d1d5da;
@@ -23684,17 +23682,17 @@ img {
   border-bottom: 1px solid #d1d5da !important;
 }
 
-/* line 487, ../../../../sass/src/view/AppViewport.scss */
+/* line 485, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel .x-tab-top-disabled {
   background: #e6e7eb;
 }
 
-/* line 491, ../../../../sass/src/view/AppViewport.scss */
+/* line 489, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel .x-tab-top-disabled button .x-tab-inner {
   color: #999 !important;
 }
 
-/* line 495, ../../../../sass/src/view/AppViewport.scss */
+/* line 493, ../../../../sass/src/view/AppViewport.scss */
 .navbar .nav .active > a {
   background: 0 !important;
   color: #0074c2 !important;
@@ -23704,28 +23702,28 @@ img {
 }
 
 /*Dashboard*/
-/* line 503, ../../../../sass/src/view/AppViewport.scss */
+/* line 501, ../../../../sass/src/view/AppViewport.scss */
 #DashboardPanel {
   background: none;
 }
 
-/* line 507, ../../../../sass/src/view/AppViewport.scss */
+/* line 505, ../../../../sass/src/view/AppViewport.scss */
 #welcome_splash {
   text-align: center;
 }
 
-/* line 511, ../../../../sass/src/view/AppViewport.scss */
+/* line 509, ../../../../sass/src/view/AppViewport.scss */
 .welcome_sub {
   font-size: 18px;
   color: #999999;
 }
 
-/* line 516, ../../../../sass/src/view/AppViewport.scss */
+/* line 514, ../../../../sass/src/view/AppViewport.scss */
 #dashboardButtons {
   text-align: center;
 }
 
-/* line 520, ../../../../sass/src/view/AppViewport.scss */
+/* line 518, ../../../../sass/src/view/AppViewport.scss */
 .dashBtn {
   margin: 10px;
   background: #f8f8f8;
@@ -23733,24 +23731,24 @@ img {
   border: #ECF0F1;
 }
 
-/* line 527, ../../../../sass/src/view/AppViewport.scss */
+/* line 525, ../../../../sass/src/view/AppViewport.scss */
 #dashboardButtons .x-btn-default-large {
   padding: 10px 3px 3px 3px;
   background: #ECF0F1;
   border-color: #E0E3E6;
 }
 
-/* line 533, ../../../../sass/src/view/AppViewport.scss */
+/* line 531, ../../../../sass/src/view/AppViewport.scss */
 #dashboardButtons .x-btn-inner {
   padding-top: 30px;
 }
 
-/* line 537, ../../../../sass/src/view/AppViewport.scss */
+/* line 535, ../../../../sass/src/view/AppViewport.scss */
 #dashboardButtons .x-btn-icon {
   height: 25px;
 }
 
-/* line 541, ../../../../sass/src/view/AppViewport.scss */
+/* line 539, ../../../../sass/src/view/AppViewport.scss */
 .projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23758,7 +23756,7 @@ img {
   color: #006ADC;
 }
 
-/* line 548, ../../../../sass/src/view/AppViewport.scss */
+/* line 546, ../../../../sass/src/view/AppViewport.scss */
 .projectStartBtn-over #projectStartBtn-btnIconEl {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23766,7 +23764,7 @@ img {
   background-image: url(images/projectstart-over.png) !important;
 }
 
-/* line 555, ../../../../sass/src/view/AppViewport.scss */
+/* line 553, ../../../../sass/src/view/AppViewport.scss */
 .watchTutorialBtn-over #watchTutorialBtn-btnIconEl {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23774,7 +23772,7 @@ img {
   background-image: url(images/watchtut-over.png) !important;
 }
 
-/* line 562, ../../../../sass/src/view/AppViewport.scss */
+/* line 560, ../../../../sass/src/view/AppViewport.scss */
 .readManualsBtn-over #readManualsBtn-btnIconEl {
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23782,72 +23780,72 @@ img {
   background-image: url(images/readman-over.png) !important;
 }
 
-/* line 569, ../../../../sass/src/view/AppViewport.scss */
+/* line 567, ../../../../sass/src/view/AppViewport.scss */
 .welcome_text {
   font-size: 48px;
   font-weight: bold;
 }
 
-/* line 574, ../../../../sass/src/view/AppViewport.scss */
+/* line 572, ../../../../sass/src/view/AppViewport.scss */
 .sequencePrompt-box input {
   width: 200px;
 }
 
-/* line 578, ../../../../sass/src/view/AppViewport.scss */
+/* line 576, ../../../../sass/src/view/AppViewport.scss */
 .sequencePrompt-box table {
   margin: 0 auto;
 }
 
-/* line 582, ../../../../sass/src/view/AppViewport.scss */
+/* line 580, ../../../../sass/src/view/AppViewport.scss */
 #DashboardPanel-body {
   border-top: none;
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* line 587, ../../../../sass/src/view/AppViewport.scss */
+/* line 585, ../../../../sass/src/view/AppViewport.scss */
 #projectGrid_Panel_header, #designGrid_Panel_header, #dashboard_StatsPanel_header {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-/* line 592, ../../../../sass/src/view/AppViewport.scss */
+/* line 590, ../../../../sass/src/view/AppViewport.scss */
 #projectGrid_Panel-body, #designGrid_Panel-body, #dashboard_StatsPanel-body {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-/* line 597, ../../../../sass/src/view/AppViewport.scss */
+/* line 595, ../../../../sass/src/view/AppViewport.scss */
 #designGrid_Panel .x-panel-header-default, .x-toolbar-default, #dashboard_BottomPanel .x-panel-header-default {
   border: 0;
   background: none;
   box-shadow: none;
 }
 
-/* line 603, ../../../../sass/src/view/AppViewport.scss */
+/* line 601, ../../../../sass/src/view/AppViewport.scss */
 #designGrid_Panel_header {
   top: 30px !important;
   z-index: 100;
 }
 
-/* line 608, ../../../../sass/src/view/AppViewport.scss */
+/* line 606, ../../../../sass/src/view/AppViewport.scss */
 #designGrid_Panel .x-toolbar-default {
   z-index: 110;
 }
 
 /*Device Editor*/
-/* line 612, ../../../../sass/src/view/AppViewport.scss */
+/* line 610, ../../../../sass/src/view/AppViewport.scss */
 .j5runPanel .x-field-label-cell {
   vertical-align: middle !important;
 }
 
-/* line 616, ../../../../sass/src/view/AppViewport.scss */
+/* line 614, ../../../../sass/src/view/AppViewport.scss */
 .grid-DSF {
   border-right-color: red !important;
   border-right-style: solid !important;
   border-right-width: 1px !important;
 }
 
-/* line 622, ../../../../sass/src/view/AppViewport.scss */
+/* line 620, ../../../../sass/src/view/AppViewport.scss */
 .binHeader, .binHeader .x-panel-body-default {
   background-color: #fefefe;
   border-color: #ECF0F1;
@@ -23859,18 +23857,18 @@ img {
   -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-/* line 633, ../../../../sass/src/view/AppViewport.scss */
+/* line 631, ../../../../sass/src/view/AppViewport.scss */
 .binHeader:hover, .binHeader .x-panel-body-default:hover {
   border-color: #4A4B4C;
 }
 
-/* line 637, ../../../../sass/src/view/AppViewport.scss */
+/* line 635, ../../../../sass/src/view/AppViewport.scss */
 .binHeader-selected, .binHeader-selected .x-panel-body-default {
   background-color: #f0f0f0 !important;
   border-color: #006CAB !important;
 }
 
-/* line 642, ../../../../sass/src/view/AppViewport.scss */
+/* line 640, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell, .gridPartCell .x-panel-body-default {
   font-size: 13px;
   background-color: #fefefe;
@@ -23880,34 +23878,34 @@ img {
   -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-/* line 651, ../../../../sass/src/view/AppViewport.scss */
+/* line 649, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell:hover, .gridPartCell .x-panel-body-default:hover {
   border-color: #4A4B4C !important;
 }
 
-/* line 656, ../../../../sass/src/view/AppViewport.scss */
+/* line 654, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-alert:hover, .gridPartCell-alert .x-panel-body-default:hover {
   border-color: #e10000;
 }
 
-/* line 660, ../../../../sass/src/view/AppViewport.scss */
+/* line 658, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-selected, .gridPartCell-selected .x-panel-body-default {
   background-color: #ECF0F1 !important;
   border-color: #4A4B4C !important;
   /*border-color: #006CAB;*/
 }
 
-/* line 666, ../../../../sass/src/view/AppViewport.scss */
+/* line 664, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-highlighted, .gridPartCell-highlighted .x-panel-body-default {
   border-color: #006CAB !important;
 }
 
-/* line 670, ../../../../sass/src/view/AppViewport.scss */
+/* line 668, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-alert, .gridPartCell-alert .x-panel-body-default {
   border-color: #e10000;
 }
 
-/* line 674, ../../../../sass/src/view/AppViewport.scss */
+/* line 672, ../../../../sass/src/view/AppViewport.scss */
 .mapAlert {
   color: white;
   background: #ff7373;
@@ -23916,82 +23914,88 @@ img {
   border-radius: 4px;
 }
 
-/* line 682, ../../../../sass/src/view/AppViewport.scss */
+/* line 680, ../../../../sass/src/view/AppViewport.scss */
 .fasConflictIndicator {
   position: absolute;
   top: 2px;
   left: 2px;
 }
 
-/* line 688, ../../../../sass/src/view/AppViewport.scss */
+/* line 686, ../../../../sass/src/view/AppViewport.scss */
 .eugeneRuleIndicator {
   position: absolute;
   bottom: 2px;
   right: 2px;
 }
 
-/* line 694, ../../../../sass/src/view/AppViewport.scss */
+/* line 692, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorTab {
   border: 1px solid #E9E9E9;
   border-top: none;
 }
 
-/* line 699, ../../../../sass/src/view/AppViewport.scss */
+/* line 697, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorBody {
   border: 0px;
 }
 
-/* line 703, ../../../../sass/src/view/AppViewport.scss */
+/* line 701, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorTitlePanel .x-toolbar-default {
   background: #FDFDFD;
 }
 
-/* line 707, ../../../../sass/src/view/AppViewport.scss */
+/* line 705, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorMenuPanel .x-toolbar-default {
   background: #FDFDFD;
 }
 
-/* line 711, ../../../../sass/src/view/AppViewport.scss */
+/* line 709, ../../../../sass/src/view/AppViewport.scss */
 #DeviceEditorMainToolPanel {
   background: #F8F8F8;
 }
 
-/* line 715, ../../../../sass/src/view/AppViewport.scss */
+/* line 713, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorToolPanel .x-toolbar-default {
   background: #F8F8F8;
 }
 
-/* line 719, ../../../../sass/src/view/AppViewport.scss */
+/* line 717, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorPartsBar {
   background: #125B85;
 }
 
-/* line 723, ../../../../sass/src/view/AppViewport.scss */
+/* line 721, ../../../../sass/src/view/AppViewport.scss */
+.DeviceEditorPartsBar .x-btn-default-toolbar-large-focused, .DeviceEditorPartsBar .x-btn-default-toolbar-large-focus {
+  background: none !important;
+  border: 0 none !important;
+}
+
+/* line 726, ../../../../sass/src/view/AppViewport.scss */
 .x-toolbar .x-toolbar-separator-horizontal {
   border-left: 1px solid #035363;
   border-right: 1px solid #05628D;
 }
 
-/* line 728, ../../../../sass/src/view/AppViewport.scss */
+/* line 731, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
   background: rgba(0, 0, 0, 0.3);
   box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.5);
   border: black;
 }
 
-/* line 733, ../../../../sass/src/view/AppViewport.scss */
+/* line 736, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorCanvas .x-layout-fit {
   border: none;
 }
 
-/* line 737, ../../../../sass/src/view/AppViewport.scss */
+/* line 740, ../../../../sass/src/view/AppViewport.scss */
 .flipBinButton {
   background: #ECF0F1;
   border: 1px solid #E0E3E6;
   border-radius: 2px;
 }
 
-/* line 743, ../../../../sass/src/view/AppViewport.scss */
+/* line 746, ../../../../sass/src/view/AppViewport.scss */
 .flipImage {
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
@@ -24001,59 +24005,59 @@ img {
   -webkit-transform: rotate(180deg);
 }
 
-/* line 752, ../../../../sass/src/view/AppViewport.scss */
+/* line 755, ../../../../sass/src/view/AppViewport.scss */
 .designGrid {
   width: 5000px !important;
 }
 
-/* line 756, ../../../../sass/src/view/AppViewport.scss */
+/* line 759, ../../../../sass/src/view/AppViewport.scss */
 .InspectorPanel {
   border: 0px !important;
   background: #ECF0F1;
 }
 
-/* line 761, ../../../../sass/src/view/AppViewport.scss */
+/* line 764, ../../../../sass/src/view/AppViewport.scss */
 .InspectorPanel .x-panel-header-default-framed-top {
   border-radius: 0px;
 }
 
-/* line 765, ../../../../sass/src/view/AppViewport.scss */
+/* line 768, ../../../../sass/src/view/AppViewport.scss */
 .InspectorPanel .x-panel-body-default-framed {
   z-index: 1000;
   background: #ECF0F1;
 }
 
-/* line 770, ../../../../sass/src/view/AppViewport.scss */
+/* line 773, ../../../../sass/src/view/AppViewport.scss */
 .PartPropertiesForm .x-panel-header-default, .forcedAssemblyStrategyForm .x-panel-header-default, .eugeneRulesForm .x-panel-header-default, .collectionInfoTab .x-panel-header-default {
   background: #ECF0F1 !important;
   border: #ECF0F1;
 }
 
-/* line 775, ../../../../sass/src/view/AppViewport.scss */
+/* line 778, ../../../../sass/src/view/AppViewport.scss */
 .PartPropertiesForm .x-panel-body-default, .forcedAssemblyStrategyForm .x-panel-body-default, .eugeneRulesForm .x-panel-body-default {
   background: #FFF !important;
   border-radius: 4px;
   border: 0px;
 }
 
-/* line 781, ../../../../sass/src/view/AppViewport.scss */
+/* line 784, ../../../../sass/src/view/AppViewport.scss */
 .partInfoTab .x-panel-body-default {
   background: #ECF0F1;
 }
 
-/* line 785, ../../../../sass/src/view/AppViewport.scss */
+/* line 788, ../../../../sass/src/view/AppViewport.scss */
 .collectionInfoTab .x-panel-body-default {
   border-radius: 4px;
   border: 0px;
 }
 
-/* line 790, ../../../../sass/src/view/AppViewport.scss */
+/* line 793, ../../../../sass/src/view/AppViewport.scss */
 .inspectorGrid, .eugeneRulesGrid {
   border: 1px solid #E0E3E6;
   border-radius: 2px;
 }
 
-/* line 795, ../../../../sass/src/view/AppViewport.scss */
+/* line 798, ../../../../sass/src/view/AppViewport.scss */
 .inspectorGrid .x-grid-row-selected .x-grid-cell {
   background: #E0E3E6 !important;
   border-color: #E0E3E6 !important;
@@ -24061,37 +24065,37 @@ img {
   font-weight: 600;
 }
 
-/* line 802, ../../../../sass/src/view/AppViewport.scss */
+/* line 805, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorCanvas, .DeviceEditorCanvas .x-layout-fit {
   width: auto !important;
 }
 
-/* line 806, ../../../../sass/src/view/AppViewport.scss */
+/* line 809, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorCanvas .x-panel-body-default {
   font-size: 13px;
 }
 
-/* line 810, ../../../../sass/src/view/AppViewport.scss */
+/* line 813, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Window label {
   font-size: 10px !important;
 }
 
-/* line 814, ../../../../sass/src/view/AppViewport.scss */
+/* line 817, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Window, .j5Parameters_Window .x-window-body {
   background: #F8F8F8;
 }
 
-/* line 818, ../../../../sass/src/view/AppViewport.scss */
+/* line 821, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Buttons {
   background: #F8F8F8;
 }
 
-/* line 822, ../../../../sass/src/view/AppViewport.scss */
+/* line 825, ../../../../sass/src/view/AppViewport.scss */
 .warning-wrap {
   margin-bottom: 15px;
 }
 
-/* line 826, ../../../../sass/src/view/AppViewport.scss */
+/* line 829, ../../../../sass/src/view/AppViewport.scss */
 .warning-note {
   height: 10px;
   width: 10px;
@@ -24101,7 +24105,7 @@ img {
   margin: 10px;
 }
 
-/* line 835, ../../../../sass/src/view/AppViewport.scss */
+/* line 838, ../../../../sass/src/view/AppViewport.scss */
 .openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
@@ -24109,17 +24113,17 @@ img {
   -webkit-transition: background .2s ease-in-out;
 }
 
-/* line 842, ../../../../sass/src/view/AppViewport.scss */
+/* line 845, ../../../../sass/src/view/AppViewport.scss */
 .openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .buildBtn .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner {
   color: white;
 }
 
-/* line 846, ../../../../sass/src/view/AppViewport.scss */
+/* line 849, ../../../../sass/src/view/AppViewport.scss */
 .x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
   background: #006CAB;
 }
 
-/* line 850, ../../../../sass/src/view/AppViewport.scss */
+/* line 853, ../../../../sass/src/view/AppViewport.scss */
 .addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn {
   background: #4A4B4C;
   transition: background .2s ease-in-out;
@@ -24127,55 +24131,55 @@ img {
   -webkit-transition: background .2s ease-in-out;
 }
 
-/* line 857, ../../../../sass/src/view/AppViewport.scss */
+/* line 860, ../../../../sass/src/view/AppViewport.scss */
 .addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner {
   color: white;
 }
 
-/* line 861, ../../../../sass/src/view/AppViewport.scss */
+/* line 864, ../../../../sass/src/view/AppViewport.scss */
 .x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over {
   background: #333234;
 }
 
-/* line 865, ../../../../sass/src/view/AppViewport.scss */
+/* line 868, ../../../../sass/src/view/AppViewport.scss */
 .selectPartFocus {
   background: #e74c3c;
 }
 
-/* line 869, ../../../../sass/src/view/AppViewport.scss */
+/* line 872, ../../../../sass/src/view/AppViewport.scss */
 .selectPartFocus:hover {
   background: #d70000;
 }
 
-/* line 873, ../../../../sass/src/view/AppViewport.scss */
+/* line 876, ../../../../sass/src/view/AppViewport.scss */
 .btnDisabled {
   background: #E0E3E6;
   color: #FFF;
 }
 
-/* line 878, ../../../../sass/src/view/AppViewport.scss */
+/* line 881, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-body {
   background: #ECF0F1;
 }
 
-/* line 885, ../../../../sass/src/view/AppViewport.scss */
+/* line 888, ../../../../sass/src/view/AppViewport.scss */
 .j5button .x-toolbar .x-toolbar-item {
   margin-left: 10px !important;
 }
 
-/* line 889, ../../../../sass/src/view/AppViewport.scss */
+/* line 892, ../../../../sass/src/view/AppViewport.scss */
 .j5button {
   position: relative !important;
   left: 0 !important;
   float: right;
-  background: #e74c3c;
+  background: #2ecc71;
   border: 0;
   padding: 1px 25px 1px 25px;
   font-weight: bold;
   margin: 0px 10px 0px 0px !important;
 }
 
-/* line 900, ../../../../sass/src/view/AppViewport.scss */
+/* line 903, ../../../../sass/src/view/AppViewport.scss */
 .importEugeneRulesBtn {
   margin: 4px 0px 0px 27px;
   border: 0 !important;
@@ -24183,155 +24187,155 @@ img {
   background: none;
 }
 
-/* line 907, ../../../../sass/src/view/AppViewport.scss */
+/* line 910, ../../../../sass/src/view/AppViewport.scss */
 .importEugeneRulesBtn .x-btn-inner {
   font-size: 11px !important;
 }
 
-/* line 911, ../../../../sass/src/view/AppViewport.scss */
+/* line 914, ../../../../sass/src/view/AppViewport.scss */
 .j5button .x-btn-inner {
   color: white;
 }
 
-/* line 915, ../../../../sass/src/view/AppViewport.scss */
+/* line 918, ../../../../sass/src/view/AppViewport.scss */
 .x-form-file-btn .x-btn-inner {
   padding-top: 0px !important;
 }
 
-/* line 919, ../../../../sass/src/view/AppViewport.scss */
+/* line 922, ../../../../sass/src/view/AppViewport.scss */
 .status-note {
   height: 10px;
   width: 10px;
   background: #61B5FF;
   border-radius: 1000px;
   float: right;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
-/* line 928, ../../../../sass/src/view/AppViewport.scss */
+/* line 931, ../../../../sass/src/view/AppViewport.scss */
 .status-note-completed {
   background: #77FF73;
 }
 
-/* line 932, ../../../../sass/src/view/AppViewport.scss */
+/* line 935, ../../../../sass/src/view/AppViewport.scss */
 .status-note-warning {
   background: #FFD24D;
 }
 
-/* line 936, ../../../../sass/src/view/AppViewport.scss */
+/* line 939, ../../../../sass/src/view/AppViewport.scss */
 .status-note-failed {
   background: #e74c3c;
 }
 
 /*j5 Reports*/
-/* line 940, ../../../../sass/src/view/AppViewport.scss */
+/* line 943, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body, .j5ReportsPanel .x-menu {
   background: #333234 !important;
   border: 0 none;
   color: white;
 }
 
-/* line 946, ../../../../sass/src/view/AppViewport.scss */
+/* line 949, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel .x-menu-item-text {
   background: none;
   color: white;
 }
 
-/* line 951, ../../../../sass/src/view/AppViewport.scss */
+/* line 954, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel .x-menu-item-active {
   background: rgba(0, 0, 0, 0.3);
   color: #00b7ff;
   border-color: black;
 }
 
-/* line 958, ../../../../sass/src/view/AppViewport.scss */
+/* line 961, ../../../../sass/src/view/AppViewport.scss */
 .j5-menuitem-active {
   background: black;
 }
 
-/* line 962, ../../../../sass/src/view/AppViewport.scss */
+/* line 965, ../../../../sass/src/view/AppViewport.scss */
 .j5-menuitem-active .x-menu-item-text {
   color: #1fa8f8;
 }
 
-/* line 967, ../../../../sass/src/view/AppViewport.scss */
+/* line 970, ../../../../sass/src/view/AppViewport.scss */
 .j5ReportsPanel .x-menu-icon-separator {
   border: 0 none;
   width: 0px;
 }
 
-/* line 972, ../../../../sass/src/view/AppViewport.scss */
+/* line 975, ../../../../sass/src/view/AppViewport.scss */
 .j5ResponseTextField {
   top: 50px !important;
   left: 11px !important;
   width: 410px !important;
 }
 
-/* line 978, ../../../../sass/src/view/AppViewport.scss */
+/* line 981, ../../../../sass/src/view/AppViewport.scss */
 .j5ResponseTextField .x-form-display-field {
   color: white;
 }
 
-/* line 982, ../../../../sass/src/view/AppViewport.scss */
+/* line 985, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub .x-tab-default-top .x-tab-inner {
   font-weight: 500;
 }
 
-/* line 986, ../../../../sass/src/view/AppViewport.scss */
+/* line 989, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub .x-tab-top-active .x-tab-inner {
   font-weight: bold;
 }
 
-/* line 990, ../../../../sass/src/view/AppViewport.scss */
+/* line 993, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub .x-tab-top-active, .j5InfoTab-Sub .x-tab-default-top {
   background: none;
   border: 0 none !important;
   border-bottom: 0 none !important;
 }
 
-/* line 996, ../../../../sass/src/view/AppViewport.scss */
+/* line 999, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub-Advanced .x-tab-default-top {
   background: none !important;
   border: 0 none !important;
   border-bottom-width: 0 none !important;
 }
 
-/* line 1002, ../../../../sass/src/view/AppViewport.scss */
+/* line 1005, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub-Advanced .x-tab-top-active {
   background: #ECF0F1 !important;
   border: 0 none !important;
   border-bottom-width: 0 none !important;
 }
 
-/* line 1008, ../../../../sass/src/view/AppViewport.scss */
+/* line 1011, ../../../../sass/src/view/AppViewport.scss */
 .j5InfoTab-Sub-Advanced-Body {
   border: 0 none;
 }
 
-/* line 1012, ../../../../sass/src/view/AppViewport.scss */
+/* line 1015, ../../../../sass/src/view/AppViewport.scss */
 .j5detailpanel-fillcontent {
   text-align: center;
   border-radius: 4px;
   background: #ECF0F1;
 }
 
-/* line 1018, ../../../../sass/src/view/AppViewport.scss */
+/* line 1021, ../../../../sass/src/view/AppViewport.scss */
 .assembly-label {
   position: relative;
   top: 4px;
 }
 
-/* line 1023, ../../../../sass/src/view/AppViewport.scss */
+/* line 1026, ../../../../sass/src/view/AppViewport.scss */
 .x-box-scroller-top .x-menu-scroll-top {
   display: none;
 }
 
-/* line 1027, ../../../../sass/src/view/AppViewport.scss */
+/* line 1030, ../../../../sass/src/view/AppViewport.scss */
 .x-box-scroller-bottom .x-menu-scroll-bottom {
   display: none;
 }
 
-/* line 1031, ../../../../sass/src/view/AppViewport.scss */
+/* line 1034, ../../../../sass/src/view/AppViewport.scss */
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {
   background: #f54242;
   color: white;
@@ -24343,7 +24347,7 @@ img {
   left: 420px !important;
 }
 
-/* line 1042, ../../../../sass/src/view/AppViewport.scss */
+/* line 1045, ../../../../sass/src/view/AppViewport.scss */
 .progress {
   overflow: hidden;
   height: 18px;
@@ -24364,7 +24368,7 @@ img {
   border-radius: 3px;
 }
 
-/* line 1062, ../../../../sass/src/view/AppViewport.scss */
+/* line 1065, ../../../../sass/src/view/AppViewport.scss */
 .progress .bar {
   width: 0%;
   height: 18px;
@@ -24397,7 +24401,7 @@ img {
   transition: width 0.6s ease;
 }
 
-/* line 1094, ../../../../sass/src/view/AppViewport.scss */
+/* line 1097, ../../../../sass/src/view/AppViewport.scss */
 .progress-striped .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24412,14 +24416,14 @@ img {
   background-size: 40px 40px;
 }
 
-/* line 1108, ../../../../sass/src/view/AppViewport.scss */
+/* line 1111, ../../../../sass/src/view/AppViewport.scss */
 .progress.active .bar {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
   -moz-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
-/* line 1114, ../../../../sass/src/view/AppViewport.scss */
+/* line 1117, ../../../../sass/src/view/AppViewport.scss */
 .progress-danger .bar {
   background-color: #dd514c;
   background-image: -moz-linear-gradient(top, #ee5f5b, #c43c35);
@@ -24432,7 +24436,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
 }
 
-/* line 1126, ../../../../sass/src/view/AppViewport.scss */
+/* line 1129, ../../../../sass/src/view/AppViewport.scss */
 .progress-danger.progress-striped .bar {
   background-color: #ee5f5b;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24443,7 +24447,7 @@ img {
   background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 1136, ../../../../sass/src/view/AppViewport.scss */
+/* line 1139, ../../../../sass/src/view/AppViewport.scss */
 .progress-success .bar {
   background-color: #5eb95e;
   background-image: -moz-linear-gradient(top, #62c462, #57a957);
@@ -24456,7 +24460,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
 
-/* line 1148, ../../../../sass/src/view/AppViewport.scss */
+/* line 1151, ../../../../sass/src/view/AppViewport.scss */
 .progress-success.progress-striped .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24467,7 +24471,7 @@ img {
   background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 1158, ../../../../sass/src/view/AppViewport.scss */
+/* line 1161, ../../../../sass/src/view/AppViewport.scss */
 .progress-info .bar {
   background-color: #4bb1cf;
   background-image: -moz-linear-gradient(top, #5bc0de, #339bb9);
@@ -24483,7 +24487,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bc0de', endColorstr='#339bb9', GradientType=0);
 }
 
-/* line 1173, ../../../../sass/src/view/AppViewport.scss */
+/* line 1176, ../../../../sass/src/view/AppViewport.scss */
 .progress-info.progress-striped .bar {
   background-color: #5bc0de;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24495,60 +24499,60 @@ img {
 }
 
 @-webkit-keyframes progress-bar-stripes {
-  /* line 1184, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1187, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1186, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1189, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @-moz-keyframes progress-bar-stripes {
-  /* line 1190, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1193, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1192, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1195, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @keyframes progress-bar-stripes {
-  /* line 1196, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1199, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1198, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1201, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
-/* line 1202, ../../../../sass/src/view/AppViewport.scss */
+/* line 1205, ../../../../sass/src/view/AppViewport.scss */
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner {
   color: black;
   text-decoration: underline;
 }
 
-/* line 1207, ../../../../sass/src/view/AppViewport.scss */
+/* line 1210, ../../../../sass/src/view/AppViewport.scss */
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner:hover {
   color: blue;
   text-decoration: underline;
 }
 
-/* line 1212, ../../../../sass/src/view/AppViewport.scss */
+/* line 1215, ../../../../sass/src/view/AppViewport.scss */
 .gridcolumn-wrap-text {
   white-space: normal;
 }
 
 /*Restriction Enzymes Manager Window*/
-/* line 2, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 2, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-addAll {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: -29px 0;
@@ -24558,7 +24562,7 @@ img {
   background-repeat: no-repeat;
 }
 
-/* line 11, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 11, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-removeAll {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: 3px 0;
@@ -24568,7 +24572,7 @@ img {
   background-repeat: no-repeat;
 }
 
-/* line 20, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 20, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-add {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: -91px 0;
@@ -24578,7 +24582,7 @@ img {
   background-repeat: no-repeat;
 }
 
-/* line 29, ../../../../sass/src/view/RestrictionEnzymesManagerWindow.scss */
+/* line 29, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-remove {
   background: url(images/ux/enzymeSelector-btns.png);
   background-position: -60px 0;
