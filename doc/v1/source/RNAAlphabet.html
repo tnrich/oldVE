@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-alphabets-RNAAlphabet'>/**
+</span> * @class Teselagen.bio.sequence.alphabets.RNAAlphabet
+ * 
+ * RNA alphabet. Most general alphabet to build RNA sequences.  See Teselagen.bio.sequence.symbols.NucleotideSymbol.
+ * 
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ * @author Timothy Ham (original author)
+ */
+Ext.define(&quot;Teselagen.bio.sequence.alphabets.RNAAlphabet&quot;, {
+	extend: &quot;Teselagen.bio.sequence.alphabets.AbstractAlphabet&quot;,
+
+	requires: &quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;,
+
+	singleton: true,
+
+	a: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Adenine&quot;, value: &quot;a&quot; , ambiguousMatches: []}),
+	g: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Guanine&quot;, value: &quot;g&quot;, ambiguousMatches: []}), 
+	c: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Cytosine&quot;, value: &quot;c&quot;, ambiguousMatches: []}), 
+    u: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Uracil&quot;, value: &quot;u&quot;, ambiguousMatches: []}), 
+	m: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c;'}&quot; , value: &quot;m&quot;, ambiguousMatches: []}),
+	r: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'g;'}&quot;, value: &quot;r&quot;, ambiguousMatches: []}),
+	w: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'u;'}&quot;, value: &quot;w&quot;, ambiguousMatches: []}), 
+	s: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'g;'}&quot;, value: &quot;s&quot;, ambiguousMatches: []}), 
+	y: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'u}&quot;, value: &quot;y&quot;, ambiguousMatches: []}), 
+	k: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'g' or 'u;'}&quot;, value: &quot;k&quot;, ambiguousMatches: []}), 
+	v: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c;' or 'g'}&quot;, value: &quot;v&quot;, ambiguousMatches: []}), 
+	h: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c;' or 'u'}&quot;, value: &quot;h&quot;, ambiguousMatches: []}), 
+	d: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'g;' or 'u'}&quot;, value: &quot;d&quot;, ambiguousMatches: []}), 
+	b: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'g;' or 'u'}&quot;, value: &quot;b&quot;, ambiguousMatches: []}), 
+	n: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'u;' or 'g' or 'c'}&quot;, value: &quot;n&quot;, ambiguousMatches: [] }), 
+
+	symbolsMap: [],
+
+	//A workaround to set ambiguous matches.
+	constructor: function(){
+		var that = this;
+		that.m.setAmbiguousMatches([that.a, that.c]);
+		that.r.setAmbiguousMatches([that.a, that.g]);
+		that.w.setAmbiguousMatches([that.a, that.u]);
+		that.s.setAmbiguousMatches([that.c, that.g]);
+		that.y.setAmbiguousMatches([that.c, that.u]);
+		that.k.setAmbiguousMatches([that.g, that.u]);
+		that.v.setAmbiguousMatches([that.a, that.c, that.g]);
+		that.h.setAmbiguousMatches([that.a, that.c, that.u]);
+		that.d.setAmbiguousMatches([that.a, that.g, that.u]);
+		that.b.setAmbiguousMatches( [that.c, that.g, that.u]);
+		that.n.setAmbiguousMatches([that.a, that.c, that.g, that.u]);
+
+		that.callParent([]);
+
+		this.symbolsMap =  {
+                &quot;a&quot;: this.getA(),
+                &quot;g&quot;: this.getG(),
+                &quot;c&quot;: this.getC(),
+                &quot;u&quot;: this.getU(),
+                &quot;m&quot;: this.getM(),
+                &quot;r&quot;: this.getR(),
+                &quot;w&quot;: this.getW(),
+                &quot;s&quot;: this.getS(),
+                &quot;y&quot;: this.getY(),
+                &quot;k&quot;: this.getK(),
+                &quot;v&quot;: this.getV(),
+                &quot;h&quot;: this.getH(),
+                &quot;d&quot;: this.getD(),
+                &quot;b&quot;: this.getB(),
+                &quot;n&quot;: this.getN()
+        };
+	},
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getA'>/**
+</span>		 * Returns data about the Adenine NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the &quot;a&quot; nucleotide
+		 */
+		getA: function() { 
+			return this.a;
+		},
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getG'>		/**
+</span>		*
+		 * Returns data about the Guanine NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the &quot;g&quot; nucleotide
+		  */
+		getG: function() { 
+			return this.g; 
+		},
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getC'>		/**
+</span>		 * Returns data about the Cytosine NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the &quot;c&quot; nucleotide
+		 */
+		getC: function(){ 
+			return this.c; 
+		},
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getU'>		/**
+</span>		 * Returns data about the Uracil NucleotideSymbol
+		 * @return {NucleotideSymbol} [description]
+		 */
+		getU: function(){ return this.u; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getM'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or c&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c nucleotide
+		 */
+		getM: function(){ return this.m; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getR'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or g&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or g nucleotide
+		 */
+		getR: function(){ return this.r; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getW'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or t&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t nucleotide
+		 */
+		getW: function(){ return this.w; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getS'>		/**
+</span>		  * Returns data about the &quot;Ambiguous c or g&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or g nucleotide
+		 */
+		getS: function(){ return this.s; },
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getY'>		/**
+</span>		*
+		  * Returns data about the &quot;Ambiguous c or t&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or t nucleotide
+		  */
+		getY: function(){ return this.y; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getK'>		/**
+</span>		  * Returns data about the &quot;Ambiguous g or t&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous g or t nucleotide
+		 */
+		getK: function(){ return this.k; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getV'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or c or g&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c or g nucleotide
+		 */
+		getV: function(){ return this.v; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getH'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or c or t&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c or t nucleotide
+		 */
+		getH: function(){ return this.h; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getD'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or g or t&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or g or t nucleotide
+		 */
+		getD: function(){ return this.d; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getB'>		/**
+</span>		  * Returns data about the &quot;Ambiguous c or g or t&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or g or t nucleotide
+		 */
+		getB: function(){ return this.b; },
+
+<span id='Teselagen-bio-sequence-alphabets-RNAAlphabet-method-getN'>		/**
+</span>		  * Returns data about the &quot;Ambiguous a or t or g or c&quot; NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t or g or c nucleotide
+		 */
+		getN: function(){ return this.n; },
+});
+</pre>
+</body>
+</html>

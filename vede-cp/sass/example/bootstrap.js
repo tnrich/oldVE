@@ -61,7 +61,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.parsers.GenbankManager": [],
   "Ext.ux.PreviewPlugin": [],
   "Teselagen.manager.J5Manager": [],
-  "Vede.controller.RestrictionEnzymeController": [],
   "Ext.ux.ajax.SimXhr": [],
   "Vede.controller.AppController": [],
   "Vede.view.de.DeviceEditorToolPanel": [],
@@ -136,6 +135,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.models.J5Input": [],
   "Teselagen.bio.parsers.GenbankFeaturesKeyword": [],
   "Teselagen.models.Rectangle": [],
+  "Vede.controller.VectorEditor.RestrictionEnzymeController": [],
   "Teselagen.renderer.sequence.Renderer": [],
   "Vede.view.ve.SafeEditWindow": [],
   "Ext.ux.GMapPanel": [],
@@ -258,6 +258,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.ajax.SimManager": [],
   "Vede.controller.AuthWindowController": [],
   "Teselagen.store.UserStore": [],
+  "Teselagen.utils.Logger": [],
   "Teselagen.event.ActionStackEvent": [],
   "Teselagen.manager.PartManager": [],
   "Teselagen.renderer.pie.PieRenderer": [],
@@ -324,12 +325,12 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.ve.SelectWindow": [],
   "Vede.view.j5Report.j5ReportPanel": [],
   "Teselagen.models.digest.Ladder": [],
+  "Vede.view.de.InspectorCollectionInfoGrid": [],
   "Teselagen.models.DNAFeatureNote": [],
   "Teselagen.renderer.pie.Layer": [],
   "Vede.controller.PartLibraryController": [],
   "Teselagen.bio.sequence.common.SymbolList": [],
   "Teselagen.models.EugeneRule": [],
-  "Vede.view.RestrictionEnzymesManagerWindow": [],
   "Teselagen.bio.sequence.alphabets.DNAAlphabet": [
     "Teselagen.DNAAlphabet"
   ],
@@ -357,6 +358,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.controller.VectorEditor.EditSequenceFeatureWindowController": [],
   "Vede.view.de.DeviceEditor": [],
   "Vede.view.ve.GoToWindow": [],
+  "Vede.view.ve.RestrictionEnzymesManagerWindow": [],
   "Vede.controller.VectorEditor.PieContextMenuController": [],
   "Teselagen.bio.util.Point": [],
   "Teselagen.manager.SequenceManagerMemento": [],
@@ -436,7 +438,6 @@ Ext.ClassManager.addNameAliasMappings({
     "plugin.preview"
   ],
   "Teselagen.manager.J5Manager": [],
-  "Vede.controller.RestrictionEnzymeController": [],
   "Ext.ux.ajax.SimXhr": [],
   "Vede.controller.AppController": [],
   "Vede.view.de.DeviceEditorToolPanel": [
@@ -539,6 +540,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.models.J5Input": [],
   "Teselagen.bio.parsers.GenbankFeaturesKeyword": [],
   "Teselagen.models.Rectangle": [],
+  "Vede.controller.VectorEditor.RestrictionEnzymeController": [],
   "Teselagen.renderer.sequence.Renderer": [],
   "Vede.view.ve.SafeEditWindow": [],
   "Ext.ux.GMapPanel": [
@@ -711,6 +713,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.ajax.SimManager": [],
   "Vede.controller.AuthWindowController": [],
   "Teselagen.store.UserStore": [],
+  "Teselagen.utils.Logger": [],
   "Teselagen.event.ActionStackEvent": [],
   "Teselagen.manager.PartManager": [],
   "Teselagen.renderer.pie.PieRenderer": [],
@@ -785,12 +788,14 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.j5ReportPanel"
   ],
   "Teselagen.models.digest.Ladder": [],
+  "Vede.view.de.InspectorCollectionInfoGrid": [
+    "widget.collectioninfogrid"
+  ],
   "Teselagen.models.DNAFeatureNote": [],
   "Teselagen.renderer.pie.Layer": [],
   "Vede.controller.PartLibraryController": [],
   "Teselagen.bio.sequence.common.SymbolList": [],
   "Teselagen.models.EugeneRule": [],
-  "Vede.view.RestrictionEnzymesManagerWindow": [],
   "Teselagen.bio.sequence.alphabets.DNAAlphabet": [],
   "Teselagen.models.j5Output.NonDegPart": [],
   "Teselagen.bio.sequence.alphabets.ProteinAlphabet": [],
@@ -820,6 +825,7 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.DeviceEditorPanel"
   ],
   "Vede.view.ve.GoToWindow": [],
+  "Vede.view.ve.RestrictionEnzymesManagerWindow": [],
   "Vede.controller.VectorEditor.PieContextMenuController": [],
   "Teselagen.bio.util.Point": [],
   "Teselagen.manager.SequenceManagerMemento": [],

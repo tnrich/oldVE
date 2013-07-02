@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="100%" 
+	height="100%"
+    title="About"
+	showCloseButton="true"
+	close="exit()">
+	
+	<mx:Script>
+		<![CDATA[
+			import org.jbei.registry.view.ui.MainCanvas;
+			import mx.managers.PopUpManager;
+			import org.jbei.registry.utils.SystemUtils;
+			import org.jbei.registry.Constants;
+			
+			[Embed(source='../../assets/icons/misc/jbei-logo.gif')]
+			[Bindable]
+			private var logoImage:Class;
+		
+			private function exit():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox id="mainBox" width="100%" height="100%" horizontalAlign="center" left="10" right="10" top="10" bottom="10">
+		<mx:Image source="{ logoImage }" horizontalAlign="center" />
+		<mx:Spacer />
+		<mx:Text width="400" selectable="false" htmlText="Version: { Constants.VERSION }" />
+		<mx:Text width="400" selectable="false" htmlText="Authors: { Constants.AUTHORS }" />
+        <mx:Text width="400" condenseWhite="true" leading="0">
+            <mx:htmlText>
+                <![CDATA[
+                    Citation: <font color="#0000FF"><u><a href="http://www.jbioleng.org/content/6/1/1/" target="_blank">
+                    Chen, J., Densmore, D., Ham, T.S., Keasling, J.D., and Hillson, N.J. "DeviceEditor visual biological 
+                    CAD canvas". Journal of Biological Engineering 6:1</a></u></font>
+                ]]>
+            </mx:htmlText>
+        </mx:Text>
+	</mx:VBox>
+	
+</mx:TitleWindow>

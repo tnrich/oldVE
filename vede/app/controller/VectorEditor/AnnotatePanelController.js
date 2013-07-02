@@ -385,7 +385,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     changeCaretPosition: function(index, silent, scrollToCaret) {
-        if(index >= 0 &&
+        if(index >= 0 && this.caretIndex !== index &&
            index <= this.SequenceManager.getSequence().toString().length) {
             
             this.callParent(arguments);

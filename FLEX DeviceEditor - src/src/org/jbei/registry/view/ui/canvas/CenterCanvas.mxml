@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:canvas="org.jbei.registry.view.ui.canvas.*" 
+	width="100%" 
+	height="100%" 
+    initialize="onInitialize()"
+    click="onClick(event)"
+	>
+	
+	<canvas:GridCanvas id="gridCanvas"/>	
+	
+	<mx:Script>
+		<![CDATA[
+            import com.roguedevelopment.objecthandles.SelectionManager;
+            
+            import flash.desktop.Clipboard;
+            
+            import org.jbei.registry.Constants;
+            import org.jbei.registry.view.ui.shapes.CollectionShape;
+            import org.jbei.registry.view.ui.shapes.RectShape;
+                                                
+            public static const MAP_GENBANK:String = "MapGenbank";
+            public static const CLIPBOARD_PASTE_BEGIN:String = "ClipboardPasteBegin";
+            public static const CHANGE_ICON:String = "ChangeIcon";
+            public static const DESELECT:String = "Deselect";
+            
+            private var customContextMenu:ContextMenu;
+            private var mapGenbankMenuItem:ContextMenuItem;
+            private var mapVectorEditorPasteMenuItem:ContextMenuItem;
+            private var changeIconMenuItem:ContextMenuItem;
+			
+            private function onInitialize():void
+            {
+               createContextMenu();
+            }
+            
+            private function createContextMenu():void
+            {
+                customContextMenu = new ContextMenu();
+                
+                customContextMenu.hideBuiltInItems();
+                customContextMenu.clipboardMenu = true;
+                customContextMenu.clipboardItems.selectAll = false;
+                    
+                contextMenu = customContextMenu;
+                
+                createCustomContextMenuItems();
+                
+                customContextMenu.addEventListener(ContextMenuEvent.MENU_SELECT, onContextMenuSelect);
+            }
+            
+            private function createCustomContextMenuItems():void
+            {
+                mapGenbankMenuItem = new ContextMenuItem("Map from Genbank");
+                mapGenbankMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onMapGenbankMenuItem);
+                mapVectorEditorPasteMenuItem = new ContextMenuItem("Map from Clipboard");
+                mapVectorEditorPasteMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onClipboardPaste);
+                changeIconMenuItem = new ContextMenuItem("Change Icon", true);
+                changeIconMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onChangeIconMenuItem);
+            }
+            
+            private function onContextMenuSelect(event:ContextMenuEvent):void
+            {
+                customContextMenu.customItems = new Array;
+                
+                if (event.mouseTarget is RectShape) {
+                    SelectionManager.instance.setSelected(event.mouseTarget as RectShape);
+                    customContextMenu.customItems.push(mapGenbankMenuItem);
+                    customContextMenu.customItems.push(mapVectorEditorPasteMenuItem);
+                    customContextMenu.customItems.push(changeIconMenuItem);
+                    customContextMenu.clipboardItems.copy = true;
+                    customContextMenu.clipboardItems.clear = true;
+                } else if (event.mouseTarget is CollectionShape) {
+                    SelectionManager.instance.setSelected(event.mouseTarget as CollectionShape);
+                    customContextMenu.clipboardItems.copy = false;
+                    customContextMenu.clipboardItems.clear = true;
+                } else {
+                    customContextMenu.clipboardItems.copy = false;
+                    customContextMenu.clipboardItems.clear = false;
+                }
+                
+                if (Clipboard.generalClipboard.hasFormat(Constants.PART_CLIPBOARD_KEY)) {
+                    customContextMenu.clipboardItems.paste = true;
+                } else {
+                    customContextMenu.clipboardItems.paste = false;
+                }
+            }
+            
+            private function onMapGenbankMenuItem(event:Event):void
+            {
+                dispatchEvent(new Event(MAP_GENBANK, true)); 
+            }
+            
+            private function onClipboardPaste(event:Event):void
+            {
+                dispatchEvent(new Event(CLIPBOARD_PASTE_BEGIN, true));
+            }
+            
+            private function onChangeIconMenuItem(event:Event):void
+            {
+                dispatchEvent(new Event(CHANGE_ICON, true));
+            }
+            
+            private function onClick(event:Event):void
+            {
+                if (!(event.target is RectShape) && !(event.target is CollectionShape)) {
+                    this.setFocus();
+                    SelectionManager.instance.selectNone();
+                    dispatchEvent(new Event(DESELECT));
+                }
+            }
+	]]>
+	</mx:Script>
+	
+</mx:Canvas>

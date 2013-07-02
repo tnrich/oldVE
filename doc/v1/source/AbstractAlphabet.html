@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-alphabets-AbstractAlphabet'>/**
+</span> * @class Teselagen.bio.sequence.alphabets.AbstractAlphabet
+ * 
+ * Abstract general class for alphabets.
+ * 
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ * @author Timothy Ham (original author)
+ */ 
+ Ext.define(&quot;Teselagen.bio.sequence.alphabets.AbstractAlphabet&quot;, {
+	requires: [&quot;Teselagen.bio.sequence.symbols.GapSymbol&quot;, &quot;Teselagen.bio.BioException&quot;],
+
+	symbolsMap: [],
+
+    gap: Ext.create(&quot;Teselagen.bio.sequence.symbols.GapSymbol&quot;, {
+        name: &quot;Gap&quot;,
+        value: &quot;-&quot;
+    }),
+
+	constructor: function(inData){
+		//var symbolsMap = [];
+		var key = this.gap.getValue();
+
+		this.symbolsMap[key] = this.gap;
+
+<span id='Teselagen-bio-sequence-alphabets-AbstractAlphabet-method-getSymbols'>		/**
+</span>		 * Returns the list of the alphabet's symbols.
+		 * @return {Symbols[]} an array of symbols.
+		 */
+		this.getSymbols = function (){
+			var symbols = [];
+			for (var index in this.symbolsMap){
+				symbols.push(this.symbolsMap[index]);
+			}
+			return symbols;
+		}
+
+<span id='Teselagen-bio-sequence-alphabets-AbstractAlphabet-method-symbolByValue'>		/** 
+</span>		 * SYMBOLSMAP ARRAY IS AN EMPTY ARRAY WHEN CALLED FROM DNAAlphabet
+		 * Retrieves the symbol that corresponds to the input value.
+         * @method symbolByValue
+		 * @param  {Symbol} pValue corresponds to the key for a symbol in the map of symbols
+		 * @return {Symbol} a symbol in the symbol map.
+		 */
+		this.symbolByValue = function(pValue){
+			return this.symbolsMap[pValue];
+		}
+
+<span id='Teselagen-bio-sequence-alphabets-AbstractAlphabet-method-addSymbol'>		/**
+</span>		 * Adds an input symbol to the symbol map.
+         * @method addSymbol
+		 * @param {Symbol} pSymbol corresponds to the symbol to be added to to the map of symbols
+		 */
+		this.addSymbol = function(pSymbol){
+			console.log(Ext.getClassName(pSymbol).indexOf(&quot;Teselagen.bio.sequence.symbols&quot;) !== -1);
+			//Check the type (in a roundabout kind of way)
+			if (Ext.getClassName(pSymbol).indexOf(&quot;Teselagen.bio.sequence.symbols&quot;) !== -1){
+				var key = pSymbol.getValue();
+				this.symbolsMap[key] = pSymbol;
+			} else {
+				throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+					message: &quot;You tried adding a non-symbol to symbolsMap&quot;
+				});
+			}
+		}
+
+<span id='Teselagen-bio-sequence-alphabets-AbstractAlphabet-method-getGap'>		/**
+</span>		 * Returns the Gap Symbol for the Alphabet
+         * @method getGap
+		 * @return {Gap Symbol} the gap symbol of the alphabet
+		 */
+		this.getGap = function(){
+			return this.gap;
+		}
+
+		return this;
+	}
+});
+</pre>
+</body>
+</html>

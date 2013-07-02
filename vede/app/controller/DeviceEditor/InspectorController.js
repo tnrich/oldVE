@@ -90,7 +90,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var j5collection = tab.model.getDesign().getJ5Collection();
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
-        var runj5Btn = this.inspector.down("button[cls='runj5Btn']");
+        var runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
+        var runj5Btn2 = tab.down("button[cls='j5button']");
         var inspector = this.inspector;
 
         this.checkCombinatorial(j5collection,function(combinatorial){
@@ -133,17 +134,29 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 j5ready = false;
             }
 
+            Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
+
             tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
             tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
             if (j5ready ==  true) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
-                    runj5Btn.enable();
-                    runj5Btn.removeCls('btnDisabled');
+
+                    runj5Btn1.enable();
+                    runj5Btn1.removeCls('btnDisabled');
+
+                    runj5Btn2.enable();
+                    runj5Btn2.removeCls('btnDisabled');
+
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
                 } else {
                     j5ReadyField.setFieldStyle("color:red");
-                    runj5Btn.disable();
-                    runj5Btn.addCls('btnDisabled');
+
+                    runj5Btn1.disable();
+                    runj5Btn1.addCls('btnDisabled');
+
+                    runj5Btn2.disable();
+                    runj5Btn2.addCls('btnDisabled');
+
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
                 }
             if (combinatorial == true) {
@@ -153,7 +166,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
 
             if (typeof(cb) == "function") {cb(combinatorial,j5ready);}
-
         });
     },
 
@@ -512,10 +524,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var newName = nameField.getValue();
         var self = this;
 
+        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
+
         Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
             // If the selected part is not in the device already, add it.
-            if(self.selectedPart.get("phantom") || 
-               self.DeviceDesignManager.getBinAssignment(self.activeProject,
+            //if(self.selectedPart.get("phantom") || 
+            if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
                                                          self.selectedPart) < 0) {
                 self.selectedPart = Ext.create("Teselagen.models.Part");
                 self.selectedPart.set("phantom", false);
@@ -523,6 +537,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
             } else {
+                if(self.selectedPart.get("phantom")) {
+                    self.selectedPart.set("phantom", false);
+                }
+
                 self.selectedPart.set("name", newName);
             }
 
@@ -653,8 +671,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                name: this.DeviceDesignManager.generateDefaultRuleName(this.activeProject),
                 compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
             });
+
             var ruleForm = newEugeneRuleDialog.down("form");
             var operand2Field = ruleForm.down("combobox[cls='operand2PartField']");
 
@@ -675,7 +695,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     ruleForm.loadRecord(newEugeneRule);
                     ruleForm.down("displayfield[cls='operand1Field']").setValue(
                                                 self.selectedPart.get("name"));
-
 
                     operand2Field.bindStore(partsStore);
                     operand2Field.setValue(partsStore[0]);

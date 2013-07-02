@@ -17,11 +17,11 @@ Ext.define("Teselagen.manager.PrinterMonitor", {
     disabled: true,
 
     constructor: function(){
-        console.log("Printer Monitor created!");
+        // console.log("Printer Monitor created!");
     },
 
     stopMonitoring: function(){
-        console.log("Printer monitor stopped");
+        // console.log("Printer monitor stopped");
         this.disabled = true;
     },
 

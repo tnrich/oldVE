@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+<span id='Teselagen-bio-parsers-GenbankLocusKeyword'>/**
+</span> * @class Teselagen.bio.parsers.GenbankLocusKeyword
+ *
+ * Stores the information from the LOCUS line of a Genbank file.
+ * Same level as {@link Teselagen.bio.parsers.GenbankKeyword},
+ * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword},
+ * and {@link Teselagen.bio.parsers.GenbankOriginKeyword}.
+ * Specifically for parsing the Locus line.
+ *
+ * When parsing through GenbankManager, the Locus line must be in this order with no white space in each term.
+ * The spaces between the terms (either spaces or tabs or other white space) between terms do not:
+ *      LOCUS &lt;locusName&gt; &lt;sequenceLength&gt; bp &lt;strandType&gt;-&lt;nucleic acid type&gt; &lt;linear/circular&gt; &lt;division code&gt; &lt;date&gt;
+ *
+ * Sequence Length:     Number of base pairs. Required.
+ * Strand Type:         Single strand (ss) or double strand. Not required
+ * Nucleic Acid Type:   DNA or RNA. Required.
+ * Linear/Circular:     When absent, default is Linear
+ * Division Code:       Three letter, all caps. Not required.
+ * Date:                Date. Not required.
+ *
+ *
+ * @author Diana Wong
+ * @author Timothy Ham (original author)
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
+    
+    requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
+    
+    extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
+
+<span id='Teselagen-bio-parsers-GenbankLocusKeyword-cfg-config'>    /**
+</span>     * @cfg {Object} config
+     * @cfg {String} keyword
+     * @cfg {String} locusName
+     * @cfg {Number} sequenceLength
+     * @cfg {String} strandType
+     * @cfg {String} naType
+     * @cfg {Boolean} lnear
+     * @cfg {Boolean} circular
+     * @cfg {String} divisionCode
+     * @cfg {String} date
+     */
+    config: {
+        //keyword: &quot;LOCUS&quot;,
+        locusName: &quot;&quot;,
+        sequenceLength: 0,
+        strandType: &quot;&quot;,
+        naType: &quot;DNA&quot;,
+        linear: false,
+        circular: true,
+        divisionCode: &quot;&quot;,
+        date: &quot;&quot;
+    },
+
+<span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-constructor'>    /**
+</span>     * Creates a new GenbankLocusKeyword from inData.
+     * @param {String} locusName
+     * @param {Number} sequenceLength base pair length
+     * @param {String} strandType ss or ds
+     * @param {String} naType DNA or RNA
+     * @param {Boolean} linear !linear = circular.
+     * @param {String} divisionCode Three letter code in caps.
+     * @param {String} date
+     * @returns {GenbankLocusKeyword}
+     * @member Teselagen.bio.parsers.GenbankLocusKeyword
+     */
+    constructor: function (inData) {
+        //var that = this;
+        
+        this.keyword = &quot;LOCUS&quot;;
+        //var locusName;
+        //var sequenceLength;
+        //var strandType;
+        //var naType;
+        //var linear; //boolean; cannot designate Tandem
+        //var circular; //boolean
+        //var divisionCode;
+        // date;
+
+        if (inData !== undefined) {
+            this.locusName       = inData.locusName || &quot;&quot;;
+            this.sequenceLength  = inData.sequenceLength || 0;
+            this.strandType      = inData.strandType || &quot;&quot;;
+            this.naType          = inData.naType || &quot;DNA&quot;;
+            this.linear          = inData.linear || false; // false or false; default is false, only a true can override this
+            this.circular        = inData.circular || !inData.linear; //untested
+            this.divisionCode    = inData.divisionCode || &quot;&quot;;
+            this.date            = inData.date || &quot;&quot;;
+        }
+
+        return this;
+    },
+
+<span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-toString'>    /**
+</span>     * Converts this GenbankLocusKeyword to Genbank file format string
+     * @returns {String} genbankString
+     */
+    toString: function () {
+        var tmp;
+
+        var line = Teselagen.StringUtil.rpad(&quot;LOCUS&quot;,&quot; &quot;, 12);
+        line += Teselagen.StringUtil.rpad(this.locusName,&quot; &quot;, 16);
+        line += &quot; &quot;; // T.H line 2778 of GenbankFormat.as col 29 space
+        line += Teselagen.StringUtil.lpad(String(this.sequenceLength),&quot; &quot;, 11);
+        line += &quot; bp &quot;; // col 41
+        if (this.strandType !== &quot;&quot;) {
+            tmp =  this.strandType + &quot;-&quot;;
+        } else {
+            tmp = &quot;&quot;;
+        }
+        line += Teselagen.StringUtil.lpad(tmp, &quot; &quot;, 3);
+        line += Teselagen.StringUtil.rpad(this.naType,&quot; &quot;,6);
+        line += &quot;  &quot;;
+
+        if (this.linear === true) {
+            line += &quot;linear  &quot;;
+            //line += &quot;        &quot;;
+        } else {
+            line += &quot;circular&quot;;
+        }
+
+        line += &quot; &quot;; //col 64
+        if (this.divisionCode !== undefined) {
+            line += Teselagen.StringUtil.rpad(this.divisionCode,&quot; &quot;, 3);
+        } else {
+            Teselagen.StringUtil.rpad(line, &quot; &quot;, 3);
+        }
+        line += &quot; &quot;; // col 68
+        // DOES NOT PARSE DATE USEFULLY ORIGINALLY!
+        line += this.date;
+        //line += &quot;\n&quot;;
+
+        return line;
+    },
+
+<span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-toJSON'>    /**
+</span>     * Converts to JSON format.
+     * @returns {Object} json
+     */
+    toJSON: function() {
+        var json = {
+                keyword: this.keyword,
+                locusName: this.locusName,
+                sequenceLength: this.sequenceLength,
+                strandType: this.strandType,
+                naType: this.naType,
+                linear: this.linear,
+                divisionCode: this.divisionCode,
+                date: this.date
+        };
+        return json;
+    },
+
+<span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-fromJSON'>    /**
+</span>     * Converts GenBank JSON back to GenBank model
+     * @param {Object} json Genbank Locus in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
+     */
+    fromJSON: function(json) {
+        this.setKeyword(json[&quot;keyword&quot;]);
+        this.setLocusName(json[&quot;locusName&quot;]);
+        this.setSequenceLength(json[&quot;sequenceLength&quot;]);
+        this.setStrandType(json[&quot;strandType&quot;]);
+        this.setNaType(json[&quot;naType&quot;]);
+        this.setLinear(json[&quot;linear&quot;]);
+        this.setDivisionCode(json[&quot;divisionCode&quot;]);
+        this.setDate(json[&quot;date&quot;]);
+
+        return this;
+    }
+
+});</pre>
+</body>
+</html>

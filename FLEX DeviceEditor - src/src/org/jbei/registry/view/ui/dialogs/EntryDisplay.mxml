@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="100%" 
+	title="Entry Information"
+	showCloseButton="true"
+	close="cancel(event)">
+	
+	<!--<mx:HBox>
+		
+		<mx:VBox width="50%" paddingBottom="3" paddingTop="3">
+	 		<mx:Button label="Map Entry to Shape" click="setShapeEntry()"/>
+	 	</mx:VBox>
+	 	<mx:VBox width="50%" paddingBottom="3" paddingTop="3">
+	 		<mx:Button label="Cancel" click="cancel()"/>
+	 	</mx:VBox>	
+	 	
+	 </mx:HBox>-->	
+
+		
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Button;
+			import mx.containers.VBox;
+			import mx.containers.HBox;
+			import mx.controls.Alert;
+			
+			import org.jbei.registry.view.ui.MappingBar;
+			
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import mx.controls.DataGrid;
+			import mx.collections.ArrayCollection;
+			
+		    import mx.managers.PopUpManager;
+			
+			import org.jbei.registry.api.Entry;
+		    import org.jbei.registry.api.SearchResult;
+		    import org.jbei.registry.api.Name;
+		    import org.jbei.registry.api.PartNumber;
+			
+			private var _mappingBar:MappingBar;
+			
+			//FIXME - update, this may be fixed now with the creation policy all update
+			//FIXME - not ideal that I had to put the grid in the code
+			//I wanted to put the grid in the script but it was not getting initialized at the right time
+			//This is part of a larger issue having to do with separating out the GUI and code pieces better....
+			private var searchDataGrid:DataGrid = new DataGrid();
+			
+			private var _selectedEntry:Entry;
+			private var _results:ArrayCollection
+			
+			
+			//Getter and Setter functions
+			
+			public function set mappingBar(p:MappingBar):void
+			{
+				_mappingBar = p;
+			}
+			
+			public function set results(a:ArrayCollection):void
+			{
+				_results = a;
+			}
+			
+			public function set selectedEntry(e:Entry):void
+			{
+				_selectedEntry = e;
+			}
+			
+			
+			//Function to display the results to the DataGrid
+			public function displayResults():void
+			{
+				if(_results && _results.length > 0) {
+                   var resultsDataProvider:ArrayCollection = new ArrayCollection(); 
+                   for(var i:int = 0; i < _results.length; i++) {
+                        var searchResult:SearchResult = _results[i];
+                                                
+                        resultsDataProvider.addItem(
+                             {
+                               "index" : i + 1,
+                               "id" : searchResult.entry.recordId,
+                               "score" : searchResult.score,
+                               "partNumber" : (searchResult.entry.partNumbers.length > 0 ? (searchResult.entry.partNumbers[0] as PartNumber).partNumber : ""),
+                               "name" : (searchResult.entry.names.length > 0 ? (searchResult.entry.names[0] as Name).name : "")
+                             }
+                             );
+                        }
+                        
+                        setUpSearchDataGrid(resultsDataProvider);                
+                                        
+                                        
+              	} 
+              	else {
+                   setUpSearchDataGrid(new ArrayCollection());                     
+                   trace("No entries found!");
+               }
+               
+               	PopUpManager.addPopUp(this, _mappingBar.parent, true);
+				PopUpManager.centerPopUp(this);
+			}
+			
+			//Ideally this function would not be needed if I separted out the GUI and the .as script code better
+			private function setUpSearchDataGrid(resultsDataProvider:ArrayCollection):void
+			{
+				var vBoxMain:VBox = new VBox();
+				var vBoxTwo:VBox = new VBox();
+				var hBox:HBox = new HBox();
+				
+				searchDataGrid.editable = false;
+                searchDataGrid.width = 600;
+                
+                searchDataGrid.dataProvider = resultsDataProvider;
+                trace("Set data provider");                        
+                
+                var colIndex:DataGridColumn = new DataGridColumn();
+                colIndex.headerText = "#";
+                colIndex.editable = false;
+                colIndex.dataField = "index";
+                searchDataGrid.columns.push(colIndex);                        
+                                                        
+                var colIndex2:DataGridColumn = new DataGridColumn();                                        
+                colIndex2.headerText = "ID";
+                colIndex2.editable = true;
+                colIndex2.dataField = "id";
+                searchDataGrid.columns.push(colIndex2);
+                                        
+                var colIndex3:DataGridColumn = new DataGridColumn();
+                colIndex3.headerText = "Score";
+                colIndex3.editable = false;
+                colIndex3.dataField = "score";
+                searchDataGrid.columns.push(colIndex3);
+                              
+                var colIndex4:DataGridColumn = new DataGridColumn();
+                colIndex4.headerText = "Part Number";
+                colIndex4.editable = true;
+                colIndex4.dataField = "partNumber";
+                searchDataGrid.columns.push(colIndex4);
+                                        
+                var colIndex5:DataGridColumn = new DataGridColumn();
+                colIndex5.headerText = "Name";
+                colIndex5.editable = true;
+                colIndex5.dataField = "name";
+                searchDataGrid.columns.push(colIndex5);
+                                        
+               //This is what was in the flex script orginally.....
+               /*
+               <mx:DataGrid id="searchDataGrid" width="100%" editable="true">
+                   <mx:columns>
+                       <mx:DataGridColumn headerText="#" dataField="index" width="45" editable="false"/>
+                       <mx:DataGridColumn headerText="ID" dataField="id" editable="true"/>
+                       <mx:DataGridColumn headerText="Score" dataField="score" editable="false"/>
+                       <mx:DataGridColumn headerText="Part Number" dataField="partNumber" editable="true"/>
+                       <mx:DataGridColumn headerText="Name" dataField="name" editable="true"/>
+                   </mx:columns>
+              </mx:DataGrid>*/
+              
+              	
+              var mapButton:Button = new Button();
+              mapButton.label = "Map Entry to Shape";
+              mapButton.addEventListener(MouseEvent.CLICK, setShapeEntry);
+              var cancelButton:Button = new Button();
+              cancelButton.label = "Cancel";
+              cancelButton.addEventListener(MouseEvent.CLICK, cancel);
+              
+              hBox.addChild(mapButton);
+              hBox.addChild(cancelButton);
+              
+              
+                                       		
+              vBoxTwo.addChild(searchDataGrid);
+              vBoxMain.addChild(vBoxTwo);
+              vBoxMain.addChild(hBox);
+              
+              addChild(vBoxMain); 
+              	
+			}
+			
+			
+			
+			//Sets up entry for the shape being mapped 
+			private function setShapeEntry(e:Event):void 
+			{
+					if(searchDataGrid.selectedIndex != -1)
+					{
+						//The entry you want mapped in the searchDataGrid selected
+						var searchResult:SearchResult = _results[searchDataGrid.selectedIndex];
+						_mappingBar.mapEntry(searchResult.entry);		
+					
+						//Close this
+						PopUpManager.removePopUp(this);
+					}
+					else
+						Alert.show("Make sure to select an row!", "Error Message");			
+			}
+			
+			
+			//Remove this from the pop up manager; used when the cancel button is pressed
+			private function cancel(e:Event):void
+			{
+				PopUpManager.removePopUp(this);	
+			}			
+			
+		]]>
+	</mx:Script>
+</mx:TitleWindow>

@@ -37,7 +37,11 @@ Ext.define("Teselagen.models.EugeneRule", {
         {name: "operand1_id",   type: "long"},
         {name: "operand2_id",   type: "long"},
         {
-            name: "name",
+            name: "name"
+            /**
+             * @DEPRECATED
+             * Use DeviceDesignManager.getDefaultRuleName method to generate
+             * default rule name strings, as this generates design-specific names.
             convert: function(v, record) {
                 var name;
 
@@ -53,7 +57,7 @@ Ext.define("Teselagen.models.EugeneRule", {
                     }
                 }
                 return name;
-            }
+            }*/
         },
 
         
@@ -72,17 +76,6 @@ Ext.define("Teselagen.models.EugeneRule", {
                     // These check out
                 } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) {
                     console.warn("Using deprecated compositionalOperator: ",compOp);
-                    if(compOp === constants.NOTMORETHAN)
-                    {
-                        compOp = constants.MORETHAN;
-                        this.set('negationOperator',true);
-                        console.warn("Compositional operator updated to MORE and NOT? True");
-                    }
-                    if(compOp === constants.NOTMOREWITH)
-                    {
-                        compOp = constants.MOREWITH;
-                        cconsole.warn("Compositional operator updated to WITH and NOT? True");
-                    }
                 } else {
                     // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
                     console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);

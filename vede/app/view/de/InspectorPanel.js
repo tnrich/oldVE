@@ -25,6 +25,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
     titleCollapse: false,
     removePanelHeader: false,
     resizable: true,
+    autoScroll: true,
     width: 100,
     layout: {
         deferredRender: false,
@@ -134,6 +135,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
                             name: 'fas',
+                            editable: false,
                             queryMode: 'local',
                             anchor: '100%',
                             store: []
@@ -310,7 +312,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            layout: 'fit',
                             allowDeselect: true,
                             columnLines: true,
                             minHeight:132,
@@ -360,6 +361,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
                                     dataIndex: 'fas',
+                                    readOnly: true,
                                     renderer: function(value, metadata, record) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
@@ -477,11 +479,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
             bodyCls: 'j5InfoTab-body',
             disabled: true,
             preventHeader: true,
+            autoScroll: true,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            autoScroll: false,
             margin: "5px 0px 5px 0px",
             items: [
                 {
@@ -552,6 +554,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     cls: 'assemblyMethodSelector',
                                     fieldLabel: '<b>Assembly Method:</b>',
                                     labelCls: 'assembly-label',
+                                    editable: false,
                                     labelSeparator: ' ',
                                     labelWidth: 110,
                                     width:350,

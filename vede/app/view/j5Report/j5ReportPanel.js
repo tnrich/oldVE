@@ -221,7 +221,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             xtype: 'gridcolumn',
                             dataIndex: 'name',
                             flex: 1,
-                            text: 'Name'
+                            text: 'Name',
+                            renderer: function (val, metadata) {
+                                metadata.tdAttr = 'data-qtip = "Click to open"';
+                                return val;
+                            }
                         },
                         {
                             xtype: 'gridcolumn',
@@ -239,7 +243,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             xtype: 'gridcolumn',
                             dataIndex: 'fileContent',
                             flex: 2,
-                            text: 'Content'
+                            text: 'Content',
+                            renderer: function(val) {
+                                var content_limited = val.slice(0, (val.lastIndexOf("bp") + 2));
+                                return content_limited + "..."
+                            }
                         }
                     ]
                 },
