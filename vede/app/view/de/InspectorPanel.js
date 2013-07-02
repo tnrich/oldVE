@@ -311,9 +311,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            layout: 'fit',
                             allowDeselect: true,
-                            autoScroll: true,
                             columnLines: true,
                             minHeight:132,
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
@@ -362,6 +360,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
                                     dataIndex: 'fas',
+                                    readOnly: true,
                                     renderer: function(value, metadata, record) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
