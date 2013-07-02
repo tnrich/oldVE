@@ -325,6 +325,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.ve.SelectWindow": [],
   "Vede.view.j5Report.j5ReportPanel": [],
   "Teselagen.models.digest.Ladder": [],
+  "Vede.view.de.InspectorCollectionInfoGrid": [],
   "Teselagen.models.DNAFeatureNote": [],
   "Teselagen.renderer.pie.Layer": [],
   "Vede.controller.PartLibraryController": [],
@@ -787,6 +788,9 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.j5ReportPanel"
   ],
   "Teselagen.models.digest.Ladder": [],
+  "Vede.view.de.InspectorCollectionInfoGrid": [
+    "widget.collectioninfogrid"
+  ],
   "Teselagen.models.DNAFeatureNote": [],
   "Teselagen.renderer.pie.Layer": [],
   "Vede.controller.PartLibraryController": [],

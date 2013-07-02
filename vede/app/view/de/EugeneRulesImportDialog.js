@@ -11,7 +11,7 @@ Ext.define('Vede.view.de.EugeneRulesImportDialog', {
             hideHeaders: true,
             height: 122,
             name: 'conflict',
-            title: 'Conflict rules',
+            title: 'Conflicting rules',
             columns: [{
                     xtype: 'gridcolumn',
                     dataIndex: 'originalRuleLine',
