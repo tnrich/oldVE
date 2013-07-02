@@ -213,7 +213,7 @@ function encoded_target_part_order_list_file(model,method)
         }
         else
         {
-            direction = (bin["directionForward"] === 'true') ? 'forward' : '';
+            direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
             //fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
             fas = bin.fases[0];
             if(fas === 'None') fas = '';

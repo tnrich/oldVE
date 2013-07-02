@@ -7,7 +7,7 @@
 Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     alias: "DeviceDesignParsersManager",
     singleton: true,
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.constants.SBOLIcons"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.constants.SBOLIcons","Teselagen.utils.FormatUtils"],
     mixins: {
         observable: "Ext.util.Observable"
     },
@@ -615,8 +615,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     try {
                     var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                         name: newRule.name,
-                        compositionalOperator: newRule.compositionalOperator,
-                        negationOperator: newRule.negationOperator,
+                        compositionalOperator: Teselagen.utils.FormatUtils.convertEugeneRule(newRule.compositionalOperator).compOp,
+                        negationOperator: Teselagen.utils.FormatUtils.convertEugeneRule(newRule.negationOperator).negOp,
                         originalRuleLine: line
                     });
                     }
@@ -627,6 +627,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             //console.log("Unsupported operator");
                             unsupported = true;
                             ignoredLines.push({"originalRuleLine":line});
+                        }
+                        else
+                        {
+                            throw new Error("Error while processing eugeneRules");               
                         }
                     }
                     
@@ -673,7 +677,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             checkForDuplicatedName(rule,function(dup,existingRule){
                 if(dup) { 
                     var rule2 = existingRule.get('operand2isNumber') ? existingRule.get('operand2Number') : existingRule.getOperand2().data.name;
-                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+"and the rule to be imported, "+rule.data.originalRuleLine +"Renaming the rule to be imported: "+rule.data.name+'_1'});
+                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+rule.data.name+'_1'});
                     rule.set('name',rule.data.name+'_1');
                     rule.set('originalRuleLine',rule.get('originalRuleLine').replace(existingRule.get('name'),rule.get('name')));
                 }

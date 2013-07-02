@@ -211,9 +211,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
                                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                                Vede.application.fireEvent("PopulateStats");
                             });
                         }
                     });
+
                 } else {
                     return false;
                 }
@@ -259,6 +261,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         }
                     });
 
+                    Vede.application.fireEvent("PopulateStats");
+
                 } else {
                     return false;
                 }
@@ -283,6 +287,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
                     oldTab.el.mask("Generating Design");
                     var self = this;
+
+                    Vede.application.fireEvent("PopulateStats");
+
                     if(project) {
 
                         var binsArray = [];

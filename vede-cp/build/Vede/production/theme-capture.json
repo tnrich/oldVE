@@ -624,6 +624,7 @@
         "x": 10,
         "y": 873
       },
+      "gradient": "top",
       "id": "button-1024",
       "radius": {
         "bl": 3,
@@ -652,6 +653,7 @@
         "x": 10,
         "y": 915
       },
+      "gradient": "top",
       "id": "button-1025",
       "radius": {
         "bl": 3,
@@ -680,6 +682,7 @@
         "x": 10,
         "y": 957
       },
+      "gradient": "top",
       "id": "button-1026",
       "radius": {
         "bl": 3,

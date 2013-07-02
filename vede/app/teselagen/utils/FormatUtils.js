@@ -58,8 +58,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
         "Teselagen.bio.sequence.dna.FeatureNote",
         "Teselagen.bio.sequence.DNATools",
 
-        "Teselagen.utils.SequenceUtils"//,
-        //"Teselagen.manager.SequenceFileManager"
+        "Teselagen.utils.SequenceUtils",
+        "Teselagen.constants.Constants"
     ],
 
     singleton: true,
@@ -708,6 +708,24 @@ Ext.define("Teselagen.utils.FormatUtils", {
             }
         }
         return gb;
+    },
+    convertEugeneRule: function(v,n) {
+        var compOp = v.toUpperCase();
+        var negationOperator = v;
+        var constants = Teselagen.constants.Constants;
+        if(compOp === constants.NOTMORETHAN)
+        {
+            compOp = constants.MORETHAN;
+            negationOperator = true;
+            console.warn("Compositional operator updated to MORE and NOT? True");
+        }
+        if(compOp === constants.NOTMOREWITH)
+        {
+            compOp = constants.MOREWITH;
+            negationOperator = true;
+            cconsole.warn("Compositional operator updated to WITH and NOT? True");
+        }
+        return {"compOp":compOp,"negOp":negationOperator};
     }
 
 });
