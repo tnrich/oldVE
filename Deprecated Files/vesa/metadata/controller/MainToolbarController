@@ -1,0 +1,13 @@
+{
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "MainToolbarController"
+    },
+    "id": "ExtBox1-ext-gen13951",
+    "designerId": "75149a58-6160-42c0-8847-5066ab8e2b32"
+}

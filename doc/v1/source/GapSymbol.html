@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-symbols-GapSymbol'>    /**
+</span>    * @class Teselagen.bio.sequence.symbols.GapSymbol
+    * This class models a gap symbol.
+    * @author Micah Lerner
+    */
+   Ext.define(&quot;Teselagen.bio.sequence.symbols.GapSymbol&quot;,{
+
+	constructor: function(inData){
+		var name;
+		var value;
+
+		if (inData) {
+			name = inData.name;
+			value = inData.value
+		}else {
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+<span id='Teselagen-bio-sequence-symbols-GapSymbol-method-getName'>		/**
+</span>		 * Gets Name
+		 * @return {String} gets Name
+		 */
+		this.getName = function(){
+			return name;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-GapSymbol-method-setName'>		/**
+</span>		 * Sets Name
+		 * @method setName
+		 * @param {String} pName sets name
+		 */
+		this.setName = function(pName){
+			name = pName;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-GapSymbol-method-getValue'>		/**
+</span>		 * Gets Value
+		 * @method getValue
+		 * @return {String} gets value
+		 */
+		this.getValue = function(){
+			return value;
+		}
+
+<span id='Teselagen-bio-sequence-symbols-GapSymbol-method-setValue'>		/**
+</span>		 * Sets Value
+		 * @method setValue
+		 * @param {String} pValue sets value
+		 */
+		this.setValue = function(pValue){
+			value = pValue;
+		}
+
+		return this;
+	},
+
+
+
+
+});</pre>
+</body>
+</html>

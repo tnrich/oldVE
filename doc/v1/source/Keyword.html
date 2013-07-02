@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+<span id='Teselagen-bio-parsers-Keyword'>/**
+</span> * @class Teselagen.bio.parsers.Keyword
+ *
+ * Super class for all Keywords that have a keyword-value pairs.
+ * Not used directly by Genbank.
+ * @author Diana Wong
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.Keyword&quot;, {
+    /* */
+
+<span id='Teselagen-bio-parsers-Keyword-cfg-config'>    /**
+</span>     * @cfg {Object} config
+     * @cfg {String} keyword
+     * @cfg {String} value
+     */
+    config: {
+<span id='Teselagen-bio-parsers-Keyword-cfg-keyword'>        /**
+</span>         * @cfg {String} keyword
+         */
+        keyword: null,
+<span id='Teselagen-bio-parsers-Keyword-cfg-value'>        /**
+</span>         * @cfg {String} value
+         */
+        value: null
+    },
+<span id='Teselagen-bio-parsers-Keyword-method-constructor'>    /**
+</span>     * Creates a new Keyword from inData. General super class for GenbankKeywords to inherit from.
+     * @param {String} keyword
+     * @param {String} value
+     * @member Teselagen.bio.parsers.Keyword
+     */
+    constructor: function (inData) {
+        
+<span id='Teselagen-bio-parsers-Keyword-property-keyword'>        /**
+</span>         *  @property {String} keyword
+         *  @property {String} value
+         */
+        if (inData) {
+            this.keyword = inData.keyword || null;
+            this.value = inData.value || null;
+        }
+        
+        /*
+         * Appends to existing parameter, value. THIS HAS BEEN MOVED TO CHILDREN.
+         * @param {String} value
+         *
+        this.appendValue = function(pVal) {
+            this.value += pVal;
+        }*/
+        
+        return this;
+    }
+
+});</pre>
+</body>
+</html>

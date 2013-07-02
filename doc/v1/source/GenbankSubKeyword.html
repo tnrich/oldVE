@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+<span id='Teselagen-bio-parsers-GenbankSubKeyword'>/**
+</span> * @class Teselagen.bio.parsers.GenbankSubKeyword class
+ *
+ * Stores the information from sub-keyword lines of a Genbank file.
+ * These are for subkeywords not defined by {@link Teselagen.bio.parsers.GenbankFeatureElement}
+ * (Qualifier and Location) and from the main section of the Genbank File (e.g. Source, Authors, etc.)
+ * @author Diana Wong
+ * @author Timothy Ham (original author)
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
+    
+    requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
+    
+    extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
+
+<span id='Teselagen-bio-parsers-GenbankSubKeyword-cfg-config'>    /**
+</span>     * @cfg {Object} config
+     * @cfg {String} keyword
+     * @cfg {String} value
+     */
+    config: {
+        value: null
+    },
+
+<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-constructor'>    /**
+</span>     * Creates a new GenbankSubKeyword from inData.
+     * @param {String} keyword
+     * @param {String} value
+     * @returns {GenbankSubKeyword}
+     * @member Teselagen.bio.parsers.GenbankSubKeyword
+     */
+    constructor: function (inData) {
+
+        if (inData !== undefined) {
+            this.keyword    = inData.keyword || null;
+            this.value      = inData.value || null;
+        }
+        return this;
+    },
+<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-appendValue'>    /**
+</span>     * Appends pValue to existing value property
+     * @param {String} value
+     */
+    appendValue: function(pVal) {
+        if (this.value) {
+            this.value += pVal;
+        } else {
+            this.value = pVal;
+        }
+    },
+
+<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-toString'>    /**
+</span>     * Converts this GenbankSubKeywords to Genbank file format string
+     * This does not account for text wrapping.
+     * @returns {String} genbankString
+     */
+    toString: function() {
+        //var width = 80-12;
+        var line = &quot;  &quot; + this.keyword;
+        //line = line.lpad(&quot; &quot;, 2); // + this.value;
+        line = Teselagen.StringUtil.rpad(line,&quot; &quot;, 12);
+
+        line += this.value;
+        /*line += that.value.substring(0,width)
+
+        for (var i=width; i&lt;value; i=i+width) {
+            line += that.value.substring(i,width);
+        }*/
+
+        return line;
+    },
+
+<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-toJSON'>    /**
+</span>     * Converts to JSON format. Overloads for JSON.stringify()
+     * @returns {Object} json
+     */
+    toJSON: function() {
+
+        var json = {
+            keyword: this.keyword,
+            value: this.value
+        };
+        return json;
+    },
+
+<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-fromJSON'>    /**
+</span>     * Converts GenBank JSON back to GenBank model
+     * @param {Object} json Genbank SubKeyword in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankSubKeyword}
+     */
+    fromJSON: function(json) {
+        //console.log(&quot;RIGHT HERE&quot;);
+
+        this.keyword    = json[&quot;keyword&quot;];
+        this.value      = json[&quot;value&quot;];
+
+        return this;
+    }
+
+});</pre>
+</body>
+</html>

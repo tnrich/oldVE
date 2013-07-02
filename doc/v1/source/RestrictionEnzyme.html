@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-enzymes-RestrictionEnzyme'>/**
+</span> * @class Teselagen.bio.enzymes.RestrictionEnzyme
+ * Restriction Enzyme holder.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author)
+ */
+Ext.define(&quot;Teselagen.bio.enzymes.RestrictionEnzyme&quot;, {
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-constructor'>    /**
+</span>     * Creates a RestrictionEnzyme object.
+     * @param {String} name Enzyme name.
+     * @param {String} site Enzyme site.
+     * @param {Int} cutType Downstream or Upstream cut type. Values: 0 = downstream, 1 = upstream
+     * @param {String} forwardRegex Forward regular expression.
+     * @param {String} reverseRegex Reverse regular expression.
+     * @param {Int} dsForward Downstream 3&quot; strand cut position.
+     * @param {Int} dsReverse Downstream 5&quot; strand cut position.
+     * @param {Int} usForward Upstream 3&quot; strand cut position.
+     * @param {Int} usReverse Upstream 5&quot; strand cut position.
+     * @returns {RestrictionEnzyme} Restriction Enzyme object.
+     */
+    constructor: function(inData) {
+        var name = inData.name;
+        var site = inData.site;
+        var cutType = inData.cutType;
+        var forwardRegex = inData.forwardRegex;
+        var reverseRegex = inData.reverseRegex;
+        var dsForward = inData.dsForward;
+        var dsReverse = inData.dsReverse;
+        var usForward = inData.usForward;
+        var usReverse = inData.usReverse;
+        
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-isPalindromic'>        /**
+</span>         * Checks if enzyme is palindromic.
+         * @returns {Boolean} True if enzyme has palindromic regex.
+         */
+        this.isPalindromic = function() {
+            return forwardRegex === reverseRegex;
+        }
+        
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-toString'>        /**
+</span>         * Converts the object to a string of the form &quot;Restriction Enzyme [name]&quot;
+         * @method toString
+         * @return {String}
+         */
+        this.toString = function() {
+            return &quot;RestrictionEnzyme: &quot; + name;
+        }
+        
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getName'>        /**
+</span>         * Get name.
+         * @method getName
+         * @return {String}
+         */
+        this.getName = function() {
+            return name;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setName'>        /**
+</span>         * Set name.
+         * @method setName
+         * @param {String} pName 
+         */
+        this.setName = function(pName) {
+            name = pName;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getSite'>        /**
+</span>         * Get site.
+         * @method getSite
+         * @return {String}
+         */
+        this.getSite = function() {
+            return site;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setSite'>        /**
+</span>         * Set site.
+         * @method setSite
+         * @param {String} pSite
+         */
+        this.setSite = function(pSite) {
+            site = pSite;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getCutType'>        /**
+</span>         * Get cutType.
+         * @method getCutType
+         * @return {Int}
+         */
+        this.getCutType = function() {
+            return cutType;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setCutType'>        /**
+</span>         * Set name.
+         * @method setCutType
+         * @param {Int} pCutType
+         */
+        this.setCutType = function(pCutType) {
+            cutType = pCutType;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getForwardRegex'>        /**
+</span>         * Get forwardRegex.
+         * @method getForwardRegex
+         * @return {String}
+         */
+        this.getForwardRegex = function() {
+            return forwardRegex;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setForwardRegex'>        /**
+</span>         * Set forwardRegex.
+         * @method setForwardRegex
+         * @param {String} pForwardRegex
+         */
+        this.setForwardRegex = function(pForwardRegex) {
+            forwardRegex = pForwardRegex;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getReverseRegex'>        /**
+</span>         * Get reverseRegex.
+         * @method getReverseRegex
+         * @return {String}
+         */
+        this.getReverseRegex = function() {
+            return reverseRegex;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setReverseRegex'>        /**
+</span>         * Set reverseRegex.
+         * @method setReverseRegex
+         * @param {String} pReverseRegex
+         */
+        this.setReverseRegex = function(pReverseRegex) {
+            reverseRegex = pReverseRegex;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getDsForward'>        /**
+</span>         * Get dsForward.
+         * @method getDsForward
+         * @return {Int}
+         */
+        this.getDsForward = function() {
+            return dsForward;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setDsForward'>        /**
+</span>         * Set dsForward.
+         * @method setDsForward
+         * @param {Int} pDsForward
+         */
+        this.setDsForward = function(pDsForward) {
+            dsForward = pDsForward;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getDsReverse'>        /**
+</span>         * Get dsReverse.
+         * @method getDsReverse
+         * @return {String}
+         */
+        this.getDsReverse = function() {
+            return dsReverse;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setDsReverse'>        /**
+</span>         * Set dsReverse.
+         * @method setDsReverse
+         * @param {Int} pDsReverse
+         */
+        this.setDsReverse = function(pDsReverse) {
+            dsReverse = pDsReverse;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getUsForward'>        /**
+</span>         * Get usForward.
+         * @method getUsForward
+         * @return {Int}
+         */
+        this.getUsForward = function() {
+            return usForward;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setUsForward'>        /**
+</span>         * Set usForward.
+         * @method setUsForward
+         * @param {Int} pUsForward
+         */
+        this.setUsForward = function(pUsForward) {
+            usForward = pUsForward;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getUsReverse'>        /**
+</span>         * Get usReverse.
+         * @method getUsReverse
+         * @return {Int}
+         */
+        this.getUsReverse = function() {
+            return usReverse;
+        }
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setUsReverse'>        /**
+</span>         * Set usReverse.
+         * @method setUsReverse
+         * @param {Int} pUsReverse
+         */
+        this.setUsReverse = function(pUsReverse) {
+            usReverse = pUsReverse;
+        }
+    }
+});
+</pre>
+</body>
+</html>

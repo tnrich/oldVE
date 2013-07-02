@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:ApplicationControlBar 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%"
+	height="40" 
+	dock="true" 
+	backgroundColor="#FFFFFF" 
+	paddingTop="0" 
+	styleName="haloSilver" 
+	paddingBottom="0" 
+	paddingLeft="0" 
+    paddingRight="0"
+	verticalGap="0" 
+	horizontalGap="0" 
+	cornerRadius="0">
+
+	<mx:HBox width = "100%">
+		<!--<mx:Spacer width="5" />
+	    <mx:Button width="32" height="32" id="RegistryButton" toolTip="Registry Controls"/> 
+		 
+		<mx:Spacer width="5" />
+	   	<mx:Button width="32" height="32" id="EugeneButton" toolTip="Eugene Controls"/>-->
+		
+		
+	    <mx:Button width="40" height="32" id="J5Button" label="J5" toolTip="J5 Controls" click="j5Clicked(event)"/>
+		
+		
+	    <mx:Button width="40" height="32" id="PropertiesButton" icon="{ propIcon }" toolTip="Properties" click="propClicked(event)"/>
+	    
+	    
+	    <mx:Button width="40" height="32" id="HelpButton" click="helpClicked(event)" icon="{ helpIcon }" toolTip="About"/>	
+    </mx:HBox>
+    <mx:HBox>
+    	<mx:Label id="titleLabel" text = "new_design" toolTip="Name of the current design"/>
+    </mx:HBox>
+    
+    
+    <mx:Script>
+		<![CDATA[
+            import mx.managers.PopUpManager;
+            
+            import org.jbei.registry.ApplicationFacade;
+
+            public static const J5CLICKED:String = "J5CLicked";
+			public static const PROPERTIESCLICKED:String = "PropertiesCLicked";
+			public static const HELPCLICKED:String = "HelpClicked";
+		
+			[Embed(source='../assets/icons/controlbar/j5_logo_icon-24.png')]
+			[Bindable]
+			private var j5Icon:Class;
+			
+			[Embed(source='../assets/icons/controlbar/properties.png')]
+			[Bindable]
+			private var propIcon:Class;
+			
+			[Embed(source='../assets/icons/controlbar/Help2-24.png')]
+			[Bindable]
+			private var helpIcon:Class;
+			
+    		private function j5Clicked(event:Event):void
+			{
+					dispatchEvent(new Event(J5CLICKED));
+			}
+			
+			private function propClicked(event:Event):void
+			{
+					dispatchEvent(new Event(PROPERTIESCLICKED));
+			}
+			
+			private function helpClicked(event:Event):void
+			{
+					dispatchEvent(new Event(HELPCLICKED));
+			}
+			
+			public function setTitle(s:String):void
+			{
+				titleLabel.text = s;
+			}
+			
+		]]>
+	</mx:Script>		
+
+
+</mx:ApplicationControlBar>

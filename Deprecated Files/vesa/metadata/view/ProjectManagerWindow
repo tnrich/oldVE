@@ -1,0 +1,140 @@
+{
+    "type": "window",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "container|align": "stretch",
+        "designer|userClassName": "ProjectManagerWindow",
+        "height": 250,
+        "id": "ProjectManagerWindow",
+        "width": 400,
+        "layout": "hbox",
+        "title": "Project Manager"
+    },
+    "id": "ExtBox1-ext-gen203404",
+    "designerId": "52420128-9754-4bb8-92c8-187a378e4e5f",
+    "cn": [
+        {
+            "type": "gridpanel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|flex": 2,
+                "dock": null,
+                "designer|userClassName": "MyGridPanel3",
+                "id": "projectGrid_Panel",
+                "title": "Your Projects"
+            },
+            "designerId": "abd93eb6-c5e8-47dc-afec-bc68f3687d2a",
+            "cn": [
+                {
+                    "type": "gridcolumn",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyColumn5",
+                        "id": "projectGrid_name",
+                        "dataIndex": "string",
+                        "text": "Name"
+                    },
+                    "designerId": "f5669cc0-ff87-4230-b7d0-10908c210390"
+                },
+                {
+                    "type": "datecolumn",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyDateColumn3",
+                        "id": "projectGrid_DateCreated",
+                        "dataIndex": "date",
+                        "text": "Date Created"
+                    },
+                    "designerId": "311a7b24-b75b-4a40-8260-2e8fbd986acf"
+                },
+                {
+                    "type": "datecolumn",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyDateColumn3",
+                        "id": "projectGrid_DateModified",
+                        "dataIndex": "date",
+                        "text": "Last Modified"
+                    },
+                    "designerId": "105c402b-9e93-4b00-ba62-f2ba507cd5ab"
+                },
+                {
+                    "type": "gridview",
+                    "reference": {
+                        "name": "viewConfig",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyGridView3"
+                    },
+                    "designerId": "f804f9df-3b1e-4fa0-a315-d7ae9d6b809d"
+                }
+            ]
+        },
+        {
+            "type": "toolbar",
+            "reference": {
+                "name": "dockedItems",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|flex": 1,
+                "dock": "top",
+                "designer|userClassName": "MyToolbar"
+            },
+            "designerId": "35991d80-cc59-4977-b321-48543f266412",
+            "cn": [
+                {
+                    "type": "button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": null,
+                        "designer|userClassName": "MyButton65",
+                        "text": "New Project"
+                    },
+                    "designerId": "25cd6eab-78d7-4eed-b3a1-4caf8c236618"
+                },
+                {
+                    "type": "button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": null,
+                        "designer|userClassName": "MyButton66",
+                        "text": "Delete Project"
+                    },
+                    "designerId": "a2b969d6-2502-4e82-b61f-f2f8b6816c41"
+                }
+            ]
+        }
+    ]
+}

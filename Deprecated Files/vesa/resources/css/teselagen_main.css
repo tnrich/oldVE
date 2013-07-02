@@ -1,0 +1,303 @@
+<<<<<<< HEAD
+=======
+/*Font Families*/
+
+>>>>>>> master
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Quicksand Regular'), local('Quicksand-Regular'), url(http://themes.googleusercontent.com/static/fonts/quicksand/v2/sKd0EMYPAh5PYCRKSryvW7O3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Quicksand Bold'), local('Quicksand-Bold'), url(http://themes.googleusercontent.com/static/fonts/quicksand/v2/32nyIRHyCu6iqEka_hbKsqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+}
+
+<<<<<<< HEAD
+.x-body {
+	font-family: 'Quicksand', sans-serif;
+	font-size: 12px;
+=======
+/*Global Theme Vars*/
+
+body {
+  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+}
+
+.x-body {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 12px;
+>>>>>>> master
+}
+
+.x-panel-header-text-default,
+.x-panel-header-text-default-framed {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 12px;
+    color: #333;
+}
+
+.x-tab-inner {
+<<<<<<< HEAD
+	font-family: 'Quicksand', sans-serif;
+=======
+  font-family: 'Quicksand', sans-serif;
+>>>>>>> master
+    font-size: 12px;
+    color: #333;
+}
+
+<<<<<<< HEAD
+.x-btn,
+.x-btn-center,
+.x-btn-default-toolbar-small .x-btn-inner {
+	font-family: 'Quicksand', sans-serif;
+    font-size: 12px;
+    color: #333;	
+}
+
+#projectTab1, #projectTab2, #projectTab3, #projectTab4 {
+	height: 36px;
+	width: 54px;
+}
+
+.projectBarButton {
+	width: 32px;
+	height: 32px;
+}
+
+#tabbar-1013-body {
+	height:40px;
+}
+
+#tabbar-1013-strip {
+	top:37px;
+}
+
+#tabbar-1013-innerCt {
+	height:50px;
+}
+=======
+.x-panel-body-default {
+  border-color: #EBEBEB;
+}
+
+.x-btn,
+.x-btn-center,
+.x-btn .x-btn-center .x-btn-inner,
+.x-btn-default-toolbar-small .x-btn-inner,
+.x-btn-default-small .x-btn-inner,
+.x-grid-row .x-grid-cell {
+  font-family: 'Quicksand', sans-serif;
+    font-size: 12px;
+    color: #333;  
+}
+
+.x-form-field, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
+  font-family: 'Quicksand', sans-serif;
+    font-size: 12px;
+    color: #111;
+}
+
+.x-grid-tree-node-expanded   .x-tree-icon-parent {
+  background-image: url(../images/ux/tree-node-parent.png);
+}
+
+.x-grid-row .x-grid-cell {
+  padding:5px;
+}
+
+.x-tab-close-btn {
+  background-image: url(../images/ux/tab-default-close.png);
+}
+
+.x-toolbar {
+  border-top: 0px none;
+}
+
+/*Header*/
+#headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
+  border: none;
+}
+
+#headerPanel-body, #headerMain-body, #headerSub-body {
+}
+
+#headerUserIcon, #help_Btn {
+  border: none;
+  background: none;
+  padding-left: 10px;
+  padding-right: 10px;  
+}
+
+#mainAppPanel .x-tab-bar-top .x-tab-bar-body   {
+  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+  border: 0 none;
+}
+
+#mainAppPanel div:first-child div:first-child{
+  background-color:none;
+}
+
+
+#mainAppPanel .x-tab-default-top {
+  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+  border-color: #ddd;
+}
+
+#mainAppPanel .x-tab-top-active {
+  background: -webkit-linear-gradient(#f8f8f8 0%, #e8e8e8 100%);
+  border-color: #ccc;
+  box-shadow: none;
+}
+
+/*Project Panel*/
+#projectDesignPanel-body {
+  background: #fdfdfd;
+}
+
+#projectDesignPanel-body div table td div .x-tree-icon-leaf {
+  background-image: url(../images/ux/design-tree-icon-leaf.png);
+}
+
+#projectAnalysisPanel-body div table td div .x-tree-icon-leaf {
+  background-image: url(../images/ux/j5-tree-icon-leaf.png);
+}
+
+#projectPartsPanel-body div table td div .x-tree-icon-leaf {
+  background-image: url(../images/ux/ve-tree-icon-leaf.png);
+}
+
+#projectTab1, #projectTab2, #projectTab3, #projectTab4 {
+  height: 36px;
+  width: 54px;
+  border: none;
+  border-radius: none;
+}
+
+.projectBarButton {
+  border-radius: none;
+  box-shadow: none;
+  background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
+}
+
+.project-tab-focus {
+  border-radius: 0;
+  background: rgba(0,0,0,0.2);
+}
+
+.x-tab-project-tab-active {
+  border-radius: 0;
+  background: rgba(0,0,0,0.3);
+  box-shadow: inset 1px 1px 10px 1px rgba(0,0,0,0.5);
+}
+
+.projectTab {
+  background: none;
+}
+
+.projectBarButton {
+  width: 32px;
+  height: 32px;
+}
+
+#ProjectPanel_header { 
+  border-top-right-radius: 4px;
+  border-color: #4c4c4c;
+  background: #4c4c4c; /* Old browsers */
+  background: -moz-linear-gradient(top,  #4c4c4c 0%, #333333 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(100%,#333333)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #4c4c4c 0%,#333333 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #4c4c4c 0%,#333333 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #4c4c4c 0%,#333333 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #4c4c4c 0%,#333333 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
+  box-shadow: none;
+}
+
+#ProjectPanel_header_hd span {
+  color: #efefef;
+}
+
+#ProjectPanel-body {
+  border-width: 0 1px;
+}
+
+#ProjectPanel .x-tab-bar { 
+  background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
+}
+
+#ProjectPanel .x-tab-bar-top .x-tab-bar-body {
+  border-width: 1px;
+  border-color: #003e53;
+}
+
+#ProjectPanel .x-tab-bar-body {
+  height:38px;
+}
+
+#ProjectPanel .x-tab-bar-strip {
+  top:37px;
+}
+
+/*Dashboard*/
+#dashboard_Panel-body {
+  border-top: none;
+}
+
+#projectGrid_Panel_header, #designGrid_Panel_header, #dashboard_StatsPanel_header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+#projectGrid_Panel-body, #designGrid_Panel-body, #dashboard_StatsPanel-body{
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/*Vector Editor*/
+#MainMenuPanel-body {
+  border: 0px;
+}
+
+#VectorPanel_header, #AnnotatePanel_header {
+  border-top: 0px;
+}
+
+#VectorEditor-body {
+  border:0px;
+}
+
+#VectorEditorMenuBar{
+  background: #FDFDFD;
+}
+
+#VectorEditorMainToolBar {
+  background: #F8F8F8;
+}
+/*Device Editor*/
+
+#DeviceEditorMenuBar {
+   background: #FDFDFD;
+}
+
+#DeviceEditorMainToolPanel {
+  background: #F8F8F8;
+}
+
+#DeviceEditorToolPanel .x-toolbar-default {
+background: #F8F8F8;
+}
+
+#DeviceEditorPartsBar-innerCt {
+  background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
+}
+
+#DeviceEditorCanvas-body {
+  border: none;
+}
+
+>>>>>>> master

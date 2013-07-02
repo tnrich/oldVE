@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-common-Sequence'>/**
+</span> * @class Teselagen.bio.sequence.common.Sequence
+ * 
+ * Sequence with name
+ * @extends Teselagen.bio.sequence.common.SymbolList
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ */
+Ext.define(&quot;Teselagen.bio.sequence.common.Sequence&quot;, {
+	extend: &quot;Teselagen.bio.sequence.common.SymbolList&quot;,
+
+<span id='Teselagen-bio-sequence-common-Sequence-method-constructor'>	/**
+</span>	 * Constructor
+	 * @param  {String} name name of sequence
+	 * @param {SymbolList} [symbolList] a list of symbols that contains symbols and an alphabet
+	 */
+	constructor: function(inData){
+		var name;
+
+		if (inData) {
+			name = inData.name || &quot;&quot;;
+			this.callParent([{
+				symbols: inData.symbolList.getSymbols(),
+				alphabet: inData.symbolList.getAlphabet()
+			}]);
+		} else {
+			Teselagen.bio.BioException.raise(&quot;Arguments needed&quot;);
+		}
+
+<span id='Teselagen-bio-sequence-common-Sequence-method-getName'>		/**
+</span>		 * Get Name of the sequence
+		 * @return {String} Name
+		 */
+		this.getName = function(){
+			return name;
+		}
+
+<span id='Teselagen-bio-sequence-common-Sequence-method-setName'>		/**
+</span>		 * Set name
+		 * @method setName
+		 * @param {String} pName Sets sequence name
+		 */
+		this.setName = function(pName){
+			name = pName;
+		}
+
+		return this;
+	}
+});</pre>
+</body>
+</html>

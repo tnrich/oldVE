@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+                layout="absolute" 
+                width="{Math.min(825, parentApplication.width)}" 
+                height="{Math.min(575, parentApplication.height)}"
+                title="j5 Parameters"
+                showCloseButton="true"
+                close="exit()">
+    <mx:Canvas id="j5PropertiesCanvas" height="100%" width="100%">
+        <mx:VBox height="100%" width="98%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+            <mx:HBox width ="100%">
+                <mx:VBox width="50%">
+                    <mx:HBox>
+                        <mx:Label text="Master Oligo Num of Digits ({J5Parameters.MONOD_Default})" toolTip="{J5Parameters.MONOD_DESC}"/>
+                        <mx:NumericStepper id="MONOD_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Master Plasmid Num of Digits ({J5Parameters.MPNOD_Default})" toolTip="{J5Parameters.MPNOD_DESC}"/>
+                        <mx:NumericStepper id="MPNOD_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Gibson Overlap BPs ({J5Parameters.GOB_Default})" toolTip="{J5Parameters.GOB_DESC}"/>
+                        <mx:NumericStepper id="GOB_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Gibson Overlap Min Tm ({J5Parameters.GOMT_Default})" toolTip="{J5Parameters.GOMT_DESC}"/>
+                        <mx:NumericStepper id="GOMT_stepper" stepSize="0.1" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Gibson Overlap Max Tm ({J5Parameters.GOMAXT_Default})" toolTip="{J5Parameters.GOMAXT_DESC}"/>
+                        <mx:NumericStepper id="GOMAXT_stepper" stepSize="0.1" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Maximum Num of Oligo BPs ({J5Parameters.MOLB_Default})" toolTip="{J5Parameters.MOLB_DESC}"/>
+                        <mx:NumericStepper id="MOLB_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Minimum Gibson Fragment Size BPs ({J5Parameters.MFSGB_Default})" toolTip="{J5Parameters.MFSGB_DESC}"/>
+                        <mx:NumericStepper  id="MFSGB_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Golden Gate Overhang BPs ({J5Parameters.GGOHB_Default})" toolTip="{J5Parameters.GGOHB_DESC}"/>
+                        <mx:NumericStepper id="GGOHB_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Golden Gate Recognition Sequence ({J5Parameters.GGRS_Default})" toolTip="{J5Parameters.GGRS_DESC}"/>
+                        <mx:TextInput id="GGRS_Text"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Golden Gate Term Extra Seq ({J5Parameters.GGTES_Default})" toolTip="{J5Parameters.GGTES_DESC}"/>
+                        <mx:TextInput id="GGTES_Text"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Max Identities Golden Gate Overhangs ({J5Parameters.MIGGOC_Default})" toolTip="{J5Parameters.MIGGOC_DESC}"/>
+                        <mx:NumericStepper id="MIGGOC_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Oligo Synthesis Cost Per BP (US) ({J5Parameters.OSCPB_Default})" toolTip="{J5Parameters.OSCPB_DESC}"/>
+                        <mx:NumericStepper id="OSCPB_stepper" stepSize="0.01" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Oligo Purification Cost Per Piece (US) ({J5Parameters.OPPCPP_Default})" toolTip="{J5Parameters.OPPCPP_DESC}"/>
+                        <mx:NumericStepper id="OPPCPP_stepper" stepSize="0.01" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Oligo Max Length No Page Purification ({J5Parameters.OMLPPRB_Default})" toolTip="{J5Parameters.OMLPPRB_DESC}"/>
+                        <mx:NumericStepper id="OMLPPRB_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Minimum PCR Product BPs ({J5Parameters.MPPB_Default})" toolTip="{J5Parameters.MPPB_DESC}"/>
+                        <mx:NumericStepper id="MPPB_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Direct Synthesis Cost Per BP (US) ({J5Parameters.DSCPB_Default})" toolTip="{J5Parameters.DSCPB_DESC}"/>
+                        <mx:NumericStepper id="DSCPB_stepper" stepSize="0.01" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Direct Synthesis Min. Cost Per Piece (US) ({J5Parameters.DSMCPP_Default})" toolTip="{J5Parameters.DSMCPP_DESC}"/>
+                        <mx:NumericStepper id="DSMCPP_stepper" stepSize="0.01" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Output Sequence Format ({J5Parameters.OSF_Default})" toolTip="{J5Parameters.OSF_DESC}"/>
+                        <mx:ComboBox id="OSF_ComboBox"/>
+                    </mx:HBox>
+                </mx:VBox>
+                <mx:VBox width="50%">
+                    <mx:HBox>
+                        <mx:Label text="Primer GC Clamp ({J5Parameters.PGC_Default})" toolTip="{J5Parameters.PGC_DESC}"/>
+                        <mx:NumericStepper id="PGC_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Min Size ({J5Parameters.PMS_Default})" toolTip="{J5Parameters.PMS_DESC}"/>
+                        <mx:NumericStepper id = "PMS_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Max Size ({J5Parameters.PMAXS_Default})" toolTip="{J5Parameters.PMAXS_DESC}"/>
+                        <mx:NumericStepper id = "PMAXS_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Min Tm ({J5Parameters.PMT_Default})" toolTip="{J5Parameters.PMT_DESC}"/>
+                        <mx:NumericStepper id="PMT_stepper" stepSize="0.1" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Max Tm ({J5Parameters.PMAXT_Default})" toolTip="{J5Parameters.PMAXT_DESC}"/>
+                        <mx:NumericStepper id="PMAXT_stepper" stepSize="0.1" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Max Tm Diff ({J5Parameters.PMDT_Default})" toolTip="{J5Parameters.PMDT_DESC}"/>
+                        <mx:NumericStepper id="PMDT_stepper" stepSize="0.1" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Max Self Compl Any TH ({J5Parameters.PMSAT_Default})" toolTip="{J5Parameters.PMSAT_DESC}"/>
+                        <mx:NumericStepper id = "PMSAT_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Max Self Compl End TH ({J5Parameters.PMSET_Default})" toolTip="{J5Parameters.PMSET_DESC}"/>
+                        <mx:NumericStepper id = "PMSET_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Pair Max Compl Any TH ({J5Parameters.PPMCAT_Default})" toolTip="{J5Parameters.PPMCAT_DESC}"/>
+                        <mx:NumericStepper id = "PPMCAT_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Pair Max Compl End TH ({J5Parameters.PPMCET_Default})" toolTip="{J5Parameters.PPMCET_DESC}"/>
+                        <mx:NumericStepper id = "PPMCET_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Tm Santa Lucia ({J5Parameters.PTS_Default})" toolTip="{J5Parameters.PTS_DESC}"/>
+                        <mx:ComboBox id="PTS_comboBox"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer Salt Corrections ({J5Parameters.PSC_Default})" toolTip="{J5Parameters.PSC_DESC}"/>
+                        <mx:ComboBox id="PSC_comboBox"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Primer DNA Conc ({J5Parameters.PDC_Default})" toolTip="{J5Parameters.PDC_DESC}"/>
+                        <mx:NumericStepper id="PDC_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="MisPriming 3Prime Boundary ({J5Parameters.M3BBTWIH_Default})" toolTip="{J5Parameters.M3BBTWIH_DESC}"/>
+                        <mx:NumericStepper id="M3BBTWIH_stepper" minimum="0" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="MisPriming Min Tm ({J5Parameters.MMT_Default})" toolTip="{J5Parameters.MMT_DESC}"/>
+                        <mx:NumericStepper id="MMT_stepper" minimum="0" stepSize="0.1" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="MisPriming Salt Conc ({J5Parameters.MSC_Default})" toolTip="{J5Parameters.MSC_DESC}"/>
+                        <mx:NumericStepper id="MSC_stepper" minimum="0" stepSize="0.01" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="MisPriming Oligo Conc ({J5Parameters.MOC_Default})" toolTip="{J5Parameters.MOC_DESC}"/>
+                        <mx:NumericStepper id = "MOC_stepper" minimum="0" stepSize="0.00000001" maximum="10000000"/>
+                    </mx:HBox>
+                    <mx:HBox>
+                        <mx:Label text="Suppress Pure Primers ({J5Parameters.SPP_Default})" toolTip="{J5Parameters.SPP_DESC}"/>
+                        <mx:ComboBox id="SPP_ComboBox"/>
+                    </mx:HBox>
+                </mx:VBox>
+            </mx:HBox>
+            <mx:Spacer height="100%"/>
+            <mx:HBox width="100%">
+                <mx:Label text="(Defaults listed in parentheses)" toolTip="Nathan Hillson thought this would help folks!"/>
+            </mx:HBox>
+            <mx:HBox width="100%">
+                <mx:Button id="returnToDefaultsButton" label="Return to Defaults" toolTip="Return parameters to the default values"/>
+                <mx:Button id="returnToServerValuesButton" label="Return to Server Values" toolTip="Return parameters to the values stored on the server from the previous j5 run"/>
+                <mx:Spacer width="100%"/>
+                <mx:Button id="cancelButton" label="Cancel" toolTip="Don't save changes" width="70"/>
+                <mx:Button id="okButton" label="OK" toolTip="Save changes (does not update values on server until a design is sent to j5)" width="70"/>
+            </mx:HBox>
+        </mx:VBox>	
+    </mx:Canvas>
+    <mx:Script>
+        <![CDATA[
+            import mx.managers.PopUpManager;
+            
+            import org.jbei.registry.models.J5Parameters;
+            
+            public function exit():void
+            {
+                PopUpManager.removePopUp(this);
+            }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

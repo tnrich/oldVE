@@ -17,6 +17,7 @@ app.xmlrpc = require('xmlrpc');
 app.fs = require('fs');
 app.mongo = require('mongodb');
 app.mongoose = require('mongoose');
+app.mongostore = require('connect-mongo')
 app.mysql = require('mysql');
 app.markdown = require("markdown-js");
 app.soap = require("soap");

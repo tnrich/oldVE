@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:Panel 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" 
+	width="100%" 
+	height="100%"
+    paddingBottom="5"
+	paddingLeft="5" 
+	paddingRight="5">
+	
+	<mx:HBox paddingLeft="5" paddingTop="5">
+		<mx:Label text="J5 Ready:" fontWeight = "bold"/>
+		<mx:Label id="j5ReadyText" toolTip="If the current collection is ready to export j5 design files" color="0xFF0000" text="False"/>
+	</mx:HBox>
+	<mx:HBox paddingLeft="5">
+		<mx:Label text="Combinatorial:" fontWeight = "bold"/>
+		<mx:Label id="combinatorialText" toolTip="If the current collection is a combinatorial design or not" color="0x4D0099" text="False"/>
+	</mx:HBox>
+    <mx:HBox paddingLeft="5">
+        <mx:RadioButtonGroup id="circularLinearRadioButtonGroup"/>
+        <mx:RadioButton id="circularRadioButton" label="Circular" value="{Constants.CIRCULAR}" group="{circularLinearRadioButtonGroup}" selected="true"/>
+        <mx:RadioButton id="linearRadioButton" label="Linear" value="{Constants.LINEAR}" group="{circularLinearRadioButtonGroup}"/>
+    </mx:HBox>
+    <mx:DataGrid id="binInfoGrid" paddingLeft="10" paddingRight="10" height="25%" width="100%" editable="true" enabled="false" sortableColumns="false" itemClick="showBinItems(event)" itemEditEnd="saveInfo(event)">
+        <mx:columns>
+            <mx:DataGridColumn headerText="Column Name" dataField="name" editable ="true" headerRenderer="mx.controls.Label" showDataTips="true"/>
+            <mx:DataGridColumn headerText="Direction" dataField="direction" editable="false"/>
+            <mx:DataGridColumn headerText="Items" dataField="itemCount" editable="false"/>
+            <mx:DataGridColumn headerText="FAS" dataField="fas" editable="false" showDataTips="true"/>
+            <mx:DataGridColumn id="dsfColumn" headerText="DSF" dataField="dsf" editable="true" visible="false"/>
+            <mx:DataGridColumn id="froColumn" headerText="FRO" dataField="fro" editable="true" visible="false"/>
+            <mx:DataGridColumn id="extra5PrimeBpsColumn" headerText="5' Ex" dataField="extra5PrimeBps" editable="true" visible="false"/>
+            <mx:DataGridColumn id="extra3PrimeBpsColumn" headerText="3' Ex" dataField="extra3PrimeBps" editable="true" visible="false"/>
+        </mx:columns>
+    </mx:DataGrid>
+    <mx:HBox width="100%">
+        <mx:Button id="addBinButton" label="Add Column" toolTip="Add a column before the selected column, or at the end if no column selected" paddingLeft="5" paddingRight="5" enabled="false"/>
+		<mx:Button id="removeBinButton" label="Remove Column" toolTip="Remove the selected column, or the last column if none selected" paddingLeft="5" paddingRight="5" enabled="false"/>
+        <mx:Spacer width="100%"/>
+        <mx:LinkButton id="expandBinInfoGridButton" label="Expand Table" toolTip="See additional information" 
+                       rollOverColor="0xFFFFFF" selectionColor="0xFFFFFF" textRollOverColor="0x0000FF" textSelectedColor="0x0000FF" 
+                       color="0x0000FF" fontWeight="normal" textDecoration="underline" paddingTop="0" paddingLeft="0" paddingRight="0" paddingBottom="0"/>
+	</mx:HBox>
+    <mx:Text id="abbreviationsText" toolTip="For more information see the j5 manual" leading="0">
+        <mx:htmlText>
+            <![CDATA[<u>Abbreviations</u><br/><b>FAS</b>: Forced Assembly Strategy]]>
+        </mx:htmlText>
+    </mx:Text>
+    
+    <mx:HRule width="100%"/>
+    
+	<mx:Label text="Column Contents" fontWeight = "bold" paddingLeft="5" paddingRight="5"/>
+	<mx:TextArea id="binContents" paddingLeft="5" paddingRight="5" height="30%" width="100%" editable="false"/>
+	
+	<mx:Script>
+		<![CDATA[
+            import flash.net.sendToURL;
+            
+            import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.controls.Button;
+            import mx.controls.Label;
+            import mx.controls.TextInput;
+            import mx.core.Application;
+            import mx.events.DataGridEvent;
+            import mx.events.ListEvent;
+            
+            import org.jbei.registry.ApplicationFacade;
+            import org.jbei.registry.Constants;
+            import org.jbei.registry.Notifications;
+            import org.jbei.registry.commands.FunctionMediator;
+            import org.jbei.registry.models.Part;
+            import org.jbei.registry.models.j5.*;
+            import org.jbei.registry.utils.NullableInt;
+            import org.jbei.registry.view.ui.Colors;
+            import org.jbei.registry.view.ui.MainCanvas;
+            import org.jbei.registry.view.ui.canvas.CenterCanvas;
+            import org.jbei.registry.view.ui.shapes.CollectionShape;
+            import org.jbei.registry.view.ui.shapes.RectShape;
+            import org.puremvc.as3.patterns.observer.Notifier;
+            
+            public static const EDIT_COLLECTION_NAME:String = "EditCollectionName";
+            public static const SHOW_BIN_ITEMS:String = "ShowBinItems";
+            public static const BIN_NAME_CHANGED:String = "BinNameChanged";
+            public static const UPDATE_DSF_LINES:String = "UpdateDSFLines";
+		
+			private var _collection:J5Collection;
+            private var processingSaveInfo:Boolean;
+            
+            public function get functionMediator():FunctionMediator
+            {
+                return ApplicationFacade.getInstance().retrieveMediator(FunctionMediator.NAME) as FunctionMediator;
+            }
+            
+            public function set collection(collection:J5Collection):void
+            {
+                _collection = collection;
+            }
+            
+			private function showBinItems(event:Event):void
+			{
+                dispatchEvent(new Event(SHOW_BIN_ITEMS));
+			}
+            
+            //Save the bin info provided to the actual j5 bins
+            //note: cannot move to mediator because the event does not bubble and event.preventDefault() is needed
+            private function saveInfo(event:DataGridEvent):void
+            {
+                if (!processingSaveInfo) {
+                    
+                    processingSaveInfo = true;
+                    var inputText:String = ((event.target as DataGrid).itemEditorInstance as TextInput).text;
+                    
+                    var bin:J5Bin = _collection.binsVector[event.rowIndex];
+                    
+                    if (event.columnIndex == 0) {  //Bin Name column
+                        if (inputText == "") {
+                            event.preventDefault();
+                            Alert.show("Cannot change name to blank. Please enter a name to change.\nReverting to old name.", "Error Message");
+                            processingSaveInfo = false;
+                            return;
+                        } else if (!functionMediator.isLegalName(inputText)) {
+                            event.preventDefault();
+                            Alert.show("Illegal name. Name can only contain alphanumeric characters, underscore (_), and hyphen (-).\nReverting to old name.", "Error Message");
+                            processingSaveInfo = false;
+                            return;
+                        } else if (!functionMediator.isUniqueBinName(inputText, _collection) && inputText != bin.binName) {
+                            event.preventDefault();
+                            Alert.show("Column name already exists. Please choose a unique column name.\nReverting to old name.", "Error Message");
+                            processingSaveInfo = false;
+                            return;
+                        } else {
+                            bin.binName = inputText;
+                        }
+                        
+                        dispatchEvent(new Event(BIN_NAME_CHANGED))
+                        
+                    } else if (event.columnIndex == 4) {  //DSF column
+                        if(inputText.toLowerCase() == "true")
+                            bin.dsf = true;
+                        else if(inputText.toLowerCase() == "false")
+                            bin.dsf = false;
+                        else
+                            event.preventDefault();
+                        
+                        dispatchEvent(new Event(UPDATE_DSF_LINES));
+                        
+                    } else if (event.columnIndex == 5) {  //FRO column
+                        if(isNaN(Number(inputText)) || Math.floor(Number(inputText)) != Number(inputText))  //only allow integer values
+                            event.preventDefault();
+                        else if(inputText.length == 0)
+                            bin.fro = null;
+                        else
+                            bin.fro = new NullableInt(int(inputText));
+                        
+                    } else if (event.columnIndex == 6) {  //5' Extra bps column
+                        if(isNaN(Number(inputText)) || Math.floor(Number(inputText)) != Number(inputText))  //only allow integer values
+                            event.preventDefault();
+                        else if(inputText.length == 0)
+                            bin.extra5PrimeBps = null;
+                        else
+                            bin.extra5PrimeBps = new NullableInt(int(inputText));
+                        
+                    } else if (event.columnIndex == 7) {  //3' Extra bps column
+                        if(isNaN(Number(inputText)) || Math.floor(Number(inputText)) != Number(inputText))  //only allow integer values
+                            event.preventDefault();
+                        else if(inputText.length == 0)
+                            bin.extra3PrimeBps = null;
+                        else
+                            bin.extra3PrimeBps = new NullableInt(int(inputText));
+                    }
+                    
+                    processingSaveInfo = false;
+                } else {
+                    event.preventDefault();
+                }
+            }
+		]]>
+	</mx:Script>
+</mx:Panel>

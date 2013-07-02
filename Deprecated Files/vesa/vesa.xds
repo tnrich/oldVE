@@ -1,0 +1,287 @@
+{
+    "name": "vesa",
+    "settings": {
+        "urlPrefix": "http://localhost/vesa/",
+        "spacesToIndent": 4,
+        "exportPath": "/Users/tim98210/Sites/Teselagen/ve/vesa",
+        "sdkPath": "",
+        "lineEnding": "LF",
+        "genTimestamps": false,
+        "cacheBust": false,
+        "codeGenFormat": "Class",
+        "senchaIoKey": "",
+        "senchaIoPath": "http://extjs.cachefly.net/designer/IO/",
+        "instantiateStore": true,
+        "saveOnDeploy": false,
+        "appName": "MyApp"
+    },
+    "xdsVersion": "2.1.0",
+<<<<<<< HEAD
+    "xdsBuild": 637,
+=======
+    "xdsBuild": 678,
+>>>>>>> master
+    "schemaVersion": 1,
+    "upgradeVersion": 210000000498,
+    "framework": "ext40",
+    "topInstanceFileMap": {
+        "769f9c07-da27-4fec-8039-b923f3e3a5d5": {
+            "paths": [
+                "metadata/view/AppViewport",
+                "app/view/override/AppViewport.js",
+                "app/view/AppViewport.js",
+                "app/view/Viewport.js"
+            ],
+            "className": "AppViewport"
+        },
+        "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0": {
+            "paths": [
+                "metadata/controller/MainMenuController",
+                "app/controller/override/MainMenuController.js",
+                "app/controller/MainMenuController.js"
+            ],
+            "className": "MainMenuController"
+        },
+        "36796554-cdfd-4b2b-bfce-3a09263e3130": {
+            "paths": [
+                "metadata/view/FileImportWindow",
+                "app/view/override/FileImportWindow.js",
+                "app/view/FileImportWindow.js"
+            ],
+            "className": "FileImportWindow"
+        },
+        "75149a58-6160-42c0-8847-5066ab8e2b32": {
+            "paths": [
+                "metadata/controller/MainToolbarController",
+                "app/controller/override/MainToolbarController.js",
+                "app/controller/MainToolbarController.js"
+            ],
+            "className": "MainToolbarController"
+        },
+        "f835a9f2-f016-427b-bcde-f3f23c2ed3b7": {
+            "paths": [
+                "metadata/controller/VectorPanelController",
+                "app/controller/override/VectorPanelController.js",
+                "app/controller/VectorPanelController.js"
+            ],
+            "className": "VectorPanelController"
+        },
+        "eb88d82d-8bf8-4192-9d48-d0d198c847e3": {
+            "paths": [
+                "metadata/resource/Library"
+            ],
+            "className": "Library"
+        },
+        "cc197c6f-a9d6-48ef-bc91-84f1591fa3fe": {
+            "paths": [
+                "metadata/controller/AppTabController",
+                "app/controller/override/AppTabController.js",
+                "app/controller/AppTabController.js"
+            ],
+            "className": "AppTabController"
+        },
+        "c10b7d7f-6ac6-4404-b48f-87debe7c6526": {
+            "paths": [
+                "metadata/controller/ActionStackController",
+                "app/controller/override/ActionStackController.js",
+                "app/controller/ActionStackController.js"
+            ],
+            "className": "ActionStackController"
+        },
+        "3041989b-701e-4c42-8d5e-e13c2ecc4f5b": {
+            "paths": [
+                "metadata/controller/AppController",
+                "app/controller/override/AppController.js",
+                "app/controller/AppController.js"
+            ],
+            "className": "AppController"
+        },
+        "4f66accb-c02c-4330-8a9c-ffeaecdfc38c": {
+            "paths": [
+                "metadata/controller/AnnotatePanelController",
+                "app/controller/override/AnnotatePanelController.js",
+                "app/controller/AnnotatePanelController.js"
+            ],
+            "className": "AnnotatePanelController"
+        },
+        "ed227e0b-50cf-4b8c-87db-4cb9f8abd78c": {
+            "paths": [
+                "metadata/controller/FindPanelController",
+                "app/controller/override/FindPanelController.js",
+                "app/controller/FindPanelController.js"
+            ],
+            "className": "FindPanelController"
+        },
+        "39db65a6-8d94-40fe-9e23-7c52a54f1400": {
+            "paths": [
+                "metadata/controller/MainPanelController",
+                "app/controller/override/MainPanelController.js",
+                "app/controller/MainPanelController.js"
+            ],
+            "className": "MainPanelController"
+        },
+        "060bed49-c8dc-438b-9842-5d40f0693227": {
+            "paths": [
+                "metadata/controller/PieController",
+                "app/controller/override/PieController.js",
+                "app/controller/PieController.js"
+            ],
+            "className": "PieController"
+        },
+        "fa5e1ae7-cb9e-44d4-9f05-66c6ba8fb9ba": {
+            "paths": [
+                "metadata/controller/RailController",
+                "app/controller/override/RailController.js",
+                "app/controller/RailController.js"
+            ],
+            "className": "RailController"
+        },
+        "99989391-cc30-4d76-ba12-ebb1c186a668": {
+            "paths": [
+                "metadata/controller/RestrictionEnzymeController",
+                "app/controller/override/RestrictionEnzymeController.js",
+                "app/controller/RestrictionEnzymeController.js"
+            ],
+            "className": "RestrictionEnzymeController"
+        },
+        "7d4fc686-038a-4c3d-8042-a955ea620820": {
+            "paths": [
+                "metadata/controller/SequenceController",
+                "app/controller/override/SequenceController.js",
+                "app/controller/SequenceController.js"
+            ],
+            "className": "SequenceController"
+        },
+        "3848615c-4532-4873-9594-46c97ffb674b": {
+            "paths": [
+                "metadata/controller/SimulateDigestionController",
+                "app/controller/override/SimulateDigestionController.js",
+                "app/controller/SimulateDigestionController.js"
+            ],
+            "className": "SimulateDigestionController"
+        },
+        "80fca5e0-4950-4656-b37a-ee0401bd3048": {
+            "paths": [
+                "metadata/view/RestrictionEnzymesManagerWindow",
+                "app/view/override/RestrictionEnzymesManagerWindow.js",
+                "app/view/RestrictionEnzymesManagerWindow.js"
+            ],
+            "className": "RestrictionEnzymesManagerWindow"
+        },
+        "b2e50587-a656-45cb-8b69-0312e55ad096": {
+            "paths": [
+                "metadata/view/SimulateDigestionWindow",
+                "app/view/override/SimulateDigestionWindow.js",
+                "app/view/SimulateDigestionWindow.js"
+            ],
+            "className": "SimulateDigestionWindow"
+        },
+        "fbd2b5b8-1b30-431c-8cf6-b7ca258521a5": {
+            "paths": [
+                "metadata/resource/js"
+            ],
+            "className": "js"
+        },
+        "c345d05e-4bb1-4e81-a135-b5bfbb9c987d": {
+            "paths": [
+                "metadata/resource/js1"
+            ],
+            "className": "js1"
+        },
+        "5c7afb4a-331f-47e6-b7dc-74ffca366be0": {
+            "paths": [
+                "metadata/resource/css"
+            ],
+            "className": "css"
+        },
+        "0642f570-f4b0-4524-849d-e2d031863cf8": {
+            "paths": [
+<<<<<<< HEAD
+=======
+                "metadata/resource/css3"
+            ],
+            "className": "css3"
+        },
+        "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf": {
+            "paths": [
+>>>>>>> master
+                "metadata/resource/css1"
+            ],
+            "className": "css1"
+        },
+<<<<<<< HEAD
+        "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf": {
+=======
+        "2cd681c3-f88e-40dd-8fc5-f30e2fca7803": {
+>>>>>>> master
+            "paths": [
+                "metadata/resource/css2"
+            ],
+            "className": "css2"
+<<<<<<< HEAD
+=======
+        },
+        "52420128-9754-4bb8-92c8-187a378e4e5f": {
+            "paths": [
+                "metadata/view/ProjectManagerWindow",
+                "app/view/override/ProjectManagerWindow.js",
+                "app/view/ProjectManagerWindow.js"
+            ],
+            "className": "ProjectManagerWindow"
+        },
+        "5f55a0d3-e51a-4747-a1e5-33469cabd931": {
+            "paths": [
+                "metadata/view/MyWindow4",
+                "app/view/override/MyWindow4.js",
+                "app/view/MyWindow4.js"
+            ],
+            "className": "MyWindow4"
+>>>>>>> master
+        }
+    },
+    "viewOrderMap": {
+        "view": [
+            "769f9c07-da27-4fec-8039-b923f3e3a5d5",
+            "36796554-cdfd-4b2b-bfce-3a09263e3130",
+            "80fca5e0-4950-4656-b37a-ee0401bd3048",
+            "b2e50587-a656-45cb-8b69-0312e55ad096",
+            "52420128-9754-4bb8-92c8-187a378e4e5f",
+            "5f55a0d3-e51a-4747-a1e5-33469cabd931"
+        ],
+        "store": [],
+        "controller": [
+            "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0",
+            "75149a58-6160-42c0-8847-5066ab8e2b32",
+            "f835a9f2-f016-427b-bcde-f3f23c2ed3b7",
+            "cc197c6f-a9d6-48ef-bc91-84f1591fa3fe",
+            "c10b7d7f-6ac6-4404-b48f-87debe7c6526",
+            "3041989b-701e-4c42-8d5e-e13c2ecc4f5b",
+            "ed227e0b-50cf-4b8c-87db-4cb9f8abd78c",
+            "39db65a6-8d94-40fe-9e23-7c52a54f1400",
+            "060bed49-c8dc-438b-9842-5d40f0693227",
+            "fa5e1ae7-cb9e-44d4-9f05-66c6ba8fb9ba",
+            "99989391-cc30-4d76-ba12-ebb1c186a668",
+            "7d4fc686-038a-4c3d-8042-a955ea620820",
+            "4f66accb-c02c-4330-8a9c-ffeaecdfc38c",
+            "3848615c-4532-4873-9594-46c97ffb674b"
+        ],
+        "model": [],
+        "resource": [
+            "eb88d82d-8bf8-4192-9d48-d0d198c847e3",
+            "fbd2b5b8-1b30-431c-8cf6-b7ca258521a5",
+            "c345d05e-4bb1-4e81-a135-b5bfbb9c987d",
+            "5c7afb4a-331f-47e6-b7dc-74ffca366be0",
+<<<<<<< HEAD
+            "0642f570-f4b0-4524-849d-e2d031863cf8",
+            "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf"
+=======
+            "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf",
+            "2cd681c3-f88e-40dd-8fc5-f30e2fca7803",
+            "0642f570-f4b0-4524-849d-e2d031863cf8"
+>>>>>>> master
+        ],
+        "app": [
+            "application"
+        ]
+    }
+}
