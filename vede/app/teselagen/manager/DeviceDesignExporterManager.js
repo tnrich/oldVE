@@ -114,7 +114,16 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonEugene["de:negationOperator"] = rule.get("negationOperator");
             jsonEugene["de:operand1ID"] = rule.getOperand1().internalId;
             jsonEugene["de:compositionalOperator"] = rule.get("compositionalOperator");
-            jsonEugene["de:operand2ID"] = rule.getOperand2().internalId;
+            jsonEugene["de:operand2isNumber"] = rule.get('operand2isNumber');
+            if(rule.get('operand2isNumber'))
+            {
+                jsonEugene["de:operand2Number"] = rule.get('operand2Number');
+            }
+            else
+            {
+                jsonEugene["de:operand2ID"] = rule.getOperand2().internalId;   
+            }
+
 
             rules.push(jsonEugene);
         });

@@ -145,7 +145,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 partSource: workingSequence.data.partSource,
                 name: name
             });
-    		//debugger;
+
     		selectedProj.sequences().add(newSequenceFile);
             newSequenceFile.set("project_id",selectedProj.data.id);
             
