@@ -26,8 +26,6 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
     start: -1,
     end: -1,
 
-    renderedRows: [],
-
     selected: false,
     selecting: false,
 
@@ -50,35 +48,12 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         this.selected = false;
 
-        if(this.selectionSVG && this.start > 0 && this.end > 0) {
-            var startRowIndex = this.sequenceAnnotator.rowByBpIndex(this.start).getIndex();
-            var endRowIndex = this.sequenceAnnotator.rowByBpIndex(this.end).getIndex();
-
-            // Remove already-rendered rows that are less than fromIndex and
-            // greater than toIndex.
-            if(fromIndex > toIndex) {
-                d3.selectAll("#annotateSVG [class*=row]").each(function() {
-                    var rowIndex = this.className.baseVal.match(/\d+$/);
-                    if(rowIndex >= startRowIndex && rowIndex <= endRowIndex) {
-                        this.remove();
-                    }
-                });
-            } else {
-                d3.selectAll("#annotateSVG [class*=row]").each(function() {
-                    var rowIndex = this.className.baseVal.match(/\d+$/);
-                    if(rowIndex <= startRowIndex || rowIndex >= endRowIndex) {
-                        this.remove();
-                    }
-                });
-            }
-            var endRowInRenderedRowsIndex = this.renderedRows.indexOf(endRowIndex);
-            if(endRowInRenderedRowsIndex >= 0) {
-                this.renderedRows.splice(endRowInRenderedRowsIndex, 1);
-            }
-        } else {
-            this.selectionSVG = d3.select("#annotateSVG").append("svg:g")
-                .attr("id", "selectionSVG");
+        if(this.selectionSVG) {
+            this.selectionSVG.remove();
         }
+
+        this.selectionSVG = d3.select("#annotateSVG").append("svg:g")
+            .attr("id", "selectionSVG");
 
         if(fromIndex > toIndex) {
             this.drawSelection(0, toIndex);
@@ -99,8 +74,6 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         this.end = -1;
         this.selected = false;
         this.selecting = false;
-
-        this.renderedRows = [];
 
         if(this.selectionSVG) {
             this.selectionSVG.remove();
@@ -187,30 +160,24 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
     drawSelection: function(fromIndex, toIndex) {
         var startRow = this.sequenceAnnotator.rowByBpIndex(fromIndex);
         var endRow = this.sequenceAnnotator.rowByBpIndex(toIndex);
-        var startRowIndex = startRow.getIndex();
-        var endRowIndex = endRow.getIndex();
 
         if(!startRow || !endRow) {
             this.deselect();
             return;
         }
 
-        if(startRowIndex === endRowIndex) {
+        if(startRow.getIndex() === endRow.getIndex()) {
             this.drawRowSelectionRect(fromIndex, toIndex);
-        } else if(startRowIndex + 1 <= endRowIndex) {
+        } else if(startRow.getIndex() + 1 <= endRow.getIndex()) {
             this.drawRowSelectionRect(fromIndex, startRow.rowData.getEnd(),
                                       true);
 
-            for(var i = startRowIndex + 1; i < endRowIndex; i++) {
+            for(var i = startRow.getIndex() + 1; i < endRow.getIndex(); i++) {
                 var rowData = 
                     this.sequenceAnnotationManager.RowManager.rows[i].rowData;
 
-                if(this.renderedRows.indexOf(i) < 0) {
-                    this.drawRowSelectionRect(rowData.getStart(), 
-                                              rowData.getEnd(), true);
-
-                    this.renderedRows.push(i);
-                }
+                this.drawRowSelectionRect(rowData.getStart(), rowData.getEnd(),
+                                          true);
             }
 
             this.drawRowSelectionRect(endRow.rowData.getStart(), toIndex);
@@ -286,7 +253,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         }
 
         this.selectionSVG.append("svg:rect")
-            .attr("class", "annotateSelectionRect row" + row.getIndex())
+            .attr("class", "annotateSelectionRect")
             .attr("x", startMetrics.x)
             .attr("y", startMetrics.y + 8)
             .attr("width", endMetrics.x - startMetrics.x);
