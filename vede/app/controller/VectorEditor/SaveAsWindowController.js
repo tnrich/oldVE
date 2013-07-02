@@ -98,7 +98,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
             
             for (var j=0; j<sequencesNames.length; j++) {
                 if (sequencesNames[j]===name) {
-                	alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+                	Ext.MessageBox.alert('','A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+                	//alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
     				return;
                 }
                 	//{ return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }

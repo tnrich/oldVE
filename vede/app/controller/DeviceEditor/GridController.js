@@ -35,7 +35,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     totalRows: 2,
     totalColumns: 1,
-
+    
+    
+    gridManager: null,
+    
+    
     onReRenderDECanvasEvent: function(){
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         this.onTabChange(tab,tab,tab);
@@ -45,7 +49,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * Renders a given DeviceDesign.
      */
     renderDevice: function() {
-        Ext.suspendLayouts();
+    	this.gridManager = Ext.create("Teselagen.manager.GridManager", {
+    		activeProject: this.activeProject,
+    		j5Collection: this.activeProject.getJ5Collection()
+    	});
+    	this.gridManager.initGrid();
+    	
+    	
+    	/*Ext.suspendLayouts();
 
         var bins = this.activeProject.getJ5Collection().bins().getRange();
         var j5Bin;
@@ -56,6 +67,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
 
         Ext.resumeLayouts(true);
+        */
     },
 
     /**
@@ -349,7 +361,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             // newTab.query('label[cls="designName"]')[0].setText(newTab.model.data.name);
             this.activeBins = this.activeProject.getJ5Collection().bins();
-
+            
+            //debugger;
+            
             this.activeBins.on("add", this.onAddToBins, this);
             this.activeBins.on("update", this.onBinsUpdate, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
@@ -661,7 +675,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * Handler for the Insert Row button.
      */
     onAddRowAbove: function() {
-        this.totalRows += 1;
+    	this.gridManager.addRowAbove();	
+    	/*this.totalRows += 1;
         this.updateBinsWithTotalRows();
 
         var PartIndex = null;
@@ -695,11 +710,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleCutCopyPastePartOptions(false);
         this.toggleInsertOptions(false);
         this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+        this.toggleInsertRowBelowOptions(false);*/
     },
 
     onAddRowBelow: function() {
-        this.totalRows += 1;
+        this.gridManager.addRowBelow();
+    	/*this.totalRows += 1;
         this.updateBinsWithTotalRows();
 
         var PartIndex = null;
@@ -733,7 +749,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleCutCopyPastePartOptions(false);
         this.toggleInsertOptions(false);
         this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+        this.toggleInsertRowBelowOptions(false);*/
     },
 
     onRemoveRow: function() {
@@ -800,7 +816,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumnLeft: function() {
-        var selectedBinIndex = null;
+        this.gridManager.addColumnLeft();
+    	/*var selectedBinIndex = null;
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
@@ -829,7 +846,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleInsertRowBelowOptions(false);
 
         // toastr.info("Added Column Left");
-
+        */
     },
 
     /**
@@ -837,7 +854,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumnRight: function() {
-        var selectedBinIndex = null;
+        this.gridManager.addColumnRight();
+    	/*var selectedBinIndex = null;
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
@@ -865,7 +883,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleInsertRowAboveOptions(false);
         this.toggleInsertRowBelowOptions(false);
         
-        // toastr.info("Added Column Right");
+        // toastr.info("Added Column Right");*/
     },
 
     /**
