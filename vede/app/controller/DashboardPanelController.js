@@ -28,7 +28,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
                	var sequencesLabel = Ext.getCmp('dashboardStats').down('field[cls="sequencesCountBox-desc"]');
                	var partsData = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-num"]');
                	var partsLabel = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-desc"]');
-
+                
                	projectsData.setValue(response.numberProjects);
                 designsData.setValue(response.numberDesigns);
                 sequencesData.setValue(response.numberSequences);

@@ -48,11 +48,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
 
                     if(rule.operand2_id) newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
-
                     if(rule.operand2isNumber)
                     {
-                        newEugeneRule.set('Operand2Number',rule.operand2Number);
-                        newEugeneRule.set('Operand2isNumber',true);
+                        newEugeneRule.set('operand2Number',rule.operand2Number);
+                        newEugeneRule.set('operand2isNumber',true);
                     }
 
                     currentProject.getDesign().addToRules(newEugeneRule);
