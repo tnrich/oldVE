@@ -35,6 +35,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     oligosListText: null,
     directSynthesesListText: null,
 
+    j5Running: false,
+
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
@@ -96,6 +98,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
         var self = this;
+
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
             if(!combobox.getValue()) {
@@ -104,6 +107,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 });
             }
         } 
+
+        if(this.j5Running) {
+            this.disableAllJ5RunButtons(true);
+        }
     },
 
     /**
@@ -376,7 +383,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         fr.onload = processPlasmidsFile;
         fr.readAsText(plasmidsFile.files[0]);
-
     },
 
     onUseServerOligosRadioBtnChange: function (e) {
@@ -542,8 +548,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onJ5RunStatusChanged: function(runId, runStatus) {
-        var buttonsToEnable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
-        buttonsToEnable = buttonsToEnable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
+        var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
         var button;
 
         for(var i = 0; i < buttonsToEnable.length; i++) {
@@ -556,6 +562,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 $(".loader-mini").hide();
             }
         }
+
+        this.j5Running = false;
     },
 
     onRunJ5BtnClick: function () {
@@ -636,24 +644,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm = Teselagen.manager.J5CommunicationManager;
         inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
+        this.j5Running = true;
+
         //responseMessage.setValue("Saving design");
 
-        var buttonsToDisable = Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='runj5Btn']");
-        buttonsToDisable = buttonsToDisable.concat(Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='j5button']"));
-        var button;
-
-        for(var i = 0; i < buttonsToDisable.length; i++) {
-            button = buttonsToDisable[i];
-
-            button.disable();
-
-            if(button.cls === "runj5Btn") {
-
-                $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
-
-                button.setText("Running J5...");
-            }
-        }
+        this.disableAllJ5RunButtons();
 
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
@@ -680,6 +675,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
+    },
+
+    disableAllJ5RunButtons: function(skipAppendLoader) {
+        var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+        var button;
+
+        if(!skipAppendLoader) {
+            $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+        }
+
+        for(var i = 0; i < buttonsToDisable.length; i++) {
+            button = buttonsToDisable[i];
+            button.disable();
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Running J5...");
+            }
+        }
     },
 
     onDistributePCRBtn: function () {
@@ -983,6 +997,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         
         this.application.on("runj5", this.onRunJ5Event, this);
         this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
+        this.application.on("ReLoadAssemblyMethods", this.loadAssemblyMethodSelector, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
