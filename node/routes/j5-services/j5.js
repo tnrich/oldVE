@@ -330,7 +330,7 @@ app.post('/executej5',restrict,function(req,res){
         combinatorialAssembly: [],
         j5Input :
           {
-            j5parameters: JSON.parse(req.body.parameters)
+            j5Parameters: JSON.parse(req.body.parameters)
           }
       });
 
