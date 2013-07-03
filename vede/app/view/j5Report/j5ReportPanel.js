@@ -281,6 +281,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                 margin: '10 10 10 10',
                 layout: 'fit',
                 title: 'Combinatorial Mock Assembly Output',
+                hidden: true,
                 items: [
                     {
                         xtype: 'textareafield',
