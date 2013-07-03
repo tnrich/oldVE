@@ -5,7 +5,7 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters","Teselagen.bio.parsers.ParsersManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -14,26 +14,29 @@ Ext.define("Vede.controller.J5ReportController", {
     cls: 'j5ReportTab',
 
     onPlasmidsItemClick: function(row,record){
+
         var currentTab = Ext.getCmp("mainAppPanel");
         var mask = new Ext.LoadMask({target: currentTab});
-
         mask.setVisible(true, false);
 
-        var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
-            "GENBANK",
-            record.data.fileContent,
-            record.data.name,
-            ""
-        );
+        var ext = record.data.name.split('.').pop();
 
-        // Javascript waits to render the loading mask until after the call to
-        // openSequence, so we force it to wait a millisecond before calling
-        // to give it time to render the loading mask.
-        Ext.defer(function() {
-            Teselagen.manager.ProjectManager.openSequence(sequence);
-            mask.setVisible(false);
-        }, 10);
+        Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.fileContent,ext,function(gb){
+            var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+                "GENBANK",
+                gb,
+                record.data.name,
+                ""
+            );
 
+            // Javascript waits to render the loading mask until after the call to
+            // openSequence, so we force it to wait a millisecond before calling
+            // to give it time to render the loading mask.
+            Ext.defer(function() {
+                Teselagen.manager.ProjectManager.openSequence(sequence);
+                mask.setVisible(false);
+            }, 10);
+        });
     },
 
     downloadResults: function(){
@@ -307,7 +310,7 @@ Ext.define("Vede.controller.J5ReportController", {
             'button[cls="downloadResults"]': {
                 click: this.downloadResults
             },
-            "gridpanel[title=Output Plasmids]": {
+            "gridpanel[name='assemblies']": {
                 itemclick: this.onPlasmidsItemClick
             },
             "button[cls='buildBtn']": {
