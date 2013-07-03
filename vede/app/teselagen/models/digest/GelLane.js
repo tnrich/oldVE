@@ -46,7 +46,9 @@ Ext.define("Teselagen.models.digest.GelLane", {
         /**
          * size of the font for labels (in pixels)
          */
-        labelSize: 16,
+        labelSize: 12,
+
+        font_family:  "Ubuntu Mono",
         /**
          * holds the sprites for all the bands
          */
@@ -201,7 +203,7 @@ Ext.define("Teselagen.models.digest.GelLane", {
                 type: "text",
                 text: laneLabelText,
                 fill: this.BAND_COLOR,
-                font: this.labelSize + "px 'monospace'",
+                font: this.labelSize + "px '"+ this.font_family +"'",
                 x: this.xOffset + xSpacer,
                 y: 10
             });
@@ -222,7 +224,7 @@ Ext.define("Teselagen.models.digest.GelLane", {
             type: "text",
             text: sizeString,
             fill: this.BAND_COLOR,
-            font: this.labelSize + "px 'monospace'",
+            font: this.labelSize + "px '" + this.font_family + "'",
             style: {
                 textAlign: "right",
                 display: "block",
