@@ -81,7 +81,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         return cb(combinatorial);
     },
 
-    onCheckj5Ready: function(cb){
+    onCheckj5Ready: function(cb,notChangeMethod){
         /*
         non-combinatorial designs: each collection bin (column) must contain exactly one mapped part.
         combinatorial designs: each collection bin must contain at least one mapped part, and at least 
@@ -135,7 +135,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 j5ready = false;
             }
 
-            Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
+            if( !(notChangeMethod === true) ) Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
 
             tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
             tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
