@@ -65395,6 +65395,18 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.bio.parsers.SbolParser', Ext.Base, {singleton: true, namespace: null, constructor: function() {
   XmlToJson = Teselagen.bio.util.XmlToJson;
   namespace = "";
+}, convertGenbankToSBOL: function(data, cb) {
+  var messageBox = Ext.MessageBox.wait("Converting to SBOL XML/RDF...", "Waiting for the server");
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genbanktosbol", ''), params: {filename: 'example.xml', data: Base64.encode(data)}, success: function(response) {
+  response = JSON.parse(response.responseText);
+  messageBox.close();
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  cb(response.data, true);
+}, failure: function(response, opts) {
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  messageBox.close();
+  Ext.MessageBox.alert('Failed', 'Conversion failed');
+}});
 }, parse: function(data, cb) {
   console.log("Parsing using j5");
   var self = this;
@@ -65747,6 +65759,49 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   DNATools = Teselagen.bio.sequence.DNATools;
   SbolParser = Teselagen.bio.parsers.SbolParser;
   Sha256 = Teselagen.bio.util.Sha256;
+}, detectXMLFormat: function(data, cb) {
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(data, "text/xml");
+  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
+  if (diff.length > 0) 
+  {
+    return cb(data, false);
+  } else {
+    Teselagen.bio.parsers.SbolParser.parse(data, cb);
+  }
+}, parseSequence: function(result, pExt, cb) {
+  var self = this;
+  var asyncParseFlag = false;
+  switch (pExt) {
+    case "fasta":
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+      break;
+    case "fas":
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+      break;
+    case "json":
+      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
+      break;
+    case "gb":
+      fileContent = result;
+      break;
+    case "xml":
+      asyncParseFlag = true;
+      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
+  var gb;
+  if (isSBOL) 
+  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+  return cb(gb);
+  ;
+});
+      break;
+  }
+  if (!asyncParseFlag) 
+  {
+    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
+    return cb(gb);
+    ;
+  }
 }, fastaToGenbank: function(pFasta) {
   var result;
   var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
@@ -67836,10 +67891,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}]}, 0, ["DashboardPanelView"], ["panel", "DashboardPanelView", "component", "container", "box"], {"panel": true, "DashboardPanelView": true, "component": true, "container": true, "box": true}, ["widget.DashboardPanelView"], 0, [Vede.view.common, 'DashboardPanelView'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", MAP_PART_SELECT: "MapPartSelect", MAP_PART_NOTSELECT: "MapPartNotSelect", FILL_BLANK_CELLS: "FillBlankCells", OPEN_LIBRARY: "OpenPartLibrary"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
+(Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", MAP_PART_SELECT: "MapPartSelect", MAP_PART_NOTSELECT: "MapPartNotSelect", ADD_SELECT_ALERTS: "AddSelectAlerts", FILL_BLANK_CELLS: "FillBlankCells", OPEN_LIBRARY: "OpenPartLibrary"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, overlapHeader: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, autoScroll: true, width: 100, layout: {type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', editable: false, queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
+(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, overlapHeader: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, width: 100, layout: {type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', editable: false, queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
   return rule.getOperand1().get("name");
 }}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', cls: "operand2_field", editor: {xtype: 'combobox', store: [], cls: "operand2_combobox"}, renderer: function(id, metaData, rule) {
   if (rule.get("operand2isNumber")) 
@@ -67848,7 +67903,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return rule.getOperand2().get("name");
   }
-}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', anchor: "100% 65%", autoScroll: true, viewConfig: {markDirty: false}, allowDeselect: true, columnLines: true, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
+}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', anchor: '100%', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', anchor: "100% 65%", autoScroll: true, viewConfig: {markDirty: false}, allowDeselect: true, columnLines: true, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
   metadata.tdAttr = 'data-qtip="' + value + '"';
   return value;
 }}, {xtype: 'gridcolumn', text: '<div data-qtip="Direction">Direction</div>', dataIndex: 'directionForward', editor: {xtype: 'combobox', store: [[true, "Forward"], [false, "Reverse"]]}, renderer: function(forward) {
@@ -67970,13 +68025,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}]}, {xtype: 'gridpanel', name: 'errors', cls: 'errorsGrid', hidden: true, margin: '10 10 20 10', title: 'Errors', minHeight: 80, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'faultString', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
   return '<div style="white-space:normal !important;">' + val + '</div>';
-}}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Plasmids', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name', renderer: function(val, metadata) {
+}}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Assembled Constructs', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name', renderer: function(val, metadata) {
   metadata.tdAttr = 'data-qtip = "Click to open"';
   return val;
-}}, {xtype: 'gridcolumn', dataIndex: 'size', flex: 1, text: 'Size'}, {xtype: 'gridcolumn', dataIndex: 'fileType', flex: 1, text: 'Type'}, {xtype: 'gridcolumn', dataIndex: 'fileContent', flex: 2, text: 'Content', renderer: function(val) {
-  var content_limited = val.slice(0, (val.lastIndexOf("bp") + 2));
-  return content_limited + "...";
-}}]}, {xtype: 'gridpanel', name: 'j5parameters', margin: '10 10 20 10', collapsible: true, collapseDirection: 'top', collapsed: true, title: 'j5 Parameters', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'value', flex: 1, text: 'Value'}]}, {xtype: 'fieldset', margin: '10 10 10 10', layout: 'fit', title: 'Combinatorial Mock Assembly Output', hidden: true, items: [{xtype: 'textareafield', name: 'combinatorialAssembly', margin: '10 10 20 10', fieldLabel: ''}]}]}], listeners: {}}, 0, ["j5ReportPanel"], ["panel", "component", "container", "box", "j5ReportPanel"], {"panel": true, "component": true, "container": true, "box": true, "j5ReportPanel": true}, ["widget.j5ReportPanel"], 0, [Vede.view.j5Report, 'j5ReportPanel'], 0));
+}}, {xtype: 'gridcolumn', dataIndex: 'sizeBP', flex: 1, text: 'Size (bp)'}, {xtype: 'gridcolumn', dataIndex: 'fileType', flex: 1, text: 'Type'}]}, {xtype: 'gridpanel', name: 'j5parameters', margin: '10 10 20 10', collapsible: true, collapseDirection: 'top', collapsed: true, title: 'j5 Parameters', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'value', flex: 1, text: 'Value'}]}, {xtype: 'fieldset', margin: '10 10 10 10', layout: 'fit', title: 'Combinatorial Mock Assembly Output', hidden: true, items: [{xtype: 'textareafield', name: 'combinatorialAssembly', margin: '10 10 20 10', fieldLabel: ''}]}]}], listeners: {}}, 0, ["j5ReportPanel"], ["panel", "component", "container", "box", "j5ReportPanel"], {"panel": true, "component": true, "container": true, "box": true, "j5ReportPanel": true}, ["widget.j5ReportPanel"], 0, [Vede.view.j5Report, 'j5ReportPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.HelpWindow', Ext.window.Window, {height: 360, width: 771, title: 'Help', autodestoy: true, items: [{xtype: 'form', height: 361, bodyPadding: 10, title: '', items: [{xtype: 'fieldset', height: 115, title: 'Send feedback', items: [{xtype: 'textareafield', anchor: '100%', name: 'feedback', emptyText: 'Enter feedback or comments here.'}, {xtype: 'button', text: 'Send', id: 'reportFeedbackBtn'}]}, {xtype: 'fieldset', height: 185, title: 'Report Error', items: [{xtype: 'textareafield', anchor: '100%', name: 'error', emptyText: 'Enter specific error here.'}, {xtype: 'textareafield', anchor: '100%', name: 'error_feedback', emptyText: 'Enter additional feedback here.'}, {xtype: 'button', text: 'Report Error', id: 'reportErrorBtn'}]}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'HelpWindow'], 0));
@@ -68699,14 +68751,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       for (var binIndex = 0; binIndex < 1; binIndex++) 
         {
           var newBin = Ext.create("Teselagen.models.J5Bin", {binName: "Bin1"});
-          var tempParts = [];
-          for (var i = 0; i < 2; i++) 
-            {
-              var newPart = Ext.create("Teselagen.models.Part", {name: "", phantom: true});
-              parts.push(newPart);
-              tempParts.push(newPart);
-              newBin.parts().add(newPart);
-            }
           binsArray.push(newBin);
         }
       var afterPartsSaved = function() {
@@ -68952,80 +68996,79 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     return false;
   }
 }}], validation: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
-  this.setDefaultValues();
 }, loadValues: function(values) {
   if (values.MASTEROLIGONUMBEROFDIGITS) 
-  this.set("masterOligoNumberOfDigitsValue            ", values.MASTEROLIGONUMBEROFDIGITS);
+  this.set("masterOligoNumberOfDigitsValue", values.MASTEROLIGONUMBEROFDIGITS);
   if (values.MASTERPLASMIDNUMBEROFDIGITS) 
-  this.set("masterPlasmidNumberOfDigitsValue          ", values.MASTERPLASMIDNUMBEROFDIGITS);
+  this.set("masterPlasmidNumberOfDigitsValue", values.MASTERPLASMIDNUMBEROFDIGITS);
   if (values.GIBSONOVERLAPBPS) 
-  this.set("gibsonOverlapBPsValue                     ", values.GIBSONOVERLAPBPS);
+  this.set("gibsonOverlapBPsValue", values.GIBSONOVERLAPBPS);
   if (values.GIBSONOVERLAPMINTM) 
-  this.set("gibsonOverlapMinTmValue                   ", values.GIBSONOVERLAPMINTM);
+  this.set("gibsonOverlapMinTmValue", values.GIBSONOVERLAPMINTM);
   if (values.GIBSONOVERLAPMAXTM) 
-  this.set("gibsonOverlapMaxTmValue                   ", values.GIBSONOVERLAPMAXTM);
+  this.set("gibsonOverlapMaxTmValue", values.GIBSONOVERLAPMAXTM);
   if (values.MAXIMUMOLIGOLENGTHBPS) 
-  this.set("maxOligoLengthBPsValue                    ", values.MAXIMUMOLIGOLENGTHBPS);
+  this.set("maxOligoLengthBPsValue", values.MAXIMUMOLIGOLENGTHBPS);
   if (values.MINIMUMFRAGMENTSIZEGIBSONBPS) 
-  this.set("minFragmentSizeGibsonBPsValue             ", values.MINIMUMFRAGMENTSIZEGIBSONBPS);
+  this.set("minFragmentSizeGibsonBPsValue", values.MINIMUMFRAGMENTSIZEGIBSONBPS);
   if (values.GOLDENGATEOVERHANGBPS) 
-  this.set("goldenGateOverhangBPsValue                ", values.GOLDENGATEOVERHANGBPS);
+  this.set("goldenGateOverhangBPsValue", values.GOLDENGATEOVERHANGBPS);
   if (values.GOLDENGATERECOGNITIONSEQ) 
-  this.set("goldenGateRecognitionSeqValue             ", values.GOLDENGATERECOGNITIONSEQ);
+  this.set("goldenGateRecognitionSeqValue", values.GOLDENGATERECOGNITIONSEQ);
   if (values.GOLDENGATETERMINIEXTRASEQ) 
-  this.set("goldenGateTerminiExtraSeqValue            ", values.GOLDENGATETERMINIEXTRASEQ);
+  this.set("goldenGateTerminiExtraSeqValue", values.GOLDENGATETERMINIEXTRASEQ);
   if (values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE) 
   this.set("maxIdentitiesGoldenGateOverhangsCompatible", values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE);
   if (values.OLIGOSYNTHESISCOSTPERBPUSD) 
-  this.set("oligoSynthesisCostPerBPUSDValue           ", values.OLIGOSYNTHESISCOSTPERBPUSD);
+  this.set("oligoSynthesisCostPerBPUSDValue", values.OLIGOSYNTHESISCOSTPERBPUSD);
   if (values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD) 
-  this.set("oligoPagePurificationCostPerPieceUSDValue ", values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD);
+  this.set("oligoPagePurificationCostPerPieceUSDValue", values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD);
   if (values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS) 
   this.set("oligoMaxLengthNoPagePurificationRequiredBP", values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBP);
   if (values.MINIMUMPCRPRODUCTBPS) 
-  this.set("minPCRProductBPsValue                     ", values.MINIMUMPCRPRODUCTBPS);
+  this.set("minPCRProductBPsValue", values.MINIMUMPCRPRODUCTBPS);
   if (values.DIRECTSYNTHESISCOSTPERBPUSD) 
-  this.set("directSynthesisCostPerBPUSDValue          ", values.DIRECTSYNTHESISCOSTPERBPUSD);
+  this.set("directSynthesisCostPerBPUSDValue", values.DIRECTSYNTHESISCOSTPERBPUSD);
   if (values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD) 
-  this.set("directSynthesisMinCostPerPieceUSDValue    ", values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD);
+  this.set("directSynthesisMinCostPerPieceUSDValue", values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD);
   if (values.PRIMER_GC_CLAMP) 
-  this.set("primerGCClampValue                        ", values.PRIMER_GC_CLAMP);
+  this.set("primerGCClampValue", values.PRIMER_GC_CLAMP);
   if (values.PRIMER_MIN_SIZE) 
-  this.set("primerMinSizeValue                        ", values.PRIMER_MIN_SIZE);
+  this.set("primerMinSizeValue", values.PRIMER_MIN_SIZE);
   if (values.PRIMER_MAX_SIZE) 
-  this.set("primerMaxSizeValue                        ", values.PRIMER_MAX_SIZE);
+  this.set("primerMaxSizeValue", values.PRIMER_MAX_SIZE);
   if (values.PRIMER_MIN_TM) 
-  this.set("primerMinTmValue                          ", values.PRIMER_MIN_TM);
+  this.set("primerMinTmValue", values.PRIMER_MIN_TM);
   if (values.PRIMER_MAX_TM) 
-  this.set("primerMaxTmValue                          ", values.PRIMER_MAX_TM);
+  this.set("primerMaxTmValue", values.PRIMER_MAX_TM);
   if (values.PRIMER_MAX_DIFF_TM) 
-  this.set("primerMaxDiffTmValue                      ", values.PRIMER_MAX_DIFF_TM);
+  this.set("primerMaxDiffTmValue", values.PRIMER_MAX_DIFF_TM);
   if (values.PRIMER_MAX_SELF_ANY_TH) 
-  this.set("primerMaxSelfAnyThValue                   ", values.PRIMER_MAX_SELF_ANY_TH);
+  this.set("primerMaxSelfAnyThValue", values.PRIMER_MAX_SELF_ANY_TH);
   if (values.PRIMER_MAX_SELF_END_TH) 
-  this.set("primerMaxSelfEndThValue                   ", values.PRIMER_MAX_SELF_END_TH);
+  this.set("primerMaxSelfEndThValue", values.PRIMER_MAX_SELF_END_TH);
   if (values.PRIMER_PAIR_MAX_COMPL_ANY_TH) 
-  this.set("primerPairMaxComplAnyThValue              ", values.PRIMER_PAIR_MAX_COMPL_ANY_TH);
+  this.set("primerPairMaxComplAnyThValue", values.PRIMER_PAIR_MAX_COMPL_ANY_TH);
   if (values.PRIMER_PAIR_MAX_COMPL_END_TH) 
-  this.set("primerPairMaxComplEndThValue              ", values.PRIMER_PAIR_MAX_COMPL_END_TH);
+  this.set("primerPairMaxComplEndThValue", values.PRIMER_PAIR_MAX_COMPL_END_TH);
   if (values.PRIMER_TM_SANTALUCIA) 
-  this.set("primerTmSantaluciaValue                   ", values.PRIMER_TM_SANTALUCIA);
+  this.set("primerTmSantaluciaValue", values.PRIMER_TM_SANTALUCIA);
   if (values.PRIMER_SALT_CORRECTIONS) 
-  this.set("primerSaltCorrectionsValue                ", values.PRIMER_SALT_CORRECTIONS);
+  this.set("primerSaltCorrectionsValue", values.PRIMER_SALT_CORRECTIONS);
   if (values.PRIMER_DNA_CONC) 
-  this.set("primerDnaConcValue                        ", values.PRIMER_DNA_CONC);
+  this.set("primerDnaConcValue", values.PRIMER_DNA_CONC);
   if (values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT) 
   this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT);
   if (values.MISPRIMING_MIN_TM) 
-  this.set("misprimingMinTmValue                      ", values.MISPRIMING_MIN_TM);
+  this.set("misprimingMinTmValue", values.MISPRIMING_MIN_TM);
   if (values.MISPRIMING_SALT_CONC) 
-  this.set("misprimingSaltConcValue                   ", values.MISPRIMING_SALT_CONC);
+  this.set("misprimingSaltConcValue", values.MISPRIMING_SALT_CONC);
   if (values.MISPRIMING_OLIGO_CONC) 
-  this.set("misprimingOligoConcValue                  ", values.MISPRIMING_OLIGO_CONC);
+  this.set("misprimingOligoConcValue", values.MISPRIMING_OLIGO_CONC);
   if (values.OUTPUT_SEQUENCE_FORMAT) 
-  this.set("outputSequenceFormatValue                 ", values.OUTPUT_SEQUENCE_FORMAT);
+  this.set("outputSequenceFormatValue", values.OUTPUT_SEQUENCE_FORMAT);
   if (values.SUPPRESS_PURE_PRIMERS) 
-  this.set("SPP_Default                          ", values.SUPPRESS_PURE_PRIMERS);
+  this.set("SPP_Default", values.SUPPRESS_PURE_PRIMERS);
 }, setDefaultValues: function() {
   this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
   this.set("masterPlasmidNumberOfDigitsValue", this.self.MPNOD_Default);
@@ -69251,7 +69294,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return constants.GENBANK;
   }
-}}, {name: "name", type: "String", defaultValue: ""}, {name: "fileContent", type: "String", defaultValue: ""}, {name: "size", type: "String", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'AssembledSequenceFile'], 0));
+}}, {name: "name", type: "String", defaultValue: ""}, {name: "fileContent", type: "String", defaultValue: ""}, {name: "sizeBP", type: "String", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'AssembledSequenceFile'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.j5Output.Warnings', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "warning_id", type: "long"}, {name: "type", type: "string", defaultValue: ""}, {name: "message", type: "string", defaultValue: ""}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.Assembly", getterName: "getAssembly", setterName: "setAssembly", associationKey: "assembly", foreignKey: "assembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Warnings'], 0));
@@ -70279,68 +70322,58 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     saveToServer();
   }
+}, promptFormat: function(cb) {
+  var dialog = Ext.create('Ext.window.MessageBox', {buttons: [{text: 'GENBANK', handler: function() {
+  cb("GENBANK", dialog);
+}}, {text: 'FASTA', handler: function() {
+  cb("FASTA", dialog);
+}}, {text: 'SBOL XML/RDF', handler: function() {
+  cb("SBOL XML/RDF", dialog);
+}}, {text: 'CANCEL', handler: function() {
+  cb("CANCEL", dialog);
+}}]});
+  dialog.show({msg: '<p>Please select format</p>', closable: false});
+  dialog.setHeight(60);
+  dialog.setWidth(370);
 }, saveSequenceToFile: function() {
-  gb = this.sequenceFileManager.toGenbank().toString();
+  var self = this;
+  var performSavingOperation = function(data, filename) {
   var saveFile = function(name, gb) {
   var flag;
-  var text = gb;
+  var text = data;
   var filename = name;
   var bb = new BlobBuilder();
   bb.append(text);
   saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
 };
-  saveFile(this.sequence.data.name + '.gb', gb);
+  saveFile(filename, data);
+};
+  this.promptFormat(function(btn, dialog) {
+  gb = self.sequenceFileManager.toGenbank().toString();
+  if (btn === "GENBANK") 
+  {
+    performSavingOperation(gb, self.sequence.data.name + '.gb');
+  } else if (btn === "FASTA") 
+  {
+    var data = ">" + self.sequence.data.name + "\n";
+    data += self.sequenceFileManager.sequence.toString();
+    performSavingOperation(data, self.sequence.data.name + '.fas');
+  } else if (btn === "SBOL XML/RDF") 
+  {
+    Teselagen.bio.parsers.SbolParser.convertGenbankToSBOL(gb, function(data) {
+  performSavingOperation(data, self.sequence.data.name + '.xml');
+});
+  }
+  dialog.close();
+});
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'VectorEditorManager'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.VectorEditor.ImportSequenceController', Ext.app.Controller, {detectXMLFormat: function(data, cb) {
-  var parser = new DOMParser();
-  var xmlDoc = parser.parseFromString(data, "text/xml");
-  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
-  if (diff.length > 0) 
-  {
-    return cb(data, false);
-  } else {
-    Teselagen.bio.parsers.SbolParser.parse(data, cb);
-  }
-}, parseSequence: function(pFile, pExt, pEvt, cb) {
+(Ext.cmd.derive('Vede.controller.VectorEditor.ImportSequenceController', Ext.app.Controller, {onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
   var self = this;
-  var result = pEvt.target.result;
-  var asyncParseFlag = false;
-  switch (pExt) {
-    case "fasta":
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
-      break;
-    case "fas":
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
-      break;
-    case "json":
-      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
-      break;
-    case "gb":
-      fileContent = result;
-      break;
-    case "xml":
-      asyncParseFlag = true;
-      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
-  var gb;
-  if (isSBOL) 
-  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
-  return cb(gb);
-  ;
-});
-      break;
-  }
-  if (!asyncParseFlag) 
-  {
-    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
-    return cb(gb);
-    ;
-  }
-}, onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
-  var self = this;
+  Teselagen.bio.parsers.ParsersManager.parseSequence(pEvt.target.result, pExt, function(gb) {
+  var locusName = gb.getLocus().locusName;
   performSequenceCreation = function(newSequence, cb) {
-  self.parseSequence(pFile, pExt, pEvt, function(gb) {
   var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
   if (newSequence) 
   {
@@ -70378,7 +70411,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     cb(sequence);
   }
-});
 };
   if (sequence.get("project_id") == "") 
   {
@@ -70392,24 +70424,24 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     var currentTabEl = (currentTab.getEl());
     var selectWindow = Ext.create("Ext.window.Window", {title: "Please choose a project", height: 200, width: 400, layout: "fit", renderTo: currentTabEl, items: {xtype: "grid", border: false, columns: {items: {dataIndex: "name"}, defaults: {flex: 1}}, store: Teselagen.manager.ProjectManager.projects, listeners: {"itemclick": function(grid, project) {
   selectWindow.close();
-  Teselagen.manager.ProjectManager.workingProject = project;
-  var sequencesNames = [];
-  project.sequences().load().each(function(sequence) {
-  sequencesNames.push(sequence.data.name);
-});
   var onSequencePromptClosed = function(btn, text) {
   if (btn === "ok") 
   {
     if (text === "") 
     {
-      return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this);
+      return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
     }
+    Teselagen.manager.ProjectManager.workingProject = project;
+    var sequencesNames = [];
+    project.sequences().load().each(function(sequence) {
+  sequencesNames.push(sequence.data.name);
+});
     for (var j = 0; j < sequencesNames.length; j++) 
       {
-        if (sequencesNames[j].match(text)) 
+        if (sequencesNames[j] === text) 
         {
           var conflictName = sequencesNames[j];
-          Ext.MessageBox.show({title: "Name", msg: "A sequence with the name  <i> <q>" + conflictName + "</q> </i>  already exists in this project. <p> Please enter another name:", buttons: Ext.MessageBox.OKCANCEL, fn: onSequencePromptClosed, prompt: true, value: null, cls: "sequencePrompt-box", style: {"text-align": "center"}, layout: {align: "center"}, items: [{xtype: "textfield", layout: {align: "center"}, width: 50}]});
+          Ext.MessageBox.show({title: "Name", msg: "A sequence with the name  <i> <q>" + conflictName + "</q> </i>  already exists in this project. <p> Please enter another name:", buttons: Ext.MessageBox.OKCANCEL, fn: onSequencePromptClosed, prompt: true, value: conflictName + "(1)", cls: "sequencePrompt-box", style: {"text-align": "center"}, layout: {align: "center"}, items: [{xtype: "textfield", layout: {align: "center"}, width: 50}]});
           return Ext.MessageBox;
         }
       }
@@ -70426,7 +70458,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }});
   }
 };
-  Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this);
+  Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
 }, "destroy": function(selectWindow) {
   currentTabPanel.setLoading(false);
 }}}}).show();
@@ -70436,6 +70468,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }});
   }
+});
 }, init: function() {
   this.application.on("ImportFileToSequence", this.onImportFileToSequence, this);
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'ImportSequenceController'], 0));
@@ -71917,7 +71950,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
   parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
   toastr.options.onclick = null;
-  toastr.info("Part Sucessfully Created");
+  toastr.info("Part Successfully Created");
 }});
 });
   } else if (response.type === 'error') 
@@ -72817,7 +72850,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
   var assemblies = self.activeJ5Run.getJ5Results().assemblies();
   var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-  var j5parameters = self.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+  var j5parameters = Ext.create("Teselagen.models.J5Parameters");
+  j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);
+  J5parametersValues = j5parameters.getParametersAsStore();
   Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
   Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
   Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
@@ -72871,7 +72906,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     errorsStore = null;
   }
   Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
   Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
   Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
 }});
@@ -73065,14 +73100,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, unHighlight: function() {
   this.partCell.down().removeBodyCls("gridPartCell-highlighted");
 }, deselect: function() {
-  this.partCell.down().removeBodyCls("gridPartCell-alert");
   this.partCell.down().removeBodyCls("gridPartCell-selected");
   this.partCell.down().removeBodyCls("gridPartCell-highlighted");
 }, leaveselect: function() {
   this.partCell.down().removeBodyCls("gridPartCell-selected");
 }, mapSelect: function() {
   this.partCell.down().addBodyCls("gridPartCell-selected");
-  this.partCell.down().removeBodyCls("gridPartCell-alert");
 }, addFasIndicator: function(fasConflict) {
   var image;
   if (fasConflict) 
@@ -73105,6 +73138,24 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       this.addJ5Bin(j5Bin);
     }
   Ext.resumeLayouts(true);
+}, addSelectAlerts: function() {
+  var bins = this.grid.query("Bin");
+  for (var i = 0; i < bins.length; i++) 
+    {
+      gridBin = bins[i];
+      parts = gridBin.query("Part");
+      for (var j = 0; j < parts.length; j++) 
+        {
+          part = parts[j];
+          if (part.getPart() != undefined) 
+          {
+            if (part.getPart().get('name') != "" && part.getPart().get('sequencefile_id') == "") 
+            {
+              part.selectAlert();
+            }
+          }
+        }
+    }
 }, onPartPanelButtonClick: function(button) {
   if (this.selectedBin) 
   this.selectedBin.bin.set('iconID', button.data.iconKey);
@@ -73770,7 +73821,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, ownerIndices[i]);
       gridBin = this.getGridBinFromJ5Bin(ownerBin);
-      var partIndex = ownerBin.parts().indexOf(j5Part);
+      var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
       gridPart = gridBin.query("Part")[partIndex];
       if (targetGridParts.indexOf(gridPart) < 0) 
       {
@@ -73809,7 +73860,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.renderDevice();
 }, onPartSelected: function(j5Part) {
   var gridParts = this.getGridPartsFromJ5Part(j5Part);
-  console.log(gridParts);
   if (gridParts.length > 0 && gridParts.indexOf(this.selectedPart) === -1) 
   {
     this.selectedPart = gridParts[0];
@@ -73973,6 +74023,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.application.on("resumePartAlerts", this.resumePartAlerts, this);
   this.application.on("FillBlankCells", this.onfillBlankCells, this);
   this.application.on("rerenderPart", this.rerenderPart, this);
+  this.application.on("rerenderPart", this.rerenderPart, this);
+  this.application.on("addSelectAlerts", this.addSelectAlerts, this);
   this.application.on(this.DeviceEvent.ADD_ROW_ABOVE, this.onAddRowAbove, this);
   this.application.on(this.DeviceEvent.ADD_ROW_BELOW, this.onAddRowBelow, this);
   this.application.on(this.DeviceEvent.ADD_COLUMN_LEFT, this.onAddColumnLeft, this);
@@ -74049,7 +74101,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     combinatorial = true;
   }
   return cb(combinatorial);
-}, onCheckj5Ready: function(cb) {
+}, onCheckj5Ready: function(cb, notChangeMethod) {
   var tab = Ext.getCmp('mainAppPanel').getActiveTab();
   var j5collection = tab.model.getDesign().getJ5Collection();
   var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
@@ -74100,6 +74152,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     j5ready = false;
   }
+  if (!(notChangeMethod === true)) 
   Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
   tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
   tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
@@ -74178,6 +74231,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     self.selectedPart = part;
     self.onReRenderDECanvasEvent();
     Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+    Vede.application.fireEvent(self.DeviceEvent.ADD_SELECT_ALERTS);
   } else {
     Ext.MessageBox.alert('Error', 'Failed mapping part from library');
   }
@@ -74576,7 +74630,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.columnsGrid.getSelectionModel().deselect(selectedPart);
   this.columnsGrid.getView().removeRowCls(selectedPart, this.columnsGrid.getView().selectedItemCls);
   this.columnsGrid.getView().removeRowCls(selectedPart, this.columnsGrid.getView().focusedItemCls);
-  this.renderCollectionInfo();
+  this.renderCollectionInfo(true);
 }, onRemoveFromBins: function(activeBins, removedBin, index) {
   this.renderCollectionInfo();
 }, onAddToParts: function(parts, addedParts, index) {
@@ -74601,7 +74655,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }
 }, onReRenderCollectionInfoEvent: function() {
   this.renderCollectionInfo();
-}, renderCollectionInfo: function() {
+}, renderCollectionInfo: function(skipReconfigureGrid) {
   Ext.suspendLayouts();
   var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
   var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
@@ -74623,7 +74677,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
     var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
     operand2Field.store = partsStore;
-    this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+    if (!skipReconfigureGrid) 
+    {
+      this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+    }
     var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
     if (selectedBin) 
     {
@@ -74809,7 +74866,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       self.loadAssemblyMethodSelector(combinatorial);
     }
   }
-});
+}, true);
 }, loadAssemblyMethodSelector: function(combinatorial) {
   var store;
   var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
@@ -82337,11 +82394,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var currentTab = Ext.getCmp("mainAppPanel");
   var mask = new Ext.LoadMask({target: currentTab});
   mask.setVisible(true, false);
-  var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
+  var ext = record.data.name.split('.').pop();
+  Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.fileContent, ext, function(gb) {
+  var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", gb, record.data.name, "");
   Ext.defer(function() {
   Teselagen.manager.ProjectManager.openSequence(sequence);
   mask.setVisible(false);
 }, 10);
+});
 }, downloadResults: function() {
   if (this.activeJ5Run) 
   {
@@ -82368,8 +82428,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
   endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
   var assemblies = this.activeJ5Run.getJ5Results().assemblies();
+  assemblies.sort('name', 'ASC');
   var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-  var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+  var j5parameters = Ext.create("Teselagen.models.J5Parameters");
+  j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);
+  J5parametersValues = j5parameters.getParametersAsStore();
   this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
   this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
   this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
@@ -82424,7 +82487,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     errorsStore = null;
   }
   this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-  this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+  this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
   this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
 }, elapsedDate: function(seconds) {
   var numdays = Math.floor((seconds % 31536000) / 86400);
@@ -82512,7 +82575,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, init: function() {
   this.callParent();
   this.application.on("resetJ5ActiveRun", this.setActiveRun, this);
-  this.control({'panel[cls="j5ReportsPanel"] > menu > menuitem': {click: this.onJ5RunSelect}, 'button[cls="downloadResults"]': {click: this.downloadResults}, "gridpanel[title=Output Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='buildBtn']": {click: this.buildBtnClick}});
+  this.control({'panel[cls="j5ReportsPanel"] > menu > menuitem': {click: this.onJ5RunSelect}, 'button[cls="downloadResults"]': {click: this.downloadResults}, "gridpanel[name='assemblies']": {itemclick: this.onPlasmidsItemClick}, "button[cls='buildBtn']": {click: this.buildBtnClick}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'J5ReportController'], 0));
 ;
 
@@ -82610,18 +82673,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var startBP = form.findField('startBP');
   var stopBP = form.findField('stopBP');
   var revComp = form.findField('revComp');
-  this.selectedPart.set('name', name.getValue());
-  this.selectedSequence.set('partSource', partSource.getValue());
-  this.selectedPart.set('partSource', partSource.getValue());
-  if (this.selectedSequence) 
-  {
-    this.selectedSequence.set('partSource', partSource.getValue());
-    this.selectedPart.set('partSource', partSource.getValue());
-    this.selectedSequence.set('sequenceFileContent', sourceData.getValue());
-  }
-  this.selectedPart.set('genbankStartBP', startBP.getValue());
-  this.selectedPart.set('endBP', stopBP.getValue());
-  this.selectedPart.set('revComp', revComp.getValue());
+  this.selectedSequence.set({partSource: partSource.getValue(), sequenceFileContent: sourceData.getValue()});
+  this.selectedPart.set({name: name.getValue(), partSource: partSource.getValue(), genbankStartBP: startBP.getValue(), endBP: stopBP.getValue(), revComp: revComp.getValue()});
   if (this.selectedBinIndex != -1) 
   {
     Vede.application.fireEvent("partSelected", this.selectedPart, this.selectedBinIndex);
