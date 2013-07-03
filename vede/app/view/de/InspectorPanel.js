@@ -133,6 +133,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
                             name: 'fas',
+                            editable: false,
                             queryMode: 'local',
                             anchor: '100%',
                             store: []
@@ -552,6 +553,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     cls: 'assemblyMethodSelector',
                                     fieldLabel: '<b>Assembly Method:</b>',
                                     labelCls: 'assembly-label',
+                                    editable: false,
                                     labelSeparator: ' ',
                                     labelWidth: 110,
                                     width:350,

@@ -101,7 +101,15 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 iconAlign: 'top',
                                 iconCls: 'manuals-icon',
                                 text: 'Manuals',
-                                href: 'http://help.teselagen.com/manual/'
+                                href: 'http://help.teselagen.com/manual/',
+                                listeners: {
+                                    afterrender: function(cmp) {
+                                        cmp.getEl().set({
+                                            "data-intro": 'Make sure you check out the manuals for a thorough documentation.',
+                                            "data-step": 4
+                                        });
+                                    }
+                                }
                             },
                             {
                                 xtype: 'button',

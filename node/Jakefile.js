@@ -49,14 +49,17 @@ task("patchNode", function() {
 //directory("log");
 
 task("startNode", function() {
+    var startNodeCmd = 'pm2 start processes.json';
     JakeUtil.exec(startNodeCmd);
 });
 
 task("stopNode", function() {
+    var stopNodeCmd = 'pm2 kill';
     JakeUtil.exec(stopNodeCmd);
 });
 
 task("restartNode", function() {
+    var restartNodeCmd = 'pm2 restart processes.json';
     JakeUtil.exec(restartNodeCmd);
 });
 

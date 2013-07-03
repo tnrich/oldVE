@@ -99,6 +99,10 @@ Ext.define('Vede.view.de.grid.Bin', {
                 }]
             }]
         });
+
+        if(!this.getBin().get("directionForward")) {
+            this.binHeader.down("image[cls='binIcon']").addCls('flipImage');
+        }
         
         this.callParent([{
             layout: {
