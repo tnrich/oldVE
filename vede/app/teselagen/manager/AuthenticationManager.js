@@ -33,10 +33,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
-        if(Ext.util.Cookies.get("last_server"))
-        {
-            this.autoAuthURL = Ext.util.Cookies.get("last_server");
-        }
+        //if(Ext.util.Cookies.get("last_server"))
+        //{
+        //    this.autoAuthURL = Ext.util.Cookies.get("last_server");
+        //}
 
 
         if(Ext.util.Cookies.get("sessionname"))
@@ -137,7 +137,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
 
-                Ext.util.Cookies.set("last_server",Teselagen.manager.SessionManager.baseURL);
+                //Ext.util.Cookies.set("last_server",Teselagen.manager.SessionManager.baseURL);
 
                 if (cb) { return cb(true); }// for Testing
             },
