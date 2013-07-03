@@ -258,7 +258,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 align: 'stretch'
             },
             title: 'Collection Info',
-//            autoScroll: true,
             margin: "5px 0px 5px 0px",
             items: [
                 {
@@ -266,7 +265,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     cls: 'collectionInfoForm',
                     flex: 2,
                     bodyBorder: false,
-//                    autoScroll: true,
+                    autoScroll: true,
                     bodyPadding: 10,
                     items: [
                         {
@@ -285,6 +284,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'radiogroup',
+                            anchor: '100%',
                             cls: 'plasmid_geometry',
                             fieldLabel: 'Plasmid Type',
                             allowBlank: false,
