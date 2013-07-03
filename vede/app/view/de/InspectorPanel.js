@@ -142,7 +142,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 {
                     xtype: 'form',
                     cls: 'eugeneRulesForm',
-                    flex: 1,
                     autoScroll: true,
                     bodyPadding: 10,
                     margin: '5px 0px 0px 0px',
@@ -313,6 +312,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'gridpanel',
                             cls: 'inspectorGrid',
                             anchor:"100% 65%",
+                            flex:1,
                             autoScroll: true,
                             viewConfig: {
                                 markDirty: false,
