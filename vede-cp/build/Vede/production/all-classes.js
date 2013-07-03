@@ -65395,6 +65395,18 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.bio.parsers.SbolParser', Ext.Base, {singleton: true, namespace: null, constructor: function() {
   XmlToJson = Teselagen.bio.util.XmlToJson;
   namespace = "";
+}, convertGenbankToSBOL: function(data, cb) {
+  var messageBox = Ext.MessageBox.wait("Converting to SBOL XML/RDF...", "Waiting for the server");
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genbanktosbol", ''), params: {filename: 'example.xml', data: Base64.encode(data)}, success: function(response) {
+  response = JSON.parse(response.responseText);
+  messageBox.close();
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  cb(response.data, true);
+}, failure: function(response, opts) {
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  messageBox.close();
+  Ext.MessageBox.alert('Failed', 'Conversion failed');
+}});
 }, parse: function(data, cb) {
   console.log("Parsing using j5");
   var self = this;
@@ -65747,6 +65759,49 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   DNATools = Teselagen.bio.sequence.DNATools;
   SbolParser = Teselagen.bio.parsers.SbolParser;
   Sha256 = Teselagen.bio.util.Sha256;
+}, detectXMLFormat: function(data, cb) {
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(data, "text/xml");
+  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
+  if (diff.length > 0) 
+  {
+    return cb(data, false);
+  } else {
+    Teselagen.bio.parsers.SbolParser.parse(data, cb);
+  }
+}, parseSequence: function(result, pExt, cb) {
+  var self = this;
+  var asyncParseFlag = false;
+  switch (pExt) {
+    case "fasta":
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+      break;
+    case "fas":
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+      break;
+    case "json":
+      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
+      break;
+    case "gb":
+      fileContent = result;
+      break;
+    case "xml":
+      asyncParseFlag = true;
+      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
+  var gb;
+  if (isSBOL) 
+  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+  return cb(gb);
+  ;
+});
+      break;
+  }
+  if (!asyncParseFlag) 
+  {
+    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
+    return cb(gb);
+    ;
+  }
 }, fastaToGenbank: function(pFasta) {
   var result;
   var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
@@ -70267,67 +70322,56 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     saveToServer();
   }
+}, promptFormat: function(cb) {
+  var dialog = Ext.create('Ext.window.MessageBox', {buttons: [{text: 'GENBANK', handler: function() {
+  cb("GENBANK", dialog);
+}}, {text: 'FASTA', handler: function() {
+  cb("FASTA", dialog);
+}}, {text: 'SBOL XML/RDF', handler: function() {
+  cb("SBOL XML/RDF", dialog);
+}}, {text: 'CANCEL', handler: function() {
+  cb("CANCEL", dialog);
+}}]});
+  dialog.show({msg: '<p>Please select format</p>', closable: false});
+  dialog.setHeight(60);
+  dialog.setWidth(370);
 }, saveSequenceToFile: function() {
-  gb = this.sequenceFileManager.toGenbank().toString();
+  var self = this;
+  var performSavingOperation = function(data, filename) {
   var saveFile = function(name, gb) {
   var flag;
-  var text = gb;
+  var text = data;
   var filename = name;
   var bb = new BlobBuilder();
   bb.append(text);
   saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
 };
-  saveFile(this.sequence.data.name + '.gb', gb);
+  saveFile(filename, data);
+};
+  this.promptFormat(function(btn, dialog) {
+  gb = self.sequenceFileManager.toGenbank().toString();
+  if (btn === "GENBANK") 
+  {
+    performSavingOperation(gb, self.sequence.data.name + '.gb');
+  } else if (btn === "FASTA") 
+  {
+    var data = ">" + self.sequence.data.name + "\n";
+    data += self.sequenceFileManager.sequence.toString();
+    performSavingOperation(data, self.sequence.data.name + '.fas');
+  } else if (btn === "SBOL XML/RDF") 
+  {
+    Teselagen.bio.parsers.SbolParser.convertGenbankToSBOL(gb, function(data) {
+  performSavingOperation(data, self.sequence.data.name + '.xml');
+});
+  }
+  dialog.close();
+});
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'VectorEditorManager'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.VectorEditor.ImportSequenceController', Ext.app.Controller, {detectXMLFormat: function(data, cb) {
-  var parser = new DOMParser();
-  var xmlDoc = parser.parseFromString(data, "text/xml");
-  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
-  if (diff.length > 0) 
-  {
-    return cb(data, false);
-  } else {
-    Teselagen.bio.parsers.SbolParser.parse(data, cb);
-  }
-}, parseSequence: function(pFile, pExt, pEvt, cb) {
+(Ext.cmd.derive('Vede.controller.VectorEditor.ImportSequenceController', Ext.app.Controller, {onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
   var self = this;
-  var result = pEvt.target.result;
-  var asyncParseFlag = false;
-  switch (pExt) {
-    case "fasta":
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
-      break;
-    case "fas":
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
-      break;
-    case "json":
-      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
-      break;
-    case "gb":
-      fileContent = result;
-      break;
-    case "xml":
-      asyncParseFlag = true;
-      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
-  var gb;
-  if (isSBOL) 
-  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
-  return cb(gb);
-  ;
-});
-      break;
-  }
-  if (!asyncParseFlag) 
-  {
-    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
-    return cb(gb);
-    ;
-  }
-}, onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
-  var self = this;
-  self.parseSequence(pFile, pExt, pEvt, function(gb) {
+  Teselagen.bio.parsers.ParsersManager.parseSequence(pEvt.target.result, pExt, function(gb) {
   var locusName = gb.getLocus().locusName;
   performSequenceCreation = function(newSequence, cb) {
   var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
@@ -71906,7 +71950,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
   parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
   toastr.options.onclick = null;
-  toastr.info("Part Sucessfully Created");
+  toastr.info("Part Successfully Created");
 }});
 });
   } else if (response.type === 'error') 
@@ -72806,7 +72850,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
   var assemblies = self.activeJ5Run.getJ5Results().assemblies();
   var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-  var j5parameters = self.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+  var j5parameters = Ext.create("Teselagen.models.J5Parameters");
+  j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);
+  J5parametersValues = j5parameters.getParametersAsStore();
   Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
   Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
   Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
@@ -72860,7 +72906,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     errorsStore = null;
   }
   Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+  Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
   Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
   Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
 }});
@@ -73775,7 +73821,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, ownerIndices[i]);
       gridBin = this.getGridBinFromJ5Bin(ownerBin);
-      var partIndex = ownerBin.parts().indexOf(j5Part);
+      var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
       gridPart = gridBin.query("Part")[partIndex];
       if (targetGridParts.indexOf(gridPart) < 0) 
       {
@@ -74055,7 +74101,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     combinatorial = true;
   }
   return cb(combinatorial);
-}, onCheckj5Ready: function(cb) {
+}, onCheckj5Ready: function(cb, notChangeMethod) {
   var tab = Ext.getCmp('mainAppPanel').getActiveTab();
   var j5collection = tab.model.getDesign().getJ5Collection();
   var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
@@ -74106,6 +74152,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     j5ready = false;
   }
+  if (!(notChangeMethod === true)) 
   Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
   tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
   tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
@@ -74583,7 +74630,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.columnsGrid.getSelectionModel().deselect(selectedPart);
   this.columnsGrid.getView().removeRowCls(selectedPart, this.columnsGrid.getView().selectedItemCls);
   this.columnsGrid.getView().removeRowCls(selectedPart, this.columnsGrid.getView().focusedItemCls);
-  this.renderCollectionInfo();
+  this.renderCollectionInfo(true);
 }, onRemoveFromBins: function(activeBins, removedBin, index) {
   this.renderCollectionInfo();
 }, onAddToParts: function(parts, addedParts, index) {
@@ -74608,7 +74655,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }
 }, onReRenderCollectionInfoEvent: function() {
   this.renderCollectionInfo();
-}, renderCollectionInfo: function() {
+}, renderCollectionInfo: function(skipReconfigureGrid) {
   Ext.suspendLayouts();
   var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
   var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
@@ -74630,7 +74677,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
     var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
     operand2Field.store = partsStore;
-    this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+    if (!skipReconfigureGrid) 
+    {
+      this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+    }
     var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
     if (selectedBin) 
     {
@@ -74816,7 +74866,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       self.loadAssemblyMethodSelector(combinatorial);
     }
   }
-});
+}, true);
 }, loadAssemblyMethodSelector: function(combinatorial) {
   var store;
   var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
@@ -82344,11 +82394,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var currentTab = Ext.getCmp("mainAppPanel");
   var mask = new Ext.LoadMask({target: currentTab});
   mask.setVisible(true, false);
-  var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
+  var ext = record.data.name.split('.').pop();
+  Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.fileContent, ext, function(gb) {
+  var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", gb, record.data.name, "");
   Ext.defer(function() {
   Teselagen.manager.ProjectManager.openSequence(sequence);
   mask.setVisible(false);
 }, 10);
+});
 }, downloadResults: function() {
   if (this.activeJ5Run) 
   {
@@ -82375,6 +82428,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
   endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
   var assemblies = this.activeJ5Run.getJ5Results().assemblies();
+  assemblies.sort('name', 'ASC');
   var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
   var j5parameters = Ext.create("Teselagen.models.J5Parameters");
   j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);
@@ -82521,7 +82575,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, init: function() {
   this.callParent();
   this.application.on("resetJ5ActiveRun", this.setActiveRun, this);
-  this.control({'panel[cls="j5ReportsPanel"] > menu > menuitem': {click: this.onJ5RunSelect}, 'button[cls="downloadResults"]': {click: this.downloadResults}, "gridpanel[title=Output Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='buildBtn']": {click: this.buildBtnClick}});
+  this.control({'panel[cls="j5ReportsPanel"] > menu > menuitem': {click: this.onJ5RunSelect}, 'button[cls="downloadResults"]': {click: this.downloadResults}, "gridpanel[name='assemblies']": {itemclick: this.onPlasmidsItemClick}, "button[cls='buildBtn']": {click: this.buildBtnClick}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'J5ReportController'], 0));
 ;
 
@@ -82619,18 +82673,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var startBP = form.findField('startBP');
   var stopBP = form.findField('stopBP');
   var revComp = form.findField('revComp');
-  this.selectedPart.set('name', name.getValue());
-  this.selectedSequence.set('partSource', partSource.getValue());
-  this.selectedPart.set('partSource', partSource.getValue());
-  if (this.selectedSequence) 
-  {
-    this.selectedSequence.set('partSource', partSource.getValue());
-    this.selectedPart.set('partSource', partSource.getValue());
-    this.selectedSequence.set('sequenceFileContent', sourceData.getValue());
-  }
-  this.selectedPart.set('genbankStartBP', startBP.getValue());
-  this.selectedPart.set('endBP', stopBP.getValue());
-  this.selectedPart.set('revComp', revComp.getValue());
+  this.selectedSequence.set({partSource: partSource.getValue(), sequenceFileContent: sourceData.getValue()});
+  this.selectedPart.set({name: name.getValue(), partSource: partSource.getValue(), genbankStartBP: startBP.getValue(), endBP: stopBP.getValue(), revComp: revComp.getValue()});
   if (this.selectedBinIndex != -1) 
   {
     Vede.application.fireEvent("partSelected", this.selectedPart, this.selectedBinIndex);
