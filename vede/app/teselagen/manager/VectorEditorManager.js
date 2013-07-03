@@ -144,6 +144,42 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         else { saveToServer(); }
 
     },
+
+    promptFormat: function(cb) {
+        var dialog = Ext.create('Ext.window.MessageBox', {
+            buttons: [{
+                text: 'GENBANK',
+                handler: function() {
+                    cb("GENBANK",dialog);
+                }
+            },{
+                text: 'FASTA',
+                handler: function() {
+                    cb("FASTA",dialog);
+                }
+            },{
+                text: 'SBOL XML/RDF',
+                handler: function() {
+                    cb("SBOL XML/RDF",dialog);
+                }
+            },{
+                text: 'CANCEL',
+                handler: function() {
+                    cb("CANCEL",dialog);
+                }
+            }]
+        });
+
+        dialog.show({
+            msg: '<p>Please select format</p>',
+            closable: false,
+
+        });
+
+        dialog.setHeight(60);
+        dialog.setWidth(370);
+    },
+
     saveSequenceToFile: function(){
 
         var self = this;
@@ -160,27 +196,28 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             saveFile(filename,data);
         };
 
-        Ext.MessageBox.show({
-            title: "Export sequence",
-            msg: "Select format to export",
-            buttons: Ext.Msg.YESNOCANCEL,
-            buttonText: {yes: "GENBANK",no: "SBOL XML/RDF"},
-            icon: Ext.Msg.QUESTION,
-            fn: function (btn) {
+        this.promptFormat(function(btn,dialog){
 
                 gb  = self.sequenceFileManager.toGenbank().toString();
 
-                if (btn==="yes") {
+
+                if (btn==="GENBANK") {
                     performSavingOperation(gb,self.sequence.data.name+'.gb');
                 }
-                else if (btn==="no") {
+                else if (btn==="FASTA") {
+                    var data = ">"+self.sequence.data.name+"\n";
+                    data += self.sequenceFileManager.sequence.toString();
+                    performSavingOperation(data,self.sequence.data.name+'.fas');
+                }
+                else if (btn==="SBOL XML/RDF") {
                     Teselagen.bio.parsers.SbolParser.convertGenbankToSBOL(gb,function(data){
                         performSavingOperation(data,self.sequence.data.name+'.xml');
                     });
                 }
 
-            }
+                dialog.close();
         });
+
     }
 
 });
