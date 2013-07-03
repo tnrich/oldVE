@@ -933,8 +933,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.columnsGrid.getView().removeRowCls(selectedPart,
                                     this.columnsGrid.getView().focusedItemCls);
 
-
-        this.renderCollectionInfo();
+        this.renderCollectionInfo(true);
     },
 
     /**
@@ -1006,8 +1005,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     /**
      * Fills in the Collection Info tab's various fields.
+     * @param {Boolean} skipReconfigureGrid True to not reconfigure the collection
+     * info grid. This should be true when we're using the same bins store as
+     * before.
      */
-    renderCollectionInfo: function () {
+    renderCollectionInfo: function (skipReconfigureGrid) {
         Ext.suspendLayouts();
 
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
@@ -1052,7 +1054,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
             operand2Field.store = partsStore;
-            this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+
+            if(!skipReconfigureGrid) {
+                this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+            }
 
             var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
 
