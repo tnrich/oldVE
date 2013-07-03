@@ -58,6 +58,23 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.resumeLayouts(true);
     },
 
+    addSelectAlerts: function() {
+        var bins = this.grid.query("Bin");
+        for(var i = 0; i < bins.length; i++) {
+                gridBin = bins[i];
+                parts = gridBin.query("Part");
+
+                for(var j = 0; j < parts.length; j++) {
+                    part = parts[j];
+                    if(part.getPart() != undefined) {
+                        if (part.getPart().get('name') != "" && part.getPart().get('sequencefile_id')=="") {
+                                part.selectAlert();
+                            }
+                        }
+                    }
+                }
+    },
+
     /**
      * Changes the selected bin's icon to the clicked icon button.
      * @param {Ext.button.Button} button The clicked button.
@@ -1001,7 +1018,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var flip = !j5Bin.get("directionForward");
         if(flip)
         {
-            var imageBinIcon = newBin.query('image[cls="binIcon"]')[0];
+            var imageBinIcon = newBin.down('image[cls="binIcon"]');
             imageBinIcon.addCls('flipImage');
         }
 
@@ -1244,7 +1261,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if (j5Part) {
 
-            DETab.setLoading(true);
+            DETab.el.mask("loading", "loader rspin");
+            $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
 
             setTimeout(function() {
                 j5Part.getSequenceFile({
@@ -1257,7 +1276,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             callback: function (seq) {
                                 Vede.application.fireEvent("OpenVectorEditor",seq);
                         }});
-                        DETab.setLoading(false);
+                        DETab.el.unmask();
                     }
                     else
                     {
@@ -1274,14 +1293,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                 j5Part.save({
                                     callback: function(){
                                         Vede.application.fireEvent("openVectorEditor",newSequenceFile);
-                                        DETab.setLoading(false);
+                                        DETab.el.unmask();
                                     }
                                 });
                             }
                         });
                     }
                 } else {
-                    DETab.setLoading(false);
+                    DETab.el.unmask();
                     Vede.application.fireEvent("OpenPartLibrary");
                 }
 
@@ -1480,6 +1499,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("FillBlankCells", this.onfillBlankCells, this);
 
         this.application.on("rerenderPart",this.rerenderPart, this);
+
+        this.application.on("rerenderPart",this.rerenderPart, this);
+        this.application.on("addSelectAlerts", this.addSelectAlerts, this);
 
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,

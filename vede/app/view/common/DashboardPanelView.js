@@ -31,7 +31,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         id: 'dashboardButtons',
                         margin: '0 100 0 100',
-                        minHeight: 200,
+                        minHeight: 125,
                         minWidth: 800,
                         flex: 0.4,
                         border: 0,
@@ -101,7 +101,15 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 iconAlign: 'top',
                                 iconCls: 'manuals-icon',
                                 text: 'Manuals',
-                                href: 'http://help.teselagen.com/manual/'
+                                href: 'http://help.teselagen.com/manual/',
+                                listeners: {
+                                    afterrender: function(cmp) {
+                                        cmp.getEl().set({
+                                            "data-intro": 'Make sure you check out the manuals for a thorough documentation.',
+                                            "data-step": 4
+                                        });
+                                    }
+                                }
                             },
                             {
                                 xtype: 'button',
@@ -128,7 +136,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         id: 'dashboardStats',
                         margin: '10 100 50 100',
                         flex: 1,
-                        minHeight: 400,
+                        minHeight: 320,
                         minWidth: 800,
                         border: 0,
                         layout: {

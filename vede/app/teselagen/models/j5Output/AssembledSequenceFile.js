@@ -34,9 +34,17 @@ Ext.define("Teselagen.models.j5Output.AssembledSequenceFile", {
                 
             }
         },
-        {name: "name",   type: "String",     defaultValue: ""},
+        {
+            name: "name",   type: "String",     defaultValue: "",
+            // convert: function(v) {
+            //     var sorted = v.sort('name', 'ASC');
+            //     console.log(sorted);
+            //     v = sorted;
+            //     return v;
+            // }
+        },
         {name: "fileContent",   type: "String",     defaultValue: ""},
-        {name: "size",   type: "String",     defaultValue: ""}
+        {name: "sizeBP",   type: "String",     defaultValue: ""}
     ]
 
 });

@@ -197,7 +197,7 @@ function encoded_target_part_order_list_file(model,method)
                     fas = bin.fases[partKey];
                     if(fas === 'None') fas = '';
                     fro = (bin['fro'] === 'None') ? '' : bin['fro'];
-                    direction = (part["directionForward"] === 'true') ? 'forward' : '';
+                    direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
                     dsf = (bin['dsf'] === false) ? '' : '';
                     extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
                     extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
@@ -206,6 +206,7 @@ function encoded_target_part_order_list_file(model,method)
                 }
             });
 
+            fas = "";
             tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';
             out += tempBinHeader;
             out += tempOut;
@@ -213,7 +214,7 @@ function encoded_target_part_order_list_file(model,method)
         }
         else
         {
-            direction = (bin.parts[0]["directionForward"] === 'true') ? 'forward' : '';
+            direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
             //fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
             fas = bin.fases[0];
             if(fas === 'None') fas = '';
@@ -225,7 +226,7 @@ function encoded_target_part_order_list_file(model,method)
             out += bin.parts[0]["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
         }
     });
-
+    //quicklog(out);
     return new Buffer(out).toString('base64');
 }
 

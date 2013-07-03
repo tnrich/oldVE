@@ -48,11 +48,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
 
                     if(rule.operand2_id) newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
-
                     if(rule.operand2isNumber)
                     {
-                        newEugeneRule.set('Operand2Number',rule.operand2Number);
-                        newEugeneRule.set('Operand2isNumber',true);
+                        newEugeneRule.set('operand2Number',rule.operand2Number);
+                        newEugeneRule.set('operand2isNumber',true);
                     }
 
                     currentProject.getDesign().addToRules(newEugeneRule);
@@ -272,7 +271,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     onDeviceEditorSaveBtnClick: function () {
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        activeTab.el.mask('Loading');
+        activeTab.el.mask('Loading', "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
         this.saveDEProject(function () {
             activeTab.el.unmask();
 

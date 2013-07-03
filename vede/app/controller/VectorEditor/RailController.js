@@ -439,7 +439,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
      * @param {Boolean} silent If true, don't fire a position changed event.
      */
     changeCaretPosition: function(index, silent) {
-        if(index >= 0 && 
+        if(index >= 0 && this.caretIndex !== index &&
            index <= this.SequenceManager.getSequence().toString().length) {
             this.callParent(arguments);
             this.railManager.adjustCaret(index);

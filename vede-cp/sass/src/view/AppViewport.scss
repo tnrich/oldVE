@@ -143,11 +143,15 @@ border-color: #E0E3E6;
 }
 
 .x-column-header-over {
-  background: #ECF0F1;
+  background: #F8F8F8;
 }
 
 .x-column-header-sort-DESC .x-column-header-text, .x-column-header-sort-ASC .x-column-header-text {
   background-position:right 3px;
+}
+
+.x-grid-body .x-grid-table-focused-first, .x-grid-with-row-lines .x-grid-table-selected-first {
+  border-top: 0 none !important;
 }
 
 .x-tab-inner {
@@ -205,29 +209,23 @@ border-color: #E0E3E6;
   background:#E0E3E6;
 }
 
-.x-btn-default-toolbar-medium-over {
+#VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-.x-btn-default-toolbar-medium-over {
+#VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
   border-color: #1585C5;
   background-image: none;
   background: #ECF0F1;
 }
 
-.x-btn-default-toolbar-medium-active, .x-btn-default-toolbar-medium-menu-active, .x-btn-default-toolbar-medium-pressed {
+#VectorEditorMainToolBar .x-btn-default-toolbar-medium-active,#VectorEditorMainToolBar  .x-btn-default-toolbar-medium-menu-active, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-pressed, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-focused, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-focus  {
   border-color:#1585C5;
   background-image: none;
   background: #E0E3E6;
-}
-
-.x-btn-default-toolbar-medium-focused, .x-btn-default-toolbar-medium-focus {
-  border-color: white;
-  background-image:none !important;
-  background: none !important;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
@@ -347,7 +345,7 @@ border-color: #E0E3E6;
 
 .x-column-header {
   border-right-color: #E0E3E6;
-  background: #ECF0F1;
+  background: #F8F8F8;
 }
 
 .x-column-header-text {
@@ -668,7 +666,7 @@ border-color: #E0E3E6;
 }
 
 .gridPartCell-alert, .gridPartCell-alert .x-panel-body-default {
-  border-color: rgb(225, 0, 0);
+  border-color: rgb(225, 0, 0) !important;
 }
 
 .mapAlert {
@@ -718,6 +716,11 @@ background: #F8F8F8;
 
 .DeviceEditorPartsBar {
   background: #125B85;
+}
+
+.DeviceEditorPartsBar .x-btn-default-toolbar-large-focused, .DeviceEditorPartsBar .x-btn-default-toolbar-large-focus {
+  background: none !important;
+  border: 0 none !important;
 }
 
 .x-toolbar .x-toolbar-separator-horizontal {
@@ -890,7 +893,7 @@ background: #F8F8F8;
   position: relative !important;
   left: 0 !important;
   float: right;
-  background: #e74c3c;
+  background: #2ecc71;
   border: 0;
   padding: 1px 25px 1px 25px;
   font-weight: bold;
@@ -922,7 +925,7 @@ background: #F8F8F8;
   background: #61B5FF;
   border-radius: 1000px;
   float: right;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .status-note-completed {

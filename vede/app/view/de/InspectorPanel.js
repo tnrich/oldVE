@@ -5,30 +5,27 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-    requires: ["Teselagen.event.DeviceEvent","Ext.grid.plugin.RowEditing"],
+    requires: ["Teselagen.event.DeviceEvent","Ext.form.RadioGroup", "Ext.grid.column.Boolean",
+               "Ext.grid.column.Column", "Ext.grid.column.Number", "Ext.grid.Panel", 
+               "Ext.grid.plugin.RowEditing"],
     cls: 'InspectorPanel',
 
     activeTab: 1,
     animCollapse: false,
     dock: 'right',
-    floatable: true,
     frame: true,
     minWidth: 350,
     bodyBorder: false,
     collapseDirection: 'right',
     collapsible: true,
     frameHeader: false,
-    hideCollapseTool: false,
     overlapHeader: false,
-    plain: false,
     title: 'Inspector',
     titleCollapse: false,
     removePanelHeader: false,
     resizable: true,
-    autoScroll: true,
     width: 100,
     layout: {
-        deferredRender: false,
         type: 'card'
     },
 
@@ -135,6 +132,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
                             name: 'fas',
+                            editable: false,
                             queryMode: 'local',
                             anchor: '100%',
                             store: []
@@ -158,7 +156,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 markDirty: false
                             },
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2
+                                clicksToEdit: 2,
+                                // listeners: {
+                                //     edit: function () {
+                                //         Vede.application.fireEvent('editEugeneRule');
+                                //     }
+                                // }
                             }),
                             columnLines: true,
                             rowLines: true,
@@ -209,7 +212,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     editor: {
                                         xtype: 'combobox',
                                         store: [],
-                                        cls: "operand2_combobox"
+                                        cls: "operand2_combobox",
                                     },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
@@ -217,7 +220,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         } else {
                                             return rule.getOperand2().get("name");
                                         }
-                                    }
+                                    },
+                                    
                                 }
                             ]
                         },
@@ -259,7 +263,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 align: 'stretch'
             },
             title: 'Collection Info',
-            autoScroll: true,
             margin: "5px 0px 5px 0px",
             items: [
                 {
@@ -286,6 +289,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'radiogroup',
+                            anchor: '100%',
                             cls: 'plasmid_geometry',
                             fieldLabel: 'Plasmid Type',
                             allowBlank: false,
@@ -308,14 +312,13 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'gridpanel',
                             cls: 'inspectorGrid',
-                            viewConfig: {
-                                markDirty: false
-                            },
-                            layout: 'fit',
-                            allowDeselect: true,
+                            anchor:"100% 65%",
                             autoScroll: true,
+                            viewConfig: {
+                                markDirty: false,
+                            },
+                            allowDeselect: true,
                             columnLines: true,
-                            minHeight:132,
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2,
                                 errorSummary: false
@@ -362,6 +365,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
                                     dataIndex: 'fas',
+                                    readOnly: true,
                                     renderer: function(value, metadata, record) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
@@ -554,6 +558,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     cls: 'assemblyMethodSelector',
                                     fieldLabel: '<b>Assembly Method:</b>',
                                     labelCls: 'assembly-label',
+                                    editable: false,
                                     labelSeparator: ' ',
                                     labelWidth: 110,
                                     width:350,
