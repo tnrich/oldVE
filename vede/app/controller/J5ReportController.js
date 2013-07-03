@@ -65,7 +65,8 @@ Ext.define("Vede.controller.J5ReportController", {
         startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
         endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
-        
+        assemblies.sort('name', 'ASC');
+
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
         var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
         //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
