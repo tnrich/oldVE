@@ -6,7 +6,7 @@
  */
 Ext.define("Teselagen.manager.VectorEditorManager", {
 
-    requires: ["Ext.layout.container.Border"],
+    requires: ["Ext.layout.container.Border","Teselagen.bio.parsers.SbolParser"],
     sequenceFileManager: null,
     sequence: null,
 
@@ -145,17 +145,42 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
     },
     saveSequenceToFile: function(){
-        gb  = this.sequenceFileManager.toGenbank().toString();
 
-        var saveFile = function(name,gb) {
-            var flag;
-            var text        = gb;
-            var filename    = name;
-            var bb          = new BlobBuilder();
-            bb.append(text);
-            saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+        var self = this;
+        
+        var performSavingOperation = function(data,filename){
+            var saveFile = function(name,gb) {
+                var flag;
+                var text        = data;
+                var filename    = name;
+                var bb          = new BlobBuilder();
+                bb.append(text);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            };
+            saveFile(filename,data);
         };
-        saveFile(this.sequence.data.name+'.gb',gb);
+
+        Ext.MessageBox.show({
+            title: "Export sequence",
+            msg: "Select format to export",
+            buttons: Ext.Msg.YESNOCANCEL,
+            buttonText: {yes: "GENBANK",no: "SBOL XML/RDF"},
+            icon: Ext.Msg.QUESTION,
+            fn: function (btn) {
+
+                gb  = self.sequenceFileManager.toGenbank().toString();
+
+                if (btn==="yes") {
+                    performSavingOperation(gb,self.sequence.data.name+'.gb');
+                }
+                else if (btn==="no") {
+                    Teselagen.bio.parsers.SbolParser.convertGenbankToSBOL(gb,function(data){
+                        performSavingOperation(data,self.sequence.data.name+'.xml');
+                    });
+                }
+
+            }
+        });
     }
 
 });
