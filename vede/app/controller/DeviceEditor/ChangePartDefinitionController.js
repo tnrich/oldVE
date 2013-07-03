@@ -131,7 +131,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     onChangePartDefinitionDoneBtnClick: function(){
-
         var form = this.selectedWindow.down('form').getForm();
         var name = form.findField('partName');
         var partSource = form.findField('partSource');
@@ -141,22 +140,18 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var stopBP = form.findField('stopBP');
         var revComp = form.findField('revComp');
 
-        this.selectedPart.set('name',name.getValue());
-        this.selectedSequence.set('partSource',partSource.getValue());
-        this.selectedPart.set('partSource',partSource.getValue());
+        this.selectedSequence.set({
+            partSource: partSource.getValue(),
+            sequenceFileContent: sourceData.getValue()
+        });
 
-        if(this.selectedSequence)
-        {
-            this.selectedSequence.set('partSource',partSource.getValue());
-            this.selectedPart.set('partSource',partSource.getValue());
-            this.selectedSequence.set('sequenceFileContent',sourceData.getValue());
-        }
-        
-
-        this.selectedPart.set('genbankStartBP',startBP.getValue());
-        this.selectedPart.set('endBP',stopBP.getValue());
-
-        this.selectedPart.set('revComp',revComp.getValue());
+        this.selectedPart.set({
+            name: name.getValue(),
+            partSource: partSource.getValue(),
+            genbankStartBP: startBP.getValue(),
+            endBP: stopBP.getValue(),
+            revComp: revComp.getValue()
+        });
 
         if(this.selectedBinIndex!=-1) {
             Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
@@ -174,7 +169,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             });
             
         }
-        else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
+        else Vede.application.fireEvent("partCreated", this.selectedSequence, this.selectedPart);
 
         this.selectedWindow.close();
     },
