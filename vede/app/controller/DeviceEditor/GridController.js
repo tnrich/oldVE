@@ -1167,7 +1167,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
                                                                   ownerIndices[i]);
             gridBin = this.getGridBinFromJ5Bin(ownerBin);
-            var partIndex = ownerBin.parts().indexOf(j5Part);
+            var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
             gridPart = gridBin.query("Part")[partIndex];
 
             if(targetGridParts.indexOf(gridPart) < 0) {
