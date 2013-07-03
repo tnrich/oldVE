@@ -314,7 +314,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             allowDeselect: true,
                             columnLines: true,
-                            minHeight:132,
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2,
                                 errorSummary: false
