@@ -23902,7 +23902,7 @@ img {
 
 /* line 668, ../../../../sass/src/view/AppViewport.scss */
 .gridPartCell-alert, .gridPartCell-alert .x-panel-body-default {
-  border-color: #e10000;
+  border-color: #e10000 !important;
 }
 
 /* line 672, ../../../../sass/src/view/AppViewport.scss */

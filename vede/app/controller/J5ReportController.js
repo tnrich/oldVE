@@ -5,7 +5,7 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -67,8 +67,10 @@ Ext.define("Vede.controller.J5ReportController", {
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
         
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-        var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
-        //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+
+        var j5parameters = Ext.create("Teselagen.models.J5Parameters");
+        j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+        J5parametersValues = j5parameters.getParametersAsStore();
         //console.log(j5parameters);
         //console.log(this.activeJ5Run);
 
@@ -134,9 +136,9 @@ Ext.define("Vede.controller.J5ReportController", {
         }
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-        this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+        this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-
+        // this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
