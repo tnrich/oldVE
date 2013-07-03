@@ -6,6 +6,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
+    "Teselagen.models.EugeneRule",
     "Vede.view.de.PartDefinitionDialog",
     "Ext.layout.container.Border"],
 
@@ -773,6 +774,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.destroy();
     },
 
+    // onEditEugeneRule: function () {
+    //     console.log(new2);
+    // },
+
     /**
      * Handler for the Eugene Rule Dialog compositional operator combobox.
      * Ensures that the operator 2 field is the appropriate type of input field
@@ -1082,6 +1087,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
 
         this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
+
+        // this.application.on("editEugeneRule", this.onEditEugeneRule, this);
 
         this.control({
             "textfield[cls='partNameField']": {

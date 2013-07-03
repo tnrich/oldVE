@@ -25,7 +25,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
     titleCollapse: false,
     removePanelHeader: false,
     resizable: true,
-    autoScroll: true,
     width: 100,
     layout: {
         deferredRender: false,
@@ -158,7 +157,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 markDirty: false
                             },
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2
+                                clicksToEdit: 2,
+                                // listeners: {
+                                //     edit: function () {
+                                //         Vede.application.fireEvent('editEugeneRule');
+                                //     }
+                                // }
                             }),
                             columnLines: true,
                             rowLines: true,
@@ -209,7 +213,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     editor: {
                                         xtype: 'combobox',
                                         store: [],
-                                        cls: "operand2_combobox"
+                                        cls: "operand2_combobox",
                                     },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
@@ -217,7 +221,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         } else {
                                             return rule.getOperand2().get("name");
                                         }
-                                    }
+                                    },
+                                    
                                 }
                             ]
                         },
@@ -313,7 +318,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             layout: 'fit',
                             allowDeselect: true,
-                            autoScroll: true,
                             columnLines: true,
                             minHeight:132,
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{

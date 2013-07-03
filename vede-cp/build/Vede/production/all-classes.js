@@ -62681,6 +62681,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return reCuts;
 }, cutSequenceByRestrictionEnzyme: function(restrictionEnzyme, symbolList) {
   var restrictionCutSites = new Array();
+  var restrictionCutSite;
   var forwardRegExpPattern = new RegExp(restrictionEnzyme.getForwardRegex().toLowerCase(), "g");
   var reverseRegExpPattern = new RegExp(restrictionEnzyme.getReverseRegex().toLowerCase(), "g");
   var reLength = restrictionEnzyme.getSite().length;
@@ -66183,7 +66184,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'Point'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.AuthenticationEvent', Ext.Base, {singleton: true, LOGGED_IN: "LoggedIn"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'AuthenticationEvent'], 0));
+(Ext.cmd.derive('Teselagen.event.AuthenticationEvent', Ext.Base, {singleton: true, LOGGED_IN: "LoggedIn", POPULATE_STATS: "PopulateStats"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'AuthenticationEvent'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Project', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{flex: 1, xtype: 'treepanel', border: false, id: 'projectTreePanel', width: 220, rootVisible: false, animate: false, width: 220}, {hidden: true, flex: 1, xtype: 'treepanel', title: 'Part Library', id: 'projectPartsPanel', width: 220, rootVisible: false}]}, 0, ["ProjectPanelView"], ["panel", "component", "container", "ProjectPanelView", "box"], {"panel": true, "component": true, "container": true, "ProjectPanelView": true, "box": true}, ["widget.ProjectPanelView"], 0, [Vede.view.common, 'ProjectPanelView'], 0));
@@ -66236,6 +66237,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     cb(parsedResponse);
   }
+}, failure: function() {
+  self.stop();
 }});
 }, observeChanges: function(data) {
   if (this.debugFlag) 
@@ -66306,7 +66309,24 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.constants.Constants', Ext.Base, {singleton: true, ENV_DEV: "dev", ENV_PROD: "prod", ENV_TEST: "test", VERSION: "1.0", API_URL: "http://teselagen.local/api/", FORMATS_LIST: ["GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML", "jbei-seq"], GENBANK: "Genbank", FASTA: "FASTA", JBEISEQ: "jbei-seq", JBEISEQJSON: "JBEISEQJSON", SBOLXML: "SBOLXML", INIT: "INIT", GENBANK_SUFFIX: ".gb", FASTA_SUFFIX: ".fas", JEBISEQ_SUFFIX: ".xml", SBOL_SUFFIX: ".sbol", NOTMORETHAN: "NOTMORETHAN", NOTWITH: "NOTWITH", AFTER: "AFTER", BEFORE: "BEFORE", WITH: "WITH", THEN: "THEN", NEXTTO: "NEXTTO", MORETHAN: "MORETHAN", COMPOP_LIST: ["AFTER", "BEFORE", "WITH", "THEN", "NEXTTO", "MORETHAN"], FAS_LIST: ["None", "DIGEST", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS_LIST_NO_DIGEST: ["None", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS: Object.freeze({NONE: "None", DIGEST: "DIGEST", DIRECT: "Direct Synthesis", PCR: "PCR", PRIMER_REV: "Embed_in_primer_reverse", PRIMER_FWD: "Embed_in_primer_forward", ANNEALED: "Annealed Oligos"}), ASSEMBLYTYPE_LIST: ["MOCK", "SLIC", "GOLDENGATE"], NONMOCKTYPE_LIST: ["SLIC/Gibonson/CPEC/SLiCE", "GOLDENGATE"], MOCK: "MOCK", SLIC: "SLIC", GOLDENGATE: "GOLDENGATE", SYNTHESISTYPE_LIST: ["DIRECT", "OLIGO", "ANNEALED OLIGOS"], RUN_STATUS_LIST: ["SUCCESS", "FAILED", "IN PROGRESS"], RECT_SHAPE_DEFAULT_SIZE: 56, RECT_SHAPE_MIN_SIZE: this.RECT_SHAPE_DEFAULT_SIZE / 2, CIRCULAR: "circular", LINEAR: "linear", FEATURE_TYPES: [{label: "-10_signal", data: "-10_signal"}, {label: "-35_signal", data: "-35_signal"}, {label: "3'UTR", data: "3'UTR"}, {label: "5'UTR", data: "5'UTR"}, {label: "allele", data: "allele"}, {label: "attenuator", data: "attenuator"}, {label: "C_region", data: "C_region"}, {label: "CAAT_signal", data: "CAAT_signal"}, {label: "CDS", data: "CDS"}, {label: "conflict", data: "conflict"}, {label: "D_segment", data: "D_segment"}, {label: "D-loop", data: "D-loop"}, {label: "enhancer", data: "enhancer"}, {label: "exon", data: "exon"}, {label: "GC_signal", data: "GC_signal"}, {label: "gene", data: "gene"}, {label: "iDNA", data: "iDNA"}, {label: "intron", data: "intron"}, {label: "J_region", data: "J_region"}, {label: "LTR", data: "LTR"}, {label: "mat_peptide", data: "mat_peptide"}, {label: "misc_binding", data: "misc_binding"}, {label: "misc_difference", data: "misc_difference"}, {label: "misc_feature", data: "misc_feature"}, {label: "misc_recomb", data: "misc_recomb"}, {label: "misc_RNA", data: "misc_RNA"}, {label: "misc_signal", data: "misc_signal"}, {label: "misc_structure", data: "misc_structure"}, {label: "modified_base", data: "modified_base"}, {label: "mRNA", data: "mRNA"}, {label: "mutation", data: "mutation"}, {label: "N_region", data: "N_region"}, {label: "old_sequence", data: "old_sequence"}, {label: "polyA_signal", data: "polyA_signal"}, {label: "polyA_site", data: "polyA_site"}, {label: "precursor_RNA", data: "precursor_RNA"}, {label: "prim_transcript", data: "prim_transcript"}, {label: "primer", data: "primer"}, {label: "primer_bind", data: "primer_bind"}, {label: "promoter", data: "promoter"}, {label: "protein_bind", data: "protein_bind"}, {label: "RBS", data: "RBS"}, {label: "rep_origin", data: "rep_origin"}, {label: "repeat_region", data: "repeat_region"}, {label: "repeat_unit", data: "repeat_unit"}, {label: "rRNA", data: "rRNA"}, {label: "S_region", data: "S_region"}, {label: "satellite", data: "satellite"}, {label: "scRNA", data: "scRNA"}, {label: "sig_peptide", data: "sig_peptide"}, {label: "snRNA", data: "snRNA"}, {label: "source", data: "source"}, {label: "stem_loop", data: "stem_loop"}, {label: "STS", data: "STS"}, {label: "TATA_signal", data: "TATA_signal"}, {label: "terminator", data: "terminator"}, {label: "transit_peptide", data: "transit_peptide"}, {label: "transposon", data: "transposon"}, {label: "tRNA", data: "tRNA"}, {label: "unsure", data: "unsure"}, {label: "V_region ", data: "V_region "}, {label: "variation", data: "variation"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.constants, 'Constants'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.SessionManager', Ext.Base, {singleton: true, config: {baseURL: null, baseUser: null, data: null, env: null}, constants: null, constructor: function() {
+(Ext.cmd.derive('Teselagen.manager.SessionManager', Ext.Base, {singleton: true, config: {baseURL: null, baseUser: null, data: null, env: null}, constants: null, maskApp: function() {
+  splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span><span id="splash-retry" style="visibility: hidden;"><button id="retry-btn">Retry</button></span>', 'splashscreen');
+  Ext.get('retry-btn').on("click", function() {
+  Ext.get('splash-retry').hide();
+  Teselagen.manager.AuthenticationManager.Login();
+});
+  splashscreen.addCls('splashscreen');
+  Ext.select('.x-mask-msg').setStyle('top', '60px');
+  Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {cls: 'x-splash-icon'});
+}, unmaskApp: function() {
+  if (splashscreen) 
+  {
+    splashscreen.fadeOut({duration: 1000, remove: true});
+    splashscreen.next().fadeOut({duration: 1000, remove: true, listeners: {afteranimate: function() {
+  splashscreen = null;
+}}});
+  }
+}, constructor: function() {
   this.constants = Teselagen.constants.Constants;
   this.setBaseURL(location.href.substring(0, location.href.indexOf("/", 7) + 1) + "api/");
   this.setEnv(this.constants.ENV_DEV);
@@ -67494,6 +67514,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       }
     }
   }
+  if (request.action === "destroy" && request.records[0].data.id) 
+  {
+    var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns/" + request.records[0].data.id;
+    if (this.debugFlag) 
+    console.log("DESTROYING SPECIFIC DESIGN FROM PROJECT: ", url);
+    delete request.params.filter;
+    return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+  }
   console.log("No devicedesign url generated");
 }, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
@@ -67725,19 +67753,25 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     Ext.get("splash-retry").show();
   }
 }, Login: function(cb) {
-  if (Ext.util.Cookies.get("session")) 
+  if (Ext.util.Cookies.get("last_server")) 
+  {
+    this.autoAuthURL = Ext.util.Cookies.get("last_server");
+  }
+  if (Ext.util.Cookies.get("sessionname")) 
   {
     console.log("Authenticating using cookies");
-    var session = JSON.parse(Ext.util.Cookies.get("session"));
-    this.username = session.username;
-    if (session.userId) 
-    return this.sendAuthRequest(session, cb);
+    return this.sendAuthRequest({}, cb, true);
   }
   if (!this.autoAuthURL) 
   this.autoAuthURL = "http://dev2.teselagen.com/api";
   var updateServerPath = function() {
-  var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-  Ext.getCmp('select-server-combo').setValue(baseURL + 'api/');
+  if (Ext.util.Cookies.get("last_server")) 
+  {
+    Ext.getCmp('select-server-combo').setValue(Ext.util.Cookies.get("last_server"));
+  } else {
+    var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+    Ext.getCmp('select-server-combo').setValue(baseURL + 'api/');
+  }
 };
   var self = this;
   if (Vede.application.autoCredentialsFetch) 
@@ -67748,10 +67782,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   self.username = session.username;
   if (session.userId) 
   {
-    console.log("Authenticating using dev2.teselagen.com");
     self.sendAuthRequest(session, cb);
   } else {
-    console.log("Authenticating using login form");
     Ext.create("Vede.view.AuthWindow").show();
     updateServerPath();
   }
@@ -67769,19 +67801,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     Teselagen.manager.SessionManager.baseURL = params.server;
   }
-  if (params.username) 
-  {
-    Teselagen.manager.SessionManager.setBaseUser(params.username);
-  } else {
-    console.warn("Warning, username not defined");
-  }
   self.updateSplashScreenMessage("Authenticating to server");
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("login"), params: {username: params.username || "", password: params.password || "", sessionId: params.sessionId || ""}, success: function(response) {
-  if (params.username) 
-  {
-    self.username = params.username;
-  }
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("login"), params: {username: params.username || "", password: params.password || "", sessionId: params.sessionId || "", remember: remember}, success: function(response) {
   self.authResponse = JSON.parse(response.responseText);
+  self.username = self.authResponse.user.username;
+  Teselagen.manager.SessionManager.setBaseUser(self.username);
   self.updateSplashScreenMessage(self.authResponse.msg);
   if (Ext.getCmp("AuthWindow")) 
   {
@@ -67791,8 +67815,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
   Teselagen.manager.TasksMonitor.bootMonitoring();
   Teselagen.manager.TasksMonitor.startMonitoring();
-  if (remember) 
-  self.rememberSession(self.authResponse);
+  Ext.util.Cookies.set("last_server", Teselagen.manager.SessionManager.baseURL);
   if (cb) 
   {
     return cb(true);
@@ -67806,9 +67829,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     return cb(false, response.statusText);
   }
 }});
-}, rememberSession: function(session) {
-  var coookieSession = {username: session.user.username, userId: 1, sessionId: 1};
-  Ext.util.Cookies.set("session", JSON.stringify(coookieSession));
 }}, 0, 0, 0, 0, ["AuthenticationManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'AuthenticationManager'], 0));
 ;
 
@@ -67817,11 +67837,19 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }, region: 'north', id: 'headerPanel', cls: 'navbar navbar-static-top', margin: '0 0 10 0', layout: 'fit', items: [{xtype: 'container', id: 'headerPanel-navbar', cls: 'navbar-inner', html: '<ul class="nav"><li id="headerUserIcon"><a href="" class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>', items: [{xtype: 'image', id: 'headerIcon', src: 'resources/images/teselagen_toplogo_alt.png'}]}]}, 0, ["HeaderPanelView"], ["panel", "HeaderPanelView", "component", "container", "box"], {"panel": true, "HeaderPanelView": true, "component": true, "container": true, "box": true}, ["widget.HeaderPanelView"], 0, [Vede.view.common, 'HeaderPanelView'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.common.DashboardPanelView', Ext.panel.Panel, {id: 'DashboardPanel', layout: {type: 'fit'}, frameHeader: false, border: 0, title: 'Dashboard', items: [{xtype: 'panel', border: 0, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', flex: 0.3, id: 'welcome_splash', border: 0}, {xtype: 'container', id: 'dashboardButtons', margin: '0 100 0 100', minHeight: 200, minWidth: 800, flex: 0.4, border: 0, style: {borderColor: '#E0E3E6', borderStyle: 'solid'}, layout: {type: 'hbox'}, items: [{xtype: 'button', height: 100, cls: 'dashBtn', flex: 1, id: 'projectStartBtn', text: 'New Project', scale: 'medium', overCls: 'projectStartBtn-over', iconCls: 'newProject-icon', iconAlign: 'top', listeners: {click: function() {
+(Ext.cmd.derive('Vede.view.common.DashboardPanelView', Ext.panel.Panel, {id: 'DashboardPanel', layout: {type: 'fit'}, frameHeader: false, border: 0, title: 'Dashboard', items: [{xtype: 'panel', border: 0, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', flex: 0.3, id: 'welcome_splash', border: 0}, {xtype: 'container', id: 'dashboardButtons', margin: '0 100 0 100', minHeight: 125, minWidth: 800, flex: 0.4, border: 0, style: {borderColor: '#E0E3E6', borderStyle: 'solid'}, layout: {type: 'hbox'}, items: [{xtype: 'button', height: 100, cls: 'dashBtn', flex: 1, id: 'projectStartBtn', text: 'New Project', scale: 'medium', overCls: 'projectStartBtn-over', iconCls: 'newProject-icon', iconAlign: 'top', listeners: {click: function() {
   Teselagen.manager.ProjectManager.createNewProject();
+}, afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'Click here to Start a Project', "data-step": 1});
 }}}, {xtype: 'button', cls: 'dashBtn', height: 100, flex: 1, id: 'createSequence', text: 'Create Sequence', scale: 'medium', iconCls: 'newSequence-icon', iconAlign: 'top', overCls: 'createSequence-over', listeners: {click: function() {
-  Vede.application.fireEvent("TabOpen");
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'http://help.teselagen.com/manual/'}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'tourBtn', scale: 'medium', flex: 1, overCls: 'tourBtn-over', iconAlign: 'top', iconCls: 'tour-icon', iconAlign: 'top', text: 'Take a Tour', href: 'http://help.teselagen.com/manual/'}]}, {xtype: 'container', id: 'dashboardStats', margin: '10 100 50 100', flex: 1, minHeight: 400, minWidth: 800, border: 0, layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}]}, 0, ["DashboardPanelView"], ["panel", "DashboardPanelView", "component", "container", "box"], {"panel": true, "DashboardPanelView": true, "component": true, "container": true, "box": true}, ["widget.DashboardPanelView"], 0, [Vede.view.common, 'DashboardPanelView'], 0));
+  Vede.application.fireEvent("createSequence");
+}, afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'You can start with a blank sequence by clicking here.', "data-step": 2});
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'http://help.teselagen.com/manual/'}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'tourBtn', scale: 'medium', flex: 1, overCls: 'tourBtn-over', iconAlign: 'top', iconCls: 'tour-icon', iconAlign: 'top', text: 'Take a Tour', listeners: {click: function() {
+  introJs().start();
+}}}]}, {xtype: 'container', id: 'dashboardStats', margin: '10 100 50 100', flex: 1, minHeight: 320, minWidth: 800, border: 0, layout: {type: 'hbox', align: 'stretch'}, listeners: {afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'Here are some awesome stats to keep you up to date.', "data-position": 'top', "data-step": 3});
+}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}]}, 0, ["DashboardPanelView"], ["panel", "DashboardPanelView", "component", "container", "box"], {"panel": true, "DashboardPanelView": true, "component": true, "container": true, "box": true}, ["widget.DashboardPanelView"], 0, [Vede.view.common, 'DashboardPanelView'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", MAP_PART_SELECT: "MapPartSelect", MAP_PART_NOTSELECT: "MapPartNotSelect", FILL_BLANK_CELLS: "FillBlankCells", OPEN_LIBRARY: "OpenPartLibrary"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
@@ -67829,7 +67857,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 
 (Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', floatable: true, frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, plain: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, width: 100, layout: {deferredRender: false, type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
   return rule.getOperand1().get("name");
-}}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'Yes', falseText: 'No', editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', renderer: function(id, metaData, rule) {
+}}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', cls: "operand2_field", plugins: Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 2, listeners: {edit: function(editor, e) {
+  Vede.application.fireEvent('EugeneRuleEdit');
+}}}), editor: {xtype: 'combobox', store: [], cls: "operand2_combobox"}, renderer: function(id, metaData, rule) {
   if (rule.get("operand2isNumber")) 
   {
     return rule.get("operand2Number");
@@ -67865,12 +67895,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return value;
   }
-}}, {xtype: 'numbercolumn', text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>', dataIndex: 'extra5PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}, {xtype: 'numbercolumn', text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>', dataIndex: 'extra3PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}]}]}, {xtype: 'form', autoScroll: true, flex: 1, title: 'Column Content', margin: '5px 0px 5px 0px', cls: 'columnContentForm', items: [{xtype: 'displayfield', cls: 'columnContentDisplayField', margin: 10, fieldLabel: ''}]}]}, {xtype: 'panel', cls: 'j5InfoTab', title: 'j5', bodyCls: 'j5InfoTab-body', disabled: true, preventHeader: true, layout: {type: 'vbox', align: 'stretch'}, autoScroll: false, margin: "5px 0px 5px 0px", items: [{xtype: 'button', text: 'Submit Run to j5', cls: 'runj5Btn', overCls: 'runj5Btn-over', margin: '2.5 0 2.5 0', height: 40, border: 0}, {xtype: 'button', text: 'Condense Assemblies', cls: 'condenseAssembliesBtn', overCls: 'condenseAssembliesBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'button', text: 'Distribute PCR Reactions', cls: 'distributePCRBtn', overCls: 'distributePCRBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub', animCollapse: false, collapsible: false, removePanelHeader: true, margin: '10 0 0 0', items: [{xtype: 'form', flex: 1, cls: 'j5InfoTab-Basic', width: 287, layout: {align: 'stretch', type: 'vbox'}, bodyPadding: 10, title: 'Basic', margin: '5px 0px 5px 0px', items: [{xtype: 'combobox', cls: 'assemblyMethodSelector', fieldLabel: '<b>Assembly Method:</b>', labelCls: 'assembly-label', labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'assemblyMethod', valueField: 'assemblyMethod'}, {xtype: 'container', html: '<b>Master Plasmids List</b>', cls: 'masterPlasmidsList-box', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'plasmidsListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}]}, {xtype: 'container', html: '<b>Master Oligos List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerOligosRadioBtn', name: 'oligosListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyOligosRadioBtn', name: 'oligosListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'oligosListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'container', html: '<b>Master Direct Syntheses List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerSynthesesRadioBtn', name: 'directSynthesesListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptySynthesesRadioBtn', name: 'directSynthesesListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'directSynthesesFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'button', text: 'Edit J5 Parameters', cls: 'editj5ParamsBtn', margin: '15 0 0 0', height: 30, border: 0}]}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub-Advanced', animCollapse: false, collapsible: false, removePanelHeader: true, bodyPadding: 10, title: 'Advanced', border: 0, bodyCls: 'j5InfoTab-Sub-Advanced-Body', margin: '5px 0px 0px 0px', items: [{xtype: 'container', title: 'Condense Assembly Files', cls: 'condenseAssemblyFiles-box', margin: '0 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: 'Assembly Files To Condense List:', margin: '10 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'condenseAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'container', html: 'Zipped Assembly Files:', cls: 'condenseAssemblyFiles-box', margin: '15 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'zippedAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'button', margin: '20 0 0 0', cls: 'downloadCondenseAssemblyResultsBtn', text: 'Download Results', hidden: true}]}, {xtype: 'container', title: 'Downstream Automation', cls: 'downstreamAutomation-box', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: '', cls: 'downstreamAutomationParameters-box', margin: '5 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'sourcePlateListSelector', margin: '30 0 0 0', validateOnChange: false, fieldLabel: 'Source Plate List:', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'zippedPlateFilesSelector', fieldLabel: 'Zipped Plate Files:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'assemblyFileSelector', validateOnChange: false, fieldLabel: 'j5 Assembly File:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'button', cls: 'customizeAutomationParamsBtn', margin: '20 0 0 0', height: 30, text: 'Customize Automation Parameters'}, {xtype: 'button', cls: 'downloadDownstreamAutomationBtn', pressed: false, text: 'Download Results', hidden: true, margin: '15 0 0 0'}]}]}]}]}]}], listeners: {'tabchange': function(tabPanel, tab) {
+}}, {xtype: 'numbercolumn', text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>', dataIndex: 'extra5PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}, {xtype: 'numbercolumn', text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>', dataIndex: 'extra3PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}]}]}, {xtype: 'form', autoScroll: true, flex: 1, title: 'Column Content', margin: '5px 0px 5px 0px', cls: 'columnContentForm', items: [{xtype: 'displayfield', cls: 'columnContentDisplayField', margin: 10, fieldLabel: ''}]}]}, {xtype: 'panel', cls: 'j5InfoTab', title: 'j5', bodyCls: 'j5InfoTab-body', disabled: true, preventHeader: true, autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, margin: "5px 0px 5px 0px", items: [{xtype: 'button', text: 'Submit Run to j5', cls: 'runj5Btn', overCls: 'runj5Btn-over', margin: '2.5 0 2.5 0', height: 40, border: 0}, {xtype: 'button', text: 'Condense Assemblies', cls: 'condenseAssembliesBtn', overCls: 'condenseAssembliesBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'button', text: 'Distribute PCR Reactions', cls: 'distributePCRBtn', overCls: 'distributePCRBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub', animCollapse: false, collapsible: false, removePanelHeader: true, margin: '10 0 0 0', items: [{xtype: 'form', flex: 1, cls: 'j5InfoTab-Basic', width: 287, layout: {align: 'stretch', type: 'vbox'}, bodyPadding: 10, title: 'Basic', margin: '5px 0px 5px 0px', items: [{xtype: 'combobox', cls: 'assemblyMethodSelector', fieldLabel: '<b>Assembly Method:</b>', labelCls: 'assembly-label', labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'assemblyMethod', valueField: 'assemblyMethod'}, {xtype: 'container', html: '<b>Master Plasmids List</b>', cls: 'masterPlasmidsList-box', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'plasmidsListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}]}, {xtype: 'container', html: '<b>Master Oligos List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerOligosRadioBtn', name: 'oligosListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyOligosRadioBtn', name: 'oligosListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'oligosListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'container', html: '<b>Master Direct Syntheses List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerSynthesesRadioBtn', name: 'directSynthesesListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptySynthesesRadioBtn', name: 'directSynthesesListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'directSynthesesFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'button', text: 'Edit J5 Parameters', cls: 'editj5ParamsBtn', margin: '15 0 0 0', height: 30, border: 0}]}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub-Advanced', animCollapse: false, collapsible: false, removePanelHeader: true, bodyPadding: 10, title: 'Advanced', border: 0, bodyCls: 'j5InfoTab-Sub-Advanced-Body', margin: '5px 0px 0px 0px', items: [{xtype: 'container', title: 'Condense Assembly Files', cls: 'condenseAssemblyFiles-box', margin: '0 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: 'Assembly Files To Condense List:', margin: '10 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'condenseAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'container', html: 'Zipped Assembly Files:', cls: 'condenseAssemblyFiles-box', margin: '15 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'zippedAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'button', margin: '20 0 0 0', cls: 'downloadCondenseAssemblyResultsBtn', text: 'Download Results', hidden: true}]}, {xtype: 'container', title: 'Downstream Automation', cls: 'downstreamAutomation-box', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: '', cls: 'downstreamAutomationParameters-box', margin: '5 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'sourcePlateListSelector', margin: '30 0 0 0', validateOnChange: false, fieldLabel: 'Source Plate List:', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'zippedPlateFilesSelector', fieldLabel: 'Zipped Plate Files:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'assemblyFileSelector', validateOnChange: false, fieldLabel: 'j5 Assembly File:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'button', cls: 'customizeAutomationParamsBtn', margin: '20 0 0 0', height: 30, text: 'Customize Automation Parameters'}, {xtype: 'button', cls: 'downloadDownstreamAutomationBtn', pressed: false, text: 'Download Results', hidden: true, margin: '15 0 0 0'}]}]}]}]}]}], listeners: {'tabchange': function(tabPanel, tab) {
   if (tab.cls == 'j5InfoTab') 
   {
     Vede.application.fireEvent("openj5");
   }
-}}}, 0, ["InspectorPanel"], ["tabpanel", "panel", "component", "container", "InspectorPanel", "box"], {"tabpanel": true, "panel": true, "component": true, "container": true, "InspectorPanel": true, "box": true}, ["widget.InspectorPanel"], 0, [Vede.view.de, 'InspectorPanel'], 0));
+}}, init: function() {
+  console.log(workingProject);
+}}, 0, ["InspectorPanel"], ["tabpanel", "panel", "component", "container", "InspectorPanel", "box"], {"tabpanel": true, "panel": true, "component": true, "container": true, "InspectorPanel": true, "box": true}, ["widget.InspectorPanel"], 0, [Vede.view.de, 'InspectorPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.DeviceEditorPartPanel', Ext.panel.Panel, {dock: 'top', cls: 'DeviceEditorPartPanel', collapseDirection: 'top', collapsed: false, hideCollapseTool: true, titleCollapse: true, dockedItems: [{xtype: 'toolbar', dock: 'top', height: 45, cls: 'DeviceEditorPartsBar', enableOverflow: true, layout: {align: 'left', pack: 'center', type: 'hbox'}, items: [{xtype: 'button', cls: 'ori_Btn', data: {iconKey: 'ORIGIN-OF-REPLICATION'}, icon: 'resources/images/icons/device/small/origin-of-replication.png', scale: 'large', tooltip: 'Origin of Replication'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'cds_Btn', data: {iconKey: 'CDS'}, icon: 'resources/images/icons/device/small/cds.png', scale: 'large', tooltip: 'CDS'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'five_prime_ov_Btn', data: {iconKey: 'FIVE-PRIME-OVERHANG'}, icon: 'resources/images/icons/device/small/five-prime-overhang.png', scale: 'large', tooltip: '5\' Overhang'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'three_prime_ov_Btn', data: {iconKey: 'THREE-PRIME-OVERHANG'}, icon: 'resources/images/icons/device/small/three-prime-overhang.png', scale: 'large', tooltip: '3\' Overhang'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'promoter_Btn', data: {iconKey: 'PROMOTER'}, icon: 'resources/images/icons/device/small/promoter.png', scale: 'large', tooltip: 'Promoter'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'primer_binding_site_Btn', data: {iconKey: 'PRIMER-BINDING-SITE'}, icon: 'resources/images/icons/device/small/primer-binding-site.png', scale: 'large', tooltip: 'Primer Binding Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'five_prime_restriction_site_Btn', data: {iconKey: 'FIVE-PRIME-STICKY-RESTRICTION-SITE'}, icon: 'resources/images/icons/device/small/five-prime-sticky-restriction-site.png', scale: 'large', tooltip: '5\' Sticky Restriction Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'three_prime_restriction_site_Btn', data: {iconKey: 'THREE-PRIME-RESTRICTION-SITE'}, icon: 'resources/images/icons/device/small/three-prime-sticky-restriction-site.png', scale: 'large', tooltip: '3\' Sticky Restriction Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'restriction_enz_recog_site_Btn', data: {iconKey: 'RESTRICTION-ENZYME-RECOGNITION-SITE'}, icon: 'resources/images/icons/device/small/restriction-enzyme-recognition-site.png', scale: 'large', tooltip: 'Restriction Enzyme Recognition Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'blunt_restriction_site_Btn', data: {iconKey: 'BLUNT-RESTRICTION-SITE'}, icon: 'resources/images/icons/device/small/blunt-restriction-site.png', scale: 'large', tooltip: 'Blunt Restriction Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'restriction_site_w_no_overhang_Btn', data: {iconKey: 'RESTRICTION-SITE-NO-OVERHANG'}, icon: 'resources/images/icons/device/small/restriction-site-with-no-overhang.png', scale: 'large', tooltip: 'Restriction Site With No Overhangs'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'protease_site_Btn', data: {iconKey: 'PROTEASE-SITE'}, icon: 'resources/images/icons/device/small/protease-site.png', scale: 'large', tooltip: 'Protease Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'protein_stability_element_Btn', data: {iconKey: 'PROTEIN-STABILITY-ELEMENT'}, icon: 'resources/images/icons/device/small/protein-stability-element.png', scale: 'large', tooltip: 'Protein Stability Element'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'assembly_junction_Btn', data: {iconKey: 'ASSEMBLY-SCAR'}, icon: 'resources/images/icons/device/small/assembly-scar.png', scale: 'large', tooltip: 'Assembly Junction'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'insulator_Btn', data: {iconKey: 'INSULATOR'}, icon: 'resources/images/icons/device/small/insulator.png', scale: 'large', tooltip: 'Insulator'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'operator_Btn', data: {iconKey: 'OPERATOR'}, icon: 'resources/images/icons/device/small/operator.png', scale: 'large', tooltip: 'Operator'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'ribonuclease_site_Btn', data: {iconKey: 'RIBONUCLEASE-SITE'}, icon: 'resources/images/icons/device/small/ribonuclease-site.png', scale: 'large', tooltip: 'Ribonuclease Site'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'rna_stability_element_Btn', data: {iconKey: 'RNA-STABILITY-ELEMENT'}, icon: 'resources/images/icons/device/small/rna-stability-element.png', scale: 'large', tooltip: 'RNA Stability Element'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'terminator_Btn', data: {iconKey: 'TERMINATOR'}, icon: 'resources/images/icons/device/small/terminator.png', scale: 'large', tooltip: 'Terminator'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'signature_Btn', data: {iconKey: 'SIGNATURE'}, icon: 'resources/images/icons/device/small/signature.png', params: 'Signature', scale: 'large', tooltip: 'Signature'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'five_prime_utr_Btn', data: {iconKey: 'FIVE-PRIME-UTR'}, icon: 'resources/images/icons/device/small/ribosome-entry-site.png', params: 'five_prime_utr', scale: 'large', tooltip: 'Five Prime UTR'}, {xtype: 'tbseparator', height: 40}, {xtype: 'button', cls: 'generic', data: {iconKey: 'USER-DEFINED'}, icon: 'resources/images/icons/device/small/generic.png', params: 'generic', scale: 'large', tooltip: 'Generic DNA'}]}]}, 0, ["DeviceEditorPartPanel"], ["panel", "DeviceEditorPartPanel", "component", "container", "box"], {"panel": true, "DeviceEditorPartPanel": true, "component": true, "container": true, "box": true}, ["widget.DeviceEditorPartPanel"], 0, [Vede.view.de, 'DeviceEditorPartPanel'], 0));
@@ -67885,7 +67917,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.view.de.DeviceEditorStatusPanel', Ext.panel.Panel, {dock: "bottom", border: "0 1 1 1", height: 23, layout: {type: "fit"}, headerPosition: "bottom", dockedItems: [{xtype: "toolbar", dock: "top", cls: "DeviceEditorStatusBar", items: [{xtype: "tbfill"}, {xtype: "tbtext", cls: "DeviceEditorStatusBarAlert"}]}]}, 0, ["DeviceEditorStatusPanel"], ["panel", "DeviceEditorStatusPanel", "component", "container", "box"], {"panel": true, "DeviceEditorStatusPanel": true, "component": true, "container": true, "box": true}, ["widget.DeviceEditorStatusPanel"], 0, [Vede.view.de, 'DeviceEditorStatusPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.DeviceEditorCanvasPanel', Ext.panel.Panel, {flex: 1, cls: 'DeviceEditorCanvas', border: 0, layout: {type: 'fit'}, animCollapse: false, autoScroll: true, items: [{xtype: 'container', title: 'Canvas container', cls: 'designGrid', minWidth: 3000, autoScroll: true, border: 0, layout: {type: 'column'}, padding: 10}]}, 0, ["DeviceEditorCanvasPanel"], ["panel", "component", "container", "box", "DeviceEditorCanvasPanel"], {"panel": true, "component": true, "container": true, "box": true, "DeviceEditorCanvasPanel": true}, ["widget.DeviceEditorCanvasPanel"], 0, [Vede.view.de, 'DeviceEditorCanvasPanel'], 0));
+(Ext.cmd.derive('Vede.view.de.DeviceEditorCanvasPanel', Ext.panel.Panel, {flex: 1, cls: 'DeviceEditorCanvas', border: 0, layout: {type: 'fit'}, animCollapse: false, autoScroll: true, items: [{xtype: 'container', title: 'Canvas container', cls: 'designGrid', minWidth: 3000, autoScroll: true, overflow: 'auto', border: 0, layout: {type: 'column'}, padding: 10}]}, 0, ["DeviceEditorCanvasPanel"], ["panel", "component", "container", "box", "DeviceEditorCanvasPanel"], {"panel": true, "component": true, "container": true, "box": true, "DeviceEditorCanvasPanel": true}, ["widget.DeviceEditorCanvasPanel"], 0, [Vede.view.de, 'DeviceEditorCanvasPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.DeviceEditorTitlePanel', Ext.panel.Panel, {dock: 'top', hidden: false, cls: 'DeviceEditorTitlePanel', width: 150, layout: {type: 'fit'}, dockedItems: [{xtype: 'toolbar', dock: 'top', items: [{xtype: 'label', margins: '0 0 0 7', style: '{font-weight:bold;}', text: 'Device Editor'}, {xtype: 'tbseparator', margins: '0 0 20 8'}, {xtype: 'label', margins: '0 0 0 10', style: '{font-weight:light;}', cls: 'designName', text: ''}]}]}, 0, ["DeviceEditorTitlePanel"], ["panel", "DeviceEditorTitlePanel", "component", "container", "box"], {"panel": true, "DeviceEditorTitlePanel": true, "component": true, "container": true, "box": true}, ["widget.DeviceEditorTitlePanel"], 0, [Vede.view.de, 'DeviceEditorTitlePanel'], 0));
@@ -67956,7 +67988,13 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}]}, {xtype: 'gridpanel', name: 'errors', cls: 'errorsGrid', hidden: true, margin: '10 10 20 10', title: 'Errors', minHeight: 80, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'faultString', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
   return '<div style="white-space:normal !important;">' + val + '</div>';
-}}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Plasmids', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'size', flex: 1, text: 'Size'}, {xtype: 'gridcolumn', dataIndex: 'fileType', flex: 1, text: 'Type'}, {xtype: 'gridcolumn', dataIndex: 'fileContent', flex: 2, text: 'Content'}]}, {xtype: 'gridpanel', name: 'j5parameters', margin: '10 10 20 10', collapsible: true, collapseDirection: 'top', collapsed: true, title: 'j5 Parameters', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'value', flex: 1, text: 'Value'}]}, {xtype: 'fieldset', margin: '10 10 10 10', layout: 'fit', title: 'Combinatorial Mock Assembly Output', items: [{xtype: 'textareafield', name: 'combinatorialAssembly', margin: '10 10 20 10', fieldLabel: ''}]}]}], listeners: {}}, 0, ["j5ReportPanel"], ["panel", "component", "container", "box", "j5ReportPanel"], {"panel": true, "component": true, "container": true, "box": true, "j5ReportPanel": true}, ["widget.j5ReportPanel"], 0, [Vede.view.j5Report, 'j5ReportPanel'], 0));
+}}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Plasmids', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name', renderer: function(val, metadata) {
+  metadata.tdAttr = 'data-qtip = "Click to open"';
+  return val;
+}}, {xtype: 'gridcolumn', dataIndex: 'size', flex: 1, text: 'Size'}, {xtype: 'gridcolumn', dataIndex: 'fileType', flex: 1, text: 'Type'}, {xtype: 'gridcolumn', dataIndex: 'fileContent', flex: 2, text: 'Content', renderer: function(val) {
+  var content_limited = val.slice(0, (val.lastIndexOf("bp") + 2));
+  return content_limited + "...";
+}}]}, {xtype: 'gridpanel', name: 'j5parameters', margin: '10 10 20 10', collapsible: true, collapseDirection: 'top', collapsed: true, title: 'j5 Parameters', minHeight: 100, layout: 'fit', columns: [{xtype: 'gridcolumn', dataIndex: 'name', flex: 1, text: 'Name'}, {xtype: 'gridcolumn', dataIndex: 'value', flex: 1, text: 'Value'}]}, {xtype: 'fieldset', margin: '10 10 10 10', layout: 'fit', title: 'Combinatorial Mock Assembly Output', items: [{xtype: 'textareafield', name: 'combinatorialAssembly', margin: '10 10 20 10', fieldLabel: ''}]}]}], listeners: {}}, 0, ["j5ReportPanel"], ["panel", "component", "container", "box", "j5ReportPanel"], {"panel": true, "component": true, "container": true, "box": true, "j5ReportPanel": true}, ["widget.j5ReportPanel"], 0, [Vede.view.j5Report, 'j5ReportPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.HelpWindow', Ext.window.Window, {height: 360, width: 771, title: 'Help', autodestoy: true, items: [{xtype: 'form', height: 361, bodyPadding: 10, title: '', items: [{xtype: 'fieldset', height: 115, title: 'Send feedback', items: [{xtype: 'textareafield', anchor: '100%', name: 'feedback', emptyText: 'Enter feedback or comments here.'}, {xtype: 'button', text: 'Send', id: 'reportFeedbackBtn'}]}, {xtype: 'fieldset', height: 185, title: 'Report Error', items: [{xtype: 'textareafield', anchor: '100%', name: 'error', emptyText: 'Enter specific error here.'}, {xtype: 'textareafield', anchor: '100%', name: 'error_feedback', emptyText: 'Enter additional feedback here.'}, {xtype: 'button', text: 'Report Error', id: 'reportErrorBtn'}]}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'HelpWindow'], 0));
@@ -67964,7 +68002,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 
 (Ext.cmd.derive('Vede.view.AppViewport', Ext.container.Viewport, {layout: {type: 'border'}, initComponent: function() {
   var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'HeaderPanelView'}, {xtype: 'ProjectPanelView'}, {xtype: 'tabpanel', id: 'mainAppPanel', region: 'center', border: 0, activeTab: 0, items: [{xtype: 'DashboardPanelView', title: null, iconCls: 'home-dash-icon', iconAlign: 'top'}, {xtype: 'VectorEditorPanel'}]}]});
+  Ext.applyIf(me, {items: [{xtype: 'HeaderPanelView'}, {xtype: 'ProjectPanelView'}, {xtype: 'tabpanel', id: 'mainAppPanel', region: 'center', border: 0, activeTab: 0, items: [{xtype: 'DashboardPanelView', title: null, iconCls: 'home-dash-icon', iconAlign: 'top', listeners: {tabchange: function() {
+  Vede.application.fireEvent("PopulateStats");
+}}}, {xtype: 'VectorEditorPanel'}]}]});
   me.callParent(arguments);
 }}, 0, 0, ["viewport", "component", "container", "box"], {"viewport": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'AppViewport'], 0));
 ;
@@ -68530,8 +68570,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 });
 }, openDeviceDesign: function(selectedDesign) {
   this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function(tabPanel) {
-  Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
-  Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
   tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {title: "Device Editor | " + selectedDesign.data.name, model: selectedDesign, modelId: selectedDesign.data.id})).show();
   if (selectedDesign.data.id) 
   Vede.application.fireEvent("loadEugeneRules");
@@ -68590,6 +68628,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
   Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
   Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+  Vede.application.fireEvent("PopulateStats");
 });
 }});
   } else {
@@ -68626,6 +68665,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   toastr.info("New Sequence Successfully Created");
 });
 }});
+    Vede.application.fireEvent("PopulateStats");
   } else {
     return false;
   }
@@ -68647,8 +68687,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this);
         }
       }
-    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Generating Design");
+    var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+    oldTab.el.mask("Generating Design");
     var self = this;
+    Vede.application.fireEvent("PopulateStats");
     if (project) 
     {
       var binsArray = [];
@@ -68674,6 +68716,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   design.save({success: function(record, operation) {
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
   Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
+  oldTab.el.unmask();
   Ext.getCmp("projectTreePanel").selectPath("/root/" + project.data.id + "/" + design.data.id);
 });
   self.openDeviceDesign(design);
@@ -68686,6 +68729,12 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 };
   Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
+}, createDirectVESession: function() {
+  this.directVEEditingMode = true;
+  this.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {name: "Untitled VEProject", dateCreated: new Date(), dateModified: new Date()});
+  this.workingSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
+  Vede.application.fireEvent("OpenVectorEditor", this.workingSequence);
+  var menuItem = Ext.ComponentQuery.query('#saveSequenceBtn')[0];
 }, createNewVEProject: function() {
   console.log("Deprecated");
 }}, 0, 0, 0, 0, ["ProjectManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'ProjectManager'], 0));
@@ -68727,11 +68776,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
   Ext.getCmp('AuthWindow').destroy();
 }, onLogoutClick: function(button, e, options) {
-  Ext.util.Cookies.clear('session');
+  Ext.util.Cookies.clear('last_server');
   var self = this;
   Ext.Ajax.request({url: '/api/logout', method: 'POST', success: function(response) {
-  Ext.getBody().mask();
-  self.window.close();
+  Teselagen.manager.SessionManager.maskApp();
+  Ext.create("Vede.view.AuthWindow").show();
 }});
 }, onReconnectClick: function() {
   Teselagen.manager.AuthenticationManager.Login();
@@ -68739,8 +68788,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   if (newValue) 
   {
     this.rememberSession = true;
-  } else {
-    Ext.util.Cookies.clear('session');
   }
 }, init: function() {
   var that = this;
@@ -68762,7 +68809,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }, populateStatisticts: function() {
   Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("getStats", ''), success: function(response) {
   response = JSON.parse(response.responseText);
-  console.log(response);
   var projectsData = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-num"]');
   var projectsLabel = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-desc"]');
   var designsData = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-num"]');
@@ -68771,6 +68817,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var sequencesLabel = Ext.getCmp('dashboardStats').down('field[cls="sequencesCountBox-desc"]');
   var partsData = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-num"]');
   var partsLabel = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-desc"]');
+  console.log(response.numberProjects);
   projectsData.setValue(response.numberProjects);
   designsData.setValue(response.numberDesigns);
   sequencesData.setValue(response.numberSequences);
@@ -68802,8 +68849,18 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }, failure: function(response) {
   console.log('getting stats failed');
 }});
+}, DashNewSequence: function() {
+  Teselagen.manager.ProjectManager.directVEEditingMode = true;
+  Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {name: "Untitled VEProject", dateCreated: new Date(), dateModified: new Date()});
+  Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
+  Vede.application.fireEvent("OpenVectorEditor", Teselagen.manager.ProjectManager.workingSequence);
+}, onLaunch: function() {
+  this.tabPanel = Ext.getCmp("mainAppPanel");
+  this.tabPanel.on("tabchange", this.populateStatisticts);
 }, init: function() {
+  this.application.on("createSequence", this.DashNewSequence);
   this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatisticts);
+  this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatisticts);
   this.control({"#designGrid_Panel": {itemclick: this.onLastDEProjectsItemClick}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'DashboardPanelController'], 0));
 ;
@@ -68837,7 +68894,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'HeaderPanelController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.MainPanelController', Ext.app.Controller, {refs: [{ref: "deMainMenuBar", selector: "#DeviceEditorMainMenuBar"}, {ref: "deMainToolBar", selector: "#DeviceEditorMainToolBar"}, {ref: "veMainMenuBar", selector: "#VectorEditorMainMenuBar"}, {ref: "veMainToolBar", selector: "#VectorEditorMainToolBar"}], init: function() {
+(Ext.cmd.derive('Vede.controller.MainPanelController', Ext.app.Controller, {oldTab: null, refs: [{ref: "deMainMenuBar", selector: "#DeviceEditorMainMenuBar"}, {ref: "deMainToolBar", selector: "#DeviceEditorMainToolBar"}, {ref: "veMainMenuBar", selector: "#VectorEditorMainMenuBar"}, {ref: "veMainToolBar", selector: "#VectorEditorMainToolBar"}], init: function() {
   this.control({"#MainPanel": {tabchange: this.onTabChange}});
 }, onLaunch: function() {
 }, onTabChange: function(pTabpanel, pNewcard) {
@@ -68867,8 +68924,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
   response = JSON.parse(response.responseText);
   self.partLibraryStore = Ext.create('Teselagen.store.PartStore', {model: 'Teselagen.models.Part', data: response, proxy: {type: 'memory', reader: {type: 'json', root: 'parts'}}, autoLoad: true});
-  self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
   self.partLibraryWindow.show();
+  self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
   loadingMsgBox.close();
 }});
 }, onPartListSelected: function(grid, part, item) {
@@ -68877,23 +68934,24 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   console.log("Validating...");
   Vede.application.fireEvent("validateDuplicatedPartName", part, part.get('name'));
   this.callbackFn(grid, part, item, this.partLibraryWindow);
-}, onOpenPartLibrary: function(inCallbackFn) {
-  if (this.partLibraryWindow === null) 
-  {
-    this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow');
-    this.partLibraryWindow.render(Ext.getCmp('mainAppPanel').getActiveTab().getEl());
-  }
-  this.fetchPartLibrary();
-  this.callbackFn = inCallbackFn;
 }, init: function() {
   this.control({'#partLibraryGridList': {itemclick: this.onPartListSelected}});
   this.partLibraryStore = Teselagen.manager.ProjectManager.partLibrary;
-  this.application.on("openPartLibrary", this.onOpenPartLibrary, this);
   this.callParent();
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'PartLibraryController'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default}], validation: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
+(Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default, convert: function(value, record) {
+  if (Ext.isBoolean(value)) 
+  {
+    return value;
+  } else if (Ext.isString(value)) 
+  {
+    return (/^(true|1)$/i).test(value);
+  } else {
+    return false;
+  }
+}}], validation: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
   this.setDefaultValues();
 }, loadValues: function(values) {
   if (values.MASTEROLIGONUMBEROFDIGITS) 
@@ -69317,14 +69375,21 @@ function requestMessageProcessor(request, success) {
 });
 }});
 }, resolveAndopenDeviceDesign: function(record) {
+  var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+  oldTab.el.mask("Loading design", "loader rspin");
+  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
   var design_id = record.data.id;
   var project_id = record.parentNode.data.id;
   var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
   project.designs().load({id: design_id, callback: function(loadedDesign) {
   Teselagen.manager.ProjectManager.workingProject = project;
   Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+  oldTab.el.unmask();
 }});
 }, resolveAndOpenj5Reports: function(record) {
+  var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+  oldTab.el.mask("Loading j5 report", "loader rspin");
+  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
   var design_id = record.data.id.replace("report", "");
   ;
   var project_id = record.parentNode.parentNode.data.id;
@@ -69333,6 +69398,7 @@ function requestMessageProcessor(request, success) {
   Teselagen.manager.ProjectManager.workingProject = project;
   var design = loadedDesign[0];
   Teselagen.manager.ProjectManager.openj5Report(design);
+  oldTab.el.unmask();
 }});
 }, resolveAndCreateDEProject: function(record) {
   var project_id = record.parentNode.data.id;
@@ -69392,6 +69458,9 @@ function requestMessageProcessor(request, success) {
 }});
 });
 }, resolveAndOpenSequence: function(record) {
+  var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+  oldTab.el.mask("Loading sequence", "loader rspin");
+  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
   var sequence_id = record.data.id;
   var project_id = record.parentNode.data.id;
   var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
@@ -69399,6 +69468,7 @@ function requestMessageProcessor(request, success) {
   Teselagen.manager.ProjectManager.workingProject = project;
   Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
   Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
+  oldTab.el.unmask();
 }});
 }, expandProject: function(record) {
   if (record.isExpanded()) 
@@ -69502,7 +69572,43 @@ function requestMessageProcessor(request, success) {
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'RestrictionEnzymeGroup'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeGroupManager', Ext.Base, {singleton: true, config: {systemGroups: [], userGroups: [], activeGroup: null, rebaseEnzymesDatabase: Ext.create("Ext.util.HashMap"), isInitialized: false, activeEnzymesChanged: false}, RestrictionEnzymeManager: null, UserManager: null, COMMON_ENZYMES: ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV", "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI", "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"], ACTIVE: "Active", constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.utils.Logger', Ext.Base, {singleton: true, logger: null, notifer: null, constructor: function() {
+  this.logger = console;
+  this.notifier = toastr;
+}, info: function(pMsg, pNotify) {
+  this.logInfo(pMsg);
+  this.notifyInfo(pMsg, pNotify);
+}, logInfo: function(pMsg) {
+  this.logger.info(pMsg);
+}, notifyInfo: function(pMsg, pOpts) {
+  var opts = pOpts || {};
+  this.reset();
+  this.notifier.info(pMsg, opts.title, opts);
+}, warn: function(pMsg, pNotify) {
+  this.logWarn(pMsg);
+  this.notifyWarn(pMsg, pNotify);
+}, logWarn: function(pMsg) {
+  this.logger.warn(pMsg);
+}, notifyWarn: function(pMsg, pOpts) {
+  var opts = pOpts || {};
+  this.reset();
+  this.notifier.warning(pMsg, opts.title, opts);
+}, error: function(pMsg, pNotify) {
+  this.logError(pMsg);
+  this.notifyError(pMsg, pNotify);
+}, logError: function(pMsg) {
+  this.logger.error(pMsg);
+}, notifyError: function(pMsg, pOpts) {
+  var opts = pOpts || {};
+  this.reset();
+  this.notifier.error(pMsg, opts.title, opts);
+}, reset: function() {
+  this.notifier.options.onclick = null;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.utils, 'Logger'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.RestrictionEnzymeGroupManager', Ext.Base, {singleton: true, config: {systemGroups: [], userGroups: [], activeGroup: null, rebaseEnzymesDatabase: Ext.create("Ext.util.HashMap"), isInitialized: false, activeEnzymesChanged: false}, Logger: null, RestrictionEnzymeManager: null, UserManager: null, COMMON_ENZYMES: ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV", "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI", "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"], ACTIVE: "Active", constructor: function(inData) {
+  this.Logger = Teselagen.utils.Logger;
   this.RestrictionEnzymeManager = Teselagen.bio.enzymes.RestrictionEnzymeManager;
   this.UserManager = Teselagen.manager.UserManager;
   this.initConfig(inData);
@@ -69533,37 +69639,6 @@ function requestMessageProcessor(request, success) {
 });
   }
   this.changeActiveGroup();
-}, loadUserRestrictionEnzymes: function(user) {
-  this.setUserGroups([]);
-  var newUserGroups = [];
-  var newUserGroup, userEnzymes;
-  var newActiveGroup = [];
-  Ext.each(user.restrictionEnzymeGroups(), function(group) {
-  if (!group || !group.get("groupName") || group.get("enzymeNames").length === 0) 
-  {
-    return true;
-  }
-  newUserGroup = this.createGroupByEnzymes(group.get("groupName"), group.get("enzymeNames"));
-  newUserGroups.push(newUserGroup);
-}, this);
-  if (userEnzymes.get("activeEnzymeNames").length > 0) 
-  {
-    this.setActiveGroup([]);
-    var activeEnzymeNames = this.createGroupByEnzymes("active", userEnzymes.get("activeEnzymeNames"));
-    Ext.each(activeEnzymeNames, function(enzymeName) {
-  newActiveGroup.push(this.getRebaseEnzymesDatabase().get(enzymeName));
-}, this);
-  }
-  this.setUserGroups(newUserGroups);
-  this.setActiveGroup(newActiveGroup);
-}, removeGroup: function(enzymeGroup) {
-  var newUserGroups = this.getUserGroups();
-  var index = newUserGroups.indexOf(enzymeGroup);
-  if (index !== -1) 
-  {
-    newUserGroups.splice(index, 1);
-  }
-  this.setUserGroups(newUserGroups);
 }, groupByName: function(name) {
   var resultGroup = null;
   Ext.each(this.getSystemGroups(), function(systemGroup) {
@@ -69646,6 +69721,30 @@ function requestMessageProcessor(request, success) {
   var userActiveGroup = this.getActiveUserGroup();
   var activeGroup = this.createGroupByEnzymes(this.ACTIVE, userActiveGroup.userRestrictionEnzymes().collect("name"));
   this.setActiveGroup(activeGroup);
+}, loadUserGroups: function() {
+  this.UserManager.loadUser(function(pSuccess) {
+  if (!pSuccess) 
+  {
+    console.error("Error loading user restriction enzyme groups");
+  }
+});
+  this.setActiveEnzymesChanged(false);
+}, saveUserGroups: function() {
+  var me = this;
+  this.UserManager.update(function(pSuccess) {
+  if (!pSuccess) 
+  {
+    console.error("Unable to save user restriction enzyme groups");
+  } else {
+    if (me.getActiveEnzymesChanged()) 
+    {
+      me.changeActiveGroup();
+      Vede.application.fireEvent("ActiveEnzymesChanged");
+      me.setActiveEnzymesChanged(false);
+    }
+    me.Logger.notifyInfo("User restriction enzyme groups saved");
+  }
+});
 }, loadUserEnzymes: function(pStore, pNames) {
   var rebase = this.getRebaseEnzymesDatabase();
   pStore.removeAll();
@@ -69677,345 +69776,6 @@ function requestMessageProcessor(request, success) {
   newSystemGroups.push(fermentasFastDigestBBGroup);
   this.setSystemGroups(newSystemGroups);
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RestrictionEnzymeGroupManager'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.form.ItemSelector', Ext.ux.form.MultiSelect, {hideNavIcons: false, buttons: ['top', 'up', 'add', 'remove', 'down', 'bottom'], buttonsText: {top: "Move to Top", up: "Move Up", add: "Add to Selected", remove: "Remove from Selected", down: "Move Down", bottom: "Move to Bottom"}, doCopy: false, layout: {type: 'hbox', align: 'stretch'}, initComponent: function() {
-  var me = this;
-  if (me.ddReorder) 
-  {
-    me.ddGroup = me.id + '-dd';
-  }
-  me.callParent();
-  me.bindStore(me.store);
-}, createList: function(title) {
-  var me = this;
-  return Ext.create('Ext.ux.form.MultiSelect', {submitValue: false, getSubmitData: function() {
-  return null;
-}, getModelData: function() {
-  return null;
-}, flex: 1, dragGroup: me.ddGroup, dropGroup: me.ddGroup, title: title, store: {model: me.store.model, data: []}, displayField: me.displayField, valueField: me.valueField, disabled: me.disabled, listeners: {boundList: {scope: me, itemdblclick: me.onItemDblClick, drop: me.syncValue}}});
-}, setupItems: function() {
-  var me = this;
-  me.fromField = me.createList(me.fromTitle);
-  me.toField = me.createList(me.toTitle);
-  return [me.fromField, {xtype: 'container', margins: '0 4', layout: {type: 'vbox', pack: 'center'}, items: me.createButtons()}, me.toField];
-}, createButtons: function() {
-  var me = this, buttons = [];
-  if (!me.hideNavIcons) 
-  {
-    Ext.Array.forEach(me.buttons, function(name) {
-  buttons.push({xtype: 'button', tooltip: me.buttonsText[name], handler: me['on' + Ext.String.capitalize(name) + 'BtnClick'], cls: 'enzymeSelector-btn', iconCls: 'enzymeSelector-btn-' + name, navBtn: true, scope: me, margin: '4 0 0 0'});
-});
-  }
-  return buttons;
-}, getSelections: function(list) {
-  var store = list.getStore();
-  return Ext.Array.sort(list.getSelectionModel().getSelection(), function(a, b) {
-  a = store.indexOf(a);
-  b = store.indexOf(b);
-  if (a < b) 
-  {
-    return -1;
-  } else if (a > b) 
-  {
-    return 1;
-  }
-  return 0;
-});
-}, onTopBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
-  store.suspendEvents();
-  store.remove(selected, true);
-  store.insert(0, selected);
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onBottomBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
-  store.suspendEvents();
-  store.remove(selected, true);
-  store.add(selected);
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onUpBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = 0, len = selected.length, index = 0;
-  store.suspendEvents();
-  for (; i < len; ++i , index++) 
-    {
-      rec = selected[i];
-      index = Math.max(index, store.indexOf(rec) - 1);
-      store.remove(rec, true);
-      store.insert(index, rec);
-    }
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onDownBtnClick: function() {
-  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = selected.length - 1, index = store.getCount() - 1;
-  store.suspendEvents();
-  for (; i > -1; --i , index--) 
-    {
-      rec = selected[i];
-      index = Math.min(index, store.indexOf(rec) + 1);
-      store.remove(rec, true);
-      store.insert(index, rec);
-    }
-  store.resumeEvents();
-  list.refresh();
-  this.syncValue();
-  list.getSelectionModel().select(selected);
-}, onAddBtnClick: function() {
-  var me = this, selected = me.getSelections(me.fromField.boundList);
-  me.moveRec(true, selected);
-  me.toField.boundList.getSelectionModel().select(selected);
-}, onAddAllBtnClick: function() {
-  var recs = this.fromField.boundList.getStore().getRange();
-  var toStore = this.toField.boundList.getStore();
-  var recsUnique = [];
-  for (var i = 0; i < recs.length; i++) 
-    {
-      if (toStore.findExact(this.displayField, recs[i].get(this.displayField)) === -1) 
-      {
-        recsUnique.push(recs[i]);
-      }
-    }
-  this.moveRec(true, recsUnique);
-}, onRemoveBtnClick: function() {
-  var me = this, selected = me.getSelections(me.toField.boundList);
-  me.moveRec(false, selected);
-  me.fromField.boundList.getSelectionModel().select(selected);
-}, onRemoveAllBtnClick: function() {
-  var recs = this.toField.boundList.getStore().getRange();
-  this.moveRec(false, recs);
-}, moveRec: function(add, recs) {
-  var me = this, fromField = me.fromField, toField = me.toField, fromStore = add ? fromField.store : toField.store, toStore = add ? toField.store : fromField.store;
-  fromStore.suspendEvents();
-  toStore.suspendEvents();
-  if (!me.doCopy) 
-  {
-    fromStore.remove(recs);
-    toStore.add(recs);
-  } else {
-    if (add) 
-    {
-      toStore.add(recs);
-    } else {
-      fromStore.remove(recs);
-    }
-  }
-  fromStore.resumeEvents();
-  toStore.resumeEvents();
-  fromField.boundList.refresh();
-  toField.boundList.refresh();
-  me.syncValue();
-}, syncValue: function() {
-  var me = this;
-  me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
-}, onItemDblClick: function(view, rec) {
-  this.moveRec(view === this.fromField.boundList, rec);
-}, setValue: function(value) {
-  var me = this, fromField = me.fromField, toField = me.toField, fromStore = fromField.store, toStore = toField.store, selected;
-  if (!me.fromStorePopulated) 
-  {
-    me.fromField.store.on({load: Ext.Function.bind(me.setValue, me, [value]), single: true});
-    return;
-  }
-  value = me.setupValue(value);
-  me.mixins.field.setValue.call(me, value);
-  selected = me.getRecordsForValue(value);
-  fromStore.suspendEvents();
-  toStore.suspendEvents();
-  fromStore.removeAll();
-  toStore.removeAll();
-  me.populateFromStore(me.store);
-  Ext.Array.forEach(selected, function(rec) {
-  if (fromStore.indexOf(rec) > -1) 
-  {
-    fromStore.remove(rec);
-  }
-  toStore.add(rec);
-});
-  fromStore.resumeEvents();
-  toStore.resumeEvents();
-  Ext.suspendLayouts();
-  fromField.boundList.refresh();
-  toField.boundList.refresh();
-  Ext.resumeLayouts(true);
-}, onBindStore: function(store, initial) {
-  var me = this;
-  if (me.fromField) 
-  {
-    me.fromField.store.removeAll();
-    me.toField.store.removeAll();
-    if (store.getCount()) 
-    {
-      me.populateFromStore(store);
-    } else {
-      me.store.on('load', me.populateFromStore, me);
-    }
-  }
-}, populateFromStore: function(store) {
-  var fromStore = this.fromField.store;
-  this.fromStorePopulated = true;
-  fromStore.add(store.getRange());
-  fromStore.fireEvent('load', fromStore);
-}, onEnable: function() {
-  var me = this;
-  me.callParent();
-  me.fromField.enable();
-  me.toField.enable();
-  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
-  btn.enable();
-});
-}, onDisable: function() {
-  var me = this;
-  me.callParent();
-  me.fromField.disable();
-  me.toField.disable();
-  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
-  btn.disable();
-});
-}, onDestroy: function() {
-  this.bindStore(null);
-  this.callParent();
-}}, 0, ["itemselectorvede"], ["itemselectorvede", "component", "multiselectfield", "container", "multiselect", "fieldcontainer", "box"], {"itemselectorvede": true, "component": true, "multiselectfield": true, "container": true, "multiselect": true, "fieldcontainer": true, "box": true}, ["widget.itemselectorvede"], 0, [Vede.view.form, 'ItemSelector'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.RestrictionEnzymesManagerWindow', Ext.window.Window, {height: 474, width: 450, layout: {align: "stretch", type: "vbox"}, title: "Restriction Enzyme Manager", resizable: false, draggable: false, modal: true, cls: "restrictionEnzymeManager", initComponent: function() {
-  var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
-  var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], sorters: [{property: "name", direction: "ASC"}]});
-  var me = this;
-  Ext.applyIf(me, {items: [{xtype: "container", layout: {align: "middle", type: "hbox"}, items: [{xtype: "container", layout: {align: "stretch", type: "vbox"}, width: 180, items: [{xtype: "combobox", cls: "enzymeGroupSelector", store: groupStore, displayField: "name", fieldLabel: "Enzyme Groups", labelAlign: "top", queryMode: "local", maxWidth: 150, editable: false}, {xtype: "textfield", cls: "enzymeSearchField", fieldLabel: "Label", hideLabel: true, emptyText: "Search for Enzyme", maxWidth: 150, enableKeyEvents: true}]}, {xtype: "combobox", cls: "userEnzymeGroupSelector", displayField: "name", fieldLabel: "User Enzyme Groups", labelAlign: "top", queryMode: "local", width: 150, editable: false}]}, {xtype: "container", layout: {align: "stretch", type: "hbox"}, flex: 1, items: [{xtype: "itemselectorvede", cls: "enzymeSelector", store: enzymeListStore, displayField: "name", width: 330, buttons: ["addAll", "add", "remove", "removeAll"], buttonsText: {add: "Add", addAll: "Add All", remove: "Remove", removeAll: "Remove All"}, doCopy: true}, {xtype: "container", layout: {type: "vbox", align: "stretch", defaultMargins: 5}, items: [{xtype: "button", text: "New Group", cls: "newGroupButton"}, {xtype: "button", text: "Copy Group", cls: "copyGroupButton"}, {xtype: "button", text: "Delete Group", cls: "deleteGroupButton"}, {xtype: "button", text: "Make Active", cls: "makeActiveButton"}]}]}, {xtype: "container", layout: {type: "hbox", defaultMargins: 10, pack: "center"}, items: [{xtype: "button", cls: "restrictionEnzymesManagerSaveButton", width: 69, text: "Save"}, {xtype: "button", cls: "restrictionEnzymesManagerCancelButton", width: 69, text: "Cancel"}]}]});
-  me.callParent(arguments);
-}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'RestrictionEnzymesManagerWindow'], 0));
-;
-
-(Ext.cmd.derive('Vede.controller.RestrictionEnzymeController', Ext.app.Controller, {GroupManager: null, UserManager: null, managerWindow: null, enzymeSelector: null, userEnzymeGroupSelector: null, refs: [{ref: "deleteGroupBtn", selector: "button[cls=deleteGroupButton]"}, {ref: "makeActiveBtn", selector: "button[cls=makeActiveButton]"}, {ref: "enzymeGroupSelector", selector: "combobox[cls=enzymeGroupSelector]"}, {ref: "userEnzymeGroupSelector", selector: "combobox[cls=userEnzymeGroupSelector]"}, {ref: "enzymeSelector", selector: "itemselectorvede[cls=enzymeSelector]"}], init: function() {
-  this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-  this.UserManager = Teselagen.manager.UserManager;
-  this.control({"combobox[cls=enzymeGroupSelector]": {change: this.onEnzymeGroupChange}, "combobox[cls=userEnzymeGroupSelector]": {change: this.onUserEnzymeGroupChange}, "textfield[cls=enzymeSearchField]": {keyup: this.onEnzymeSearchFieldKeyup}, "itemselectorvede[cls=enzymeSelector]": {change: this.onEnzymeListChange}, "button[cls=restrictionEnzymesManagerSaveButton]": {click: this.onSaveButtonClick}, "button[cls=restrictionEnzymesManagerCancelButton]": {click: this.onCancelButtonClick}, "button[cls=newGroupButton]": {click: this.onNewGroupButtonClick}, "button[cls=copyGroupButton]": {click: this.onCopyGroupButtonClick}, "button[cls=deleteGroupButton]": {click: this.onDeleteGroupButtonClick}, "button[cls=makeActiveButton]": {click: this.onMakeActiveButtonClick}, "window[cls=restrictionEnzymeManager]": {close: this.onWindowClose}});
-  var listeners = {RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened, scope: this};
-  listeners[Teselagen.event.AuthenticationEvent.LOGGED_IN] = this.onLoggedIn;
-  this.application.on(listeners);
-}, onEnzymeManagerOpened: function(manager) {
-  var me = this;
-  this.managerWindow = manager;
-  this.enzymeSelector = this.getEnzymeSelector();
-  var groupSelector = this.getEnzymeGroupSelector();
-  this.UserManager.loadUser(function(pSuccess) {
-  if (pSuccess) 
-  {
-    if (!me.GroupManager.getIsInitialized()) 
-    {
-      me.GroupManager.initialize();
-    }
-    me.GroupManager.setActiveEnzymesChanged(false);
-    Ext.each(me.GroupManager.getGroupNames(), function(name) {
-  groupSelector.store.add({name: name});
-});
-    groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
-    var startGroup = me.GroupManager.groupByName(groupSelector.getValue());
-    var groupArray = [];
-    Ext.each(startGroup.getEnzymes(), function(enzyme) {
-  groupArray.push({name: enzyme.getName()});
-});
-    me.enzymeSelector.store.loadData(groupArray);
-    me.enzymeSelector.bindStore(me.enzymeSelector.store);
-    me.GroupManager.initActiveUserGroup();
-    me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
-    me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
-    me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
-  } else {
-    console.error("Error launching Restriction Enzyme Manager");
-  }
-});
-}, onLoggedIn: function() {
-  this.GroupManager.initActiveUserGroup();
-}, onEnzymeGroupChange: function(combobox) {
-  var newGroup = this.GroupManager.groupByName(combobox.getValue());
-  var enzymeArray = [];
-  Ext.each(newGroup.getEnzymes(), function(enzyme) {
-  enzymeArray.push({name: enzyme.getName()});
-});
-  this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
-  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
-}, onUserEnzymeGroupChange: function(combobox) {
-  var groupName = combobox.getValue();
-  var record = combobox.findRecordByValue(groupName);
-  this.enzymeSelector.toField.bindStore(record.userRestrictionEnzymes());
-  if (groupName === this.GroupManager.ACTIVE) 
-  {
-    this.getDeleteGroupBtn().disable();
-    this.getMakeActiveBtn().disable();
-  } else {
-    this.getDeleteGroupBtn().enable();
-    this.getMakeActiveBtn().enable();
-  }
-}, onEnzymeSearchFieldKeyup: function(field) {
-  this.enzymeSelector.fromField.store.filterBy(function(rec) {
-  if (rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) 
-  {
-    return true;
-  }
-});
-  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
-}, onEnzymeListChange: function() {
-  this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
-  if (this.userEnzymeGroupSelector.getValue() === this.GroupManager.ACTIVE) 
-  {
-    this.GroupManager.setActiveEnzymesChanged(true);
-  }
-}, onCopyGroupButtonClick: function() {
-  this.groupPrompt(false);
-}, onDeleteGroupButtonClick: function() {
-  var name = this.userEnzymeGroupSelector.getValue();
-  this.GroupManager.removeUserGroup(name);
-  this.userEnzymeGroupSelector.setValue(this.GroupManager.ACTIVE);
-}, onMakeActiveButtonClick: function() {
-  this.GroupManager.makeActive(this.userEnzymeGroupSelector.getValue());
-}, onSaveButtonClick: function() {
-  this.UserManager.update(function(pSuccess) {
-  if (!pSuccess) 
-  {
-    console.warn("Unable to save restriction enzymes");
-  }
-});
-}, onCancelButtonClick: function() {
-  this.managerWindow.close();
-}, onNewGroupButtonClick: function() {
-  this.groupPrompt(true);
-}, groupPrompt: function(pIsNew) {
-  return Ext.MessageBox.prompt("Group Name", "Please enter a unique group name:", this.onGroupPrompt.bind(this, pIsNew), this);
-}, onGroupPrompt: function(pIsNew, pBtnId, pText) {
-  if (pBtnId === "ok") 
-  {
-    if (!pText || this.userEnzymeGroupSelector.findRecordByValue(pText)) 
-    {
-      var msgbox = this.groupPrompt();
-      Ext.defer(function() {
-  msgbox.zIndexManager.bringToFront(msgbox);
-}, 100);
-    } else {
-      if (pIsNew) 
-      {
-        this.GroupManager.createUserGroup(pText, []);
-      } else {
-        this.GroupManager.copyUserGroup(this.userEnzymeGroupSelector.getValue(), pText);
-      }
-      this.userEnzymeGroupSelector.setValue(pText);
-    }
-  }
-}, onWindowClose: function() {
-  if (this.GroupManager.getActiveEnzymesChanged()) 
-  {
-    this.GroupManager.changeActiveGroup();
-    this.application.fireEvent("ActiveEnzymesChanged");
-  }
-}}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'RestrictionEnzymeController'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.digest.Ladder', Ext.Base, {config: {ladderTypes: null, bandSizes: null}, statics: {BP_LADDER_BANDS: [20000, 10000, 7000, 5000, 4000, 3000, 2000, 1500, 1000, 700, 500, 400, 300, 200, 75], GR_HIGH_RANGE_LADDER_BANDS: [48502, 24508, 20555, 17000, 15258, 13825, 12119, 10171], GR_1KB_LADDER_BANDS: [10000, 8000, 6000, 5000, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 750, 500, 250], GR_1KB_PLUS_LADDER_BANDS: [20000, 10000, 7000, 5000, 4000, 3000, 2000, 1500, 1000, 700, 500, 400, 300, 200, 75], GR_100BP_LADDER_BANDS: [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100], GR_100BP_PLUS_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100], GR_50BP_LADDER_BANDS: [1000, 900, 800, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50], GR_LOW_RANGE_LADDER_BANDS: [700, 500, 400, 300, 200, 150, 100, 75, 50, 25], GR_ULTRA_LOW_RANGE_LADDER_BANDS: [300, 200, 150, 100, 75, 50, 35, 25, 20, 15, 10], PBR322_LADDER_BANDS: [587, 540, 502, 458, 434, 267, 234, 213, 192, 184, 124, 123, 104, 89, 90], LAMBDA_LADDER_BANDS: [21226, 5148, 4973, 4268, 3530, 2027, 1904, 1584, 1375, 947, 831, 564], KB_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]}, fields: [{name: "bandSizes", type: "auto", defaultValue: null}], constructor: function(inData) {
@@ -70301,31 +70061,21 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.dnaSequence = dnaSequence;
     dnaSequence.setCircular(true);
   }
-}, filterEnzymes: function(searchCombo, groupSelector) {
-  var currentGroup = this.GroupManager.groupByName(groupSelector.getValue());
-  var enzymeArray = [];
-  var fromField = this.enzymeListSelector.fromField;
-  var fromStore = fromField.getStore();
-  var toField = this.enzymeListSelector.toField;
-  Ext.each(currentGroup.getEnzymes(), function(enzyme) {
-  enzymeArray.push({name: enzyme.getName()});
-});
-  fromStore.loadData(enzymeArray);
-  toField.bindStore(this.GroupManager.getActiveUserGroup().userRestrictionEnzymes());
+}, filterEnzymes: function(searchTerm, store) {
   var searchPhrase = ".";
-  if (searchCombo.getValue() !== null) 
+  if (searchTerm !== null) 
   {
-    searchPhrase = searchCombo.getValue();
+    searchPhrase = searchTerm;
   }
   try {
     var regEx = new RegExp(searchPhrase, "i");
   }  catch (err) {
   regEx = null;
 }
-  fromStore.filterBy(function(enzyme) {
+  store.filterBy(function(enzyme) {
   return enzyme.get("name").search(regEx) !== -1;
 }, this);
-  fromStore.sort("name", "ASC");
+  store.sort("name", "ASC");
 }, updateLadderLane: function(ladder) {
   this.selectedLadder = this.Ladder.ladderTypes.get(ladder);
   this.drawGel();
@@ -70374,14 +70124,13 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SimulateDigestionManager'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.VectorEditor.SimulateDigestionController', Ext.app.Controller, {GroupManager: null, DNATools: null, digestManager: null, managerWindow: null, digestPanel: null, dnaSequence: null, groupSelector: null, enzymeListSelector: null, UserManager: null, init: function() {
+(Ext.cmd.derive('Vede.controller.VectorEditor.SimulateDigestionController', Ext.app.Controller, {GroupManager: null, DNATools: null, digestManager: null, managerWindow: null, digestPanel: null, dnaSequence: null, groupSelector: null, enzymeListSelector: null, addAllBtn: null, init: function() {
   this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-  this.UserManager = Teselagen.manager.UserManager;
   this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
   this.DNATools = Teselagen.bio.sequence.DNATools;
   this.filterTaskRunner = new Ext.util.TaskRunner();
   this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
-  this.control({"#enzymeGroupSelector-digest": {change: this.onEnzymeGroupSelected}, "#ladderSelector": {change: this.updateLadderLane}, "#enzymeGroupSelector-search": {change: this.searchEnzymes}, "#drawingSurface": {resize: this.onGelResize}, "#enzymeListSelector-digest": {change: this.onEnzymeListChange}, "button[cls=simulateDigestionSaveButton]": {click: this.onSaveButtonClick}, "button[cls=simulateDigestionCancelButton]": {click: this.onCancelButtonClick}});
+  this.control({"#enzymeGroupSelector-digest": {change: this.onEnzymeGroupSelected}, "#ladderSelector": {change: this.updateLadderLane}, "#enzymeGroupSelector-search": {change: this.searchEnzymes}, "#drawingSurface": {resize: this.onGelResize}, "#enzymeListSelector-digest": {change: this.onEnzymeListChange}, "button[cls=simulateDigestionSaveButton]": {click: this.onSaveButtonClick}, "button[cls=simulateDigestionCancelButton]": {click: this.onCancelButtonClick}, "window[cls=simulateDigestion]": {close: this.onWindowClose}});
   this.application.on({SequenceManagerChanged: this.getSequenceManagerData, SimulateDigestionWindowOpened: this.onSimulateDigestionOpened, scope: this});
 }, getSequenceManagerData: function(pSequenceManager) {
   if (pSequenceManager.getSequence().seqString()) 
@@ -70394,37 +70143,27 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onSimulateDigestionOpened: function(manager) {
   var me = this;
   this.managerWindow = manager;
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+  this.groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+  this.searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
   var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
   this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
-  this.digestManager.digestPanel = this.digestPanel;
   this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
+  this.addAllBtn = this.enzymeListSelector.down("button[cls=enzymeSelector-btn]");
+  this.digestManager.digestPanel = this.digestPanel;
   this.digestManager.enzymeListSelector = this.enzymeListSelector;
-  this.UserManager.loadUser(function(pSuccess) {
-  if (pSuccess) 
+  this.enzymeListSelector.toField.bindStore(this.GroupManager.getActiveUserGroup().userRestrictionEnzymes());
+  if (!me.GroupManager.getIsInitialized()) 
   {
-    if (!me.GroupManager.getIsInitialized()) 
-    {
-      me.GroupManager.initialize();
-    }
-    Ext.each(me.GroupManager.getGroupNames(), function(name) {
-  groupSelector.store.add({"name": name});
-});
-    me.digestManager.filterEnzymes(searchCombobox, groupSelector);
-    me.updateLadderLane(ladderSelector);
-    me.digestManager.drawGel();
-  } else {
-    console.error("Error launching Simulate Digestion");
+    me.GroupManager.initialize();
   }
+  Ext.each(me.GroupManager.getGroupNames(), function(name) {
+  me.groupSelector.store.add({"name": name});
 });
+  this.onEnzymeGroupSelected();
+  me.updateLadderLane(ladderSelector);
+  this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
 }, onSaveButtonClick: function() {
-  this.UserManager.update(function(pSuccess) {
-  if (!pSuccess) 
-  {
-    console.warn("Unable to save restriction enzymes");
-  }
-});
+  this.GroupManager.saveUserGroups();
 }, onCancelButtonClick: function() {
   this.managerWindow.close();
 }, onGelResize: function(drawingSurface, width, height) {
@@ -70434,18 +70173,33 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   this.digestManager.drawGel(drawingSurface, width, height);
 }, onEnzymeGroupSelected: function() {
-  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-  this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+  var currentGroup = this.GroupManager.groupByName(this.groupSelector.getValue());
+  var enzymeArray = [];
+  var fromStore = this.enzymeListSelector.fromField.getStore();
+  Ext.each(currentGroup.getEnzymes(), function(enzyme) {
+  enzymeArray.push({name: enzyme.getName()});
+});
+  fromStore.loadData(enzymeArray);
+  fromStore.sort("name", "ASC");
+  this.setAddAllBtnState();
 }, searchEnzymes: function() {
-  var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-  var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-  this.digestManager.filterEnzymes(searchCombobox, groupSelector);
+  this.digestManager.filterEnzymes(this.searchCombobox.getValue(), this.enzymeListSelector.fromField.getStore());
 }, onEnzymeListChange: function() {
-  this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
-  this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
+  this.digestManager.updateSampleLane(this.enzymeListSelector.toField.getStore());
+  this.enzymeListSelector.toField.getStore().sort("name", "ASC");
+  this.GroupManager.setActiveEnzymesChanged(true);
 }, updateLadderLane: function(combobox) {
   this.digestManager.updateLadderLane(combobox.getValue());
+}, onWindowClose: function() {
+  this.GroupManager.loadUserGroups();
+}, setAddAllBtnState: function() {
+  var count = this.enzymeListSelector.fromField.getStore().getCount();
+  if (count > 50) 
+  {
+    this.addAllBtn.disable();
+  } else {
+    this.addAllBtn.enable();
+  }
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'SimulateDigestionController'], 0));
 ;
 
@@ -71008,6 +70762,335 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.isPieSelectionLayerRightClicked = false;
   this.pieContextMenu.hide();
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'PieContextMenuController'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.form.ItemSelector', Ext.ux.form.MultiSelect, {hideNavIcons: false, buttons: ['top', 'up', 'add', 'remove', 'down', 'bottom'], buttonsText: {top: "Move to Top", up: "Move Up", add: "Add to Selected", remove: "Remove from Selected", down: "Move Down", bottom: "Move to Bottom"}, doCopy: false, layout: {type: 'hbox', align: 'stretch'}, initComponent: function() {
+  var me = this;
+  if (me.ddReorder) 
+  {
+    me.ddGroup = me.id + '-dd';
+  }
+  me.callParent();
+  me.bindStore(me.store);
+}, createList: function(title) {
+  var me = this;
+  return Ext.create('Ext.ux.form.MultiSelect', {submitValue: false, getSubmitData: function() {
+  return null;
+}, getModelData: function() {
+  return null;
+}, flex: 1, dragGroup: me.ddGroup, dropGroup: me.ddGroup, title: title, store: {model: me.store.model, data: []}, displayField: me.displayField, valueField: me.valueField, disabled: me.disabled, listeners: {boundList: {scope: me, itemdblclick: me.onItemDblClick, drop: me.syncValue}}});
+}, setupItems: function() {
+  var me = this;
+  me.fromField = me.createList(me.fromTitle);
+  me.toField = me.createList(me.toTitle);
+  return [me.fromField, {xtype: 'container', margins: '0 4', layout: {type: 'vbox', pack: 'center'}, items: me.createButtons()}, me.toField];
+}, createButtons: function() {
+  var me = this, buttons = [];
+  if (!me.hideNavIcons) 
+  {
+    Ext.Array.forEach(me.buttons, function(name) {
+  buttons.push({xtype: 'button', tooltip: me.buttonsText[name], handler: me['on' + Ext.String.capitalize(name) + 'BtnClick'], cls: 'enzymeSelector-btn', iconCls: 'enzymeSelector-btn-' + name, navBtn: true, scope: me, margin: '4 0 0 0'});
+});
+  }
+  return buttons;
+}, getSelections: function(list) {
+  var store = list.getStore();
+  return Ext.Array.sort(list.getSelectionModel().getSelection(), function(a, b) {
+  a = store.indexOf(a);
+  b = store.indexOf(b);
+  if (a < b) 
+  {
+    return -1;
+  } else if (a > b) 
+  {
+    return 1;
+  }
+  return 0;
+});
+}, onTopBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
+  store.suspendEvents();
+  store.remove(selected, true);
+  store.insert(0, selected);
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onBottomBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list);
+  store.suspendEvents();
+  store.remove(selected, true);
+  store.add(selected);
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onUpBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = 0, len = selected.length, index = 0;
+  store.suspendEvents();
+  for (; i < len; ++i , index++) 
+    {
+      rec = selected[i];
+      index = Math.max(index, store.indexOf(rec) - 1);
+      store.remove(rec, true);
+      store.insert(index, rec);
+    }
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onDownBtnClick: function() {
+  var list = this.toField.boundList, store = list.getStore(), selected = this.getSelections(list), rec, i = selected.length - 1, index = store.getCount() - 1;
+  store.suspendEvents();
+  for (; i > -1; --i , index--) 
+    {
+      rec = selected[i];
+      index = Math.min(index, store.indexOf(rec) + 1);
+      store.remove(rec, true);
+      store.insert(index, rec);
+    }
+  store.resumeEvents();
+  list.refresh();
+  this.syncValue();
+  list.getSelectionModel().select(selected);
+}, onAddBtnClick: function() {
+  var me = this, selected = me.getSelections(me.fromField.boundList);
+  me.moveRec(true, selected);
+  me.toField.boundList.getSelectionModel().select(selected);
+}, onAddAllBtnClick: function() {
+  var recs = this.fromField.boundList.getStore().getRange();
+  var toStore = this.toField.boundList.getStore();
+  var recsUnique = [];
+  for (var i = 0; i < recs.length; i++) 
+    {
+      if (toStore.findExact(this.displayField, recs[i].get(this.displayField)) === -1) 
+      {
+        recsUnique.push(recs[i]);
+      }
+    }
+  this.moveRec(true, recsUnique);
+}, onRemoveBtnClick: function() {
+  var me = this, selected = me.getSelections(me.toField.boundList);
+  me.moveRec(false, selected);
+  me.fromField.boundList.getSelectionModel().select(selected);
+}, onRemoveAllBtnClick: function() {
+  var recs = this.toField.boundList.getStore().getRange();
+  this.moveRec(false, recs);
+}, moveRec: function(add, recs) {
+  var me = this, fromField = me.fromField, toField = me.toField, fromStore = add ? fromField.store : toField.store, toStore = add ? toField.store : fromField.store;
+  fromStore.suspendEvents();
+  toStore.suspendEvents();
+  if (!me.doCopy) 
+  {
+    fromStore.remove(recs);
+    toStore.add(recs);
+  } else {
+    if (add) 
+    {
+      toStore.add(recs);
+    } else {
+      fromStore.remove(recs);
+    }
+  }
+  fromStore.resumeEvents();
+  toStore.resumeEvents();
+  fromField.boundList.refresh();
+  toField.boundList.refresh();
+  me.syncValue();
+}, syncValue: function() {
+  var me = this;
+  me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
+}, onItemDblClick: function(view, rec) {
+  this.moveRec(view === this.fromField.boundList, rec);
+}, setValue: function(value) {
+  var me = this, fromField = me.fromField, toField = me.toField, fromStore = fromField.store, toStore = toField.store, selected;
+  if (!me.fromStorePopulated) 
+  {
+    me.fromField.store.on({load: Ext.Function.bind(me.setValue, me, [value]), single: true});
+    return;
+  }
+  value = me.setupValue(value);
+  me.mixins.field.setValue.call(me, value);
+  selected = me.getRecordsForValue(value);
+  fromStore.suspendEvents();
+  toStore.suspendEvents();
+  fromStore.removeAll();
+  toStore.removeAll();
+  me.populateFromStore(me.store);
+  Ext.Array.forEach(selected, function(rec) {
+  if (fromStore.indexOf(rec) > -1) 
+  {
+    fromStore.remove(rec);
+  }
+  toStore.add(rec);
+});
+  fromStore.resumeEvents();
+  toStore.resumeEvents();
+  Ext.suspendLayouts();
+  fromField.boundList.refresh();
+  toField.boundList.refresh();
+  Ext.resumeLayouts(true);
+}, onBindStore: function(store, initial) {
+  var me = this;
+  if (me.fromField) 
+  {
+    me.fromField.store.removeAll();
+    me.toField.store.removeAll();
+    if (store.getCount()) 
+    {
+      me.populateFromStore(store);
+    } else {
+      me.store.on('load', me.populateFromStore, me);
+    }
+  }
+}, populateFromStore: function(store) {
+  var fromStore = this.fromField.store;
+  this.fromStorePopulated = true;
+  fromStore.add(store.getRange());
+  fromStore.fireEvent('load', fromStore);
+}, onEnable: function() {
+  var me = this;
+  me.callParent();
+  me.fromField.enable();
+  me.toField.enable();
+  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
+  btn.enable();
+});
+}, onDisable: function() {
+  var me = this;
+  me.callParent();
+  me.fromField.disable();
+  me.toField.disable();
+  Ext.Array.forEach(me.query('[navBtn]'), function(btn) {
+  btn.disable();
+});
+}, onDestroy: function() {
+  this.bindStore(null);
+  this.callParent();
+}}, 0, ["itemselectorvede"], ["itemselectorvede", "component", "multiselectfield", "container", "multiselect", "fieldcontainer", "box"], {"itemselectorvede": true, "component": true, "multiselectfield": true, "container": true, "multiselect": true, "fieldcontainer": true, "box": true}, ["widget.itemselectorvede"], 0, [Vede.view.form, 'ItemSelector'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.ve.RestrictionEnzymesManagerWindow', Ext.window.Window, {height: 474, width: 450, layout: {align: "stretch", type: "vbox"}, title: "Restriction Enzyme Manager", resizable: false, draggable: false, modal: true, cls: "restrictionEnzymeManager", initComponent: function() {
+  var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
+  var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], sorters: [{property: "name", direction: "ASC"}]});
+  var me = this;
+  Ext.applyIf(me, {items: [{xtype: "container", layout: {align: "middle", type: "hbox"}, items: [{xtype: "container", layout: {align: "stretch", type: "vbox"}, width: 180, items: [{xtype: "combobox", cls: "enzymeGroupSelector", store: groupStore, displayField: "name", fieldLabel: "Enzyme Groups", labelAlign: "top", queryMode: "local", maxWidth: 150, editable: false}, {xtype: "textfield", cls: "enzymeSearchField", fieldLabel: "Label", hideLabel: true, emptyText: "Search for Enzyme", maxWidth: 150, enableKeyEvents: true}]}, {xtype: "combobox", cls: "userEnzymeGroupSelector", displayField: "name", fieldLabel: "User Enzyme Groups", labelAlign: "top", queryMode: "local", width: 150, editable: false}]}, {xtype: "container", layout: {align: "stretch", type: "hbox"}, flex: 1, items: [{xtype: "itemselectorvede", cls: "enzymeSelector", store: enzymeListStore, displayField: "name", width: 330, buttons: ["addAll", "add", "remove", "removeAll"], buttonsText: {add: "Add", addAll: "Add All", remove: "Remove", removeAll: "Remove All"}, doCopy: true}, {xtype: "container", layout: {type: "vbox", align: "stretch", defaultMargins: 5}, items: [{xtype: "button", text: "New Group", cls: "newGroupButton"}, {xtype: "button", text: "Copy Group", cls: "copyGroupButton"}, {xtype: "button", text: "Delete Group", cls: "deleteGroupButton"}, {xtype: "button", text: "Make Active", cls: "makeActiveButton"}]}]}, {xtype: "container", layout: {type: "hbox", defaultMargins: 10, pack: "center"}, items: [{xtype: "button", cls: "restrictionEnzymesManagerSaveButton", width: 69, text: "Save"}, {xtype: "button", cls: "restrictionEnzymesManagerCancelButton", width: 69, text: "Cancel"}]}]});
+  me.callParent(arguments);
+}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'RestrictionEnzymesManagerWindow'], 0));
+;
+
+(Ext.cmd.derive('Vede.controller.VectorEditor.RestrictionEnzymeController', Ext.app.Controller, {GroupManager: null, Logger: null, UserManager: null, managerWindow: null, enzymeSelector: null, userEnzymeGroupSelector: null, refs: [{ref: "deleteGroupBtn", selector: "button[cls=deleteGroupButton]"}, {ref: "makeActiveBtn", selector: "button[cls=makeActiveButton]"}, {ref: "enzymeGroupSelector", selector: "combobox[cls=enzymeGroupSelector]"}, {ref: "userEnzymeGroupSelector", selector: "combobox[cls=userEnzymeGroupSelector]"}, {ref: "enzymeSelector", selector: "itemselectorvede[cls=enzymeSelector]"}], init: function() {
+  this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+  this.Logger = Teselagen.utils.Logger;
+  this.UserManager = Teselagen.manager.UserManager;
+  this.control({"combobox[cls=enzymeGroupSelector]": {change: this.onEnzymeGroupChange}, "combobox[cls=userEnzymeGroupSelector]": {change: this.onUserEnzymeGroupChange}, "textfield[cls=enzymeSearchField]": {keyup: this.onEnzymeSearchFieldKeyup}, "itemselectorvede[cls=enzymeSelector]": {change: this.onEnzymeListChange}, "button[cls=restrictionEnzymesManagerSaveButton]": {click: this.onSaveButtonClick}, "button[cls=restrictionEnzymesManagerCancelButton]": {click: this.onCancelButtonClick}, "button[cls=newGroupButton]": {click: this.onNewGroupButtonClick}, "button[cls=copyGroupButton]": {click: this.onCopyGroupButtonClick}, "button[cls=deleteGroupButton]": {click: this.onDeleteGroupButtonClick}, "button[cls=makeActiveButton]": {click: this.onMakeActiveButtonClick}, "window[cls=restrictionEnzymeManager]": {close: this.onWindowClose}});
+  var listeners = {RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened, scope: this};
+  listeners[Teselagen.event.AuthenticationEvent.LOGGED_IN] = this.onLoggedIn;
+  this.application.on(listeners);
+}, onEnzymeManagerOpened: function(manager) {
+  var me = this;
+  this.managerWindow = manager;
+  this.enzymeSelector = this.getEnzymeSelector();
+  var groupSelector = this.getEnzymeGroupSelector();
+  if (!me.GroupManager.getIsInitialized()) 
+  {
+    me.GroupManager.initialize();
+  }
+  Ext.each(me.GroupManager.getGroupNames(), function(name) {
+  groupSelector.store.add({name: name});
+});
+  groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
+  var startGroup = me.GroupManager.groupByName(groupSelector.getValue());
+  var groupArray = [];
+  Ext.each(startGroup.getEnzymes(), function(enzyme) {
+  groupArray.push({name: enzyme.getName()});
+});
+  me.enzymeSelector.store.loadData(groupArray);
+  me.enzymeSelector.bindStore(me.enzymeSelector.store);
+  me.GroupManager.initActiveUserGroup();
+  me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
+  me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
+  me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
+}, onLoggedIn: function() {
+  this.GroupManager.initActiveUserGroup();
+}, onEnzymeGroupChange: function(combobox) {
+  var newGroup = this.GroupManager.groupByName(combobox.getValue());
+  var enzymeArray = [];
+  Ext.each(newGroup.getEnzymes(), function(enzyme) {
+  enzymeArray.push({name: enzyme.getName()});
+});
+  var fromStore = this.enzymeSelector.fromField.getStore();
+  fromStore.loadData(enzymeArray);
+  fromStore.sort("name", "ASC");
+}, onUserEnzymeGroupChange: function(combobox) {
+  var groupName = combobox.getValue();
+  var record = combobox.findRecordByValue(groupName);
+  this.enzymeSelector.toField.bindStore(record.userRestrictionEnzymes());
+  if (groupName === this.GroupManager.ACTIVE) 
+  {
+    this.getDeleteGroupBtn().disable();
+    this.getMakeActiveBtn().disable();
+  } else {
+    this.getDeleteGroupBtn().enable();
+    this.getMakeActiveBtn().enable();
+  }
+}, onEnzymeSearchFieldKeyup: function(field) {
+  this.enzymeSelector.fromField.store.filterBy(function(rec) {
+  if (rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) 
+  {
+    return true;
+  }
+});
+  this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+}, onEnzymeListChange: function() {
+  this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
+  if (this.userEnzymeGroupSelector.getValue() === this.GroupManager.ACTIVE) 
+  {
+    this.GroupManager.setActiveEnzymesChanged(true);
+  }
+}, onCopyGroupButtonClick: function() {
+  this.groupPrompt(false);
+}, onDeleteGroupButtonClick: function() {
+  var name = this.userEnzymeGroupSelector.getValue();
+  this.GroupManager.removeUserGroup(name);
+  this.userEnzymeGroupSelector.setValue(this.GroupManager.ACTIVE);
+}, onMakeActiveButtonClick: function() {
+  this.GroupManager.makeActive(this.userEnzymeGroupSelector.getValue());
+}, onSaveButtonClick: function() {
+  this.GroupManager.saveUserGroups();
+}, onCancelButtonClick: function() {
+  this.managerWindow.close();
+}, onNewGroupButtonClick: function() {
+  this.groupPrompt(true);
+}, groupPrompt: function(pIsNew) {
+  return Ext.MessageBox.prompt("Group Name", "Please enter a unique group name:", this.onGroupPrompt.bind(this, pIsNew), this);
+}, onGroupPrompt: function(pIsNew, pBtnId, pText) {
+  if (pBtnId === "ok") 
+  {
+    var foundRec = this.userEnzymeGroupSelector.findRecordByValue(pText);
+    if (!pText || foundRec) 
+    {
+      if (foundRec) 
+      {
+        this.Logger.notifyWarn(Ext.String.format("The group '{0}' already exists.", pText));
+      }
+      var msgbox = this.groupPrompt();
+      Ext.defer(function() {
+  msgbox.zIndexManager.bringToFront(msgbox);
+}, 100);
+    } else {
+      if (pIsNew) 
+      {
+        this.GroupManager.createUserGroup(pText, []);
+      } else {
+        this.GroupManager.copyUserGroup(this.userEnzymeGroupSelector.getValue(), pText);
+      }
+      this.userEnzymeGroupSelector.setValue(pText);
+    }
+  }
+}, onWindowClose: function() {
+  this.GroupManager.loadUserGroups();
+}}, 0, 0, 0, 0, 0, 0, [Vede.controller.VectorEditor, 'RestrictionEnzymeController'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.event.SequenceManagerEvent', Ext.Base, {singleton: true, SEQUENCE_MANAGER_CHANGED: "SequenceManagerChanged", SEQUENCE_CHANGING: "SequenceChanging", SEQUENCE_CHANGED: "SequenceChanged", KIND_FEATURE_ADD: "FeatureAddSequenceProviderEvent", KIND_FEATURE_REMOVE: "FeatureRemoveSequenceProviderEvent", KIND_FEATURES_ADD: "FeaturesAddSequenceProviderEvent", KIND_FEATURES_REMOVE: "FeaturesRemoveSequenceProviderEvent", KIND_SEQUENCE_INSERT: "SequenceInsertSequenceProviderEvent", KIND_SEQUENCE_REMOVE: "SequenceRemoveSequenceProviderEvent", KIND_MANUAL_UPDATE: "ManualUpdate", KIND_SET_MEMENTO: "SetMemento", KIND_INITIALIZED: "SequenceInitialized"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SequenceManagerEvent'], 0));
@@ -71933,6 +72016,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onSaveAsWindowOKButtonClick: function() {
   var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
   var name = Ext.getCmp('saveAsWindowSequenceNameField').getValue();
+  name = Ext.String.trim(name);
   var selectedProjs = Ext.getCmp('saveAsWindowProjectsGrid').getSelectionModel().getSelection();
   if (selectedProjs.length < 1) 
   {
@@ -71948,10 +72032,15 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     Ext.getCmp('saveAsWindowSequenceNameField').setFieldStyle("border-color:red");
   } else {
-    var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
-    for (var i = 0; i < sequenceStore.data.items.length; i++) 
+    var project_id = selectedProj.internalId;
+    var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+    var sequencesNames = [];
+    project.sequences().load().each(function(sequence) {
+  sequencesNames.push(sequence.data.name);
+});
+    for (var j = 0; j < sequencesNames.length; j++) 
       {
-        if (name == sequenceStore.data.items[i].data.name && selectedProj.internalId == sequenceStore.data.items[i].data.project_id) 
+        if (sequencesNames[j] === name) 
         {
           alert('A sequence with the name "' + name + '" already exists in the project "' + selectedProj.data.name + '."\nPlease select another name.');
           return;
@@ -72547,8 +72636,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   deproject.set('name', text);
   deproject.save({callback: function() {
   Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | " + text);
-  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
-  parttext.animate({duration: 5000, to: {opacity: 0}});
+  toastr.options.onclick = null;
+  toastr.info("Design renamed");
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
   Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
 });
@@ -72703,6 +72792,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   j5runs.load({callback: function() {
   j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
   self.activeJ5Run = j5runs.getById(data.id);
+  for (var i = 0; i < Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem").length; i++) 
+    {
+      Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
+    }
   var assemblyMethod = self.activeJ5Run.get('assemblyMethod');
   var status = self.activeJ5Run.get('status');
   var startDate = new Date(self.activeJ5Run.get('date'));
@@ -73519,10 +73612,16 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (this.selectedPart && j5Part) 
   {
     var parentBins = this.DeviceDesignManager.getParentBins(this.activeProject, j5Part);
+    var partIndex;
+    var parentBin;
     this.deHighlight(j5Part);
+    this.skipPadOnRemovePart = true;
     if (parentBins.length > 1) 
     {
-      this.selectedPart.up('Bin').getBin().parts().remove(j5Part);
+      parentBin = this.selectedPart.up('Bin').getBin();
+      index = parentBin.parts().indexOf(j5Part);
+      parentBin.parts().remove(j5Part);
+      parentBin.parts().insert(index, Ext.create("Teselagen.models.Part"));
     } else {
       var rule;
       var involvedRules = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, j5Part);
@@ -73533,10 +73632,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
           rule.destroy();
           involvedRules = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, j5Part);
         }
+      index = parentBins[0].parts().indexOf(j5Part);
       parentBins[0].parts().remove(j5Part);
+      parentBins[0].parts().insert(index, Ext.create("Teselagen.models.Part"));
     }
     this.onfillBlankCells();
-    this.selectedPart = null;
   }
   Ext.resumeLayouts(true);
 }, onSelectBin: function(j5Bin) {
@@ -74045,7 +74145,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
   response = JSON.parse(response.responseText);
   var partLibrary = Ext.create('Teselagen.store.PartStore', {model: 'Teselagen.models.Part', data: response, proxy: {type: 'memory', reader: {type: 'json', root: 'parts'}}, autoLoad: true, sorters: [{property: 'name', direction: 'ASC'}]});
-  var selectWindow = Ext.create('Ext.window.Window', {title: 'Part Library', height: 400, width: 400, layout: 'fit', renderTo: currentTabEl, closeAction: 'close', modal: true, items: {xtype: 'grid', border: false, columns: {items: {text: "Name", dataIndex: "name"}, defaults: {flex: 1}}, store: partLibrary, listeners: {"itemclick": function(grid, part, item) {
+  var selectWindow = Ext.create('Ext.window.Window', {title: 'Part Library', height: 400, width: 400, layout: 'fit', closeAction: 'close', modal: true, items: {xtype: 'grid', border: false, columns: {items: {text: "Name", dataIndex: "name"}, defaults: {flex: 1}}, store: partLibrary, listeners: {"itemclick": function(grid, part, item) {
   Vede.application.fireEvent("validateDuplicatedPartName", part, part.get('name'), function() {
   var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject, self.selectedBinIndex);
   if (bin) 
@@ -74212,14 +74312,19 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
   var newName = nameField.getValue();
   var self = this;
+  this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
   Vede.application.fireEvent("validateDuplicatedPartName", this.selectedPart, newName, function() {
-  if (self.selectedPart.get("phantom") || self.DeviceDesignManager.getBinAssignment(self.activeProject, self.selectedPart) < 0) 
+  if (self.DeviceDesignManager.getBinAssignment(self.activeProject, self.selectedPart) < 0) 
   {
     self.selectedPart = Ext.create("Teselagen.models.Part");
     self.selectedPart.set("phantom", false);
     self.selectedPart.set("name", newName);
     self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
   } else {
+    if (self.selectedPart.get("phantom")) 
+    {
+      self.selectedPart.set("phantom", false);
+    }
     self.selectedPart.set("name", newName);
   }
 });
@@ -74361,6 +74466,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var newRule = newEugeneRuleDialog.down("form").getForm().getRecord();
   newEugeneRuleDialog.close();
   newRule.destroy();
+}, onEugeneRuleEdit: function() {
+  console.log('heyyyyy');
 }, onCompositionalOperatorSelect: function(box) {
   var operator = box.getValue();
   var ruleDialog = Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
@@ -74489,6 +74596,13 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     } else {
       linearPlasmidField.setValue(true);
     }
+    var allParts = this.DeviceDesignManager.getAllParts(this.activeProject, this.selectedPart);
+    var partsStore = [];
+    Ext.each(allParts, function(part) {
+  partsStore = partsStore.concat([part.get("name")]);
+});
+    var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
+    operand2Field.store = partsStore;
     this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
     var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
     if (selectedBin) 
@@ -74513,6 +74627,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.application.on("ClearPart", this.onClearPart, this);
   this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
   this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
+  this.application.on("EugeneRuleEdit", this.onEugeneRuleEdit, this);
   this.control({"textfield[cls='partNameField']": {keyup: this.onPartNameFieldChange}, "combobox[cls='forcedAssemblyComboBox']": {select: this.onPartAssemblyStrategyChange}, "radiofield[cls='circular_plasmid_radio']": {change: this.onPlasmidGeometryChange}, "button[cls='inspectorAddColumnBtn']": {click: this.onAddColumnButtonClick}, "button[cls='inspectorRemoveColumnBtn']": {click: this.onRemoveColumnButtonClick}, "gridpanel[cls='inspectorGrid']": {select: this.onGridBinSelect}, "button[cls='openPartLibraryBtn']": {click: this.onopenPartLibraryBtnClick}, "button[cls='deletePartBtn']": {click: this.onDeletePartBtnClick}, "button[cls='emptySequenceBtn']": {click: this.onEmptySequenceBtnClick}, "button[cls='addEugeneRuleBtn']": {click: this.onAddEugeneRuleBtnClick}, "button[cls='deleteEugeneRuleBtn']": {click: this.onDeleteEugeneRuleBtnClick}, "button[cls='submitNewEugeneRuleBtn']": {click: this.onSubmitNewEugeneRuleBtnClick}, "button[cls='cancelNewEugeneRuleBtn']": {click: this.onCancelNewEugeneRuleBtnClick}, "combobox[cls='compositionalOperatorCombobox']": {select: this.onCompositionalOperatorSelect}, "radio[cls='circular_plasmid_radio']": {change: this.onCircularPlasmidRadioChange}, "button[cls='changePartDefinitionBtn']": {click: this.onChangePartDefinitionBtnClick}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'InspectorController'], 0));
 ;
@@ -74640,7 +74755,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'J5ControlsUtils'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.j5Parameters', Ext.window.Window, {height: 620, maxHeight: 830, width: 845, maxWidth: 845, title: 'j5 Parameters', cls: 'j5Parameters_Window', autoScroll: true, modal: true, maximizable: false, resizable: false, initComponent: function() {
+(Ext.cmd.derive('Vede.view.de.j5Parameters', Ext.window.Window, {height: 620, maxHeight: 830, width: 845, maxWidth: 845, title: 'j5 Parameters', cls: 'j5Parameters_Window', autoScroll: true, modal: true, maximizable: false, resizable: true, initComponent: function() {
   var me = this;
   Ext.applyIf(me, {items: [{xtype: 'container', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'container', flex: 1, items: [{xtype: 'numberfield', cls: 'masterOligoNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Oligo Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'masterPlasmidNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Plasmid Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapBPsValue', padding: 3, fieldLabel: 'Gibson Overlap BPs (26)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMinTmValue', padding: 3, fieldLabel: 'Gibson Overlap Min Tm (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMaxTmValue', padding: 3, fieldLabel: 'Gibson Overlap Max Tm (70)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'maxOligoLengthBPsValue', padding: 3, fieldLabel: 'Maximum Num of Oligo BPs (110)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minFragmentSizeGibsonBPsValue', padding: 3, fieldLabel: 'Minimum Gibson Fragment Size BPs (250)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'goldenGateOverhangBPsValue', padding: 3, fieldLabel: 'Golden Gate Overhang BPs (4)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'textfield', cls: 'goldenGateRecognitionSeqValue', padding: 3, fieldLabel: 'Golden Gate Recognition Sequence (GGTCTC)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'textfield', cls: 'goldenGateTerminiExtraSeqValue', padding: 3, fieldLabel: 'Golden Gate Term Extra Seq (CACACCAGGTCTCA)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'numberfield', cls: 'maxIdentitiesGoldenGateOverhangsCompatibleValue', padding: 3, fieldLabel: 'Max Identities Golden Gate Overhangs (2)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'oligoSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Oligo Synthesis Cost Per BP (US) (0.1)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoPagePurificationCostPerPieceUSDValue', padding: 3, fieldLabel: 'Oligo Purification Cost Per Piece (US) (40)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoMaxLengthNoPagePurificationRequiredBPsValue', padding: 3, fieldLabel: 'Oligo Max Length No Page Purification (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minPCRProductBPsValue', padding: 3, fieldLabel: 'Minimum PCR Product BPs (100)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'directSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Cost Per BP (US) (0.39)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'directSynthesisMinCostPerPieceUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Min. Cost Per Piece (US) (159)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'combobox', cls: 'outputSequenceFormatValue', padding: 3, fieldLabel: 'Output Sequence Format (Genbank)', labelSeparator: ' ', labelWidth: 270, queryMode: 'local', store: ['Genbank', 'FASTA', 'jbei-seq', 'SBOLXML'], value: 'Genbank'}]}, {xtype: 'container', flex: 0.8, width: 370, items: [{xtype: 'numberfield', cls: 'primerGCClampValue', padding: 3, fieldLabel: 'Primer GC Clamp (2)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'primerMinSizeValue', padding: 3, fieldLabel: 'Primer Min Size (18)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSizeValue', padding: 3, fieldLabel: 'Primer Max Size (36)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMinTmValue', padding: 3, fieldLabel: 'Primer Min Tm (60)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxTmValue', padding: 3, fieldLabel: 'Primer Max Tm (70)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxDiffTmValue', padding: 3, fieldLabel: 'Primer Max Tm Diff (5)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfAnyThValue', padding: 3, fieldLabel: 'Primer Max Self Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfEndThValue', padding: 3, fieldLabel: 'Primer Max Self Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplAnyThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplEndThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'checkboxfield', cls: 'primerTmSantaluciaValue', padding: 3, fieldLabel: 'Primer Tm Santa Lucia (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'primerSaltCorrectionsValue', padding: 3, fieldLabel: 'Primer Salt Corrections (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'numberfield', cls: 'primerDnaConcValue', padding: 3, fieldLabel: 'Primer DNA Conc (250)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'mispriming3PrimeBoundaryBPToWarnIfHitValue', padding: 3, fieldLabel: 'MisPriming 3\' Boundary (4)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingMinTmValue', padding: 3, fieldLabel: 'MisPriming Min Tm (45)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingSaltConcValue', padding: 3, fieldLabel: 'MisPriming Salt Conc (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'misprimingOligoConcValue', padding: 3, fieldLabel: 'MisPriming Oligo Conc (2.5e-7)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 8, step: 1.0E-8, minValue: 0}, {xtype: 'checkboxfield', cls: 'suppressPurePrimersValue', padding: 3, fieldLabel: 'Suppress Pure Primers (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}]}]}, {xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'resetj5DefaultParamsBtn', x: 0, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Reset To Defaults</b>'}, {xtype: 'button', cls: 'resetj5ServerParamsBtn', x: 120, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Reset to Server Values</b>'}, {xtype: 'button', cls: 'j5ParamsCancelBtn', x: 640, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'j5ParamsOKBtn', x: 730, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>OK</b>'}]}]});
   me.callParent(arguments);
@@ -74669,18 +74784,37 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
     inspector.setActiveTab(2);
-    var store;
-    if (combinatorial) 
-    {
-      store = new Ext.data.ArrayStore({fields: ['assemblyMethod'], data: [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]});
-    } else {
-      store = new Ext.data.ArrayStore({fields: ['assemblyMethod'], data: [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]});
-    }
     var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
-    combobox.bindStore(store);
-    combobox.setValue(store.first());
+    if (!combobox.getValue()) 
+    {
+      self.loadAssemblyMethodSelector(combinatorial);
+    }
   }
 });
+}, loadAssemblyMethodSelector: function(combinatorial) {
+  var store;
+  var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
+  var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
+  if (combinatorial) 
+  {
+    store = new Ext.data.ArrayStore({fields: ['assemblyMethod'], data: [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]});
+  } else {
+    store = new Ext.data.ArrayStore({fields: ['assemblyMethod'], data: [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]});
+  }
+  combobox.bindStore(store);
+  combobox.setValue(store.first());
+}, onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
+  var self = this;
+  if (newTab.initialCls == "DeviceEditorTab") 
+  {
+    var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
+    if (!combobox.getValue()) 
+    {
+      Vede.application.fireEvent("checkj5Ready", function(combinatorial, j5ready) {
+  self.loadAssemblyMethodSelector(combinatorial);
+});
+    }
+  }
 }, onTabChange: function(j5AdvancedTab, newTab, oldTab) {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
@@ -74718,7 +74852,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onEditJ5ParamsBtnClick: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var currentTabEl = (currentTab.getEl());
-  this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
+  this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
   this.previousJ5ParameterData = this.j5Parameters.getData();
   this.populateJ5ParametersDialog();
 }, resetDefaultj5Params: function() {
@@ -74730,7 +74864,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("GetLastUpdatedUserFiles", ''), success: function(response) {
   self.j5ParamsWindow.setLoading(false);
   var r = JSON.parse(response.responseText).j5parameters;
-  self.j5Parameters.set({masterOligoNumberOfDigitsValue: r.MASTEROLIGONUMBEROFDIGITS, masterPlasmidNumberOfDigitsValue: r.MASTERPLASMIDNUMBEROFDIGITS, gibsonOverlapBPsValue: r.GIBSONOVERLAPBPS, gibsonOverlapMinTmValue: r.GIBSONOVERLAPMINTM, gibsonOverlapMaxTmValue: r.GIBSONOVERLAPMAXTM, maxOligoLengthBPsValue: r.MAXIMUMOLIGOLENGTHBPS, minFragmentSizeGibsonBPsValue: r.MINIMUMFRAGMENTSIZEGIBSONBPS, goldenGateOverhangBPsValue: r.GOLDENGATEOVERHANGBPS, goldenGateRecognitionSeqValue: r.GOLDENGATERECOGNITIONSEQ, goldenGateTerminiExtraSeqValue: r.GOLDENGATETERMINIEXTRASEQ, maxIdentitiesGoldenGateOverhangsCompatibleValue: r.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE, oligoSynthesisCostPerBPUSDValue: r.OLIGOSYNTHESISCOSTPERBPUSD, oligoPagePurificationCostPerPieceUSDValue: r.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD, oligoMaxLengthNoPagePurificationRequiredBPsValue: r.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS, minPCRProductBPsValue: r.MINIMUMPCRPRODUCTBPS, directSynthesisCostPerBPUSDValue: r.DIRECTSYNTHESISCOSTPERBPUSD, directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIMUMCOSTPERPIECEUSD, primerGCClampValue: r.PRIMER_GC_CLAMP, primerMinSizeValue: r.PRIMER_MIN_SIZE, primerMaxSizeValue: r.PRIMER_MAX_SIZE, primerMinTmValue: r.PRIMER_MIN_TM, primerMaxTmValue: r.PRIMER_MAX_TM, primerMaxDiffTmValue: r.PRIMER_MAX_DIFF_TM, primerMaxSelfAnyThValue: r.PRIMER_MAX_SELF_ANY_TH, primerMaxSelfEndThValue: r.PRIMER_MAX_SELF_END_TH, primerPairMaxComplAnyThValue: r.PRIMER_PAIR_MAX_COMPL_ANY_TH, primerPairMaxComplEndThValue: r.PRIMER_PAIR_MAX_COMPL_END_TH, primerTmSantaluciaValue: r.PRIMER_TM_SANTALUCIA, primerSaltCorrectionsValue: r.PRIMER_SALT_CORRECTIONS, primerDnaConcValue: r.PRIMER_DNA_CONC, mispriming3PrimeBoundaryBPToWarnIfHitValue: r.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT, misprimingMinTmValue: r.MISPRIMING_MIN_TM, misprimingSaltConcValue: r.MISPRIMING_SALT_CONC, misprimingOligoConcValue: r.MISPRIMING_OLIGO_CONC, outputSequenceFormatValue: r.OUTPUT_SEQUENCE_FORMAT, suppressPurePrimersValue: r.SUPPRESS_PURE_PRIMERS});
+  self.j5Parameters.set({masterOligoNumberOfDigitsValue: r.MASTEROLIGONUMBEROFDIGITS, masterPlasmidNumberOfDigitsValue: r.MASTERPLASMIDNUMBEROFDIGITS, gibsonOverlapBPsValue: r.GIBSONOVERLAPBPS, gibsonOverlapMinTmValue: r.GIBSONOVERLAPMINTM, gibsonOverlapMaxTmValue: r.GIBSONOVERLAPMAXTM, maxOligoLengthBPsValue: r.MAXIMUMOLIGOLENGTHBPS, minFragmentSizeGibsonBPsValue: r.MINIMUMFRAGMENTSIZEGIBSONBPS, goldenGateOverhangBPsValue: r.GOLDENGATEOVERHANGBPS, goldenGateRecognitionSeqValue: r.GOLDENGATERECOGNITIONSEQ, goldenGateTerminiExtraSeqValue: r.GOLDENGATETERMINIEXTRASEQ, maxIdentitiesGoldenGateOverhangsCompatibleValue: r.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE, oligoSynthesisCostPerBPUSDValue: r.OLIGOSYNTHESISCOSTPERBPUSD, oligoPagePurificationCostPerPieceUSDValue: r.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD, oligoMaxLengthNoPagePurificationRequiredBPsValue: r.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS, minPCRProductBPsValue: r.MINIMUMPCRPRODUCTBPS, directSynthesisCostPerBPUSDValue: r.DIRECTSYNTHESISCOSTPERBPUSD, directSynthesisMinCostPerPieceUSDValue: r.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD, primerGCClampValue: r.PRIMER_GC_CLAMP, primerMinSizeValue: r.PRIMER_MIN_SIZE, primerMaxSizeValue: r.PRIMER_MAX_SIZE, primerMinTmValue: r.PRIMER_MIN_TM, primerMaxTmValue: r.PRIMER_MAX_TM, primerMaxDiffTmValue: r.PRIMER_MAX_DIFF_TM, primerMaxSelfAnyThValue: r.PRIMER_MAX_SELF_ANY_TH, primerMaxSelfEndThValue: r.PRIMER_MAX_SELF_END_TH, primerPairMaxComplAnyThValue: r.PRIMER_PAIR_MAX_COMPL_ANY_TH, primerPairMaxComplEndThValue: r.PRIMER_PAIR_MAX_COMPL_END_TH, primerTmSantaluciaValue: r.PRIMER_TM_SANTALUCIA, primerSaltCorrectionsValue: r.PRIMER_SALT_CORRECTIONS, primerDnaConcValue: r.PRIMER_DNA_CONC, mispriming3PrimeBoundaryBPToWarnIfHitValue: r.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT, misprimingMinTmValue: r.MISPRIMING_MIN_TM, misprimingSaltConcValue: r.MISPRIMING_SALT_CONC, misprimingOligoConcValue: r.MISPRIMING_OLIGO_CONC, outputSequenceFormatValue: r.OUTPUT_SEQUENCE_FORMAT, suppressPurePrimersValue: r.SUPPRESS_PURE_PRIMERS});
   self.populateJ5ParametersDialog();
   isCircular = r.ASSEMBLY_PRODUCT_TYPE == 'circular' ? true : false;
   Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign().getJ5Collection().set('isCircular', isCircular);
@@ -74961,9 +75095,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       if (button.cls === "runj5Btn") 
       {
         button.setText("Submit Run to j5");
+        $(".loader-mini").hide();
       }
     }
 }, onRunJ5BtnClick: function() {
+  $(".toast-success").hide();
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
   this.onOpenJ5();
@@ -75041,11 +75177,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       button.disable();
       if (button.cls === "runj5Btn") 
       {
-        button.setLoading({msg: "Running J5"});
-        button.loadMask.el.setStyle("background-color", "transparent");
-        button.loadMask.msgEl.setStyle("background-color", "transparent");
-        button.loadMask.msgTextEl.setStyle("background-color", "transparent");
-        button.setText("");
+        $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+        button.setText("Running J5...");
       }
     }
   Vede.application.fireEvent("saveDesignEvent", function() {
@@ -75174,7 +75307,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var inspector = currentTab.down('InspectorPanel');
   inspector.j5comm.downloadCondenseAssemblyResults(button);
 }, init: function() {
-  this.control({"panel[cls='j5InfoTab-Sub-Advanced']": {tabchange: this.onTabChangeSub}, "panel[cls='j5InfoTab-Sub']": {tabchange: this.onTabChange}, "button[cls='editj5ParamsBtn']": {click: this.onEditJ5ParamsBtnClick}, "button[cls='resetj5DefaultParamsBtn']": {click: this.resetDefaultj5Params}, "button[cls='resetj5ServerParamsBtn']": {click: this.resetServerj5Params}, "button[cls='j5ParamsCancelBtn']": {click: this.onj5ParamsCancelBtnClick}, "button[cls='j5ParamsOKBtn']": {click: this.onj5ParamsOKBtnClick}, "radio[cls='useServerPlasmidsRadioBtn']": {change: this.onUseServerPlasmidsRadioBtnChange}, "radio[cls='useEmptyPlasmidsRadioBtn']": {change: this.onUseEmptyPlasmidsRadioBtnChange}, "component[cls='plasmidsListFileSelector']": {change: this.onPlasmidsListFileSelectorChange}, "radio[cls='useServerOligosRadioBtn']": {change: this.onUseServerOligosRadioBtnChange}, "radio[cls='useEmptyOligosRadioBtn']": {change: this.onUseEmptyOligosRadioBtnChange}, "component[cls='oligosListFileSelector']": {change: this.onOligosListFileSelectorChange}, "radio[cls='useServerSynthesesRadioBtn']": {change: this.onUseServerSynthesesRadioBtnChange}, "radio[cls='useEmptySynthesesRadioBtn']": {change: this.onUseEmptySynthesesRadioBtnChange}, "component[cls='directSynthesesFileSelector']": {change: this.onDirectSynthesesFileSelectorChange}, "button[cls='customizeAutomationParamsBtn']": {click: this.onCustomizeAutomationParamsBtnClick}, "button[cls='runj5Btn']": {click: this.onRunJ5BtnClick}, "button[cls='loadAssemblyBtn']": {click: this.onLoadAssemblyBtnClick}, "button[cls='automationParamsCancelBtn']": {click: this.onAutomationParamsCancelClick}, "button[cls='automationParamsOKBtn']": {click: this.onAutomationParamsOKClick}, "button[cls='automationParamsResetBtn']": {click: this.onResetAutomationParamsBtnClick}, "button[cls='downloadj5Btn']": {click: this.onDownloadj5Btn}, "button[cls='downloadDownstreamAutomationBtn']": {click: this.onDownloadDownstreamAutomationBtn}, "component[cls='sourcePlateListSelector']": {change: this.onSourcePlateListFileSelectorChange}, "component[cls='zippedPlateFilesSelector']": {change: this.onZippedPlateFilesSelectorChange}, "component[cls='assemblyFileSelector']": {change: this.onAssemblyFileSelectorChange}, "button[cls='distributePCRBtn']": {click: this.onDistributePCRBtn}, "gridpanel[title=Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='condenseAssembliesBtn']": {click: this.onCondenseAssembliesBtnClick}, "component[cls='condenseAssemblyFilesSelector']": {change: this.onCondenseAssemblyFilesSelectorChange}, "component[cls='zippedAssemblyFilesSelector']": {change: this.onZippedAssemblyFilesSelectorChange}, "button[cls='downloadCondenseAssemblyResultsBtn']": {click: this.onDownloadCondenseAssemblyResultsBtnClick}, "button[cls='stopj5runBtn']": {click: this.abortJ5Run}});
+  this.control({"#mainAppPanel": {tabchange: this.onMainAppPanelTabChange}, "panel[cls='j5InfoTab-Sub-Advanced']": {tabchange: this.onTabChangeSub}, "panel[cls='j5InfoTab-Sub']": {tabchange: this.onTabChange}, "button[cls='editj5ParamsBtn']": {click: this.onEditJ5ParamsBtnClick}, "button[cls='resetj5DefaultParamsBtn']": {click: this.resetDefaultj5Params}, "button[cls='resetj5ServerParamsBtn']": {click: this.resetServerj5Params}, "button[cls='j5ParamsCancelBtn']": {click: this.onj5ParamsCancelBtnClick}, "button[cls='j5ParamsOKBtn']": {click: this.onj5ParamsOKBtnClick}, "radio[cls='useServerPlasmidsRadioBtn']": {change: this.onUseServerPlasmidsRadioBtnChange}, "radio[cls='useEmptyPlasmidsRadioBtn']": {change: this.onUseEmptyPlasmidsRadioBtnChange}, "component[cls='plasmidsListFileSelector']": {change: this.onPlasmidsListFileSelectorChange}, "radio[cls='useServerOligosRadioBtn']": {change: this.onUseServerOligosRadioBtnChange}, "radio[cls='useEmptyOligosRadioBtn']": {change: this.onUseEmptyOligosRadioBtnChange}, "component[cls='oligosListFileSelector']": {change: this.onOligosListFileSelectorChange}, "radio[cls='useServerSynthesesRadioBtn']": {change: this.onUseServerSynthesesRadioBtnChange}, "radio[cls='useEmptySynthesesRadioBtn']": {change: this.onUseEmptySynthesesRadioBtnChange}, "component[cls='directSynthesesFileSelector']": {change: this.onDirectSynthesesFileSelectorChange}, "button[cls='customizeAutomationParamsBtn']": {click: this.onCustomizeAutomationParamsBtnClick}, "button[cls='runj5Btn']": {click: this.onRunJ5BtnClick}, "button[cls='loadAssemblyBtn']": {click: this.onLoadAssemblyBtnClick}, "button[cls='automationParamsCancelBtn']": {click: this.onAutomationParamsCancelClick}, "button[cls='automationParamsOKBtn']": {click: this.onAutomationParamsOKClick}, "button[cls='automationParamsResetBtn']": {click: this.onResetAutomationParamsBtnClick}, "button[cls='downloadj5Btn']": {click: this.onDownloadj5Btn}, "button[cls='downloadDownstreamAutomationBtn']": {click: this.onDownloadDownstreamAutomationBtn}, "component[cls='sourcePlateListSelector']": {change: this.onSourcePlateListFileSelectorChange}, "component[cls='zippedPlateFilesSelector']": {change: this.onZippedPlateFilesSelectorChange}, "component[cls='assemblyFileSelector']": {change: this.onAssemblyFileSelectorChange}, "button[cls='distributePCRBtn']": {click: this.onDistributePCRBtn}, "gridpanel[title=Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='condenseAssembliesBtn']": {click: this.onCondenseAssembliesBtnClick}, "component[cls='condenseAssemblyFilesSelector']": {change: this.onCondenseAssemblyFilesSelectorChange}, "component[cls='zippedAssemblyFilesSelector']": {change: this.onZippedAssemblyFilesSelectorChange}, "button[cls='downloadCondenseAssemblyResultsBtn']": {click: this.onDownloadCondenseAssemblyResultsBtnClick}, "button[cls='stopj5runBtn']": {click: this.abortJ5Run}});
   this.application.on("runj5", this.onRunJ5Event, this);
   this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
   this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
@@ -77600,15 +77733,37 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 ;
 
 (Ext.cmd.derive('Vede.view.annotate.Caret', Ext.Base, {statics: {CARET_COLOR: "#000000", CARET_WIDTH: 2, TIMER_REFRESH_SPEED: "1s", SINGLE_HEIGHT: 20, DOUBLE_HEIGHT: 40}, config: {position: 0, height: 38, sequenceAnnotator: null}, caretSVG: null, constructor: function(pConfig) {
+  this.position = pConfig.position || 0;
+  this.height = pConfig.height || 38;
   this.initConfig(pConfig);
-}, render: function() {
-  d3.selectAll("#caretSVG").remove();
-  this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:g").attr("id", "caretSVG").style("pointer-events", "none");
-  var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
-  if (location) 
+}, applyPosition: function(pPosition) {
+  if (this.getSequenceAnnotator().getSequenceAnnotator().getSequenceManager()) 
   {
-    this.caretSVG.append("svg:path").attr("d", "M" + (location.x - 1) + " " + (location.y + 8) + "L" + (location.x - 1) + " " + (location.y + this.height + 2)).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH).append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite").style("pointer-events", "none");
+    var location = this.getSequenceAnnotator().bpMetricsByIndex(pPosition);
+    var path = "M" + (location.x - 1) + " " + (location.y + 8) + "L" + (location.x - 1) + " " + (location.y + this.height + 2);
+    if (!this.caretSVG) 
+    {
+      this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:path").attr("id", "caretSVG").style("pointer-events", "none").attr("d", path).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH);
+      this.caretSVG.append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite").style("pointer-events", "none");
+    } else {
+      this.caretSVG.attr("d", path);
+    }
   }
+  return pPosition;
+}, applyHeight: function(pHeight) {
+  if (this.getSequenceAnnotator().getSequenceAnnotator().getSequenceManager()) 
+  {
+    var location = this.getSequenceAnnotator().bpMetricsByIndex(this.position);
+    var path = "M" + (location.x - 1) + " " + (location.y + 8) + "L" + (location.x - 1) + " " + (location.y + pHeight + 2);
+    if (!this.caretSVG) 
+    {
+      this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:path").attr("id", "caretSVG").style("pointer-events", "none").attr("d", path).attr("stroke", this.self.CARET_COLOR).attr("stroke-width", this.self.CARET_WIDTH);
+      this.caretSVG.append("svg:animate").attr("attributeName", "visibility").attr("from", "hidden").attr("to", "visible").attr("dur", this.self.TIMER_REFRESH_SPEED).attr("repeatCount", "indefinite").style("pointer-events", "none");
+    } else {
+      this.caretSVG.attr("d", path);
+    }
+  }
+  return pHeight;
 }}, 1, 0, 0, 0, 0, 0, [Vede.view.annotate, 'Caret'], 0));
 ;
 
@@ -77627,12 +77782,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.features = this.sequenceManager.getFeatures();
   this.annotator.setSequenceAnnotator(this);
   this.annotator.render();
-  this.caret.render();
 }, render: function() {
   this.RowManager.update();
   this.annotator.render();
   this.caret.setPosition(this.caret.getPosition());
-  this.caret.render();
 }, sequenceChanged: function() {
   this.RowManager.setSequenceAnnotator(this);
   this.RowManager.update();
@@ -77642,7 +77795,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.annotator.render();
 }, adjustCaret: function(index) {
   this.caret.setPosition(index);
-  this.caret.render();
 }, bpAtPoint: function(x, y) {
   var numberOfRows = this.RowManager.rows.length;
   var bpIndex = -1;
@@ -77711,11 +77863,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       {
         this.caret.setHeight(this.caret.self.DOUBLE_HEIGHT);
         this.caret.setPosition(this.caret.getPosition());
-        this.caret.render();
       } else {
         this.caret.setHeight(this.caret.self.SINGLE_HEIGHT);
         this.caret.setPosition(this.caret.getPosition());
-        this.caret.render();
       }
     }
   }
@@ -78320,7 +78470,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
   }
 }, select: function(start, end) {
-  this.changeCaretPosition(start, false, true);
+  this.changeCaretPosition(start, true, true);
   this.SelectionLayer.select(start, end);
 }, changeCaretPosition: function(index, silent, scrollToCaret) {
   if (index >= 0 && index <= this.SequenceManager.getSequence().toString().length) 
@@ -78331,7 +78481,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
       var el = Ext.getCmp("AnnotateContainer").el;
-      if (!(metrics.y < el.dom.scrollTop + el.getViewSize().height && metrics.y > el.dom.scrollTop)) 
+      var scrollTop = el.dom.scrollTop;
+      if (!(metrics.y < scrollTop + el.getViewSize().height && metrics.y > scrollTop)) 
       {
         el.scrollTo("top", metrics.y);
       }
@@ -78846,7 +78997,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'SelectWindow'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.SimulateDigestionWindow', Ext.window.Window, {height: 500, width: 900, layout: {align: "stretch", type: "hbox"}, resizable: true, constrainHeader: true, title: "Gel Digest", modal: true, initComponent: function() {
+(Ext.cmd.derive('Vede.view.ve.SimulateDigestionWindow', Ext.window.Window, {height: 500, width: 900, layout: {align: "stretch", type: "hbox"}, resizable: true, constrainHeader: true, title: "Gel Digest", modal: true, cls: "simulateDigestion", initComponent: function() {
   var groupStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: []});
   var enzymeListStore = Ext.create("Ext.data.Store", {fields: [{name: "name", type: "string"}], data: [], autoLoad: true, sorters: [{property: "name", direction: "ASC"}]});
   var me = this;
@@ -78952,7 +79103,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   simulateDigestionWindow.center();
   this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
 }, onRestrictionEnzymesManagerMenuItemClick: function() {
-  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.RestrictionEnzymesManagerWindow");
+  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.ve.RestrictionEnzymesManagerWindow");
   restrictionEnzymesManagerWindow.show();
   restrictionEnzymesManagerWindow.center();
   this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
@@ -79129,7 +79280,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED, pressed);
 }, onREButtonClick: function() {
-  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.RestrictionEnzymesManagerWindow");
+  var restrictionEnzymesManagerWindow = Ext.create("Vede.view.ve.RestrictionEnzymesManagerWindow");
   restrictionEnzymesManagerWindow.show();
   restrictionEnzymesManagerWindow.center();
   this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
@@ -80429,7 +80580,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'WireframeSelectionLayer'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.VectorEditor.PieController', Vede.controller.VectorEditor.SequenceController, {refs: [{ref: "pieContainer", selector: "#PieContainer"}], statics: {SELECTION_THRESHOLD: 2 * Math.PI / 360, PIE_CENTER: {x: 100, y: 100}, RAIL_RADIUS: 100}, pieManager: null, pieContainer: null, startSelectionAngle: 0, init: function() {
+(Ext.cmd.derive('Vede.controller.VectorEditor.PieController', Vede.controller.VectorEditor.SequenceController, {refs: [{ref: "pieContainer", selector: "#PieContainer"}], statics: {SELECTION_THRESHOLD: 2 * Math.PI / 360, PIE_CENTER: {x: 100, y: 100}, RAIL_RADIUS: 100}, pieManager: null, pieContainer: null, pieParent: null, startSelectionAngle: 0, init: function() {
   this.callParent();
   this.application.on("ShowMapCaretChanged", this.onShowMapCaretChanged, this);
   this.application.on("PieNameBoxClick", this.onPieNameBoxClick);
@@ -80565,9 +80716,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var bp = this.bpAtAngle(angle);
   if (showMapCaret) 
   {
-    this.pieManager.adjustCaret(bp);
+    this.pieManager.caret.svgObject.style("visibility", "visible");
   } else {
-    this.pieManager.caret.svgObject.remove();
+    this.pieManager.caret.svgObject.style("visibility", "hidden");
   }
 }, onMousedown: function(self) {
   if (d3.event.button == 2) 
@@ -80678,9 +80829,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     this.SelectionLayer.select(start, end);
   }
-  this.changeCaretPosition(this.SelectionLayer.start);
+  this.changeCaretPosition(this.SelectionLayer.start, true);
 }, getClickAngle: function() {
-  var svg = d3.select(".pieParent");
+  var svg;
+  if (!this.pieParent) 
+  {
+    this.pieParent = d3.select(".pieParent");
+  }
+  svg = this.pieParent;
   var transformValues;
   var scrolled = this.pieContainer.el.getScroll();
   transformValues = svg.attr("transform").match(/[-.\d]+/g);
@@ -80807,7 +80963,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onRightMouseDown: function(self) {
   d3.event.preventDefault();
   Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
-  var svg = d3.select(".pieParent");
+  var svg;
+  if (!this.pieParent) 
+  {
+    this.pieParent = d3.select(".pieParent");
+  }
+  svg = this.pieParent;
   var transformValues;
   var scrolled = this.pieContainer.el.getScroll();
   transformValues = svg.attr("transform").match(/[-.\d]+/g);
@@ -81799,7 +81960,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.railManager.zoomOut();
 }, select: function(start, end) {
   this.SelectionLayer.select(start, end);
-  this.changeCaretPosition(this.SelectionLayer.start);
+  this.changeCaretPosition(this.SelectionLayer.start, true);
 }, getClickLocation: function() {
   var svg = d3.select(".railParent");
   var transformValues;
@@ -81813,7 +81974,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   return fraction;
 }, bpAtAngle: function(angle) {
   return Math.floor(angle * this.railManager.sequenceManager.getSequence().seqString().length);
-}, changeCaretPosition: function(index) {
+}, changeCaretPosition: function(index, silent) {
   if (index >= 0 && index <= this.SequenceManager.getSequence().toString().length) 
   {
     this.callParent(arguments);
@@ -82058,18 +82219,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       Vede.application.fireEvent("OpenVectorEditor", Teselagen.manager.ProjectManager.workingSequence);
     }
   }
-}, onTabOpen: function() {
-  var self = this;
-  if (!Teselagen.manager.ProjectManager.workingSequence) 
-  {
-    console.log("Opening VE Direct Mode");
-    Teselagen.manager.ProjectManager.directVEEditingMode = true;
-    Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {name: "Untitled VEProject", dateCreated: new Date(), dateModified: new Date()});
-    Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence"});
-    Vede.application.fireEvent("OpenVectorEditor", Teselagen.manager.ProjectManager.workingSequence);
-  }
 }, init: function() {
-  this.application.on("TabOpen", this.onTabOpen);
   this.control({"#VectorPanel": {afterrender: this.onRender, resize: this.onResize, collapse: this.onCollapse}});
 }, onLaunch: function() {
   this.tabPanel = Ext.getCmp("mainAppPanel");
@@ -82103,9 +82253,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 ;
 
 (Ext.cmd.derive('Teselagen.manager.PrinterMonitor', Ext.Base, {singleton: true, delay: 1000, debugFlag: true, feedback: "", updateFn: null, disabled: true, constructor: function() {
-  console.log("Printer Monitor created!");
 }, stopMonitoring: function() {
-  console.log("Printer monitor stopped");
   this.disabled = true;
 }, startMonitoring: function(fn) {
   this.updateFn = fn;
@@ -82119,7 +82267,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   task.delay(this.delay);
 }, monitorServerTasks: function() {
   var self = this;
-  Ext.Ajax.request({url: 'http://localhost:8090/feedback', method: 'GET', success: function(response) {
+  Ext.Ajax.request({url: 'http://lab001.teselagen.com:8090/feedback', method: 'GET', success: function(response) {
   var parsedResponse = response.responseText;
   self.observeChanges(parsedResponse);
 }});
@@ -82249,6 +82397,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var date = new Date(j5run.data.date);
   menu.add([{text: j5run.getItemTitle(), id: j5run.data.id, cls: 'j5runselect'}]);
 });
+  if (this.activeJ5Run) 
+  {
+    var item = Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='" + this.activeJ5Run.internalId + "']")[0];
+    item.addCls("j5-menuitem-active");
+  }
 }, loadj5Results: function() {
   var self = this;
   this.activeProject.j5runs().load({callback: function(runs) {
@@ -82289,6 +82442,15 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }, setActiveRun: function(activeJ5Run) {
   this.activeJ5Run = activeJ5Run;
+  for (var i = 0; i < this.tabPanel.query("menuitem").length; i++) 
+    {
+      this.tabPanel.query("menuitem")[i].removeCls("j5-menuitem-active");
+    }
+  var item = Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='" + this.activeJ5Run.internalId + "']")[0];
+  if (item) 
+  {
+    item.addCls("j5-menuitem-active");
+  }
 }, onLaunch: function() {
   this.tabPanel = Ext.getCmp("mainAppPanel");
   this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
@@ -82434,18 +82596,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 
 var splashscreen;
 Ext.Loader.setConfig({enabled: true, paths: {'Ext.ux': './ext/src/ux', Teselagen: './app/teselagen', Vede: './app', 'Teselagen.bio': '../biojs/src/teselagen/bio'}});
-Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 've.SimulateDigestionWindow'], controllers: ['AppController', 'AuthWindowController', 'DashboardPanelController', 'HeaderPanelController', 'MainPanelController', 'PartLibraryController', 'ProjectController', 'RestrictionEnzymeController', 'HeaderPanelController', 'VectorEditor.SimulateDigestionController', 'VectorEditor.ImportSequenceController', 'VectorEditor.CreateNewFeatureWindowController', 'VectorEditor.EditSequenceFeatureWindowController', 'VectorEditor.PieContextMenuController', 'VectorEditor.SaveAsWindowController', 'AuthWindowController', 'DeviceEditor.DeviceEditorPanelController', 'DeviceEditor.GridController', 'DeviceEditor.InspectorController', 'DeviceEditor.J5Controller', 'DeviceEditor.MainMenuController', 'DeviceEditor.MainToolbarController', 'VectorEditor.ActionStackController', 'VectorEditor.AnnotatePanelController', 'VectorEditor.CreateNewFeatureWindowController', 'VectorEditor.EditSequenceFeatureWindowController', 'VectorEditor.FindPanelController', 'VectorEditor.ImportSequenceController', 'VectorEditor.MainMenuController', 'VectorEditor.MainToolbarController', 'VectorEditor.PieController', 'VectorEditor.RailController', 'VectorEditor.SelectWindowController', 'VectorEditor.SequenceController', 'VectorEditor.SequenceEditingController', 'VectorEditor.SimulateDigestionController', 'VectorEditor.StatusBarController', 'VectorEditor.VectorPanelController', 'Vede.controller.AuthEventDispatcherController', 'Vede.controller.J5ReportController', 'Vede.controller.DeviceEditor.ChangePartDefinitionController'], errorHandler: function(err) {
+Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 've.SimulateDigestionWindow'], controllers: ['AppController', 'AuthWindowController', 'DashboardPanelController', 'HeaderPanelController', 'MainPanelController', 'PartLibraryController', 'ProjectController', 'HeaderPanelController', 'VectorEditor.SimulateDigestionController', 'VectorEditor.ImportSequenceController', 'VectorEditor.CreateNewFeatureWindowController', 'VectorEditor.EditSequenceFeatureWindowController', 'VectorEditor.PieContextMenuController', 'VectorEditor.RestrictionEnzymeController', 'VectorEditor.SaveAsWindowController', 'AuthWindowController', 'DeviceEditor.DeviceEditorPanelController', 'DeviceEditor.GridController', 'DeviceEditor.InspectorController', 'DeviceEditor.J5Controller', 'DeviceEditor.MainMenuController', 'DeviceEditor.MainToolbarController', 'VectorEditor.ActionStackController', 'VectorEditor.AnnotatePanelController', 'VectorEditor.CreateNewFeatureWindowController', 'VectorEditor.EditSequenceFeatureWindowController', 'VectorEditor.FindPanelController', 'VectorEditor.ImportSequenceController', 'VectorEditor.MainMenuController', 'VectorEditor.MainToolbarController', 'VectorEditor.PieController', 'VectorEditor.RailController', 'VectorEditor.SelectWindowController', 'VectorEditor.SequenceController', 'VectorEditor.SequenceEditingController', 'VectorEditor.SimulateDigestionController', 'VectorEditor.StatusBarController', 'VectorEditor.VectorPanelController', 'Vede.controller.AuthEventDispatcherController', 'Vede.controller.J5ReportController', 'Vede.controller.DeviceEditor.ChangePartDefinitionController'], errorHandler: function(err) {
   console.warn(err);
   return true;
-}, requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager", "Teselagen.constants.Constants", "Teselagen.constants.SBOLIcons", "Teselagen.models.SequenceFile"], init: function() {
-  splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span><span id="splash-retry" style="visibility: hidden;"><button id="retry-btn">Retry</button></span>', 'splashscreen');
-  Ext.get('retry-btn').on("click", function() {
-  Ext.get('splash-retry').hide();
-  Teselagen.manager.AuthenticationManager.Login();
-});
-  splashscreen.addCls('splashscreen');
-  Ext.select('.x-mask-msg').setStyle('top', '60px');
-  Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {cls: 'x-splash-icon'});
+}, requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager", "Teselagen.constants.Constants", "Teselagen.constants.SBOLIcons", "Teselagen.models.SequenceFile", "Teselagen.manager.SessionManager"], init: function() {
+  Teselagen.manager.SessionManager.maskApp();
 }, launch: function() {
   Vede.application = this;
   Ext.Ajax.cors = true;
@@ -82462,16 +82617,8 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Teselagen.manager.AuthenticationManager.Login();
   var self = this;
   var task = new Ext.util.DelayedTask(function() {
-  if (splashscreen) 
-  {
-    splashscreen.fadeOut({duration: 1000, remove: true});
-    splashscreen.next().fadeOut({duration: 1000, remove: true, listeners: {afteranimate: function() {
-  splashscreen = null;
+  Teselagen.manager.SessionManager.unmaskApp();
   Teselagen.manager.ProjectManager.loadUser();
-}}});
-  } else {
-    Teselagen.manager.ProjectManager.loadUser();
-  }
 });
   this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function() {
   task.delay(1500);
@@ -82485,9 +82632,6 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 ;
 
 (Ext.cmd.derive('Teselagen.store.WarningsStore', Ext.data.Store, {model: 'Teselagen.models.j5Output.Warning'}, 0, 0, 0, 0, 0, 0, [Teselagen.store, 'WarningsStore'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.PartLibraryWindow', Ext.window.Window, {title: 'Part Library', height: 400, width: 400, layout: 'fit', modal: true, items: {xtype: 'grid', id: 'partLibraryGridList', border: false, columns: {items: {text: "Name", dataIndex: "name"}, defaults: {flex: 1}}}}, 0, ["partLibrary"], ["panel", "window", "partLibrary", "component", "container", "box"], {"panel": true, "window": true, "partLibrary": true, "component": true, "container": true, "box": true}, ["widget.partLibrary"], 0, [Vede.view, 'PartLibraryWindow'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.EugeneRuleDialog', Ext.window.Window, {statics: {FORM_WIDTH: 285}, title: 'Add Eugene Rule', cls: 'addEugeneRuleDialog', closable: false, draggable: true, modal: true, resizable: false, maxWidth: 400, initComponent: function() {
