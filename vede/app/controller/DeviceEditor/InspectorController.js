@@ -927,11 +927,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.columnsGrid.getSelectionModel().deselect(selectedPart);
 
         // Remove the highlighting from the selected row- it appears that a bug
-        // is preventing this from happening automatically.
-        this.columnsGrid.getView().removeRowCls(selectedPart,
+        // is preventing this from happening automatically. EDIT: Not happening
+        // with the new Ext version.
+        /*this.columnsGrid.getView().removeRowCls(selectedPart,
                                     this.columnsGrid.getView().selectedItemCls);
         this.columnsGrid.getView().removeRowCls(selectedPart,
-                                    this.columnsGrid.getView().focusedItemCls);
+                                    this.columnsGrid.getView().focusedItemCls);*/
 
 
         this.renderCollectionInfo();
@@ -1052,6 +1053,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
             operand2Field.store = partsStore;
+
             this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
 
             var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];

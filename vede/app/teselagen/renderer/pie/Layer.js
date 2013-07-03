@@ -43,7 +43,9 @@ Ext.define("Teselagen.renderer.pie.Layer", {
     select: function(fromIndex, toIndex, pointerEvents) {
         this.drawSelectionPie(fromIndex, toIndex, pointerEvents);
 
-        this.selectionSVG.style("visibility", "visible");
+        if(this.selectionSVG.style("visibility") === "hidden") {
+            this.selectionSVG.style("visibility", "visible");
+        }
 
         this.selected = true;
         this.start = fromIndex;
