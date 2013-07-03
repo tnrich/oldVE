@@ -1177,7 +1177,9 @@ var processJ5Response = function(method,encodedFileData,callback) {
             fileContent: zip.files[file]['data']
         };
 
-        if( fileName.match(/\w+.(\w+)/)[1] == "gb" )       files.assemblies.push(newFile);
+        if     ( fileName.match(/\w+.(\w+)/)[1] == "gb" )       files.assemblies.push(newFile);
+        else if( fileName.match(/\w+.(\w+)/)[1] == "xml" )       files.assemblies.push(newFile);
+        else if( fileName.match(/\w+.(\w+)/)[1] == "fas" )       files.assemblies.push(newFile);
         else if( fileName.match(/.+combinatorial.csv/) )   files.combinatorial = newFile;
         else if( fileName.match(/.+\d\d.csv/) )            files.assembly = newFile;
         else if( fileName.match(/eugeneruleslist.eug/) )   files.eugenerules = newFile;
