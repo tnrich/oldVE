@@ -49,15 +49,20 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
 
         var updateServerPath = function(){
-            if(Ext.util.Cookies.get("last_server"))
-            {
-                Ext.getCmp('select-server-combo').setValue( Ext.util.Cookies.get("last_server") );
-            }
-            else
-            {
-                var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-                Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
-            }
+            //if(Ext.util.Cookies.get("last_server"))
+            //{
+            //    Ext.getCmp('select-server-combo').setValue( Ext.util.Cookies.get("last_server") );
+            //}
+            //else
+            //{
+            //    var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            //    Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+            //}
+
+
+            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+
         };
 
         var self = this;
