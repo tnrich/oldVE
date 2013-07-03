@@ -1259,7 +1259,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             callback: function (seq) {
                                 Vede.application.fireEvent("OpenVectorEditor",seq);
                         }});
-                        DETab.setLoading(false);
+                        DETab.el.unmask();
                     }
                     else
                     {
