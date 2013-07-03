@@ -213,7 +213,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     xtype: 'gridpanel',
                     name: 'assemblies',
                     margin: '10 10 20 10',
-                    title: 'Output Assembled Constructs',
+                    title: 'Output Plasmids',
                     minHeight: 100,
                     layout: 'fit',
                     columns: [
@@ -229,9 +229,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         },
                         {
                             xtype: 'gridcolumn',
-                            dataIndex: 'sizeBP',
+                            dataIndex: 'size',
                             flex: 1,
-                            text: 'Size (bp)'
+                            text: 'Size'
                         },
                         {
                             xtype: 'gridcolumn',
@@ -239,16 +239,16 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             flex: 1,
                             text: 'Type'
                         },
-                        // {
-                        //     xtype: 'gridcolumn',
-                        //     dataIndex: 'fileContent',
-                        //     flex: 2,
-                        //     text: 'Content',
-                        //     renderer: function(val) {
-                        //         var content_limited = val.slice(0, (val.lastIndexOf("bp") + 2));
-                        //         return content_limited + "..."
-                        //     }
-                        // }
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'fileContent',
+                            flex: 2,
+                            text: 'Content',
+                            renderer: function(val) {
+                                var content_limited = val.slice(0, (val.lastIndexOf("bp") + 2));
+                                return content_limited + "..."
+                            }
+                        }
                     ]
                 },
                 {
@@ -276,21 +276,21 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         }
                     ]
                 },
-                // {
-                //     xtype: 'fieldset',
-                //     margin: '10 10 10 10',
-                //     layout: 'fit',
-                //     title: 'Combinatorial Mock Assembly Output',
-                //     items: [
-                //         {
-                //             xtype: 'textareafield',
-                //             name: 'combinatorialAssembly',
-                //             margin: '10 10 20 10',
-                //             fieldLabel: ''
-                //         }
-                //     ]
-                // }
-                ]
+                {
+                xtype: 'fieldset',
+                margin: '10 10 10 10',
+                layout: 'fit',
+                title: 'Combinatorial Mock Assembly Output',
+                hidden: true,
+                items: [
+                    {
+                        xtype: 'textareafield',
+                        name: 'combinatorialAssembly',
+                        margin: '10 10 20 10',
+                        fieldLabel: ''
+                    }
+                    ]
+                }]
             }],
 
     listeners: {}

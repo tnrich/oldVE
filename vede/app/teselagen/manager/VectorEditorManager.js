@@ -42,6 +42,13 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
             toastr.info ("Sequence Successfully Saved");
+            project = Teselagen.manager.ProjectManager.workingProject;
+            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
+                                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                                Vede.application.fireEvent("PopulateStats");
+            });
+
             if(typeof (cb) === "function") { cb(); }
         };
 

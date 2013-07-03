@@ -29,8 +29,6 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
             return;
         }
 
-        d3.selectAll(".railWireframeElement").remove();
-
         var startAngle = fromIndex / seqLen;
         var endAngle = endIndex  / seqLen;
 
@@ -63,11 +61,17 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
                    "L" + startPoint  + " " + wireHeight;
         }
 
-        this.selectionSVG.append("svg:path")
-                         .attr("class", "railWireframeElement")
-                         .attr("stroke", this.self.FRAME_COLOR)
-                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                         .attr("fill", "none")
-                         .attr("d", path);
+        var selectionElement = this.selectionSVG.select(".railWireframeElement");
+
+        if(selectionElement[0][0] === null) {
+            this.selectionSVG.append("svg:path")
+                             .attr("class", "railWireframeElement")
+                             .attr("stroke", this.self.FRAME_COLOR)
+                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                             .attr("fill", "none")
+                             .attr("d", path);
+        } else {
+            selectionElement.attr("d", path);
+        }
     }
 });

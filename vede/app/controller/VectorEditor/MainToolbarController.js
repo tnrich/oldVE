@@ -24,7 +24,9 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
             var file = fileInput.files[0];
             var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
             if (ext) {
-                Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
+                Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File', "loader rspin");
+                $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
                 var fr = new FileReader();
                 fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
                 fr.onerror = this.onImportFileError;

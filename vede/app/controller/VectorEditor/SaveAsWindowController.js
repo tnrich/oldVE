@@ -45,7 +45,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
         var onPromptClosed = function (btn, text) {
             if(btn === "ok") {
                 if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, Teselagen.manager.ProjectManager); }
-                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project");
+                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new project", "loader rspin");
+                $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
                 var self = Teselagen.manager.ProjectManager;
                 var project = Ext.create("Teselagen.models.Project", {
                     name: text,
@@ -98,7 +99,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
             
             for (var j=0; j<sequencesNames.length; j++) {
                 if (sequencesNames[j]===name) {
-                	alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+                	Ext.MessageBox.alert('','A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
+                	//alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
     				return;
                 }
                 	//{ return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
@@ -145,7 +147,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 partSource: workingSequence.data.partSource,
                 name: name
             });
-    		//debugger;
+
     		selectedProj.sequences().add(newSequenceFile);
             newSequenceFile.set("project_id",selectedProj.data.id);
             
