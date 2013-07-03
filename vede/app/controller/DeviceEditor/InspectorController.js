@@ -299,6 +299,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                 self.selectedPart = part;
                                                 self.onReRenderDECanvasEvent();
                                                 Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                                Vede.application.fireEvent(self.DeviceEvent.ADD_SELECT_ALERTS);
                                             }
                                             else
                                             {
