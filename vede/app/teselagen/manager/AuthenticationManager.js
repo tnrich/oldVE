@@ -33,10 +33,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
-        if(Ext.util.Cookies.get("last_server"))
-        {
-            this.autoAuthURL = Ext.util.Cookies.get("last_server");
-        }
+        //if(Ext.util.Cookies.get("last_server"))
+        //{
+        //    this.autoAuthURL = Ext.util.Cookies.get("last_server");
+        //}
 
 
         if(Ext.util.Cookies.get("sessionname"))
@@ -49,15 +49,20 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
 
         var updateServerPath = function(){
-            if(Ext.util.Cookies.get("last_server"))
-            {
-                Ext.getCmp('select-server-combo').setValue( Ext.util.Cookies.get("last_server") );
-            }
-            else
-            {
-                var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-                Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
-            }
+            //if(Ext.util.Cookies.get("last_server"))
+            //{
+            //    Ext.getCmp('select-server-combo').setValue( Ext.util.Cookies.get("last_server") );
+            //}
+            //else
+            //{
+            //    var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            //    Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+            //}
+
+
+            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
+
         };
 
         var self = this;
@@ -132,12 +137,12 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
 
-                Ext.util.Cookies.set("last_server",Teselagen.manager.SessionManager.baseURL);
+                //Ext.util.Cookies.set("last_server",Teselagen.manager.SessionManager.baseURL);
 
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
-                //self.updateSplashScreenMessage(response.statusText, true);
+                if(response.status !== 200) return Ext.getCmp('auth-response').update(response.statusText);
                 var response = JSON.parse(response.responseText);
                 if(response) Ext.getCmp('auth-response').update(response.msg);
                 if (cb) {return cb(false, response.statusText); }

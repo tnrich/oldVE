@@ -37,7 +37,11 @@ Ext.define("Teselagen.models.EugeneRule", {
         {name: "operand1_id",   type: "long"},
         {name: "operand2_id",   type: "long"},
         {
-            name: "name",
+            name: "name"
+            /**
+             * @DEPRECATED
+             * Use DeviceDesignManager.getDefaultRuleName method to generate
+             * default rule name strings, as this generates design-specific names.
             convert: function(v, record) {
                 var name;
 
@@ -53,7 +57,7 @@ Ext.define("Teselagen.models.EugeneRule", {
                     }
                 }
                 return name;
-            }
+            }*/
         },
 
         
