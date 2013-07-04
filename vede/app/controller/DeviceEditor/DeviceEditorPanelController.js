@@ -360,6 +360,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
                     endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
+                    assemblies.sort('name', 'ASC');
+                    
                     var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
 
                     var j5parameters = Ext.create("Teselagen.models.J5Parameters");
