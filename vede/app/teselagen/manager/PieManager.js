@@ -277,7 +277,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         Ext.resumeLayouts(true);
 
-        this.fitWidthToContent(this);
+        this.fitWidthToContent(this, true);
     },
 
     /**
@@ -302,7 +302,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             Ext.resumeLayouts(true);
 
-            this.fitWidthToContent(this, false);//, 1 / this.self.ZOOM_FACTOR / 5);
+            this.fitWidthToContent(this, true);//, 1 / this.self.ZOOM_FACTOR / 5);
         }
     },
 

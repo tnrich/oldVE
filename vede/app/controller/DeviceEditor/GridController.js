@@ -1170,7 +1170,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
             gridPart = gridBin.query("Part")[partIndex];
 
-            if(targetGridParts.indexOf(gridPart) < 0) {
+            if(targetGridParts.indexOf(gridPart) < 0 && partIndex >= 0) {
                 targetGridParts.push(gridPart);
             }
         }
