@@ -252,7 +252,9 @@ Ext.define("Teselagen.manager.PieManager", {
             this.featureSVG.style("visibility", "hidden");
         }
 
-        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
+        Ext.defer(function(){this.fitWidthToContent(this, false)}, 10, this);
+
+        //this.drawCoordinates();
     },
 
     /**
@@ -300,7 +302,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             Ext.resumeLayouts(true);
 
-            this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+            this.fitWidthToContent(this, false);//, 1 / this.self.ZOOM_FACTOR / 5);
         }
     },
 
@@ -308,13 +310,19 @@ Ext.define("Teselagen.manager.PieManager", {
      * Adjust the width of the surface to fit all content, ensuring that a 
      * scrollbar appears.
      * @param {Teselagen.manager.PieManager} scope The pieManager. Used when being
+     * @param {Boolean} scrollToCenter Whether to scroll the pie to the center.
      * called by the window onresize event.
      */
-    fitWidthToContent: function(scope) {
+    fitWidthToContent: function(scope, scrollToCenter) {
         if(Ext.getCmp("PieContainer").el) {
-            var containerSize = Ext.getCmp("PieContainer").getSize();
-            var transX = containerSize.width / 2 - scope.center.x;
+            var container = Ext.getCmp("PieContainer");
+            var containerSize = container.getSize();
+
+            var transX = containerSize.width / 2;
+            //var transX = containerSize.width / 2 - scope.center.x;
+            //var transX = (containerSize.width - scope.center.x) / 2;
             var transY = containerSize.height / 2 - scope.center.y;
+
             var pieBox = scope.pie[0][0].getBBox();
 
             // Get previous values for scale and transform.
@@ -327,6 +335,10 @@ Ext.define("Teselagen.manager.PieManager", {
 
             scope.pie.attr("width", pieBox.width + transX)
                      .attr("height", pieBox.height + transY);
+
+            if(scrollToCenter) {
+                container.el.setScrollLeft((this.pie[0][0].width.baseVal.value - container.getWidth()) / 2);
+            }
         }
     },
 
@@ -678,6 +690,8 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     applySequenceManager: function(pSequenceManager) {
+        var pieContainer = Ext.getCmp("PieContainer");
+
         if(!this.sequenceManager) this.sequenceManager = pSequenceManager;
         this.dirty = true;
         this.sequenceManagerChanged = true;
@@ -798,7 +812,7 @@ Ext.define("Teselagen.manager.PieManager", {
                                   .attr("class", "pieFeature");
         this.featureRenderer.setFeatureSVG(this.featureSVG);
 
-        this.fitWidthToContent(this);
+        this.fitWidthToContent(this, false);
         
         /*d3.select("#PieContainer").selectAll("*").on("mousedown", function(){
        	 	return function() {
