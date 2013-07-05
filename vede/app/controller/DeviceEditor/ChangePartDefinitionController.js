@@ -159,7 +159,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             var self = this;
             Vede.application.fireEvent("saveDesignEvent",function(){
                 self.selectedPart.save({
-                    callback: function(records, operation, success){
+                    callback: function(record, operation, success){
                         if(success) {
                             toastr.options.onclick = null;
                             toastr.info("Part Definition Changed");
@@ -167,6 +167,11 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             Vede.application.fireEvent("ReRenderCollectionInfo")
                         } else {
                             Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
+                            record.reject();
+
+                            // Manually trigger an update event to force the 
+                            // part info form to reload.
+                            record.set("name", record.get("name"));
                         }
                     }
                 });

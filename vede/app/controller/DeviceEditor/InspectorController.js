@@ -975,13 +975,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {String} modified The name of the field that was edited.
      */
     onUpdateParts: function(parts, updatedPart, operation, modified) {
-        if( modified && !updatedPart.data.phantom)
+        if(modified && !updatedPart.data.phantom)
         {
             if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
                                                                       updatedPart);
 
                 this.updateColumnContentDisplayField(parentBin);
+            }
+
+            if(parts.indexOf(this.selectedPart) > -1) {
+                var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+                partPropertiesForm.loadRecord(this.selectedPart);
             }
         }
     },
