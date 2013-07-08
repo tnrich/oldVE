@@ -746,6 +746,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
             var newOperand2 = 
                 newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
+            newRule.set("operand2isNumber", true);
+            newRule.set("operand2Number", newOperand2);
         } else {
             newOperand2Name =
                 newEugeneRuleDialog.down("component[cls='operand2PartField']").getValue();
@@ -758,20 +760,31 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
         var self = this;
-        newOperand2.save({
-            callback: function(){
-                newRule.setOperand2(newOperand2);                
 
-                self.activeProject.addToRules(newRule);
+        if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
+            newOperand2.save({
+                callback: function(){
+                    newRule.setOperand2(newOperand2);                
 
-                var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
-                                                                                self.selectedPart)
+                    self.activeProject.addToRules(newRule);
 
-                self.eugeneRulesGrid.reconfigure(rulesStore);
+                    var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
+                                                                                    self.selectedPart)
 
-                newEugeneRuleDialog.close();
-            }
-        });
+                    self.eugeneRulesGrid.reconfigure(rulesStore);
+                    newEugeneRuleDialog.close();
+                }
+            });
+        } else {
+            this.activeProject.addToRules(newRule);
+
+            var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                            this.selectedPart)
+
+            this.eugeneRulesGrid.reconfigure(rulesStore);
+            newEugeneRuleDialog.close();
+        }
+
         toastr.options.onclick = null;
         toastr.info("Eugene Rule Added");
     },
