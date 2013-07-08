@@ -4,7 +4,10 @@
  */
 Ext.define("Vede.controller.PartLibraryController", {
     extend: "Ext.app.Controller",
-    requires: ["Teselagen.manager.ProjectManager", 'Teselagen.store.PartStore', 'Teselagen.models.Part'],
+    requires: ["Teselagen.event.DeviceEvent", 
+               "Teselagen.manager.ProjectManager", 
+               "Teselagen.store.PartStore", 
+               "Teselagen.models.Part"],
     partLibraryStore: null,
     partLibraryWindow: null,
     callbackFn: null,
@@ -69,6 +72,7 @@ Ext.define("Vede.controller.PartLibraryController", {
 //    },
 
     init: function() {
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
 
         this.control({
             '#partLibraryGridList': {
@@ -78,7 +82,7 @@ Ext.define("Vede.controller.PartLibraryController", {
 
         this.partLibraryStore = Teselagen.manager.ProjectManager.partLibrary;
 
-        //this.application.on("openPartLibrary", this.onOpenPartLibrary, this);
+        //this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onOpenPartLibrary, this);
 
         this.callParent();
     }

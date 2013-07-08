@@ -49,7 +49,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         var self = this;
 
-        Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
+        Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY, function(combinatorial,j5ready) {
             if(!j5ready)
             {
 
@@ -102,7 +102,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
             if(!combobox.getValue()) {
-                Vede.application.fireEvent("checkj5Ready", function(combinatorial,j5ready) {
+                Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY, function(combinatorial,j5ready) {
                     self.loadAssemblyMethodSelector(combinatorial);
                 });
             }
@@ -994,6 +994,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 click: this.abortJ5Run
             }
         });
+
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
         
         this.application.on("runj5", this.onRunJ5Event, this);
         this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);

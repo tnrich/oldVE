@@ -54,7 +54,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.clearPartInfo();
         toastr.options.onclick = null;
         toastr.info("Part Cleared");
-        this.application.fireEvent("checkj5Ready");
+        this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -628,8 +628,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         removeColumnMenuItem.disable
 
         this.toggleInsertOptions(false);        
-        this.application.fireEvent("ReRenderCollectionInfo");
-
+        this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
     },
 
     removeColumn: function (selectedBin, evt) {
@@ -637,20 +636,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(selectedBin) {
                 var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
                 this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
-                this.application.fireEvent("ReRenderCollectionInfo");
+                this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             } else {
                 this.activeProject.getJ5Collection().deleteBinByIndex(
                 this.activeProject.getJ5Collection().binCount() - 1);
                 this.columnsGrid.getView().refresh();
                 this.renderCollectionInfo();
-                this.application.fireEvent("ReRenderCollectionInfo");
+                this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             }
 
             if (this.activeProject.getJ5Collection().binCount() == 0) {
                 this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 0);
             } 
 
-            this.application.fireEvent("ReRenderCollectionInfo");
+            this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
         }
     },
 
@@ -1043,7 +1042,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
 
         if(this.activeProject) {
-            Vede.application.fireEvent("checkj5Ready");
+            Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
             // j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
             //                                                 this.activeProject));
 
@@ -1112,19 +1111,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.SELECT_BIN, this.onBinSelected, this);
 
-        this.application.on("ReRenderDECanvas", this.onReRenderDECanvasEvent, this);
+        this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS, this.onReRenderDECanvasEvent, this);
 
-        this.application.on("OpenPartLibrary", this.onopenPartLibraryBtnClick, this);
+        this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onopenPartLibraryBtnClick, this);
 
-        this.application.on("checkj5Ready", this.onCheckj5Ready, this);
+        this.application.on(this.DeviceEvent.CHECK_J5_READY, this.onCheckj5Ready, this);
 
-        this.application.on("partSelected", this.onPartSelected, this);
+        this.application.on(this.DeviceEvent.CLEAR_PART, this.onClearPart, this);
 
-        this.application.on("ClearPart", this.onClearPart, this);
+        this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
 
-        this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
-
-        this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
+        this.application.on(this.DeviceEvent.RERENDER_COLLECTION_INFO, this.onReRenderCollectionInfoEvent, this);
 
         // this.application.on("editEugeneRule", this.onEditEugeneRule, this);
 

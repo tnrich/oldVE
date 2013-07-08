@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent", "Teselagen.models.J5Parameters"],
+    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent", "Teslagen.event.GridEvent", "Teselagen.models.J5Parameters"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -155,7 +155,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         // var loadingMessage = this.createLoadingMessage();
 
-        Vede.application.fireEvent("suspendPartAlerts");
+        Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
 
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var deproject = activeTab.model;
@@ -216,7 +216,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 design.save({
                     callback: function (record, operation) {
                         // loadingMessage.close();
-                        Vede.application.fireEvent("resumePartAlerts");
+                        Vede.application.fireEvent(this.GridEvent.RESUME_PART_ALERTS);
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
                             toastr.options.onclick = null;
@@ -529,5 +529,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.GridEvent = Teselagen.event.GridEvent;
     }
 });

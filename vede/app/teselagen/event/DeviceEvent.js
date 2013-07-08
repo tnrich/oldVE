@@ -12,6 +12,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
     ADD_ROW_ABOVE: "AddRowAbove",
     ADD_ROW_BELOW: "AddRowBelow",
 
+    CHECK_J5_READY: "CheckJ5Ready",
+
     SELECT_BIN: "SelectBin",
     SELECT_PART: "SelectPart",
     CLEAR_PART: "ClearPart",
@@ -24,10 +26,13 @@ Ext.define("Teselagen.event.DeviceEvent", {
     MAP_PART_SELECT: "MapPartSelect",
     MAP_PART_NOTSELECT: "MapPartNotSelect",
 
+    // TODO: Not used?
     ADD_SELECT_ALERTS: "AddSelectAlerts",
 
     FILL_BLANK_CELLS: "FillBlankCells",
 
-    OPEN_LIBRARY: "OpenPartLibrary"
+    RERENDER_COLLECTION_INFO: "RerenderCollectionInfo",
+    RERENDER_DE_CANVAS: "RerenderDECanvas",
 
+    OPEN_PART_LIBRARY: "OpenPartLibrary"
 });

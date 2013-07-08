@@ -6,6 +6,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.event.GridEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
                "Vede.view.de.grid.Bin",
@@ -58,6 +59,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.resumeLayouts(true);
     },
 
+    // Not sure what this is, but it appears to be unused.
     addSelectAlerts: function() {
         var bins = this.grid.query("Bin");
         for(var i = 0; i < bins.length; i++) {
@@ -98,7 +100,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Get the bin that the button refers to and reverse its direction.
         var parentBin = button.up().up().up().getBin();
 
-        this.application.fireEvent("BinHeaderClick", button.up());
+        this.application.fireEvent(this.GridEvent.BIN_HEADER_CLICK, button.up());
 
         parentBin.set("directionForward", !parentBin.get("directionForward"));
     },
@@ -110,7 +112,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     addBinHeaderClickEvent: function(binHeader) {
         binHeader.body.on("click", function() {
-            this.application.fireEvent("BinHeaderClick", binHeader);
+            this.application.fireEvent(this.GridEvent.BIN_HEADER_CLICK, binHeader);
         }, this);
     },
 
@@ -510,7 +512,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
         if(modified)
         {
-            Vede.application.fireEvent("checkj5Ready");
+            Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
 
             if(modified.indexOf("fas") >= 0) {
                 this.renderFasConflicts(parts, updatedPart);
@@ -1303,13 +1305,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     }
                 } else {
                     DETab.el.unmask();
-                    Vede.application.fireEvent("OpenPartLibrary");
+                    Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
                 }
 
                 }});
             }, 1);
     } else { 
-        Vede.application.fireEvent("OpenPartLibrary");
+        Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
     }
 
     },
@@ -1493,16 +1495,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         });
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.GridEvent = Teselagen.event.GridEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on("suspendPartAlerts",this.suspendPartAlerts, this);
-        this.application.on("resumePartAlerts",this.resumePartAlerts, this);
+        this.application.on(this.GridEvent.SUSPEND_PART_ALERTS, this.suspendPartAlerts, this);
+        this.application.on(this.GridEvent.RESUME_PART_ALERTS, this.resumePartAlerts, this);
 
         this.application.on("FillBlankCells", this.onfillBlankCells, this);
 
         this.application.on("rerenderPart",this.rerenderPart, this);
 
-        this.application.on("rerenderPart",this.rerenderPart, this);
+        // Appears to be unused.
         this.application.on("addSelectAlerts", this.addSelectAlerts, this);
 
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
@@ -1553,7 +1556,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onPartSelected,
                             this);
 
-        this.application.on("BinHeaderClick",
+        this.application.on(this.GridEvent.BIN_HEADER_CLICK,
                             this.onBinHeaderClick,
                             this);
 
@@ -1569,7 +1572,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onPartCellMouseout,
                             this);
 
-        this.application.on("ReRenderDECanvas",
+        this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS,
                             this.onReRenderDECanvasEvent,
                             this);
 
