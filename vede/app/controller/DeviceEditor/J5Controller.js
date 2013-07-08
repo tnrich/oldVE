@@ -8,6 +8,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     requires: ["Ext.window.MessageBox",
                "Teselagen.bio.parsers.GenbankManager", 
                "Teselagen.constants.Constants", 
+               "Teselagen.event.CommonEvent",
+               "Teselagen.event.DeviceEvent",
                "Teselagen.manager.DeviceDesignManager", 
                "Teselagen.manager.J5CommunicationManager", 
                "Teselagen.manager.ProjectManager", 
@@ -650,7 +652,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         this.disableAllJ5RunButtons();
 
-        Vede.application.fireEvent("saveDesignEvent", function () {
+        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
             if (!Teselagen.manager.TasksMonitor.disabled) {
                 Teselagen.manager.TasksMonitor.start();
@@ -887,6 +889,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     init: function () {
+        this.CommonEvent = Teselagen.event.CommonEvent;
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
+
         this.control({
             "#mainAppPanel": {
                 tabchange: this.onMainAppPanelTabChange
@@ -995,11 +1000,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         });
 
-        this.DeviceEvent = Teselagen.event.DeviceEvent;
         
-        this.application.on("runj5", this.onRunJ5Event, this);
-        this.application.on("j5RunStatusChanged", this.onJ5RunStatusChanged, this);
-        this.application.on("ReLoadAssemblyMethods", this.loadAssemblyMethodSelector, this);
+        this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
+        this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.onJ5RunStatusChanged, this);
+        this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;

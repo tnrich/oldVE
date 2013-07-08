@@ -4,7 +4,15 @@
  */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent", "Teslagen.event.GridEvent", "Teselagen.models.J5Parameters"],
+    requires: ["Ext.draw.*", 
+               "Teselagen.manager.DeviceDesignParsersManager", 
+               "Teselagen.manager.ProjectManager", 
+               "Teselagen.manager.DeviceDesignManager", 
+               "Teselagen.event.CommonEvent",
+               "Teselagen.event.DeviceEvent", 
+               "Teselagen.event.GridEvent", 
+               "Teselagen.event.ProjectEvent", 
+               "Teselagen.models.J5Parameters"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -153,6 +161,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     saveDEProject: function (cb) {
 
+        var self = this;
+
         // var loadingMessage = this.createLoadingMessage();
 
         Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
@@ -216,7 +226,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 design.save({
                     callback: function (record, operation) {
                         // loadingMessage.close();
-                        Vede.application.fireEvent(this.GridEvent.RESUME_PART_ALERTS);
+                        Vede.application.fireEvent(self.GridEvent.RESUME_PART_ALERTS);
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
                             toastr.options.onclick = null;
@@ -315,7 +325,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onJ5buttonClick: function (button, e, options) {
-        Vede.application.fireEvent("runj5");
+        Vede.application.fireEvent(this.CommonEvent.RUN_J5);
         toastr.options.onclick = null;
         toastr.info("Design Saved");
     },
@@ -477,13 +487,18 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
      */
     init: function () {
         this.callParent();
+
+        this.CommonEvent = Teselagen.event.CommonEvent;
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.GridEvent = Teselagen.event.GridEvent;
+
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
 
-        this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
+        this.application.on(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
 
-        this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+        this.application.on(this.DeviceEvent.LOAD_EUGENE_RULES, this.onLoadEugeneRulesEvent, this);
 
-        this.application.on("jumpToJ5Run", this.onJumpToJ5Run, this);
+        this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.onJumpToJ5Run, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
@@ -528,7 +543,5 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         });
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-        this.DeviceEvent = Teselagen.event.DeviceEvent;
-        this.GridEvent = Teselagen.event.GridEvent;
     }
 });

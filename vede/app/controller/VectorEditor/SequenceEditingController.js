@@ -5,8 +5,12 @@
 Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.SequenceManagerEvent", "Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager",
-    "Teselagen.manager.VectorEditorManager"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.event.ProjectEvent",
+               "Teselagen.event.SequenceManagerEvent", 
+               "Teselagen.manager.SequenceFileManager", 
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.manager.VectorEditorManager"],
 
     editingDETab: null,
     createPartWindow: null,
@@ -91,7 +95,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             endBP: sequence.getLength()
         });
 
-        Vede.application.fireEvent("createPartDefinition", veproject, part, sequence);
+        Vede.application.fireEvent(this.DeviceEvent.CREATE_PART_DEFINITION, veproject, part, sequence);
     },
 
     onOpenVectorEditor: function(seq){
@@ -103,7 +107,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
         this.VEManager = Ext.create("Teselagen.manager.VectorEditorManager",seq,sequenceFileManager);
 
-        Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
+        Vede.application.fireEvent(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, sequenceFileManager);
     },
 
     onsaveSequenceBtnClick: function(){
@@ -181,6 +185,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
     
     init: function () {
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
+        this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
 
         this.control({
             '#VectorEditorMainToolBar > button[cls="saveSequenceBtn"]': {
@@ -200,9 +207,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             }
         });
 
-        this.application.on("openVectorEditor", this.onOpenVectorEditor, this);
-        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
-        this.application.on("partCreated", this.onPartCreated, this);
+        this.application.on(this.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.onOpenVectorEditor, this);
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
+        this.application.on(this.DeviceEvent.PART_CREATED, this.onPartCreated, this);
 
 
     }

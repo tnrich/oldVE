@@ -118,19 +118,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     addPartCellEvents: function(partCell) {
         partCell.body.on("click", function() {
-            this.application.fireEvent("PartCellClick", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_CLICK, partCell);
         },this);
         
         partCell.body.on("dblclick", function() {
-            this.application.fireEvent("PartCellVEEditClick", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_DBLCLICK, partCell);
         },this);
 
         partCell.body.on("mouseover", function() {
-            this.application.fireEvent("PartCellMouseover", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_MOUSEOVER, partCell);
         }, this);
 
         partCell.body.on("mouseout", function() {
-            this.application.fireEvent("PartCellMouseout", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_MOUSEOUT, partCell);
         }, this);
     },
 
@@ -1262,6 +1262,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var self = this;
 
         if (j5Part) {
 
@@ -1278,7 +1279,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     {
                         j5Part.getSequenceFile({
                             callback: function (seq) {
-                                Vede.application.fireEvent("OpenVectorEditor",seq);
+                                Vede.application.fireEvent(self.ProjectEvent.OPEN_SEQUENCE_IN_VE, seq);
                         }});
                         DETab.el.unmask();
                     }
@@ -1296,7 +1297,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                 j5Part.setSequenceFileModel(newSequenceFile);
                                 j5Part.save({
                                     callback: function(){
-                                        Vede.application.fireEvent("openVectorEditor",newSequenceFile);
+                                        Vede.application.fireEvent(self.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
                                         DETab.el.unmask();
                                     }
                                 });
@@ -1501,12 +1502,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on(this.GridEvent.SUSPEND_PART_ALERTS, this.suspendPartAlerts, this);
         this.application.on(this.GridEvent.RESUME_PART_ALERTS, this.resumePartAlerts, this);
 
-        this.application.on("FillBlankCells", this.onfillBlankCells, this);
-
-        this.application.on("rerenderPart",this.rerenderPart, this);
+        this.application.on(this.DeviceEvent.FILL_BLANK_CELLS, this.onfillBlankCells, this);
 
         // Appears to be unused.
-        this.application.on("addSelectAlerts", this.addSelectAlerts, this);
+        //this.application.on("addSelectAlerts", this.addSelectAlerts, this);
 
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,
@@ -1560,15 +1559,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onBinHeaderClick,
                             this);
 
-        this.application.on("PartCellClick",
+        this.application.on(this.GridEvent.PART_CELL_CLICK,
                             this.onPartCellClick,
                             this);
 
-        this.application.on("PartCellMouseover",
+        this.application.on(this.GridEvent.PART_CELL_MOUSEOVER,
                             this.onPartCellMouseover,
                             this);
 
-        this.application.on("PartCellMouseout",
+        this.application.on(this.GridEvent.PART_CELL_MOUSEOUT,
                             this.onPartCellMouseout,
                             this);
 
@@ -1576,15 +1575,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onReRenderDECanvasEvent,
                             this);
 
-        this.application.on("PartCellVEEditClick",
+        this.application.on(this.GridEvent.PART_CELL_DBLCLICK,
                             this.onPartCellVEEditClick,
                             this);
 
-        this.application.on("validateDuplicatedPartName",
+        this.application.on(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME,
                             this.onValidateDuplicatedPartNameEvent,
                             this);
 
-        this.application.on("onReloadDesign",
+        this.application.on(this.DeviceEvent.RELOAD_DESIGN,
                             this.onReloadDesign,
                             this);
 

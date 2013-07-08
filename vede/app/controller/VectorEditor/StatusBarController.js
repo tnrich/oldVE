@@ -46,7 +46,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
         this.SelectionEvent = Teselagen.event.SelectionEvent;
         this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
 
-        this.application.on("SequenceManagerChanged", 
+        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
                             this.onSequenceManagerChanged, this);
 
         this.application.on(this.CaretEvent.CARET_POSITION_CHANGED,

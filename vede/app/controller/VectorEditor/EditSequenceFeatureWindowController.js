@@ -1,7 +1,10 @@
 Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
 	extend: "Ext.app.Controller",
 	
-	requires: ["Teselagen.event.ContextMenuEvent"],
+	requires: ["Teselagen.event.ActionStackEvent",
+               "Teselagen.event.CaretEvent",
+               "Teselagen.event.ContextMenuEvent",
+               "Teselagen.event.SequenceManagerEvent"],
                
 	actionStackManager: null,
     sequenceManager: null,
@@ -174,14 +177,13 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
     			change: this.endFieldChange
     		}
     	});
-    	this.application.on("SequenceManagerChanged", 
+    	this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_EVENT,
                 this.onSequenceManagerChanged, this);
     	this.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, 
                 this.onPieAnnotationRightClicked, this);
-    	this.application.on("VectorPanelAnnotationContextMenu", 
+    	this.application.on(Teselagen.event.CaretEvent.VE_CONTEXT_MENU, 
                 this.onPieAnnotationRightClicked, this);
-    	this.application.on("ActionStackChanged", 
+    	this.application.on(Teselagen.event.ActionStackEvent.ACTION_STACK_CHANGED, 
                 this.onActionStackManagerChanged, this);
     }
-
 });

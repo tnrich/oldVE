@@ -56,7 +56,7 @@ Ext.define("Vede.controller.PartLibraryController", {
         console.log("Part selected");
         console.log(part.get('name'));
         console.log("Validating...");
-        Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'));
+        Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get('name'));
         this.callbackFn(grid,part,item,this.partLibraryWindow);
     },
 

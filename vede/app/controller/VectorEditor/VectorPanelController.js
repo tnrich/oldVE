@@ -5,7 +5,8 @@
  */
 Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
     extend: "Ext.app.Controller",
-    require: ["Teselagen.manager.ProjectManager"],
+    requires: ["Teselagen.event.ProjectEvent",
+               "Teselagen.manager.ProjectManager"],
     isRendered: false,
 
     onTabChange: function (tabPanel, newTab, oldTab) {
@@ -30,7 +31,7 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
                 });
 
                 //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-                Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
+                Vede.application.fireEvent(this.ProjectEvent.OPEN_SEQUENCE_IN_VE, Teselagen.manager.ProjectManager.workingSequence);
             }
         }
     },
@@ -91,7 +92,8 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
      * @member Vede.controller.VectorEditor.VectorPanelController
      */
     init: function () {
-        // this.application.on("TabOpen", this.onTabOpen);
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
+
         this.control({
             "#VectorPanel": {
                 afterrender: this.onRender,

@@ -1,6 +1,7 @@
 Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 	extend: "Ext.app.Controller",	
-	requires: ["Teselagen.event.ContextMenuEvent"],
+	requires: ["Teselagen.event.ContextMenuEvent",
+               "Teselagen.event.SequenceManagerEvent"],
 	
 	isPieContextMenuOpen: false,
 	isPieAnnotationRightClicked: false,
@@ -64,7 +65,7 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     	Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, this.onPieAnnotationRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED, this.onPieSelectionLayerRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, this.onMouseDownAnyWhere, this);
-    	Vede.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+    	Vede.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
 	},
 	
 	onPieRightClicked: function() {

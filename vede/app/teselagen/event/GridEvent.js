@@ -7,8 +7,12 @@
 Ext.define("Teselagen.event.GridEvent", {
     singleton: true,
 
-    // Fired when a bin header is clicked.
     BIN_HEADER_CLICK: "BinHeaderClick",
+    PART_CELL_CLICK: "PartCellClick",
+    PART_CELL_DBLCLICK: "PartCellDblClick",
+
+    PART_CELL_MOUSEOVER: "PartCellMouseover",
+    PART_CELL_MOUSEOUT: "PartCellMouseout",
 
     // Suspend/resume alerts on the parts store.
     SUSPEND_PART_ALERTS: "SuspendPartAlerts",
