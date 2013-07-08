@@ -65,7 +65,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         });
         // When pie is resized, scale the graphics in the pie.
         this.pieContainer.on("resize", function() {
-            this.pieManager.fitWidthToContent(this.pieManager);
+            this.pieManager.fitWidthToContent(this.pieManager, true);
         }, this);
 
         // Set the tabindex attribute in order to receive keyboard events on a div.
@@ -98,7 +98,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 clearTimeout(timeOut);
 
             timeOut = setTimeout(function(){
-                self.pieManager.fitWidthToContent(self.pieManager);
+                self.pieManager.fitWidthToContent(self.pieManager, true);
             }, 400);
         };
 
@@ -185,6 +185,8 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.pieManager.setFeatures(pSeqMan.getFeatures());
 
         this.pieManager.render();
+
+        this.pieManager.fitWidthToContent(this.pieManager, true);
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
         this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.wireframeSVG);

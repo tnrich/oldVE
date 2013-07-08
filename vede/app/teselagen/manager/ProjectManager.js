@@ -306,16 +306,17 @@ Ext.define("Teselagen.manager.ProjectManager", {
                             var newBin = Ext.create("Teselagen.models.J5Bin", {
                                 binName: "Bin1"
                             });
-                            var tempParts = [];
-                            for(var i = 0; i < 2; i++) {
-                                var newPart = Ext.create("Teselagen.models.Part", {
-                                    name: "",
-                                    phantom: true
-                                });
-                                parts.push(newPart);
-                                tempParts.push(newPart);
-                                newBin.parts().add(newPart);
-                            }
+                            // Removing creation of phantom parts for #793.
+//                            var tempParts = [];
+//                            for(var i = 0; i < 2; i++) {
+//                                var newPart = Ext.create("Teselagen.models.Part", {
+//                                    name: "",
+//                                    phantom: true
+//                                });
+//                                parts.push(newPart);
+//                                tempParts.push(newPart);
+//                                newBin.parts().add(newPart);
+//                            }
                             binsArray.push(newBin);
                         }
 

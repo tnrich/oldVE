@@ -30,6 +30,32 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         namespace = "";
     },
 
+    convertGenbankToSBOL: function(data,cb){
+            var messageBox = Ext.MessageBox.wait(
+                "Converting to SBOL XML/RDF...",
+                "Waiting for the server"
+            );
+
+            Ext.Ajax.request({
+                url: Teselagen.manager.SessionManager.buildUrl("genbanktosbol", ''),
+                params: {
+                    filename: 'example.xml',
+                    data: Base64.encode(data)
+                },
+                success: function (response) {
+                    response = JSON.parse(response.responseText);
+                    messageBox.close();
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                    cb(response.data,true);
+                },
+                failure: function(response, opts) {
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                    messageBox.close();
+                    Ext.MessageBox.alert('Failed','Conversion failed');
+                }
+            });        
+    },
+
     parse: function(data, cb){
         console.log("Parsing using j5");
         var self = this;

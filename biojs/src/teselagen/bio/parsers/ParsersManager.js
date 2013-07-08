@@ -58,6 +58,61 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         Sha256      = Teselagen.bio.util.Sha256;
     },
 
+    detectXMLFormat: function(data,cb){
+
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(data, "text/xml");
+        var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
+        if(diff.length>0)
+        {
+            // JBEI-SEQ
+            return cb(data,false);
+        }
+        else
+        {
+            // SBOL
+            Teselagen.bio.parsers.SbolParser.parse(data,cb);
+        }
+    },
+
+    parseSequence: function(result, pExt,cb){
+
+        var self = this;
+        var asyncParseFlag = false;
+
+        //console.log(ext);
+        switch(pExt)
+        {
+            case "fasta":
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+                break;
+            case "fas":
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+                break;
+            case "json":
+                fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
+                break;
+            case "gb":
+                fileContent = result;
+                break;
+            case "xml":
+                asyncParseFlag = true;
+                fileContent = self.detectXMLFormat(result,function(pGB,isSBOL){
+                    var gb;
+                    if(isSBOL) gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
+                    else  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+                    return cb(gb);;
+                });
+                break;
+        }
+        
+        if(!asyncParseFlag)
+        {
+            var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
+            return cb(gb);;
+        }
+    },
+
     // ===========================================================================
     //  Fasta & Genbank Conversions
     // ===========================================================================

@@ -5,30 +5,32 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-    requires: ["Teselagen.event.DeviceEvent","Ext.grid.plugin.RowEditing"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Ext.form.RadioGroup", 
+               "Ext.grid.column.Boolean",
+               "Ext.grid.column.Column", 
+               "Ext.grid.column.Number", 
+               "Ext.grid.Panel", 
+               "Ext.grid.plugin.RowEditing",
+               "Vede.view.de.InspectorCollectionInfoGrid"],
     cls: 'InspectorPanel',
 
     activeTab: 1,
     animCollapse: false,
     dock: 'right',
-    floatable: true,
     frame: true,
     minWidth: 350,
     bodyBorder: false,
     collapseDirection: 'right',
     collapsible: true,
     frameHeader: false,
-    hideCollapseTool: false,
     overlapHeader: false,
-    plain: false,
     title: 'Inspector',
     titleCollapse: false,
     removePanelHeader: false,
     resizable: true,
-    autoScroll: true,
     width: 100,
     layout: {
-        deferredRender: false,
         type: 'card'
     },
 
@@ -159,7 +161,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 markDirty: false
                             },
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2
+                                clicksToEdit: 2,
+                                // listeners: {
+                                //     edit: function () {
+                                //         Vede.application.fireEvent('editEugeneRule');
+                                //     }
+                                // }
                             }),
                             columnLines: true,
                             rowLines: true,
@@ -210,7 +217,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     editor: {
                                         xtype: 'combobox',
                                         store: [],
-                                        cls: "operand2_combobox"
+                                        cls: "operand2_combobox",
                                     },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
@@ -218,7 +225,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         } else {
                                             return rule.getOperand2().get("name");
                                         }
-                                    }
+                                    },
+                                    
                                 }
                             ]
                         },
@@ -260,7 +268,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 align: 'stretch'
             },
             title: 'Collection Info',
-            autoScroll: true,
             margin: "5px 0px 5px 0px",
             items: [
                 {
@@ -287,6 +294,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'radiogroup',
+                            anchor: '100%',
                             cls: 'plasmid_geometry',
                             fieldLabel: 'Plasmid Type',
                             allowBlank: false,
@@ -309,121 +317,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'gridpanel',
                             cls: 'inspectorGrid',
-                            viewConfig: {
-                                markDirty: false
-                            },
-                            allowDeselect: true,
-                            columnLines: true,
-                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2,
-                                errorSummary: false
-                            }),
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    width: 100,
-                                    text: '<div data-qtip="Column Name">Column Name</div>',
-                                    dataIndex: 'binName',
-                                    editor: {
-                                        xtype: 'textfield',
-                                        allowBlank: false
-                                    },
-                                    renderer: function(value, metadata) {
-                                        metadata.tdAttr = 'data-qtip="' + value + '"';
-                                        return value;
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Direction">Direction</div>',
-                                    dataIndex: 'directionForward',
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: [[true, "Forward"], [false, "Reverse"]]
-                                    },
-                                    renderer: function(forward) {
-                                        if(forward) {
-                                            return "Forward";
-                                        } else {
-                                            return "Reverse";
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="Items">Items</div>',
-                                    renderer: function(value, metadata, record) {
-                                        return record.parts().getRange().length;
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
-                                    dataIndex: 'fas',
-                                    readOnly: true,
-                                    renderer: function(value, metadata, record) {
-                                        metadata.tdAttr = 'data-qtip="' + value + '"';
-
-                                        if(record.parts().getRange().length > 0) {
-                                            metadata.tdAttr = 'data-qtip="' + record.parts().getRange()[0].get("fas") + '"';
-                                            return record.parts().getRange()[0].get("fas");
-                                        } else {
-                                            metadata.tdAttr = 'data-qtip="' + value + '"';
-                                            return value;
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'booleancolumn',
-                                    text: '<div data-qtip="Direct Synthesis Firewall">DSF</div>',
-                                    dataIndex: 'dsf',
-                                    editor: {
-                                        xtype: 'checkbox'
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
-                                    dataIndex: 'fro',
-                                    editor: {
-                                        xtype: 'textfield'
-                                    },
-                                    renderer: function(value) {
-                                        if(value === 'None') {
-                                            return '';
-                                        } else {
-                                            return value;
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>',
-                                    dataIndex: 'extra5PrimeBps',
-                                    editor: {
-                                        xtype: 'numberfield',
-                                        allowDecimals: false,
-                                        decimalPrecision: 1,
-                                        emptyText: '',
-                                        hideTrigger: true
-                                    },
-                                    renderer: Ext.util.Format.numberRenderer('0')
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
-                                    dataIndex: 'extra3PrimeBps',
-                                    editor: {
-                                        xtype: 'numberfield',
-                                        allowDecimals: false,
-                                        decimalPrecision: 1,
-                                        emptyText: '',
-                                        hideTrigger: true
-                                    },
-                                    renderer: Ext.util.Format.numberRenderer('0')
-                                }
-                            ],
+                            anchor:"100% 65%",
+                            xtype: 'collectioninfogrid'
                         }
+                            
                         // {
                         //     xtype: 'container',
                         //     cls: 'inspector_containerActions',

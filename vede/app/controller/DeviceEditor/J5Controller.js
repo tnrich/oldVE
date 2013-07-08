@@ -72,7 +72,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     self.loadAssemblyMethodSelector(combinatorial);
                 }
             }
-        });
+        },true); //This last flag is to avoid replace assembly method
     },
 
     loadAssemblyMethodSelector: function(combinatorial) {
