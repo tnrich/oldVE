@@ -741,7 +741,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             cls: 'customizeAutomationParamsBtn',
                                             margin: '20 0 0 0',
                                             height: 30,
-                                            text: 'Customize Automation Parameters'
+                                            text: 'Edit Automation Parameters'
                                         },
                                         {
                                             xtype: 'button',
