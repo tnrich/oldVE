@@ -7,7 +7,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
     alias: 'widget.InspectorPanel',
     requires: ["Teselagen.event.DeviceEvent","Ext.form.RadioGroup", "Ext.grid.column.Boolean",
                "Ext.grid.column.Column", "Ext.grid.column.Number", "Ext.grid.Panel", 
-               "Ext.grid.plugin.RowEditing"],
+               "Ext.grid.plugin.RowEditing", "Teselagen.models.EugeneRule", "Vede.view.de.grid.Part"],
     cls: 'InspectorPanel',
 
     activeTab: 1,
@@ -157,11 +157,16 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2,
-                                // listeners: {
-                                //     edit: function () {
-                                //         Vede.application.fireEvent('editEugeneRule');
-                                //     }
-                                // }
+                                listeners: {
+                                    validateedit: function (editor, e, eOpts) {
+                                        var updatedField = e.field;
+                                        var newId = e.newValues.operand2_id;
+                                        var ruleName = e.record.raw.name;
+                                        if (updatedField === "operand2_id") {
+                                            Vede.application.fireEvent('operand2Changed', newId, ruleName);
+                                        };
+                                    }
+                                }
                             }),
                             columnLines: true,
                             rowLines: true,
@@ -213,6 +218,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'combobox',
                                         store: [],
                                         cls: "operand2_combobox",
+                                    },
+                                    listeners: {
+                                        dblclick: function () {
+                                            Vede.application.fireEvent('populateOperand2Field');
+                                        }
                                     },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {

@@ -84,11 +84,15 @@ Ext.define("Teselagen.models.EugeneRule", {
                     });
                 }
                 return compOp;
+                console.log('heloo');
             }
         },
         {
             name: "operand2isNumber",
+
             convert: function(v) {
+                console.log(v);
+            console.log(operand2isNumber);
                 if (this.get("operand2Number") === undefined) {
                     return v;
                 }
