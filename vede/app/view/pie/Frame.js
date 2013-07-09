@@ -35,6 +35,7 @@ Ext.define('Vede.view.pie.Frame', {
                   innerStartPoint.x + " " + (innerStartPoint.y - 0.0001);
 
         return inData.pie.append("svg:path")
+                         .attr("class", "pieFrame")
                          .attr("stroke", this.self.OUTLINE_COLOR)
                          .attr("stroke-width", this.self.OUTLINE_WIDTH)
                          .attr("fill", this.self.RING_COLOR)
