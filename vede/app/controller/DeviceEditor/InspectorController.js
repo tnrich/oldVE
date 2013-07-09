@@ -67,17 +67,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         for(var i = 0; i < bins.length; i++) {
             parts = bins[i].parts().getRange();
             if(parts.length > 1) {
+                tmpC = 0;
+
                 for(var j = 0; j < parts.length; j++) {
-                    if(parts[j].get("sequencefile_id")!="") {
+                    if(parts[j].get("sequencefile_id")!="" && !parts[j].get("phantom")) {
                         tmpC++;
                     }
+                }
+
+                if (tmpC>1) {
+                    combinatorial = true;
                 }
             }
         }
 
-        if (tmpC>1) {
-            combinatorial = true;
-        }
         return cb(combinatorial);
     },
 
