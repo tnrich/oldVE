@@ -5,7 +5,7 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters","Teselagen.bio.parsers.ParsersManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -14,26 +14,29 @@ Ext.define("Vede.controller.J5ReportController", {
     cls: 'j5ReportTab',
 
     onPlasmidsItemClick: function(row,record){
+
         var currentTab = Ext.getCmp("mainAppPanel");
         var mask = new Ext.LoadMask({target: currentTab});
-
         mask.setVisible(true, false);
 
-        var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
-            "GENBANK",
-            record.data.fileContent,
-            record.data.name,
-            ""
-        );
+        var ext = record.data.name.split('.').pop();
 
-        // Javascript waits to render the loading mask until after the call to
-        // openSequence, so we force it to wait a millisecond before calling
-        // to give it time to render the loading mask.
-        Ext.defer(function() {
-            Teselagen.manager.ProjectManager.openSequence(sequence);
-            mask.setVisible(false);
-        }, 10);
+        Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.fileContent,ext,function(gb){
+            var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+                "GENBANK",
+                gb,
+                record.data.name,
+                ""
+            );
 
+            // Javascript waits to render the loading mask until after the call to
+            // openSequence, so we force it to wait a millisecond before calling
+            // to give it time to render the loading mask.
+            Ext.defer(function() {
+                Teselagen.manager.ProjectManager.openSequence(sequence);
+                mask.setVisible(false);
+            }, 10);
+        });
     },
 
     downloadResults: function(){
@@ -65,10 +68,13 @@ Ext.define("Vede.controller.J5ReportController", {
         startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
         endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
-        
+        assemblies.sort('name', 'ASC');
+
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-        var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
-        //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+
+        var j5parameters = Ext.create("Teselagen.models.J5Parameters");
+        j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+        J5parametersValues = j5parameters.getParametersAsStore();
         //console.log(j5parameters);
         //console.log(this.activeJ5Run);
 
@@ -134,9 +140,9 @@ Ext.define("Vede.controller.J5ReportController", {
         }
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-        this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+        this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-
+        // this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
@@ -304,7 +310,7 @@ Ext.define("Vede.controller.J5ReportController", {
             'button[cls="downloadResults"]': {
                 click: this.downloadResults
             },
-            "gridpanel[title=Output Plasmids]": {
+            "gridpanel[name='assemblies']": {
                 itemclick: this.onPlasmidsItemClick
             },
             "button[cls='buildBtn']": {

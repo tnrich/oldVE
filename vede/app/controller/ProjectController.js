@@ -118,7 +118,7 @@ Ext.define("Vede.controller.ProjectController", {
                                     leaf: true,
                                     id: sequence.data.id,
                                     hrefTarget: "opensequence",
-                                    icon: "resources/images/ux/sequence-tree-icon-leaf.png",
+                                    icon: "resources/images/ux/circular.png",
                                     qtip: 'Sequence ' + sequence.data.name
                                 });
                             });

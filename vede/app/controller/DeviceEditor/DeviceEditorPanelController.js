@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent"],
+    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent", "Teselagen.models.J5Parameters"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -360,8 +360,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
                     endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
+                    assemblies.sort('name', 'ASC');
+                    
                     var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
-                    var j5parameters = self.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+
+                    var j5parameters = Ext.create("Teselagen.models.J5Parameters");
+                    j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+                    J5parametersValues = j5parameters.getParametersAsStore();
                     //console.log(self.activeJ5Run.getJ5Input().getJ5Parameters());
                     //console.log(j5parameters);
                     //console.log(self.activeJ5Run);
@@ -428,7 +433,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     }
 
                     Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+                    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
                     Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
 
                     

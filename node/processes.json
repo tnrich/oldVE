@@ -1,0 +1,4 @@
+[
+	{"script":"app.js","name":"Dev","args":"-r 3000","instances":"2"},
+	{"script":"appTest.js","name":"Test","args":"-t -r 3001","instances":"2"}
+]

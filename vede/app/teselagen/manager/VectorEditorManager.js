@@ -6,7 +6,7 @@
  */
 Ext.define("Teselagen.manager.VectorEditorManager", {
 
-    requires: ["Ext.layout.container.Border"],
+    requires: ["Ext.layout.container.Border","Teselagen.bio.parsers.SbolParser"],
     sequenceFileManager: null,
     sequence: null,
 
@@ -39,9 +39,9 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         var successFullSavedCallback = function(){
             currentTabPanel.setLoading(false);
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
-            parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on '+ nowDate);
+            parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
-            toastr.info ("Sequence Successfully Saved");
+            toastr.info ("Sequence Saved");
             project = Teselagen.manager.ProjectManager.workingProject;
             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
@@ -144,18 +144,80 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         else { saveToServer(); }
 
     },
-    saveSequenceToFile: function(){
-        gb  = this.sequenceFileManager.toGenbank().toString();
 
-        var saveFile = function(name,gb) {
-            var flag;
-            var text        = gb;
-            var filename    = name;
-            var bb          = new BlobBuilder();
-            bb.append(text);
-            saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+    promptFormat: function(cb) {
+        var dialog = Ext.create('Ext.window.MessageBox', {
+            buttons: [{
+                text: 'GENBANK',
+                handler: function() {
+                    cb("GENBANK",dialog);
+                }
+            },{
+                text: 'FASTA',
+                handler: function() {
+                    cb("FASTA",dialog);
+                }
+            },{
+                text: 'SBOL XML/RDF',
+                handler: function() {
+                    cb("SBOL XML/RDF",dialog);
+                }
+            },{
+                text: 'CANCEL',
+                handler: function() {
+                    cb("CANCEL",dialog);
+                }
+            }]
+        });
+
+        dialog.show({
+            msg: '<p>Please select format</p>',
+            closable: false,
+
+        });
+
+        dialog.setHeight(60);
+        dialog.setWidth(370);
+    },
+
+    saveSequenceToFile: function(){
+
+        var self = this;
+        
+        var performSavingOperation = function(data,filename){
+            var saveFile = function(name,gb) {
+                var flag;
+                var text        = data;
+                var filename    = name;
+                var bb          = new BlobBuilder();
+                bb.append(text);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            };
+            saveFile(filename,data);
         };
-        saveFile(this.sequence.data.name+'.gb',gb);
+
+        this.promptFormat(function(btn,dialog){
+
+                gb  = self.sequenceFileManager.toGenbank().toString();
+
+
+                if (btn==="GENBANK") {
+                    performSavingOperation(gb,self.sequence.data.name+'.gb');
+                }
+                else if (btn==="FASTA") {
+                    var data = ">"+self.sequence.data.name+"\n";
+                    data += self.sequenceFileManager.sequence.toString();
+                    performSavingOperation(data,self.sequence.data.name+'.fas');
+                }
+                else if (btn==="SBOL XML/RDF") {
+                    Teselagen.bio.parsers.SbolParser.convertGenbankToSBOL(gb,function(data){
+                        performSavingOperation(data,self.sequence.data.name+'.xml');
+                    });
+                }
+
+                dialog.close();
+        });
+
     }
 
 });

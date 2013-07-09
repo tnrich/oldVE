@@ -53,12 +53,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     onCircularViewButtonClick: function(button, e, options) {
         var viewMode;
 
-        if (button.pressed) {
-            viewMode = "circular";
-        }
-        else {
-            viewMode = "linear";
-        }
+        viewMode = "circular";
 
         this.application.fireEvent("ViewModeChanged", viewMode);
     },
@@ -126,12 +121,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     onLinearViewBtnClick: function(button, e, options) {
         var viewMode;
 
-        if (button.pressed) {
-            viewMode = "linear";
-        }
-        else {
-            viewMode = "circular";
-        }
+        viewMode = "linear";
 
         this.application.fireEvent("ViewModeChanged", viewMode);
     },
@@ -141,11 +131,11 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         var linearButton = Ext.getCmp("linearViewBtn");
 
         if(viewMode == "linear") {
-            circularButton.toggle(false, true);
-            linearButton.toggle(true, true);
+            circularButton.toggle(false);
+            linearButton.toggle(true);
         } else {
-            circularButton.toggle(true, false);
-            linearButton.toggle(false, true);
+            circularButton.toggle(true);
+            linearButton.toggle(false);
         }
     },
 

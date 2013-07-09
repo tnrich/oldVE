@@ -17,7 +17,6 @@ module.exports = function(app) {
      */
 
     app.get('/fqdn', restrict,  function(req, res) {
-        console.log(req.user.FQDN);
         return res.json(req.user)
     });
 
@@ -81,7 +80,7 @@ module.exports = function(app) {
      */
     app.put('/parts', restrict,  function(req, res) {
 
-        if(req.body.name===""||req.body.phantom) { return res.json({parts:app.constants.defaultEmptyPart}); }
+        if(req.body.name === "" || req.body.phantom) { return res.json({parts:app.constants.defaultEmptyPart}); }
         else if(!req.body.id) { savePart(req,res); }
         else
         {

@@ -99,7 +99,6 @@ Ext.define('Vede.view.de.grid.Part', {
             if(this.getPart().isEmpty()) {
                 this.partCell.down().removeBodyCls("gridPartCell");
                 this.partCell.down().removeBodyCls("gridPartCell-selected");
-
                 // Add the red background. Commented out for ticket #447.
                 //this.partCell.down().addBodyCls("gridPartCell-alert");
             }
@@ -161,7 +160,7 @@ Ext.define('Vede.view.de.grid.Part', {
      * Removes the 'selected' CSS class from the part when it is deselected.
      */
     deselect: function () {
-        this.partCell.down().removeBodyCls("gridPartCell-alert");
+        // this.partCell.down().removeBodyCls("gridPartCell-alert");
         this.partCell.down().removeBodyCls("gridPartCell-selected");
         this.partCell.down().removeBodyCls("gridPartCell-highlighted");
     },
@@ -172,7 +171,7 @@ Ext.define('Vede.view.de.grid.Part', {
 
     mapSelect: function() {
         this.partCell.down().addBodyCls("gridPartCell-selected");
-        this.partCell.down().removeBodyCls("gridPartCell-alert");
+        // this.partCell.down().removeBodyCls("gridPartCell-alert");
     },
     /**
      * If the fas is set, add either a red or blue rectangle, depending on

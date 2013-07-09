@@ -65,7 +65,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         });
         // When pie is resized, scale the graphics in the pie.
         this.pieContainer.on("resize", function() {
-            this.pieManager.fitWidthToContent(this.pieManager);
+            this.pieManager.fitWidthToContent(this.pieManager, true);
         }, this);
 
         // Set the tabindex attribute in order to receive keyboard events on a div.
@@ -98,7 +98,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 clearTimeout(timeOut);
 
             timeOut = setTimeout(function(){
-                self.pieManager.fitWidthToContent(self.pieManager);
+                self.pieManager.fitWidthToContent(self.pieManager, true);
             }, 400);
         };
 
@@ -162,10 +162,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.clickedAnnotationEnd = end;
     },
 
-    onAnnotatePanelAnnotationClicked: function(start, end) {
-        this.select(start, end);
-    },
-
     onViewModeChanged: function(viewMode) {
         if(viewMode == "linear") {
             Ext.getCmp("PieContainer").hide();
@@ -177,7 +173,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start);
+            this.changeCaretPosition(start, true);
         }
     },
 
@@ -190,8 +186,10 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
         this.pieManager.render();
 
+        this.pieManager.fitWidthToContent(this.pieManager, true);
+
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.wireframeSVG);
 
         this.SelectionLayer.setSequenceManager(pSeqMan);
         this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
@@ -320,9 +318,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 end = endSelectionIndex;
             }
 
-            self.WireframeSelectionLayer.startSelecting();
-            self.WireframeSelectionLayer.select(start, end);
-
             if(d3.event.ctrlKey) {
                 self.SelectionLayer.startSelecting();
 
@@ -335,6 +330,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             } else {
                 self.stickySelect(start, end);
             }
+
+            self.WireframeSelectionLayer.startSelecting();
+            self.WireframeSelectionLayer.select(start, end);
         }
     },
 
@@ -461,8 +459,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * @param {Boolean} silent If true, don't fire a position changed event.
      */
     changeCaretPosition: function(index, silent) {
-        if(index >= 0 &&
-           this.SequenceManager &&
+        if(index >= 0 && this.SequenceManager && this.caretIndex !== index &&
            index <= this.SequenceManager.getSequence().toString().length) {
             this.callParent(arguments);
             this.pieManager.adjustCaret(index);

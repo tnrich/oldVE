@@ -443,6 +443,9 @@ border-color: #E0E3E6;
 }
 
 
+.x-message-box-info, .x-message-box-warning, .x-message-box-question, .x-message-box-error {
+  background-size: 32px;
+}
 
 /*Header*/
 #headerPanel, #headerPanel-body {
@@ -666,7 +669,7 @@ border-color: #E0E3E6;
 }
 
 .gridPartCell-alert, .gridPartCell-alert .x-panel-body-default {
-  border-color: rgb(225, 0, 0);
+  border-color: rgb(225, 0, 0) !important;
 }
 
 .mapAlert {

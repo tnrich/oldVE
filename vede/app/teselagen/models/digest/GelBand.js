@@ -18,6 +18,9 @@ Ext.define("Teselagen.models.digest.GelBand", {
          * size of the font for labels (in pixels)
          */
         labelSize: 16,
+
+        
+        font_family:  "Ubuntu Mono",
         /**
          * The height (thickness) of this band in pixels
          */
@@ -183,7 +186,7 @@ Ext.define("Teselagen.models.digest.GelBand", {
             type: "text",
             text: sizeString,
             fill: this.BAND_COLOR,
-            font: this.labelSize + "px 'monospace'",
+            font: this.labelSize + "px '" + this.font_family + "'",
             style: {
                 textAlign: "right",
                 display: "block",
