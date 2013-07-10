@@ -396,6 +396,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
                     var warnings = self.activeJ5Run.raw.warnings;
                     var errors = self.activeJ5Run.raw.error_list[0];
+                    var nonDegenerativeParts = self.activeJ5Run.getJ5Results().raw.processedData.nondegenerateParts;
+
+                    var nonDegenerativPartsStore = Ext.create('Teselagen.store.PartStore', {
+                        model: 'Teselagen.models.Part',
+                        data: nonDegenerativeParts
+                    });
 
                     if (warnings) {
                     var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
@@ -435,6 +441,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
                     Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
                     Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+                    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="combinatorialAssembly"]').reconfigure(nonDegenerativPartsStore);
 
                     
                     Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);

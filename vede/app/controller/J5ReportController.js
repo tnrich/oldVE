@@ -103,6 +103,12 @@ Ext.define("Vede.controller.J5ReportController", {
 
         var warnings = this.activeJ5Run.raw.warnings;
         var errors = this.activeJ5Run.raw.error_list[0];
+        var nonDegenerativeParts = this.activeJ5Run.getJ5Results().raw.processedData.nondegenerateParts;
+
+        var nonDegenerativPartsStore = Ext.create('Teselagen.store.PartStore', {
+            model: 'Teselagen.models.Part',
+            data: nonDegenerativeParts
+        });
 
         if (warnings) {
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
@@ -141,7 +147,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
-        this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+        this.tabPanel.down('gridpanel[name="combinatorialAssembly"]').reconfigure(nonDegenerativPartsStore);
         // this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
