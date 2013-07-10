@@ -136,7 +136,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
         var me = this;
         this.GroupManager.saveUserGroups(function(pSuccess) {
             if (pSuccess) {
-                me.Logger.notifyInfo("Active enzymes saved");
+                me.Logger.notifyInfo("Active enzyme group saved");
             }
         });
     },
