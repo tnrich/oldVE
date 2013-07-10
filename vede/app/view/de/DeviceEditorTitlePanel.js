@@ -23,7 +23,7 @@ Ext.define('Vede.view.de.DeviceEditorTitlePanel', {
             text: 'Device Editor'
         }, {
             xtype: 'tbseparator',
-            margins: '0 0 20 8',
+            margins: '0 0 20 8'
         }, {
             xtype: 'label',
             margins: '0 0 0 10',

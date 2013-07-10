@@ -73,7 +73,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                             }
                         });
                     }
-                },
+                }
             });
         };
 

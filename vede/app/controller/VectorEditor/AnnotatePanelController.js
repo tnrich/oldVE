@@ -482,5 +482,5 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         if (vectorPanel.collapsed) {
             vectorPanel.expand()
         }
-    },
+    }
 });

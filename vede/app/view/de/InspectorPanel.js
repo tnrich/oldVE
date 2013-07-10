@@ -161,7 +161,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 markDirty: false
                             },
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2,
+                                clicksToEdit: 2
                                 // listeners: {
                                 //     edit: function () {
                                 //         Vede.application.fireEvent('editEugeneRule');
@@ -217,7 +217,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     editor: {
                                         xtype: 'combobox',
                                         store: [],
-                                        cls: "operand2_combobox",
+                                        cls: "operand2_combobox"
                                     },
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
@@ -225,7 +225,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         } else {
                                             return rule.getOperand2().get("name");
                                         }
-                                    },
+                                    }
                                     
                                 }
                             ]
@@ -252,11 +252,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     margin: '0 0 0 5',
                                     overCls: 'deleteEugeneRuleBtn-over',
                                     border: 0,
-                                    text: 'Delete Rule',
+                                    text: 'Delete Rule'
                                 }
                             ]
                         }
-                    ],
+                    ]
                 }
             ]
         },
@@ -590,7 +590,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     margin: '15 0 0 0',
                                     height: 30,
                                     border: 0
-                                },
+                                }
                             ]
                         },
                         {
@@ -768,7 +768,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
             {   
                 Vede.application.fireEvent("openj5");
             }
-        },
+        }
     },
 
     init: function () {

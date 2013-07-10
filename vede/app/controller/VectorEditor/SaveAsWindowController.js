@@ -179,7 +179,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     		},
     		'#saveAsWindowOKButton': {
     			click: this.onSaveAsWindowOKButtonClick
-    		},
+    		}
     	});
     	this.application.on("SequenceManagerChanged",this.onSequenceManagerChanged, this);
     } 

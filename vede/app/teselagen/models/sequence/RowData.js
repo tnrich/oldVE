@@ -15,5 +15,5 @@ Ext.define("Teselagen.models.sequence.RowData", {
 
     constructor: function(inData){
         this.initConfig(inData);
-    },
+    }
 });

@@ -95,7 +95,7 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
             .attr("height", this.sequenceAnnotationManager.caret.height - 4)
             .attr("fill", this.self.HIGHLIGHT_COLOR)
             .attr("fill-opacity", this.self.HIGHLIGHT_TRANSPARENCY);
-    },
+    }
     
     
 });

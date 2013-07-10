@@ -431,6 +431,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
         */
-    },
+    }
 
 });

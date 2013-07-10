@@ -238,5 +238,5 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 
         this.orfSVG.append("svg:title")
             .text(tooltipLabel);
-    },
+    }
 });

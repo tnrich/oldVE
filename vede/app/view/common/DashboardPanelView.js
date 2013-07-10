@@ -25,7 +25,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         flex: 0.3,
                         id: 'welcome_splash',
-                        border: 0,
+                        border: 0
                     },
                     {
                         xtype: 'container',
@@ -183,7 +183,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 flex: .6,
                                                 layout: {
                                                     type: 'hbox',
-                                                    pack: 'center',
+                                                    pack: 'center'
                                                 },
                                                 items: [
                                                     {
@@ -216,7 +216,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         readOnly: true,
                                                         cls: 'projectsCountBox-desc',
                                                         flex: .6,
-                                                        border: 0,
+                                                        border: 0
                                                     }
                                                 ]
                                             }
@@ -247,7 +247,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         xtype: 'image',
                                                         imgCls: 'designs-icon',
                                                         border: 0,
-                                                        margin: '32 0 0 0',
+                                                        margin: '32 0 0 0'
                                                     }
                                                 ]
                                             },
@@ -266,19 +266,19 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         cls: 'designsCountBox-num',
                                                         border: 0,
                                                         flex: 1,
-                                                        text: null,
+                                                        text: null
                                                     },                         
                                                     {
                                                         xtype: 'textfield',
                                                         readOnly: true,
                                                         cls: 'designsCountBox-desc',
                                                         border: 0,
-                                                        flex: .6,
+                                                        flex: .6
                                                     }
                                                 ]
                                             }
                                         ]
-                                    },
+                                    }
 
                                 ]
                             },
@@ -318,7 +318,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         xtype: 'image',
                                                         imgCls: 'sequences-icon',
                                                         border: 0,
-                                                        margin: '32 0 0 0',
+                                                        margin: '32 0 0 0'
                                                     }
                                                 ]
                                             },
@@ -337,14 +337,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         cls: 'sequencesCountBox-num',
                                                         border: 0,
                                                         flex: 1,
-                                                        text: null,
+                                                        text: null
                                                     },
                                                     {
                                                         xtype: 'textfield',
                                                         readOnly: true,
                                                         cls: 'sequencesCountBox-desc',
                                                         border: 0,
-                                                        flex: .6,
+                                                        flex: .6
                                                     }
                                                 ]
                                             }
@@ -374,7 +374,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         xtype: 'image',
                                                         imgCls: 'parts-icon',
                                                         border: 0,
-                                                        margin: '32 0 0 0',
+                                                        margin: '32 0 0 0'
                                                     }
                                                 ]
                                             },
@@ -393,26 +393,26 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         cls: 'partsCountBox-num',
                                                         border: 0,
                                                         flex: 1,
-                                                        text: null,
+                                                        text: null
                                                     },
                                                     {
                                                         xtype: 'textfield',
                                                         readOnly: true,
                                                         cls: 'partsCountBox-desc',
                                                         border: 0,
-                                                        flex: .6,
+                                                        flex: .6
                                                     }
                                                 ]
                                             }
                                         ]
-                                    },
+                                    }
                                 ]  
                             }
                         ]
                     }
                 ]
             }
-        ],
+        ]
 
 
             // require: ["Teselagen.event.AuthenticationEvent"],

@@ -254,7 +254,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
 	        contextMenu.show(); 
 	        contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
     	}
-    },
+    }
 });
 
 

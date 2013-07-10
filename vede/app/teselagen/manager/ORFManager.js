@@ -151,5 +151,5 @@ Ext.define("Teselagen.manager.ORFManager", {
         });
 
         this.setOrfs(recalcOrfs);
-    },
+    }
 });

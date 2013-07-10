@@ -122,7 +122,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
                                 "destroy": function(selectWindow) {
                                     currentTabPanel.setLoading(false);
-                                },
+                                }
 
 
                                 /*"hide":function(currentTabPanel){
@@ -172,7 +172,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         dialog.show({
             msg: '<p>Please select format</p>',
-            closable: false,
+            closable: false
 
         });
 

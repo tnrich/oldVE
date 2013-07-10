@@ -10,7 +10,7 @@ Ext.Loader.setConfig({
         Teselagen: './app/teselagen',
         Vede: './app',
         'Teselagen.bio': '../biojs/src/teselagen/bio'
-    },
+    }
     //disableCaching: false
 });
 

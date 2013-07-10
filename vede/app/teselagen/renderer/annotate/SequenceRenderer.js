@@ -509,5 +509,5 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             .attr("x", labelX)
             .attr("y", labelY)
             .text(this.renderIndexString(basePairs));
-    },
+    }
 });

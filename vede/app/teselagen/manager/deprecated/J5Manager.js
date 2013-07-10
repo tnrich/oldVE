@@ -114,7 +114,7 @@ Ext.define("Teselagen.manager.J5Manager", {
             }
         }*/
         this.j5Collection = null;
-    },
+    }
 
 
     /** (moved to J5Collection.js as addNewBin())

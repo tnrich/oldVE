@@ -224,7 +224,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     misprimingSaltConcValue: r.MISPRIMING_SALT_CONC,
                     misprimingOligoConcValue: r.MISPRIMING_OLIGO_CONC,
                     outputSequenceFormatValue: r.OUTPUT_SEQUENCE_FORMAT,
-                    suppressPurePrimersValue: r.SUPPRESS_PURE_PRIMERS,
+                    suppressPurePrimersValue: r.SUPPRESS_PURE_PRIMERS
                 });
 
                 self.populateJ5ParametersDialog();
