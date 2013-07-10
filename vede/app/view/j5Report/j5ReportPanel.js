@@ -275,22 +275,38 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             text: 'Value'
                         }
                     ]
-                },
-                {
-                xtype: 'fieldset',
-                margin: '10 10 10 10',
-                layout: 'fit',
-                title: 'Combinatorial Mock Assembly Output',
-                hidden: true,
-                items: [
-                    {
-                        xtype: 'textareafield',
-                        name: 'combinatorialAssembly',
-                        margin: '10 10 20 10',
-                        fieldLabel: ''
-                    }
+                },{
+                    xtype: 'gridpanel',
+                    name: 'combinatorialAssembly',
+                    margin: '10 10 20 10',
+                    title: 'Parts',
+                    minHeight: 100,
+                    layout: 'fit',
+                    columns: [
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'name',
+                            flex: 1,
+                            text: 'Name'
+                        }
                     ]
-                }]
+                },
+                // {
+                // xtype: 'fieldset',
+                // margin: '10 10 10 10',
+                // layout: 'fit',
+                // title: 'Combinatorial Mock Assembly Output',
+                // hidden: true,
+                // items: [
+                //     {
+                //         xtype: 'textareafield',
+                //         name: 'combinatorialAssembly',
+                //         margin: '10 10 20 10',
+                //         fieldLabel: ''
+                //     }
+                //     ]
+                // }
+                ]
             }],
 
     listeners: {}
