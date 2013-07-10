@@ -238,7 +238,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             dataIndex: 'fileType',
                             flex: 1,
                             text: 'Type'
-                        },
+                        }
                         // {
                         //     xtype: 'gridcolumn',
                         //     dataIndex: 'fileContent',

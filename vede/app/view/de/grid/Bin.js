@@ -200,5 +200,5 @@ Ext.define('Vede.view.de.grid.Bin', {
      */
     deselect: function() {
         this.binHeader.down().removeBodyCls("binHeader-selected");
-    },
+    }
 });

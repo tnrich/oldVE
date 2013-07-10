@@ -6,22 +6,22 @@ Ext.define('Vede.view.ve.PieContextMenu', {
     id: 'PieContextMenu',
     items: [{
   	    text: 'Annotate as new Sequence Feature',
-  	    id: 'PieContextMenuNewFeature',
+  	    id: 'PieContextMenuNewFeature'
   	    //autoDestroy: false,
   	    //disabled: true
 	  },{
         xtype: 'menuseparator',
-        id: 'PieContextMenuSeparator0',
+        id: 'PieContextMenuSeparator0'
         //autoDestroy: false,
       },{
         text: 'Edit Sequence Feature',
-        id: 'PieContextMenuEditFeature',
+        id: 'PieContextMenuEditFeature'
         //autoDestroy: false,
         //disabled: true
       },{
         text: 'Delete Sequence Feature',
-        id: 'PieContextMenuDeleteFeature',
+        id: 'PieContextMenuDeleteFeature'
         //autoDestroy: false,
         //disabled: true
-      }],
+      }]
 });
