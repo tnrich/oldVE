@@ -277,7 +277,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     /**
     * Save user groups
     */
-    saveUserGroups: function() {
+    saveUserGroups: function(pNext) {
         var me = this;
         this.UserManager.update(function(pSuccess) {
             if (!pSuccess) {
@@ -289,8 +289,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
                     Vede.application.fireEvent("ActiveEnzymesChanged");
                     me.setActiveEnzymesChanged(false);
                 }
-                me.Logger.notifyInfo("User restriction enzyme groups saved");
             }
+            pNext(pSuccess);
         });
     },
     
