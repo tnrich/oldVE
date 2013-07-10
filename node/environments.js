@@ -5,6 +5,7 @@ var readEnvironments = function(app) {
     .option('-g, --guest', 'Create Guest User')
     .option('-d, --dev', 'Run Development environment')
     .option('-t, --test', 'Run Test environment')
+    .option('-a, --alpha', 'Run Alpha environment')
     .option('-b, --beta', 'Run Beta environment')
     .option('-p, --prod', 'Run Production environment')
     .option('-r, --port <n>', 'Node port default is 3000', parseInt)
@@ -16,6 +17,10 @@ var readEnvironments = function(app) {
   if (app.program.test) {
       app.set("env", "test");
       app.dbname = "teselagenTest";
+  }
+  else if (app.program.alpha) {
+      app.set("env", "alpha");
+      app.dbname = "teselagenAlpha";
   }
   else if (app.program.beta) {
       app.set("env", "beta");
@@ -39,10 +44,13 @@ var configEnvironments = function(app,express) {
         app.use(express.errorHandler());
     });
 
-    app.configure('beta', function() {
+    app.configure('alpha', function() {
         app.use(express.errorHandler());
     });
 
+    app.configure('beta', function() {
+        app.use(express.errorHandler());
+    });
 };
 
 exports.readEnvironments = readEnvironments;

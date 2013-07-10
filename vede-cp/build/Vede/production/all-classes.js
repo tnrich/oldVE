@@ -67894,16 +67894,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", MAP_PART_SELECT: "MapPartSelect", MAP_PART_NOTSELECT: "MapPartNotSelect", ADD_SELECT_ALERTS: "AddSelectAlerts", FILL_BLANK_CELLS: "FillBlankCells", OPEN_LIBRARY: "OpenPartLibrary"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, overlapHeader: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, width: 100, layout: {type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', editable: false, queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
-  return rule.getOperand1().get("name");
-}}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', cls: "operand2_field", editor: {xtype: 'combobox', store: [], cls: "operand2_combobox"}, renderer: function(id, metaData, rule) {
-  if (rule.get("operand2isNumber")) 
-  {
-    return rule.get("operand2Number");
-  } else {
-    return rule.getOperand2().get("name");
-  }
-}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', anchor: '100%', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', anchor: "100% 65%", autoScroll: true, viewConfig: {markDirty: false}, allowDeselect: true, columnLines: true, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
+(Ext.cmd.derive('Vede.view.de.InspectorCollectionInfoGrid', Ext.grid.Panel, {initComponent: function() {
+  Ext.apply(this, {viewConfig: {markDirty: false}, layout: 'fit', allowDeselect: true, autoScroll: true, columnLines: true, minHeight: 132, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
   metadata.tdAttr = 'data-qtip="' + value + '"';
   return value;
 }}, {xtype: 'gridcolumn', text: '<div data-qtip="Direction">Direction</div>', dataIndex: 'directionForward', editor: {xtype: 'combobox', store: [[true, "Forward"], [false, "Reverse"]]}, renderer: function(forward) {
@@ -67914,8 +67906,17 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     return "Reverse";
   }
 }}, {xtype: 'numbercolumn', text: '<div data-qtip="Items">Items</div>', renderer: function(value, metadata, record) {
-  return record.parts().getRange().length;
-}}, {xtype: 'gridcolumn', text: '<div data-qtip="Forced Assembly Strategy">FAS</div>', dataIndex: 'fas', readOnly: true, renderer: function(value, metadata, record) {
+  var numParts = 0;
+  var partsArray = record.parts().getRange();
+  for (var i = 0; i < partsArray.length; i++) 
+    {
+      if (!partsArray[i].get("phantom")) 
+      {
+        numParts++;
+      }
+    }
+  return numParts;
+}}, {xtype: 'gridcolumn', text: '<div data-qtip="Forced Assembly Strategy">FAS</div>', dataIndex: 'fas', renderer: function(value, metadata, record) {
   metadata.tdAttr = 'data-qtip="' + value + '"';
   if (record.parts().getRange().length > 0) 
   {
@@ -67932,7 +67933,21 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return value;
   }
-}}, {xtype: 'numbercolumn', text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>', dataIndex: 'extra5PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}, {xtype: 'numbercolumn', text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>', dataIndex: 'extra3PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}]}]}, {xtype: 'form', autoScroll: true, flex: 1, title: 'Column Content', margin: '5px 0px 5px 0px', cls: 'columnContentForm', items: [{xtype: 'displayfield', cls: 'columnContentDisplayField', margin: 10, fieldLabel: ''}]}]}, {xtype: 'panel', cls: 'j5InfoTab', title: 'j5', bodyCls: 'j5InfoTab-body', disabled: true, preventHeader: true, autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, margin: "5px 0px 5px 0px", items: [{xtype: 'button', text: 'Submit Run to j5', cls: 'runj5Btn', overCls: 'runj5Btn-over', margin: '2.5 0 2.5 0', height: 40, border: 0}, {xtype: 'button', text: 'Condense Assemblies', cls: 'condenseAssembliesBtn', overCls: 'condenseAssembliesBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'button', text: 'Distribute PCR Reactions', cls: 'distributePCRBtn', overCls: 'distributePCRBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub', animCollapse: false, collapsible: false, removePanelHeader: true, margin: '10 0 0 0', items: [{xtype: 'form', flex: 1, cls: 'j5InfoTab-Basic', width: 287, layout: {align: 'stretch', type: 'vbox'}, bodyPadding: 10, title: 'Basic', margin: '5px 0px 5px 0px', items: [{xtype: 'combobox', cls: 'assemblyMethodSelector', fieldLabel: '<b>Assembly Method:</b>', labelCls: 'assembly-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'assemblyMethod', valueField: 'assemblyMethod'}, {xtype: 'container', html: '<b>Master Plasmids List</b>', cls: 'masterPlasmidsList-box', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'plasmidsListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}]}, {xtype: 'container', html: '<b>Master Oligos List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerOligosRadioBtn', name: 'oligosListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyOligosRadioBtn', name: 'oligosListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'oligosListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'container', html: '<b>Master Direct Syntheses List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerSynthesesRadioBtn', name: 'directSynthesesListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptySynthesesRadioBtn', name: 'directSynthesesListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'directSynthesesFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'button', text: 'Edit J5 Parameters', cls: 'editj5ParamsBtn', margin: '15 0 0 0', height: 30, border: 0}]}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub-Advanced', animCollapse: false, collapsible: false, removePanelHeader: true, bodyPadding: 10, title: 'Advanced', border: 0, bodyCls: 'j5InfoTab-Sub-Advanced-Body', margin: '5px 0px 0px 0px', items: [{xtype: 'container', title: 'Condense Assembly Files', cls: 'condenseAssemblyFiles-box', margin: '0 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: 'Assembly Files To Condense List:', margin: '10 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'condenseAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'container', html: 'Zipped Assembly Files:', cls: 'condenseAssemblyFiles-box', margin: '15 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'zippedAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'button', margin: '20 0 0 0', cls: 'downloadCondenseAssemblyResultsBtn', text: 'Download Results', hidden: true}]}, {xtype: 'container', title: 'Downstream Automation', cls: 'downstreamAutomation-box', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: '', cls: 'downstreamAutomationParameters-box', margin: '5 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'sourcePlateListSelector', margin: '30 0 0 0', validateOnChange: false, fieldLabel: 'Source Plate List:', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'zippedPlateFilesSelector', fieldLabel: 'Zipped Plate Files:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'assemblyFileSelector', validateOnChange: false, fieldLabel: 'j5 Assembly File:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'button', cls: 'customizeAutomationParamsBtn', margin: '20 0 0 0', height: 30, text: 'Customize Automation Parameters'}, {xtype: 'button', cls: 'downloadDownstreamAutomationBtn', pressed: false, text: 'Download Results', hidden: true, margin: '15 0 0 0'}]}]}]}]}]}], listeners: {'tabchange': function(tabPanel, tab) {
+}}, {xtype: 'numbercolumn', text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>', dataIndex: 'extra5PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}, {xtype: 'numbercolumn', text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>', dataIndex: 'extra3PrimeBps', editor: {xtype: 'numberfield', allowDecimals: false, decimalPrecision: 1, emptyText: '', hideTrigger: true}, renderer: Ext.util.Format.numberRenderer('0')}]});
+  this.callParent(arguments);
+}}, 0, ["collectioninfogrid"], ["panel", "component", "tablepanel", "container", "grid", "box", "gridpanel", "collectioninfogrid"], {"panel": true, "component": true, "tablepanel": true, "container": true, "grid": true, "box": true, "gridpanel": true, "collectioninfogrid": true}, ["widget.collectioninfogrid"], 0, [Vede.view.de, 'InspectorCollectionInfoGrid'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, overlapHeader: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, width: 100, layout: {type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', editable: false, queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
+  return rule.getOperand1().get("name");
+}}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', cls: "operand2_field", editor: {xtype: 'combobox', store: [], cls: "operand2_combobox"}, renderer: function(id, metaData, rule) {
+  if (rule.get("operand2isNumber")) 
+  {
+    return rule.get("operand2Number");
+  } else {
+    return rule.getOperand2().get("name");
+  }
+}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', anchor: '100%', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', anchor: "100% 65%", xtype: 'collectioninfogrid'}]}, {xtype: 'form', autoScroll: true, flex: 1, title: 'Column Content', margin: '5px 0px 5px 0px', cls: 'columnContentForm', items: [{xtype: 'displayfield', cls: 'columnContentDisplayField', margin: 10, fieldLabel: ''}]}]}, {xtype: 'panel', cls: 'j5InfoTab', title: 'j5', bodyCls: 'j5InfoTab-body', disabled: true, preventHeader: true, autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, margin: "5px 0px 5px 0px", items: [{xtype: 'button', text: 'Submit Run to j5', cls: 'runj5Btn', overCls: 'runj5Btn-over', margin: '2.5 0 2.5 0', height: 40, border: 0}, {xtype: 'button', text: 'Condense Assemblies', cls: 'condenseAssembliesBtn', overCls: 'condenseAssembliesBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'button', text: 'Distribute PCR Reactions', cls: 'distributePCRBtn', overCls: 'distributePCRBtn-over', margin: '2.5 0 2.5 0', height: 40, border: 0, hidden: true}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub', animCollapse: false, collapsible: false, removePanelHeader: true, margin: '10 0 0 0', items: [{xtype: 'form', flex: 1, cls: 'j5InfoTab-Basic', width: 287, layout: {align: 'stretch', type: 'vbox'}, bodyPadding: 10, title: 'Basic', margin: '5px 0px 5px 0px', items: [{xtype: 'combobox', cls: 'assemblyMethodSelector', fieldLabel: '<b>Assembly Method:</b>', labelCls: 'assembly-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'assemblyMethod', valueField: 'assemblyMethod'}, {xtype: 'container', html: '<b>Master Plasmids List</b>', cls: 'masterPlasmidsList-box', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyPlasmidsRadioBtn', name: 'plasmidsListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'plasmidsListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}]}, {xtype: 'container', html: '<b>Master Oligos List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerOligosRadioBtn', name: 'oligosListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptyOligosRadioBtn', name: 'oligosListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'oligosListFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'container', html: '<b>Master Direct Syntheses List</b>', margin: '20 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'radiofield', cls: 'useServerSynthesesRadioBtn', name: 'directSynthesesListSource', margin: '20 0 0 25', labelWidth: 110, boxLabel: 'Use latest server version', checked: true}, {xtype: 'radiofield', cls: 'useEmptySynthesesRadioBtn', name: 'directSynthesesListSource', margin: '5 0 0 25', fieldLabelCls: 'align-middle', labelWidth: 110, boxLabel: 'Generate empty file'}, {xtype: 'filefield', cls: 'directSynthesesFileSelector', margin: '10 0 0 25', validateOnChange: false, padding: 0, height: 23, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>'}]}, {xtype: 'button', text: 'Edit J5 Parameters', cls: 'editj5ParamsBtn', margin: '15 0 0 0', height: 30, border: 0}]}, {xtype: 'tabpanel', activeTab: 0, cls: 'j5InfoTab-Sub-Advanced', animCollapse: false, collapsible: false, removePanelHeader: true, bodyPadding: 10, title: 'Advanced', border: 0, bodyCls: 'j5InfoTab-Sub-Advanced-Body', margin: '5px 0px 0px 0px', items: [{xtype: 'container', title: 'Condense Assembly Files', cls: 'condenseAssemblyFiles-box', margin: '0 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: 'Assembly Files To Condense List:', margin: '10 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'condenseAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'container', html: 'Zipped Assembly Files:', cls: 'condenseAssemblyFiles-box', margin: '15 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'zippedAssemblyFilesSelector', validateOnChange: false, labelSeparator: ' ', labelWidth: 10, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: 'Choose File', margin: '20 0 0 0'}]}, {xtype: 'button', margin: '20 0 0 0', cls: 'downloadCondenseAssemblyResultsBtn', text: 'Download Results', hidden: true}]}, {xtype: 'container', title: 'Downstream Automation', cls: 'downstreamAutomation-box', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'container', html: '', cls: 'downstreamAutomationParameters-box', margin: '5 0 0 0', layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'filefield', cls: 'sourcePlateListSelector', margin: '30 0 0 0', validateOnChange: false, fieldLabel: 'Source Plate List:', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'zippedPlateFilesSelector', fieldLabel: 'Zipped Plate Files:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'filefield', cls: 'assemblyFileSelector', validateOnChange: false, fieldLabel: 'j5 Assembly File:', margin: '15 0 0 0', labelWidth: 110, labelSeparator: ' ', buttonText: 'Choose File'}, {xtype: 'button', cls: 'customizeAutomationParamsBtn', margin: '20 0 0 0', height: 30, text: 'Edit Automation Parameters'}, {xtype: 'button', cls: 'downloadDownstreamAutomationBtn', pressed: false, text: 'Download Results', hidden: true, margin: '15 0 0 0'}]}]}]}]}]}], listeners: {'tabchange': function(tabPanel, tab) {
   if (tab.cls == 'j5InfoTab') 
   {
     Vede.application.fireEvent("openj5");
@@ -68714,7 +68729,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + newSequenceFile.data.id);
   Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
   self.openSequence(newSequenceFile);
-  toastr.info("New Sequence Successfully Created");
+  toastr.info("New Sequence Created");
 });
 }});
     Vede.application.fireEvent("PopulateStats");
@@ -69388,7 +69403,7 @@ function requestMessageProcessor(request, success) {
   var sequences = project.sequences();
   sequences.each(function(sequence) {
   Teselagen.manager.ProjectManager.sequenceStore.add(sequence);
-  projectNode.appendChild({text: sequence.data.name, leaf: true, id: sequence.data.id, hrefTarget: "opensequence", icon: "resources/images/ux/sequence-tree-icon-leaf.png", qtip: 'Sequence ' + sequence.data.name});
+  projectNode.appendChild({text: sequence.data.name, leaf: true, id: sequence.data.id, hrefTarget: "opensequence", icon: "resources/images/ux/circular.png", qtip: 'Sequence ' + sequence.data.name});
 });
   if (typeof (cb2) === "function") 
   {
@@ -70270,9 +70285,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var successFullSavedCallback = function() {
   currentTabPanel.setLoading(false);
   var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
-  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on ' + nowDate);
+  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on ' + nowDate);
   toastr.options.onclick = null;
-  toastr.info("Sequence Successfully Saved");
+  toastr.info("Sequence Saved");
   project = Teselagen.manager.ProjectManager.workingProject;
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
   Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
@@ -70383,7 +70398,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     newSequence.set('sequenceFileFormat', "GENBANK");
     newSequence.set('sequenceFileName', name);
     newSequence.set('firstTimeImported', true);
-    toastr.info("New Sequence Successfully Created");
+    toastr.info("New Sequence Created");
   } else {
     if (Teselagen.manager.ProjectManager.workingSequence) 
     {
@@ -70404,7 +70419,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     sequence.set('firstTimeImported', true);
   }
   var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
+  parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed');
   parttext.animate({duration: 5000, to: {opacity: 0}});
   Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
   if (typeof (cb) === "function") 
@@ -72849,6 +72864,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
   endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
   var assemblies = self.activeJ5Run.getJ5Results().assemblies();
+  assemblies.sort('name', 'ASC');
   var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
   var j5parameters = Ext.create("Teselagen.models.J5Parameters");
   j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);
@@ -73823,7 +73839,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       gridBin = this.getGridBinFromJ5Bin(ownerBin);
       var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
       gridPart = gridBin.query("Part")[partIndex];
-      if (targetGridParts.indexOf(gridPart) < 0) 
+      if (targetGridParts.indexOf(gridPart) < 0 && partIndex >= 0) 
       {
         targetGridParts.push(gridPart);
       }
@@ -73876,11 +73892,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     }
   }
 }, deHighlight: function(j5Part) {
-  var gridParts = this.getGridPartsFromJ5Part(j5Part);
-  for (var i = 0; i < gridParts.length; i++) 
-    {
-      gridParts[i].deselect();
-    }
+  if (j5Part && !j5Part.get("phantom")) 
+  {
+    var gridParts = this.getGridPartsFromJ5Part(j5Part);
+    for (var i = 0; i < gridParts.length; i++) 
+      {
+        gridParts[i].deselect();
+      }
+  }
 }, onPartCellVEEditClick: function(partCell) {
   var gridPart = partCell.up().up();
   var j5Part = gridPart.getPart();
@@ -74520,6 +74539,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) 
   {
     var newOperand2 = newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
+    newRule.set("operand2isNumber", true);
+    newRule.set("operand2Number", newOperand2);
   } else {
     newOperand2Name = newEugeneRuleDialog.down("component[cls='operand2PartField']").getValue();
     newOperand2 = this.DeviceDesignManager.getPartByName(this.activeProject, newOperand2Name);
@@ -74528,13 +74549,21 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   newRule.set("negationOperator", newNegationOperator);
   newRule.set("compositionalOperator", newCompositionalOperator);
   var self = this;
-  newOperand2.save({callback: function() {
+  if (newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) 
+  {
+    newOperand2.save({callback: function() {
   newRule.setOperand2(newOperand2);
   self.activeProject.addToRules(newRule);
   var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
   self.eugeneRulesGrid.reconfigure(rulesStore);
   newEugeneRuleDialog.close();
 }});
+  } else {
+    this.activeProject.addToRules(newRule);
+    var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, this.selectedPart);
+    this.eugeneRulesGrid.reconfigure(rulesStore);
+    newEugeneRuleDialog.close();
+  }
   toastr.options.onclick = null;
   toastr.info("Eugene Rule Added");
 }, onCancelNewEugeneRuleBtnClick: function() {
@@ -74628,8 +74657,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   parts.on("remove", this.onRemoveFromParts, this);
 }, this);
   this.columnsGrid.getSelectionModel().deselect(selectedPart);
-  this.columnsGrid.getView().removeRowCls(selectedPart, this.columnsGrid.getView().selectedItemCls);
-  this.columnsGrid.getView().removeRowCls(selectedPart, this.columnsGrid.getView().focusedItemCls);
   this.renderCollectionInfo(true);
 }, onRemoveFromBins: function(activeBins, removedBin, index) {
   this.renderCollectionInfo();
@@ -74643,6 +74670,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject, updatedPart);
       this.updateColumnContentDisplayField(parentBin);
+    }
+    if (parts.indexOf(this.selectedPart) > -1) 
+    {
+      var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+      partPropertiesForm.loadRecord(this.selectedPart);
     }
   }
 }, onRemoveFromParts: function(parts, removedPart, index) {
@@ -78424,8 +78456,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.HighlightLayer.addAllHighlights(indices);
 }, onClearHighlight: function() {
   this.HighlightLayer.clearHighlights();
-}, onVectorPanelAnnotationClicked: function(start, end) {
-  this.select(start, end);
 }, onAnnotatePanelAnnotationClicked: function(start, end) {
   this.clickedAnnotationStart = start;
   this.clickedAnnotationEnd = end;
@@ -79329,12 +79359,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }, onCircularViewButtonClick: function(button, e, options) {
   var viewMode;
-  if (button.pressed) 
-  {
-    viewMode = "circular";
-  } else {
-    viewMode = "linear";
-  }
+  viewMode = "circular";
   this.application.fireEvent("ViewModeChanged", viewMode);
 }, onUndoButtonClick: function() {
   this.application.fireEvent(this.MenuItemEvent.UNDO);
@@ -79376,23 +79401,18 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.application.fireEvent("RestrictionEnzymeManagerOpened", restrictionEnzymesManagerWindow);
 }, onLinearViewBtnClick: function(button, e, options) {
   var viewMode;
-  if (button.pressed) 
-  {
-    viewMode = "linear";
-  } else {
-    viewMode = "circular";
-  }
+  viewMode = "linear";
   this.application.fireEvent("ViewModeChanged", viewMode);
 }, onViewModeChanged: function(viewMode) {
   var circularButton = Ext.getCmp("circularViewBtn");
   var linearButton = Ext.getCmp("linearViewBtn");
   if (viewMode == "linear") 
   {
-    circularButton.toggle(false, true);
-    linearButton.toggle(true, true);
+    circularButton.toggle(false);
+    linearButton.toggle(true);
   } else {
-    circularButton.toggle(true, false);
-    linearButton.toggle(false, true);
+    circularButton.toggle(true);
+    linearButton.toggle(false);
   }
 }, onSaveToRegistryButtonClick: function() {
   Ext.create("Vede.view.SaveToRegistryWindow").show();
@@ -80112,7 +80132,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Vede.view.pie, 'NameBox'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.PieManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 35, LABEL_HEIGHT: 10, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, center: null, pie: null, railRadius: 0, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railRadiusChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, zoomLevel: 0, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.manager.PieManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 35, LABEL_HEIGHT: 10, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC", STROKE_OPACITY: 0.8, WIREFRAME_COLOR: "#808080", WIREFRAME_OFFSET: 10, ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, center: null, pie: null, railRadius: 0, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, wireframeSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railRadiusChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, zoomLevel: 0, constructor: function(inData) {
   this.initConfig(inData);
   this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, cutSites: this.cutSites});
   this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, center: this.center, railRadius: this.railRadius, features: this.features});
@@ -80230,7 +80250,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.featureSVG.style("visibility", "hidden");
   }
   Ext.defer(function() {
-  this.fitWidthToContent(this);
+  this.fitWidthToContent(this, false);
 }, 10, this);
 }, zoomIn: function() {
   Ext.suspendLayouts();
@@ -80241,7 +80261,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   scale[1] += this.self.ZOOM_INCREMENT;
   this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
   Ext.resumeLayouts(true);
-  this.fitWidthToContent(this);
+  this.fitWidthToContent(this, true);
 }, zoomOut: function() {
   var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
   var scale = [translateValues[0], translateValues[3]];
@@ -80253,13 +80273,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     scale[1] -= this.self.ZOOM_INCREMENT;
     this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + translate[1] + ")");
     Ext.resumeLayouts(true);
-    this.fitWidthToContent(this);
+    this.fitWidthToContent(this, true);
   }
-}, fitWidthToContent: function(scope) {
+}, fitWidthToContent: function(scope, scrollToCenter) {
   if (Ext.getCmp("PieContainer").el) 
   {
-    var containerSize = Ext.getCmp("PieContainer").getSize();
-    var transX = containerSize.width / 2 - scope.center.x;
+    var container = Ext.getCmp("PieContainer");
+    var containerSize = container.getSize();
+    var transX = containerSize.width / 2;
     var transY = containerSize.height / 2 - scope.center.y;
     var pieBox = scope.pie[0][0].getBBox();
     var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
@@ -80267,6 +80288,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     var translate = [Number(translateValues[4]), Number(translateValues[5])];
     scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + transX + " " + transY + ")");
     scope.pie.attr("width", pieBox.width + transX).attr("height", pieBox.height + transY);
+    if (scrollToCenter) 
+    {
+      container.el.setScrollLeft((this.pie[0][0].width.baseVal.value - container.getWidth()) / 2);
+    }
   }
 }, drawCoordinates: function() {
   d3.select(".coordinateSVG").remove();
@@ -80485,6 +80510,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     return (annotation.getStart() + annotation.getEnd() - 1) / 2 + 1;
   }
 }, applySequenceManager: function(pSequenceManager) {
+  var pieContainer = Ext.getCmp("PieContainer");
   if (!this.sequenceManager) 
   this.sequenceManager = pSequenceManager;
   this.dirty = true;
@@ -80533,14 +80559,15 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
   this.labelSVG = this.parentSVG.append("svg:g").attr("class", "pieLabel");
-  this.selectionSVG = this.parentSVG.append("svg:g").attr("class", "pieSelection");
+  this.selectionSVG = this.parentSVG.append("svg:path").attr("class", "pieSelection").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).style("pointer-events", "none");
+  this.wireframeSVG = this.parentSVG.append("svg:path").attr("class", "pieWireframe").attr("stroke", this.self.WIREFRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none");
   this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "pieCutSite");
   this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
   this.orfSVG = this.parentSVG.append("svg:g").attr("class", "pieOrf");
   this.orfRenderer.setOrfSVG(this.orfSVG);
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
-  this.fitWidthToContent(this);
+  this.fitWidthToContent(this, false);
 }, updateNameBox: function() {
   var name;
   var length;
@@ -80564,10 +80591,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'PieManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.pie.Layer', Ext.Base, {inheritableStatics: {STROKE_OPACITY: 0.8}, config: {selectionSVG: null, sequenceManager: null, center: {}, radius: 0}, start: -1, end: -1, startAngle: 0, endAngle: 0, selecting: false, selected: false, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.renderer.pie.Layer', Ext.Base, {config: {selectionSVG: null, sequenceManager: null, center: {}, radius: 0}, inheritableStatics: {WIREFRAME_OFFSET: 10}, start: -1, end: -1, startAngle: 0, endAngle: 0, selecting: false, selected: false, constructor: function(inData) {
   this.initConfig(inData);
 }, select: function(fromIndex, toIndex, pointerEvents) {
   this.drawSelectionPie(fromIndex, toIndex, pointerEvents);
+  if (this.selectionSVG.style("visibility") === "hidden") 
+  {
+    this.selectionSVG.style("visibility", "visible");
+  }
   this.selected = true;
   this.start = fromIndex;
   this.end = toIndex;
@@ -80578,6 +80609,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.endAngle = 0;
   this.selected = false;
   this.selecting = false;
+  this.selectionSVG.style("visibility", "hidden");
 }, startSelecting: function() {
   this.selecting = true;
 }, endSelecting: function() {
@@ -80586,10 +80618,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'Layer'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.pie.SelectionLayer', Teselagen.renderer.pie.Layer, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC"}, deselect: function() {
-  this.callParent();
-  this.selectionSVG.selectAll(".pieSelectionElement").remove();
-}, drawSelectionPie: function(fromIndex, endIndex) {
+(Ext.cmd.derive('Teselagen.renderer.pie.SelectionLayer', Teselagen.renderer.pie.Layer, {drawSelectionPie: function(fromIndex, endIndex) {
   var path;
   var seqLen = this.sequenceManager.getSequence().toString().length;
   if (seqLen == 0) 
@@ -80598,10 +80627,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   this.startAngle = fromIndex * 2 * Math.PI / seqLen;
   this.endAngle = endIndex * 2 * Math.PI / seqLen;
-  var startPoint = Ext.create("Teselagen.bio.util.Point");
+  var startPoint = {};
   startPoint.x = this.center.x + this.radius * Math.sin(this.startAngle);
   startPoint.y = this.center.y - this.radius * Math.cos(this.startAngle);
-  var endPoint = Ext.create("Teselagen.bio.util.Point");
+  var endPoint = {};
   endPoint.x = this.center.x + this.radius * Math.sin(this.endAngle);
   endPoint.y = this.center.y - this.radius * Math.cos(this.endAngle);
   var adjustedEnd = this.endAngle;
@@ -80623,20 +80652,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     largeArcFlag = 1;
   }
   path = "M" + this.center.x + " " + this.center.y + " " + "L" + startPoint.x + " " + startPoint.y + " " + "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + "L" + this.center.x + " " + this.center.y;
-  var selectionElement = this.selectionSVG.select(".pieSelectionElement");
-  if (selectionElement[0][0] === null) 
-  {
-    this.selectionSVG.append("svg:path").attr("class", "pieSelectionElement").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).attr("d", path).style("pointer-events", "none");
-  } else {
-    selectionElement.attr("d", path);
-  }
+  this.selectionSVG.attr("d", path);
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'SelectionLayer'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.pie.WireframeSelectionLayer', Teselagen.renderer.pie.Layer, {statics: {FRAME_COLOR: "#808080", WIREFRAME_OFFSET: 10}, deselect: function() {
-  this.callParent();
-  this.selectionSVG.selectAll(".pieWireframeElement").remove();
-}, drawSelectionPie: function(fromIndex, endIndex) {
+(Ext.cmd.derive('Teselagen.renderer.pie.WireframeSelectionLayer', Teselagen.renderer.pie.Layer, {drawSelectionPie: function(fromIndex, endIndex) {
   var path;
   var seqLen = this.sequenceManager.getSequence().toString().length;
   if (seqLen == 0 || (this.start == fromIndex && this.end == endIndex) || fromIndex == endIndex) 
@@ -80646,10 +80666,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var startAngle = fromIndex * 2 * Math.PI / seqLen;
   var endAngle = endIndex * 2 * Math.PI / seqLen;
   var wireRadius = this.radius + this.self.WIREFRAME_OFFSET;
-  var startPoint = Ext.create("Teselagen.bio.util.Point");
+  var startPoint = {};
   startPoint.x = this.center.x + wireRadius * Math.sin(startAngle);
   startPoint.y = this.center.y - wireRadius * Math.cos(startAngle);
-  var endPoint = Ext.create("Teselagen.bio.util.Point");
+  var endPoint = {};
   endPoint.x = this.center.x + wireRadius * Math.sin(endAngle);
   endPoint.y = this.center.y - wireRadius * Math.cos(endAngle);
   if (endAngle > startAngle) 
@@ -80670,13 +80690,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     largeArcFlag = 1;
   }
   path = "M" + this.center.x + " " + this.center.y + "L" + startPoint.x + " " + startPoint.y + "A" + wireRadius + " " + wireRadius + " 0 " + largeArcFlag + " " + sweepFlag + " " + endPoint.x + " " + endPoint.y + "L" + this.center.x + " " + this.center.y;
-  var selectionElement = this.selectionSVG.select(".pieWireframeElement");
-  if (selectionElement[0][0] === null) 
-  {
-    this.selectionSVG.append("svg:path").attr("class", "pieWireframeElement").attr("stroke", this.self.FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none").attr("d", path);
-  } else {
-    selectionElement.attr("d", path);
-  }
+  this.selectionSVG.attr("d", path);
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.pie, 'WireframeSelectionLayer'], 0));
 ;
 
@@ -80702,7 +80716,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   return d3.event.preventDefault();
 });
   this.pieContainer.on("resize", function() {
-  this.pieManager.fitWidthToContent(this.pieManager);
+  this.pieManager.fitWidthToContent(this.pieManager, true);
 }, this);
   this.pieContainer.el.dom.setAttribute("tabindex", "0");
   this.pieContainer.el.on("keydown", this.onKeydown, this);
@@ -80718,7 +80732,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (timeOut != null) 
   clearTimeout(timeOut);
   timeOut = setTimeout(function() {
-  self.pieManager.fitWidthToContent(self.pieManager);
+  self.pieManager.fitWidthToContent(self.pieManager, true);
 }, 400);
 };
   this.Managers.push(this.pieManager);
@@ -80755,8 +80769,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onVectorPanelAnnotationClicked: function(start, end) {
   this.clickedAnnotationStart = start;
   this.clickedAnnotationEnd = end;
-}, onAnnotatePanelAnnotationClicked: function(start, end) {
-  this.select(start, end);
 }, onViewModeChanged: function(viewMode) {
   if (viewMode == "linear") 
   {
@@ -80768,7 +80780,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (scope !== this) 
   {
     this.SelectionLayer.select(start, end);
-    this.changeCaretPosition(start);
+    this.changeCaretPosition(start, true);
   }
 }, onSequenceManagerChanged: function(pSeqMan) {
   this.callParent(arguments);
@@ -80776,8 +80788,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
   this.pieManager.setFeatures(pSeqMan.getFeatures());
   this.pieManager.render();
+  this.pieManager.fitWidthToContent(this.pieManager, true);
   this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-  this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+  this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.wireframeSVG);
   this.SelectionLayer.setSequenceManager(pSeqMan);
   this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
 }, onShowFeaturesChanged: function(show) {
@@ -80873,8 +80886,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       start = self.startSelectionIndex;
       end = endSelectionIndex;
     }
-    self.WireframeSelectionLayer.startSelecting();
-    self.WireframeSelectionLayer.select(start, end);
     if (d3.event.ctrlKey) 
     {
       self.SelectionLayer.startSelecting();
@@ -80883,6 +80894,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     } else {
       self.stickySelect(start, end);
     }
+    self.WireframeSelectionLayer.startSelecting();
+    self.WireframeSelectionLayer.select(start, end);
   }
 }, onMouseup: function(self) {
   if (self.mouseIsDown) 
@@ -81400,7 +81413,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'NameBox'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.RailManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 3, LABEL_HEIGHT: 7, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", RAIL_PAD: 100, ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, reference: null, rail: null, nameBox: null, railGap: 0, railWidth: 300, showMapCaret: true, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, startPoints: null, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railGapChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.manager.RailManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 3, LABEL_HEIGHT: 7, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", RAIL_PAD: 100, SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC", STROKE_OPACITY: 0.8, WIREFRAME_COLOR: "#808080", ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, reference: null, rail: null, nameBox: null, railGap: 0, railWidth: 300, showMapCaret: true, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, startPoints: null, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, wireframeSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railGapChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, constructor: function(inData) {
   this.initConfig(inData);
   this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, reference: this.reference, railHeight: this.railHeight, railWidth: this.railWidth, railGap: this.railGap, cutSites: this.cutSites});
   this.featureRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, railWidth: this.railWidth, railHeight: this.railHeight, reference: this.reference, railGap: this.railGap, features: this.features});
@@ -81718,7 +81731,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
   this.labelSVG = this.parentSVG.append("svg:g").attr("class", "railLabel");
-  this.selectionSVG = this.parentSVG.append("svg:g").attr("class", "railSelection");
+  this.selectionSVG = this.parentSVG.append("svg:path").attr("class", "pieSelection").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).style("pointer-events", "none");
+  this.wireframeSVG = this.parentSVG.append("svg:path").attr("class", "pieWireframe").attr("stroke", this.self.WIREFRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none");
   this.cutSiteSVG = this.parentSVG.append("svg:g").attr("class", "railCutSite");
   this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
   this.orfSVG = this.parentSVG.append("svg:g").attr("class", "railOrf");
@@ -81745,10 +81759,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'RailManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.rail.Layer', Ext.Base, {inheritableStatics: {STROKE_OPACITY: 0.8}, config: {selectionSVG: null, sequenceManager: null, reference: {}, radius: 0, railWidth: null}, start: -1, end: -1, startPos: 0, endPos: 0, selecting: false, selected: false, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.renderer.rail.Layer', Ext.Base, {config: {selectionSVG: null, sequenceManager: null, reference: {}, radius: 0, railWidth: null}, inheritableStatics: {WIREFRAME_OFFSET: 5}, start: -1, end: -1, startPos: 0, endPos: 0, selecting: false, selected: false, constructor: function(inData) {
   this.initConfig(inData);
 }, select: function(fromIndex, toIndex) {
   this.drawSelectionRail(fromIndex, toIndex);
+  this.selectionSVG.style("visibility", "visible");
   this.selected = true;
   this.start = fromIndex;
   this.end = toIndex;
@@ -81759,6 +81774,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.endPos = 0;
   this.selected = false;
   this.selecting = false;
+  this.selectionSVG.style("visibility", "hidden");
 }, startSelecting: function() {
   this.selecting = true;
 }, endSelecting: function() {
@@ -81767,10 +81783,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'Layer'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.rail.SelectionLayer', Teselagen.renderer.rail.Layer, {statics: {SELECTION_COLOR: "#0099FF", SELECTION_TRANSPARENCY: 0.3, SELECTION_FRAME_COLOR: "#CCCCCC", WIREFRAME_OFFSET: 5}, deselect: function() {
-  this.callParent();
-  this.selectionSVG.selectAll(".railSelectionElement").remove();
-}, drawSelectionRail: function(fromIndex, endIndex) {
+(Ext.cmd.derive('Teselagen.renderer.rail.SelectionLayer', Teselagen.renderer.rail.Layer, {drawSelectionRail: function(fromIndex, endIndex) {
   var seqLen = this.sequenceManager.getSequence().toString().length;
   var path;
   if (seqLen == 0) 
@@ -81789,20 +81802,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     path = "M" + startPoint + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
   }
-  var selectionElement = this.selectionSVG.select(".railSelectionElement");
-  if (selectionElement[0][0] === null) 
-  {
-    this.selectionSVG.append("svg:path").attr("class", "railSelectionElement").attr("stroke", this.self.SELECTION_FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY).attr("d", path).style("pointer-events", "none");
-  } else {
-    selectionElement.attr("d", path);
-  }
+  this.selectionSVG.attr("d", path);
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'SelectionLayer'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.rail.WireframeSelectionLayer', Teselagen.renderer.rail.Layer, {statics: {FRAME_COLOR: "#808080", WIREFRAME_OFFSET: 5}, deselect: function() {
-  this.callParent();
-  d3.selectAll(".railWireframeElement").remove();
-}, drawSelectionRail: function(fromIndex, endIndex) {
+(Ext.cmd.derive('Teselagen.renderer.rail.WireframeSelectionLayer', Teselagen.renderer.rail.Layer, {drawSelectionRail: function(fromIndex, endIndex) {
   var path;
   var seqLen = this.sequenceManager.getSequence().toString().length;
   if (seqLen == 0 || (this.start == fromIndex && this.end == endIndex) || fromIndex == endIndex) 
@@ -81821,13 +81825,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     path = "M" + startPoint + " " + wireHeight + "L" + endPoint + " " + wireHeight + "L" + endPoint + " " + (-wireHeight) + "L" + startPoint + " " + (-wireHeight) + "L" + startPoint + " " + wireHeight;
   }
-  var selectionElement = this.selectionSVG.select(".railWireframeElement");
-  if (selectionElement[0][0] === null) 
-  {
-    this.selectionSVG.append("svg:path").attr("class", "railWireframeElement").attr("stroke", this.self.FRAME_COLOR).attr("stroke-opacity", this.self.STROKE_OPACITY).attr("fill", "none").attr("d", path);
-  } else {
-    selectionElement.attr("d", path);
-  }
+  this.selectionSVG.attr("d", path);
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.renderer.rail, 'WireframeSelectionLayer'], 0));
 ;
 
@@ -81905,8 +81903,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onVectorPanelAnnotationClicked: function(start, end) {
   this.clickedAnnotationStart = start;
   this.clickedAnnotationEnd = end;
-}, onAnnotatePanelAnnotationClicked: function(start, end) {
-  this.select(start, end);
 }, onViewModeChanged: function(viewMode) {
   if (viewMode == "circular") 
   {
@@ -81918,7 +81914,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (scope != this) 
   {
     this.SelectionLayer.select(start, end);
-    this.changeCaretPosition(start);
+    this.changeCaretPosition(start, true);
   }
 }, onSequenceManagerChanged: function(pSeqMan) {
   this.callParent(arguments);
@@ -81927,7 +81923,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.railManager.setFeatures(pSeqMan.getFeatures());
   this.railManager.render();
   this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-  this.WireframeSelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
+  this.WireframeSelectionLayer.setSelectionSVG(this.railManager.wireframeSVG);
   this.SelectionLayer.setSequenceManager(pSeqMan);
   this.SelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
 }, onShowFeaturesChanged: function(show) {
@@ -82680,11 +82676,18 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     Vede.application.fireEvent("partSelected", this.selectedPart, this.selectedBinIndex);
     var self = this;
     Vede.application.fireEvent("saveDesignEvent", function() {
-  self.selectedPart.save({callback: function() {
-  toastr.options.onclick = null;
-  toastr.info("Part Definition Changed");
-  Vede.application.fireEvent("onReloadDesign");
-  Vede.application.fireEvent("ReRenderCollectionInfo");
+  self.selectedPart.save({callback: function(record, operation, success) {
+  if (success) 
+  {
+    toastr.options.onclick = null;
+    toastr.info("Part Definition Changed");
+    Vede.application.fireEvent("onReloadDesign");
+    Vede.application.fireEvent("ReRenderCollectionInfo");
+  } else {
+    Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
+    record.reject();
+    record.set("name", record.get("name"));
+  }
 }});
 });
   } else Vede.application.fireEvent("partCreated", this.selectedSequence, this.selectedPart);
