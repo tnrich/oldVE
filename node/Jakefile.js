@@ -44,7 +44,7 @@ task("stopNode", function() {
 });
 
 task("restartNode", function() {
-    var restartNodeCmd = "pm2 restart processes.json";
+    var restartNodeCmd = "pm2 restartAll";
     JakeUtil.exec(restartNodeCmd);
 });
 
