@@ -170,7 +170,7 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 		this.isPieAnnotationRightClicked = false;
 		this.isPieSelectionLayerRightClicked = false;
 		this.pieContextMenu.hide();
-    },
+    }
 });
 
 
