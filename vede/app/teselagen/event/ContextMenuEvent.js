@@ -16,7 +16,7 @@ Ext.define("Teselagen.event.ContextMenuEvent", {
     
     PIE_RIGHT_CLICKED: "PieRightClicked",
     
-    PIE_NONRIGHT_MOUSE_DOWN: "PieNonrightMouseDown",
+    PIE_NONRIGHT_MOUSE_DOWN: "PieNonrightMouseDown"
     
     
     

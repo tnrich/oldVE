@@ -109,7 +109,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                         text: 'Linear View'
                     }]
                 }
-            },
+            }
             /*{
                 xtype: 'menuseparator'
             },

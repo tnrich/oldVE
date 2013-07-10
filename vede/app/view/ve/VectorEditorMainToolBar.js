@@ -219,7 +219,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         scale: 'medium',
         icon: 'resources/images/fullscreen.png',
         tooltip: 'Toggle fullscreen'
-    },
+    }
     //        {
     //            xtype: 'button',
     //            id: 'reBtn',

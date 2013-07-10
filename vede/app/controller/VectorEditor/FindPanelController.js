@@ -158,5 +158,5 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
 
         this.findManager = Ext.create("Teselagen.manager.FindManager");
         this.findManager.setAAManager(Teselagen.manager.AAManager);
-    },
+    }
 });

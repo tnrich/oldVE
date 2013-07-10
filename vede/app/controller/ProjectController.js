@@ -42,7 +42,7 @@ Ext.define("Vede.controller.ProjectController", {
                     text: "Create project",
                     leaf: true,
                     hrefTarget: "newproj",
-                    icon: "resources/images/add.png",
+                    icon: "resources/images/add.png"
                 });
 
                 // Iterate over projects
@@ -60,7 +60,7 @@ Ext.define("Vede.controller.ProjectController", {
                         text: "Create design",
                         leaf: true,
                         hrefTarget: "newde",
-                        icon: "resources/images/add.png",
+                        icon: "resources/images/add.png"
                     });
 
                     // Append sequence to project node
@@ -68,7 +68,7 @@ Ext.define("Vede.controller.ProjectController", {
                         text: "Create sequence",
                         leaf: true,
                         hrefTarget: "newsequence",
-                        icon: "resources/images/add.png",
+                        icon: "resources/images/add.png"
                         //id: 0
                     });
 

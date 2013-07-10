@@ -226,7 +226,7 @@ Ext.define("Teselagen.constants.Constants", {
      {label: "unsure", data: "unsure"}, 
      {label: "V_region ", data: "V_region "}, 
      {label: "variation", data: "variation"}
-	],
+	]
 	
 //    constructor: function() {
 //        this.RECT_SHAPE_MIN_SIZE = this.RECT_SHAPE_DEFAULT_SIZE / 2;

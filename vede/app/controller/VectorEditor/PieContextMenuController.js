@@ -22,26 +22,26 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 	init: function() {
 		this.pieContextMenu = Ext.create('Ext.menu.Menu', {
 			id: 'PieContextMenu',
-			items: [],
+			items: []
 		});
 		
 		this.pieContextMenuNewFeature = {
     		xtype: 'menuitem',
     		text: 'Annotate as new Sequence Feature',
       	    id: 'PieContextMenuNewFeature',
-      	    autoDestroy: false,
+      	    autoDestroy: false
     	};
     	this.pieContextMenuEditFeature = {
     		xtype: 'menuitem',
     		text: 'Edit Sequence Feature',
             id: 'PieContextMenuEditFeature',
-            autoDestroy: false,
+            autoDestroy: false
     	};
     	this.pieContextMenuDeleteFeature = {
     		xtype: 'menuitem',
     		text: 'Delete Sequence Feature',
             id: 'PieContextMenuDeleteFeature',
-            autoDestroy: false,
+            autoDestroy: false
     	};	
     	
 		this.control({

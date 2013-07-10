@@ -76,5 +76,5 @@ Ext.define("Teselagen.models.RestrictionEnzymeGroup", {
         } else {
             return this.getEnzymes()[index];
         }
-    },
+    }
 });

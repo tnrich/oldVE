@@ -245,7 +245,7 @@ Ext.define("Teselagen.manager.PrintManager", {
 		var px = div.offsetWidth;
 		document.body.removeChild(div);
 		return px;
-	},
+	}
 });
 
 

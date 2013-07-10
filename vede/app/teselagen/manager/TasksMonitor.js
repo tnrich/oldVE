@@ -138,6 +138,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     } else {
     return numseconds + " seconds";
     }
-    },
+    }
 
 });

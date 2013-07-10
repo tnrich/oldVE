@@ -204,5 +204,5 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
             this.showSpaceEvery10BpChanged = true;
         }
         return pShow;
-    },
+    }
 });

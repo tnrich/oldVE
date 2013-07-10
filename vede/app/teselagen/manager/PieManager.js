@@ -881,5 +881,5 @@ Ext.define("Teselagen.manager.PieManager", {
                 });*/
             }
         }
-    },
+    }
 });

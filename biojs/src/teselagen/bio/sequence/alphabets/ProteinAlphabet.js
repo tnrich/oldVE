@@ -286,6 +286,6 @@ Ext.define("Teselagen.bio.sequence.alphabets.ProteinAlphabet", {
 	* Returns data about the Valine AminoAcidSymbol
 	* @return {AminoAcidSymbol} returns the datastructure for the specified AminoAcidSymbol
 	*/
-	getValine:  function (){ return this.v; },
+	getValine:  function (){ return this.v; }
 	
 });
