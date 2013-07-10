@@ -68,17 +68,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         for(var i = 0; i < bins.length; i++) {
             parts = bins[i].parts().getRange();
             if(parts.length > 1) {
+                tmpC = 0;
+
                 for(var j = 0; j < parts.length; j++) {
-                    if(parts[j].get("sequencefile_id")!="") {
+                    if(parts[j].get("sequencefile_id")!="" && !parts[j].get("phantom")) {
                         tmpC++;
                     }
+                }
+
+                if (tmpC>1) {
+                    combinatorial = true;
                 }
             }
         }
 
-        if (tmpC>1) {
-            combinatorial = true;
-        }
         return cb(combinatorial);
     },
 
@@ -673,10 +676,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onAddEugeneRuleBtnClick: function() {
         if(this.selectedPart) {
             var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
+
+            this.activeProject.rules().clearFilter();
+
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                 name: this.DeviceDesignManager.generateDefaultRuleName(this.activeProject),
                 compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
             });
+
+            this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                           this.selectedPart);
 
             var ruleForm = newEugeneRuleDialog.down("form");
             var operand2Field = ruleForm.down("combobox[cls='operand2PartField']");

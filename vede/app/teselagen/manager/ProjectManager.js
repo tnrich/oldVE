@@ -273,7 +273,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + newSequenceFile.data.id);
                                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
                                 self.openSequence(newSequenceFile);
-                                toastr.info ("New Sequence Successfully Created");
+                                toastr.info ("New Sequence Created");
                             });
                         }
                     });

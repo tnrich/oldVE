@@ -121,7 +121,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                         newSequence.set('sequenceFileFormat',"GENBANK");
                         newSequence.set('sequenceFileName',name);
                         newSequence.set('firstTimeImported',true);
-                        toastr.info ("New Sequence Successfully Created");
+                        toastr.info ("New Sequence Created");
                     }
 
                     else {
@@ -145,7 +145,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     }
 
                     var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
+                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed');
                     parttext.animate({duration: 5000, to: {opacity: 0}});
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                     if(typeof (cb) === "function") { cb(sequence); }

@@ -39,9 +39,9 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         var successFullSavedCallback = function(){
             currentTabPanel.setLoading(false);
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
-            parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on '+ nowDate);
+            parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
-            toastr.info ("Sequence Successfully Saved");
+            toastr.info ("Sequence Saved");
             project = Teselagen.manager.ProjectManager.workingProject;
             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
