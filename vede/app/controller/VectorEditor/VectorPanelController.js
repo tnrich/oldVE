@@ -29,9 +29,6 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
                     sequenceFileName: "untitled.gb",
                     partSource: "Untitled sequence"
                 });
-
-                //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-                //Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
             }
         }
     },
