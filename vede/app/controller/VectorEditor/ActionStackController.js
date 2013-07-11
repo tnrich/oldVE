@@ -32,10 +32,32 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
         this.application.on("saveCurrentVEProject",
                     this.onsaveCurrentVEProject, this);
 
+        this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            }
+        });
     },
 
     onLaunch: function() {
         this.ActionStackManager = Ext.create("Teselagen.manager.ActionStackManager");
+    },
+
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        // Save the old tab's stack, and load the new tab's one.
+        if(oldTab.initialCls === "VectorEditorPanel") {
+            oldTab.undoStack = this.ActionStackManager.undoStack;
+            oldTab.redoStack = this.ActionStackManager.redoStack;
+        }
+
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+
+            if(newTab.undoStack && oldTab.redoStack) {
+                this.ActionStackManager.undoStack = newTab.undoStack;
+                this.ActionStackManager.redoStack = newTab.redoStack;
+            }
+        }
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -60,6 +82,7 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
             this.ActionStackManager.redo();
         }
     },
+
     onsaveCurrentVEProject: function() {
         var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
         var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();

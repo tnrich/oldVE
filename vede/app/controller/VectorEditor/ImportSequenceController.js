@@ -143,9 +143,11 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                         sequence.set('firstTimeImported',true);
                     }
 
-                    var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed');
-                    parttext.animate({duration: 5000, to: {opacity: 0}});
+                    var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('tbtext[id="VectorEditorStatusBarAlert"]');
+                    if(parttext) {
+                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed');
+                        parttext.animate({duration: 5000, to: {opacity: 0}});
+                    }
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                     if(typeof (cb) === "function") { cb(sequence); }
             };
@@ -255,7 +257,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                             Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
                                         },
                                         "destroy": function(selectWindow) {
-                                            currentTabPanel.setLoading(false);
+                                            Ext.getCmp("mainAppPanel").setLoading(false);
                                         }
                                     }
                                 }

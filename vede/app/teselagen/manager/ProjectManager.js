@@ -57,16 +57,30 @@ Ext.define("Teselagen.manager.ProjectManager", {
     checkDuplicatedTabs: function (model, tabName, cb, cb2) {
         var tabPanel = Ext.getCmp("mainAppPanel");
         var duplicated = false;
-        var ModelId = model.data.id;
-        tabPanel.items.items.forEach(function (tab, key) {
-            if(tab.model && tab.initialCls === tabName) {
-                if(tab.model.data.id === ModelId) {
+        var ModelId;
+
+        if(tabName !== "VectorEditorPanel") {
+            ModelId = model.data.id;
+            tabPanel.items.items.forEach(function (tab, key) {
+                if(tab.model && tab.initialCls === tabName) {
+                    if(tab.model.data.id === ModelId) {
+                        duplicated = true;
+                        tabPanel.setActiveTab(key);
+                        if(typeof (cb2) === "function") { cb2(); }
+                    }
+                }
+            });
+        } else {
+            tabPanel.items.items.forEach(function (tab, key) {
+                if(tab.model && model && tab.model.$className === "Teselagen.manager.SequenceManager" && 
+                   tab.model.getName() === model.getName() &&
+                   tab.model.getSequence().toString() === model.getSequence().toString()) {
                     duplicated = true;
                     tabPanel.setActiveTab(key);
-                    if(typeof (cb2) === "function") { cb2(); }
                 }
-            }
-        });
+            });
+        }
+
         if(!duplicated) { return cb(tabPanel); }
         else { console.log("Trying to open duplicated tab!"); }
     },
@@ -152,6 +166,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openSequence: function (sequence) {
     	//console.log("Opening Sequence");
     	this.workingSequence = sequence;
+
         Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {

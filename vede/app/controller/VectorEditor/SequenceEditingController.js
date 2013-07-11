@@ -81,7 +81,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onCreatePartBtnClick: function () {
-
         var veproject = Teselagen.manager.ProjectManager.workingSequence;
         var sequence = Teselagen.manager.ProjectManager.workingSequence;
         var part = Ext.create("Teselagen.models.Part", {
@@ -95,15 +94,23 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onOpenVectorEditor: function(seq){
-        //console.log("Using general Vector Editor Sequence Editing Controller");
-        currentTabPanel = Ext.getCmp('mainAppPanel');
-        currentTabPanel.setActiveTab(1);
-        Teselagen.manager.ProjectManager.workingSequence = seq;
-        sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        var sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        var self = this;
 
-        this.VEManager = Ext.create("Teselagen.manager.VectorEditorManager",seq,sequenceFileManager);
+        Teselagen.manager.ProjectManager.checkDuplicatedTabs(sequenceFileManager, "VectorEditorPanel", function(tabPanel) {
+            var newTab = Ext.create("Vede.view.ve.VectorEditorPanel", {
+                title: sequenceFileManager.getName()
+            });
 
-        Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
+            // Clone the sequencemanager so the tab will still appear to be a
+            // duplicate if we edit the file without saving.
+            newTab.model = sequenceFileManager.clone();
+
+            self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager",seq,sequenceFileManager);
+
+            tabPanel.add(newTab).show();
+            Teselagen.manager.ProjectManager.workingSequence = seq;
+        });
     },
 
     onsaveSequenceBtnClick: function(){
@@ -179,14 +186,23 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
           Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
     	*/
     },
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
     
     init: function () {
 
         this.control({
-            '#VectorEditorMainToolBar > button[cls="saveSequenceBtn"]': {
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
+            'component[cls="VectorEditorMainToolBar"] > button[cls="saveSequenceBtn"]': {
                 click: this.onsaveSequenceBtnClick
             },
-            '#VectorEditorMainToolBar > button[cls="createPartBtn"]': {
+            'component[cls="VectorEditorMainToolBar"] > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
             },
             "#exportToFileMenuItem": {

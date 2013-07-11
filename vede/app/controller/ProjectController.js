@@ -309,7 +309,7 @@ Ext.define("Vede.controller.ProjectController", {
             callback: function (loadedsequence) {
                 Teselagen.manager.ProjectManager.workingProject = project;
                 Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
-                Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
+                //Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
                 oldTab.el.unmask();
             }
         });

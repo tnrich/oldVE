@@ -153,9 +153,18 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
 	    	Ext.getCmp("EditSequenceFeature").close();
     	}
     },
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
     
     init: function() {
     	this.control({   		
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
     		'#EditSequenceFeature': {
     			show: this.onWindowShow
     		},

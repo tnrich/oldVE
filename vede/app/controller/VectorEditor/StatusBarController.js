@@ -29,13 +29,17 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     permissionText: null,
     sequenceLengthText: null,
 
-    onLaunch: function() {
-        this.StatusPanel = Ext.getCmp("VectorEditorStatusPanel");
-        this.caretPositionText = this.StatusPanel.down("tbtext[cls='caretPositionText']");
-        this.meltingTemperatureText = this.StatusPanel.down("tbtext[cls='meltingTemperatureText']");
-        this.permissionText = this.StatusPanel.down("tbtext[cls='permissionText']");
-        this.selectionPositionText = this.StatusPanel.down("tbtext[cls='selectionPositionText']");
-        this.sequenceLengthText = this.StatusPanel.down("tbtext[cls='sequenceLengthText']");
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.StatusPanel = newTab.down("component[cls='VectorEditorStatusPanel']");
+            this.caretPositionText = this.StatusPanel.down("tbtext[cls='caretPositionText']");
+            this.meltingTemperatureText = this.StatusPanel.down("tbtext[cls='meltingTemperatureText']");
+            this.permissionText = this.StatusPanel.down("tbtext[cls='permissionText']");
+            this.selectionPositionText = this.StatusPanel.down("tbtext[cls='selectionPositionText']");
+            this.sequenceLengthText = this.StatusPanel.down("tbtext[cls='sequenceLengthText']");
+
+            this.onSequenceManagerChanged(newTab.model);
+        }
     },
 
     init: function() {
@@ -45,6 +49,12 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
         this.CaretEvent = Teselagen.event.CaretEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
         this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+
+        this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            }
+        });
 
         this.application.on("SequenceManagerChanged", 
                             this.onSequenceManagerChanged, this);

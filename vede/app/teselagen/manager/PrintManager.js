@@ -41,9 +41,12 @@ Ext.define("Teselagen.manager.PrintManager", {
 		this.getPrintStyleSheet();
 		
 		var startShown = true;
-		if(document.getElementById('PieContainer').style.display=='none') {
-			Ext.getCmp("PieContainer").show();
-        	Ext.getCmp("RailContainer").hide();
+        var pieContainer = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
+        var railContainer = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']");
+        if(pieContainer.el.getStyle("display") === "none") {
+		//if(document.getElementById('PieContainer').style.display=='none') {
+            pieContainer.show();
+            railContainer.hide();
 			startShown = false;
 		}
 		
@@ -85,19 +88,19 @@ Ext.define("Teselagen.manager.PrintManager", {
         this.printStyleSheet.addRule('body','width: '+(pageWidthInches-2*marginInches)+'in');
         
         // I don't know if 'addRule' works for all browsers.
-        this.printStyleSheet.addRule('#Pie', 'visibility: visible');
-        this.printStyleSheet.addRule('#Pie', 'overflow: visible');
-        this.printStyleSheet.addRule('#Pie', 'position: fixed');
-        this.printStyleSheet.addRule('#Pie', 'left: 0in');
-        this.printStyleSheet.addRule('#Pie', 'top: 0in');
+        this.printStyleSheet.addRule('.Pie', 'visibility: visible');
+        this.printStyleSheet.addRule('.Pie', 'overflow: visible');
+        this.printStyleSheet.addRule('.Pie', 'position: fixed');
+        this.printStyleSheet.addRule('.Pie', 'left: 0in');
+        this.printStyleSheet.addRule('.Pie', 'top: 0in');
         
-        this.printStyleSheet.addRule('#Pie', scaleFactor);
-        this.printStyleSheet.addRule('#Pie', '-ms-'+scaleFactor);
-        this.printStyleSheet.addRule('#Pie', '-webkit-'+scaleFactor);
-        this.printStyleSheet.addRule('#Pie', '-o-'+scaleFactor);
-        this.printStyleSheet.addRule('#Pie', '-moz-'+scaleFactor);
+        this.printStyleSheet.addRule('.Pie', scaleFactor);
+        this.printStyleSheet.addRule('.Pie', '-ms-'+scaleFactor);
+        this.printStyleSheet.addRule('.Pie', '-webkit-'+scaleFactor);
+        this.printStyleSheet.addRule('.Pie', '-o-'+scaleFactor);
+        this.printStyleSheet.addRule('.Pie', '-moz-'+scaleFactor);
         
-        this.printStyleSheet.addRule('#Pie', 'left: '+((pageWidthInches-2*marginInches)/2-pieWidth/pxPerInch/2)+'in');
+        this.printStyleSheet.addRule('.Pie', 'left: '+((pageWidthInches-2*marginInches)/2-pieWidth/pxPerInch/2)+'in');
         
         this.printStyleSheet.addRule('.pieSelection', 'display: none');
         this.printStyleSheet.addRule('.pieWireframeElement', 'display: none');
@@ -105,19 +108,22 @@ Ext.define("Teselagen.manager.PrintManager", {
         
         window.print();
         if(!startShown) {
-        	Ext.getCmp("PieContainer").hide();
-        	Ext.getCmp("RailContainer").show();
+            pieContainer.hide();
+            railContainer.show();
     	}
-        this.removeRules('#Pie','@page','.x-viewport','body','.pieSelection','.pieWireframeElement','.pieCaret');
+        this.removeRules('.Pie','@page','.x-viewport','body','.pieSelection','.pieWireframeElement','.pieCaret');
 	},	
 	
 	printLinearView: function() {
 		this.getPrintStyleSheet();
-		
+
 		var startShown = true;
-		if(document.getElementById('RailContainer').style.display=='none') {
-			Ext.getCmp("RailContainer").show();
-			Ext.getCmp("PieContainer").hide();
+        var pieContainer = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
+        var railContainer = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']");
+        if(railContainer.el.getStyle("display") === "none") {
+		//if(document.getElementById('PieContainer').style.display=='none') {
+            railContainer.show();
+            pieContainer.hide();
 			startShown = false;
 		}
 		
@@ -156,19 +162,19 @@ Ext.define("Teselagen.manager.PrintManager", {
         this.printStyleSheet.addRule('body','height: '+(pageHeightInches-2*marginInches)+'in');
         this.printStyleSheet.addRule('body','width: '+(pageWidthInches-2*marginInches)+'in');
         
-        this.printStyleSheet.addRule('#Rail', 'visibility: visible');
-        this.printStyleSheet.addRule('#Rail', 'overflow: visible');
-        this.printStyleSheet.addRule('#Rail', 'position: fixed');
-        this.printStyleSheet.addRule('#Rail', 'left: 0in');
-        this.printStyleSheet.addRule('#Rail', 'top: 0in');
+        this.printStyleSheet.addRule('.Rail', 'visibility: visible');
+        this.printStyleSheet.addRule('.Rail', 'overflow: visible');
+        this.printStyleSheet.addRule('.Rail', 'position: fixed');
+        this.printStyleSheet.addRule('.Rail', 'left: 0in');
+        this.printStyleSheet.addRule('.Rail', 'top: 0in');
         
-        this.printStyleSheet.addRule('#Rail', scaleFactor);
-        this.printStyleSheet.addRule('#Rail', '-ms-'+scaleFactor);
-        this.printStyleSheet.addRule('#Rail', '-webkit-'+scaleFactor);
-        this.printStyleSheet.addRule('#Rail', '-o-'+scaleFactor);
-        this.printStyleSheet.addRule('#Rail', '-moz-'+scaleFactor);
+        this.printStyleSheet.addRule('.Rail', scaleFactor);
+        this.printStyleSheet.addRule('.Rail', '-ms-'+scaleFactor);
+        this.printStyleSheet.addRule('.Rail', '-webkit-'+scaleFactor);
+        this.printStyleSheet.addRule('.Rail', '-o-'+scaleFactor);
+        this.printStyleSheet.addRule('.Rail', '-moz-'+scaleFactor);
         
-        this.printStyleSheet.addRule('#Rail', 'left: '+((pageWidthInches-2*marginInches)/2-railWidth/pxPerInch/2)+'in');
+        this.printStyleSheet.addRule('.Rail', 'left: '+((pageWidthInches-2*marginInches)/2-railWidth/pxPerInch/2)+'in');
 
         this.printStyleSheet.addRule('.railSelection', 'display: none');
         this.printStyleSheet.addRule('.railWireframeElement', 'display: none');
@@ -176,10 +182,10 @@ Ext.define("Teselagen.manager.PrintManager", {
         
         window.print();
         if(!startShown) {
-        	Ext.getCmp("RailContainer").hide();
-        	Ext.getCmp("PieContainer").show();
+            railContainer.hide();
+            pieContainer.show();
     	}
-        this.removeRules('#Rail','@page','.x-viewport','body','.railSelection','.railWireframeElement','.railCaret');
+        this.removeRules('.Rail','@page','.x-viewport','body','.railSelection','.railWireframeElement','.railCaret');
 	},
 	
 	printSequenceView: function() {
@@ -201,8 +207,8 @@ Ext.define("Teselagen.manager.PrintManager", {
 		this.SequenceAnnotationManager.setBpPerRow(bpPerRow);
 		this.SequenceAnnotationManager.render();
         
-		var seqWidth = document.getElementById('annotateSVG').width.animVal.value;
-		var seqHeight = document.getElementById('annotateSVG').height.animVal.value;	
+		var seqWidth = d3.select('.annotateSVG').node().width.animVal.value;
+		var seqHeight = d3.select('.annotateSVG').node().height.animVal.value;	
 				
 		// I don't know if 'addRule' works for all browsers.
         this.printStyleSheet.addRule('@page', 'size: '+pageWidthInches+'in '+pageHeightInches+'in');
@@ -216,20 +222,20 @@ Ext.define("Teselagen.manager.PrintManager", {
         this.printStyleSheet.addRule('body','height: '+(seqHeight / pxPerInch)+'in');
         this.printStyleSheet.addRule('body','width: '+(seqWidth / pxPerInch)+'in');
         
-        this.printStyleSheet.addRule('#annotateSVG', 'visibility: visible');
-        this.printStyleSheet.addRule('#annotateSVG', 'overflow: visible');
-        this.printStyleSheet.addRule('#annotateSVG', 'position: fixed');
-        this.printStyleSheet.addRule('#annotateSVG', 'left: 0in');
-        this.printStyleSheet.addRule('#annotateSVG', 'top: 0in');
+        this.printStyleSheet.addRule('.annotateSVG', 'visibility: visible');
+        this.printStyleSheet.addRule('.annotateSVG', 'overflow: visible');
+        this.printStyleSheet.addRule('.annotateSVG', 'position: fixed');
+        this.printStyleSheet.addRule('.annotateSVG', 'left: 0in');
+        this.printStyleSheet.addRule('.annotateSVG', 'top: 0in');
 		
-        this.printStyleSheet.addRule('#annotateSVG', 'left: '+((pageWidthInches-2*marginInches)/2-seqWidth/pxPerInch/2)+'in');
+        this.printStyleSheet.addRule('.annotateSVG', 'left: '+((pageWidthInches-2*marginInches)/2-seqWidth/pxPerInch/2)+'in');
         
-		this.printStyleSheet.addRule('#selectionSVG','display: none');
-		this.printStyleSheet.addRule('#caretSVG','display: none');
+		this.printStyleSheet.addRule('.selectionSVG','display: none');
+		this.printStyleSheet.addRule('.caretSVG','display: none');
 		
         window.print();
 		
-		this.removeRules('#annotateSVG','@page','.x-viewport','body','#selectionSVG','#caretSVG');
+		this.removeRules('.annotateSVG','@page','.x-viewport','body','.selectionSVG','.caretSVG');
 		this.SequenceAnnotationManager.setBpPerRow(oldBpPerRow);
 		this.SequenceAnnotationManager.render();
 	},

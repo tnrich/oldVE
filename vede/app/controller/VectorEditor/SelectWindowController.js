@@ -42,8 +42,17 @@ Ext.define("Vede.controller.VectorEditor.SelectWindowController", {
         }
     },
 
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
+
     init: function() {
         this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
             "#selectWindowOKButton": {
                 click: this.onOKButtonClick
             }

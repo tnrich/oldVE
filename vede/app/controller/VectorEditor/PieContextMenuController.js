@@ -45,6 +45,9 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     	};	
     	
 		this.control({
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
 			'#PieContextMenu': {
     			show: this.onPieContextMenuShow,
     			beforehide: this.onPieContextMenuHide
@@ -66,6 +69,12 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     	Vede.application.on(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, this.onMouseDownAnyWhere, this);
     	Vede.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
 	},
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
 	
 	onPieRightClicked: function() {
 		//console.log("PIE RIGHT CLICKED: "+this.isPieContextMenuOpen+", "+this.isPieAnnotationRightClicked+", "+this.isPieSelectionLayerRightClicked);

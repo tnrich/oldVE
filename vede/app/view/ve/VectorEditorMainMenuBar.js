@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
-    id: 'VectorEditorMainMenuBar',
+    cls: 'VectorEditorMainMenuBar',
     alias: 'widget.VectorEditorMainMenuBar',
     items: [
      {
@@ -12,20 +12,21 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
          text: 'File',
          menu: {
              xtype: 'menu',
-             id: 'veFileMenu',
+             cls: 'veFileMenu',
              minWidth: 140,
+             hideMode: 'offsets',
              items: [
             {
                 xtype: 'menuitem',
                 text: 'New Sequence',
-                id: 'newBlankVectorEditorMenuItem'
+                identifier: 'newBlankVectorEditorMenuItem'
             },                  
             /*{
                 //Disabled until VE is refactored to open multiple tabs.
             	xtype: 'menuitem',
                 text: 'Close',
                 disabled: true,
-                id: 'closeMenuItem'
+                identifier: 'closeMenuItem'
             },*/
             {
                 xtype: 'menuseparator'
@@ -33,12 +34,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             {
             	xtype: 'menuitem',
                 text: 'Save',
-                id: 'saveMenuItem'
+                identifier: 'saveMenuItem'
             },
             {
             	xtype: 'menuitem',
                 text: 'Save As...',
-                id: 'saveAsMenuItem'
+                identifier: 'saveAsMenuItem'
             },
             /*{
                 xtype: 'menuseparator'
@@ -46,7 +47,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             {
                 xtype: 'menuitem',
                 text: 'Share',
-                id: 'shareItem',
+                identifier: 'shareItem',
                 disabled: true
                 menu: {
                 	xtype: 'menu',
@@ -60,8 +61,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             {
                 xtype: 'filefield',
                 buttonOnly: true,
-                cls: 'importSequenceBtn',
-                id: 'importSequenceMenuItem',
+                identifier: 'importSequenceBtn',
+                identifier: 'importSequenceMenuItem',
                 text: 'Import File',
                 buttonConfig: {
                     border: false,
@@ -73,13 +74,13 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             },
             {
                 xtype: 'menuitem',
-                id: 'exportToFileMenuItem',
+                identifier: 'exportToFileMenuItem',
                 text: 'Export to File'
             },                                
             /*{ //Move 'Permissions' functionality to inside of 'Properties' window.
                 xtype: 'menuitem',
                 text: 'Permissions',
-                id: 'permissionsMenuItem'
+                identifier: 'permissionsMenuItem'
             },*/
             {
                 xtype: 'menuseparator'
@@ -87,7 +88,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             /*{ //Commented out until we learn what to put in 'Print Setup...'.
             	xtype: 'menuitem',
                 text: 'Print Setup...',
-                id: 'printSetupMenuItem'
+                identifier: 'printSetupMenuItem'
             },*/
             {
                 xtype: 'menuitem',
@@ -97,15 +98,15 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                     width: 120,
                     items: [{
                         xtype: 'menuitem',
-                        id: 'printSequenceViewMenuItem',
+                        identifier: 'printSequenceViewMenuItem',
                         text: 'Sequence'
                     }, {
                         xtype: 'menuitem',
-                        id: 'printCircularViewMenuItem',
+                        identifier: 'printCircularViewMenuItem',
                         text: 'Circular View'
                     }, {
                         xtype: 'menuitem',
-                        id: 'printLinearViewMenuItem',
+                        identifier: 'printLinearViewMenuItem',
                         text: 'Linear View'
                     }]
                 }
@@ -116,7 +117,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             {
             	xtype: 'menuitem',
                 text: 'Properties...',
-                id: 'propertiesMenuItem'
+                identifier: 'propertiesMenuItem'
             }*/]
          }
      },
@@ -128,80 +129,80 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             minWidth: 150,
             items: [{
                 xtype: 'menuitem',
-                id: 'cutMenuItem',
+                identifier: 'cutMenuItem',
                 text: 'Cut'
             }, {
                 xtype: 'menuitem',
-                id: 'copyMenuItem',
+                identifier: 'copyMenuItem',
                 text: 'Copy'
             }, {
                 xtype: 'menuitem',
-                id: 'pasteMenuItem',
+                identifier: 'pasteMenuItem',
                 text: 'Paste'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menuitem',
-                id: 'undoMenuItem',
+                identifier: 'undoMenuItem',
                 text: 'Undo'
             }, {
                 xtype: 'menuitem',
-                id: 'redoMenuItem',
+                identifier: 'redoMenuItem',
                 text: 'Redo'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menucheckitem',
-                id: 'safeEditingMenuItem',
+                identifier: 'safeEditingMenuItem',
                 text: 'Safe Editing',
                 checked: true
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menuitem',
-                id: 'findMenuItem',
+                identifier: 'findMenuItem',
                 text: 'Find...'
             }, {
                 xtype: 'menuitem',
-                id: 'gotoMenuItem',
+                identifier: 'gotoMenuItem',
                 text: 'Go To...'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menuitem',
-                id: 'selectMenuItem',
+                identifier: 'selectMenuItem',
                 text: 'Select...'
             }, {
                 xtype: 'menuitem',
-                id: 'selectAllMenuItem',
+                identifier: 'selectAllMenuItem',
                 text: 'Select All'
             }, {
                 xtype: 'menuitem',
-                id: 'selectInverseMenuItem',
+                identifier: 'selectInverseMenuItem',
                 text: 'Select Inverse'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menucheckitem',
-                id: 'sequenceLinearMenuItem',
+                identifier: 'sequenceLinearMenuItem',
                 text: 'Sequence Linear'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menuitem',
-                itemId: 'reverseComplementMenuItem',
+                identifier: 'reverseComplementMenuItem',
                 text: 'Reverse Complement Entire Sequence'
             },
             {
                 xtype: 'menuitem',
-                id: 'rebaseMenuItem',
+                identifier: 'rebaseMenuItem',
                 text: 'Rotate to Here'
             }/*,{
                 xtype: 'menuseparator'
             },
             {
                 xtype: 'menuitem',
-                id: 'createNewFeatureMenuItem',
+                identifier: 'createNewFeatureMenuItem',
                 text: 'Annotate as new Sequence Feature',
                 disabled: true
             }*/
@@ -215,75 +216,76 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             minWidth: 140,
             items: [{
                 xtype: 'menucheckitem',
-                id: 'circularViewMenuItem',
+                identifier: 'circularViewMenuItem',
                 text: 'Circular',
                 checked: true,
-                group: 'lineType'
+                //group: 'lineType'
             }, {
                 xtype: 'menucheckitem',
-                id: 'linearViewMenuItem',
+                identifier: 'linearViewMenuItem',
                 text: 'Linear',
-                group: 'lineType'
+                checked: false,
+                //group: 'lineType'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menucheckitem',
-                id: 'mapCaretMenuItem',
+                identifier: 'mapCaretMenuItem',
                 text: 'Map Caret',
                 checked: true
             }, {
                 xtype: 'menucheckitem',
-                id: 'featuresMenuItem',
+                identifier: 'featuresMenuItem',
                 text: 'Features',
                 checked: true
             }, {
                 xtype: 'menucheckitem',
-                id: 'cutSitesMenuItem',
+                identifier: 'cutSitesMenuItem',
                 text: 'Cut Sites'
             }, {
                 xtype: 'menucheckitem',
-                id: 'orfsMenuItem',
+                identifier: 'orfsMenuItem',
                 text: 'ORF'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menucheckitem',
-                id: 'showComplementaryMenuItem',
+                identifier: 'showComplementaryMenuItem',
                 text: 'Complementary',
                 checked: true
             }, {
                 xtype: 'menucheckitem',
-                id: 'showSpacesMenuItem',
+                identifier: 'showSpacesMenuItem',
                 text: 'Spaces',
                 checked: true
             }, {
                 xtype: 'menucheckitem',
-                id: 'showSequenceAAMenuItem',
+                identifier: 'showSequenceAAMenuItem',
                 text: 'Sequence AA'
             }, {
                 xtype: 'menucheckitem',
-                id: 'showRevcomAAMenuItem',
+                identifier: 'showRevcomAAMenuItem',
                 text: 'Revcom AA'
             }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menucheckitem',
-                id: 'featureLabelsMenuItem',
+                identifier: 'featureLabelsMenuItem',
                 text: 'Feature Labels',
                 checked: true
             }, {
                 xtype: 'menucheckitem',
-                id: 'cutSiteLabelsMenuItem',
+                identifier: 'cutSiteLabelsMenuItem',
                 text: 'Cut Site Labels',
                 checked: true
             }, {
                 xtype: 'menuitem',
-                id: 'zoomInMenuItem',
+                identifier: 'zoomInMenuItem',
                 hideOnClick: false,
                 text: 'Zoom In (+)'
             }, {
                 xtype: 'menuitem',
-                id: 'zoomOutMenuItem',
+                identifier: 'zoomOutMenuItem',
                 hideOnClick: false,
                 text: 'Zoom Out (-)'
             }]
@@ -299,12 +301,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
              
             {
                 xtype: 'menuitem',
-                id: 'restrictionEnzymesManagerMenuItem',
+                identifier: 'restrictionEnzymesManagerMenuItem',
                 text: 'Restriction Enzymes Manager'
             },
             {
                 xtype: 'menuitem',
-                id: 'simulateDigestionMenuItem',
+                identifier: 'simulateDigestionMenuItem',
                 text: 'Simulate Digestion'
             }
 //            {

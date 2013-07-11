@@ -333,7 +333,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid.removeAll(); // Clean grid
 
 
-            Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
+            //Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
 
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);

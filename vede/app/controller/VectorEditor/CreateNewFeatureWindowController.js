@@ -111,9 +111,18 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     endFieldChange: function() {
     	this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED,this,this.selectedStart,Ext.getCmp("createNewFeatureWindowEndField").getValue());
     },
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
     
     init: function() {
     	this.control({
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
     		'#createNewFeatureWindowAttributesGridPanel': {
     			validateedit: this.editAttributes
     		},

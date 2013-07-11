@@ -51,6 +51,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
 
     safeEditing: true,
 
+    activeTab: null,
+
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
 
@@ -118,6 +120,14 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
             this.onSequenceChanged;
 
         this.application.on(listenersObject, this);
+    },
+
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        this.activeTab = newTab;
+
+        if(newTab.initialCls == "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
     },
     
     onLaunch: function() {
@@ -298,7 +308,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         grid.columns[0].setWidth(160);
 
         promptWindow.on('close', function() {
-            Ext.getCmp("AnnotateContainer").el.focus();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='AnnotateContainer']").el.focus();
         }, this);
 
         promptWindow.down("displayfield").on("click", function() {

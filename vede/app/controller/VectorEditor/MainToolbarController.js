@@ -13,6 +13,10 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     MenuItemEvent: null,
     VisibilityEvent: null,
 
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        this.activeTab = newTab;
+    },
+
     onImportBtnChange: function(pBtn) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
         // Change this at a later date when that class is tested. --DW 10.17.2012
@@ -71,12 +75,15 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     },
 
     onFeaturesButtonToggle: function(button, pressed, options) {
-        var menuItem = Ext.ComponentQuery.query('#featuresMenuItem')[0];
-        if (pressed) {
-            menuItem.setChecked(true, true);
+        var checkitems = Ext.ComponentQuery.query("menucheckitem[identifier='featuresMenuItem']");
+        var buttons = Ext.ComponentQuery.query("button[cls='featuresBtn']");
+
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].toggle(checked, true);
         }
-        else {
-            menuItem.setChecked(false, true);
+
+        for(i = 0; i < checkitems.length; i++) {
+            checkitems[i].setChecked(checked, true);
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
@@ -84,25 +91,33 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     },
 
     onCutSitesButtonToggle: function(button, pressed, options) {
-        var menuItem = Ext.ComponentQuery.query('#cutSitesMenuItem')[0];
-        if (pressed) {
-            menuItem.setChecked(true, true);
+        var checkitems = Ext.ComponentQuery.query("menucheckitem[identifier='cutSitesMenuItem']");
+        var buttons = Ext.ComponentQuery.query("button[cls='cutSitesBtn']");
+
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].toggle(checked, true);
         }
-        else {
-            menuItem.setChecked(false, true);
+
+        for(i = 0; i < checkitems.length; i++) {
+            checkitems[i].setChecked(checked, true);
         }
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
                                    pressed);
     },
 
     onOrfsButtonToggle: function(button, pressed, options) {
-        var menuItem = Ext.ComponentQuery.query('#orfsMenuItem')[0];
-        if (pressed) {
-            menuItem.setChecked(true, true);
+        var checkitems = Ext.ComponentQuery.query("menucheckitem[identifier='orfsMenuItem']");
+        var buttons = Ext.ComponentQuery.query("button[cls='orfsBtn']");
+
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].toggle(checked, true);
         }
-        else {
-            menuItem.setChecked(false, true);
+
+        for(i = 0; i < checkitems.length; i++) {
+            checkitems[i].setChecked(checked, true);
         }
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
                                    pressed);
     },
@@ -127,15 +142,19 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     },
 
     onViewModeChanged: function(viewMode) {
-        var circularButton = Ext.getCmp("circularViewBtn");
-        var linearButton = Ext.getCmp("linearViewBtn");
+        var circularButtons = Ext.ComponentQuery.query("button[cls='circularBtn']");
+        var linearButtons = Ext.ComponentQuery.query("button[cls='linearBtn']");
 
         if(viewMode == "linear") {
-            circularButton.toggle(false);
-            linearButton.toggle(true);
+            for(var i = 0; i < circularButtons.length; i++) {
+                circularButtons[i].toggle(false, true);
+                linearButtons[i].toggle(true, true);
+            }
         } else {
-            circularButton.toggle(true);
-            linearButton.toggle(false);
+            for(var i = 0; i < circularButtons.length; i++) {
+                circularButtons[i].toggle(true, true);
+                linearButtons[i].toggle(false, true);
+            }
         }
     },
 
@@ -156,8 +175,12 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         Ext.getCmp('ProjectPanel').hide();
         //Ext.get('headerPanel').hide();
         //Ext.get('VectorEditorMainMenuPanel').hide();
-        Ext.get("VectorEditorStatusPanel").hide();
-        Ext.get("FindPanel").hide();        
+        Ext.each(Ext.ComponentQuery.query("component[cls='VectorEditorStatusPanel']"), function(panel) {
+            panel.hide();
+        });
+        Ext.each(Ext.ComponentQuery.query("component[cls='FindPanel']"), function(panel) {
+            panel.hide();
+        });
     },
 
     showPanels: function(){
@@ -165,8 +188,12 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         Ext.getCmp('ProjectPanel').show();
         //Ext.get('headerPanel').show();
         //Ext.get('VectorEditorMainMenuPanel').show();
-        Ext.get("VectorEditorStatusPanel").show();
-        Ext.get("FindPanel").show();        
+        Ext.each(Ext.ComponentQuery.query("component[cls='VectorEditorStatusPanel']"), function(panel) {
+            panel.show();
+        });
+        /*Ext.each(Ext.ComponentQuery.query("component[cls='FindPanel']"), function(panel) {
+            panel.show();
+        });*/
     },
 
     registerFullScreenEventListener: function(){
@@ -222,46 +249,49 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.control({
-            "#importBtn": {
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "component[cls='importSequenceBtn']": {
                 change: this.onImportBtnChange
             },
-            "#importSequenceMenuItem": {
+            "filefield[text='Import File']": {
                 change: this.onImportBtnChange
             },
-            "#circularViewBtn": {
-                click: this.onCircularViewButtonClick
-            },
-            "#undoViewBtn": {
+            "button[cls='undoBtn']": {
                 click: this.onUndoButtonClick
             },
-            "#redoViewBtn": {
+            "button[cls='redoBtn']": {
                 click: this.onRedoButtonClick
             },
-            "#findBtn": {
+            "button[cls='findBtn']": {
                 click: this.onFindButtonClick
             },
-            "#featuresBtn": {
+            "button[cls='featuresBtn']": {
                 toggle: this.onFeaturesButtonToggle
             },
-            "#cutsitesBtn": {
+            "button[cls='cutSitesBtn']": {
                 toggle: this.onCutSitesButtonToggle
             },
-            "#orfsBtn": {
+            "button[cls='orfsBtn']": {
                 toggle: this.onOrfsButtonToggle
             },
-            "#reBtn": {
+            "button[cls='reBtn']": {
                 click: this.onREButtonClick
             },
-            "#linearViewBtn": {
+            "button[cls='circularBtn']": {
+                click: this.onCircularViewButtonClick
+            },
+            "button[cls='linearBtn']": {
                 click: this.onLinearViewBtnClick
             },
-            "#exportBtn": {
+            "button[cls='exportBtn']": {
 //                click: this.onSaveToRegistryButtonClick
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
             },
-            "#fullscreen": {
+            "button[cls='fullscreenBtn']": {
                 click: this.onFullscreenButtonClick
             },
         });

@@ -164,9 +164,18 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     		Ext.getCmp('SaveAsWindow').close();
     	}	
     },
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
     
     init: function() {  	
     	this.control({
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
     		'#SaveAsWindow': {
     			show: this.onWindowShow,
     			resize: this.onWindowResize
@@ -184,9 +193,3 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	this.application.on("SequenceManagerChanged",this.onSequenceManagerChanged, this);
     } 
 });
-
-
-
-
-
-
