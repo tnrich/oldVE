@@ -6,7 +6,9 @@
 
 Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     extend: "Ext.app.Controller",
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent", "Teselagen.models.J5Parameters"],
+    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager",
+               "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent",
+               "Teselagen.models.J5Parameters"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -154,6 +156,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
     },
 
+    /**
+     * Saves the device design
+     */
     saveDEProject: function (cb) {
 
         // var loadingMessage = this.createLoadingMessage();
