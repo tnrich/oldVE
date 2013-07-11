@@ -72,9 +72,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             });
         } else {
             tabPanel.items.items.forEach(function (tab, key) {
-                if(tab.model && model && tab.model.$className === "Teselagen.manager.SequenceManager" && 
-                   tab.model.getName() === model.getName() &&
-                   tab.model.getSequence().toString() === model.getSequence().toString()) {
+                if(tab.sequenceFile && model && tab.sequenceFile.get("id") === model.get("id")) {
                     duplicated = true;
                     tabPanel.setActiveTab(key);
                 }

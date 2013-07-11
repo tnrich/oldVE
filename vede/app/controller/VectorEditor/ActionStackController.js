@@ -45,15 +45,15 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
 
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         // Save the old tab's stack, and load the new tab's one.
-        if(oldTab.initialCls === "VectorEditorPanel") {
+        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
             oldTab.undoStack = this.ActionStackManager.undoStack;
             oldTab.redoStack = this.ActionStackManager.redoStack;
         }
 
-        if(newTab.initialCls === "VectorEditorPanel") {
+        if(newTab && newTab.initialCls === "VectorEditorPanel") {
             this.onSequenceManagerChanged(newTab.model);
 
-            if(newTab.undoStack && oldTab.redoStack) {
+            if(newTab.undoStack && newTab.redoStack) {
                 this.ActionStackManager.undoStack = newTab.undoStack;
                 this.ActionStackManager.redoStack = newTab.redoStack;
             }

@@ -97,18 +97,19 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         var sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
         var self = this;
 
-        Teselagen.manager.ProjectManager.checkDuplicatedTabs(sequenceFileManager, "VectorEditorPanel", function(tabPanel) {
+        console.log(seq.id);
+
+        Teselagen.manager.ProjectManager.checkDuplicatedTabs(seq, "VectorEditorPanel", function(tabPanel) {
             var newTab = Ext.create("Vede.view.ve.VectorEditorPanel", {
                 title: sequenceFileManager.getName()
             });
+            newTab.model = sequenceFileManager;
+            newTab.sequenceFile = seq;
 
-            // Clone the sequencemanager so the tab will still appear to be a
-            // duplicate if we edit the file without saving.
-            newTab.model = sequenceFileManager.clone();
-
-            self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager",seq,sequenceFileManager);
+            self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager", seq, sequenceFileManager);
 
             tabPanel.add(newTab).show();
+
             Teselagen.manager.ProjectManager.workingSequence = seq;
         });
     },
@@ -205,13 +206,13 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             'component[cls="VectorEditorMainToolBar"] > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
             },
-            "#exportToFileMenuItem": {
+            "component[identifier='exportToFileMenuItem']": {
                 click: this.onExportToFileMenuItemClick
             },
-            "#saveMenuItem": {
+            "component[identifier='saveMenuItem']": {
                 click: this.onSaveMenuItemClick
             },
-            "#saveAsMenuItem": {
+            "component[identifier='saveAsMenuItem']": {
                 click: this.onSaveAsMenuItemClick
             }
         });

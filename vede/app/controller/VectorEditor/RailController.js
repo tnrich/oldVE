@@ -48,6 +48,10 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
 
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         if(newTab.initialCls == "VectorEditorPanel") {
+            if(this.railContainer && this.railContainer.el) {
+                this.railContainer.el.un("keydown", this.onKeydown, this);
+            }
+
             this.railContainer = newTab.down("component[cls='RailContainer']");
             this.initRail(newTab);
         }

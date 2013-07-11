@@ -56,6 +56,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             self.sequence.save({
                 success: function (msg,operation) {
                     Ext.getCmp("mainAppPanel").getActiveTab().model = self.sequenceFileManager.clone();
+                    Ext.getCmp("mainAppPanel").getActiveTab().modelId = self.sequence.id;
                     var response = JSON.parse(operation.response.responseText);
                     successFullSavedCallback();
                     
@@ -63,7 +64,6 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     {
                         Ext.MessageBox.alert("Warning", "A part with the same name already exist in this project, using the unique instance of this sequence.");
                     }
-                    
                 },
                 failure: function() {
                     Ext.MessageBox.alert("Error", "Error saving sequence.");

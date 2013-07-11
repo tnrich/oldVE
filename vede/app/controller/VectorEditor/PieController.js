@@ -51,7 +51,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         if(newTab.initialCls == "VectorEditorPanel") {
             // Remove listeners from previous pieContainer.
-            if(this.pieContainer) {
+            if(this.pieContainer && this.pieContainer.el) {
                 this.pieContainer.el.un("keydown", this.onKeydown, this);
             }
 
