@@ -31,7 +31,7 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
                 });
 
                 //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-                Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
+                //Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
             }
         }
     },
