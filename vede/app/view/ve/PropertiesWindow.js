@@ -5,7 +5,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
     id: 'PropertiesWindow',
     modal: true,
     layout: {
-    	type: 'vbox',
+    	type: 'vbox'
     	//align: 'stretch'
     },
     width: 400,
@@ -32,19 +32,19 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                             fieldLabel: 'Owner',
                             id: 'propertiesWindowOwnerField',
                             disabled: true,
-                            disabledCls: 'x-panel',
+                            disabledCls: 'x-panel'
                         }, {
                             xtype: 'textfield',
                             fieldLabel: 'Created',
                             id: 'propertiesWindowCreatedField',
                             disabled: true,
-                            disabledCls: 'x-panel',
+                            disabledCls: 'x-panel'
                         }, {
                             xtype: 'textfield',
                             fieldLabel: 'Last Modified',
                             id: 'propertiesWindowLastModifiedField',
                             disabled: true,
-                            disabledCls: 'x-panel',
+                            disabledCls: 'x-panel'
                         },
                         /*{
                             xtype: 'gridpanel',
@@ -60,7 +60,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                     id: 'propertiesWindowOKButton',
                                     margin: 2,
                                     padding: 2,
-                                    text: 'Ok',                                    
+                                    text: 'Ok'                                    
                                 }, {
                                     xtype: 'button',
                                     margin: 2,
@@ -71,7 +71,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                             ]
                         }
                     ]
-                },
+                }
 	        ]
     	});
     	me.callParent(arguments);

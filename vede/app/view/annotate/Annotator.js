@@ -390,6 +390,5 @@ Ext.define("Vede.view.annotate.Annotator", {
         d3.selectAll(".featuresSVG").remove(); 
         this.featuresSVG = this.annotateSVG.append("svg:g")
                 .attr("class", "featuresSVG");
-    },
-
+    }
 });

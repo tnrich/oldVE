@@ -12,5 +12,5 @@ Ext.define("Teselagen.models.Rectangle", {
 
     constructor: function(inData){
         this.initConfig(inData);
-    },
+    }
 });

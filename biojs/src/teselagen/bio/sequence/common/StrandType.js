@@ -11,7 +11,7 @@ Ext.define("Teselagen.bio.sequence.common.StrandType", {
 		UNKNOWN: 0
 	},
 
-	alternateClassName: "Teselagen.StrandType",
+	alternateClassName: "Teselagen.StrandType"
 
 // Nick's edit: apparently making a class a singleton makes the 'statics' unavailable from outside that class. hooray for extjs
 //singleton: "True"

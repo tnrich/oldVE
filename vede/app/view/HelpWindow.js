@@ -22,7 +22,7 @@ Ext.define('Vede.view.HelpWindow', {
                 xtype: 'textareafield',
                 anchor: '100%',
                 name: 'feedback',
-                emptyText: 'Enter feedback or comments here.',
+                emptyText: 'Enter feedback or comments here.'
                 /*
                 enableKeyEvents: true,
                 listeners: {
@@ -45,19 +45,19 @@ Ext.define('Vede.view.HelpWindow', {
                 xtype: 'textareafield',
                 anchor: '100%',
                 name: 'error',
-                emptyText: 'Enter specific error here.',
+                emptyText: 'Enter specific error here.'
             }, {
                 xtype: 'textareafield',
                 anchor: '100%',
                 name: 'error_feedback',
-                emptyText: 'Enter additional feedback here.',
+                emptyText: 'Enter additional feedback here.'
             }, {
                 xtype: 'button',
                 text: 'Report Error',
                 id: 'reportErrorBtn'
             }]
         }]
-    }],
+    }]
     /*
     listeners: {
         close: function (panel) {

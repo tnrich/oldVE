@@ -514,7 +514,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             },
             "component[cls='propertiesWindowOKButton']": {
                 click: this.onPropertiesWindowOKButtonClick
-            },
+            }
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;

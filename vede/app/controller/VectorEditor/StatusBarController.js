@@ -13,7 +13,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
         "Teselagen.event.SelectionEvent",
         "Teselagen.event.SequenceManagerEvent",
         "Teselagen.bio.sequence.DNATools",
-        "Teselagen.bio.tools.TemperatureCalculator",
+        "Teselagen.bio.tools.TemperatureCalculator"
     ],
 
     DNATools: null,
@@ -136,5 +136,5 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     onSequenceChanged: function() {
         this.sequenceLengthText.el.setHTML(
             this.SequenceManager.getSequence().toString().length);
-    },
+    }
 });

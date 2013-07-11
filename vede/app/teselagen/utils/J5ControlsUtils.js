@@ -71,5 +71,5 @@ singleton: true,
 
     getSeqListInfo: function() {
         var returnString = "\n";
-    },
+    }
 });

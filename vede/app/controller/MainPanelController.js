@@ -45,7 +45,7 @@ Ext.define("Vede.controller.MainPanelController", {
             this.getDeMainMenuBar().show();
             this.getDeMainToolBar().show();
         }
-    },
+    }
 });
 
 

@@ -32,8 +32,8 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                             flex: 0.3,
                             store: Teselagen.manager.ProjectManager.projects,
                             columns: [
-                                {header: 'Projects', dataIndex: 'name'},
-                            ],
+                                {header: 'Projects', dataIndex: 'name'}
+                            ]
 	                    },{
 	                    	xtype: 'gridpanel',
                             forceFit: true,
@@ -42,16 +42,16 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                             flex: 0.7,
                             //store: Teselagen.manager.ProjectManager.projects.getAt(0).sequencesStore,
                             columns: [
-                                {header: 'Sequences', dataIndex: 'name'},
-                            ],
+                                {header: 'Sequences', dataIndex: 'name'}
+                            ]
 	                    }
-                    ],
+                    ]
 		        },{
                     xtype: 'textfield',
                     fieldLabel: 'Sequence Name',
                     id: 'saveAsWindowSequenceNameField',
                     allowBlank: false,
-                    padding: '20 15 10 15',
+                    padding: '20 15 10 15'
                 },{
                       xtype: 'panel',
                       dock: 'bottom',
@@ -71,7 +71,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
 									    id: 'saveAsWindowNewProjectButton',
 									    margin: 10,
 									    padding: 5,
-									    text: 'New Project',
+									    text: 'New Project'
 									},
                                   {
                                       xtype: 'button',
@@ -98,7 +98,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
 	        ]
     	});
     	me.callParent(arguments);
-    },
+    }
     
 });
 

@@ -293,7 +293,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
             },
             "button[cls='fullscreenBtn']": {
                 click: this.onFullscreenButtonClick
-            },
+            }
         });
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);

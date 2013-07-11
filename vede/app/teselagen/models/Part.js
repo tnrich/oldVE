@@ -24,7 +24,7 @@ Ext.define("Teselagen.models.Part", {
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
-        },
+        }
         /*
         afterRequest: function(req, res) {
             console.log(JSON.parse(req.operation.response.responseText).duplicated); 

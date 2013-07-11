@@ -20,7 +20,7 @@ Ext.define("Teselagen.renderer.common.TextRenderer", {
         this.initConfig(inData);
     },
 
-    renderText: function(pText, pWidthGap, pHeightHap){},
+    renderText: function(pText, pWidthGap, pHeightHap){}
 
     
 });

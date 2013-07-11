@@ -438,7 +438,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             hidden: true,
                             margin: '15 0 0 0'
                         }]
-                    },
+                    }
 //                    {
 //                        xtype: 'panel',
 //                        title: 'j5 Files',

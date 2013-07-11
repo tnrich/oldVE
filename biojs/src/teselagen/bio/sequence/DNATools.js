@@ -138,5 +138,5 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 				symbols: reverseComplementSymbols,
 				alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 			});
-		},	
+		}	
 });

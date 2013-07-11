@@ -28,7 +28,7 @@ Ext.define('Vede.view.ve.ImportSequenceWindow', {
                     name: 'importedFile',
                     buttonOnly: true
 //                    fieldLabel: 'Local file path'
-                }, 
+                } 
 //                {
 //                    xtype: 'fieldset',
 //                    title: 'Sequence details (optional)',

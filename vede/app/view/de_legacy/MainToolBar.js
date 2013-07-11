@@ -15,6 +15,6 @@ Ext.define('Vede.view.de_legacy.MainToolBar', {
                     icon: 'resources/images/save.png',
                     scale: 'medium',
                     tooltip: 'Save Design'
-                },
+                }
            ]
 });

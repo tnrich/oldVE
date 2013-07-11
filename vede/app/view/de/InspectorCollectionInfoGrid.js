@@ -134,7 +134,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     },
                     renderer: Ext.util.Format.numberRenderer('0')
                 }
-            ],
+            ]
         });
 
         this.callParent(arguments);

@@ -616,5 +616,5 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     },
 
     select: function() {
-    },
+    }
 });

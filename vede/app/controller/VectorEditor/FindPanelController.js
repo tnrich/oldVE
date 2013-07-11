@@ -167,5 +167,5 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
 
             this.onSequenceManagerChanged(newTab.model);
         }
-    },
+    }
 });

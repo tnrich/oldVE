@@ -74,7 +74,7 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
             },
             "button[cls='exportMenu'] > menu > menuitem[text='XML file']": {
                 click: this.onExportToXMLClick
-            },
+            }
         });
 
     }

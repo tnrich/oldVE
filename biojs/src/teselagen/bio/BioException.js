@@ -19,7 +19,7 @@ Ext.define("Teselagen.bio.BioException", {
                     passedMessage = pInput;
                    }
                    Ext.Error.raise({msg: passedMessage});
-        },
+        }
     },
     /* 
      * @param message A message you want to display.
@@ -28,7 +28,7 @@ Ext.define("Teselagen.bio.BioException", {
         var that = this;
         that.message = inData.message || "Default Message";
         this.callParent([inData]);
-    },
+    }
 
         
 

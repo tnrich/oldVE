@@ -22,7 +22,7 @@ Ext.define("Teselagen.event.SequenceManagerEvent", {
     KIND_SEQUENCE_REMOVE: "SequenceRemoveSequenceProviderEvent",
     KIND_MANUAL_UPDATE: "ManualUpdate",
     KIND_SET_MEMENTO: "SetMemento",
-    KIND_INITIALIZED: "SequenceInitialized",
+    KIND_INITIALIZED: "SequenceInitialized"
 
     // not needed
     //NEEDS_RECALCULATE_COMPLEMENT_SEQUENCE: "RecalculateComplementSequence",

@@ -1185,7 +1185,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='changePartDefinitionBtn']": {
                 click: this.onChangePartDefinitionBtnClick
-            },
+            }
         });
     }
 });
