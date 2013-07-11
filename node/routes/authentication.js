@@ -102,7 +102,7 @@ module.exports = function(app){
         var query;
         //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
 
-        if (!app.program.prod) {
+        if (app.program.dev || app.program.test) {
             // TESTING AUTH
 
             if(req.signedCookies.sessionname)
@@ -114,14 +114,12 @@ module.exports = function(app){
             if (username) getOrCreateUser(req, res, username, remember);
             else if (sessionId) getOrCreateUser(req, res, username, remember);
             else getOrCreateUser(req, res, "guest", remember);
-        }
-
-        if (app.program.prod) {
+        } else {
             // PRODUCTION AUTH
 
             // Manage errors
             if (!sessionId && (!username || !password)) return res.json({
-                "msg": "Credentials not sended"
+                "msg": "Credentials not sent"
             }, 405);
 
             // Happy path of Login
@@ -145,7 +143,7 @@ module.exports = function(app){
             }
 
             // Login using sessionID
-            if (sessionId && app.program.prod) {
+            if (sessionId) {
 
                 query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id='" + sessionId + "';";
                 console.log(query);
