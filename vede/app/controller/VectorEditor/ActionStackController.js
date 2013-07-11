@@ -29,8 +29,6 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
                             this.onUndo, this);
         this.application.on(this.MenuItemEvent.REDO,
                             this.onRedo, this);
-        this.application.on("saveCurrentVEProject",
-                    this.onsaveCurrentVEProject, this);
 
         this.control({
             "#mainAppPanel": {
@@ -83,7 +81,10 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
         }
     },
 
-    onsaveCurrentVEProject: function() {
+    /**
+     * @deprecated
+     */
+    /*onsaveCurrentVEProject: function() {
         var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
         var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();
         workingSequence.set('sequenceFileFormat',updatedGenbankSequence);
@@ -91,5 +92,5 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
             callback:function(){
                 console.log("Working sequence updated!");
         }});
-    }
+    }*/
 });

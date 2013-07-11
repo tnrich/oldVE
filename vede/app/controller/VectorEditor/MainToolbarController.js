@@ -5,7 +5,8 @@
 Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    requires: ['Teselagen.event.VisibilityEvent',
+    requires: ['Teselagen.event.ProjectEvent',
+               'Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
                'Teselagen.bio.parsers.GenbankManager',
                'Vede.view.ve.RestrictionEnzymesManagerWindow'],
@@ -44,7 +45,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
     },
 
     onImportFileLoad: function(pFile, pExt, pEvt) {
-        Vede.application.fireEvent("ImportFileToSequence",pFile, pExt, pEvt,Teselagen.manager.ProjectManager.workingSequence);
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.IMPORT_FILE_TO_SEQUENCE, pFile, pExt, pEvt, Teselagen.manager.ProjectManager.workingSequence);
     },
 
     onImportFileError: function(pEvt) {
@@ -59,7 +60,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
 
         viewMode = "circular";
 
-        this.application.fireEvent("ViewModeChanged", viewMode);
+        this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
     },
 
     onUndoButtonClick: function() {
@@ -138,7 +139,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
 
         viewMode = "linear";
 
-        this.application.fireEvent("ViewModeChanged", viewMode);
+        this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
     },
 
     onViewModeChanged: function(viewMode) {
@@ -296,7 +297,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
             }
         });
 
-        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+        this.application.on(this.VisibilityEvent.VIEW_MODE_CHANGED, this.onViewModeChanged, this);
         this.registerFullScreenEventListener();
     }
 

@@ -5,8 +5,9 @@
  */
 Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
     extend: "Ext.app.Controller",
-    requires: ["Teselagen.event.SequenceManagerEvent",
-               "Teselagen.manager.ProjectManager"],
+
+    requires: ["Teselagen.manager.ProjectManager"],
+
     isRendered: false,
 
     onTabChange: function (tabPanel, newTab, oldTab) {
@@ -89,7 +90,6 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
      * @member Vede.controller.VectorEditor.VectorPanelController
      */
     init: function () {
-        // this.application.on("TabOpen", this.onTabOpen);
         this.control({
             "#VectorPanel": {
                 afterrender: this.onRender,

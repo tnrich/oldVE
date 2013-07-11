@@ -1,9 +1,13 @@
 Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     extend: "Vede.controller.VectorEditor.SequenceEditingController",
     
-    requires: ["Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager",
-               "Teselagen.manager.VectorEditorManager", "Teselagen.event.ProjectEvent",
-               "Teselagen.bio.parsers.ParsersManager", "Teselagen.constants.Constants"],
+    requires: ["Teselagen.manager.SequenceFileManager", 
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.manager.VectorEditorManager", 
+               "Teselagen.event.ProjectEvent",
+               "Teselagen.event.SequenceManagerEvent",
+               "Teselagen.bio.parsers.ParsersManager", 
+               "Teselagen.constants.Constants"],
                
     sequenceManager: null,
    
@@ -190,6 +194,8 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     			click: this.onSaveAsWindowOKButtonClick
     		}
     	});
-    	this.application.on("SequenceManagerChanged",this.onSequenceManagerChanged, this);
+
+    	this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
+                            this.onSequenceManagerChanged, this);
     } 
 });

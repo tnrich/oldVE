@@ -6,6 +6,7 @@ Ext.define("Vede.controller.VectorEditor.SelectWindowController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.SelectionEvent",
+               "Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MenuItemEvent"],
 
     MenuItemEvent: null,
@@ -63,7 +64,7 @@ Ext.define("Vede.controller.VectorEditor.SelectWindowController", {
 
         this.application.on(this.MenuItemEvent.SELECT_WINDOW_OPENED,
                             this.onSelectWindowOpened, this);
-        this.application.on("SequenceManagerChanged", 
+        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
                             this.onSequenceManagerChanged, this);
     }
 });

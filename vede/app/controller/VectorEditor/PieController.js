@@ -8,6 +8,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     requires: ["Teselagen.manager.PieManager",
                "Teselagen.renderer.pie.SelectionLayer",
                "Teselagen.renderer.pie.WireframeSelectionLayer",
+               "Teselagen.event.CaretEvent",
                "Teselagen.event.ContextMenuEvent",
                "Teselagen.event.VisibilityEvent"],
 
@@ -32,8 +33,8 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      */
     init: function() {
         this.callParent();
-        this.application.on("ShowMapCaretChanged", this.onShowMapCaretChanged, this);
-        this.application.on("PieNameBoxClick", this.onPieNameBoxClick, this);
+        this.application.on(Teselagen.event.VisibilityEvent.SHOW_MAP_CARET_CHANGED, this.onShowMapCaretChanged, this);
+        this.application.on(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED, this.onPieNameBoxClick);
 
         this.control({
             "#mainAppPanel": {

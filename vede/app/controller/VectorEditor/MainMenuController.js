@@ -124,7 +124,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             viewMode = "linear";
         }
 
-        this.application.fireEvent("ViewModeChanged", viewMode);
+        this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
     },
 
     onLinearViewMenuItemCheckChange: function(menucheckitem, checked, options) {
@@ -526,7 +526,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED,
                             this.validateSafeEditingMenuItem, this);
 
-        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+        this.application.on(this.VisibilityEvent.VIEW_MODE_CHANGED, this.onViewModeChanged, this);
         this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
                 this.onSequenceManagerChanged,this);
     }
