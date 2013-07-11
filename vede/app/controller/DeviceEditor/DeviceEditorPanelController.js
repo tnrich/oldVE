@@ -2,8 +2,10 @@
  * Device Editor panel controller
  * @class Vede.controller.DeviceEditor.DeviceEditorPanelController
  */
-Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
-    extend: 'Ext.app.Controller',
+/*global $, toastr*/
+
+Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
+    extend: "Ext.app.Controller",
     requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent", "Teselagen.models.J5Parameters"],
 
     DeviceDesignManager: null,
@@ -11,19 +13,19 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     onLoadEugeneRulesEvent: function(){
         //console.log("Loading eugene rules");
-        var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+        var currentProject = Ext.getCmp("mainAppPanel").getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
         
         Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/"+currentProject.data.project_id+"/devicedesigns/"+currentProject.data.id+"/eugenerules", ''),
-            method: 'GET',
+            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/"+currentProject.data.project_id+"/devicedesigns/"+currentProject.data.id+"/eugenerules", ""),
+            method: "GET",
             params: {
                 id: deproject_id
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                rules = response.rules;
+                var rules = response.rules;
 
                 var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject.getDesign());
 
@@ -41,24 +43,24 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
                     if( !rule.operand2_id && !rule.operand2isNumber )
                     {
-                        throw new Error("Operand 2 ID is missing");                     
+                        throw new Error("Operand 2 ID is missing");
                     }
 
                     newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
 
 
-                    if(rule.operand2_id) newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
+                    if(rule.operand2_id) { newEugeneRule.setOperand2(allParts.getById(rule.operand2_id)); }
                     if(rule.operand2isNumber)
                     {
-                        newEugeneRule.set('operand2Number',rule.operand2Number);
-                        newEugeneRule.set('operand2isNumber',true);
+                        newEugeneRule.set("operand2Number",rule.operand2Number);
+                        newEugeneRule.set("operand2isNumber",true);
                     }
 
                     currentProject.getDesign().addToRules(newEugeneRule);
                 });
             },
-            failure: function(response, opts) {
-                Ext.MessageBox.alert('Error','Problem while loading Eugene Rules');
+            failure: function() {
+                Ext.MessageBox.alert("Error","Problem while loading Eugene Rules");
             }
         });
         
@@ -69,51 +71,52 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
      * When opening a Device Editor project, store it in the "model" attribute of the active Device Editor panel.
      */
     openProject: function (project) {
-        Ext.getCmp('mainAppPanel').getActiveTab().model = project;
+        Ext.getCmp("mainAppPanel").getActiveTab().model = project;
     },
 
     onDeviceEditorRenameBtnClick: function () {
-        var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+        var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
         var onPromptClosed = function (answer, text) {
-                deproject.set('name', text);
+                deproject.set("name", text);
                 deproject.save({
                     callback: function () {
-                        Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | "+text);
+                        Ext.getCmp("mainAppPanel").getActiveTab().setTitle("Device Editor | "+text);
                         toastr.options.onclick = null;
                         toastr.info("Design renamed");
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                            Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
+                            Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
                         });
                     }
                 });
             };
 
-        Ext.MessageBox.prompt("Rename Design", 'New name:', onPromptClosed, this, false, deproject.get("name"));
+        Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this, false, deproject.get("name"));
     },
 
     onDeviceEditorDeleteBtnClick: function () {
 
-        Ext.Msg.show({
-             title:'Are you sure you want to delete this design?',
-             msg: 'WARNING: This will remove the current design. This action is not undoable!',
-             cls: 'messageBox',
-             buttons: Ext.Msg.OKCANCEL,
-             fn: DeleteDeviceDesignBtn,
-             icon: Ext.Msg.QUESTION
-        });
-
         function DeleteDeviceDesignBtn (btn) {
-            if (btn=='ok') {
-                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            if (btn==="ok") {
+                var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
                 toastr.options.onclick = null;
                 toastr.info("Design Deleted");
              }
          }
+
+        Ext.Msg.show({
+             title:"Are you sure you want to delete this design?",
+             msg: "WARNING: This will remove the current design. This action is not undoable!",
+             cls: "messageBox",
+             buttons: Ext.Msg.OKCANCEL,
+             fn: DeleteDeviceDesignBtn,
+             icon: Ext.Msg.QUESTION
+        });
+
     },
 
-    onOpenExampleItemBtnClick: function (item, e, eOpts) {
+    onOpenExampleItemBtnClick: function (item) {
         var selectedItem = item.text;
         var examplesMap = {
             "SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json",
@@ -124,7 +127,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         Ext.Ajax.request({
             url: examplesMap[selectedItem],
-            method: 'GET',
+            method: "GET",
             success: function (response) {
                 Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
             }
@@ -133,9 +136,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     createLoadingMessage: function () {
         var msgBox = Ext.MessageBox.show({
-            title: 'Please wait',
-            msg: 'Preparing input parameters',
-            progressText: 'Initializing...',
+            title: "Please wait",
+            msg: "Preparing input parameters",
+            progressText: "Initializing...",
             width: 300,
             progress: true,
             closable: false
@@ -146,7 +149,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 msgBox.close();
             },
             update: function (progress, msg) {
-                msgBox.updateProgress(progress / 100, progress + '% completed', msg);
+                msgBox.updateProgress(progress / 100, progress + "% completed", msg);
             }
         };
     },
@@ -157,7 +160,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         Vede.application.fireEvent("suspendPartAlerts");
 
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
         var deproject = activeTab.model;
 
         var design = deproject.getDesign();
@@ -170,14 +173,14 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     part.getSequenceFile({callback: function(associatedSequence){
                         if(associatedSequence)
                         {
-                            var lastSequenceId = associatedSequence.get('id');
-                            if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                            var lastSequenceId = associatedSequence.get("id");
+                            if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get("id"))
                             {
                                 associatedSequence.save({
                                     callback: function (sequencefile) {
                                         if(!lastSequenceId)
                                         {
-                                            part.set("sequencefile_id", sequencefile.get('id'));
+                                            part.set("sequencefile_id", sequencefile.get("id"));
                                             part.save({
                                                 callback: function () {
                                                     cb();
@@ -199,13 +202,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         }
                     }});
                 }
-                else cb();
+                else { cb(); }
                 
             };
 
         var saveDesign = function () {
 
-                Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter()
+                Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
                 var rules = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules();
                 rules.each(function(rule){
                     rule.setOperand1(rule.getOperand1());
@@ -214,7 +217,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
                 design = activeTab.model.getDesign();
                 design.save({
-                    callback: function (record, operation) {
+                    callback: function () {
                         // loadingMessage.close();
                         Vede.application.fireEvent("resumePartAlerts");
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
@@ -222,32 +225,32 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                             toastr.options.onclick = null;
                             toastr.info("Design Saved");
                         });
-                        if(typeof (cb) == "function") cb();
+                        if(typeof (cb) === "function") { cb(); }
                     }
                 });
             };
 
         var countParts = 0;
 
-        design.getJ5Collection().bins().each(function (bin, binKey) {
-            bin.parts().each(function (part, partIndex) {
+        design.getJ5Collection().bins().each(function (bin) {
+            bin.parts().each(function() {
                 countParts++;
             });
         });
         // loadingMessage.update(30, "Saving "+countParts+" parts");
         //console.log("Saving "+countParts+" parts");
-        design.getJ5Collection().bins().each(function (bin, binKey) {
-            bin.parts().each(function (part, partIndex) {
+        design.getJ5Collection().bins().each(function (bin) {
+            bin.parts().each(function (part) {
 
-                    if(!part.data.project_id) part.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
-                    if(part.data.name==="") part.set('phantom',true);
-                    else part.set('phantom',false);
+                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+                    if(part.data.name==="") { part.set("phantom",true); }
+                    else { part.set("phantom",false); }
                 
                     if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                         part.save({
                             callback: function (part) {
                                 saveAssociatedSequence(part, function () {
-                                    if(countParts == 1) saveDesign();
+                                    if(countParts === 1) { saveDesign(); }
                                     countParts--;
                                     // loadingMessage.update(30, "Saving "+countParts+" parts");
                                     //console.log("Saving "+countParts+" parts");
@@ -256,7 +259,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         });
                     } else {
                         saveAssociatedSequence(part,function(){
-                        if(countParts === 1) saveDesign();
+                        if(countParts === 1) { saveDesign(); }
                         countParts--;
                         // Vede.application.fireEvent("MapPart", part);
                         // loadingMessage.update(30, "Saving "+countParts+" parts");
@@ -270,8 +273,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onDeviceEditorSaveBtnClick: function () {
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        activeTab.el.mask('Loading', "loader rspin");
+        var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        activeTab.el.mask("Loading", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         this.saveDEProject(function () {
@@ -314,7 +317,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.REMOVE_ROW);
     },
 
-    onJ5buttonClick: function (button, e, options) {
+    onJ5buttonClick: function () {
         Vede.application.fireEvent("runj5");
         toastr.options.onclick = null;
         toastr.info("Design Saved");
@@ -332,8 +335,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var self = this;
         var continueCode = function(){
 
-            self.detailPanel = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel"]')[0];
-            self.detailPanelFill = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel-fill"]')[0];
+            self.detailPanel = Ext.getCmp("mainAppPanel").getActiveTab().query("panel[cls='j5detailpanel']")[0];
+            self.detailPanelFill = Ext.getCmp("mainAppPanel").getActiveTab().query("panel[cls='j5detailpanel-fill']")[0];
             self.detailPanel.show();
             self.detailPanelFill.hide();
 
@@ -341,54 +344,54 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
             j5runs.load({
                 callback : function(){
-
+                    var field;
                     j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
 
                     self.activeJ5Run = j5runs.getById(data.id);
 
-                    for(var i=0; i<Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem").length; i++) {
-                        Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
+                    for(var i=0; i<Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem").length; i++) {
+                        Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
                     }
 
-                    var assemblyMethod = self.activeJ5Run.get('assemblyMethod');
-                    var status = self.activeJ5Run.get('status');
-                    var startDate = new Date(self.activeJ5Run.get('date'));
-                    var endDate = new Date(self.activeJ5Run.get('endDate'));
+                    var assemblyMethod = self.activeJ5Run.get("assemblyMethod");
+                    var status = self.activeJ5Run.get("status");
+                    var startDate = new Date(self.activeJ5Run.get("date"));
+                    var endDate = new Date(self.activeJ5Run.get("endDate"));
                     var elapsed = endDate - startDate;
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                     startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
                     endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
-                    assemblies.sort('name', 'ASC');
+                    assemblies.sort("name", "ASC");
                     
                     var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
 
                     var j5parameters = Ext.create("Teselagen.models.J5Parameters");
                     j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
-                    J5parametersValues = j5parameters.getParametersAsStore();
+                    var J5parametersValues = j5parameters.getParametersAsStore();
                     //console.log(self.activeJ5Run.getJ5Input().getJ5Parameters());
                     //console.log(j5parameters);
                     //console.log(self.activeJ5Run);
 
-                    Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5AssemblyType").setValue(assemblyMethod);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStatus").setValue(status);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStart").setValue(startDate);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunEnd").setValue(endDate);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunElapsed").setValue(elapsed);
 
-                    if(status=="Completed") {
-                        var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+                    if(status==="Completed") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-completed");
-                    } else if (status=="Completed with warnings") {
-                        var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+                    } else if (status==="Completed with warnings") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-warning");
-                    } else if (status=="Error") {
-                        var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+                    } else if (status==="Error") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").addClass("status-note-failed");
@@ -397,51 +400,52 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     var warnings = self.activeJ5Run.raw.warnings;
                     var errors = self.activeJ5Run.raw.error_list[0];
                     var nonDegenerativeParts = self.activeJ5Run.getJ5Results().raw.processedData.nondegenerateParts;
+                    var warningsStore, errorsStore;
 
-                    var nonDegenerativPartsStore = Ext.create('Teselagen.store.PartStore', {
-                        model: 'Teselagen.models.Part',
+                    var nonDegenerativPartsStore = Ext.create("Teselagen.store.PartStore", {
+                        model: "Teselagen.models.Part",
                         data: nonDegenerativeParts
                     });
 
                     if (warnings) {
-                    var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
-                        model: 'Teselagen.models.j5Output.Warning',
+                        warningsStore = Ext.create("Teselagen.store.WarningsStore", {
+                        model: "Teselagen.models.j5Output.Warning",
                         data: warnings
                     });
                     }
 
                     if (errors) {
-                    var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
-                        model: 'Teselagen.models.j5Output.Error',
+                        errorsStore = Ext.create("Teselagen.store.ErrorsStore", {
+                        model: "Teselagen.models.j5Output.Error",
                         data: errors.error
                     });
-                    }   
+                    }
 
-                    if ((warnings.length>0)==true) {
-                        Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').show();
-                        Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+                    if ((warnings.length>0)===true) {
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").show();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").reconfigure(warningsStore);
                     } else {
-                         Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').hide();
+                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").hide();
                          warnings = null;
                          warningsStore = null;
                     }
 
                     if (errors) {
-                        Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').show();
-                        Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').reconfigure(errorsStore);
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").show();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").reconfigure(errorsStore);
                         // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
                         // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
                         // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
                     } else {
-                         Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="errors"]').hide();
+                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").hide();
                          errors = null;
                          errorsStore = null;
                     }
 
-                    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
-                    Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-                    Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="combinatorialAssembly"]').reconfigure(nonDegenerativPartsStore);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='assemblies']").reconfigure(assemblies);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='j5parameters']").reconfigure(J5parametersValues);
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("textareafield[name='combinatorialAssembly']").setValue(combinatorial.get("nonDegenerativeParts"));
+                    Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='combinatorialAssembly']").reconfigure(nonDegenerativPartsStore);
 
                     
                     Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
@@ -464,7 +468,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     elapsedDate: function (seconds)
     {
-    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numdays = Math.floor((seconds % 31536000) / 86400);
     var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
     var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
     var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
