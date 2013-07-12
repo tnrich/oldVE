@@ -24132,21 +24132,21 @@ img {
 }
 
 /* line 856, ../../../../sass/src/view/AppViewport.scss */
-.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn {
-  background: #4A4B4C;
+.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn, .editj5ParamsBtn {
+  background: #92a4b6;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
   -webkit-transition: background .2s ease-in-out;
 }
 
 /* line 863, ../../../../sass/src/view/AppViewport.scss */
-.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner {
+.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner {
   color: white;
 }
 
 /* line 867, ../../../../sass/src/view/AppViewport.scss */
-.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over {
-  background: #333234;
+.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over, .x-editj5ParamsBtn-over {
+  background: #8898a8;
 }
 
 /* line 871, ../../../../sass/src/view/AppViewport.scss */
