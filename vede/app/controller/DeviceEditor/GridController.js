@@ -1312,12 +1312,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
         var duplicated = false;
-        this.activeBins.each(function(bin) {
-            bin.parts().each(function(part){
-                if(part.get("id")!==pPart.get("id") && part.get("name")===name && part.get("sequencefile_id") !== "") {duplicated = true;}
+        if (pPart.get("id")) {
+            this.activeBins.each(function(bin) {
+                bin.parts().each(function(part){
+                    if(part.get("id")!==pPart.get("id") && part.get("name")===name && part.get("sequencefile_id")) {
+                        duplicated = true;
+                    }
+                });
             });
-        });
-
+        }
         if(duplicated)
         {
             Ext.MessageBox.show({
@@ -1327,7 +1330,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 icon:Ext.MessageBox.ERROR
             });
         }
-        else {return cb();}
+        else {
+            cb();
+        }
     },
 
     toggleCutCopyPastePartOptions: function(state){
