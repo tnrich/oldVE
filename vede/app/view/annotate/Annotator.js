@@ -45,7 +45,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     constructor: function(inData){
         this.callParent([inData]);
         this.initConfig(inData);
-        this.id = "AnnotationSurface";
+        this.cls = "AnnotationSurface";
         
         // Firefox doesn't support SVG's text-width, so we have to modify
         // CHAR_WIDTH if the user is using Firefox.
@@ -59,25 +59,36 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
     
     init: function() {
-        this.annotateSVG = d3.select("#AnnotateContainer")
-            .append("svg:svg")
-            .attr("id", "annotateSVG");
-        
-        this.linesSVG = this.annotateSVG.append("svg:g")
-            .attr("id", "linesSVG");
+        var containerId = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='AnnotateContainer']").el.dom.id;
 
-        this.sequenceSVG = this.annotateSVG.append("svg:g")
-            .attr("id", "sequenceSVG");
+        // Only add new svg elements if there isn't already one present.
+        if(!d3.select("#" + containerId + " .annotateSVG").node()) {
+            this.annotateSVG = d3.select("#" + containerId + ".AnnotateContainer")
+                .append("svg:svg")
+                .attr("class", "annotateSVG");
+            
+            this.linesSVG = this.annotateSVG.append("svg:g")
+                .attr("class", "linesSVG");
 
-        this.bpLabelsSVG = this.annotateSVG.append("svg:g")
-                .attr("id", "bpLabelsSVG");
+            this.sequenceSVG = this.annotateSVG.append("svg:g")
+                .attr("class", "sequenceSVG");
 
-        this.aminoAcidsSVG = this.annotateSVG.append("svg:g")
-                .attr("id", "aminoAcidsSVG");
+            this.bpLabelsSVG = this.annotateSVG.append("svg:g")
+                    .attr("class", "bpLabelsSVG");
 
-        this.featuresSVG = this.annotateSVG.append("svg:g")
-                .attr("id", "featuresSVG");
-        
+            this.aminoAcidsSVG = this.annotateSVG.append("svg:g")
+                    .attr("class", "aminoAcidsSVG");
+
+            this.featuresSVG = this.annotateSVG.append("svg:g")
+                    .attr("class", "featuresSVG");
+        } else {
+            this.annotateSVG = d3.select("#" + containerId + " .annotateSVG");
+            this.linesSVG = this.annotateSVG.select(".linesSVG");
+            this.sequenceSVG = this.annotateSVG.select(".sequenceSVG");
+            this.bpLabelsSVG = this.annotateSVG.select(".bpLabelsSVG");
+            this.aminoAcidsSVG = this.annotateSVG.select(".aminoAcidsSVG");
+            this.featuresSVG = this.annotateSVG.select(".featuresSVG");
+        }
     },
     
     sequenceChanged: function(){
@@ -88,7 +99,7 @@ Ext.define("Vede.view.annotate.Annotator", {
      */
     render: function(){
         this.clean();
-        this.panel = Ext.getCmp('AnnotatePanel');
+        this.panel = Ext.getCmp('mainAppPanel').getActiveTab().down("component[cls='AnnotatePanel']");
         this.xMax = this.panel.getBox().width;
         this.yMax = this.panel.getBox().height;
 
@@ -99,8 +110,8 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.renderSequence();
             this.drawSplitLines();
 
-            d3.selectAll("#cutSiteSVG").remove();
-            d3.selectAll("#orfSVG").remove();
+            d3.selectAll("#" + this.panel.el.dom.id + " .cutSiteSVG").remove();
+            d3.selectAll("#" + this.panel.el.dom.id + " .orfSVG").remove();
 
             if (this.sequenceAnnotator.getShowFeatures()){
                 this.loadFeatureRenderers();
@@ -360,25 +371,24 @@ Ext.define("Vede.view.annotate.Annotator", {
      */
     clean: function(){
 
-        d3.select("#linesSVG").remove(); 
+        d3.selectAll(".linesSVG").remove(); 
         this.linesSVG = this.annotateSVG.append("svg:g")
-            .attr("id", "linesSVG");
+            .attr("class", "linesSVG");
 
-        d3.select("#sequenceSVG").remove(); 
+        d3.selectAll(".sequenceSVG").remove(); 
         this.sequenceSVG = this.annotateSVG.append("svg:g")
-            .attr("id", "sequenceSVG");
+            .attr("class", "sequenceSVG");
         
-        d3.select("#bpLabelsSVG").remove(); 
+        d3.selectAll(".bpLabelsSVG").remove(); 
         this.bpLabelsSVG = this.annotateSVG.append("svg:g")
-                .attr("id", "bpLabelsSVG");
+                .attr("class", "bpLabelsSVG");
 
-        d3.select("#aminoAcidsSVG").remove(); 
+        d3.selectAll(".aminoAcidsSVG").remove(); 
         this.aminoAcidsSVG = this.annotateSVG.append("svg:g")
-                .attr("id", "aminoAcidsSVG");
+                .attr("class", "aminoAcidsSVG");
 
-        d3.select("#featuresSVG").remove(); 
+        d3.selectAll(".featuresSVG").remove(); 
         this.featuresSVG = this.annotateSVG.append("svg:g")
-                .attr("id", "featuresSVG");
+                .attr("class", "featuresSVG");
     }
-
 });

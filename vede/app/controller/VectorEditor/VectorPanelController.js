@@ -5,7 +5,9 @@
  */
 Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
     extend: "Ext.app.Controller",
-    require: ["Teselagen.manager.ProjectManager"],
+
+    requires: ["Teselagen.manager.ProjectManager"],
+
     isRendered: false,
 
     onTabChange: function (tabPanel, newTab, oldTab) {
@@ -28,9 +30,6 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
                     sequenceFileName: "untitled.gb",
                     partSource: "Untitled sequence"
                 });
-
-                //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-                Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
             }
         }
     },
@@ -91,7 +90,6 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
      * @member Vede.controller.VectorEditor.VectorPanelController
      */
     init: function () {
-        // this.application.on("TabOpen", this.onTabOpen);
         this.control({
             "#VectorPanel": {
                 afterrender: this.onRender,
@@ -110,8 +108,8 @@ Ext.define("Vede.controller.VectorEditor.VectorPanelController", {
         if(!this.isRendered) {
             this.tabPanel = Ext.getCmp("mainAppPanel");
             this.tabPanel.setActiveTab(0);
-            Vede.application.getController("VectorEditor.PieController").initPie();
-            Vede.application.getController("VectorEditor.RailController").initRail();
+            /*Vede.application.getController("VectorEditor.PieController").initPie();
+            Vede.application.getController("VectorEditor.RailController").initRail();*/
             this.isRendered = true;
         }
     },

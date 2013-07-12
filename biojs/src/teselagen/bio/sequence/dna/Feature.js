@@ -123,6 +123,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
                         name: name,
                         start: inData.start,
                         end: inData.end,
+                        index: inData.index,
                         type: type,
                         strand: this.getStrand(),
                         notes: inData.notes

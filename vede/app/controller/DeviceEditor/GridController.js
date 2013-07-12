@@ -6,6 +6,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.event.GridEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
                "Vede.view.de.grid.Bin",
@@ -58,6 +59,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.resumeLayouts(true);
     },
 
+    // Not sure what this is, but it appears to be unused.
     addSelectAlerts: function() {
         var bins = this.grid.query("Bin");
         for(var i = 0; i < bins.length; i++) {
@@ -98,7 +100,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Get the bin that the button refers to and reverse its direction.
         var parentBin = button.up().up().up().getBin();
 
-        this.application.fireEvent("BinHeaderClick", button.up());
+        this.application.fireEvent(this.GridEvent.BIN_HEADER_CLICK, button.up());
 
         parentBin.set("directionForward", !parentBin.get("directionForward"));
     },
@@ -110,25 +112,25 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     addBinHeaderClickEvent: function(binHeader) {
         binHeader.body.on("click", function() {
-            this.application.fireEvent("BinHeaderClick", binHeader);
+            this.application.fireEvent(this.GridEvent.BIN_HEADER_CLICK, binHeader);
         }, this);
     },
 
     addPartCellEvents: function(partCell) {
         partCell.body.on("click", function() {
-            this.application.fireEvent("PartCellClick", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_CLICK, partCell);
         },this);
         
         partCell.body.on("dblclick", function() {
-            this.application.fireEvent("PartCellVEEditClick", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_DBLCLICK, partCell);
         },this);
 
         partCell.body.on("mouseover", function() {
-            this.application.fireEvent("PartCellMouseover", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_MOUSEOVER, partCell);
         }, this);
 
         partCell.body.on("mouseout", function() {
-            this.application.fireEvent("PartCellMouseout", partCell);
+            this.application.fireEvent(this.GridEvent.PART_CELL_MOUSEOUT, partCell);
         }, this);
     },
 
@@ -333,7 +335,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid.removeAll(); // Clean grid
 
 
-            Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
+            //Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
 
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
@@ -510,7 +512,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
         if(modified)
         {
-            Vede.application.fireEvent("checkj5Ready");
+            Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
 
             if(modified.indexOf("fas") >= 0) {
                 this.renderFasConflicts(parts, updatedPart);
@@ -1260,6 +1262,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var self = this;
 
         if (j5Part) {
 
@@ -1276,7 +1279,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     {
                         j5Part.getSequenceFile({
                             callback: function (seq) {
-                                Vede.application.fireEvent("OpenVectorEditor",seq);
+                                Vede.application.fireEvent(self.ProjectEvent.OPEN_SEQUENCE_IN_VE, seq);
                         }});
                         DETab.el.unmask();
                     }
@@ -1294,7 +1297,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                 j5Part.setSequenceFileModel(newSequenceFile);
                                 j5Part.save({
                                     callback: function(){
-                                        Vede.application.fireEvent("openVectorEditor",newSequenceFile);
+                                        Vede.application.fireEvent(self.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
                                         DETab.el.unmask();
                                     }
                                 });
@@ -1303,13 +1306,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     }
                 } else {
                     DETab.el.unmask();
-                    Vede.application.fireEvent("OpenPartLibrary");
+                    Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
                 }
 
                 }});
             }, 1);
     } else { 
-        Vede.application.fireEvent("OpenPartLibrary");
+        Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
     }
 
     },
@@ -1493,17 +1496,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         });
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.GridEvent = Teselagen.event.GridEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on("suspendPartAlerts",this.suspendPartAlerts, this);
-        this.application.on("resumePartAlerts",this.resumePartAlerts, this);
+        this.application.on(this.GridEvent.SUSPEND_PART_ALERTS, this.suspendPartAlerts, this);
+        this.application.on(this.GridEvent.RESUME_PART_ALERTS, this.resumePartAlerts, this);
 
-        this.application.on("FillBlankCells", this.onfillBlankCells, this);
+        this.application.on(this.DeviceEvent.FILL_BLANK_CELLS, this.onfillBlankCells, this);
 
-        this.application.on("rerenderPart",this.rerenderPart, this);
-
-        this.application.on("rerenderPart",this.rerenderPart, this);
-        this.application.on("addSelectAlerts", this.addSelectAlerts, this);
+        // Appears to be unused.
+        //this.application.on("addSelectAlerts", this.addSelectAlerts, this);
 
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,
@@ -1553,35 +1555,35 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onPartSelected,
                             this);
 
-        this.application.on("BinHeaderClick",
+        this.application.on(this.GridEvent.BIN_HEADER_CLICK,
                             this.onBinHeaderClick,
                             this);
 
-        this.application.on("PartCellClick",
+        this.application.on(this.GridEvent.PART_CELL_CLICK,
                             this.onPartCellClick,
                             this);
 
-        this.application.on("PartCellMouseover",
+        this.application.on(this.GridEvent.PART_CELL_MOUSEOVER,
                             this.onPartCellMouseover,
                             this);
 
-        this.application.on("PartCellMouseout",
+        this.application.on(this.GridEvent.PART_CELL_MOUSEOUT,
                             this.onPartCellMouseout,
                             this);
 
-        this.application.on("ReRenderDECanvas",
+        this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS,
                             this.onReRenderDECanvasEvent,
                             this);
 
-        this.application.on("PartCellVEEditClick",
+        this.application.on(this.GridEvent.PART_CELL_DBLCLICK,
                             this.onPartCellVEEditClick,
                             this);
 
-        this.application.on("validateDuplicatedPartName",
+        this.application.on(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME,
                             this.onValidateDuplicatedPartNameEvent,
                             this);
 
-        this.application.on("onReloadDesign",
+        this.application.on(this.DeviceEvent.RELOAD_DESIGN,
                             this.onReloadDesign,
                             this);
 

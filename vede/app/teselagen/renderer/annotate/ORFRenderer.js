@@ -21,7 +21,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 
     render: function() {
         this.orfSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
-                           .attr("id", "orfSVG");
+                           .attr("class", "orfSVG");
 
         var orf = this.orf;
         var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap().get(orf);

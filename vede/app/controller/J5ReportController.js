@@ -5,7 +5,13 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters","Teselagen.bio.parsers.ParsersManager"],
+    requires: ["Teselagen.event.CommonEvent",
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.manager.ProjectManager",
+               'Vede.view.j5Report.buildDNAPanel',
+               "Teselagen.manager.PrinterMonitor",
+               "Teselagen.models.J5Parameters",
+               "Teselagen.bio.parsers.ParsersManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -307,7 +313,9 @@ Ext.define("Vede.controller.J5ReportController", {
     init: function () {
         this.callParent();
 
-        this.application.on("resetJ5ActiveRun", this.setActiveRun, this);
+        this.CommonEvent = Teselagen.event.CommonEvent;
+
+        this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
 
         this.control({
             'panel[cls="j5ReportsPanel"] > menu > menuitem': {

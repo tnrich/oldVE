@@ -4,6 +4,8 @@
  */
 Ext.define("Vede.controller.MainPanelController", {
     extend: "Ext.app.Controller",
+
+    requires: ["Teselagen.event.SequenceManagerEvent"],
     
     oldTab: null,
     refs: [
@@ -34,6 +36,8 @@ Ext.define("Vede.controller.MainPanelController", {
             this.getDeMainToolBar().hide();
             this.getVeMainMenuBar().show();
             this.getVeMainToolBar().show();
+
+            this.application.fireEvent(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, pNewcard.model);
         }
         else if (pNewcard.id.indexOf("DeviceEditor") === 0) {
         	this.getVeMainMenuBar().hide();
@@ -42,7 +46,6 @@ Ext.define("Vede.controller.MainPanelController", {
             this.getDeMainToolBar().show();
         }
     }
-    
 });
 
 

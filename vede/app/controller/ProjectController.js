@@ -281,11 +281,11 @@ Ext.define("Vede.controller.ProjectController", {
                             selectedVEProject.parts().add(newPart);
                             selectedVEProject.save({
                                 callback: function () {
-                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                    Vede.application.fireEvent(this.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                         Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + selectedVEProject.data.id);
                                     });
                                     Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-                                    Vede.application.fireEvent("openVectorEditor", newSequenceFile);
+                                    Vede.application.fireEvent(this.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
                                 }
                             });
                         }
@@ -309,7 +309,7 @@ Ext.define("Vede.controller.ProjectController", {
             callback: function (loadedsequence) {
                 Teselagen.manager.ProjectManager.workingProject = project;
                 Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
-                Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
+                //Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
                 oldTab.el.unmask();
             }
         });
@@ -401,8 +401,11 @@ Ext.define("Vede.controller.ProjectController", {
      */
     init: function () {
         this.callParent();
-        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
-        this.application.on(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
+
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
+
+        this.application.on(this.ProjectEvent.OPEN_PROJECT, this.openProject, this);
+        this.application.on(this.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
 
         this.control({
             "#projectTreePanel": {

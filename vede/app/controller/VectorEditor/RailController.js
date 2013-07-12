@@ -13,9 +13,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
     
-    refs: [
+    /*refs: [
         {ref: "railContainer", selector: "#RailContainer"}
-    ],
+    ],*/
 
     railManager: null,
 
@@ -33,18 +33,34 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.callParent();
 
         this.control({
-            "#zoomInMenuItem": {
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "menuitem[cls='zoomInMenuItem']": {
                 click: this.onZoomInMenuItemClick
             },
-            "#zoomOutMenuItem": {
+            "menuitem[cls='zoomOutMenuItem']": {
                 click: this.onZoomOutMenuItemClick
             }
         });
 
     },
 
-    initRail: function() {
-        this.railManager.initRail();
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(newTab.initialCls == "VectorEditorPanel") {
+            if(this.railContainer && this.railContainer.el) {
+                this.railContainer.el.un("keydown", this.onKeydown, this);
+            }
+
+            this.railContainer = newTab.down("component[cls='RailContainer']");
+            this.initRail(newTab);
+        }
+
+        this.callParent(arguments);
+    },
+
+    initRail: function(newTab) {
+        this.railManager.initRail(newTab);
         var rail = this.railManager.getRail();
         var self = this;
 
@@ -72,6 +88,10 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         // Set the tabindex attribute in order to receive keyboard events on a div.
         this.railContainer.el.dom.setAttribute("tabindex", "0");
         this.railContainer.el.on("keydown", this.onKeydown, this);
+
+        if(newTab.down("menucheckitem[identifier*='circularViewMenuItem']").checked) {
+            this.railContainer.hide();
+        }
     },
 
     onLaunch: function() {
@@ -79,17 +99,11 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         var self = this;
 
         this.callParent(arguments);
-        this.railContainer = this.getRailContainer();
 
         this.railManager = Ext.create("Teselagen.manager.RailManager", {
             reference: {x: 0, y: 0},
             railWidth: 400,
-            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
-            showFeatures: Ext.getCmp("featuresMenuItem").checked,
-            showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
-
-        rail = this.railManager.getRail();
 
         // When window is resized, scale the graphics in the rail.
         var timeOut = null;
@@ -104,7 +118,6 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         };
 
         this.Managers.push(this.railManager);
-        this.railContainer.hide();
 
         this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
             reference: this.railManager.reference,
@@ -166,9 +179,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
 
     onViewModeChanged: function(viewMode) {
         if(viewMode == "circular") {
-            Ext.getCmp("RailContainer").hide();
+            this.activeTab.down("component[cls='RailContainer']").hide();
         } else {
-            Ext.getCmp("RailContainer").show();
+            this.activeTab.down("component[cls='RailContainer']").show();
         }
     },
 

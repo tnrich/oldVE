@@ -1,5 +1,7 @@
 Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     extend: "Ext.app.Controller",
+
+    requires: ["Teselagen.event.SequenceManagerEvent"],
     
     sequenceManager: null,
     selectedStart: null,
@@ -111,9 +113,20 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     endFieldChange: function() {
     	this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED,this,this.selectedStart,Ext.getCmp("createNewFeatureWindowEndField").getValue());
     },
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
     
     init: function() {
+        this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
+
     	this.control({
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
     		'#createNewFeatureWindowAttributesGridPanel': {
     			validateedit: this.editAttributes
     		},
@@ -132,7 +145,7 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     			change: this.endFieldChange
     		}
     	});
-    	this.application.on("SequenceManagerChanged", 
+    	this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
                 this.onSequenceManagerChanged, this);
     	this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, 
                 this.onSelectionChanged,this);

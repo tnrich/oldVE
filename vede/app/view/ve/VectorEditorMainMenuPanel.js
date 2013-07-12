@@ -4,7 +4,7 @@
  */
 Ext.define("Vede.view.ve.VectorEditorMainMenuPanel", {
     extend: "Ext.panel.Panel",
-    id: "VectorEditorMainMenuPanel",
+    cls: "VectorEditorMainMenuPanel",
     alias: "widget.VectorEditorMainMenuPanel",
     dock: "top",
     layout: {

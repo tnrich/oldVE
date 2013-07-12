@@ -14,7 +14,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         //console.log("Teselagen.manager.VectorEditorManager created");
         this.sequenceManager = mgr;
         this.sequence = seq;
-        Ext.getCmp("mainAppPanel").down("button[cls=\"saveSequenceBtn\"]").show();
+        //Ext.getCmp("mainAppPanel").down("button[cls=\"saveSequenceBtn\"]").show();
         //console.log(this.sequence);
     },
 
@@ -38,7 +38,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         var successFullSavedCallback = function(){
             currentTabPanel.setLoading(false);
-            var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
+            var parttext = Ext.getCmp("mainAppPanel").getActiveTab().down("tbtext[cls=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
             toastr.info ("Sequence Saved");
@@ -53,9 +53,10 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         };
 
         var saveToServer = function(){
-
             self.sequence.save({
                 success: function (msg,operation) {
+                    Ext.getCmp("mainAppPanel").getActiveTab().model = self.sequenceFileManager.clone();
+                    Ext.getCmp("mainAppPanel").getActiveTab().modelId = self.sequence.id;
                     var response = JSON.parse(operation.response.responseText);
                     successFullSavedCallback();
                     
@@ -63,7 +64,6 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     {
                         Ext.MessageBox.alert("Warning", "A part with the same name already exist in this project, using the unique instance of this sequence.");
                     }
-                    
                 },
                 failure: function() {
                     Ext.MessageBox.alert("Error", "Error saving sequence.");

@@ -34,7 +34,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
     render: function(){
         this.featureGroupSVG = this.sequenceAnnotator.featuresSVG.append("svg:g")
-                .attr("id", "feature-" + this.feature.getName());
+                .attr("class", "feature-" + this.feature.getName());
 
         this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
         var g = this.featureGroupSVG;

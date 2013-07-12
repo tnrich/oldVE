@@ -7,7 +7,9 @@
 Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     alias: "DeviceDesignParsersManager",
     singleton: true,
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.constants.SBOLIcons","Teselagen.utils.FormatUtils"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.constants.SBOLIcons",
+               "Teselagen.event.DeviceEvent",
+               "Teselagen.utils.FormatUtils"],
     mixins: {
         observable: "Ext.util.Observable"
     },
@@ -98,7 +100,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 design.addToRules(eugeneRules[i]);
             }
 
-            Vede.application.fireEvent("ReRenderDECanvas");
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
         }
     },
 

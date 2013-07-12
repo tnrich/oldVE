@@ -5,8 +5,12 @@
 Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.SequenceManagerEvent", "Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager",
-    "Teselagen.manager.VectorEditorManager"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.event.ProjectEvent",
+               "Teselagen.event.SequenceManagerEvent", 
+               "Teselagen.manager.SequenceFileManager", 
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.manager.VectorEditorManager"],
 
     editingDETab: null,
     createPartWindow: null,
@@ -81,7 +85,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onCreatePartBtnClick: function () {
-
         var veproject = Teselagen.manager.ProjectManager.workingSequence;
         var sequence = Teselagen.manager.ProjectManager.workingSequence;
         var part = Ext.create("Teselagen.models.Part", {
@@ -91,19 +94,28 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             endBP: sequence.getLength()
         });
 
-        Vede.application.fireEvent("createPartDefinition", veproject, part, sequence);
+        Vede.application.fireEvent(this.DeviceEvent.CREATE_PART_DEFINITION, veproject, part, sequence);
     },
 
     onOpenVectorEditor: function(seq){
-        //console.log("Using general Vector Editor Sequence Editing Controller");
-        currentTabPanel = Ext.getCmp('mainAppPanel');
-        currentTabPanel.setActiveTab(1);
-        Teselagen.manager.ProjectManager.workingSequence = seq;
-        sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        var sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        var self = this;
 
-        this.VEManager = Ext.create("Teselagen.manager.VectorEditorManager",seq,sequenceFileManager);
+        console.log(seq.id);
 
-        Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
+        Teselagen.manager.ProjectManager.checkDuplicatedTabs(seq, "VectorEditorPanel", function(tabPanel) {
+            var newTab = Ext.create("Vede.view.ve.VectorEditorPanel", {
+                title: sequenceFileManager.getName()
+            });
+            newTab.model = sequenceFileManager;
+            newTab.sequenceFile = seq;
+
+            self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager", seq, sequenceFileManager);
+
+            tabPanel.add(newTab).show();
+
+            Teselagen.manager.ProjectManager.workingSequence = seq;
+        });
     },
 
     onsaveSequenceBtnClick: function(){
@@ -179,30 +191,42 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
           Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
     	*/
     },
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
     
     init: function () {
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
+        this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
 
         this.control({
-            '#VectorEditorMainToolBar > button[cls="saveSequenceBtn"]': {
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
+            'component[cls="VectorEditorMainToolBar"] > button[cls="saveSequenceBtn"]': {
                 click: this.onsaveSequenceBtnClick
             },
-            '#VectorEditorMainToolBar > button[cls="createPartBtn"]': {
+            'component[cls="VectorEditorMainToolBar"] > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
             },
-            "#exportToFileMenuItem": {
+            "component[identifier='exportToFileMenuItem']": {
                 click: this.onExportToFileMenuItemClick
             },
-            "#saveMenuItem": {
+            "component[identifier='saveMenuItem']": {
                 click: this.onSaveMenuItemClick
             },
-            "#saveAsMenuItem": {
+            "component[identifier='saveAsMenuItem']": {
                 click: this.onSaveAsMenuItemClick
             }
         });
 
-        this.application.on("openVectorEditor", this.onOpenVectorEditor, this);
-        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
-        this.application.on("partCreated", this.onPartCreated, this);
+        this.application.on(this.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.onOpenVectorEditor, this);
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
+        this.application.on(this.DeviceEvent.PART_CREATED, this.onPartCreated, this);
 
 
     }
