@@ -3,11 +3,13 @@
  * @class Vede.view.de.DeviceEditor
  */
 Ext.define('Vede.view.de.DeviceEditor', {
+    // Attributes stored in this view by ProjectManager: model and modelId
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorPanel',
-    requires: ["Vede.view.de.InspectorPanel", "Vede.view.de.DeviceEditorPartPanel", "Vede.view.de.DeviceEditorMenuPanel", "Vede.view.de.DeviceEditorToolPanel", "Vede.view.de.DeviceEditorStatusPanel", "Vede.view.de.DeviceEditorCanvasPanel", "Vede.view.de.DeviceEditorTitlePanel"],
+    requires: ["Vede.view.de.InspectorPanel", "Vede.view.de.DeviceEditorPartPanel", "Vede.view.de.DeviceEditorMenuPanel", 
+               "Vede.view.de.DeviceEditorToolPanel", "Vede.view.de.DeviceEditorStatusPanel", "Vede.view.de.DeviceEditorCanvasPanel", 
+               "Vede.view.de.DeviceEditorTitlePanel"],
     cls: 'DeviceEditorTab',
-    //id: 'DeviceEditorPanel',
     layout: {
         type: 'fit'
     },
@@ -25,9 +27,6 @@ Ext.define('Vede.view.de.DeviceEditor', {
     {
         xtype: 'InspectorPanel'
     }
-    // {
-    //     xtype: "DeviceEditorStatusPanel"
-    // }
     ],
     items: [{
         xtype: 'panel',

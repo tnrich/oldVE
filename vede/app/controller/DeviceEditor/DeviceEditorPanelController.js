@@ -160,17 +160,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
      * Saves the device design
      */
     saveDEProject: function (cb) {
-
-        // var loadingMessage = this.createLoadingMessage();
-
         Vede.application.fireEvent("suspendPartAlerts");
-
-        var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
-        var deproject = activeTab.model;
-
-        var design = deproject.getDesign();
-        // loadingMessage.update(30, "Saving design");
-        //deproject.save({callback:function(){
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
         var saveAssociatedSequence = function (part, cb) {
             if(part.data.phantom === false)
@@ -212,69 +203,52 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             };
 
         var saveDesign = function () {
-
-                Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
-                var rules = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules();
-                rules.each(function(rule){
-                    rule.setOperand1(rule.getOperand1());
-                    rule.setOperand2(rule.getOperand2());
-                });
-
-                design = activeTab.model.getDesign();
-                design.save({
-                    callback: function () {
-                        // loadingMessage.close();
-                        Vede.application.fireEvent("resumePartAlerts");
-                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                            Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
-                            toastr.options.onclick = null;
-                            toastr.info("Design Saved");
-                        });
-                        if(typeof (cb) === "function") { cb(); }
-                    }
-                });
-            };
+            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+            design.rules().filters.clear();
+            design.save({
+                callback: function () {
+                    Vede.application.fireEvent("resumePartAlerts");
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                        Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
+                        toastr.options.onclick = null;
+                        toastr.info("Design Saved");
+                    });
+                    if(typeof (cb) === "function") { cb(); }
+                }
+            });
+        };
 
         var countParts = 0;
-
         design.getJ5Collection().bins().each(function (bin) {
             bin.parts().each(function() {
                 countParts++;
             });
         });
-        // loadingMessage.update(30, "Saving "+countParts+" parts");
-        //console.log("Saving "+countParts+" parts");
         design.getJ5Collection().bins().each(function (bin) {
             bin.parts().each(function (part) {
 
-                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-                    if(part.data.name==="") { part.set("phantom",true); }
-                    else { part.set("phantom",false); }
-                
-                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                        part.save({
-                            callback: function (part) {
-                                saveAssociatedSequence(part, function () {
-                                    if(countParts === 1) { saveDesign(); }
-                                    countParts--;
-                                    // loadingMessage.update(30, "Saving "+countParts+" parts");
-                                    //console.log("Saving "+countParts+" parts");
-                                });
-                            }
-                        });
-                    } else {
-                        saveAssociatedSequence(part,function(){
+                if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+                if(part.data.name==="") { part.set("phantom",true); }
+                else { part.set("phantom",false); }
+
+                if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                    part.save({
+                        callback: function (part) {
+                            saveAssociatedSequence(part, function () {
+                                if(countParts === 1) { saveDesign(); }
+                                countParts--;
+                            });
+                        }
+                    });
+                } else {
+                    saveAssociatedSequence(part,function(){
                         if(countParts === 1) { saveDesign(); }
                         countParts--;
-                        // Vede.application.fireEvent("MapPart", part);
-                        // loadingMessage.update(30, "Saving "+countParts+" parts");
-                        });
-                    }
-                //}
+                    });
+                }
             });
         });
         
-        //}});
     },
 
     onDeviceEditorSaveBtnClick: function () {
