@@ -376,6 +376,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
         if (!quiet && !this.manualUpdateStarted) {
             Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindFeatureAdd, this.createMemento());
         }
+
+        // Ensure that this feature's index is unique among features already present.
+        pFeature.setIndex(this.features.length);
+
         this.features.push(pFeature);
 
         if (!quiet && !this.manualUpdateStarted) {
