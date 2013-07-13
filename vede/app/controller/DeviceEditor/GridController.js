@@ -12,7 +12,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                "Teselagen.models.DeviceEditorProject",
                "Vede.view.de.grid.Bin",
                "Vede.view.de.grid.Part",
-               "Teselagen.constants.SBOLIcons"],
+               "Teselagen.constants.SBOLIcons",
+               "Teselagen.utils.Logger"],
 
     statics: {
         DEFAULT_ROWS: 2
@@ -20,8 +21,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     DeviceEvent: null,
     ProjectEvent: null,
-
     DeviceDesignManager: null,
+    Logger: null,
+    InspectorController: null,
 
     activeBins: null,
     activeProject: null,
@@ -1311,17 +1313,25 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
+        var me = this;
         var duplicated = false;
+        var nonidentical = false;
         if (pPart.get("id")) {
-            this.activeBins.each(function(bin) {
+            this.activeBins.each(function(bin, binIndex) {
                 bin.parts().each(function(part){
-                    if(part.get("id")!==pPart.get("id") && part.get("name")===name && part.get("sequencefile_id")) {
-                        duplicated = true;
+                    if (part.get("id")===pPart.get("id")) {
+                        if (binIndex === me.InspectorController.selectedBinIndex) {
+                            duplicated = true;
+                        }
+                    }
+                    // Phantom part will not have a sequencefile_id
+                    else if (part.get("name")===name && part.get("sequencefile_id")) {
+                        nonidentical = true;
                     }
                 });
             });
         }
-        if(duplicated)
+        if(nonidentical)
         {
             Ext.MessageBox.show({
                 title: "Error",
@@ -1329,6 +1339,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 buttons: Ext.MessageBox.OK,
                 icon:Ext.MessageBox.ERROR
             });
+        }
+        else if (duplicated) {
+            this.Logger.notifyWarn("Cannot insert a part twice in the same column");
         }
         else {
             cb();
@@ -1442,6 +1455,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.tabPanel.on("tabchange",
                          this.onTabChange,
                          this);
+        this.InspectorController = this.application.getDeviceEditorInspectorControllerController();
     },
 
     /**
@@ -1477,6 +1491,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
+        this.Logger = Teselagen.utils.Logger;
 
         this.application.on(this.GridEvent.SUSPEND_PART_ALERTS, this.suspendPartAlerts, this);
         this.application.on(this.GridEvent.RESUME_PART_ALERTS, this.resumePartAlerts, this);
