@@ -393,6 +393,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
+                    text : 'Edit J5 Parameters',
+                    cls: 'editj5ParamsBtn',
+                    overCls: 'editj5ParamsBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 30,
+                    border: 0
+                },
+                {
+                    xtype: 'button',
                     text : 'Condense Assemblies',
                     cls: 'condenseAssembliesBtn',
                     overCls: 'condenseAssembliesBtn-over',
@@ -411,18 +420,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     border: 0,
                     hidden: true
                 },
-                // {
-                //     xtype: 'button',
-                //     cls: 'condenseAssembliesBtn',
-                //     text: 'Condense Assemblies',
-                //     margin: '2.5 0 2.5 0'
-                // },
-                // {
-                //     xtype: 'button',
-                //     cls: 'distributePCRBtn',
-                //     margin: '2.5 0 2.5 0',
-                //     text: 'Distribute PCR Reactions'
-                // }, 
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
@@ -580,16 +577,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         buttonOnly: false,
                                         buttonText: '<b>Choose File</b>'
                                     }]
-                                },
-                                {
-                                    xtype: 'button',
-                                    text : 'Edit J5 Parameters',
-                                    cls: 'editj5ParamsBtn',
-                                    // cls: 'runj5Btn',
-                                    // overCls: 'runj5Btn-over',
-                                    margin: '15 0 0 0',
-                                    height: 30,
-                                    border: 0
                                 }
                             ]
                         },

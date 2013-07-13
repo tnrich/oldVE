@@ -127,15 +127,18 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
         var runj5Btn = inspector.down("button[cls='runj5Btn']");
+        var editj5ParamsBtn = inspector.down("button[cls='editj5ParamsBtn']");
         var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
         var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
 
         if(newTab.initialCls == "j5InfoTab-Basic") {
                 runj5Btn.show();
+                editj5ParamsBtn.show();
                 distributePCRBtn.hide();
                 condenseAssembliesBtn.hide();
         } else {
             j5AdvancedTab.getActiveTab().setActiveTab(0);
+            editj5ParamsBtn.hide();
             runj5Btn.hide();
             distributePCRBtn.hide();
             condenseAssembliesBtn.show();
