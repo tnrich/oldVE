@@ -660,6 +660,8 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             }
             // QUALIFIERS -> ATTRIBUTES
             var newAttr = [];
+            var usingLabel = false;
+            var usingGene = false;
             for (k=0; k < ft.getFeatureQualifier().length; k++) {
                 key    = ft.getFeatureQualifier()[k].getName();
                 value  = ft.getFeatureQualifier()[k].getValue();
@@ -667,8 +669,19 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
                 // SET THE LABEL FIELD. DO NOT STORE AS AN ATTRIBUTE
 
-                if (this.isALabel(key) ) {
-                    label = value;
+                if (this.isALabel(key)) {
+                    if(key === "label") {
+                        usingLabel = true;
+                        label = value;
+                    } else if(key === "gene") {
+                        if(!usingLabel) {
+                            usingGene = true;
+                            label = value;
+                        }
+                    } else if(!usingLabel && !usingGene) {
+                        label = value;
+                    }
+
                     //don't add as attribute
                 } else {
                     newAttr.push( {
