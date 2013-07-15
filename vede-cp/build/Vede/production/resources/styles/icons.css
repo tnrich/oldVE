@@ -1,0 +1,194 @@
+/* line 338, icons/device/small/*.png */
+.small-sprite, .small-assembly_junction, .small-assembly_junction_reverse, .small-cds, .small-cds_reverse, .small-five_prime_overhang, .small-five_prime_overhang_reverse, .small-five_prime_utr, .small-five_prime_utr_reverse, .small-generic, .small-generic_reverse, .small-insulator, .small-insulator_reverse, .small-operator_site, .small-operator_site_reverse, .small-origin_of_replication, .small-origin_of_replication_reverse, .small-primer_binding_site, .small-primer_binding_site_reverse, .small-promoter, .small-promoter_reverse, .small-protease_site, .small-protease_site_reverse, .small-protein_stability_element, .small-protein_stability_element_reverse, .small-restriction_enzyme_recognition_site, .small-restriction_enzyme_recognition_site_reverse, .small-restriction_site_no_overhang, .small-restriction_site_no_overhang_reverse, .small-ribonuclease_site, .small-ribonuclease_site_reverse, .small-rna_stability_element, .small-rna_stability_element_reverse, .small-signature, .small-signature_reverse, .small-terminator, .small-terminator_reverse, .small-three_prime_overhang, .small-three_prime_overhang_reverse {
+  background: url('../images/icons/device/small-s50afd5d0e7.png') no-repeat;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-assembly_junction {
+  background-position: 0 -1360px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-assembly_junction_reverse {
+  background-position: 0 -1400px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-cds {
+  background-position: 0 -280px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-cds_reverse {
+  background-position: 0 -200px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-five_prime_overhang {
+  background-position: 0 -1080px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-five_prime_overhang_reverse {
+  background-position: 0 -1320px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-five_prime_utr {
+  background-position: 0 -440px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-five_prime_utr_reverse {
+  background-position: 0 -320px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-generic {
+  background-position: 0 -1440px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-generic_reverse {
+  background-position: 0 -1480px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-insulator {
+  background-position: 0 -360px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-insulator_reverse {
+  background-position: 0 -400px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-operator_site {
+  background-position: 0 -880px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-operator_site_reverse {
+  background-position: 0 -920px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-origin_of_replication {
+  background-position: 0 0;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-origin_of_replication_reverse {
+  background-position: 0 -40px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-primer_binding_site {
+  background-position: 0 -1280px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-primer_binding_site_reverse {
+  background-position: 0 -1040px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-promoter {
+  background-position: 0 -80px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-promoter_reverse {
+  background-position: 0 -120px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-protease_site {
+  background-position: 0 -840px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-protease_site_reverse {
+  background-position: 0 -800px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-protein_stability_element {
+  background-position: 0 -640px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-protein_stability_element_reverse {
+  background-position: 0 -680px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-restriction_enzyme_recognition_site {
+  background-position: 0 -760px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-restriction_enzyme_recognition_site_reverse {
+  background-position: 0 -720px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-restriction_site_no_overhang {
+  background-position: 0 -1120px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-restriction_site_no_overhang_reverse {
+  background-position: 0 -1160px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-ribonuclease_site {
+  background-position: 0 -520px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-ribonuclease_site_reverse {
+  background-position: 0 -560px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-rna_stability_element {
+  background-position: 0 -160px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-rna_stability_element_reverse {
+  background-position: 0 -240px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-signature {
+  background-position: 0 -600px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-signature_reverse {
+  background-position: 0 -480px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-terminator {
+  background-position: 0 -1000px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-terminator_reverse {
+  background-position: 0 -960px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-three_prime_overhang {
+  background-position: 0 -1240px;
+}
+
+/* line 60, ../../../../.rvm/gems/ruby-1.9.3-p194@classroom/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.small-three_prime_overhang_reverse {
+  background-position: 0 -1200px;
+}
