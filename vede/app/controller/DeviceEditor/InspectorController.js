@@ -798,12 +798,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
         var self = this;
-<<<<<<< HEAD
         newOperand2.save({
             callback: function(){
                 newRule.setOperand2(newOperand2);   
-=======
->>>>>>> 3f34cb444aa02a388e51acb570b6e7b440b69b7e
 
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
@@ -857,7 +854,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.destroy();
     },
 
-<<<<<<< HEAD
     onOperand2Changed: function(newId, ruleName, oldId, e) {
         var newOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, newId);
         var oldOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, oldId);
@@ -916,8 +912,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         //     }
         // });
 
-=======
->>>>>>> 3f34cb444aa02a388e51acb570b6e7b440b69b7e
     /**
      * Handler for the Eugene Rule Dialog compositional operator combobox.
      * Ensures that the operator 2 field is the appropriate type of input field
@@ -1225,7 +1219,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
 
-<<<<<<< HEAD
         this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
 
         this.application.on("operand2Changed", this.onOperand2Changed, this);
@@ -1235,9 +1228,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on("AddEugeneRuleIndicator", this.onAddEugeneRuleIndicator, this);
 
         this.application.on("RemoveEugeneRuleIndicator", this.onRemoveEugeneRuleIndicator, this);
-=======
+        
         this.application.on(this.DeviceEvent.RERENDER_COLLECTION_INFO, this.onReRenderCollectionInfoEvent, this);
->>>>>>> 3f34cb444aa02a388e51acb570b6e7b440b69b7e
 
         this.control({
             "textfield[cls='partNameField']": {
