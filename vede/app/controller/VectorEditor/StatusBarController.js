@@ -79,6 +79,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
         this.caretPositionText.el.setHTML("0");
 
         this.permissionText.el.setHTML("Editable");
+        this.permissionText.el.setStyle("top", "0px");
 
         this.onSelectionCanceled();
         this.onSequenceChanged();
