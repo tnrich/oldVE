@@ -277,22 +277,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         //     ]
                         // }
                     ]
-                },
-                {
-                    xtype: 'form',
-                    autoScroll: true,
-                    flex: 1,
-                    title: 'Column Content',
-                    margin: '5px 0px 5px 0px',
-                    cls: 'columnContentForm',
-                    items: [
-                        {
-                            xtype: 'displayfield',
-                            cls: 'columnContentDisplayField',
-                            margin: 10,
-                            fieldLabel: ''
-                        }
-                    ]
                 }
             ]
         },
