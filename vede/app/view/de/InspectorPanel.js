@@ -12,6 +12,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                "Ext.grid.column.Number", 
                "Ext.grid.Panel", 
                "Ext.grid.plugin.RowEditing",
+               "Vede.view.de.EugeneRulesGrid",
                "Vede.view.de.InspectorCollectionInfoGrid"],
     cls: 'InspectorPanel',
 
@@ -154,81 +155,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     title: 'Eugene Rules',
                     items: [
                         {
-                            xtype: 'gridpanel',
+                            xtype: 'eugenerulesgrid',
                             cls: 'eugeneRulesGrid',
-                            layout: 'fit',
-                            viewConfig: {
-                                markDirty: false
-                            },
-                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2
-                                // listeners: {
-                                //     edit: function () {
-                                //         Vede.application.fireEvent('editEugeneRule');
-                                //     }
-                                // }
-                            }),
-                            columnLines: true,
-                            rowLines: true,
-                            minHeight: 140,
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    width: 100,
-                                    text: 'Name',
-                                    dataIndex: 'name',
-                                    editor: {
-                                        xtype: 'textfield',
-                                        allowBlank: false
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: 'Operand 1',
-                                    dataIndex: 'operand1_id',
-                                    renderer: function(id, metaData, rule) {
-                                        return rule.getOperand1().get("name");
-                                    }
-                                },
-                                {
-                                    xtype: 'booleancolumn',
-                                    text: 'NOT?',
-                                    dataIndex: 'negationOperator',
-                                    trueText: 'NOT',
-                                    falseText: null,
-                                    editor: {
-                                        xtype: 'checkbox'
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: 'Operator',
-                                    dataIndex: 'compositionalOperator',
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: Teselagen.constants.Constants.COMPOP_LIST
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: 'Operand 2',
-                                    dataIndex: 'operand2_id',
-                                    cls: "operand2_field",
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: [],
-                                        cls: "operand2_combobox"
-                                    },
-                                    renderer: function(id, metaData, rule) {
-                                        if(rule.get("operand2isNumber")) {
-                                            return rule.get("operand2Number");
-                                        } else {
-                                            return rule.getOperand2().get("name");
-                                        }
-                                    }
-                                    
-                                }
-                            ]
                         },
                         {
                             xtype: 'container',
@@ -349,22 +277,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         //     ]
                         // }
                     ]
-                },
-                {
-                    xtype: 'form',
-                    autoScroll: true,
-                    flex: 1,
-                    title: 'Column Content',
-                    margin: '5px 0px 5px 0px',
-                    cls: 'columnContentForm',
-                    items: [
-                        {
-                            xtype: 'displayfield',
-                            cls: 'columnContentDisplayField',
-                            margin: 10,
-                            fieldLabel: ''
-                        }
-                    ]
                 }
             ]
         },
@@ -393,6 +305,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
+                    text : 'Edit J5 Parameters',
+                    cls: 'editj5ParamsBtn',
+                    overCls: 'editj5ParamsBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 30,
+                    border: 0
+                },
+                {
+                    xtype: 'button',
                     text : 'Condense Assemblies',
                     cls: 'condenseAssembliesBtn',
                     overCls: 'condenseAssembliesBtn-over',
@@ -411,18 +332,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     border: 0,
                     hidden: true
                 },
-                // {
-                //     xtype: 'button',
-                //     cls: 'condenseAssembliesBtn',
-                //     text: 'Condense Assemblies',
-                //     margin: '2.5 0 2.5 0'
-                // },
-                // {
-                //     xtype: 'button',
-                //     cls: 'distributePCRBtn',
-                //     margin: '2.5 0 2.5 0',
-                //     text: 'Distribute PCR Reactions'
-                // }, 
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
@@ -580,16 +489,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         buttonOnly: false,
                                         buttonText: '<b>Choose File</b>'
                                     }]
-                                },
-                                {
-                                    xtype: 'button',
-                                    text : 'Edit J5 Parameters',
-                                    cls: 'editj5ParamsBtn',
-                                    // cls: 'runj5Btn',
-                                    // overCls: 'runj5Btn-over',
-                                    margin: '15 0 0 0',
-                                    height: 30,
-                                    border: 0
                                 }
                             ]
                         },

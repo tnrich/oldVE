@@ -335,7 +335,7 @@ Ext.define("Teselagen.manager.PieManager", {
         if(container && container.el) {
             var containerSize = container.getSize();
 
-            var transX = containerSize.width / 2;
+            var transX = Number(scope.pie.attr("width")) / 2 - scope.center.x;
             //var transX = containerSize.width / 2 - scope.center.x;
             //var transX = (containerSize.width - scope.center.x) / 2;
             var transY = containerSize.height / 2 - scope.center.y;

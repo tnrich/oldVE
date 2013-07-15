@@ -94,11 +94,12 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
                 var downloadBtn = inspector.down('button[cls=downloadDownstreamAutomationBtn]');
                 downloadBtn.show();
-                self.designDownstreamAutomationResults = response;
 
 
                 toastr.options.onclick = null;
                 toastr.success("PCR Distribution Complete");
+
+                self.designDownstreamAutomationResults = response;
 
                 return cb(true);
 
@@ -176,8 +177,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     downloadDownstreamAutomationResults: function(btn){
         var response = this.designDownstreamAutomationResults;
         var endDate = new Date(response.endDate);
-        var fileName = "j5_CondenseAssemblies_"+endDate+"_"+response.username;
-        var byteArray = Base64Binary.decodeArrayBuffer(response.encoded_output_file);
+        var fileName = "j5_DownstreamAutomation_"+endDate+"_"+response.username;
+        var byteArray = Base64Binary.decodeArrayBuffer(response.data.encoded_output_file);
         var bb = new BlobBuilder();
         bb.append(byteArray);
         saveAs(bb.getBlob("data:application/stream;"), fileName);

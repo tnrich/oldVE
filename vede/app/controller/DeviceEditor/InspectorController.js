@@ -496,27 +496,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         //console.log(selectedPart);
         selectionModel.select(j5Bin);
-
-        this.updateColumnContentDisplayField(j5Bin);
-    },
-
-    /**
-     * Updates the Column Contents field of a given bin model.
-     * @param {Teselagen.models.J5Bin} j5Bin The bin model to update info for.
-     */
-    updateColumnContentDisplayField: function(j5Bin) {
-        var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
-        var contentArray = [];
-        j5Bin.parts().each(function(part, i) {
-            if(!part.get("phantom")) {
-                contentArray.push(part.get("name"));
-                contentArray.push(": ");
-                contentArray.push(part.get("fas"));
-                contentArray.push("<br>");
-            }
-        });
-
-        contentField.setValue(contentArray.join(""));
     },
 
     /**
@@ -753,6 +732,29 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var newOperand2;
         var newOperand2Name;
+
+        var uniqueName = this.DeviceDesignManager.isUniqueRuleName(this.activeProject, newName);
+        console.log(uniqueName);
+        if (uniqueName = false || newName === "") {
+            Ext.MessageBox.show({
+                title: "Name conflict",
+                msg: "A rule with this name already exists in this design. <p> Please enter another name:",
+                buttons: [{
+                    text: "Ok",
+                    handler: function () {
+                        Ext.MessageBox.hide();
+                    }
+                }, {
+                    text: "Cancel",
+                    handler: function () {
+                        newEugeneRuleDialog.close();
+                    }
+                }],
+
+            })                                        
+            return Ext.MessageBox;
+                                             
+        }
         if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
             var newOperand2 = 
                 newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
@@ -770,6 +772,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
         var self = this;
+        newOperand2.save({
+            callback: function(){
+                newRule.setOperand2(newOperand2);   
+            }
+        });
 
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
@@ -799,6 +806,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         toastr.info("Eugene Rule Added");
     },
 
+    onPopulateOperand2Field: function() {
+        var allParts = this.DeviceDesignManager.getAllParts(this.activeProject, this.selectedPart);
+            
+        var partsStore = [];
+        Ext.each(allParts, function(part) {
+            partsStore = partsStore.concat([[part.get('id'), part.get('name')]]);
+        });
+
+        var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
+        operand2Field.store = partsStore;
+    },
+
     /**
      * Handler for the Eugene Rule Dialog cancel button.
      */
@@ -810,6 +829,64 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newEugeneRuleDialog.close();
         newRule.destroy();
     },
+
+    onOperand2Changed: function(newId, ruleName, oldId, e) {
+        var newOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, newId);
+        var oldOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, oldId);
+        var rule = this.DeviceDesignManager.getRuleByName(this.activeProject, ruleName);
+
+        var self = this;
+        newOperand2.save({
+            callback: function() {
+                if (newOperand2 != oldOperand2) {
+                    Vede.application.fireEvent('getNewGridParts', newOperand2);
+                    Vede.application.fireEvent('getOldGridParts', oldOperand2);
+                }
+
+                rule.setOperand2(newOperand2)
+                var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
+                self.eugeneRulesGrid.reconfigure(rulesStore);
+            }
+        });
+    },
+
+    onAddEugeneRuleIndicator: function(gridOperands2) {
+        for(var k = 0; k < gridOperands2.length; k++) {
+            gridOperand2 = gridOperands2[k];
+            if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                gridOperand2.addEugeneRuleIndicator();
+            }
+        }
+    },
+
+    onRemoveEugeneRuleIndicator: function(gridOperands2) {
+        for(var k = 0; k < gridOperands2.length; k++) {
+            gridOperand2 = gridOperands2[k];
+            if(gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                gridOperand2.removeEugeneRuleIndicator();
+            }
+        }
+    },
+        
+
+        // var newEugeneRuleDialog = Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
+        // var newRule = newEugeneRuleDialog.down("form").getForm().getRecord();
+        // newRule.set("name", newOperand2);
+        // var self = this;
+        // newOperand2.save({
+        //     callback: function(){
+        //         newRule.setOperand2(newOperand2);                
+
+        //         self.activeProject.addToRules(newRule);
+
+        //         var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
+        //                                                                         self.selectedPart)
+
+        //         self.eugeneRulesGrid.reconfigure(rulesStore);
+
+        //         newEugeneRuleDialog.close();
+        //     }
+        // });
 
     /**
      * Handler for the Eugene Rule Dialog compositional operator combobox.
@@ -1000,8 +1077,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
                                                                       updatedPart);
-
-                this.updateColumnContentDisplayField(parentBin);
             }
 
             if(parts.indexOf(this.selectedPart) > -1) {
@@ -1075,25 +1150,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 linearPlasmidField.setValue(true);
             }
 
-            var allParts = this.DeviceDesignManager.getAllParts(
-                                this.activeProject, this.selectedPart);
-            
-            var partsStore = [];
-            Ext.each(allParts, function(part) {
-                partsStore = partsStore.concat([part.get("name")]);
-            });
-
-            var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
-            operand2Field.store = partsStore;
-
             if(!skipReconfigureGrid) {
                 this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
-            }
-
-            var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-
-            if(selectedBin) {
-                this.updateColumnContentDisplayField(selectedBin);
             }
         }
 
@@ -1129,6 +1187,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
 
+        this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
+
+        this.application.on("operand2Changed", this.onOperand2Changed, this);
+
+        this.application.on("populateOperand2Field", this.onPopulateOperand2Field, this);
+
+        this.application.on("AddEugeneRuleIndicator", this.onAddEugeneRuleIndicator, this);
+
+        this.application.on("RemoveEugeneRuleIndicator", this.onRemoveEugeneRuleIndicator, this);
+        
         this.application.on(this.DeviceEvent.RERENDER_COLLECTION_INFO, this.onReRenderCollectionInfoEvent, this);
 
         this.control({

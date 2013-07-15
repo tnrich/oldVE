@@ -1156,6 +1156,90 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         return targetGridParts;
     },
 
+    getNewOperand2Parts: function(j5Part) {
+        if(!j5Part) {
+            return [];
+        }
+
+        var targetGridParts = [];
+        var bins = this.grid.query("Bin");
+        var parts;
+        var gridBin;
+        var gridPart;
+        var ownerIndices = this.DeviceDesignManager.getOwnerBinIndices(this.activeProject,
+                                                                       j5Part);
+
+        // Iterate through gridParts and find all those with a matching j5Part.
+        for(var i = 0; i < bins.length; i++) {
+            gridBin = bins[i];
+            parts = gridBin.query("Part");
+            for(var j = 0; j < parts.length; j++) {
+                gridPart = parts[j];
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                   !gridPart.getPart().get("phantom")) {
+                    targetGridParts.push(gridPart);
+                }
+            }
+        }
+
+        // Iterate through j5Parts and find those matching ours.
+        for(i = 0; i < ownerIndices.length; i++) {
+            var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
+                                                                  ownerIndices[i]);
+            gridBin = this.getGridBinFromJ5Bin(ownerBin);
+            var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
+            gridPart = gridBin.query("Part")[partIndex];
+
+            if(targetGridParts.indexOf(gridPart) < 0 && partIndex >= 0) {
+                targetGridParts.push(gridPart);
+            }
+        }
+
+        Vede.application.fireEvent('AddEugeneRuleIndicator', targetGridParts);
+    },
+
+    getOldOperand2Parts: function(j5Part) {
+        if(!j5Part) {
+            return [];
+        }
+
+        var targetGridParts = [];
+        var bins = this.grid.query("Bin");
+        var parts;
+        var gridBin;
+        var gridPart;
+        var ownerIndices = this.DeviceDesignManager.getOwnerBinIndices(this.activeProject,
+                                                                       j5Part);
+
+        // Iterate through gridParts and find all those with a matching j5Part.
+        for(var i = 0; i < bins.length; i++) {
+            gridBin = bins[i];
+            parts = gridBin.query("Part");
+            for(var j = 0; j < parts.length; j++) {
+                gridPart = parts[j];
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                   !gridPart.getPart().get("phantom")) {
+                    targetGridParts.push(gridPart);
+                }
+            }
+        }
+
+        // Iterate through j5Parts and find those matching ours.
+        for(i = 0; i < ownerIndices.length; i++) {
+            var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
+                                                                  ownerIndices[i]);
+            gridBin = this.getGridBinFromJ5Bin(ownerBin);
+            var partIndex = ownerBin.parts().getRange().indexOf(j5Part);
+            gridPart = gridBin.query("Part")[partIndex];
+
+            if(targetGridParts.indexOf(gridPart) < 0 && partIndex >= 0) {
+                targetGridParts.push(gridPart);
+            }
+        }
+
+        Vede.application.fireEvent('RemoveEugeneRuleIndicator', targetGridParts);
+    },
+
     onPartMapped: function(pj5Part) {
         var j5Part = pj5Part;
 
@@ -1497,6 +1581,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on(this.GridEvent.RESUME_PART_ALERTS, this.resumePartAlerts, this);
 
         this.application.on(this.DeviceEvent.FILL_BLANK_CELLS, this.onfillBlankCells, this);
+
+        this.application.on("getNewGridParts", this.getNewOperand2Parts, this);
+
+        this.application.on("getOldGridParts", this.getOldOperand2Parts, this);
 
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,

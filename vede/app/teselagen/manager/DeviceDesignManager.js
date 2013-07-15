@@ -60,9 +60,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     clearDesignAndAddBins: function(device,pBins) {
         var bins = device.getJ5Collection().bins();
+
         bins.removeAll();
+
         bins.add(pBins);
-        device.rules().removeAll();
+
         var err = device.validate();
         if (err.length > 0) {
             console.warn("Clearing DeviceDesign: " + err.length + " errors found.");
@@ -309,7 +311,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                         part.getSequenceFile({
                             callback: function(sequenceFile){
                                 if (sequenceFile) {
-                                    if(sequenceFile.get("partSource")!=="") {
+                                    if(sequenceFile.get("partSource")!="") {
                                         console.log(sequenceFile.get("partSource"));
                                         tmpC++;
                                     }
@@ -319,7 +321,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                     });
                 }
             if (tmpC>1) {
-                combo = true;
+                combinatorial = true;
             }
             collection.set("combinatorial", combo);
             }
@@ -600,9 +602,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }*/
         var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
 
-//        var bin = this.getBinByIndex(pDevice, pIndex);
+        var bin = this.getBinByIndex(pDevice, pIndex);
 
-//        var emptyPartCount = this.findMaxNumParts(pDevice);
+        var emptyPartCount = this.findMaxNumParts(pDevice);
 
         // for (var i = 0; i < emptyPartCount; i++) {
         //     var newPart = this.createPart(pDevice, pIndex);
@@ -710,9 +712,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @returns {Store} Store of parts.
      */
-    getAllPartsAsStore: function(pDevice) {
-        var allParts = Ext.create("Ext.data.Store", {
-            model: "Teselagen.models.Part"
+    getAllPartsAsStore: function(pDevice, pExcept) {
+        allParts = Ext.create('Ext.data.Store', {
+            model: 'Teselagen.models.Part'
         });
 
         pDevice.getJ5Collection().bins().each(function(bin) {
@@ -799,7 +801,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             partsStore = binsStore.getAt(i).parts();
 
             for(var j = 0; j < partsStore.getCount(); j++) {
-                if(partsStore.getAt(j) && partsStore.getAt(j).id && pPart.id) {
+                if(partsStore.getAt(j) && partsStore.getAt(j).id && pPart.id) { 
                     if(partsStore.getAt(j).id === pPart.id) {
                         binIndices.push(i);
                     }
@@ -828,14 +830,14 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     /** NOT TESTED--CANT UNTIL DB IS DONE
      * Get a part given its Part ID
      * @param {Teselagen.models.DeviceDesign} pDevice
-     * @param {Long}  pId
+     * @param {Long}  pPartId
      * @returns {Teselagen.models.Part}
      */
-    getPartById: function(pDevice, pId) {
-        var part;
+    getPartById: function(pDevice, pPartId) {
+        var part, id;
         for (var i =0; i < pDevice.getJ5Collection().binCount(); i++) {
-            var bin = pDevice.getJ5Collection().binCount().getAt(i);
-            part = bin.getPartById(pId);
+            var bin = pDevice.getJ5Collection().bins().getAt(i);
+            part = bin.getPartById(pPartId);
             //id = bin.parts().find("id", pId);
             if (part !== null) {
                 return part;
@@ -850,7 +852,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Teselagen.models.Part}
      */
     getPartByName: function(pDevice, pPartName) {
-        var part;
+        var part, id;
         for (var i =0; i < pDevice.getJ5Collection().binCount(); i++) {
             var bin = pDevice.getJ5Collection().bins().getAt(i);
             part = bin.getPartByName(pPartName);
