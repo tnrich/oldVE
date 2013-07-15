@@ -158,16 +158,22 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                                 clicksToEdit: 2,
                                 listeners: {
-                                    validateedit: function (editor, e, eOpts) {
+                                    edit: function (editor, e, eOpts) {
                                         var updatedField = e.field;
                                         var newId = e.newValues.operand2_id;
                                         var ruleName = e.record.raw.name;
+                                        var oldId = e.value;
                                         if (updatedField === "operand2_id") {
-                                            Vede.application.fireEvent('operand2Changed', newId, ruleName);
+                                            Vede.application.fireEvent('operand2Changed', newId, ruleName, oldId, e);
                                         };
                                     }
                                 }
                             }),
+                            listeners: {
+                                afterrender: function () {
+                                    Vede.application.fireEvent('populateOperand2Field');
+                                }
+                            },
                             columnLines: true,
                             rowLines: true,
                             minHeight: 140,
@@ -219,11 +225,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         store: [],
                                         cls: "operand2_combobox",
                                     },
-                                    listeners: {
-                                        dblclick: function () {
-                                            Vede.application.fireEvent('populateOperand2Field');
-                                        }
-                                    },
+                                    
                                     renderer: function(id, metaData, rule) {
                                         if(rule.get("operand2isNumber")) {
                                             return rule.get("operand2Number");

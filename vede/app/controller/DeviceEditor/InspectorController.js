@@ -8,7 +8,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     requires: ["Teselagen.event.DeviceEvent",
     "Teselagen.models.EugeneRule",
     "Vede.view.de.PartDefinitionDialog",
-    "Ext.layout.container.Border"],
+    "Ext.layout.container.Border",
+    "Vede.controller.DeviceEditor.GridController"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -743,6 +744,29 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var newOperand2;
         var newOperand2Name;
+
+        var uniqueName = this.DeviceDesignManager.isUniqueRuleName(this.activeProject, newName);
+        console.log(uniqueName);
+        if (uniqueName = false || newName === "") {
+            Ext.MessageBox.show({
+                title: "Name conflict",
+                msg: "A rule with this name already exists in this design. <p> Please enter another name:",
+                buttons: [{
+                    text: "Ok",
+                    handler: function () {
+                        Ext.MessageBox.hide();
+                    }
+                }, {
+                    text: "Cancel",
+                    handler: function () {
+                        newEugeneRuleDialog.close();
+                    }
+                }],
+
+            })                                        
+            return Ext.MessageBox;
+                                             
+        }
         if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
             var newOperand2 = 
                 newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
@@ -760,7 +784,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var self = this;
         newOperand2.save({
             callback: function(){
-                newRule.setOperand2(newOperand2);                
+                newRule.setOperand2(newOperand2);   
 
                 self.activeProject.addToRules(newRule);
 
@@ -800,20 +824,45 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.destroy();
     },
 
-    onOperand2Changed: function(newId, ruleName) {
+    onOperand2Changed: function(newId, ruleName, oldId, e) {
         var newOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, newId);
+        var oldOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, oldId);
         var rule = this.DeviceDesignManager.getRuleByName(this.activeProject, ruleName);
-        
+
         var self = this;
         newOperand2.save({
             callback: function() {
+                if (newOperand2 != oldOperand2) {
+                    Vede.application.fireEvent('getNewGridParts', newOperand2);
+                    Vede.application.fireEvent('getOldGridParts', oldOperand2);
+                }
+
                 rule.setOperand2(newOperand2)
-                console.log(rule);
                 var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                 self.eugeneRulesGrid.reconfigure(rulesStore);
             }
         });
+    },
+
+    onAddEugeneRuleIndicator: function(gridOperands2) {
+        for(var k = 0; k < gridOperands2.length; k++) {
+            gridOperand2 = gridOperands2[k];
+            if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                gridOperand2.addEugeneRuleIndicator();
+            }
+        }
+    },
+
+    onRemoveEugeneRuleIndicator: function(gridOperands2) {
+        for(var k = 0; k < gridOperands2.length; k++) {
+            gridOperand2 = gridOperands2[k];
+            if(gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                gridOperand2.removeEugeneRuleIndicator();
+            }
+        }
+    },
         
+
         // var newEugeneRuleDialog = Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
         // var newRule = newEugeneRuleDialog.down("form").getForm().getRecord();
         // newRule.set("name", newOperand2);
@@ -832,7 +881,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         //         newEugeneRuleDialog.close();
         //     }
         // });
-    },
 
     /**
      * Handler for the Eugene Rule Dialog compositional operator combobox.
@@ -1146,6 +1194,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on("operand2Changed", this.onOperand2Changed, this);
 
         this.application.on("populateOperand2Field", this.onPopulateOperand2Field, this);
+
+        this.application.on("AddEugeneRuleIndicator", this.onAddEugeneRuleIndicator, this);
+
+        this.application.on("RemoveEugeneRuleIndicator", this.onRemoveEugeneRuleIndicator, this);
 
         this.control({
             "textfield[cls='partNameField']": {
