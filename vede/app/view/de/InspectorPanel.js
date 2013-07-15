@@ -5,11 +5,9 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-<<<<<<< HEAD
     requires: ["Teselagen.event.DeviceEvent","Ext.form.RadioGroup", "Ext.grid.column.Boolean",
                "Ext.grid.column.Column", "Ext.grid.column.Number", "Ext.grid.Panel", 
                "Ext.grid.plugin.RowEditing", "Teselagen.models.EugeneRule", "Vede.view.de.grid.Part"],
-=======
     requires: ["Teselagen.event.DeviceEvent",
                "Ext.form.RadioGroup", 
                "Ext.grid.column.Boolean",
@@ -18,7 +16,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                "Ext.grid.Panel", 
                "Ext.grid.plugin.RowEditing",
                "Vede.view.de.InspectorCollectionInfoGrid"],
->>>>>>> 3f34cb444aa02a388e51acb570b6e7b440b69b7e
     cls: 'InspectorPanel',
 
     activeTab: 1,
