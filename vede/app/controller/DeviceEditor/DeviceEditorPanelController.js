@@ -102,6 +102,39 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this, false, deproject.get("name"));
     },
 
+    onDeviceEditorClearBtnClick: function () {
+
+        Ext.Msg.show({
+             title:'Are you sure you want to clear this design?',
+             msg: 'WARNING: This will clear the current design. This action is not undoable!',
+             cls: 'messageBox',
+             buttons: Ext.Msg.OKCANCEL,
+             fn: ClearDeviceDesignBtn,
+             icon: Ext.Msg.QUESTION
+        });
+
+        function ClearDeviceDesignBtn (btn) {
+            if (btn=='ok') {
+                var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+                var bins = existingDesign.getJ5Collection().bins();
+                var binIndex = existingDesign.getJ5Collection().binCount();
+                
+                for (var i = 0; i <= binIndex; i++) {
+                    existingDesign.getJ5Collection().deleteBinByIndex(i)
+                }
+            
+                var newBin = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "Bin1"
+                });
+                bins.add(newBin);
+                console.log(existingDesign);
+                Vede.application.fireEvent("ReRenderCollectionInfo")
+                toastr.options.onclick = null;
+                toastr.info("Design Cleared");
+            }
+        }
+    },
+
     onDeviceEditorDeleteBtnClick: function () {
 
         function DeleteDeviceDesignBtn (btn) {
@@ -491,6 +524,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
                 click: this.onDeviceEditorSaveEvent
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {
+                click: this.onDeviceEditorClearBtnClick
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {
                 click: this.onDeviceEditorDeleteBtnClick

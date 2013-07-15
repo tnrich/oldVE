@@ -834,8 +834,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     getPartById: function(pDevice, pId) {
         var part;
         for (var i =0; i < pDevice.getJ5Collection().binCount(); i++) {
-            var bin = pDevice.getJ5Collection().binCount().getAt(i);
-            part = bin.getPartById(pId);
+            var bin = pDevice.getJ5Collection().bins().getAt(i);
+            part = bin.getPartById(pPartId);
             //id = bin.parts().find("id", pId);
             if (part !== null) {
                 return part;

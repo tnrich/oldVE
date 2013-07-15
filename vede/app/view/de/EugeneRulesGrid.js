@@ -10,18 +10,29 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
 
     initComponent: function() {
         Ext.apply(this, {
+            layout: 'fit',
             viewConfig: {
                 markDirty: false
             },
-            layout: 'fit',
             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                clicksToEdit: 2
-                // listeners: {
-                //     edit: function () {
-                //         Vede.application.fireEvent('editEugeneRule');
-                //     }
-                // }
+                clicksToEdit: 2,
+                listeners: {
+                    edit: function (editor, e, eOpts) {
+                        var updatedField = e.field;
+                        var newId = e.newValues.operand2_id;
+                        var ruleName = e.record.raw.name;
+                        var oldId = e.value;
+                        if (updatedField === "operand2_id") {
+                            Vede.application.fireEvent('operand2Changed', newId, ruleName, oldId, e);
+                        };
+                    }
+                }
             }),
+            listeners: {
+                afterrender: function () {
+                    Vede.application.fireEvent('populateOperand2Field');
+                }
+            },
             columnLines: true,
             rowLines: true,
             minHeight: 140,
@@ -73,6 +84,7 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                         store: [],
                         cls: "operand2_combobox"
                     },
+                    
                     renderer: function(id, metaData, rule) {
                         if(rule.get("operand2isNumber")) {
                             return rule.get("operand2Number");
@@ -80,7 +92,6 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                             return rule.getOperand2().get("name");
                         }
                     }
-                    
                 }
             ]
         });
