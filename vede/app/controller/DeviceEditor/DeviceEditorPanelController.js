@@ -404,6 +404,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').enable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').removeClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').removeClass('btnDisabled');
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-completed");
@@ -411,13 +413,17 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').enable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').removeClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').removeClass('btnDisabled');
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-warning");
                     } else if (status==="Error") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');    
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
 
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
