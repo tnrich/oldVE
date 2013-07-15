@@ -5,11 +5,7 @@
 Ext.define("Vede.view.ve.VectorPanel", {
     extend: "Ext.panel.Panel",
     alias: "widget.VectorPanel",
-    id: "VectorPanel",
-    /*layout: {
-        type: "fit"
-    },*/
-    //autoScroll: true,
+    cls: "VectorPanel",
     scrollable: false,
     collapsible: true,
     collapseDirection: "left",
@@ -17,7 +13,7 @@ Ext.define("Vede.view.ve.VectorPanel", {
     titleCollapse: true,
     items: [{
         xtype: "container",
-        id: "PieContainer",
+        cls: "PieContainer",
         style: {
             overflow: "auto"
         },
@@ -26,7 +22,7 @@ Ext.define("Vede.view.ve.VectorPanel", {
         }
     }, {
         xtype: "container",
-        id: "RailContainer",
+        cls: "RailContainer",
         style: {
             overflow: "auto"
         },

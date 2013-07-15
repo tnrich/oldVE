@@ -161,5 +161,5 @@ Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
 		  * Returns data about the "Ambiguous a or t or g or c" NucleotideSymbol
 		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t or g or c nucleotide
 		 */
-		getN: function(){ return this.n; },
+		getN: function(){ return this.n; }
 });

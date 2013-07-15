@@ -11,7 +11,8 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
 
     config: {
         sequenceManager: null,
-        sequenceAnnotator: null
+        sequenceAnnotator: null,
+        tabId: null
     },
 
     highlightSVG: null,
@@ -30,8 +31,8 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
         }
 
         if(!this.highlightSVG) {
-            this.highlightSVG = d3.select("#annotateSVG").append("svg:g")
-                .attr("id", "highlightSVG");           
+            this.highlightSVG = d3.select("#" + this.getTabId() + " .annotateSVG").append("svg:g")
+                .attr("class", "highlightSVG");           
         }
 
         if(fromIndex > toIndex) {
@@ -52,7 +53,7 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
 
     clearHighlights: function() {
         if(this.highlightSVG) {
-            d3.selectAll("#highlightSVG").remove();
+            d3.selectAll("#" + this.getTabId() + " .highlightSVG").remove();
             this.highlightSVG = null;
         }
     },
@@ -88,14 +89,14 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
             endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
         }
 
-        d3.select("#highlightSVG").append("svg:rect")
+        d3.select("#" + this.getTabId() + " .highlightSVG").append("svg:rect")
             .attr("x", startMetrics.x)
             .attr("y", startMetrics.y + 4)
             .attr("width", endMetrics.x - startMetrics.x)
             .attr("height", this.sequenceAnnotationManager.caret.height - 4)
             .attr("fill", this.self.HIGHLIGHT_COLOR)
             .attr("fill-opacity", this.self.HIGHLIGHT_TRANSPARENCY);
-    },
+    }
     
     
 });

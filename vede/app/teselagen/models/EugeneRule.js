@@ -139,7 +139,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             instanceName: "operand2",
             foreignKey: "operand2_id" 
 
-        },
+        }
         //Needed to find the parent of a child
         /*
         {

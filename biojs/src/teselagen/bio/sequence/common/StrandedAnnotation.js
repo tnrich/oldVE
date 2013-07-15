@@ -48,5 +48,5 @@ Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 		}
 
 		return this;
-	},
+	}
 });

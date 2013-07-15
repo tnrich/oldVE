@@ -25,7 +25,7 @@ Ext.define("Vede.view.rail.NameBox", {
             "font-weight": "bold",
             x: this.center.x,
             y: this.center.y,
-            "text-anchor": "middle",
+            "text-anchor": "middle"
         }]);
 
         var text1;

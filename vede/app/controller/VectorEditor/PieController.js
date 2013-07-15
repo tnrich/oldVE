@@ -8,12 +8,13 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     requires: ["Teselagen.manager.PieManager",
                "Teselagen.renderer.pie.SelectionLayer",
                "Teselagen.renderer.pie.WireframeSelectionLayer",
+               "Teselagen.event.CaretEvent",
                "Teselagen.event.ContextMenuEvent",
                "Teselagen.event.VisibilityEvent"],
 
-    refs: [
+    /*refs: [
         {ref: "pieContainer", selector: "#PieContainer"}
-    ],
+    ],*/
     
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360,
@@ -32,20 +33,40 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      */
     init: function() {
         this.callParent();
-        this.application.on("ShowMapCaretChanged", this.onShowMapCaretChanged, this);
-        this.application.on("PieNameBoxClick", this.onPieNameBoxClick);
+        this.application.on(Teselagen.event.VisibilityEvent.SHOW_MAP_CARET_CHANGED, this.onShowMapCaretChanged, this);
+        this.application.on(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED, this.onPieNameBoxClick);
+
         this.control({
-            "#zoomInMenuItem": {
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "menuitem[identifier='zoomInMenuItem']": {
                 click: this.onZoomInMenuItemClick
             },
-            "#zoomOutMenuItem": {
+            "menuitem[identifier='zoomOutMenuItem']": {
                 click: this.onZoomOutMenuItemClick
             }
         });
     },
 
-    initPie: function() {
-        this.pieManager.initPie();
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(newTab.initialCls == "VectorEditorPanel") {
+            // Remove listeners from previous pieContainer.
+            if(this.pieContainer && this.pieContainer.el) {
+                this.pieContainer.el.un("keydown", this.onKeydown, this);
+            }
+
+            this.pieContainer = newTab.down("component[cls='PieContainer']");
+            this.initPie(newTab);
+
+            this.pieParent = d3.select("#" + newTab.el.dom.id + " .pieParent");
+        }
+
+        this.callParent(arguments);
+    },
+
+    initPie: function(newTab) {
+        this.pieManager.initPie(newTab);
         var pie = this.pieManager.getPie();
         var self = this;
 
@@ -78,14 +99,13 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         var self = this;
 
         this.callParent(arguments);
-        this.pieContainer = this.getPieContainer();
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
             center: this.self.PIE_CENTER,
             railRadius: this.self.RAIL_RADIUS,
-            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
+            /*showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
             showFeatures: Ext.getCmp("featuresMenuItem").checked,
-            showOrfs: Ext.getCmp("orfsMenuItem").checked
+            showOrfs: Ext.getCmp("orfsMenuItem").checked*/
         });
 
         pie = this.pieManager.getPie();
@@ -162,22 +182,18 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.clickedAnnotationEnd = end;
     },
 
-    onAnnotatePanelAnnotationClicked: function(start, end) {
-        this.select(start, end);
-    },
-
     onViewModeChanged: function(viewMode) {
         if(viewMode == "linear") {
-            Ext.getCmp("PieContainer").hide();
+            this.activeTab.down("component[cls='PieContainer']").hide();
         } else {
-            Ext.getCmp("PieContainer").show();
+            this.activeTab.down("component[cls='PieContainer']").show();
         }
     },
 
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start);
+            this.changeCaretPosition(start, true);
         }
     },
 
@@ -193,7 +209,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.pieManager.fitWidthToContent(this.pieManager, true);
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+        this.WireframeSelectionLayer.setSelectionSVG(this.pieManager.wireframeSVG);
 
         this.SelectionLayer.setSequenceManager(pSeqMan);
         this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
@@ -240,7 +256,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     onShowMapCaretChanged: function(show) {
-        var showMapCaret = Ext.getCmp("mapCaretMenuItem").checked;
+        var showMapCaret = this.activeTab.down("component[identifier='mapCaretMenuItem']").checked;
         var angle = this.startSelectionAngle;
         var bp = this.bpAtAngle(angle);
         if (showMapCaret) {
@@ -322,9 +338,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 end = endSelectionIndex;
             }
 
-            self.WireframeSelectionLayer.startSelecting();
-            self.WireframeSelectionLayer.select(start, end);
-
             if(d3.event.ctrlKey) {
                 self.SelectionLayer.startSelecting();
 
@@ -337,6 +350,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             } else {
                 self.stickySelect(start, end);
             }
+
+            self.WireframeSelectionLayer.startSelecting();
+            self.WireframeSelectionLayer.select(start, end);
         }
     },
 
@@ -422,13 +438,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * angle relative to the vertical.
      */
     getClickAngle: function() {
-        var svg;
-
-        if(!this.pieParent) {
-            this.pieParent = d3.select(".pieParent");
-        }
-
-        svg = this.pieParent;
+        var svg = this.pieParent;
         var transformValues;
         var scrolled = this.pieContainer.el.getScroll();
 
@@ -590,13 +600,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
     	//console.log(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
         
-        var svg;
-    	
-        if(!this.pieParent) {
-            this.pieParent = d3.select(".pieParent");
-        }
-
-    	svg = this.pieParent;
+    	var svg = this.pieParent;
         var transformValues;
         var scrolled = this.pieContainer.el.getScroll();
 
@@ -631,13 +635,14 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     onPieNameBoxClick: function() {
-        var checked = Ext.getCmp("mapCaretMenuItem").checked
-        var menuItem = Ext.getCmp("mapCaretMenuItem")
+        var menuitem = this.activeTab.down("component[identifier='mapCaretMenuItem']");
+        var checked = menuitem.checked;
+
         if (checked) {
-            menuItem.setChecked(false);
+            menuitem.setChecked(false);
         }
         else {
-            menuItem.setChecked(true);
+            menuitem.setChecked(true);
         }
     }
 });

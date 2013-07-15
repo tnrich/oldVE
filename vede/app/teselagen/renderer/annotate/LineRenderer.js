@@ -27,6 +27,6 @@ Ext.define("Teselagen.renderer.annotate.LineRenderer", {
     recalculateLines: function(){
         
         
-    },
+    }
     
 });

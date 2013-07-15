@@ -5,9 +5,20 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
+<<<<<<< HEAD
     requires: ["Teselagen.event.DeviceEvent","Ext.form.RadioGroup", "Ext.grid.column.Boolean",
                "Ext.grid.column.Column", "Ext.grid.column.Number", "Ext.grid.Panel", 
                "Ext.grid.plugin.RowEditing", "Teselagen.models.EugeneRule", "Vede.view.de.grid.Part"],
+=======
+    requires: ["Teselagen.event.DeviceEvent",
+               "Ext.form.RadioGroup", 
+               "Ext.grid.column.Boolean",
+               "Ext.grid.column.Column", 
+               "Ext.grid.column.Number", 
+               "Ext.grid.Panel", 
+               "Ext.grid.plugin.RowEditing",
+               "Vede.view.de.InspectorCollectionInfoGrid"],
+>>>>>>> 3f34cb444aa02a388e51acb570b6e7b440b69b7e
     cls: 'InspectorPanel',
 
     activeTab: 1,
@@ -223,7 +234,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     editor: {
                                         xtype: 'combobox',
                                         store: [],
-                                        cls: "operand2_combobox",
+                                        cls: "operand2_combobox"
                                     },
                                     
                                     renderer: function(id, metaData, rule) {
@@ -232,7 +243,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         } else {
                                             return rule.getOperand2().get("name");
                                         }
-                                    },
+                                    }
                                     
                                 }
                             ]
@@ -259,11 +270,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     margin: '0 0 0 5',
                                     overCls: 'deleteEugeneRuleBtn-over',
                                     border: 0,
-                                    text: 'Delete Rule',
+                                    text: 'Delete Rule'
                                 }
                             ]
                         }
-                    ],
+                    ]
                 }
             ]
         },
@@ -325,122 +336,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'gridpanel',
                             cls: 'inspectorGrid',
                             anchor:"100% 65%",
-                            autoScroll: true,
-                            viewConfig: {
-                                markDirty: false,
-                            },
-                            allowDeselect: true,
-                            columnLines: true,
-                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2,
-                                errorSummary: false
-                            }),
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    width: 100,
-                                    text: '<div data-qtip="Column Name">Column Name</div>',
-                                    dataIndex: 'binName',
-                                    editor: {
-                                        xtype: 'textfield',
-                                        allowBlank: false
-                                    },
-                                    renderer: function(value, metadata) {
-                                        metadata.tdAttr = 'data-qtip="' + value + '"';
-                                        return value;
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Direction">Direction</div>',
-                                    dataIndex: 'directionForward',
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: [[true, "Forward"], [false, "Reverse"]]
-                                    },
-                                    renderer: function(forward) {
-                                        if(forward) {
-                                            return "Forward";
-                                        } else {
-                                            return "Reverse";
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="Items">Items</div>',
-                                    renderer: function(value, metadata, record) {
-                                        return record.parts().getRange().length;
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
-                                    dataIndex: 'fas',
-                                    readOnly: true,
-                                    renderer: function(value, metadata, record) {
-                                        metadata.tdAttr = 'data-qtip="' + value + '"';
-
-                                        if(record.parts().getRange().length > 0) {
-                                            metadata.tdAttr = 'data-qtip="' + record.parts().getRange()[0].get("fas") + '"';
-                                            return record.parts().getRange()[0].get("fas");
-                                        } else {
-                                            metadata.tdAttr = 'data-qtip="' + value + '"';
-                                            return value;
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'booleancolumn',
-                                    text: '<div data-qtip="Direct Synthesis Firewall">DSF</div>',
-                                    dataIndex: 'dsf',
-                                    editor: {
-                                        xtype: 'checkbox'
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
-                                    dataIndex: 'fro',
-                                    editor: {
-                                        xtype: 'textfield'
-                                    },
-                                    renderer: function(value) {
-                                        if(value === 'None') {
-                                            return '';
-                                        } else {
-                                            return value;
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>',
-                                    dataIndex: 'extra5PrimeBps',
-                                    editor: {
-                                        xtype: 'numberfield',
-                                        allowDecimals: false,
-                                        decimalPrecision: 1,
-                                        emptyText: '',
-                                        hideTrigger: true
-                                    },
-                                    renderer: Ext.util.Format.numberRenderer('0')
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
-                                    dataIndex: 'extra3PrimeBps',
-                                    editor: {
-                                        xtype: 'numberfield',
-                                        allowDecimals: false,
-                                        decimalPrecision: 1,
-                                        emptyText: '',
-                                        hideTrigger: true
-                                    },
-                                    renderer: Ext.util.Format.numberRenderer('0')
-                                }
-                            ],
+                            xtype: 'collectioninfogrid'
                         }
+                            
                         // {
                         //     xtype: 'container',
                         //     cls: 'inspector_containerActions',
@@ -513,6 +411,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
+                    text : 'Edit J5 Parameters',
+                    cls: 'editj5ParamsBtn',
+                    overCls: 'editj5ParamsBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 30,
+                    border: 0
+                },
+                {
+                    xtype: 'button',
                     text : 'Condense Assemblies',
                     cls: 'condenseAssembliesBtn',
                     overCls: 'condenseAssembliesBtn-over',
@@ -531,18 +438,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     border: 0,
                     hidden: true
                 },
-                // {
-                //     xtype: 'button',
-                //     cls: 'condenseAssembliesBtn',
-                //     text: 'Condense Assemblies',
-                //     margin: '2.5 0 2.5 0'
-                // },
-                // {
-                //     xtype: 'button',
-                //     cls: 'distributePCRBtn',
-                //     margin: '2.5 0 2.5 0',
-                //     text: 'Distribute PCR Reactions'
-                // }, 
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
@@ -700,17 +595,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         buttonOnly: false,
                                         buttonText: '<b>Choose File</b>'
                                     }]
-                                },
-                                {
-                                    xtype: 'button',
-                                    text : 'Edit J5 Parameters',
-                                    cls: 'editj5ParamsBtn',
-                                    // cls: 'runj5Btn',
-                                    // overCls: 'runj5Btn-over',
-                                    margin: '15 0 0 0',
-                                    height: 30,
-                                    border: 0
-                                },
+                                }
                             ]
                         },
                         {
@@ -861,7 +746,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             cls: 'customizeAutomationParamsBtn',
                                             margin: '20 0 0 0',
                                             height: 30,
-                                            text: 'Customize Automation Parameters'
+                                            text: 'Edit Automation Parameters'
                                         },
                                         {
                                             xtype: 'button',
@@ -888,7 +773,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
             {   
                 Vede.application.fireEvent("openj5");
             }
-        },
+        }
     },
 
     init: function () {

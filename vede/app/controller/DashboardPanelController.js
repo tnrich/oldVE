@@ -5,7 +5,8 @@
 Ext.define("Vede.controller.DashboardPanelController", {
 	extend: "Ext.app.Controller",
 
-	requires: ["Teselagen.manager.ProjectManager"],
+	requires: ["Teselagen.event.ProjectEvent",
+               "Teselagen.manager.ProjectManager"],
 
 
 	onLastDEProjectsItemClick: function (item,record) {
@@ -63,6 +64,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
         });
 	},
 
+    /**
+     * TODO: Not used anymore?
+     * @deprecated
+     */
   DashNewSequence: function () {
       Teselagen.manager.ProjectManager.directVEEditingMode = true;
 
@@ -81,7 +86,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
       });
 
       //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-      Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
+      Vede.application.fireEvent(this.ProjectEvent.OPEN_SEQUENCE_IN_VE, Teselagen.manager.ProjectManager.workingSequence);
   },
 
   onLaunch: function () {
@@ -91,7 +96,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
 
 	init: function () {
-    this.application.on("createSequence", this.DashNewSequence);
+    this.ProjectEvent = Teselagen.event.ProjectEvent;
+
     this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
     this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
 

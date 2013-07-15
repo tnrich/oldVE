@@ -9,7 +9,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
     singleton: true,
     
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
-        "Teselagen.bio.sequence.common.StrandType",],
+        "Teselagen.bio.sequence.common.StrandType"],
     
     /**
      * Cut sequence by list of restriction enzymes.  See Teselagen.bio.enzymes.RestrictionCutSite.

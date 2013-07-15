@@ -5,7 +5,19 @@
  */
 Ext.define("Teselagen.manager.ProjectManager", {
 
-    requires: ["Teselagen.event.ProjectEvent", "Teselagen.store.UserStore", "Vede.view.de.DeviceEditor", "Teselagen.manager.SessionManager", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.FormatUtils", "Teselagen.models.J5Bin", "Teselagen.models.Part","Teselagen.models.VectorEditorProject", "Ext.window.MessageBox"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.event.ProjectEvent", 
+               "Teselagen.event.SequenceManagerEvent", 
+               "Teselagen.store.UserStore", 
+               "Teselagen.manager.SessionManager", 
+               "Teselagen.manager.DeviceDesignManager", 
+               "Teselagen.utils.FormatUtils", 
+               "Teselagen.models.J5Bin", 
+               "Teselagen.models.Part",
+               "Teselagen.models.VectorEditorProject", 
+               "Vede.view.de.DeviceEditor", 
+               "Ext.window.MessageBox"],
+
     alias: "ProjectManager",
     mixins: {
         observable: "Ext.util.Observable"
@@ -57,16 +69,28 @@ Ext.define("Teselagen.manager.ProjectManager", {
     checkDuplicatedTabs: function (model, tabName, cb, cb2) {
         var tabPanel = Ext.getCmp("mainAppPanel");
         var duplicated = false;
-        var ModelId = model.data.id;
-        tabPanel.items.items.forEach(function (tab, key) {
-            if(tab.model && tab.initialCls === tabName) {
-                if(tab.model.data.id === ModelId) {
+        var ModelId;
+
+        if(tabName !== "VectorEditorPanel") {
+            ModelId = model.data.id;
+            tabPanel.items.items.forEach(function (tab, key) {
+                if(tab.model && tab.initialCls === tabName) {
+                    if(tab.model.data.id === ModelId) {
+                        duplicated = true;
+                        tabPanel.setActiveTab(key);
+                        if(typeof (cb2) === "function") { cb2(); }
+                    }
+                }
+            });
+        } else {
+            tabPanel.items.items.forEach(function (tab, key) {
+                if(tab.sequenceFile && model && tab.sequenceFile.get("id") === model.get("id")) {
                     duplicated = true;
                     tabPanel.setActiveTab(key);
-                    if(typeof (cb2) === "function") { cb2(); }
                 }
-            }
-        });
+            });
+        }
+
         if(!duplicated) { return cb(tabPanel); }
         else { console.log("Trying to open duplicated tab!"); }
     },
@@ -107,7 +131,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 model: selectedDesign,
                 modelId: selectedDesign.data.id
             })).show();
-            if(selectedDesign.data.id) Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
+            if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 
         });
@@ -152,7 +176,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openSequence: function (sequence) {
     	//console.log("Opening Sequence");
     	this.workingSequence = sequence;
-        Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.workingSequence);
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
 //            new Ext.util.DelayedTask(function() {
@@ -182,7 +206,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 tabPanel.setActiveTab(1);
                 var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(self.workingSequence.data.sequenceFileContent);
                 var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-                Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+                Vede.application.fireEvent(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, seqMgr);
             }
         });
     },
@@ -261,7 +285,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + newSequenceFile.data.id);
                                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
                                 self.openSequence(newSequenceFile);
-                                toastr.info ("New Sequence Successfully Created");
+                                toastr.info ("New Sequence Created");
                             });
                         }
                     });
@@ -376,14 +400,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     partSource: "Untitled sequence"
                 });
 
-                Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
+                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.workingSequence);
 
                 var menuItem = Ext.ComponentQuery.query('#saveSequenceBtn')[0];
     },
 
     /*
     * Creates a new VEProject based on an existing sequence
-    * DEPRECATED
+    * @deprecated
     */
     createNewVEProject: function(){
         console.log("Deprecated");
@@ -431,6 +455,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
         */
-    },
+    }
 
 });

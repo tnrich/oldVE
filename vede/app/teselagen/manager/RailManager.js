@@ -21,6 +21,11 @@ Ext.define("Teselagen.manager.RailManager", {
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2",
         RAIL_PAD: 100,
+        SELECTION_COLOR: "#0099FF",
+        SELECTION_TRANSPARENCY: 0.3,
+        SELECTION_FRAME_COLOR: "#CCCCCC",
+        STROKE_OPACITY: 0.8, // Selection and wireframe outline opacity.
+        WIREFRAME_COLOR: "#808080",
         ZOOM_INCREMENT: 0.25
     },
 
@@ -51,6 +56,7 @@ Ext.define("Teselagen.manager.RailManager", {
     orfSVG: null,
     featureSVG: null,
     selectionSVG: null,
+    wireframeSVG: null,
    
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -316,8 +322,10 @@ Ext.define("Teselagen.manager.RailManager", {
      * called by the window onresize event.
      */
     fitWidthToContent: function(scope) {
-        if(Ext.getCmp("RailContainer").el) {
-            var containerSize = Ext.getCmp("RailContainer").getSize();
+        var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']");
+
+        if(container && container.el) {
+            var containerSize = container.getSize();
             var transY = containerSize.height / 2;
 
             var railBox = scope.rail[0][0].getBBox();
@@ -626,63 +634,106 @@ Ext.define("Teselagen.manager.RailManager", {
      * @private
      * Adds the caret to the rail.
      */
-    initRail: function() {
-        this.rail = d3.select("#RailContainer")
-                      .append("svg:svg")
-                      .attr("id", "Rail")
-                      .attr("overflow", "auto");
+    initRail: function(newTab) {
+        var newTabDomId = newTab.el.dom.id;
+        // If there's no SVG in the current tab, VE hasn't been rendered yet, so
+        // add svg elements. Otherwise, just set this.rail to the rail in this tab,
+        // and so on.
+        if(!d3.select("#" + newTabDomId + " .Rail").node()) {
+            this.rail = d3.select("#" + newTabDomId + " .RailContainer")
+                          .append("svg:svg")
+                          .attr("class", "Rail")
+                          .attr("overflow", "auto");
 
-        this.parentSVG = this.rail.append("svg:g")
-                                  .attr("class", "railParent")
-                                  .attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
+            this.parentSVG = this.rail.append("svg:g")
+                                      .attr("class", "railParent")
+                                      .attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
 
-        this.frame = Ext.create("Vede.view.rail.Frame", {
-            rail: this.parentSVG,
-            railWidth: this.railWidth,
-            center: this.center
-        });
+            this.frame = Ext.create("Vede.view.rail.Frame", {
+                rail: this.parentSVG,
+                railWidth: this.railWidth,
+                center: this.center
+            });
 
-        this.caret = Ext.create("Vede.view.rail.Caret", {
-            rail: this.parentSVG,
-            start: 0,
-            reference: this.reference,
-            railWidth: this.railWidth,
-            length: 3
-        });
+            this.caret = Ext.create("Vede.view.rail.Caret", {
+                rail: this.parentSVG,
+                start: 0,
+                reference: this.reference,
+                railWidth: this.railWidth,
+                length: 3
+            });
 
-        var name = "unknown";
-        var length = 0
-        if(this.sequenceManager) {
-            name = this.sequenceManager.getName();
-            length = this.sequenceManager.getSequence().toString().length;
+            var name = "unknown";
+            var length = 0
+            if(this.sequenceManager) {
+                name = this.sequenceManager.getName();
+                length = this.sequenceManager.getSequence().toString().length;
+            }
+
+            this.nameBox = Ext.create("Vede.view.rail.NameBox", {
+                rail: this.parentSVG,
+                center: this.center,
+                name: name,
+                length: length
+            });
+
+            this.labelSVG = this.parentSVG.append("svg:g")
+                                    .attr("class", "railLabel");
+
+            this.selectionSVG = this.parentSVG.append("svg:path")
+                                    .attr("class", "railSelection")
+                                    .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                                    .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                                    .attr("fill", this.self.SELECTION_COLOR)
+                                    .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                                    .style("pointer-events", "none");
+
+            this.wireframeSVG = this.parentSVG.append("svg:path")
+                                    .attr("class", "railWireframe")
+                                    .attr("stroke", this.self.WIREFRAME_COLOR)
+                                    .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                                    .attr("fill", "none");
+
+            this.cutSiteSVG = this.parentSVG.append("svg:g")
+                                      .attr("class", "railCutSite");
+            this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+
+            this.orfSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "railOrf");
+            this.orfRenderer.setOrfSVG(this.orfSVG);
+
+            this.featureSVG = this.parentSVG.append("svg:g")
+                                      .attr("class", "railFeature");
+            this.featureRenderer.setFeatureSVG(this.featureSVG);
+
+            this.fitWidthToContent(this);
+        } else {
+            this.rail = d3.select("#" + newTabDomId + " .Rail");
+
+            this.parentSVG = this.rail.select(".railParent");
+
+            this.parentSVG.select(".railCaret").remove();
+            this.caret = Ext.create("Vede.view.rail.Caret", {
+                rail: this.parentSVG,
+                start: 0,
+                reference: this.reference,
+                railWidth: this.railWidth,
+                length: 3
+            });
+
+            this.frame = this.parentSVG.select(".railFrame");
+            this.nameBox = this.parentSVG.select(".railNameBox");
+            this.labelSVG = this.parentSVG.select(".railLabel");
+            this.selectionSVG = this.parentSVG.select(".railSelection");
+            this.wireframeSVG = this.parentSVG.select(".railWireframe");
+            this.cutSiteSVG = this.parentSVG.select(".railCutSite");
+            this.orfSVG = this.parentSVG.select(".railOrf");
+            this.featureSVG = this.parentSVG.select(".railFeature");
+
+            this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+            this.orfRenderer.setOrfSVG(this.orfSVG);
+            this.featureRenderer.setFeatureSVG(this.featureSVG);
         }
-
-        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
-            rail: this.parentSVG,
-            center: this.center,
-            name: name,
-            length: length
-        });
-
-        this.labelSVG = this.parentSVG.append("svg:g")
-                                .attr("class", "railLabel");
-
-        this.selectionSVG = this.parentSVG.append("svg:g")
-                                    .attr("class", "railSelection");
-
-        this.cutSiteSVG = this.parentSVG.append("svg:g")
-                                  .attr("class", "railCutSite");
-        this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-
-        this.orfSVG = this.parentSVG.append("svg:g")
-                              .attr("class", "railOrf");
-        this.orfRenderer.setOrfSVG(this.orfSVG);
-
-        this.featureSVG = this.parentSVG.append("svg:g")
-                                  .attr("class", "railFeature");
-        this.featureRenderer.setFeatureSVG(this.featureSVG);
-
-        this.fitWidthToContent(this);
     },
 
     updateNameBox: function() {

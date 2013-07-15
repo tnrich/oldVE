@@ -12,6 +12,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
     ADD_ROW_ABOVE: "AddRowAbove",
     ADD_ROW_BELOW: "AddRowBelow",
 
+    CHECK_J5_READY: "CheckJ5Ready",
+
     SELECT_BIN: "SelectBin",
     SELECT_PART: "SelectPart",
     CLEAR_PART: "ClearPart",
@@ -24,10 +26,32 @@ Ext.define("Teselagen.event.DeviceEvent", {
     MAP_PART_SELECT: "MapPartSelect",
     MAP_PART_NOTSELECT: "MapPartNotSelect",
 
+    // TODO: Not used?
     ADD_SELECT_ALERTS: "AddSelectAlerts",
 
+    // Fired when cells in the grid which have no associated part should be 
+    // filled with phantom parts.
     FILL_BLANK_CELLS: "FillBlankCells",
 
-    OPEN_LIBRARY: "OpenPartLibrary"
+    RERENDER_COLLECTION_INFO: "RerenderCollectionInfo",
+    RERENDER_DE_CANVAS: "RerenderDECanvas",
 
+    // Loads given design from server.
+    RELOAD_DESIGN: "ReloadDesign",
+
+    SAVE_DESIGN: "SaveDesign",
+
+    // Loads Eugene rules from the server for a given design.
+    LOAD_EUGENE_RULES: "LoadEugeneRules",
+
+    OPEN_PART_LIBRARY: "OpenPartLibrary",
+    OPEN_CHANGE_PART_DEFINITION: "OpenChangePartDefinition",
+
+    // Fired when a new part is created and needs to be defined.
+    CREATE_PART_DEFINITION: "CreatePartDefinition",
+
+    // Fired when a new part has been defined.
+    PART_CREATED: "PartCreated",
+
+    VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName"
 });

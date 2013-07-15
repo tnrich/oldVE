@@ -105,7 +105,7 @@ module.exports = function(app, express) {
 
 
     // MYSQL CONNECTION
-    if (app.program.beta || app.program.prod) {
+    if (app.program.alpha || app.program.beta || app.program.prod) {
         // Init MYSQL
         var connection = app.mysql.createConnection({
             host: 'localhost',

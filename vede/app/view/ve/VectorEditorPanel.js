@@ -5,13 +5,12 @@
 Ext.define("Vede.view.ve.VectorEditorPanel", {
     extend: "Ext.panel.Panel",
     alias: "widget.VectorEditorPanel",
-    id: "VectorEditorPanel",
+    cls: "VectorEditorPanel",
     border: 0,
+    closable: true,
     layout: {
         type: "fit"
     },
-    title: "Vector Editor",
-    closable: false,
     requires: [
         "Vede.view.ve.AnnotatePanel",
         "Vede.view.ve.VectorEditorFindPanel",
@@ -29,7 +28,7 @@ Ext.define("Vede.view.ve.VectorEditorPanel", {
     items: [{
         xtype: "panel",
         border: 0,
-        id: "VectorEditorSubPanel",
+        cls: "VectorEditorSubPanel",
         layout: {
             align: "stretch",
             type: "hbox"

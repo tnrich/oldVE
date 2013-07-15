@@ -198,5 +198,5 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
         this.setNeedsMeasurement(true);
 
         return pFeatures;
-    },
+    }
 });

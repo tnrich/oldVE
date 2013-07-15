@@ -266,7 +266,7 @@ Ext.define("Teselagen.manager.RowManager", {
         //console.log("Push in Row annotations after: " + pRows);
 
         return pRows;
-    },
+    }
 
 
 

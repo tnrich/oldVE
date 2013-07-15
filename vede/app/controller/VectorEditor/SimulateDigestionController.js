@@ -11,7 +11,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          "Teselagen.bio.sequence.DNATools",
          "Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.manager.SimulateDigestionManager",
-         "Ext.util.TaskRunner"],
+         "Teselagen.utils.Logger"],
     /*
      * The enzymeGroupManager that manages the groups of enzymes in this control
      */
@@ -45,6 +45,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       */
      enzymeListSelector: null,
      addAllBtn: null,
+     Logger: null,
      
      /**
       * @member Vede.controller.SimulateDigestionController
@@ -53,8 +54,8 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
          this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
          this.DNATools = Teselagen.bio.sequence.DNATools;
-         this.filterTaskRunner = new Ext.util.TaskRunner();
          this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
+         this.Logger = Teselagen.utils.Logger;
          this.control({
              "#enzymeGroupSelector-digest": {
                  change: this.onEnzymeGroupSelected
@@ -132,7 +133,12 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      * Saves to database.
      */
     onSaveButtonClick: function() {
-        this.GroupManager.saveUserGroups();
+        var me = this;
+        this.GroupManager.saveUserGroups(function(pSuccess) {
+            if (pSuccess) {
+                me.Logger.notifyInfo("Active enzyme group saved");
+            }
+        });
     },
     
     /**

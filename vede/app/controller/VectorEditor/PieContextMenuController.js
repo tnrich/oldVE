@@ -1,6 +1,7 @@
 Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 	extend: "Ext.app.Controller",	
-	requires: ["Teselagen.event.ContextMenuEvent"],
+	requires: ["Teselagen.event.ContextMenuEvent",
+               "Teselagen.event.SequenceManagerEvent"],
 	
 	isPieContextMenuOpen: false,
 	isPieAnnotationRightClicked: false,
@@ -22,29 +23,32 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 	init: function() {
 		this.pieContextMenu = Ext.create('Ext.menu.Menu', {
 			id: 'PieContextMenu',
-			items: [],
+			items: []
 		});
 		
 		this.pieContextMenuNewFeature = {
     		xtype: 'menuitem',
     		text: 'Annotate as new Sequence Feature',
       	    id: 'PieContextMenuNewFeature',
-      	    autoDestroy: false,
+      	    autoDestroy: false
     	};
     	this.pieContextMenuEditFeature = {
     		xtype: 'menuitem',
     		text: 'Edit Sequence Feature',
             id: 'PieContextMenuEditFeature',
-            autoDestroy: false,
+            autoDestroy: false
     	};
     	this.pieContextMenuDeleteFeature = {
     		xtype: 'menuitem',
     		text: 'Delete Sequence Feature',
             id: 'PieContextMenuDeleteFeature',
-            autoDestroy: false,
+            autoDestroy: false
     	};	
     	
 		this.control({
+            '#mainAppPanel': {
+                tabchange: this.onTabChange
+            },
 			'#PieContextMenu': {
     			show: this.onPieContextMenuShow,
     			beforehide: this.onPieContextMenuHide
@@ -64,8 +68,14 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     	Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, this.onPieAnnotationRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED, this.onPieSelectionLayerRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, this.onMouseDownAnyWhere, this);
-    	Vede.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+    	Vede.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
 	},
+
+    onTabChange: function(mainAppPanel, newTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    },
 	
 	onPieRightClicked: function() {
 		//console.log("PIE RIGHT CLICKED: "+this.isPieContextMenuOpen+", "+this.isPieAnnotationRightClicked+", "+this.isPieSelectionLayerRightClicked);
@@ -170,7 +180,7 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 		this.isPieAnnotationRightClicked = false;
 		this.isPieSelectionLayerRightClicked = false;
 		this.pieContextMenu.hide();
-    },
+    }
 });
 
 

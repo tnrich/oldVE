@@ -5,7 +5,13 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters","Teselagen.bio.parsers.ParsersManager"],
+    requires: ["Teselagen.event.CommonEvent",
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.manager.ProjectManager",
+               'Vede.view.j5Report.buildDNAPanel',
+               "Teselagen.manager.PrinterMonitor",
+               "Teselagen.models.J5Parameters",
+               "Teselagen.bio.parsers.ParsersManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -103,6 +109,12 @@ Ext.define("Vede.controller.J5ReportController", {
 
         var warnings = this.activeJ5Run.raw.warnings;
         var errors = this.activeJ5Run.raw.error_list[0];
+        var nonDegenerativeParts = this.activeJ5Run.getJ5Results().raw.processedData.nondegenerateParts;
+
+        var nonDegenerativPartsStore = Ext.create('Teselagen.store.PartStore', {
+            model: 'Teselagen.models.Part',
+            data: nonDegenerativeParts
+        });
 
         if (warnings) {
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
@@ -141,7 +153,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
-        this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+        this.tabPanel.down('gridpanel[name="combinatorialAssembly"]').reconfigure(nonDegenerativPartsStore);
         // this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
@@ -301,7 +313,9 @@ Ext.define("Vede.controller.J5ReportController", {
     init: function () {
         this.callParent();
 
-        this.application.on("resetJ5ActiveRun", this.setActiveRun, this);
+        this.CommonEvent = Teselagen.event.CommonEvent;
+
+        this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
 
         this.control({
             'panel[cls="j5ReportsPanel"] > menu > menuitem': {

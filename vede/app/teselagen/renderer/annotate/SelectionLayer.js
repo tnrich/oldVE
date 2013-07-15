@@ -16,7 +16,8 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
     config: {
         sequenceManager: null,
-        sequenceAnnotator: null
+        sequenceAnnotator: null,
+        tabId: null
     },
 
     SelectionLayerEvent: null,
@@ -52,8 +53,8 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
             this.selectionSVG.remove();
         }
 
-        this.selectionSVG = d3.select("#annotateSVG").append("svg:g")
-            .attr("id", "selectionSVG");
+        this.selectionSVG = d3.select("#" + this.getTabId() + " .annotateSVG").append("svg:g")
+            .attr("class", "selectionSVG");
 
         if(fromIndex > toIndex) {
             this.drawSelection(0, toIndex);
@@ -132,7 +133,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         var that = this;
 
         this.leftHandleSVG = this.selectionSVG.append("svg:image")
-            .attr("id", "leftHandleSVG")
+            .attr("class", "leftHandleSVG")
             .attr("xlink:href", 
                   "app/teselagen/renderer/annotate/assets/handle.png")
             .attr("width", this.self.HANDLE_WIDTH)
@@ -142,7 +143,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
                   this.self.HANDLE_HEIGHT / 2);
 
         this.rightHandleSVG = this.selectionSVG.append("svg:image")
-            .attr("id", "rightHandleSVG")
+            .attr("class", "rightHandleSVG")
             .attr("xlink:href", 
                   "app/teselagen/renderer/annotate/assets/handle.png")
             .attr("width", this.self.HANDLE_WIDTH)
@@ -153,8 +154,8 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
     },
 
     hideHandles: function() {
-        d3.selectAll("#leftHandleSVG").remove();
-        d3.selectAll("#rightHandleSVG").remove();
+        d3.selectAll(".leftHandleSVG").remove();
+        d3.selectAll(".rightHandleSVG").remove();
     },
 
     drawSelection: function(fromIndex, toIndex) {
@@ -194,7 +195,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         var that = this;
         var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(fromIndex);
         this.selectionSVG.append("svg:rect")
-            .attr("id", "selectionRectangle")
+            .attr("class", "selectionRectangle")
             .attr("x", startMetrics.x - 10)
             .attr("y", startMetrics.y)
             .attr("width", 20)
@@ -210,7 +211,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(toIndex);
         this.selectionSVG.append("svg:rect")
-            .attr("id", "selectionRectangle")
+            .attr("class", "selectionRectangle")
             .attr("x", endMetrics.x - 10)
             .attr("y", endMetrics.y)
             .attr("width", 20)

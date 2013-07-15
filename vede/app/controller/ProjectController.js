@@ -17,7 +17,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     /**
-     * Load the projectTree in ProjectExplorer Panel, method triggered by 
+     * Load the projectTree in ProjectExplorer Panel, method triggered by
      * @param {callback} Callback function (optional).
      * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
      */
@@ -35,14 +35,14 @@ Ext.define("Vede.controller.ProjectController", {
 
 
                 var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
-                rootNode.removeAll(); // Remove existing subnodes   
+                rootNode.removeAll(); // Remove existing subnodes
 
                 // Append create project at the top
                 rootNode.appendChild({
                     text: "Create project",
                     leaf: true,
                     hrefTarget: "newproj",
-                    icon: "resources/images/add.png",
+                    icon: "resources/images/add.png"
                 });
 
                 // Iterate over projects
@@ -60,7 +60,7 @@ Ext.define("Vede.controller.ProjectController", {
                         text: "Create design",
                         leaf: true,
                         hrefTarget: "newde",
-                        icon: "resources/images/add.png",
+                        icon: "resources/images/add.png"
                     });
 
                     // Append sequence to project node
@@ -68,7 +68,7 @@ Ext.define("Vede.controller.ProjectController", {
                         text: "Create sequence",
                         leaf: true,
                         hrefTarget: "newsequence",
-                        icon: "resources/images/add.png",
+                        icon: "resources/images/add.png"
                         //id: 0
                     });
 
@@ -84,17 +84,17 @@ Ext.define("Vede.controller.ProjectController", {
                                     id: design.data.id,
                                     hrefTarget: "opende",
                                     icon: "resources/images/ux/design-tree-icon-leaf.png",
-                                    qtip: 'Design ' + design.data.name
+                                    qtip: "Design " + design.data.name
                                 });
 
                                 // Append j5Report to design
                                 designnode.appendChild({
                                     text: "J5 Reports",
                                     leaf: true,
-                                    id: design.data.id+'report',
+                                    id: design.data.id+"report",
                                     hrefTarget: "j5reports",
                                     icon: "resources/images/ux/j5-tree-icon-parent.png",
-                                    qtip: design.data.name + ' Report'
+                                    qtip: design.data.name + " Report"
                                 });
                             });
 
@@ -119,16 +119,16 @@ Ext.define("Vede.controller.ProjectController", {
                                     id: sequence.data.id,
                                     hrefTarget: "opensequence",
                                     icon: "resources/images/ux/circular.png",
-                                    qtip: 'Sequence ' + sequence.data.name
+                                    qtip: "Sequence " + sequence.data.name
                                 });
                             });
                             
-                            if(typeof (cb2) === "function") { cb2(); }
+                            if(typeof (cb2) === "function") {cb2(); }
                     
                 });
 
                 // For testing, execute callback
-                if(typeof (cb) === "function") { cb(); }
+                if(typeof (cb) === "function") {cb(); }
             }
         };
 
@@ -137,7 +137,7 @@ Ext.define("Vede.controller.ProjectController", {
         // PRELOAD DATA
         projects.load({
             callback: function(){
-                if(projects.count()===0) finishedPreloading();
+                if(projects.count()===0) { finishedPreloading(); }
                 projects.each(function(project){
                     storesCounter++;
                     project.designs().load({
@@ -196,7 +196,7 @@ Ext.define("Vede.controller.ProjectController", {
     	
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-    	var design_id = record.data.id.replace("report","");;
+    	var design_id = record.data.id.replace("report","");
         var project_id = record.parentNode.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         project.designs().load({
@@ -281,11 +281,11 @@ Ext.define("Vede.controller.ProjectController", {
                             selectedVEProject.parts().add(newPart);
                             selectedVEProject.save({
                                 callback: function () {
-                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                    Vede.application.fireEvent(this.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                         Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + selectedVEProject.data.id);
                                     });
                                     Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-                                    Vede.application.fireEvent("openVectorEditor", newSequenceFile);
+                                    Vede.application.fireEvent(this.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
                                 }
                             });
                         }
@@ -309,15 +309,15 @@ Ext.define("Vede.controller.ProjectController", {
             callback: function (loadedsequence) {
                 Teselagen.manager.ProjectManager.workingProject = project;
                 Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
-                Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
+                //Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]").setText("");
                 oldTab.el.unmask();
             }
         });
     },
 
     expandProject: function (record) {
-        if(record.isExpanded()) { record.collapse(); }
-        else { record.expand(); }
+        if(record.isExpanded()) {record.collapse(); }
+        else {record.expand(); }
     },
 
     onProjectPanelItemClick: function (store, record) {
@@ -352,11 +352,11 @@ Ext.define("Vede.controller.ProjectController", {
         }
     },
     
-    onProjectPanelItemContextMenu: function(store, record, item, index, e) {   	
+    onProjectPanelItemContextMenu: function(store, record, item, index, e) {
     	e.preventDefault();
         var contextMenu = Ext.create('Ext.menu.Menu',{
         	  items: [{
-        	    text: 'Open',
+        	    text: 'Open'
         	    //handler: this.resolveAndOpenSequence(record)
         	  },{
           	    text: 'Open in New Tab'/*,
@@ -385,7 +385,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onNewDEClick: function () {
-        if(!Teselagen.manager.ProjectManager.workingProject) { return Ext.MessageBox.alert("Alert", "First select or create a Project."); }
+        if(!Teselagen.manager.ProjectManager.workingProject) {return Ext.MessageBox.alert("Alert", "First select or create a Project."); }
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
@@ -401,8 +401,11 @@ Ext.define("Vede.controller.ProjectController", {
      */
     init: function () {
         this.callParent();
-        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
-        this.application.on(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
+
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
+
+        this.application.on(this.ProjectEvent.OPEN_PROJECT, this.openProject, this);
+        this.application.on(this.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
 
         this.control({
             "#projectTreePanel": {

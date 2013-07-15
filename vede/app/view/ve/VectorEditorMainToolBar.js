@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     extend: 'Ext.toolbar.Toolbar',
-    id: 'VectorEditorMainToolBar',
+    cls: 'VectorEditorMainToolBar',
     alias: 'widget.VectorEditorMainToolBar',
     items: [
     {
@@ -36,7 +36,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
                 }
             }
         },
-        id: 'importBtn'
     },
     {
         xtype: 'tbseparator',
@@ -58,21 +57,21 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
 
     //        {
     //            xtype: 'button',
-    //            id: 'saveBtn',
+    //            cls: 'saveBtn',
     //            icon: 'resources/images/export_disabled.png',
     //            scale: 'medium',
     //            tooltip: 'Save Project'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'exportBtn',
+    //            cls: 'exportBtn',
     //            icon: 'resources/images/save_disabled.png',
     //            scale: 'medium',
     //            tooltip: 'Save to Registry'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'projectPropsBtn',
+    //            cls: 'projectPropsBtn',
     //            icon: 'resources/images/project_properties.png',
     //            scale: 'medium',
     //            tooltip: 'Project Properties'
@@ -80,7 +79,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'undoBtn',
-        id: 'undoViewBtn',
         icon: 'resources/images/undo_new.png',
         scale: 'medium',
         tooltip: 'Undo'
@@ -92,7 +90,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     }, {
         xtype: 'button',
         cls: 'redoBtn',
-        id: 'redoViewBtn',
         icon: 'resources/images/redo_new.png',
         scale: 'medium',
         tooltip: 'Redo'
@@ -105,7 +102,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'circularBtn',
-        id: 'circularViewBtn',
         enableToggle: true,
         icon: 'resources/images/circular.png',
         pressed: true,
@@ -120,7 +116,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'linearBtn',
-        id: 'linearViewBtn',
         enableToggle: true,
         icon: 'resources/images/linear.png',
         scale: 'medium',
@@ -133,35 +128,35 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     },
     //        {
     //            xtype: 'button',
-    //            id: 'copyBtn',
+    //            cls: 'copyBtn',
     //            icon: 'resources/images/copy_disabled.png',
     //            scale: 'medium',
     //            tooltip: 'Copy'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'cutBtn',
+    //            cls: 'cutBtn',
     //            icon: 'resources/images/cut_disabled.png',
     //            scale: 'medium',
     //            tooltip: 'Cut'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'pasteBtn',
+    //            cls: 'pasteBtn',
     //            icon: 'resources/images/paste_disabled.png',
     //            scale: 'medium',
     //            tooltip: 'Paste'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'safeBtn',
+    //            cls: 'safeBtn',
     //            icon: 'resources/images/safe_editing.png',
     //            scale: 'medium',
     //            tooltip: 'Safe Editing'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'findBtn',
+    //            cls: 'findBtn',
     //            icon: 'resources/images/find.png',
     //            scale: 'medium',
     //            tooltip: 'Find...'
@@ -169,7 +164,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'featuresBtn',
-        id: 'featuresBtn',
         enableToggle: true,
         focusCls: '', // Without this, the button will not be toggled until it loses focus for some reason.
         icon: 'resources/images/features.png',
@@ -185,7 +179,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'cutSitesBtn',
-        id: 'cutsitesBtn',
         enableToggle: true,
         focusCls: '', // Without this, the button will not be toggled until it loses focus for some reason.
         icon: 'resources/images/cut_sites.png',
@@ -199,7 +192,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     },
     {
         xtype: 'button',
-        id: 'orfsBtn',
         cls: 'orfsBtn',
         enableToggle: true,
         focusCls: '', // Without this, the button will not be toggled until it loses focus for some reason.
@@ -215,21 +207,20 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'fullscreenBtn',
-        id: 'fullscreen',
         scale: 'medium',
         icon: 'resources/images/fullscreen.png',
         tooltip: 'Toggle fullscreen'
-    },
+    }
     //        {
     //            xtype: 'button',
-    //            id: 'reBtn',
+    //            cls: 'reBtn',
     //            icon: 'resources/images/restriction_enzymes.png',
     //            scale: 'medium',
     //            tooltip: 'Show Restriction Enzymes'
     //        },
     //        {
     //            xtype: 'button',
-    //            id: 'propsBtn',
+    //            cls: 'propsBtn',
     //            icon: 'resources/images/properties.png',
     //            scale: 'medium',
     //            tooltip: 'Properties'

@@ -26,5 +26,5 @@ Ext.define("Teselagen.renderer.rail.CutSiteLabel", {
         label =  this.annotation.getRestrictionEnzyme().getName();
         
         return label;
-    },
+    }
 });

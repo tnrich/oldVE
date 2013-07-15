@@ -9,18 +9,6 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
     
     extend: "Teselagen.renderer.pie.Layer",
 
-    statics: {
-        SELECTION_COLOR: "#0099FF",
-        SELECTION_TRANSPARENCY: 0.3,
-        SELECTION_FRAME_COLOR: "#CCCCCC"
-    },
-
-    deselect: function() {
-        this.callParent();
-
-        this.selectionSVG.selectAll(".pieSelectionElement").remove();
-    },
-
     /**
      * Draws the shaded wedge-shaped selection area.
      */
@@ -34,11 +22,11 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
         this.startAngle = fromIndex * 2 * Math.PI / seqLen;
         this.endAngle = endIndex * 2 * Math.PI / seqLen;
 
-        var startPoint = Ext.create("Teselagen.bio.util.Point");
+        var startPoint = {};
         startPoint.x = this.center.x + this.radius * Math.sin(this.startAngle);
         startPoint.y = this.center.y - this.radius * Math.cos(this.startAngle);
 
-        var endPoint = Ext.create("Teselagen.bio.util.Point");
+        var endPoint = {};
         endPoint.x = this.center.x + this.radius * Math.sin(this.endAngle);
         endPoint.y = this.center.y - this.radius * Math.cos(this.endAngle);
 
@@ -70,19 +58,6 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
                " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
                "L" + this.center.x + " " + this.center.y;
 
-        var selectionElement = this.selectionSVG.select(".pieSelectionElement");
-
-        if(selectionElement[0][0] === null) {
-            this.selectionSVG.append("svg:path")
-                             .attr("class", "pieSelectionElement")
-                             .attr("stroke", this.self.SELECTION_FRAME_COLOR)
-                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                             .attr("fill", this.self.SELECTION_COLOR)
-                             .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
-                             .attr("d", path)
-                             .style("pointer-events", "none");
-        } else {
-            selectionElement.attr("d", path);
-        }
+        this.selectionSVG.attr("d", path);
     }
 });

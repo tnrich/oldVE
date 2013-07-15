@@ -18,6 +18,6 @@ Ext.define("Teselagen.models.DNAFeatureLocation", {
 		{name: "genbankStart", type: "int",	defaultValue: 0},
 		{name: "end", type: "int", defaultValue: 0},
 		{name: "singleResidue", type: "boolean", defaultValue: false},
-		{name: "inBetween", type: "boolean", defaultValue: false},
+		{name: "inBetween", type: "boolean", defaultValue: false}
 	]
 });
