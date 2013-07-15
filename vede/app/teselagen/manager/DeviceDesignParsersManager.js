@@ -101,6 +101,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             }
 
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);            
         }
     },
 

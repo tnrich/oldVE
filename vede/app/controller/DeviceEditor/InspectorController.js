@@ -496,27 +496,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         //console.log(selectedPart);
         selectionModel.select(j5Bin);
-
-        this.updateColumnContentDisplayField(j5Bin);
-    },
-
-    /**
-     * Updates the Column Contents field of a given bin model.
-     * @param {Teselagen.models.J5Bin} j5Bin The bin model to update info for.
-     */
-    updateColumnContentDisplayField: function(j5Bin) {
-        var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
-        var contentArray = [];
-        j5Bin.parts().each(function(part, i) {
-            if(!part.get("phantom")) {
-                contentArray.push(part.get("name"));
-                contentArray.push(": ");
-                contentArray.push(part.get("fas"));
-                contentArray.push("<br>");
-            }
-        });
-
-        contentField.setValue(contentArray.join(""));
     },
 
     /**
@@ -1098,8 +1077,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
                                                                       updatedPart);
-
-                this.updateColumnContentDisplayField(parentBin);
             }
 
             if(parts.indexOf(this.selectedPart) > -1) {
@@ -1175,12 +1152,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             if(!skipReconfigureGrid) {
                 this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
-            }
-
-            var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-
-            if(selectedBin) {
-                this.updateColumnContentDisplayField(selectedBin);
             }
         }
 
