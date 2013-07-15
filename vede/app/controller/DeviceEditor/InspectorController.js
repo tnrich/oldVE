@@ -5,11 +5,11 @@
 Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.event.DeviceEvent",
-    "Teselagen.models.EugeneRule",
-    "Vede.view.de.PartDefinitionDialog",
-    "Ext.layout.container.Border",
-    "Vede.controller.DeviceEditor.GridController"],
+    requires: ["Teselagen.event.CommonEvent",
+               "Teselagen.event.DeviceEvent",
+               "Teselagen.models.EugeneRule",
+               "Vede.view.de.PartDefinitionDialog",
+               "Ext.layout.container.Border"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -55,7 +55,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.clearPartInfo();
         toastr.options.onclick = null;
         toastr.info("Part Cleared");
-        this.application.fireEvent("checkj5Ready");
+        this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -68,17 +68,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         for(var i = 0; i < bins.length; i++) {
             parts = bins[i].parts().getRange();
             if(parts.length > 1) {
+                tmpC = 0;
+
                 for(var j = 0; j < parts.length; j++) {
-                    if(parts[j].get("sequencefile_id")!="") {
+                    if(parts[j].get("sequencefile_id")!="" && !parts[j].get("phantom")) {
                         tmpC++;
                     }
+                }
+
+                if (tmpC>1) {
+                    combinatorial = true;
                 }
             }
         }
 
-        if (tmpC>1) {
-            combinatorial = true;
-        }
         return cb(combinatorial);
     },
 
@@ -95,6 +98,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
         var runj5Btn2 = tab.down("button[cls='j5button']");
         var inspector = this.inspector;
+        var self = this;
 
         this.checkCombinatorial(j5collection,function(combinatorial){
             var j5ready = true;
@@ -136,7 +140,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 j5ready = false;
             }
 
-            if( !(notChangeMethod === true) ) Vede.application.fireEvent("ReLoadAssemblyMethods", combinatorial);
+            if( !(notChangeMethod === true) ) Vede.application.fireEvent(self.CommonEvent.LOAD_ASSEMBLY_METHODS, combinatorial);
 
             tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
             tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
@@ -176,7 +180,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             this.selectedPart.getSequenceFile({
                 callback: function(){
-                    Vede.application.fireEvent("openChangePartDefinition",self.selectedPart,self.selectedBinIndex,self.selectedPart.getSequenceFile());
+                    Vede.application.fireEvent(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
         }
@@ -289,7 +293,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         store: partLibrary,
                         listeners: {
                             "itemclick": function(grid, part, item){
-                                Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
+                                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part,part.get('name'),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
                                     //part.getSequenceFile({
                                     //    callback: function(sequence){
@@ -529,7 +533,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
-        Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
+        Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
             // If the selected part is not in the device already, add it.
             //if(self.selectedPart.get("phantom") || 
             if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
@@ -629,8 +633,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         removeColumnMenuItem.disable
 
         this.toggleInsertOptions(false);        
-        this.application.fireEvent("ReRenderCollectionInfo");
-
+        this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
     },
 
     removeColumn: function (selectedBin, evt) {
@@ -638,20 +641,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(selectedBin) {
                 var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
                 this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
-                this.application.fireEvent("ReRenderCollectionInfo");
+                this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             } else {
                 this.activeProject.getJ5Collection().deleteBinByIndex(
                 this.activeProject.getJ5Collection().binCount() - 1);
                 this.columnsGrid.getView().refresh();
                 this.renderCollectionInfo();
-                this.application.fireEvent("ReRenderCollectionInfo");
+                this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             }
 
             if (this.activeProject.getJ5Collection().binCount() == 0) {
                 this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 0);
             } 
 
-            this.application.fireEvent("ReRenderCollectionInfo");
+            this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
         }
     },
 
@@ -673,10 +676,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onAddEugeneRuleBtnClick: function() {
         if(this.selectedPart) {
             var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
+
+            this.activeProject.rules().clearFilter();
+
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                 name: this.DeviceDesignManager.generateDefaultRuleName(this.activeProject),
                 compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
             });
+
+            this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                           this.selectedPart);
 
             var ruleForm = newEugeneRuleDialog.down("form");
             var operand2Field = ruleForm.down("combobox[cls='operand2PartField']");
@@ -770,6 +779,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
             var newOperand2 = 
                 newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
+            newRule.set("operand2isNumber", true);
+            newRule.set("operand2Number", newOperand2);
         } else {
             newOperand2Name =
                 newEugeneRuleDialog.down("component[cls='operand2PartField']").getValue();
@@ -785,17 +796,33 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newOperand2.save({
             callback: function(){
                 newRule.setOperand2(newOperand2);   
-
-                self.activeProject.addToRules(newRule);
-
-                var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
-                                                                                self.selectedPart)
-
-                self.eugeneRulesGrid.reconfigure(rulesStore);
-
-                newEugeneRuleDialog.close();
             }
         });
+
+        if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
+            newOperand2.save({
+                callback: function(){
+                    newRule.setOperand2(newOperand2);                
+
+                    self.activeProject.addToRules(newRule);
+
+                    var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
+                                                                                    self.selectedPart)
+
+                    self.eugeneRulesGrid.reconfigure(rulesStore);
+                    newEugeneRuleDialog.close();
+                }
+            });
+        } else {
+            this.activeProject.addToRules(newRule);
+
+            var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                            this.selectedPart)
+
+            this.eugeneRulesGrid.reconfigure(rulesStore);
+            newEugeneRuleDialog.close();
+        }
+
         toastr.options.onclick = null;
         toastr.info("Eugene Rule Added");
     },
@@ -1023,11 +1050,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.columnsGrid.getSelectionModel().deselect(selectedPart);
 
         // Remove the highlighting from the selected row- it appears that a bug
-        // is preventing this from happening automatically.
-        this.columnsGrid.getView().removeRowCls(selectedPart,
+        // is preventing this from happening automatically. EDIT: Not happening
+        // with the new Ext version.
+        /*this.columnsGrid.getView().removeRowCls(selectedPart,
                                     this.columnsGrid.getView().selectedItemCls);
         this.columnsGrid.getView().removeRowCls(selectedPart,
-                                    this.columnsGrid.getView().focusedItemCls);
+                                    this.columnsGrid.getView().focusedItemCls);*/
 
         this.renderCollectionInfo(true);
     },
@@ -1119,7 +1147,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
 
         if(this.activeProject) {
-            Vede.application.fireEvent("checkj5Ready");
+            Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
             // j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
             //                                                 this.activeProject));
 
@@ -1170,6 +1198,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     init: function () {
         this.callParent();
 
+        this.CommonEvent = Teselagen.event.CommonEvent;
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
 
@@ -1177,17 +1206,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.SELECT_BIN, this.onBinSelected, this);
 
-        this.application.on("ReRenderDECanvas", this.onReRenderDECanvasEvent, this);
+        this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS, this.onReRenderDECanvasEvent, this);
 
-        this.application.on("OpenPartLibrary", this.onopenPartLibraryBtnClick, this);
+        this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onopenPartLibraryBtnClick, this);
 
-        this.application.on("checkj5Ready", this.onCheckj5Ready, this);
+        this.application.on(this.DeviceEvent.CHECK_J5_READY, this.onCheckj5Ready, this);
 
-        this.application.on("partSelected", this.onPartSelected, this);
+        this.application.on(this.DeviceEvent.CLEAR_PART, this.onClearPart, this);
 
-        this.application.on("ClearPart", this.onClearPart, this);
-
-        this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
+        this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
 
         this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
 
@@ -1198,6 +1225,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on("AddEugeneRuleIndicator", this.onAddEugeneRuleIndicator, this);
 
         this.application.on("RemoveEugeneRuleIndicator", this.onRemoveEugeneRuleIndicator, this);
+        
+        this.application.on(this.DeviceEvent.RERENDER_COLLECTION_INFO, this.onReRenderCollectionInfoEvent, this);
 
         this.control({
             "textfield[cls='partNameField']": {
@@ -1247,7 +1276,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='changePartDefinitionBtn']": {
                 click: this.onChangePartDefinitionBtnClick
-            },
+            }
         });
     }
 });
