@@ -275,22 +275,23 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             text: 'Value'
                         }
                     ]
-                },{
-                    xtype: 'gridpanel',
-                    name: 'combinatorialAssembly',
-                    margin: '10 10 20 10',
-                    title: 'Parts',
-                    minHeight: 100,
-                    layout: 'fit',
-                    columns: [
-                        {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'name',
-                            flex: 1,
-                            text: 'Name'
-                        }
-                    ]
-                },
+                }
+                // ,{
+                //     xtype: 'gridpanel',
+                //     name: 'combinatorialAssembly',
+                //     margin: '10 10 20 10',
+                //     title: 'Parts',
+                //     minHeight: 100,
+                //     layout: 'fit',
+                //     columns: [
+                //         {
+                //             xtype: 'gridcolumn',
+                //             dataIndex: 'name',
+                //             flex: 1,
+                //             text: 'Name'
+                //         }
+                //     ]
+                // },
                 // {
                 // xtype: 'fieldset',
                 // margin: '10 10 10 10',

@@ -619,8 +619,9 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         var newFeatures = [];
 
         for (var i=0; i < feat.length; i++) {
-            var label, start, end, key, value, quoted;
+            var start, end, key, value, quoted;
             var j, k;
+            var nameAttr = {};
 
             var ft    = feat[i];
             var newFt = [];
@@ -660,6 +661,10 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             }
             // QUALIFIERS -> ATTRIBUTES
             var newAttr = [];
+            var hasName = false;
+            var usingLabel = false;
+            var usingGene = false;
+
             for (k=0; k < ft.getFeatureQualifier().length; k++) {
                 key    = ft.getFeatureQualifier()[k].getName();
                 value  = ft.getFeatureQualifier()[k].getValue();
@@ -667,9 +672,79 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
                 // SET THE LABEL FIELD. DO NOT STORE AS AN ATTRIBUTE
 
-                if (this.isALabel(key) ) {
-                    label = value;
-                    //don't add as attribute
+                if (this.isALabel(key)) {
+                    // Priority for name attributes is: 'label' > 'gene' > 'organism'.
+                    // We check to see if the current name is from a lower-priority
+                    // attribute. If it is, we store it as an attribute and then
+                    // replace it with the current higher-priority attribute.
+
+                    if(key === "label") {
+                        // Label has top priority.
+                        
+                        // If feature already has a name, it is lower priority,
+                        // so save it as a normal attribute instead.
+                        if(hasName) {
+                            newAttr.push(nameAttr);
+                        }
+
+                        nameAttr = {
+                            "_name": key,
+                            "_quoted": quoted,
+                            "__text": value
+                        };
+
+                        usingLabel = true;
+                    } else if(key === "gene") {
+
+                        // If we're not using the label for the name, use the
+                        // current 'gene' attribute. If we are using label for
+                        // the name, just save the current attribute as a normal
+                        // attribute.
+                        if(!usingLabel) {
+                            if(hasName) {
+                                newAttr.push(nameAttr);
+                            }
+
+                            nameAttr = {
+                                "_name": key,
+                                "_quoted": quoted,
+                                "__text": value
+                            };
+
+                            usingGene = true;
+                        } else {
+                            newAttr.push({
+                                "_name": key,
+                                "_quoted": quoted,
+                                "__text": value
+                            });
+                        }
+                    } else if(!usingLabel && !usingGene) {
+                        // If we don't have a label from either a 'gene' or a
+                        // 'label' field, use the current field as the name.
+
+                        if(hasName) {
+                            newAttr.push(nameAttr);
+                        }
+
+                        nameAttr = {
+                            "_name": key,
+                            "_quoted": quoted,
+                            "__text": value
+                        };
+                    } else {
+                        // If we already have a name, and the current attribute
+                        // is not of higher priority, just save it as a normal
+                        // attribute.
+                        
+                        newAttr.push({
+                            "_name": key,
+                            "_quoted": quoted,
+                            "__text": value
+                        });
+                    }
+
+                    hasName = true;
                 } else {
                     newAttr.push( {
                         //"seq:attribute" : {
@@ -682,7 +757,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             }
 
             newFt = {
-                "seq:label" : label, //ft.findLabel(),
+                "seq:label" : nameAttr.__text, //ft.findLabel(),
                 "seq:complement" : ft.getComplement(),
                 "seq:type" : ft.getKeyword(),
                 "seq:index" : ft.getIndex(),

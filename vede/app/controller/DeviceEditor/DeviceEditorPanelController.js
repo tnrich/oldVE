@@ -402,16 +402,29 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     if(status==="Completed") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').removeClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').removeClass('btnDisabled');
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-completed");
                     } else if (status==="Completed with warnings") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').removeClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').removeClass('btnDisabled');
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-warning");
                     } else if (status==="Error") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');    
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
+
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").addClass("status-note-failed");
@@ -464,8 +477,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='assemblies']").reconfigure(assemblies);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='j5parameters']").reconfigure(J5parametersValues);
-                    Ext.getCmp("mainAppPanel").getActiveTab().down("textareafield[name='combinatorialAssembly']").setValue(combinatorial.get("nonDegenerativeParts"));
-                    Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='combinatorialAssembly']").reconfigure(nonDegenerativPartsStore);
 
                     
                     Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);

@@ -130,11 +130,13 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var editj5ParamsBtn = inspector.down("button[cls='editj5ParamsBtn']");
         var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
         var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
+        var editAutomationParamsBtn = inspector.down("button[cls='customizeAutomationParamsBtn']");
 
         if(newTab.initialCls == "j5InfoTab-Basic") {
                 runj5Btn.show();
                 editj5ParamsBtn.show();
                 distributePCRBtn.hide();
+                editAutomationParamsBtn.hide();
                 condenseAssembliesBtn.hide();
         } else {
             j5AdvancedTab.getActiveTab().setActiveTab(0);
@@ -142,6 +144,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             runj5Btn.hide();
             distributePCRBtn.hide();
             condenseAssembliesBtn.show();
+            editAutomationParamsBtn.show();
+            editAutomationParamsBtn.disable();
         }
     },
 
@@ -151,15 +155,18 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var runj5Btn = inspector.down("button[cls='runj5Btn']");
         var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
         var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
+        var editAutomationParamsBtn = inspector.down("button[cls='customizeAutomationParamsBtn']");
 
         if(newTab.initialCls == "condenseAssemblyFiles-box") {
                 runj5Btn.hide();
                 distributePCRBtn.hide();
                 condenseAssembliesBtn.show();
+                editAutomationParamsBtn.disable();
             }else if(newTab.initialCls == "downstreamAutomation-box") {                    
                 runj5Btn.hide();
                 distributePCRBtn.show();
                 condenseAssembliesBtn.hide();
+                editAutomationParamsBtn.enable();
             }
         
     },

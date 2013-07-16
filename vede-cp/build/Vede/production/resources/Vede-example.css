@@ -24132,7 +24132,7 @@ img {
 }
 
 /* line 856, ../../../../sass/src/view/AppViewport.scss */
-.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn, .editj5ParamsBtn {
+.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn, .editj5ParamsBtn, .customizeAutomationParamsBtn, .downloadCondenseAssemblyResultsBtn, .downloadDownstreamAutomationBtn {
   background: #92a4b6;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
@@ -24140,12 +24140,12 @@ img {
 }
 
 /* line 863, ../../../../sass/src/view/AppViewport.scss */
-.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner {
+.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner, .customizeAutomationParamsBtn .x-btn-inner, .downloadCondenseAssemblyResultsBtn .x-btn-inner, .downloadDownstreamAutomationBtn .x-btn-inner {
   color: white;
 }
 
 /* line 867, ../../../../sass/src/view/AppViewport.scss */
-.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over, .x-editj5ParamsBtn-over {
+.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over, .x-editj5ParamsBtn-over, .x-customizeAutomationParamsBtn-over, .x-downloadCondenseAssemblyResultsBtn-over, .x-downloadDownstreamAutomationBtn-over {
   background: #8898a8;
 }
 

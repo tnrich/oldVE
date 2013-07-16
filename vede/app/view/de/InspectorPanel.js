@@ -277,22 +277,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         //     ]
                         // }
                     ]
-                },
-                {
-                    xtype: 'form',
-                    autoScroll: true,
-                    flex: 1,
-                    title: 'Column Content',
-                    margin: '5px 0px 5px 0px',
-                    cls: 'columnContentForm',
-                    items: [
-                        {
-                            xtype: 'displayfield',
-                            cls: 'columnContentDisplayField',
-                            margin: 10,
-                            fieldLabel: ''
-                        }
-                    ]
                 }
             ]
         },
@@ -347,6 +331,16 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     height: 40,
                     border: 0,
                     hidden: true
+                },
+                {
+                    xtype: 'button',
+                    cls: 'customizeAutomationParamsBtn',
+                    overCls: 'customizeAutomationParamsBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 30,
+                    border: 0,
+                    hidden: true,
+                    text: 'Edit Automation Parameters'
                 },
                 {
                     xtype: 'tabpanel',
@@ -585,6 +579,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             xtype: 'button',
                                             margin: '20 0 0 0',
                                             cls: 'downloadCondenseAssemblyResultsBtn',
+                                            overCls: 'downloadDownstreamAutomationBtn-over',
                                             text: 'Download Results',
                                             hidden:true
                                         }
@@ -627,7 +622,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         {
                                             xtype: 'filefield',
                                             cls: 'sourcePlateListSelector',
-                                            margin: '30 0 0 0',
+                                            margin: '15 0 0 0',
                                             validateOnChange: false,
                                             fieldLabel: 'Source Plate List:',
                                             labelWidth: 110,
@@ -653,14 +648,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         },
                                         {
                                             xtype: 'button',
-                                            cls: 'customizeAutomationParamsBtn',
-                                            margin: '20 0 0 0',
-                                            height: 30,
-                                            text: 'Edit Automation Parameters'
-                                        },
-                                        {
-                                            xtype: 'button',
                                             cls: 'downloadDownstreamAutomationBtn',
+                                            overCls: 'downloadDownstreamAutomationBtn-over',
                                             pressed: false,
                                             text: 'Download Results',
                                             hidden: true,

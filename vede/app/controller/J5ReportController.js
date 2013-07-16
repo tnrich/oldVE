@@ -92,16 +92,28 @@ Ext.define("Vede.controller.J5ReportController", {
 
         if(status=="Completed") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').enable();
+            this.tabPanel.down('button[cls="downloadResults"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').enable();
+            this.tabPanel.down('button[cls="buildBtn"]').removeClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').enable();
+            this.tabPanel.down('button[cls="downloadResults"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').enable();
+            this.tabPanel.down('button[cls="buildBtn"]').removeClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-failed")
             $("#" + field + " .status-note").addClass("status-note-warning");;
         } else if (status=="Error") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').disable();
+            this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').disable();
+            this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
@@ -153,9 +165,6 @@ Ext.define("Vede.controller.J5ReportController", {
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
-        this.tabPanel.down('gridpanel[name="combinatorialAssembly"]').reconfigure(nonDegenerativPartsStore);
-        // this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-        // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
     elapsedDate: function (seconds)

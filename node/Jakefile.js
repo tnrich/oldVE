@@ -1,17 +1,22 @@
 /*global complete, fail, jake, process, task*/
 
+var _s = require("underscore.string");
 var util = require("util");
 var DbManager = require("./manager/DbManager")();
 var ApiManager = require("./manager/ApiManager")();
 var JakeUtil = require("../jakelib/JakeUtil");
 var apiManager;
 var dbManager;
-var dbname = "teselagenDev";
-var env = process.env.env;
+var env = process.env.env || "dev";
 
-if (env === "test") {
-    dbname = "teselagenTest";
+if (! (env==="dev" || env==="test" || env==="alpha" || env==="beta" || env==="prod")) {
+    console.log("Invalid environment:" + env);
+    process.exit();
 }
+
+var pm2name = _s.capitalize(env);
+var dbname = "teselagen" + pm2name;
+
 
 // Jake 'complete' event listener
 jake.addListener("complete", function () {
@@ -46,6 +51,11 @@ task("stopNode", function() {
 task("restartNode", function() {
     var restartNodeCmd = "pm2 restartAll";
     JakeUtil.exec(restartNodeCmd);
+});
+
+task("logNode", function() {
+    var cmd = "sudo tail -f /root/.pm2/logs/" + pm2name + "-out.log";
+    JakeUtil.exec(cmd);
 });
 
 /*

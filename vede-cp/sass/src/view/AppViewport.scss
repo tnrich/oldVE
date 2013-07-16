@@ -853,18 +853,18 @@ background: #F8F8F8;
   background: #006CAB;
 }
 
-.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn,  .editj5ParamsBtn {
+.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn,  .editj5ParamsBtn, .customizeAutomationParamsBtn, .downloadCondenseAssemblyResultsBtn, .downloadDownstreamAutomationBtn {
   background: rgb(146, 164, 182);
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
   -webkit-transition: background .2s ease-in-out;
 }
 
-.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner {
+.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner, .customizeAutomationParamsBtn .x-btn-inner, .downloadCondenseAssemblyResultsBtn .x-btn-inner, .downloadDownstreamAutomationBtn .x-btn-inner {
   color: white;
 }
 
-.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over, .x-editj5ParamsBtn-over  {
+.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over, .x-editj5ParamsBtn-over, .x-customizeAutomationParamsBtn-over, .x-downloadCondenseAssemblyResultsBtn-over, .x-downloadDownstreamAutomationBtn-over { 
   background: rgb(136, 152, 168);
 }
 
