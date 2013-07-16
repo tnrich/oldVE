@@ -127,8 +127,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
-                title: "Device Editor | " + selectedDesign.data.name,
+                title: selectedDesign.data.name,
                 model: selectedDesign,
+                icon: "resources/images/ux/design-tree-icon-leaf16x16.png",
                 modelId: selectedDesign.data.id
             })).show();
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
