@@ -477,7 +477,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='assemblies']").reconfigure(assemblies);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='j5parameters']").reconfigure(J5parametersValues);
-                    Ext.getCmp("mainAppPanel").getActiveTab().down("textareafield[name='combinatorialAssembly']").setValue(combinatorial.get("nonDegenerativeParts"));
 
                     
                     Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
