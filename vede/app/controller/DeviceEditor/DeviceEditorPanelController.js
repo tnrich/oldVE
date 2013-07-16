@@ -432,13 +432,23 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     var warnings = self.activeJ5Run.raw.warnings;
                     var errors = self.activeJ5Run.raw.error_list[0];
-                    var nonDegenerativeParts = self.activeJ5Run.getJ5Results().raw.processedData.nondegenerateParts;
                     var warningsStore, errorsStore;
 
-                    var nonDegenerativPartsStore = Ext.create("Teselagen.store.PartStore", {
-                        model: "Teselagen.models.Part",
-                        data: nonDegenerativeParts
-                    });
+                    if(self.activeJ5Run.getJ5Results().raw.processedData.assemblyPieces) {
+                        var assemblyPieces = self.activeJ5Run.getJ5Results().raw.processedData.assemblyPieces;
+                        for(var i = 0; i<assemblies.getCount(); i++) {
+                            assemblies.getAt(i).set("parts", assemblyPieces[i].parts);
+                        }
+                    }
+
+                    if(self.activeJ5Run.getJ5Results().raw.processedData.targetParts) {
+                        var targetParts = self.activeJ5Run.getJ5Results().raw.processedData.targetParts;
+                        var targetPartNames=[];
+                        for(var i = 0; i<targetParts.length; i++) {
+                            targetPartNames.push(targetParts[i].name);
+                        }
+                        assemblies.getAt(0).set("parts", targetPartNames);
+                    }
 
                     if (warnings) {
                         warningsStore = Ext.create("Teselagen.store.WarningsStore", {

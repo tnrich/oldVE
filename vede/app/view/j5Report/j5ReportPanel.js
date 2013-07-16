@@ -216,11 +216,12 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     title: 'Output Assembled Constructs',
                     minHeight: 100,
                     layout: 'fit',
+                    autoScroll: true,
                     columns: [
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'name',
-                            flex: 1,
+                            width: 120,
                             text: 'Name',
                             renderer: function (val, metadata) {
                                 metadata.tdAttr = 'data-qtip = "Click to open"';
@@ -230,14 +231,25 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'sizeBP',
-                            flex: 1,
+                            width: 80,
                             text: 'Size (bp)'
                         },
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'fileType',
-                            flex: 1,
+                            width: 120,
                             text: 'Type'
+                        },
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'parts',
+                            flex: 1,
+                            dirty: false,
+                            text: 'Parts Contained',
+                            renderer: function(val) {
+                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "");
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
                         }
                         // {
                         //     xtype: 'gridcolumn',
