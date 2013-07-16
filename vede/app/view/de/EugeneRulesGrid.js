@@ -18,6 +18,7 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                 clicksToEdit: 2,
                 listeners: {
                     edit: function (editor, e, eOpts) {
+                        console.log(editor);
                         var updatedField = e.field;
                         var newId = e.newValues.operand2_id;
                         var ruleName = e.record.raw.name;
@@ -28,11 +29,6 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                     }
                 }
             }),
-            listeners: {
-                afterrender: function () {
-                    Vede.application.fireEvent('populateOperand2Field');
-                }
-            },
             columnLines: true,
             rowLines: true,
             minHeight: 140,
@@ -79,6 +75,11 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                     text: 'Operand 2',
                     dataIndex: 'operand2_id',
                     cls: "operand2_field",
+                    listeners: {
+                        dblclick: function () {
+                            Vede.application.fireEvent('populateOperand2Field');
+                        }
+                    },
                     editor: {
                         xtype: 'combobox',
                         store: [],

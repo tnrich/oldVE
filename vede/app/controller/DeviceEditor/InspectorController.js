@@ -327,6 +327,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onReRenderDECanvasEvent: function () {
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         this.onTabChange(tab, tab, tab);
+        Vede.application.fireEvent('populateOperand2Field');
     },
 
     /**
@@ -456,6 +457,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.eugeneRulesGrid.reconfigure(rulesStore);
 
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
+
+        Vede.application.fireEvent('populateOperand2Field');
     },
 
     /**
@@ -750,6 +753,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             newEugeneRuleDialog.down("checkbox[cls='negationOperatorField']").getValue();
         var newCompositionalOperator = 
             newEugeneRuleDialog.down("combobox[name='compositionalOperator']").getValue();
+        var newOperand1_id =
+            newEugeneRuleDialog.down("displayfield[cls='operand1Field']").getValue();
 
         var newOperand2;
         var newOperand2Name;
@@ -802,29 +807,30 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
                 callback: function(){
-                    newRule.setOperand2(newOperand2);                
-
+                    newRule.setOperand2(newOperand2);
                     self.activeProject.addToRules(newRule);
 
                     var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
                                                                                     self.selectedPart)
-
                     self.eugeneRulesGrid.reconfigure(rulesStore);
+                    
                     newEugeneRuleDialog.close();
                 }
             });
         } else {
-            this.activeProject.addToRules(newRule);
+            self.activeProject.addToRules(newRule);
 
-            var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                            this.selectedPart)
+            var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
+                                                                            self.selectedPart)
 
-            this.eugeneRulesGrid.reconfigure(rulesStore);
+            self.eugeneRulesGrid.reconfigure(rulesStore);
             newEugeneRuleDialog.close();
         }
 
         toastr.options.onclick = null;
         toastr.info("Eugene Rule Added");
+        Vede.application.fireEvent('populateOperand2Field');
+        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
     },
 
     onPopulateOperand2Field: function() {
@@ -836,7 +842,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         });
 
         var operand2Field = this.inspector.down("gridcolumn[cls='operand2_field']").editor;
-        operand2Field.store = partsStore;
+        if (operand2Field != null) {
+            console.log('hi');
+            operand2Field.store = partsStore;
+        }
     },
 
     /**

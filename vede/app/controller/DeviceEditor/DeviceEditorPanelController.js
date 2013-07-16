@@ -276,7 +276,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     part.save({
                         callback: function (part) {
                             saveAssociatedSequence(part, function () {
-                                if(countParts === 1) { saveDesign(); }
+                                if(countParts === 1) { saveDesign();}
                                 countParts--;
                             });
                         }

@@ -171,7 +171,6 @@ Ext.define("Teselagen.models.EugeneRule", {
      */
     setOperand2: function(pOperand2) {
         if (Ext.typeOf(pOperand2) === "number") {
-            //console.log(pOperand2);
             this.set("operand2Number", pOperand2);
             this.set("operand2isNumber", true);
         } else if (Ext.getClassName(pOperand2) === "Teselagen.models.Part") {
@@ -183,7 +182,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
     },
 
-    /*setOperand1: function(pOperand1) {
+    setOperand1: function(pOperand1) {
         console.log("here");
         if (Ext.getClassName(pOperand1) === "Teselagen.models.Part") {
             this.setOperand1(pOperand1);
@@ -192,7 +191,7 @@ Ext.define("Teselagen.models.EugeneRule", {
                 message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
             });
         }
-    },*/
+    },
 
 
     /** (From EugeneRulesManager.js/EugeneProxy.as)

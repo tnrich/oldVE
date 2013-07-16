@@ -261,7 +261,32 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     text = Ext.String.trim(text);
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
                     for (var j=0; j<veprojectNames.length; j++) {
-                        if (veprojectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
+                        if (veprojectNames[j]===text) {
+                            Ext.MessageBox.show({
+                                title: "Name",
+                                msg: "A sequence with this name already exists in this project. <p> Please enter another name:",
+                                buttons: Ext.MessageBox.OKCANCEL,
+                                fn: onPromptClosed,
+                                prompt: true,
+                                cls: "sequencePrompt-box",
+                                style: {
+                                    "text-align": "center"
+                                },
+                                layout: {
+                                    align: "center"
+                                },
+                                items: [
+                                    {
+                                        xtype: "textfield",
+                                        layout: {
+                                            align: "center"
+                                        },
+                                        width: 50
+                                    }
+                                ]
+                            });
+                            return Ext.MessageBox;                            
+                        }
                     }
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
@@ -311,8 +336,34 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 	text = Ext.String.trim(text);
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this); }
                     for (var j=0; j<projectNames.length; j++) {
-                        if (projectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
-                    }
+                        if (projectNames[j]===text) {
+                            Ext.MessageBox.show({
+                                title: "Name",
+                                msg: "A design with this name already exists in this project. <p> Please enter another name:",
+                                buttons: Ext.MessageBox.OKCANCEL,
+                                fn: onPromptClosed,
+                                prompt: true,
+                                cls: "sequencePrompt-box",
+                                style: {
+                                    "text-align": "center"
+                                },
+                                layout: {
+                                    align: "center"
+                                },
+                                items: [
+                                    {
+                                        xtype: "textfield",
+                                        layout: {
+                                            align: "center"
+                                        },
+                                        width: 50
+                                    }
+                                ]
+                            });
+                            return Ext.MessageBox;
+                            
+                        }
+                    };
                     var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
                     oldTab.el.mask("Generating Design", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
