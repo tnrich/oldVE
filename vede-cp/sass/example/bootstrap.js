@@ -335,6 +335,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.sequence.alphabets.DNAAlphabet": [
     "Teselagen.DNAAlphabet"
   ],
+  "Vede.view.de.EugeneRulesGrid": [],
   "Teselagen.models.j5Output.NonDegPart": [],
   "Teselagen.bio.sequence.alphabets.ProteinAlphabet": [],
   "Teselagen.manager.AAManager": [],
@@ -799,6 +800,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.sequence.common.SymbolList": [],
   "Teselagen.models.EugeneRule": [],
   "Teselagen.bio.sequence.alphabets.DNAAlphabet": [],
+  "Vede.view.de.EugeneRulesGrid": [
+    "widget.eugenerulesgrid"
+  ],
   "Teselagen.models.j5Output.NonDegPart": [],
   "Teselagen.bio.sequence.alphabets.ProteinAlphabet": [],
   "Teselagen.manager.AAManager": [],
