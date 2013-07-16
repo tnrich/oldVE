@@ -127,8 +127,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
-                title: "Device Editor | " + selectedDesign.data.name,
+                title: selectedDesign.data.name,
                 model: selectedDesign,
+                icon: "resources/images/ux/design-tree-icon-leaf16x16.png",
                 modelId: selectedDesign.data.id
             })).show();
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
@@ -261,7 +262,34 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     text = Ext.String.trim(text);
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
                     for (var j=0; j<veprojectNames.length; j++) {
-                        if (veprojectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
+                        if (veprojectNames[j]===text) {
+                            Ext.MessageBox.show({
+                                title: "Name",
+                                msg: "A sequence with this name already exists in this project. <p> Please enter another name:",
+                                buttons: Ext.MessageBox.OKCANCEL,
+                                fn: onPromptClosed,
+                                prompt: true,
+                                cls: "sequencePrompt-box",
+                                scope: this,
+                                style: {
+                                    "text-align": "center"
+                                },
+                                scope: this,
+                                layout: {
+                                    align: "center"
+                                },
+                                items: [
+                                    {
+                                        xtype: "textfield",
+                                        layout: {
+                                            align: "center"
+                                        },
+                                        width: 50
+                                    }
+                                ]
+                            });
+                            return Ext.MessageBox;                            
+                        }
                     }
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
@@ -311,8 +339,36 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 	text = Ext.String.trim(text);
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this); }
                     for (var j=0; j<projectNames.length; j++) {
-                        if (projectNames[j]===text) { return Ext.MessageBox.prompt("Name", "A design with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
-                    }
+                        if (projectNames[j]===text) {
+                            Ext.MessageBox.show({
+                                title: "Name",
+                                msg: "A design with this name already exists in this project. <p> Please enter another name:",
+                                buttons: Ext.MessageBox.OKCANCEL,
+                                fn: onPromptClosed,
+                                prompt: true,
+                                cls: "sequencePrompt-box",
+                                scope: this,
+                                style: {
+                                    "text-align": "center"
+                                },
+                                scope: this,
+                                layout: {
+                                    align: "center"
+                                },
+                                items: [
+                                    {
+                                        xtype: "textfield",
+                                        layout: {
+                                            align: "center"
+                                        },
+                                        width: 50
+                                    }
+                                ]
+                            });
+                            return Ext.MessageBox;
+                            
+                        }
+                    };
                     var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
                     oldTab.el.mask("Generating Design", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
