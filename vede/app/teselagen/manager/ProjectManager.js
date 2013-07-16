@@ -269,6 +269,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 fn: onPromptClosed,
                                 prompt: true,
                                 cls: "sequencePrompt-box",
+                                scope: this,
                                 style: {
                                     "text-align": "center"
                                 },
@@ -344,6 +345,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 fn: onPromptClosed,
                                 prompt: true,
                                 cls: "sequencePrompt-box",
+                                scope: this,
                                 style: {
                                     "text-align": "center"
                                 },
