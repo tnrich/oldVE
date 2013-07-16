@@ -273,6 +273,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 style: {
                                     "text-align": "center"
                                 },
+                                scope: this,
                                 layout: {
                                     align: "center"
                                 },
@@ -338,7 +339,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this); }
                     for (var j=0; j<projectNames.length; j++) {
                         if (projectNames[j]===text) {
-                            Ext.MessageBox.show({
+                            Ext.MessageBox({
                                 title: "Name",
                                 msg: "A design with this name already exists in this project. <p> Please enter another name:",
                                 buttons: Ext.MessageBox.OKCANCEL,
@@ -349,6 +350,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 style: {
                                     "text-align": "center"
                                 },
+                                scope: this,
                                 layout: {
                                     align: "center"
                                 },
