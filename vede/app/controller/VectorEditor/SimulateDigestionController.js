@@ -9,6 +9,8 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
     requires:
         ["Teselagen.bio.tools.DigestionCalculator",
          "Teselagen.bio.sequence.DNATools",
+         "Teselagen.event.MenuItemEvent",
+         "Teselagen.event.SequenceManagerEvent",
          "Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.manager.SimulateDigestionManager",
          "Teselagen.utils.Logger"],
@@ -50,44 +52,56 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
      /**
       * @member Vede.controller.SimulateDigestionController
       */
-     init: function() {
-         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
-         this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
-         this.DNATools = Teselagen.bio.sequence.DNATools;
-         this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
-         this.Logger = Teselagen.utils.Logger;
-         this.control({
-             "#enzymeGroupSelector-digest": {
-                 change: this.onEnzymeGroupSelected
-             },
-             "#ladderSelector": {
-                 change: this.updateLadderLane
-             },
-             "#enzymeGroupSelector-search": {
-                 change: this.searchEnzymes
-             },
-             "#drawingSurface": {
-                 resize: this.onGelResize
-             },
-             "#enzymeListSelector-digest": {
-                 change: this.onEnzymeListChange
-             },
-             "button[cls=simulateDigestionSaveButton]": {
+    init: function() {
+        this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
+        this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
+        this.DNATools = Teselagen.bio.sequence.DNATools;
+        this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
+        this.Logger = Teselagen.utils.Logger;
+        this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "#enzymeGroupSelector-digest": {
+                change: this.onEnzymeGroupSelected
+            },
+            "#ladderSelector": {
+                change: this.updateLadderLane
+            },
+            "#enzymeGroupSelector-search": {
+                change: this.searchEnzymes
+            },
+            "#drawingSurface": {
+                resize: this.onGelResize
+            },
+            "#enzymeListSelector-digest": {
+                change: this.onEnzymeListChange
+            },
+            "button[cls=simulateDigestionSaveButton]": {
                 click: this.onSaveButtonClick
             },
             "button[cls=simulateDigestionCancelButton]": {
                 click: this.onCancelButtonClick
             },
             "window[cls=simulateDigestion]": {
-                 close: this.onWindowClose
-             }
-         });
-         this.application.on({
-             SequenceManagerChanged: this.getSequenceManagerData,
-             SimulateDigestionWindowOpened: this.onSimulateDigestionOpened,
-             scope: this
-         });
-     },
+                close: this.onWindowClose
+            }
+        });
+
+        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
+                            this.getSequenceManagerData, this);
+
+        this.application.on(Teselagen.event.MenuItemEvent.SIMULATE_DIGESTION_WINDOW_OPENED,
+                            this.onSimulateDigestionOpened, this);
+    },
+
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        this.activeTab = newTab;
+
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.getSequenceManagerData(newTab.model);
+        }
+    },
 
      /**
       * Gets data for the sequence from the provided sequenceManager

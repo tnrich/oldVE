@@ -253,7 +253,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
-        this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+        this.application.fireEvent(this.MenuItemEvent.SIMULATE_DIGESTION_WINDOW_OPENED, simulateDigestionWindow);
     },    
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
