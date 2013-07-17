@@ -34,6 +34,18 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
 
             newTab.down("component[identifier*='sequenceLinearMenuItem']").setChecked(
                                             !this.sequenceManager.getCircular(), true);
+
+            // Store current feature/cut site/orf visibility settings on the old
+            // tab, and load those from the new tab.
+            if(oldTab.initialCls === "VectorEditorPanel") {
+                oldTab.options = {
+                    features: oldTab.down("component[identifier='featuresMenuItem']").checked,
+                    cutSites: oldTab.down("component[identifier='cutSitesMenuItem']").checked,
+                    orfs: oldTab.down("component[identifier='orfsMenuItem']").checked,
+                }
+            }
+
+            this.loadTabOptions(newTab.options);
         }
     },
 
@@ -62,7 +74,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     validateSafeEditingMenuItem: function(checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='safeEditingMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='safeEditingMenuItem']"), function(item) {
             item.setChecked(checked);
         });
     },
@@ -140,9 +152,14 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.fireEvent("ViewModeChanged", viewMode);
     },
 
+    loadTabOptions: function(tabOptions) {
+        if(tabOptions) {
+        }
+    },
+
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var buttons = Ext.ComponentQuery.query('component[cls="featuresBtn"]');
-        var checkitems = Ext.ComponentQuery.query('menucheckitem[identifier="featuresMenuItem"]');
+        var buttons = this.activeTab.query('component[cls="featuresBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="featuresMenuItem"]');
 
         for(var i = 0; i < buttons.length; i++) {
             buttons[i].toggle(checked, true);
@@ -157,8 +174,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var buttons = Ext.ComponentQuery.query('component[cls="cutSitesBtn"]');
-        var checkitems = Ext.ComponentQuery.query('menucheckitem[identifier="cutSitesMenuItem"]');
+        var buttons = this.activeTab.query('component[cls="cutSitesBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="cutSitesMenuItem"]');
 
         for(var i = 0; i < buttons.length; i++) {
             buttons[i].toggle(checked, true);
@@ -172,8 +189,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var buttons = Ext.ComponentQuery.query('component[cls="orfsBtn"]');
-        var checkitems = Ext.ComponentQuery.query('menucheckitem[identifier="orfsMenuItem"]');
+        var buttons = this.activeTab.query('component[cls="orfsBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="orfsMenuItem"]');
 
         for(var i = 0; i < buttons.length; i++) {
             buttons[i].toggle(checked, true);
@@ -187,7 +204,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showComplementaryMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showComplementaryMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -196,7 +213,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowSpacesMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showSpacesMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showSpacesMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -205,7 +222,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showSequenceAAMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showSequenceAAMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -214,7 +231,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showRevcomAAMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showRevcomAAMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -223,7 +240,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='featureLabelsMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='featureLabelsMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -232,7 +249,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onCutSiteLabelsMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='cutSiteLabelsMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='cutSiteLabelsMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -241,7 +258,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onMapCaretMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='mapCaretMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='mapCaretMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -268,8 +285,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onViewModeChanged: function(viewMode) {
-        var circularMenuItems = Ext.ComponentQuery.query("component[identifier*='circularViewMenuItem']");
-        var linearMenuItems = Ext.ComponentQuery.query("component[identifier*='linearViewMenuItem']");
+        var circularMenuItems = this.activeTab.query("component[identifier*='circularViewMenuItem']");
+        var linearMenuItems = this.activeTab.query("component[identifier*='linearViewMenuItem']");
 
         if(viewMode == "linear") {
             for(var i = 0; i < circularMenuItems.length; i++) {
