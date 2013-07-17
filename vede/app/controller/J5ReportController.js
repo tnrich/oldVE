@@ -215,7 +215,9 @@ Ext.define("Vede.controller.J5ReportController", {
 
         if(this.activeJ5Run) {
             var item =  Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='"+this.activeJ5Run.internalId+"']")[0];
+            if(item) {
             item.addCls("j5-menuitem-active");
+            }
         }
 
     },
