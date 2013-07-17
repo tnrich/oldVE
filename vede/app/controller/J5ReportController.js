@@ -122,32 +122,33 @@ Ext.define("Vede.controller.J5ReportController", {
         var warnings = this.activeJ5Run.raw.warnings;
         var errors = this.activeJ5Run.raw.error_list[0];
         
-
-        if(this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
-            var combinationPieces = this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
-            for(var i = 0; i<assemblies.getCount(); i++) {
-                var combinationParts = [];
-                for (var k =0; k<combinationPieces[i].partsContained.length; k++) {
-                    combinationParts.push(combinationPieces[i].partsContained[k].parts);
+        if(this.activeJ5Run.getJ5Results().raw.processedData) {
+            if(this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
+                var combinationPieces = this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
+                for(var i = 0; i<assemblies.getCount(); i++) {
+                    var combinationParts = [];
+                    for (var k =0; k<combinationPieces[i].partsContained.length; k++) {
+                        combinationParts.push(combinationPieces[i].partsContained[k].parts);
+                    }
+                    assemblies.getAt(i).set("parts", combinationParts.join());
                 }
-                assemblies.getAt(i).set("parts", combinationParts.join());
             }
-        }
 
-        if(this.activeJ5Run.getJ5Results().raw.processedData.targetParts) {
-            var targetParts = this.activeJ5Run.getJ5Results().raw.processedData.targetParts;
-            var targetPartNames=[];
-            for(var i = 0; i<targetParts.length; i++) {
-                targetPartNames.push(targetParts[i].name);
+            if(this.activeJ5Run.getJ5Results().raw.processedData.targetParts) {
+                var targetParts = this.activeJ5Run.getJ5Results().raw.processedData.targetParts;
+                var targetPartNames=[];
+                for(var i = 0; i<targetParts.length; i++) {
+                    targetPartNames.push(targetParts[i].name);
+                }
+                assemblies.getAt(0).set("parts", targetPartNames);
             }
-            assemblies.getAt(0).set("parts", targetPartNames);
-        }
 
-        if(this.activeJ5Run.getJ5Results().raw.processedData.combinationParts) {
-            var comboParts = this.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
-            var comboPartNames=[];
-            for(var i = 0; i<assemblies.getCount(); i++) {
-                assemblies.getAt(i).set("parts", comboParts[i].parts);
+            if(this.activeJ5Run.getJ5Results().raw.processedData.combinationParts) {
+                var comboParts = this.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
+                var comboPartNames=[];
+                for(var i = 0; i<assemblies.getCount(); i++) {
+                    assemblies.getAt(i).set("parts", comboParts[i].parts);
+                }
             }
         }
 
@@ -177,9 +178,6 @@ Ext.define("Vede.controller.J5ReportController", {
         if (errors) {
             this.tabPanel.down('gridpanel[name="errors"]').show();
             this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
-            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
-            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
-            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
         } else {
              this.tabPanel.down('gridpanel[name="errors"]').hide();
              errors = null;

@@ -247,7 +247,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             dirty: false,
                             text: 'Parts Contained',
                             renderer: function(val) {
-                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ", ");
+                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ",");
                                 return '<div style="white-space:normal !important;">'+ val +'</div>';
                             }
                         }
