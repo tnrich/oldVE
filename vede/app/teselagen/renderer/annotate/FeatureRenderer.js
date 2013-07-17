@@ -16,9 +16,13 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     },
 
     statics: {
-        DEFAULT_FEATURE_HEIGHT: 8,
+        DEFAULT_FEATURE_HEIGHT: 6,
         DEFAULT_FEATURES_SEQUENCE_GAP: 6,
-        DEFAULT_FEATURES_GAP: 2
+        DEFAULT_FEATURES_GAP: 2,
+
+        ADDITIONAL_ROW_WIDTH: 5,
+        ADDITIONAL_ROW_START_X: 2,
+        BACKWARD_RECT_ADDITIONAL_ROW_LEFT: 1
     },
 
     constructor: function(inData){
@@ -107,14 +111,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                 var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
-                var featureX1 = bpStartMetrics1.x + 2;
-                var featureX2 = bpStartMetrics2.x + 2;
+                var featureX1 = bpStartMetrics1.x + this.self.ADDITIONAL_ROW_START_X;
+                var featureX2 = bpStartMetrics2.x + this.self.ADDITIONAL_ROW_START_X;
                 var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
-
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureYCommon += 20;
-                }*/
 
                 if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     //Add AminoAcidsTextRenderer
@@ -134,26 +133,23 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                     drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 } else if(this.feature.getStrand() === -1){
-                    drawFeatureBackwardRect(g, (featureX1-8), featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    drawFeatureBackwardRect(g, (featureX1 - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT), 
+                                            featureYCommon, featureRowWidth1, featureRowHeightCommon);
                     drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 }
-            }else{
+            } else {
                 var bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                 var bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
                 
-                var featureX = bpStartMetrics.x + 2;
+                var featureX = bpStartMetrics.x + this.self.ADDITIONAL_ROW_START_X;
                 var featureY = bpStartMetrics.y  + downShift;
 
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureY += 20;
-                }*/
                 if (this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     featureY += (3 * 20);
                 }
 
-                var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 3;
-                var featureRowHeight = 6;
+                var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + this.self.ADDITIONAL_ROW_WIDTH;
+                var featureRowHeight = this.self.DEFAULT_FEATURE_HEIGHT;
 
                 if (this.feature.getStrand() == 0){
                     drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
@@ -167,7 +163,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     if(featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()){
                         drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else{
-                        drawFeatureBackwardRect(g, (featureX-8), featureY, featureRowWidth, featureRowHeight);
+                        drawFeatureBackwardRect(g, (featureX - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT), 
+                                                featureY, featureRowWidth, featureRowHeight);
                     }
                 }
 
@@ -213,8 +210,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                     bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
                     
-                    featureX1 = bpStartMetrics1.x  + 2;
-                    featureX2 = bpStartMetrics2.x + 2;
+                    featureX1 = bpStartMetrics1.x + this.self.ADDITIONAL_ROW_START_X;
+                    featureX2 = bpStartMetrics2.x + this.self.ADDITIONAL_ROW_START_X;
                     
                     featureYCommon = bpStartMetrics1.y + downShift;
 
@@ -228,7 +225,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
                     featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16
                     featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
-                    var featureRowHeightCommon = 6;
+                    var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
 
                     if(this.feature.getStrand() == 0){
                         drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
@@ -244,19 +241,15 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                     bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
-                    featureX = bpStartMetrics.x + 2;
+                    featureX = bpStartMetrics.x + this.self.ADDITIONAL_ROW_START_X;
                     featureY = bpStartMetrics.y + downShift;
                     
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureY +=  20;
-                }*/
                     if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                         featureY += (3* 20);
                     }
 
-                    featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 10;
-                    featureRowHeight = 6;
+                    featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + this.self.ADDITIONAL_ROW_WIDTH;
+                    featureRowHeight = this.self.DEFAULT_FEATURE_HEIGHT;
 
                     if(this.feature.getStrand() == 0){
                         drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
