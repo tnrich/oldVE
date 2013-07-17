@@ -434,10 +434,14 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     var errors = self.activeJ5Run.raw.error_list[0];
                     var warningsStore, errorsStore;
 
-                    if(self.activeJ5Run.getJ5Results().raw.processedData.assemblyPieces) {
-                        var assemblyPieces = self.activeJ5Run.getJ5Results().raw.processedData.assemblyPieces;
+                    if(self.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
+                        var combinationPieces = self.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
                         for(var i = 0; i<assemblies.getCount(); i++) {
-                            assemblies.getAt(i).set("parts", assemblyPieces[i].parts);
+                            var combinationParts = [];
+                            for (var k =0; k<combinationPieces[i].partsContained.length; k++) {
+                                combinationParts.push(combinationPieces[i].partsContained[k].parts);
+                            }
+                            assemblies.getAt(i).set("parts", combinationParts.join());
                         }
                     }
 
@@ -450,6 +454,13 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         assemblies.getAt(0).set("parts", targetPartNames);
                     }
 
+                    if(self.activeJ5Run.getJ5Results().raw.processedData.combinationParts) {
+                        var comboParts = self.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
+                        var comboPartNames=[];
+                        for(var i = 0; i<assemblies.getCount(); i++) {
+                            assemblies.getAt(i).set("parts", comboParts[i].parts);
+                        }
+                    }
                     if (warnings) {
                         warningsStore = Ext.create("Teselagen.store.WarningsStore", {
                         model: "Teselagen.models.j5Output.Warning",
