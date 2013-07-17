@@ -862,10 +862,10 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         lines.splice(0,1)[0]; //Columns
 
         obj.assemblyPieces = [];
-        var currentPiece = lines.splice(0,1)[0];
-        while(currentPiece!== "")
+        var currentAssemblyPiece = lines.splice(0,1)[0];
+        while(currentAssemblyPiece!== "")
         {
-            splitted = currentPiece.split(',');
+            splitted = currentAssemblyPiece.split(',');
             // "ID Number",Type,"Type ID Number",Part(s),"Relative Overlap Position","Extra 5' CPEC bps","Extra 3' CPEC bps","CPEC Tm Next","Overlap with Next (bps)","Overlap with Next","Overlap with Next Reverse 
             obj.assemblyPieces.push({
                 id: splitted[0],
@@ -881,25 +881,37 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
                 sequence_length: splitted[10],
                 sequence: splitted[11]
             });
-            currentPiece = lines.splice(0,1)[0];
+            currentAssemblyPiece = lines.splice(0,1)[0];
         }
 
         //Combination of Assembly Pieces
         lines.splice(0,1)[0]; //Header
-        lines.splice(0,1)[0]; //???
+        var binLine = lines.splice(0,1)[0]; //???
         lines.splice(0,1)[0]; //Columns
 
+        var binCount = (binLine.split("Bin").length-1);
+        console.log(binCount);
+
         obj.combinationPieces = [];
-        var currentPiece = lines.splice(0,1)[0];
-        while(currentPiece!== "")
+        var currentCombinatorialPiece = lines.splice(0,1)[0];
+        while(currentCombinatorialPiece!== "")
         {
-            splittedPart = currentPiece.split(',');
+            binCombinationPieces = [];
+            splitted = currentCombinatorialPiece.split(',');
+            for (var i =0; i<binCount; i++) {
+                binCombinationPieces.push({
+                    parts: splitted[i+(3+i)]
+                });
+            }
             obj.combinationPieces.push({
-                variant: splitted[0],
-                bin0: splitted[1],
-                bin1: splitted[2]
+                partsContained: binCombinationPieces
             });
-            currentPiece = lines.splice(0,1)[0];
+            // obj.combinationPieces.push({
+            //     variant: splitted[0],
+            //     bin0: splitted[3],
+            //     bin1: splitted[5]
+            // });
+            currentCombinatorialPiece = lines.splice(0,1)[0];
         }
 
         cb(obj);
@@ -1050,10 +1062,10 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         lines.splice(0,1)[0]; //Columns
 
         obj.assemblyPieces = [];
-        var currentPiece = lines.splice(0,1)[0];
-        while(currentPiece!== "")
+        var currentAssemblyPiece = lines.splice(0,1)[0];
+        while(currentAssemblyPiece!== "")
         {
-            splitted = currentPiece.split(',');
+            splitted = currentAssemblyPiece.split(',');
             // "ID Number",Type,"Type ID Number",Part(s),"Overhang with Previous","Overhang with Next","Relative Overhang Position","Sequence Length",Sequence
             obj.assemblyPieces.push({
                 id: splitted[0],
@@ -1065,25 +1077,32 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
                 sequence_length: splitted[6],
                 sequence: splitted[7]
             });
-            currentPiece = lines.splice(0,1)[0];
+            currentAssemblyPiece = lines.splice(0,1)[0];
         }
 
         //Combination of Assembly Pieces
         lines.splice(0,1)[0]; //Header
-        lines.splice(0,1)[0]; //???
+        binLine = lines.splice(0,1)[0]; //???
         lines.splice(0,1)[0]; //Columns
 
+        var binCount = (binLine.split("Bin").length-1);
+        console.log(binCount);
+
         obj.combinationPieces = [];
-        var currentPiece = lines.splice(0,1)[0];
-        while(currentPiece!== "")
+        var currentCombinatorialPiece = lines.splice(0,1)[0];
+        while(currentCombinatorialPiece!== "")
         {
-            splittedPart = currentPiece.split(',');
+            var binCombinationPieces = [];
+            splitted = currentCombinatorialPiece.split(',');
+            for (var i =0; i<binCount; i++) {
+                binCombinationPieces.push({
+                    parts: splitted[i+(3+i)]
+                });
+            }
             obj.combinationPieces.push({
-                variant: splitted[0],
-                bin0: splitted[1],
-                bin1: splitted[2]
+                partsContained: binCombinationPieces
             });
-            currentPiece = lines.splice(0,1)[0];
+            currentCombinatorialPiece = lines.splice(0,1)[0];
         }
 
         cb(obj);
