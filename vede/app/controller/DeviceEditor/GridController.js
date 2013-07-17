@@ -1175,7 +1175,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id &&
                    !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
@@ -1195,7 +1195,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        Vede.application.fireEvent('AddEugeneRuleIndicator', targetGridParts);
+        Vede.application.fireEvent("AddEugeneRuleIndicator", targetGridParts);
     },
 
     getOldOperand2Parts: function(j5Part) {
@@ -1217,7 +1217,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id &&
                    !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
@@ -1237,7 +1237,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        Vede.application.fireEvent('RemoveEugeneRuleIndicator', targetGridParts);
+        Vede.application.fireEvent("RemoveEugeneRuleIndicator", targetGridParts);
     },
 
     onPartMapped: function(pj5Part) {
