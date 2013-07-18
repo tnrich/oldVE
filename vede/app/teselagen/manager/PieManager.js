@@ -293,7 +293,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         Ext.resumeLayouts(true);
 
-        this.fitWidthToContent(this, true);
+        this.fitWidthToContent(this, false);
     },
 
     /**
@@ -318,7 +318,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             Ext.resumeLayouts(true);
 
-            this.fitWidthToContent(this, true);//, 1 / this.self.ZOOM_FACTOR / 5);
+            this.fitWidthToContent(this, false);
         }
     },
 
@@ -331,12 +331,21 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     fitWidthToContent: function(scope, scrollToCenter) {
         var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
-        scrollToCenter = true;
+        //scrollToCenter = true;
 
-        for(var i = 0; i < 10; i++) {
-            if(container && container.el) {
-                var pc = container.el.dom;
-                var frame = scope.pie.select(".pieFrame").node();
+        if(container && container.el) {
+            var pc = container.el.dom;
+            var frame = scope.pie.select(".pieFrame").node();
+            var pcRect = pc.getBoundingClientRect();
+            var frameRect = frame.getBoundingClientRect();
+            var scrollWidthRatio = (pc.scrollLeft + pcRect.width / 2) / pc.scrollWidth;
+            var scrollHeightRatio = (pc.scrollTop + pcRect.height / 2) / pc.scrollHeight;
+
+            for(var i = 0; i < 10; i++) {
+                pc = container.el.dom;
+                frame = scope.pie.select(".pieFrame").node();
+                pcRect = pc.getBoundingClientRect();
+                frameRect = frame.getBoundingClientRect();
 
                 var pieBox = scope.pie.node().getBBox();
 
@@ -344,8 +353,6 @@ Ext.define("Teselagen.manager.PieManager", {
                     return;
                 }
 
-                var frameRect = frame.getBoundingClientRect();
-                var pcRect = pc.getBoundingClientRect();
 
                 var distanceFromCenterX = pc.scrollWidth / 2 - (frameRect.left + pc.scrollLeft + frameRect.width / 2 - pcRect.left);
                 var distanceFromCenterY = pc.scrollHeight / 2 - (frameRect.top + pc.scrollTop + frameRect.height / 2 - pcRect.top);
@@ -364,10 +371,14 @@ Ext.define("Teselagen.manager.PieManager", {
                 scope.pie.attr("width", pieBox.width + transX)
                          .attr("height", pieBox.height + transY);
 
-                if(scrollToCenter) {
-                    container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
-                    container.el.setScrollTop((this.pie.node().height.baseVal.value - container.getHeight()) / 2);
-                }
+            }
+
+            if(scrollToCenter) {
+                container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                container.el.setScrollTop((this.pie.node().height.baseVal.value - container.getHeight()) / 2);
+            } else {
+                container.el.setScrollLeft(scrollWidthRatio * pc.scrollWidth - pcRect.width / 2);
+                container.el.setScrollTop(scrollHeightRatio * pc.scrollHeight - pcRect.height / 2);
             }
         }
     },
