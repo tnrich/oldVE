@@ -184,7 +184,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                                 return '<div style="white-space:normal !important;">'+ val +'</div>';
                             }
                         }
-                    ]
+                    ],
+                    viewConfig: {
+                        enableTextSelection: true
+                    },
+
                 },
                 {
                     xtype: 'gridpanel',
@@ -208,7 +212,19 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                                 return '<div style="white-space:normal !important;">'+ val +'.</div>';
                             }
                         }
-                    ]
+                    ],
+                    viewConfig: {
+                        enableTextSelection: true
+                    },
+
+                    tools:[
+                        {
+                            type:'help',
+                            tooltip: 'Get Help',
+                            handler: function(event, toolEl, panel){
+                                // show help here
+                            }
+                        }],
                 },
                 {
                     xtype: 'gridpanel',
@@ -262,7 +278,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         //         return content_limited + "..."
                         //     }
                         // }
-                    ]
+                    ],
                 },
                 {
                     xtype: 'gridpanel',

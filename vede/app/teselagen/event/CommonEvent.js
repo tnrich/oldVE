@@ -23,5 +23,5 @@ Ext.define("Teselagen.event.CommonEvent", {
     // Loads possible j5 assembly methods.
     LOAD_ASSEMBLY_METHODS: "LoadAssemblyMethods",
 
-    ACTION_MESSAGE: "ActionMessage"
+    ACTION_MESSAGE: "ActionMessage",
 });
