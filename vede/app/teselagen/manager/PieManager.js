@@ -331,34 +331,42 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     fitWidthToContent: function(scope, scrollToCenter) {
         var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
+        scrollToCenter = true;
 
-        if(container && container.el) {
-            var containerSize = container.getSize();
+        for(var i = 0; i < 7; i++) {
+            if(container && container.el) {
+                var pc = container.el.dom;
+                var frame = scope.pie.select(".pieFrame").node();
 
-            var transX = Number(scope.pie.attr("width")) / 2 - scope.center.x;
-            //var transX = containerSize.width / 2 - scope.center.x;
-            //var transX = (containerSize.width - scope.center.x) / 2;
-            var transY = containerSize.height / 2 - scope.center.y;
+                var pieBox = scope.pie.node().getBBox();
 
-            var pieBox = scope.pie.node().getBBox();
+                if(pieBox.height === 0 || pieBox.width === 0) {
+                    return;
+                }
 
-            if(pieBox.height === 0 || pieBox.width === 0) {
-                return;
-            }
+                var frameRect = frame.getBoundingClientRect();
+                var pcRect = pc.getBoundingClientRect();
 
-            // Get previous values for scale and transform.
-            var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-            var scale = [Number(translateValues[0]), Number(translateValues[3])];
-            var translate = [Number(translateValues[4]), Number(translateValues[5])];
+                var distanceFromCenterX = pc.scrollWidth / 2 - (frameRect.left + pc.scrollLeft + frameRect.width / 2 - pcRect.left);
+                var distanceFromCenterY = pc.scrollHeight / 2 - (frameRect.top + pc.scrollTop + frameRect.height / 2 - pcRect.top);
 
-            scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
-                                                     " " + transX + " " + transY + ")");
+                // Get previous values for scale and transform.
+                var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+                var scale = [Number(translateValues[0]), Number(translateValues[3])];
+                var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-            scope.pie.attr("width", pieBox.width + transX)
-                     .attr("height", pieBox.height + transY);
+                var transX = distanceFromCenterX + translate[0];
+                var transY = distanceFromCenterY + translate[1];
 
-            if(scrollToCenter) {
-                container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                          " " + transX + " " + transY + ")");
+
+                scope.pie.attr("width", pieBox.width + transX)
+                         .attr("height", pieBox.height + transY);
+
+                if(scrollToCenter) {
+                    container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                }
             }
         }
     },

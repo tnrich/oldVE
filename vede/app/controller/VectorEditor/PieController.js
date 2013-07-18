@@ -92,6 +92,19 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         // Set the tabindex attribute in order to receive keyboard events on a div.
         this.pieContainer.el.dom.setAttribute("tabindex", "0");
         this.pieContainer.el.on("keydown", this.onKeydown, this);
+
+        if(newTab.model.getCircular()) {
+            this.pieContainer.show();
+        } else {
+            this.pieContainer.hide();
+        }
+
+        // Set the relevant view options to the tab's saved settings.
+        this.pieManager.setShowCutSites(newTab.options.cutSites);
+        this.pieManager.setShowFeatures(newTab.options.features);
+        this.pieManager.setShowOrfs(newTab.options.orfs);
+        this.pieManager.setShowFeatureLabels(newTab.options.featureLabels);
+        this.pieManager.setShowCutSiteLabels(newTab.options.cutSiteLabels);
     },
     
     onLaunch: function() {
