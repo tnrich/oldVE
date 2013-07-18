@@ -1175,7 +1175,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id &&
                    !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
@@ -1195,7 +1195,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        Vede.application.fireEvent('AddEugeneRuleIndicator', targetGridParts);
+        Vede.application.fireEvent("AddEugeneRuleIndicator", targetGridParts);
     },
 
     getOldOperand2Parts: function(j5Part) {
@@ -1217,7 +1217,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id &&
                    !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
@@ -1237,7 +1237,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        Vede.application.fireEvent('RemoveEugeneRuleIndicator', targetGridParts);
+        Vede.application.fireEvent("RemoveEugeneRuleIndicator", targetGridParts);
     },
 
     onPartMapped: function(pj5Part) {
@@ -1402,9 +1402,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var nonidentical = false;
         if (pPart.get("id")) {
             this.activeBins.each(function(bin, binIndex) {
-                bin.parts().each(function(part){
+                bin.parts().each(function(part, partIndex){
                     if (part.get("id")===pPart.get("id")) {
-                        if (binIndex === me.InspectorController.selectedBinIndex) {
+                        if (binIndex === me.InspectorController.selectedBinIndex && 
+                            partIndex != me.InspectorController.selectedPartIndex) {
                             duplicated = true;
                         }
                     }

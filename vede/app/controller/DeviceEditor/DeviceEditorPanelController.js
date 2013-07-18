@@ -463,7 +463,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                             }
                         }
                     }
-                    
+
                     if (warnings) {
                         warningsStore = Ext.create("Teselagen.store.WarningsStore", {
                         model: "Teselagen.models.j5Output.Warning",
