@@ -49,7 +49,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     var now = new Date();
                                     nowTime = Ext.Date.format(now, "g:i:s A  ");
                                     nowDate = Ext.Date.format(now, "l, F d, Y");
-                                    var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                                    var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('tbtext[cls="VectorEditorStatusBarAlert"]');
                                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                     toastr.options.onclick = null;
                                     toastr.info("Part Successfully Created");
@@ -69,7 +69,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                         var now = new Date();
                                         nowTime = Ext.Date.format(now, "g:i:s A  ");
                                         nowDate = Ext.Date.format(now, "l, F d, Y");
-                                        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('tbtext[cls="VectorEditorStatusBarAlert"]');
                                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                         toastr.options.onclick = null;
                                         toastr.info("Part Sucessfully Created");

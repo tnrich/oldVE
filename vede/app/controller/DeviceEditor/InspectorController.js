@@ -543,7 +543,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 self.selectedPart.set("name", newName);
             }
 
-        });
+        }, "Another non-identical part with that name already exists in the design. Please input a different name.");
 
         if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
             deletePartBtn.enable();
