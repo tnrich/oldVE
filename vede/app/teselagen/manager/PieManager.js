@@ -333,7 +333,7 @@ Ext.define("Teselagen.manager.PieManager", {
         var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
         scrollToCenter = true;
 
-        for(var i = 0; i < 7; i++) {
+        for(var i = 0; i < 10; i++) {
             if(container && container.el) {
                 var pc = container.el.dom;
                 var frame = scope.pie.select(".pieFrame").node();
@@ -366,6 +366,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
                 if(scrollToCenter) {
                     container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                    container.el.setScrollTop((this.pie.node().height.baseVal.value - container.getHeight()) / 2);
                 }
             }
         }
