@@ -9,6 +9,7 @@ Ext.define("Teselagen.event.ProjectEvent", {
     SAVE_PROJECT: "saveProject",
     CLOSE_PROJECT: "closeProject",
     LOAD_PROJECT_TREE: "loadProjectTree",
+    CREATE_SEQUENCE: "createSequence",
 
     IMPORT_FILE_TO_SEQUENCE: "ImportFileToSequence",
     OPEN_SEQUENCE_IN_VE: "OpenSequenceInVectorEditor",
