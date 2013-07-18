@@ -316,6 +316,46 @@ Ext.define("Teselagen.manager.RailManager", {
     },
 
     /**
+     * Restores the rail to a scale factor of 1.
+     */
+    removeZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        this.previousZoomLevel = scale[0];
+
+        // Increase scale values.
+        scale[0] = 1.5;
+        scale[1] = 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
+     * Reverts zoom level back to what it was before calling removeZoom.
+     */
+    restoreZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        // Increase scale values.
+        scale[0] = this.previousZoomLevel || 1.5;
+        scale[1] = this.previousZoomLevel || 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
      * Adjust the width of the surface to fit all content, ensuring that a 
      * scrollbar appears.
      * @param {Teselagen.manager.RailManager} scope The railManager. Used when being
@@ -326,6 +366,12 @@ Ext.define("Teselagen.manager.RailManager", {
 
         if(container && container.el) {
             var containerSize = container.getSize();
+            var rc = container.el.dom;
+            var frame = scope.rail.select(".railFrame").node();
+            var rcRect = rc.getBoundingClientRect();
+
+            var scrollWidthRatio = (rc.scrollLeft + rcRect.width / 2) / rc.scrollWidth;
+
             var transY = containerSize.height / 2;
 
             var railBox = scope.rail[0][0].getBBox();
@@ -336,15 +382,13 @@ Ext.define("Teselagen.manager.RailManager", {
             var scale = [Number(translateValues[0]), Number(translateValues[3])];
             var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-            /*if(railBox.y > parentBox.y) {
-                transY += railBox.y - parentBox.y;
-            }*/
-
             scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
                                                      " " + translate[0] + " " + transY + ")");
 
             scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD)
                       .attr("height", railBox.height + transY);
+
+            container.el.setScrollLeft(scrollWidthRatio * rc.scrollWidth - rcRect.width / 2);
         }
     },
 
