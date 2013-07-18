@@ -505,6 +505,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.Logger.notifyInfo("Changing the part's name will change its name across all designs.");
         }
     },
+
+    onPartNameFieldKeyup: function(field, event) {
+        if(event.getKey() === event.ENTER) {
+            this.onPartNameFieldBlur(field);
+        }
+    },
     
     /**
      * Handles the event that the Part Name field changes due to keyup. Checks to see if the
@@ -512,7 +518,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * add the part to the design.
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
-    onPartNameFieldKeyup: function (nameField) {
+    onPartNameFieldBlur: function (nameField) {
         var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var newName = nameField.getValue();
@@ -1201,6 +1207,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.control({
             "textfield[cls='partNameField']": {
                 focus: this.onPartNameFieldFocus,
+                blur: this.onPartNameFieldBlur,
                 keyup: this.onPartNameFieldKeyup
             },
             "combobox[cls='forcedAssemblyComboBox']": {
