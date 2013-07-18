@@ -181,7 +181,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             this.selectedPart.getSequenceFile({
                 callback: function(){
-                    Vede.application.fireEvent(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, 
+                            self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
         }
@@ -506,7 +507,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPartNameFieldFocus: function() {
         if (this.selectedPart.get("sequencefile_id")) {
-            this.Logger.notifyInfo("Changing the part name will modify it for all instances.");
+            this.Logger.notifyInfo("Changing the part's name will change its name across all designs.");
         }
     },
     
