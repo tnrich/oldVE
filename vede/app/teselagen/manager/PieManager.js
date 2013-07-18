@@ -323,6 +323,46 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     /**
+     * Restores the pie to a scale factor of 1.
+     */
+    removeZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        this.previousZoomLevel = scale[0];
+
+        // Increase scale values.
+        scale[0] = 1.5;
+        scale[1] = 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
+     * Reverts zoom level back to what it was before calling removeZoom.
+     */
+    restoreZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        // Increase scale values.
+        scale[0] = this.previousZoomLevel || 1.5;
+        scale[1] = this.previousZoomLevel || 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
      * Adjust the width of the surface to fit all content, ensuring that a 
      * scrollbar appears.
      * @param {Teselagen.manager.PieManager} scope The pieManager. Used when being
@@ -331,7 +371,6 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     fitWidthToContent: function(scope, scrollToCenter) {
         var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
-        //scrollToCenter = true;
 
         if(container && container.el) {
             var pc = container.el.dom;
@@ -374,8 +413,8 @@ Ext.define("Teselagen.manager.PieManager", {
             }
 
             if(scrollToCenter) {
-                container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
-                container.el.setScrollTop((this.pie.node().height.baseVal.value - container.getHeight()) / 2);
+                container.el.setScrollLeft((scope.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                container.el.setScrollTop((scope.pie.node().height.baseVal.value - container.getHeight()) / 2);
             } else {
                 container.el.setScrollLeft(scrollWidthRatio * pc.scrollWidth - pcRect.width / 2);
                 container.el.setScrollTop(scrollHeightRatio * pc.scrollHeight - pcRect.height / 2);
