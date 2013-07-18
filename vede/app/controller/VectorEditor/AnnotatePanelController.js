@@ -80,6 +80,15 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.SelectionLayer.setTabId(tabId);
             this.HighlightLayer.setTabId(tabId);
 
+            // Set the relevant view options to the tab's saved settings.
+            this.SequenceAnnotationManager.setShowFeatures(newTab.options.features);
+            this.SequenceAnnotationManager.setShowCutSites(newTab.options.cutSites);
+            this.SequenceAnnotationManager.setShowOrfs(newTab.options.orfs);
+            this.SequenceAnnotationManager.setShowComplementarySequence(newTab.options.complementary);
+            this.SequenceAnnotationManager.setShowSpaceEvery10Bp(newTab.options.spaces);
+            this.SequenceAnnotationManager.setShowAminoAcids(newTab.options.sequenceAA);
+            this.SequenceAnnotationManager.setShowAminoAcidsRevCom(newTab.options.revComAA);
+
             this.SequenceAnnotationManager.tabChanged();
             this.SequenceAnnotationManager.annotator.init();
         }
