@@ -1013,6 +1013,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedPart = newPart;
 
             newPart.select();
+            this.highlight(j5Part);
         }
     },
 
@@ -1226,6 +1227,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.deHighlight(j5Part);
         this.selectedPart.select();
         
+        this.highlight(j5Part);
+    },
+
+    highlight: function(j5Part) {
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
         // Highlight all gridParts with the same source, unless the j5Part is empty.
         if(j5Part) {
             if(j5Part.get("sequencefile_id")) {
@@ -1303,13 +1310,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     }
                 } else {
                     DETab.el.unmask();
-                    Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_PART_LIBRARY);
                 }
 
                 }});
             }, 1);
     } else {
-        Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
+        Vede.application.fireEvent(self.DeviceEvent.OPEN_PART_LIBRARY);
     }
 
     },
