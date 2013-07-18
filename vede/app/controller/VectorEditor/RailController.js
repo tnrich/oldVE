@@ -36,10 +36,10 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
             "#mainAppPanel": {
                 tabchange: this.onTabChange
             },
-            "menuitem[cls='zoomInMenuItem']": {
+            "menuitem[identifier='zoomInMenuItem']": {
                 click: this.onZoomInMenuItemClick
             },
-            "menuitem[cls='zoomOutMenuItem']": {
+            "menuitem[identifier='zoomOutMenuItem']": {
                 click: this.onZoomOutMenuItemClick
             }
         });
@@ -89,8 +89,10 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.railContainer.el.dom.setAttribute("tabindex", "0");
         this.railContainer.el.on("keydown", this.onKeydown, this);
 
-        if(newTab.down("menucheckitem[identifier*='circularViewMenuItem']").checked) {
+        if(newTab.model.getCircular()) {
             this.railContainer.hide();
+        } else {
+            this.railContainer.show();
         }
 
         // Set the relevant view options to the tab's saved settings.
