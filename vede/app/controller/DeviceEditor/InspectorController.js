@@ -784,11 +784,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
         var self = this;
-        newOperand2.save({
-            callback: function(){
-                newRule.setOperand2(newOperand2);
-            }
-        });
+
+        if(Ext.isNumber(newOperand2)) {
+            newRule.setOperand2(newOperand2);
+        } else {
+            newOperand2.save({
+                callback: function(){
+                    newRule.setOperand2(newOperand2);
+                }
+            });
+        }
 
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
