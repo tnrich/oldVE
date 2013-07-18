@@ -181,7 +181,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             this.selectedPart.getSequenceFile({
                 callback: function(){
-                    Vede.application.fireEvent(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, 
+                            self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
         }
@@ -304,7 +305,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                 self.selectedPart = part;
                                                 self.onReRenderDECanvasEvent();
                                                 Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
-                                                Vede.application.fireEvent(self.DeviceEvent.ADD_SELECT_ALERTS);
+//                                                Vede.application.fireEvent(self.DeviceEvent.ADD_SELECT_ALERTS);
                                             }
                                             else
                                             {
@@ -506,7 +507,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPartNameFieldFocus: function() {
         if (this.selectedPart.get("sequencefile_id")) {
-            this.Logger.notifyInfo("Changing the part name will modify it for all instances.");
+            this.Logger.notifyInfo("Changing the part's name will change its name across all designs.");
         }
     },
     
@@ -542,7 +543,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 self.selectedPart.set("name", newName);
             }
 
-        });
+        }, "Another non-identical part with that name already exists in the design. Please input a different name.");
 
         if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
             deletePartBtn.enable();
@@ -783,11 +784,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
         var self = this;
-        newOperand2.save({
-            callback: function(){
-                newRule.setOperand2(newOperand2);
-            }
-        });
+
+        if(Ext.isNumber(newOperand2)) {
+            newRule.setOperand2(newOperand2);
+        } else {
+            newOperand2.save({
+                callback: function(){
+                    newRule.setOperand2(newOperand2);
+                }
+            });
+        }
 
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
