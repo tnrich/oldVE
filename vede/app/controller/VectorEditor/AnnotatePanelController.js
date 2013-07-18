@@ -149,6 +149,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.SequenceAnnotationManager.render();
 
             this.SelectionLayer.refresh();
+            this.HighlightLayer.refresh();
         }
     },
     
@@ -431,6 +432,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.callParent(arguments);
 
         this.SelectionLayer.refresh();
+
         this.changeCaretPosition(this.caretIndex, true, false);
     },
 
