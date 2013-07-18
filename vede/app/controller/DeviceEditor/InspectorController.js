@@ -14,6 +14,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     DeviceDesignManager: null,
     DeviceEvent: null,
+    Logger: null,
 
     activeProject: null,
     columnsGrid: null,
@@ -336,6 +337,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartSelected: function (j5Part, binIndex) {
         this.selectedBinIndex = binIndex;
         this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
+        this.selectedPartIndex = this.DeviceDesignManager.getPartIndex(this.selectedBin, j5Part);
         //console.log(this.inspector);
         this.inspector.setActiveTab(0);
 
@@ -500,12 +502,21 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     /**
-     * Handles the event that the Part Name field changes. Checks to see if the
+     * Handler when part name field receives focus.
+     */
+    onPartNameFieldFocus: function() {
+        if (this.selectedPart.get("sequencefile_id")) {
+            this.Logger.notifyInfo("Changing the part name will modify it for all instances.");
+        }
+    },
+    
+    /**
+     * Handles the event that the Part Name field changes due to keyup. Checks to see if the
      * part is already owned by a bin. If not, this is a new part, so we have to
      * add the part to the design.
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
-    onPartNameFieldChange: function (nameField) {
+    onPartNameFieldKeyup: function (nameField) {
         var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var newName = nameField.getValue();
@@ -1087,8 +1098,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             //this.clearPartInfo();
         } catch(err)
         {
-            console.log("Failed removing part from bin.");
-            console.log(err);
+            console.log("Failed removing part from bin. Error:", err);
         }
     },
 
@@ -1159,6 +1169,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.CommonEvent = Teselagen.event.CommonEvent;
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
+        this.Logger = Teselagen.utils.Logger;
 
         this.application.on(this.DeviceEvent.SELECT_PART, this.onPartSelected, this);
 
@@ -1188,7 +1199,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.control({
             "textfield[cls='partNameField']": {
-                keyup: this.onPartNameFieldChange
+                focus: this.onPartNameFieldFocus,
+                keyup: this.onPartNameFieldKeyup
             },
             "combobox[cls='forcedAssemblyComboBox']": {
                 select: this.onPartAssemblyStrategyChange

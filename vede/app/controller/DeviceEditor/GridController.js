@@ -1402,9 +1402,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var nonidentical = false;
         if (pPart.get("id")) {
             this.activeBins.each(function(bin, binIndex) {
-                bin.parts().each(function(part){
+                bin.parts().each(function(part, partIndex){
                     if (part.get("id")===pPart.get("id")) {
-                        if (binIndex === me.InspectorController.selectedBinIndex) {
+                        if (binIndex === me.InspectorController.selectedBinIndex && 
+                            partIndex != me.InspectorController.selectedPartIndex) {
                             duplicated = true;
                         }
                     }
