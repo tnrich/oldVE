@@ -506,7 +506,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPartNameFieldFocus: function() {
         if (this.selectedPart.get("sequencefile_id")) {
-            this.Logger.notifyInfo("Changing the part name will modify it for all instances.");
+            this.Logger.notifyInfo("Changing the part's name will change its name across all designs.");
         }
     },
     
