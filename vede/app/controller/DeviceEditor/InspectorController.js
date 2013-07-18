@@ -181,7 +181,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             this.selectedPart.getSequenceFile({
                 callback: function(){
-                    Vede.application.fireEvent(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, 
+                            self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
         }
