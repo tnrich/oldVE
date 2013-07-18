@@ -385,8 +385,6 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                 this.SelectionLayer.start, this.SelectionLayer.end);
 
             this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
-            
-            //this.changeCaretPosition(this.caretIndex - this.application.ClipBoardData.length);
         }
     },
 

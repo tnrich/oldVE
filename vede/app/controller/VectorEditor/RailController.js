@@ -92,6 +92,13 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         if(newTab.down("menucheckitem[identifier*='circularViewMenuItem']").checked) {
             this.railContainer.hide();
         }
+
+        // Set the relevant view options to the tab's saved settings.
+        this.railManager.setShowCutSites(newTab.options.cutSites);
+        this.railManager.setShowFeatures(newTab.options.features);
+        this.railManager.setShowOrfs(newTab.options.orfs);
+        this.railManager.setShowFeatureLabels(newTab.options.featureLabels);
+        this.railManager.setShowCutSiteLabels(newTab.options.cutSiteLabels);
     },
 
     onLaunch: function() {
