@@ -181,7 +181,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             this.selectedPart.getSequenceFile({
                 callback: function(){
-                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, 
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION,
                             self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
@@ -513,7 +513,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
     
     /**
-     * Handles the event that the Part Name field changes due to keyup. Checks to see if the
+     * Handles the event that the Part Name field changes due to loss of focus. Checks to see if the
      * part is already owned by a bin. If not, this is a new part, so we have to
      * add the part to the design.
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
@@ -523,6 +523,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var newName = nameField.getValue();
         var self = this;
+        
+        if (!newName) {
+            this.Logger.notifyWarn("Part name cannot be blank.");
+            return;
+        }
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
