@@ -181,7 +181,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             this.selectedPart.getSequenceFile({
                 callback: function(){
-                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, 
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION,
                             self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
@@ -295,24 +295,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part){
                                 Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part,part.get("name"),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    //part.getSequenceFile({
-                                    //    callback: function(sequence){
-                                            if(bin)
-                                            {
-                                                self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
-                                                self.onReRenderDECanvasEvent();
-                                                selectWindow.close();
-                                                self.selectedPart = part;
-                                                self.onReRenderDECanvasEvent();
-                                                Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
-//                                                Vede.application.fireEvent(self.DeviceEvent.ADD_SELECT_ALERTS);
-                                            }
-                                            else
-                                            {
-                                                Ext.MessageBox.alert("Error","Failed mapping part from library");
-                                            }
-                                    //    }
-                                    //});
+                                    if(bin)
+                                    {
+                                        self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
+                                        self.onReRenderDECanvasEvent();
+                                        selectWindow.close();
+                                        self.selectedPart = part;
+                                        self.onReRenderDECanvasEvent();
+                                        Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                    }
+                                    else
+                                    {
+                                        Ext.MessageBox.alert("Error","Failed mapping part from library");
+                                    }
                                 });
                             }
                         }
@@ -510,18 +505,29 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.Logger.notifyInfo("Changing the part's name will change its name across all designs.");
         }
     },
+
+    onPartNameFieldKeyup: function(field, event) {
+        if(event.getKey() === event.ENTER) {
+            this.onPartNameFieldBlur(field);
+        }
+    },
     
     /**
-     * Handles the event that the Part Name field changes due to keyup. Checks to see if the
+     * Handles the event that the Part Name field changes due to loss of focus. Checks to see if the
      * part is already owned by a bin. If not, this is a new part, so we have to
      * add the part to the design.
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
-    onPartNameFieldKeyup: function (nameField) {
+    onPartNameFieldBlur: function (nameField) {
         var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var newName = nameField.getValue();
         var self = this;
+        
+        if (!newName) {
+            this.Logger.notifyWarn("Part name cannot be blank.");
+            return;
+        }
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
@@ -1206,6 +1212,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.control({
             "textfield[cls='partNameField']": {
                 focus: this.onPartNameFieldFocus,
+                blur: this.onPartNameFieldBlur,
                 keyup: this.onPartNameFieldKeyup
             },
             "combobox[cls='forcedAssemblyComboBox']": {
