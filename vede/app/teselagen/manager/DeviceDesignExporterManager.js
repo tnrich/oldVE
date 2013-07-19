@@ -100,7 +100,8 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 jsonSequence.hash = sequence.get("hash");
                 jsonSequence["de:format"] = sequence.get("sequenceFileFormat");
                 jsonSequence["de:content"] = sequence.get("sequenceFileContent");
-                jsonSequence["de:fileName"] = sequence.get("partSource") + ".gb";
+                var partSource = sequence.get("partSource");
+                jsonSequence["de:fileName"] =  partSource ? partSource + ".gb" : "";
 
                 sequences.push(jsonSequence);
             });
