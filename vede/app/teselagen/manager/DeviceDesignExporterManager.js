@@ -101,6 +101,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 jsonSequence["de:format"] = sequence.get("sequenceFileFormat");
                 jsonSequence["de:content"] = sequence.get("sequenceFileContent");
                 var partSource = sequence.get("partSource");
+                // Named parts do not have a partSource
                 jsonSequence["de:fileName"] =  partSource ? partSource + ".gb" : "";
 
                 sequences.push(jsonSequence);
