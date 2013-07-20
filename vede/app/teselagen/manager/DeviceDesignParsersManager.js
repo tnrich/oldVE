@@ -282,12 +282,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * @param {Function} (optional) Callback with design as argument 0.
      */
     parseXML: function (input, cb) {
-        var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(input, "text/xml");
+        var me = this;
         var i,j, part, newPart;
 
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(input, "text/xml");
         xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
-
 
         // Build part Index
 
@@ -371,34 +371,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             var direction = (bin.getElementsByTagNameNS("*", "direction")[0].textContent === "forward");
-            var dsf = bin.getElementsByTagNameNS("*", "dsf")[0];
-            if (dsf) {
-                dsf = dsf.textContent;
-            }
-            else {
-                dsf = false;
-            }
-            var fro = bin.getElementsByTagNameNS("*", "fro")[0];
-            if( fro ) {
-                fro = fro.textContent;
-            }
-            else {
-                fro = "";
-            }
-            var extra3PrimeBps = bin.getElementsByTagNameNS("*", "extra3PrimeBps")[0];
-            if ( extra3PrimeBps) {
-                extra3PrimeBps = extra3PrimeBps.textContent;
-            }
-            else {
-                extra3PrimeBps = "";
-            }
-            var extra5PrimeBps = bin.getElementsByTagNameNS("*", "extra5PrimeBps")[0];
-            if( extra5PrimeBps ) {
-                extra5PrimeBps = extra5PrimeBps.textContent;
-            }
-            else {
-                extra5PrimeBps = "";
-            }
+            var dsf = this.getTagText(bin, "dsf");
+            var fro = this.getTagText(bin, "fro");
+            var extra3PrimeBps = this.getTagText(bin, "extra3PrimeBps");
+            var extra5PrimeBps = this.getTagText(bin, "extra5PrimeBps");
 
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) { console.warn(iconID); console.warn("Invalid iconID"); }
 
@@ -406,7 +382,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 binName: binName,
                 iconID: iconID,
                 directionForward: direction,
-                dsf: (dsf === "true") ? true : false,
+                dsf: dsf ? true : false,
                 fro: fro,
                 extra3PrimeBps: extra3PrimeBps,
                 extra5PrimeBps: extra5PrimeBps
@@ -432,12 +408,16 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 {
                     var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
                     var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+                    var name = this.getTagText(part, "name");
+                    var startBP = this.getTagText(part, "startBP");
+                    var endBP = this.getTagText(part, "stopBP");
+                    var revComp = this.getTagText(part, "revComp");
                     newPart = Ext.create("Teselagen.models.Part", {
-                        name: part.getElementsByTagNameNS("*", "name")[0].textContent,
-                        genbankStartBP: part.getElementsByTagNameNS("*", "startBP")[0].textContent,
-                        endBP: part.getElementsByTagNameNS("*", "stopBP")[0].textContent,
-                        revComp: part.getElementsByTagNameNS("*", "revComp")[0] ? part.getElementsByTagNameNS("*", "revComp")[0].textContent :  false,
-                        fas: (fas === "") ? "None" : fas
+                        name: name,
+                        genbankStartBP: startBP,
+                        endBP: endBP,
+                        revComp: revComp ? true :  false,
+                        fas: fas ? fas : "None"
                     });
 
                     getSequenceByID(hash, function (sequence) {
@@ -445,7 +425,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                             sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
                             sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                            sequenceFileName: sequence.getElementsByTagNameNS("*", "fileName")[0].textContent
+                            sequenceFileName: me.getTagText(sequence, "fileName")
                         });
 
                         newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
@@ -802,6 +782,22 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         });
 
 
+    },
+    
+    /**
+     * Return the textContent of a DOM Element's child by tagname.
+     * This will only return the text of the first matching child element.
+     * @param {Element} element DOM Element
+     * @param {String} tagname Child tag name
+     * @param {String} [default] Default value if tag is not found (defaults to empty string)
+     */
+    getTagText: function(pElement, pTagname, pDefault) {
+        var elem = pElement.getElementsByTagName(pTagname)[0];
+        var text = pDefault || "";
+        if (elem) {
+            text = elem.textContent;
+        }
+        return text;
     }
 
 });
