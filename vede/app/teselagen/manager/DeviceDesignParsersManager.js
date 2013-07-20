@@ -371,14 +371,34 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             var direction = (bin.getElementsByTagNameNS("*", "direction")[0].textContent === "forward");
-            var dsf = bin.getElementsByTagNameNS("*", "dsf")[0] ? bin.getElementsByTagNameNS("*", "dsf")[0].textContent : false;
-            
-            var fro = "";
-            if( bin.getElementsByTagNameNS("*", "fro") ) {fro = (bin.getElementsByTagNameNS("*", "fro").length > 0) ? bin.getElementsByTagNameNS("*", "fro")[0].textContent : "";}
-            var extra3PrimeBps = "";
-            if ( bin.getElementsByTagNameNS("*", "extra3PrimeBps") ) {extra3PrimeBps = (bin.getElementsByTagNameNS("*", "extra3PrimeBps").length > 0) ? bin.getElementsByTagNameNS("*", "extra3PrimeBps")[0].textContent : "";}
-            var extra5PrimeBps = "";
-            if( bin.getElementsByTagNameNS("*", "extra5PrimeBps") ) {extra5PrimeBps = (bin.getElementsByTagNameNS("*", "extra5PrimeBps").length > 0) ? bin.getElementsByTagNameNS("*", "extra5PrimeBps")[0].textContent : "";}
+            var dsf = bin.getElementsByTagNameNS("*", "dsf")[0];
+            if (dsf) {
+                dsf = dsf.textContent;
+            }
+            else {
+                dsf = false;
+            }
+            var fro = bin.getElementsByTagNameNS("*", "fro")[0];
+            if( fro ) {
+                fro = fro.textContent;
+            }
+            else {
+                fro = "";
+            }
+            var extra3PrimeBps = bin.getElementsByTagNameNS("*", "extra3PrimeBps")[0];
+            if ( extra3PrimeBps) {
+                extra3PrimeBps = extra3PrimeBps.textContent;
+            }
+            else {
+                extra3PrimeBps = "";
+            }
+            var extra5PrimeBps = bin.getElementsByTagNameNS("*", "extra5PrimeBps")[0];
+            if( extra5PrimeBps ) {
+                extra5PrimeBps = extra5PrimeBps.textContent;
+            }
+            else {
+                extra5PrimeBps = "";
+            }
 
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) { console.warn(iconID); console.warn("Invalid iconID"); }
 
