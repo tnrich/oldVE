@@ -167,7 +167,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 parts = [];
                 var itemsObj = bin["de:binItems"];
                 for (var prop in itemsObj) {
-                    parts.push(itemsObj[prop]);
+                    if (itemsObj.hasOwnProperty(prop)) {
+                        parts.push(itemsObj[prop]);
+                    }
                 }
             }
 
