@@ -53,9 +53,9 @@ Ext.define('Vede.view.AppViewport', {
                             }
                         },
 
-                        {
+                        /*{
                             xtype: 'VectorEditorPanel'
-                        }
+                        }*/
                     ]
                 }
             ]

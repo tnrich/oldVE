@@ -5,9 +5,15 @@
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
-    requires: ["Teselagen.event.DeviceEvent","Ext.form.RadioGroup", "Ext.grid.column.Boolean",
-               "Ext.grid.column.Column", "Ext.grid.column.Number", "Ext.grid.Panel", 
-               "Ext.grid.plugin.RowEditing"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Ext.form.RadioGroup", 
+               "Ext.grid.column.Boolean",
+               "Ext.grid.column.Column", 
+               "Ext.grid.column.Number", 
+               "Ext.grid.Panel", 
+               "Ext.grid.plugin.RowEditing",
+               "Vede.view.de.EugeneRulesGrid",
+               "Vede.view.de.InspectorCollectionInfoGrid"],
     cls: 'InspectorPanel',
 
     activeTab: 1,
@@ -149,81 +155,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     title: 'Eugene Rules',
                     items: [
                         {
-                            xtype: 'gridpanel',
+                            xtype: 'eugenerulesgrid',
                             cls: 'eugeneRulesGrid',
-                            layout: 'fit',
-                            viewConfig: {
-                                markDirty: false
-                            },
-                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2,
-                                // listeners: {
-                                //     edit: function () {
-                                //         Vede.application.fireEvent('editEugeneRule');
-                                //     }
-                                // }
-                            }),
-                            columnLines: true,
-                            rowLines: true,
-                            minHeight: 140,
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    width: 100,
-                                    text: 'Name',
-                                    dataIndex: 'name',
-                                    editor: {
-                                        xtype: 'textfield',
-                                        allowBlank: false
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: 'Operand 1',
-                                    dataIndex: 'operand1_id',
-                                    renderer: function(id, metaData, rule) {
-                                        return rule.getOperand1().get("name");
-                                    }
-                                },
-                                {
-                                    xtype: 'booleancolumn',
-                                    text: 'NOT?',
-                                    dataIndex: 'negationOperator',
-                                    trueText: 'NOT',
-                                    falseText: null,
-                                    editor: {
-                                        xtype: 'checkbox'
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: 'Operator',
-                                    dataIndex: 'compositionalOperator',
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: Teselagen.constants.Constants.COMPOP_LIST
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: 'Operand 2',
-                                    dataIndex: 'operand2_id',
-                                    cls: "operand2_field",
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: [],
-                                        cls: "operand2_combobox",
-                                    },
-                                    renderer: function(id, metaData, rule) {
-                                        if(rule.get("operand2isNumber")) {
-                                            return rule.get("operand2Number");
-                                        } else {
-                                            return rule.getOperand2().get("name");
-                                        }
-                                    },
-                                    
-                                }
-                            ]
                         },
                         {
                             xtype: 'container',
@@ -247,11 +180,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     margin: '0 0 0 5',
                                     overCls: 'deleteEugeneRuleBtn-over',
                                     border: 0,
-                                    text: 'Delete Rule',
+                                    text: 'Delete Rule'
                                 }
                             ]
                         }
-                    ],
+                    ]
                 }
             ]
         },
@@ -313,122 +246,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'gridpanel',
                             cls: 'inspectorGrid',
                             anchor:"100% 65%",
-                            autoScroll: true,
-                            viewConfig: {
-                                markDirty: false,
-                            },
-                            allowDeselect: true,
-                            columnLines: true,
-                            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
-                                clicksToEdit: 2,
-                                errorSummary: false
-                            }),
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    width: 100,
-                                    text: '<div data-qtip="Column Name">Column Name</div>',
-                                    dataIndex: 'binName',
-                                    editor: {
-                                        xtype: 'textfield',
-                                        allowBlank: false
-                                    },
-                                    renderer: function(value, metadata) {
-                                        metadata.tdAttr = 'data-qtip="' + value + '"';
-                                        return value;
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Direction">Direction</div>',
-                                    dataIndex: 'directionForward',
-                                    editor: {
-                                        xtype: 'combobox',
-                                        store: [[true, "Forward"], [false, "Reverse"]]
-                                    },
-                                    renderer: function(forward) {
-                                        if(forward) {
-                                            return "Forward";
-                                        } else {
-                                            return "Reverse";
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="Items">Items</div>',
-                                    renderer: function(value, metadata, record) {
-                                        return record.parts().getRange().length;
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
-                                    dataIndex: 'fas',
-                                    readOnly: true,
-                                    renderer: function(value, metadata, record) {
-                                        metadata.tdAttr = 'data-qtip="' + value + '"';
-
-                                        if(record.parts().getRange().length > 0) {
-                                            metadata.tdAttr = 'data-qtip="' + record.parts().getRange()[0].get("fas") + '"';
-                                            return record.parts().getRange()[0].get("fas");
-                                        } else {
-                                            metadata.tdAttr = 'data-qtip="' + value + '"';
-                                            return value;
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'booleancolumn',
-                                    text: '<div data-qtip="Direct Synthesis Firewall">DSF</div>',
-                                    dataIndex: 'dsf',
-                                    editor: {
-                                        xtype: 'checkbox'
-                                    }
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
-                                    dataIndex: 'fro',
-                                    editor: {
-                                        xtype: 'textfield'
-                                    },
-                                    renderer: function(value) {
-                                        if(value === 'None') {
-                                            return '';
-                                        } else {
-                                            return value;
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>',
-                                    dataIndex: 'extra5PrimeBps',
-                                    editor: {
-                                        xtype: 'numberfield',
-                                        allowDecimals: false,
-                                        decimalPrecision: 1,
-                                        emptyText: '',
-                                        hideTrigger: true
-                                    },
-                                    renderer: Ext.util.Format.numberRenderer('0')
-                                },
-                                {
-                                    xtype: 'numbercolumn',
-                                    text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
-                                    dataIndex: 'extra3PrimeBps',
-                                    editor: {
-                                        xtype: 'numberfield',
-                                        allowDecimals: false,
-                                        decimalPrecision: 1,
-                                        emptyText: '',
-                                        hideTrigger: true
-                                    },
-                                    renderer: Ext.util.Format.numberRenderer('0')
-                                }
-                            ],
+                            xtype: 'collectioninfogrid'
                         }
+                            
                         // {
                         //     xtype: 'container',
                         //     cls: 'inspector_containerActions',
@@ -456,22 +276,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         //         }
                         //     ]
                         // }
-                    ]
-                },
-                {
-                    xtype: 'form',
-                    autoScroll: true,
-                    flex: 1,
-                    title: 'Column Content',
-                    margin: '5px 0px 5px 0px',
-                    cls: 'columnContentForm',
-                    items: [
-                        {
-                            xtype: 'displayfield',
-                            cls: 'columnContentDisplayField',
-                            margin: 10,
-                            fieldLabel: ''
-                        }
                     ]
                 }
             ]
@@ -501,6 +305,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
+                    text : 'Edit J5 Parameters',
+                    cls: 'editj5ParamsBtn',
+                    overCls: 'editj5ParamsBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 30,
+                    border: 0
+                },
+                {
+                    xtype: 'button',
                     text : 'Condense Assemblies',
                     cls: 'condenseAssembliesBtn',
                     overCls: 'condenseAssembliesBtn-over',
@@ -519,18 +332,16 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     border: 0,
                     hidden: true
                 },
-                // {
-                //     xtype: 'button',
-                //     cls: 'condenseAssembliesBtn',
-                //     text: 'Condense Assemblies',
-                //     margin: '2.5 0 2.5 0'
-                // },
-                // {
-                //     xtype: 'button',
-                //     cls: 'distributePCRBtn',
-                //     margin: '2.5 0 2.5 0',
-                //     text: 'Distribute PCR Reactions'
-                // }, 
+                {
+                    xtype: 'button',
+                    cls: 'customizeAutomationParamsBtn',
+                    overCls: 'customizeAutomationParamsBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 30,
+                    border: 0,
+                    hidden: true,
+                    text: 'Edit Automation Parameters'
+                },
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
@@ -688,17 +499,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         buttonOnly: false,
                                         buttonText: '<b>Choose File</b>'
                                     }]
-                                },
-                                {
-                                    xtype: 'button',
-                                    text : 'Edit J5 Parameters',
-                                    cls: 'editj5ParamsBtn',
-                                    // cls: 'runj5Btn',
-                                    // overCls: 'runj5Btn-over',
-                                    margin: '15 0 0 0',
-                                    height: 30,
-                                    border: 0
-                                },
+                                }
                             ]
                         },
                         {
@@ -778,6 +579,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             xtype: 'button',
                                             margin: '20 0 0 0',
                                             cls: 'downloadCondenseAssemblyResultsBtn',
+                                            overCls: 'downloadDownstreamAutomationBtn-over',
                                             text: 'Download Results',
                                             hidden:true
                                         }
@@ -820,7 +622,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         {
                                             xtype: 'filefield',
                                             cls: 'sourcePlateListSelector',
-                                            margin: '30 0 0 0',
+                                            margin: '15 0 0 0',
                                             validateOnChange: false,
                                             fieldLabel: 'Source Plate List:',
                                             labelWidth: 110,
@@ -846,14 +648,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         },
                                         {
                                             xtype: 'button',
-                                            cls: 'customizeAutomationParamsBtn',
-                                            margin: '20 0 0 0',
-                                            height: 30,
-                                            text: 'Customize Automation Parameters'
-                                        },
-                                        {
-                                            xtype: 'button',
                                             cls: 'downloadDownstreamAutomationBtn',
+                                            overCls: 'downloadDownstreamAutomationBtn-over',
                                             pressed: false,
                                             text: 'Download Results',
                                             hidden: true,
@@ -876,7 +672,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
             {   
                 Vede.application.fireEvent("openj5");
             }
-        },
+        }
     },
 
     init: function () {

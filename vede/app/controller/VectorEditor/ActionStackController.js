@@ -29,13 +29,33 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
                             this.onUndo, this);
         this.application.on(this.MenuItemEvent.REDO,
                             this.onRedo, this);
-        this.application.on("saveCurrentVEProject",
-                    this.onsaveCurrentVEProject, this);
 
+        this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            }
+        });
     },
 
     onLaunch: function() {
         this.ActionStackManager = Ext.create("Teselagen.manager.ActionStackManager");
+    },
+
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        // Save the old tab's stack, and load the new tab's one.
+        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
+            oldTab.undoStack = this.ActionStackManager.undoStack;
+            oldTab.redoStack = this.ActionStackManager.redoStack;
+        }
+
+        if(newTab && newTab.initialCls === "VectorEditorPanel") {
+            this.onSequenceManagerChanged(newTab.model);
+
+            if(newTab.undoStack && newTab.redoStack) {
+                this.ActionStackManager.undoStack = newTab.undoStack;
+                this.ActionStackManager.redoStack = newTab.redoStack;
+            }
+        }
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -60,7 +80,11 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
             this.ActionStackManager.redo();
         }
     },
-    onsaveCurrentVEProject: function() {
+
+    /**
+     * @deprecated
+     */
+    /*onsaveCurrentVEProject: function() {
         var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
         var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();
         workingSequence.set('sequenceFileFormat',updatedGenbankSequence);
@@ -68,5 +92,5 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
             callback:function(){
                 console.log("Working sequence updated!");
         }});
-    }
+    }*/
 });

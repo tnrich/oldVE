@@ -273,5 +273,5 @@ Ext.define("Teselagen.manager.TraceManager", {
         }
 
         return insertions;
-    },
+    }
 });

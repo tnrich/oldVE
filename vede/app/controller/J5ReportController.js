@@ -5,7 +5,13 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager",'Vede.view.j5Report.buildDNAPanel',"Teselagen.manager.PrinterMonitor","Teselagen.models.J5Parameters","Teselagen.bio.parsers.ParsersManager"],
+    requires: ["Teselagen.event.CommonEvent",
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.manager.ProjectManager",
+               'Vede.view.j5Report.buildDNAPanel',
+               "Teselagen.manager.PrinterMonitor",
+               "Teselagen.models.J5Parameters",
+               "Teselagen.bio.parsers.ParsersManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -86,16 +92,28 @@ Ext.define("Vede.controller.J5ReportController", {
 
         if(status=="Completed") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').enable();
+            this.tabPanel.down('button[cls="downloadResults"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').enable();
+            this.tabPanel.down('button[cls="buildBtn"]').removeClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').enable();
+            this.tabPanel.down('button[cls="downloadResults"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').enable();
+            this.tabPanel.down('button[cls="buildBtn"]').removeClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-failed")
             $("#" + field + " .status-note").addClass("status-note-warning");;
         } else if (status=="Error") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').disable();
+            this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').disable();
+            this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
@@ -103,6 +121,36 @@ Ext.define("Vede.controller.J5ReportController", {
 
         var warnings = this.activeJ5Run.raw.warnings;
         var errors = this.activeJ5Run.raw.error_list[0];
+        
+        if(this.activeJ5Run.getJ5Results().raw.processedData) {
+            if(this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
+                var combinationPieces = this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
+                for(var i = 0; i<assemblies.getCount(); i++) {
+                    var combinationParts = [];
+                    for (var k =0; k<combinationPieces[i].partsContained.length; k++) {
+                        combinationParts.push(combinationPieces[i].partsContained[k].parts);
+                    }
+                    assemblies.getAt(i).set("parts", combinationParts.join());
+                }
+            }
+
+            if(this.activeJ5Run.getJ5Results().raw.processedData.targetParts) {
+                var targetParts = this.activeJ5Run.getJ5Results().raw.processedData.targetParts;
+                var targetPartNames=[];
+                for(var i = 0; i<targetParts.length; i++) {
+                    targetPartNames.push(targetParts[i].name);
+                }
+                assemblies.getAt(0).set("parts", targetPartNames);
+            }
+
+            if(this.activeJ5Run.getJ5Results().raw.processedData.combinationParts) {
+                var comboParts = this.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
+                var comboPartNames=[];
+                for(var i = 0; i<assemblies.getCount(); i++) {
+                    assemblies.getAt(i).set("parts", comboParts[i].parts);
+                }
+            }
+        }
 
         if (warnings) {
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
@@ -130,9 +178,6 @@ Ext.define("Vede.controller.J5ReportController", {
         if (errors) {
             this.tabPanel.down('gridpanel[name="errors"]').show();
             this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
-            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
-            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue("N/A");
-            // this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue("N/A");
         } else {
              this.tabPanel.down('gridpanel[name="errors"]').hide();
              errors = null;
@@ -141,9 +186,6 @@ Ext.define("Vede.controller.J5ReportController", {
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(J5parametersValues);
-        this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-        // this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-        // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
     elapsedDate: function (seconds)
@@ -173,7 +215,9 @@ Ext.define("Vede.controller.J5ReportController", {
 
         if(this.activeJ5Run) {
             var item =  Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='"+this.activeJ5Run.internalId+"']")[0];
+            if(item) {
             item.addCls("j5-menuitem-active");
+            }
         }
 
     },
@@ -301,7 +345,9 @@ Ext.define("Vede.controller.J5ReportController", {
     init: function () {
         this.callParent();
 
-        this.application.on("resetJ5ActiveRun", this.setActiveRun, this);
+        this.CommonEvent = Teselagen.event.CommonEvent;
+
+        this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
 
         this.control({
             'panel[cls="j5ReportsPanel"] > menu > menuitem': {

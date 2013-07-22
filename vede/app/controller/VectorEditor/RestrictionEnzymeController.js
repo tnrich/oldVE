@@ -202,7 +202,12 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
      * Saves to database and closes the window.
      */
     onSaveButtonClick: function() {
-        this.GroupManager.saveUserGroups();
+        var me = this;
+        this.GroupManager.saveUserGroups(function(pSuccess) {
+            if (pSuccess) {
+                me.Logger.notifyInfo("User enzyme groups saved");
+            }
+        });
     },
     
     /**

@@ -169,10 +169,6 @@ Ext.define('Vede.view.de.grid.Part', {
         this.partCell.down().removeBodyCls("gridPartCell-selected");
     },
 
-    mapSelect: function() {
-        this.partCell.down().addBodyCls("gridPartCell-selected");
-        // this.partCell.down().removeBodyCls("gridPartCell-alert");
-    },
     /**
      * If the fas is set, add either a red or blue rectangle, depending on
      * whether the fasConflict flag is true or false.
@@ -218,5 +214,5 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     removeEugeneRuleIndicator: function() {
         this.partCell.down("image[cls='eugeneRuleIndicator']").destroy();
-    },
+    }
 });

@@ -4,7 +4,7 @@
  */
 Ext.define("Vede.view.ve.VectorEditorFindPanel", {
     extend: "Ext.panel.Panel",
-    id: "FindPanel",
+    cls: "FindPanel",
     alias: "widget.VectorEditorFindPanel",
     height: 28,
     dock: "bottom",
@@ -14,7 +14,7 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
     hidden: true,
     items: [{
         xtype: "textfield",
-        id: "findField",
+        cls: "findField",
         hideLabel: true,
         emptyText: "Search...",
         enableKeyEvents: true,
@@ -22,8 +22,8 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
         maxWidth: 600,
         margin: "2 4 2 4",
         validator: function(value) {
-            var literal = Ext.getCmp("literalSelector").getValue();
-            var searchIn = Ext.getCmp("findInSelector").getValue();
+            var literal = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='literalSelector']").getValue();
+            var searchIn = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='findInSelector']").getValue();
             var matches;
 
             if(searchIn === "DNA") {
@@ -48,12 +48,12 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
         }
     }, {
         xtype: "button",
-        id: "findNextBtn",
+        cls: "findNextBtn",
         text: "<b>Find Next</b>",
         margin: "2 4 2 4"
     }, {
         xtype: "combobox",
-        id: "findInSelector",
+        cls: "findInSelector",
         queryMode: "local",
         editable: false,
         value: "DNA",
@@ -61,7 +61,7 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
         margin: "2 4 2 4"
     }, {
         xtype: "combobox",
-        id: "literalSelector",
+        cls: "literalSelector",
         queryMode: "local",
         editable: false,
         value: "Literal",
@@ -69,7 +69,7 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
         margin: "2 4 2 4"
     }, {
         xtype: "button",
-        id: "highlightAllBtn",
+        cls: "highlightAllBtn",
         enableToggle: true,
         text: "<b>Highlight All</b>",
         margin: "2 4 2 4"

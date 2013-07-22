@@ -21,6 +21,11 @@ Ext.define("Teselagen.manager.RailManager", {
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2",
         RAIL_PAD: 100,
+        SELECTION_COLOR: "#0099FF",
+        SELECTION_TRANSPARENCY: 0.3,
+        SELECTION_FRAME_COLOR: "#CCCCCC",
+        STROKE_OPACITY: 0.8, // Selection and wireframe outline opacity.
+        WIREFRAME_COLOR: "#808080",
         ZOOM_INCREMENT: 0.25
     },
 
@@ -51,6 +56,7 @@ Ext.define("Teselagen.manager.RailManager", {
     orfSVG: null,
     featureSVG: null,
     selectionSVG: null,
+    wireframeSVG: null,
    
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -310,14 +316,62 @@ Ext.define("Teselagen.manager.RailManager", {
     },
 
     /**
+     * Restores the rail to a scale factor of 1.
+     */
+    removeZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        this.previousZoomLevel = scale[0];
+
+        // Increase scale values.
+        scale[0] = 1.5;
+        scale[1] = 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
+     * Reverts zoom level back to what it was before calling removeZoom.
+     */
+    restoreZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        // Increase scale values.
+        scale[0] = this.previousZoomLevel || 1.5;
+        scale[1] = this.previousZoomLevel || 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
      * Adjust the width of the surface to fit all content, ensuring that a 
      * scrollbar appears.
      * @param {Teselagen.manager.RailManager} scope The railManager. Used when being
      * called by the window onresize event.
      */
     fitWidthToContent: function(scope) {
-        if(Ext.getCmp("RailContainer").el) {
-            var containerSize = Ext.getCmp("RailContainer").getSize();
+        var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']");
+
+        if(container && container.el) {
+            var containerSize = container.getSize();
+            var rc = container.el.dom;
+            var frame = scope.rail.select(".railFrame").node();
+            var rcRect = rc.getBoundingClientRect();
+
+            var scrollWidthRatio = (rc.scrollLeft + rcRect.width / 2) / rc.scrollWidth;
+
             var transY = containerSize.height / 2;
 
             var railBox = scope.rail[0][0].getBBox();
@@ -328,15 +382,13 @@ Ext.define("Teselagen.manager.RailManager", {
             var scale = [Number(translateValues[0]), Number(translateValues[3])];
             var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-            /*if(railBox.y > parentBox.y) {
-                transY += railBox.y - parentBox.y;
-            }*/
-
             scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
                                                      " " + translate[0] + " " + transY + ")");
 
             scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD)
                       .attr("height", railBox.height + transY);
+
+            container.el.setScrollLeft(scrollWidthRatio * rc.scrollWidth - rcRect.width / 2);
         }
     },
 
@@ -626,63 +678,106 @@ Ext.define("Teselagen.manager.RailManager", {
      * @private
      * Adds the caret to the rail.
      */
-    initRail: function() {
-        this.rail = d3.select("#RailContainer")
-                      .append("svg:svg")
-                      .attr("id", "Rail")
-                      .attr("overflow", "auto");
+    initRail: function(newTab) {
+        var newTabDomId = newTab.el.dom.id;
+        // If there's no SVG in the current tab, VE hasn't been rendered yet, so
+        // add svg elements. Otherwise, just set this.rail to the rail in this tab,
+        // and so on.
+        if(!d3.select("#" + newTabDomId + " .Rail").node()) {
+            this.rail = d3.select("#" + newTabDomId + " .RailContainer")
+                          .append("svg:svg")
+                          .attr("class", "Rail")
+                          .attr("overflow", "auto");
 
-        this.parentSVG = this.rail.append("svg:g")
-                                  .attr("class", "railParent")
-                                  .attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
+            this.parentSVG = this.rail.append("svg:g")
+                                      .attr("class", "railParent")
+                                      .attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
 
-        this.frame = Ext.create("Vede.view.rail.Frame", {
-            rail: this.parentSVG,
-            railWidth: this.railWidth,
-            center: this.center
-        });
+            this.frame = Ext.create("Vede.view.rail.Frame", {
+                rail: this.parentSVG,
+                railWidth: this.railWidth,
+                center: this.center
+            });
 
-        this.caret = Ext.create("Vede.view.rail.Caret", {
-            rail: this.parentSVG,
-            start: 0,
-            reference: this.reference,
-            railWidth: this.railWidth,
-            length: 3
-        });
+            this.caret = Ext.create("Vede.view.rail.Caret", {
+                rail: this.parentSVG,
+                start: 0,
+                reference: this.reference,
+                railWidth: this.railWidth,
+                length: 3
+            });
 
-        var name = "unknown";
-        var length = 0
-        if(this.sequenceManager) {
-            name = this.sequenceManager.getName();
-            length = this.sequenceManager.getSequence().toString().length;
+            var name = "unknown";
+            var length = 0
+            if(this.sequenceManager) {
+                name = this.sequenceManager.getName();
+                length = this.sequenceManager.getSequence().toString().length;
+            }
+
+            this.nameBox = Ext.create("Vede.view.rail.NameBox", {
+                rail: this.parentSVG,
+                center: this.center,
+                name: name,
+                length: length
+            });
+
+            this.labelSVG = this.parentSVG.append("svg:g")
+                                    .attr("class", "railLabel");
+
+            this.selectionSVG = this.parentSVG.append("svg:path")
+                                    .attr("class", "railSelection")
+                                    .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                                    .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                                    .attr("fill", this.self.SELECTION_COLOR)
+                                    .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                                    .style("pointer-events", "none");
+
+            this.wireframeSVG = this.parentSVG.append("svg:path")
+                                    .attr("class", "railWireframe")
+                                    .attr("stroke", this.self.WIREFRAME_COLOR)
+                                    .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                                    .attr("fill", "none");
+
+            this.cutSiteSVG = this.parentSVG.append("svg:g")
+                                      .attr("class", "railCutSite");
+            this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+
+            this.orfSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "railOrf");
+            this.orfRenderer.setOrfSVG(this.orfSVG);
+
+            this.featureSVG = this.parentSVG.append("svg:g")
+                                      .attr("class", "railFeature");
+            this.featureRenderer.setFeatureSVG(this.featureSVG);
+
+            this.fitWidthToContent(this);
+        } else {
+            this.rail = d3.select("#" + newTabDomId + " .Rail");
+
+            this.parentSVG = this.rail.select(".railParent");
+
+            this.parentSVG.select(".railCaret").remove();
+            this.caret = Ext.create("Vede.view.rail.Caret", {
+                rail: this.parentSVG,
+                start: 0,
+                reference: this.reference,
+                railWidth: this.railWidth,
+                length: 3
+            });
+
+            this.frame = this.parentSVG.select(".railFrame");
+            this.nameBox = this.parentSVG.select(".railNameBox");
+            this.labelSVG = this.parentSVG.select(".railLabel");
+            this.selectionSVG = this.parentSVG.select(".railSelection");
+            this.wireframeSVG = this.parentSVG.select(".railWireframe");
+            this.cutSiteSVG = this.parentSVG.select(".railCutSite");
+            this.orfSVG = this.parentSVG.select(".railOrf");
+            this.featureSVG = this.parentSVG.select(".railFeature");
+
+            this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+            this.orfRenderer.setOrfSVG(this.orfSVG);
+            this.featureRenderer.setFeatureSVG(this.featureSVG);
         }
-
-        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
-            rail: this.parentSVG,
-            center: this.center,
-            name: name,
-            length: length
-        });
-
-        this.labelSVG = this.parentSVG.append("svg:g")
-                                .attr("class", "railLabel");
-
-        this.selectionSVG = this.parentSVG.append("svg:g")
-                                    .attr("class", "railSelection");
-
-        this.cutSiteSVG = this.parentSVG.append("svg:g")
-                                  .attr("class", "railCutSite");
-        this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
-
-        this.orfSVG = this.parentSVG.append("svg:g")
-                              .attr("class", "railOrf");
-        this.orfRenderer.setOrfSVG(this.orfSVG);
-
-        this.featureSVG = this.parentSVG.append("svg:g")
-                                  .attr("class", "railFeature");
-        this.featureRenderer.setFeatureSVG(this.featureSVG);
-
-        this.fitWidthToContent(this);
     },
 
     updateNameBox: function() {

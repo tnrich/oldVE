@@ -1,6 +1,7 @@
 Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     extend: 'Ext.app.Controller',
-    requires: ["Teselagen.event.MapperEvent"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.event.MapperEvent"],
 
     selectedPart: null,
     selectedWindow: null,
@@ -154,22 +155,31 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         });
 
         if(this.selectedBinIndex!=-1) {
-            Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
+            Vede.application.fireEvent(this.DeviceEvent.SELECT_PART, this.selectedPart, this.selectedBinIndex);
 
             var self = this;
-            Vede.application.fireEvent("saveDesignEvent",function(){
+            Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function(){
                 self.selectedPart.save({
-                    callback: function(){
-                        toastr.options.onclick = null;
-                        toastr.info("Part Definition Changed");
-                        Vede.application.fireEvent("onReloadDesign")
-                        Vede.application.fireEvent("ReRenderCollectionInfo")
+                    callback: function(record, operation, success){
+                        if(success) {
+                            toastr.options.onclick = null;
+                            toastr.info("Part Definition Changed");
+                            Vede.application.fireEvent(this.DeviceEvent.RELOAD_DESIGN);
+                            Vede.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
+                        } else {
+                            Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
+                            record.reject();
+
+                            // Manually trigger an update event to force the 
+                            // part info form to reload.
+                            record.set("name", record.get("name"));
+                        }
                     }
                 });
             });
             
         }
-        else Vede.application.fireEvent("partCreated", this.selectedSequence, this.selectedPart);
+        else Vede.application.fireEvent(this.DeviceEvent.PART_CREATED, this.selectedSequence, this.selectedPart);
 
         this.selectedWindow.close();
     },
@@ -180,6 +190,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
     init: function () {
     
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
 
         this.control({
@@ -194,8 +205,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             }
         });
         
-        this.application.on("openChangePartDefinition", this.open, this);
-        this.application.on("createPartDefinition", this.openCreatePart, this);
+        this.application.on(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, this.open, this);
+        this.application.on(this.DeviceEvent.CREATE_PART_DEFINITION, this.openCreatePart, this);
 
         this.application.on(this.SelectionEvent.SELECTION_CHANGED, this.onSequenceSelectionChanged, this);
 

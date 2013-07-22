@@ -181,6 +181,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.models.j5Output.NonMockAssembly": [],
   "Vede.controller.VectorEditor.SimulateDigestionController": [],
   "Teselagen.renderer.annotate.HighlightLayer": [],
+  "Teselagen.event.GridEvent": [],
   "Teselagen.manager.ActionStackManager": [],
   "Teselagen.models.PartVO": [],
   "Teselagen.manager.FindManager": [],
@@ -296,8 +297,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.utils.RestProxy": [],
   "Teselagen.manager.RowManager": [],
   "Teselagen.models.j5Output.Warnings": [],
-  "Teselagen.constants.Constants": [],
   "Teselagen.manager.SimulateDigestionManager": [],
+  "Teselagen.constants.Constants": [],
   "Teselagen.bio.BioException": [],
   "Vede.controller.VectorEditor.SequenceController": [],
   "Teselagen.bio.tools.DigestionCalculator": [],
@@ -334,6 +335,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.sequence.alphabets.DNAAlphabet": [
     "Teselagen.DNAAlphabet"
   ],
+  "Vede.view.de.EugeneRulesGrid": [],
   "Teselagen.models.j5Output.NonDegPart": [],
   "Teselagen.bio.sequence.alphabets.ProteinAlphabet": [],
   "Teselagen.manager.AAManager": [],
@@ -608,6 +610,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.models.j5Output.NonMockAssembly": [],
   "Vede.controller.VectorEditor.SimulateDigestionController": [],
   "Teselagen.renderer.annotate.HighlightLayer": [],
+  "Teselagen.event.GridEvent": [],
   "Teselagen.manager.ActionStackManager": [],
   "Teselagen.models.PartVO": [],
   "Teselagen.manager.FindManager": [],
@@ -757,8 +760,8 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.utils.RestProxy": [],
   "Teselagen.manager.RowManager": [],
   "Teselagen.models.j5Output.Warnings": [],
-  "Teselagen.constants.Constants": [],
   "Teselagen.manager.SimulateDigestionManager": [],
+  "Teselagen.constants.Constants": [],
   "Teselagen.bio.BioException": [],
   "Vede.controller.VectorEditor.SequenceController": [],
   "Teselagen.bio.tools.DigestionCalculator": [],
@@ -797,6 +800,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.sequence.common.SymbolList": [],
   "Teselagen.models.EugeneRule": [],
   "Teselagen.bio.sequence.alphabets.DNAAlphabet": [],
+  "Vede.view.de.EugeneRulesGrid": [
+    "widget.eugenerulesgrid"
+  ],
   "Teselagen.models.j5Output.NonDegPart": [],
   "Teselagen.bio.sequence.alphabets.ProteinAlphabet": [],
   "Teselagen.manager.AAManager": [],

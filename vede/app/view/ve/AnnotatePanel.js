@@ -5,7 +5,7 @@
 Ext.define("Vede.view.ve.AnnotatePanel", {
     extend: "Ext.panel.Panel",
     alias: "widget.AnnotatePanel",
-    id: "AnnotatePanel",
+    cls: "AnnotatePanel",
     //autoScroll: true,
     width: "645px",
     layout: {
@@ -20,9 +20,9 @@ Ext.define("Vede.view.ve.AnnotatePanel", {
         xtype: "container",
         overflowY: "scroll",
         //overflowX: "scroll",
-        id: "AnnotateContainer",
+        cls: "AnnotateContainer",
         layout: {
             type: "fit"
         }
-    }],
+    }]
 });

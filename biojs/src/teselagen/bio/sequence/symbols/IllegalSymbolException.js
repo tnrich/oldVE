@@ -14,13 +14,13 @@ Ext.define("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
                     passedMessage = pInput;
                    }
                    Ext.Error.raise({msg: passedMessage});
-        },
+        }
     },
     constructor: function(inData){
         var that = this;
         that.message = inData.message || "Default Message";
         this.callParent([inData]);
-    },
+    }
 
 
 

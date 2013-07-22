@@ -142,6 +142,10 @@ border-color: #E0E3E6;
   border-color: #ECF0F1 !important;
 }
 
+.x-grid-dirty-cell {
+  background: none;
+}
+
 .x-column-header-over {
   background: #F8F8F8;
 }
@@ -445,6 +449,19 @@ border-color: #E0E3E6;
 
 .x-message-box-info, .x-message-box-warning, .x-message-box-question, .x-message-box-error {
   background-size: 32px;
+}
+
+.x-grid-row ,.x-grid-cell, .x-unselectable, .x-unselectable * {
+ -webkit-user-select: text !important;
+ -o-user-select: text !important;
+ -khtml-user-select: all !important;
+ -ms-user-select: text !important;
+ user-select: text !important;
+ -moz-user-select: text !important;
+}
+
+.tab-icon {
+  background-size:14px;
 }
 
 /*Header*/
@@ -838,7 +855,7 @@ background: #F8F8F8;
   margin: 10px;
 }
 
-.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn, {
+.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
@@ -849,23 +866,23 @@ background: #F8F8F8;
   color: white;
 }
 
-.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over {
+.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over{
   background: #006CAB;
 }
 
-.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn {
-  background: #4A4B4C;
+.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn,  .editj5ParamsBtn, .customizeAutomationParamsBtn, .downloadCondenseAssemblyResultsBtn, .downloadDownstreamAutomationBtn {
+  background: rgb(146, 164, 182);
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
   -webkit-transition: background .2s ease-in-out;
 }
 
-.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner {
+.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner, .customizeAutomationParamsBtn .x-btn-inner, .downloadCondenseAssemblyResultsBtn .x-btn-inner, .downloadDownstreamAutomationBtn .x-btn-inner {
   color: white;
 }
 
-.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over {
-  background: #333234;
+.x-addEugeneRuleBtn-over, .x-deleteEugeneRuleBtn-over, .x-inspectorAddColumnBtn-over, .x-inspectorRemoveColumnBtn-over, .x-editj5ParamsBtn-over, .x-customizeAutomationParamsBtn-over, .x-downloadCondenseAssemblyResultsBtn-over, .x-downloadDownstreamAutomationBtn-over { 
+  background: rgb(136, 152, 168);
 }
 
 .selectPartFocus {

@@ -32,10 +32,13 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.callParent();
 
         this.control({
-            "#AnnotateContainer" : {
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "component[cls='AnnotateContainer']" : {
                 render: this.onRender
             },
-            "#AnnotatePanel": {
+            "component[cls='AnnotatePanel']": {
                 resize: this.onResize,
                 beforecollapse: this.onBeforeCollapse
             }
@@ -69,17 +72,38 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.application.on(listenersObject);
     },
 
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(newTab.initialCls == "VectorEditorPanel") {
+            var tabId = newTab.el.dom.id;
+            this.AnnotatePanel = newTab.down("component[cls='AnnotatePanel']");
+
+            this.SelectionLayer.setTabId(tabId);
+            this.HighlightLayer.setTabId(tabId);
+
+            // Set the relevant view options to the tab's saved settings.
+            this.SequenceAnnotationManager.setShowFeatures(newTab.options.features);
+            this.SequenceAnnotationManager.setShowCutSites(newTab.options.cutSites);
+            this.SequenceAnnotationManager.setShowOrfs(newTab.options.orfs);
+            this.SequenceAnnotationManager.setShowComplementarySequence(newTab.options.complementary);
+            this.SequenceAnnotationManager.setShowSpaceEvery10Bp(newTab.options.spaces);
+            this.SequenceAnnotationManager.setShowAminoAcids(newTab.options.sequenceAA);
+            this.SequenceAnnotationManager.setShowAminoAcidsRevCom(newTab.options.revComAA);
+
+            this.SequenceAnnotationManager.tabChanged();
+            this.SequenceAnnotationManager.annotator.init();
+        }
+
+        this.callParent(arguments);
+    },
+
     onLaunch: function() {
         this.callParent();
-
-        this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
 
         this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {
             sequenceManager: this.SequenceManager,
             orfManager: this.ORFManager,
             aaManager: this.AAManager,
-            restrictionEnzymeManager: this.RestrictionEnzymeManager,
-            annotatePanel: this.AnnotatePanel
+            restrictionEnzymeManager: this.RestrictionEnzymeManager
         });
 
 //        this.AnnotatePanel.add(this.SequenceAnnotationManager.annotator);
@@ -96,6 +120,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.HighlightLayer = Ext.create("Teselagen.renderer.annotate.HighlightLayer", {
             sequenceAnnotator: this.SequenceAnnotationManager.annotator
         });
+
         Teselagen.manager.PrintManager.sequenceViewConfig(this.SequenceAnnotationManager);
     },
 
@@ -106,8 +131,6 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         // Set the tabindex attribute in order to receive keyboard events on the div.
         pCmp.el.dom.setAttribute("tabindex", "0");
         pCmp.el.on("keydown", this.onKeydown, this);       
-        this.SequenceAnnotationManager.annotator.init();
-        
     },
 
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
@@ -126,6 +149,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.SequenceAnnotationManager.render();
 
             this.SelectionLayer.refresh();
+            this.HighlightLayer.refresh();
         }
     },
     
@@ -201,10 +225,6 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.HighlightLayer.clearHighlights();
     },
 
-    onVectorPanelAnnotationClicked: function(start, end) {
-        this.select(start, end);
-    },
-
     onAnnotatePanelAnnotationClicked: function(start, end) {
         this.clickedAnnotationStart = start;
         this.clickedAnnotationEnd = end;
@@ -250,8 +270,9 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onMousedown: function(pEvt, pOpts) {
-        if(this.SequenceAnnotationManager.sequenceManager) {
-            var el = Ext.getCmp("AnnotateContainer").el;
+        if(this.SequenceAnnotationManager.sequenceManager &&
+           (pEvt.getTarget().getBoundingClientRect().right - pEvt.getX()) > 18) {
+            var el = this.activeTab.down("component[cls='AnnotateContainer']").el;
             var adjustedX = pEvt.getX() - el.getX();
             var adjustedY = pEvt.getY() + el.dom.scrollTop - el.getY();
 
@@ -280,7 +301,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
     onMousemove: function(pEvt, pOpts) {
         if(this.mouseIsDown && this.mouseButton!=2) {
-            var el = Ext.getCmp("AnnotateContainer").el;
+            var el = this.activeTab.down("component[cls='AnnotateContainer']").el;
             var x = pEvt.getX() - el.getX();
             var y = pEvt.getY() + el.dom.scrollTop - el.getY();
 
@@ -395,7 +416,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             // dragging to make a selection.
             if(scrollToCaret) {
                 var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
-                var el = Ext.getCmp("AnnotateContainer").el;
+                var el = this.activeTab.down("component[cls='AnnotateContainer']").el;
 
                 var scrollTop = el.dom.scrollTop;
 
@@ -411,6 +432,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.callParent(arguments);
 
         this.SelectionLayer.refresh();
+
         this.changeCaretPosition(this.caretIndex, true, false);
     },
 
@@ -482,9 +504,9 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onBeforeCollapse: function() {
-        var vectorPanel = Ext.getCmp("VectorPanel");
+        var vectorPanel = this.activeTab.down('component[cls="VectorPanel"]');
         if (vectorPanel.collapsed) {
-            vectorPanel.expand()
+            vectorPanel.expand();
         }
-    },
+    }
 });

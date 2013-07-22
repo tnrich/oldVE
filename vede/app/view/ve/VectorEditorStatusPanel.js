@@ -4,7 +4,7 @@
  */
 Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
     extend: "Ext.panel.Panel",
-    id: "VectorEditorStatusPanel",
+    cls: "VectorEditorStatusPanel",
     alias: "widget.VectorEditorStatusPanel",
     dock: "bottom",
     border: '0 1 1 1',
@@ -17,13 +17,13 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         xtype: "toolbar",
         dock: "top",
         layout: "hbox",
-        id: "VectorEditorStatusBar",
+        cls: "VectorEditorStatusBar",
         items: [{
             xtype: "tbfill"
         },
         {
             xtype: "tbtext",
-            id: "VectorEditorStatusBarAlert",
+            cls: "VectorEditorStatusBarAlert",
             shrinkWrap: false
         },
         {

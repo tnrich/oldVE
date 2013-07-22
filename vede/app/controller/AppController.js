@@ -6,7 +6,7 @@ Ext.define('Vede.controller.AppController', {
     extend: 'Ext.app.Controller',
     requires: ["Teselagen.event.ContextMenuEvent"],
     init: function() {
-        Vede.application = Vede.app;
+        Vede.application = this.application;
     },
     onLaunch: function() {
         Ext.tip.QuickTipManager.init();

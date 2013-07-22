@@ -11,7 +11,9 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
 
     config: {
         sequenceManager: null,
-        sequenceAnnotator: null
+        sequenceAnnotator: null,
+        tabId: null,
+        highlightIndices: []
     },
 
     highlightSVG: null,
@@ -30,8 +32,9 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
         }
 
         if(!this.highlightSVG) {
-            this.highlightSVG = d3.select("#annotateSVG").append("svg:g")
-                .attr("id", "highlightSVG");           
+            this.highlightSVG = d3.select("#" + this.getTabId() + " .annotateSVG").append("svg:g")
+                .attr("class", "highlightSVG")
+                .style("pointer-events", "none");
         }
 
         if(fromIndex > toIndex) {
@@ -41,19 +44,27 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
         } else {
             this.drawHighlight(fromIndex, toIndex);
         }
-        
     },
 
     addAllHighlights: function(indices) {
+        this.setHighlightIndices(indices);
+
         Ext.each(indices, function(index) {
             this.addHighlight(index.start, index.end);
         }, this);
     },
 
+    refresh: function() {
+        var indices = this.getHighlightIndices();
+        this.clearHighlights();
+        this.addAllHighlights(indices);
+    },
+
     clearHighlights: function() {
         if(this.highlightSVG) {
-            d3.selectAll("#highlightSVG").remove();
+            d3.selectAll("#" + this.getTabId() + " .highlightSVG").remove();
             this.highlightSVG = null;
+            this.setHighlightIndices([]);
         }
     },
 
@@ -88,16 +99,14 @@ Ext.define("Teselagen.renderer.annotate.HighlightLayer", {
             endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
         }
 
-        d3.select("#highlightSVG").append("svg:rect")
+        d3.select("#" + this.getTabId() + " .highlightSVG").append("svg:rect")
             .attr("x", startMetrics.x)
-            .attr("y", startMetrics.y + 4)
+            .attr("y", startMetrics.y + 8)
             .attr("width", endMetrics.x - startMetrics.x)
-            .attr("height", this.sequenceAnnotationManager.caret.height - 4)
+            .attr("height", this.sequenceAnnotationManager.caret.height - 6)
             .attr("fill", this.self.HIGHLIGHT_COLOR)
             .attr("fill-opacity", this.self.HIGHLIGHT_TRANSPARENCY);
-    },
-    
-    
+    }
 });
 
 

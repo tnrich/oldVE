@@ -277,7 +277,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     /**
     * Save user groups
     */
-    saveUserGroups: function() {
+    saveUserGroups: function(pNext) {
         var me = this;
         this.UserManager.update(function(pSuccess) {
             if (!pSuccess) {
@@ -289,8 +289,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
                     Vede.application.fireEvent("ActiveEnzymesChanged");
                     me.setActiveEnzymesChanged(false);
                 }
-                me.Logger.notifyInfo("User restriction enzyme groups saved");
             }
+            pNext(pSuccess);
         });
     },
     
@@ -344,11 +344,11 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
         newSystemGroups.push(rebaseGroup);
         // 3. Berkeley Biobrick
-        var berkeleyBBGroup = this.createGroupByEnzymes("Berkeley BglBricks", ["EcoRI", "BglII", "BamHI", "XhoI"]);
+        var berkeleyBBGroup = this.createGroupByEnzymes("Berkeley BglBrick", ["EcoRI", "BglII", "BamHI", "XhoI"]);
         newSystemGroups.push(berkeleyBBGroup);
         
         // 4. MIT Biobrick
-        var mitBBGroup = this.createGroupByEnzymes("MIT BglBricks", ["EcoRI", "XbaI", "SpeI", "PstI"]);
+        var mitBBGroup = this.createGroupByEnzymes("MIT BioBrick", ["EcoRI", "XbaI", "SpeI", "PstI"]);
         newSystemGroups.push(mitBBGroup);
         
         // 5. Fermentas Fast Digest

@@ -1,4 +1,5 @@
 module.exports = function(app){
+    var crypto = require("crypto");
 
     /**
      *  Login Auth Method : Find User in DB
@@ -8,7 +9,7 @@ module.exports = function(app){
         User.findOne({
             "username": username
         }, function(err, user) {
-            if (err) return fn(new Error("cannot find user"));
+            if (err) {return fn(new Error("cannot find user"));}
             return fn(null, user);
         });
     };
@@ -45,8 +46,8 @@ module.exports = function(app){
                 });
                 User.create(newuser, function(err, user) {
 
-                if(remember) res.cookie('sessionname', username, { signed: true });
-                else { res.clearCookie('sessionname'); }
+                if(remember) {res.cookie("sessionname", username, { signed: true });}
+                else { res.clearCookie("sessionname"); }
 
                     console.log(username + " user created!");
                     req.session.regenerate(function() {
@@ -62,8 +63,8 @@ module.exports = function(app){
                 });
             } else {
 
-                if(remember) res.cookie('sessionname', username, { signed: true });
-                else { res.clearCookie('sessionname'); }
+                if(remember) {res.cookie("sessionname", username, { signed: true });}
+                else { res.clearCookie("sessionname"); }
 
                 console.log("LOGIN: " + username);
                 req.session.regenerate(function() {
@@ -82,7 +83,7 @@ module.exports = function(app){
 
     app.all("/logout", function(req, res) {
         req.session.destroy();
-        res.clearCookie('sessionname');
+        res.clearCookie("sessionname");
         return res.send();
     });
 
@@ -98,69 +99,61 @@ module.exports = function(app){
         var username = req.body.username;
         var password = req.body.password;
         var remember = req.body.remember === "true" ? true : false;
-
-        var query;
+        var query, hash;
         //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
 
-        if (!app.program.prod) {
+        if (app.program.dev || app.program.test) {
             // TESTING AUTH
 
             if(req.signedCookies.sessionname)
             {
-                return getOrCreateUser(req, res, req.signedCookies.sessionname, remember);                
+                return getOrCreateUser(req, res, req.signedCookies.sessionname, remember);
             }
 
             // Login using fake sessionId (For Testing)
-            if (username) getOrCreateUser(req, res, username, remember);
-            else if (sessionId) getOrCreateUser(req, res, username, remember);
-            else getOrCreateUser(req, res, "guest", remember);
-        }
-
-        if (app.program.prod) {
+            if (username) {getOrCreateUser(req, res, username, remember);}
+            else if (sessionId) {getOrCreateUser(req, res, username, remember);}
+            else {getOrCreateUser(req, res, "guest", remember);}
+        } else {
             // PRODUCTION AUTH
 
             // Manage errors
-            if (!sessionId && (!username || !password)) return res.json({
-                "msg": "Credentials not sended"
-            }, 405);
+            if (!sessionId && (!username || !password)) {return res.json({
+                "msg": "Credentials not sent"
+                }, 401);
+            }
 
             // Happy path of Login
             if (username && password) {
-
-                var crypto = require("crypto");
-                var hash = crypto.createHash("md5").update(password).digest("hex");
-
-                // Check the user in Mysql
-                query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password='" + hash + "' order by j5sessions.id desc limit 1;";
-
-                app.mysql.query(query, function(err, rows) {
-                    if (err||!rows) return res.json({
-                        "msg": "Invalid session"
-                    }, 405);
-                    if (rows[0]) getOrCreateUser(req, res, rows[0].username, remember);
-                    else return res.json({
-                        "msg": "Username or password invalid"
-                    }, 405);
-                });
+                hash = crypto.createHash("md5").update(password).digest("hex");
+                query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password='" + hash +
+                    "' order by j5sessions.id desc limit 1;";
             }
-
-            // Login using sessionID
-            if (sessionId && app.program.prod) {
-
+            else {
                 query = "select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id='" + sessionId + "';";
-                console.log(query);
-                if (app.mysql) {
-                    app.mysql.query(query, function(err, rows) {
-                        if (err||!rows) return res.json({
-                            "msg": "Invalid session"
-                        }, 405);
-                        getOrCreateUser(req, res, rows[0].username, remember);
-                    });
-                } else res.json({
-                    "msg": "Unexpected error."
-                }, 405);
             }
-//            debugger;
+
+            app.mysql.query(query, function(err, rows) {
+                if (err||!rows) {
+                    return res.json({
+                        "msg": "Invalid session"
+                    }, 401);
+                }
+                if (rows[0]) {
+                    // For now only let beta users through
+                    if (rows[0].beta) {
+                        getOrCreateUser(req, res, rows[0].username, remember);
+                    }
+                    else {
+                        return res.json({"msg":"For now only beta users are authorized"}, 403);
+                    }
+                }
+                else {
+                    return res.json({
+                        "msg": "Username or password invalid"
+                    }, 401);
+                }
+            });
         }
     });
 

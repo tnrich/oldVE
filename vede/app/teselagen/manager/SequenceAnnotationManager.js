@@ -67,6 +67,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.RowManager = Ext.create("Teselagen.manager.RowManager", {
             sequenceAnnotator: that
         });
+
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that
         });
@@ -74,6 +75,13 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.caret = Ext.create("Vede.view.annotate.Caret", {
             sequenceAnnotator: that.annotator
         });
+    },
+
+    tabChanged: function() {
+        if(this.caret.caretSVG) {
+            this.caret.caretSVG.remove();
+            this.caret.caretSVG = null;
+        }
     },
 
     setSequenceManager: function(pSeqMan){
@@ -204,5 +212,5 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
             this.showSpaceEvery10BpChanged = true;
         }
         return pShow;
-    },
+    }
 });

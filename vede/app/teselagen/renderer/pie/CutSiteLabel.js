@@ -23,5 +23,5 @@ Ext.define("Teselagen.renderer.pie.CutSiteLabel", {
      */
     labelText: function() {
         return this.annotation.getRestrictionEnzyme().getName();
-    },
+    }
 });

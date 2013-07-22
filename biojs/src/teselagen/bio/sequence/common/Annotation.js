@@ -600,6 +600,6 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		} 
 
 		return this;
-	},
+	}
 
 });

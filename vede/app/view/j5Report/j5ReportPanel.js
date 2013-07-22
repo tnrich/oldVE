@@ -184,7 +184,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                                 return '<div style="white-space:normal !important;">'+ val +'</div>';
                             }
                         }
-                    ]
+                    ],
+                    viewConfig: {
+                        enableTextSelection: true
+                    },
+
                 },
                 {
                     xtype: 'gridpanel',
@@ -204,10 +208,23 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             forceFit: true,
                             flex: 1,
                             renderer: function(val) {
-                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                                val = val.substring(0, val.indexOf(" at")).substring(0, val.indexOf("."));
+                                return '<div style="white-space:normal !important;">'+ val +'.</div>';
                             }
                         }
-                    ]
+                    ],
+                    viewConfig: {
+                        enableTextSelection: true
+                    },
+
+                    tools:[
+                        {
+                            type:'help',
+                            tooltip: 'Get Help',
+                            handler: function(event, toolEl, panel){
+                                // show help here
+                            }
+                        }],
                 },
                 {
                     xtype: 'gridpanel',
@@ -216,11 +233,12 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     title: 'Output Assembled Constructs',
                     minHeight: 100,
                     layout: 'fit',
+                    autoScroll: true,
                     columns: [
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'name',
-                            flex: 1,
+                            width: 120,
                             text: 'Name',
                             renderer: function (val, metadata) {
                                 metadata.tdAttr = 'data-qtip = "Click to open"';
@@ -230,15 +248,26 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'sizeBP',
-                            flex: 1,
+                            width: 80,
                             text: 'Size (bp)'
                         },
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'fileType',
-                            flex: 1,
+                            width: 120,
                             text: 'Type'
                         },
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'parts',
+                            flex: 1,
+                            dirty: false,
+                            text: 'Parts Contained',
+                            renderer: function(val) {
+                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ",");
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
+                        }
                         // {
                         //     xtype: 'gridcolumn',
                         //     dataIndex: 'fileContent',
@@ -249,7 +278,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         //         return content_limited + "..."
                         //     }
                         // }
-                    ]
+                    ],
                 },
                 {
                     xtype: 'gridpanel',
@@ -275,22 +304,39 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             text: 'Value'
                         }
                     ]
-                },
-                {
-                xtype: 'fieldset',
-                margin: '10 10 10 10',
-                layout: 'fit',
-                title: 'Combinatorial Mock Assembly Output',
-                hidden: true,
-                items: [
-                    {
-                        xtype: 'textareafield',
-                        name: 'combinatorialAssembly',
-                        margin: '10 10 20 10',
-                        fieldLabel: ''
-                    }
-                    ]
-                }]
+                }
+                // ,{
+                //     xtype: 'gridpanel',
+                //     name: 'combinatorialAssembly',
+                //     margin: '10 10 20 10',
+                //     title: 'Parts',
+                //     minHeight: 100,
+                //     layout: 'fit',
+                //     columns: [
+                //         {
+                //             xtype: 'gridcolumn',
+                //             dataIndex: 'name',
+                //             flex: 1,
+                //             text: 'Name'
+                //         }
+                //     ]
+                // },
+                // {
+                // xtype: 'fieldset',
+                // margin: '10 10 10 10',
+                // layout: 'fit',
+                // title: 'Combinatorial Mock Assembly Output',
+                // hidden: true,
+                // items: [
+                //     {
+                //         xtype: 'textareafield',
+                //         name: 'combinatorialAssembly',
+                //         margin: '10 10 20 10',
+                //         fieldLabel: ''
+                //     }
+                //     ]
+                // }
+                ]
             }],
 
     listeners: {}

@@ -26,10 +26,37 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     sequenceManager: null,
     VEManager: null,
 
-    onImportBtnChange: function(pBtn) {
-        alert("hi");
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        this.activeTab = newTab;
+
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.sequenceManager = newTab.model;
+
+            newTab.down("component[identifier*='sequenceLinearMenuItem']").setChecked(
+                                            !this.sequenceManager.getCircular(), true);
+
+            // Store current feature/cut site/orf visibility settings on the old
+            // tab, and load those from the new tab.
+            if(oldTab.initialCls === "VectorEditorPanel") {
+                oldTab.options = {
+                    features: oldTab.down("component[identifier='featuresMenuItem']").checked,
+                    cutSites: oldTab.down("component[identifier='cutSitesMenuItem']").checked,
+                    orfs: oldTab.down("component[identifier='orfsMenuItem']").checked,
+                    circular: oldTab.down("component[identifier='circularViewMenuItem']").checked,
+                    mapCaret: oldTab.down("component[identifier='mapCaretMenuItem']").checked,
+                    complementary: oldTab.down("component[identifier='showComplementaryMenuItem']").checked,
+                    spaces: oldTab.down("component[identifier='showSpacesMenuItem']").checked,
+                    sequenceAA: oldTab.down("component[identifier='showSequenceAAMenuItem']").checked,
+                    revComAA: oldTab.down("component[identifier='showRevcomAAMenuItem']").checked,
+                    featureLabels: oldTab.down("component[identifier='featureLabelsMenuItem']").checked,
+                    cutSiteLabels: oldTab.down("component[identifier='cutSiteLabelsMenuItem']").checked
+                }
+            }
+
+            this.loadTabOptions(newTab.options);
+        }
     },
-    
+
     onCutMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.CUT);
     },
@@ -55,7 +82,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     validateSafeEditingMenuItem: function(checked) {
-        Ext.getCmp("safeEditingMenuItem").setChecked(checked);
+        Ext.each(this.activeTab.query("component[identifier*='safeEditingMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
     },
 
     onFindMenuItemClick: function() {
@@ -115,16 +144,48 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             viewMode = "linear";
         }
 
+        this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
+    },
+
+    onLinearViewMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var viewMode;
+
+        if (checked) {
+            viewMode = "linear";
+        }
+        else {
+            viewMode = "circular";
+        }
+
         this.application.fireEvent("ViewModeChanged", viewMode);
     },
 
-    onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
-        if (checked) {
-            btn.toggle(true, true);
+    loadTabOptions: function(tabOptions) {
+        if(tabOptions) {
+            this.activeTab.down("component[cls='featuresBtn']").toggle(tabOptions.features);
+            this.activeTab.down("component[cls='cutSitesBtn']").toggle(tabOptions.cutSites);
+            this.activeTab.down("component[cls='orfsBtn']").toggle(tabOptions.orfs);
+            this.activeTab.down("component[identifier='circularViewMenuItem']").setChecked(tabOptions.circular);
+            this.activeTab.down("component[identifier='mapCaretMenuItem']").setChecked(tabOptions.mapCaret);
+            this.activeTab.down("component[identifier='showComplementaryMenuItem']").setChecked(tabOptions.complementary);
+            this.activeTab.down("component[identifier='showSpacesMenuItem']").setChecked(tabOptions.spaces);
+            this.activeTab.down("component[identifier='showSequenceAAMenuItem']").setChecked(tabOptions.sequenceAA);
+            this.activeTab.down("component[identifier='showRevcomAAMenuItem']").setChecked(tabOptions.revComAA);
+            this.activeTab.down("component[identifier='featureLabelsMenuItem']").setChecked(tabOptions.featureLabels);
+            this.activeTab.down("component[identifier='cutSiteLabelsMenuItem']").setChecked(tabOptions.cutSiteLabels);
         }
-        else {
-            btn.toggle(false, true);
+    },
+
+    onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var buttons = this.activeTab.query('component[cls="featuresBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="featuresMenuItem"]');
+
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].toggle(checked, true);
+        }
+
+        for(i = 0; i < checkitems.length; i++) {
+            checkitems[i].setChecked(checked, true);
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
@@ -132,60 +193,94 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var btn = Ext.ComponentQuery.query("#cutsitesBtn")[0];
-        if(checked) {
-            btn.toggle(true, true);
-        } else {
-            btn.toggle(false, true);
+        var buttons = this.activeTab.query('component[cls="cutSitesBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="cutSitesMenuItem"]');
+
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].toggle(checked, true);
         }
-        
+
+        for(i = 0; i < checkitems.length; i++) {
+            checkitems[i].setChecked(checked, true);
+        }
         this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
                                    checked);
     },
 
     onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var btn = Ext.ComponentQuery.query("#orfsBtn")[0];
-        if(checked) {
-            btn.toggle(true, true);
-        } else {
-            btn.toggle(false, true);
+        var buttons = this.activeTab.query('component[cls="orfsBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="orfsMenuItem"]');
+
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].toggle(checked, true);
         }
 
+        for(i = 0; i < checkitems.length; i++) {
+            checkitems[i].setChecked(checked, true);
+        }
         this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
                                    checked);
     },
 
     onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='showComplementaryMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED,
                                    checked);
     },
 
     onShowSpacesMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='showSpacesMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_SPACES_CHANGED,
                                    checked);
     },
 
     onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='showSequenceAAMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED,
                                    checked);
     },
 
     onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='showRevcomAAMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED,
                                    checked);
     },
     
     onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='featureLabelsMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED,
                                    checked);
     },
 
     onCutSiteLabelsMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='cutSiteLabelsMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED,
                                    checked);
     },
 
     onMapCaretMenuItemCheckChange: function(menucheckitem, checked) {
+        Ext.each(this.activeTab.query("component[identifier*='mapCaretMenuItem']"), function(item) {
+            item.setChecked(checked);
+        });
+
         this.application.fireEvent(this.VisibilityEvent.SHOW_MAP_CARET_CHANGED,
                                     checked);
     },
@@ -194,7 +289,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
-        this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+        this.application.fireEvent(this.MenuItemEvent.SIMULATE_DIGESTION_WINDOW_OPENED, simulateDigestionWindow);
     },    
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
@@ -209,15 +304,19 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onViewModeChanged: function(viewMode) {
-        var circularMenuItem = Ext.getCmp("circularViewMenuItem");
-        var linearMenuItem = Ext.getCmp("linearViewMenuItem");
+        var circularMenuItems = this.activeTab.query("component[identifier*='circularViewMenuItem']");
+        var linearMenuItems = this.activeTab.query("component[identifier*='linearViewMenuItem']");
 
         if(viewMode == "linear") {
-            circularMenuItem.setChecked(false, true);
-            linearMenuItem.setChecked(true, true);
+            for(var i = 0; i < circularMenuItems.length; i++) {
+                circularMenuItems[i].setChecked(false, true);
+                linearMenuItems[i].setChecked(true, true);
+            }
         } else {
-            circularMenuItem.setChecked(true, false);
-            linearMenuItem.setChecked(false, true);
+            for(var i = 0; i < circularMenuItems.length; i++) {
+                circularMenuItems[i].setChecked(true, false);
+                linearMenuItems[i].setChecked(false, true);
+            }
         }
     },
 
@@ -265,9 +364,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onSequenceManagerChanged: function(sequenceManager) {
-        Ext.getCmp("sequenceLinearMenuItem").setChecked(
-                                        !sequenceManager.getCircular(), true);
-
     	this.sequenceManager = sequenceManager;
     },
     
@@ -285,11 +381,11 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     
     onPropertiesMenuItemClick: function() {
     	var propertiesWindow = Ext.create("Vede.view.ve.PropertiesWindow");
-    	Ext.getCmp('propertiesWindowOwnerField').setFieldStyle('border-color:transparent;background-color:transparent');
-    	Ext.getCmp('propertiesWindowCreatedField').setFieldStyle('border-color:transparent;background-color:transparent');
-    	Ext.getCmp('propertiesWindowLastModifiedField').setFieldStyle('border-color:transparent;background-color:transparent');
+    	this.activeTab.down('component[cls="propertiesWindowOwnerField"]').setFieldStyle('border-color:transparent;background-color:transparent');
+    	this.activeTab.down('component[cls="propertiesWindowCreatedField"]').setFieldStyle('border-color:transparent;background-color:transparent');
+    	this.activeTab.down('component[cls="propertiesWindowLastModifiedField"]').setFieldStyle('border-color:transparent;background-color:transparent');
     	
-    	Ext.getCmp('propertiesWindowSequenceNameField').setValue(
+    	this.activeTab.down('component[cls="propertiesWindowSequenceNameField"]').setValue(
             Teselagen.manager.ProjectManager.workingSequence.get("name"));
 
     	propertiesWindow.show();
@@ -297,9 +393,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onPropertiesWindowOKButtonClick: function() {
-    	var name = Ext.getCmp('propertiesWindowSequenceNameField').getValue();
+    	var name = this.activeTab.down('component[cls="propertiesWindowSequenceNameField"]').getValue();
     	if(name == null || name.match(/^\s*$/) || name.length==0) {
-    		Ext.getCmp('propertiesWindowSequenceNameField').setFieldStyle("border-color:red");
+    		this.activeTab.down('component[cls="propertiesWindowSequenceNameField"]').setFieldStyle("border-color:red");
     	} else {
     		var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
     		var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
@@ -326,126 +422,135 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     		workingSequence.save({
                 callback: function () {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                        Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
-                        //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                        this.activeTab.down("component[cls='projectTreePanel']").expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
                     });
                 }
             });
     		
-    		Ext.getCmp('PropertiesWindow').close();
+    		this.activeTab.down('component[cls="PropertiesWindow"]').close();
     	}
     },
     
     init: function() {
+        // For some reason, menu items' 'cls' attributes are set to null when 
+        // the parent menu is opened and then closed. For this reason, we can't
+        // query them by class, so we must query them by a different field. I 
+        // added the field 'identifier' to make this easier.
         this.control({
-            "#cutMenuItem": {
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "component[identifier*='cutMenuItem']": {
                 click: this.onCutMenuItemClick
             },
-            "#copyMenuItem": {
+            "component[identifier*='copyMenuItem']": {
                 click: this.onCopyMenuItemClick
             },
-            "#pasteMenuItem": {
+            "component[identifier*='pasteMenuItem']": {
                 click: this.onPasteMenuItemClick
             },
-            "#undoMenuItem": {
+            "component[identifier*='undoMenuItem']": {
                 click: this.onUndoMenuItemClick
             },
-            "#redoMenuItem": {
+            "component[identifier*='redoMenuItem']": {
                 click: this.onRedoMenuItemClick
             },
-            "#safeEditingMenuItem": {
+            "component[identifier*='safeEditingMenuItem']": {
                 checkchange: this.onSafeEditingMenuItemCheckChange
             },
-            "#findMenuItem": {
+            "component[identifier*='findMenuItem']": {
                 click: this.onFindMenuItemClick
             },
-            "#gotoMenuItem": {
+            "component[identifier*='gotoMenuItem']": {
                 click: this.onGotoMenuItemClick
             },
-            "#selectMenuItem": {
+            "component[identifier*='selectMenuItem']": {
                 click: this.onSelectMenuItemClick
             },
-            "#selectAllMenuItem": {
+            "component[identifier*='selectAllMenuItem']": {
                 click: this.onSelectAllMenuItemClick
             },
-            "#selectInverseMenuItem": {
+            "component[identifier*='selectInverseMenuItem']": {
                 click: this.onSelectInverseMenuItemClick
             },
-            "#sequenceLinearMenuItem": {
+            "component[identifier*='sequenceLinearMenuItem']": {
                 checkchange: this.onSequenceLinearMenuItemCheckChange
             },
-            "#reverseComplementMenuItem": {
+            "component[identifier*='reverseComplementMenuItem']": {
                 click: this.onReverseComplementMenuItemClick
             },
-            "#rebaseMenuItem": {
+            "component[identifier*='rebaseMenuItem']": {
                 click: this.onRebaseMenuItemClick
             },
-            "#VectorEditorPanel > button[text=Cancel]": {
+            "component[identifier='VectorEditorPanel'] > button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
-            "#downloadGenbankMenuItem": {
+            "component[identifier*='downloadGenbankMenuItem']": {
                 click: this.onDownloadGenbankMenuItemClick
             },
-            "#renameSequenceItem": {
+            "component[identifier*='renameSequenceItem']": {
                 click: this.onRenameSequenceItemClick
             },
-            "#circularViewMenuItem": {
+            "component[identifier*='circularViewMenuItem']": {
                 checkchange: this.onCircularViewMenuItemCheckChange
             },
-            "#featuresMenuItem": {
+            "component[identifier*='linearViewMenuItem']": {
+                checkchange: this.onLinearViewMenuItemCheckChange
+            },
+            "component[identifier*='featuresMenuItem']": {
                 checkchange: this.onFeaturesMenuItemCheckChange
             },
-            "#cutSitesMenuItem": {
+            "component[identifier*='cutSitesMenuItem']": {
                 checkchange: this.onCutSitesMenuItemCheckChange
             },
-            "#orfsMenuItem": {
+            "component[identifier*='orfsMenuItem']": {
                 checkchange: this.onOrfsMenuItemCheckChange
             },
-            "#showComplementaryMenuItem": {
+            "component[identifier*='showComplementaryMenuItem']": {
                 checkchange: this.onShowComplementaryMenuItemCheckChange
             },
-            "#showSpacesMenuItem": {
+            "component[identifier*='showSpacesMenuItem']": {
                 checkchange: this.onShowSpacesMenuItemCheckChange
             },
-            "#showSequenceAAMenuItem": {
+            "component[identifier*='showSequenceAAMenuItem']": {
                 checkchange: this.onShowSequenceAAMenuItemCheckChange
             },
-            "#showRevcomAAMenuItem": {
+            "component[identifier*='showRevcomAAMenuItem']": {
                 checkchange: this.onShowRevcomAAMenuItemCheckChange
             },
-            "#featureLabelsMenuItem": {
+            "component[identifier*='featureLabelsMenuItem']": {
                 checkchange: this.onFeatureLabelsMenuItemCheckChange
             },
-            "#cutSiteLabelsMenuItem": {
+            "component[identifier*='cutSiteLabelsMenuItem']": {
                 checkchange: this.onCutSiteLabelsMenuItemCheckChange
             },
-            "#mapCaretMenuItem": {
+            "component[identifier*='mapCaretMenuItem']": {
                 checkchange: this.onMapCaretMenuItemCheckChange
             },
-            "#simulateDigestionMenuItem": {
+            "component[identifier*='simulateDigestionMenuItem']": {
                 click: this.onSimulateDigestionMenuItemClick
             },
-            "#restrictionEnzymesManagerMenuItem": {
+            "component[identifier*='restrictionEnzymesManagerMenuItem']": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             },
-            "#newBlankVectorEditorMenuItem": {
+            "component[identifier*='newBlankVectorEditorMenuItem']": {
                 click: this.onNewBlankVectorEditorMenuItemClick
             },
-            "#printSequenceViewMenuItem": {
+            "component[identifier*='printSequenceViewMenuItem']": {
                 click: this.onPrintSequenceViewMenuItemClick
             },
-            "#printCircularViewMenuItem": {
+            "component[identifier*='printCircularViewMenuItem']": {
                 click: this.onPrintCircularViewMenuItemClick
             },
-            "#printLinearViewMenuItem": {
+            "component[identifier*='printLinearViewMenuItem']": {
                 click: this.onPrintLinearViewMenuItemClick
             },
-            "#propertiesMenuItem": {
+            "component[identifier*='propertiesMenuItem']": {
                 click: this.onPropertiesMenuItemClick
             },
-            "#propertiesWindowOKButton": {
+            "component[cls='propertiesWindowOKButton']": {
                 click: this.onPropertiesWindowOKButtonClick
-            },
+            }
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;
@@ -457,7 +562,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED,
                             this.validateSafeEditingMenuItem, this);
 
-        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+        this.application.on(this.VisibilityEvent.VIEW_MODE_CHANGED, this.onViewModeChanged, this);
         this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
                 this.onSequenceManagerChanged,this);
     }

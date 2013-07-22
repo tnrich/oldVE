@@ -84,11 +84,15 @@ Ext.define("Teselagen.models.EugeneRule", {
                     });
                 }
                 return compOp;
+                console.log('heloo');
             }
         },
         {
             name: "operand2isNumber",
+
             convert: function(v) {
+                console.log(v);
+            console.log(operand2isNumber);
                 if (this.get("operand2Number") === undefined) {
                     return v;
                 }
@@ -135,7 +139,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             instanceName: "operand2",
             foreignKey: "operand2_id" 
 
-        },
+        }
         //Needed to find the parent of a child
         /*
         {
@@ -167,7 +171,6 @@ Ext.define("Teselagen.models.EugeneRule", {
      */
     setOperand2: function(pOperand2) {
         if (Ext.typeOf(pOperand2) === "number") {
-            //console.log(pOperand2);
             this.set("operand2Number", pOperand2);
             this.set("operand2isNumber", true);
         } else if (Ext.getClassName(pOperand2) === "Teselagen.models.Part") {
@@ -179,16 +182,16 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
     },
 
-    /*setOperand1: function(pOperand1) {
-        console.log("here");
-        if (Ext.getClassName(pOperand1) === "Teselagen.models.Part") {
-            this.setOperand1(pOperand1);
-        } else {
-            throw Ext.create("Teselagen.bio.BioException", {
-                message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
-            });
-        }
-    },*/
+    // setOperand1: function(pOperand1) {
+    //     console.log("here");
+    //     if (Ext.getClassName(pOperand1) === "Teselagen.models.Part") {
+    //         this.setOperand1(pOperand1);
+    //     } else {
+    //         throw Ext.create("Teselagen.bio.BioException", {
+    //             message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
+    //         });
+    //     }
+    // },
 
 
     /** (From EugeneRulesManager.js/EugeneProxy.as)

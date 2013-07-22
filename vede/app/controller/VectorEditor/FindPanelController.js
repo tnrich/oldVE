@@ -30,8 +30,8 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
     },
 
     onFindPanelOpened: function() {
-        Ext.getCmp("FindPanel").setVisible(!Ext.getCmp("FindPanel").isVisible());
-        Ext.getCmp("findField").focus(true, 10);
+        this.activeTab.down("component[cls='FindPanel']").setVisible(!this.activeTab.down("component[cls='FindPanel']").isVisible());
+        this.findField.focus(true, 10);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -39,6 +39,12 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
         this.findManager.setSequenceManager(pSeqMan);
 
         this.findManager.getAAManager().setSequenceManager(pSeqMan);
+    },
+
+    onSequenceChanged: function() {
+        if(this.activeTab.down("button[cls='highlightAllBtn']").pressed) {
+            this.highlightMatches();
+        }
     },
 
     onFindFieldKeyup: function(field, event) {
@@ -55,9 +61,9 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
     
     onFindFieldValidityChange: function(field, valid) {
         if(valid) {
-            Ext.getCmp("findNextBtn").enable();
+            this.activeTab.down("button[cls='findNextBtn']").enable();
         } else {
-            Ext.getCmp("findNextBtn").disable();
+            this.activeTab.down("button[cls='findNextBtn']").disable();
             this.findField.setFieldStyle("background-color:#ff6666");
         }
     },
@@ -79,7 +85,9 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this, result.start, result.end);
 
-                if(Ext.getCmp("highlightAllBtn").pressed) {
+                this.caretIndex = result.start;
+
+                if(this.activeTab.down("button[cls='highlightAllBtn']").pressed) {
                     this.highlightMatches();
                 }
             } else {
@@ -120,20 +128,23 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
 
     init: function() {
         this.control({
-            "#findField": {
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
+            "component[cls='findField']": {
                 keyup: this.onFindFieldKeyup,
                 validitychange: this.onFindFieldValidityChange
             },
-            "#findNextBtn": {
+            "component[cls='findNextBtn']": {
                 click: this.onFindNextClick
             },
-            "#highlightAllBtn": {
+            "component[cls='highlightAllBtn']": {
                 toggle: this.onToggleHighlight
             },
-            "#findInSelector": {
+            "component[cls='findInSelector']": {
                 change: this.onFindInSelectorChange
             },
-            "#literalSelector": {
+            "component[cls='literalSelector']": {
                 change: this.validateFindField
             }
         });
@@ -149,14 +160,22 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
                             this.onFindPanelOpened, this);
         this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
                             this.onSequenceManagerChanged, this);
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGED,
+                            this.onSequenceChanged, this);
     },
 
-    onLaunch: function() {
-        this.findField = Ext.getCmp("findField");
-        this.findInSelector = Ext.getCmp("findInSelector");
-        this.literalSelector = Ext.getCmp("literalSelector");
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(newTab.initialCls === "VectorEditorPanel") {
+            this.activeTab = newTab;
 
-        this.findManager = Ext.create("Teselagen.manager.FindManager");
-        this.findManager.setAAManager(Teselagen.manager.AAManager);
-    },
+            this.findField = newTab.down("component[cls='findField']");
+            this.findInSelector = newTab.down("component[cls='findInSelector']");
+            this.literalSelector = newTab.down("component[cls='literalSelector']");
+
+            this.findManager = Ext.create("Teselagen.manager.FindManager");
+            this.findManager.setAAManager(Teselagen.manager.AAManager);
+
+            this.onSequenceManagerChanged(newTab.model);
+        }
+    }
 });

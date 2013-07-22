@@ -102,7 +102,7 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
             contextMenu.show(); 
             contextMenu.setPagePosition(d3.event.pageX+1, d3.event.pageY - 5);*/
         };
-    },
+    }
 });
 
 

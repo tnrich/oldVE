@@ -7,19 +7,6 @@
 Ext.define("Teselagen.renderer.rail.SelectionLayer", {
     extend: "Teselagen.renderer.rail.Layer",
 
-    statics: {
-        SELECTION_COLOR: "#0099FF",
-        SELECTION_TRANSPARENCY: 0.3,
-        SELECTION_FRAME_COLOR: "#CCCCCC",
-        WIREFRAME_OFFSET: 5 // Distance of wireframe from rail edge.
-    },
-
-    deselect: function() {
-        this.callParent();
-
-        this.selectionSVG.selectAll(".railSelectionElement").remove();
-    },
-
     /**
      * Draws the shaded wedge-shaped selection area.
      */
@@ -62,20 +49,7 @@ Ext.define("Teselagen.renderer.rail.SelectionLayer", {
                    "L" + startPoint  + " " + wireHeight;
         }
 
-        var selectionElement = this.selectionSVG.select(".railSelectionElement");
-
-        if(selectionElement[0][0] === null) {
-            this.selectionSVG.append("svg:path")
-                             .attr("class", "railSelectionElement")
-                             .attr("stroke", this.self.SELECTION_FRAME_COLOR)
-                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                             .attr("fill", this.self.SELECTION_COLOR)
-                             .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
-                             .attr("d", path)
-                             .style("pointer-events", "none");
-        } else {
-            selectionElement.attr("d", path);
-        }
+        this.selectionSVG.attr("d", path);
     }
 });
     

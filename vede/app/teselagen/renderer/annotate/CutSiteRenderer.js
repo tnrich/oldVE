@@ -30,7 +30,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
     render: function() {
         this.cutSiteSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
-                               .attr("id", "cutSiteSVG");
+                               .attr("class", "cutSiteSVG");
 
         this.cutSiteSVG.append("svg:pattern")
             .attr("id", "curvyLine")

@@ -8,17 +8,6 @@
 Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
     extend: "Teselagen.renderer.rail.Layer",
 
-    statics: {
-        FRAME_COLOR: "#808080",
-        WIREFRAME_OFFSET: 5 // Distance of wireframe from rail edge.
-    },
-
-    deselect: function() {
-        this.callParent();
-
-        d3.selectAll(".railWireframeElement").remove();
-    },
-
     drawSelectionRail: function(fromIndex, endIndex) {
         var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
@@ -61,17 +50,6 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
                    "L" + startPoint  + " " + wireHeight;
         }
 
-        var selectionElement = this.selectionSVG.select(".railWireframeElement");
-
-        if(selectionElement[0][0] === null) {
-            this.selectionSVG.append("svg:path")
-                             .attr("class", "railWireframeElement")
-                             .attr("stroke", this.self.FRAME_COLOR)
-                             .attr("stroke-opacity", this.self.STROKE_OPACITY)
-                             .attr("fill", "none")
-                             .attr("d", path);
-        } else {
-            selectionElement.attr("d", path);
-        }
+        this.selectionSVG.attr("d", path);
     }
 });

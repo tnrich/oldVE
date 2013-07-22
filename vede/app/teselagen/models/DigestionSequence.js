@@ -11,7 +11,7 @@ Ext.define("Teselagen.models.DigestionSequence", {
         {name: 'startRestrictionEnzyme', type: 'auto'},
         {name: 'endRestrictionEnzyme', type: 'auto'},
         {name: 'startRelativePosition', type: 'int'},
-        {name: 'endRelativePosition', type: 'int'},
-    ],
+        {name: 'endRelativePosition', type: 'int'}
+    ]
 });
 
