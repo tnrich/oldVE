@@ -12,7 +12,7 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
         var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
         
         var finishedPreloadingResources = function(){
-            console.log("finished preloading resources");
+//            console.log("finished preloading resources");
             return cb(model);
         };
 
