@@ -34,43 +34,51 @@ Ext.define("Vede.controller.ProjectController", {
             {
 
 
-                var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
-                rootNode.removeAll(); // Remove existing subnodes
+                // var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
+                // rootNode.removeAll(); // Remove existing subnodes
 
-                // Append create project at the top
-                rootNode.appendChild({
-                    text: "Create project",
-                    leaf: true,
-                    hrefTarget: "newproj",
-                    icon: "resources/images/add.png"
+                // // Append create project at the top
+                // rootNode.appendChild({
+                //     text: "Create project",
+                //     leaf: true,
+                //     hrefTarget: "newproj",
+                //     icon: "resources/images/add.png"
+                // });
+
+                var gridStore = new Ext.data.Store({
+                    data: [],
+                    reader: new Ext.data.ArrayReader({
+                        id: 'id'},
+                        ['name', 'id', 'hrefTarget', 'icon', 'qtip']
+                    )
                 });
-
+                
                 // Iterate over projects
                 projects.each(function (project) {
 
                     // Append existing project
-                    var projectNode = rootNode.appendChild({
-                        text: project.data.name,
-                        id: project.data.id,
-                        hrefTarget: "openproj"
-                    });
+                    // var projectNode = rootNode.appendChild({
+                    //     text: project.data.name,
+                    //     id: project.data.id,
+                    //     hrefTarget: "openproj"
+                    // });
 
-                    // Append design to project node
-                    projectNode.appendChild({
-                        text: "Create design",
-                        leaf: true,
-                        hrefTarget: "newde",
-                        icon: "resources/images/add.png"
-                    });
+                    // // Append design to project node
+                    // projectNode.appendChild({
+                    //     text: "Create design",
+                    //     leaf: true,
+                    //     hrefTarget: "newde",
+                    //     icon: "resources/images/add.png"
+                    // });
 
-                    // Append sequence to project node
-                    projectNode.appendChild({
-                        text: "Create sequence",
-                        leaf: true,
-                        hrefTarget: "newsequence",
-                        icon: "resources/images/add.png"
-                        //id: 0
-                    });
+                    // // Append sequence to project node
+                    // projectNode.appendChild({
+                    //     text: "Create sequence",
+                    //     leaf: true,
+                    //     hrefTarget: "newsequence",
+                    //     icon: "resources/images/add.png"
+                    //     //id: 0
+                    // });
 
                     var designs = project.designs(); // Get designs store from current project
 
@@ -78,9 +86,8 @@ Ext.define("Vede.controller.ProjectController", {
                             // Iterate over designs
                             designs.each(function (design) {
                                 // Append design to project node
-                                var designnode = projectNode.appendChild({
-                                    text: design.data.name,
-                                    leaf: false,
+                                gridStore.add( new record ({
+                                    name: design.data.name,
                                     id: design.data.id,
                                     hrefTarget: "opende",
                                     icon: "resources/images/ux/design-tree-icon-leaf.png",
@@ -88,9 +95,8 @@ Ext.define("Vede.controller.ProjectController", {
                                 });
 
                                 // Append j5Report to design
-                                designnode.appendChild({
-                                    text: "J5 Reports",
-                                    leaf: true,
+                                gridStore.add( new record ({
+                                    name: "J5 Reports",
                                     id: design.data.id+"report",
                                     hrefTarget: "j5reports",
                                     icon: "resources/images/ux/j5-tree-icon-parent.png",
