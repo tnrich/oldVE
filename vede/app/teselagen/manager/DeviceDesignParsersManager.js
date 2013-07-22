@@ -442,9 +442,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             }
 
-            for(i = 0; i < delayedLinkedPartsLookup.length; i++)
+            for(var k = 0; k < delayedLinkedPartsLookup.length; k++)
             {
-                var delayed = delayedLinkedPartsLookup[i];
+                var delayed = delayedLinkedPartsLookup[k];
                 var originalPart = fullPartsAssocArray[delayed.part.getAttribute("id")];
                 if(originalPart)
                 {
