@@ -506,7 +506,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
-    onPartNameFieldKeyup: function(field, event) {
+    /**
+     * Handler when part name field receives keyup event.
+     */
+   onPartNameFieldKeyup: function(field, event) {
         if(event.getKey() === event.ENTER) {
             this.onPartNameFieldBlur(field);
         }
