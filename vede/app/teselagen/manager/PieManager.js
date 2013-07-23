@@ -380,7 +380,7 @@ Ext.define("Teselagen.manager.PieManager", {
             var scrollWidthRatio = (pc.scrollLeft + pcRect.width / 2) / pc.scrollWidth;
             var scrollHeightRatio = (pc.scrollTop + pcRect.height / 2) / pc.scrollHeight;
 
-            for(var i = 0; i < 10; i++) {
+            for(var i = 0; i < 8; i++) {
                 pc = container.el.dom;
                 frame = scope.pie.select(".pieFrame").node();
                 pcRect = pc.getBoundingClientRect();

@@ -89,7 +89,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.railContainer.el.dom.setAttribute("tabindex", "0");
         this.railContainer.el.on("keydown", this.onKeydown, this);
 
-        if(newTab.model.getCircular()) {
+        if(newTab.down("component[identifier='circularViewMenuItem']").checked) {
             this.railContainer.hide();
         } else {
             this.railContainer.show();
@@ -188,9 +188,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
 
     onViewModeChanged: function(viewMode) {
         if(viewMode == "circular") {
-            this.activeTab.down("component[cls='RailContainer']").hide();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']").hide();
         } else {
-            this.activeTab.down("component[cls='RailContainer']").show();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']").show();
         }
     },
 

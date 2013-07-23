@@ -34,7 +34,7 @@ Ext.define("Teselagen.mappers.Mapper", {
 
     setSequenceManager: function(pSeqMan) {
         if(pSeqMan) {
-            if(this.previousCalculatedSequence !== pSeqMan.getSequence()) {
+            if(this.previousCalculatedSequence !== pSeqMan.getSequence().toString()) {
                 //console.log(this.$className + " dirty");
                 this.setDirty(true);
                 this.previousCalculatedSequence = pSeqMan.getSequence().toString();
