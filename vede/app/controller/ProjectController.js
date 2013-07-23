@@ -34,49 +34,43 @@ Ext.define("Vede.controller.ProjectController", {
             {
 
 
-                // var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
-                // rootNode.removeAll(); // Remove existing subnodes
+                var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
+                rootNode.removeAll(); // Remove existing subnodes
 
-                // // Append create project at the top
-                // rootNode.appendChild({
-                //     text: "Create project",
-                //     leaf: true,
-                //     hrefTarget: "newproj",
-                //     icon: "resources/images/add.png"
-                // });
-
-                var gridStore = Ext.create("Ext.data.Store", {
-                    data: [],
-                    groupField: 'type',
-                    fields: ['type', 'name', 'id', 'hrefTarget', 'icon', 'qtip']
+                // Append create project at the top
+                rootNode.appendChild({
+                    text: "Create project",
+                    leaf: true,
+                    hrefTarget: "newproj",
+                    icon: "resources/images/add.png"
                 });
-                
+
                 // Iterate over projects
                 projects.each(function (project) {
 
                     // Append existing project
-                    // var projectNode = rootNode.appendChild({
-                    //     text: project.data.name,
-                    //     id: project.data.id,
-                    //     hrefTarget: "openproj"
-                    // });
+                    var projectNode = rootNode.appendChild({
+                        text: project.data.name,
+                        id: project.data.id,
+                        hrefTarget: "openproj"
+                    });
 
-                    // // Append design to project node
-                    // projectNode.appendChild({
-                    //     text: "Create design",
-                    //     leaf: true,
-                    //     hrefTarget: "newde",
-                    //     icon: "resources/images/add.png"
-                    // });
+                    // Append design to project node
+                    projectNode.appendChild({
+                        text: "Create design",
+                        leaf: true,
+                        hrefTarget: "newde",
+                        icon: "resources/images/add.png"
+                    });
 
-                    // // Append sequence to project node
-                    // projectNode.appendChild({
-                    //     text: "Create sequence",
-                    //     leaf: true,
-                    //     hrefTarget: "newsequence",
-                    //     icon: "resources/images/add.png"
-                    //     //id: 0
-                    // });
+                    // Append sequence to project node
+                    projectNode.appendChild({
+                        text: "Create sequence",
+                        leaf: true,
+                        hrefTarget: "newsequence",
+                        icon: "resources/images/add.png"
+                        //id: 0
+                    });
 
                     var designs = project.designs(); // Get designs store from current project
 
@@ -84,9 +78,9 @@ Ext.define("Vede.controller.ProjectController", {
                             // Iterate over designs
                             designs.each(function (design) {
                                 // Append design to project node
-                                gridStore.add({
-                                    type: 'Designs',
-                                    name: design.data.name,
+                                var designnode = projectNode.appendChild({
+                                    text: design.data.name,
+                                    leaf: false,
                                     id: design.data.id,
                                     hrefTarget: "opende",
                                     icon: "resources/images/ux/design-tree-icon-leaf.png",
@@ -94,17 +88,15 @@ Ext.define("Vede.controller.ProjectController", {
                                 });
 
                                 // Append j5Report to design
-                                gridStore.add({
-                                    type: 'Reports',
-                                    name: "J5 Reports",
+                                designnode.appendChild({
+                                    text: "J5 Reports",
+                                    leaf: true,
                                     id: design.data.id+"report",
                                     hrefTarget: "j5reports",
                                     icon: "resources/images/ux/j5-tree-icon-parent.png",
                                     qtip: design.data.name + " Report"
                                 });
                             });
-
-                    console.log(gridStore);
 
                     // Empty sequenceFile store
 
@@ -121,9 +113,9 @@ Ext.define("Vede.controller.ProjectController", {
                                 Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
 
                                 // Append sequence to project store
-                                gridStore.add({
-                                    type: 'Sequences',
-                                    name: sequence.data.name,
+                                projectNode.appendChild({
+                                    text: sequence.data.name,
+                                    leaf: true,
                                     id: sequence.data.id,
                                     hrefTarget: "opensequence",
                                     icon: "resources/images/ux/circular.png",
@@ -134,8 +126,6 @@ Ext.define("Vede.controller.ProjectController", {
                             if(typeof (cb2) === "function") {cb2(); }
                     
                 });
-
-                Ext.getCmp("ProjectPanelGrid").reconfigure(gridStore);
 
                 // For testing, execute callback
                 if(typeof (cb) === "function") {cb(); }

@@ -4,7 +4,6 @@
  */
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.panel.Panel',
-    requires: ["Vede.view.common.ProjectPanelGrid"],
     alias: 'widget.ProjectPanelView',
     region: 'west',
     id: 'ProjectPanel',
@@ -20,8 +19,14 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         pack: 'center'
     },
     items: [{
-        xtype: 'ProjectPanelGrid',
         flex: 1,
+        xtype: 'treepanel',
+        border: false,
+        id: 'projectTreePanel',
+        width: 220,
+        rootVisible: false,
+        animate: false,
+        width: 220
     }, {
         hidden: true,
         flex: 1,
