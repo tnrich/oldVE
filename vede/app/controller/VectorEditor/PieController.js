@@ -92,6 +92,19 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         // Set the tabindex attribute in order to receive keyboard events on a div.
         this.pieContainer.el.dom.setAttribute("tabindex", "0");
         this.pieContainer.el.on("keydown", this.onKeydown, this);
+
+        if(newTab.down("component[identifier='circularViewMenuItem']").checked) {
+            this.pieContainer.show();
+        } else {
+            this.pieContainer.hide();
+        }
+
+        // Set the relevant view options to the tab's saved settings.
+        this.pieManager.setShowCutSites(newTab.options.cutSites);
+        this.pieManager.setShowFeatures(newTab.options.features);
+        this.pieManager.setShowOrfs(newTab.options.orfs);
+        this.pieManager.setShowFeatureLabels(newTab.options.featureLabels);
+        this.pieManager.setShowCutSiteLabels(newTab.options.cutSiteLabels);
     },
     
     onLaunch: function() {
@@ -184,9 +197,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
     onViewModeChanged: function(viewMode) {
         if(viewMode == "linear") {
-            this.activeTab.down("component[cls='PieContainer']").hide();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']").hide();
         } else {
-            this.activeTab.down("component[cls='PieContainer']").show();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']").show();
         }
     },
 

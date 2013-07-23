@@ -34,6 +34,28 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
 
             newTab.down("component[identifier*='sequenceLinearMenuItem']").setChecked(
                                             !this.sequenceManager.getCircular(), true);
+
+            // Store current feature/cut site/orf visibility settings on the old
+            // tab, and load those from the new tab.
+            if(oldTab.initialCls === "VectorEditorPanel") {
+                var menuPanel = oldTab.down("VectorEditorMainMenuPanel");
+
+                oldTab.options = {
+                    features: menuPanel.down("component[identifier='featuresMenuItem']").checked,
+                    cutSites: menuPanel.down("component[identifier='cutSitesMenuItem']").checked,
+                    orfs: menuPanel.down("component[identifier='orfsMenuItem']").checked,
+                    circular: menuPanel.down("component[identifier='circularViewMenuItem']").checked,
+                    mapCaret: menuPanel.down("component[identifier='mapCaretMenuItem']").checked,
+                    complementary: menuPanel.down("component[identifier='showComplementaryMenuItem']").checked,
+                    spaces: menuPanel.down("component[identifier='showSpacesMenuItem']").checked,
+                    sequenceAA: menuPanel.down("component[identifier='showSequenceAAMenuItem']").checked,
+                    revComAA: menuPanel.down("component[identifier='showRevcomAAMenuItem']").checked,
+                    featureLabels: menuPanel.down("component[identifier='featureLabelsMenuItem']").checked,
+                    cutSiteLabels: menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").checked
+                }
+            }
+
+            this.loadTabOptions(newTab.options);
         }
     },
 
@@ -62,7 +84,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     validateSafeEditingMenuItem: function(checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='safeEditingMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='safeEditingMenuItem']"), function(item) {
             item.setChecked(checked);
         });
     },
@@ -140,9 +162,29 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.fireEvent("ViewModeChanged", viewMode);
     },
 
+    loadTabOptions: function(tabOptions) {
+        if(tabOptions) {
+            var menuPanel = this.activeTab.down("VectorEditorMainMenuPanel");
+
+            menuPanel.down("component[cls='featuresBtn']").toggle(tabOptions.features);
+            menuPanel.down("component[cls='cutSitesBtn']").toggle(tabOptions.cutSites);
+            menuPanel.down("component[cls='orfsBtn']").toggle(tabOptions.orfs);
+            menuPanel.down("component[cls='circularBtn']").toggle(tabOptions.circular);
+            menuPanel.down("component[cls='linearBtn']").toggle(!tabOptions.circular);
+            menuPanel.down("component[identifier='circularViewMenuItem']").setChecked(tabOptions.circular);
+            menuPanel.down("component[identifier='mapCaretMenuItem']").setChecked(tabOptions.mapCaret);
+            menuPanel.down("component[identifier='showComplementaryMenuItem']").setChecked(tabOptions.complementary);
+            menuPanel.down("component[identifier='showSpacesMenuItem']").setChecked(tabOptions.spaces);
+            menuPanel.down("component[identifier='showSequenceAAMenuItem']").setChecked(tabOptions.sequenceAA);
+            menuPanel.down("component[identifier='showRevcomAAMenuItem']").setChecked(tabOptions.revComAA);
+            menuPanel.down("component[identifier='featureLabelsMenuItem']").setChecked(tabOptions.featureLabels);
+            menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").setChecked(tabOptions.cutSiteLabels);
+        }
+    },
+
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var buttons = Ext.ComponentQuery.query('component[cls="featuresBtn"]');
-        var checkitems = Ext.ComponentQuery.query('menucheckitem[identifier="featuresMenuItem"]');
+        var buttons = this.activeTab.query('component[cls="featuresBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="featuresMenuItem"]');
 
         for(var i = 0; i < buttons.length; i++) {
             buttons[i].toggle(checked, true);
@@ -157,8 +199,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var buttons = Ext.ComponentQuery.query('component[cls="cutSitesBtn"]');
-        var checkitems = Ext.ComponentQuery.query('menucheckitem[identifier="cutSitesMenuItem"]');
+        var buttons = this.activeTab.query('component[cls="cutSitesBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="cutSitesMenuItem"]');
 
         for(var i = 0; i < buttons.length; i++) {
             buttons[i].toggle(checked, true);
@@ -172,8 +214,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
-        var buttons = Ext.ComponentQuery.query('component[cls="orfsBtn"]');
-        var checkitems = Ext.ComponentQuery.query('menucheckitem[identifier="orfsMenuItem"]');
+        var buttons = this.activeTab.query('component[cls="orfsBtn"]');
+        var checkitems = this.activeTab.query('menucheckitem[identifier="orfsMenuItem"]');
 
         for(var i = 0; i < buttons.length; i++) {
             buttons[i].toggle(checked, true);
@@ -187,7 +229,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showComplementaryMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showComplementaryMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -196,7 +238,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowSpacesMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showSpacesMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showSpacesMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -205,7 +247,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showSequenceAAMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showSequenceAAMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -214,7 +256,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='showRevcomAAMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='showRevcomAAMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -223,7 +265,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
     
     onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='featureLabelsMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='featureLabelsMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -232,7 +274,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onCutSiteLabelsMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='cutSiteLabelsMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='cutSiteLabelsMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -241,7 +283,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onMapCaretMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(Ext.ComponentQuery.query("component[identifier*='mapCaretMenuItem']"), function(item) {
+        Ext.each(this.activeTab.query("component[identifier*='mapCaretMenuItem']"), function(item) {
             item.setChecked(checked);
         });
 
@@ -253,7 +295,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
-        this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+        this.application.fireEvent(this.MenuItemEvent.SIMULATE_DIGESTION_WINDOW_OPENED, simulateDigestionWindow);
     },    
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
@@ -268,8 +310,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onViewModeChanged: function(viewMode) {
-        var circularMenuItems = Ext.ComponentQuery.query("component[identifier*='circularViewMenuItem']");
-        var linearMenuItems = Ext.ComponentQuery.query("component[identifier*='linearViewMenuItem']");
+        var circularMenuItems = this.activeTab.query("component[identifier*='circularViewMenuItem']");
+        var linearMenuItems = this.activeTab.query("component[identifier*='linearViewMenuItem']");
 
         if(viewMode == "linear") {
             for(var i = 0; i < circularMenuItems.length; i++) {

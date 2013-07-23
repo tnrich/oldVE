@@ -105,7 +105,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
             var tabPanel = Ext.getCmp("mainAppPanel");
             var newj5ReportPanel = Ext.create("Vede.view.j5Report.j5ReportPanel", {
                 title: DeviceDesign.data.name + " j5 Report",
-                model: DeviceDesign
+                model: DeviceDesign,
+                icon: "resources/images/ux/tab-report-icon.png",
+                iconCls: "tab-icon"
             });
             tabPanel.add(newj5ReportPanel).show();
             tabPanel.setActiveTab(newj5ReportPanel);
@@ -127,8 +129,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
-                title: "Device Editor | " + selectedDesign.data.name,
+                title: selectedDesign.data.name,
                 model: selectedDesign,
+                icon: "resources/images/ux/tab-design-icon.png",
+                iconCls: "tab-icon",
                 modelId: selectedDesign.data.id
             })).show();
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules

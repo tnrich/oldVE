@@ -23,11 +23,10 @@ Ext.define("Teselagen.event.DeviceEvent", {
     INSERT_PART_AT_SELECTION: "InsertPartAtSelection",
 
     MAP_PART: "MapPart",
-    MAP_PART_SELECT: "MapPartSelect",
-    MAP_PART_NOTSELECT: "MapPartNotSelect",
+//    MAP_PART_SELECT: "MapPartSelect",
+//    MAP_PART_NOTSELECT: "MapPartNotSelect",
 
-    // TODO: Not used?
-    ADD_SELECT_ALERTS: "AddSelectAlerts",
+//    ADD_SELECT_ALERTS: "AddSelectAlerts",
 
     // Fired when cells in the grid which have no associated part should be 
     // filled with phantom parts.

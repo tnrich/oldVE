@@ -40,10 +40,10 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
             "#mainAppPanel": {
                 tabchange: this.onTabChange
             },
-            "menuitem[cls='zoomInMenuItem']": {
+            "menuitem[identifier='zoomInMenuItem']": {
                 click: this.onZoomInMenuItemClick
             },
-            "menuitem[cls='zoomOutMenuItem']": {
+            "menuitem[identifier='zoomOutMenuItem']": {
                 click: this.onZoomOutMenuItemClick
             }
         });
@@ -93,9 +93,18 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.railContainer.el.dom.setAttribute("tabindex", "0");
         this.railContainer.el.on("keydown", this.onKeydown, this);
 
-        if(newTab.down("menucheckitem[identifier*='circularViewMenuItem']").checked) {
+        if(newTab.down("component[identifier='circularViewMenuItem']").checked) {
             this.railContainer.hide();
+        } else {
+            this.railContainer.show();
         }
+
+        // Set the relevant view options to the tab's saved settings.
+        this.railManager.setShowCutSites(newTab.options.cutSites);
+        this.railManager.setShowFeatures(newTab.options.features);
+        this.railManager.setShowOrfs(newTab.options.orfs);
+        this.railManager.setShowFeatureLabels(newTab.options.featureLabels);
+        this.railManager.setShowCutSiteLabels(newTab.options.cutSiteLabels);
     },
 
     onLaunch: function() {
@@ -183,9 +192,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
 
     onViewModeChanged: function(viewMode) {
         if(viewMode == "circular") {
-            this.activeTab.down("component[cls='RailContainer']").hide();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']").hide();
         } else {
-            this.activeTab.down("component[cls='RailContainer']").show();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']").show();
         }
     },
 

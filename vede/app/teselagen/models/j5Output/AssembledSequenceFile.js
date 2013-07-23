@@ -36,7 +36,8 @@ Ext.define("Teselagen.models.j5Output.AssembledSequenceFile", {
         },
         {name: "name",   type: "String",     defaultValue: ""},
         {name: "fileContent",   type: "String",     defaultValue: ""},
-        {name: "sizeBP",   type: "String",     defaultValue: ""}
+        {name: "sizeBP",   type: "String",     defaultValue: ""},
+        {name: "parts", type: "String", defaultValue: ""}
     ]
 
 });

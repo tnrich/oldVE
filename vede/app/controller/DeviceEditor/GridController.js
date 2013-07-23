@@ -165,47 +165,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellClick: function(partCell) {
         Ext.suspendLayouts();
 
-        if(this.selectedPart) {
-            /*this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-
-            if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
-                this.selectedPart.deselect();
-            } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
-                this.selectedPart.select();
-                this.selectedPart.leaveselect();
-            }*/
-        }
-
-
         var gridPart = partCell.up().up();
-
         var j5Part = gridPart.getPart();
-
-        var j5Bin = gridPart.up("Bin").getBin();
-        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-
+        var gridBin = gridPart.up("Bin");
+        var j5Bin = gridBin.getBin();
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
-        this.selectedPart = gridPart;
-
-        gridPart.deselect();
-        gridPart.select();
-
-        if(j5Part) {
-            if(j5Part.get("sequencefile_id")==="") {
-                gridPart.select();
-                if (j5Part.get("name") !== "") {
-                    gridPart.selectAlert();
-                    gridPart.unHighlight();
-                }
-            } else {
-                gridPart.deselect();
-                gridPart.mapSelect();
-            }
-        } else {
-            gridPart.select();
-        }
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
 
         // Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(true);
@@ -213,6 +179,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleInsertRowAboveOptions(true);
         this.toggleInsertRowBelowOptions(true);
 
+        this.selectedPart = gridPart;
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
 
         Ext.resumeLayouts(true);
@@ -930,8 +897,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     /**
-     * Handler for the SELECT_BIN event. This event is fired when a bin is
-     * selected in the Inspector.
+     * Handler for the SELECT_BIN event. This event is fired when a bin/part is
+     * selected on the grid or a bin is selected in the Inspector.
      * @param {Teselagen.models.J5Bin} j5Bin The bin which has been selected.
      */
     onSelectBin: function(j5Bin) {
@@ -1046,6 +1013,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedPart = newPart;
 
             newPart.select();
+            this.highlight(j5Part);
         }
     },
 
@@ -1175,7 +1143,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id &&
                    !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
@@ -1195,7 +1163,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        Vede.application.fireEvent('AddEugeneRuleIndicator', targetGridParts);
+        Vede.application.fireEvent("AddEugeneRuleIndicator", targetGridParts);
     },
 
     getOldOperand2Parts: function(j5Part) {
@@ -1217,7 +1185,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id &&
                    !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
@@ -1237,69 +1205,45 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        Vede.application.fireEvent('RemoveEugeneRuleIndicator', targetGridParts);
+        Vede.application.fireEvent("RemoveEugeneRuleIndicator", targetGridParts);
     },
 
     onPartMapped: function(pj5Part) {
         var j5Part = pj5Part;
-
         var j5Bin = this.DeviceDesignManager.getBinByPart(this.activeProject, j5Part);
-
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
-
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-        }
-
-        this.onPartCellHasBeenMapped(j5Part);
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
 
-    onPartCellHasBeenMapped: function(j5Part) {
-        var gridParts = this.getGridPartsFromJ5Part(j5Part);
-
-        for(var i = 0; i < gridParts.length; i++) {
-            gridParts[i].mapSelect();
-        }
-
-        this.selectedPart = null;
-        this.selectedBin = null;
-
-        this.grid.removeAll();
-        this.renderDevice();
-    },
-
-    onPartCellHasNotBeenMapped: function(j5Part) {
-        var gridParts = this.getGridPartsFromJ5Part(j5Part);
-
-        for(var i = 0; i < gridParts.length; i++) {
-            gridParts[i].select();
-        }
-
-        this.grid.removeAll();
-        this.renderDevice();
-    },
-
     /**
-     * When a SELECT_PART event is fired, check to see if it is already selected.
-     * If not, select it, then highlight all of the grid parts which have the
+     * Handler for SELECT_PART event.
+     * After deselecting, apply selection to the selectedPart.
+     * Highlight all of the grid parts which have the
      * same j5Part.
      */
     onPartSelected: function(j5Part) {
+        this.deHighlight(j5Part);
+        this.selectedPart.select();
+        this.highlight(j5Part);
+    },
+
+    /**
+     * Highlights all gridParts associated with a given j5 part.
+     * @param {Teselagen.model.Part} j5Part
+     */
+    highlight: function(j5Part) {
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        if(gridParts.length > 0 && gridParts.indexOf(this.selectedPart) === -1) {
-            this.selectedPart = gridParts[0];
-            gridParts[0].mapSelect();
-        }
-
-        // Select all gridParts with the same source, unless the j5Part is empty.
+        // Highlight all gridParts with the same source, unless the j5Part is empty.
         if(j5Part) {
-            if(j5Part.get("sequencefile_id") !== "") {
+            if(j5Part.get("sequencefile_id")) {
                 for(var i = 0; i < gridParts.length; i++) {
                     gridParts[i].highlight();
                 }
+            }
+            else if (j5Part.get("name")) { // Named part
+                this.selectedPart.selectAlert();
+                this.selectedPart.unHighlight();
             }
         }
     },
@@ -1314,6 +1258,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             for(var i = 0; i < gridParts.length; i++) {
                 gridParts[i].deselect();
+                gridParts[i].unHighlight();
             }
         }
     },
@@ -1366,13 +1311,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     }
                 } else {
                     DETab.el.unmask();
-                    Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
+                    Vede.application.fireEvent(self.DeviceEvent.OPEN_PART_LIBRARY);
                 }
 
                 }});
             }, 1);
     } else {
-        Vede.application.fireEvent(this.DeviceEvent.OPEN_PART_LIBRARY);
+        Vede.application.fireEvent(self.DeviceEvent.OPEN_PART_LIBRARY);
     }
 
     },
@@ -1396,15 +1341,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }, this);
     },
 
-    onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
+    onValidateDuplicatedPartNameEvent: function(pPart,name,cb, errorMessage){
         var me = this;
         var duplicated = false;
         var nonidentical = false;
         if (pPart.get("id")) {
             this.activeBins.each(function(bin, binIndex) {
-                bin.parts().each(function(part){
+                bin.parts().each(function(part, partIndex){
                     if (part.get("id")===pPart.get("id")) {
-                        if (binIndex === me.InspectorController.selectedBinIndex) {
+                        if (binIndex === me.InspectorController.selectedBinIndex &&
+                            partIndex !== me.InspectorController.selectedPartIndex) {
                             duplicated = true;
                         }
                     }
@@ -1419,7 +1365,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         {
             Ext.MessageBox.show({
                 title: "Error",
-                msg: "Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.",
+                msg: errorMessage || "Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.",
                 buttons: Ext.MessageBox.OK,
                 icon:Ext.MessageBox.ERROR
             });
@@ -1622,13 +1568,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onPartMapped,
                             this);
 
-        this.application.on(this.DeviceEvent.MAP_PART_SELECT,
-                            this.onPartCellHasBeenMapped,
-                            this);
+//        this.application.on(this.DeviceEvent.MAP_PART_SELECT,
+//                            this.onPartCellHasBeenMapped,
+//                            this);
 
-        this.application.on(this.DeviceEvent.MAP_PART_NOTSELECT,
-                            this.onPartCellHasNotBeenMapped,
-                            this);
+//        this.application.on(this.DeviceEvent.MAP_PART_NOTSELECT,
+//                            this.onPartCellHasNotBeenMapped,
+//                            this);
 
         this.application.on(this.DeviceEvent.SELECT_PART,
                             this.onPartSelected,

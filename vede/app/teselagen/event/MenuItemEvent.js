@@ -24,5 +24,7 @@ Ext.define("Teselagen.event.MenuItemEvent", {
     SELECT_WINDOW_OPENED: "SelectWindowOpened",
 
     REVERSE_COMPLEMENT: "ReverseComplement",
-    REBASE_SEQUENCE: "RebaseSequence"
+    REBASE_SEQUENCE: "RebaseSequence",
+
+    SIMULATE_DIGESTION_WINDOW_OPENED: "SimulateDigestionWindowOpened"
 });

@@ -8,6 +8,7 @@ Ext.define("Teselagen.event.ContextMenuEvent", {
     
     MOUSE_DOWN_ANYWHERE: "MouseDownAnyWhere",
     
+    ANNOTATION_CONTEXT_MENU: "VectorPanelAnnotationContextMenu",
     
     // fired with feature as args
     PIE_ANNOTATION_RIGHT_CLICKED: "PieAnnotationRightClicked",
