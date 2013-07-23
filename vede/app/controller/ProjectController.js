@@ -45,12 +45,10 @@ Ext.define("Vede.controller.ProjectController", {
                 //     icon: "resources/images/add.png"
                 // });
 
-                var gridStore = new Ext.data.Store({
+                var gridStore = Ext.create("Ext.data.Store", {
                     data: [],
-                    reader: new Ext.data.ArrayReader({
-                        id: 'id'},
-                        ['name', 'id', 'hrefTarget', 'icon', 'qtip']
-                    )
+                    groupField: 'type',
+                    fields: ['type', 'name', 'id', 'hrefTarget', 'icon', 'qtip']
                 });
                 
                 // Iterate over projects
@@ -86,7 +84,8 @@ Ext.define("Vede.controller.ProjectController", {
                             // Iterate over designs
                             designs.each(function (design) {
                                 // Append design to project node
-                                gridStore.add( new record ({
+                                gridStore.add({
+                                    type: 'Designs',
                                     name: design.data.name,
                                     id: design.data.id,
                                     hrefTarget: "opende",
@@ -95,7 +94,8 @@ Ext.define("Vede.controller.ProjectController", {
                                 });
 
                                 // Append j5Report to design
-                                gridStore.add( new record ({
+                                gridStore.add({
+                                    type: 'Reports',
                                     name: "J5 Reports",
                                     id: design.data.id+"report",
                                     hrefTarget: "j5reports",
@@ -103,6 +103,8 @@ Ext.define("Vede.controller.ProjectController", {
                                     qtip: design.data.name + " Report"
                                 });
                             });
+
+                    console.log(gridStore);
 
                     // Empty sequenceFile store
 
@@ -119,9 +121,9 @@ Ext.define("Vede.controller.ProjectController", {
                                 Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
 
                                 // Append sequence to project store
-                                projectNode.appendChild({
-                                    text: sequence.data.name,
-                                    leaf: true,
+                                gridStore.add({
+                                    type: 'Sequences',
+                                    name: sequence.data.name,
                                     id: sequence.data.id,
                                     hrefTarget: "opensequence",
                                     icon: "resources/images/ux/circular.png",
@@ -132,6 +134,8 @@ Ext.define("Vede.controller.ProjectController", {
                             if(typeof (cb2) === "function") {cb2(); }
                     
                 });
+
+                Ext.getCmp("ProjectPanelGrid").reconfigure(gridStore);
 
                 // For testing, execute callback
                 if(typeof (cb) === "function") {cb(); }

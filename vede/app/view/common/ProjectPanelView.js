@@ -20,7 +20,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         pack: 'center'
     },
     items: [{
-        xtype: 'ProjectPanelGrid'
+        xtype: 'ProjectPanelGrid',
+        flex: 1,
     }, {
         hidden: true,
         flex: 1,

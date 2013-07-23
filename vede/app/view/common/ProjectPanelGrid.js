@@ -7,18 +7,21 @@ Ext.define('Vede.view.common.ProjectPanelGrid', {
 	alias: 'widget.ProjectPanelGrid',
 	xtype: 'grouped-grid', 
 	width: 220,
+	name: 'explorer',
+    id: 'ProjectPanelGrid',
 	features: [{
         ftype: 'grouping',
-        groupHeaderTpl: '{columnName}: {name} ({rows.length} Item{[values.rows.length > 1 ? "s" : ""]})',
+        groupHeaderTpl: '{name}',
         hideGroupedHeader: true,
-        id: 'ProjectPanelGrid'
+        startCollapsed: true,
     }],
 
     initComponent: function() {
     	this.columns = [{
     		text:'Type',
     		flex: 1,
-    		dataIndex: 'name'
+    		dataIndex: 'name',
+    		striped: false,
     	}];
 
     	this.callParent();
