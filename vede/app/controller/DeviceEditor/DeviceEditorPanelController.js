@@ -269,8 +269,15 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             bin.parts().each(function (part) {
 
                 if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-                if(part.data.name==="") { part.set("phantom",true); }
-                else { part.set("phantom",false); }
+                if(part.data.name==="") { 
+                    if(!part.get("phantom")) {
+                        part.set("phantom", true); 
+                    }
+                } else { 
+                    if(part.get("phantom")) {
+                        part.set("phantom", false); 
+                    }
+                }
 
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                     part.save({
