@@ -27,7 +27,7 @@ Ext.define("Teselagen.models.Part", {
         }
         /*
         afterRequest: function(req, res) {
-            console.log(JSON.parse(req.operation.response.responseText).duplicated); 
+            console.log(JSON.parse(req.operation.response.responseText).duplicated);
         }
         */
     },
@@ -93,7 +93,7 @@ Ext.define("Teselagen.models.Part", {
         sortType: function (s) {
             return String(s).toUpperCase();
         },
-        convert: function(v, record) {
+        convert: function(v) {
             var name;
             /*
                 if (v === "" || v === undefined || v === null) {
@@ -110,7 +110,7 @@ Ext.define("Teselagen.models.Part", {
                 return name;
                 */
             name = v;
-            if (v === undefined || v === null) name = "";
+            if (v === undefined || v === null) {name = "";}
             //if ( name !== "" ) record.set('phantom',false);
             return name;
     }}, {
@@ -182,14 +182,25 @@ Ext.define("Teselagen.models.Part", {
 
     /**
      * Determines if Part is empty, i.e.
-     * a Part is empty if it only has default values and no set SequenceFile
-     * A Part with a non-default "name" field is still defined as Empty.
+     * a Part is empty if it has no set SequenceFile
      * @returns {Boolean} True if empty, false if not.
      */
     isEmpty: function() {
         var partEmpty = false;
-        if (!this.get('sequencefile_id')) partEmpty = true;
+        if (!this.get("sequencefile_id")) {partEmpty = true;}
         return partEmpty;
+    },
+
+    /**
+     * Whether this part is a named part.
+     * @returns {Boolean} True if named, false if not.
+     */
+    isNamed: function() {
+        var isNamed = false;
+        if (this.get("name") && !this.get("sequencefile_id") && !this.get("partSource")) {
+            isNamed = true;
+        }
+        return isNamed;
     },
 
     /**
@@ -205,7 +216,7 @@ Ext.define("Teselagen.models.Part", {
             return true;
         }
 
-        if (this.get("name") === otherPart.get("name") && this.get("partSouce") == otherPart.get("partSource") && this.get("revComp") === otherPart.get("revComp") && this.get("genbankStartBP") === otherPart.get("genbankStartBP") && this.get("endBP") === otherPart.get("endBP") &&
+        if (this.get("name") === otherPart.get("name") && this.get("partSouce") === otherPart.get("partSource") && this.get("revComp") === otherPart.get("revComp") && this.get("genbankStartBP") === otherPart.get("genbankStartBP") && this.get("endBP") === otherPart.get("endBP") &&
         //this.get("sequenceFile") === otherPart.get("sequenceFile") &&
         this.getSequenceFile() === otherPart.getSequenceFile() &&
         //this.getSequenceFile().get("sequenceFileContent") === otherPart.getSequenceFile().get("sequenceFileContent") &&
