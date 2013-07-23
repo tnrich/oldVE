@@ -226,5 +226,5 @@ Ext.define("Teselagen.models.EugeneRule", {
         ruleText.push(");");
 
         return ruleText.join("");
-    }
+    },
 });
