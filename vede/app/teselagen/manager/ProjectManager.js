@@ -436,8 +436,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                     }
                 } else { return false; }
-
-            };
+        };
         Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
 
     },
