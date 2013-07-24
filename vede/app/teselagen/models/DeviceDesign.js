@@ -7,7 +7,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: ["Teselagen.constants.Constants",
                "Teselagen.models.J5Collection",
-               "Teselagen.models.EugeneRule"],
+               "Teselagen.models.EugeneRule",
+               "Teselagen.models.J5Bin"],
 
     proxy: {
         type: "rest",
@@ -161,17 +162,31 @@ Ext.define("Teselagen.models.DeviceDesign", {
         name: "name",
         type: "String",
         defaultValue: ""
-    }],
+    },
+        {
+        name: "combinatorial",
+        type: "boolean",
+        defaultValue: false
+    },
+        {
+        name: "isCircular",
+        type: "boolean",
+        defaultValue: true
+    }
+    ],
 
     validations: [],
 
-    associations: [{
-        type: "hasOne",
-        model: "Teselagen.models.J5Collection",
-        getterName: "getJ5Collection",
-        setterName: "setJ5Collection",
-        associationKey: "j5collection",
-        name: "j5collection" // Note: not a documented config, but specified for getRecordData
+    associations: [
+    {
+        type: "hasMany",
+        model: "Teselagen.models.J5Bin",
+        name: "bins"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.Part",
+        name: "parts",
+        foreignKey: "devicedesign_id"
     }, {
         type: "hasOne",
         model: "Teselagen.models.SBOLvIconInfo",
@@ -229,35 +244,57 @@ Ext.define("Teselagen.models.DeviceDesign", {
         });
     },
 
-    getDesign: function() {
-        /*
-        if(!this.modelIsLoaded)
-        {
-            this.modelIsLoaded = true;
-            this.reload(function(record){
-                if (Ext.isFunction(callback)) {
-                    callback(record);
-                }
-            });
-        }
-        */
-        return this;
-    },
 
-    /** (Untested)
-     * Get number of bins in J5Bin.
-     * @member Teselagen.models.DeviceDesign
-     * @returns {Number}
+    /**
+     * Adds a Part into the parts store.
+     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
+     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
+     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
+     * @returns {Boolean} True if added, false if not.
      */
-    getBinCount: function() {
-        return this.getJ5Collection().binCount();
+     /*
+    addToParts: function(pPart, pPosition, pFas) {
+        var added = false;
+        var fasNone = Teselagen.constants.Constants.FAS.NONE;
+        var fas = fasNone;
+        var fases = this.get("fases");
+        var isArray = Ext.isArray(pPart);
+        
+        if (!Ext.isEmpty(pFas)) {
+            fas = pFas;
+        }
+        else {
+            if (isArray) {
+                fas = [];
+                for (var i=0; i < pPart.length; i++) {
+                    fas.push(fasNone);
+                }
+            }
+        }
+        if (!Ext.isEmpty(pPosition)) {
+            if (Ext.isNumber(pPosition) && pPosition >= 0) {
+                this.parts().insert(pPosition, pPart);
+                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
+                added = true;
+            } else {
+                console.warn("Invalid part index:", pPosition);
+            }
+        } else {
+            this.parts().add(pPart);
+            this.set("fases", fases.concat(fas));
+            added = true;
+        }
+
+        return added;
     },
+    */
 
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection
      * @returns {Teselagen.models.J5Collection}
      */
+     /*
     createNewCollection: function(pNumBins) {
         if (this.getJ5Collection().binCount() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
@@ -272,12 +309,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
         this.setJ5Collection(j5Coll);
         return j5Coll;
     },
+    */
 
     /**
      * Creates a J5Collection from given J5Bins.
      * @param {Teselagen.models.J5Bin[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
      * @returns {Teselagen.models.J5Collection}
      */
+     /*
     createCollectionFromBins: function(pBins) {
         if (this.getJ5Collection().binCount() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
@@ -289,6 +328,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         this.setJ5Collection(j5Coll);
         return j5Coll;
     },
+    */
 
     /**
      * Adds a EugeneRule into the Rules Store.

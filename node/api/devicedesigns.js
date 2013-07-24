@@ -7,7 +7,8 @@ module.exports = function(app) {
      var Part = app.db.model("part");
 
     function fillEmptyParts(design){
-
+        
+        //console.log(design);
         design.j5collection.bins.forEach(function(bin, binKey) {
             bin.parts.forEach(function(part, partKey) {
                 var partId = design.j5collection.bins[binKey].parts[partKey];
@@ -19,17 +20,11 @@ module.exports = function(app) {
     };
 
     function prepareDesignWithParts(design,cb){
-        DeviceDesign.findById(design._id).populate('j5collection.bins.parts').exec(function(err, design) {
+        DeviceDesign.findById(design._id).populate('j5collection.bins.cells.part').exec(function(err, design) {
 
             design = design.toObject();
             design.id = design._id;
             delete design.rules;
-
-            design.j5collection.bins.forEach(function(bin, i) {
-                bin.parts.forEach(function(part, j) {
-                    //design.j5collection.bins[i].parts[j] = { name: "blank" };
-                });
-            });
 
             return cb(design);
         });
@@ -48,7 +43,7 @@ module.exports = function(app) {
 
         var reqDesign = req.body;
 
-        reqDesign = fillEmptyParts(reqDesign);
+        //reqDesign = fillEmptyParts(reqDesign);
 
         var newDesign = new DeviceDesign(reqDesign);
 
@@ -77,7 +72,7 @@ module.exports = function(app) {
         var DeviceDesign = app.db.model("devicedesign");
         var Part = app.db.model("part");
 
-        var id = req.body.id;
+        //var id = req.body.id;
         var model = req.body;
 
         model = fillEmptyParts(model);
@@ -129,7 +124,7 @@ module.exports = function(app) {
             });
         });
     });
-
+    
     /**
      * GET device design by id
      * @memberof module:./routes/api
@@ -137,32 +132,57 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
+        DeviceDesign.findById(req.params.devicedesign_id, function(err, design) {
+            var originalDesign = design.toObject();
+            if (err) {
+                errorHandler(err, req, res);
+            } else {
+                DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.cells.part').exec(function(err, design) {
+                    if(!design) return res.json(500,{"error":"design not found"});
+                    design = design.toObject();
+                    design.id = design._id;
+                    //delete design.rules; // Eugene rules to be send on a different request
+    
+                    if (err) {
+                        errorHandler(err, req, res);
+                    } else {
+    
+                        res.json({
+                            "designs": design
+                        });
+                    }
+                });
+                
+            }
+        });
+        
+    });
+    
+    /**
+     * GET device design by id
+     * @memberof module:./routes/api
+     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     */
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
+        var DeviceDesign = app.db.model("devicedesign");
+        DeviceDesign.findById(req.params.devicedesign_id, function(err, design) {console.log(design.j5collection.bins[0]);});
         DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
             if(!design) return res.json(500,{"error":"design not found"});
-            
             design = design.toObject();
             design.id = design._id;
-            delete design.rules; // Eugene rules to be send on a different request
+            //delete design.rules; // Eugene rules to be send on a different request
 
             if (err) {
                 errorHandler(err, req, res);
             } else {
-                design.j5collection.bins.forEach(function(bin, i) {
-                    bin.parts.forEach(function(part, partKey) {
-                        part.fas = bin.fases[partKey];
-                        if(part.phantom) {
-                            design.j5collection.bins[i].parts[partKey] = app.constants.defaultEmptyPart; 
-                            //delete design.j5collection.bins[i].parts[partKey].id;
-                        }
-                    });
-                });
                 res.json({
                     "designs": design
                 });
             }
         });
     });
-
+    
+    
     app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.params.devicedesign_id,function(err,devicedesign) {
