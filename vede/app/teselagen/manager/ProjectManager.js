@@ -119,6 +119,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
         );
     },
 
+    openSequenceLibrary: function () {
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
+        sequenceGrid.reconfigure(this.sequenceStore);
+        dashPanel.getActiveTab().el.unmask();
+    },
+
     /**
      * openDeviceDesign
      * Opens a DeviceDesign model in a new tab.

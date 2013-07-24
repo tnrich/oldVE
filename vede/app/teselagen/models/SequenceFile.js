@@ -189,6 +189,22 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "firstTimeImported",
         type: "boolean",
         defaultValue: "false"
+    }, {
+        name: "size",
+        type: "short",
+        convert: function(v, record) {
+            if (!(v === "" || v === undefined || v === null)) {
+                return v;
+            }
+
+            var length = record.getLength();
+
+            return length;
+        }
+    }, {
+        name: "parentProject",
+        type: "string",
+        defaultValue: ""
     }
 
     ],
