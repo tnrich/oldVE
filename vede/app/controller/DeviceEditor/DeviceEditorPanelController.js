@@ -120,7 +120,10 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     binName: "Bin1"
                 });
                 bins.add(newBin);
+
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.FILL_BLANK_CELLS);
                 toastr.options.onclick = null;
                 toastr.info("Design Cleared");
             }

@@ -633,8 +633,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if (evt === "ok") {
             if(selectedBin) {
                 var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
-                console.log(selectedBinIndex);
-                console.log(this.activeProject);
                 this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
                 this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             } else {
