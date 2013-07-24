@@ -57,7 +57,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
 
 
-                    if(rule.operand2_id) { newEugeneRule.setOperand2(allParts.getById(rule.operand2_id)); }
+                    if(rule.operand2_id && !rule.operand2isNumber) { newEugeneRule.setOperand2(allParts.getById(rule.operand2_id)); }
                     if(rule.operand2isNumber)
                     {
                         newEugeneRule.set("operand2Number",rule.operand2Number);
@@ -112,14 +112,15 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 
                 for (var i = 0; i <= binIndex; i++) {
                     existingDesign.getJ5Collection().deleteBinByIndex(i);
+                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
+
                 }
             
                 var newBin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "Bin1"
                 });
                 bins.add(newBin);
-//                console.log(existingDesign);
-                Vede.application.fireEvent("ReRenderCollectionInfo");
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
                 toastr.options.onclick = null;
                 toastr.info("Design Cleared");
             }
@@ -202,8 +203,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     saveDEProject: function (cb) {
         var self = this;
         Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
-        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
-
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model; 
 
         var saveAssociatedSequence = function (part, cb) {
             // Do not save sequence for a phantom or named part
@@ -222,6 +222,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                                             part.set("sequencefile_id", sequencefile.get("id"));
                                             part.save({
                                                 callback: function () {
+
                                                     cb();
                                                 }
                                             });
@@ -247,9 +248,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
         var saveDesign = function () {
             var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
-            design.rules().filters.clear();
+            design.rules().clearFilter(true);
+
             design.save({
+                // console.log('hii');
                 callback: function () {
+
                     Vede.application.fireEvent(self.GridEvent.RESUME_PART_ALERTS);
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
@@ -277,6 +281,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                     part.save({
                         callback: function (part) {
+
                             saveAssociatedSequence(part, function () {
                                 if(countParts === 1) { saveDesign();}
                                 countParts--;

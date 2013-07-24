@@ -11,7 +11,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                "Ext.grid.column.Column", 
                "Ext.grid.column.Number", 
                "Ext.grid.Panel", 
-               "Ext.grid.plugin.RowEditing",
+               "Ext.grid.plugin.CellEditing",
                "Vede.view.de.EugeneRulesGrid",
                "Vede.view.de.InspectorCollectionInfoGrid"],
     cls: 'InspectorPanel',

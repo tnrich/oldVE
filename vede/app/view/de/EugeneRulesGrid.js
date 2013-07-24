@@ -14,20 +14,39 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
             viewConfig: {
                 markDirty: false
             },
-            plugins: Ext.create('Ext.grid.plugin.RowEditing',{
+            plugins: Ext.create('Ext.grid.plugin.CellEditing',{
                 clicksToEdit: 2,
+                pluginId: 'cellplugin',
                 listeners: {
-                    edit: function (editor, e, eOpts) {
-                        console.log(editor);
+                    validateedit: function (editor, e, eOpts) {
                         var updatedField = e.field;
-                        var newId = e.newValues.operand2_id;
-                        var ruleName = e.record.raw.name;
-                        var oldId = e.value;
-                        if (updatedField === "operand2_id") {
-                            Vede.application.fireEvent('operand2Changed', newId, ruleName, oldId, e);
+                        var cancel = e.cancel;
+                        if (updatedField === "name" && e.originalValue != e.value) {
+                            var newName = e.value;
+                            duplicate = Vede.application.fireEvent('ruleNameChanged', newName, cancel);
+                            if (!duplicate) {return false;}
                         };
+                    },
+                    edit: function (editor, e, eOpts) {
+                        var updatedField = e.field;
+                        var operand1Id = e.record.operand1.internalId;
+                        var ruleName = e.record.data.name;
+                        
+                        if (updatedField === "operand2_id") {
+                            var oldId = e.originalValue;
+                            var newId = e.value;
+                            Vede.application.fireEvent('operand2Changed', operand1Id, newId, ruleName, oldId, e);
+                        } else if (updatedField === "compositionalOperator") {
+                            var record = e.record;
+                            var column = e.column;
+                            var oldOperand2 = e.record.operand2;
+                            var newCompOperator = e.value;
+                            var oldCompOperator = e.originalValue;
+                            Vede.application.fireEvent('changeCompOperator', record, column, ruleName, oldOperand2, operand1Id, oldCompOperator, newCompOperator); 
+                        }
                     }
-                }
+                },
+                
             }),
             columnLines: true,
             rowLines: true,
@@ -67,6 +86,7 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                     dataIndex: 'compositionalOperator',
                     editor: {
                         xtype: 'combobox',
+                        editable: false,
                         store: Teselagen.constants.Constants.COMPOP_LIST
                     }
                 },
@@ -77,23 +97,25 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                     cls: "operand2_field",
                     listeners: {
                         dblclick: function () {
-                            Vede.application.fireEvent('populateOperand2Field');
+                            var column = this;
+                            Vede.application.fireEvent('setOperand2Editor', column);
                         }
                     },
-                    editor: {
-                        xtype: 'combobox',
-                        store: [],
-                        cls: "operand2_combobox"
-                    },
-                    
                     renderer: function(id, metaData, rule) {
+                        if (rule.get("compositionalOperator") === "MORETHAN") {
+                            rule.set("operand2isNumber", true);
+                            return rule.get("operand2Number");
+                        } else {
+                            rule.set("operand2isNumber", false);
+                            return rule.getOperand2().get("name");
+                        }
                         if(rule.get("operand2isNumber")) {
                             return rule.get("operand2Number");
                         } else {
                             return rule.getOperand2().get("name");
                         }
                     }
-                }
+                },
             ]
         });
 
