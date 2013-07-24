@@ -241,7 +241,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 self.populateJ5ParametersDialog();
                 isCircular = r.ASSEMBLY_PRODUCT_TYPE == 'circular' ? true : false;
-                Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign().getJ5Collection().set('isCircular',isCircular);
+                Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign()().set('isCircular',isCircular);
             },
             failure: function(responseData, opts) {
                 self.j5ParamsWindow.setLoading(false);

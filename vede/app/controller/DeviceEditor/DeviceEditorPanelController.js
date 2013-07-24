@@ -35,7 +35,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 response = JSON.parse(response.responseText);
                 var rules = response.rules;
 
-                var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject.getDesign());
+                var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject);
 
                 rules.forEach(function(rule){
                     var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
@@ -64,7 +64,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         newEugeneRule.set("operand2isNumber",true);
                     }
 
-                    currentProject.getDesign().addToRules(newEugeneRule);
+                    currentProject.addToRules(newEugeneRule);
                 });
             },
             failure: function() {
@@ -107,11 +107,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         function ClearDeviceDesignBtn (btn) {
             if (btn==="ok") {
                 var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-                var bins = existingDesign.getJ5Collection().bins();
-                var binIndex = existingDesign.getJ5Collection().binCount();
+                var bins = existingDesign().bins();
+                var binIndex = existingDesign().binCount();
                 
                 for (var i = 0; i <= binIndex; i++) {
-                    existingDesign.getJ5Collection().deleteBinByIndex(i);
+                    existingDesign().deleteBinByIndex(i);
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
 
                 }
@@ -266,40 +266,36 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
 
         var countParts = 0;
-        design.getJ5Collection().bins().each(function (bin) {
-            bin.parts().each(function() {
-                countParts++;
+        design().bins().each(function (bin) {
+            bin.cells().each(function(cell) {
+                if(cell.getPart()) {
+                    countParts++;
+                }
             });
         });
-        design.getJ5Collection().bins().each(function (bin) {
-            bin.parts().each(function (part) {
+        design().bins().each(function (bin) {
+            bin.cells().each(function (cell) {
+                var part = cell.getPart();
 
-                if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-                if(part.data.name==="") { 
-                    if(!part.get("phantom")) {
-                        part.set("phantom", true); 
+                if(part) {
+                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+
+                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                        part.save({
+                            callback: function (part) {
+
+                                saveAssociatedSequence(part, function () {
+                                    if(countParts === 1) { saveDesign();}
+                                    countParts--;
+                                });
+                            }
+                        });
+                    } else {
+                        saveAssociatedSequence(part,function(){
+                            if(countParts === 1) { saveDesign(); }
+                            countParts--;
+                        });
                     }
-                } else { 
-                    if(part.get("phantom")) {
-                        part.set("phantom", false); 
-                    }
-                }
-
-                if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                    part.save({
-                        callback: function (part) {
-
-                            saveAssociatedSequence(part, function () {
-                                if(countParts === 1) { saveDesign();}
-                                countParts--;
-                            });
-                        }
-                    });
-                } else {
-                    saveAssociatedSequence(part,function(){
-                        if(countParts === 1) { saveDesign(); }
-                        countParts--;
-                    });
                 }
             });
         });

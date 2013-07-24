@@ -47,11 +47,11 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         var sequences = [];
         var rules = [];
 
-        design.getJ5Collection().bins().each(function(bin,binKey){
+        design().bins().each(function(bin,binKey){
 
             //bin.fases = [];
-            //for (var i= 0; i < bin.parts().count(); i++) {
-            //    bin.fases[i] = bin.parts().getAt(i).data.fas;
+            //for (var i= 0; i < bin.cells().count(); i++) {
+            //    bin.fases[i] = bin.cells().getAt(i).data.fas;
             //}
             //console.log(bin);
             var jsonBin = {};
@@ -69,7 +69,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonBin["de:binItems"] = {};
             jsonBin["de:binItems"]["de:partID"] = [];
 
-            bin.parts().each(function(part,partIndex){
+            bin.cells().each(function(part,partIndex){
                 //console.log(part);
                 jsonBin["de:binItems"]["de:partID"].push(part.internalId);
 

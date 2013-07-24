@@ -55,9 +55,9 @@ Ext.onReady(function() {
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
 
-            expect(bin.parts()).not.toBe(null);
-            expect(Ext.getClassName(bin.parts())).toBe("Ext.data.Store");
-            expect(Ext.getClassName(bin.getJ5Collection())).toBe("Teselagen.models.J5Collection");
+            expect(bin.cells()).not.toBe(null);
+            expect(Ext.getClassName(bin.cells())).toBe("Ext.data.Store");
+            expect(Ext.getClassName(bin())).toBe("Teselagen.models.J5Collection");
         });
 
         it("indexOfPart()//hasPart()", function(){
@@ -88,23 +88,23 @@ Ext.onReady(function() {
                 success = bin.addToParts(part1);
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(1);
-                expect(bin.parts().getAt(0)).toBe(part1);
+                expect(bin.cells().getAt(0)).toBe(part1);
                 expect(bin.get("fases")[0]).toBe("None");
                 //Add a second part, insert in front of previous part
                 success = bin.addToParts(part2, 0, "fas1");
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(2);
-                expect(bin.parts().getAt(0)).toBe(part2);
-                expect(bin.parts().getAt(1)).toBe(part1);
+                expect(bin.cells().getAt(0)).toBe(part2);
+                expect(bin.cells().getAt(1)).toBe(part1);
                 expect(bin.get("fases")[0]).toBe("fas1");
                 expect(bin.get("fases")[1]).toBe("None");
                 //Add a third part in between
                 success = bin.addToParts(part3, 1, "fas2");
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(3);
-                expect(bin.parts().getAt(0)).toBe(part2);
-                expect(bin.parts().getAt(1)).toBe(part3);
-                expect(bin.parts().getAt(2)).toBe(part1);
+                expect(bin.cells().getAt(0)).toBe(part2);
+                expect(bin.cells().getAt(1)).toBe(part3);
+                expect(bin.cells().getAt(2)).toBe(part1);
                 expect(bin.get("fases")[0]).toBe("fas1");
                 expect(bin.get("fases")[1]).toBe("fas2");
                 expect(bin.get("fases")[2]).toBe("None");
@@ -118,8 +118,8 @@ Ext.onReady(function() {
                 success = bin.addToParts(part2, null, "fas1");
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(2);
-                expect(bin.parts().getAt(0)).toBe(part1);
-                expect(bin.parts().getAt(1)).toBe(part2);
+                expect(bin.cells().getAt(0)).toBe(part1);
+                expect(bin.cells().getAt(1)).toBe(part2);
                 expect(bin.get("fases")[0]).toBe("None");
                 expect(bin.get("fases")[1]).toBe("fas1");
             });
@@ -155,7 +155,7 @@ Ext.onReady(function() {
                 success = bin.addToParts([part2, part3], 0, ["fas2", "fas3"]);
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(3);
-                expect(bin.parts().getAt(1).get("name")).toBe("part3")
+                expect(bin.cells().getAt(1).get("name")).toBe("part3")
                 var fases = bin.get("fases");
                 expect(fases.length).toBe(3);
                 expect(fases[1]).toBe("fas3");
@@ -185,13 +185,13 @@ Ext.onReady(function() {
                 // check if the structure is correct.
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(1);
-                expect(bin.parts().getAt(0)).toBe(part1);
-                expect(bin.parts().getAt(0).get("partSource")).toBe("tmpname");
+                expect(bin.cells().getAt(0)).toBe(part1);
+                expect(bin.cells().getAt(0).get("partSource")).toBe("tmpname");
 
                 // change part 1. Change should be reflected in the bin's parts
                 part1.set("partSource", "blahblah");
-                expect(bin.parts().getAt(0)).toBe(part1);
-                expect(bin.parts().getAt(0).get("partSource")).toBe("blahblah"); //double check change
+                expect(bin.cells().getAt(0)).toBe(part1);
+                expect(bin.cells().getAt(0).get("partSource")).toBe("blahblah"); //double check change
 
             });
         });
@@ -207,14 +207,14 @@ Ext.onReady(function() {
             bin.addToParts([part1, part2]);
 
             expect(bin.partCount()).toBe(2);
-            expect(bin.parts().getAt(0)).toBe(part1);
-            expect(bin.parts().getAt(1)).toBe(part2);
+            expect(bin.cells().getAt(0)).toBe(part1);
+            expect(bin.cells().getAt(1)).toBe(part2);
             expect(fases.length).toBe(2);
 
             var success = bin.removeFromParts(part1);
             expect(success).toBe(true);
             expect(bin.partCount()).toBe(1);
-            expect(bin.parts().getAt(0)).toBe(part2);
+            expect(bin.cells().getAt(0)).toBe(part2);
             expect(fases.length).toBe(1);
 
             // should fail to remove it again
@@ -282,16 +282,16 @@ Ext.onReady(function() {
             device.addToRules(rule1);
 
             // Check Structure
-            expect(bin.parts().count()).toBe(2);
-            expect(bin.parts().getAt(0)).toBe(part1);
+            expect(bin.cells().count()).toBe(2);
+            expect(bin.cells().getAt(0)).toBe(part1);
             expect(device.rules().count()).toBe(1);
 
             // Delete the part with rule
             bin.deletePart(part1, device);
 
             // Check New Structure
-            expect(bin.parts().count()).toBe(1);
-            expect(bin.parts().getAt(0)).toBe(part2);
+            expect(bin.cells().count()).toBe(1);
+            expect(bin.cells().getAt(0)).toBe(part2);
             expect(bin.get("fases").length).toBe(1);
             expect(bin.get("fases")[0]).toBe("fas2");
             expect(device.rules().count()).toBe(0);

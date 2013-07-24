@@ -28,13 +28,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     findBinByPart:function(findingPart,cb){
         var foundBin = null;
-        var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        var j5collection = tab.model.getDesign().getJ5Collection();
-        j5collection.bins().each(function(bin){
-            bin.parts().each(function(part){
-                if(part.internalId===findingPart.internalId) {foundBin = bin;}
+        var deviceDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
+        deviceDesign.model.bins().each(function(bin){
+            bin.cells().each(function(cell){
+                var part = cell.getPart();
+                if(part && part.internalId === findingPart.internalId) {
+                    foundBin = bin;
+                }
             });
         });
+
         return cb(foundBin);
     },
 
@@ -60,14 +64,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
     },
 
-    checkCombinatorial:function(j5collection,cb){
+    checkCombinatorial:function(deviceDesign,cb){
         var tmpC = 0;
-        var bins = j5collection.bins().getRange();
+        var bins = deviceDesign.bins().getRange();
         var parts;
         var combinatorial = false;
 
         for(var i = 0; i < bins.length; i++) {
-            parts = bins[i].parts().getRange();
+            cells = bins[i].cells().getRange();
+
+            var parts = [];
+            for(var k = 0; k < cells.length; k++) {
+                if(cells[k].getPart()) {
+                    parts.push(cells[k].getPart());
+                }
+            }
+            
             if(parts.length > 1) {
                 tmpC = 0;
 
@@ -93,7 +105,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         one bin must contain more than one mapped part. No column should contained a non-mapped (but named) part.
         */
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        var j5collection = tab.model.getDesign().getJ5Collection();
+        var deviceDesign = tab.model;
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
         var runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
@@ -101,18 +113,26 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var inspector = this.inspector;
         var self = this;
 
-        this.checkCombinatorial(j5collection,function(combinatorial){
+        this.checkCombinatorial(deviceDesign, function(combinatorial){
             var j5ready = true;
             var tmpJ = 0;
-            var bins = j5collection.bins().getRange();
+            var bins = deviceDesign.bins().getRange();
             var cnt = bins.length;
             var parts;
+            var cells;
             var part;
             var names = 0;
 
             for(var i = 0; i < cnt; i++) {
                 var tmpC = 0;
-                parts = bins[i].parts().getRange();
+                cells = bins[i].cells().getRange();
+
+                var parts = [];
+                for(var k = 0; k < cells.length; k++) {
+                    if(cells[k].getPart()) {
+                        parts.push(cells[k].getPart());
+                    }
+                }
 
                 for(var j = 0; j < parts.length; j++) {
                     part = parts[j];
@@ -193,7 +213,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onCircularPlasmidRadioChange: function(radio){
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        tab.model.getDesign().getJ5Collection().set("isCircular",radio.getValue());
+        tab.model.set("isCircular", radio.getValue());
     },
 
     onEmptySequenceBtnClick: function(){
@@ -635,17 +655,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
                 console.log(selectedBinIndex);
                 console.log(this.activeProject);
-                this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+                this.activeProject.deleteBinByIndex(selectedBinIndex);
                 this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             } else {
-                this.activeProject.getJ5Collection().deleteBinByIndex(
-                this.activeProject.getJ5Collection().binCount() - 1);
+                this.activeProject.deleteBinByIndex(
+                this.activeProject.binCount() - 1);
                 this.columnsGrid.getView().refresh();
                 this.renderCollectionInfo();
                 this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             }
 
-            if (this.activeProject.getJ5Collection().binCount() === 0) {
+            if (this.activeProject.binCount() === 0) {
                 this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 0);
             }
 
@@ -1129,7 +1149,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 // Unset listeners for the parts store of each bin.
                 this.activeBins.each(function (bin) {
-                    var parts = bin.parts();
+                    var parts = bin.cells();
 
                     parts.un("add", this.onAddToParts, this);
                     parts.un("update", this.onUpdateParts, this);
@@ -1137,16 +1157,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }, this);
             }
 
-            this.activeProject = newTab.model.getDesign();
+            this.activeProject = newTab.model;
 
-            this.activeBins = this.activeProject.getJ5Collection().bins();
+            this.activeBins = this.activeProject.bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
             // Add listeners to each bin's parts store.
             this.activeBins.each(function (bin) {
-                var parts = bin.parts();
+                var parts = bin.cells();
 
                 parts.on("add", this.onAddToParts, this);
                 parts.on("update", this.onUpdateParts, this);
@@ -1196,7 +1216,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         // Add event listeners to the parts store of this bin.
         Ext.each(addedBins, function (j5Bin) {
-            var parts = j5Bin.parts();
+            var parts = j5Bin.cells();
             parts.on("add", this.onAddToParts, this);
             parts.on("update", this.onUpdateParts, this);
             parts.on("remove", this.onRemoveFromParts, this);
@@ -1306,14 +1326,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             //         combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
             //     }
 
-            if(this.activeProject.getJ5Collection().get("isCircular")) {
+            if(this.activeProject.get("isCircular")) {
                 circularPlasmidField.setValue(true);
             } else {
                 linearPlasmidField.setValue(true);
             }
 
             if(!skipReconfigureGrid) {
-                this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+                this.columnsGrid.reconfigure(this.activeProject.bins());
             }
         }
 

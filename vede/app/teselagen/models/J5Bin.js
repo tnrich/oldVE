@@ -64,13 +64,6 @@ Ext.define("Teselagen.models.J5Bin", {
         },
 
         {
-            type: "hasMany",
-            model: "Teselagen.models.Cell",
-            name: "cells",
-            foreignKey: "cell_id"
-        },
-
-        {
             name: "iconID",
             convert: function(v) {
                 //console.log(Teselagen.constants.SBOLIcons.ICON_LIST);
@@ -128,14 +121,11 @@ Ext.define("Teselagen.models.J5Bin", {
 
     associations: [
         {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Collection",
-            name: "j5collection",
-            getterName: "getJ5Collection",
-            setterName: "setJ5Collection",
-            associationKey: "j5Collection",
-            foreignKey: "j5collection_id"
-        }
+            type: "hasMany",
+            model: "Teselagen.models.Cell",
+            name: "cells",
+            foreignKey: "cell_id"
+        },
     ],
 
     /**

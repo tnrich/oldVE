@@ -509,8 +509,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         var partIndex = {};
 
-        design.getJ5Collection().bins().each(function (bin) {
-            bin.parts().each(function (part) {
+        design().bins().each(function (bin) {
+            bin.cells().each(function (part) {
                 partIndex[part.data.name] = part;
             });
         });

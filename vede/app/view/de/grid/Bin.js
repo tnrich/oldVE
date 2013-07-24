@@ -123,21 +123,21 @@ Ext.define('Vede.view.de.grid.Bin', {
         var firstFas;
 
         if(this.getBin()) {
-            for (var i = 0; i <= this.getBin().parts().getRange().length; i++) {
-                if (this.getBin().parts().getRange()[i] && this.getBin().parts().getRange()[i].get("phantom") == false && (firstFas == undefined || firstFas == "None")) {
-                    firstFas = this.getBin().parts().getRange()[i].get("fas");
+            for (var i = 0; i < this.getBin().cells().getRange().length; i++) {
+                if (this.getBin().cells().getAt(i).get("part_id") !== null && (firstFas == undefined || firstFas == "None")) {
+                    firstFas = this.getBin().cells().getRange()[i].get("fas");
                 }
             }
 
             // Add each part in the bin to the bin view object.
-            this.getBin().parts().each(function(part) {
+            this.getBin().cells().each(function(cell) {
                 this.add(Ext.create("Vede.view.de.grid.Part", {
-                    part: part,
+                    part: cell.getPart(),
                     fasConflict: part.get("fas") !== firstFas
                 }));
             }, this);
             
-            currentRows = this.getBin().parts().getRange().length;
+            currentRows = this.getBin().cells().getRange().length;
         }
 
         // Add blank rows until currentRows equals totalRows.

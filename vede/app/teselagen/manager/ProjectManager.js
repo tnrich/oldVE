@@ -398,7 +398,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 //                                });
 //                                parts.push(newPart);
 //                                tempParts.push(newPart);
-//                                newBin.parts().add(newPart);
+//                                newbin.cells().add(newPart);
 //                            }
                             binsArray.push(newBin);
                         }

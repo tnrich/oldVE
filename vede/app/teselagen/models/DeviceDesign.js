@@ -23,29 +23,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                var j5Collection = associatedData.j5collection;
 
                 var rules = associatedData.rules;
-                data.j5collection = j5Collection;
 
                 var binsTempArray = [];
 
-                record.getJ5Collection().bins().each(function(bin) {
-                    var partsTempArray = [];
-                    bin.parts().each(function(part) {
-                        {partsTempArray.push(part.getData().id); }
-                    });
-                    binsTempArray.push(partsTempArray);
-                });
-
-                data.j5collection.bins.forEach(function(bin,binKey){
+                /*data.bins.forEach(function(bin,binKey){
                     var partIds = binsTempArray[binKey];
-                    bin.fases = [];
-                    for (var i= 0; i < partIds.length; i++) {
-                        bin.fases[i] = bin.parts[i].fas;
-                    }
                     bin.parts = partIds;
-                });
+                });*/
 
                 data.rules = rules;
 
@@ -227,7 +213,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     me.data[k] = r.data[k];
                 }
 
-                me.setJ5Collection(r.getJ5Collection());
+                me.setJ5Collection(r());
                 me.j5runs().removeAll();
                 me.j5runs().insert(0, r.j5runs());
 
@@ -244,6 +230,75 @@ Ext.define("Teselagen.models.DeviceDesign", {
         });
     },
 
+    /**
+     * Adds a default J5Bin given a name and index.
+     * @param {String} pName
+     * @param {Number} pIndex Index to insert new J5Bin. Optional. Defaults to end of of array if invalid or undefined value.
+     * ///@returns {Teselagen.models.J5Bin}
+     * @returns {Boolean} True if added, false if not.
+     */
+    addNewBinByIndex: function(pIndex, pName) {
+        var added   = false;
+
+        var cnt     = this.bins().count();
+
+        if (pName === "" || pName === undefined || pName === null) {
+            var maxBin = 0;
+
+            this.bins().each(function(bin) {
+                var name = bin.get("binName");
+                var binNumber;
+
+                if(name.match(/^Bin\d+$/)) {
+                    binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                    if(binNumber > maxBin) {
+                        maxBin = binNumber;
+                    }
+                }
+            });
+
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (maxBin + 1)
+            });
+        } else {
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: pName
+            });
+        }
+
+        if (pIndex >= 0 && pIndex < this.bins().count()) {
+            //this.bins().splice(pIndex, 0, j5Bin);
+            this.bins().insert(pIndex, j5Bin);
+        } else {
+            //Ext.Array.include(this.bins(), j5Bin);
+            this.bins().add(j5Bin);
+        }
+
+        var newCnt  = this.binCount();
+        if (newCnt > cnt) {
+            added = true;
+        }
+
+        // DW: NEED TO FIRE EVENT NEW_BIN_ADDED
+
+        return added; //j5Bin;
+    },
+
+    /**
+     * Checks to see if a given name is unique within the J5Bins names.
+     * @param {String} pName Name to check against bins.
+     * @returns {Boolean} True if unique, false if not.
+     */
+    isUniqueBinName: function(pName) {
+        var index = this.bins().find("binName", pName);
+
+        if (index === -1) {
+            return true;
+        } else {
+            return false;
+        }
+    },
 
     /**
      * Adds a Part into the parts store.
