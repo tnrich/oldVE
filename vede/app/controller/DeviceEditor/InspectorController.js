@@ -857,6 +857,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onOperand2Changed: function(operand1Id, newId, ruleName, oldId, e) {
         var operand1 = this.DeviceDesignManager.getPartById(this.activeProject, operand1Id);
         var operand1Bin = this.DeviceDesignManager.getBinByPart(this.activeProject, operand1);
+        console.log(ruleName);
         
         if (isNaN(newId) && isNaN(oldId)) {
             var newOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, newId);
@@ -999,8 +1000,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     onSetOperand2Editor: function(column) {
         var compOperator = this.eugeneRulesGrid.getSelectionModel().getSelection()[0].data.compositionalOperator;
+        var operand1Id = this.eugeneRulesGrid.getSelectionModel().getSelection()[0].data.operand1_id;
+        var operand1 = this.DeviceDesignManager.getPartById(this.activeProject, operand1Id);
+        console.log(operand1);
 
-        var allParts = this.DeviceDesignManager.getAllParts(this.activeProject, this.selectedPart);
+        var allParts = this.DeviceDesignManager.getAllParts(this.activeProject, operand1);
         var partsStore = [];
         Ext.each(allParts, function(part) {
             partsStore = partsStore.concat([[part.get('id'), part.get('name')]]);

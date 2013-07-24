@@ -30,7 +30,7 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                     edit: function (editor, e, eOpts) {
                         var updatedField = e.field;
                         var operand1Id = e.record.operand1.internalId;
-                        var ruleName = e.record.raw.name;
+                        var ruleName = e.record.data.name;
                         
                         if (updatedField === "operand2_id") {
                             var oldId = e.originalValue;
