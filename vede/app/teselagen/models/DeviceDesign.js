@@ -294,42 +294,22 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection
      * @returns {Teselagen.models.J5Collection}
      */
-     /*
-    createNewCollection: function(pNumBins) {
-        if (this.getJ5Collection().binCount() > 0) {
+    createEmptyGridModel: function(pNumBins) {
+        var bins = this.bins();
+
+        if (bins.count() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
         }
-        var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
             var bin = Ext.create("Teselagen.models.J5Bin", {
                 binName: "No_Name" + i
             });
-            j5Coll.addToBin(bin, i);
+            bins.insertAt(i, bin);
         }
-        this.setJ5Collection(j5Coll);
-        return j5Coll;
-    },
-    */
 
-    /**
-     * Creates a J5Collection from given J5Bins.
-     * @param {Teselagen.models.J5Bin[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
-     * @returns {Teselagen.models.J5Collection}
-     */
-     /*
-    createCollectionFromBins: function(pBins) {
-        if (this.getJ5Collection().binCount() > 0) {
-            console.warn("Warning. Overwriting existing J5Collection");
-        }
-        var j5Coll = Ext.create("Teselagen.models.J5Collection");
-        for (var i = 0; i < pBins.length; i++) {
-            j5Coll.addToBin(pBins[i], i);
-        }
-        this.setJ5Collection(j5Coll);
-        return j5Coll;
+        return bins;
     },
-    */
-
+    
     /**
      * Adds a EugeneRule into the Rules Store.
      * @param {Teselagen.models.EugeneRule} pRule. Can be a single rule or an array of rules.

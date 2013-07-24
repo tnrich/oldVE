@@ -43,12 +43,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     createDeviceDesign: function(pNumBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
-        device.createNewCollection(pNumBins);
+        device.createEmptyGridModel(pNumBins);
 
         var err = device.validate();
         if (err.length > 0) {
             console.warn("Creating DeviceDesign: " + err.length + " errors found.");
         }
+
         return device;
     },
 
@@ -81,9 +82,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     createDeviceDesignFromBins: function(pBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
-        device.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
 
-        device.createCollectionFromBins(pBins);
+        device.bins().removeAll();
+        device.bins().insert(0, pBins);
 
         // var combo = this.setCombinatorial(device);
         //console.log(combo);
