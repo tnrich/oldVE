@@ -5,6 +5,7 @@
  * @author Zinovii Dmytriv (original author of FeatureRenderer.as)
  */
 Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
+    requires: ["Teselagen.event.ContextMenuEvent"],
 
     config: {
         feature: null,
@@ -16,9 +17,19 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     },
 
     statics: {
-        DEFAULT_FEATURE_HEIGHT: 8,
+        DEFAULT_FEATURE_HEIGHT: 6,
         DEFAULT_FEATURES_SEQUENCE_GAP: 6,
-        DEFAULT_FEATURES_GAP: 2
+        DEFAULT_FEATURES_GAP: 2,
+
+        ADDITIONAL_ROW_WIDTH: 5,
+        ADDITIONAL_ROW_START_X: 2,
+        BACKWARD_RECT_ADDITIONAL_ROW_LEFT: 1,
+
+        ALL_ADDITIONAL_Y: 20,
+
+        SINGLE_BP_FEATURE_ADDITIONAL_HEIGHT: 3,
+        SINGLE_BP_FEATURE_ADDITIONAL_WIDTH: 2,
+        SINGLE_BP_FEATURE_ADDITIONAL_X: 2,
     },
 
     constructor: function(inData){
@@ -46,6 +57,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         g.attr("fill", this.featureColor);
 
         var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getIndex());
+
         if (!featureRows){
             return;
         }
@@ -107,14 +119,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                 var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
-                var featureX1 = bpStartMetrics1.x + 2;
-                var featureX2 = bpStartMetrics2.x + 2;
+                var featureX1 = bpStartMetrics1.x + this.self.ADDITIONAL_ROW_START_X;
+                var featureX2 = bpStartMetrics2.x + this.self.ADDITIONAL_ROW_START_X;
                 var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
-
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureYCommon += 20;
-                }*/
 
                 if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     //Add AminoAcidsTextRenderer
@@ -128,46 +135,54 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
                 //Add functionality for drawing arrow directions
                 if (this.feature.getStrand() === 0){
-                    drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-                    drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+                    this.drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    this.drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
                 } else if (this.feature.getStrand() === 1){
-                    drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-                    drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    this.drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    this.drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 } else if(this.feature.getStrand() === -1){
-                    drawFeatureBackwardRect(g, (featureX1-8), featureYCommon, featureRowWidth1, featureRowHeightCommon);
-                    drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    this.drawFeatureBackwardRect(g, (featureX1 - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT), 
+                                            featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    this.drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 }
-            }else{
+            } else {
                 var bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                 var bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
                 
-                var featureX = bpStartMetrics.x + 2;
+                var featureX = bpStartMetrics.x + this.self.ADDITIONAL_ROW_START_X;
                 var featureY = bpStartMetrics.y  + downShift;
 
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureY += 20;
-                }*/
                 if (this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     featureY += (3 * 20);
                 }
 
-                var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 3;
-                var featureRowHeight = 6;
+                var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + this.self.ADDITIONAL_ROW_WIDTH;
+                var featureRowHeight = this.self.DEFAULT_FEATURE_HEIGHT;
 
                 if (this.feature.getStrand() == 0){
-                    drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                    this.drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else if ( this.feature.getStrand() == 1){
                     if(featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()){
-                        drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        // If the feature is 1 BP, draw a small arrow.
+                        if(endBP === startBP) {
+                            this.drawFeatureForwardSingleBP(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        } else {
+                            this.drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        }
                     } else{
-                        drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        this.drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     }
                 } else if( this.feature.getStrand() == -1){
                     if(featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()){
-                        drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        // If the feature is 1 BP, draw a small arrow.
+                        if(endBP === startBP) {
+                            this.drawFeatureBackwardSingleBP(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        } else {
+                            this.drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        }
                     } else{
-                        drawFeatureBackwardRect(g, (featureX-8), featureY, featureRowWidth, featureRowHeight);
+                        this.drawFeatureBackwardRect(g, (featureX - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT), 
+                                                featureY, featureRowWidth, featureRowHeight);
                     }
                 }
 
@@ -213,74 +228,72 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                     bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
                     
-                    featureX1 = bpStartMetrics1.x  + 2;
-                    featureX2 = bpStartMetrics2.x + 2;
+                    featureX1 = bpStartMetrics1.x + this.self.ADDITIONAL_ROW_START_X;
+                    featureX2 = bpStartMetrics2.x + this.self.ADDITIONAL_ROW_START_X;
                     
                     featureYCommon = bpStartMetrics1.y + downShift;
 
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureY += 20;
-                }*/
                     if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                         featureYCommon += (3*20);
                     }
 
                     featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16
                     featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
-                    var featureRowHeightCommon = 6;
+                    var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
 
                     if(this.feature.getStrand() == 0){
-                        drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-                        drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+                        this.drawFeatureRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                        this.drawFeatureRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
                     } else if( this.feature.getStrand() == 1){
-                        drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-                        drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+                        this.drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                        this.drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
                     } else if(this.feature.getStrand() == -1){
-                        drawFeatureBackwardRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
-                        drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+                        this.drawFeatureBackwardRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                        this.drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
                     }
                 } else{
                     bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                     bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
-                    featureX = bpStartMetrics.x + 2;
+                    featureX = bpStartMetrics.x + this.self.ADDITIONAL_ROW_START_X;
                     featureY = bpStartMetrics.y + downShift;
                     
-                /*if(this.sequenceAnnotationManager.showAminoAcids){
-                    //Add AminoAcidsTextRenderer
-                    featureY +=  20;
-                }*/
                     if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                         featureY += (3* 20);
                     }
 
-                    featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 10;
-                    featureRowHeight = 6;
+                    featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + this.self.ADDITIONAL_ROW_WIDTH;
+                    featureRowHeight = this.self.DEFAULT_FEATURE_HEIGHT;
 
                     if(this.feature.getStrand() == 0){
-                        drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        this.drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else if( this.feature.getStrand() == 1){
                         if(location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1){
-                            if(featureEnd == location.getEnd()){
-
-                                drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                            if((location.getEnd() - location.getStart()) <= 1) {
+                                this.drawFeatureForwardSingleBP(g, featureX, featureY, featureRowWidth, featureRowHeight);
                             } else {
-                                drawFeatureForwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                                if(featureEnd == location.getEnd()){
+                                    this.drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                                } else {
+                                    this.drawFeatureForwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                                }
                             }
                         } else{
-                            drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                            this.drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                         }
                     } else if (this.feature.getStrand() == -1){
-
                         if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()){
-                            if (featureStart == location.getStart()){
-                                drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
-                            } else{
-                                drawFeatureBackwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                            if((location.getEnd() - location.getStart()) <= 1) {
+                                this.drawFeatureBackwardSingleBP(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                            } else {
+                                if (featureStart == location.getStart()){
+                                    this.drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                                } else{
+                                    this.drawFeatureBackwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                                }
                             }
                         } else{
-                            drawFeatureBackwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                            this.drawFeatureBackwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                         }
                     }
                 }
@@ -288,112 +301,144 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
             this.addToolTip(this.feature);
             this.addClickListener(this.feature);
-        
-
-        }
-
-
-        function drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight){
-            pGraphics.append("svg:rect")
-                .attr("x", pX)
-                .attr("y", pY + 20)
-                .attr("stroke", this.featureColor)
-                .attr("width", pWidth)
-                .attr("height", 6);
-        }
-        function drawFeatureForwardRect(pGraphics, pX, pY, pWidth, pHeight){
-            pY += 20;
-            pGraphics.append("svg:path")
-                .attr("d", " M " + (pX) + " " + (pY) + 
-                           " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) + 
-                           " L " + (pX + pWidth) + " " + (pY + pHeight) +
-                           " L " + (pX + pWidth) + " " + (pY) + 
-                           " L " + (pX) + " " + (pY));
-        }
-        function drawFeatureBackwardRect(pGraphics, pX, pY, pWidth, pHeight){
-            pY += 20;
-            pGraphics.append("svg:path")
-                .attr("d", " M " + (pX) + " " + (pY) + 
-                           " L " + (pX) + " " + (pY + pHeight) +
-                           " L " + (pX + pWidth) + " " + (pY + pHeight) + 
-                           " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) + 
-                           " L " + (pX) + " " + (pY));
-        }
-        function drawFeatureForwardArrow(pGraphics, pX, pY, pWidth, pHeight){
-            pY += 20;
-            if(pWidth ){
-                
-                pGraphics.append("svg:path")
-                    .attr("d", " M " + (pX) + " " + (pY) + 
-                               " L " + (pX + pWidth - 8) + " " + (pY) +
-                               " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + 
-                               " L " + (pX + pWidth - 8) + " " + (pY + pHeight) +
-                               " L " + (pX) + " " + (pY + pHeight) +
-                               " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
-            } else{
-
-                pGraphics.append("svg:path")
-                    .attr("d", " M " + (pX) + " " + (pY) + 
-                               " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
-                               " L " + (pX) + " " + (pY + pHeight) + 
-                               " L " + (pX) + " " + (pY));
-            }
-        /*
-            pGraphics.append("svg:line")
-                .attr("x", pX + 5)
-                .attr("y", pY +10)
-                .attr("stroke", this.featureColor)
-                .attr("stroke-width", 10)
-                .attr("height", pHeight);
-                */
-        }
-        function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight){
-            //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
-            pY += 20;
-            if(pWidth){
-                
-                pGraphics.append("svg:path")
-                    .attr("d", " M " + (pX + 8) + " " + (pY) + 
-                               " L " + (pX + pWidth) + " " + (pY) +
-                               " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) + 
-                               " L " + (pX + 8) + " " + (pY + pHeight) + 
-                               " L " + (pX) + " " + (pY + pHeight / 2) + 
-                               " L " + (pX + 8) + " " + (pY));
-            } else{
-
-                pGraphics.append("svg:path")
-                    .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + 
-                               " L " + (pX + pWidth) + " " + (pY) +
-                               " L " + (pX + pWidth) + " " + (pY + pHeight) + 
-                               " L " + (pX) + " " + (pY + pHeight / 2));
-            }
-        }
-
-        function drawFeatureForwardCurved(pGraphics, pX, pY, pWidth, pHeight){
-            //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
-            /*
-             pGraphics.append("svg:line")
-                .attr("x", pX + 5)
-                .attr("y", pY + 10)
-                .attr("stroke", this.featureColor)
-                .attr("stroke-width", 10)
-                
-                .attr("height", pHeight);
-                */
-        }
-        function drawFeatureBackwardCurved(pGraphics, pX, pY, pWidth, pHeight){
-            //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
-            /*pGraphics.append("svg:line")
-                .attr("x", pX + 5)
-                .attr("y", pY + 10)
-                .attr("stroke", this.featureColor)
-                .attr("stroke-width", 10)
-                .attr("height", pHeight);
-                */
         }
     },
 
-    
+    drawFeatureRect: function(pGraphics, pX, pY, pWidth, pHeight){
+        pY += this.self.ALL_ADDITIONAL_Y;
+
+        pGraphics.append("svg:rect")
+            .attr("x", pX)
+            .attr("y", pY)
+            .attr("stroke", this.featureColor)
+            .attr("width", pWidth)
+            .attr("height", 6);
+    },
+
+    drawFeatureForwardRect: function(pGraphics, pX, pY, pWidth, pHeight){
+        pY += this.self.ALL_ADDITIONAL_Y;
+
+        pGraphics.append("svg:path")
+            .attr("d", " M " + (pX) + " " + (pY) + 
+                       " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) + 
+                       " L " + (pX + pWidth) + " " + (pY + pHeight) +
+                       " L " + (pX + pWidth) + " " + (pY) + 
+                       " L " + (pX) + " " + (pY));
+    },
+
+    drawFeatureBackwardRect: function(pGraphics, pX, pY, pWidth, pHeight){
+        pY += this.self.ALL_ADDITIONAL_Y;
+
+        pGraphics.append("svg:path")
+            .attr("d", " M " + (pX) + " " + (pY) + 
+                       " L " + (pX) + " " + (pY + pHeight) +
+                       " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                       " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) + 
+                       " L " + (pX) + " " + (pY));
+    },
+
+    drawFeatureForwardArrow: function(pGraphics, pX, pY, pWidth, pHeight){
+        pY += this.self.ALL_ADDITIONAL_Y;
+
+        if(pWidth ){
+            
+            pGraphics.append("svg:path")
+                .attr("d", " M " + (pX) + " " + (pY) + 
+                           " L " + (pX + pWidth - 8) + " " + (pY) +
+                           " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + 
+                           " L " + (pX + pWidth - 8) + " " + (pY + pHeight) +
+                           " L " + (pX) + " " + (pY + pHeight) +
+                           " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
+        } else{
+
+            pGraphics.append("svg:path")
+                .attr("d", " M " + (pX) + " " + (pY) + 
+                           " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
+                           " L " + (pX) + " " + (pY + pHeight) + 
+                           " L " + (pX) + " " + (pY));
+        }
+    /*
+        pGraphics.append("svg:line")
+            .attr("x", pX + 5)
+            .attr("y", pY +10)
+            .attr("stroke", this.featureColor)
+            .attr("stroke-width", 10)
+            .attr("height", pHeight);
+            */
+    },
+
+    drawFeatureForwardSingleBP: function(pGraphics, pX, pY, pWidth, pHeight) {
+        pY += this.self.ALL_ADDITIONAL_Y;
+        pX -= this.self.SINGLE_BP_FEATURE_ADDITIONAL_X;
+        pWidth += this.self.SINGLE_BP_FEATURE_ADDITIONAL_WIDTH;
+        pHeight += this.self.SINGLE_BP_FEATURE_ADDITIONAL_HEIGHT;
+
+        pGraphics.append("svg:path")
+                 .attr("d", " M " + (pX) + " " + (pY) + 
+                            " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
+                            " L " + (pX) + " " + (pY + pHeight) + 
+                            " L " + (pX) + " " + (pY));
+    },
+
+    drawFeatureBackwardArrow: function(pGraphics, pX, pY, pWidth, pHeight){
+        //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+        pY += this.self.ALL_ADDITIONAL_Y;
+
+        if(pWidth){
+            
+            pGraphics.append("svg:path")
+                .attr("d", " M " + (pX + 8) + " " + (pY) + 
+                           " L " + (pX + pWidth) + " " + (pY) +
+                           " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) + 
+                           " L " + (pX + 8) + " " + (pY + pHeight) + 
+                           " L " + (pX) + " " + (pY + pHeight / 2) + 
+                           " L " + (pX + 8) + " " + (pY));
+        } else{
+
+            pGraphics.append("svg:path")
+                .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + 
+                           " L " + (pX + pWidth) + " " + (pY) +
+                           " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                           " L " + (pX) + " " + (pY + pHeight / 2));
+        }
+    },
+
+    drawFeatureBackwardSingleBP: function(pGraphics, pX, pY, pWidth, pHeight) {
+        pY += this.self.ALL_ADDITIONAL_Y;
+        pX -= this.self.SINGLE_BP_FEATURE_ADDITIONAL_X;
+        pWidth += this.self.SINGLE_BP_FEATURE_ADDITIONAL_WIDTH;
+        pHeight += this.self.SINGLE_BP_FEATURE_ADDITIONAL_HEIGHT;
+
+        pGraphics.append("svg:path")
+                 .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + 
+                       " L " + (pX + pWidth) + " " + (pY) +
+                       " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                       " L " + (pX) + " " + (pY + pHeight / 2));
+    },
+
+    drawFeatureForwardCurved: function(pGraphics, pX, pY, pWidth, pHeight){
+        //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+        /*
+         pGraphics.append("svg:line")
+            .attr("x", pX + 5)
+            .attr("y", pY + 10)
+            .attr("stroke", this.featureColor)
+            .attr("stroke-width", 10)
+            
+            .attr("height", pHeight);
+            */
+    },
+
+    drawFeatureBackwardCurved: function(pGraphics, pX, pY, pWidth, pHeight){
+        //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+        /*pGraphics.append("svg:line")
+            .attr("x", pX + 5)
+            .attr("y", pY + 10)
+            .attr("stroke", this.featureColor)
+            .attr("stroke-width", 10)
+            .attr("height", pHeight);
+            */
+    },
 
     colorByType: function(type) {
         var switchObj = {
@@ -424,7 +469,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             Vede.application.fireEvent("AnnotatePanelAnnotationClicked", feature.getStart(), feature.getEnd());
         });
     	this.featureGroupSVG.on("contextmenu", function(data,index) {
-			Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+			Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.ANNOTATION_CONTEXT_MENU, feature);
 			d3.event.preventDefault();
             var contextMenu = Ext.create('Ext.menu.Menu',{
             	  items: [{

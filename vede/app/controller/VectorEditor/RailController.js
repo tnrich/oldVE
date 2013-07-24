@@ -7,7 +7,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
 
     requires: ["Teselagen.manager.RailManager",
                "Teselagen.renderer.rail.SelectionLayer",
-               "Teselagen.renderer.rail.WireframeSelectionLayer"],
+               "Teselagen.renderer.rail.WireframeSelectionLayer",
+               "Teselagen.event.CaretEvent",
+               "Teselagen.event.VisibilityEvent"],
 
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
@@ -31,15 +33,17 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
      */
     init: function() {
         this.callParent();
+        this.application.on(Teselagen.event.VisibilityEvent.SHOW_MAP_CARET_CHANGED, this.onShowMapCaretChanged, this);
+        this.application.on(Teselagen.event.CaretEvent.RAIL_NAMEBOX_CLICKED, this.onRailNameBoxClick, this);
 
         this.control({
             "#mainAppPanel": {
                 tabchange: this.onTabChange
             },
-            "menuitem[cls='zoomInMenuItem']": {
+            "menuitem[identifier='zoomInMenuItem']": {
                 click: this.onZoomInMenuItemClick
             },
-            "menuitem[cls='zoomOutMenuItem']": {
+            "menuitem[identifier='zoomOutMenuItem']": {
                 click: this.onZoomOutMenuItemClick
             }
         });
@@ -89,9 +93,18 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         this.railContainer.el.dom.setAttribute("tabindex", "0");
         this.railContainer.el.on("keydown", this.onKeydown, this);
 
-        if(newTab.down("menucheckitem[identifier*='circularViewMenuItem']").checked) {
+        if(newTab.down("component[identifier='circularViewMenuItem']").checked) {
             this.railContainer.hide();
+        } else {
+            this.railContainer.show();
         }
+
+        // Set the relevant view options to the tab's saved settings.
+        this.railManager.setShowCutSites(newTab.options.cutSites);
+        this.railManager.setShowFeatures(newTab.options.features);
+        this.railManager.setShowOrfs(newTab.options.orfs);
+        this.railManager.setShowFeatureLabels(newTab.options.featureLabels);
+        this.railManager.setShowCutSiteLabels(newTab.options.cutSiteLabels);
     },
 
     onLaunch: function() {
@@ -179,9 +192,9 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
 
     onViewModeChanged: function(viewMode) {
         if(viewMode == "circular") {
-            this.activeTab.down("component[cls='RailContainer']").hide();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']").hide();
         } else {
-            this.activeTab.down("component[cls='RailContainer']").show();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']").show();
         }
     },
 
@@ -249,10 +262,14 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     },
 
     onShowMapCaretChanged: function(show) {
-        this.railManager.setShowMapCaret(show);
-
-        if(this.railManager.sequenceManager) {
-            this.railManager.render();
+        var showMapCaret = this.activeTab.down("component[identifier='mapCaretMenuItem']").checked;
+        var angle = this.startSelectionAngle;
+        var bp = this.bpAtAngle(angle);
+        if (showMapCaret) {
+            this.railManager.caret.svgObject.style("visibility", "visible");
+        }
+        else {
+            this.railManager.caret.svgObject.style("visibility", "hidden");
         }
     },
 
@@ -599,6 +616,18 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     		
     		contextMenu.show(); 
             contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+        }
+    },
+
+    onRailNameBoxClick: function() {
+        var menuitem = this.activeTab.down("component[identifier='mapCaretMenuItem']");
+        var checked = menuitem.checked;
+
+        if (checked) {
+            menuitem.setChecked(false);
+        }
+        else {
+            menuitem.setChecked(true);
         }
     }
 });

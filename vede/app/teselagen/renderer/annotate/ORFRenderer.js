@@ -6,6 +6,7 @@
  */
 Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
     statics: {
+        CODON_SHIFT: -6,
         ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"],
         ORF_STROKE_WIDTH: 2
     },
@@ -120,15 +121,13 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         .attr("stroke-width", this.self.ORF_STROKE_WIDTH);
 				} else {
                     this.orfSVG.append("svg:path")
-                        .attr("d", "M" + (bpStartPoint.x + 2) + " " + orfY +
-                                   "L" + (bpEndPoint.x + textWidth + 2) + 
+                        .attr("d", "M" + (bpStartPoint.x + 1) + " " + orfY +
+                                   "L" + (bpEndPoint.x + textWidth - 2) + 
                                    " " + orfY)
                         .attr("stroke", color)
                         .attr("stroke-width", this.self.ORF_STROKE_WIDTH);
 				}
 				
-                var codonShift = -8;
-
                 Ext.each(orf.getStartCodons(), function(startCodonIndex) {
                     if(startCodonIndex >= row.rowData.getStart() && 
                        startCodonIndex <= row.rowData.end) {
@@ -140,14 +139,14 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         if(orf.getStrand() == -1) {
                             this.orfSVG.append("svg:circle")
                                 .attr("cx", codonStartPointX + textWidth + 
-                                            codonShift)
+                                            this.self.CODON_SHIFT)
                                 .attr("cy", codonStartPointY)
                                 .attr("r", 3.5)
                                 .attr("fill", color);
                         } else {
                             this.orfSVG.append("svg:circle")
                                 .attr("cx", codonStartPointX + textWidth +
-                                            codonShift)
+                                            this.self.CODON_SHIFT)
                                 .attr("cy", codonStartPointY)
                                 .attr("r", 3.5)
                                 .attr("fill", color);

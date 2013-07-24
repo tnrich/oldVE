@@ -57,7 +57,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
 
 
-                    if(rule.operand2_id) { newEugeneRule.setOperand2(allParts.getById(rule.operand2_id)); }
+                    if(rule.operand2_id && !rule.operand2isNumber) { newEugeneRule.setOperand2(allParts.getById(rule.operand2_id)); }
                     if(rule.operand2isNumber)
                     {
                         newEugeneRule.set("operand2Number",rule.operand2Number);
@@ -104,35 +104,40 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
     onDeviceEditorClearBtnClick: function () {
 
-        Ext.Msg.show({
-             title:'Are you sure you want to clear this design?',
-             msg: 'WARNING: This will clear the current design. This action is not undoable!',
-             cls: 'messageBox',
-             buttons: Ext.Msg.OKCANCEL,
-             fn: ClearDeviceDesignBtn,
-             icon: Ext.Msg.QUESTION
-        });
-
         function ClearDeviceDesignBtn (btn) {
-            if (btn=='ok') {
+            if (btn==="ok") {
                 var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
                 var bins = existingDesign.getJ5Collection().bins();
                 var binIndex = existingDesign.getJ5Collection().binCount();
                 
                 for (var i = 0; i <= binIndex; i++) {
-                    existingDesign.getJ5Collection().deleteBinByIndex(i)
+                    existingDesign.getJ5Collection().deleteBinByIndex(i);
+                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
+
                 }
             
                 var newBin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "Bin1"
                 });
                 bins.add(newBin);
-                console.log(existingDesign);
-                Vede.application.fireEvent("ReRenderCollectionInfo")
+
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.FILL_BLANK_CELLS);
                 toastr.options.onclick = null;
                 toastr.info("Design Cleared");
             }
         }
+
+        Ext.Msg.show({
+             title:"Are you sure you want to clear this design?",
+             msg: "WARNING: This will clear the current design. This action is not undoable!",
+             cls: "messageBox",
+             buttons: Ext.Msg.OKCANCEL,
+             fn: ClearDeviceDesignBtn,
+             icon: Ext.Msg.QUESTION
+        });
+
     },
 
     onDeviceEditorDeleteBtnClick: function () {
@@ -201,11 +206,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     saveDEProject: function (cb) {
         var self = this;
         Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
-        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
-
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model; 
 
         var saveAssociatedSequence = function (part, cb) {
-            if(part.data.phantom === false)
+            // Do not save sequence for a phantom or named part
+            if( !part.get("phantom") && !part.isNamed() )
                 {
                     part.getSequenceFile({callback: function(associatedSequence){
                         if(associatedSequence)
@@ -220,6 +225,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                                             part.set("sequencefile_id", sequencefile.get("id"));
                                             part.save({
                                                 callback: function () {
+
                                                     cb();
                                                 }
                                             });
@@ -245,9 +251,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
         var saveDesign = function () {
             var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
-            design.rules().filters.clear();
+            design.rules().clearFilter(true);
+
             design.save({
+                // console.log('hii');
                 callback: function () {
+
                     Vede.application.fireEvent(self.GridEvent.RESUME_PART_ALERTS);
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
@@ -275,6 +284,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                     part.save({
                         callback: function (part) {
+
                             saveAssociatedSequence(part, function () {
                                 if(countParts === 1) { saveDesign();}
                                 countParts--;
@@ -385,7 +395,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
                     assemblies.sort("name", "ASC");
                     
-                    var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
+//                    var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
 
                     var j5parameters = Ext.create("Teselagen.models.J5Parameters");
                     j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
@@ -402,28 +412,28 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     if(status==="Completed") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').removeClass('btnDisabled');
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').removeClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-completed");
                     } else if (status==="Completed with warnings") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').removeClass('btnDisabled');
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').removeClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-warning");
                     } else if (status==="Error") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');    
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
 
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
@@ -432,13 +442,36 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     var warnings = self.activeJ5Run.raw.warnings;
                     var errors = self.activeJ5Run.raw.error_list[0];
-                    var nonDegenerativeParts = self.activeJ5Run.getJ5Results().raw.processedData.nondegenerateParts;
                     var warningsStore, errorsStore;
 
-                    var nonDegenerativPartsStore = Ext.create("Teselagen.store.PartStore", {
-                        model: "Teselagen.models.Part",
-                        data: nonDegenerativeParts
-                    });
+                    if(self.activeJ5Run.getJ5Results().raw.processedData) {
+                        if(self.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
+                            var combinationPieces = self.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
+                            for(i = 0; i<assemblies.getCount(); i++) {
+                                var combinationParts = [];
+                                for (var k =0; k<combinationPieces[i].partsContained.length; k++) {
+                                    combinationParts.push(combinationPieces[i].partsContained[k].parts);
+                                }
+                                assemblies.getAt(i).set("parts", combinationParts.join());
+                            }
+                        }
+
+                        if(self.activeJ5Run.getJ5Results().raw.processedData.targetParts) {
+                            var targetParts = self.activeJ5Run.getJ5Results().raw.processedData.targetParts;
+                            var targetPartNames=[];
+                            for(i = 0; i<targetParts.length; i++) {
+                                targetPartNames.push(targetParts[i].name);
+                            }
+                            assemblies.getAt(0).set("parts", targetPartNames);
+                        }
+
+                        if(self.activeJ5Run.getJ5Results().raw.processedData.combinationParts) {
+                            var comboParts = self.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
+                            for(i = 0; i<assemblies.getCount(); i++) {
+                                assemblies.getAt(i).set("parts", comboParts[i].parts);
+                            }
+                        }
+                    }
 
                     if (warnings) {
                         warningsStore = Ext.create("Teselagen.store.WarningsStore", {

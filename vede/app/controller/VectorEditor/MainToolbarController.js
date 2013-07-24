@@ -80,11 +80,11 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         var buttons = Ext.ComponentQuery.query("button[cls='featuresBtn']");
 
         for(var i = 0; i < buttons.length; i++) {
-            buttons[i].toggle(checked, true);
+            buttons[i].toggle(pressed, true);
         }
 
         for(i = 0; i < checkitems.length; i++) {
-            checkitems[i].setChecked(checked, true);
+            checkitems[i].setChecked(pressed, true);
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
@@ -96,11 +96,11 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         var buttons = Ext.ComponentQuery.query("button[cls='cutSitesBtn']");
 
         for(var i = 0; i < buttons.length; i++) {
-            buttons[i].toggle(checked, true);
+            buttons[i].toggle(pressed, true);
         }
 
         for(i = 0; i < checkitems.length; i++) {
-            checkitems[i].setChecked(checked, true);
+            checkitems[i].setChecked(pressed, true);
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
@@ -112,11 +112,11 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         var buttons = Ext.ComponentQuery.query("button[cls='orfsBtn']");
 
         for(var i = 0; i < buttons.length; i++) {
-            buttons[i].toggle(checked, true);
+            buttons[i].toggle(pressed, true);
         }
 
         for(i = 0; i < checkitems.length; i++) {
-            checkitems[i].setChecked(checked, true);
+            checkitems[i].setChecked(pressed, true);
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,

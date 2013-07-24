@@ -226,10 +226,20 @@ Ext.define("Teselagen.constants.Constants", {
      {label: "unsure", data: "unsure"}, 
      {label: "V_region ", data: "V_region "}, 
      {label: "variation", data: "variation"}
-	]
+	],
 	
-//    constructor: function() {
-//        this.RECT_SHAPE_MIN_SIZE = this.RECT_SHAPE_DEFAULT_SIZE / 2;
-//    }
-
+    // Default options for Vector Editor's view menu.
+    DEFAULT_VE_VIEW_OPTIONS: {
+        features: true,
+        cutSites: false,
+        orfs: false,
+        circular: true,
+        mapCaret: true,
+        complementary: true,
+        spaces: true,
+        sequenceAA: false,
+        revComAA: false,
+        featureLabels: true,
+        cutSiteLabels: true
+    }
 });

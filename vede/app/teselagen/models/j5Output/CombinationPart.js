@@ -18,7 +18,7 @@ Ext.define("Teselagen.models.j5Output.CombinationPart", {
     
     fields: [
         {name: "id",      type: "string",     defaultValue: ""},
-        {name: "name",      type: "string",     defaultValue: ""},
+        // {name: "name",      type: "string",     defaultValue: ""},
         {name: "parts",      type: "string",     defaultValue: ""}
     ]
 });

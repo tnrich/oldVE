@@ -5,7 +5,8 @@
 Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.DeviceEvent",
+    requires: ["Teselagen.constants.Constants",
+               "Teselagen.event.DeviceEvent",
                "Teselagen.event.ProjectEvent",
                "Teselagen.event.SequenceManagerEvent", 
                "Teselagen.manager.SequenceFileManager", 
@@ -48,7 +49,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     var now = new Date();
                                     nowTime = Ext.Date.format(now, "g:i:s A  ");
                                     nowDate = Ext.Date.format(now, "l, F d, Y");
-                                    var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                                    var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('tbtext[cls="VectorEditorStatusBarAlert"]');
                                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                     toastr.options.onclick = null;
                                     toastr.info("Part Successfully Created");
@@ -68,7 +69,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                         var now = new Date();
                                         nowTime = Ext.Date.format(now, "g:i:s A  ");
                                         nowDate = Ext.Date.format(now, "l, F d, Y");
-                                        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('tbtext[cls="VectorEditorStatusBarAlert"]');
                                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                         toastr.options.onclick = null;
                                         toastr.info("Part Sucessfully Created");
@@ -103,10 +104,14 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
         Teselagen.manager.ProjectManager.checkDuplicatedTabs(seq, "VectorEditorPanel", function(tabPanel) {
             var newTab = Ext.create("Vede.view.ve.VectorEditorPanel", {
-                title: sequenceFileManager.getName()
+                title: sequenceFileManager.getName(),
+                icon: "resources/images/ux/tab-circular-icon.png",
+                iconCls: "tab-icon",
             });
             newTab.model = sequenceFileManager;
             newTab.sequenceFile = seq;
+            newTab.options = Teselagen.constants.Constants.DEFAULT_VE_VIEW_OPTIONS;
+            newTab.options.circular = sequenceFileManager.getCircular();
 
             self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager", seq, sequenceFileManager);
 

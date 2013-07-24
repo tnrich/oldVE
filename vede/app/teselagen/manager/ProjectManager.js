@@ -105,7 +105,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
             var tabPanel = Ext.getCmp("mainAppPanel");
             var newj5ReportPanel = Ext.create("Vede.view.j5Report.j5ReportPanel", {
                 title: DeviceDesign.data.name + " j5 Report",
-                model: DeviceDesign
+                model: DeviceDesign,
+                icon: "resources/images/ux/tab-report-icon.png",
+                iconCls: "tab-icon"
             });
             tabPanel.add(newj5ReportPanel).show();
             tabPanel.setActiveTab(newj5ReportPanel);
@@ -127,8 +129,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
-                title: "Device Editor | " + selectedDesign.data.name,
+                title: selectedDesign.data.name,
                 model: selectedDesign,
+                icon: "resources/images/ux/tab-design-icon.png",
+                iconCls: "tab-icon",
                 modelId: selectedDesign.data.id
             })).show();
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
@@ -404,8 +408,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
                                 design.set("name",text);
                                 design.set("project_id",project.data.id);
+                                for (var i = 0; i < 2; i++) {
+                                    var newPart = Ext.create("Teselagen.models.Part",{phantom:true});
+                                    Teselagen.manager.DeviceDesignManager.addPartToBin(design, newPart, 0);
+                                }                            
                                 project.designs().add(design);
-
                                 design.save({
                                     success: function(record, operation) {
                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
@@ -429,11 +436,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         });
                         */
                         afterPartsSaved();
-
                     }
                 } else { return false; }
-
-            };
+        };
         Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
 
     },

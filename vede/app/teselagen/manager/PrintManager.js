@@ -44,13 +44,14 @@ Ext.define("Teselagen.manager.PrintManager", {
         var pieContainer = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
         var railContainer = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='RailContainer']");
         if(pieContainer.el.getStyle("display") === "none") {
-		//if(document.getElementById('PieContainer').style.display=='none') {
             pieContainer.show();
             railContainer.hide();
 			startShown = false;
 		}
-		
-		
+
+        var pieManager = Vede.application.getController("VectorEditor.PieController").pieManager;
+        pieManager.removeZoom();
+
 		var bBox = d3.select('.pieParent').node().getBBox();
 		var svg = d3.select(".pieParent");
         var transformValues = svg.attr("transform").match(/[-.\d]+/g);
@@ -106,11 +107,14 @@ Ext.define("Teselagen.manager.PrintManager", {
         this.printStyleSheet.addRule('.pieWireframeElement', 'display: none');
         this.printStyleSheet.addRule('.pieCaret', 'display: none');
         
+
         window.print();
         if(!startShown) {
             pieContainer.hide();
             railContainer.show();
     	}
+
+        pieManager.restoreZoom();
         this.removeRules('.Pie','@page','.x-viewport','body','.pieSelection','.pieWireframeElement','.pieCaret');
 	},	
 	
@@ -126,7 +130,9 @@ Ext.define("Teselagen.manager.PrintManager", {
             pieContainer.hide();
 			startShown = false;
 		}
-		
+
+		var railManager = Vede.application.getController("VectorEditor.RailController").railManager;
+        railManager.removeZoom();
 		
 		var bBox = d3.select('.railParent').node().getBBox();
 		var svg = d3.select(".railParent");
@@ -185,6 +191,8 @@ Ext.define("Teselagen.manager.PrintManager", {
             railContainer.hide();
             pieContainer.show();
     	}
+
+        railManager.restoreZoom();
         this.removeRules('.Rail','@page','.x-viewport','body','.railSelection','.railWireframeElement','.railCaret');
 	},
 	

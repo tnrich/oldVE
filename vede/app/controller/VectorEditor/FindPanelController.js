@@ -41,6 +41,12 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
         this.findManager.getAAManager().setSequenceManager(pSeqMan);
     },
 
+    onSequenceChanged: function() {
+        if(this.activeTab.down("button[cls='highlightAllBtn']").pressed) {
+            this.highlightMatches();
+        }
+    },
+
     onFindFieldKeyup: function(field, event) {
         if(field.getValue() && event.getKey() === event.ENTER) {
             this.find(this.caretIndex + 1, this.caretIndex + 2);
@@ -78,6 +84,8 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
                 this.findField.setFieldStyle("background-color:white");
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this, result.start, result.end);
+
+                this.caretIndex = result.start;
 
                 if(this.activeTab.down("button[cls='highlightAllBtn']").pressed) {
                     this.highlightMatches();
@@ -152,6 +160,8 @@ Ext.define('Vede.controller.VectorEditor.FindPanelController', {
                             this.onFindPanelOpened, this);
         this.application.on(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
                             this.onSequenceManagerChanged, this);
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGED,
+                            this.onSequenceChanged, this);
     },
 
     onTabChange: function(mainAppPanel, newTab, oldTab) {

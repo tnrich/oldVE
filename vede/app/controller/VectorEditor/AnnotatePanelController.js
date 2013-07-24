@@ -80,6 +80,15 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.SelectionLayer.setTabId(tabId);
             this.HighlightLayer.setTabId(tabId);
 
+            // Set the relevant view options to the tab's saved settings.
+            this.SequenceAnnotationManager.setShowFeatures(newTab.options.features);
+            this.SequenceAnnotationManager.setShowCutSites(newTab.options.cutSites);
+            this.SequenceAnnotationManager.setShowOrfs(newTab.options.orfs);
+            this.SequenceAnnotationManager.setShowComplementarySequence(newTab.options.complementary);
+            this.SequenceAnnotationManager.setShowSpaceEvery10Bp(newTab.options.spaces);
+            this.SequenceAnnotationManager.setShowAminoAcids(newTab.options.sequenceAA);
+            this.SequenceAnnotationManager.setShowAminoAcidsRevCom(newTab.options.revComAA);
+
             this.SequenceAnnotationManager.tabChanged();
             this.SequenceAnnotationManager.annotator.init();
         }
@@ -140,6 +149,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.SequenceAnnotationManager.render();
 
             this.SelectionLayer.refresh();
+            this.HighlightLayer.refresh();
         }
     },
     
@@ -260,7 +270,8 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onMousedown: function(pEvt, pOpts) {
-        if(this.SequenceAnnotationManager.sequenceManager) {
+        if(this.SequenceAnnotationManager.sequenceManager &&
+           (pEvt.getTarget().getBoundingClientRect().right - pEvt.getX()) > 18) {
             var el = this.activeTab.down("component[cls='AnnotateContainer']").el;
             var adjustedX = pEvt.getX() - el.getX();
             var adjustedY = pEvt.getY() + el.dom.scrollTop - el.getY();
@@ -421,6 +432,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.callParent(arguments);
 
         this.SelectionLayer.refresh();
+
         this.changeCaretPosition(this.caretIndex, true, false);
     },
 

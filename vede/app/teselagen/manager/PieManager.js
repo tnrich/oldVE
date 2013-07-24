@@ -293,7 +293,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         Ext.resumeLayouts(true);
 
-        this.fitWidthToContent(this, true);
+        this.fitWidthToContent(this, false);
     },
 
     /**
@@ -318,8 +318,48 @@ Ext.define("Teselagen.manager.PieManager", {
 
             Ext.resumeLayouts(true);
 
-            this.fitWidthToContent(this, true);//, 1 / this.self.ZOOM_FACTOR / 5);
+            this.fitWidthToContent(this, false);
         }
+    },
+
+    /**
+     * Restores the pie to a scale factor of 1.
+     */
+    removeZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        this.previousZoomLevel = scale[0];
+
+        // Increase scale values.
+        scale[0] = 1.5;
+        scale[1] = 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
+    },
+
+    /**
+     * Reverts zoom level back to what it was before calling removeZoom.
+     */
+    restoreZoom: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        // Increase scale values.
+        scale[0] = this.previousZoomLevel || 1.5;
+        scale[1] = this.previousZoomLevel || 1.5;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        this.fitWidthToContent(this, true);
     },
 
     /**
@@ -333,32 +373,51 @@ Ext.define("Teselagen.manager.PieManager", {
         var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
 
         if(container && container.el) {
-            var containerSize = container.getSize();
+            var pc = container.el.dom;
+            var frame = scope.pie.select(".pieFrame").node();
+            var pcRect = pc.getBoundingClientRect();
+            var frameRect = frame.getBoundingClientRect();
+            var scrollWidthRatio = (pc.scrollLeft + pcRect.width / 2) / pc.scrollWidth;
+            var scrollHeightRatio = (pc.scrollTop + pcRect.height / 2) / pc.scrollHeight;
 
-            var transX = Number(scope.pie.attr("width")) / 2 - scope.center.x;
-            //var transX = containerSize.width / 2 - scope.center.x;
-            //var transX = (containerSize.width - scope.center.x) / 2;
-            var transY = containerSize.height / 2 - scope.center.y;
+            for(var i = 0; i < 8; i++) {
+                pc = container.el.dom;
+                frame = scope.pie.select(".pieFrame").node();
+                pcRect = pc.getBoundingClientRect();
+                frameRect = frame.getBoundingClientRect();
 
-            var pieBox = scope.pie.node().getBBox();
+                var pieBox = scope.pie.node().getBBox();
 
-            if(pieBox.height === 0 || pieBox.width === 0) {
-                return;
+                if(pieBox.height === 0 || pieBox.width === 0) {
+                    return;
+                }
+
+
+                var distanceFromCenterX = pc.scrollWidth / 2 - (frameRect.left + pc.scrollLeft + frameRect.width / 2 - pcRect.left);
+                var distanceFromCenterY = pc.scrollHeight / 2 - (frameRect.top + pc.scrollTop + frameRect.height / 2 - pcRect.top);
+
+                // Get previous values for scale and transform.
+                var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+                var scale = [Number(translateValues[0]), Number(translateValues[3])];
+                var translate = [Number(translateValues[4]), Number(translateValues[5])];
+
+                var transX = distanceFromCenterX + translate[0];
+                var transY = distanceFromCenterY + translate[1];
+
+                scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                          " " + transX + " " + transY + ")");
+
+                scope.pie.attr("width", pieBox.width + transX)
+                         .attr("height", pieBox.height + transY);
+
             }
 
-            // Get previous values for scale and transform.
-            var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-            var scale = [Number(translateValues[0]), Number(translateValues[3])];
-            var translate = [Number(translateValues[4]), Number(translateValues[5])];
-
-            scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
-                                                     " " + transX + " " + transY + ")");
-
-            scope.pie.attr("width", pieBox.width + transX)
-                     .attr("height", pieBox.height + transY);
-
             if(scrollToCenter) {
-                container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                container.el.setScrollLeft((scope.pie.node().width.baseVal.value - container.getWidth()) / 2);
+                container.el.setScrollTop((scope.pie.node().height.baseVal.value - container.getHeight()) / 2);
+            } else {
+                container.el.setScrollLeft(scrollWidthRatio * pc.scrollWidth - pcRect.width / 2);
+                container.el.setScrollTop(scrollHeightRatio * pc.scrollHeight - pcRect.height / 2);
             }
         }
     },
