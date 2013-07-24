@@ -405,18 +405,18 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     if(status==="Completed") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-completed");
                     } else if (status==="Completed with warnings") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-failed");
                         $("#" + field + " .status-note").addClass("status-note-warning");
