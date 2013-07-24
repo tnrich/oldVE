@@ -331,9 +331,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPartSelected: function (j5Part, binIndex) {
         this.selectedBinIndex = binIndex;
-        this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
-        this.selectedPartIndex = this.DeviceDesignManager.getPartIndex(this.selectedBin, j5Part);
-        //console.log(this.inspector);
+
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -881,7 +879,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     self.eugeneRulesGrid.reconfigure(rulesStore);
 
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
+                    self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+                    self.onPartSelected(operand1, self.selectedBinIndex);
+                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
+                    
                     Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
                 }
             });
@@ -898,8 +899,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     rule.setOperand2(newOperand2)
                     var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                     self.eugeneRulesGrid.reconfigure(rulesStore);
+                    
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
+                    self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+                    self.onPartSelected(operand1, self.selectedBinIndex);
+                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
 
                 }
             });
@@ -914,8 +918,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 rule.setOperand2(newOperand2)
                 var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                 self.eugeneRulesGrid.reconfigure(rulesStore);
+                    
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
+                self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+                self.onPartSelected(operand1, self.selectedBinIndex);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
+
         } else {
             var newOperand2 = newId;
             var oldOperand2 = oldId;
@@ -925,8 +933,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 rule.setOperand2(newOperand2)
                 var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                 self.eugeneRulesGrid.reconfigure(rulesStore);
+                
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
+                self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+                self.onPartSelected(operand1, self.selectedBinIndex);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
         }
     },
 
@@ -953,8 +964,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         rule.setOperand2(oldOperand2)
                         var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                         self.eugeneRulesGrid.reconfigure(rulesStore);
+                        
                         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
+                        self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+                        self.onPartSelected(operand1, self.selectedBinIndex);
+                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
                     }
                 });
             }
@@ -973,7 +987,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                         self.eugeneRulesGrid.reconfigure(rulesStore);
                         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
+                        self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+                        self.onPartSelected(operand1, self.selectedBinIndex);
+                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
                         plugin.startEdit(record, column);
                     }
                 });
