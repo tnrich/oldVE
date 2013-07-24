@@ -147,25 +147,33 @@ module.exports = function(db) {
 		dateCreated: String,
 		dateModified: String,
 		de_metadata: Mixed,
-		j5collection: {
+		directionForward: String,
+		combinatorial: String,
+		isCircular: String,
+		bins: [{
 			directionForward: String,
-			combinatorial: String,
-			isCircular: String,
-			bins: [{
-				directionForward: String,
-				dsf: String,
-				fro: String,
-				fases: [String],
-				extra5PrimeBps: String,
-				extra3PrimeBps: String,
-				binName: String,
-				iconID: String,
-				parts: [{
-					type: oIDRef,
-					ref: 'part'
-				}]
-			}]
-		},
+			dsf: String,
+			fro: String,
+			extra5PrimeBps: String,
+			extra3PrimeBps: String,
+			binName: String,
+			iconID: String,
+			cells: [
+				{
+					index: String,
+					fas: String,
+					part_id :
+						{
+							type: oIDRef,
+							ref: 'part'
+						}
+				}
+			]
+		}],
+		parts: [{
+			type: oIDRef,
+			ref: 'part'
+		}],
 		rules: [Mixed],
 		j5runs: [{
 			type: oIDRef,
