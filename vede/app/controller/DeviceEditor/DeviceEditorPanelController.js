@@ -120,7 +120,10 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     binName: "Bin1"
                 });
                 bins.add(newBin);
+
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.FILL_BLANK_CELLS);
                 toastr.options.onclick = null;
                 toastr.info("Design Cleared");
             }
@@ -274,8 +277,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         design.getJ5Collection().bins().each(function (bin) {
             bin.parts().each(function (part) {
 
-                if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-                if(part.data.name==="") { part.set("phantom",true); }
+                if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); console.log('heyy');}
+                if(part.data.name==="") { part.set("phantom",true); console.log('hi'); }
                 else { part.set("phantom",false); }
 
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
