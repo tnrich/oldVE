@@ -1229,13 +1229,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
                                                         this.selectedBin.getBin());
-            console.log(selectedBinIndex);
             var gridParts = this.getGridPartsFromJ5Part(j5Part);
             for(var i = 0; i<gridParts.length; i++) {
                 var parentBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
                                                         gridParts[i].parentBin);
-                console.log(parentBinIndex);
 
                 if(parentBinIndex == selectedBinIndex) {
                     gridParts[i].select();
