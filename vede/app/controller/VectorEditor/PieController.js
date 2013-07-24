@@ -34,7 +34,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     init: function() {
         this.callParent();
         this.application.on(Teselagen.event.VisibilityEvent.SHOW_MAP_CARET_CHANGED, this.onShowMapCaretChanged, this);
-        this.application.on(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED, this.onPieNameBoxClick);
+        this.application.on(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED, this.onPieNameBoxClick, this);
 
         this.control({
             "#mainAppPanel": {
@@ -93,7 +93,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.pieContainer.el.dom.setAttribute("tabindex", "0");
         this.pieContainer.el.on("keydown", this.onKeydown, this);
 
-        if(newTab.model.getCircular()) {
+        if(newTab.down("component[identifier='circularViewMenuItem']").checked) {
             this.pieContainer.show();
         } else {
             this.pieContainer.hide();
@@ -197,9 +197,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
     onViewModeChanged: function(viewMode) {
         if(viewMode == "linear") {
-            this.activeTab.down("component[cls='PieContainer']").hide();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']").hide();
         } else {
-            this.activeTab.down("component[cls='PieContainer']").show();
+            Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']").show();
         }
     },
 
@@ -647,7 +647,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         //console.log("("+relX+", "+relY+");  "+relDist);
     },
 
-    onPieNameBoxClick: function() {
+    onPieNameBoxClick: function(show) {
         var menuitem = this.activeTab.down("component[identifier='mapCaretMenuItem']");
         var checked = menuitem.checked;
 

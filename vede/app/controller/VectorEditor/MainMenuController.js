@@ -38,18 +38,20 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             // Store current feature/cut site/orf visibility settings on the old
             // tab, and load those from the new tab.
             if(oldTab.initialCls === "VectorEditorPanel") {
+                var menuPanel = oldTab.down("VectorEditorMainMenuPanel");
+
                 oldTab.options = {
-                    features: oldTab.down("component[identifier='featuresMenuItem']").checked,
-                    cutSites: oldTab.down("component[identifier='cutSitesMenuItem']").checked,
-                    orfs: oldTab.down("component[identifier='orfsMenuItem']").checked,
-                    circular: oldTab.down("component[identifier='circularViewMenuItem']").checked,
-                    mapCaret: oldTab.down("component[identifier='mapCaretMenuItem']").checked,
-                    complementary: oldTab.down("component[identifier='showComplementaryMenuItem']").checked,
-                    spaces: oldTab.down("component[identifier='showSpacesMenuItem']").checked,
-                    sequenceAA: oldTab.down("component[identifier='showSequenceAAMenuItem']").checked,
-                    revComAA: oldTab.down("component[identifier='showRevcomAAMenuItem']").checked,
-                    featureLabels: oldTab.down("component[identifier='featureLabelsMenuItem']").checked,
-                    cutSiteLabels: oldTab.down("component[identifier='cutSiteLabelsMenuItem']").checked
+                    features: menuPanel.down("component[identifier='featuresMenuItem']").checked,
+                    cutSites: menuPanel.down("component[identifier='cutSitesMenuItem']").checked,
+                    orfs: menuPanel.down("component[identifier='orfsMenuItem']").checked,
+                    circular: menuPanel.down("component[identifier='circularViewMenuItem']").checked,
+                    mapCaret: menuPanel.down("component[identifier='mapCaretMenuItem']").checked,
+                    complementary: menuPanel.down("component[identifier='showComplementaryMenuItem']").checked,
+                    spaces: menuPanel.down("component[identifier='showSpacesMenuItem']").checked,
+                    sequenceAA: menuPanel.down("component[identifier='showSequenceAAMenuItem']").checked,
+                    revComAA: menuPanel.down("component[identifier='showRevcomAAMenuItem']").checked,
+                    featureLabels: menuPanel.down("component[identifier='featureLabelsMenuItem']").checked,
+                    cutSiteLabels: menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").checked
                 }
             }
 
@@ -162,17 +164,21 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
 
     loadTabOptions: function(tabOptions) {
         if(tabOptions) {
-            this.activeTab.down("component[cls='featuresBtn']").toggle(tabOptions.features);
-            this.activeTab.down("component[cls='cutSitesBtn']").toggle(tabOptions.cutSites);
-            this.activeTab.down("component[cls='orfsBtn']").toggle(tabOptions.orfs);
-            this.activeTab.down("component[identifier='circularViewMenuItem']").setChecked(tabOptions.circular);
-            this.activeTab.down("component[identifier='mapCaretMenuItem']").setChecked(tabOptions.mapCaret);
-            this.activeTab.down("component[identifier='showComplementaryMenuItem']").setChecked(tabOptions.complementary);
-            this.activeTab.down("component[identifier='showSpacesMenuItem']").setChecked(tabOptions.spaces);
-            this.activeTab.down("component[identifier='showSequenceAAMenuItem']").setChecked(tabOptions.sequenceAA);
-            this.activeTab.down("component[identifier='showRevcomAAMenuItem']").setChecked(tabOptions.revComAA);
-            this.activeTab.down("component[identifier='featureLabelsMenuItem']").setChecked(tabOptions.featureLabels);
-            this.activeTab.down("component[identifier='cutSiteLabelsMenuItem']").setChecked(tabOptions.cutSiteLabels);
+            var menuPanel = this.activeTab.down("VectorEditorMainMenuPanel");
+
+            menuPanel.down("component[cls='featuresBtn']").toggle(tabOptions.features);
+            menuPanel.down("component[cls='cutSitesBtn']").toggle(tabOptions.cutSites);
+            menuPanel.down("component[cls='orfsBtn']").toggle(tabOptions.orfs);
+            menuPanel.down("component[cls='circularBtn']").toggle(tabOptions.circular);
+            menuPanel.down("component[cls='linearBtn']").toggle(!tabOptions.circular);
+            menuPanel.down("component[identifier='circularViewMenuItem']").setChecked(tabOptions.circular);
+            menuPanel.down("component[identifier='mapCaretMenuItem']").setChecked(tabOptions.mapCaret);
+            menuPanel.down("component[identifier='showComplementaryMenuItem']").setChecked(tabOptions.complementary);
+            menuPanel.down("component[identifier='showSpacesMenuItem']").setChecked(tabOptions.spaces);
+            menuPanel.down("component[identifier='showSequenceAAMenuItem']").setChecked(tabOptions.sequenceAA);
+            menuPanel.down("component[identifier='showRevcomAAMenuItem']").setChecked(tabOptions.revComAA);
+            menuPanel.down("component[identifier='featureLabelsMenuItem']").setChecked(tabOptions.featureLabels);
+            menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").setChecked(tabOptions.cutSiteLabels);
         }
     },
 
