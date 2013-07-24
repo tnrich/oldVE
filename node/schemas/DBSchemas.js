@@ -65,10 +65,6 @@ module.exports = function(db) {
 
 	var SequenceSchema = new Schema({
 		FQDN: String,
-		project_id: {
-			type: oIDRef,
-			ref: 'project'
-		},
 		user_id: {
 			type: oIDRef,
 			ref: 'user'
@@ -92,7 +88,6 @@ module.exports = function(db) {
 	var PartSchema = new Schema({
 		FQDN: {type : String},
         definitionHash: {type: String},
-		project_id : { type: oIDRef, ref: 'project' },
 		user_id : { type: oIDRef, ref: 'user' },
 		name: String,
 		dateCreated: String,
@@ -107,8 +102,7 @@ module.exports = function(db) {
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
-		iconID            :  String,
-		phantom           :  Boolean
+		iconID            :  String
 	});
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});

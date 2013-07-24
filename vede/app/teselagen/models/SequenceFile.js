@@ -104,9 +104,6 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "id",
         type: "long"
     }, {
-        name: "project_id",
-        type: "long"
-    }, {
         name: "part_id",
         type: "long"
     }, {
