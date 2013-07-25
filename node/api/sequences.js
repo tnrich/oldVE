@@ -43,19 +43,17 @@ module.exports = function(app) {
 
     var saveSequence = function(newSequence,req,res){
         for (var prop in req.body) {
-            if(prop!="project_id") { newSequence[prop] = req.body[prop]; }
+            newSequence[prop] = req.body[prop];
         }
 
-        if(req.body.project_id!="") newSequence.project_id = req.body.project_id;
+        //Project.findById(req.body.project_id,function(err,project){
+            //if(err) return res.json(500,{"error":err});
+            //if(!project) return res.json(500,{"error":"project not found"});
 
-        Project.findById(req.body.project_id,function(err,project){
-            if(err) return res.json(500,{"error":err});
-            if(!project) return res.json(500,{"error":"project not found"});
+            newSequence.FQDN = req.user.FQDN+'.'+req.body.name;
 
-            newSequence.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
-
-            project.sequences.push(newSequence);
-            project.save();
+            //project.sequences.push(newSequence);
+            //project.save();
             newSequence.save(function(err){
                 if(err)
                 {
@@ -74,7 +72,7 @@ module.exports = function(app) {
                 else res.json({'sequences': newSequence,"duplicated":false,"err":err});
             });
 
-        });
+        //});
 
         /*
         newSequence.save(function(err) {

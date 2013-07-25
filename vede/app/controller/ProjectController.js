@@ -228,7 +228,7 @@ Ext.define("Vede.controller.ProjectController", {
 
     /* Creates a sequence and an associated sequence */
     createSequence: function (record) {
-        Teselagen.manager.ProjectManager.createNewSequence(project);
+        Teselagen.manager.ProjectManager.createNewSequence();
     },
 
     promptPartName: function(cb){
