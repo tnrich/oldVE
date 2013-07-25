@@ -187,11 +187,17 @@ Ext.define("Teselagen.manager.GridManager", {
 	addRowBelow: function() {
 		var me = this;			
 		var rowIndex;
+        var newCell;
+
 		if(this.selectedGridPart==null) rowIndex = -1;
 		else rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));	
 		
-		for(var i=0;i<this.totalColumns;i++) {
-			this.collectionData[i].parts.splice(rowIndex+1,0,{phantom: true});
+		for(var i=0; i < this.totalColumns; i++) {
+            newCell = Ext.create("Teselagen.models.Cell", {
+                index: rowIndex + 1
+            });
+
+            this.activeProject.bins().getAt(i).cells().insert(rowIndex + 1, newCell);
 		}
 		
 		this.selectedGridPart = null;
@@ -218,10 +224,14 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	addRowAbove: function() {
 		var me = this;			
+        var newCell;
 		var rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
 		
 		for(var i=0;i<this.totalColumns;i++) {
-			this.collectionData[i].parts.splice(rowIndex,0,{phantom: true});
+            newCell = Ext.create("Teselagen.models.Cell", {
+                index: rowIndex + 1
+            });
+            this.activeProject.bins().getAt(i).cells().insert(rowIndex, newCell);
 		}
 		
 		this.selectedGridPart = null;
@@ -250,11 +260,8 @@ Ext.define("Teselagen.manager.GridManager", {
 		var me = this;
 		me.newColumnSuffixNum++;
 		var columnIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
-		var binName = me.generateDefaultColumnName();
 		
 		var newBin = {
-			//binName: "Bin"+me.newColumnSuffixNum, 
-			binName: binName, 
 			iconID: "USER-DEFINED",
 			directionForward: true,
 			parts: []
@@ -293,11 +300,8 @@ Ext.define("Teselagen.manager.GridManager", {
 		var me = this;
 		me.newColumnSuffixNum++;
 		var columnIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
-		var binName = me.generateDefaultColumnName();
 		
 		var newBin = {
-			//binName: "Bin"+me.newColumnSuffixNum, 
-			binName: binName,
 			iconID: "USER-DEFINED",
 			directionForward: true,
 			parts: []
@@ -356,7 +360,6 @@ Ext.define("Teselagen.manager.GridManager", {
 		var removedBin;
 		if(this.totalColumns==1) {
 			var newBin = {
-				binName: "Bin"+me.newColumnSuffixNum, 
 				iconID: "USER-DEFINED",
 				directionForward: true,
 				parts: []
