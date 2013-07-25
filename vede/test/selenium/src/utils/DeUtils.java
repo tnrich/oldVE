@@ -147,6 +147,52 @@ public class DeUtils {
 		builder.perform();
 	}
 	
+	public static void loadExample(WebDriver driver, String name) {
+		String s = "//div[starts-with(@id,'DeviceEditorMenuPanel-')]/div[starts-with(@id,'toolbar-')]" +
+				"//a[contains(@class,' examplesMenu ')]";
+		SelUtil.click(SelUtil.findElement(driver, By.xpath(s)));
+		
+		s = "/html/body/div[starts-with(@id,'menu-')]/div[starts-with(@id,'menu-') and " +
+				"'-body'=substring(@id, string-length(@id)- string-length('-body') +1)]" +
+				"/div[starts-with(@id,'menu-') and '-innerCt'=substring(@id, string-length(@id)- string-length('-innerCt') +1)]" +
+				"/div[starts-with(@id,'menu-') and '-targetEl'=substring(@id, string-length(@id)- string-length('-targetEl') +1)]" +
+				"//a/span[text()='"+name+"']/parent::*";
+		SelUtil.click(SelUtil.findElement(driver, By.xpath(s)));
+		
+		s = "/html/body/div/div/div/div/div/div/span[text()='Are you sure you want to load example?']" +
+				"/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*//span[text()='OK']/parent::*";
+		SelUtil.click(SelUtil.findElement(driver, By.xpath(s)));
+	}
+	
+	/**
+	 * Gets the value of the 'j5 Ready' field on the inspector panel.
+	 * 
+	 * @param driver Webdriver
+	 * @return Value of the 'j5 Ready' field or null if the value is not 'true' or 'false'
+	 */
+	public static Boolean getJ5ReadyFromInspectorPanel(WebDriver driver) {
+		String s = "//div[starts-with(@id,'InspectorPanel-')]//table[contains(@class,' j5_ready_field ')]" +
+				"//div[@role='input']";
+		String value = SelUtil.findElement(driver, By.xpath(s)).getText();
+		if(value.equals("true")) return true;
+		else if(value.equals("false")) return false;
+		else return null;
+	}
+	
+	/**
+	 * Gets the value of the 'combinatorial' field on the inspector panel.
+	 * 
+	 * @param driver Webdriver
+	 * @return Value of the 'combinatorial' field or null if the value is not 'true' or 'false'
+	 */
+	public static Boolean getCombinatorialFromInspectorPanel(WebDriver driver) {
+		String s = "//div[starts-with(@id,'InspectorPanel-')]//table[contains(@class,' combinatorial_field ')]" +
+				"//div[@role='input']";
+		String value = SelUtil.findElement(driver, By.xpath(s)).getText();
+		if(value.equals("true")) return true;
+		else if(value.equals("false")) return false;
+		else return null;
+	}
 	
 }
 

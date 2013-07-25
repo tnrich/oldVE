@@ -51,17 +51,26 @@ public class Test01 {
 	        }
     	});*/
 		JsUtils.appendJsErrorToBodyAttr(driver);
+		//NavUtils.createNewProject(driver, "gup90gdf");
+		//NavUtils.toggleExpansionOfProject(driver, "jrur9uwrtwt");
+		//NavUtils.createNewDesign(driver, "jrur9uwrtwt", "des");
+		NavUtils.openDesign(driver, "jrur9uwrtwt", "des");
+		DeUtils.loadExample(driver, "Combinatorial Golden Gate");
+		boolean j5Ready = DeUtils.getJ5ReadyFromInspectorPanel(driver);
+		boolean combinatorial = DeUtils.getCombinatorialFromInspectorPanel(driver);
+		System.out.println(j5Ready);		
+		System.out.println(combinatorial);
 		
 		
-		NavUtils.openSequence(driver, "Project 0", "Seq3");
+		//NavUtils.openSequence(driver, "Project 0", "Seq3");
 		
 		//PieUtils.clickOnFeature(driver, "hhth", "misc_feature", 38, 167);
 		//PieUtils.rightClickOnFeature(driver, "hhth", "misc_feature", 38, 167);
 		//PieUtils.rightClickOnFeature(driver, "hhth", "misc_feature", 38, 167);
 		//PieUtils.contextMenuClickOnFeature(driver, "ghj");
 		//PieUtils.contextMenuClickOnFeature(driver, "ghj");
-		Thread.sleep(5000);
-		System.out.println(PieUtils.isMapCaretVisible(driver));
+		//Thread.sleep(5000);
+		//System.out.println(PieUtils.isMapCaretVisible(driver));
 		
 		
 		//String s1 = PieUtils.getPieName(driver);

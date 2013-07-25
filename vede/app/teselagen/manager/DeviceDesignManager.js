@@ -97,7 +97,30 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return device;
     },
+    
+    /**
+     * Creates a DeviceDesign using a given set of J5Bins.
+     * The order in the array determines the order in the Collection.
+     * Validates DeviceDesign.
+     * @param {Teselagen.models.J5Bin[]} pBins One or an array of J5Bins
+     * @returns {Teselagen.models.DeviceDesign}
+     */
+    createDeviceDesignFromBinsAndParts: function(pBins, pParts) {
+        var device = Ext.create("Teselagen.models.DeviceDesign");
 
+        device.bins().removeAll();
+        device.bins().insert(0, pBins);
+
+        device.parts().removeAll();
+        device.parts().insert(0, pParts);
+
+        var err = device.validate();
+        if (err.length > 0) {
+            console.warn("Creating DeviceDesign: " + err.length + " errors found.");
+        }
+        return device;
+    },
+    
     //================================================================
     // EugeneRules Management
     //================================================================

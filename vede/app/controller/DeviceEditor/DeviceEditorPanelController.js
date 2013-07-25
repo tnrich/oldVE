@@ -172,7 +172,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             url: examplesMap[selectedItem],
             method: "GET",
             success: function (response) {
-                Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
+                //Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
+            	Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText);
             }
         });
     },
