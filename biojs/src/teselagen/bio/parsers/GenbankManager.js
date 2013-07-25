@@ -147,7 +147,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         // IGNORE LINES: DO NOT EVEN PROCESS
         if (Ext.String.trim(line) === "" || key==="COMMENT" || key===";") {
-            console.warn("Parsing GenBank File: Empty line, 'COMMENT', or ';' detected. Ignoring line: " + line);
+            // console.warn("Parsing GenBank File: Empty line, 'COMMENT', or ';' detected. Ignoring line: " + line);
             return null;
         }
 
@@ -168,12 +168,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             break;
         case "COMMENT":
             // do nothing
-            console.warn("GenbankManager.lineParser(: This line contains a 'COMMENT' and has been ignored: " + line);
+            // console.warn("GenbankManager.lineParser(: This line contains a 'COMMENT' and has been ignored: " + line);
             break;
         default: // FOLLOWING FOR KEYWORDS NOT PREVIOUSLY DEFINED IN CASES
             if ( key === "BASE") {
                 // do nothing;              // BLANK LINES || line with ;;;;;;;;;  || "BASE COUNT"
-                console.warn("Parsing GenBank File: This line with BaseCount has been ignored: " + line);
+                // console.warn("Parsing GenBank File: This line with BaseCount has been ignored: " + line);
                 break;
             } else if ( isKey ) {
                 // REGULAR KEYWORDS (NOT LOCUS/FEATURES/ORIGIN) eg VERSION, ACCESSION, SOURCE, REFERENCE
@@ -187,7 +187,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 //lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
                 lastObj.appendValue(Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line), gb);
             } else {
-                console.warn("Parsing GenBank File: This line has been ignored: " + line);
+                // console.warn("Parsing GenBank File: This line has been ignored: " + line);
             }
         }
 

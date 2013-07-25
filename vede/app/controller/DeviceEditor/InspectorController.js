@@ -345,6 +345,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     /**
+     * Handles the event that a cell is selected on the grid.
+     * @param {Teselagen.models.Cell} cell The cell model that has been selected.
+     */
+    onCellSelected: function(cell) {
+        if(cell.get("part_id")) {
+            var part = cell.getPart();
+            this.onPartSelected(part, this.activeProject.bins().indexOf(cell.getJ5Bin()));
+        }
+    },
+
+    /**
      * Handles the event that a part is selected on the grid.
      * @param {Teselagen.models.Part} j5Part The part model that has been selected.
      * @param {Number} binIndex The index of the bin that owns the selected part.
@@ -1357,6 +1368,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.Logger = Teselagen.utils.Logger;
 
         this.application.on(this.DeviceEvent.SELECT_PART, this.onPartSelected, this);
+
+        this.application.on(this.DeviceEvent.SELECT_CELL, this.onCellSelected, this);
 
         this.application.on(this.DeviceEvent.SELECT_BIN, this.onBinSelected, this);
 

@@ -454,147 +454,48 @@ Ext.define("Teselagen.manager.GridManager", {
 		});
 		me.selectPartByIndex(xIndex, yIndex);
 	},
+
+    onGridPartRectSvgClick: function() {
+        Teselagen.manager.GridManager.selectPart(this);
+    },
 	
-	onGridPartRectSvgClick: function() {
+	selectPart: function(gridPart) {
 		var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(true);
 		gridManager.GridController.toggleInsertOptions(true);
 		gridManager.GridController.toggleInsertRowAboveOptions(true);
 		gridManager.GridController.toggleInsertRowBelowOptions(true);
 		
-		if(d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
+		if(d3.select(gridPart.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
 			d3.selectAll(".gridBinHeaderRectSVG")
 				.attr("fill", gridManager.BIN_FILL_COLOR)
 				.attr("stroke", gridManager.BIN_OUTLINE_COLOR)
 				.attr("isSelected", "false");
-			d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG")
+			d3.select(gridPart.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG")
 				.transition()
 			    .duration(30)
 			    .attr("stroke", gridManager.BIN_SELECTED_OUTLINE_COLOR)
 			    .attr("fill", gridManager.BIN_SELECTED_FILL_COLOR)
 			    .attr("isSelected", "true");
-			gridManager.selectedGridBin = d3.select(this.parentNode.parentNode.parentNode);
+			gridManager.selectedGridBin = d3.select(gridPart.parentNode.parentNode.parentNode);
 		}
 		
-		if(d3.select(this).attr("isSelected")=="true") return;
+		if(d3.select(gridPart).attr("isSelected")=="true") return;
 		
 		d3.selectAll(".gridPartRectSVG")
 			.attr("fill", gridManager.PART_FILL_COLOR)
 			.attr("stroke", gridManager.PART_OUTLINE_COLOR)
 			.attr("isSelected", "false");
 						
-		d3.select(this).transition()
+		d3.select(gridPart).transition()
 		    .duration(30)
 		    .attr("stroke", gridManager.PART_SELECTED_OUTLINE_COLOR)
 		    .attr("fill", gridManager.PART_SELECTED_FILL_COLOR)
 		    .attr("isSelected", "true");
 		
-		gridManager.selectedGridPart = d3.select(this.parentNode);
+		gridManager.selectedGridPart = d3.select(gridPart.parentNode);
 
-        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, gridManager.selectedGridPart.datum());
-
-		/*gridManager.inspector.setActiveTab(0);
-		
-
-        var partPropertiesForm = gridManager.inspector.down("form[cls='PartPropertiesForm']");
-        var openPartLibraryBtn = gridManager.inspector.down("button[cls='openPartLibraryBtn']");
-        var changePartDefinitionBtn = gridManager.inspector.down("button[cls='changePartDefinitionBtn']");
-        var deletePartBtn = gridManager.inspector.down("button[cls='deletePartBtn']");
-        var clearPartMenuItem = gridManager.currentTab.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
-        var fasForm = gridManager.inspector.down("form[cls='forcedAssemblyStrategyForm']");
-        var fasCombobox = fasForm.down("combobox");
-        var partSourceNameField = gridManager.inspector.down("displayfield[cls='partSourceField']");
-        var fasArray = [];
-        
-        openPartLibraryBtn.enable();
-        openPartLibraryBtn.removeCls('btnDisabled');
-
-        var removeRowMenuItem = gridManager.currentTab.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
-        removeRowMenuItem.enable();
-        
-        var selectedBinIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
-        if(selectedBinIndex !== 0) {
-            // Turn the FAS_LIST array into an array of arrays, as required by
-            // the store's loadData function.
-            Ext.each(Teselagen.constants.Constants.FAS_LIST_NO_DIGEST, function(fas) {
-                fasArray.push([fas]);
-            });
-
-            fasForm.down("combobox").store.loadData(fasArray);
-        } else {
-            Ext.each(Teselagen.constants.Constants.FAS_LIST, function(fas) {
-                fasArray.push([fas]);
-            });
-
-            fasForm.down("combobox").store.loadData(fasArray);
-        }
-        
-        //debugger;
-        var j5Part = gridManager.j5PartFromCollectionDataPart(gridManager.selectedGridPart.datum());
-        
-        partPropertiesForm.loadRecord(j5Part);
-
-        if( j5Part.get('sequencefile_id')!=="" && !j5Part.get('phantom') )
-        {
-            j5Part.getSequenceFile({
-                callback: function(sequenceFile){
-                    if(sequenceFile)
-                    {
-                        if(sequenceFile.get("partSource")!="") {
-                            changePartDefinitionBtn.removeCls('btnDisabled');
-                            openPartLibraryBtn.setText("Open Part Library");
-                            openPartLibraryBtn.removeCls('selectPartFocus');
-                            changePartDefinitionBtn.enable();
-                            deletePartBtn.enable();
-                            deletePartBtn.removeCls('btnDisabled');
-                            deletePartBtn.removeCls('selectPartFocus');
-                            clearPartMenuItem.enable();
-                            partSourceNameField.setValue(sequenceFile.get('partSource'));
-                        } else {
-                            changePartDefinitionBtn.disable();
-                            openPartLibraryBtn.setText("Select Part From Library");
-                            openPartLibraryBtn.addCls('selectPartFocus');
-                            changePartDefinitionBtn.addCls('btnDisabled');     
-                            deletePartBtn.disable();
-                            clearPartMenuItem.disable();
-                            deletePartBtn.removeCls('selectPartFocus');
-                            deletePartBtn.addCls('btnDisabled');
-                        }
-                    }
-                }
-            });
-        } else if (j5Part.get('sequencefile_id') == "" && j5Part.get('name') != ""){
-            changePartDefinitionBtn.disable();
-            openPartLibraryBtn.setText("Select Part From Library");
-            openPartLibraryBtn.addCls('selectPartFocus');
-            changePartDefinitionBtn.addCls('btnDisabled');
-            deletePartBtn.enable();
-            deletePartBtn.removeCls('btnDisabled');
-            deletePartBtn.addCls('selectPartFocus');
-            clearPartMenuItem.enable();  
-        } else {
-            changePartDefinitionBtn.disable();
-            openPartLibraryBtn.setText("Select Part From Library");
-            openPartLibraryBtn.addCls('selectPartFocus');
-            changePartDefinitionBtn.addCls('btnDisabled');     
-            deletePartBtn.disable();
-            clearPartMenuItem.disable();
-            deletePartBtn.removeCls('selectPartFocus');
-            deletePartBtn.addCls('btnDisabled');
-        }
-        
-        if(j5Part.get("fas") === "") {
-            fasForm.down("combobox").setValue("None");
-        } else {
-            fasForm.loadRecord(j5Part);
-        }
-        
-        Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
-        
-        
-        //>> Eugene rules stuff should go here.
-		Teselagen.manager.InspectorPanelManager.refreshEugeneRulesGridForPart(gridManager.selectedGridPart.datum().id);*/
-		
+        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridManager.selectedGridPart.datum());
 	},
 
     selectBin: function(gridBin) {

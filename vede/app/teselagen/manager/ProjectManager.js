@@ -119,6 +119,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
         );
     },
 
+    openSequenceLibrary: function () {
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
+        sequenceGrid.reconfigure(this.sequenceStore);
+        dashPanel.getActiveTab().el.unmask();
+    },
+
     /**
      * openDeviceDesign
      * Opens a DeviceDesign model in a new tab.
@@ -392,17 +399,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
                             var newBin = Ext.create("Teselagen.models.J5Bin", {
                                 binName: "Bin1"
                             });
-                            // Removing creation of phantom parts for #793.
-//                            var tempParts = [];
-//                            for(var i = 0; i < 2; i++) {
-//                                var newPart = Ext.create("Teselagen.models.Part", {
-//                                    name: "",
-//                                    phantom: true
-//                                });
-//                                parts.push(newPart);
-//                                tempParts.push(newPart);
-//                                newbin.cells().add(newPart);
-//                            }
+
+                            var newCell = Ext.create("Teselagen.models.Cell", {
+                                index: 0,
+                                part_id: null
+                            });
+
+                            newBin.cells().insert(0, newCell);
+
                             binsArray.push(newBin);
                         }
 
@@ -516,6 +520,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
         */
-    }
+    },
+
+    onExplorerMenuItemClick: function(menuitem, e, opt) {
+        console.log("here");
+        switch (menuitem.text) {
+            case "Rename": 
+            console.log("rename");
+            break;
+            case "Delete":
+            console.log("delete");
+            break;
+        }
+    },
 
 });

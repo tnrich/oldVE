@@ -201,6 +201,7 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.ux.Spotlight": [],
   "Ext.ux.grid.FiltersFeature": [],
+  "Vede.view.common.ProjectPanelGrid": [],
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
@@ -640,6 +641,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.Spotlight": [],
   "Ext.ux.grid.FiltersFeature": [
     "feature.filters"
+  ],
+  "Vede.view.common.ProjectPanelGrid": [
+    "widget.ProjectPanelGrid",
+    "widget.grouped-grid"
   ],
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],

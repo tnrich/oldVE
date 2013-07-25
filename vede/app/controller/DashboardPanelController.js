@@ -89,9 +89,22 @@ Ext.define("Vede.controller.DashboardPanelController", {
       Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, Teselagen.manager.ProjectManager.workingSequence);
   },
 
+  onTabChange: function(tabPanel, newTab, oldTab) {
+      var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+      var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
+      sequenceTab.el.mask("Loading j5 report", "loader rspin");
+      $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+      if (newTab == sequenceTab ) {
+        Teselagen.manager.ProjectManager.openSequenceLibrary();
+      }
+  },
+
   onLaunch: function () {
       this.tabPanel = Ext.getCmp("mainAppPanel");
       this.tabPanel.on("tabchange", this.populateStatisticts);
+
+      Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
   },
 
 

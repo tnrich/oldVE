@@ -3,11 +3,11 @@
  * @class Vede.view.common.DashboardPanelView
  */
 Ext.define('Vede.view.common.DashboardPanelView', {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.tab.Panel',
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     layout: {
-        type: 'fit'
+        type: 'card'
     },
     frameHeader: false,
     border: 0,
@@ -15,6 +15,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     items: [
             {
             xtype: 'panel',
+            title: 'Dashboard',
             border: 0,
             layout: {
                 type: 'vbox',
@@ -25,7 +26,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         flex: 0.3,
                         id: 'welcome_splash',
-                        border: 0
+                        border: 0,
                     },
                     {
                         xtype: 'container',
@@ -407,6 +408,64 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         ]
                                     }
                                 ]  
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                xtype: 'panel',
+                title: 'Sequence Library',
+                cls: 'sequenceLibraryPanel',
+                border: 0,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        xtype: 'container'
+                    },
+                    {
+                        xtype: 'container',
+                        cls: 'sequenceLibraryContainer',
+                        flex: 1,
+                        items : [
+                            {
+                                xtype: 'gridpanel',
+                                border: 0,
+                                name: 'SequenceLibraryGrid',
+                                cls: 'sequenceLibraryGrid',
+                                columns: [
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Name',
+                                        width: 320,
+                                        dataIndex: 'name'
+                                    }, {
+                                        xtype: 'gridcolumn',
+                                        text: 'File Format',
+                                        width: 100,
+                                        dataIndex: 'sequenceFileFormat'
+                                    },{
+                                        xtype: 'gridcolumn',
+                                        text: 'Project',
+                                        width: 120,
+                                        dataIndex: 'parentProject'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Size',
+                                        width: 80,
+                                        dataIndex: 'size'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Features',
+                                        flex: 1,
+                                        dataIndex: 'features'
+                                    },
+                                ]
                             }
                         ]
                     }

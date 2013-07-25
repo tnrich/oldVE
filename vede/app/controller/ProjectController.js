@@ -38,12 +38,12 @@ Ext.define("Vede.controller.ProjectController", {
                 rootNode.removeAll(); // Remove existing subnodes
 
                 // Append create project at the top
-                rootNode.appendChild({
-                    text: "Create project",
-                    leaf: true,
-                    hrefTarget: "newproj",
-                    icon: "resources/images/add.png"
-                });
+                // rootNode.appendChild({
+                //     text: "Create project",
+                //     leaf: true,
+                //     hrefTarget: "newproj",
+                //     icon: "resources/images/add.png"
+                // });
 
                 rootNode.appendChild({
                     text: "Create sequence",
@@ -60,6 +60,7 @@ Ext.define("Vede.controller.ProjectController", {
                     var projectNode = rootNode.appendChild({
                         text: project.data.name,
                         id: project.data.id,
+                        type: "project",
                         hrefTarget: "openproj"
                     });
 
@@ -79,6 +80,7 @@ Ext.define("Vede.controller.ProjectController", {
                                 // Append design to project node
                                 var designnode = projectNode.appendChild({
                                     text: design.data.name,
+                                    type: "design",
                                     leaf: false,
                                     id: design.data.id,
                                     hrefTarget: "opende",
@@ -90,12 +92,27 @@ Ext.define("Vede.controller.ProjectController", {
                                 designnode.appendChild({
                                     text: "J5 Reports",
                                     leaf: true,
+                                    type: "report",
                                     id: design.data.id+"report",
                                     hrefTarget: "j5reports",
                                     icon: "resources/images/ux/j5-tree-icon-parent.png",
                                     qtip: design.data.name + " Report"
                                 });
+
+                                // Append parts to design
+                                designnode.appendChild({
+                                    text: "Parts",
+                                    leaf: false,
+                                    id: design.data.id+"parts",
+                                    icon: "resources/images/ux/circular.png",
+                                    qtip: design.data.name + " Parts"
+                                });
                             });
+
+
+
+                            
+                            if(typeof (cb2) === "function") {cb2(); }
 
                     // Empty sequenceFile store
 
@@ -103,26 +120,15 @@ Ext.define("Vede.controller.ProjectController", {
                         Ext.create("Ext.data.Store", {
                         model: "Teselagen.models.SequenceFile"
                     });
-                    
+                                
                     var sequences = project.sequences(); // Get sequences store from current project
 
+                    // Iterate over sequences
+                    sequences.each(function (sequence) {
+                        sequence.data.parentProject = project.data.name;
+                        Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
+                    });
 
-                            // Iterate over sequences
-                            sequences.each(function (sequence) {
-                                Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
-
-                                // Append sequence to project store
-                                projectNode.appendChild({
-                                    text: sequence.data.name,
-                                    leaf: true,
-                                    id: sequence.data.id,
-                                    hrefTarget: "opensequence",
-                                    icon: "resources/images/ux/circular.png",
-                                    qtip: "Sequence " + sequence.data.name
-                                });
-                            });
-                            
-                            if(typeof (cb2) === "function") {cb2(); }
                     
                 });
 
@@ -188,6 +194,13 @@ Ext.define("Vede.controller.ProjectController", {
         });
     },
     */
+
+    resolveAndOpenSequenceLibrary: function (record) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        tabPanel.setActiveTab(0);
+        dashPanel.setActiveTab(1);
+    },
 
     resolveAndOpenj5Reports: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
@@ -410,6 +423,9 @@ Ext.define("Vede.controller.ProjectController", {
             },
             "#newProject_Btn": {
                 click: this.onNewProjectClick
+            },
+            "#openSequenceLibraryBtn": {
+                click: this.resolveAndOpenSequenceLibrary
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick
