@@ -567,6 +567,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
                 // If the selected part is not in the device already, add it.
                 //if(self.selectedPart.get("phantom") ||
+                debugger;
                 if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
                                                              self.selectedPart) < 0) {
                     self.selectedPart = Ext.create("Teselagen.models.Part");
