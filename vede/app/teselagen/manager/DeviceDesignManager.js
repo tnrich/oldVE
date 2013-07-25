@@ -63,7 +63,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var bins = device.bins();
 
         bins.removeAll();
-        debugger;
         bins.add(pBins);
 
         var err = device.validate();
@@ -77,20 +76,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var bins = device.bins();
         var parts = device.parts();
         
-        bins.removeAll();
-        //debugger;
+        bins.suspendEvents();
+        
+        parts.removeAll(true);
+        parts.add(pParts);
+        
+        bins.removeAll(true);
         bins.add(pBins);
         
-        parts.removeAll();
-        parts.add(pParts);
+        Teselagen.manager.DeviceDesignManager.enforceColumnLength(device);
+        
+        bins.resumeEvents();
+        bins.fireEvent("datachanged");
         
         var err = device.validate();
         if (err.length > 0) {
             console.warn("Clearing DeviceDesign: " + err.length + " errors found.");
         }
-       
         return device;
     },
+    
     /**
      * Creates a DeviceDesign using a given set of J5Bins.
      * The order in the array determines the order in the Collection.
@@ -119,11 +124,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     createDeviceDesignFromBinsAndParts: function(pBins, pParts) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
 
-        device.bins().removeAll();
-        device.bins().insert(0, pBins);
-
         device.parts().removeAll();
         device.parts().insert(0, pParts);
+        
+        device.bins().removeAll();
+        device.bins().insert(0, pBins);
 
         var err = device.validate();
         if (err.length > 0) {
@@ -406,6 +411,25 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             }
         }
         return num;
+    },
+    
+    /**
+     * Fills columns with phantom parts so that all columns have the same 
+     * number of parts.
+     * @param {Teselagen.models.DeviceDesign}
+     */
+    enforceColumnLength: function(pDevice) {
+    	var maxNumParts = Teselagen.manager.DeviceDesignManager.findMaxNumParts(pDevice);
+    	pDevice.bins().each(function(bin) {
+    		var phantomArray = [];
+    		for(var i=bin.cells().getCount(); i<maxNumParts; i++) {
+    			phantomArray.push(Ext.create("Teselagen.models.Cell", {
+    				index: i
+    			}));
+    		}
+    		bin.cells().add(phantomArray);
+    		
+    	});
     },
 
     /**

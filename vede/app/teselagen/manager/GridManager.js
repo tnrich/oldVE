@@ -89,7 +89,7 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	renderGrid: function(model) {
 		var me = this;
-
+		
         this.removeGrid();
 
         this.currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
@@ -183,7 +183,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		    .attr("shape-rendering", "crispEdges")
 		    .attr("stroke-dasharray",(me.BIN_HEIGHT-2)+", "+(me.BIN_PART_GAP_HEIGHT+1)+", "+(me.totalRows*me.PART_HEIGHT+1)+",0");
 	},
-
+	
 	addRowBelow: function() {
 		var me = this;			
 		var rowIndex;

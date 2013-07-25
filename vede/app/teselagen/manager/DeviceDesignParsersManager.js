@@ -271,6 +271,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 	        }
         }
         
+        
+        
         //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
         //debugger;
     	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
