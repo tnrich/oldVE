@@ -11,15 +11,11 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     sequence: null,
 
     constructor: function(seq,mgr) {
-        //console.log("Teselagen.manager.VectorEditorManager created");
         this.sequenceManager = mgr;
         this.sequence = seq;
-        //Ext.getCmp("mainAppPanel").down("button[cls=\"saveSequenceBtn\"]").show();
-        //console.log(this.sequence);
     },
 
     changeSequenceManager: function(newSequenceManager){
-        //console.log("SequenceManager changed!!");
         this.sequenceFileManager = newSequenceManager;
     },
 
@@ -43,11 +39,11 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             toastr.options.onclick = null;
             toastr.info ("Sequence Saved");
             project = Teselagen.manager.ProjectManager.workingProject;
-            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                                Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
-                                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-                                Vede.application.fireEvent("PopulateStats");
-            });
+            //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+            //                    Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
+                            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+            //                    Vede.application.fireEvent("PopulateStats");
+            //});
 
             if(typeof (cb) === "function") { cb(); }
         };
@@ -72,7 +68,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             });
         };
 
-        if(!this.sequence.get("project_id"))
+        if( this.sequence.get("name") === "" )
         {
 
             Ext.MessageBox.prompt("Name", "Please enter a sequence name:", function(btn,text){
@@ -80,63 +76,10 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                 {
                     var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
                     var currentTabEl = (currentTab.getEl());
-                    var selectWindow = Ext.create("Ext.window.Window", {
-                        title: "Please choose a project",
-                        height: 200,
-                        width: 400,
-                        layout: "fit",
-                        renderTo: currentTabEl,
-                        items: {
-                            xtype: "grid",
-                            border: false,
-                            columns: {
-                                items: {
-                                    dataIndex: "name"
-                                },
-                                defaults: {
-                                    flex: 1
-                                }
-                            },
-                            store: Teselagen.manager.ProjectManager.projects,
-                            listeners: {
-                                "itemclick": function(grid, project){
-                                    selectWindow.close();
-                                    Teselagen.manager.ProjectManager.workingProject = project;
-                                    Teselagen.manager.ProjectManager.workingSequence.set("name",text);
-                                    Teselagen.manager.ProjectManager.workingSequence.setProject(project);
-                                    Teselagen.manager.ProjectManager.workingSequence.set("project_id",project.data.id);
-                                    project.sequences().add(Teselagen.manager.ProjectManager.workingSequence);
-                                    saveToServer();
-                                    /*
-                                    Teselagen.manager.ProjectManager.workingSequence.save({
-                                        callback: function(){
-                                            //saveToServer();
-                                            successFullSavedCallback();
-                                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                                                Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + Teselagen.manager.ProjectManager.workingSequence.data.id);
-                                            });
-                                        }
-                                    });
-                                    */
-                                },
 
-                                "destroy": function(selectWindow) {
-                                    currentTabPanel.setLoading(false);
-                                }
+                    Teselagen.manager.ProjectManager.workingSequence.set("name",text);
+                    saveToServer();
 
-
-                                /*"hide":function(currentTabPanel){
-                                          console.log('just hidden');
-                                          currentTabPanel.setLoading(false);
-                                  }*/
-
-
-
-
-
-                            }
-                        }
-                    }).show();
                 }
                 else { currentTabPanel.setLoading(false); }
             },this,false,self.sequenceFileManager.name);
