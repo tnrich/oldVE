@@ -94,7 +94,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             if(this.activeBins) {
                 this.activeBins.un("datachanged", this.onBinsChanged, this);
-
+            	
                 // Unset listeners for the parts store of each bin.
                 this.activeBins.each(function(bin) {
                     var parts = bin.cells();
