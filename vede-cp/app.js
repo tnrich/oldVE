@@ -67,10 +67,12 @@ Ext.application({
         'Vede.controller.J5ReportController',
         'Vede.controller.DeviceEditor.ChangePartDefinitionController'
     ],
+    /*
     errorHandler: function(err) {
         console.warn(err);
         return true;
     },
+    */
     requires: [
         "Teselagen.event.AuthenticationEvent",
         "Teselagen.manager.AuthenticationManager",

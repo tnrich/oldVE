@@ -55,11 +55,6 @@ Ext.define("Teselagen.models.Part", {
         name: "id",
         type: "long"
     }, {
-        name: "project_id",
-        type: "long"
-    },
-    // {name: "j5bin_id",        type: "long"},
-    {
         name: "eugenerule_id",
         type: "long"
     }, {

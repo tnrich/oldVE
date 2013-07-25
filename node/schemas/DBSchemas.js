@@ -65,10 +65,6 @@ module.exports = function(db) {
 
 	var SequenceSchema = new Schema({
 		FQDN: String,
-		project_id: {
-			type: oIDRef,
-			ref: 'project'
-		},
 		user_id: {
 			type: oIDRef,
 			ref: 'user'
@@ -92,7 +88,6 @@ module.exports = function(db) {
 	var PartSchema = new Schema({
 		FQDN: {type : String},
         definitionHash: {type: String},
-		project_id : { type: oIDRef, ref: 'project' },
 		user_id : { type: oIDRef, ref: 'user' },
 		name: String,
 		dateCreated: String,
@@ -107,8 +102,7 @@ module.exports = function(db) {
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
-		iconID            :  String,
-		phantom           :  Boolean
+		iconID            :  String
 	});
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});
@@ -147,25 +141,33 @@ module.exports = function(db) {
 		dateCreated: String,
 		dateModified: String,
 		de_metadata: Mixed,
-		j5collection: {
+		directionForward: String,
+		combinatorial: String,
+		isCircular: String,
+		bins: [{
 			directionForward: String,
-			combinatorial: String,
-			isCircular: String,
-			bins: [{
-				directionForward: String,
-				dsf: String,
-				fro: String,
-				fases: [String],
-				extra5PrimeBps: String,
-				extra3PrimeBps: String,
-				binName: String,
-				iconID: String,
-				parts: [{
-					type: oIDRef,
-					ref: 'part'
-				}]
-			}]
-		},
+			dsf: String,
+			fro: String,
+			extra5PrimeBps: String,
+			extra3PrimeBps: String,
+			binName: String,
+			iconID: String,
+			cells: [
+				{
+					index: String,
+					fas: String,
+					part_id :
+						{
+							type: oIDRef,
+							ref: 'part'
+						}
+				}
+			]
+		}],
+		parts: [{
+			type: oIDRef,
+			ref: 'part'
+		}],
 		rules: [Mixed],
 		j5runs: [{
 			type: oIDRef,

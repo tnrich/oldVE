@@ -199,19 +199,19 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         this.promptFormat(function(btn,dialog){
 
                 gb  = self.sequenceFileManager.toGenbank().toString();
-
+                var locusName = self.sequenceFileManager.getName();
 
                 if (btn==="GENBANK") {
-                    performSavingOperation(gb,self.sequence.data.name+'.gb');
+                    performSavingOperation(gb,locusName+'.gb');
                 }
                 else if (btn==="FASTA") {
-                    var data = ">"+self.sequence.data.name+"\n";
+                    var data = ">"+locusName+"\n";
                     data += self.sequenceFileManager.sequence.toString();
-                    performSavingOperation(data,self.sequence.data.name+'.fas');
+                    performSavingOperation(data,locusName+'.fas');
                 }
                 else if (btn==="SBOL XML/RDF") {
                     Teselagen.bio.parsers.SbolParser.convertGenbankToSBOL(gb,function(data){
-                        performSavingOperation(data,self.sequence.data.name+'.xml');
+                        performSavingOperation(data,locusName+'.xml');
                     });
                 }
 

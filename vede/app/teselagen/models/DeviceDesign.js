@@ -7,7 +7,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: ["Teselagen.constants.Constants",
                "Teselagen.models.J5Collection",
-               "Teselagen.models.EugeneRule"],
+               "Teselagen.models.EugeneRule",
+               "Teselagen.models.J5Bin"],
 
     proxy: {
         type: "rest",
@@ -22,29 +23,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                var j5Collection = associatedData.j5collection;
 
                 var rules = associatedData.rules;
-                data.j5collection = j5Collection;
 
                 var binsTempArray = [];
 
-                record.getJ5Collection().bins().each(function(bin) {
-                    var partsTempArray = [];
-                    bin.parts().each(function(part) {
-                        {partsTempArray.push(part.getData().id); }
-                    });
-                    binsTempArray.push(partsTempArray);
-                });
-
-                data.j5collection.bins.forEach(function(bin,binKey){
+                /*data.bins.forEach(function(bin,binKey){
                     var partIds = binsTempArray[binKey];
-                    bin.fases = [];
-                    for (var i= 0; i < partIds.length; i++) {
-                        bin.fases[i] = bin.parts[i].fas;
-                    }
                     bin.parts = partIds;
-                });
+                });*/
 
                 data.rules = rules;
 
@@ -161,17 +148,31 @@ Ext.define("Teselagen.models.DeviceDesign", {
         name: "name",
         type: "String",
         defaultValue: ""
-    }],
+    },
+        {
+        name: "combinatorial",
+        type: "boolean",
+        defaultValue: false
+    },
+        {
+        name: "isCircular",
+        type: "boolean",
+        defaultValue: true
+    }
+    ],
 
     validations: [],
 
-    associations: [{
-        type: "hasOne",
-        model: "Teselagen.models.J5Collection",
-        getterName: "getJ5Collection",
-        setterName: "setJ5Collection",
-        associationKey: "j5collection",
-        name: "j5collection" // Note: not a documented config, but specified for getRecordData
+    associations: [
+    {
+        type: "hasMany",
+        model: "Teselagen.models.J5Bin",
+        name: "bins"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.Part",
+        name: "parts",
+        foreignKey: "devicedesign_id"
     }, {
         type: "hasOne",
         model: "Teselagen.models.SBOLvIconInfo",
@@ -212,7 +213,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     me.data[k] = r.data[k];
                 }
 
-                me.setJ5Collection(r.getJ5Collection());
+                me.setJ5Collection(r());
                 me.j5runs().removeAll();
                 me.j5runs().insert(0, r.j5runs());
 
@@ -229,67 +230,141 @@ Ext.define("Teselagen.models.DeviceDesign", {
         });
     },
 
-    getDesign: function() {
-        /*
-        if(!this.modelIsLoaded)
-        {
-            this.modelIsLoaded = true;
-            this.reload(function(record){
-                if (Ext.isFunction(callback)) {
-                    callback(record);
+    /**
+     * Adds a default J5Bin given a name and index.
+     * @param {String} pName
+     * @param {Number} pIndex Index to insert new J5Bin. Optional. Defaults to end of of array if invalid or undefined value.
+     * ///@returns {Teselagen.models.J5Bin}
+     * @returns {Boolean} True if added, false if not.
+     */
+    addNewBinByIndex: function(pIndex, pName) {
+        var added   = false;
+
+        var cnt     = this.bins().count();
+
+        if (pName === "" || pName === undefined || pName === null) {
+            var maxBin = 0;
+
+            this.bins().each(function(bin) {
+                var name = bin.get("binName");
+                var binNumber;
+
+                if(name.match(/^Bin\d+$/)) {
+                    binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                    if(binNumber > maxBin) {
+                        maxBin = binNumber;
+                    }
                 }
             });
+
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (maxBin + 1)
+            });
+        } else {
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: pName
+            });
         }
-        */
-        return this;
+
+        if (pIndex >= 0 && pIndex < this.bins().count()) {
+            //this.bins().splice(pIndex, 0, j5Bin);
+            this.bins().insert(pIndex, j5Bin);
+        } else {
+            //Ext.Array.include(this.bins(), j5Bin);
+            this.bins().add(j5Bin);
+        }
+
+        var newCnt  = this.binCount();
+        if (newCnt > cnt) {
+            added = true;
+        }
+
+        // DW: NEED TO FIRE EVENT NEW_BIN_ADDED
+
+        return added; //j5Bin;
     },
 
-    /** (Untested)
-     * Get number of bins in J5Bin.
-     * @member Teselagen.models.DeviceDesign
-     * @returns {Number}
+    /**
+     * Checks to see if a given name is unique within the J5Bins names.
+     * @param {String} pName Name to check against bins.
+     * @returns {Boolean} True if unique, false if not.
      */
-    getBinCount: function() {
-        return this.getJ5Collection().binCount();
+    isUniqueBinName: function(pName) {
+        var index = this.bins().find("binName", pName);
+
+        if (index === -1) {
+            return true;
+        } else {
+            return false;
+        }
     },
+
+    /**
+     * Adds a Part into the parts store.
+     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
+     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
+     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
+     * @returns {Boolean} True if added, false if not.
+     */
+     /*
+    addToParts: function(pPart, pPosition, pFas) {
+        var added = false;
+        var fasNone = Teselagen.constants.Constants.FAS.NONE;
+        var fas = fasNone;
+        var fases = this.get("fases");
+        var isArray = Ext.isArray(pPart);
+        
+        if (!Ext.isEmpty(pFas)) {
+            fas = pFas;
+        }
+        else {
+            if (isArray) {
+                fas = [];
+                for (var i=0; i < pPart.length; i++) {
+                    fas.push(fasNone);
+                }
+            }
+        }
+        if (!Ext.isEmpty(pPosition)) {
+            if (Ext.isNumber(pPosition) && pPosition >= 0) {
+                this.parts().insert(pPosition, pPart);
+                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
+                added = true;
+            } else {
+                console.warn("Invalid part index:", pPosition);
+            }
+        } else {
+            this.parts().add(pPart);
+            this.set("fases", fases.concat(fas));
+            added = true;
+        }
+
+        return added;
+    },
+    */
 
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection
      * @returns {Teselagen.models.J5Collection}
      */
-    createNewCollection: function(pNumBins) {
-        if (this.getJ5Collection().binCount() > 0) {
+    createEmptyGridModel: function(pNumBins) {
+        var bins = this.bins();
+
+        if (bins.count() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
         }
-        var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
             var bin = Ext.create("Teselagen.models.J5Bin", {
                 binName: "No_Name" + i
             });
-            j5Coll.addToBin(bin, i);
+            bins.insertAt(i, bin);
         }
-        this.setJ5Collection(j5Coll);
-        return j5Coll;
-    },
 
-    /**
-     * Creates a J5Collection from given J5Bins.
-     * @param {Teselagen.models.J5Bin[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
-     * @returns {Teselagen.models.J5Collection}
-     */
-    createCollectionFromBins: function(pBins) {
-        if (this.getJ5Collection().binCount() > 0) {
-            console.warn("Warning. Overwriting existing J5Collection");
-        }
-        var j5Coll = Ext.create("Teselagen.models.J5Collection");
-        for (var i = 0; i < pBins.length; i++) {
-            j5Coll.addToBin(pBins[i], i);
-        }
-        this.setJ5Collection(j5Coll);
-        return j5Coll;
+        return bins;
     },
-
+    
     /**
      * Adds a EugeneRule into the Rules Store.
      * @param {Teselagen.models.EugeneRule} pRule. Can be a single rule or an array of rules.
@@ -343,8 +418,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     getRulesInvolvingPart: function(pPart) {
         var constants = Teselagen.constants.Constants;
 
-        this.rules().clearFilter();
-
+        this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart) {
                 return true;
@@ -360,11 +434,24 @@ Ext.define("Teselagen.models.DeviceDesign", {
         return this.rules();
     },
 
+    getNumberOfRulesInvolvingPart: function(pPart) {
+        this.rules().clearFilter(true);
+        var numRules = 0
+        var rules = this.rules();
+        rules.each(function (rule) {
+            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
+                numRules++
+            }
+        });  
+        return numRules;    
+    },
+
     /**
      * @param {String} pName
      * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pName) {
+        this.rules().clearFilter(true);
         var index = this.rules().find("name", pName);
         if (index !== -1) {
             return this.rules().getAt(index);
@@ -379,6 +466,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @returns {Boolean} True if unique, false if not.
      */
     isUniqueRuleName: function(pName) {
+        this.rules().clearFilter(true);
         var index = this.rules().find("name", pName);
 
         if (index === -1) {

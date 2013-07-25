@@ -70,7 +70,6 @@ module.exports = function(app) {
 
 
     app.post('/parts', restrict,  function(req, res) {
-        if( req.body.name === "" || req.body.phantom ) return res.json({parts:app.constants.defaultEmptyPart});
         savePart(req,res);
     });
 
@@ -80,9 +79,7 @@ module.exports = function(app) {
      * @method PUT 'parts'
      */
     app.put('/parts', restrict,  function(req, res) {
-
-        if(req.body.name === "" || req.body.phantom) { return res.json({parts:app.constants.defaultEmptyPart}); }
-        else if(!req.body.id) { savePart(req,res); }
+        if(!req.body.id) { savePart(req,res); }
         else
         {
             Part.findById(req.body.id, function(err, newPart) {

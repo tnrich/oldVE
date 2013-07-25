@@ -93,18 +93,18 @@ Ext.define("Vede.controller.J5ReportController", {
         if(status=="Completed") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             this.tabPanel.down('button[cls="downloadResults"]').enable();
-            this.tabPanel.down('button[cls="downloadResults"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').enable();
-            this.tabPanel.down('button[cls="buildBtn"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
             this.tabPanel.down('button[cls="downloadResults"]').enable();
-            this.tabPanel.down('button[cls="downloadResults"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').enable();
-            this.tabPanel.down('button[cls="buildBtn"]').removeClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-failed")
             $("#" + field + " .status-note").addClass("status-note-warning");;

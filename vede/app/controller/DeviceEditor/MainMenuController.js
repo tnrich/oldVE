@@ -19,14 +19,14 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
 
         var countParts = 0;
 
-        model.getJ5Collection().bins().each(function (bin, binKey) {
-            bin.parts().each(function (part, partIndex) {
+        model().bins().each(function (bin, binKey) {
+            bin.cells().each(function (part, partIndex) {
                 countParts++;
             });
         });
 
-        model.getJ5Collection().bins().each(function (bin, binKey) {
-            bin.parts().each(function (part, partIndex) {
+        model().bins().each(function (bin, binKey) {
+            bin.cells().each(function (part, partIndex) {
                 part.getSequenceFile({
                     callback: function (part) {
                         if(countParts === 1) finishedPreloadingResources();
