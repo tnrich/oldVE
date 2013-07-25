@@ -12,9 +12,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                "Teselagen.manager.GridManager",
                "Teselagen.models.DeviceEditorProject",
                "Teselagen.constants.SBOLIcons",
-               "Teselagen.utils.Logger",
-               "Vede.view.de.grid.Bin",
-               "Vede.view.de.grid.Part"],
+               "Teselagen.utils.Logger"],
 
     statics: {
         DEFAULT_ROWS: 2
@@ -558,7 +556,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     init: function() {
         this.callParent();
-
+        
+        /*
         this.control({
             "DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
@@ -582,21 +581,22 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 click: this.onCutPartMenuItemClick
             }
         });
+        */
+        
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
         this.Logger = Teselagen.utils.Logger;
 
-        this.application.on(this.GridEvent.SUSPEND_PART_ALERTS, this.suspendPartAlerts, this);
-        this.application.on(this.GridEvent.RESUME_PART_ALERTS, this.resumePartAlerts, this);
 
-        this.application.on(this.DeviceEvent.FILL_BLANK_CELLS, this.onfillBlankCells, this);
+        //this.application.on(this.DeviceEvent.FILL_BLANK_CELLS, this.onfillBlankCells, this);
 
-        this.application.on("getNewGridParts", this.getNewOperand2Parts, this);
+        //this.application.on("getNewGridParts", this.getNewOperand2Parts, this);
 
-        this.application.on("getOldGridParts", this.getOldOperand2Parts, this);
+        //this.application.on("getOldGridParts", this.getOldOperand2Parts, this);
 
+        /*
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,
                             this);
@@ -642,5 +642,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onReloadDesign,
                             this);
 
+        */
         }
+        
 });

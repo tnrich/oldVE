@@ -656,3 +656,5 @@ Ext.define("Teselagen.manager.GridManager", {
     		.select(".gridBinHeaderSVG")[0][0];
     	me.selectBinHeader(gridBinHeader);
     },
+
+});
