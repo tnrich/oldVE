@@ -146,7 +146,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
-    onAddRowAboveButtonClick: function() {
+    onAddRowAbove: function() {
+        this.GridManager.addRowAbove();
+    },
+
+    onAddRowBelow: function() {
+        this.GridManager.addRowBelow();
+    },
+
+    onAddColumnLeft: function() {
+        this.GridManager.addColumnLeft();
+    },
+
+    onAddColumnRight: function() {
+        this.GridManager.addColumnRight();
     },
 
     /**
@@ -420,22 +433,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
     */
 
-    /*
     onValidateDuplicatedPartNameEvent: function(pPart,name,cb, errorMessage){
         var me = this;
         var duplicated = false;
         var nonidentical = false;
-        if (pPart.get("id")) {
+        if(pPart.get("id")) {
             this.activeBins.each(function(bin, binIndex) {
                 bin.cells().each(function(part, partIndex){
-                    if (part.get("id")===pPart.get("id")) {
-                        if (binIndex === me.InspectorController.selectedBinIndex &&
+                    if(part.get("id")===pPart.get("id")) {
+                        if(binIndex === me.InspectorController.selectedBinIndex &&
                             partIndex !== me.InspectorController.selectedPartIndex) {
                             duplicated = true;
                         }
                     }
                     // Phantom part will not have a sequencefile_id
-                    else if (part.get("name")===name && part.get("sequencefile_id")) {
+                    else if(part.get("name")===name && part.get("sequencefile_id")) {
                         nonidentical = true;
                     }
                 });
@@ -450,14 +462,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 icon:Ext.MessageBox.ERROR
             });
         }
-        else if (duplicated) {
+        else if(duplicated) {
             this.Logger.notifyWarn("Cannot insert a part twice in the same column");
         }
         else {
             cb();
         }
     },
-    */
 
     toggleCutCopyPastePartOptions: function(state){
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Cut Part']")[0].setDisabled(!state||false);
@@ -597,7 +608,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         //this.application.on("getOldGridParts", this.getOldOperand2Parts, this);
 
-        /*
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,
                             this);
@@ -632,15 +642,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.MAP_PART,
                             this.onPartMapped,
-                            this);
+                            this);*/
 
 
         this.application.on(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME,
                             this.onValidateDuplicatedPartNameEvent,
                             this);
 
-        this.application.on(this.DeviceEvent.RELOAD_DESIGN,
+        /*this.application.on(this.DeviceEvent.RELOAD_DESIGN,
                             this.onReloadDesign,
-                            this); */
+                            this);*/
     }
 });

@@ -23,10 +23,12 @@ Ext.define("Teselagen.models.Cell", {
      */
     fields: [{
         name: "index",
-        type: "int"
+        type: "int",
+        defaultValue: 0
     }, {
         name: "part_id",
-        type: "long"
+        type: "long",
+        defaultValue: null
     }, {
         name: "fas",
         type: "string",
