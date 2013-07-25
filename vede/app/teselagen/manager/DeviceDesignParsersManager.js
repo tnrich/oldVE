@@ -123,6 +123,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var binsArray = [];
         var partsArray = [];
         var rulesArray = [];
+        var fullPartsAssocArray = {};
         
         function getSequenceByHash(targetHash, part, cb) {
             // Find sequence by hash
@@ -139,9 +140,17 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         // Parts Processing
         for (var i=0; i<parts.length; i++) {
         	var part = parts[i];
+        	var partId;
+        	if (part["de:parts"]["de:part"] instanceof Array) {
+                // Cover the special cases in which some structures parts are inside subnodes that are array
+        		partId = part["de:parts"]["de:part"][0].id;
+            } else {
+            	partId = part["de:parts"]["de:part"].id;
+            }
+        	
         	getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
         		var newPart = Ext.create("Teselagen.models.Part", {
-                    id: part["id"],
+                    //id: part["id"],
         			name: part["de:name"],
                     partSource: part["de:partSource"],
                     genbankStartBP: part["de:startBP"],
@@ -167,6 +176,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                 newPart.setSequenceFileModel(newSequence);
                 
+                fullPartsAssocArray[partId] = newPart;
                 partsArray.push(newPart);
         	});
         	
@@ -202,9 +212,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var temCellsArray = [];
             for (var j=0; j<binParts.length; j++) {
             	var newCell = Ext.create("Teselagen.models.Cell", {
-                    index: j,
-                    part_id: binParts[i]
+                    index: j
                 });
+            	newCell.setPart(fullPartsAssocArray[binParts[j]]);
             	temCellsArray.push(newCell);
             }
             
@@ -235,10 +245,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 	
 	        for (var k=0; k < eugeneRules.length; k++) {
 	            var rule = eugeneRules[k];
-	            var operand1 = rule["de:operand1ID"];
+	            var operand1 = fullPartsAssocArray[rule["de:operand1ID"]];
 	            var operand2;
 	            if(rule["de:operand2isNumber"]===true) operand2 = rule["de:operand2Number"];
-	            else operand2 = rule["de:operand2ID"];
+	            else operand2 = fullPartsAssocArray[rule["de:operand2ID"]];
 	            
 	            var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
 	                name: rule["de:name"],
@@ -274,7 +284,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         
         
         //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
-        //debugger;
+        debugger;
     	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
     	
     	
