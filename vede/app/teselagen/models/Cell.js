@@ -33,6 +33,10 @@ Ext.define("Teselagen.models.Cell", {
         name: "fas",
         type: "string",
         defaultValue: "None"
+    }, {
+        name: "j5bin_id",
+        type: "long",
+        defaultValue: null
     }],
 
     associations: [{
@@ -50,7 +54,13 @@ Ext.define("Teselagen.models.Cell", {
         setterName: "setJ5Bin",
         associationKey: "j5Bin",
         foreignKey: "j5bin_id"
+    }],
+
+    setPart: function(part) {
+        if(!part.get("id")) {
+            this.set("part_id", part.internalId);
+        } else {
+            this.set("part_id", part.get("id"));
+        }
     }
-    ]
-    
 });

@@ -119,13 +119,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             this.activeBins = this.activeProject.bins();
 
-            this.activeBins.on("datachanged", this.onBinsChanged, this);
+            this.activeBins.on("add", this.onAddToBins, this);
+            this.activeBins.on("update", this.onUpdateBins, this);
+            this.activeBins.on("remove", this.onRemoveFromBins, this);
 
             this.activeBins.each(function(bin) {
-                var parts = bin.cells();
-
-                parts.on("datachanged", this.onPartsChanged, this);
+                bin.cells().on("datachanged", this.onCellsChanged, this);
             }, this);
+
+            this.activeProject.parts().on("datachanged", this.onPartsChanged, this);
 
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
@@ -138,7 +140,25 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
     },
 
-    onBinsChanged: function() {
+    onAddToBins: function(store, addedBins) {
+        for(var i = 0; i < addedBins.length; i++) {
+            addedBins[i].cells().on("datachanged", this.onCellsChanged, this);
+        }
+
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onUpdateBins: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromBins: function(store, removedBin) {
+        removedBin.cells().un("datachanged", this.onCellsChanged, this);
+
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onCellsChanged: function() {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
@@ -437,20 +457,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var me = this;
         var duplicated = false;
         var nonidentical = false;
-        if(pPart.get("id")) {
-            this.activeProject.parts().each(function(part, partIndex){
-                if(part.get("id")===pPart.get("id")) {
-                    if(binIndex === me.InspectorController.selectedBinIndex &&
-                        partIndex !== me.InspectorController.selectedPartIndex) {
-                        duplicated = true;
-                    }
-                }
-                // Phantom part will not have a sequencefile_id
-                else if(part.get("name")===name && part.get("sequencefile_id")) {
-                    nonidentical = true;
-                }
-            });
-        }
+
+        this.activeProject.parts().each(function(part, partIndex){
+            if(part.get("name") === name && part !== pPart) {
+                nonidentical = true;
+            }
+        });
+
         if(nonidentical)
         {
             Ext.MessageBox.show({
@@ -459,11 +472,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 buttons: Ext.MessageBox.OK,
                 icon:Ext.MessageBox.ERROR
             });
-        }
-        else if(duplicated) {
-            this.Logger.notifyWarn("Cannot insert a part twice in the same column");
-        }
-        else {
+        } else {
             cb();
         }
     },

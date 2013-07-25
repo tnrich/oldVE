@@ -789,6 +789,23 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         //return pDevice.isPartInCollection(pPart);
     },
+
+    /**
+     * Determines bin that pCell is in and returns its index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Cell} pCell
+     * @returns {Number} Index of bin.
+     */
+    getCellBinAssignment: function(pDevice, pCell) {
+        var bins = pDevice.bins().getRange();
+
+        for(var i = 0; i < bins.length; i++) {
+            if(bins[i].cells().indexOf(pCell) >= 0) {
+                return i;
+            }
+        }
+    },
+
     /**
      * Determines (first) bin that pPart is in and returns its index.
      * @param {Teselagen.models.DeviceDesign} pDevice

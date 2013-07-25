@@ -353,10 +353,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         if(cell.get("part_id")) {
             var part = cell.getPart();
-            this.onPartSelected(part, this.activeProject.bins().indexOf(cell.getJ5Bin()));
+            this.onPartSelected(part, this.DeviceDesignManager.getCellBinAssignment(this.activeProject, cell));
         } else {
             this.selectedPart = null;
-            this.onPartSelected(null, this.activeProject.bins().indexOf(cell.getJ5Bin()));
+            this.onPartSelected(null, this.DeviceDesignManager.getCellBinAssignment(this.activeProject, cell));
         }
     },
 
@@ -402,7 +402,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             fasForm.down("combobox").store.loadData(fasArray);
         }
 
-        // If a j5Part exists for the selected part, load it. If not, create a
+        // If selected part exists, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
@@ -456,13 +456,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 deletePartBtn.addCls("btnDisabled");
             }
 
-            if(j5Part.get("fas") === "") {
+            if(this.selectedCell.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
             } else {
-                fasForm.loadRecord(j5Part);
+                fasForm.loadRecord(this.selectedCell);
             }
-//            fasCombobox.setValue(this.selectedBin.getFas(this.selectedPartIndex));
+
             this.selectedPart = j5Part;
+
+            var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                            this.selectedPart);
+
+            this.eugeneRulesGrid.reconfigure(rulesStore);
         } else {
             var newPart = Ext.create("Teselagen.models.Part");
             partPropertiesForm.loadRecord(newPart);
@@ -475,15 +480,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             deletePartBtn.addCls("btnDisabled");
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.addCls("selectPartFocus");
-
-            this.selectedPart = newPart;
-
         }
-
-        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                        this.selectedPart);
-
-        this.eugeneRulesGrid.reconfigure(rulesStore);
 
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
     },
@@ -553,7 +550,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
     onPartNameFieldBlur: function (nameField) {
-        if(this.selectedPart) {
+        if(this.selectedCell) {
             var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
             var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
             var newName = nameField.getValue();
@@ -567,25 +564,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
                 // If the selected part is not in the device already, add it.
                 //if(self.selectedPart.get("phantom") ||
-                debugger;
-                if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
-                                                             self.selectedPart) < 0) {
-                    self.selectedPart = Ext.create("Teselagen.models.Part");
-                    self.selectedPart.set("phantom", false);
+                if(!self.selectedPart) {
+                    self.selectedPart = self.inspector.down("form[cls='PartPropertiesForm']").getRecord();
                     self.selectedPart.set("name", newName);
 
-                    self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
+                    self.activeProject.parts().add(self.selectedPart);
+                    self.selectedCell.setPart(self.selectedPart);
                 } else {
-                    if(self.selectedPart.get("phantom")) {
-                        self.selectedPart.set("phantom", false);
-                    }
-
                     self.selectedPart.set("name", newName);
                 }
 
             }, "Another non-identical part with that name already exists in the design. Please input a different name.");
 
-            if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
+            if(!self.selectedPart) {
+                // Validating duplicated part failed.
+                return;
+            } else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
                 deletePartBtn.enable();
                 deletePartBtn.removeCls("btnDisabled");
                 deletePartBtn.addCls("selectPartFocus");
@@ -1129,7 +1123,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the event that a bin is selected in the Inspector.
      */
     onGridBinSelect: function (grid, j5Bin) {
-//        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
             var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
             var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
             var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
