@@ -405,7 +405,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 part_id: null
                             });
 
+                            var newCell2 = Ext.create("Teselagen.models.Cell", {
+                                index: 1,
+                                part_id: null
+                            });
+
                             newBin.cells().insert(0, newCell);
+                            newBin.cells().insert(1, newCell2);
 
                             binsArray.push(newBin);
                         }

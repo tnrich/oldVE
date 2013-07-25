@@ -58,7 +58,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     text: '<div data-qtip="Items">Items</div>',
                     renderer: function(value, metadata, record) {
                         var numParts = 0;
-                        var partsArray = record.parts().getRange();
+                        var partsArray = record.cells().getRange();
 
                         for(var i = 0; i < partsArray.length; i++) {
                             if(!partsArray[i].get("phantom")) {
@@ -76,9 +76,9 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     renderer: function(value, metadata, record) {
                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
-                        if(record.parts().getRange().length > 0) {
-                            metadata.tdAttr = 'data-qtip="' + record.parts().getRange()[0].get("fas") + '"';
-                            return record.parts().getRange()[0].get("fas");
+                        if(record.cells().getRange().length > 0) {
+                            metadata.tdAttr = 'data-qtip="' + record.cells().getRange()[0].get("fas") + '"';
+                            return record.cells().getRange()[0].get("fas");
                         } else {
                             metadata.tdAttr = 'data-qtip="' + value + '"';
                             return value;

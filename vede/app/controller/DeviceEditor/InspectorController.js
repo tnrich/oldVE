@@ -349,9 +349,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Teselagen.models.Cell} cell The cell model that has been selected.
      */
     onCellSelected: function(cell) {
+        this.selectedCell = cell;
+
         if(cell.get("part_id")) {
             var part = cell.getPart();
             this.onPartSelected(part, this.activeProject.bins().indexOf(cell.getJ5Bin()));
+        } else {
+            this.selectedPart = null;
         }
     },
 
@@ -527,7 +531,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handler when part name field receives focus.
      */
     onPartNameFieldFocus: function() {
-        if (this.selectedPart.get("sequencefile_id")) {
+        if (this.selectedPart && this.selectedPart.get("sequencefile_id")) {
             this.Logger.notifyInfo("Changing the part's name will change its name across all designs.");
         }
     },
@@ -548,50 +552,49 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
     onPartNameFieldBlur: function (nameField) {
-        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
-        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
-        var newName = nameField.getValue();
-        var self = this;
-        
-        if (!newName) {
-            this.Logger.notifyWarn("Part name cannot be blank.");
-            return;
-        }
-
-        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
-
-        Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
-            // If the selected part is not in the device already, add it.
-            //if(self.selectedPart.get("phantom") ||
-            if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
-                                                         self.selectedPart) < 0) {
-                self.selectedPart = Ext.create("Teselagen.models.Part");
-                self.selectedPart.set("phantom", false);
-                self.selectedPart.set("name", newName);
-
-                self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
-            } else {
-                if(self.selectedPart.get("phantom")) {
-                    self.selectedPart.set("phantom", false);
-                }
-
-                self.selectedPart.set("name", newName);
+        if(this.selectedPart) {
+            var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+            var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
+            var newName = nameField.getValue();
+            var self = this;
+            
+            if (!newName) {
+                this.Logger.notifyWarn("Part name cannot be blank.");
+                return;
             }
 
-        }, "Another non-identical part with that name already exists in the design. Please input a different name.");
+            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
+                // If the selected part is not in the device already, add it.
+                //if(self.selectedPart.get("phantom") ||
+                if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
+                                                             self.selectedPart) < 0) {
+                    self.selectedPart = Ext.create("Teselagen.models.Part");
+                    self.selectedPart.set("phantom", false);
+                    self.selectedPart.set("name", newName);
 
-        if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
-            deletePartBtn.enable();
-            deletePartBtn.removeCls("btnDisabled");
-            deletePartBtn.addCls("selectPartFocus");
-            clearPartMenuItem.enable();
-        }
-        else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") === ""){
-            deletePartBtn.disable();
-            deletePartBtn.addCls("btnDisabled");
-            deletePartBtn.removeCls("selectPartFocus");
-            clearPartMenuItem.disable();
+                    self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
+                } else {
+                    if(self.selectedPart.get("phantom")) {
+                        self.selectedPart.set("phantom", false);
+                    }
 
+                    self.selectedPart.set("name", newName);
+                }
+
+            }, "Another non-identical part with that name already exists in the design. Please input a different name.");
+
+            if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
+                deletePartBtn.enable();
+                deletePartBtn.removeCls("btnDisabled");
+                deletePartBtn.addCls("selectPartFocus");
+                clearPartMenuItem.enable();
+            }
+            else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") === ""){
+                deletePartBtn.disable();
+                deletePartBtn.addCls("btnDisabled");
+                deletePartBtn.removeCls("selectPartFocus");
+                clearPartMenuItem.disable();
+            }
         }
     },
 
@@ -600,13 +603,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.form.field.Combobox} box The FAS combobox.
      */
     onPartAssemblyStrategyChange: function (box) {
-//        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var newStrategy = box.getValue();
+        if(this.selectedPart) {
+    //        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+            var newStrategy = box.getValue();
 
-        this.selectedPart.set("fas", newStrategy);
-        this.columnsGrid.getView().refresh();
+            this.selectedPart.set("fas", newStrategy);
+            this.columnsGrid.getView().refresh();
 
-        Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
+            Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
+        }
     },
 
     /**

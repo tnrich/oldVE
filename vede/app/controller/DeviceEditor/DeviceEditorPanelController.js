@@ -107,11 +107,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         function ClearDeviceDesignBtn (btn) {
             if (btn==="ok") {
                 var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-                var bins = existingDesign().bins();
-                var binIndex = existingDesign().binCount();
+                var bins = existingDesign.bins();
+                var binIndex = existingDesign.binCount();
                 
                 for (var i = 0; i <= binIndex; i++) {
-                    existingDesign().deleteBinByIndex(i);
+                    existingDesign.deleteBinByIndex(i);
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
 
                 }
@@ -267,14 +267,14 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
 
         var countParts = 0;
-        design().bins().each(function (bin) {
+        design.bins().each(function (bin) {
             bin.cells().each(function(cell) {
                 if(cell.getPart()) {
                     countParts++;
                 }
             });
         });
-        design().bins().each(function (bin) {
+        design.bins().each(function (bin) {
             bin.cells().each(function (cell) {
                 var part = cell.getPart();
 

@@ -438,19 +438,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var duplicated = false;
         var nonidentical = false;
         if(pPart.get("id")) {
-            this.activeBins.each(function(bin, binIndex) {
-                bin.cells().each(function(part, partIndex){
-                    if(part.get("id")===pPart.get("id")) {
-                        if(binIndex === me.InspectorController.selectedBinIndex &&
-                            partIndex !== me.InspectorController.selectedPartIndex) {
-                            duplicated = true;
-                        }
+            this.activeProject.parts().each(function(part, partIndex){
+                if(part.get("id")===pPart.get("id")) {
+                    if(binIndex === me.InspectorController.selectedBinIndex &&
+                        partIndex !== me.InspectorController.selectedPartIndex) {
+                        duplicated = true;
                     }
-                    // Phantom part will not have a sequencefile_id
-                    else if(part.get("name")===name && part.get("sequencefile_id")) {
-                        nonidentical = true;
-                    }
-                });
+                }
+                // Phantom part will not have a sequencefile_id
+                else if(part.get("name")===name && part.get("sequencefile_id")) {
+                    nonidentical = true;
+                }
             });
         }
         if(nonidentical)
