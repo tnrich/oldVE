@@ -582,10 +582,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             },
             "button[cls='editMenu'] > menu > menuitem[text='Cut Part']": {
                 click: this.onCutPartMenuItemClick
-            }*/
+            }
         });
         */
-        
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;

@@ -61,41 +61,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 						else return gridManager.PART_OUTLINE_COLOR;
 					});
 			})
-			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick/*function() {
-				gridManager.toggleCutCopyPastePartOptions(true);
-				gridManager.toggleInsertOptions(true);
-				gridManager.toggleInsertRowAboveOptions(true);
-				gridManager.toggleInsertRowBelowOptions(true);
-				
-				if(d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
-					d3.selectAll(".gridBinHeaderRectSVG")
-						.attr("fill", gridManager.BIN_FILL_COLOR)
-						.attr("stroke", gridManager.BIN_OUTLINE_COLOR)
-						.attr("isSelected", "false");
-					d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG")
-						.transition()
-					    .duration(30)
-					    .attr("stroke", gridManager.BIN_SELECTED_OUTLINE_COLOR)
-					    .attr("fill", gridManager.BIN_SELECTED_FILL_COLOR)
-					    .attr("isSelected", "true");
-					gridManager.selectedGridBin = d3.select(this.parentNode.parentNode.parentNode);
-				}
-				if(d3.select(this).attr("isSelected")=="true") return;
-				
-				d3.selectAll(".gridPartRectSVG")
-					.attr("fill", gridManager.PART_FILL_COLOR)
-					.attr("stroke", gridManager.PART_OUTLINE_COLOR)
-					.attr("isSelected", "false");
-								
-				d3.select(this).transition()
-				    .duration(30)
-				    .attr("stroke", gridManager.PART_SELECTED_OUTLINE_COLOR)
-				    .attr("fill", gridManager.PART_SELECTED_FILL_COLOR)
-				    .attr("isSelected", "true");
-				
-				gridManager.selectedGridPart = d3.select(this.parentNode);
-				
-			}*/)
+			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
 			.on("dblclick", function(d) {
 				if(d.get("part_id")===null) {
 					gridManager.onOpenPartLibraryRequest(d, d3.select(this.parentNode));
