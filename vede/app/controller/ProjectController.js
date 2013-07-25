@@ -45,6 +45,14 @@ Ext.define("Vede.controller.ProjectController", {
                     icon: "resources/images/add.png"
                 });
 
+                rootNode.appendChild({
+                    text: "Create sequence",
+                    leaf: true,
+                    hrefTarget: "newsequence",
+                    icon: "resources/images/add.png"
+                    //id: 0
+                });
+
                 // Iterate over projects
                 projects.each(function (project) {
 
@@ -61,15 +69,6 @@ Ext.define("Vede.controller.ProjectController", {
                         leaf: true,
                         hrefTarget: "newde",
                         icon: "resources/images/add.png"
-                    });
-
-                    // Append sequence to project node
-                    projectNode.appendChild({
-                        text: "Create sequence",
-                        leaf: true,
-                        hrefTarget: "newsequence",
-                        icon: "resources/images/add.png"
-                        //id: 0
                     });
 
                     var designs = project.designs(); // Get designs store from current project
@@ -229,13 +228,7 @@ Ext.define("Vede.controller.ProjectController", {
 
     /* Creates a sequence and an associated sequence */
     createSequence: function (record) {
-        var project_id = record.parentNode.data.id;
-        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var sequencesNames = [];
-        project.sequences().load().each(function (sequence) {
-            sequencesNames.push(sequence.data.name);
-        });
-        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
+        Teselagen.manager.ProjectManager.createNewSequence();
     },
 
     promptPartName: function(cb){

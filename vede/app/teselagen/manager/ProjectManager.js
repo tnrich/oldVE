@@ -186,9 +186,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 //            new Ext.util.DelayedTask(function() {
         		
         		var sequence = Teselagen.manager.ProjectManager.workingSequence;
-                Ext.getCmp("projectTreePanel").expandPath('/root/'+sequence.data.project_id,null,null,function(item,item2){
-                    Ext.getCmp("projectTreePanel").getSelectionModel().select(item2.findChild('id',sequence.data.id,true));                    
-                });
+                //Ext.getCmp("projectTreePanel").expandPath('/root/',null,null,function(item,item2){
+                    var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
+                    var sequenceNode = rootNode.findChild('id',sequence.data.id,true);
+                    if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);                    
+                //});
                 
  //           }).delay(500);
         });
@@ -259,41 +261,42 @@ Ext.define("Teselagen.manager.ProjectManager", {
     * Creates a new Sequence given a project
     * @param {model} Project model
     */
-    createNewSequence: function (project, veprojectNames) {
+    createNewSequence: function (project) {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
                     text = Ext.String.trim(text);
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
-                    for (var j=0; j<veprojectNames.length; j++) {
-                        if (veprojectNames[j]===text) {
-                            Ext.MessageBox.show({
-                                title: "Name",
-                                msg: "A sequence with this name already exists in this project. <p> Please enter another name:",
-                                buttons: Ext.MessageBox.OKCANCEL,
-                                fn: onPromptClosed,
-                                prompt: true,
-                                cls: "sequencePrompt-box",
-                                scope: this,
-                                style: {
-                                    "text-align": "center"
-                                },
-                                scope: this,
+
+                    /*
+                    Ext.MessageBox.show({
+                        title: "Name",
+                        msg: "A sequence with this name already exists in this project. <p> Please enter another name:",
+                        buttons: Ext.MessageBox.OKCANCEL,
+                        fn: onPromptClosed,
+                        prompt: true,
+                        cls: "sequencePrompt-box",
+                        scope: this,
+                        style: {
+                            "text-align": "center"
+                        },
+                        scope: this,
+                        layout: {
+                            align: "center"
+                        },
+                        items: [
+                            {
+                                xtype: "textfield",
                                 layout: {
                                     align: "center"
                                 },
-                                items: [
-                                    {
-                                        xtype: "textfield",
-                                        layout: {
-                                            align: "center"
-                                        },
-                                        width: 50
-                                    }
-                                ]
-                            });
-                            return Ext.MessageBox;                            
-                        }
-                    }
+                                width: 50
+                            }
+                        ]
+                    });
+                    return Ext.MessageBox;   
+                    */                         
+                        
+                    
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
@@ -307,13 +310,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         name: text
                     });
 
-                    project.sequences().add(newSequenceFile);
-                    newSequenceFile.set("project_id",project.data.id);
+                    //project.sequences().add(newSequenceFile);
+                    //newSequenceFile.set("project_id",project.data.id);
                     
                     newSequenceFile.save({
                         callback: function () {
                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                                Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + newSequenceFile.data.id);
+                                Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
                                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
                                 self.openSequence(newSequenceFile);
                                 toastr.info ("New Sequence Created");

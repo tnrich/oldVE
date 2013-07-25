@@ -47,14 +47,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.button.Button} button The clicked reverse button.
      */
     onFlipBinButtonClick: function(button) {
-        if(button.icon === Vede.view.de.grid.Bin.forwardButtonIconPath) {
-            button.setIcon(Vede.view.de.grid.Bin.reverseButtonIconPath);
-        } else {
-            button.setIcon(Vede.view.de.grid.Bin.forwardButtonIconPath);
-        }
+        //if(button.icon === Vede.view.de.grid.Bin.forwardButtonIconPath) {
+        //    button.setIcon(Vede.view.de.grid.Bin.reverseButtonIconPath);
+        //} else {
+        //    button.setIcon(Vede.view.de.grid.Bin.forwardButtonIconPath);
+        //}
 
         // Get the bin that the button refers to and reverse its direction.
-        var parentBin = button.up().up().up().getBin();
+        //var parentBin = button.up().up().up().getBin();
 
         this.application.fireEvent(this.GridEvent.BIN_HEADER_CLICK, button.up());
 
@@ -559,7 +559,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     init: function() {
         this.callParent();
-
+        
+        /*
         this.control({
             /*"DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
@@ -583,6 +584,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 click: this.onCutPartMenuItemClick
             }*/
         });
+        */
+        
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
@@ -595,6 +598,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         //this.application.on("getOldGridParts", this.getOldOperand2Parts, this);
 
+        /*
         this.application.on(this.DeviceEvent.ADD_ROW_ABOVE,
                             this.onAddRowAbove,
                             this);
@@ -639,6 +643,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on(this.DeviceEvent.RELOAD_DESIGN,
                             this.onReloadDesign,
                             this); */
-
     }
 });
