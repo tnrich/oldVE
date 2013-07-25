@@ -92,8 +92,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         if (evt === "ok") {
 
             var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-            var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign,binsArray);
-
+            //var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign,binsArray);
+            var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBinsAndParts(existingDesign,binsArray,partsArray);
+            
             Ext.getCmp("mainAppPanel").getActiveTab().model = design;
             
             // Load the Eugene Rules in the Design
@@ -213,62 +214,65 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         }
         
         
-        
-        //Process Eugene Rules
-        var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
-
-        // Fix for issue caused by designs with eugeneRules not defined within array structures
-        if (eugeneRules["de:eugeneRule"] instanceof Array) {
-            eugeneRules = eugeneRules["de:eugeneRule"];
+        if(typeof(cb) !== "function" ) { // Not parsing eugeneRules in tests
+	        
+	        //Process Eugene Rules
+	        var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
+	
+	        // Fix for issue caused by designs with eugeneRules not defined within array structures
+	        if (eugeneRules["de:eugeneRule"] instanceof Array) {
+	            eugeneRules = eugeneRules["de:eugeneRule"];
+	        }
+	
+	        if (eugeneRules.eugeneRule instanceof Array) {
+	            if(eugeneRules.eugeneRule.length === 0) {
+	                eugeneRules = [];
+	            }
+	        }
+	
+	        //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
+	        //else { console.log("Eugene rules found."); }
+	
+	        for (var k=0; k < eugeneRules.length; k++) {
+	            var rule = eugeneRules[k];
+	            var operand1 = rule["de:operand1ID"];
+	            var operand2;
+	            if(rule["de:operand2isNumber"]===true) operand2 = rule["de:operand2Number"];
+	            else operand2 = rule["de:operand2ID"];
+	            
+	            var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+	                name: rule["de:name"],
+	                compositionalOperator: rule["de:compositionalOperator"],
+	                negationOperator: rule["de:negationOperator"]
+	            });
+	            newEugeneRule.setOperand1(operand1);
+	            newEugeneRule.setOperand2(operand2);
+	            rulesArray.push(newEugeneRule);
+	            /*if(fullPartsAssocArray[operand1]) {
+	                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+	                    name: rule["de:name"],
+	                    compositionalOperator: rule["de:compositionalOperator"],
+	                    negationOperator: rule["de:negationOperator"]
+	                });
+	                fullPartsAssocArray[operand1].save({
+	                    callback: function(){
+	                        newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+	                    }
+	                });
+	                fullPartsAssocArray[operand2].save({
+	                    callback: function() {
+	                        newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+	                    }
+	                });
+	                rulesArray.push(newEugeneRule);
+	            } else {
+	                //console.warn("Eugene rule possible not loaded");
+	            }*/
+	        }
         }
-
-        if (eugeneRules.eugeneRule instanceof Array) {
-            if(eugeneRules.eugeneRule.length === 0) {
-                eugeneRules = [];
-            }
-        }
-
-        //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
-        //else { console.log("Eugene rules found."); }
-
-        for (var k=0; k < eugeneRules.length; k++) {
-            var rule = eugeneRules[k];
-            var operand1 = rule["de:operand1ID"];
-            var operand2;
-            if(rule["de:operand2isNumber"]===true) operand2 = rule["de:operand2Number"];
-            else operand2 = rule["de:operand2ID"];
-            
-            var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-                name: rule["de:name"],
-                compositionalOperator: rule["de:compositionalOperator"],
-                negationOperator: rule["de:negationOperator"]
-            });
-            newEugeneRule.setOperand1(operand1);
-            newEugeneRule.setOperand2(operand2);
-            rulesArray.push(newEugeneRule);
-            /*if(fullPartsAssocArray[operand1]) {
-                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-                    name: rule["de:name"],
-                    compositionalOperator: rule["de:compositionalOperator"],
-                    negationOperator: rule["de:negationOperator"]
-                });
-                fullPartsAssocArray[operand1].save({
-                    callback: function(){
-                        newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-                    }
-                });
-                fullPartsAssocArray[operand2].save({
-                    callback: function() {
-                        newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
-                    }
-                });
-                rulesArray.push(newEugeneRule);
-            } else {
-                //console.warn("Eugene rule possible not loaded");
-            }*/
-        }
         
-        
+        //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
+        //debugger;
     	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
     	
     	
