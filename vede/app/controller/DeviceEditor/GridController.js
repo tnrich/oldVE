@@ -489,7 +489,42 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     toggleInsertRowBelowOptions: function(state) {
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Below']")[0].setDisabled(!state||false);
     },
-
+    
+    onCutPartMenuItemClick: function() {
+    	this.application.fireEvent(this.DeviceEvent.CUT_PART);
+    },
+    
+    onCopyPartMenuItemClick: function() {
+    	this.application.fireEvent(this.DeviceEvent.COPY_PART);
+    },
+    
+    onPastePartMenuItemClick: function() {
+    	this.application.fireEvent(this.DeviceEvent.PASTE_PART);
+    },
+    
+    onCutPart: function() {
+    	var gridManager = Teselagen.manager.GridManager;
+    	if(gridManager.selectedGridPart) {
+    		
+    	}
+    },
+    
+    onCopyPart: function() {
+    	var gridManager = Teselagen.manager.GridManager;
+    	if(gridManager.selectedGridPart) {
+    		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
+    	}
+    },
+    
+    onPastePart: function() {
+    	var gridManager = Teselagen.manager.GridManager;
+    	var selectedCell = gridManager.selectedGridPart.datum();
+    	if(gridManager.clipboardPart && selectedCell) {
+    		selectedCell.setPart(gridManager.clipboardPart);
+    		//debugger;
+    	}
+    },
+    
     /*
     onCutPartMenuItemClick: function(){
         this.selectedClipboardPart = this.selectedPart.getPart();
@@ -569,14 +604,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     init: function() {
         this.callParent();
         
-        /*
+        
         this.control({
             /*"DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
             },
             "button[cls='flipBinButton']": {
                 click: this.onFlipBinButtonClick
-            },
+            },*/
             //"component[cls='binHeader']": {
             //    render: this.addBinHeaderClickEvent
             //},
@@ -593,7 +628,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 click: this.onCutPartMenuItemClick
             }
         });
-        */
+        
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
@@ -620,8 +655,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,
                             this.onAddColumnRight,
-                            this); 
+                            this);
+        
+        this.application.on(this.DeviceEvent.CUT_PART,
+			                this.onCutPart,
+			                this);
 
+		this.application.on(this.DeviceEvent.COPY_PART,
+			                this.onCopyPart,
+			                this);
+
+		this.application.on(this.DeviceEvent.PASTE_PART,
+			                this.onPastePart,
+			                this);
+		
         /*this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
                             this.onInsertPartAtSelection,
                             this);

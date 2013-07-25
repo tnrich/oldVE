@@ -53,5 +53,10 @@ Ext.define("Teselagen.event.DeviceEvent", {
     // Fired when a new part has been defined.
     PART_CREATED: "PartCreated",
 
-    VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName"
+    VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName",
+    
+    CUT_PART: "CutPart",
+    COPY_PART: "CopyPart",
+    PASTE_PART: "PastePart"
+    
 });
