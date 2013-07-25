@@ -74,7 +74,7 @@ Ext.define("Teselagen.manager.GridManager", {
 	// The selected parts and bins are each a d3 selection (i.e., an array of arrays of elements).
 	selectedGridPart: null,
 	selectedGridBin: null,
-	selectedClipboardPart: null,
+	clipboardPart: null,
 
     GridController: null,
 	

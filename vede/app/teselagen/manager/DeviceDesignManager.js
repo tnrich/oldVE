@@ -423,9 +423,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     	pDevice.bins().each(function(bin) {
     		var phantomArray = [];
     		for(var i=bin.cells().getCount(); i<maxNumParts; i++) {
-    			phantomArray.push(Ext.create("Teselagen.models.Cell", {
+    			var phantomCell = Ext.create("Teselagen.models.Cell", {
     				index: i
-    			}));
+    			});
+    			phantomCell.setJ5Bin(bin);
+    			phantomArray.push(phantomCell);
     		}
     		bin.cells().add(phantomArray);
     		
