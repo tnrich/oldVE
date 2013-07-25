@@ -52,6 +52,7 @@ Ext.define("Vede.controller.ProjectController", {
                     var projectNode = rootNode.appendChild({
                         text: project.data.name,
                         id: project.data.id,
+                        type: "project",
                         hrefTarget: "openproj"
                     });
 
@@ -80,6 +81,7 @@ Ext.define("Vede.controller.ProjectController", {
                                 // Append design to project node
                                 var designnode = projectNode.appendChild({
                                     text: design.data.name,
+                                    type: "design",
                                     leaf: false,
                                     id: design.data.id,
                                     hrefTarget: "opende",
@@ -91,6 +93,7 @@ Ext.define("Vede.controller.ProjectController", {
                                 designnode.appendChild({
                                     text: "J5 Reports",
                                     leaf: true,
+                                    type: "report",
                                     id: design.data.id+"report",
                                     hrefTarget: "j5reports",
                                     icon: "resources/images/ux/j5-tree-icon-parent.png",

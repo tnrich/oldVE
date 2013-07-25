@@ -65,6 +65,43 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             handler: function(event, toolEl, panelHeader) {
                 Teselagen.manager.ProjectManager.createNewProject();
             }
-        }]
+        }],
+        listeners: {
+            itemcontextmenu: function(view, record, item, index, event) {
+    //          Register the context node with the menu so that a Menu Item's handler function can access
+    //          it via its parentMenu property.
+                var menu = Ext.create("Ext.menu.Menu", {
+                    cls: 'explorerMenu',
+                    items: [{
+                        text: 'Rename',
+                        cls: 'explorerMenuRenameBtn',
+                    },
+                    {
+                        text: 'Delete'
+                    }],
+                    listeners: {
+                        click: function(item, e, opt) {
+                            Teselagen.manager.ProjectManager.onExplorerMenuItemClick(item, e, opt);
+                        }
+                    }
+                });
+                console.log(record.data.id);
+                switch(record.data.hrefTarget) {
+                    case "openproj":
+                        console.log("project");
+                        break;
+                    case "opende":
+                        console.log("design");
+                        break;
+                    case "opensequence":
+                        console.log("design");
+                        break;
+                }
+                menu.showAt(event.getXY());
+                event.stopEvent();
+                event.preventDefault;
+            }
+        }
+
     }]
 });

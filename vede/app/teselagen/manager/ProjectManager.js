@@ -521,6 +521,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
         */
-    }
+    },
+
+    onExplorerMenuItemClick: function(menuitem, e, opt) {
+        console.log("here");
+        switch (menuitem.text) {
+            case "Rename": 
+            console.log("rename");
+            break;
+            case "Delete":
+            console.log("delete");
+            break;
+        }
+    },
 
 });
