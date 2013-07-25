@@ -109,3 +109,19 @@
 	border: none;
 }
 
+#DashboardPanel .x-tab-top-active {
+	background: 0 none;
+	border: 0 none;
+}
+
+#DashboardPanel .x-tab-default-active .x-tab-inner {
+	color: #006cab;
+}
+
+#DashboardPanel .x-tab-default-top {
+	background: 0;
+	border: 0;
+	border-bottom:0;
+	
+}
+
