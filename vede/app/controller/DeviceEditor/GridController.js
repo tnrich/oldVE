@@ -1222,14 +1222,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * same j5Part.
      */
     onPartSelected: function(j5Part) {
-        var gridParts = this.getGridPartsFromJ5Part(j5Part);
-
         this.deHighlight(j5Part);
         this.selectedPart.select();
-        
         this.highlight(j5Part);
     },
 
+    /**
+     * Highlights all gridParts associated with a given j5 part.
+     * @param {Teselagen.model.Part} j5Part
+     */
     highlight: function(j5Part) {
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
