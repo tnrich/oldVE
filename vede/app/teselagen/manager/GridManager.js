@@ -172,7 +172,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		    .append("svg:line")
 		    .attr("class", "gridBinDsfSVG")
 		    .attr("x1", function (d) {
-		    	if(d.dsf) return me.COLUMN_WIDTH-1;
+		    	if(d.get("dsf")) return me.COLUMN_WIDTH-1;
 		    	else d3.select(this).remove();
 	    	})
 		    .attr("y1", 1)

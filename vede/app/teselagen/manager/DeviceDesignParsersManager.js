@@ -103,7 +103,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             }
 
             //Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
-            Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         }
     },
 
@@ -150,7 +150,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         	
         	getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
         		var newPart = Ext.create("Teselagen.models.Part", {
-                    //id: part["id"],
+                    id: partId,
         			name: part["de:name"],
                     partSource: part["de:partSource"],
                     genbankStartBP: part["de:startBP"],
@@ -211,10 +211,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             
             var temCellsArray = [];
             for (var j=0; j<binParts.length; j++) {
+            	var assocPart = fullPartsAssocArray[binParts[j]];
             	var newCell = Ext.create("Teselagen.models.Cell", {
-                    index: j
+                    index: j,
+                    part_id: binParts[j],
+                    fas: assocPart.get("fas")
                 });
-            	newCell.setPart(fullPartsAssocArray[binParts[j]]);
+            	newCell.setPart(assocPart);
             	temCellsArray.push(newCell);
             }
             

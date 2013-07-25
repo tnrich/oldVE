@@ -143,19 +143,27 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("pointer-events", "none")
 			.attr("x", this.gridManager.COLUMN_WIDTH/2)
 			.attr("y", 21.5);//15+13/2
-		
+				
+		var firstFas = "None";
 		this.gridPartFasIndicatorSVG = this.gridPartSVG
 			.append("rect")
 			.attr("class", "gridPartFasIndicatorSVG")
-			.attr("fill", function(d) {
+			.attr("fill", function(d, i) {
 				var fas = d.get("fas") || "None";
-				if (fas == "None") d3.select(this).style("display","none");
-				else if (d.fasConflict==true) {
+				if(i===0) firstFas = "None";
+				if(fas==="None") {
+					d3.select(this).style("display","none");
+					return;
+				} else if(firstFas==="None") {
 					d3.select(this).style("display","inline");
-					return "red";
-				} else if (d.fasConflict==false) {
+					firstFas = fas;
+					return "blue";
+				} else if(firstFas===fas) {
 					d3.select(this).style("display","inline");
 					return "blue";
+				} else {
+					d3.select(this).style("display","inline");
+					return "red";
 				}
 			})
 			.attr("pointer-events", "none")
