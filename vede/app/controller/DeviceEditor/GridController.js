@@ -25,7 +25,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     activeBins: null,
     activeProject: null,
     grid: null,
-    gridManager: null,
+    GridManager: null,
     tabPanel: null,
 
     onReRenderDECanvasEvent: function(){
@@ -88,51 +88,43 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.tab.Panel} tabPanel The tabpanel.
      * @param {Ext.Component} newTab The tab that is being switched to.
      */
-    onTabChange: function(tabPanel, newTab) {
+    onTabChange: function(tabPanel, newTab, oldTab) {
         if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.down("component[cls='designGrid']");
 
             if(this.activeBins) {
-                this.activeBins.un("add", this.onAddToBins, this);
-                this.activeBins.un("update", this.onBinsUpdate, this);
-                this.activeBins.un("remove", this.onRemoveFromBins, this);
+                this.activeBins.un("datachanged", this.onBinsChanged, this);
 
                 // Unset listeners for the parts store of each bin.
                 this.activeBins.each(function(bin) {
                     var parts = bin.cells();
 
-                    parts.un("add", this.onAddToParts, this);
-                    parts.un("update", this.onPartsUpdate, this);
-                    parts.un("remove", this.onRemoveFromParts, this);
+                    parts.un("datachanged", this.onPartsChanged, this);
                 }, this);
             }
 
-            if(this.activeProject) {
+            /*if(this.activeProject) {
                 // Unset listeners for the project's Eugene Rules, and set them for
                 // the new active project.
                 this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
                 this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
-            }
+            }*/
 
             this.activeProject = newTab.model;
 
             this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
-            this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
-            this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
+            //this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
+            //this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
 
             this.activeBins = this.activeProject.bins();
 
-            this.activeBins.on("add", this.onAddToBins, this);
-            this.activeBins.on("update", this.onBinsUpdate, this);
-            this.activeBins.on("remove", this.onRemoveFromBins, this);
+            this.activeBins.on("datachanged", this.onBinsChanged, this);
 
             this.activeBins.each(function(bin) {
                 var parts = bin.cells();
 
-                parts.on("add", this.onAddToParts, this);
-                parts.on("update", this.onPartsUpdate, this);
-                parts.on("remove", this.onRemoveFromParts, this);
+                parts.on("datachanged", this.onPartsChanged, this);
             }, this);
 
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
@@ -142,8 +134,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.totalRows = this.self.DEFAULT_ROWS;
             }
 
-            this.renderDevice();
+            this.GridManager.renderGrid(newTab.model);
         }
+    },
+
+    onBinsChanged: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onPartsChanged: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onAddRowAboveButtonClick: function() {
     },
 
     /**
@@ -559,7 +562,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         /*
         this.control({
-            "DeviceEditorPartPanel button": {
+            /*"DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
             },
             "button[cls='flipBinButton']": {
@@ -582,15 +585,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         });
         */
-        
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
         this.Logger = Teselagen.utils.Logger;
 
-
-        //this.application.on(this.DeviceEvent.FILL_BLANK_CELLS, this.onfillBlankCells, this);
+        this.GridManager = Teselagen.manager.GridManager;
 
         //this.application.on("getNewGridParts", this.getNewOperand2Parts, this);
 
@@ -611,9 +612,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,
                             this.onAddColumnRight,
-                            this);
+                            this); 
 
-        this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
+        /*this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
                             this.onInsertPartAtSelection,
                             this);
 
@@ -640,9 +641,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.RELOAD_DESIGN,
                             this.onReloadDesign,
-                            this);
-
-        */
-        }
-        
+                            this); */
+    }
 });

@@ -61,49 +61,15 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 						else return gridManager.PART_OUTLINE_COLOR;
 					});
 			})
-			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick/*function() {
-				gridManager.toggleCutCopyPastePartOptions(true);
-				gridManager.toggleInsertOptions(true);
-				gridManager.toggleInsertRowAboveOptions(true);
-				gridManager.toggleInsertRowBelowOptions(true);
-				
-				if(d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
-					d3.selectAll(".gridBinHeaderRectSVG")
-						.attr("fill", gridManager.BIN_FILL_COLOR)
-						.attr("stroke", gridManager.BIN_OUTLINE_COLOR)
-						.attr("isSelected", "false");
-					d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG")
-						.transition()
-					    .duration(30)
-					    .attr("stroke", gridManager.BIN_SELECTED_OUTLINE_COLOR)
-					    .attr("fill", gridManager.BIN_SELECTED_FILL_COLOR)
-					    .attr("isSelected", "true");
-					gridManager.selectedGridBin = d3.select(this.parentNode.parentNode.parentNode);
-				}
-				if(d3.select(this).attr("isSelected")=="true") return;
-				
-				d3.selectAll(".gridPartRectSVG")
-					.attr("fill", gridManager.PART_FILL_COLOR)
-					.attr("stroke", gridManager.PART_OUTLINE_COLOR)
-					.attr("isSelected", "false");
-								
-				d3.select(this).transition()
-				    .duration(30)
-				    .attr("stroke", gridManager.PART_SELECTED_OUTLINE_COLOR)
-				    .attr("fill", gridManager.PART_SELECTED_FILL_COLOR)
-				    .attr("isSelected", "true");
-				
-				gridManager.selectedGridPart = d3.select(this.parentNode);
-				
-			}*/)
+			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
 			.on("dblclick", function(d) {
-				if(d.phantom==true) {
+				if(d.get("part_id")===null) {
 					gridManager.onOpenPartLibraryRequest(d, d3.select(this.parentNode));
 					// Remember to change the listener to the following event.
 					//Vede.application.fireEvent("OpenPartLibrary");
 				} else {
 					//debugger;
-					var seqID = d.sequencefile_id;
+					var seqID = d.getPart().get("sequencefile_id");
 					//var seqStore = Teselagen.manager.ProjectManager.sequenceStore.data.items;
 					var seqStore = Teselagen.manager.ProjectManager.workingProject.sequencesStore.data.items;
 					var seq = null;
@@ -142,7 +108,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 				    	  handler: gridManager.clearSelectedPart
 				      }]
 				});
-				if(d.phantom==true) {
+				if(d.get("part_id")===null) {
 					contextMenu.items.items[0].setDisabled(true);
 					contextMenu.items.items[1].setDisabled(true);
 					contextMenu.items.items[3].setDisabled(true);
@@ -162,9 +128,9 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("font-size", "13px")
 			.attr("font-weight", 500)
 			.text(function(d) {
-				if(!d.name) return "";
-				else if(d.name.length > 14) return d.name.substring(0, 14) + '..';
-				else return d.name;
+				if(!d.get("name")) return "";
+				else if(d.get("name").length > 14) return d.get("name").substring(0, 14) + '..';
+				else return d.get("name");
 			})
 			.attr("text-anchor", "middle")
 			.attr("pointer-events", "none")
@@ -175,7 +141,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.append("rect")
 			.attr("class", "gridPartFasIndicatorSVG")
 			.attr("fill", function(d) {
-				var fas = d.fas || "None";
+				var fas = d.get("fas") || "None";
 				if (fas == "None") d3.select(this).style("display","none");
 				else if (d.fasConflict==true) {
 					d3.select(this).style("display","inline");

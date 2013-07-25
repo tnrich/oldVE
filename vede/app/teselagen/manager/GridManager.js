@@ -4,14 +4,15 @@
 Ext.define("Teselagen.manager.GridManager", {
 	
 	requires: [
-		"Teselagen.manager.DeviceDesignManager",
+		"Teselagen.constants.Constants",
 		"Teselagen.constants.SBOLIcons",
+        "Teselagen.event.DeviceEvent",
+		"Teselagen.manager.DeviceDesignManager",
+		"Teselagen.manager.GridCommandPatternManager",
+		"Teselagen.manager.InspectorPanelManager",
 		"Teselagen.manager.ProjectManager",
 		"Teselagen.renderer.de.BinHeaderRenderer",
-		"Teselagen.renderer.de.PartRenderer",
-		"Teselagen.constants.Constants",
-		"Teselagen.manager.InspectorPanelManager",
-		"Teselagen.manager.GridCommandPatternManager"
+		"Teselagen.renderer.de.PartRenderer"
 	],
     
 	singleton: true,
@@ -45,11 +46,6 @@ Ext.define("Teselagen.manager.GridManager", {
 	currentTab: null,
 	activeProject: null,
 	
-	j5Collection: null,
-	combinatorial: null,
-	isCircular: null,
-	j5Ready: null,
-	collectionData: [],
 	rulesData: [],
 	partsWithRules: [],
 	
@@ -79,6 +75,8 @@ Ext.define("Teselagen.manager.GridManager", {
 	selectedGridPart: null,
 	selectedGridBin: null,
 	selectedClipboardPart: null,
+
+    GridController: null,
 	
 	totalRows: 0,
     totalColumns: 0,
@@ -89,14 +87,29 @@ Ext.define("Teselagen.manager.GridManager", {
 		if(this.grid) this.grid.remove();
 	},
 	
-	renderGrid: function() {
+	renderGrid: function(model) {
 		var me = this;
-		me.checkForFasConflict();
-		//me.updatePartsWithRules();
+
+        this.removeGrid();
+
+        this.currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        this.activeProject = model;
+
+        if(!this.GridController) {
+            this.GridController = Vede.application.getController("DeviceEditor.GridController");
+        }
+
+        this.totalColumns = model.bins().count();
+
+        if(this.totalColumns > 0) {
+            this.totalRows = model.bins().getAt(0).cells().count();
+        } else {
+            this.totalRows = 0;
+        }
 		
-		Teselagen.manager.InspectorPanelManager.refreshInspectorGrid();
-		Teselagen.manager.InspectorPanelManager.refreshPlasmidGeometry();
-		//this.grid = d3.select(".designGrid")
+		//Teselagen.manager.InspectorPanelManager.refreshInspectorGrid();
+		//Teselagen.manager.InspectorPanelManager.refreshPlasmidGeometry();
+
 		this.grid = d3.select(this.currentTab.el.dom)
 			.select(".designGrid")
 			.append("svg:svg")
@@ -109,7 +122,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		 	.attr("class", "gridParent");
 		
 		this.gridBinSVG = this.parentSVG.selectAll("g")
-		    .data(me.collectionData)
+		    .data(me.activeProject.bins().getRange())
 		    .enter()
 		    .append("g")
 			.attr("class", "gridBinSVG")
@@ -139,7 +152,7 @@ Ext.define("Teselagen.manager.GridManager", {
 			.attr('transform', 'translate(0, '+(me.BIN_HEIGHT+me.BIN_PART_GAP_HEIGHT)+')');
 		
 		this.gridPartSVG = this.gridPartParentSVG.selectAll("g")
-			.data(function(d) { return d.parts;})
+			.data(function(d) { return d.cells().getRange();})
 			.enter()
 		    .append("g")
 			.attr("class", "gridPartSVG")
@@ -188,10 +201,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.grid.remove();
 		this.renderGrid();
 		
-		this.toggleCutCopyPastePartOptions(false);
-        this.toggleInsertOptions(false);
-        this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
@@ -218,10 +231,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.grid.remove();
 		this.renderGrid();
 		
-		this.toggleCutCopyPastePartOptions(false);
-        this.toggleInsertOptions(false);
-        this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
@@ -258,10 +271,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.grid.remove();
 		this.renderGrid();
 		
-		this.toggleCutCopyPastePartOptions(false);
-        this.toggleInsertOptions(false);
-        this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
         
         me.selectGridBinHeaderByIndex(columnIndex+1);
         
@@ -316,10 +329,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.grid.remove();
 		this.renderGrid();
 		
-		this.toggleCutCopyPastePartOptions(false);
-        this.toggleInsertOptions(false);
-        this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
         
         me.selectGridBinHeaderByIndex(columnIndex);
         
@@ -360,10 +373,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.grid.remove();
 		this.renderGrid();
 		
-		this.toggleCutCopyPastePartOptions(false);
-        this.toggleInsertOptions(false);
-        this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
         me.clearPartInfo();
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
@@ -397,10 +410,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.grid.remove();
 		this.renderGrid();
 		
-		this.toggleCutCopyPastePartOptions(false);
-        this.toggleInsertOptions(false);
-        this.toggleInsertRowAboveOptions(false);
-        this.toggleInsertRowBelowOptions(false);
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
         me.clearPartInfo();
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
@@ -444,10 +457,10 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	onGridPartRectSvgClick: function() {
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.toggleCutCopyPastePartOptions(true);
-		gridManager.toggleInsertOptions(true);
-		gridManager.toggleInsertRowAboveOptions(true);
-		gridManager.toggleInsertRowBelowOptions(true);
+		gridManager.GridController.toggleCutCopyPastePartOptions(true);
+		gridManager.GridController.toggleInsertOptions(true);
+		gridManager.GridController.toggleInsertRowAboveOptions(true);
+		gridManager.GridController.toggleInsertRowBelowOptions(true);
 		
 		if(d3.select(this.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
 			d3.selectAll(".gridBinHeaderRectSVG")
@@ -478,7 +491,9 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		gridManager.selectedGridPart = d3.select(this.parentNode);
 
-		gridManager.inspector.setActiveTab(0);
+        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, gridManager.selectedGridPart.datum());
+
+		/*gridManager.inspector.setActiveTab(0);
 		
 
         var partPropertiesForm = gridManager.inspector.down("form[cls='PartPropertiesForm']");
@@ -578,17 +593,16 @@ Ext.define("Teselagen.manager.GridManager", {
         
         
         //>> Eugene rules stuff should go here.
-		Teselagen.manager.InspectorPanelManager.refreshEugeneRulesGridForPart(gridManager.selectedGridPart.datum().id);
+		Teselagen.manager.InspectorPanelManager.refreshEugeneRulesGridForPart(gridManager.selectedGridPart.datum().id);*/
 		
 	},
-	
-	onGridBinHeaderRectSvgClick: function() {
-		var gridManager = Teselagen.manager.GridManager;
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(true);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(true);
-		Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Column"]')[0].setDisabled(false);
+
+    selectBin: function(gridBin) {
+        var gridManager = Teselagen.manager.GridManager;
+		gridManager.GridController.toggleCutCopyPastePartOptions(false);
+		gridManager.GridController.toggleInsertOptions(true);
+		gridManager.GridController.toggleInsertRowAboveOptions(false);
+		gridManager.GridController.toggleInsertRowBelowOptions(true);
 		
 		if(gridManager.selectedGridPart != null) {
 			d3.selectAll(".gridPartRectSVG")
@@ -598,47 +612,58 @@ Ext.define("Teselagen.manager.GridManager", {
 			gridManager.selectedGridPart = null;
 		}
 		
-		gridManager.inspector.setActiveTab(1);
-        var columnsGrid = gridManager.inspector.down("form[cls='collectionInfoForm'] > gridpanel");
-        
-        var selectionModel = columnsGrid.getSelectionModel();
-        var selectedPart = columnsGrid.getSelectionModel().getSelection()[0];
-        gridManager.inspector.setActiveTab(1);
-        
-        
-        var j5Bin = gridManager.j5BinFromCollectionDataBin(d3.select(this.parentNode.parentNode).datum());
-        //selectionModel.select(j5Bin);
-
-        /*var contentField = gridManager.inspector.down("displayfield[cls='columnContentDisplayField']");
-        var contentArray = [];
-        j5bin.cells().each(function(part, i) {
-            if(!part.get("phantom")) {
-                contentArray.push(part.get("name"));
-                contentArray.push(": ");
-                contentArray.push(part.get("fas"));
-                contentArray.push("<br>");
-            }
-        });
-        contentField.setValue(contentArray.join(""));*/
-        
-		if(d3.select(this).attr("isSelected")=="true") return;
+		if(d3.select(gridBin).attr("isSelected")=="true") return;
 		
 		d3.selectAll(".gridBinHeaderRectSVG")
 			.attr("fill", gridManager.BIN_FILL_COLOR)
 			.attr("stroke", gridManager.BIN_OUTLINE_COLOR)
 			.attr("isSelected", "false");
 		
-		d3.select(this).transition()
+		d3.select(gridBin).transition()
 		    .duration(30)
 		    .attr("stroke", gridManager.BIN_SELECTED_OUTLINE_COLOR)
 		    .attr("fill", gridManager.BIN_SELECTED_FILL_COLOR)
 		    .attr("isSelected", "true");
 		
-		gridManager.selectedGridBin = d3.select(this.parentNode.parentNode);				
+		gridManager.selectedGridBin = d3.select(gridBin.parentNode.parentNode);				
 
-        var removeColumnMenuItem = Ext.getCmp("mainAppPanel").down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
-        removeColumnMenuItem.enable();
+        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, gridManager.selectedGridBin.datum());
+
+    },
+	
+	onGridBinHeaderRectSvgClick: function() {
+	    Teselagen.manager.GridManager.selectBin(this);
 	},
+
+    onFlipBinButtonClick: function() {
+        var gridBin = d3.select(this.parentNode.parentNode);
+        var j5Bin = gridBin.datum();
+
+        d3.select(this.parentNode).select(".gridBinHeaderFlipButtonArrowSVG")
+            .attr("transform", function(dr) {
+                if(dr.get("directionForward") === true) return "translate(93, 9)scale(0.7)rotate(180,19,10)";
+                else return "translate(93, 9)scale(0.7)";
+            });
+
+        d3.select(this.parentNode).select(".gridBinHeaderSbolIconSVG")
+            .attr("transform", function(dr) {
+                if(dr.get("directionForward") === true) return "translate(38, -15)rotate(180,25,50)";
+                else return "translate(38, -15)";
+            });
+
+        j5Bin.set("directionForward", !j5Bin.get("directionForward"));
+        
+        Teselagen.manager.GridCommandPatternManager.addCommand({
+            type: "BIN",
+            data: {
+                type: "DIR",
+                x: parseInt(gridBin.attr("deGridBinIndex")),
+                data: directionForward
+            }
+        });
+        
+        Teselagen.manager.GridManager.selectBin(gridBin);
+    },
 
 	selectPartByIndex: function(xIndex, yIndex) {
     	var me = Teselagen.manager.GridManager;
@@ -655,6 +680,5 @@ Ext.define("Teselagen.manager.GridManager", {
     		.filter(function(d, i) {return i===xIndex;})
     		.select(".gridBinHeaderSVG")[0][0];
     	me.selectBinHeader(gridBinHeader);
-    },
-
+    }
 });
