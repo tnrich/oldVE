@@ -30,15 +30,31 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         id: 'projectPanelOptions',
         items: [
             {
-                xtype: 'button',
-                border: '0',
-                id: "openSequenceLibraryBtn",
-                text: 'My Sequences',
-                cls: 'sequenceLibraryBtn',
-                overCls: 'sequenceLibraryBtn-over',
-                textAlign: 'left',
-                margin: 0,
-                height: 30,
+                xtype: 'container',
+                layout:'hbox',
+                items: [
+                    {
+                        xtype: 'button',
+                        border: '0',
+                        width: 220,
+                        id: "openSequenceLibraryBtn",
+                        text: 'My Sequences',
+                        cls: 'sequenceLibraryBtn',
+                        overCls: 'sequenceLibraryBtn-over',
+                        textAlign: 'left',
+                        margin: 0,
+                        height: 30,
+                    },
+                    {
+                        xtype: 'button',
+                        border: '0',
+                        cls: 'sequenceAddBtn',
+                        overCls: 'sequenceAddBtn-over',
+                        height: 20,
+                        width: 20,
+                        margin: 0
+                    }
+                ]
             },{
                 xtype: 'button',
                 border: '0',
@@ -62,6 +78,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         tools: [{
             type: 'plus',
             tooltip: 'New Project',
+            cls: 'projectAddBtn',
+            overCls: 'projectAddBtn-over',
             handler: function(event, toolEl, panelHeader) {
                 Teselagen.manager.ProjectManager.createNewProject();
             }
@@ -75,28 +93,22 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                     items: [{
                         text: 'Rename',
                         cls: 'explorerMenuRenameBtn',
+                        listeners: {
+                            click: function(item, e, opt) {
+                                Teselagen.manager.ProjectManager.onExplorerMenuItemClick(item, e, opt);
+                            }
+                        }
                     },
                     {
-                        text: 'Delete'
-                    }],
-                    listeners: {
-                        click: function(item, e, opt) {
-                            Teselagen.manager.ProjectManager.onExplorerMenuItemClick(item, e, opt);
+                        text: 'Delete',
+                        cls: 'explorerMenuDeleteBtn',
+                        listeners: {
+                            click: function(item, e, opt) {
+                                Teselagen.manager.ProjectManager.onExplorerMenuItemClick(item, e, opt);
+                            }
                         }
-                    }
+                    }]
                 });
-                console.log(record.data.id);
-                switch(record.data.hrefTarget) {
-                    case "openproj":
-                        console.log("project");
-                        break;
-                    case "opende":
-                        console.log("design");
-                        break;
-                    case "opensequence":
-                        console.log("design");
-                        break;
-                }
                 menu.showAt(event.getXY());
                 event.stopEvent();
                 event.preventDefault;

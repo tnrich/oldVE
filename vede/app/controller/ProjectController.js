@@ -64,14 +64,14 @@ Ext.define("Vede.controller.ProjectController", {
                         icon: "resources/images/add.png"
                     });
 
-                    // Append sequence to project node
-                    projectNode.appendChild({
-                        text: "Create sequence",
-                        leaf: true,
-                        hrefTarget: "newsequence",
-                        icon: "resources/images/add.png"
-                        //id: 0
-                    });
+                    // // Append sequence to project node
+                    // projectNode.appendChild({
+                    //     text: "Create sequence",
+                    //     leaf: true,
+                    //     hrefTarget: "newsequence",
+                    //     icon: "resources/images/add.png"
+                    //     //id: 0
+                    // });
 
                     var designs = project.designs(); // Get designs store from current project
 

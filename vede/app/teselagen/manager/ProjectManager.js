@@ -524,13 +524,40 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     onExplorerMenuItemClick: function(menuitem, e, opt) {
-        console.log("here");
+        var selectedRecord = Ext.getCmp("projectTreePanel").getSelectionModel().selected.items[0].data;
+        var recordType = selectedRecord.hrefTarget;
+        var recordId = selectedRecord.id;
         switch (menuitem.text) {
             case "Rename": 
-            console.log("rename");
+                switch(recordType) {
+                    case "openproj":
+                        console.log("rename project");
+                        var selectedProject = this.projects.getById(recordId);
+                        console.log(selectedProject);
+                        break;
+                    case "opende":
+                        console.log("rename design");
+                        this.projects.each(function (project) {
+                            var selectedDesign = project.designs().getById(recordId);
+                        });
+                        break;
+                    case "opensequence":
+                        console.log("rename sequence");
+                        break;
+                }
             break;
             case "Delete":
-            console.log("delete");
+                switch(recordType) {
+                    case "openproj":
+                        console.log("delete project");
+                        break;
+                    case "opende":
+                        console.log("delete design");
+                        break;
+                    case "opensequence":
+                        console.log("delete sequence");
+                        break;
+                }
             break;
         }
     },

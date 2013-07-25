@@ -158,3 +158,60 @@ $grid-row-cell-font-size: 12px;
   background: #004065 !important;
 }
 
+.sequenceAddBtn {
+  left: 197px !important;
+  border-radius: 0px !important;
+  top: 4px !important;
+  background: none !important;
+  background-image: url(../resources/images/tree/addSequenceBtn.png) !important;
+  background-size: 19px !important;
+  background-position: center;
+  opacity: 0.4;
+  transition: background .2s ease-in-out;
+  -moz-transition: background .2s ease-in-out;
+  -webkit-transition: background .2s ease-in-out;
+}
+
+.x-sequenceAddBtn-over {
+  background: none;
+  opacity: 1;
+}
+
+.projectAddBtn {
+  left: 193px !important;
+  border-radius: 0px !important;
+  background: none !important;
+  background-size: 21px !important;
+  background-position: center;
+}
+
+.projectAddBtn .x-tool-img {
+  background-image: url(../resources/images/tree/addProjectBtn.png) !important;
+  opacity: 0.4;
+  background-size: 17px;
+}
+
+.projectAddBtn .x-tool-plus {
+  background-position: center;
+}
+
+.x-projectAddBtn-over {
+  background: none;
+}
+
+#projectTreePanel_header-targetEl .x-tool img {
+  border-radius: 0px;
+}
+
+#projectTreePanel_header-targetEl .x-tool {
+  opacity: 0.4;
+  transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
+}
+
+#projectTreePanel_header-targetEl .x-tool-over .x-tool-plus {
+  opacity: 1;
+  background-position: center !important;
+}
+
