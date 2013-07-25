@@ -102,8 +102,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 design.addToRules(eugeneRules[i]);
             }
 
-            Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
-            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         }
     },
 
@@ -284,7 +284,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         
         
         //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
-        debugger;
+        //debugger;
     	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
     	
     	
