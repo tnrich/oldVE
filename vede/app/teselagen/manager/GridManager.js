@@ -91,12 +91,7 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	renderGrid: function() {
 		var me = this;
-		me.checkForFasConflict();
-		//me.updatePartsWithRules();
 		
-		Teselagen.manager.InspectorPanelManager.refreshInspectorGrid();
-		Teselagen.manager.InspectorPanelManager.refreshPlasmidGeometry();
-		//this.grid = d3.select(".designGrid")
 		this.grid = d3.select(this.currentTab.el.dom)
 			.select(".designGrid")
 			.append("svg:svg")
