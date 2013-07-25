@@ -106,7 +106,7 @@ $grid-row-cell-font-size: 12px;
 }
 
 #ProjectPanel-body {
-  border-width: 0 1px;
+  border-width: 0px;
   border-color: #ECF0F1;
   width:220px;
 }
@@ -139,3 +139,22 @@ $grid-row-cell-font-size: 12px;
   width: 220px;
   background: white;
 }
+
+.sequenceLibraryBtn, .partsLibraryBtn {
+  background: #006cab !important;
+  border-radius: 0px !important;
+  transition: background .2s ease-in-out;
+  -moz-transition: background .2s ease-in-out;
+  -webkit-transition: background .2s ease-in-out;
+}
+
+.sequenceLibraryBtn .x-btn-inner, .partsLibraryBtn .x-btn-inner {
+  color: white;
+  border: 0 !important;
+  border-bottom: 1px solid #4C85BE !important;
+}
+
+.x-sequenceLibraryBtn-over, .x-partsLibraryBtn-over {
+  background: #004065 !important;
+}
+
