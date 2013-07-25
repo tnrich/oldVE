@@ -6,19 +6,6 @@ module.exports = function(app) {
      var DeviceDesign = app.db.model("devicedesign");
      var Part = app.db.model("part");
 
-    function fillEmptyParts(design){
-        
-        //console.log(design);
-        design.j5collection.bins.forEach(function(bin, binKey) {
-            bin.parts.forEach(function(part, partKey) {
-                var partId = design.j5collection.bins[binKey].parts[partKey];
-                if (partId) design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
-                else design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(app.constants.defaultEmptyPart._id.toString());
-            });
-        });
-        return design;
-    };
-
     function prepareDesignWithParts(design,cb){
         DeviceDesign.findById(design._id).populate('j5collection.bins.cells.part').exec(function(err, design) {
 
@@ -42,8 +29,6 @@ module.exports = function(app) {
         var Part = app.db.model("part");
 
         var reqDesign = req.body;
-
-        //reqDesign = fillEmptyParts(reqDesign);
 
         var newDesign = new DeviceDesign(reqDesign);
 

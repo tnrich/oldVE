@@ -12,8 +12,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                "Teselagen.event.GridEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
-               "Vede.view.de.grid.Bin",
-               "Vede.view.de.grid.Part",
                "Teselagen.constants.SBOLIcons",
                "Teselagen.utils.Logger"],
 
@@ -61,14 +59,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.button.Button} button The clicked reverse button.
      */
     onFlipBinButtonClick: function(button) {
-        if(button.icon === Vede.view.de.grid.Bin.forwardButtonIconPath) {
-            button.setIcon(Vede.view.de.grid.Bin.reverseButtonIconPath);
-        } else {
-            button.setIcon(Vede.view.de.grid.Bin.forwardButtonIconPath);
-        }
+        //if(button.icon === Vede.view.de.grid.Bin.forwardButtonIconPath) {
+        //    button.setIcon(Vede.view.de.grid.Bin.reverseButtonIconPath);
+        //} else {
+        //    button.setIcon(Vede.view.de.grid.Bin.forwardButtonIconPath);
+        //}
 
         // Get the bin that the button refers to and reverse its direction.
-        var parentBin = button.up().up().up().getBin();
+        //var parentBin = button.up().up().up().getBin();
 
         this.application.fireEvent(this.GridEvent.BIN_HEADER_CLICK, button.up());
 

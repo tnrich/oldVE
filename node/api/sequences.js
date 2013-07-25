@@ -152,7 +152,7 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
-            return res.json({"sequences":app.constants.defaultEmptyPart});
+            return res.json({"sequences":{}});
         }
     );
 
