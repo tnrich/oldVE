@@ -6,14 +6,15 @@
 Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
-    requires: [
-               "Teselagen.manager.GridManager",
-               "Teselagen.event.DeviceEvent",
+    requires: ["Teselagen.event.DeviceEvent",
                "Teselagen.event.GridEvent",
                "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.manager.GridManager",
                "Teselagen.models.DeviceEditorProject",
                "Teselagen.constants.SBOLIcons",
-               "Teselagen.utils.Logger"],
+               "Teselagen.utils.Logger",
+               "Vede.view.de.grid.Bin",
+               "Vede.view.de.grid.Part"],
 
     statics: {
         DEFAULT_ROWS: 2
@@ -22,23 +23,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     DeviceEvent: null,
     ProjectEvent: null,
     DeviceDesignManager: null,
-    Logger: null,
-    InspectorController: null,
 
     activeBins: null,
     activeProject: null,
     grid: null,
+    gridManager: null,
     tabPanel: null,
-
-    selectedBin: null,
-    selectedPart: null,
-    selectedClipboardPart: null,
-    ClipboardCutFlag: false,
-
-    skipPadOnRemovePart: false,
-
-    totalRows: 2,
-    totalColumns: 1,
 
     onReRenderDECanvasEvent: function(){
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
@@ -101,21 +91,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.Component} newTab The tab that is being switched to.
      */
     onTabChange: function(tabPanel, newTab) {
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-            this.selectedPart = null;
-        }
-        
-        if(this.selectedBin) {
-            this.selectedBin.deselect();
-            this.selectedBin = null;
-        }
-
-
         if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
-            this.grid = newTab.query("component[cls='designGrid']")[0];
-            this.grid.removeAll(); // Clean grid
+            this.grid = newTab.down("component[cls='designGrid']");
 
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
@@ -146,7 +123,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
 
-            // newTab.query('label[cls="designName"]')[0].setText(newTab.model.data.name);
             this.activeBins = this.activeProject.bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
