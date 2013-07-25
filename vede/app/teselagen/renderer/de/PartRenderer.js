@@ -128,9 +128,16 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("font-size", "13px")
 			.attr("font-weight", 500)
 			.text(function(d) {
-				if(!d.get("name")) return "";
-				else if(d.get("name").length > 14) return d.get("name").substring(0, 14) + '..';
-				else return d.get("name");
+                var part = d.getPart();
+                var partName = part.get("name");
+
+                if(!part || !partName) {
+                    return "";
+                } else if(partName.length > 14) {
+                    return partName.substring(0, 14) + '..';
+                } else {
+                    return partName;
+                }
 			})
 			.attr("text-anchor", "middle")
 			.attr("pointer-events", "none")
