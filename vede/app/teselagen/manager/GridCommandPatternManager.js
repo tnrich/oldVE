@@ -10,6 +10,11 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	addCommand: function(command) {
 		var gridManager = Teselagen.manager.GridManager;
 		var tab = gridManager.currentTab;
+
+        if(!tab.commandPattern) {
+            tab.commandPattern = [];
+        }
+
 		if(tab.commandIndex===0) {
 			tab.commandPattern.push(command);
 		} else {
