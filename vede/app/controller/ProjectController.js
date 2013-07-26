@@ -72,6 +72,14 @@ Ext.define("Vede.controller.ProjectController", {
                         icon: "resources/images/add.png"
                     });
 
+                    // // Append sequence to project node
+                    // projectNode.appendChild({
+                    //     text: "Create sequence",
+                    //     leaf: true,
+                    //     hrefTarget: "newsequence",
+                    //     icon: "resources/images/add.png"
+                    //     //id: 0
+                    // });
                     var designs = project.designs(); // Get designs store from current project
 
 
@@ -201,6 +209,14 @@ Ext.define("Vede.controller.ProjectController", {
         tabPanel.setActiveTab(0);
         dashPanel.setActiveTab(1);
     },
+
+    resolveAndOpenPartLibrary: function (record) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        tabPanel.setActiveTab(0);
+        dashPanel.setActiveTab(2);
+    },
+
 
     resolveAndOpenj5Reports: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
@@ -426,6 +442,9 @@ Ext.define("Vede.controller.ProjectController", {
             },
             "#openSequenceLibraryBtn": {
                 click: this.resolveAndOpenSequenceLibrary
+            },
+            "#openPartLibraryBtn": {
+                click: this.resolveAndOpenPartLibrary
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick
