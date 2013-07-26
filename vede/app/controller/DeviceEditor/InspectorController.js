@@ -367,7 +367,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPartSelected: function (j5Part, binIndex) {
         this.selectedBinIndex = binIndex;
-
+        
+        this.columnsGrid.getSelectionModel().select(binIndex, false, true);
+        
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -385,7 +387,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
         removeRowMenuItem.enable();
-
+        
         if(this.selectedBinIndex !== 0) {
             // Turn the FAS_LIST array into an array of arrays, as required by
             // the store's loadData function.
