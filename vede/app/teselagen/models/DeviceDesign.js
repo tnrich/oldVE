@@ -267,9 +267,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
              });
         }
         
-        if (pIndex >= 0 && pIndex < cnt) this.bins().insert(pIndex, j5Bin); 
-        else this.bins().add(j5Bin);
-        
         var phantomCells = [];
 		for(var i=0;i<totalRows;i++) {
 			var phantomCell = Ext.create("Teselagen.models.Cell", {
@@ -279,6 +276,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
 			phantomCells.push(phantomCell);
 		}	
 		j5Bin.cells().add(phantomCells);
+
+        if (pIndex >= 0 && pIndex < cnt) this.bins().insert(pIndex, j5Bin); 
+        else this.bins().add(j5Bin);
         
 		var newCnt  = this.bins().count();
         if (newCnt > cnt) {

@@ -57,10 +57,17 @@ Ext.define("Teselagen.models.Cell", {
     }],
 
     setPart: function(part) {
-        if(!part.get("id")) {
-            this.set("part_id", part.internalId);
+        this.part = part;
+
+        if(part.get("id")) {
+            this.set("part_id", part.getId());
         } else {
-            this.set("part_id", part.get("id"));
+            this.set("part_id", null);
+            this.callStore("afterEdit", ["part_id"]);
         }
+    },
+
+    getPart: function() {
+        return this.part;
     }
 });
