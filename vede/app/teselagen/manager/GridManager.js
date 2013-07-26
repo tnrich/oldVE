@@ -573,8 +573,13 @@ Ext.define("Teselagen.manager.GridManager", {
     onFlipBinButtonClick: function() {
         var gridBin = d3.select(this.parentNode.parentNode);
         var j5Bin = gridBin.datum();
-
-        d3.select(this.parentNode).select(".gridBinHeaderFlipButtonArrowSVG")
+        var xIndex = parseInt(gridBin.attr("deGridBinIndex"));
+        j5Bin.set("directionForward", !j5Bin.get("directionForward"));
+        this.selectedGridPart = null;
+		this.selectedGridBin = null;
+        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, j5Bin, xIndex);
+        
+        /*d3.select(this.parentNode).select(".gridBinHeaderFlipButtonArrowSVG")
             .attr("transform", function(dr) {
                 if(dr.get("directionForward") === true) return "translate(93, 9)scale(0.7)rotate(180,19,10)";
                 else return "translate(93, 9)scale(0.7)";
@@ -593,11 +598,11 @@ Ext.define("Teselagen.manager.GridManager", {
                 x: parseInt(gridBin.attr("deGridBinIndex")),
                 data: j5Bin.get("directionForward")
             }
-        });
+        });*/
 
-        j5Bin.set("directionForward", !j5Bin.get("directionForward"));
         
-        Teselagen.manager.GridManager.selectBin(gridBin);
+        
+        //Teselagen.manager.GridManager.selectBin(gridBin);
     },
 
 });
