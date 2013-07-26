@@ -213,14 +213,14 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
-        Teselagen.manager.GridCommandPatternManager.addCommand({
+        /*Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
         	data: {
         		type: "ADD",
         		y: rowIndex,
         		loc: "BELOW"       		
         	}
-		});
+		});*/
 	},
 	
 	addRowAbove: function() {
@@ -249,14 +249,14 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
-        Teselagen.manager.GridCommandPatternManager.addCommand({
+        /*Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
         	data: {
         		type: "ADD",
         		y: rowIndex,
         		loc: "ABOVE"       		
         	}
-		});
+		});*/
 	},
 	
 	addColumnRight: function() {
@@ -264,15 +264,34 @@ Ext.define("Teselagen.manager.GridManager", {
 		me.newColumnSuffixNum++;
 		var columnIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
 		
-		var newBin = {
-			iconID: "USER-DEFINED",
-			directionForward: true,
-			parts: []
-		}
+		var maxBin = 0;
+
+        this.activeProject.bins().each(function(bin) {
+            var name = bin.get("binName");
+            var binNumber;
+
+            if(name.match(/^Bin\d+$/)) {
+                binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                if(binNumber > maxBin) {
+                    maxBin = binNumber;
+                }
+            }
+        });
+
+        var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+            binName: "Bin" + (maxBin + 1)
+        });
+        this.activeProject.bins().insert(columnIndex+1, j5Bin);
+        var phantomCells = [];
 		for(var i=0;i<this.totalRows;i++) {
-			newBin.parts.push({phantom: true});
-		}
-		this.collectionData.splice(columnIndex+1,0,newBin);	
+			var phantomCell = Ext.create("Teselagen.models.Cell", {
+				index: i
+			});
+			phantomCell.setJ5Bin(j5Bin);
+			phantomCells.push(phantomCell);
+		}	
+		j5Bin.cells().add(phantomCells);
 		
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
@@ -285,9 +304,9 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
-        me.selectGridBinHeaderByIndex(columnIndex+1);
+        //me.selectGridBinHeaderByIndex(columnIndex+1);
         
-        Teselagen.manager.GridCommandPatternManager.addCommand({
+        /*Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
         	data: {
         		type: "ADD",
@@ -295,7 +314,7 @@ Ext.define("Teselagen.manager.GridManager", {
         		loc: "RIGHT",
         		data: newBin
         	}
-		});
+		});*/
 	},
 	
 	addColumnLeft: function() {
@@ -339,7 +358,7 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
-        me.selectGridBinHeaderByIndex(columnIndex);
+        //me.selectGridBinHeaderByIndex(columnIndex);
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
@@ -582,6 +601,6 @@ Ext.define("Teselagen.manager.GridManager", {
     	var gridBinHeader = me.parentSVG.selectAll(".gridBinSVG")
     		.filter(function(d, i) {return i===xIndex;})
     		.select(".gridBinHeaderSVG")[0][0];
-    	me.selectBinHeader(gridBinHeader);
+    	me.selectBin(gridBinHeader);
     }
 });

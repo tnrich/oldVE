@@ -238,7 +238,49 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @returns {Boolean} True if added, false if not.
      */
     addNewBinByIndex: function(pIndex, pName) {
-        var added   = false;
+    	var added = false;
+        var cnt = this.bins().count();
+        
+        if (pName === "" || pName === undefined || pName === null) {
+        	this.bins().each(function(bin) {
+                var name = bin.get("binName");
+                var binNumber;
+
+                if(name.match(/^Bin\d+$/)) {
+                    binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                    if(binNumber > maxBin) {
+                        maxBin = binNumber;
+                    }
+                }
+            });
+
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (maxBin + 1)
+            });
+            
+        } else {
+        	 var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                 binName: pName
+             });
+        }
+        
+        this.bins().insert(pIndex+1, j5Bin);
+        var phantomCells = [];
+		for(var i=0;i<this.totalRows;i++) {
+			var phantomCell = Ext.create("Teselagen.models.Cell", {
+				index: i
+			});
+			phantomCell.setJ5Bin(j5Bin);
+			phantomCells.push(phantomCell);
+		}	
+		j5Bin.cells().add(phantomCells);
+    	
+    	
+    	
+    	
+    	
+    	var added   = false;
 
         var cnt     = this.bins().count();
 
