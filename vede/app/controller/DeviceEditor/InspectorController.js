@@ -626,10 +626,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     //        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
             var newStrategy = box.getValue();
 
-            this.selectedPart.set("fas", newStrategy);
+            this.selectedCell.set("fas", newStrategy);
             this.columnsGrid.getView().refresh();
-
-            Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
         }
     },
 
@@ -829,8 +827,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
             newOperand2 =
                 newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
-            newRule.set("operand2isNumber", true);
-            newRule.set("operand2Number", newOperand2);
+            newRule.set({
+            	"operand2isNumber": true, 
+            	"operand2Number": newOperand2
+        	});
         } else {
             newOperand2Name =
                 newEugeneRuleDialog.down("component[cls='operand2PartField']").getValue();
@@ -838,17 +838,36 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             newOperand2 = this.DeviceDesignManager.getPartByName(this.activeProject,
                                                                  newOperand2Name);
         }
+        
+        newRule.set({
+        	"name": newName,
+        	"negationOperator": newNegationOperator,
+        	"compositionalOperator": newCompositionalOperator
+        });
+        
+        newRule.setOperand2(newOperand2); 
+        
+        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, this.selectedPart);
+        this.activeProject.addToRules(newRule);
+        this.eugeneRulesGrid.reconfigure(rulesStore);
+        
+        newEugeneRuleDialog.close();
 
-        newRule.set("name", newName);
-        newRule.set("negationOperator", newNegationOperator);
-        newRule.set("compositionalOperator", newCompositionalOperator);
-        var self = this;
+        Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
+        
+        toastr.options.onclick = null;
+        toastr.info("Eugene Rule Added");
+        //Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
+        
+        
+        
+        
+        /*var self = this;
         // newOperand2.save({
         //     callback: function(){
         //         newRule.setOperand2(newOperand2);   
         //     }
         // });
-
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
                 callback: function(){
@@ -879,7 +898,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         toastr.options.onclick = null;
         toastr.info("Eugene Rule Added");
-        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
+        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);*/
     },
 
     /**

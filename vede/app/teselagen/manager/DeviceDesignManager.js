@@ -923,15 +923,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Teselagen.models.Part}
      */
     getPartByName: function(pDevice, pPartName) {
-        var part, id;
-        for (var i =0; i < pDevice.bins().count(); i++) {
-            var bin = pDevice.bins().getAt(i);
-            part = bin.getPartByName(pPartName);
-            if (part !== null) {
-                return part;
-            }
-        }
-        return part;
+        return pDevice.parts().data.findBy(function(part) {if(part.get("name")===pPartName) return true;});
     },
     /**
      * Add a Part to a J5Bin
