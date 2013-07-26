@@ -238,15 +238,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
         });
     },
-
-    onopenPartLibraryBtnClick: function () {
+    
+    onOpenPartLibraryBtnClick: function () {
+    	Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
+    },
+    
+    
+    onOpenPartLibrary: function () {
         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
         var currentTabEl = (currentTab.getEl());
 //        var selectedPartIndex = this.selectedBin.indexOfPart(this.selectedPart);
-
-        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
-
-        if(this.selectedPart) {
+        
+        if(this.selectedCell) {
             // If the part is not owned by a bin yet, add it to the bin.
 //            if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
 //                                                         this.selectedPart) < 0) {
@@ -315,17 +318,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part){
                                 Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part,part.get("name"),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    if(bin)
-                                    {
-                                        self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
-                                        self.onReRenderDECanvasEvent();
-                                        selectWindow.close();
+                                    if(bin) {
+                                        self.activeProject.parts().add(part);
+                                        self.selectedCell.setPart(part);
                                         self.selectedPart = part;
-                                        self.onReRenderDECanvasEvent();
-                                        Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
-                                    }
-                                    else
-                                    {
+                                        var yIndex = self.activeProject.bins().getAt(self.selectedBinIndex).cells().indexOf(self.selectedCell);
+                                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, 
+                                        		self.selectedCell, self.selectedBinIndex, yIndex);
+                                        
+                                        selectWindow.close();
+                                    } else {
                                         Ext.MessageBox.alert("Error","Failed mapping part from library");
                                     }
                                 });
@@ -1378,7 +1380,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS, this.onReRenderDECanvasEvent, this);
 
-        this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onopenPartLibraryBtnClick, this);
+        this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onOpenPartLibrary, this);
 
         this.application.on(this.DeviceEvent.CHECK_J5_READY, this.onCheckj5Ready, this);
 
@@ -1424,7 +1426,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 select: this.onGridBinSelect
             },
             "button[cls='openPartLibraryBtn']": {
-                click: this.onopenPartLibraryBtnClick
+                click: this.onOpenPartLibraryBtnClick
             },
             "button[cls='deletePartBtn']": {
                 click: this.onDeletePartBtnClick

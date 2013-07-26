@@ -240,6 +240,10 @@ Ext.define("Teselagen.constants.Constants", {
         sequenceAA: false,
         revComAA: false,
         featureLabels: true,
-        cutSiteLabels: true
+        cutSiteLabels: true,
+        selection: {
+            start: 0,
+            end: 0
+        }
     }
 });

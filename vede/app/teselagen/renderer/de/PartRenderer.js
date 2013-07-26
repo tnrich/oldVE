@@ -1,8 +1,9 @@
 Ext.define("Teselagen.renderer.de.PartRenderer", {
 	
-	
 	requires: [
    	    "Teselagen.constants.SBOLIcons",
+        "Teselagen.event.DeviceEvent",
+        "Teselagen.event.ProjectEvent",
    	    "Teselagen.manager.ProjectManager"
     ],
 	
@@ -64,20 +65,16 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
 			.on("dblclick", function(d) {
 				if(!d.getPart()) {
+					// Remember to change the listener to the following event.
 					Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
 				} else {
-					//debugger;
-					var seqID = d.getPart().get("sequencefile_id");
-					var seqStore = Teselagen.manager.ProjectManager.workingProject.sequencesStore.data.items;
-					var seq = null;
-					for(var i=0;i<seqStore.length;i++) {
-						if (seqID==seqStore[i].internalId) {
-							seq = seqStore[i];
-							break;
-						}
-					}
-					if(seq != null) Vede.application.fireEvent("OpenVectorEditor",seq);
-					else Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
+					var seq = d.getPart().getSequenceFile();
+
+					if(seq != null) {
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, seq, d.getPart());
+                    } else {
+                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
+                    }
 				}
 			})
 			.on("contextmenu", function(d) {				
