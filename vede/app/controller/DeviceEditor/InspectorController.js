@@ -246,7 +246,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
-        if(this.selectedPart) {
+        if(this.selectedCell) {
             // If the part is not owned by a bin yet, add it to the bin.
 //            if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
 //                                                         this.selectedPart) < 0) {
@@ -317,12 +317,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
                                     if(bin)
                                     {
-                                        self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
-                                        self.onReRenderDECanvasEvent();
-                                        selectWindow.close();
+                                        self.activeProject.parts().add(part);
+                                        self.selectedCell.setPart(part);
                                         self.selectedPart = part;
-                                        self.onReRenderDECanvasEvent();
-                                        Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+
+                                        selectWindow.close();
                                     }
                                     else
                                     {

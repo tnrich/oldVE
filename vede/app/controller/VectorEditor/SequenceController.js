@@ -125,8 +125,15 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         this.activeTab = newTab;
 
-        if(newTab.initialCls == "VectorEditorPanel") {
+        if(newTab.initialCls === "VectorEditorPanel") {
             this.onSequenceManagerChanged(newTab.model);
+
+            this.caretIndex = 0;
+            this.select(newTab.options.selection.start, newTab.options.selection.end);
+        }
+
+        if(oldTab.initialCls === "VectorEditorPanel") {
+
         }
     },
     
