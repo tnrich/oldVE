@@ -64,13 +64,10 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
 			.on("dblclick", function(d) {
 				if(!d.getPart()) {
-					gridManager.onOpenPartLibraryRequest(d, d3.select(this.parentNode));
-					// Remember to change the listener to the following event.
-					//Vede.application.fireEvent("OpenPartLibrary");
+					Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
 				} else {
 					//debugger;
 					var seqID = d.getPart().get("sequencefile_id");
-					//var seqStore = Teselagen.manager.ProjectManager.sequenceStore.data.items;
 					var seqStore = Teselagen.manager.ProjectManager.workingProject.sequencesStore.data.items;
 					var seq = null;
 					for(var i=0;i<seqStore.length;i++) {
@@ -80,7 +77,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 						}
 					}
 					if(seq != null) Vede.application.fireEvent("OpenVectorEditor",seq);
-					else Vede.application.fireEvent("OpenPartLibrary"); // Not sure if this is right.
+					else Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
 				}
 			})
 			.on("contextmenu", function(d) {				

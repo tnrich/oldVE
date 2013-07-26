@@ -632,6 +632,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     	this.GridManager.selectGridCellByIndex(xIndex, yIndex);
     },
     
+    onClearPart: function() {
+    	
+    },
+    
     onLaunch: function() {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
@@ -715,13 +719,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 		
         /*this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
                             this.onInsertPartAtSelection,
-                            this);
-
+                            this);*/
+		
         this.application.on(this.DeviceEvent.CLEAR_PART,
                             this.onClearPart,
                             this);
 
-        this.application.on(this.DeviceEvent.REMOVE_ROW,
+        /*this.application.on(this.DeviceEvent.REMOVE_ROW,
                             this.onRemoveRow,
                             this);*/
 		
