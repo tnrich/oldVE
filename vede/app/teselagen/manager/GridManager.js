@@ -428,10 +428,10 @@ Ext.define("Teselagen.manager.GridManager", {
 	},
 	
 	clearSelectedPart: function() {
-		var me = Teselagen.manager.GridManager;
-		
-		
-		var cell = me.selectedGridPart.datum();
+		var cell = this.selectedGridPart.datum();
+
+        this.activeProject.parts().remove(cell.getPart());
+
 		cell.setPart();
 		cell.set("fas", "None");
 		cell.set("part_id", null);
@@ -440,6 +440,7 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertOptions(false);
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
+
 			
 		/*
 		var xIndex = parseInt(me.selectedGridBin.attr("deGridBinIndex"));
