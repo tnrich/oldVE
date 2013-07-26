@@ -175,9 +175,14 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.append("circle")
 			.attr("class", "gridPartEugeneRuleFlagSVG")
 			.attr("fill", function(d) {
-				if($.inArray(d.id,gridManager.partsWithRules)<0) d3.select(this).style("display","none");
-				else d3.select(this).style("display","inline");
-				return "orange";
+				var part = d.getPart();
+				if(part && gridManager.activeProject.getNumberOfRulesInvolvingPart(part)>0) {
+					d3.select(this).style("display","inline");
+					return "orange";
+				} else {
+					d3.select(this).style("display","none");
+					return;
+				}
 			})
 			.attr("r", 4.5)
 			.attr("pointer-events", "none")
@@ -185,4 +190,16 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("cy", this.gridManager.PART_HEIGHT-3-5);
 		
 	},
+	
+	
+	
+	
 });
+
+
+
+
+
+
+
+

@@ -59,7 +59,7 @@ Ext.define("Teselagen.models.Cell", {
     setPart: function(part) {
         this.part = part;
 
-        if(part.get("id")) {
+        if(part && part.get("id")) {
             this.set("part_id", part.getId());
         } else {
             this.set("part_id", null);

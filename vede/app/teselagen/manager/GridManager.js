@@ -379,6 +379,30 @@ Ext.define("Teselagen.manager.GridManager", {
 	removeRow: function() {
 		var me = this;
 		var rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
+		
+		this.selectedGridPart = null;
+		this.selectedGridBin = null;
+		
+		if(this.totalRows===1) {
+			var cell;
+			for(var i=0;i<this.totalColumns;i++) {
+				cell = this.activeProject.bins().getAt(i).cells().getAt(rowIndex);
+				cell.setPart();
+				cell.set("fas", "None");
+				cell.set("part_id", null);
+			}
+		} else {
+			for(var i=0;i<this.totalColumns;i++) {
+				this.activeProject.bins().getAt(i).cells().removeAt(rowIndex);
+			}			
+		}
+		
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
+		
+		/*var rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
 		var removedRules = me.removeRuleDataInvolvingRow(rowIndex);
 		me.updatePartsWithRules();
 		var removedRow = [];
@@ -409,24 +433,26 @@ Ext.define("Teselagen.manager.GridManager", {
         		data: removedRow,
         		rules: removedRules
         	}
-		});
+		});*/
 	},
 	
-	//>> And also toastr message.
 	clearSelectedPart: function() {
 		var me = Teselagen.manager.GridManager;
-		var removedRules = me.removeRuleDataInvolvingPart(me.selectedGridPart.datum().id, true);
-		d3.select(me.selectedGridPart.node().parentNode.parentNode).datum().parts[parseInt(me.selectedGridPart.attr("deGridRowIndex"))] = {phantom: true};	
-		me.updatePartsWithRules();
-		me.grid.remove();
-		me.renderGrid();
-		me.clearPartInfo();
-		//me.selectedGridPart.select(".gridPartTextSVG").text("");
-		//me.selectedGridPart.select(".gridPartFasIndicatorSVG").style("display","none");
 		
+		
+		var cell = me.selectedGridPart.datum();
+		cell.setPart();
+		cell.set("fas", "None");
+		cell.set("part_id", null);
+		
+		this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
+			
+		/*
 		var xIndex = parseInt(me.selectedGridBin.attr("deGridBinIndex"));
 		var yIndex = parseInt(me.selectedGridPart.attr("deGridRowIndex"));
-			
 		Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "PART",
         	data: {
@@ -437,7 +463,7 @@ Ext.define("Teselagen.manager.GridManager", {
         		rules: removedRules
         	}
 		});
-		me.selectPartByIndex(xIndex, yIndex);
+		me.selectPartByIndex(xIndex, yIndex);*/
 	},
 
     onGridPartRectSvgClick: function() {

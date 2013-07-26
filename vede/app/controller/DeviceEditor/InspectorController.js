@@ -484,6 +484,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             deletePartBtn.addCls("btnDisabled");
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.addCls("selectPartFocus");
+            
+            this.eugeneRulesGrid.store.clearData();
+            this.eugeneRulesGrid.view.refresh();
         }
 
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
@@ -512,6 +515,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         deletePartBtn.removeCls("selectedPartFocus");
         openPartLibraryBtn.setText("Select Part From Library");
         openPartLibraryBtn.addCls("selectPartFocus");
+        
+        this.eugeneRulesGrid.store.clearData();
+        this.eugeneRulesGrid.view.refresh();
         //this.eugeneRulesGrid.reconfigure();
     },
 
@@ -678,7 +684,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
         removeColumnMenuItem.disable();
 
-        this.toggleInsertOptions(false);
+        //this.toggleInsertOptions(false);
         this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
     },
 
@@ -705,7 +711,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
         }
     },
-
+    
+    onRemoveColumn: function() {
+    	this.clearPartInfo();
+    },
+    
+    onRemoveRow: function() {
+    	this.clearPartInfo();
+    },
+    
     toggleInsertOptions: function(state) {
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Above']")[0].setDisabled(!state||false);
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Below']")[0].setDisabled(!state||false);
@@ -1405,8 +1419,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.CLEAR_PART, this.onClearPart, this);
 
-        this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
+        //this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
+        this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumn, this);
 
+        this.application.on(this.DeviceEvent.REMOVE_ROW, this.onRemoveRow, this);
+        
         this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
 
         this.application.on("ruleNameChanged", this.onRuleNameChanged, this);

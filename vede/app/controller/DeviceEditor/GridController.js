@@ -150,7 +150,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.activeProject.parts().on("add", this.onAddToParts, this);
             this.activeProject.parts().on("update", this.onUpdateParts, this);
             this.activeProject.parts().on("remove", this.onRemoveFromParts, this);
-
+            
+            this.activeProject.rules().on("add", this.onAddToRules, this);
+            this.activeProject.rules().on("update", this.onUpdateRules, this);
+            this.activeProject.rules().on("remove", this.onRemoveFromRules, this);
+            
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
 
@@ -207,7 +211,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onRemoveFromParts: function() {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
+    
+    onAddToRules: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
 
+    onUpdateRules: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromRules: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+    
     onAddRowAbove: function() {
         this.GridManager.addRowAbove();
     },
@@ -647,7 +663,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
     
     onClearPart: function() {
+    	this.GridManager.clearSelectedPart();
+    },
+    
+    onRemoveColumn: function() {
     	
+    },
+    
+    onRemoveRow: function() {
+    	this.GridManager.removeRow();
     },
     
     onLaunch: function() {
@@ -738,10 +762,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on(this.DeviceEvent.CLEAR_PART,
                             this.onClearPart,
                             this);
-
-        /*this.application.on(this.DeviceEvent.REMOVE_ROW,
+        
+        this.application.on(this.DeviceEvent.REMOVE_COLUMN,
+			                this.onRemoveColumn,
+			                this);
+        
+        this.application.on(this.DeviceEvent.REMOVE_ROW,
                             this.onRemoveRow,
-                            this);*/
+                            this);
 		
         this.application.on(this.DeviceEvent.SELECT_BIN,
                             this.onSelectBin,

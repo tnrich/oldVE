@@ -815,7 +815,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         //return pDevice.isPartInCollection(pPart);
     },
-
+    
     /**
      * Determines bin that pCell is in and returns its index.
      * @param {Teselagen.models.DeviceDesign} pDevice
