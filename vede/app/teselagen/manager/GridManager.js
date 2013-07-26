@@ -467,7 +467,6 @@ Ext.define("Teselagen.manager.GridManager", {
 	},
 
     onGridPartRectSvgClick: function() {
-        //Teselagen.manager.GridManager.selectPart(this);
     	var gridCell = d3.select(this.parentNode);
     	var xIndex = parseInt(d3.select(this.parentNode.parentNode.parentNode).attr("deGridBinIndex"));
 		var yIndex = parseInt(gridCell.attr("deGridRowIndex"));
@@ -509,8 +508,6 @@ Ext.define("Teselagen.manager.GridManager", {
 		    .attr("isSelected", "true");
 		
 		gridManager.selectedGridPart = d3.select(gridCell.parentNode);
-		
-        //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridManager.selectedGridPart.datum());
 	},
 
 	selectGridCellByIndex: function(xIndex, yIndex) {
