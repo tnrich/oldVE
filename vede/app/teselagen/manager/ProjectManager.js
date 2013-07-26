@@ -415,8 +415,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
                                 design.set("name",text);
                                 design.set("project_id",project.data.id);
+                                for (var i = 0; i < 2; i++) {
+                                    var newPart = Ext.create("Teselagen.models.Part",{phantom:true});
+                                    Teselagen.manager.DeviceDesignManager.addPartToBin(design, newPart, 0);
+                                }                            
                                 project.designs().add(design);
-
                                 design.save({
                                     success: function(record, operation) {
                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
@@ -440,11 +443,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         });
                         */
                         afterPartsSaved();
-
                     }
                 } else { return false; }
-
-            };
+        };
         Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
 
     },

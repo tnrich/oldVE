@@ -34,7 +34,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     init: function() {
         this.callParent();
         this.application.on(Teselagen.event.VisibilityEvent.SHOW_MAP_CARET_CHANGED, this.onShowMapCaretChanged, this);
-        this.application.on(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED, this.onPieNameBoxClick);
+        this.application.on(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED, this.onPieNameBoxClick, this);
 
         this.control({
             "#mainAppPanel": {
@@ -647,7 +647,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         //console.log("("+relX+", "+relY+");  "+relDist);
     },
 
-    onPieNameBoxClick: function() {
+    onPieNameBoxClick: function(show) {
         var menuitem = this.activeTab.down("component[identifier='mapCaretMenuItem']");
         var checked = menuitem.checked;
 

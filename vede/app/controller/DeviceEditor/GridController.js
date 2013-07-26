@@ -1223,7 +1223,24 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onPartSelected: function(j5Part) {
         this.deHighlight(j5Part);
+        if(this.selectedPart) {
         this.selectedPart.select();
+        } else {
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(
+                                                        this.activeProject,
+                                                        this.selectedBin.getBin());
+            var gridParts = this.getGridPartsFromJ5Part(j5Part);
+            for(var i = 0; i<gridParts.length; i++) {
+                var parentBinIndex = this.DeviceDesignManager.getBinIndex(
+                                                        this.activeProject,
+                                                        gridParts[i].parentBin);
+
+                if(parentBinIndex == selectedBinIndex) {
+                    gridParts[i].select();
+                    this.selectedPart = gridParts[i];
+                }
+            }
+        } 
         this.highlight(j5Part);
     },
 

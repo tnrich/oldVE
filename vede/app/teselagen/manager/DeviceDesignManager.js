@@ -164,6 +164,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     getRulesInvolvingPart: function(pDevice, pPart) {
         return pDevice.getRulesInvolvingPart(pPart);
     },
+
+    getNumberOfRulesInvolvingPart: function(pDevice, pPart) {
+        return pDevice.getNumberOfRulesInvolvingPart(pPart);
+    },
+
     /**
      * Returns the first EugeneRule in the store that has the given name.
      * @param {Teselagen.models.DeviceDesign} pDevice

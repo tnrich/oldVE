@@ -343,8 +343,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     getRulesInvolvingPart: function(pPart) {
         var constants = Teselagen.constants.Constants;
 
-        this.rules().clearFilter();
-
+        this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart) {
                 return true;
@@ -360,11 +359,24 @@ Ext.define("Teselagen.models.DeviceDesign", {
         return this.rules();
     },
 
+    getNumberOfRulesInvolvingPart: function(pPart) {
+        this.rules().clearFilter(true);
+        var numRules = 0
+        var rules = this.rules();
+        rules.each(function (rule) {
+            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
+                numRules++
+            }
+        });  
+        return numRules;    
+    },
+
     /**
      * @param {String} pName
      * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pName) {
+        this.rules().clearFilter(true);
         var index = this.rules().find("name", pName);
         if (index !== -1) {
             return this.rules().getAt(index);
@@ -379,6 +391,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @returns {Boolean} True if unique, false if not.
      */
     isUniqueRuleName: function(pName) {
+        this.rules().clearFilter(true);
         var index = this.rules().find("name", pName);
 
         if (index === -1) {
