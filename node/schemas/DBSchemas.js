@@ -112,7 +112,7 @@ module.exports = function(db) {
 		next();
 	});
 
-    PartSchema.statics.generateDefinitionHash = function(user, project, part, cb) {
+    PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
         db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
             var hashArray = [part.genbankStartBP,
                              part.endBP,
