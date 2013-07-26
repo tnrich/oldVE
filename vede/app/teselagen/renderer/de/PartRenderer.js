@@ -63,7 +63,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			})
 			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
 			.on("dblclick", function(d) {
-				if(d.get("part_id")===null) {
+				if(!d.getPart()) {
 					gridManager.onOpenPartLibraryRequest(d, d3.select(this.parentNode));
 					// Remember to change the listener to the following event.
 					//Vede.application.fireEvent("OpenPartLibrary");
@@ -129,9 +129,14 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("font-weight", 500)
 			.text(function(d) {
                 var part = d.getPart();
+
+                if(!part) {
+                    return "";
+                }
+
                 var partName = part.get("name");
 
-                if(!part || !partName) {
+                if(!partName) {
                     return "";
                 } else if(partName.length > 14) {
                     return partName.substring(0, 14) + '..';

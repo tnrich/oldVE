@@ -30,7 +30,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     ReRenderDevice: function(){
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.GridManager.renderDevice(tab.model);
+        this.GridManager.renderGrid(tab.model);
     },
 
     /**
@@ -93,13 +93,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.down("component[cls='designGrid']");
 
             if(this.activeBins) {
-                this.activeBins.un("datachanged", this.onBinsChanged, this);
+                this.activeBins.un("add", this.onAddToBins, this);
+                this.activeBins.un("update", this.onUpdateBins, this);
+                this.activeBins.un("remove", this.onRemoveFromBins, this);
             	
                 // Unset listeners for the parts store of each bin.
                 this.activeBins.each(function(bin) {
                     var parts = bin.cells();
 
-                    parts.un("datachanged", this.onPartsChanged, this);
+                    parts.un("add", this.onAddToParts, this);
+                    parts.un("update", this.onUpdateParts, this);
+                    parts.un("remove", this.onRemoveFromParts, this);
                 }, this);
             }
 
@@ -124,10 +128,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
             this.activeBins.each(function(bin) {
-                bin.cells().on("datachanged", this.onCellsChanged, this);
+                bin.cells().on("add", this.onAddToCells, this);
+                bin.cells().on("update", this.onUpdateCells, this);
+                bin.cells().on("remove", this.onRemoveFromCells, this);
             }, this);
 
-            this.activeProject.parts().on("datachanged", this.onPartsChanged, this);
+            this.activeProject.parts().on("add", this.onAddToParts, this);
+            this.activeProject.parts().on("update", this.onUpdateParts, this);
+            this.activeProject.parts().on("remove", this.onRemoveFromParts, this);
 
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
@@ -142,7 +150,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onAddToBins: function(store, addedBins) {
         for(var i = 0; i < addedBins.length; i++) {
-            addedBins[i].cells().on("datachanged", this.onCellsChanged, this);
+            addedBins[i].cells().on("add", this.onAddToCells, this);
+            addedBins[i].cells().on("update", this.onUpdateCells, this);
+            addedBins[i].cells().on("remove", this.onRemoveFromCells, this);
         }
 
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
@@ -153,16 +163,34 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onRemoveFromBins: function(store, removedBin) {
-        removedBin.cells().un("datachanged", this.onCellsChanged, this);
+        removedBin.cells().un("add", this.onAddToCells, this);
+        removedBin.cells().un("update", this.onUpdateCells, this);
+        removedBin.cells().un("remove", this.onRemoveFromCells, this);
 
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
-    onCellsChanged: function() {
+    onAddToCells: function() {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
-    onPartsChanged: function() {
+    onUpdateCells: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromCells: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onAddToParts: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onUpdateParts: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromParts: function() {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 

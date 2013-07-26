@@ -351,7 +351,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onCellSelected: function(cell) {
         this.selectedCell = cell;
 
-        if(cell.get("part_id")) {
+        if(cell.getPart()) {
             var part = cell.getPart();
             this.onPartSelected(part, this.DeviceDesignManager.getCellBinAssignment(this.activeProject, cell));
         } else {
