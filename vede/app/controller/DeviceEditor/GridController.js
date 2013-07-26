@@ -30,7 +30,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     ReRenderDevice: function(){
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.GridManager.renderDevice(tab.model);
+        this.GridManager.renderGrid(tab.model);
     },
 
     /**
