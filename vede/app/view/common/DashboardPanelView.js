@@ -442,7 +442,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 height: 30,
                                 cls: 'sequenceLibrarySearchField',
                                 width: '98%',
-                                emptyText: 'Search',
+                                emptyText: 'Search Library',
                                 emptyCls: 'empty-search-field',
                                 margin: 13
                             },
@@ -514,7 +514,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 height: 30,
                                 cls: 'partLibrarySearchField',
                                 width: '98%',
-                                emptyText: 'Search',
+                                emptyText: 'Search Library',
                                 emptyCls: 'empty-search-field',
                                 margin: 13
                             },
