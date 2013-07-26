@@ -60,7 +60,7 @@ module.exports = function(app) {
         //var id = req.body.id;
         var model = req.body;
 
-        model = fillEmptyParts(model);
+        //model = fillEmptyParts(model);
 
         DeviceDesign.findById(req.params.devicedesign_id, function(err, devicedesign) {
 

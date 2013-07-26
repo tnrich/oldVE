@@ -21,23 +21,33 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: "json",
             //This method should resolve associations and prepare data before saving design
             getRecordData: function(record) {
+
+                record.bins().each(function(bin){
+                    bin.cells().each(function(cell){
+                        cell.setPart(cell.getPart());
+                    });
+                });
+
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
 
-                var rules = associatedData.rules;
+                var parts = [];
 
-                var binsTempArray = [];
+                associatedData.parts.forEach(function(part,partKey){
+                    if(part.id) parts.push(part.id);
+                    else console.warn("Trying to save non-saved part");
+                });
 
-                /*data.bins.forEach(function(bin,binKey){
-                    var partIds = binsTempArray[binKey];
-                    bin.parts = partIds;
-                });*/
 
-                data.rules = rules;
+                data.bins = associatedData.bins;
+                data.parts = parts;
+                data.rules = associatedData.rules;
 
-                data.rules.forEach(function(rule, ruleKey) {
-                    delete data.rules[ruleKey]["Teselagen.models.Part"];
-                    delete data.rules[ruleKey]["teselagen.models.devicedesign_id"];
+                data.bins.forEach(function(bin){
+                    bin.cells.forEach(function(cell){
+                        delete cell.j5Bin;
+                        delete cell.j5bin_id;
+                    });
                 });
 
                 return data;
