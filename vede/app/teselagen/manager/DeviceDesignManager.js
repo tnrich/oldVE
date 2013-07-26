@@ -76,7 +76,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var bins = device.bins();
         var parts = device.parts();
         
-        bins.suspendEvents();
+        //bins.suspendEvents();
         
         parts.removeAll(true);
         parts.add(pParts);
@@ -86,8 +86,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         
         Teselagen.manager.DeviceDesignManager.enforceColumnLength(device);
         
-        bins.resumeEvents();
-        bins.fireEvent("datachanged");
+        //bins.resumeEvents();
+        //bins.fireEvent("datachanged");
         
         var err = device.validate();
         if (err.length > 0) {

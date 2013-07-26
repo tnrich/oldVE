@@ -102,7 +102,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 design.addToRules(eugeneRules[i]);
             }
 
-            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
             //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         }
     },
