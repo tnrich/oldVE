@@ -190,7 +190,7 @@ $grid-row-cell-font-size: 12px;
   opacity: 0.4;
   background-size: 17px;
 }
-
+  
 .projectAddBtn .x-tool-plus {
   background-position: center;
 }
@@ -213,5 +213,10 @@ $grid-row-cell-font-size: 12px;
 #projectTreePanel_header-targetEl .x-tool-over .x-tool-plus {
   opacity: 1;
   background-position: center !important;
+}
+
+.explorerMenu {
+  border-radius: 3px !important;
+  background: rgba(236, 240, 241, 0.5) !important;
 }
 

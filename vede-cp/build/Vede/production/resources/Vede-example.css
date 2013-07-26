@@ -21156,6 +21156,12 @@ body.x-nbr .x-tab-default-right-frameInfo {
   background-position: center !important;
 }
 
+/* line 218, ../../../../sass/src/view/common/ProjectPanelView.scss */
+.explorerMenu {
+  border-radius: 3px !important;
+  background: rgba(236, 240, 241, 0.5) !important;
+}
+
 /*Header Panel View css*/
 /* line 2, ../../../../sass/src/view/common/HeaderPanelView.scss */
 .navbar-inner {
@@ -23091,6 +23097,21 @@ body.x-nbr .x-tab-default-right-frameInfo {
   background: 0 !important;
   border: 0 !important;
   border-bottom: 0;
+}
+
+/* line 128, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.sequenceLibrarySearchField .x-form-text, .partLibrarySearchField .x-form-text {
+  background-image: url(images/ux/magnifier.png) !important;
+  background-position: 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-left: 40px;
+}
+
+/* line 136, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.empty-search-field {
+  padding-left: 40px;
+  opacity: 0.6;
 }
 
 /* line 2, ../../../../sass/src/view/ve/VectorEditorMainToolBar.scss */
