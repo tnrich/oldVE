@@ -348,7 +348,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the event that a cell is selected on the grid.
      * @param {Teselagen.models.Cell} cell The cell model that has been selected.
      */
-    onCellSelected: function(cell) {
+    onCellSelected: function(cell, xIndex, yIndex) {
         this.selectedCell = cell;
 
         if(cell.get("part_id")) {
@@ -515,14 +515,33 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the event that a bin is selected on the grid.
      * @param {Teselagen.models.J5Bin} j5Bin The selected bin.
      */
-    onBinSelected: function (j5Bin) {
+    onBinSelected: function (j5Bin, binIndex) {
+    	if(!j5Bin) j5Bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         var selectionModel = this.columnsGrid.getSelectionModel();
 //        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+        var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+        var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
+        var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
+        
         this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
-
+        
         //console.log(selectedPart);
-        selectionModel.select(j5Bin);
+        selectionModel.select(j5Bin, false, true);
+        
+        changePartDefinitionBtn.disable();
+        changePartDefinitionBtn.addCls("btnDisabled");
+        deletePartBtn.disable();
+        clearPartMenuItem.disable();
+        deletePartBtn.addCls("btnDisabled");
+        openPartLibraryBtn.disable();
+        openPartLibraryBtn.setText("Select Part From Library");
+        openPartLibraryBtn.removeCls("selectPartFocus");
+        openPartLibraryBtn.addCls("btnDisabled");
+
+        removeColumnMenuItem.enable();
     },
 
     /**
@@ -1122,26 +1141,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     /**
      * Handles the event that a bin is selected in the Inspector.
      */
-    onGridBinSelect: function (grid, j5Bin) {
-            var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
-            var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
-            var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
-            var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
-            var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
-
-            changePartDefinitionBtn.disable();
-            changePartDefinitionBtn.addCls("btnDisabled");
-            deletePartBtn.disable();
-            clearPartMenuItem.disable();
-            deletePartBtn.addCls("btnDisabled");
-            openPartLibraryBtn.disable();
-            openPartLibraryBtn.setText("Select Part From Library");
-            openPartLibraryBtn.removeCls("selectPartFocus");
-            openPartLibraryBtn.addCls("btnDisabled");
-
-            removeColumnMenuItem.enable();
-
-        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+    onGridBinSelect: function (grid, j5Bin, binIndex) {
+    	this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin, binIndex);
     },
 
     /**

@@ -240,8 +240,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     addNewBinByIndex: function(pIndex, pName) {
     	var added = false;
         var cnt = this.bins().count();
+        var totalRows = Teselagen.manager.DeviceDesignManager.findMaxNumParts(this);
         
         if (pName === "" || pName === undefined || pName === null) {
+        	var maxBin = 0;
         	this.bins().each(function(bin) {
                 var name = bin.get("binName");
                 var binNumber;
@@ -265,9 +267,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
              });
         }
         
-        this.bins().insert(pIndex+1, j5Bin);
+        if (pIndex >= 0 && pIndex < cnt) this.bins().insert(pIndex, j5Bin); 
+        else this.bins().add(j5Bin);
+        
         var phantomCells = [];
-		for(var i=0;i<this.totalRows;i++) {
+		for(var i=0;i<totalRows;i++) {
 			var phantomCell = Ext.create("Teselagen.models.Cell", {
 				index: i
 			});
@@ -275,49 +279,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
 			phantomCells.push(phantomCell);
 		}	
 		j5Bin.cells().add(phantomCells);
-    	
-    	
-    	
-    	
-    	
-    	var added   = false;
-
-        var cnt     = this.bins().count();
-
-        if (pName === "" || pName === undefined || pName === null) {
-            var maxBin = 0;
-
-            this.bins().each(function(bin) {
-                var name = bin.get("binName");
-                var binNumber;
-
-                if(name.match(/^Bin\d+$/)) {
-                    binNumber = parseInt(name.match(/\d+$/)[0]);
-
-                    if(binNumber > maxBin) {
-                        maxBin = binNumber;
-                    }
-                }
-            });
-
-            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
-                binName: "Bin" + (maxBin + 1)
-            });
-        } else {
-            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
-                binName: pName
-            });
-        }
-
-        if (pIndex >= 0 && pIndex < this.bins().count()) {
-            //this.bins().splice(pIndex, 0, j5Bin);
-            this.bins().insert(pIndex, j5Bin);
-        } else {
-            //Ext.Array.include(this.bins(), j5Bin);
-            this.bins().add(j5Bin);
-        }
-
-        var newCnt  = this.binCount();
+        
+		var newCnt  = this.bins().count();
         if (newCnt > cnt) {
             added = true;
         }

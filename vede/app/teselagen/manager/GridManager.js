@@ -261,37 +261,9 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	addColumnRight: function() {
 		var me = this;
-		me.newColumnSuffixNum++;
 		var columnIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
 		
-		var maxBin = 0;
-
-        this.activeProject.bins().each(function(bin) {
-            var name = bin.get("binName");
-            var binNumber;
-
-            if(name.match(/^Bin\d+$/)) {
-                binNumber = parseInt(name.match(/\d+$/)[0]);
-
-                if(binNumber > maxBin) {
-                    maxBin = binNumber;
-                }
-            }
-        });
-
-        var j5Bin = Ext.create("Teselagen.models.J5Bin", {
-            binName: "Bin" + (maxBin + 1)
-        });
-        this.activeProject.bins().insert(columnIndex+1, j5Bin);
-        var phantomCells = [];
-		for(var i=0;i<this.totalRows;i++) {
-			var phantomCell = Ext.create("Teselagen.models.Cell", {
-				index: i
-			});
-			phantomCell.setJ5Bin(j5Bin);
-			phantomCells.push(phantomCell);
-		}	
-		j5Bin.cells().add(phantomCells);
+		this.activeProject.addNewBinByIndex(columnIndex+1);
 		
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
@@ -304,7 +276,7 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
-        //me.selectGridBinHeaderByIndex(columnIndex+1);
+        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, null, columnIndex+1);
         
         /*Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
@@ -319,10 +291,11 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	addColumnLeft: function() {
 		var me = this;
-		me.newColumnSuffixNum++;
 		var columnIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
 		
-		var newBin = {
+		this.activeProject.addNewBinByIndex(columnIndex);
+		
+		/*var newBin = {
 			iconID: "USER-DEFINED",
 			directionForward: true,
 			parts: []
@@ -346,7 +319,7 @@ Ext.define("Teselagen.manager.GridManager", {
 			}
 		}
 		this.collectionData.splice(columnIndex,0,newBin);	
-		
+		*/
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
 		this.totalColumns++;
@@ -358,9 +331,10 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
+        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, null, columnIndex);
         //me.selectGridBinHeaderByIndex(columnIndex);
         
-        Teselagen.manager.GridCommandPatternManager.addCommand({
+        /*Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
         	data: {
         		type: "ADD",
@@ -369,7 +343,7 @@ Ext.define("Teselagen.manager.GridManager", {
         		data: newBin,
         		digests: digests
         	}
-		});
+		});*/
 	},
 	
 	removeColumn: function() {
@@ -477,49 +451,69 @@ Ext.define("Teselagen.manager.GridManager", {
 	},
 
     onGridPartRectSvgClick: function() {
-        Teselagen.manager.GridManager.selectPart(this);
+        //Teselagen.manager.GridManager.selectPart(this);
+    	var gridCell = d3.select(this.parentNode);
+    	var xIndex = parseInt(d3.select(this.parentNode.parentNode.parentNode).attr("deGridBinIndex"));
+		var yIndex = parseInt(gridCell.attr("deGridRowIndex"));
+    	Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridCell.datum(), xIndex, yIndex);
     },
 	
-	selectPart: function(gridPart) {
+	selectGridCell: function(gridCell) {
 		var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(true);
 		gridManager.GridController.toggleInsertOptions(true);
 		gridManager.GridController.toggleInsertRowAboveOptions(true);
 		gridManager.GridController.toggleInsertRowBelowOptions(true);
 		
-		if(d3.select(gridPart.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
+		if(d3.select(gridCell.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG").attr("isSelected")!="true") {
 			d3.selectAll(".gridBinHeaderRectSVG")
 				.attr("fill", gridManager.BIN_FILL_COLOR)
 				.attr("stroke", gridManager.BIN_OUTLINE_COLOR)
 				.attr("isSelected", "false");
-			d3.select(gridPart.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG")
+			d3.select(gridCell.parentNode.parentNode.parentNode).select(".gridBinHeaderRectSVG")
 				.transition()
 			    .duration(30)
 			    .attr("stroke", gridManager.BIN_SELECTED_OUTLINE_COLOR)
 			    .attr("fill", gridManager.BIN_SELECTED_FILL_COLOR)
 			    .attr("isSelected", "true");
-			gridManager.selectedGridBin = d3.select(gridPart.parentNode.parentNode.parentNode);
+			gridManager.selectedGridBin = d3.select(gridCell.parentNode.parentNode.parentNode);
 		}
 		
-		if(d3.select(gridPart).attr("isSelected")=="true") return;
+		if(d3.select(gridCell).attr("isSelected")=="true") return;
 		
 		d3.selectAll(".gridPartRectSVG")
 			.attr("fill", gridManager.PART_FILL_COLOR)
 			.attr("stroke", gridManager.PART_OUTLINE_COLOR)
 			.attr("isSelected", "false");
 						
-		d3.select(gridPart).transition()
+		d3.select(gridCell).transition()
 		    .duration(30)
 		    .attr("stroke", gridManager.PART_SELECTED_OUTLINE_COLOR)
 		    .attr("fill", gridManager.PART_SELECTED_FILL_COLOR)
 		    .attr("isSelected", "true");
 		
-		gridManager.selectedGridPart = d3.select(gridPart.parentNode);
-
-        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridManager.selectedGridPart.datum());
+		gridManager.selectedGridPart = d3.select(gridCell.parentNode);
+		
+        //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridManager.selectedGridPart.datum());
 	},
 
-    selectBin: function(gridBin) {
+	selectGridCellByIndex: function(xIndex, yIndex) {
+    	var me = Teselagen.manager.GridManager;
+    	var gridCell = me.parentSVG.selectAll(".gridBinSVG")
+    		.filter(function(d, i) {return i===xIndex;})
+    		.selectAll(".gridPartSVG")
+    		.filter(function(d, i) {return i===yIndex;})
+    		.select(".gridPartRectSVG")
+    		.node();
+    	me.selectGridCell(gridCell);
+    },
+    
+	onGridBinHeaderRectSvgClick: function() {
+		var bin = d3.select(this.parentNode.parentNode);
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, bin.datum(), parseInt(bin.attr("deGridBinIndex")));
+	},
+	
+    selectGridBinHeader: function(gridBin) {
         var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(false);
 		gridManager.GridController.toggleInsertOptions(true);
@@ -547,15 +541,18 @@ Ext.define("Teselagen.manager.GridManager", {
 		    .attr("fill", gridManager.BIN_SELECTED_FILL_COLOR)
 		    .attr("isSelected", "true");
 		
-		gridManager.selectedGridBin = d3.select(gridBin.parentNode.parentNode);				
-
-        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, gridManager.selectedGridBin.datum());
-
+		gridManager.selectedGridBin = d3.select(gridBin.parentNode.parentNode);
     },
-	
-	onGridBinHeaderRectSvgClick: function() {
-	    Teselagen.manager.GridManager.selectBin(this);
-	},
+
+    selectGridBinHeaderByIndex: function(xIndex) {
+    	var me = Teselagen.manager.GridManager;
+    	var gridBinHeaderRect = me.parentSVG.selectAll(".gridBinSVG")
+    		.filter(function(d, i) {return i===xIndex;})
+    		.select(".gridBinHeaderRectSVG")
+    		.node();
+    	me.selectGridBinHeader(gridBinHeaderRect);
+    },
+    
 
     onFlipBinButtonClick: function() {
         var gridBin = d3.select(this.parentNode.parentNode);
@@ -587,20 +584,12 @@ Ext.define("Teselagen.manager.GridManager", {
         Teselagen.manager.GridManager.selectBin(gridBin);
     },
 
-	selectPartByIndex: function(xIndex, yIndex) {
-    	var me = Teselagen.manager.GridManager;
-    	var gridPart = me.parentSVG.selectAll(".gridBinSVG")
-    		.filter(function(d, i) {return i===xIndex;})
-    		.selectAll(".gridPartSVG")
-    		.filter(function(d, i) {return i===yIndex;})[0][0];
-    	me.selectPart(gridPart);
-    },
     
-    selectGridBinHeaderByIndex: function(xIndex) {
-    	var me = Teselagen.manager.GridManager;
-    	var gridBinHeader = me.parentSVG.selectAll(".gridBinSVG")
-    		.filter(function(d, i) {return i===xIndex;})
-    		.select(".gridBinHeaderSVG")[0][0];
-    	me.selectBin(gridBinHeader);
-    }
 });
+
+
+
+
+
+
+
