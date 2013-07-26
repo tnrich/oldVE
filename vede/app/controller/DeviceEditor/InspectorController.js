@@ -238,15 +238,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
         });
     },
-
-    onopenPartLibraryBtnClick: function () {
+    
+    onOpenPartLibraryBtnClick: function () {
+    	Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
+    },
+    
+    
+    onOpenPartLibrary: function () {
         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
         var currentTabEl = (currentTab.getEl());
 //        var selectedPartIndex = this.selectedBin.indexOfPart(this.selectedPart);
-
-        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
-
-        if(this.selectedPart) {
+        
+        if(this.selectedCell) {
             // If the part is not owned by a bin yet, add it to the bin.
 //            if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
 //                                                         this.selectedPart) < 0) {
@@ -315,17 +318,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part){
                                 Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part,part.get("name"),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    if(bin)
-                                    {
-                                        self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
-                                        self.onReRenderDECanvasEvent();
-                                        selectWindow.close();
+                                    if(bin) {
+                                        self.activeProject.parts().add(part);
+                                        self.selectedCell.setPart(part);
                                         self.selectedPart = part;
-                                        self.onReRenderDECanvasEvent();
-                                        Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
-                                    }
-                                    else
-                                    {
+                                        var yIndex = self.activeProject.bins().getAt(self.selectedBinIndex).cells().indexOf(self.selectedCell);
+                                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, 
+                                        		self.selectedCell, self.selectedBinIndex, yIndex);
+                                        
+                                        selectWindow.close();
+                                    } else {
                                         Ext.MessageBox.alert("Error","Failed mapping part from library");
                                     }
                                 });
@@ -348,15 +350,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the event that a cell is selected on the grid.
      * @param {Teselagen.models.Cell} cell The cell model that has been selected.
      */
-    onCellSelected: function(cell) {
+    onCellSelected: function(cell, xIndex, yIndex) {
         this.selectedCell = cell;
 
-        if(cell.get("part_id")) {
+        if(cell.getPart()) {
             var part = cell.getPart();
-            this.onPartSelected(part, this.activeProject.bins().indexOf(cell.getJ5Bin()));
+            this.onPartSelected(part, this.DeviceDesignManager.getCellBinAssignment(this.activeProject, cell));
         } else {
             this.selectedPart = null;
-            this.onPartSelected(null, this.activeProject.bins().indexOf(cell.getJ5Bin()));
+            this.onPartSelected(null, this.DeviceDesignManager.getCellBinAssignment(this.activeProject, cell));
         }
     },
 
@@ -367,7 +369,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPartSelected: function (j5Part, binIndex) {
         this.selectedBinIndex = binIndex;
-
+        
+        this.columnsGrid.getSelectionModel().select(binIndex, false, true);
+        
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -385,7 +389,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
         removeRowMenuItem.enable();
-
+        
         if(this.selectedBinIndex !== 0) {
             // Turn the FAS_LIST array into an array of arrays, as required by
             // the store's loadData function.
@@ -402,7 +406,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             fasForm.down("combobox").store.loadData(fasArray);
         }
 
-        // If a j5Part exists for the selected part, load it. If not, create a
+        // If selected part exists, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
@@ -456,13 +460,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 deletePartBtn.addCls("btnDisabled");
             }
 
-            if(j5Part.get("fas") === "") {
+            if(this.selectedCell.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
             } else {
-                fasForm.loadRecord(j5Part);
+                fasForm.loadRecord(this.selectedCell);
             }
-//            fasCombobox.setValue(this.selectedBin.getFas(this.selectedPartIndex));
+
             this.selectedPart = j5Part;
+
+            var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                            this.selectedPart);
+
+            this.eugeneRulesGrid.reconfigure(rulesStore);
         } else {
             var newPart = Ext.create("Teselagen.models.Part");
             partPropertiesForm.loadRecord(newPart);
@@ -475,15 +484,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             deletePartBtn.addCls("btnDisabled");
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.addCls("selectPartFocus");
-
-            this.selectedPart = newPart;
-
+            
+            this.eugeneRulesGrid.store.clearData();
+            this.eugeneRulesGrid.view.refresh();
         }
-
-        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                        this.selectedPart);
-
-        this.eugeneRulesGrid.reconfigure(rulesStore);
 
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
     },
@@ -511,6 +515,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         deletePartBtn.removeCls("selectedPartFocus");
         openPartLibraryBtn.setText("Select Part From Library");
         openPartLibraryBtn.addCls("selectPartFocus");
+        
+        this.eugeneRulesGrid.store.clearData();
+        this.eugeneRulesGrid.view.refresh();
         //this.eugeneRulesGrid.reconfigure();
     },
 
@@ -518,14 +525,33 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the event that a bin is selected on the grid.
      * @param {Teselagen.models.J5Bin} j5Bin The selected bin.
      */
-    onBinSelected: function (j5Bin) {
+    onBinSelected: function (j5Bin, binIndex) {
+    	if(!j5Bin) j5Bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         var selectionModel = this.columnsGrid.getSelectionModel();
 //        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+        var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+        var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
+        var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
+        
         this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
-
+        
         //console.log(selectedPart);
-        selectionModel.select(j5Bin);
+        selectionModel.select(j5Bin, false, true);
+        
+        changePartDefinitionBtn.disable();
+        changePartDefinitionBtn.addCls("btnDisabled");
+        deletePartBtn.disable();
+        clearPartMenuItem.disable();
+        deletePartBtn.addCls("btnDisabled");
+        openPartLibraryBtn.disable();
+        openPartLibraryBtn.setText("Select Part From Library");
+        openPartLibraryBtn.removeCls("selectPartFocus");
+        openPartLibraryBtn.addCls("btnDisabled");
+
+        removeColumnMenuItem.enable();
     },
 
     /**
@@ -553,7 +579,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
     onPartNameFieldBlur: function (nameField) {
-        if(this.selectedPart) {
+        if(this.selectedCell) {
             var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
             var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
             var newName = nameField.getValue();
@@ -567,25 +593,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
                 // If the selected part is not in the device already, add it.
                 //if(self.selectedPart.get("phantom") ||
-                debugger;
-                if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
-                                                             self.selectedPart) < 0) {
-                    self.selectedPart = Ext.create("Teselagen.models.Part");
-                    self.selectedPart.set("phantom", false);
+                if(!self.selectedPart) {
+                    self.selectedPart = self.inspector.down("form[cls='PartPropertiesForm']").getRecord();
                     self.selectedPart.set("name", newName);
 
-                    self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, self.selectedPart);
+                    self.activeProject.parts().add(self.selectedPart);
+                    self.selectedCell.setPart(self.selectedPart);
                 } else {
-                    if(self.selectedPart.get("phantom")) {
-                        self.selectedPart.set("phantom", false);
-                    }
-
                     self.selectedPart.set("name", newName);
                 }
 
             }, "Another non-identical part with that name already exists in the design. Please input a different name.");
 
-            if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
+            if(!self.selectedPart) {
+                // Validating duplicated part failed.
+                return;
+            } else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
                 deletePartBtn.enable();
                 deletePartBtn.removeCls("btnDisabled");
                 deletePartBtn.addCls("selectPartFocus");
@@ -609,10 +632,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     //        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
             var newStrategy = box.getValue();
 
-            this.selectedPart.set("fas", newStrategy);
+            this.selectedCell.set("fas", newStrategy);
             this.columnsGrid.getView().refresh();
-
-            Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
         }
     },
 
@@ -663,7 +684,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
         removeColumnMenuItem.disable();
 
-        this.toggleInsertOptions(false);
+        //this.toggleInsertOptions(false);
         this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
     },
 
@@ -690,7 +711,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
         }
     },
-
+    
+    onRemoveColumn: function() {
+    	this.clearPartInfo();
+    },
+    
+    onRemoveRow: function() {
+    	this.clearPartInfo();
+    },
+    
     toggleInsertOptions: function(state) {
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Above']")[0].setDisabled(!state||false);
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Below']")[0].setDisabled(!state||false);
@@ -812,8 +841,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
             newOperand2 =
                 newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
-            newRule.set("operand2isNumber", true);
-            newRule.set("operand2Number", newOperand2);
+            newRule.set({
+            	"operand2isNumber": true, 
+            	"operand2Number": newOperand2
+        	});
         } else {
             newOperand2Name =
                 newEugeneRuleDialog.down("component[cls='operand2PartField']").getValue();
@@ -821,17 +852,36 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             newOperand2 = this.DeviceDesignManager.getPartByName(this.activeProject,
                                                                  newOperand2Name);
         }
+        
+        newRule.set({
+        	"name": newName,
+        	"negationOperator": newNegationOperator,
+        	"compositionalOperator": newCompositionalOperator
+        });
+        
+        newRule.setOperand2(newOperand2); 
+        
+        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, this.selectedPart);
+        this.activeProject.addToRules(newRule);
+        this.eugeneRulesGrid.reconfigure(rulesStore);
+        
+        newEugeneRuleDialog.close();
 
-        newRule.set("name", newName);
-        newRule.set("negationOperator", newNegationOperator);
-        newRule.set("compositionalOperator", newCompositionalOperator);
-        var self = this;
+        Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
+        
+        toastr.options.onclick = null;
+        toastr.info("Eugene Rule Added");
+        //Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
+        
+        
+        
+        
+        /*var self = this;
         // newOperand2.save({
         //     callback: function(){
         //         newRule.setOperand2(newOperand2);   
         //     }
         // });
-
         if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
             newOperand2.save({
                 callback: function(){
@@ -862,7 +912,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         toastr.options.onclick = null;
         toastr.info("Eugene Rule Added");
-        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
+        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);*/
     },
 
     /**
@@ -1128,27 +1178,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     /**
      * Handles the event that a bin is selected in the Inspector.
      */
-    onGridBinSelect: function (grid, j5Bin) {
-//        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
-            var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
-            var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
-            var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
-            var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
-            var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
-
-            changePartDefinitionBtn.disable();
-            changePartDefinitionBtn.addCls("btnDisabled");
-            deletePartBtn.disable();
-            clearPartMenuItem.disable();
-            deletePartBtn.addCls("btnDisabled");
-            openPartLibraryBtn.disable();
-            openPartLibraryBtn.setText("Select Part From Library");
-            openPartLibraryBtn.removeCls("selectPartFocus");
-            openPartLibraryBtn.addCls("btnDisabled");
-
-            removeColumnMenuItem.enable();
-
-        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+    onGridBinSelect: function (grid, j5Bin, binIndex) {
+    	this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin, binIndex);
     },
 
     /**
@@ -1382,14 +1413,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS, this.onReRenderDECanvasEvent, this);
 
-        this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onopenPartLibraryBtnClick, this);
+        this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onOpenPartLibrary, this);
 
         this.application.on(this.DeviceEvent.CHECK_J5_READY, this.onCheckj5Ready, this);
 
         this.application.on(this.DeviceEvent.CLEAR_PART, this.onClearPart, this);
 
-        this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
+        //this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
+        this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumn, this);
 
+        this.application.on(this.DeviceEvent.REMOVE_ROW, this.onRemoveRow, this);
+        
         this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
 
         this.application.on("ruleNameChanged", this.onRuleNameChanged, this);
@@ -1428,7 +1462,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 select: this.onGridBinSelect
             },
             "button[cls='openPartLibraryBtn']": {
-                click: this.onopenPartLibraryBtnClick
+                click: this.onOpenPartLibraryBtnClick
             },
             "button[cls='deletePartBtn']": {
                 click: this.onDeletePartBtnClick

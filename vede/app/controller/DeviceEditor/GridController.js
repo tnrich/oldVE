@@ -28,9 +28,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     GridManager: null,
     tabPanel: null,
 
-    onReRenderDECanvasEvent: function(){
+    ReRenderDevice: function(){
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.onTabChange(tab,tab,tab);
+        this.GridManager.renderGrid(tab.model);
     },
 
     /**
@@ -93,13 +93,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.down("component[cls='designGrid']");
 
             if(this.activeBins) {
-                this.activeBins.un("datachanged", this.onBinsChanged, this);
+                this.activeBins.un("add", this.onAddToBins, this);
+                this.activeBins.un("update", this.onUpdateBins, this);
+                this.activeBins.un("remove", this.onRemoveFromBins, this);
             	
                 // Unset listeners for the parts store of each bin.
                 this.activeBins.each(function(bin) {
                     var parts = bin.cells();
 
-                    parts.un("datachanged", this.onPartsChanged, this);
+                    parts.un("add", this.onAddToParts, this);
+                    parts.un("update", this.onUpdateParts, this);
+                    parts.un("remove", this.onRemoveFromParts, this);
                 }, this);
             }
 
@@ -111,6 +115,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }*/
 
             this.activeProject = newTab.model;
+            this.activeTab = newTab;
+
+            this.cutPartMenuItem = this.activeTab.down("menuitem[text='Cut Part']");
+            this.copyPartMenuItem = this.activeTab.down("menuitem[text='Copy Part']");
+            this.pastePartMenuItem = this.activeTab.down("menuitem[text='Paste Part']");
+            this.removeRowMenuItem = this.activeTab.down("menuitem[text='Remove Row']");
+            this.clearPartMenuItem = this.activeTab.down("menuitem[text='Clear Part']");
+            this.removeColumnMenuItem = this.activeTab.down("menuitem[text='Remove Column']");
+
+            this.columnLeftMenuItem = this.activeTab.down("menuitem[text='Column Left']");
+            this.columnRightMenuItem = this.activeTab.down("menuitem[text='Column Right']");
+
+            this.rowAboveMenuItem = this.activeTab.down("menuitem[text='Row Above']");
+            this.rowBelowMenuItem = this.activeTab.down("menuitem[text='Row Below']");
 
             this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
@@ -119,14 +137,24 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             this.activeBins = this.activeProject.bins();
 
-            this.activeBins.on("datachanged", this.onBinsChanged, this);
-            
-            this.activeBins.each(function(bin) {
-                var parts = bin.cells();
+            this.activeBins.on("add", this.onAddToBins, this);
+            this.activeBins.on("update", this.onUpdateBins, this);
+            this.activeBins.on("remove", this.onRemoveFromBins, this);
 
-                parts.on("datachanged", this.onPartsChanged, this);
+            this.activeBins.each(function(bin) {
+                bin.cells().on("add", this.onAddToCells, this);
+                bin.cells().on("update", this.onUpdateCells, this);
+                bin.cells().on("remove", this.onRemoveFromCells, this);
             }, this);
 
+            this.activeProject.parts().on("add", this.onAddToParts, this);
+            this.activeProject.parts().on("update", this.onUpdateParts, this);
+            this.activeProject.parts().on("remove", this.onRemoveFromParts, this);
+            
+            this.activeProject.rules().on("add", this.onAddToRules, this);
+            this.activeProject.rules().on("update", this.onUpdateRules, this);
+            this.activeProject.rules().on("remove", this.onRemoveFromRules, this);
+            
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
 
@@ -138,14 +166,64 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
     },
 
-    onBinsChanged: function() {
+    onAddToBins: function(store, addedBins) {
+        for(var i = 0; i < addedBins.length; i++) {
+            addedBins[i].cells().on("add", this.onAddToCells, this);
+            addedBins[i].cells().on("update", this.onUpdateCells, this);
+            addedBins[i].cells().on("remove", this.onRemoveFromCells, this);
+        }
+
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
-    onPartsChanged: function() {
+    onUpdateBins: function() {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
+    onRemoveFromBins: function(store, removedBin) {
+        removedBin.cells().un("add", this.onAddToCells, this);
+        removedBin.cells().un("update", this.onUpdateCells, this);
+        removedBin.cells().un("remove", this.onRemoveFromCells, this);
+
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onAddToCells: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onUpdateCells: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromCells: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onAddToParts: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onUpdateParts: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromParts: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+    
+    onAddToRules: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onUpdateRules: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+
+    onRemoveFromRules: function() {
+        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+    
     onAddRowAbove: function() {
         this.GridManager.addRowAbove();
     },
@@ -437,20 +515,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var me = this;
         var duplicated = false;
         var nonidentical = false;
-        if(pPart.get("id")) {
-            this.activeProject.parts().each(function(part, partIndex){
-                if(part.get("id")===pPart.get("id")) {
-                    if(binIndex === me.InspectorController.selectedBinIndex &&
-                        partIndex !== me.InspectorController.selectedPartIndex) {
-                        duplicated = true;
-                    }
-                }
-                // Phantom part will not have a sequencefile_id
-                else if(part.get("name")===name && part.get("sequencefile_id")) {
-                    nonidentical = true;
-                }
-            });
-        }
+
+        this.activeProject.parts().each(function(part, partIndex){
+            if(part.get("name") === name && part !== pPart) {
+                nonidentical = true;
+            }
+        });
+
         if(nonidentical)
         {
             Ext.MessageBox.show({
@@ -459,37 +530,68 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 buttons: Ext.MessageBox.OK,
                 icon:Ext.MessageBox.ERROR
             });
-        }
-        else if(duplicated) {
-            this.Logger.notifyWarn("Cannot insert a part twice in the same column");
-        }
-        else {
+        } else {
             cb();
         }
     },
 
     toggleCutCopyPastePartOptions: function(state){
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Cut Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Copy Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Paste Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Row']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Clear Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0].setDisabled(!state||false);
+        this.cutPartMenuItem.setDisabled(!state||false);
+        this.copyPartMenuItem.setDisabled(!state||false);
+        this.pastePartMenuItem.setDisabled(!state||false);
+        this.removeRowMenuItem.setDisabled(!state||false);
+        this.clearPartMenuItem.setDisabled(!state||false);
+        this.removeColumnMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Column Left']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Column Right']")[0].setDisabled(!state||false);
+        this.columnLeftMenuItem.setDisabled(!state||false);
+        this.columnRightMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertRowAboveOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Above']")[0].setDisabled(!state||false);
+        this.rowAboveMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertRowBelowOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Below']")[0].setDisabled(!state||false);
+        this.rowBelowMenuItem.setDisabled(!state||false);
     },
-
+    
+    onCutPartMenuItemClick: function() {
+    	this.application.fireEvent(this.DeviceEvent.CUT_PART);
+    },
+    
+    onCopyPartMenuItemClick: function() {
+    	this.application.fireEvent(this.DeviceEvent.COPY_PART);
+    },
+    
+    onPastePartMenuItemClick: function() {
+    	this.application.fireEvent(this.DeviceEvent.PASTE_PART);
+    },
+    
+    onCutPart: function() {
+    	var gridManager = Teselagen.manager.GridManager;
+    	if(gridManager.selectedGridPart) {
+    		
+    	}
+    },
+    
+    onCopyPart: function() {
+    	var gridManager = Teselagen.manager.GridManager;
+    	if(gridManager.selectedGridPart) {
+    		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
+    	}
+    },
+    
+    onPastePart: function() {
+    	var gridManager = Teselagen.manager.GridManager;
+    	var selectedCell = gridManager.selectedGridPart.datum();
+    	if(gridManager.clipboardPart && selectedCell) {
+    		selectedCell.setPart(gridManager.clipboardPart);
+    		//debugger;
+    	}
+    },
+    
     /*
     onCutPartMenuItemClick: function(){
         this.selectedClipboardPart = this.selectedPart.getPart();
@@ -551,8 +653,27 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.resumeLayouts(true);
     },
     */
-
-
+    
+    onSelectBin: function(j5Bin, binIndex) {
+    	this.GridManager.selectGridBinHeaderByIndex(binIndex);
+    },
+    
+    onSelectCell: function(cell, xIndex, yIndex) {
+    	this.GridManager.selectGridCellByIndex(xIndex, yIndex);
+    },
+    
+    onClearPart: function() {
+    	this.GridManager.clearSelectedPart();
+    },
+    
+    onRemoveColumn: function() {
+    	this.GridManager.removeColumn();
+    },
+    
+    onRemoveRow: function() {
+    	this.GridManager.removeRow();
+    },
+    
     onLaunch: function() {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
@@ -569,14 +690,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     init: function() {
         this.callParent();
         
-        /*
+        
         this.control({
             /*"DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
             },
             "button[cls='flipBinButton']": {
                 click: this.onFlipBinButtonClick
-            },
+            },*/
             //"component[cls='binHeader']": {
             //    render: this.addBinHeaderClickEvent
             //},
@@ -593,7 +714,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 click: this.onCutPartMenuItemClick
             }
         });
-        */
+        
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
@@ -620,31 +741,54 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,
                             this.onAddColumnRight,
-                            this); 
+                            this);
+        
+        this.application.on(this.DeviceEvent.CUT_PART,
+			                this.onCutPart,
+			                this);
 
+		this.application.on(this.DeviceEvent.COPY_PART,
+			                this.onCopyPart,
+			                this);
+
+		this.application.on(this.DeviceEvent.PASTE_PART,
+			                this.onPastePart,
+			                this);
+		
         /*this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
                             this.onInsertPartAtSelection,
-                            this);
-
+                            this);*/
+		
         this.application.on(this.DeviceEvent.CLEAR_PART,
                             this.onClearPart,
                             this);
-
+        
+        this.application.on(this.DeviceEvent.REMOVE_COLUMN,
+			                this.onRemoveColumn,
+			                this);
+        
         this.application.on(this.DeviceEvent.REMOVE_ROW,
                             this.onRemoveRow,
                             this);
-
+		
         this.application.on(this.DeviceEvent.SELECT_BIN,
                             this.onSelectBin,
                             this);
-
-        this.application.on(this.DeviceEvent.MAP_PART,
+        
+        this.application.on(this.DeviceEvent.SELECT_CELL,
+			                this.onSelectCell,
+			                this);
+        /*this.application.on(this.DeviceEvent.MAP_PART,
                             this.onPartMapped,
                             this);*/
 
 
         this.application.on(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME,
                             this.onValidateDuplicatedPartNameEvent,
+                            this);
+
+        this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS,
+                            this.ReRenderDevice,
                             this);
 
         /*this.application.on(this.DeviceEvent.RELOAD_DESIGN,

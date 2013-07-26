@@ -125,15 +125,27 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         this.activeTab = newTab;
 
-        if(newTab.initialCls == "VectorEditorPanel") {
+        // Load the sequencemanager associated with the new tab, and select the
+        // tab's saved selection.
+        if(newTab.initialCls === "VectorEditorPanel") {
             this.onSequenceManagerChanged(newTab.model);
+
+            this.caretIndex = 0;
+        }
+
+        // Save the selection to the old tab so we can reselect it when we 
+        // switch back to it later.
+        if(oldTab.initialCls === "VectorEditorPanel") {
+            if(this.SelectionLayer.selected) {
+                oldTab.options.selection = {
+                    start: this.SelectionLayer.start,
+                    end: this.SelectionLayer.end
+                }
+            }
         }
     },
     
     onLaunch: function() {
-        // TODO: maybe put managers in statics so they are shared by all 
-        // child controllers? 
-        
         this.RestrictionEnzymeGroupManager = 
             Teselagen.manager.RestrictionEnzymeGroupManager;
 

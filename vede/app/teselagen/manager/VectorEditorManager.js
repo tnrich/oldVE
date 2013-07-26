@@ -160,7 +160,5 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
                 dialog.close();
         });
-
     }
-
 });

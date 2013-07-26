@@ -60,7 +60,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     //generateDesign: function (binsArray, eugeneRules, cb) {
     generateDesign: function (binsArray, partsArray, eugeneRules, cb) {
-        if(typeof(cb)==="function")
+    	Teselagen.manager.GridManager.selectedGridPart = null;
+        Teselagen.manager.GridManager.selectedGridBin = null;
+    	if(typeof(cb)==="function")
         {
             return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
         }
@@ -90,7 +92,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     loadDesign: function (binsArray, partsArray, eugeneRules, evt) {
         if (evt === "ok") {
-
+        	
             var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
             //var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign,binsArray);
             var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBinsAndParts(existingDesign,binsArray,partsArray);
@@ -102,7 +104,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 design.addToRules(eugeneRules[i]);
             }
 
-            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
             //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         }
     },
@@ -150,7 +152,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         	
         	getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
         		var newPart = Ext.create("Teselagen.models.Part", {
-                    id: partId,
+                    //id: partId,
         			name: part["de:name"],
                     partSource: part["de:partSource"],
                     genbankStartBP: part["de:startBP"],
@@ -214,10 +216,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             	var assocPart = fullPartsAssocArray[binParts[j]];
             	var newCell = Ext.create("Teselagen.models.Cell", {
                     index: j,
-                    part_id: binParts[j],
+                    //part_id: binParts[j],
                     fas: assocPart.get("fas")
                 });
             	newCell.setPart(assocPart);
+            	newCell.setJ5Bin(newBin);
             	temCellsArray.push(newCell);
             }
             

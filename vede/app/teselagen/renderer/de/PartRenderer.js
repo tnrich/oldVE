@@ -1,8 +1,9 @@
 Ext.define("Teselagen.renderer.de.PartRenderer", {
 	
-	
 	requires: [
    	    "Teselagen.constants.SBOLIcons",
+        "Teselagen.event.DeviceEvent",
+        "Teselagen.event.ProjectEvent",
    	    "Teselagen.manager.ProjectManager"
     ],
 	
@@ -63,24 +64,17 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			})
 			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
 			.on("dblclick", function(d) {
-				if(d.get("part_id")===null) {
-					gridManager.onOpenPartLibraryRequest(d, d3.select(this.parentNode));
+				if(!d.getPart()) {
 					// Remember to change the listener to the following event.
-					//Vede.application.fireEvent("OpenPartLibrary");
+					Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
 				} else {
-					//debugger;
-					var seqID = d.getPart().get("sequencefile_id");
-					//var seqStore = Teselagen.manager.ProjectManager.sequenceStore.data.items;
-					var seqStore = Teselagen.manager.ProjectManager.workingProject.sequencesStore.data.items;
-					var seq = null;
-					for(var i=0;i<seqStore.length;i++) {
-						if (seqID==seqStore[i].internalId) {
-							seq = seqStore[i];
-							break;
-						}
-					}
-					if(seq != null) Vede.application.fireEvent("OpenVectorEditor",seq);
-					else Vede.application.fireEvent("OpenPartLibrary"); // Not sure if this is right.
+					var seq = d.getPart().getSequenceFile();
+
+					if(seq != null) {
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, seq, d.getPart());
+                    } else {
+                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
+                    }
 				}
 			})
 			.on("contextmenu", function(d) {				
@@ -129,9 +123,14 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("font-weight", 500)
 			.text(function(d) {
                 var part = d.getPart();
+
+                if(!part) {
+                    return "";
+                }
+
                 var partName = part.get("name");
 
-                if(!part || !partName) {
+                if(!partName) {
                     return "";
                 } else if(partName.length > 14) {
                     return partName.substring(0, 14) + '..';
@@ -176,9 +175,14 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.append("circle")
 			.attr("class", "gridPartEugeneRuleFlagSVG")
 			.attr("fill", function(d) {
-				if($.inArray(d.id,gridManager.partsWithRules)<0) d3.select(this).style("display","none");
-				else d3.select(this).style("display","inline");
-				return "orange";
+				var part = d.getPart();
+				if(part && gridManager.activeProject.getNumberOfRulesInvolvingPart(part)>0) {
+					d3.select(this).style("display","inline");
+					return "orange";
+				} else {
+					d3.select(this).style("display","none");
+					return;
+				}
 			})
 			.attr("r", 4.5)
 			.attr("pointer-events", "none")
@@ -186,4 +190,16 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("cy", this.gridManager.PART_HEIGHT-3-5);
 		
 	},
+	
+	
+	
+	
 });
+
+
+
+
+
+
+
+

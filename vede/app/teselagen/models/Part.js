@@ -71,7 +71,7 @@ Ext.define("Teselagen.models.Part", {
     },
     /*{
             name: "id",
-            convert: function() {
+            convert: function(id) {
                 var extraDigits = Math.floor(Math.random() * 1000).toString();
 
                 while (extraDigits.length < 3) {

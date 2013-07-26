@@ -76,7 +76,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var bins = device.bins();
         var parts = device.parts();
         
-        bins.suspendEvents();
+        //bins.suspendEvents();
         
         parts.removeAll(true);
         parts.add(pParts);
@@ -86,8 +86,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         
         Teselagen.manager.DeviceDesignManager.enforceColumnLength(device);
         
-        bins.resumeEvents();
-        bins.fireEvent("datachanged");
+        //bins.resumeEvents();
+        //bins.fireEvent("datachanged");
         
         var err = device.validate();
         if (err.length > 0) {
@@ -423,9 +423,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     	pDevice.bins().each(function(bin) {
     		var phantomArray = [];
     		for(var i=bin.cells().getCount(); i<maxNumParts; i++) {
-    			phantomArray.push(Ext.create("Teselagen.models.Cell", {
+    			var phantomCell = Ext.create("Teselagen.models.Cell", {
     				index: i
-    			}));
+    			});
+    			phantomCell.setJ5Bin(bin);
+    			phantomArray.push(phantomCell);
     		}
     		bin.cells().add(phantomArray);
     		
@@ -813,6 +815,23 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         //return pDevice.isPartInCollection(pPart);
     },
+    
+    /**
+     * Determines bin that pCell is in and returns its index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Cell} pCell
+     * @returns {Number} Index of bin.
+     */
+    getCellBinAssignment: function(pDevice, pCell) {
+        var bins = pDevice.bins().getRange();
+
+        for(var i = 0; i < bins.length; i++) {
+            if(bins[i].cells().indexOf(pCell) >= 0) {
+                return i;
+            }
+        }
+    },
+
     /**
      * Determines (first) bin that pPart is in and returns its index.
      * @param {Teselagen.models.DeviceDesign} pDevice
@@ -904,15 +923,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Teselagen.models.Part}
      */
     getPartByName: function(pDevice, pPartName) {
-        var part, id;
-        for (var i =0; i < pDevice.bins().count(); i++) {
-            var bin = pDevice.bins().getAt(i);
-            part = bin.getPartByName(pPartName);
-            if (part !== null) {
-                return part;
-            }
-        }
-        return part;
+        return pDevice.parts().data.findBy(function(part) {if(part.get("name")===pPartName) return true;});
     },
     /**
      * Add a Part to a J5Bin
