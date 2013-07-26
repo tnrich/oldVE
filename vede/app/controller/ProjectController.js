@@ -203,6 +203,14 @@ Ext.define("Vede.controller.ProjectController", {
         dashPanel.setActiveTab(1);
     },
 
+    resolveAndOpenPartLibrary: function (record) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        tabPanel.setActiveTab(0);
+        dashPanel.setActiveTab(2);
+    },
+
+
     resolveAndOpenj5Reports: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
     	oldTab.el.mask("Loading j5 report", "loader rspin");
@@ -433,6 +441,9 @@ Ext.define("Vede.controller.ProjectController", {
             },
             "#openSequenceLibraryBtn": {
                 click: this.resolveAndOpenSequenceLibrary
+            },
+            "#openPartLibraryBtn": {
+                click: this.resolveAndOpenPartLibrary
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick

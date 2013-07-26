@@ -23085,21 +23085,24 @@ body.x-nbr .x-tab-default-right-frameInfo {
 #DashboardPanel .x-tab-top-active {
   background: 0 none;
   border: 0 none;
+  opacity: 1 !important;
 }
 
-/* line 117, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 118, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #DashboardPanel .x-tab-default-active .x-tab-inner {
   color: #006cab;
+  opacity: 1 !important;
 }
 
-/* line 121, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 123, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #DashboardPanel .x-tab-default-top {
   background: 0 !important;
   border: 0 !important;
   border-bottom: 0;
+  opacity: 0.5;
 }
 
-/* line 128, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 130, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .sequenceLibrarySearchField .x-form-text, .partLibrarySearchField .x-form-text {
   background-image: url(images/ux/magnifier.png) !important;
   background-position: 12px center;
@@ -23108,7 +23111,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   padding-left: 40px;
 }
 
-/* line 136, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 138, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .empty-search-field {
   padding-left: 40px;
   opacity: 0.6;

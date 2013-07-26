@@ -58,6 +58,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             },{
                 xtype: 'button',
                 border: '0',
+                id: "openPartLibraryBtn",
                 text: 'My Parts',
                 cls: 'partsLibraryBtn',
                 overCls: 'partsLibraryBtn-over',

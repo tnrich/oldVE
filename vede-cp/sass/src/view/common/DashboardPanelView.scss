@@ -112,17 +112,19 @@
 #DashboardPanel .x-tab-top-active {
 	background: 0 none;
 	border: 0 none;
+	opacity: 1 !important;
 }
 
 #DashboardPanel .x-tab-default-active .x-tab-inner {
 	color: #006cab;
+	opacity: 1 !important;
 }
 
 #DashboardPanel .x-tab-default-top {
 	background: 0 !important;
 	border: 0 !important;
 	border-bottom:0 ;
-	
+	opacity: 0.5;
 }
 
 .sequenceLibrarySearchField .x-form-text, .partLibrarySearchField .x-form-text{
