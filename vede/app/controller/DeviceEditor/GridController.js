@@ -668,7 +668,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
     
     onRemoveColumn: function() {
-    	
+    	this.GridManager.removeColumn();
     },
     
     onRemoveRow: function() {

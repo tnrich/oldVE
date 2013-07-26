@@ -5,6 +5,7 @@ module.exports = function(app) {
 
     var Sequence = app.db.model("sequence");
     var Project = app.db.model("project");
+    var User = app.db.model("User");
 
     /*
     function autoReassignDuplicatedSequence(res, sequence, cb) {
@@ -41,7 +42,7 @@ module.exports = function(app) {
     }
     */
 
-    var saveSequence = function(newSequence,req,res){
+    var saveSequence = function(newSequence,req,res,cb){
         for (var prop in req.body) {
             newSequence[prop] = req.body[prop];
         }
@@ -69,7 +70,11 @@ module.exports = function(app) {
                         return res.json(500,{"error":err});
                     }
                 }
-                else res.json({'sequences': newSequence,"duplicated":false,"err":err});
+                else 
+                    {
+                        if (typeof(cb) == 'function') cb(newSequence);
+                        res.json({'sequences': newSequence,"duplicated":false,"err":err});
+                    }
             });
 
         //});
@@ -97,7 +102,13 @@ module.exports = function(app) {
      */
     app.post('/sequences', restrict, function(req, res) {
         var newSequence = new Sequence();
-        saveSequence(newSequence,req,res);
+        saveSequence(newSequence,req,res,function(savedSequence){
+            req.user.sequences.push(savedSequence);
+            User.findById(req.user._id).populate('sequences').exec(function(err, user) {
+                user.sequences.push(savedSequence);
+                user.save();
+            });
+        });
     });
 
     /**
