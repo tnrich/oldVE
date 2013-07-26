@@ -208,14 +208,6 @@ module.exports = function(db) {
 		dateCreated: String,
 		dateModified: String,
 		name: String,
-		sequences: [{
-			type: oIDRef,
-			ref: 'sequence'
-		}],
-		parts: [{
-			type: oIDRef,
-			ref: 'part'
-		}],
 		designs: [{
 			type: oIDRef,
 			ref: 'devicedesign'

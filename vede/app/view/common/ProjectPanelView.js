@@ -38,7 +38,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                 overCls: 'sequenceLibraryBtn-over',
                 textAlign: 'left',
                 margin: 0,
-                height: 30,
+                height: 30
             },{
                 xtype: 'button',
                 border: '0',
