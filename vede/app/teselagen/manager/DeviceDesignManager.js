@@ -927,6 +927,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     /**
      * Add a Part to a J5Bin
+     * @deprecated
      * @param {Teselagen.models.DeviceDesign} device
      * @param {Teselagen.models.Part} part
      * @param {Number} binIndex Bin index (0 <= i < n-1). If invalid, issues warning.
