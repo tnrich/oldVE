@@ -60,9 +60,17 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             this.initPie(newTab);
 
             this.pieParent = d3.select("#" + newTab.el.dom.id + " .pieParent");
-        }
 
-        this.callParent(arguments);
+            this.callParent(arguments);
+
+            // Defer firing the selection event to give the sequence a chance
+            // to render.
+            Ext.defer(function() {
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       null, newTab.options.selection.start,
+                                       newTab.options.selection.end);
+            }, 10, this);
+        }
     },
 
     initPie: function(newTab) {
