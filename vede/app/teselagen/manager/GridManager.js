@@ -339,22 +339,14 @@ Ext.define("Teselagen.manager.GridManager", {
 	removeColumn: function() {
 		var me = this;
 		var columnIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
-		var removedRules = me.removeRuleDataInvolvingColumn(columnIndex);
-		me.updatePartsWithRules();
-		var removedBin;
-		if(this.totalColumns==1) {
-			var newBin = {
-				iconID: "USER-DEFINED",
-				directionForward: true,
-				parts: []
-			}
-			for(var i=0;i<this.totalRows;i++) {
-				newBin.parts.push({phantom: true});
-			}
-			removedBin = this.collectionData.splice(columnIndex,1,newBin);
-		} else {
-			removedBin = this.collectionData.splice(columnIndex,1);
-			this.totalColumns--;
+		
+		this.selectedGridPart = null;
+		this.selectedGridBin = null;
+		
+		Teselagen.manager.DeviceDesignManager.removeBinByIndex(this.activeProject, columnIndex);
+		
+		if(this.activeProject.bins().count()===0) {
+			this.activeProject.addNewBinByIndex(0);
 		}
 		
 		//Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
@@ -363,9 +355,8 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertOptions(false);
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
-        me.clearPartInfo();
         
-        Teselagen.manager.GridCommandPatternManager.addCommand({
+        /*Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
         	data: {
         		type: "DEL",
@@ -373,7 +364,7 @@ Ext.define("Teselagen.manager.GridManager", {
         		data: removedBin[0],
         		rules: removedRules
         	}
-		});
+		});*/
 	},
 	
 	removeRow: function() {
