@@ -28,9 +28,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     GridManager: null,
     tabPanel: null,
 
-    onReRenderDECanvasEvent: function(){
+    ReRenderDevice: function(){
         var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.onTabChange(tab,tab,tab);
+        this.GridManager.renderDevice(tab.model);
     },
 
     /**
@@ -701,6 +701,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME,
                             this.onValidateDuplicatedPartNameEvent,
+                            this);
+
+        this.application.on(this.DeviceEvent.RERENDER_DE_CANVAS,
+                            this.ReRenderDevice,
                             this);
 
         /*this.application.on(this.DeviceEvent.RELOAD_DESIGN,
