@@ -115,6 +115,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }*/
 
             this.activeProject = newTab.model;
+            this.activeTab = newTab;
+
+            this.cutPartMenuItem = this.activeTab.down("menuitem[text='Cut Part']");
+            this.copyPartMenuItem = this.activeTab.down("menuitem[text='Copy Part']");
+            this.pastePartMenuItem = this.activeTab.down("menuitem[text='Paste Part']");
+            this.removeRowMenuItem = this.activeTab.down("menuitem[text='Remove Row']");
+            this.clearPartMenuItem = this.activeTab.down("menuitem[text='Clear Part']");
+            this.removeColumnMenuItem = this.activeTab.down("menuitem[text='Remove Column']");
+
+            this.columnLeftMenuItem = this.activeTab.down("menuitem[text='Column Left']");
+            this.columnRightMenuItem = this.activeTab.down("menuitem[text='Column Right']");
+
+            this.rowAboveMenuItem = this.activeTab.down("menuitem[text='Row Above']");
+            this.rowBelowMenuItem = this.activeTab.down("menuitem[text='Row Below']");
 
             this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
@@ -506,25 +520,25 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     toggleCutCopyPastePartOptions: function(state){
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Cut Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Copy Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Paste Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Row']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Clear Part']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0].setDisabled(!state||false);
+        this.cutPartMenuItem.setDisabled(!state||false);
+        this.copyPartMenuItem.setDisabled(!state||false);
+        this.pastePartMenuItem.setDisabled(!state||false);
+        this.removeRowMenuItem.setDisabled(!state||false);
+        this.clearPartMenuItem.setDisabled(!state||false);
+        this.removeColumnMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Column Left']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Column Right']")[0].setDisabled(!state||false);
+        this.columnLeftMenuItem.setDisabled(!state||false);
+        this.columnRightMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertRowAboveOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Above']")[0].setDisabled(!state||false);
+        this.rowAboveMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertRowBelowOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Below']")[0].setDisabled(!state||false);
+        this.rowBelowMenuItem.setDisabled(!state||false);
     },
     
     onCutPartMenuItemClick: function() {
