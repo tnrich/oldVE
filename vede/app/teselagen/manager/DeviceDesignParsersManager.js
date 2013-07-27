@@ -92,19 +92,23 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     loadDesign: function (binsArray, partsArray, eugeneRules, evt) {
         if (evt === "ok") {
+        	var gridManager = Teselagen.manager.GridManager;
+        	
+        	gridManager.setListenersEnabled(false);
         	
             var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-            //var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign,binsArray);
             var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBinsAndParts(existingDesign,binsArray,partsArray);
             
             Ext.getCmp("mainAppPanel").getActiveTab().model = design;
             
             // Load the Eugene Rules in the Design
-            for (var i = 0; i < eugeneRules.length; i++) {
+            design.rules().add(eugeneRules);
+            /*for (var i = 0; i < eugeneRules.length; i++) {
                 design.addToRules(eugeneRules[i]);
-            }
+            }*/
 
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+            gridManager.setListenersEnabled(true);
             //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         }
     },

@@ -81,7 +81,7 @@ Ext.define("Teselagen.manager.GridManager", {
 	totalRows: 0,
     totalColumns: 0,
     
-    newColumnSuffixNum: 0,
+    listenersEnabled: true,
 
 	removeGrid: function() {
 		if(this.grid) this.grid.remove();
@@ -204,6 +204,14 @@ Ext.define("Teselagen.manager.GridManager", {
                 this.selectGridCellByIndex(this.selectedColumnIndex, this.selectedPartIndex, true);
             }
         }
+	},
+	
+	setListenersEnabled: function(value) {
+		this.listenersEnabled = value;
+	},
+	
+	areListenersEnabled: function() {
+		return this.listenersEnabled;
 	},
 	
 	addRowBelow: function() {
@@ -594,6 +602,15 @@ Ext.define("Teselagen.manager.GridManager", {
         
         
         //Teselagen.manager.GridManager.selectBin(gridBin);
+    },
+    
+    test001: function() {
+    	/*asdf = true; 
+    	Ext.getCmp("mainAppPanel").getActiveTab().model.bins().fireEvent = function() {
+    		if(asdf) return qwe.apply(Ext.getCmp("mainAppPanel").getActiveTab().model.bins(), arguments);
+    		else return console.log.apply(console, arguments);
+		}*/
+    	
     },
 
 });
