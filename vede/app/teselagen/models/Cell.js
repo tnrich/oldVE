@@ -68,10 +68,6 @@ Ext.define("Teselagen.models.Cell", {
     },
 
     getPart: function() {
-        if(this.get("part_id")) {
-            this.getJ5Bin()
-        } else {
-            return this.part;
-        }
+        return this.part;
     }
 });
