@@ -563,11 +563,12 @@ Ext.define("Teselagen.manager.GridManager", {
         var gridBin = d3.select(this.parentNode.parentNode);
         var j5Bin = gridBin.datum();
         var xIndex = parseInt(gridBin.attr("deGridBinIndex"));
+        var event = document.createEvent('UIEvents');
+
+        event.initUIEvent('click', true, true);
+        this.parentNode.parentNode.dispatchEvent(event);
+
         j5Bin.set("directionForward", !j5Bin.get("directionForward"));
-        this.selectedGridPart = null;
-		this.selectedGridBin = null;
-        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, j5Bin, xIndex);
-        
         /*d3.select(this.parentNode).select(".gridBinHeaderFlipButtonArrowSVG")
             .attr("transform", function(dr) {
                 if(dr.get("directionForward") === true) return "translate(93, 9)scale(0.7)rotate(180,19,10)";
