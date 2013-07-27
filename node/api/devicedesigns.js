@@ -122,7 +122,7 @@ module.exports = function(app) {
             if (err) {
                 errorHandler(err, req, res);
             } else {
-                DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.cells.part').exec(function(err, design) {
+                DeviceDesign.findById(req.params.devicedesign_id).populate('parts j5collection.bins.cells.part').exec(function(err, design) {
                     if(!design) return res.json(500,{"error":"design not found"});
                     design = design.toObject();
                     design.id = design._id;
