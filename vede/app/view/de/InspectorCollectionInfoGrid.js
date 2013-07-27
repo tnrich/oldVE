@@ -58,10 +58,10 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     text: '<div data-qtip="Items">Items</div>',
                     renderer: function(value, metadata, record) {
                         var numParts = 0;
-                        var partsArray = record.cells().getRange();
+                        var cells = record.cells().getRange();
 
-                        for(var i = 0; i < partsArray.length; i++) {
-                            if(!partsArray[i].get("phantom")) {
+                        for(var i = 0; i < cells.length; i++) {
+                            if(cells[i].getPart()) {
                                 numParts++;
                             }
                         }
