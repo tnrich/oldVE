@@ -98,7 +98,7 @@ module.exports = function(app) {
     /**
      * GET device design by project_id
      * @memberof module:./routes/api
-     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     * @method GET '/users/:username/projects/:project_id/devicedesigns'
      */
     app.get('/users/:username/projects/:project_id/devicedesigns', restrict, function(req, res) {
         var Project = app.db.model("project");
@@ -113,7 +113,7 @@ module.exports = function(app) {
     /**
      * GET device design by id
      * @memberof module:./routes/api
-     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     * @method GET '/users/:username/projects/:project_id/devicedesigns'
      */
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
@@ -146,7 +146,7 @@ module.exports = function(app) {
     /**
      * GET device design by id
      * @memberof module:./routes/api
-     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     * @method GET '/users/:username/projects/:project_id/devicedesigns'
      */
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
@@ -167,6 +167,35 @@ module.exports = function(app) {
         });
     });
     
+    /**
+     * GET device design parts
+     * @memberof module:./routes/api
+     * @method GET '/users/:username/projects/:project_id/devicedesigns'
+     */
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/parts', restrict, function(req, res) {
+        var DeviceDesign = app.db.model("devicedesign");
+        DeviceDesign.findById(req.params.devicedesign_id).populate('parts').exec(function(err, design) {
+            if(!design) return res.json(500,{"error":"design not found"});
+
+            var parts = JSON.parse(JSON.stringify(design.parts));
+            parts.forEach(function(part){
+               // part.devicedesign_id = req.params.devicedesign_id;
+                delete part.__v;
+                delete part._id;
+                delete part.definitionHash;
+                delete part.FQDN;
+            });
+
+            if (err) {
+                errorHandler(err, req, res);
+            } else {
+                res.json({
+                    "parts": parts
+                });
+            }
+        });
+    });
+
     
     app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");

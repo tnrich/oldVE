@@ -22,7 +22,15 @@ Ext.define("Teselagen.models.Part", {
         writer: {
             type: "json"
         },
-        buildUrl: function() {
+        buildUrl: function(request) {
+            if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
+            {
+                var project_id = Teselagen.manager.ProjectManager.workingProject.data.id;
+                var url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+            }
+
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         }
         /*
@@ -131,10 +139,6 @@ Ext.define("Teselagen.models.Part", {
         name: "iconID",
         type: "string",
         defaultValue: ""
-    }, {
-        name: "phantom",
-        type: "boolean",
-        defaultValue: false
     }
     ],
 
