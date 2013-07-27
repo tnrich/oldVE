@@ -135,6 +135,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
         this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+            selectedDesign.bins().each(function(bin){
+                bin.cells().each(function(cell){
+                    cell.setPart( selectedDesign.parts().getById(cell.data.part_id) );
+                });
+            });
+
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
                 title: selectedDesign.data.name,
                 model: selectedDesign,
