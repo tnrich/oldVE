@@ -477,6 +477,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onBinSelected: function (j5Bin, binIndex) {
     	if(!j5Bin) j5Bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         var selectionModel = this.columnsGrid.getSelectionModel();
+        var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
         
         this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
