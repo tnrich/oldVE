@@ -82,7 +82,8 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "fro",               type: "string",     defaultValue: ""},
         {name: "fases",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
+        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null},
+        {name: "devicedesign_id",    type: "long",       defaultValue: null}
 
 
         /* worry about this later. Original does not include this field.
@@ -125,7 +126,13 @@ Ext.define("Teselagen.models.J5Bin", {
             model: "Teselagen.models.Cell",
             name: "cells",
             foreignKey: "cell_id"
-        },
+        }, {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceDesign",
+            getterName: "getDeviceDesign",
+            setterName: "setDeviceDesign",
+            foreignKey: "devicedesign_id"
+        }
     ],
 
     /**

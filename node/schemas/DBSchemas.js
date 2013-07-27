@@ -150,6 +150,7 @@ module.exports = function(db) {
 			fro: String,
 			extra5PrimeBps: String,
 			extra3PrimeBps: String,
+            devicedesign_id: String,
 			binName: String,
 			iconID: String,
 			cells: [
