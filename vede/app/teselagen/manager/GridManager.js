@@ -450,12 +450,19 @@ Ext.define("Teselagen.manager.GridManager", {
 	
 	clearSelectedPart: function() {
 		var cell = this.selectedGridPart.datum();
-
-        this.activeProject.parts().remove(cell.getPart());
-
+		
+		var xIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
+		var yIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
+		
+        //this.activeProject.parts().remove(cell.getPart());
+		
+		Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithCell(this.activeProject, xIndex, yIndex)
+		
 		cell.setPart();
 		cell.set("fas", "None");
 		cell.set("part_id", null);
+		
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
 		
 		this.GridController.toggleCutCopyPastePartOptions(false);
         this.GridController.toggleInsertOptions(false);
@@ -464,8 +471,7 @@ Ext.define("Teselagen.manager.GridManager", {
 
 			
 		/*
-		var xIndex = parseInt(me.selectedGridBin.attr("deGridBinIndex"));
-		var yIndex = parseInt(me.selectedGridPart.attr("deGridRowIndex"));
+		
 		Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "PART",
         	data: {
