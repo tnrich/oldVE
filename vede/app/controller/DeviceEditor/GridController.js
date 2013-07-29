@@ -216,7 +216,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.grid.el.setScrollTop(newTab.options.scrollTop);
 
                 if(newTab.options.selection) {
-                    if(newTab.options.selection.y) {
+                    if(newTab.options.selection.y !== undefined) {
                         this.GridManager.selectGridCellByIndex(newTab.options.selection.x,
                                                                newTab.options.selection.y);
                     } else {

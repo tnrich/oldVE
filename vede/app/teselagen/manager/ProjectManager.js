@@ -60,7 +60,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
                     self.projects = projectsStore; //Set the working project
                     //Teselagen.manager.ProjectExplorerManager.load();
-                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
                 }
             );
         });
