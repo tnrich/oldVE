@@ -24,7 +24,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 record.bins().each(function(bin){
                     bin.cells().each(function(cell){
-                        debugger;
                         cell.setPart(cell.getPart());
                     });
                 });

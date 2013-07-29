@@ -280,10 +280,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         store: partLibrary,
                         listeners: {
                             "itemclick": function(grid, part){
-                                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part,part.get("name"),function(){
+                                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, function(identicalPart) {
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
                                     if(bin) {
-                                        self.activeProject.parts().add(part);
+                                        // If the part already exists in the design,
+                                        // map it to the selected cell. If not,
+                                        // map the new part to the selected cell
+                                        // and add it to the design's parts store.
+                                        if(identicalPart) {
+                                            part = identicalPart;
+                                        } else {
+                                            self.activeProject.parts().add(part);
+                                        }
+
                                         self.selectedCell.setPart(part);
                                         self.selectedPart = part;
                                         var yIndex = self.activeProject.bins().getAt(self.selectedBinIndex).cells().indexOf(self.selectedCell);
@@ -529,41 +538,37 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var newName = nameField.getValue();
             var self = this;
             
-            if (!newName) {
+            if(!newName) {
                 this.Logger.notifyWarn("Part name cannot be blank.");
                 return;
             }
 
-            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
-                // If the selected part is not in the device already, add it.
-                //if(self.selectedPart.get("phantom") ||
-                if(!self.selectedPart) {
-                    self.selectedPart = self.partPropertiesForm.getRecord();
-                    self.selectedPart.set("name", newName);
+            if(!this.selectedPart) {
+                this.selectedPart = this.partPropertiesForm.getRecord();
+            }
 
+            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, function() {
+                // If the selected part is not in the device already, add it.
+                if(self.activeProject.parts().indexOf(self.selectedPart) < 0) {
                     self.activeProject.parts().add(self.selectedPart);
                     self.selectedCell.setPart(self.selectedPart);
-                } else {
-                    self.selectedPart.set("name", newName);
                 }
 
-            }, "Another non-identical part with that name already exists in the design. Please input a different name.");
+                self.selectedPart.set("name", newName);
 
-            if(!self.selectedPart) {
-                // Validating duplicated part failed.
-                return;
-            } else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
-                this.deletePartBtn.enable();
-                this.deletePartBtn.removeCls("btnDisabled");
-                this.deletePartBtn.addCls("selectPartFocus");
-                this.clearPartMenuItem.enable();
-            }
-            else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") === ""){
-                this.deletePartBtn.disable();
-                this.deletePartBtn.addCls("btnDisabled");
-                this.deletePartBtn.removeCls("selectPartFocus");
-                this.clearPartMenuItem.disable();
-            }
+                if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
+                    self.deletePartBtn.enable();
+                    self.deletePartBtn.removeCls("btnDisabled");
+                    self.deletePartBtn.addCls("selectPartFocus");
+                    self.clearPartMenuItem.enable();
+                }
+                else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") === ""){
+                    self.deletePartBtn.disable();
+                    self.deletePartBtn.addCls("btnDisabled");
+                    self.deletePartBtn.removeCls("selectPartFocus");
+                    self.clearPartMenuItem.disable();
+                }
+            }, "Another non-identical part with that name already exists in the design. Please input a different name.");
         }
     },
 
