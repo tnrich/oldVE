@@ -49,13 +49,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
             if(!success) { Ext.Error.raise("Error loading user"); }
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
+
+            self.sequenceStore = self.currentUser.sequences().load(function(sequences){
+                self.sequenceStore = sequences;
+            });
+
             //Load the projects store
             var projectsStore = self.currentUser.projects().load(
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
                     self.projects = projectsStore; //Set the working project
                     //Teselagen.manager.ProjectExplorerManager.load();
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
                 }
             );
         });
