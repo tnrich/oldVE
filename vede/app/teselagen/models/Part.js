@@ -180,15 +180,7 @@ Ext.define("Teselagen.models.Part", {
     
     constructor: function() {
         this.callParent(arguments);
-        
-        //this.on("add", this.renderIfActive, this);
-        //this.on("update", this.renderIfActive, this);
-        //this.on("remove", this.renderIfActive, this);
     },
-    
-    //renderIfActive: function() {
-    	//if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
-    //},
     
     active: false,
     
