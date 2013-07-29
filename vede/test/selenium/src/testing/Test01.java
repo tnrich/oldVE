@@ -34,27 +34,27 @@ public class Test01 {
 		//" x-tree-elbow-img x-tree-elbow-plus x-tree-expander"
 		//" x-tree-elbow-img x-tree-elbow-end-plus x-tree-expander"
 		
-		
-    	System.setProperty("webdriver.chrome.driver", "/Users/mmatena/bin/chromedriver");
+		// Driver is in ve/lib
+    	System.setProperty("webdriver.chrome.driver", "../../../lib/chromedriver-2.1");
 		WebDriver driver = new ChromeDriver();
     	//WebDriver driver = new CustomChromeDriver();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		driver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.manage().timeouts().setScriptTimeout(5, TimeUnit.SECONDS);
 		Runtime.getRuntime().addShutdownHook(new TerminationThread(driver));		
 		
 		NavUtils.goToLocalSite(driver);
 		//NavUtils.goToProductionSite(driver);
-		NavUtils.logIn(driver,"testSpam001", "");
+		NavUtils.logIn(driver,"testUser", "");
 		/*javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
 	        	FindElementGUI.createAndShowGUI(driver);
 	        }
     	});*/
 		JsUtils.appendJsErrorToBodyAttr(driver);
-		//NavUtils.createNewProject(driver, "gup90gdf");
-		//NavUtils.toggleExpansionOfProject(driver, "jrur9uwrtwt");
-		//NavUtils.createNewDesign(driver, "jrur9uwrtwt", "des");
-		NavUtils.openDesign(driver, "jrur9uwrtwt", "des");
+		NavUtils.createNewProject(driver, "testProject");
+		NavUtils.toggleExpansionOfProject(driver, "testProject");
+		NavUtils.createNewDesign(driver, "testProject", "testDesign");
+//		NavUtils.openDesign(driver, "testProject", "testDesign");
 		DeUtils.loadExample(driver, "Combinatorial Golden Gate");
 		boolean j5Ready = DeUtils.getJ5ReadyFromInspectorPanel(driver);
 		boolean combinatorial = DeUtils.getCombinatorialFromInspectorPanel(driver);
