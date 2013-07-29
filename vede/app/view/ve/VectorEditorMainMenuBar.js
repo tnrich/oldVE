@@ -6,17 +6,15 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
     cls: 'VectorEditorMainMenuBar',
     alias: 'widget.VectorEditorMainMenuBar',
-    items: [
-     {
-         xtype: 'button',
-         text: 'File',
-         menu: {
-             xtype: 'menu',
-             cls: 'veFileMenu',
-             minWidth: 140,
-             hideMode: 'offsets',
-             items: [
-            {
+    items: [{
+        xtype: 'button',
+        text: 'File',
+        menu: {
+            xtype: 'menu',
+            cls: 'veFileMenu',
+            minWidth: 140,
+            hideMode: 'offsets',
+            items: [{
                 xtype: 'menuitem',
                 text: 'New Sequence',
                 identifier: 'newBlankVectorEditorMenuItem'
@@ -110,17 +108,22 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                         text: 'Linear View'
                     }]
                 }
-            }
-            /*{
+            },
+            {
                 xtype: 'menuseparator'
             },
             {
             	xtype: 'menuitem',
-                text: 'Properties...',
-                identifier: 'propertiesMenuItem'
-            }*/]
-         }
-     },
+                identifier: 'propertiesMenuItem',
+                text: 'Properties'
+            },
+            {
+                xtype: 'menuitem',
+                identifier: 'preferencesMenuItem',
+                text: 'Preferences...'
+            }]
+        }
+    },
     {
         xtype: 'button',
         text: 'Edit',
@@ -208,7 +211,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }*/
             ]
         }
-    }, {
+    }, 
+    {
         xtype: 'button',
         text: 'View',
         menu: {
@@ -290,16 +294,14 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Zoom Out (-)'
             }]
         }
-    }
-    ,{
+    },
+    {
         xtype: 'button',
         text: 'Tools',
         menu: {
             xtype: 'menu',
             minWidth: 140,
-            items: [     
-             
-            {
+            items: [{
                 xtype: 'menuitem',
                 identifier: 'restrictionEnzymesManagerMenuItem',
                 text: 'Restriction Enzymes Manager'
@@ -309,17 +311,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 identifier: 'simulateDigestionMenuItem',
                 text: 'Simulate Digestion'
             }
-//            {
-//                xtype: 'menuitem',
-//                text: 'Properties'
-//            }, {
-//                xtype: 'menuseparator'
-//            }, {
-//                xtype: 'menuitem',
-//                text: 'Preferences'
-//            },
             ]
         }
-    }
-    ]
+    }]
 });
