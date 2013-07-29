@@ -223,6 +223,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
         var currentTabEl = (currentTab.getEl());
 //        var selectedPartIndex = this.selectedBin.indexOfPart(this.selectedPart);
+        currentTabEl.mask("Loading design", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
@@ -235,21 +237,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             var self = this;
 
-            var loadingMsgBox = Ext.MessageBox.show({
-                title: "Loading Part",
-                progressText: "Loading Part Library",
-                progress: true,
-                width: 300,
-                renderTo: currentTabEl,
-                closable: false
-            });
+            // var loadingMsgBox = Ext.MessageBox.show({
+            //     title: "Loading Part",
+            //     progress: false,
+            //     width: 300,
+            //     renderTo: currentTabEl,
+            //     closable: false
+            // });
 
             Ext.Ajax.request({
                 url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ""),
                 method: "GET",
                 success: function (response) {
 
-                loadingMsgBox.updateProgress(50 / 100, 50 + "% completed");
+                currentTabEl.unmask();
 
                 response = JSON.parse(response.responseText);
 
@@ -275,6 +276,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     height: 400,
                     width: 400,
                     layout: "fit",
+                    renderTo: currentTabEl,
                     //renderTo: currentTabEl,
                     closeAction: "close",
                     modal: true,
@@ -313,7 +315,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
                 }).show();
-                loadingMsgBox.close();
             //end ajax request
             }});
         }
