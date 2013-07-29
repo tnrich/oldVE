@@ -448,19 +448,33 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * Returns the EugeneRules Store of EugeneRules that contain the Part in either operand.
      *
      * @param {Teselagen.models.Part} pPart
+     * @param {Boolean} filterThenAndNextTo If true, filter out rules that involve
+     * the part if they are THEN or NEXTTO rules. For rendering purposes, this
+     * flag should be true, which is the default value.
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
-    getRulesInvolvingPart: function(pPart) {
+    getRulesInvolvingPart: function(pPart, filterThenAndNextTo) {
         var constants = Teselagen.constants.Constants;
+
+        // filterThenAndNextTo should default to true.
+        if(filterThenAndNextTo === undefined) {
+            filterThenAndNextTo = true;
+        }
 
         this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart) {
                 return true;
-            } else if(rule.getOperand2() === pPart && 
-                      rule.get("compositionalOperator") !== constants.THEN &&
-                      rule.get("compositionalOperator") !== constants.NEXTTO) {
-                return true;
+            } else if(rule.getOperand2() === pPart) {
+                if(filterThenAndNextTo &&
+                   rule.get("compositionalOperator") !== constants.THEN &&
+                   rule.get("compositionalOperator") !== constants.NEXTTO) {
+                    return true;
+                } else if(!filterThenAndNextTo) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -470,15 +484,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     getNumberOfRulesInvolvingPart: function(pPart) {
-        this.rules().clearFilter(true);
-        var numRules = 0
-        var rules = this.rules();
-        rules.each(function (rule) {
-            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
-                numRules++
-            }
-        });  
-        return numRules;    
+        return this.getRulesInvolvingPart(pPart, true).count();    
     },
 
     /**
