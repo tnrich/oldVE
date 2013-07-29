@@ -24136,7 +24136,7 @@ img {
 
 /* line 752, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorPartsBar {
-  background: #125B85;
+  background: #004065;
 }
 
 /* line 756, ../../../../sass/src/view/AppViewport.scss */
@@ -24147,8 +24147,8 @@ img {
 
 /* line 761, ../../../../sass/src/view/AppViewport.scss */
 .x-toolbar .x-toolbar-separator-horizontal {
-  border-left: 1px solid #035363;
-  border-right: 1px solid #05628D;
+  border-left: 1px solid #00395A;
+  border-right: 1px solid #004A75;
 }
 
 /* line 766, ../../../../sass/src/view/AppViewport.scss */
