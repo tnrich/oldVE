@@ -22,16 +22,16 @@ Ext.define("Teselagen.models.SequenceFile", {
         buildUrl: function(request) {
 
 
-            // GET SEQUENCES FROM PROJECT
+            // GET SEQUENCES
             if( request.action === "read" && !request.operation.id)
             {
-                    var url = "projects/sequences";
+                    var url = "sequences";
                     delete request.params;
                     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
 
-            // GET SPECIFIC SEQUENCE WITHOUT PROJECT_ID
+            // GET SPECIFIC SEQUENCE
             if( request.operation.action === "read" && !request.operation.filters && request.params.id)
             {
                 var url = "sequences/"+request.params.id;
@@ -40,8 +40,8 @@ Ext.define("Teselagen.models.SequenceFile", {
             }
 
             
-            // CREATE A NEW SEQUENCE WITH PROJECT_ID
-            if(request.action === "create" && request.records[0].data.project_id && !request.records[0].data.id)
+            // CREATE A NEW SEQUENCE
+            if(request.action === "create" && !request.records[0].data.id)
             {
                 var url = "sequences";
                 delete request.params;
@@ -184,10 +184,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             return length;
         }
-    }, {
-        name: "parentProject",
-        type: "string",
-        defaultValue: ""
     }
 
     ],
@@ -214,12 +210,6 @@ Ext.define("Teselagen.models.SequenceFile", {
         getterName: "getPart",
         setterName: "setPart",
         foreignKey: "part_id"
-    }, {
-        type: "belongsTo",
-        model: "Teselagen.models.Project",
-        getterName: "getProject",
-        setterName: "setProject",
-        foreignKey: "sequencefile_id"
     }],
 
     /**
