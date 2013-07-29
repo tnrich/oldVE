@@ -177,7 +177,25 @@ Ext.define("Teselagen.models.Part", {
     }
 
     ],
-
+    
+    constructor: function() {
+        this.callParent(arguments);
+        
+        //this.on("add", this.renderIfActive, this);
+        //this.on("update", this.renderIfActive, this);
+        //this.on("remove", this.renderIfActive, this);
+    },
+    
+    //renderIfActive: function() {
+    	//if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    //},
+    
+    active: false,
+    
+    setActive: function(value) {
+    	this.active = value;
+    },
+    
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it has no set SequenceFile

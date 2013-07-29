@@ -153,6 +153,24 @@ Ext.define("Teselagen.models.EugeneRule", {
         */
     ],
 
+    constructor: function() {
+        this.callParent(arguments);
+        
+        //this.on("add", this.renderIfActive, this);
+        //this.on("update", this.renderIfActive, this);
+        //this.on("remove", this.renderIfActive, this);
+    },
+    
+    //renderIfActive: function() {
+    	//if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    //},
+    
+    active: false,
+    
+    setActive: function(value) {
+    	this.active = value;
+    },
+    
     /**
      * Gets Operand2. Must use this method to obtain Operand2 correctly.
      * @returns {Teselagen.models.Part|Number} Operand2 can be a Part or a Number

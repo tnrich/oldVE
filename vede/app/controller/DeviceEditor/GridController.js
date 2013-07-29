@@ -38,7 +38,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.button.Button} button The clicked button.
      */
     onPartPanelButtonClick: function(button) {
-        if(this.selectedBin) {this.selectedBin.bin.set("iconID",button.data.iconKey);}
+        var selectedBin = Teselagen.manager.GridManager.selectedGridBin;
+    	if(selectedBin) {selectedBin.datum().set("iconID",button.data.iconKey);}
     },
 
     /**
@@ -92,7 +93,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.down("component[cls='designGrid']");
 
-            if(this.activeBins) {
+            /*if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("update", this.onUpdateBins, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
@@ -105,7 +106,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     parts.un("update", this.onUpdateParts, this);
                     parts.un("remove", this.onRemoveFromParts, this);
                 }, this);
-            }
+            }*/
 
             /*if(this.activeProject) {
                 // Unset listeners for the project's Eugene Rules, and set them for
@@ -113,7 +114,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
                 this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
             }*/
-
+            if(oldTab.model && oldTab.model.setActive) oldTab.model.setActive(false);
+            
             this.activeProject = newTab.model;
             this.activeTab = newTab;
 
@@ -136,8 +138,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             //this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
 
             this.activeBins = this.activeProject.bins();
-
-            this.activeBins.on("add", this.onAddToBins, this);
+            
+            this.activeProject.setActive(true);
+            
+           /* this.activeBins.on("add", this.onAddToBins, this);
             this.activeBins.on("update", this.onUpdateBins, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
@@ -154,7 +158,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.activeProject.rules().on("add", this.onAddToRules, this);
             this.activeProject.rules().on("update", this.onUpdateRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromRules, this);
-            
+            */
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
 
@@ -166,7 +170,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
     },
 
-    onAddToBins: function(store, addedBins) {
+    /*onAddToBins: function(store, addedBins) {
     	for(var i = 0; i < addedBins.length; i++) {
             addedBins[i].cells().on("add", this.onAddToCells, this);
             addedBins[i].cells().on("update", this.onUpdateCells, this);
@@ -222,7 +226,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onRemoveFromRules: function() {
         this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
-    },
+    },*/
     
     onAddRowAbove: function() {
         this.GridManager.addRowAbove();
@@ -706,10 +710,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         
         this.control({
-            /*"DeviceEditorPartPanel button": {
+            "DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
             },
-            "button[cls='flipBinButton']": {
+            /*"button[cls='flipBinButton']": {
                 click: this.onFlipBinButtonClick
             },*/
             //"component[cls='binHeader']": {
