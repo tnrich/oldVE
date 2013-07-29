@@ -303,8 +303,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * Adds a default J5Bin given a name and index.
      * @param {String} pName
      * @param {Number} pIndex Index to insert new J5Bin. Optional. Defaults to end of of array if invalid or undefined value.
-     * ///@returns {Teselagen.models.J5Bin}
-     * @returns {Boolean} True if added, false if not.
+     * @returns {Teselagen.models.J5Bin}
+     * ///@returns {Boolean} True if added, false if not.
      */
     addNewBinByIndex: function(pIndex, pName) {
     	var added = false;
@@ -349,14 +349,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
         if (pIndex >= 0 && pIndex < cnt) this.bins().insert(pIndex, j5Bin); 
         else this.bins().add(j5Bin);
         
-		var newCnt  = this.bins().count();
+		/*var newCnt  = this.bins().count();
         if (newCnt > cnt) {
             added = true;
-        }
+        }*/
 
         // DW: NEED TO FIRE EVENT NEW_BIN_ADDED
 
-        return added; //j5Bin;
+        //return added; //j5Bin;
+        return j5Bin;
     },
 
     /**
@@ -493,8 +494,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart, filterThenAndNextTo) {
-        var constants = Teselagen.constants.Constants;
-
+        
+    	var constants = Teselagen.constants.Constants;
+        
         // filterThenAndNextTo should default to true.
         if(filterThenAndNextTo === undefined) {
             filterThenAndNextTo = true;
@@ -523,7 +525,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     getNumberOfRulesInvolvingPart: function(pPart) {
-        return this.getRulesInvolvingPart(pPart, true).count();    
+    	this.rules().suspendEvents(false);
+    	var numberOfRules = this.getRulesInvolvingPart(pPart, true).count();
+    	this.rules().resumeEvents();
+    	return numberOfRules;
     },
 
     /**

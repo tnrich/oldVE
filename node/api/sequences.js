@@ -102,6 +102,7 @@ module.exports = function(app) {
      */
     app.post('/sequences', restrict, function(req, res) {
         var newSequence = new Sequence();
+        newSequence.user_id = req.user._id;
         saveSequence(newSequence,req,res,function(savedSequence){
             req.user.sequences.push(savedSequence);
             User.findById(req.user._id).populate('sequences').exec(function(err, user) {
