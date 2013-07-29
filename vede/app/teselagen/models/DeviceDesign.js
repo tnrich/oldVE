@@ -142,6 +142,29 @@ Ext.define("Teselagen.models.DeviceDesign", {
     	this.callParent(arguments);
     	var self = this;
     	
+        var binInsert = self.bins().insert;	
+    	/*self.bins().insert = function() {
+    		
+    		var records = arguments[1];
+    		if(!Ext.isIterable(records)) records = [records];
+    		for(var i=0;i<records.length;i++) {
+    			records[i].setDeviceDesign(self);
+    		}
+    	    return binInsert.apply(self.bins(), arguments);
+		}*/
+    	
+    	this.bins().on("add", this.renderIfActive, this);
+        this.bins().on("update", this.renderIfActive, this);
+        this.bins().on("remove", this.renderIfActive, this);
+        
+        this.parts().on("add", this.renderIfActive, this);
+        this.parts().on("update", this.renderIfActive, this);
+        this.parts().on("remove", this.renderIfActive, this);
+        
+        this.rules().on("add", this.renderIfActive, this);
+        this.rules().on("update", this.renderIfActive, this);
+        this.rules().on("remove", this.renderIfActive, this);
+        
     	var binFireEvent = self.bins().fireEvent;	
     	self.bins().fireEvent = function() {
     		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments);
@@ -231,7 +254,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     }],
 
     modelIsLoaded: false,
-
+    active: false,
+    
     reload: function(callBack) {
 
         var me = this;
@@ -259,7 +283,23 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         });
     },
-
+    
+    setActive: function(value) {
+    	this.active = value;
+    	//this.bins().each(function(bin) {
+    		//bin.setActive(value);
+    	//});
+    	//this.parts().each(function(part) {
+    		//part.setActive(value);
+    	//});
+    	//this.rules().each(function(rule) {
+    		//rule.setActive(value);
+    	//});
+    },
+    
+    renderIfActive: function() {
+    	if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
     /**
      * Adds a default J5Bin given a name and index.
      * @param {String} pName
@@ -378,7 +418,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         return added;
     },
     */
-
+    
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection
@@ -448,19 +488,33 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * Returns the EugeneRules Store of EugeneRules that contain the Part in either operand.
      *
      * @param {Teselagen.models.Part} pPart
+     * @param {Boolean} filterThenAndNextTo If true, filter out rules that involve
+     * the part if they are THEN or NEXTTO rules. For rendering purposes, this
+     * flag should be true, which is the default value.
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
-    getRulesInvolvingPart: function(pPart) {
+    getRulesInvolvingPart: function(pPart, filterThenAndNextTo) {
         var constants = Teselagen.constants.Constants;
+
+        // filterThenAndNextTo should default to true.
+        if(filterThenAndNextTo === undefined) {
+            filterThenAndNextTo = true;
+        }
 
         this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart) {
                 return true;
-            } else if(rule.getOperand2() === pPart && 
-                      rule.get("compositionalOperator") !== constants.THEN &&
-                      rule.get("compositionalOperator") !== constants.NEXTTO) {
-                return true;
+            } else if(rule.getOperand2() === pPart) {
+                if(filterThenAndNextTo &&
+                   rule.get("compositionalOperator") !== constants.THEN &&
+                   rule.get("compositionalOperator") !== constants.NEXTTO) {
+                    return true;
+                } else if(!filterThenAndNextTo) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -470,15 +524,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     getNumberOfRulesInvolvingPart: function(pPart) {
-        this.rules().clearFilter(true);
-        var numRules = 0
-        var rules = this.rules();
-        rules.each(function (rule) {
-            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
-                numRules++
-            }
-        });  
-        return numRules;    
+        return this.getRulesInvolvingPart(pPart, true).count();    
     },
 
     /**

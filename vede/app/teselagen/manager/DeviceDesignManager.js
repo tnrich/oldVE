@@ -202,8 +202,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.Part} pPart
      * @return {Ext.data.Store} Store of EugeneRules containing pPart
      */
-    getRulesInvolvingPart: function(pDevice, pPart) {
-        return pDevice.getRulesInvolvingPart(pPart);
+    getRulesInvolvingPart: function(pDevice, pPart, filterThenAndNextTo) {
+        return pDevice.getRulesInvolvingPart(pPart, filterThenAndNextTo);
     },
 
     getNumberOfRulesInvolvingPart: function(pDevice, pPart) {
@@ -269,35 +269,28 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return prefix + (highestRuleNameNumber + 1);
     },
     
-    removeRulesAndPartsAssocWithCell: function(pDevice, xIndex, yIndex) {
-    	var part = pDevice.bins().getAt(xIndex).cells().getAt(yIndex).getPart();
+    removeRulesAndPartsAssocWithCell: function(pDevice, pCell) {
+    	var part = pCell.getPart();
     	if(part) {
     		var otherParts = false;
-    		loop:
+            loop:
     		for(var i=0;i<pDevice.bins().count();i++) {
     			var bin = pDevice.bins().getAt(i);
     			for(var j=0;j<bin.cells().count();j++) {
     				var cell = bin.cells().getAt(j);
-    				if(cell.getPart()===part && i!==xIndex && j!==yIndex) {
+    				if(cell.getPart() === part && pCell !== cell) {
     					otherParts = true;
     					break loop;
     				}
     			}
     		}
     		if(!otherParts) {
-    			var rulesToRemove = pDevice.getRulesInvolvingPart(part).getRange();
-    			console.log(rulesToRemove);
-    			/*for(var i=0;i<pDevice.rules().count();i++) {
-        			var rule = pDevice.rules().getAt(i);
-        			if(rule.getOperand1()===part || rule.getOperand2()===part) {
-        				rulesToRemove.push(part);
-        			}
-    			}*/
-    			debugger;
-    			pDevice.rules().remove(rulesToRemove);
-    			pDevice.parts().remove(part);
+    			var rulesToRemove = this.getRulesInvolvingPart(pDevice, part, false).getRange();
+
+    			pDevice.rules().removeAll();
     			pDevice.rules().clearFilter(true);
 
+    			pDevice.parts().remove(part);
     		}
     	}
     	

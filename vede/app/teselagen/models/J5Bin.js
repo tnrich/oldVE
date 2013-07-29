@@ -144,6 +144,10 @@ Ext.define("Teselagen.models.J5Bin", {
         this.callParent(arguments);
         //this.set("fases", fases);
         
+        this.cells().on("add", this.renderIfActive, this);
+        this.cells().on("update", this.renderIfActive, this);
+        this.cells().on("remove", this.renderIfActive, this);
+        
         var self = this;
     	var listenersEnabled = Teselagen.manager.GridManager.listenersEnabled;
     	var cellFireEvent = self.cells().fireEvent;
@@ -152,7 +156,16 @@ Ext.define("Teselagen.models.J5Bin", {
 		}
     	
     },
-
+    
+    isActive: function() {
+    	if(this.get("devicedesign_id")) return this.getDeviceDesign().active;
+    	else return false;
+    },
+    
+    renderIfActive: function() {
+    	if(this.isActive()) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+    
     /**
      * Removes a Part from the parts.
      * This DOES NOT check if parts are in EugeneRules. Use deleteItem to check.

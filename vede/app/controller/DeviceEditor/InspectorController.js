@@ -284,7 +284,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         store: partLibrary,
                         listeners: {
                             "itemclick": function(grid, part){
-                                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, function(identicalPart) {
+                                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
                                     if(bin) {
                                         // If the part already exists in the design,
@@ -550,7 +550,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.selectedPart = this.partPropertiesForm.getRecord();
             }
 
-            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, function() {
+            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
                 // If the selected part is not in the device already, add it.
                 if(self.activeProject.parts().indexOf(self.selectedPart) < 0) {
                     self.activeProject.parts().add(self.selectedPart);
