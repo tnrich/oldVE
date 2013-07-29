@@ -1254,14 +1254,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the deletion of a bin. Simply rerenders the collection info.
      */
     onRemoveFromBins: function () {
-        this.renderCollectionInfo();
+        this.renderCollectionInfo(true);
     },
 
     /**
      * Handles the event that one or more parts are added to any bin.
      */
     onAddToParts: function () {
-        this.columnsGrid.getView().refresh();
+        this.columnsGrid.view.refresh();
         this.renderCollectionInfo();
     },
 

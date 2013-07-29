@@ -84,6 +84,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onBeforeTabChange: function(tabPanel, newTab, oldTab) {
         if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
+            var selectedBin = this.GridManager.selectedGridBin;
             var selectedCell = this.GridManager.selectedGridPart;
 
             if(!oldTab.options) {
@@ -93,12 +94,18 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             oldTab.options.scrollLeft = this.grid.el.getScrollLeft();
             oldTab.options.scrollTop = this.grid.el.getScrollTop();
 
-            // Save the previous tab's selected part.
-            if(selectedCell) {
-                oldTab.options.selection = {
-                    x: Number(d3.select(selectedCell.node().parentNode.parentNode).attr("deGridBinIndex")),
-                    y: Number(selectedCell.attr("deGridRowIndex"))
-                };
+            // Save the previous tab's selected part and/or bin.
+            if(selectedBin) {
+                if(selectedCell) {
+                    oldTab.options.selection = {
+                        x: Number(selectedBin.attr("deGridBinIndex")),
+                        y: Number(selectedCell.attr("deGridRowIndex"))
+                    };
+                } else {
+                    oldTab.options.selection = {
+                        x: Number(selectedBin.attr("deGridBinIndex"))
+                    }
+                }
             } else {
                 oldTab.options.selection = null;
             }
@@ -197,8 +204,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.grid.el.setScrollTop(newTab.options.scrollTop);
 
                 if(newTab.options.selection) {
-                    this.GridManager.selectGridCellByIndex(newTab.options.selection.x,
-                                                           newTab.options.selection.y);
+                    if(newTab.options.selection.y) {
+                        this.GridManager.selectGridCellByIndex(newTab.options.selection.x,
+                                                               newTab.options.selection.y);
+                    } else {
+                        this.GridManager.selectGridBinHeaderByIndex(newTab.options.selection.x);
+                    }
                 }
             }
         }
