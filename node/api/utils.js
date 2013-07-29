@@ -143,9 +143,9 @@ module.exports = function(app) {
         var User = app.db.model("User");
         User.findById(req.user._id).populate('projects')
         .exec(function(err, user) {
-            var countDesigns = 0;
+            var countDesigns = user.designs.length;
             var countProjects = user.projects.length;
-            var countSequences = 0;
+            var countSequences = user.sequences.length;
             var countParts = 0;
             res.json({"numberProjects":countProjects, "numberDesigns":countDesigns, "numberSequences":countSequences, "numberParts":countParts});
         });

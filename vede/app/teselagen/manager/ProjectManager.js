@@ -17,7 +17,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.models.VectorEditorProject", 
                "Vede.view.de.DeviceEditor", 
                "Ext.window.MessageBox",
-               "Teselagen.manager.ProjectExplorerManager"],
+               // "Teselagen.manager.ProjectExplorerManager"
+               ],
 
     alias: "ProjectManager",
     mixins: {
@@ -51,26 +52,16 @@ Ext.define("Teselagen.manager.ProjectManager", {
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
 
-            self.sequenceStore = self.currentUser.sequences().load(function(sequences){
-                self.sequenceStore = sequences;
+            self.sequences = self.currentUser.sequences().load(function(sequences){
+                self.sequences= sequences;
             });
-
-            //Load the projects store
-
-            self.sequenceStore = self.currentUser.sequences().load(
-                    function (sequences,operation, success) {
-                        if(!success) { Ext.Error.raise("Error loading sequences");
-                        self.sequencesStore = sequences;
-                        }
-                    }
-                );
 
             var projectsStore = self.currentUser.projects().load(
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
                     self.projects = projectsStore; //Set the working project
                     //Teselagen.manager.ProjectExplorerManager.load();
-                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
                 }
             );
         });
@@ -139,7 +130,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
         sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
-        console.log(this.sequenceStore);
+        
         sequenceGrid.reconfigure(this.sequenceStore);
         dashPanel.getActiveTab().el.unmask();
     },

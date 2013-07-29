@@ -115,23 +115,21 @@ Ext.define("Vede.controller.ProjectController", {
                             if(typeof (cb2) === "function") {cb2(); }
 
                     // Empty sequenceFile store
-                    
-                });
-
-                Teselagen.manager.ProjectManager.sequenceStore =
+                    Teselagen.manager.ProjectManager.sequenceStore =
                         Ext.create("Ext.data.Store", {
                         model: "Teselagen.models.SequenceFile"
                     });
                                 
-                    var sequences = Teselagen.manager.ProjectManager.currentUser.sequences(); // Get sequences store from current project
-
-                    console.log(sequences);
-
-                    // Iterate over sequences
-                    sequences.each(function (sequence) {
-                        sequence.data.parentProject = project.data.name;
-                        Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
+                    Teselagen.manager.ProjectManager.currentUser.sequences().load(function(sequences){
+                        for(var x=0; x<sequences.length; x++) {
+                            sequences[x].data.parentProject = project.data.name;
+                            Teselagen.manager.ProjectManager.sequenceStore.add(sequences[x]); // Add sequence to sequences store
+                        }
                     });
+                    // Iterate over sequences
+                    
+                    
+                });
 
                 // For testing, execute callback
                 if(typeof (cb) === "function") {cb(); }
@@ -153,12 +151,12 @@ Ext.define("Vede.controller.ProjectController", {
                         }
                     });
                     storesCounter++;
-                    // project.sequences().load({
-                    //     callback: function(){
-                    //         storesCounter--;
-                    //         finishedPreloading();
-                    //     }
-                    // });
+                    Teselagen.manager.ProjectManager.currentUser.sequences().load({
+                        callback: function(){
+                            storesCounter--;
+                            finishedPreloading();
+                        }
+                    });
                 });
             }
         });
