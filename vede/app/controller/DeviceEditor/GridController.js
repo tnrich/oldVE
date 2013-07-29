@@ -519,14 +519,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * Checks the current design to see if pPart is already mapped to a cell, or
      * if a nonidentical part with the same name is mapped to a cell.
      * @param {Teselagen.models.Part} pPart The part to check for duplication.
+     * @param {String} name The name of the part to use to check.
      * @param {Function(Teselagen.models.Part)} cb Callback taking the identical
      * part as an argument.
      * @param {String} errorMessage The error message to display if a non-identical
      * part exists in the design.
      */
-    onValidateDuplicatedPartNameEvent: function(pPart, cb, errorMessage){
+    onValidateDuplicatedPartNameEvent: function(pPart, name, cb, errorMessage){
         var me = this;
-        var name = pPart.get("name");
         var duplicated = false;
         var nonidentical = false;
         var identicalPart = null;
