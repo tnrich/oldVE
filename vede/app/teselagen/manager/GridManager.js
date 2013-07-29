@@ -477,6 +477,8 @@ Ext.define("Teselagen.manager.GridManager", {
 		var yIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
 		
 		Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithCell(this.activeProject, cell);
+		var oldPart = cell.getPart();
+		var oldFas = cell.get("fas");
 		
 		cell.setPart();
 		cell.set("fas", "None");
@@ -488,21 +490,21 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertOptions(false);
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
-
-			
-		/*
-		
+        
 		Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "PART",
         	data: {
         		type: "DEL",
         		x: xIndex,
         		y: yIndex,
-        		data: me.selectedGridPart.datum(),
+        		data: {
+        			oldPart: oldPart,
+        			oldFas: oldFas
+        		},
         		rules: removedRules
         	}
 		});
-		me.selectPartByIndex(xIndex, yIndex);*/
+		
 	},
 	
 	cutSelectedPart: function() {

@@ -271,6 +271,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     
     removeRulesAndPartsAssocWithCell: function(pDevice, pCell) {
     	var part = pCell.getPart();
+    	var removedPart;
+    	var removedRules = [];
     	if(part) {
     		var otherParts = false;
             loop:
@@ -285,12 +287,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     			}
     		}
     		if(!otherParts) {
-    			//var rulesToRemove = this.getRulesInvolvingPart(pDevice, part, false).getRange();
+    			removedRules = pDevice.rules().getRange();
+    			removedPart = part;
+    			
     			pDevice.rules().removeAll();
     			pDevice.rules().clearFilter(true);
     			
     			pDevice.parts().remove(part);
-    			
     		}
     	}
     	
