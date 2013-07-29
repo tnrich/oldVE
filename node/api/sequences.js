@@ -130,13 +130,11 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/projects/:project_id/sequences', restrict, function(req, res) {
-            var Sequence = app.db.model("sequence");
-            var Project = app.db.model("project");
-            Project.findById(req.params.project_id).populate('sequences').exec(function(err, project) {
-                res.json({
-                    "sequences": project.sequences
+        User.findById(req.user._id)
+                .populate({ path: 'sequences'})
+                .exec(function(err, user) {
+                    res.json({"sequences":user.sequences});
                 });
-            });
         }
     );
 
