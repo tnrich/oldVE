@@ -291,15 +291,32 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         // map it to the selected cell. If not,
                                         // map the new part to the selected cell
                                         // and add it to the design's parts store.
-                                        if(identicalPart) {
+                                        var partAdded = false;
+                                    	if(identicalPart) {
                                             part = identicalPart;
                                         } else {
                                             self.activeProject.parts().add(part);
+                                            partAdded = true;
                                         }
-
+                                        
+                                        var oldPart = self.selectedCell.getPart();
+                                        
                                         self.selectedCell.setPart(part);
                                         self.selectedPart = part;
                                         var yIndex = self.activeProject.bins().getAt(self.selectedBinIndex).cells().indexOf(self.selectedCell);
+                                        
+                                        Teselagen.manager.GridCommandPatternManager.addCommand({
+                                        	type: "PART",
+                                        	data: {
+                                        		type: "ADD",
+                                        		x: self.selectedBinIndex,
+                                        		y: yIndex,
+                                        		oldPart: oldPart,
+                                        		newPart: part,
+                                        		partAdded: partAdded
+                                        	}
+                                		});
+                                        
                                         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, 
                                         		self.selectedCell, self.selectedBinIndex, yIndex);
                                         

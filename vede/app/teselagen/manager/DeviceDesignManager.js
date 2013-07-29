@@ -287,8 +287,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     			}
     		}
     		if(!otherParts) {
-    			removedRules = pDevice.rules().getRange();
     			removedPart = part;
+    			
+    			this.getRulesInvolvingPart(pDevice, part, false);
+    			removedRules = pDevice.rules().getRange();
     			
     			pDevice.rules().removeAll();
     			pDevice.rules().clearFilter(true);

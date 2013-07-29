@@ -147,9 +147,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
     		var records = arguments[1];
     		if(!Ext.isIterable(records)) records = [records];
     		for(var i=0;i<records.length;i++) {
-    			records[i].set("devicedesign_id", self.get("id"));
+    			records[i].setDeviceDesign(self);
     		}
-    	    return binInsert.apply(self.bins(), arguments);
+    	    return binInsert.apply(self.bins(), arguments) || null;
 		}
     	
     	this.bins().on("add", this.renderIfActive, this);
@@ -166,17 +166,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
         
     	var binFireEvent = self.bins().fireEvent;	
     	self.bins().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments) || null;
 		}
     	
     	var partFireEvent = self.parts().fireEvent;
     	self.parts().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments) || null;
 		}
     	
     	var ruleFireEvent = self.rules().fireEvent;
     	self.rules().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments) || null;
 		}
     },
     

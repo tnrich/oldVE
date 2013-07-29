@@ -289,18 +289,15 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoPartAdd: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].parts.splice(command.data.y,1,command.data.oldPart);
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		if(command.data.partAdded) {
+			gridManager.activeProject.parts().remove(command.data.newPart);			
+			//gridManager.activeProject.parts().add(command.data.oldPart);
+		}
+		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).setPart(command.data.oldPart);
 	},
 	
 	undoPartFas: function(command) {
