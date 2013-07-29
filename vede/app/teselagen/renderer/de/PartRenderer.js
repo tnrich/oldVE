@@ -40,17 +40,19 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 				// Highlight all gridParts with the same source, unless the j5Part is empty.
 				//>> Part source seems to be null, so I am using 'sequencefile_id' as a temporary
 				//*  substitute for proof-of-concept purposes. Change to whatever is best later.
-				// Commented out right now as it is kind of annoying.
-				/*var selectedPartSeqId = d.sequencefile_id;
-				if(!selectedPartSeqId||selectedPartSeqId==""||selectedPartSeqId==null) return;
+                var part = d.getPart();
+
+				if(!part) {
+                    return;
+                }
+
 				d3.selectAll(".gridPartRectSVG")
 					.filter(function(dr){
-						return dr.sequencefile_id==selectedPartSeqId;
+						return dr.getPart() === part;
 					})
 					.transition()
 					.duration(30)
-					.attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR);*/
-				
+					.attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR);
 			})
 			.on("mouseout", function() {
 				//var selection = d3.select(this);
@@ -81,33 +83,35 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 				d3.event.preventDefault();
 				var gridManager = Teselagen.manager.GridManager;
 				
-				gridManager.selectPart(this.parentNode);
+                // Manually trigger the click event to select the cell.
+                var event = document.createEvent('UIEvents');
+                event.initUIEvent('click', true, true);
+
+                this.dispatchEvent(event);
+
+                var gridController = Vede.application.getController("DeviceEditor.GridController");
 				
 				var contextMenu = Ext.create('Ext.menu.Menu',{
 					items: [{
 			  	    	  text: 'Cut',
-			  	    	  handler: gridManager.onCutPartMenuItemClick
-					  },
-//					  {
-//				        xtype: 'menuseparator',
-//				      },
-				      {
+			  	    	  handler: gridController.onCutPart
+					  }, {
 						  text: 'Copy',	
-						  handler: gridManager.onCopyPartMenuItemClick
-				      },{
+						  handler: gridController.onCopyPart
+				      }, {
 				    	  text: 'Paste',
-				    	  handler: gridManager.onPastePartMenuItemClick
-				      },{
+				    	  handler: gridController.onPastePart
+				      }, {
 				    	  text: 'Delete',
 				    	  handler: gridManager.clearSelectedPart
 				      }]
 				});
-				if(d.get("part_id")===null) {
+				if(!d.getPart()) {
 					contextMenu.items.items[0].setDisabled(true);
 					contextMenu.items.items[1].setDisabled(true);
 					contextMenu.items.items[3].setDisabled(true);
 				}
-				if(gridManager.selectedClipboardPart==null) {
+				if(gridManager.clipboardPart==null) {
 					contextMenu.items.items[2].setDisabled(true);
 				}
 				

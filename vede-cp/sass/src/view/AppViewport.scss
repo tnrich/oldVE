@@ -464,6 +464,21 @@ border-color: #E0E3E6;
   background-size:14px;
 }
 
+.x-hmenu-sort-asc .x-menu-item-icon {
+  background-image: url(images/ux/sortbynamedescending.png) !important;
+  background-size: 16px;  
+}
+
+
+.x-hmenu-sort-desc .x-menu-item-icon {
+  background-image: url(images/ux/sortbynameascending.png) !important;
+  background-size: 16px;  
+}
+
+.x-cols-icon .x-menu-item-icon {
+  background-image: url(images/ux/columns.png) !important;
+  background-size: 16px;  
+}
 /*Header*/
 #headerPanel, #headerPanel-body {
   height: 120px !important;

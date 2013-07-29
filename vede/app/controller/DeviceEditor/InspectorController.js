@@ -68,7 +68,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var tmpC = 0;
         var bins = deviceDesign.bins().getRange();
         var parts;
-        var combinatorial = false;
 
         for(var i = 0; i < bins.length; i++) {
             cells = bins[i].cells().getRange();
@@ -79,23 +78,33 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     parts.push(cells[k].getPart());
                 }
             }
-            
+
             if(parts.length > 1) {
-                tmpC = 0;
+                return cb(true);
+            }
+        }
 
-                for(var j = 0; j < parts.length; j++) {
-                    if(parts[j].get("sequencefile_id")!=="" && !parts[j].get("phantom")) {
-                        tmpC++;
-                    }
-                }
+        return cb(false);
+    },
 
-                if (tmpC>1) {
-                    combinatorial = true;
+    isj5Ready: function() {
+        var bins = this.activeProject.bins().getRange();
+        var cells;
+        var part;
+
+        for(var i = 0; i < bins.length; i++) {
+            cells = bins[i].cells().getRange();
+
+            for(var j = 0; j < cells.length; j++) {
+                part = cells[j].getPart();
+
+                if(part && part.get("sequencefile_id") === "") {
+                    return false;
                 }
             }
         }
 
-        return cb(combinatorial);
+        return true;
     },
 
     onCheckj5Ready: function(cb,notChangeMethod){
@@ -114,52 +123,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var self = this;
 
         this.checkCombinatorial(deviceDesign, function(combinatorial){
-            var j5ready = true;
-            var tmpJ = 0;
-            var bins = deviceDesign.bins().getRange();
-            var cnt = bins.length;
-            var parts;
-            var cells;
-            var part;
-            var names = 0;
-
-            for(var i = 0; i < cnt; i++) {
-                var tmpC = 0;
-                cells = bins[i].cells().getRange();
-
-                var parts = [];
-                for(var k = 0; k < cells.length; k++) {
-                    if(cells[k].getPart()) {
-                        parts.push(cells[k].getPart());
-                    }
-                }
-
-                for(var j = 0; j < parts.length; j++) {
-                    part = parts[j];
-
-                    if(part !== undefined) {
-                        if(part.get("sequencefile_id") !== "" && !part.get("phantom") ) {
-                                tmpJ++;
-                                tmpC++;
-                        }
-                        else if (part.get("phantom")){
-                            tmpC--;
-                        }
-                    }
-                    if(part !== undefined) {
-                        if (part.get("name") !== "") {
-                            names++;
-                        }
-                    }
-                    if(tmpC<0) {
-                        j5ready = false;
-                    }
-                }
-            }
-
-            if (tmpJ < cnt || names !== tmpJ) {
-                j5ready = false;
-            }
+            var j5ready = self.isj5Ready();
 
             if( !notChangeMethod ) {Vede.application.fireEvent(self.CommonEvent.LOAD_ASSEMBLY_METHODS, combinatorial);}
 
@@ -698,8 +662,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if (evt === "ok") {
             if(selectedBin) {
                 var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
-                console.log(selectedBinIndex);
-                console.log(this.activeProject);
                 this.activeProject.deleteBinByIndex(selectedBinIndex);
                 this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
             } else {
@@ -1205,12 +1167,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 // Unset listeners for the parts store of each bin.
                 this.activeBins.each(function (bin) {
-                    var parts = bin.cells();
+                    var cells = bin.cells();
 
-                    parts.un("add", this.onAddToParts, this);
-                    parts.un("update", this.onUpdateParts, this);
-                    parts.un("remove", this.onRemoveFromParts, this);
+                    cells.un("add", this.onAddToCells, this);
+                    cells.un("update", this.onUpdateCells, this);
+                    cells.un("remove", this.onRemoveFromCells, this);
                 }, this);
+
+                // Remove listeners from the design's parts store.
+                this.activeProject.parts().un("add", this.onAddToParts, this);
+                this.activeProject.parts().un("update", this.onUpdateParts, this);
+                this.activeProject.parts().un("remove", this.onRemoveFromParts, this);
             }
 
             this.activeProject = newTab.model;
@@ -1220,13 +1187,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.activeBins.on("add", this.onAddToBins, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
-            // Add listeners to each bin's parts store.
-            this.activeBins.each(function (bin) {
-                var parts = bin.cells();
+            // Add listeners to the design's parts store.
+            this.activeProject.parts().on("add", this.onAddToParts, this);
+            this.activeProject.parts().on("update", this.onUpdateParts, this);
+            this.activeProject.parts().on("remove", this.onRemoveFromParts, this);
 
-                parts.on("add", this.onAddToParts, this);
-                parts.on("update", this.onUpdateParts, this);
-                parts.on("remove", this.onRemoveFromParts, this);
+            // Add listeners to each bin's cells store.
+            this.activeBins.each(function (bin) {
+                var cells = bin.cells();
+
+                cells.on("add", this.onAddToCells, this);
+                cells.on("update", this.onUpdateCells, this);
+                cells.on("remove", this.onRemoveFromCells, this);
             }, this);
 
             this.inspector = newTab.down("component[cls='InspectorPanel']");
@@ -1274,10 +1246,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         // Add event listeners to the parts store of this bin.
         Ext.each(addedBins, function (j5Bin) {
-            var parts = j5Bin.cells();
-            parts.on("add", this.onAddToParts, this);
-            parts.on("update", this.onUpdateParts, this);
-            parts.on("remove", this.onRemoveFromParts, this);
+            var cells = j5Bin.cells();
+            cells.on("add", this.onAddToCells, this);
+            cells.on("update", this.onUpdateCells, this);
+            cells.on("remove", this.onRemoveFromCells, this);
         }, this);
 
         this.columnsGrid.getSelectionModel().deselect(selectedPart);
@@ -1316,14 +1288,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {String} operation The type of update that occurred.
      * @param {String} modified The name of the field that was edited.
      */
-    onUpdateParts: function(parts, updatedPart, operation, modified) {
-        if(modified && !updatedPart.data.phantom)
-        {
-//            if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
-//                var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
-//                                                                      updatedPart);
-//            }
-
+    onUpdateParts: function(parts, updatedCell, operation, modified) {
+        if(modified) {
             if(parts.indexOf(this.selectedPart) > -1) {
                 var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
                 partPropertiesForm.loadRecord(this.selectedPart);
@@ -1335,6 +1301,45 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handles the deletion of a part from a bin.
      */
     onRemoveFromParts: function () {
+        try {
+            this.columnsGrid.getView().refresh();
+            this.renderCollectionInfo();
+            //this.clearPartInfo();
+        } catch(err)
+        {
+            console.log("Failed removing part from bin. Error:", err);
+        }
+    },
+
+    /**
+     * Handles the event that one or more cells are added to any bin.
+     */
+    onAddToCells: function () {
+        this.columnsGrid.getView().refresh();
+        this.renderCollectionInfo();
+    },
+
+    /**
+     * Handles the event where a part has been changed directly.
+     * @param {Ext.data.Store} parts The parts store of the bin which owns the
+     * modified part.
+     * @param {Teselagen.models.Part} updatedPart The part that has been updated.
+     * @param {String} operation The type of update that occurred.
+     * @param {String} modified The name of the field that was edited.
+     */
+    onUpdateCells: function(parts, updatedCell, operation, modified) {
+        if(modified && this.selectedPart) {
+            var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+            partPropertiesForm.loadRecord(this.selectedPart);
+
+            this.onCheckj5Ready();
+        }
+    },
+
+    /**
+     * Handles the deletion of a part from a bin.
+     */
+    onRemoveFromCells: function () {
         try {
             this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();

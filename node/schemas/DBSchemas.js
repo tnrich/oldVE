@@ -112,7 +112,7 @@ module.exports = function(db) {
 		next();
 	});
 
-    PartSchema.statics.generateDefinitionHash = function(user, project, part, cb) {
+    PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
         db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
             var hashArray = [part.genbankStartBP,
                              part.endBP,
@@ -150,6 +150,7 @@ module.exports = function(db) {
 			fro: String,
 			extra5PrimeBps: String,
 			extra3PrimeBps: String,
+            devicedesign_id: String,
 			binName: String,
 			iconID: String,
 			cells: [
@@ -208,14 +209,6 @@ module.exports = function(db) {
 		dateCreated: String,
 		dateModified: String,
 		name: String,
-		sequences: [{
-			type: oIDRef,
-			ref: 'sequence'
-		}],
-		parts: [{
-			type: oIDRef,
-			ref: 'part'
-		}],
 		designs: [{
 			type: oIDRef,
 			ref: 'devicedesign'

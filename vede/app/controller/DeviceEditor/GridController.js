@@ -572,7 +572,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onCutPart: function() {
     	var gridManager = Teselagen.manager.GridManager;
     	if(gridManager.selectedGridPart) {
-    		
+    		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
+
+            gridManager.clearSelectedPart();
     	}
     },
     
@@ -588,7 +590,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     	var selectedCell = gridManager.selectedGridPart.datum();
     	if(gridManager.clipboardPart && selectedCell) {
     		selectedCell.setPart(gridManager.clipboardPart);
-    		//debugger;
     	}
     },
     

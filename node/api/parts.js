@@ -3,7 +3,6 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
     var Part = app.db.model("part");
-    var Project = app.db.model("project");
 
     /**
      * POST Parts
@@ -13,7 +12,7 @@ module.exports = function(app) {
 
     /*
      * When a part is created a Fully quilified domain name (FQDN) should be generated.
-     * <company/institution>.<group>.<subgroup>.<user>.<project>.<design>.<part>
+     * <company/institution>.<group>.<subgroup>.<user>..<design>.<part>
      */
 
     app.get('/fqdn', restrict,  function(req, res) {
@@ -23,20 +22,13 @@ module.exports = function(app) {
 
     var savePart = function(req,res,existingPart){
         var newPart = existingPart;
-        var saveToProject = false;
-        if(!existingPart) { newPart = new Part(); saveToProject = true; }
+        if(!existingPart) { newPart = new Part(); }
         for (var prop in req.body) {
-            if(prop!=="project_id") newPart[prop] = req.body[prop];
+            newPart[prop] = req.body[prop];
         }
-
-        if(req.body.project_id!=="") newPart.project_id = req.body.project_id;
-
-        Project.findById(req.body.project_id,function(err,project){
-            if(err) return res.json(500,{"error":err,"info":"invalid project_id"});
-            if(!project) return res.json(500,{"error":"project not found"});
             
-            newPart.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
-            Part.generateDefinitionHash(req.user, project, newPart, function(hash){
+            newPart.FQDN = req.user.FQDN + req.body.name;
+            Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
 
                 newPart.save(function(err){
@@ -57,15 +49,10 @@ module.exports = function(app) {
                     }
                     else 
                         {
-                            if(saveToProject) {
-                                project.parts.push(newPart);
-                                project.save();
-                            }
                             res.json({'parts': newPart,"duplicated":false,"err":err});
                         }
                 });
             });
-        });
     };
 
 
@@ -96,28 +83,8 @@ module.exports = function(app) {
      * @method GET 'parts'
      */
     app.get('/parts', restrict,  function(req, res) {
-
-        if (req.query.filter) {
-            var veproject_id = JSON.parse(req.query.filter)[0].value;
-
-            var VEProject = app.db.model("veproject");
-
-            VEProject.findById(veproject_id).populate("parts").exec(function(err, veproject) {
-                if (!veproject || err) return res.json({
-                    "fault": "Unexpected error"
-                }, 500);
-                res.send({
-                    "parts": veproject.parts
-                });
-            });
-        } else if (req.query.id) {
-            var Part = app.db.model("part");
-            Part.findById(req.body.id, function(err, part) {
-                res.json({
-                    'parts': part
-                });
-            });
-        }
+        console.log("Warning: Using deprecated method");
+        return res.json({});
     });
 
 

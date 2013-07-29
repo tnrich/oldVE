@@ -6,6 +6,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
+    padding: '10 0',
     layout: {
         type: 'card'
     },
@@ -432,6 +433,20 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         flex: 1,
                         items : [
                             {
+                                xtype: 'textfield',
+                                layout: {
+                                    type: 'fit',
+                                    align: 'stretch'
+                                },
+                                anchor: '100%',
+                                height: 30,
+                                cls: 'sequenceLibrarySearchField',
+                                width: '98%',
+                                emptyText: 'Search Library',
+                                emptyCls: 'empty-search-field',
+                                margin: 13
+                            },
+                            {
                                 xtype: 'gridpanel',
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
@@ -447,6 +462,78 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'File Format',
                                         width: 100,
                                         dataIndex: 'sequenceFileFormat'
+                                    },{
+                                        xtype: 'gridcolumn',
+                                        text: 'Project',
+                                        width: 120,
+                                        dataIndex: 'parentProject'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Size',
+                                        width: 80,
+                                        dataIndex: 'size'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Features',
+                                        flex: 1,
+                                        dataIndex: 'features'
+                                    },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                xtype: 'panel',
+                title: 'Part Library',
+                cls: 'partLibraryPanel',
+                border: 0,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        xtype: 'container'
+                    },
+                    {
+                        xtype: 'container',
+                        cls: 'partLibraryContainer',
+                        flex: 1,
+                        items : [
+                            {
+                                xtype: 'textfield',
+                                layout: {
+                                    type: 'fit',
+                                    align: 'stretch'
+                                },
+                                anchor: '100%',
+                                height: 30,
+                                cls: 'partLibrarySearchField',
+                                width: '98%',
+                                emptyText: 'Search Library',
+                                emptyCls: 'empty-search-field',
+                                margin: 13
+                            },
+                            {
+                                xtype: 'gridpanel',
+                                border: 0,
+                                name: 'PartLibraryGrid',
+                                cls: 'partLibraryGrid',
+                                columns: [
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Name',
+                                        width: 320,
+                                        dataIndex: 'name'
+                                    }, {
+                                        xtype: 'gridcolumn',
+                                        text: 'File Format',
+                                        width: 100,
+                                        dataIndex: 'partFileFormat'
                                     },{
                                         xtype: 'gridcolumn',
                                         text: 'Project',
