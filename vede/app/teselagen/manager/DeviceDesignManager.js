@@ -268,7 +268,41 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         return prefix + (highestRuleNameNumber + 1);
     },
+    
+    removeRulesAndPartsAssocWithCell: function(pDevice, xIndex, yIndex) {
+    	var part = pDevice.bins().getAt(xIndex).cells().getAt(yIndex).getPart();
+    	if(part) {
+    		var otherParts = false;
+    		loop:
+    		for(var i=0;i<pDevice.bins().count();i++) {
+    			var bin = pDevice.bins().getAt(i);
+    			for(var j=0;j<bin.cells().count();j++) {
+    				var cell = bin.cells().getAt(j);
+    				if(cell.getPart()===part && i!==xIndex && j!==yIndex) {
+    					otherParts = true;
+    					break loop;
+    				}
+    			}
+    		}
+    		if(!otherParts) {
+    			var rulesToRemove = pDevice.getRulesInvolvingPart(part).getRange();
+    			console.log(rulesToRemove);
+    			/*for(var i=0;i<pDevice.rules().count();i++) {
+        			var rule = pDevice.rules().getAt(i);
+        			if(rule.getOperand1()===part || rule.getOperand2()===part) {
+        				rulesToRemove.push(part);
+        			}
+    			}*/
+    			debugger;
+    			pDevice.rules().remove(rulesToRemove);
+    			pDevice.parts().remove(part);
+    			pDevice.rules().clearFilter(true);
 
+    		}
+    	}
+    	
+    },
+    
     //================================================================
     // J5Collection Management
     //================================================================
