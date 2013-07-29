@@ -39,7 +39,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onPartPanelButtonClick: function(button) {
         var selectedBin = Teselagen.manager.GridManager.selectedGridBin;
-    	if(selectedBin) {selectedBin.datum().set("iconID",button.data.iconKey);}
+    	if(selectedBin) {
+    		var oldIcon = selectedBin.datum().get("iconID");
+    		selectedBin.datum().set("iconID",button.data.iconKey);
+    		Teselagen.manager.GridCommandPatternManager.addCommand({
+                type: "BIN",
+                data: {
+                    type: "ICON",
+                    x: parseInt(selectedBin.attr("deGridBinIndex")),
+                    oldData: oldIcon,
+                    newData: button.data.iconKey
+                }
+            });
+		}
     },
 
     /**
@@ -590,7 +602,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     	var gridManager = Teselagen.manager.GridManager;
     	if(gridManager.selectedGridPart) {
     		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
-
+    		
             gridManager.clearSelectedPart();
     	}
     },

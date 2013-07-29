@@ -1249,7 +1249,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.renderCollectionInfo(true);
     },
-
+    
     /**
      * Handles the deletion of a bin. Simply rerenders the collection info.
      */

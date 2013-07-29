@@ -285,12 +285,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     			}
     		}
     		if(!otherParts) {
-    			var rulesToRemove = this.getRulesInvolvingPart(pDevice, part, false).getRange();
-
+    			//var rulesToRemove = this.getRulesInvolvingPart(pDevice, part, false).getRange();
     			pDevice.rules().removeAll();
     			pDevice.rules().clearFilter(true);
-
+    			
     			pDevice.parts().remove(part);
+    			
     		}
     	}
     	

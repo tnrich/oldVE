@@ -20,7 +20,39 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
             minHeight:132,
             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                 clicksToEdit: 2,
-                errorSummary: false
+                errorSummary: false,
+                listeners: {
+                	validateedit: function(editor, e) {
+                		var oldBinName = e.originalValues.binName;
+                		var oldDirectionForward = e.originalValues.directionForward;
+                		var oldDsf = e.originalValues.dsf;
+                		var oldExtra3PrimeBps = e.originalValues.extra3PrimeBps;
+                		var oldExtra5PrimeBps = e.originalValues.extra5PrimeBps;
+                		var oldFro = e.originalValues.fro;
+                		
+                		var newBinName = e.record.fields.get("binName").convert(e.newValues.binName);
+                		var newDirectionForward = e.newValues.directionForward;
+                		var newDsf = e.newValues.dsf;
+                		var newExtra3PrimeBps = e.newValues.extra3PrimeBps;
+                		var newExtra5PrimeBps = e.newValues.extra5PrimeBps;
+                		var newFro = e.newValues.fro;
+                		
+                		if(oldBinName!==newBinName || oldDirectionForward!==newDirectionForward || oldDsf!==newDsf
+                				|| oldExtra3PrimeBps!==newExtra3PrimeBps || oldExtra5PrimeBps!==newExtra5PrimeBps 
+                				|| oldFro!==newFro) {
+                			Teselagen.manager.GridCommandPatternManager.addCommand({
+                	        	type: "BIN",
+                	        	data: {
+                	        		type: "EDIT",
+                	        		x: e.rowIdx,
+                	        		oldData: e.originalValues,
+                	        		newData: e.newValues
+                	        	}
+                			});
+                		}
+                		
+                	}
+                }
             }),
             columns: [
                 {

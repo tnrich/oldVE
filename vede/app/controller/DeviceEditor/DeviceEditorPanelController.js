@@ -549,7 +549,15 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         return numseconds + " seconds";
         }
     },
-
+    
+    onUndoMenuItemClick: function() {
+    	Teselagen.manager.GridCommandPatternManager.undo();
+    },
+    
+    onRedoMenuItemClick: function() {
+    	Teselagen.manager.GridCommandPatternManager.redo();
+    },
+    
     /**
      * @member Vede.controller.DeviceEditor.DeviceEditorPanelController
      */
@@ -595,6 +603,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {
                 click: this.onAddColumnRightClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Undo']": {
+                click: this.onUndoMenuItemClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Redo']": {
+                click: this.onRedoMenuItemClick
             },
             "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {
                 click: this.onclearPartMenuItemClick
