@@ -147,7 +147,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     		var records = arguments[1];
     		if(!Ext.isIterable(records)) records = [records];
     		for(var i=0;i<records.length;i++) {
-    			records[i].setDeviceDesign(self);
+    			records[i].set("devicedesign_id", self.get("id"));
     		}
     	    return binInsert.apply(self.bins(), arguments);
 		}

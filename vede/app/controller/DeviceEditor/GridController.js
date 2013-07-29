@@ -94,6 +94,36 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
     */
 
+    onBeforeTabChange: function(tabPanel, newTab, oldTab) {
+        if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
+            var selectedBin = this.GridManager.selectedGridBin;
+            var selectedCell = this.GridManager.selectedGridPart;
+
+            if(!oldTab.options) {
+                oldTab.options = {};
+            }
+
+            oldTab.options.scrollLeft = this.grid.el.getScrollLeft();
+            oldTab.options.scrollTop = this.grid.el.getScrollTop();
+
+            // Save the previous tab's selected part and/or bin.
+            if(selectedBin) {
+                if(selectedCell) {
+                    oldTab.options.selection = {
+                        x: Number(selectedBin.attr("deGridBinIndex")),
+                        y: Number(selectedCell.attr("deGridRowIndex"))
+                    };
+                } else {
+                    oldTab.options.selection = {
+                        x: Number(selectedBin.attr("deGridBinIndex"))
+                    }
+                }
+            } else {
+                oldTab.options.selection = null;
+            }
+        }
+    },
+
     /**
      * When the tab changes on the main panel, handles loading and rendering the
      * new device design, assuming the new tab is a device editor tab. Also sets
@@ -179,6 +209,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.GridManager.renderGrid(newTab.model);
+
+            // Load the new tab's saved options, if they exist.
+            if(newTab.options) {
+                this.grid.el.setScrollLeft(newTab.options.scrollLeft);
+                this.grid.el.setScrollTop(newTab.options.scrollTop);
+
+                if(newTab.options.selection) {
+                    if(newTab.options.selection.y) {
+                        this.GridManager.selectGridCellByIndex(newTab.options.selection.x,
+                                                               newTab.options.selection.y);
+                    } else {
+                        this.GridManager.selectGridBinHeaderByIndex(newTab.options.selection.x);
+                    }
+                }
+            }
         }
     },
 
@@ -708,9 +753,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-        this.tabPanel.on("tabchange",
-                         this.onTabChange,
-                         this);
         this.InspectorController = this.application.getDeviceEditorInspectorControllerController();
     },
 
@@ -722,18 +764,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         
         this.control({
+            "#mainAppPanel": {
+                beforetabchange: this.onBeforeTabChange,
+                tabchange: this.onTabChange
+            },
             "DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
             },
-            /*"button[cls='flipBinButton']": {
-                click: this.onFlipBinButtonClick
-            },*/
-            //"component[cls='binHeader']": {
-            //    render: this.addBinHeaderClickEvent
-            //},
-            //"component[cls='gridPartCell']": {
-            //    render: this.addPartCellEvents
-            //},
             "button[cls='editMenu'] > menu > menuitem[text='Copy Part']": {
                 click: this.onCopyPartMenuItemClick
             },

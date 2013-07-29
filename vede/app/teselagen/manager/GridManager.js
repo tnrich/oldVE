@@ -101,6 +101,9 @@ Ext.define("Teselagen.manager.GridManager", {
                 this.selectedPartIndex = Number(this.selectedGridPart.attr("deGridRowIndex"));
             }
         } else {
+            this.selectedGridPart = null;
+            this.selectedGridBin = null;
+
             this.selectedColumnIndex = null;
             this.selectedPartIndex = null;
         }
@@ -120,9 +123,6 @@ Ext.define("Teselagen.manager.GridManager", {
             this.totalRows = 0;
         }
 		
-		//Teselagen.manager.InspectorPanelManager.refreshInspectorGrid();
-		//Teselagen.manager.InspectorPanelManager.refreshPlasmidGeometry();
-
 		this.grid = d3.select(this.currentTab.el.dom)
 			.select(".designGrid")
 			.append("svg:svg")
