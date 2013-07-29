@@ -477,6 +477,22 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //return this.features.contains(feature);
         return Ext.Array.contains(this.features, pFeature);
     },
+
+    /**
+     * Converts Features to JSON object to agree with the Teselagen.models.DNAFeature format
+     * for loading into properties window
+     */
+    getFeaturesJSON: function () {
+        var features = this.getFeatures();
+        var newFeatures = [];
+        var length = features.length;
+
+        for (i = 0; i < length; i++) {
+            newFeature = features[i].toJSON();
+            newFeatures.push(newFeature);
+        };
+        return newFeatures;
+    },
       
     /**
      * Insert another sequence manager at position. This method is used on sequence paste.

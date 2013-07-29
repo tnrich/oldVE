@@ -448,6 +448,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                                         this.selectedPart);
 
         this.eugeneRulesGrid.reconfigure(rulesStore);
+        console.log(rulesStore);
 
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
     },

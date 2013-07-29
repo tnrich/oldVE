@@ -19,8 +19,12 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     	Ext.getCmp("createNewFeatureWindowStartField").setMaxValue(seqLen);
     	Ext.getCmp("createNewFeatureWindowEndField").setMaxValue(seqLen);
     	    	
-    	Ext.getCmp("createNewFeatureWindowStartField").setValue(this.selectedStart+1);
-    	Ext.getCmp("createNewFeatureWindowEndField").setValue(this.selectedEnd);
+    	if (this.selectedStart) {
+            Ext.getCmp("createNewFeatureWindowStartField").setValue(this.selectedStart+1);
+        }
+        if (this.selectedEnd) {
+    	   Ext.getCmp("createNewFeatureWindowEndField").setValue(this.selectedEnd);
+        }
     },
     
     onSequenceManagerChanged: function(sequenceManager) {
@@ -82,6 +86,8 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
 	    	});
 	    	this.sequenceManager.addFeature(newFeature);
 	    	Ext.getCmp("CreateNewFeature").close();
+            Vede.application.fireEvent('rerenderFeaturesGrid');
+            Vede.application.fireEvent('toggleFeatureEditOptions');
     	}
     },
     
