@@ -169,26 +169,18 @@ Ext.define("Teselagen.models.Part", {
         setterName: "setSequenceFileModel"
     }, {
         type: "belongsTo",
-        model: "Teselagen.models.Project",
-        getterName: "getProject",
-        setterName: "setProject",
-        associationKey: "project",
-        foreignKey: "id"
+        model: "Teselagen.models.User",
+        getterName: "getUser",
+        setterName: "setUser",
+        associationKey: "user",
+        foreignKey: "user_id"
     }
 
     ],
     
     constructor: function() {
         this.callParent(arguments);
-        
-        //this.on("add", this.renderIfActive, this);
-        //this.on("update", this.renderIfActive, this);
-        //this.on("remove", this.renderIfActive, this);
     },
-    
-    //renderIfActive: function() {
-    	//if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
-    //},
     
     active: false,
     

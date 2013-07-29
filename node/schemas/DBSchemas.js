@@ -81,6 +81,10 @@ module.exports = function(db) {
 		firstTimeImported: Boolean
 	});
 
+	//SequenceSchema.virtual('user_id').get(function() {
+	//  return req.user._id;
+	//});
+
 	SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true })
 
 	registerSchema('sequence', SequenceSchema);

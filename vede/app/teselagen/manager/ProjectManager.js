@@ -16,7 +16,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.models.Part",
                "Teselagen.models.VectorEditorProject", 
                "Vede.view.de.DeviceEditor", 
-               "Ext.window.MessageBox"],
+               "Ext.window.MessageBox",
+               "Teselagen.manager.ProjectExplorerManager"],
 
     alias: "ProjectManager",
     mixins: {
@@ -49,6 +50,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
             if(!success) { Ext.Error.raise("Error loading user"); }
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
+
+            self.sequenceStore = self.currentUser.sequences().load(function(sequences){
+                self.sequenceStore = sequences;
+            });
+
             //Load the projects store
 
             self.sequenceStore = self.currentUser.sequences().load(
@@ -63,7 +69,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
                     self.projects = projectsStore; //Set the working project
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+                    //Teselagen.manager.ProjectExplorerManager.load();
+                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
                 }
             );
         });
