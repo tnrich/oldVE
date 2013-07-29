@@ -37,6 +37,20 @@ Ext.define("Teselagen.models.User", {
         associationKey: "userRestrictionEnzymeGroups",
         autoLoad: true,
         foreignKey: "user_id"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.Part",
+        name: "parts",
+        associationKey: "parts",
+        autoLoad: true,
+        foreignKey: "user_id"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.SequenceFile",
+        name: "sequences",
+        associationKey: "sequences",
+        autoLoad: true,
+        foreignKey: "user_id"
     }],
     proxy: {
         type: "rest",

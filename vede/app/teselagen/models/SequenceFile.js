@@ -23,27 +23,13 @@ Ext.define("Teselagen.models.SequenceFile", {
 
 
             // GET SEQUENCES FROM PROJECT
-            if( request.action === "read" && request.operation.filters && !request.operation.id)
+            if( request.action === "read" && !request.operation.id)
             {
-                if ( request.operation.filters[0].property === "project_id" )
-                {
-                    var url = "projects/" + request.operation.filters[0].value + "/sequences";
+                    var url = "projects/sequences";
                     delete request.params;
                     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
-                }
             }
 
-            // GET SEQUENCES FROM PROJECT WITH PROJECT_ID
-            if( request.action === "read" && request.operation.filters && request.operation.id)
-            {
-                if ( request.operation.filters[0].property === "project_id" )
-                {
-                    // PROJECT_ID IS DISCARDED
-                    var url = "sequences/" + request.operation.id;
-                    delete request.params;
-                    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
-                }
-            }
 
             // GET SPECIFIC SEQUENCE WITHOUT PROJECT_ID
             if( request.operation.action === "read" && !request.operation.filters && request.params.id)
