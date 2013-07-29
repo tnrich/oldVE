@@ -149,17 +149,24 @@ Ext.define("Teselagen.models.J5Bin", {
         this.cells().on("remove", this.renderIfActive, this);
         
         var self = this;
-    	var listenersEnabled = Teselagen.manager.GridManager.listenersEnabled;
     	var cellFireEvent = self.cells().fireEvent;
     	self.cells().fireEvent = function() {
     		if(Teselagen.manager.GridManager.listenersEnabled) return cellFireEvent.apply(self.cells(), arguments);
 		}
     	
+    	var setDeviceDesign = self.setDeviceDesign;
+    	self.setDeviceDesign = function() {
+    		self.isActive = function() {
+    			if(this.getDeviceDesign()) return self.getDeviceDesign().active;
+    	    	else return false;
+    		}
+    		return setDeviceDesign.apply(self, arguments);
+		}
+    	
     },
     
     isActive: function() {
-    	if(this.get("devicedesign_id")) return this.getDeviceDesign().active;
-    	else return false;
+    	return false;
     },
     
     renderIfActive: function() {

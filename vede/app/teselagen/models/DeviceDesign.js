@@ -123,7 +123,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
             }
-
+            //debugger;
             console.log("No devicedesign url generated");
 
 
@@ -144,7 +144,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
     	
         var binInsert = self.bins().insert;	
     	self.bins().insert = function() {
-    		
     		var records = arguments[1];
     		if(!Ext.isIterable(records)) records = [records];
     		for(var i=0;i<records.length;i++) {

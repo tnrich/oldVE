@@ -125,11 +125,11 @@ module.exports = function(app) {
     });
 
     /**
-     * GET SEQUENCES WITHIN A PROJECT
+     * GET SEQUENCES
      * @memberof module:./routes/api
      * @method GET '/sequences'
      */
-    app.get('/projects/:project_id/sequences', restrict, function(req, res) {
+    app.get('/sequences', restrict, function(req, res) {
         User.findById(req.user._id)
                 .populate({ path: 'sequences'})
                 .exec(function(err, user) {
@@ -151,15 +151,6 @@ module.exports = function(app) {
                     "sequences": sequence
                 });
             });
-        }
-    );
-
-    /**
-     * GET EMPTY SEQUENCE
-     * @method GET '/sequences'
-     */
-    app.get('/sequences', restrict, function(req, res) {
-            return res.json({"sequences":{}});
         }
     );
 
