@@ -65,10 +65,10 @@ module.exports = function(db) {
 
 	var SequenceSchema = new Schema({
 		FQDN: String,
-		//user_id: {
-		//	type: oIDRef,
-		//	ref: 'user'
-		//},
+		user_id: {
+			type: oIDRef,
+			ref: 'user'
+		},
 		name: String,
 		dateCreated: String,
 		dateModified: String,
@@ -81,9 +81,9 @@ module.exports = function(db) {
 		firstTimeImported: Boolean
 	});
 
-	SequenceSchema.virtual('user_id').get(function() {
-	  return req.user._id;
-	});
+	//SequenceSchema.virtual('user_id').get(function() {
+	//  return req.user._id;
+	//});
 
 	SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true })
 
