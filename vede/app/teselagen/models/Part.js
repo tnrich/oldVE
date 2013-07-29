@@ -30,7 +30,6 @@ Ext.define("Teselagen.models.Part", {
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
             }
-
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         }
         /*

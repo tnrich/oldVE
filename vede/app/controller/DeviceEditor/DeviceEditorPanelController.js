@@ -34,7 +34,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             success: function (response) {
                 response = JSON.parse(response.responseText);
                 var rules = response.rules;
-
                 var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject);
 
                 rules.forEach(function(rule){
