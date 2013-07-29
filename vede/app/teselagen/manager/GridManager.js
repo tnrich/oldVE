@@ -225,7 +225,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		if(this.selectedGridPart==null) rowIndex = -1;
 		else rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));	
 		
-		for(var i=0; i < this.totalColumns; i++) {
+		for(var i=0; i < this.activeProject.bins().count(); i++) {
 			bin = this.activeProject.bins().getAt(i);
 			newCell = Ext.create("Teselagen.models.Cell", {
                 index: rowIndex + 1
@@ -234,7 +234,7 @@ Ext.define("Teselagen.manager.GridManager", {
             bin.cells().insert(rowIndex + 1, newCell);
 		}
 		
-		this.totalRows++;
+		//this.totalRows++;
 		
 		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS, true);
         this.setListenersEnabled(true);
@@ -256,7 +256,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		this.setListenersEnabled(false);
 		
-		for(var i=0;i<this.totalColumns;i++) {
+		for(var i=0;i<this.activeProject.bins().count();i++) {
 			bin = this.activeProject.bins().getAt(i);
 			newCell = Ext.create("Teselagen.models.Cell", {
                 index: rowIndex
@@ -265,7 +265,7 @@ Ext.define("Teselagen.manager.GridManager", {
             bin.cells().insert(rowIndex, newCell);
 		}
 		
-		this.totalRows++;
+		//this.totalRows++;
 		
 		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
         this.setListenersEnabled(true);
@@ -287,7 +287,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.selectedGridBin = null;
 		this.activeProject.addNewBinByIndex(columnIndex+1);
 		
-		this.totalColumns++;
+		//this.totalColumns++;
 		
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, null, columnIndex+1);
         
@@ -336,7 +336,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.collectionData.splice(columnIndex,0,newBin);	
 		*/
 		
-		this.totalColumns++;
+		//this.totalColumns++;
         
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, null, columnIndex);
         
@@ -392,16 +392,16 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
 		
-		if(this.totalRows===1) {
+		if(this.activeProject.bins().getAt(0).cells().count()===1) {
 			var cell;
-			for(var i=0;i<this.totalColumns;i++) {
+			for(var i=0;i<this.activeProject.bins().count();i++) {
 				cell = this.activeProject.bins().getAt(i).cells().getAt(rowIndex);
 				cell.setPart();
 				cell.set("fas", "None");
 				cell.set("part_id", null);
 			}
 		} else {
-			for(var i=0;i<this.totalColumns;i++) {
+			for(var i=0;i<this.activeProject.bins().count();i++) {
 				this.activeProject.bins().getAt(i).cells().removeAt(rowIndex);
 			}			
 		}

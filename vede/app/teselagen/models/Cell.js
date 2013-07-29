@@ -56,6 +56,23 @@ Ext.define("Teselagen.models.Cell", {
         foreignKey: "j5bin_id"
     }],
 
+    constructor: function() {
+        this.callParent(arguments);
+        //this.on("add", this.renderIfActive, this);
+        //this.on("update", this.renderIfActive, this);
+        //this.on("remove", this.renderIfActive, this);
+    },
+    
+    //renderIfActive: function() {
+    	//if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    //},
+    
+    active: false,
+    
+    setActive: function(value) {
+    	this.active = value;
+    },
+    
     setPart: function(part) {
         this.part = part;
 

@@ -293,7 +293,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         				rulesToRemove.push(part);
         			}
     			}*/
-    			debugger;
+    			//debugger;
     			pDevice.rules().remove(rulesToRemove);
     			pDevice.parts().remove(part);
     			pDevice.rules().clearFilter(true);
