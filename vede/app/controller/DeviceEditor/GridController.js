@@ -82,6 +82,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
     */
 
+    onBeforeTabChange: function(tabPanel, newTab, oldTab) {
+        if(oldTab.initialCls === "DeviceEditorTab") {
+            if(!oldTab.options) {
+                oldTab.options = {};
+            }
+
+            oldTab.options.scrollLeft = this.grid.el.getScrollLeft();
+            oldTab.options.scrollTop = this.grid.el.getScrollTop();
+
+            oldTab.options.selectedCell = this.GridManager.selectedGridPart;
+        }
+    },
+
     /**
      * When the tab changes on the main panel, handles loading and rendering the
      * new device design, assuming the new tab is a device editor tab. Also sets
@@ -167,6 +180,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.GridManager.renderGrid(newTab.model);
+
+            if(newTab.options) {
+                this.grid.el.setScrollLeft(newTab.options.scrollLeft);
+                this.grid.el.setScrollTop(newTab.options.scrollTop);
+
+                if(newTab.options.selectedCell) {
+                    this.GridManager.selectGridCell(newTab.options.selectedCell);
+                }
+            }
         }
     },
 
@@ -710,18 +732,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         
         this.control({
+            "#mainAppPanel": {
+                beforetabchange: this.onBeforeTabChange,
+                tabchange: this.onTabChange
+            },
             "DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
             },
-            /*"button[cls='flipBinButton']": {
-                click: this.onFlipBinButtonClick
-            },*/
-            //"component[cls='binHeader']": {
-            //    render: this.addBinHeaderClickEvent
-            //},
-            //"component[cls='gridPartCell']": {
-            //    render: this.addPartCellEvents
-            //},
             "button[cls='editMenu'] > menu > menuitem[text='Copy Part']": {
                 click: this.onCopyPartMenuItemClick
             },
