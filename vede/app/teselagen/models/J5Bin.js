@@ -141,12 +141,9 @@ Ext.define("Teselagen.models.J5Bin", {
     	var listenersEnabled = Teselagen.manager.GridManager.listenersEnabled;
     	var cellFireEvent = self.cells().fireEvent;
     	self.cells().fireEvent = function() {
-    		if(listenersEnabled) return cellFireEvent.apply(self.cells(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return cellFireEvent.apply(self.cells(), arguments);
 		}
-    	var cellFireEventArgs = self.cells().fireEventArgs;
-    	self.cells().fireEventArgs = function() {
-    		if(listenersEnabled) return cellFireEventArgs.apply(self.cells(), arguments);
-		}
+    	
     },
 
     /**

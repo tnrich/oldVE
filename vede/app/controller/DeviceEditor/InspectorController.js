@@ -341,9 +341,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
-    onReRenderDECanvasEvent: function () {
-        var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.onTabChange(tab, tab, tab);
+    onReRenderDECanvasEvent: function (silent) {
+        if(!silent) {
+	    	var tab = Ext.getCmp("mainAppPanel").getActiveTab();
+	        this.onTabChange(tab, tab, tab);
+        }
     },
 
     /**
@@ -496,7 +498,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Clears all the fields in the Part Info tab. Used when a part is deleted.
      */
     clearPartInfo: function() {
-        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+        //Ext.suspendLayouts();
+    	
+    	var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
         var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
@@ -519,6 +523,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.eugeneRulesGrid.store.clearData();
         this.eugeneRulesGrid.view.refresh();
         //this.eugeneRulesGrid.reconfigure();
+        
+        //Ext.resumeLayouts();
     },
 
     /**
@@ -1191,7 +1197,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onTabChange: function (tabPanel, newTab) {
         if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
-
+        	//Ext.suspendLayouts();
+        	
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
@@ -1250,6 +1257,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.removeCls("selectPartFocus");
             openPartLibraryBtn.addCls("btnDisabled");
+            
+            //Ext.resumeLayouts();
         }
     },
 

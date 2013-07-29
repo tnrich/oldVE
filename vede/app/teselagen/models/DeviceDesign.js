@@ -131,33 +131,20 @@ Ext.define("Teselagen.models.DeviceDesign", {
     constructor: function() {
     	this.callParent(arguments);
     	var self = this;
-    	var listenersEnabled = Teselagen.manager.GridManager.listenersEnabled;
     	
     	var binFireEvent = self.bins().fireEvent;	
     	self.bins().fireEvent = function() {
-    		if(listenersEnabled) return binFireEvent.apply(self.bins(), arguments);
-		}
-    	var binFireEventArgs = self.bins().fireEventArgs;
-    	self.bins().fireEventArgs = function() {
-    		if(listenersEnabled) return binFireEventArgs.apply(self.bins(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments);
 		}
     	
     	var partFireEvent = self.parts().fireEvent;
     	self.parts().fireEvent = function() {
-    		if(listenersEnabled) return partFireEvent.apply(self.parts(), arguments);
-		}
-    	var partFireEventArgs = self.parts().fireEventArgs;
-    	self.parts().fireEventArgs = function() {
-    		if(listenersEnabled) return partFireEventArgs.apply(self.parts(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments);
 		}
     	
     	var ruleFireEvent = self.rules().fireEvent;
     	self.rules().fireEvent = function() {
-    		if(listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments);
-		}
-    	var ruleFireEventArgs = self.rules().fireEventArgs;
-    	self.rules().fireEventArgs = function() {
-    		if(listenersEnabled) return ruleFireEventArgs.apply(self.rules(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments);
 		}
     },
     
