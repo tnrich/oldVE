@@ -83,7 +83,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     */
 
     onBeforeTabChange: function(tabPanel, newTab, oldTab) {
-        if(oldTab.initialCls === "DeviceEditorTab") {
+        if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
+            var selectedCell = this.GridManager.selectedGridPart;
+
             if(!oldTab.options) {
                 oldTab.options = {};
             }
@@ -91,7 +93,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             oldTab.options.scrollLeft = this.grid.el.getScrollLeft();
             oldTab.options.scrollTop = this.grid.el.getScrollTop();
 
-            oldTab.options.selectedCell = this.GridManager.selectedGridPart;
+            // Save the previous tab's selected part.
+            if(selectedCell) {
+                oldTab.options.selection = {
+                    x: Number(d3.select(selectedCell.node().parentNode.parentNode).attr("deGridBinIndex")),
+                    y: Number(selectedCell.attr("deGridRowIndex"))
+                };
+            } else {
+                oldTab.options.selection = null;
+            }
         }
     },
 
@@ -181,12 +191,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             this.GridManager.renderGrid(newTab.model);
 
+            // Load the new tab's saved options, if they exist.
             if(newTab.options) {
                 this.grid.el.setScrollLeft(newTab.options.scrollLeft);
                 this.grid.el.setScrollTop(newTab.options.scrollTop);
 
-                if(newTab.options.selectedCell) {
-                    this.GridManager.selectGridCell(newTab.options.selectedCell);
+                if(newTab.options.selection) {
+                    this.GridManager.selectGridCellByIndex(newTab.options.selection.x,
+                                                           newTab.options.selection.y);
                 }
             }
         }
@@ -718,9 +730,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-        this.tabPanel.on("tabchange",
-                         this.onTabChange,
-                         this);
         this.InspectorController = this.application.getDeviceEditorInspectorControllerController();
     },
 
