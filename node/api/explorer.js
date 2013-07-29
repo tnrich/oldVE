@@ -31,21 +31,19 @@ module.exports = function(app) {
     });
 
 
-    app.get('/getData', restrict, function(req, res) {
+    app.get('/users/:username/projectExplorer/getData', restrict, function(req, res) {
         //var numProjects = req.user.projects.length;    
 
         User.findById(req.user._id)
-        .populate({ path: 'projects' })
-        .populate({ path: 'parts', select: 'name' })
-        .populate({ path: 'sequences', select: 'name' })
+        .populate({ path: 'projects', select: 'name designs id' })
         .exec(function(err, user) {
-            Project.populate( user.projects, { path: 'designs' },function(err, populatedProjects) {
+            Project.populate( user.projects, { path: 'designs', select: 'name parts id' },function(err, populatedProjects) {
                 
             var projectDesignsPopulateCallbacks = [];
 
             populatedProjects.forEach(function(populatedProject){
                 projectDesignsPopulateCallbacks.push(function(callback){
-                    DeviceDesign.populate( populatedProject.designs, { path: 'parts'}, function(err, populatedDeviceDesigns){
+                    DeviceDesign.populate( populatedProject.designs, { path: 'parts', select: 'name id'}, function(err, populatedDeviceDesigns){
                         populatedProject.designs = populatedDeviceDesigns;
                         callback(null, null);
                     });                    
