@@ -25,6 +25,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null, // current User model
     projects: null, // Store of available projects
+    sequences: null,
     workingProject: null, // working Project model
     workingSequence: null, // working Sequence model
     workingSequenceFileManager: null, // Current SequenceFileManager (which controls Vector Editor)
@@ -49,6 +50,15 @@ Ext.define("Teselagen.manager.ProjectManager", {
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
             //Load the projects store
+
+            self.sequenceStore = self.currentUser.sequences().load(
+                    function (sequences,operation, success) {
+                        if(!success) { Ext.Error.raise("Error loading sequences");
+                        self.sequencesStore = sequences;
+                        }
+                    }
+                );
+
             var projectsStore = self.currentUser.projects().load(
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
@@ -122,6 +132,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
         sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
+        console.log(this.sequenceStore);
         sequenceGrid.reconfigure(this.sequenceStore);
         dashPanel.getActiveTab().el.unmask();
     },
