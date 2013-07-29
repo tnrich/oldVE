@@ -25,7 +25,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
             columns: [
                 {
                     xtype: 'gridcolumn',
-                    width: 100,
+                    width: 120,
                     text: '<div data-qtip="Column Name">Column Name</div>',
                     dataIndex: 'binName',
                     editor: {
@@ -41,6 +41,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     xtype: 'gridcolumn',
                     text: '<div data-qtip="Direction">Direction</div>',
                     dataIndex: 'directionForward',
+                    width: 80,
                     editor: {
                         xtype: 'combobox',
                         store: [[true, "Forward"], [false, "Reverse"]]
@@ -55,6 +56,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 },
                 {
                     xtype: 'numbercolumn',
+                    width: 40,
                     text: '<div data-qtip="Items">Items</div>',
                     renderer: function(value, metadata, record) {
                         var numParts = 0;
@@ -125,6 +127,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     xtype: 'numbercolumn',
                     text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
                     dataIndex: 'extra3PrimeBps',
+                    flex: 1,
                     editor: {
                         xtype: 'numberfield',
                         allowDecimals: false,
