@@ -16,8 +16,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.models.Part",
                "Teselagen.models.VectorEditorProject", 
                "Vede.view.de.DeviceEditor", 
-               "Ext.window.MessageBox",
-               "Teselagen.manager.ProjectExplorerManager"],
+               "Ext.window.MessageBox"],
+               //"Teselagen.manager.ProjectExplorerManager"],
 
     alias: "ProjectManager",
     mixins: {
