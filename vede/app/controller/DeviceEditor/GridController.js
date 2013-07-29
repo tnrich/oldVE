@@ -167,7 +167,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onAddToBins: function(store, addedBins) {
-        for(var i = 0; i < addedBins.length; i++) {
+    	for(var i = 0; i < addedBins.length; i++) {
             addedBins[i].cells().on("add", this.onAddToCells, this);
             addedBins[i].cells().on("update", this.onUpdateCells, this);
             addedBins[i].cells().on("remove", this.onRemoveFromCells, this);
@@ -177,11 +177,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onUpdateBins: function() {
-        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    	this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
     onRemoveFromBins: function(store, removedBin) {
-        removedBin.cells().un("add", this.onAddToCells, this);
+    	removedBin.cells().un("add", this.onAddToCells, this);
         removedBin.cells().un("update", this.onUpdateCells, this);
         removedBin.cells().un("remove", this.onRemoveFromCells, this);
 
@@ -213,7 +213,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
     
     onAddToRules: function() {
-        this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    	this.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
     },
 
     onUpdateRules: function() {

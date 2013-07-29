@@ -305,9 +305,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
-    onReRenderDECanvasEvent: function () {
-        var tab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.onTabChange(tab, tab, tab);
+    onReRenderDECanvasEvent: function (silent) {
+        if(!silent) {
+	    	var tab = Ext.getCmp("mainAppPanel").getActiveTab();
+	        this.onTabChange(tab, tab, tab);
+        }
     },
 
     /**
@@ -1131,7 +1133,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onTabChange: function (tabPanel, newTab) {
         if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
-
+        	//Ext.suspendLayouts();
+        	
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
@@ -1186,7 +1189,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.renderCollectionInfo();
             this.inspector.setActiveTab(1);
-
 
             this.partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
             this.openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");

@@ -138,7 +138,27 @@ Ext.define("Teselagen.models.DeviceDesign", {
         sortParam: undefined,
         limitParam: undefined
     },
-
+    
+    constructor: function() {
+    	this.callParent(arguments);
+    	var self = this;
+    	
+    	var binFireEvent = self.bins().fireEvent;	
+    	self.bins().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments);
+		}
+    	
+    	var partFireEvent = self.parts().fireEvent;
+    	self.parts().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments);
+		}
+    	
+    	var ruleFireEvent = self.rules().fireEvent;
+    	self.rules().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments);
+		}
+    },
+    
     //constructor: function(inData) {
     //    this.callParent([inData]);
     //

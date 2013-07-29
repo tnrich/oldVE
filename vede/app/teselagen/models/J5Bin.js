@@ -143,9 +143,15 @@ Ext.define("Teselagen.models.J5Bin", {
         //var fases = pCfg && pCfg.fases ? pCfg.fases : [];
         this.callParent(arguments);
         //this.set("fases", fases);
+        
+        var self = this;
+    	var listenersEnabled = Teselagen.manager.GridManager.listenersEnabled;
+    	var cellFireEvent = self.cells().fireEvent;
+    	self.cells().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return cellFireEvent.apply(self.cells(), arguments);
+		}
+    	
     },
-
-
 
     /**
      * Removes a Part from the parts.

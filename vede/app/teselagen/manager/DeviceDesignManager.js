@@ -78,6 +78,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         
         //bins.suspendEvents();
         
+        
         parts.removeAll(true);
         parts.add(pParts);
         
@@ -89,10 +90,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //bins.resumeEvents();
         //bins.fireEvent("datachanged");
         
-        var err = device.validate();
+        /*var err = device.validate();
         if (err.length > 0) {
             console.warn("Clearing DeviceDesign: " + err.length + " errors found.");
-        }
+        }*/
         return device;
     },
     
