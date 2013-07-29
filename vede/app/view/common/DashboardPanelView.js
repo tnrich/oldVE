@@ -447,39 +447,69 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 margin: 13
                             },
                             {
-                                xtype: 'gridpanel',
-                                border: 0,
-                                name: 'SequenceLibraryGrid',
-                                cls: 'sequenceLibraryGrid',
-                                columns: [
+                                xtype: 'container',
+                                layout: {
+                                    type: 'vbox',
+                                    align: 'stretch'
+                                },
+                                items: [
                                     {
-                                        xtype: 'gridcolumn',
-                                        text: 'Name',
-                                        width: 320,
-                                        dataIndex: 'name'
-                                    }, {
-                                        xtype: 'gridcolumn',
-                                        text: 'File Format',
-                                        width: 100,
-                                        dataIndex: 'sequenceFileFormat'
-                                    },{
-                                        xtype: 'gridcolumn',
-                                        text: 'Project',
-                                        width: 120,
-                                        dataIndex: 'parentProject'
-                                    },
-                                    {
-                                        xtype: 'gridcolumn',
-                                        text: 'Size',
-                                        width: 80,
-                                        dataIndex: 'size'
-                                    },
-                                    {
-                                        xtype: 'gridcolumn',
-                                        text: 'Features',
+                                        xtype: 'gridpanel',
                                         flex: 1,
-                                        dataIndex: 'features'
+                                        border: 0,
+                                        name: 'SequenceLibraryGrid',
+                                        cls: 'sequenceLibraryGrid',
+                                        columns: [
+                                            {
+                                                xtype: 'gridcolumn',
+                                                text: 'Name',
+                                                width: 320,
+                                                dataIndex: 'name'
+                                            }, {
+                                                xtype: 'gridcolumn',
+                                                text: 'File Format',
+                                                width: 100,
+                                                dataIndex: 'sequenceFileFormat'
+                                            },{
+                                                xtype: 'gridcolumn',
+                                                text: 'Project',
+                                                width: 120,
+                                                dataIndex: 'parentProject'
+                                            },
+                                            {
+                                                xtype: 'gridcolumn',
+                                                text: 'Size',
+                                                width: 80,
+                                                dataIndex: 'size'
+                                            },
+                                            {
+                                                xtype: 'gridcolumn',
+                                                text: 'Features',
+                                                flex: 1,
+                                                dataIndex: 'features'
+                                            },
+                                        ]
                                     },
+                                    // {
+                                    //     xtype: "panel",
+                                    //     border: 0,
+                                    //     cls: "VectorEditorSubPanel",
+                                    //     layout: {
+                                    //         align: "stretch",
+                                    //         type: "hbox"
+                                    //     },
+                                    //     items: [{
+                                    //         xtype: "VectorPanel",
+                                    //         flex: 1,
+                                    //         overflowY: "auto"
+                                    //     }, {
+                                    //         xtype: "splitter",
+                                    //         collapseTarget: "prev"
+                                    //     }, {
+                                    //         xtype: "AnnotatePanel",
+                                    //         flex: 1.2
+                                    //     }]
+                                    // }
                                 ]
                             }
                         ]

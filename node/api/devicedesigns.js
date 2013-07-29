@@ -126,7 +126,7 @@ module.exports = function(app) {
                     if(!design) return res.json(500,{"error":"design not found"});
                     design = design.toObject();
                     design.id = design._id;
-                    //delete design.rules; // Eugene rules to be send on a different request
+                    delete design.rules; // Eugene rules to be send on a different request
     
                     if (err) {
                         errorHandler(err, req, res);

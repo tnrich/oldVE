@@ -6,6 +6,7 @@ module.exports = function(app) {
     var Sequence = app.db.model("sequence");
     var User = app.db.model("User");
     var Project = app.db.model("project");
+    var Project = app.db.model("devicedesign");
 
     /**
      * GET Part library items
@@ -32,13 +33,13 @@ module.exports = function(app) {
         //var numProjects = req.user.projects.length;    
 
         User.findById(req.user._id)
-        .populate({ path: 'projects', select: 'name' })
+        .populate({ path: 'projects' })
         .populate({ path: 'parts', select: 'name' })
         .populate({ path: 'sequences', select: 'name' })
         .exec(function(err, user) {
-        	//user.projects.populate({ path: 'designs', select: 'name' }).exec(function(err, projects) {
-        		res.json({"user":user});
-        	//});
+            Project.populate( user.projects, { path: 'designs designs.parts' },function(err, populatedProjects) {
+                res.json({"projects":populatedProjects});
+        	});
         });
 
 

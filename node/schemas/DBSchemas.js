@@ -169,7 +169,18 @@ module.exports = function(db) {
 			type: oIDRef,
 			ref: 'part'
 		}],
-		rules: [Mixed],
+		rules: [
+			{
+				compositionalOperator: String,
+				name: String,
+				negationOperator: String,
+				operand1_id: String,
+				operand2Number: String,
+				operand2_id: String,
+				operand2isNumber: Boolean,
+				originalRuleLine: String,
+			}
+		],
 		j5runs: [{
 			type: oIDRef,
 			ref: 'j5run'

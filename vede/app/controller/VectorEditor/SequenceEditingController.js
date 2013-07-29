@@ -28,8 +28,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
         executeRequest = function(){
             
-          part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
-
             Ext.Ajax.request({
                 url: Teselagen.manager.SessionManager.buildUrl("checkDuplicatedPartName", ''),
                 method: 'GET',

@@ -77,9 +77,9 @@ module.exports = function(app) {
         var Project = app.db.model("project");
 
         Project.findById(reqPart.project_id, function(err,project){
-            var FQDN_candidate = req.user.FQDN+'.'+project.name+'.'+reqPart.name;
+            var FQDN_candidate = req.user.FQDN+'.'+reqPart.name;
 
-            Part.generateDefinitionHash(req.user, project, reqPart, function(hash_candidate) {
+            Part.generateDefinitionHash(req.user, reqPart, function(hash_candidate) {
                 var duplicatedName = false;
                 var identical = false;
                 var part;

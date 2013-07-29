@@ -39,13 +39,7 @@ Ext.define("Teselagen.models.Cell", {
         defaultValue: null
     }],
 
-    associations: [{
-        type: "hasOne",
-        model: "Teselagen.models.Part",
-        foreignKey: "part_id",
-        getterName: "getPart",
-        setterName: "setPart"
-    },
+    associations: [
     {
         type: "belongsTo",
         model: "Teselagen.models.J5Bin",

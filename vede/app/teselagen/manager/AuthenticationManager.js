@@ -17,7 +17,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     autoAuthURL : null,
 
     updateSplashScreenMessage: function(message, stop) {
-        if (Ext.get("splash-text")) {Ext.get("splash-text").update(message); }
+        if (Ext.get("x-splash-message")) {Ext.get("x-splash-message").update(message); }
         if (stop) {
             Ext.select(".x-mask-msg.splashscreen div:nth(2)").setStyle("background-image", "url()");
             if (splashscreen) Ext.get("splash-retry").show();
