@@ -268,11 +268,22 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoPartDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
+
+		gridManager.setListenersEnabled(false);
+		
 		var xIndex = command.data.x;
 		var yIndex = command.data.y;
+		
+		gridManager.activeProject.parts().add(command.data.part);
+		
 		var cell = gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex);
-		cell.setPart(command.data.oldPart);
-		cell.set("fas", command.data.oldFas);
+		cell.setPart(command.data.data.oldPart);
+		cell.set("fas", command.data.data.oldFas);
+		
+		gridManager.activeProject.rules().add(command.data.rules);
+		
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		gridManager.setListenersEnabled(true);
 	},
 	
 	undoPartAdd: function(command) {

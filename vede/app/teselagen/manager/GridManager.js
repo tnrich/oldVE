@@ -476,7 +476,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		var xIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
 		var yIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
 		
-		Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithCell(this.activeProject, cell);
+		var removedStuff = Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithCell(this.activeProject, cell);
 		var oldPart = cell.getPart();
 		var oldFas = cell.get("fas");
 		
@@ -501,7 +501,8 @@ Ext.define("Teselagen.manager.GridManager", {
         			oldPart: oldPart,
         			oldFas: oldFas
         		},
-        		rules: removedRules
+        		rules: removedStuff.removedRules,
+        		part: removedStuff.removedPart
         	}
 		});
 		
