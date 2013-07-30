@@ -771,6 +771,47 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     	this.GridManager.removeRow();
     },
     
+    scrollToBinOrCell: function(xIndex, yIndex, horizPadding, vertPadding) {
+    	horizPadding = horizPadding || 0;
+    	vertPadding = vertPadding || 0;
+    	
+    	var scrollTop = this.grid.el.getScrollTop();
+    	var scrollLeft = this.grid.el.getScrollLeft();
+    	var clientHeight = this.grid.el.dom.clientHeight;
+    	var clientWidth = this.grid.el.dom.clientWidth;
+    	
+    	if(yIndex>0 || yIndex===0) {
+    		var bottomBound;
+        	var topBound;
+        	
+    		bottomBound = this.GridManager.BIN_HEIGHT+10+this.GridManager.BIN_PART_GAP_HEIGHT+this.GridManager.PART_HEIGHT*(yIndex+1)-clientHeight;
+    		topBound = this.GridManager.BIN_HEIGHT+10+this.GridManager.BIN_PART_GAP_HEIGHT+this.GridManager.PART_HEIGHT*yIndex;
+    		bottomBound += vertPadding;
+    		topBound -= vertPadding;
+    		
+    		var isInVertBounds = scrollTop<=topBound && scrollTop>=bottomBound;
+    		
+        	if(!isInVertBounds) {
+        		var newScrollTop = scrollTop>topBound ? topBound : bottomBound;
+        		this.grid.el.setScrollTop(newScrollTop);
+        	}
+    	} else {
+    		this.grid.el.setScrollTop(0);
+    	}
+		
+    	var leftBound = 10+this.GridManager.COLUMN_WIDTH*(xIndex+1) - clientWidth;
+    	var rightBound = 10+this.GridManager.COLUMN_WIDTH*xIndex;
+    	leftBound += horizPadding;
+    	rightBound -= horizPadding;
+    	  	
+    	var isInHorizBounds = scrollLeft<=rightBound && scrollLeft>=leftBound;
+    	
+    	if(!isInHorizBounds) {
+    		var newScrollLeft = scrollLeft>rightBound ? rightBound : leftBound;
+    		this.grid.el.setScrollLeft(newScrollLeft);
+    	}
+    },
+    
     onLaunch: function() {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;

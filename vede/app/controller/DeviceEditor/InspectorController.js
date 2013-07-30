@@ -1167,6 +1167,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onGridBinSelect: function (grid, j5Bin, binIndex) {
     	this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin, binIndex);
+    	this.GridController.scrollToBinOrCell(binIndex, null);
     },
 
     /**
@@ -1426,6 +1427,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onLaunch: function () {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.tabPanel.on("tabchange", this.onTabChange, this);
+        this.GridController = Vede.application.getController("DeviceEditor.GridController");
     },
 
     /**
