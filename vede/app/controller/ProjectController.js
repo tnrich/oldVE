@@ -114,18 +114,7 @@ Ext.define("Vede.controller.ProjectController", {
                             
                             if(typeof (cb2) === "function") {cb2(); }
 
-                    // Empty sequenceFile store
-                    Teselagen.manager.ProjectManager.sequenceStore =
-                        Ext.create("Ext.data.Store", {
-                        model: "Teselagen.models.SequenceFile"
-                    });
-                                
-                    Teselagen.manager.ProjectManager.currentUser.sequences().load(function(sequences){
-                        for(var x=0; x<sequences.length; x++) {
-                            sequences[x].data.parentProject = project.data.name;
-                            Teselagen.manager.ProjectManager.sequenceStore.add(sequences[x]); // Add sequence to sequences store
-                        }
-                    });
+                   
                     // Iterate over sequences
                     
                     

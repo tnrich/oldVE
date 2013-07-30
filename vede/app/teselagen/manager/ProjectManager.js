@@ -131,7 +131,19 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var dashPanel = Ext.getCmp("DashboardPanel");
         sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
         
-        sequenceGrid.reconfigure(this.sequenceStore);
+ // Empty sequenceFile store
+        var sequenceStore =
+            Ext.create("Ext.data.Store", {
+            model: "Teselagen.models.SequenceFile"
+        });
+                                
+        this.currentUser.sequences().load(function(sequences){
+            for(var x=0; x<sequences.length; x++) {
+                sequenceStore.add(sequences[x]); // Add sequence to sequences store
+            }
+        });
+
+        sequenceGrid.reconfigure(sequenceStore);
         dashPanel.getActiveTab().el.unmask();
     },
 
