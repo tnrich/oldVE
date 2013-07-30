@@ -94,16 +94,24 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 				var contextMenu = Ext.create('Ext.menu.Menu',{
 					items: [{
 			  	    	  text: 'Cut',
-			  	    	  handler: gridController.onCutPart
+			  	    	  handler: function() {
+			  	    		Vede.application.fireEvent(Teselagen.event.DeviceEvent.CUT_PART);
+			  	    	  }
 					  }, {
 						  text: 'Copy',	
-						  handler: gridController.onCopyPart
+						  handler: function() {
+			  	    		Vede.application.fireEvent(Teselagen.event.DeviceEvent.COPY_PART);
+			  	    	  }
 				      }, {
 				    	  text: 'Paste',
-				    	  handler: gridController.onPastePart
+				    	  handler: function() {
+			  	    		Vede.application.fireEvent(Teselagen.event.DeviceEvent.PASTE_PART);
+			  	    	  }
 				      }, {
 				    	  text: 'Delete',
-				    	  handler: gridManager.clearSelectedPart
+				    	  handler: function() {
+			  	    		Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
+			  	    	  }
 				      }]
 				});
 				if(!d.getPart()) {

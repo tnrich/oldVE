@@ -68,6 +68,8 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			me.undoPartDel(command);
 		} else if(type=="FAS") {
 			me.undoPartFas(command);
+		} else if(type=="DEF") {
+			me.undoPartDef(command);
 		}
 	},
 	
@@ -289,7 +291,6 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoPartAdd: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		
 		var xIndex = command.data.x;
 		var yIndex = command.data.y;
 		
@@ -303,19 +304,17 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoPartFas: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].parts[command.data.y].fas = command.data.oldFas;
-		gridManager.collectionData[command.data.x].fases[command.data.y] = command.data.oldFas;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
+		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).set("fas", command.data.oldFas);
+	},
+	
+	undoPartDef: function(command) {
+		var me = Teselagen.manager.GridCommandPatternManager;
+		var gridManager = Teselagen.manager.GridManager;
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		command.data.part.set(command.data.oldDef);
 	},
 	
 	undoRuleAdd: function(command) {

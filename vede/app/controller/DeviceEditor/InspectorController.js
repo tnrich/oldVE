@@ -485,7 +485,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Clears all the fields in the Part Info tab. Used when a part is deleted.
      */
     clearPartInfo: function() {
-        this.partPropertiesForm.getForm().reset();
+        this.inspector.suspendLayouts(false);
+        
+    	this.partPropertiesForm.getForm().reset();
         this.fasForm.getForm().reset();
 
         this.changePartDefinitionBtn.disable();
@@ -499,6 +501,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         this.eugeneRulesGrid.store.clearData();
         this.eugeneRulesGrid.view.refresh();
+        
+        this.inspector.resumeLayouts();
     },
 
     /**
@@ -600,9 +604,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
     //        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
             var newStrategy = box.getValue();
-
+            var oldFas = this.selectedCell.get("fas");
             this.selectedCell.set("fas", newStrategy);
             this.columnsGrid.getView().refresh();
+            var xIndex = this.selectedBinIndex;                                      
+        	var yIndex = this.activeProject.bins().getAt(this.selectedBinIndex).cells().indexOf(this.selectedCell);
+
+            Teselagen.manager.GridCommandPatternManager.addCommand({
+            	type: "PART",
+            	data: {
+            		type: "FAS",
+            		x: xIndex,
+            		y: yIndex,
+            		oldFas: oldFas,
+            		newFas: newStrategy
+            	}
+    		});
         }
     },
 
