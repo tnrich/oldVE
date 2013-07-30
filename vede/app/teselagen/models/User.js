@@ -5,7 +5,7 @@
  */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
-    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.Preferences", "Teselagen.models.Project", "Teselagen.models.UserRestrictionEnzymeGroup"],
+    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.Preferences", "Teselagen.models.Project", "Teselagen.models.UserRestrictionEnzymeGroup", "Teselagen.models.SequenceFile", "Teselagen.models.Part"],
     fields: [{
         name: "id",
         type: "long"

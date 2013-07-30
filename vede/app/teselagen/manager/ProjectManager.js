@@ -16,9 +16,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.models.Part",
                "Teselagen.models.VectorEditorProject", 
                "Vede.view.de.DeviceEditor", 
-               "Ext.window.MessageBox"],
-               //"Teselagen.manager.ProjectExplorerManager"],
-
+               "Ext.window.MessageBox",
+               // "Teselagen.manager.ProjectExplorerManager"
+               ],
     alias: "ProjectManager",
     mixins: {
         observable: "Ext.util.Observable"
@@ -26,6 +26,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null, // current User model
     projects: null, // Store of available projects
+    sequences: null,
     workingProject: null, // working Project model
     workingSequence: null, // working Sequence model
     workingSequenceFileManager: null, // Current SequenceFileManager (which controls Vector Editor)
@@ -50,11 +51,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
 
-            self.sequenceStore = self.currentUser.sequences().load(function(sequences){
-                self.sequenceStore = sequences;
+            self.sequences = self.currentUser.sequences().load(function(sequences){
+                self.sequences= sequences;
             });
 
-            //Load the projects store
             var projectsStore = self.currentUser.projects().load(
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
@@ -129,7 +129,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
         sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
-        sequenceGrid.reconfigure(this.sequenceStore);
+        
+ // Empty sequenceFile store
+        var sequenceStore =
+            Ext.create("Ext.data.Store", {
+            model: "Teselagen.models.SequenceFile"
+        });
+                                
+        this.currentUser.sequences().load(function(sequences){
+            for(var x=0; x<sequences.length; x++) {
+                sequenceStore.add(sequences[x]); // Add sequence to sequences store
+            }
+        });
+
+        sequenceGrid.reconfigure(sequenceStore);
         dashPanel.getActiveTab().el.unmask();
     },
 

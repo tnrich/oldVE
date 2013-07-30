@@ -168,7 +168,16 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             return name;
         }
-    }, {
+    }, 
+    {
+        name: "dateCreated",
+        type: "string",
+    },
+    {
+        name: "dateModified",
+        type: "string",
+    },
+    {
         name: "firstTimeImported",
         type: "boolean",
         defaultValue: "false"

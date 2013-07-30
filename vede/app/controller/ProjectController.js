@@ -37,14 +37,6 @@ Ext.define("Vede.controller.ProjectController", {
                 var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
                 rootNode.removeAll(); // Remove existing subnodes
 
-                // Append create project at the top
-                // rootNode.appendChild({
-                //     text: "Create project",
-                //     leaf: true,
-                //     hrefTarget: "newproj",
-                //     icon: "resources/images/add.png"
-                // });
-
                 rootNode.appendChild({
                     text: "Create sequence",
                     leaf: true,
@@ -122,21 +114,9 @@ Ext.define("Vede.controller.ProjectController", {
                             
                             if(typeof (cb2) === "function") {cb2(); }
 
-                    // Empty sequenceFile store
-
-                    Teselagen.manager.ProjectManager.sequenceStore =
-                        Ext.create("Ext.data.Store", {
-                        model: "Teselagen.models.SequenceFile"
-                    });
-                                
-                    var sequences = project.sequences(); // Get sequences store from current project
-
+                   
                     // Iterate over sequences
-                    sequences.each(function (sequence) {
-                        sequence.data.parentProject = project.data.name;
-                        Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
-                    });
-
+                    
                     
                 });
 
@@ -160,7 +140,7 @@ Ext.define("Vede.controller.ProjectController", {
                         }
                     });
                     storesCounter++;
-                    project.sequences().load({
+                    Teselagen.manager.ProjectManager.currentUser.sequences().load({
                         callback: function(){
                             storesCounter--;
                             finishedPreloading();
