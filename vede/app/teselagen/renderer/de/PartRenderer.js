@@ -26,7 +26,14 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			.attr("width", this.gridManager.COLUMN_WIDTH-1)
 			.attr("height", this.gridManager.PART_HEIGHT-1)
 			.attr("fill", this.gridManager.PART_FILL_COLOR)
-			.attr("stroke", this.gridManager.PART_OUTLINE_COLOR)
+			//.attr("stroke", this.gridManager.PART_OUTLINE_COLOR)
+			.attr("stroke", function(d) {
+				var part = d.getPart();
+				if(!part) return gridManager.PART_OUTLINE_COLOR;
+				var sequencefileId = part.get("sequencefile_id");
+				if(sequencefileId === "" || sequencefileId === undefined || sequencefileId === null) return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
+				else return gridManager.PART_OUTLINE_COLOR;
+			})
 			.attr("stroke-width", this.gridManager.PART_OUTLINE_WIDTH)
 			.attr("x", 0)
 			.attr("y", 0)
@@ -60,7 +67,10 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 				selection.transition()
 					.duration(30)
 					.attr("stroke", function(d) {
-						if(d3.select(this).attr("isSelected")=="true") return gridManager.PART_SELECTED_OUTLINE_COLOR;
+						var part = d.getPart();
+						var sequencefileId = !part || part.get("sequencefile_id");
+						if(part && (sequencefileId === "" || sequencefileId === undefined || sequencefileId === null)) return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
+						else if(d3.select(this).attr("isSelected")=="true") return gridManager.PART_SELECTED_OUTLINE_COLOR;
 						else return gridManager.PART_OUTLINE_COLOR;
 					});
 			})

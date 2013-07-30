@@ -175,7 +175,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             toastr.info("Part Definition Changed");
                             Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                             Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
-                            Teselagen.manager.GridCommandPatternManager.addCommand({
+                            /*Teselagen.manager.GridCommandPatternManager.addCommand({
                             	type: "PART",
                             	data: {
                             		type: "DEF",
@@ -183,7 +183,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             		oldDef: oldDef,
                             		newDef: newDef
                             	}
-                    		});
+                    		});*/
                             
                         } else {
                             Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");

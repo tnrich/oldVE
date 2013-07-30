@@ -103,10 +103,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
             }
         }
-
+        
         return true;
     },
-
+    
     onCheckj5Ready: function(cb,notChangeMethod){
         /*
         non-combinatorial designs: each collection bin (column) must contain exactly one mapped part.
@@ -363,11 +363,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Number} binIndex The index of the bin that owns the selected part.
      */
     onPartSelected: function (j5Part, binIndex) {
-        this.selectedBinIndex = binIndex;
+    	
+    	this.inspector.setActiveTab(0);
+    	
+    	this.inspector.suspendLayouts();
+    	
+    	this.selectedBinIndex = binIndex;
         
         this.columnsGrid.getSelectionModel().select(binIndex, false, true);
-        
-        this.inspector.setActiveTab(0);
 
         var fasArray = [];
         var self = this;
@@ -393,16 +396,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             fasBox.store.loadData(fasArray);
         }
-
-
+        
         // If selected part exists, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
-            this.partPropertiesForm.loadRecord(j5Part);
+        	this.partPropertiesForm.loadRecord(j5Part);
 
             if( j5Part.get("sequencefile_id")!=="" && !j5Part.get("phantom") )
             {
-                j5Part.getSequenceFile({
+            	j5Part.getSequenceFile({
                     callback: function(sequenceFile){
                         if(sequenceFile)
                         {
@@ -430,7 +432,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     }
                 });
             } else if (j5Part.get("sequencefile_id") === "" && j5Part.get("name") !== ""){
-                self.changePartDefinitionBtn.disable();
+            	self.changePartDefinitionBtn.disable();
                 self.openPartLibraryBtn.setText("Select Part From Library");
                 self.openPartLibraryBtn.addCls("selectPartFocus");
                 self.changePartDefinitionBtn.addCls("btnDisabled");
@@ -456,13 +458,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.selectedPart = j5Part;
-
+            
             var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
                                                                             this.selectedPart);
-
+            
             this.eugeneRulesGrid.reconfigure(rulesStore);
+            
         } else {
-            var newPart = Ext.create("Teselagen.models.Part");
+        	var newPart = Ext.create("Teselagen.models.Part");
             this.partPropertiesForm.loadRecord(newPart);
             this.fasCombobox.setValue("None");
             
@@ -473,11 +476,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             self.deletePartBtn.addCls("btnDisabled");
             self.openPartLibraryBtn.setText("Select Part From Library");
             self.openPartLibraryBtn.addCls("selectPartFocus");
-            
+                        
             this.eugeneRulesGrid.store.clearData();
+                        
             this.eugeneRulesGrid.view.refresh();
         }
-
+        this.inspector.resumeLayouts();
         this.inspector.expand();
     },
 
@@ -670,7 +674,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
         removeColumnMenuItem.disable();
 
-        //this.toggleInsertOptions(false);
         this.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
     },
 
@@ -702,13 +705,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     
     onRemoveRow: function() {
     	this.clearPartInfo();
-    },
-    
-    toggleInsertOptions: function(state) {
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Above']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Row Below']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Column Left']")[0].setDisabled(!state||false);
-        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Column Right']")[0].setDisabled(!state||false);
     },
 
     reconfigureEugeneRules: function() {
@@ -853,11 +849,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
         
+        
         toastr.options.onclick = null;
         toastr.info("Eugene Rule Added");
         //Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
         
-        
+        /*Teselagen.manager.GridCommandPatternManager.addCommand({
+            type: "RULE",
+            data: {
+                type: "ADD",
+                data: newRule
+            }
+        });*/
         
         
         /*var self = this;
