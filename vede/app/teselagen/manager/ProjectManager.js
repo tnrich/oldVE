@@ -19,7 +19,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Ext.window.MessageBox",
                // "Teselagen.manager.ProjectExplorerManager"
                ],
-
     alias: "ProjectManager",
     mixins: {
         observable: "Ext.util.Observable"

@@ -40,7 +40,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
 
         // Store current feature/cut site/orf visibility settings on the old
         // tab, and load those from the new tab.
-        if(oldTab.initialCls === "VectorEditorPanel") {
+        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
             var menuPanel = oldTab.down("VectorEditorMainMenuPanel");
 
             oldTab.options.features = menuPanel.down("component[identifier='featuresMenuItem']").checked,

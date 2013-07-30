@@ -47,7 +47,7 @@ Ext.define("Teselagen.models.J5Bin", {
             name: "binName",
             convert: function(v, record) {
                 var name;
-
+                v = Ext.String.trim(v);
                 if (v === "" || v === undefined || v === null) {
                     record.self.highestDefaultNameIndex += 1;
                     name = record.self.defaultNamePrefix/*+ record.self.highestDefaultNameIndex*/;
@@ -151,16 +151,16 @@ Ext.define("Teselagen.models.J5Bin", {
         var self = this;
     	var cellFireEvent = self.cells().fireEvent;
     	self.cells().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return cellFireEvent.apply(self.cells(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return cellFireEvent.apply(self.cells(), arguments) || null;
 		}
     	
     	var setDeviceDesign = self.setDeviceDesign;
     	self.setDeviceDesign = function() {
     		self.isActive = function() {
-    			if(this.getDeviceDesign()) return self.getDeviceDesign().active;
-    	    	else return false;
+				if(self.getDeviceDesign()) return self.getDeviceDesign().active;
+				else return false;		
     		}
-    		return setDeviceDesign.apply(self, arguments);
+    		return setDeviceDesign.apply(self, arguments) || null;
 		}
     	
     },
