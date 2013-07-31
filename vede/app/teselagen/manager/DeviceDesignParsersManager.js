@@ -293,7 +293,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         
         
         //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
-        //debugger;
     	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
     	
     	
@@ -653,6 +652,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     newCell.setPart(newPart);
                     newCell.setJ5Bin(newBin);
 
+                    newBin.cells().add(newCell);
+
                     tempPartsArray.push(newPart);
                     fullPartsAssocArray[part.getAttribute("id")] = newPart;
                 }
@@ -676,8 +677,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             //newBin.set("fases",binFases);
             binsArray.push(newBin);
         }
-
-        debugger;
 
         var eugeneRules = xmlDoc.getElementsByTagNameNS("*", "eugeneRules")[0].getElementsByTagNameNS("*", "eugeneRule");
         var rulesArray = [];
@@ -712,7 +711,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             rulesArray.push(newEugeneRule);
         }
 
-        DeviceDesignParsersManager.generateDesign(binsArray, values(fullPartsAssocArray), rulesArray, cb);
+        var partsArray = [];
+
+        for(var key in fullPartsAssocArray) {
+            partsArray.push(fullPartsAssocArray[key]);
+        }
+
+        this.generateDesign(binsArray, partsArray, rulesArray, cb);
     },
 
     parseEugeneRules: function(content,filename,design){

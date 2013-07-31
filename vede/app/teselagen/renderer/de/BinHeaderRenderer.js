@@ -58,7 +58,7 @@ Ext.define("Teselagen.renderer.de.BinHeaderRenderer", {
 		this.gridBinHeaderSbolIconSVG = this.gridBinHeaderSVG
 		    .append("svg:path")
 		    .attr("class", "gridBinHeaderSbolIconSVG")
-		    .attr("d", function(d) {return Teselagen.constants.SBOLIcons.ICON_1_0_LIST[d.get("iconID")].path;})
+		    .attr("d", function(d) {return Teselagen.constants.SBOLIcons.ICON_1_0_LIST[d.get("iconID").toUpperCase()].path;})
 		    .attr("stroke", "#000000")
 		    .attr("stroke-width", 3)
 		    .attr("stroke-linecap", "round")

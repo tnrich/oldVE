@@ -121,6 +121,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             } else {
                 oldTab.options.selection = null;
             }
+
+            if(oldTab && oldTab.model && oldTab.model.setActive) {
+                oldTab.model.setActive(false);
+            }
         }
     },
 
@@ -156,7 +160,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
                 this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
             }*/
-            if(oldTab && oldTab.model && oldTab.model.setActive) oldTab.model.setActive(false);
             
             this.activeProject = newTab.model;
             this.activeTab = newTab;

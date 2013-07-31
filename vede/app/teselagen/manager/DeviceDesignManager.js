@@ -298,6 +298,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     			pDevice.parts().remove(part);
     		}
     	}
+        
     	return {
     		removedRules: removedRules,
     		removedPart: removedPart
