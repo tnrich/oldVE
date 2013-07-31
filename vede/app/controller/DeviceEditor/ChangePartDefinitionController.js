@@ -164,8 +164,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                         if(success) {
                             toastr.options.onclick = null;
                             toastr.info("Part Definition Changed");
-                            Vede.application.fireEvent(this.DeviceEvent.RELOAD_DESIGN);
-                            Vede.application.fireEvent(this.DeviceEvent.RERENDER_COLLECTION_INFO);
+                            Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
+                            Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
                         } else {
                             Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
                             record.reject();
