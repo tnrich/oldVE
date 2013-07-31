@@ -402,7 +402,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
         	this.partPropertiesForm.loadRecord(j5Part);
 
-            if( j5Part.get("sequencefile_id")!=="" && !j5Part.get("phantom") )
+            if( j5Part.get("sequencefile_id")!=="")
             {
             	j5Part.getSequenceFile({
                     callback: function(sequenceFile){
@@ -1319,7 +1319,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onUpdateParts: function(parts, updatedCell, operation, modified) {
         if(modified) {
-            console.log(modified);
             if(parts.indexOf(this.selectedPart) > -1) {
                 this.partPropertiesForm.loadRecord(this.selectedPart);
             }

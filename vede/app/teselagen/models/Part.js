@@ -327,6 +327,12 @@ Ext.define("Teselagen.models.Part", {
      * Checks to see if part is mapped to a valid (nonempty) sequenceFile.
      */
     isMapped: function() {
+        if(this.get("sequencefile_id")) {
+            return true;
+        } else {
+            return false;
+        }
+
         var sequenceFile = this.getSequenceFile();
 
         return (Boolean(sequenceFile) && Boolean(sequenceFile.get("name")) && 
