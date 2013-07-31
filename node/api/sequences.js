@@ -44,7 +44,7 @@ module.exports = function(app) {
 
     var saveSequence = function(newSequence,req,res,cb){
         for (var prop in req.body) {
-            newSequence[prop] = req.body[prop];
+            if(prop!="user_id") newSequence[prop] = req.body[prop];
         }
 
         //Project.findById(req.body.project_id,function(err,project){
@@ -102,9 +102,8 @@ module.exports = function(app) {
      */
     app.post('/sequences', restrict, function(req, res) {
         var newSequence = new Sequence();
-        newSequence.user_id = req.user._id;
+        newSequence.user_id = new app.mongo.ObjectID( req.user._id );
         saveSequence(newSequence,req,res,function(savedSequence){
-            req.user.sequences.push(savedSequence);
             User.findById(req.user._id).populate('sequences').exec(function(err, user) {
                 user.sequences.push(savedSequence);
                 user.save();

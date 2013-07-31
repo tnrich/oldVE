@@ -96,7 +96,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         cls: 'explorerMenuRenameBtn',
                         listeners: {
                             click: function(item, e, opt) {
-                                Teselagen.manager.ProjectManager.onExplorerMenuItemClick(item, e, opt);
+                                Teselagen.manager.ProjectExplorerManager.onExplorerMenuItemClick(item, e, opt);
                             }
                         }
                     },
@@ -105,7 +105,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         cls: 'explorerMenuDeleteBtn',
                         listeners: {
                             click: function(item, e, opt) {
-                                Teselagen.manager.ProjectManager.onExplorerMenuItemClick(item, e, opt);
+                                Teselagen.manager.ProjectExplorerManager.onExplorerMenuItemClick(item, e, opt);
                             }
                         }
                     }]

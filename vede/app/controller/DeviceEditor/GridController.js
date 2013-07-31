@@ -156,7 +156,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
                 this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
             }*/
-            if(oldTab.model && oldTab.model.setActive) oldTab.model.setActive(false);
+            if(oldTab && oldTab.model && oldTab.model.setActive) oldTab.model.setActive(false);
             
             this.activeProject = newTab.model;
             this.activeTab = newTab;

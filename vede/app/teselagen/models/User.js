@@ -24,20 +24,6 @@ Ext.define("Teselagen.models.User", {
         autoLoad: true,
         foreignKey: "user_id"
     }, {
-        type: "hasOne",
-        model: "Teselagen.models.Preferences",
-        associationKey: "preferences",
-        getterName: "getPreferences",
-        setterName: "setPreferences",
-        foreignKey: "preferences_id"
-    }, {
-        type: "hasMany",
-        model: "Teselagen.models.UserRestrictionEnzymeGroup",
-        name: "userRestrictionEnzymeGroups",
-        associationKey: "userRestrictionEnzymeGroups",
-        autoLoad: true,
-        foreignKey: "user_id"
-    }, {
         type: "hasMany",
         model: "Teselagen.models.Part",
         name: "parts",
@@ -49,6 +35,20 @@ Ext.define("Teselagen.models.User", {
         model: "Teselagen.models.SequenceFile",
         name: "sequences",
         associationKey: "sequences",
+        autoLoad: true,
+        foreignKey: "user_id"
+    }, {
+        type: "hasOne",
+        model: "Teselagen.models.Preferences",
+        associationKey: "preferences",
+        getterName: "getPreferences",
+        setterName: "setPreferences",
+        foreignKey: "preferences_id"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.UserRestrictionEnzymeGroup",
+        name: "userRestrictionEnzymeGroups",
+        associationKey: "userRestrictionEnzymeGroups",
         autoLoad: true,
         foreignKey: "user_id"
     }],

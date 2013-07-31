@@ -30,6 +30,14 @@ Ext.define("Teselagen.models.Part", {
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
             }
+
+            if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
+            {
+                var url = "parts";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         }
         /*
@@ -138,6 +146,10 @@ Ext.define("Teselagen.models.Part", {
         name: "iconID",
         type: "string",
         defaultValue: ""
+    },
+    {
+        name: "user_id",
+        type: "long"
     }
     ],
 

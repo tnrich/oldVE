@@ -10,15 +10,18 @@ module.exports = function(app) {
      * @method GET "/users/:username"
      */
     app.get("/users/:username", restrict, function(req, res) {
-        userManager.getById(req.user._id, function(err, user) {
-            if (err) {
-                app.errorHandler(err, req, res);
-            } else {
-                res.json({
-                    "user": user
-                });
-            }
+        res.json({
+            "user": req.user
         });
+        //userManager.getById(req.user._id, function(err, user) {
+        //    if (err) {
+        //        app.errorHandler(err, req, res);
+        //    } else {
+        //        res.json({
+        //            "user": user
+        //        });
+        //    }
+        //});
     });
 
     /**
@@ -30,6 +33,7 @@ module.exports = function(app) {
         req.user.username = req.body.username;
         req.user.preferences = req.body.preferences;
         req.user.userRestrictionEnzymeGroups = req.body.userRestrictionEnzymeGroups;
+
         userManager.update(req.user, function(err, pUser) {
             if (err) {
                 app.errorHandler(err, req, res);
