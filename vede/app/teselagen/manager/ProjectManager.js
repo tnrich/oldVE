@@ -170,7 +170,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             selectedDesign.bins().each(function(bin){
                 bin.cells().each(function(cell){
-                    cell.setPart( selectedDesign.parts().getById(cell.data.part_id) );
+                    cell.setPart( Teselagen.manager.ProjectManager.parts.getById( cell.data.part_id ) );
                 });
             });
 

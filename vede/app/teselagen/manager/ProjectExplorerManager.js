@@ -139,8 +139,8 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 	},
 
 
-    onExplorerMenuItemClick: function(menuitem, e, opt) {
-        var selectedNode = Ext.getCmp("projectTreePanel").getSelectionModel().selected.items[0];
+    onExplorerMenuItemClick: function(menuitem, record) {
+        var selectedNode = record;
         var selectedPath = selectedNode.getPath();
         var selectedRecord = selectedNode.data;
         var selectedRecordType = selectedRecord.hrefTarget;

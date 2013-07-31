@@ -28,7 +28,7 @@ module.exports = function(app) {
             if(prop!="user_id") newPart[prop] = req.body[prop];
         }
             
-            newPart.FQDN = req.user.FQDN + req.body.name;
+            newPart.FQDN = req.user.FQDN + '.' + req.body.name;
             Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
                 newPart.user_id = new app.mongo.ObjectID(req.user._id);
