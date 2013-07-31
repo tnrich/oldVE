@@ -188,6 +188,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         	
         }
         
+        // Check the fas scheme
+        var isNewFasScheme = bins[0]["de:binItems"]["de:fas"] !== undefined;
         
         // Bins Processing
         for (var i=0; i<bins.length; i++) {
@@ -203,7 +205,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             });
 
             var binParts = bin["de:binItems"]["de:partID"];
-
+            
             if (typeof(binParts) === "number") {
                 // Cover special cases in which parts are inside sub array
             	binParts = [];
@@ -215,13 +217,19 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
             }
             
+            var cellFases;
+            if(isNewFasScheme) cellFases = bin["de:binItems"]["de:fas"];
+            
             var temCellsArray = [];
             for (var j=0; j<binParts.length; j++) {
             	var assocPart = fullPartsAssocArray[binParts[j]];
+            	var cellFas;
+            	if(isNewFasScheme) cellFas = cellFases[j];
+            	else cellFas = assocPart ? assocPart.get("fas") : "None";
             	var newCell = Ext.create("Teselagen.models.Cell", {
                     index: j,
                     //part_id: binParts[j],
-                    fas: assocPart ? assocPart.get("fas") : "None"
+                    fas: cellFas
                 });
             	newCell.setPart(assocPart);
             	newCell.setJ5Bin(newBin);
