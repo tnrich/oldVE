@@ -444,7 +444,24 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 width: '98%',
                                 emptyText: 'Search Library',
                                 emptyCls: 'empty-search-field',
-                                margin: 13
+                                margin: 13,
+                                listeners: {
+                                    change: function(field, newValue, oldValue, eOpts) {
+                                        var grid = Ext.getCmp('sequenceLibrary');
+                                        grid.store.clearFilter();
+
+                                        if (newValue) {
+                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
+                                            grid.store.filter({
+                                                filterFn: function(record) {
+                                                    return matcher.test(record.get('name')) ||
+                                                        matcher.test(record.get('sequenceFileFormat')) ||
+                                                        matcher.test(record.get('size'));
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
                             },
                             {
                                 xtype: 'container',
@@ -459,6 +476,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         border: 0,
                                         name: 'SequenceLibraryGrid',
                                         cls: 'sequenceLibraryGrid',
+                                        id: 'sequenceLibrary',
                                         columns: [
                                             {
                                                 xtype: 'gridcolumn',
@@ -547,13 +565,33 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 width: '98%',
                                 emptyText: 'Search Library',
                                 emptyCls: 'empty-search-field',
-                                margin: 13
+                                margin: 13,
+                                listeners: {
+                                    change: function(field, newValue, oldValue, eOpts) {
+                                        var grid = Ext.getCmp('partLibrary');
+                                        grid.store.clearFilter();
+
+                                        if (newValue) {
+                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
+                                            grid.store.filter({
+                                                filterFn: function(record) {
+                                                    return matcher.test(record.get('name')) ||
+                                                        matcher.test(record.get('genbankStartBP')) ||
+                                                        matcher.test(record.get('endBP')) ||
+                                                        matcher.test(record.get('fas')) ||
+                                                        matcher.test(record.get('revComp'));
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
                             },
                             {
                                 xtype: 'gridpanel',
                                 border: 0,
                                 name: 'PartLibraryGrid',
                                 cls: 'partLibraryGrid',
+                                id: 'partLibrary',
                                 columns: [
                                     {
                                         xtype: 'gridcolumn',
@@ -562,26 +600,26 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         dataIndex: 'name'
                                     }, {
                                         xtype: 'gridcolumn',
-                                        text: 'File Format',
+                                        text: 'Start BP',
                                         width: 100,
-                                        dataIndex: 'partFileFormat'
+                                        dataIndex: 'genbankStartBP'
                                     },{
                                         xtype: 'gridcolumn',
-                                        text: 'Project',
+                                        text: 'Stop BP',
                                         width: 120,
-                                        dataIndex: 'parentProject'
+                                        dataIndex: 'endBP'
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        text: 'Size',
+                                        text: 'FAS',
                                         width: 80,
-                                        dataIndex: 'size'
+                                        dataIndex: 'fas'
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        text: 'Features',
+                                        text: 'Reverse Complement',
                                         flex: 1,
-                                        dataIndex: 'features'
+                                        dataIndex: 'revComp'
                                     },
                                 ]
                             }
