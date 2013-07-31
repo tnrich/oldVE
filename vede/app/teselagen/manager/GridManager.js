@@ -36,6 +36,7 @@ Ext.define("Teselagen.manager.GridManager", {
 	PART_HEIGHT: 40,
 	PART_FILL_COLOR: "#fefefe",
 	PART_OUTLINE_COLOR: "#ecf0f1",
+	PART_UNMAPPED_OUTLINE_COLOR: "#e10000",
 	PART_OUTLINE_WIDTH: 1,	// Not really sure right now.
 	PART_HOVER_OUTLINE_COLOR: "#4A4B4C",
 	PART_SELECTED_OUTLINE_COLOR: "#4A4B4C",
@@ -77,7 +78,8 @@ Ext.define("Teselagen.manager.GridManager", {
 	clipboardPart: null,
 
     GridController: null,
-	
+    InspectorController: null,
+    
 	totalRows: 0,
     totalColumns: 0,
     
@@ -114,7 +116,11 @@ Ext.define("Teselagen.manager.GridManager", {
         if(!this.GridController) {
             this.GridController = Vede.application.getController("DeviceEditor.GridController");
         }
-
+        
+        if(!this.InspectorController) {
+            this.InspectorController = Vede.application.getController("DeviceEditor.InspectorController");
+        }
+        
         this.totalColumns = model.bins().count();
 
         if(this.totalColumns > 0) {
@@ -253,10 +259,14 @@ Ext.define("Teselagen.manager.GridManager", {
         var newCell;
         var bin;
 		var rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
+		var binCount = this.activeProject.bins().count();
 		
 		this.setListenersEnabled(false);
 		
-		for(var i=0;i<this.activeProject.bins().count();i++) {
+		this.selectedGridPart = null;
+		this.selectedGridBin = null;
+		
+		for(var i=0;i<binCount;i++) {
 			bin = this.activeProject.bins().getAt(i);
 			newCell = Ext.create("Teselagen.models.Cell", {
                 index: rowIndex
@@ -265,10 +275,17 @@ Ext.define("Teselagen.manager.GridManager", {
             bin.cells().insert(rowIndex, newCell);
 		}
 		
-		//this.totalRows++;
-		
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
         this.setListenersEnabled(true);
+        // Fire event to re-render grid. This might be the wrong event or wrong eventArgs to fire, though.
+        this.activeProject.bins().getAt(0).cells().fireEvent("add");
+        this.InspectorController.clearPartInfo();
+        //this.activeProject.bins().fireEvent("update");
+        
+        this.GridController.toggleCutCopyPastePartOptions(false);
+        this.GridController.toggleInsertOptions(false);
+        this.GridController.toggleInsertRowAboveOptions(false);
+        this.GridController.toggleInsertRowBelowOptions(false);
+        
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
         	data: {
@@ -287,14 +304,13 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
-		var newBin = this.activeProject.addNewBinByIndex(columnIndex+1);
+		//var newBin = this.activeProject.addNewBinByIndex(columnIndex+1);
 		
-		//this.totalColumns++;
+		var newBin = this.activeProject.generateDefaultNewBin();
+		this.setListenersEnabled(true);
+		this.activeProject.bins().insert(columnIndex+1, newBin);
 		
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, null, columnIndex+1);
-        
-        this.setListenersEnabled(true);
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
@@ -315,39 +331,13 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
-		var newBin = this.activeProject.addNewBinByIndex(columnIndex);
 		
-		/*var newBin = {
-			iconID: "USER-DEFINED",
-			directionForward: true,
-			parts: []
-		}
+		var newBin = this.activeProject.generateDefaultNewBin();
+		this.setListenersEnabled(true);
+		this.activeProject.bins().insert(columnIndex, newBin);
 		
-		var digests;
-		if(columnIndex===0) {
-			digests = [];
-			for(var i=0;i<this.totalRows;i++) {
-				newBin.parts.push({phantom: true});
-				if(me.collectionData[0].parts[i].fas==="DIGEST" || 
-						(me.collectionData[0].fases && me.collectionData[0].fases[i]==="DIGEST")) {
-					me.collectionData[0].parts[i].fas = "None";
-					me.collectionData[0].fases[i] = "None";
-					digests.push(i);
-				}
-			}
-		} else {
-			for(var i=0;i<this.totalRows;i++) {
-				newBin.parts.push({phantom: true});				
-			}
-		}
-		this.collectionData.splice(columnIndex,0,newBin);	
-		*/
-		
-		//this.totalColumns++;
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, null, columnIndex);
         
-        this.setListenersEnabled(true);
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "BIN",
         	data: {
@@ -432,8 +422,11 @@ Ext.define("Teselagen.manager.GridManager", {
         this.GridController.toggleInsertRowAboveOptions(false);
         this.GridController.toggleInsertRowBelowOptions(false);
         
-        Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+        //Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
         this.setListenersEnabled(true);
+        // Fire event to re-render grid. This might be the wrong event or wrong eventArgs to fire, though.
+        this.activeProject.bins().getAt(0).cells().fireEvent("remove");
+        //this.activeProject.bins().getAt(0).cells().fireEvent("update");
         
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
@@ -476,15 +469,21 @@ Ext.define("Teselagen.manager.GridManager", {
 		var xIndex = parseInt(this.selectedGridBin.attr("deGridBinIndex"));
 		var yIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
 		
+		this.setListenersEnabled(false);
+		
 		var removedStuff = Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithCell(this.activeProject, cell);
 		var oldPart = cell.getPart();
 		var oldFas = cell.get("fas");
 		
 		cell.setPart();
-		cell.set("fas", "None");
 		cell.set("part_id", null);
+		cell.set("fas", "None");
+		this.setListenersEnabled(true);
+		// Fire event to re-render grid. This might be the wrong event or wrong eventArgs to fire, though.
+		this.activeProject.bins().getAt(0).cells().fireEvent("remove");
 		
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		
+		//Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
 		
 		this.GridController.toggleCutCopyPastePartOptions(false);
         this.GridController.toggleInsertOptions(false);
@@ -544,7 +543,14 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		d3.selectAll(".gridPartRectSVG")
 			.attr("fill", gridManager.PART_FILL_COLOR)
-			.attr("stroke", gridManager.PART_OUTLINE_COLOR)
+			//.attr("stroke", gridManager.PART_OUTLINE_COLOR)
+			.attr("stroke", function(d) {
+				var part = d.getPart();
+				if(!part) return gridManager.PART_OUTLINE_COLOR;
+				var sequencefileId = part.get("sequencefile_id");
+				if(sequencefileId === "" || sequencefileId === undefined || sequencefileId === null) return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
+				else return gridManager.PART_OUTLINE_COLOR;
+			})
 			.attr("isSelected", "false");
 						
 		d3.select(gridCell).transition()
@@ -582,7 +588,14 @@ Ext.define("Teselagen.manager.GridManager", {
 		if(gridManager.selectedGridPart != null) {
 			d3.selectAll(".gridPartRectSVG")
 				.attr("fill", gridManager.PART_FILL_COLOR)
-				.attr("stroke", gridManager.PART_OUTLINE_COLOR)
+				//.attr("stroke", gridManager.PART_OUTLINE_COLOR)
+				.attr("stroke", function(d) {
+					var part = d.getPart();
+					if(!part) return gridManager.PART_OUTLINE_COLOR;
+					var sequencefileId = part.get("sequencefile_id");
+					if(sequencefileId === "" || sequencefileId === undefined || sequencefileId === null) return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
+					else return gridManager.PART_OUTLINE_COLOR;
+				})
 				.attr("isSelected", "false");
 			gridManager.selectedGridPart = null;
 		}
@@ -633,8 +646,9 @@ Ext.define("Teselagen.manager.GridManager", {
             }
         });
         
-        //Teselagen.manager.GridManager.selectBin(gridBin);
+        //Teselagen.manager.GridManager.selectGridBinHeaderByIndex(xIndex);
     },
+    
     
     
     
