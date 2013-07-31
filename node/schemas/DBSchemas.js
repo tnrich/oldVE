@@ -101,7 +101,7 @@ module.exports = function(db) {
 		veproject_id      :  String,
 		j5bin_id          :  String,
 		eugenerule_id     :  String,
-		sequencefile_id   :  String,
+		sequencefile_id   : { type: oIDRef, ref: 'sequence' },
 		directionForward  :  String,
 		revComp           :  String,
 		genbankStartBP    :  String,
@@ -188,7 +188,8 @@ module.exports = function(db) {
 		j5runs: [{
 			type: oIDRef,
 			ref: 'j5run'
-		}]
+		}],
+		sequences: Mixed
 	});
 
 	DeviceDesignSchema.pre('remove',function (next) {
