@@ -46,7 +46,8 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         var sequences = [];
         var rules = [];
     	
-    	
+        var partFasAssocArray = {};
+        
         design.bins().each(function(bin,binKey) {
         	var jsonBin = {};
             jsonBin = {};
@@ -63,11 +64,19 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             // Parts structure
             jsonBin["de:binItems"] = {};
             jsonBin["de:binItems"]["de:partID"] = [];
+            jsonBin["de:binItems"]["de:fas"] = [];
             
             bin.cells().each(function(cell,partIndex) {
             	var part = cell.getPart();
-            	if(!part) jsonBin["de:binItems"]["de:partID"].push("");
-            	else jsonBin["de:binItems"]["de:partID"].push(part.internalId);
+            	if(!part) {
+            		jsonBin["de:binItems"]["de:partID"].push("");
+            		jsonBin["de:binItems"]["de:fas"].push("");
+            	} else {
+            		jsonBin["de:binItems"]["de:partID"].push(part.internalId);
+            		var cellFas = (cell.get("fas")==="None") ? "" : cell.get("fas");
+            		jsonBin["de:binItems"]["de:fas"].push(cellFas);
+            		partFasAssocArray[cell.getPart().internalId] = cellFas;
+            	}
             });
             
             bins.push(jsonBin);
@@ -75,7 +84,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         
         for(var i=0;i<design.parts().count();i++) {
         	var part = design.parts().getAt(i);
-        	var sequence = part.getSequenceFile(); 	
+        	var sequence = part.getSequenceFile();
         	
         	// Process parts
             var jsonPart = {};
@@ -93,7 +102,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             //jsonPart["de:parts"]["de:part"].id = part.get("id");
             jsonPart["de:parts"]["de:part"].id = part.internalId;
             var fas = part.data.fas;
-            jsonPart["de:parts"]["de:part"]["de:fas"] = (fas === "None") ? "" : fas;
+            jsonPart["de:parts"]["de:part"]["de:fas"] = partFasAssocArray[part.internalId];
             
             parts.push(jsonPart);
             
