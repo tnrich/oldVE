@@ -366,7 +366,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     	
     	this.inspector.setActiveTab(0);
     	
-    	this.inspector.suspendLayouts();
+    	this.inspector.suspendLayouts(false);
     	
     	this.selectedBinIndex = binIndex;
         
@@ -516,11 +516,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onBinSelected: function (j5Bin, binIndex) {
     	if(!j5Bin) j5Bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         var selectionModel = this.columnsGrid.getSelectionModel();
-        var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
+        //var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
         
         this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
         
+    	this.inspector.suspendLayouts(false);
+
         //console.log(selectedPart);
         selectionModel.select(j5Bin, false, true);
         
@@ -534,7 +536,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.openPartLibraryBtn.removeCls("selectPartFocus");
         this.openPartLibraryBtn.addCls("btnDisabled");
 
-        removeColumnMenuItem.enable();
+        //removeColumnMenuItem.enable();
+        this.inspector.resumeLayouts();
     },
 
     /**
@@ -1362,8 +1365,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onRemoveFromCells: function () {
         try {
-            this.columnsGrid.getView().refresh();
+            this.inspector.suspendLayouts();
+        	
+        	this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
+            
+            this.inspector.resumeLayouts();
             //this.clearPartInfo();
         } catch(err)
         {

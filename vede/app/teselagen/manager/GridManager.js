@@ -581,6 +581,7 @@ Ext.define("Teselagen.manager.GridManager", {
     selectGridBinHeader: function(gridBin) {
         var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(false);
+		gridManager.GridController.toggleRemoveColumnOptions(true);
 		gridManager.GridController.toggleInsertOptions(true);
 		gridManager.GridController.toggleInsertRowAboveOptions(false);
 		gridManager.GridController.toggleInsertRowBelowOptions(true);

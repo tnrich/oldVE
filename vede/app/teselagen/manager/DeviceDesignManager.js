@@ -304,6 +304,17 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 		}
     },
     
+    removeRulesAndPartsAssocWithBin: function(pDevice, pBin, binIndex) {
+    	var partsArray = [];
+    	for(var i=0;i<pBin.cells().count();i++) {
+    		partsArray.push(pBin.cells().getAt(i));
+    	}
+    	
+    	console.log(partsArray);
+    	
+    	
+    },
+    
     //================================================================
     // J5Collection Management
     //================================================================

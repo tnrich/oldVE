@@ -8,7 +8,7 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
         "Teselagen.manager.DeviceDesignExporterManager"
     ],
 
-    preloadResources: function(cb){
+    /*preloadResources: function(cb){
         var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
         
         var finishedPreloadingResources = function(){
@@ -19,13 +19,13 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
 
         var countParts = 0;
 
-        model().bins().each(function (bin, binKey) {
+        model.bins().each(function (bin, binKey) {
             bin.cells().each(function (part, partIndex) {
                 countParts++;
             });
         });
 
-        model().bins().each(function (bin, binKey) {
+        model.bins().each(function (bin, binKey) {
             bin.cells().each(function (part, partIndex) {
                 part.getSequenceFile({
                     callback: function (part) {
@@ -35,18 +35,22 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
                 });
             });
         });
-    },
+    },*/
 
     onExportToJSONClick: function () {
-        this.preloadResources(function(model){
+    	var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
+    	Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);
+    	/*this.preloadResources(function(model){
             Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);
-        });
+        });*/
     },
 
     onExportToXMLClick: function () {
-        this.preloadResources(function(model){
+    	var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
+    	Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);
+    	/*this.preloadResources(function(model){
             Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);
-        });
+        });*/
     },
 
     onNewDesignClick: function() {
