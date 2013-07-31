@@ -122,8 +122,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             } else {
                 oldTab.options.selection = null;
             }
-            if(oldTab.model && oldTab.model.setActive) oldTab.model.setActive(false);
-        }	
+
+            if(oldTab && oldTab.model && oldTab.model.setActive) {
+                oldTab.model.setActive(false);
+            }
+        }
     },
 
     /**

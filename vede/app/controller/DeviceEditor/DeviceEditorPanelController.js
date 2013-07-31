@@ -243,7 +243,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                                             part.set("sequencefile_id", sequencefile.get("id"));
                                             part.save({
                                                 callback: function () {
-
                                                     cb();
                                                 }
                                             });

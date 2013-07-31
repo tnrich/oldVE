@@ -546,9 +546,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
         this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
-            if (rule.getOperand1() === pPart) {
+            if (rule.getOperand1().getId() === pPart.getId()) {
                 return true;
-            } else if(rule.getOperand2() === pPart) {
+            } else if(rule.getOperand2().getId() === pPart.getId()) {
                 if(filterThenAndNextTo &&
                    rule.get("compositionalOperator") !== constants.THEN &&
                    rule.get("compositionalOperator") !== constants.NEXTTO) {

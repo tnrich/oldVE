@@ -305,7 +305,6 @@ Ext.define("Teselagen.models.Part", {
         return success;
     },
 
-
     /** (WEIRD PROBLEM--print part, does not show same seqFile from getSeqFile.)
      * Removes the SequenceFile of Part. Resets the Sequence File format to INIT (?),
      * and the content, filename, partsource, etc to empty strings.
@@ -322,6 +321,21 @@ Ext.define("Teselagen.models.Part", {
         } else {
             return false;
         }
-    }
+    },
 
+    /**
+     * Checks to see if part is mapped to a valid (nonempty) sequenceFile.
+     */
+    isMapped: function() {
+        if(this.get("sequencefile_id")) {
+            return true;
+        } else {
+            return false;
+        }
+
+        var sequenceFile = this.getSequenceFile();
+
+        return (Boolean(sequenceFile) && Boolean(sequenceFile.get("name")) && 
+                Boolean(sequenceFile.get("sequenceFileContent")));
+    }
 });

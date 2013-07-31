@@ -166,12 +166,21 @@ Ext.define("Teselagen.manager.ProjectManager", {
      */
     openDeviceDesign: function (selectedDesign) {
         this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
-            //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
-            //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+
+            // Set part_id fields on each cell.
             selectedDesign.bins().each(function(bin){
                 bin.cells().each(function(cell){
-                    cell.setPart( Teselagen.manager.ProjectManager.parts.getById( cell.data.part_id ) );
+                    cell.setPart( Teselagen.manager.ProjectManager.parts.getById(cell.get("part_id")));
                 });
+            });
+
+            // Set sequencefile_id fields on each part.
+            selectedDesign.parts().each(function(part) {
+                var sequenceFile = part.getSequenceFile();
+
+                if(sequenceFile) {
+                    part.set("sequencefile_id", sequenceFile.getId());
+                }
             });
 
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
