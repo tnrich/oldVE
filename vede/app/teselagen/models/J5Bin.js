@@ -47,7 +47,7 @@ Ext.define("Teselagen.models.J5Bin", {
             name: "binName",
             convert: function(v, record) {
                 var name;
-                v = Ext.String.trim(v);
+                v = Ext.String.trim(v+"");
                 if (v === "" || v === undefined || v === null) {
                     record.self.highestDefaultNameIndex += 1;
                     name = record.self.defaultNamePrefix/*+ record.self.highestDefaultNameIndex*/;

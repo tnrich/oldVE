@@ -220,7 +220,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             	var newCell = Ext.create("Teselagen.models.Cell", {
                     index: j,
                     //part_id: binParts[j],
-                    fas: assocPart.get("fas")
+                    fas: assocPart ? assocPart.get("fas") : "None"
                 });
             	newCell.setPart(assocPart);
             	newCell.setJ5Bin(newBin);

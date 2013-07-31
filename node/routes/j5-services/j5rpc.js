@@ -49,24 +49,15 @@ function quicklog(s) {
  */
 function encoded_sequences_list_file(model)
 {
-    var bins = model["j5collection"]["bins"];
+    var sequences = model["sequences"];
 
     var out ="Sequence File Name,Format\n";
 
-    var sequences = [];
-    bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-            if(!part.phantom) sequences.push(part["SequenceFile"]);
-        });
-    });
-
-    sequences = loopAndSplice(sequences);
-
-    sequences.forEach(function(sequenceFile){
+    for( sequenceKey in sequences ) {
+        var sequenceFile = sequences[sequenceKey];
         var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
         out += sequenceFile['sequenceFileName']+','+ format +'\n';
-    });
-    //quicklog(out);
+    };
     return new Buffer(out).toString('base64');
 }
 
@@ -78,26 +69,17 @@ function encoded_sequences_list_file(model)
 function encoded_zipped_sequences_file(model)
 {
 
-    var bins = model["j5collection"]["bins"];
+    var parts = model["parts"];
 
     var zip = new require('node-zip')();
 
-    bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-            if(!part.phantom) {
-            if(part)
-            {
-                var sequenceFile = part["SequenceFile"];
-                if(sequenceFile) zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
-                else console.log("Warning: Sequence file not found");
-            }
-            else
-            {
-                console.log("Warning: Part not found");
-            }
-            }
-        });
-    });
+    for( partKey in parts )
+    {
+        var part = parts[partKey]; 
+        var sequenceFile = model.sequences[part["sequencefile_id"]];
+        if(sequenceFile) zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
+        else console.log("Warning: Sequence file not found for generating zipped file"," looking for: ",part["sequencefile_id"]);
+    }
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
     //quicklog(data);
@@ -113,13 +95,14 @@ function encoded_parts_list_file(model)
 {
     var out = "Part Name,Part Source (Sequence Display ID),Reverse Compliment?,Start (bp),End (bp)\n";
 
-    var bins = model["j5collection"]["bins"];
+    var bins = model["bins"];
 
     bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-            if(!part.phantom)
+        bin.cells.forEach(function(cell){
+            var part = model.parts[cell.part_id];
+            if(part)
             {
-                var sequenceFile = part["SequenceFile"];
+                var sequenceFile = model.sequences[part["sequencefile_id"]];
                 if(sequenceFile)
                 {
                     var sequenceName = "";
@@ -181,7 +164,7 @@ function encoded_target_part_order_list_file(model,method)
 {
 
 
-    var bins = model["j5collection"]["bins"];
+    var bins = model["bins"];
 
     var out = '(>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps\n';
     bins.forEach(function(bin){
@@ -191,10 +174,11 @@ function encoded_target_part_order_list_file(model,method)
             var tempOut = '';
             var dsfFirewall = '';
             var fas;
-            bin.parts.forEach(function(part,partKey){
-                if(!part.phantom)
+            bin.cells.forEach(function(cell,cellKey){
+                var part = model.parts[cell.part_id];
+                if(part)
                 {
-                    fas = bin.fases[partKey];
+                    fas = cell.fas;
                     if(fas === 'None') fas = '';
                     fro = (bin['fro'] === 'None') ? '' : bin['fro'];
                     direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
@@ -216,14 +200,14 @@ function encoded_target_part_order_list_file(model,method)
         {
             direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
             //fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
-            fas = bin.fases[0];
+            fas = bin.cells[0].fas;
             if(fas === 'None') fas = '';
             fro = (bin['fro'] === 'None') ? '' : bin['fro'];
             dsf = (bin['dsf'] === false) ? '' : bin['dsf'];
             extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
             extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
 
-            out += bin.parts[0]["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
+            out += model.parts[bin.cells[0].part_id]["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
         }
     });
     //quicklog(out);
@@ -237,19 +221,10 @@ function encoded_target_part_order_list_file(model,method)
  */
 function encoded_eugene_rules_list_file(model)
 {
-    var partsIndex = {};
+    var partsIndex = model.parts;
     var eugenes = model["rules"];
     //console.log("Processing "+eugenes.length+" eugene rules");
     var out = "";
-
-    var bins = model["j5collection"]["bins"];
-    bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-            partsIndex[part.id] = part;
-        });
-    });
-
-
     
     eugenes.forEach(function(val,key){
         var name = val["name"];

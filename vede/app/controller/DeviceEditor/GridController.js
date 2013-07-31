@@ -95,7 +95,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     */
 
     onBeforeTabChange: function(tabPanel, newTab, oldTab) {
-        if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
+        
+    	if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
             var selectedBin = this.GridManager.selectedGridBin;
             var selectedCell = this.GridManager.selectedGridPart;
 
@@ -136,7 +137,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.Component} newTab The tab that is being switched to.
      */
     onTabChange: function(tabPanel, newTab, oldTab) {
-        if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
+    	if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.down("component[cls='designGrid']");
 
             /*if(this.activeBins) {
@@ -620,6 +621,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.clearPartMenuItem.setDisabled(!state||false);
         this.removeColumnMenuItem.setDisabled(!state||false);
     },
+    
+    toggleRemoveColumnOptions: function(state) {
+    	this.removeColumnMenuItem.setDisabled(!state||false);
+    },
 
     toggleInsertOptions: function(state) {
         this.columnLeftMenuItem.setDisabled(!state||false);
@@ -827,7 +832,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     init: function() {
         this.callParent();
-        
         
         this.control({
             "#mainAppPanel": {
