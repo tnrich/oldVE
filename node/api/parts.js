@@ -3,6 +3,7 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
     var Part = app.db.model("part");
+    var User = app.db.model("User");
 
     /**
      * POST Parts
@@ -20,16 +21,17 @@ module.exports = function(app) {
     });
 
 
-    var savePart = function(req,res,existingPart){
+    var savePart = function(req,res,existingPart,cb){
         var newPart = existingPart;
         if(!existingPart) { newPart = new Part(); }
         for (var prop in req.body) {
-            newPart[prop] = req.body[prop];
+            if(prop!="user_id") newPart[prop] = req.body[prop];
         }
             
-            newPart.FQDN = req.user.FQDN + req.body.name;
+            newPart.FQDN = req.user.FQDN + '.' + req.body.name;
             Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
+                newPart.user_id = new app.mongo.ObjectID(req.user._id);
 
                 newPart.save(function(err){
                     if(err)
@@ -49,6 +51,7 @@ module.exports = function(app) {
                     }
                     else 
                         {
+                            if (typeof(cb) == 'function') cb(newPart);
                             res.json({'parts': newPart,"duplicated":false,"err":err});
                         }
                 });
@@ -57,7 +60,12 @@ module.exports = function(app) {
 
 
     app.post('/parts', restrict,  function(req, res) {
-        savePart(req,res);
+        savePart(req,res,null,function(savedSequence){
+            User.findById(req.user._id).populate('parts').exec(function(err, user) {
+                user.parts.push(savedSequence);
+                user.save();
+            });
+        });
     });
 
     /**
@@ -83,8 +91,12 @@ module.exports = function(app) {
      * @method GET 'parts'
      */
     app.get('/parts', restrict,  function(req, res) {
-        console.log("Warning: Using deprecated method");
-        return res.json({});
+        User.findById(req.user._id)
+        .populate({ path: 'parts'})
+        .exec(function(err, user) {
+            res.json({"parts":user.parts});
+        });
+        
     });
 
 
