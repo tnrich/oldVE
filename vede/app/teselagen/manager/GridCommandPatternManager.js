@@ -68,7 +68,11 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			me.undoPartDel(command);
 		} else if(type=="FAS") {
 			me.undoPartFas(command);
-		}
+		} else if(type=="PASTE") {
+			me.undoPartPaste(command);
+		}/*else if(type=="DEF") {
+			me.undoPartDef(command);
+		}*/
 	},
 	
 	undoRowCommand: function(command) {
@@ -268,78 +272,71 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoPartDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].parts.splice(command.data.y,1,command.data.data);
-		if(command.data.rules.length>0) gridManager.rulesData = gridManager.rulesData.concat(command.data.rules);
-		gridManager.updatePartsWithRules();
+
+		gridManager.setListenersEnabled(false);
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
+		var part = command.data.part;
+		var rules = command.data.rules;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
+		if(part) gridManager.activeProject.parts().add(part);
 		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		var cell = gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex);
+		cell.setPart(command.data.data.oldPart);
+		cell.set("fas", command.data.data.oldFas);
+		
+		if(rules.length!==0) gridManager.activeProject.rules().add(rules);
+		
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		gridManager.setListenersEnabled(true);
 	},
 	
 	undoPartAdd: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].parts.splice(command.data.y,1,command.data.oldPart);
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		if(command.data.partAdded) {
+			gridManager.activeProject.parts().remove(command.data.newPart);			
+			//gridManager.activeProject.parts().add(command.data.oldPart);
+		}
+		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).setPart(command.data.oldPart);
 	},
 	
 	undoPartFas: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].parts[command.data.y].fas = command.data.oldFas;
-		gridManager.collectionData[command.data.x].fases[command.data.y] = command.data.oldFas;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
+		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).set("fas", command.data.oldFas);
+	},
+	
+	/*undoPartDef: function(command) {
+		var me = Teselagen.manager.GridCommandPatternManager;
+		var gridManager = Teselagen.manager.GridManager;
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
+		command.data.part.set(command.data.oldDef);
+	},*/
+	
+	undoPartPaste: function(command) {
+		var me = Teselagen.manager.GridCommandPatternManager;
+		var gridManager = Teselagen.manager.GridManager;
 		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
+		
+		var cell = gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex);
+		cell.setPart(command.data.oldPart);
 	},
 	
 	undoRuleAdd: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		for (var i=0;i<gridManager.rulesData.length;i++) {
-			if(gridManager.rulesData[i].name==command.data.rule.name) {
-				gridManager.rulesData.splice(i,1);
-				break;
-			}
-		}
-		gridManager.updatePartsWithRules();
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		gridManager.activeProject.rules().remove(command.data.data);
 	},
 	
 	undoRuleDel: function(command) {
@@ -421,6 +418,8 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			me.redoPartDel(command);
 		} else if(type=="FAS") {
 			me.redoPartFas(command);
+		} else if(type=="PASTE") {
+			me.redoPartPaste(command);
 		}
 	},
 	
@@ -441,12 +440,10 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			me.redoBinAdd(command);
 		} else if(type=="DEL") {
 			me.redoBinDel(command);
-		} else if(type=="RENAME") {
-			me.redoBinRename(command);
+		} else if(type=="EDIT") {
+			me.redoBinEdit(command);
 		} else if(type=="DIR") {
 			me.redoBinDir(command);
-		} else if(type=="DSF") {
-			me.redoBinDsf(command);
 		} else if(type=="ICON") {
 			me.redoBinIcon(command);
 		}
@@ -473,65 +470,65 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	redoPartAdd: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].parts.splice(command.data.y,0,command.data.newPart);
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		if(command.data.partAdded) {
+			gridManager.activeProject.parts().add(command.data.newPart);			
+		}
+		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).setPart(command.data.newPart);
 	},
 	
 	redoPartDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
-		var gridManager = Teselagen.manager.GridManager;		
-		if(command.data.rules.length>0) {
-			gridManager.removeRuleDataInvolvingPart(command.data.data.id, true);
-			gridManager.updatePartsWithRules();
-		}
-		gridManager.collectionData[command.data.x].parts.splice(command.data.y,1,{phantom: true});
+		var gridManager = Teselagen.manager.GridManager;
+
+		gridManager.setListenersEnabled(false);
 		
+		var part = command.data.part;
+		var rules = command.data.rules;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.clearPartInfo();
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
+		if(part) gridManager.activeProject.parts().remove(part);
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
+		var cell = gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex);
+		cell.setPart();
+		cell.set("part_id", null);
+		cell.set("fas", "None");
 		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		if(rules.length!==0) gridManager.activeProject.rules().remove(rules);
+		
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		gridManager.setListenersEnabled(true);
 	},
 	
 	redoPartFas: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.collectionData[command.data.x].parts[command.data.y].fas = command.data.newFas;
-		gridManager.collectionData[command.data.x].fases[command.data.y] = command.data.newFas;
+		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).set("fas", command.data.newFas);
+	},
+	
+	redoPartPaste: function(command) {
+		var me = Teselagen.manager.GridCommandPatternManager;
+		var gridManager = Teselagen.manager.GridManager;
 		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
+		var xIndex = command.data.x;
+		var yIndex = command.data.y;
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		var cell = gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex);
+		cell.setPart(command.data.newPart);
 	},
 	
 	redoRowAdd: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
+		
+		gridManager.setListenersEnabled(false);
+
 		var loc = command.data.loc;
 		var rowIndex;
 		if(loc=="ABOVE") {
@@ -540,45 +537,46 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			rowIndex = command.data.y+1;
 		}
 		
-		for(var i=0;i<gridManager.totalColumns;i++) {
-			gridManager.collectionData[i].parts.splice(rowIndex,0,{phantom: true});
+		var bin;
+		var newCell;
+		for(var i=0;i<gridManager.activeProject.bins().count();i++) {
+			bin = gridManager.activeProject.bins().getAt(i);
+			newCell = Ext.create("Teselagen.models.Cell", {
+                index: rowIndex
+            });
+			newCell.setJ5Bin(bin);
+            bin.cells().insert(rowIndex, newCell);
 		}
-		gridManager.totalRows++;
 		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-        gridManager.toggleInsertRowBelowOptions(false);
-        gridManager.clearPartInfo();
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		gridManager.setListenersEnabled(true);
 	},
 	
 	redoRowDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
+		
+		gridManager.setListenersEnabled(false);
+		
 		var rowIndex = command.data.y;
-		if(command.data.rules.length>0) {
-			gridManager.removeRuleDataInvolvingRow(rowIndex);			
-			gridManager.updatePartsWithRules();
+		var row = command.data.data;
+		if(command.data.oneRowLeft) {
+			var newCell;
+			for(var i=0;i<gridManager.activeProject.bins().count();i++) {
+				var cells = gridManager.activeProject.bins().getAt(i).cells();
+				cells.removeAt(rowIndex);
+				newCell = Ext.create("Teselagen.models.Cell", {
+	                index: rowIndex
+	            });
+				cells.add(newCell);
+			}
+		} else {
+			for(var i=0;i<gridManager.activeProject.bins().count();i++) {
+				gridManager.activeProject.bins().getAt(i).cells().removeAt(rowIndex);
+			}
 		}
-		for(var i=0;i<gridManager.totalColumns;i++) {
-			gridManager.collectionData[i].parts.splice(rowIndex,1);
-		}
-		
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		gridManager.totalRows--;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		gridManager.setListenersEnabled(true);
 	},
 	
 	redoBinAdd: function(command) {
@@ -588,119 +586,63 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		var binIndex;
 		if(loc=="LEFT") {
 			binIndex = command.data.x;
-			if(command.data.digests && command.data.digests.length>0) {
+			/*if(command.data.digests && command.data.digests.length>0) {
 				for(var i=0;i<command.data.digests.length;i++) {
-					gridManager.collectionData[0].parts[command.data.digests[i]].fas = "None";
-					gridManager.collectionData[0].fases[command.data.digests[i]] = "None";
+					gridManager.collectionData[1].parts[command.data.digests[i]].fas = "DIGEST";
+					gridManager.collectionData[1].fases[command.data.digests[i]] = "DIGEST";
 				}
-			}
+			}*/
 		} else if(loc=="RIGHT") {
 			binIndex = command.data.x+1;
 		}
-		gridManager.collectionData.splice(binIndex,0,command.data.data);
 		
-		gridManager.totalColumns++;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
-		gridManager.clearPartInfo();
+		gridManager.activeProject.bins().insert(binIndex, command.data.data);
 	},
 	
 	redoBinDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
 		var binIndex = command.data.x;
-		if(command.data.rules.length>0) {
-			gridManager.removeRuleDataInvolvingColumn(binIndex);			
-			gridManager.updatePartsWithRules();
+		var removedBin = command.data.data;
+		/*
+		if(command.data.rules.length>0) gridManager.rulesData = gridManager.rulesData.concat(command.data.rules);
+		*/
+		if(command.data.oneBinLeft) {
+			gridManager.activeProject.bins().removeAt(0);
+			gridManager.activeProject.addNewBinByIndex(binIndex);
+		} else {
+			gridManager.activeProject.bins().removeAt(binIndex);
 		}
-		gridManager.collectionData.splice(binIndex,1);
-		
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		gridManager.totalColumns--;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
 	},
 	
-	redoBinRename: function(command) {
+	/**
+	 * Only for editing via the inspector grid.
+	 */
+	redoBinEdit: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].binName = command.data.newName;
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		var binIndex = command.data.x;
+		gridManager.activeProject.bins().getAt(binIndex).set(command.data.newData);
 	},
 	
+	/**
+	 * Only for changes done via the flip button on the header.
+	 */
 	redoBinDir: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].directionForward = !command.data.data;
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		var binIndex = command.data.x;
+		gridManager.activeProject.bins().getAt(binIndex).set("directionForward", !command.data.oldData);
 	},
 	
-	redoBinDsf: function(command) {
-		var me = Teselagen.manager.GridCommandPatternManager;
-		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].dsf = !command.data.data;
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
-	},
-	
+	/**
+	 * Only for changes done via the parts bar.
+	 */
 	redoBinIcon: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		gridManager.collectionData[command.data.x].iconID = command.data.newIcon;
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		var binIndex = command.data.x;
+		gridManager.activeProject.bins().getAt(binIndex).set("iconID", command.data.newData);
 	},
 	
 	redoRuleAdd: function(command) {

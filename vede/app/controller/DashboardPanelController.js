@@ -6,7 +6,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
 	extend: "Ext.app.Controller",
 
 	requires: ["Teselagen.event.ProjectEvent",
-               "Teselagen.manager.ProjectManager"],
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.bio.parsers.ParsersManager"],
 
 
 	onLastDEProjectsItemClick: function (item,record) {
@@ -90,14 +92,56 @@ Ext.define("Vede.controller.DashboardPanelController", {
   },
 
   onTabChange: function(tabPanel, newTab, oldTab) {
-      var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
-      var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
-      sequenceTab.el.mask("Loading j5 report", "loader rspin");
-      $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-      if (newTab == sequenceTab ) {
-        Teselagen.manager.ProjectManager.openSequenceLibrary();
+      if(newTab.initialCls == "sequenceLibraryPanel") {
+
+        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+        var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
+        sequenceTab.el.mask("Loading j5 report", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        if (newTab == sequenceTab ) {
+          Teselagen.manager.ProjectManager.openSequenceLibrary();
+        }
+
       }
+      else if(newTab.initialCls == "partLibraryPanel") {
+
+        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+        var partTab = Ext.getCmp("DashboardPanel").down("panel[cls='partLibraryPanel']");
+        partTab.el.mask("Loading j5 report", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        if (newTab == partTab ) {
+          Teselagen.manager.ProjectManager.openPartLibrary();
+        }
+
+      }
+  },
+
+  onSequenceGridItemClick: function(row,record) {
+        var currentTab = Ext.getCmp("mainAppPanel");
+        currentTab.el.mask("Loading Sequence", "loader rspin")
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        var ext = record.data.sequenceFileName.split('.').pop();
+
+        Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.sequenceFileContent,ext,function(gb){
+            var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+                "GENBANK",
+                gb,
+                record.data.name,
+                ""
+            );
+
+            // Javascript waits to render the loading mask until after the call to
+            // openSequence, so we force it to wait a millisecond before calling
+            // to give it time to render the loading mask.
+            Ext.defer(function() {
+                Teselagen.manager.ProjectManager.openSequence(sequence);
+                currentTab.el.unmask();
+            }, 10);
+        });
   },
 
   onLaunch: function () {
@@ -118,7 +162,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
 		this.control({
 			"#designGrid_Panel": {
 				itemclick: this.onLastDEProjectsItemClick
-			}
+			},
+      "gridpanel[name='SequenceLibraryGrid']": {
+                itemclick: this.onSequenceGridItemClick
+            },
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}

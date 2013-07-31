@@ -102,29 +102,43 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     },
 
     onDeviceEditorClearBtnClick: function () {
-
+    	var gridManager = Teselagen.manager.GridManager;
+		
         function ClearDeviceDesignBtn (btn) {
             if (btn==="ok") {
-                var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-                var bins = existingDesign.bins();
-                var binIndex = existingDesign.binCount();
-                
-                for (var i = 0; i <= binIndex; i++) {
-                    existingDesign.deleteBinByIndex(i);
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
 
-                }
-            
+        		gridManager.setListenersEnabled(false);
+        		
+            	var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+                existingDesign.bins().removeAll(true);
+                existingDesign.rules().removeAll(true);
+                existingDesign.parts().removeAll(true);
+                
                 var newBin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "Bin1"
                 });
-                bins.add(newBin);
 
-                Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_COLLECTION_INFO);
-                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin);
-                Vede.application.fireEvent(Teselagen.event.DeviceEvent.FILL_BLANK_CELLS);
+                var newCell = Ext.create("Teselagen.models.Cell", {
+                    index: 0,
+                    part_id: null
+                });
+
+                var newCell2 = Ext.create("Teselagen.models.Cell", {
+                    index: 1,
+                    part_id: null
+                });
+
+                newBin.cells().insert(0, [newCell,newCell2]);
+                existingDesign.bins().insert(0, newBin);
+                
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+                gridManager.setListenersEnabled(true);
+                
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin, 0);
+                
                 toastr.options.onclick = null;
                 toastr.info("Design Cleared");
+                
             }
         }
 
@@ -205,9 +219,13 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
      */
     saveDEProject: function (cb) {
         var self = this;
+        var gridManager = Teselagen.manager.GridManager;
+        
+        gridManager.setListenersEnabled(false);
+        
         Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
         var design = Ext.getCmp("mainAppPanel").getActiveTab().model; 
-
+        
         var saveAssociatedSequence = function (part, cb) {
             // Do not save sequence for a phantom or named part
             if( !part.get("phantom") && !part.isNamed() )
@@ -254,7 +272,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             design.rules().clearFilter(true);
 
             design.save({
-                // console.log('hii');
                 callback: function () {
 
                     Vede.application.fireEvent(self.GridEvent.RESUME_PART_ALERTS);
@@ -263,6 +280,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         toastr.options.onclick = null;
                         toastr.info("Design Saved");
                     });
+                    gridManager.setListenersEnabled(true);
                     if(typeof (cb) === "function") { cb(); }
                 }
             });
@@ -276,33 +294,36 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 }
             });
         });
-        design.bins().each(function (bin) {
-            bin.cells().each(function (cell) {
-                var part = cell.getPart();
-
-                if(part) {
-                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-
-                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                        part.save({
-                            callback: function (part) {
-
-                                saveAssociatedSequence(part, function () {
-                                    if(countParts === 1) { saveDesign();}
-                                    countParts--;
-                                });
-                            }
-                        });
-                    } else {
-                        saveAssociatedSequence(part,function(){
-                            if(countParts === 1) { saveDesign(); }
-                            countParts--;
-                        });
-                    }
-                }
-            });
-        });
         
+        if(countParts === 0) {
+        	saveDesign();
+        } else {
+	        design.bins().each(function (bin) {
+	            bin.cells().each(function (cell) {
+	                var part = cell.getPart();
+	
+	                if(part) {
+	                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+	
+	                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+	                        part.save({
+	                            callback: function (part) {
+	                                saveAssociatedSequence(part, function () {
+	                                	if(countParts === 1) { saveDesign();}
+	                                	countParts--;
+	                                });
+	                            }
+	                        });
+	                    } else {
+	                        saveAssociatedSequence(part,function(){
+	                        	if(countParts === 1) { saveDesign(); }
+	                        	countParts--;
+	                        });
+	                    }
+	                }
+	            });
+	        });
+        }
     },
 
     onDeviceEditorSaveBtnClick: function () {

@@ -140,19 +140,28 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
         var revComp = form.findField('revComp');
-
-        this.selectedSequence.set({
-            partSource: partSource.getValue(),
-            sequenceFileContent: sourceData.getValue()
-        });
-
-        this.selectedPart.set({
+        
+        var oldDef = {
+            name: this.selectedPart.get("name"),
+            partSource: this.selectedPart.get("partSource"),
+            genbankStartBP: this.selectedPart.get("genbankStartBP"),
+            endBP: this.selectedPart.get("endBP"),
+            revComp: this.selectedPart.get("revComp")
+        };
+        var newDef = {
             name: name.getValue(),
             partSource: partSource.getValue(),
             genbankStartBP: startBP.getValue(),
             endBP: stopBP.getValue(),
             revComp: revComp.getValue()
+        };
+        
+        this.selectedSequence.set({
+            partSource: partSource.getValue(),
+            sequenceFileContent: sourceData.getValue()
         });
+        
+        this.selectedPart.set(newDef);
 
         if(this.selectedBinIndex!=-1) {
             Vede.application.fireEvent(this.DeviceEvent.SELECT_PART, this.selectedPart, this.selectedBinIndex);
@@ -166,6 +175,15 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             toastr.info("Part Definition Changed");
                             Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                             Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
+                            /*Teselagen.manager.GridCommandPatternManager.addCommand({
+                            	type: "PART",
+                            	data: {
+                            		type: "DEF",
+                            		part: record,
+                            		oldDef: oldDef,
+                            		newDef: newDef
+                            	}
+                    		});*/
                         } else {
                             Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
                             record.reject();

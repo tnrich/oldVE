@@ -32,8 +32,6 @@ module.exports = function(app) {
 
 
     app.get('/users/:username/projectExplorer/getData', restrict, function(req, res) {
-        //var numProjects = req.user.projects.length;    
-
         User.findById(req.user._id)
         .populate({ path: 'projects', select: 'name designs id' })
         .exec(function(err, user) {
@@ -55,6 +53,30 @@ module.exports = function(app) {
                 res.json(populatedProjects);
             });
 
+        	});
+        });
+    });
+
+    app.get('/users/:username/projectExplorer/renameProject', restrict, function(req, res) {
+        Project.findById(req.query.id, function(err,project){
+            project.name = req.query.newname;
+            project.save(function(){
+                res.json({
+                    "success" : true
+                });
+            });
+        });
+    });
+
+
+
+};
+
+
+
+
+
+
 
 /*
 async.parallel([
@@ -75,17 +97,3 @@ function(err, results){
     // the second function had a shorter timeout.
 });
 */
-
-                //Part.populate( populatedProjects[0].designs, { path: 'parts'}, function(err, populatedParts){
-                //    res.json({"parts":populatedParts});
-                //});
-
-
-        	});
-        });
-
-
-
-    });
-
-};

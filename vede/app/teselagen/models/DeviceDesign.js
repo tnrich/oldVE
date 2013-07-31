@@ -147,9 +147,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
     		var records = arguments[1];
     		if(!Ext.isIterable(records)) records = [records];
     		for(var i=0;i<records.length;i++) {
-    			records[i].set("devicedesign_id", self.get("id"));
+    			records[i].setDeviceDesign(self);
     		}
-    	    return binInsert.apply(self.bins(), arguments);
+    	    return binInsert.apply(self.bins(), arguments) || null;
 		}
     	
     	this.bins().on("add", this.renderIfActive, this);
@@ -166,17 +166,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
         
     	var binFireEvent = self.bins().fireEvent;	
     	self.bins().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments) || null;
 		}
     	
     	var partFireEvent = self.parts().fireEvent;
     	self.parts().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments) || null;
 		}
     	
     	var ruleFireEvent = self.rules().fireEvent;
     	self.rules().fireEvent = function() {
-    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments);
+    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments) || null;
 		}
     },
     
@@ -359,7 +359,49 @@ Ext.define("Teselagen.models.DeviceDesign", {
         //return added; //j5Bin;
         return j5Bin;
     },
+    
+    generateDefaultNewBin: function(pName) {
+    	var cnt = this.bins().count();
+        var totalRows = Teselagen.manager.DeviceDesignManager.findMaxNumParts(this);
+        
+        if (pName === "" || pName === undefined || pName === null) {
+        	var maxBin = 0;
+        	this.bins().each(function(bin) {
+                var name = bin.get("binName");
+                var binNumber;
 
+                if(name.match(/^Bin\d+$/)) {
+                    binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                    if(binNumber > maxBin) {
+                        maxBin = binNumber;
+                    }
+                }
+            });
+
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (maxBin + 1)
+            });
+            
+        } else {
+        	 var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                 binName: pName
+             });
+        }
+        
+        var phantomCells = [];
+		for(var i=0;i<totalRows;i++) {
+			var phantomCell = Ext.create("Teselagen.models.Cell", {
+				index: i
+			});
+			phantomCell.setJ5Bin(j5Bin);
+			phantomCells.push(phantomCell);
+		}	
+		j5Bin.cells().add(phantomCells);
+		
+		return j5Bin;
+    },
+    
     /**
      * Checks to see if a given name is unique within the J5Bins names.
      * @param {String} pName Name to check against bins.

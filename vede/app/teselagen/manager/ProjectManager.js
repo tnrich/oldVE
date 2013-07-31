@@ -16,9 +16,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.models.Part",
                "Teselagen.models.VectorEditorProject", 
                "Vede.view.de.DeviceEditor", 
-               "Ext.window.MessageBox"],
-               //"Teselagen.manager.ProjectExplorerManager"],
-
+               "Ext.window.MessageBox",
+                "Teselagen.manager.ProjectExplorerManager"
+               ],
     alias: "ProjectManager",
     mixins: {
         observable: "Ext.util.Observable"
@@ -26,10 +26,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null, // current User model
     projects: null, // Store of available projects
+    parts: null,
+    sequences: null,
     workingProject: null, // working Project model
     workingSequence: null, // working Sequence model
     workingSequenceFileManager: null, // Current SequenceFileManager (which controls Vector Editor)
-    sequenceStore: null,
 
     /**
      * @member Teselagen.manager.ProjectManager
@@ -50,19 +51,27 @@ Ext.define("Teselagen.manager.ProjectManager", {
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
 
-            self.sequenceStore = self.currentUser.sequences().load(function(sequences){
-                self.sequenceStore = sequences;
-            });
-
-            //Load the projects store
             var projectsStore = self.currentUser.projects().load(
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
                     self.projects = projectsStore; //Set the working project
-                    //Teselagen.manager.ProjectExplorerManager.load();
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+                    Teselagen.manager.ProjectExplorerManager.load();
+                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
                 }
             );
+
+            var sequencesStore = self.currentUser.sequences().load(
+               function (sequences, operation, success){
+                   self.sequences = sequencesStore;
+               }
+            );
+
+            var partsStore = self.currentUser.parts().load(
+                function (parts, operation, success){
+                    self.parts = partsStore;
+                }
+            );
+
         });
     },
 
@@ -76,6 +85,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     checkDuplicatedTabs: function (model, tabName, cb, cb2) {
         var tabPanel = Ext.getCmp("mainAppPanel");
         var duplicated = false;
+        var duplicatedTab;
         var ModelId;
 
         if(tabName !== "VectorEditorPanel") {
@@ -84,6 +94,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 if(tab.model && tab.initialCls === tabName) {
                     if(tab.model.data.id === ModelId) {
                         duplicated = true;
+                        duplicatedTab = tab;
                         tabPanel.setActiveTab(key);
                         if(typeof (cb2) === "function") { cb2(); }
                     }
@@ -93,13 +104,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
             tabPanel.items.items.forEach(function (tab, key) {
                 if(tab.sequenceFile && model && tab.sequenceFile.get("id") === model.get("id")) {
                     duplicated = true;
+                    duplicatedTab = tab;
                     tabPanel.setActiveTab(key);
                 }
             });
         }
 
         if(!duplicated) { return cb(tabPanel); }
-        else { console.log("Trying to open duplicated tab!"); }
+        else { 
+            duplicatedTab.el.unmask();
+            //console.log("Trying to open duplicated tab!"); 
+        }
+
     },
 
     /**
@@ -128,8 +144,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
-        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
-        sequenceGrid.reconfigure(this.sequenceStore);
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");    
+        if(sequenceGrid) sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+
+        dashPanel.getActiveTab().el.unmask();
+    },
+
+    openPartLibrary: function () {
+        var dashPanel = Ext.getCmp("DashboardPanel");
+
+        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']");    
+        if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
+
         dashPanel.getActiveTab().el.unmask();
     },
 
@@ -144,7 +170,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
             selectedDesign.bins().each(function(bin){
                 bin.cells().each(function(cell){
-                    cell.setPart( selectedDesign.parts().getById(cell.data.part_id) );
+                    cell.setPart( Teselagen.manager.ProjectManager.parts.getById( cell.data.part_id ) );
                 });
             });
 
@@ -539,43 +565,5 @@ Ext.define("Teselagen.manager.ProjectManager", {
         */
     },
 
-    onExplorerMenuItemClick: function(menuitem, e, opt) {
-        var selectedRecord = Ext.getCmp("projectTreePanel").getSelectionModel().selected.items[0].data;
-        var recordType = selectedRecord.hrefTarget;
-        var recordId = selectedRecord.id;
-        switch (menuitem.text) {
-            case "Rename": 
-                switch(recordType) {
-                    case "openproj":
-                        console.log("rename project");
-                        var selectedProject = this.projects.getById(recordId);
-                        console.log(selectedProject);
-                        break;
-                    case "opende":
-                        console.log("rename design");
-                        this.projects.each(function (project) {
-                            var selectedDesign = project.designs().getById(recordId);
-                        });
-                        break;
-                    case "opensequence":
-                        console.log("rename sequence");
-                        break;
-                }
-            break;
-            case "Delete":
-                switch(recordType) {
-                    case "openproj":
-                        console.log("delete project");
-                        break;
-                    case "opende":
-                        console.log("delete design");
-                        break;
-                    case "opensequence":
-                        console.log("delete sequence");
-                        break;
-                }
-            break;
-        }
-    },
 
 });
