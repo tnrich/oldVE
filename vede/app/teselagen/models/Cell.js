@@ -61,6 +61,10 @@ Ext.define("Teselagen.models.Cell", {
     },
     
     setPart: function(part) {
+
+        // De-suscribe to existing events
+        if(this.part) this.part.un( "idchanged", this.updateId, this );
+
         this.part = part;
 
         if(part && part.get("id")) {
@@ -69,6 +73,15 @@ Ext.define("Teselagen.models.Cell", {
             this.set("part_id", null);
             this.callStore("afterEdit", ["part_id"]);
         }
+
+
+        // Suscribe to part changeid event
+        if(this.part) this.part.on( "idchanged", this.updateId, this );
+
+    },
+
+    updateId: function( part, oldId, newId, eOpts ){
+            this.set('part_id',newId);
     },
 
     getPart: function() {
