@@ -193,7 +193,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         newSequenceFile.save({
             callback: function(){
-                selectedPart.setSequenceFileModel(newSequenceFile);
+                selectedPart.setSequenceFile(newSequenceFile);
                 selectedPart.save({
                     callback: function(){
                         //console.log(selectedPart);
