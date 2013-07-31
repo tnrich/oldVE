@@ -193,6 +193,9 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             return length;
         }
+    },{
+        name: "user_id",
+        type: "long"
     }
 
     ],

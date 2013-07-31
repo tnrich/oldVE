@@ -92,13 +92,30 @@ Ext.define("Vede.controller.DashboardPanelController", {
   },
 
   onTabChange: function(tabPanel, newTab, oldTab) {
-      var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
-      var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
-      sequenceTab.el.mask("Loading j5 report", "loader rspin");
-      $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-      if (newTab == sequenceTab ) {
-        Teselagen.manager.ProjectManager.openSequenceLibrary();
+      if(newTab.initialCls == "sequenceLibraryPanel") {
+
+        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+        var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
+        sequenceTab.el.mask("Loading j5 report", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        if (newTab == sequenceTab ) {
+          Teselagen.manager.ProjectManager.openSequenceLibrary();
+        }
+
+      }
+      else if(newTab.initialCls == "partLibraryPanel") {
+
+        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+        var partTab = Ext.getCmp("DashboardPanel").down("panel[cls='partLibraryPanel']");
+        partTab.el.mask("Loading j5 report", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        if (newTab == partTab ) {
+          Teselagen.manager.ProjectManager.openPartLibrary();
+        }
+
       }
   },
 

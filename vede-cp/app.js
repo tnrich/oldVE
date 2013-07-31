@@ -28,7 +28,7 @@ Ext.application({
         'HeaderPanelController',
         'MainPanelController',
         'PartLibraryController',
-        'ProjectController',
+        'ProjectExplorerController',
         //'SelectWindowController',
         //'SequenceController',
         'HeaderPanelController',
