@@ -74,7 +74,8 @@ Ext.define("Teselagen.models.Part", {
         type: "long"
     }, {
         name: "sequencefile_id",
-        type: "long"
+        type: "long",
+        defaultValue: null
     }, {
         name: "directionForward",
         type: "boolean",

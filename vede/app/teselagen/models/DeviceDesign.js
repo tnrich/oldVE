@@ -34,8 +34,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 var parts = [];
 
                 associatedData.parts.forEach(function(part,partKey){
-                    if(part.id) parts.push(part.id);
-                    else console.warn("Trying to save non-saved part");
+                    if(part.id) {
+                        parts.push(part.id);
+                    } else {
+                        debugger;
+                        console.warn("Trying to save non-saved part");
+                    }
                 });
 
 
