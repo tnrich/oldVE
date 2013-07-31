@@ -195,6 +195,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Deleting design", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
         var project_id = devicedesign.data.project_id;
+        var project = Teselagen.manager.ProjectManager.currentUser.projects().getById(project_id);
+        console.log(project);
+        this.workingProject = project;
+        console.log(Teselagen.manager.ProjectManager.workingProject);
         var designs = Teselagen.manager.ProjectManager.workingProject.designs();
         designs.remove(devicedesign);
         devicedesign.destroy(true);
@@ -203,18 +207,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
             Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
         });
+        if(tab) {
         Ext.getCmp("mainAppPanel").remove(tab);
-        /*
-        var store =  Teselagen.manager.ProjectManager.workingProject.designs();
-        store.remove(devicedesign);
-
-        store.sync({
-            callback: function () {
-                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
-                Ext.getCmp("mainAppPanel").remove(tab);
-            }
-        });
-        */
+        }
     },
 
     /**

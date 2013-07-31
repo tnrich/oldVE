@@ -174,12 +174,19 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 }
             break;
             case "Delete":
-                switch(recordType) {
+                switch(selectedRecordType) {
                     case "openproj":
                         console.log("delete project");
                         break;
                     case "opende":
                         console.log("delete design");
+                        var selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
+                        selectedProject.designs().load({
+                            id: selectedRecord.id,
+                            callback: function (loadedDesign) {
+                                self.deleteDesign( loadedDesign[0], expandPathCallback);
+                            }
+                        });
                         break;
                     case "opensequence":
                         console.log("delete sequence");
@@ -245,6 +252,26 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
         };
 
         Ext.MessageBox.prompt("Name", promptText, onPromptClosed, this);
+    },
+
+    deleteDesign: function(selectedDesign, cb){
+        console.log("here");
+        function DeleteDeviceDesignBtn (btn) {
+            if (btn==="ok") {
+                Teselagen.manager.ProjectManager.DeleteDeviceDesign(selectedDesign);
+                toastr.options.onclick = null;
+                toastr.info("Design Deleted");
+             }
+         }
+
+        Ext.Msg.show({
+             title:"Are you sure you want to delete this design?",
+             msg: "WARNING: This will remove the current design. This action is not undoable!",
+             cls: "messageBox",
+             buttons: Ext.Msg.OKCANCEL,
+             fn: DeleteDeviceDesignBtn,
+             icon: Ext.Msg.QUESTION
+        });
     }
 
 

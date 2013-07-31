@@ -52,7 +52,12 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         overCls: 'sequenceAddBtn-over',
                         height: 20,
                         width: 20,
-                        margin: 0
+                        margin: 0,
+                        listeners: {
+                            click: function () {
+                                Vede.application.fireEvent("createSequence");
+                            }
+                        }
                     }
                 ]
             },{

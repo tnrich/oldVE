@@ -470,12 +470,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 text: 'File Format',
                                                 width: 100,
                                                 dataIndex: 'sequenceFileFormat'
-                                            },{
-                                                xtype: 'gridcolumn',
-                                                text: 'Project',
-                                                width: 120,
-                                                dataIndex: 'parentProject'
                                             },
+                                            // {
+                                            //     xtype: 'gridcolumn',
+                                            //     text: 'Project',
+                                            //     width: 120,
+                                            //     dataIndex: 'parentProject'
+                                            // },
                                             {
                                                 xtype: 'gridcolumn',
                                                 text: 'Size',
