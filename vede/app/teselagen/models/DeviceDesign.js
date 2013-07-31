@@ -37,7 +37,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     if(part.id) {
                         parts.push(part.id);
                     } else {
-                        debugger;
                         console.warn("Trying to save non-saved part");
                     }
                 });
@@ -127,7 +126,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
             }
-            //debugger;
             console.log("No devicedesign url generated");
 
 

@@ -315,11 +315,11 @@ Ext.define("Teselagen.models.Part", {
      * Gets SequenceFile.
      * @returns {Teselagen.models.SequenceFile} The sequencefile model.
      */
-    getSequenceFile: function(callback) {
+    getSequenceFile: function(callbackFn) {
         if(this.hasSequenceFile || this.get("sequencefile_id")) {
-            if(typeof(callback) === "function"){
+            if(typeof(callbackFn) === "object"){
                 return this.getSequenceFileModel({
-                    callback: callback
+                    callback: callbackFn.callback
                 });
             } else {
                 return this.getSequenceFileModel();

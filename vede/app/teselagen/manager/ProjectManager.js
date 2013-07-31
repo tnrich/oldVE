@@ -170,14 +170,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
             // Set part_id fields on each cell.
             selectedDesign.bins().each(function(bin){
                 bin.cells().each(function(cell){
-                    cell.setPart( Teselagen.manager.ProjectManager.parts.getById(cell.get("part_id")));
+                    cell.setPart( selectedDesign.parts().getById( cell.data.part_id ) );
                 });
             });
 
             // Set sequencefile_id fields on each part.
             selectedDesign.parts().each(function(part) {
                 var sequenceFile = part.getSequenceFile();
-
                 if(sequenceFile) {
                     part.set("sequencefile_id", sequenceFile.getId());
                 }
