@@ -442,7 +442,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 height: 30,
                                 cls: 'sequenceLibrarySearchField',
                                 width: '98%',
-                                emptyText: 'Search Library',
+                                emptyText: 'Search Sequence Library',
                                 emptyCls: 'empty-search-field',
                                 margin: 13,
                                 listeners: {
@@ -489,12 +489,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 width: 100,
                                                 dataIndex: 'sequenceFileFormat'
                                             },
-                                            // {
-                                            //     xtype: 'gridcolumn',
-                                            //     text: 'Project',
-                                            //     width: 120,
-                                            //     dataIndex: 'parentProject'
-                                            // },
                                             {
                                                 xtype: 'gridcolumn',
                                                 text: 'Size',
@@ -503,9 +497,27 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             },
                                             {
                                                 xtype: 'gridcolumn',
-                                                text: 'Features',
                                                 flex: 1,
-                                                dataIndex: 'features'
+                                                text: 'Date Created',
+                                                width: 100,
+                                                dataIndex: 'dateCreated',
+                                                renderer: function(val) {
+                                                    val = new Date(val);
+                                                    val = Ext.Date.format(val, "l, F d, Y g:i:s A");
+                                                    return val;
+                                                }
+                                            },
+                                            {
+                                                xtype: 'gridcolumn',
+                                                flex: 1,
+                                                text: 'Last Modified',
+                                                width: 100,
+                                                dataIndex: 'dateModified',
+                                                renderer: function(val) {
+                                                    val = new Date(val);
+                                                    val = Ext.Date.format(val, "l, F d, Y g:i:s A");
+                                                    return val;
+                                                }
                                             },
                                         ]
                                     },
@@ -563,7 +575,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 height: 30,
                                 cls: 'partLibrarySearchField',
                                 width: '98%',
-                                emptyText: 'Search Library',
+                                emptyText: 'Search Part Library',
                                 emptyCls: 'empty-search-field',
                                 margin: 13,
                                 listeners: {
@@ -579,7 +591,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         matcher.test(record.get('genbankStartBP')) ||
                                                         matcher.test(record.get('endBP')) ||
                                                         matcher.test(record.get('fas')) ||
-                                                        matcher.test(record.get('revComp'));
+                                                        matcher.test(record.get('revComp')) || 
+                                                        matcher.test(record.get('partSource'));
                                                 }
                                             });
                                         }
@@ -606,7 +619,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },{
                                         xtype: 'gridcolumn',
                                         text: 'Stop BP',
-                                        width: 120,
+                                        width: 100,
                                         dataIndex: 'endBP'
                                     },
                                     {
@@ -618,9 +631,21 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Reverse Complement',
-                                        flex: 1,
-                                        dataIndex: 'revComp'
+                                        dataIndex: 'revComp',
+                                        width: 150,
+                                        renderer: function(val) {
+                                            val = String(val);
+                                            val = val.charAt(0).toUpperCase() + val.slice(1);
+                                            return val;
+                                        }
                                     },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Source Sequence',
+                                        width: 80,
+                                        dataIndex: 'partSource'
+                                    }
                                 ]
                             }
                         ]

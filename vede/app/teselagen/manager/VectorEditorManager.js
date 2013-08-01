@@ -25,6 +25,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         var rawGenbank = this.sequenceFileManager.toGenbank().toString();
         this.sequence.setSequenceFileContent(rawGenbank);
+        this.sequence.set("dateModified", new Date());
 
         var self = this;
 
@@ -68,9 +69,9 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             });
         };
 
-        if( this.sequence.get("name") === "" )
+        if( this.sequence.get("name") == "" )
         {
-
+            console.log(this.sequence);
             Ext.MessageBox.prompt("Name", "Please enter a sequence name:", function(btn,text){
                 if(btn==="ok")
                 {
