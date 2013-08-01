@@ -177,7 +177,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             strand : this.getStrand()
         }
         data.notes = [];
-
+        debugger;
         this.getNotes().forEach(function(note){
             data.notes.push(note.serialize());
         });
@@ -189,7 +189,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
         var self = this;
 
         data.notes.forEach(function(note){
-            var newNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", note);
+            var newNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", note.inData);
             self.addNote(newNote);
         });
     }

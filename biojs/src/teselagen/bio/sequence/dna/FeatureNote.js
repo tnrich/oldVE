@@ -90,9 +90,11 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 	},
 	serialize: function(){
 		var data = {};
-		data.name = this.getName();
-		data.value = this.getValue();
-		data.quoted = this.getQuoted();
+		data.inData = {
+			name : this.getName(),
+			value : this.getValue(),
+			quoted : this.getQuoted()
+		}
 		return data;
 	}
 });

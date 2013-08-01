@@ -1446,15 +1446,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var data = {};
         data.features = [];
         data.inData = {
-            name: this.name,
-            circulate: this.circular,
-            complementSequence: this.complementSequence,
-            reverseComplementSequence: this.reverseComplementSequence,
-            manualUpdateStarted: this.manualUpdateStarted,
-            needsRecalculateComplementSequence: this.needsRecalculateComplementSequence,
-            needsRecalculateReverseComplementSequence: this.needsRecalculateReverseComplementSequence
+            name: this.getName(),
+            circulate: this.getCircular(),
+            //complementSequence: this.getComplementSequence(),
+            reverseComplementSequence: this.getReverseComplementSequence(),
+            manualUpdateStarted: this.getManualUpdateStarted(),
+            needsRecalculateComplementSequence: this.getNeedsRecalculateComplementSequence(),
+            //needsRecalculateReverseComplementSequence: this.getNeedsRecalculateReverseComplementSequence()
         }
-
         this.getFeatures().forEach(function(feature){
             data.features.push(feature.serialize());
         });

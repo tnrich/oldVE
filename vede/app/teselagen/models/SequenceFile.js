@@ -417,6 +417,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     setSequenceManager: function(sequenceManager){
         var data = sequenceManager.serialize();
+        console.log(data);
         this.set("serialize",JSON.stringify(data));
     },
 
