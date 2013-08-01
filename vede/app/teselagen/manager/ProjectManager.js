@@ -211,19 +211,21 @@ Ext.define("Teselagen.manager.ProjectManager", {
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
         var project_id = devicedesign.data.project_id;
         var project = Teselagen.manager.ProjectManager.currentUser.projects().getById(project_id);
-        console.log(project);
+        //console.log(project);
         this.workingProject = project;
-        console.log(Teselagen.manager.ProjectManager.workingProject);
+        //console.log(Teselagen.manager.ProjectManager.workingProject);
+        Teselagen.manager.GridManager.setListenersEnabled(false);
         var designs = Teselagen.manager.ProjectManager.workingProject.designs();
         designs.remove(devicedesign);
-        devicedesign.destroy(true);
+        devicedesign.destroy();
         designs.sync();
+        Teselagen.manager.GridManager.setListenersEnabled(true);
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE,null, function () {
             Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
         });
         if(tab) {
-        Ext.getCmp("mainAppPanel").remove(tab);
+        	Ext.getCmp("mainAppPanel").remove(tab);
         }
     },
 

@@ -280,8 +280,14 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
             for (j=0; j < ft["location_asArray"].length; j++) {
                 //console.log(ft["location_asArray"][j]);
-                var start = ft["location_asArray"][j]["genbankStart"]["__text"];
-
+            	
+                var start;
+                // The following code checks for a variation of format found in test files.
+                if (ft["location_asArray"][j]["genbankStart"] === undefined) {
+                	start = ft["location_asArray"][j]["genbank_start"]["__text"];
+                } else {
+                	start = ft["location_asArray"][j]["genbankStart"]["__text"];
+                }
                 var end;
                 if (ft["location_asArray"][j]["end"] === undefined) {
                     end   = start;

@@ -760,7 +760,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     */
     
     onSelectBin: function(j5Bin, binIndex) {
-    	if(!binIndex || binIndex===null || binIndex===undefined) binIndex = this.activeProject.bins().indexOf(j5Bin);
+    	if(binIndex===null || binIndex===undefined) binIndex = this.activeProject.bins().indexOf(j5Bin);
     	this.GridManager.selectGridBinHeaderByIndex(binIndex);
     },
     

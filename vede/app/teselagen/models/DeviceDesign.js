@@ -36,7 +36,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     if(part.id) {
                         parts.push(part.id);
                     } else {
-                        console.warn("Trying to save non-saved part");
+                    	console.warn("Trying to save non-saved part");
                     }
                 });
 

@@ -275,7 +275,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             design.rules().clearFilter(true);
 
             design.rules().each(function(rule) {
-                debugger;
                 rule.set("operand1_id", rule.getOperand1().getId());
 
                 if(!rule.get("operand2isNumber")) {

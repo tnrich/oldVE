@@ -300,186 +300,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 	        }
         }
         
-        
-        
         //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
     	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	/*
-    	var jsonDoc = JSON.parse(input);
-        jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
-        var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
-        var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
-        var binsArray = [];
-        var fullPartsAssocArray = {};
-        var binsCounter = bins.length;
-
-        function getSequenceByHash(targetHash, part, cb) {
-            // Find sequence by hash
-            var found = false;
-            sequences.forEach(function (sequence) {
-                if (String(sequence.hash) === String(targetHash) && !found) {
-                    found = true;
-                    part.sequence = sequence;
-                    return cb(part);
-                }
-            });
-        }
-
-        function getPartByID(targetId, cb) {
-            // Return part associated to bin finding by id (internal)
-            var parts = jsonDoc["de:design"]["de:partVOs"]["de:partVO"];
-            parts.forEach(function (part) {
-                if (String(part["de:parts"]["de:part"].id) === String(targetId)) {
-                    getSequenceByHash(part["de:sequenceFileHash"], part, cb);
-                } else if (part["de:parts"]["de:part"] instanceof Array) {
-                    // Cover the special cases in which some structures parts are inside subnodes that are array
-                    if (String(part["de:parts"]["de:part"][0].id) === String(targetId)) {
-                        getSequenceByHash(part["de:sequenceFileHash"], part, cb);
-                    }
-                }
-            });
-        }
-
-
-        // Bins Processing
-        for (var i = 0; i < bins.length; i++) {
-            var bin = bins[i];
-
-            if(!Teselagen.constants.SBOLIcons.ICONS[bin["de:iconID"].toUpperCase()]) { console.warn(bin["de:iconID"]); console.warn("Invalid iconID"); }
-
-            var newBin = Ext.create("Teselagen.models.J5Bin", {
-                binName: bin["de:binName"],
-                iconID: bin["de:iconID"].toUpperCase(),
-                directionForward: (bin["de:direction"] === "forward"),
-                dsf: Boolean(bin["de:dsf"])
-            });
-
-            var parts = bin["de:binItems"]["de:partID"];
-
-            if (typeof(parts) === "number") {
-                // Cover special cases in which parts are inside sub array
-                parts = [];
-                var itemsObj = bin["de:binItems"];
-                for (var prop in itemsObj) {
-                    if (itemsObj.hasOwnProperty(prop)) {
-                        parts.push(itemsObj[prop]);
-                    }
-                }
-            }
-
-            var partsCounter = parts.length;
-
-            var tempPartsArray = [];
-            for (var j = 0; j < parts.length; j++) {
-                getPartByID(parts[j], function (part) {
-                    // Part processing
-                    var newPart = Ext.create("Teselagen.models.Part", {
-                        name: part["de:name"],
-                        partSource: part["de:partSource"],
-                        genbankStartBP: part["de:startBP"],
-                        endBP: part["de:stopBP"],
-                        revComp: part["de:revComp"],
-                        fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]
-                    });
-
-                    newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-
-                    var partName;
-                    partName = part.sequence.name;
-                    if(part.sequence["de:fileName"]) {partName = part.sequence["de:fileName"].replace(".gb","");}
-                    if(newPart.get("partSource")===""&&!newPart.get("partSource")) {newPart.set("partSource",partName);}
-                    // Sequence processing
-                    var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                        name: partName,
-                        sequenceFileContent: part.sequence["de:content"],
-                        sequenceFileFormat: part.sequence["de:format"],
-                        sequenceFileName: part.sequence["de:fileName"]
-                    });
-
-                    newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-
-                    newPart.setSequenceFile(newSequence);
-
-                    tempPartsArray.push(newPart);
-                    fullPartsAssocArray[part.id] = newPart;
-
-                    partsCounter--;
-                    if (partsCounter === 0) {
-                        newBin.addToParts(tempPartsArray);
-                        binsArray.push(newBin);
-
-                        binsCounter--;
-
-                        if (binsCounter === 0) {
-
-                            var rulesArray = [];
-                            if(typeof(cb) !== "function" ) // Not parsing eugeneRules in tests
-                            {
-                                //Process Eugene Rules
-                                var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
-
-                                // Fix for issue caused by designs with eugeneRules not defined within array structures
-                                if (eugeneRules["de:eugeneRule"] instanceof Array) {
-                                    eugeneRules = eugeneRules["de:eugeneRule"];
-                                }
-
-                                if (eugeneRules.eugeneRule instanceof Array) {
-                                    if(eugeneRules.eugeneRule.length === 0) {
-                                        eugeneRules = [];
-                                    }
-                                }
-
-                                //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
-                                //else { console.log("Eugene rules found."); }
-
-                                for (var k=0; k < eugeneRules.length; k++) {
-                                    var rule = eugeneRules[k];
-                                    var operand1 = rule["de:operand1ID"];
-                                    var operand2 = rule["de:operand2ID"];
-
-                                    if(fullPartsAssocArray[operand1])
-                                    {
-                                        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-                                            name: rule["de:name"],
-                                            compositionalOperator: rule["de:compositionalOperator"],
-                                            negationOperator: rule["de:negationOperator"]
-                                        });
-                                        fullPartsAssocArray[operand1].save({
-                                            callback: function(){
-                                                newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-                                            }
-                                        });
-                                        fullPartsAssocArray[operand2].save({
-                                            callback: function(){
-                                                newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
-                                            }
-                                        });
-                                        rulesArray.push(newEugeneRule);
-                                    }
-                                    else
-                                    {
-                                        //console.warn("Eugene rule possible not loaded");
-                                    }
-                                }
-                            }
-                            Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
-                        }
-                    }
-                });
-            }
-        }
-        */
     },
 
     /**
@@ -740,7 +562,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         var partIndex = {};
 
-        design().bins().each(function (bin) {
+        design.bins().each(function (bin) {
             bin.cells().each(function (part) {
                 partIndex[part.data.name] = part;
             });
@@ -881,12 +703,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
             }
         });
-
+        
         var checkForDuplicatedName = function(parsedRule,cb){
-
             var rulesCounter = existingRules.count();
             var duplicated = false;
             var duplicatedRule;
+            if(rulesCounter === 0) {cb(duplicated,duplicatedRule);}
             existingRules.each(function(existingRule){
                 if(
                     parsedRule.data.name === existingRule.data.name
@@ -918,9 +740,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         };
 
         var checkForRepeatedRule = function(parsedRule,cb){
-
             var rulesCounter = existingRules.count();
             var duplicated = false;
+            if(rulesCounter === 0) {cb(duplicated);}
             existingRules.each(function(existingRule){
                 if(
                     parsedRule.data.operand1_id === existingRule.data.operand1_id &&
@@ -931,80 +753,83 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     parsedRule.data.compositionalOperator === existingRule.data.compositionalOperator
                 )
                 {
-                    duplicated = true;
+                    console.log("AAA");
+                	duplicated = true;
                     rulesCounter--;
                 }
                 else
                 {
-                    rulesCounter--;
+                	console.log("BBB");
+                	rulesCounter--;
                 }
-                if(rulesCounter === 0) {cb(duplicated);}
+                if(rulesCounter === 0) {console.log("CCC"); cb(duplicated);}
             });
         };
 
 
         var endEugeneRulesProcessing = function(){
-
-        var eugeneRulesImportWindow = Ext.create("Vede.view.de.EugeneRulesImportDialog").show();
-
-        eugeneRulesImportWindow.down("grid[name='new']").reconfigure(newRules);
-
-        var conflictRulesStore = new Ext.data.ArrayStore({
-                fields: [
-                   {name: "originalRuleLine"}
-                ]
-            });
-        conflictRulesStore.loadData(conflictRules);
-        eugeneRulesImportWindow.down("grid[name='conflict']").reconfigure(conflictRulesStore);
-
-        var ignoredRulesStore = new Ext.data.ArrayStore({
-                fields: [
-                   {name: "originalRuleLine"}
-                ]
-            });
-        ignoredRulesStore.loadData(ignoredLines);
-        eugeneRulesImportWindow.down("grid[name='ignored']").reconfigure(ignoredRulesStore);
-
-        var repeatedRulesStore = new Ext.data.ArrayStore({
-                fields: [
-                   {name: "originalRuleLine"}
-                ]
-            });
-        repeatedRulesStore.loadData(repeatedRules);
-        eugeneRulesImportWindow.down("grid[name='repeated']").reconfigure(repeatedRulesStore);
-
-        eugeneRulesImportWindow.down("button[text='Ok']").on("click", function() {
-            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
-
-            // Load the Eugene Rules in the Design
-            newRules.each(function(rule){
-                design.addToRules(rule);
-            });
-            eugeneRulesImportWindow.close();
-        });
-
-        eugeneRulesImportWindow.down("button[text='Cancel']").on("click", function() {
-            eugeneRulesImportWindow.close();
-        });
+        	
+	        var eugeneRulesImportWindow = Ext.create("Vede.view.de.EugeneRulesImportDialog").show();
+	
+	        eugeneRulesImportWindow.down("grid[name='new']").reconfigure(newRules);
+	
+	        var conflictRulesStore = new Ext.data.ArrayStore({
+	                fields: [
+	                   {name: "originalRuleLine"}
+	                ]
+	            });
+	        conflictRulesStore.loadData(conflictRules);
+	        eugeneRulesImportWindow.down("grid[name='conflict']").reconfigure(conflictRulesStore);
+	
+	        var ignoredRulesStore = new Ext.data.ArrayStore({
+	                fields: [
+	                   {name: "originalRuleLine"}
+	                ]
+	            });
+	        ignoredRulesStore.loadData(ignoredLines);
+	        eugeneRulesImportWindow.down("grid[name='ignored']").reconfigure(ignoredRulesStore);
+	
+	        var repeatedRulesStore = new Ext.data.ArrayStore({
+	                fields: [
+	                   {name: "originalRuleLine"}
+	                ]
+	            });
+	        repeatedRulesStore.loadData(repeatedRules);
+	        eugeneRulesImportWindow.down("grid[name='repeated']").reconfigure(repeatedRulesStore);
+	
+	        eugeneRulesImportWindow.down("button[text='Ok']").on("click", function() {
+	            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+	
+	            // Load the Eugene Rules in the Design
+	            newRules.each(function(rule){
+	                design.addToRules(rule);
+	            });
+	            eugeneRulesImportWindow.close();
+	        });
+	
+	        eugeneRulesImportWindow.down("button[text='Cancel']").on("click", function() {
+	            eugeneRulesImportWindow.close();
+	        });
 
         };
 
         var processedRules = parsedRules.count();
-
+        
         parsedRules.each(function(parsedRule)
         {
-            //sconsole.log("processing: ",parsedRule.data.name);
+        	//sconsole.log("processing: ",parsedRule.data.name);
             checkForRepeatedRule(parsedRule,function(repeated){
-                if(repeated)
+            	if(repeated)
                 {
-                    repeatedRules.push({"originalRuleLine":parsedRule.data.originalRuleLine});
+            		repeatedRules.push({"originalRuleLine":parsedRule.data.originalRuleLine});
                     processedRules--;
                     if(processedRules === 0) {endEugeneRulesProcessing();}
                 }
                 else
                 {
                     checkForConflicts(parsedRule,function(){
-                        newRules.add(parsedRule);
+                    	console.log("ybbjdfhj");
+                    	newRules.add(parsedRule);
                         processedRules--;
                         if(processedRules === 0) {endEugeneRulesProcessing();}
                     });
