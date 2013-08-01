@@ -167,9 +167,15 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
     serialize: function(){
 
         var data = {};
-        data.name = this.getName();
-        data.type = this.getType();
-        data.index = this.getIndex();
+        data.inData = {
+            name : this.getName(),
+            type : this.getType(),
+            index : this.getIndex(),
+            start : this.getStart(),
+            end : this.getEnd(),
+            type : this.getType(),
+            strand : this.getStrand()
+        }
         data.notes = [];
 
         this.getNotes().forEach(function(note){
@@ -181,9 +187,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
     deSerialize: function(data){
         var self = this;
-        this.setName(data.name);
-        this.setType(data.type);
-        this.setIndex(data.index);
+
         data.notes.forEach(function(note){
             var newNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", note);
             self.addNote(newNote);

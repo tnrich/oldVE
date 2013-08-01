@@ -1466,7 +1466,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     deSerialize: function(data){
         var self = this;
         data.features.forEach(function(feature){
-            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{});
+            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",feature.inData);
             newFeature.deSerialize(feature);
             self.addFeature(newFeature,true);
         });
