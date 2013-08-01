@@ -272,6 +272,15 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
             design.rules().clearFilter(true);
 
+            design.rules().each(function(rule) {
+                debugger;
+                rule.set("operand1_id", rule.getOperand1().getId());
+
+                if(!rule.get("operand2isNumber")) {
+                    rule.set("operand2_id", rule.getOperand2().getId());
+                }
+            });
+
             design.save({
                 callback: function () {
 
