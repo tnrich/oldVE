@@ -8,8 +8,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
 	requires: ["Teselagen.event.ProjectEvent",
                "Teselagen.manager.ProjectManager",
                "Teselagen.manager.DeviceDesignManager",
-               "Teselagen.bio.parsers.ParsersManager"],
+               "Teselagen.bio.parsers.ParsersManager",
+               "Vede.view.ve.VectorViewer"],
 
+    CurrentVectorViewer: null,
 
 	onLastDEProjectsItemClick: function (item,record) {
 		Teselagen.manager.ProjectManager.openDeviceDesign(record);
@@ -160,6 +162,23 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
   },
 
+    onPartGridItemMouseEnter: function(grid, part, el) {
+        var boundingRect = el.getBoundingClientRect();
+
+        if(part.getSequenceFile()) {
+            this.CurrentVectorViewer = Ext.create("Vede.view.ve.VectorViewer", {
+                title: part.get("name"),
+                part: part
+            }).show();
+
+            this.CurrentVectorViewer.setPosition(boundingRect.left, boundingRect.top);
+        }
+    },
+
+  onPartGridItemMouseLeave: function(grid, part, el) {
+      this.CurrentVectorViewer.close();
+  },
+
   onLaunch: function () {
       this.tabPanel = Ext.getCmp("mainAppPanel");
       this.tabPanel.on("tabchange", this.populateStatisticts);
@@ -183,7 +202,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemclick: this.onSequenceGridItemClick
             },
       "gridpanel[name='PartLibraryGrid']": {
-          itemclick: this.onPartGridItemClick
+          itemclick: this.onPartGridItemClick,
+          itemmouseenter: this.onPartGridItemMouseEnter,
+          itemmouseleave: this.onPartGridItemMouseLeave,
       },
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);

@@ -162,6 +162,23 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
     toString: function() {
         return "Feature " + this.getName() + " of type " + this.getType() + " from " + 
             this.getStart() + " to " + this.getEnd();
+    },
+
+    serialize: function(){
+
+        var data = {};
+        data.name = this.getName();
+        data.type = this.getType();
+        //data.notes = this.getNotes();
+        data.index = this.getIndex();
+        return data;
+    },
+
+    deSerialize: function(data){
+        this.setName(data.name);
+        this.setType(data.type);
+        //this.setNotes(data.notes);
+        this.setIndex(data.index);
     }
 
 });

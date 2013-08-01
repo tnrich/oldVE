@@ -222,5 +222,15 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 			return this.seqString();
 		}
 
-	}
+	},
+
+    serialize: function(){
+        var data = {};
+        //data.notes = this.getNotes();
+        return data;
+    },
+
+    deSerialize: function(data){
+        //this.setNotes(data.notes);
+    }
 });

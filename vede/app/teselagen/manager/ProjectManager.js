@@ -156,8 +156,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
         this.currentUser.parts().load(
                 function (parts, operation, success){
                     for(var z=0; z<parts.length; z++) {
-                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
-                        console.log(parts[z].getUser());
+                        if(parts[z].getSequenceFile()) {
+                            parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                        } else {
+                            parts[z].set("partSource", "None");
+                        }
                     }
                     partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
                     if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
