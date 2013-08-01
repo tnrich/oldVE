@@ -7,6 +7,7 @@
     background: -webkit-linear-gradient(white 0%, #F8F8F8 100%);
     background-image: url(../images/bg/furley_bg.png);
     background-repeat: repeat;
+    
     opacity: 1;
 }
 
@@ -35,21 +36,9 @@
 .x-splash-icon {
     /* Important required due to the loading symbols CSS selector */
     background-image: url('../images/logo-splash.png') !important;
-    margin: 0 auto;
-    margin-top: 220px;
+    margin-top: 0px;
     width:330px;
-    height:85px;
-}
-
-#x-splash-message {
-    background: none;
-    margin: 0 auto;
-    height: 40px;
-    text-align: center;
-    margin-top: 180px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #006cab;
+    height:175px;
 }
 
 .x-mask-msg div:nth-child(2) {

@@ -50,6 +50,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.models.SBOLvIconInfo": [],
   "Vede.view.de.j5Parameters": [],
   "Teselagen.models.DeviceEditorProject": [],
+  "Teselagen.models.Cell": [],
   "Teselagen.bio.parsers.ParsersManager": [],
   "Vede.view.pie.Caret": [],
   "Teselagen.models.UserRestrictionEnzyme": [],
@@ -105,7 +106,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.controller.VectorEditor.ImportSequenceController": [],
   "Teselagen.bio.parsers.JbeiseqParser": [],
   "Teselagen.utils.SystemUtils": [],
-  "Vede.view.de.grid.Part": [],
   "Teselagen.event.CommonEvent": [],
   "Vede.view.de.DeviceEditorPartPanel": [],
   "Teselagen.manager.TasksMonitor": [],
@@ -180,6 +180,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.controller.VectorEditor.SelectWindowController": [],
   "Teselagen.models.j5Output.NonMockAssembly": [],
   "Vede.controller.VectorEditor.SimulateDigestionController": [],
+  "Teselagen.manager.ProjectExplorerManager": [],
   "Teselagen.renderer.annotate.HighlightLayer": [],
   "Teselagen.event.GridEvent": [],
   "Teselagen.manager.ActionStackManager": [],
@@ -210,6 +211,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.grid.TransformGrid": [],
   "Vede.controller.DeviceEditor.ChangePartDefinitionController": [],
   "Vede.view.de_legacy.DeviceEditor": [],
+  "Teselagen.manager.InspectorPanelManager": [],
+  "Vede.controller.ProjectExplorerController": [],
   "Teselagen.bio.parsers.SbolParser": [],
   "Vede.view.ve.ImportSequenceWindow": [],
   "Teselagen.bio.parsers.GenbankSubKeyword": [],
@@ -222,10 +225,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.event.SelectionEvent": [],
   "Vede.view.pie.Frame": [],
   "Teselagen.manager.J5CommunicationManager": [],
-  "Vede.controller.ProjectController": [],
   "Vede.view.de.InspectorPanel": [],
-  "Vede.view.de.grid.Bin": [],
   "Teselagen.store.PartStore": [],
+  "Teselagen.renderer.de.BinHeaderRenderer": [],
   "Ext.ux.form.MultiSelect": [
     "Ext.ux.Multiselect"
   ],
@@ -282,8 +284,10 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.renderer.annotate.LineRenderer": [],
   "Ext.ux.TreePicker": [],
   "Teselagen.manager.SessionManager": [],
+  "Teselagen.manager.GridManager": [],
   "Teselagen.renderer.rail.FeatureLabel": [],
   "Vede.controller.DeviceEditor.GridController": [],
+  "Teselagen.renderer.de.PartRenderer": [],
   "Vede.view.de.DeviceEditorTitlePanel": [],
   "Ext.ux.data.PagingMemoryProxy": [
     "Ext.data.PagingMemoryProxy"
@@ -306,6 +310,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.AppViewport": [],
   "Teselagen.bio.sequence.symbols.NucleotideSymbol": [],
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
+  "Teselagen.manager.GridCommandPatternManager": [],
   "Vede.view.ve.PropertiesWindow": [],
   "Teselagen.utils.NullableInt": [],
   "Teselagen.models.J5Results": [],
@@ -325,8 +330,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.grid.filter.StringFilter": [],
   "Vede.view.ve.SimulateDigestionWindow": [],
   "Vede.view.ve.SelectWindow": [],
-  "Vede.view.j5Report.j5ReportPanel": [],
   "Teselagen.models.digest.Ladder": [],
+  "Vede.view.j5Report.j5ReportPanel": [],
   "Vede.view.de.InspectorCollectionInfoGrid": [],
   "Teselagen.models.DNAFeatureNote": [],
   "Teselagen.renderer.pie.Layer": [],
@@ -426,6 +431,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.models.SBOLvIconInfo": [],
   "Vede.view.de.j5Parameters": [],
   "Teselagen.models.DeviceEditorProject": [],
+  "Teselagen.models.Cell": [],
   "Teselagen.bio.parsers.ParsersManager": [],
   "Vede.view.pie.Caret": [],
   "Teselagen.models.UserRestrictionEnzyme": [],
@@ -507,9 +513,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.controller.VectorEditor.ImportSequenceController": [],
   "Teselagen.bio.parsers.JbeiseqParser": [],
   "Teselagen.utils.SystemUtils": [],
-  "Vede.view.de.grid.Part": [
-    "widget.Part"
-  ],
   "Teselagen.event.CommonEvent": [],
   "Vede.view.de.DeviceEditorPartPanel": [
     "widget.DeviceEditorPartPanel"
@@ -610,6 +613,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.controller.VectorEditor.SelectWindowController": [],
   "Teselagen.models.j5Output.NonMockAssembly": [],
   "Vede.controller.VectorEditor.SimulateDigestionController": [],
+  "Teselagen.manager.ProjectExplorerManager": [],
   "Teselagen.renderer.annotate.HighlightLayer": [],
   "Teselagen.event.GridEvent": [],
   "Teselagen.manager.ActionStackManager": [],
@@ -656,6 +660,8 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.de_legacy.DeviceEditor": [
     "widget.DeviceEditorLegacyPanel"
   ],
+  "Teselagen.manager.InspectorPanelManager": [],
+  "Vede.controller.ProjectExplorerController": [],
   "Teselagen.bio.parsers.SbolParser": [],
   "Vede.view.ve.ImportSequenceWindow": [],
   "Teselagen.bio.parsers.GenbankSubKeyword": [],
@@ -670,14 +676,11 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.event.SelectionEvent": [],
   "Vede.view.pie.Frame": [],
   "Teselagen.manager.J5CommunicationManager": [],
-  "Vede.controller.ProjectController": [],
   "Vede.view.de.InspectorPanel": [
     "widget.InspectorPanel"
   ],
-  "Vede.view.de.grid.Bin": [
-    "widget.Bin"
-  ],
   "Teselagen.store.PartStore": [],
+  "Teselagen.renderer.de.BinHeaderRenderer": [],
   "Ext.ux.form.MultiSelect": [
     "widget.multiselect",
     "widget.multiselectfield"
@@ -747,8 +750,10 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.treepicker"
   ],
   "Teselagen.manager.SessionManager": [],
+  "Teselagen.manager.GridManager": [],
   "Teselagen.renderer.rail.FeatureLabel": [],
   "Vede.controller.DeviceEditor.GridController": [],
+  "Teselagen.renderer.de.PartRenderer": [],
   "Vede.view.de.DeviceEditorTitlePanel": [
     "widget.DeviceEditorTitlePanel"
   ],
@@ -773,6 +778,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.AppViewport": [],
   "Teselagen.bio.sequence.symbols.NucleotideSymbol": [],
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
+  "Teselagen.manager.GridCommandPatternManager": [],
   "Vede.view.ve.PropertiesWindow": [],
   "Teselagen.utils.NullableInt": [],
   "Teselagen.models.J5Results": [],
@@ -792,10 +798,10 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Vede.view.ve.SimulateDigestionWindow": [],
   "Vede.view.ve.SelectWindow": [],
+  "Teselagen.models.digest.Ladder": [],
   "Vede.view.j5Report.j5ReportPanel": [
     "widget.j5ReportPanel"
   ],
-  "Teselagen.models.digest.Ladder": [],
   "Vede.view.de.InspectorCollectionInfoGrid": [
     "widget.collectioninfogrid"
   ],
