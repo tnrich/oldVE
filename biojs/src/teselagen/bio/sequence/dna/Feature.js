@@ -169,16 +169,25 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
         var data = {};
         data.name = this.getName();
         data.type = this.getType();
-        //data.notes = this.getNotes();
         data.index = this.getIndex();
+        data.notes = [];
+
+        this.getNotes().forEach(function(note){
+            data.notes.push(note.serialize());
+        });
+
         return data;
     },
 
     deSerialize: function(data){
+        var self = this;
         this.setName(data.name);
         this.setType(data.type);
-        //this.setNotes(data.notes);
         this.setIndex(data.index);
+        data.notes.forEach(function(note){
+            var newNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", note);
+            self.addNote(newNote);
+        });
     }
 
 });

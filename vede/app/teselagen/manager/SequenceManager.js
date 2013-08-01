@@ -1445,6 +1445,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
     serialize: function(){
         var data = {};
         data.features = [];
+        data.inData = {
+            name: this.name,
+            circulate: this.circular,
+            complementSequence: this.complementSequence,
+            reverseComplementSequence: this.reverseComplementSequence,
+            manualUpdateStarted: this.manualUpdateStarted,
+            needsRecalculateComplementSequence: this.needsRecalculateComplementSequence,
+            needsRecalculateReverseComplementSequence: this.needsRecalculateReverseComplementSequence
+        }
+
         this.getFeatures().forEach(function(feature){
             data.features.push(feature.serialize());
         });
