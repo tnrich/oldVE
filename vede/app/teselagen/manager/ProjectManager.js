@@ -157,6 +157,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 function (parts, operation, success){
                     for(var z=0; z<parts.length; z++) {
                         parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                        console.log(parts[z].getUser());
                     }
                     partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
                     if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
