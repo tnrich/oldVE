@@ -84,11 +84,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         if(combinatorial) {
             combobox.bindStore(this.combinatorialStore);
+            combobox.setValue(this.combinatorialStore.first());
         } else {
             combobox.bindStore(this.nonCombinatorialStore);
+            combobox.setValue(this.nonCombinatorialStore.first());
         }
-
-        combobox.setValue(store.first());
     },
 
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
