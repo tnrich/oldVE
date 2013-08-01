@@ -184,7 +184,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             		newDef: newDef
                             	}
                     		});*/
-                            
                         } else {
                             Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
                             record.reject();

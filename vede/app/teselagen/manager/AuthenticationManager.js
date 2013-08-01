@@ -142,7 +142,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
-                if(response.status !== 200) return Ext.getCmp('auth-response').update(response.statusText);
+                if(response.status !== 200) { return function(){
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(response.statusText);
+                    };
+                }
                 var response = JSON.parse(response.responseText);
                 if(response) Ext.getCmp('auth-response').update(response.msg);
                 if (cb) {return cb(false, response.statusText); }

@@ -29,10 +29,9 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
      * @param {Model} DEProject.
      * @param {Model} Callback.
      */
-    generateObject: function (deproject,cb) {
-        var json = {};
-        var design = deproject.getDesign();
-
+    generateObject: function (design,cb) {
+    	var json = {};
+        
         // Structures
         json["de:j5Collection"] = {};
         json["de:j5Collection"]["de:j5Bins"] = {};
@@ -46,21 +45,18 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         var parts = [];
         var sequences = [];
         var rules = [];
-
-        design().bins().each(function(bin,binKey){
-
-            //bin.fases = [];
-            //for (var i= 0; i < bin.cells().count(); i++) {
-            //    bin.fases[i] = bin.cells().getAt(i).data.fas;
-            //}
-            //console.log(bin);
-            var jsonBin = {};
+    	
+        var partFasAssocArray = {};
+        
+        design.bins().each(function(bin,binKey) {
+        	var jsonBin = {};
             jsonBin = {};
             jsonBin["de:binName"] = bin.get("binName");
             jsonBin["de:iconID" ] = bin.get("iconID");
             jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
             jsonBin["de:dsf"] = bin.get("dsf");
-            jsonBin["de:fas"] = (bin.get("fas") === "None") ? "" : bin.get("fas");
+            var binFas = bin.cells().getAt(0).get("fas");
+            jsonBin["de:fas"] = (binFas === "None") ? "" : binFas;
             jsonBin["de:fro"] = bin.get("fro");
             jsonBin["de:extra3PrimeBps"] = parseInt( bin.get("extra3PrimeBps") );
             jsonBin["de:extra5PrimeBps"] = parseInt( bin.get("extra5PrimeBps") );
@@ -68,48 +64,61 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             // Parts structure
             jsonBin["de:binItems"] = {};
             jsonBin["de:binItems"]["de:partID"] = [];
-
-            bin.cells().each(function(part,partIndex){
-                //console.log(part);
-                jsonBin["de:binItems"]["de:partID"].push(part.internalId);
-
-                var sequence = part.getSequenceFile();
-
-                // Process parts
-                var jsonPart = {};
-
-                //jsonPart.id = part.get("id");
-                jsonPart.id = part.internalId;
-                jsonPart["de:name"] = part.get("name");
-                jsonPart["de:revComp"] = part.get("revComp");
-                jsonPart["de:startBP"] = part.get("genbankStartBP");
-                jsonPart["de:stopBP"] = part.get("endBP");
-                jsonPart["de:sequenceFileHash"] = sequence.get("hash");
-
-                jsonPart["de:parts"] = {};
-                jsonPart["de:parts"]["de:part"] = {};
-                //jsonPart["de:parts"]["de:part"].id = part.get("id");
-                jsonPart["de:parts"]["de:part"].id = part.internalId;
-                var fas = part.data.fas;
-                jsonPart["de:parts"]["de:part"]["de:fas"] = (fas === "None") ? "" : fas;
-
-                parts.push(jsonPart);
-
-                // Process sequences
-                var jsonSequence = {};
-                jsonSequence.hash = sequence.get("hash");
-                jsonSequence["de:format"] = sequence.get("sequenceFileFormat");
-                jsonSequence["de:content"] = sequence.get("sequenceFileContent");
-                var partSource = sequence.get("partSource");
-                // Named parts do not have a partSource
-                jsonSequence["de:fileName"] =  partSource ? partSource + ".gb" : "";
-
-                sequences.push(jsonSequence);
+            jsonBin["de:binItems"]["de:fas"] = [];
+            
+            bin.cells().each(function(cell,partIndex) {
+            	var part = cell.getPart();
+            	if(!part) {
+            		jsonBin["de:binItems"]["de:partID"].push("");
+            		jsonBin["de:binItems"]["de:fas"].push("");
+            	} else {
+            		jsonBin["de:binItems"]["de:partID"].push(part.internalId);
+            		var cellFas = (cell.get("fas")==="None") ? "" : cell.get("fas");
+            		jsonBin["de:binItems"]["de:fas"].push(cellFas);
+            		partFasAssocArray[cell.getPart().internalId] = cellFas;
+            	}
             });
-
+            
             bins.push(jsonBin);
         });
-        Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
+        
+        for(var i=0;i<design.parts().count();i++) {
+        	var part = design.parts().getAt(i);
+        	var sequence = part.getSequenceFile();
+        	
+        	// Process parts
+            var jsonPart = {};
+            
+            //jsonPart.id = part.get("id");
+            jsonPart.id = part.internalId;
+            jsonPart["de:name"] = part.get("name");
+            jsonPart["de:revComp"] = part.get("revComp");
+            jsonPart["de:startBP"] = part.get("genbankStartBP");
+            jsonPart["de:stopBP"] = part.get("endBP");
+            jsonPart["de:sequenceFileHash"] = sequence.get("hash");
+
+            jsonPart["de:parts"] = {};
+            jsonPart["de:parts"]["de:part"] = {};
+            //jsonPart["de:parts"]["de:part"].id = part.get("id");
+            jsonPart["de:parts"]["de:part"].id = part.internalId;
+            var fas = part.data.fas;
+            jsonPart["de:parts"]["de:part"]["de:fas"] = partFasAssocArray[part.internalId];
+            
+            parts.push(jsonPart);
+            
+            // Process sequences
+            var jsonSequence = {};
+            jsonSequence.hash = sequence.get("hash");
+            jsonSequence["de:format"] = sequence.get("sequenceFileFormat");
+            jsonSequence["de:content"] = sequence.get("sequenceFileContent");
+            var partSource = sequence.get("partSource");
+            // Named parts do not have a partSource
+            jsonSequence["de:fileName"] =  partSource ? partSource + ".gb" : "";
+
+            sequences.push(jsonSequence);
+        }
+    	
+        design.rules().clearFilter();
         design.rules().each(function(rule){
             var jsonEugene = {};
             jsonEugene["de:name"] = rule.get("name");
@@ -142,10 +151,10 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
      * Generate JSON Structure
      * @param {Model} DEProject.
      */
-    exportToJSON: function (deproject) {
+    exportToJSON: function (design) {
         var self = this;
-        this.generateObject(deproject,function(json){
-            var fileName = deproject.get("name")+".json";
+        this.generateObject(design,function(json){
+            var fileName = design.get("name")+".json";
             var fileContent = JSON.stringify({"de:design":json});
             self.saveToFile(fileName,fileContent);
         });

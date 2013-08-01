@@ -126,10 +126,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var device = Ext.create("Teselagen.models.DeviceDesign");
 
         device.parts().removeAll();
-        device.parts().insert(0, pParts);
+        device.parts().add(pParts);
         
         device.bins().removeAll();
-        device.bins().insert(0, pBins);
+        device.bins().add(pBins);
 
         var err = device.validate();
         if (err.length > 0) {
@@ -298,10 +298,22 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     			pDevice.parts().remove(part);
     		}
     	}
+        
     	return {
     		removedRules: removedRules,
     		removedPart: removedPart
 		}
+    },
+    
+    removeRulesAndPartsAssocWithBin: function(pDevice, pBin, binIndex) {
+    	var partsArray = [];
+    	for(var i=0;i<pBin.cells().count();i++) {
+    		partsArray.push(pBin.cells().getAt(i));
+    	}
+    	
+    	console.log(partsArray);
+    	
+    	
     },
     
     //================================================================

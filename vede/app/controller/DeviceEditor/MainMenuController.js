@@ -19,32 +19,32 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
 
         var countParts = 0;
 
-        model().bins().each(function (bin, binKey) {
-            bin.cells().each(function (part, partIndex) {
-                countParts++;
-            });
+        model.parts().each(function () {
+            countParts++;
         });
 
-        model().bins().each(function (bin, binKey) {
-            bin.cells().each(function (part, partIndex) {
-                part.getSequenceFile({
-                    callback: function (part) {
-                        if(countParts === 1) finishedPreloadingResources();
-                        countParts--;
-                    }
-                });
+        model.parts().each(function (part) {
+            part.getSequenceFile({
+                callback: function (part) {
+                    if(countParts === 1) finishedPreloadingResources();
+                    countParts--;
+                }
             });
         });
     },
 
     onExportToJSONClick: function () {
-        this.preloadResources(function(model){
+    	/*var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
+    	Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);*/
+    	this.preloadResources(function(model){
             Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);
         });
     },
 
     onExportToXMLClick: function () {
-        this.preloadResources(function(model){
+    	/*var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
+    	Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);*/
+    	this.preloadResources(function(model){
             Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);
         });
     },

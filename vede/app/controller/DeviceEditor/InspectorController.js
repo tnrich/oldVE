@@ -193,7 +193,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         newSequenceFile.save({
             callback: function(){
-                selectedPart.setSequenceFileModel(newSequenceFile);
+                selectedPart.setSequenceFile(newSequenceFile);
                 selectedPart.save({
                     callback: function(){
                         //console.log(selectedPart);
@@ -366,7 +366,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     	
     	this.inspector.setActiveTab(0);
     	
-    	this.inspector.suspendLayouts();
+    	this.inspector.suspendLayouts(false);
     	
     	this.selectedBinIndex = binIndex;
         
@@ -402,7 +402,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
         	this.partPropertiesForm.loadRecord(j5Part);
 
-            if( j5Part.get("sequencefile_id")!=="" && !j5Part.get("phantom") )
+            if( j5Part.get("sequencefile_id")!=="")
             {
             	j5Part.getSequenceFile({
                     callback: function(sequenceFile){
@@ -516,11 +516,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onBinSelected: function (j5Bin, binIndex) {
     	if(!j5Bin) j5Bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         var selectionModel = this.columnsGrid.getSelectionModel();
-        var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
+        //var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
         
         this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
         
+    	this.inspector.suspendLayouts(false);
+
         //console.log(selectedPart);
         selectionModel.select(j5Bin, false, true);
         
@@ -534,7 +536,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.openPartLibraryBtn.removeCls("selectPartFocus");
         this.openPartLibraryBtn.addCls("btnDisabled");
 
-        removeColumnMenuItem.enable();
+        //removeColumnMenuItem.enable();
+        this.inspector.resumeLayouts();
     },
 
     /**
@@ -575,28 +578,34 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.selectedPart = this.partPropertiesForm.getRecord();
             }
 
-            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
-                // If the selected part is not in the device already, add it.
-                if(self.activeProject.parts().indexOf(self.selectedPart) < 0) {
-                    self.activeProject.parts().add(self.selectedPart);
-                    self.selectedCell.setPart(self.selectedPart);
-                }
+            // Only validate/set the part's name if the name is different from
+            // what it was before. This prevents the grid from being rendered
+            // twice when entering a name, pressing enter, and then clicking 
+            // away from the part name field.
+            if(this.selectedPart.get("name") !== newName) {
+                Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
+                    // If the selected part is not in the device already, add it.
+                    if(self.activeProject.parts().indexOf(self.selectedPart) < 0) {
+                        self.activeProject.parts().add(self.selectedPart);
+                        self.selectedCell.setPart(self.selectedPart);
+                    }
 
-                self.selectedPart.set("name", newName);
+                    self.selectedPart.set("name", newName);
 
-                if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") !== ""){
-                    self.deletePartBtn.enable();
-                    self.deletePartBtn.removeCls("btnDisabled");
-                    self.deletePartBtn.addCls("selectPartFocus");
-                    self.clearPartMenuItem.enable();
-                }
-                else if (self.selectedPart.get("sequencefile_id") === "" && self.selectedPart.get("name") === ""){
-                    self.deletePartBtn.disable();
-                    self.deletePartBtn.addCls("btnDisabled");
-                    self.deletePartBtn.removeCls("selectPartFocus");
-                    self.clearPartMenuItem.disable();
-                }
-            }, "Another non-identical part with that name already exists in the design. Please input a different name.");
+                    if (!self.selectedPart.isMapped() && self.selectedPart.get("name") !== ""){
+                        self.deletePartBtn.enable();
+                        self.deletePartBtn.removeCls("btnDisabled");
+                        self.deletePartBtn.addCls("selectPartFocus");
+                        self.clearPartMenuItem.enable();
+                    }
+                    else if (!self.selectedPart.isMapped() && self.selectedPart.get("name") === ""){
+                        self.deletePartBtn.disable();
+                        self.deletePartBtn.addCls("btnDisabled");
+                        self.deletePartBtn.removeCls("selectPartFocus");
+                        self.clearPartMenuItem.disable();
+                    }
+                }, "Another non-identical part with that name already exists in the design. Please input a different name.");
+            }
         }
     },
 
@@ -1362,8 +1371,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onRemoveFromCells: function () {
         try {
-            this.columnsGrid.getView().refresh();
+            this.inspector.suspendLayouts();
+        	
+        	this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
+            
+            this.inspector.resumeLayouts();
             //this.clearPartInfo();
         } catch(err)
         {

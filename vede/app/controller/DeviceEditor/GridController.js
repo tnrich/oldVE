@@ -95,7 +95,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     */
 
     onBeforeTabChange: function(tabPanel, newTab, oldTab) {
-        if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
+        
+    	if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
             var selectedBin = this.GridManager.selectedGridBin;
             var selectedCell = this.GridManager.selectedGridPart;
 
@@ -121,6 +122,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             } else {
                 oldTab.options.selection = null;
             }
+
+            if(oldTab && oldTab.model && oldTab.model.setActive) {
+                oldTab.model.setActive(false);
+            }
         }
     },
 
@@ -132,7 +137,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.Component} newTab The tab that is being switched to.
      */
     onTabChange: function(tabPanel, newTab, oldTab) {
-        if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
+    	if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.down("component[cls='designGrid']");
 
             /*if(this.activeBins) {
@@ -156,7 +161,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
                 this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
             }*/
-            if(oldTab && oldTab.model && oldTab.model.setActive) oldTab.model.setActive(false);
             
             this.activeProject = newTab.model;
             this.activeTab = newTab;
@@ -548,7 +552,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
                         newSequenceFile.save({
                             callback: function(){
-                                j5Part.setSequenceFileModel(newSequenceFile);
+                                j5Part.setSequenceFile(newSequenceFile);
                                 j5Part.save({
                                     callback: function(){
                                         Vede.application.fireEvent(self.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
@@ -616,6 +620,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.removeRowMenuItem.setDisabled(!state||false);
         this.clearPartMenuItem.setDisabled(!state||false);
         this.removeColumnMenuItem.setDisabled(!state||false);
+    },
+    
+    toggleRemoveColumnOptions: function(state) {
+    	this.removeColumnMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertOptions: function(state) {
@@ -824,7 +832,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     init: function() {
         this.callParent();
-        
         
         this.control({
             "#mainAppPanel": {

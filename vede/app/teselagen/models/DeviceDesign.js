@@ -34,8 +34,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 var parts = [];
 
                 associatedData.parts.forEach(function(part,partKey){
-                    if(part.id) parts.push(part.id);
-                    else console.warn("Trying to save non-saved part");
+                    if(part.id) {
+                        parts.push(part.id);
+                    } else {
+                        console.warn("Trying to save non-saved part");
+                    }
                 });
 
 
@@ -123,7 +126,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
             }
-            //debugger;
             console.log("No devicedesign url generated");
 
 
@@ -546,9 +548,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
         this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
-            if (rule.getOperand1() === pPart) {
+            if (rule.getOperand1().getId() === pPart.getId()) {
                 return true;
-            } else if(rule.getOperand2() === pPart) {
+            } else if(rule.getOperand2().getId() === pPart.getId()) {
                 if(filterThenAndNextTo &&
                    rule.get("compositionalOperator") !== constants.THEN &&
                    rule.get("compositionalOperator") !== constants.NEXTTO) {

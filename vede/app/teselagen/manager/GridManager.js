@@ -543,13 +543,18 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		d3.selectAll(".gridPartRectSVG")
 			.attr("fill", gridManager.PART_FILL_COLOR)
-			//.attr("stroke", gridManager.PART_OUTLINE_COLOR)
 			.attr("stroke", function(d) {
 				var part = d.getPart();
-				if(!part) return gridManager.PART_OUTLINE_COLOR;
-				var sequencefileId = part.get("sequencefile_id");
-				if(sequencefileId === "" || sequencefileId === undefined || sequencefileId === null) return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
-				else return gridManager.PART_OUTLINE_COLOR;
+
+				if(!part) {
+                    return gridManager.PART_OUTLINE_COLOR;
+                }
+
+				if(!part.isMapped()) {
+                    return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
+                } else {
+                    return gridManager.PART_OUTLINE_COLOR;
+                }
 			})
 			.attr("isSelected", "false");
 						
@@ -581,6 +586,7 @@ Ext.define("Teselagen.manager.GridManager", {
     selectGridBinHeader: function(gridBin) {
         var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(false);
+		gridManager.GridController.toggleRemoveColumnOptions(true);
 		gridManager.GridController.toggleInsertOptions(true);
 		gridManager.GridController.toggleInsertRowAboveOptions(false);
 		gridManager.GridController.toggleInsertRowBelowOptions(true);
@@ -588,14 +594,19 @@ Ext.define("Teselagen.manager.GridManager", {
 		if(gridManager.selectedGridPart != null) {
 			d3.selectAll(".gridPartRectSVG")
 				.attr("fill", gridManager.PART_FILL_COLOR)
-				//.attr("stroke", gridManager.PART_OUTLINE_COLOR)
 				.attr("stroke", function(d) {
-					var part = d.getPart();
-					if(!part) return gridManager.PART_OUTLINE_COLOR;
-					var sequencefileId = part.get("sequencefile_id");
-					if(sequencefileId === "" || sequencefileId === undefined || sequencefileId === null) return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
-					else return gridManager.PART_OUTLINE_COLOR;
-				})
+                    var part = d.getPart();
+
+                    if(!part) {
+                        return gridManager.PART_OUTLINE_COLOR;
+                    }
+
+                    if(!part.isMapped()) {
+                        return gridManager.PART_UNMAPPED_OUTLINE_COLOR;
+                    } else {
+                        return gridManager.PART_OUTLINE_COLOR;
+                    }
+                })
 				.attr("isSelected", "false");
 			gridManager.selectedGridPart = null;
 		}

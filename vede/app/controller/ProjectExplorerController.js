@@ -122,7 +122,7 @@ Ext.define("Vede.controller.ProjectExplorerController", {
 
             newSequenceFile.save({
                 callback: function () {
-                    newPart.setSequenceFileModel(newSequenceFile);
+                    newPart.setSequenceFile(newSequenceFile);
                     var selectedVEProjectID = selectedVEProject.data.id;
                     newPart.set("veproject_id", selectedVEProjectID);
                     selectedVEProject.set("id",selectedVEProjectID);

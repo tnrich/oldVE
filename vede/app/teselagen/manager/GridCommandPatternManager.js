@@ -646,22 +646,9 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	},
 	
 	redoRuleAdd: function(command) {
-		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
 		
-		gridManager.rulesData.push(command.data.rule);
-		gridManager.updatePartsWithRules();
-		
-		gridManager.selectedGridPart = null;
-		gridManager.selectedGridBin = null;
-		
-		gridManager.removeGrid();
-		gridManager.renderGrid();
-		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
+		gridManager.activeProject.rules().add(command.data.data);
 	},
 	
 	redoRuleDel: function(command) {
