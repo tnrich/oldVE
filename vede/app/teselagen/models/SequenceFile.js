@@ -196,7 +196,11 @@ Ext.define("Teselagen.models.SequenceFile", {
     },{
         name: "user_id",
         type: "long"
-    }
+    },
+    {
+        name: 'serialize', 
+        type: "auto"
+    },
 
     ],
     /*
@@ -394,5 +398,38 @@ Ext.define("Teselagen.models.SequenceFile", {
         } else {}
         //console.log(end);
         return end;
+    },
+
+    getSequenceManager: function(){
+        var data = this.get("serialize");
+        if(!data || data === "") {
+            console.log("No data");
+            return null;
+        }
+        else
+        {
+            var decodeData = Ext.decode( data );
+            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager", decodeData);
+            return sequenceManager;
+        }
+    },
+
+    setSequenceManager: function(sequenceManager){
+        var data = Ext.encode( sequenceManager );
+        this.set("serialize",data);
+    },
+
+    saveSequenceManagerInContext: function(){
+        var context = Ext.getCmp("mainAppPanel").getActiveTab();
+        if( context.model &&
+        Ext.getClassName( context.model ) === "Teselagen.manager.SequenceManager" )
+        {
+            this.setSequenceManager( context.model );
+            console.log("Saved SequenceManager in context into model");
+        }
+        else
+        {
+            console.log("Context not found");
+        }
     }
 });
