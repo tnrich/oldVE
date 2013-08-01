@@ -357,10 +357,5 @@ Ext.define("Teselagen.models.Part", {
         } else {
             return false;
         }
-
-        var sequenceFile = this.getSequenceFile();
-
-        return (Boolean(sequenceFile) && Boolean(sequenceFile.get("name")) && 
-                Boolean(sequenceFile.get("sequenceFileContent")));
     }
 });

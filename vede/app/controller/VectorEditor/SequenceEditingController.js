@@ -109,6 +109,8 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             });
             newTab.model = sequenceFileManager;
             newTab.sequenceFile = seq;
+
+            // Set VE tab options.
             newTab.options = Teselagen.constants.Constants.DEFAULT_VE_VIEW_OPTIONS;
             newTab.options.circular = sequenceFileManager.getCircular();
 

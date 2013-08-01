@@ -148,6 +148,18 @@ Ext.define("Vede.controller.DashboardPanelController", {
         //});
   },
 
+  onPartGridItemClick: function(row,record) {
+        var currentTab = Ext.getCmp("mainAppPanel");
+        currentTab.el.mask("Loading Sequence", "loader rspin")
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        sequence = Teselagen.manager.ProjectManager.sequences.getById(record.data.sequencefile_id);
+
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
+        currentTab.el.unmask();
+
+  },
+
   onLaunch: function () {
       this.tabPanel = Ext.getCmp("mainAppPanel");
       this.tabPanel.on("tabchange", this.populateStatisticts);
@@ -170,6 +182,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
       "gridpanel[name='SequenceLibraryGrid']": {
                 itemclick: this.onSequenceGridItemClick
             },
+      "gridpanel[name='PartLibraryGrid']": {
+          itemclick: this.onPartGridItemClick
+      },
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}
