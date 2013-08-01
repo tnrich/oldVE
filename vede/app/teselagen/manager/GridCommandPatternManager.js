@@ -129,18 +129,19 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		var loc = command.data.loc;
 		var binIndex;
 		if(loc=="LEFT") {
-			binIndex = command.data.x;
-			/*if(command.data.digests && command.data.digests.length>0) {
-				for(var i=0;i<command.data.digests.length;i++) {
-					gridManager.collectionData[1].parts[command.data.digests[i]].fas = "DIGEST";
-					gridManager.collectionData[1].fases[command.data.digests[i]] = "DIGEST";
-				}
-			}*/
+			binIndex = command.data.x;	
 		} else if(loc=="RIGHT") {
 			binIndex = command.data.x+1;
 		}
 		
 		gridManager.activeProject.bins().removeAt(binIndex);
+		
+		if(command.data.digests && command.data.digests.length>0) {
+			var firstBinCells = gridManager.activeProject.bins().getAt(0).cells();
+			for(var i=0;i<command.data.digests.length;i++) {
+				firstBinCells.getAt(command.data.digests[i]).set("fas", "DIGEST");
+			}
+		}
 	},
 	
 	undoBinDel: function(command) {
@@ -148,9 +149,10 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		var gridManager = Teselagen.manager.GridManager;
 		var binIndex = command.data.x;
 		var removedBin = command.data.data;
-		/*
-		if(command.data.rules.length>0) gridManager.rulesData = gridManager.rulesData.concat(command.data.rules);
-		*/
+		
+		if(command.data.rules.length>0) gridManager.activeProject.rules().add(command.data.rules);
+		if(command.data.parts.length>0) gridManager.activeProject.parts().add(command.data.parts);
+		
 		if(command.data.oneBinLeft) {
 			gridManager.activeProject.bins().removeAt(0);
 			gridManager.activeProject.bins().add(removedBin);
@@ -253,6 +255,10 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		
 		var rowIndex = command.data.y;
 		var row = command.data.data;
+		
+		if(command.data.rules.length>0) gridManager.activeProject.rules().add(command.data.rules);
+		if(command.data.parts.length>0) gridManager.activeProject.parts().add(command.data.parts);
+		
 		if(command.data.oneRowLeft) {
 			for(var i=0;i<gridManager.activeProject.bins().count();i++) {
 				var cell = gridManager.activeProject.bins().getAt(i).cells().getAt(rowIndex);
@@ -560,6 +566,10 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		
 		var rowIndex = command.data.y;
 		var row = command.data.data;
+		
+		if(command.data.rules.length>0) gridManager.activeProject.rules().remove(command.data.rules);
+		if(command.data.parts.length>0) gridManager.activeProject.parts().remove(command.data.parts);
+		
 		if(command.data.oneRowLeft) {
 			var newCell;
 			for(var i=0;i<gridManager.activeProject.bins().count();i++) {
@@ -586,12 +596,12 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		var binIndex;
 		if(loc=="LEFT") {
 			binIndex = command.data.x;
-			/*if(command.data.digests && command.data.digests.length>0) {
+			if(command.data.digests && command.data.digests.length>0) {
+				var firstBinCells = gridManager.activeProject.bins().getAt(0).cells();
 				for(var i=0;i<command.data.digests.length;i++) {
-					gridManager.collectionData[1].parts[command.data.digests[i]].fas = "DIGEST";
-					gridManager.collectionData[1].fases[command.data.digests[i]] = "DIGEST";
+					firstBinCells.getAt(command.data.digests[i]).set("fas", "None");
 				}
-			}*/
+			}
 		} else if(loc=="RIGHT") {
 			binIndex = command.data.x+1;
 		}
@@ -604,9 +614,10 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		var gridManager = Teselagen.manager.GridManager;
 		var binIndex = command.data.x;
 		var removedBin = command.data.data;
-		/*
-		if(command.data.rules.length>0) gridManager.rulesData = gridManager.rulesData.concat(command.data.rules);
-		*/
+		
+		if(command.data.rules.length>0) gridManager.activeProject.rules().remove(command.data.rules);
+		if(command.data.parts.length>0) gridManager.activeProject.parts().remove(command.data.parts);
+		
 		if(command.data.oneBinLeft) {
 			gridManager.activeProject.bins().removeAt(0);
 			gridManager.activeProject.addNewBinByIndex(binIndex);

@@ -306,8 +306,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     
     removeRulesAndPartsAssocWithBin: function(pDevice, pBin, binIndex) {
-    	if(!binIndex || binIndex===null || binIndex===undefined) binIndex = pDevice.bins().indexOf(pBin);
-    	if(!pBin || pBin===null || pBin===undefined) pBin = pDevice.bins().getAt(binIndex);
+    	if(binIndex===null || binIndex===undefined) binIndex = pDevice.bins().indexOf(pBin);
+    	if(pBin===null || pBin===undefined) pBin = pDevice.bins().getAt(binIndex);
     	
     	var removedParts = [];
     	var removedRules = [];
@@ -1033,15 +1033,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Teselagen.models.Part}
      */
     getPartById: function(pDevice, pPartId) {
-        var part, id;
-        for (var i =0; i < pDevice.bins().count(); i++) {
-            var bin = pDevice.bins().getAt(i);
-            part = bin.getPartById(pPartId);
-            //id = bin.cells().find("id", pId);
-            if (part !== null) {
-                return part;
-            }
-        }
+        var part = pDevice.getPartById(pPartId);
         return part;
     },
     /**

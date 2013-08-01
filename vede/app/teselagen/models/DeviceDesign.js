@@ -601,7 +601,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
         } else {
             return false;
         }
-    }
+    },
+    
+    getPartById: function(pId) {
+	    var index = this.parts().find("id", pId);
+	
+	    if ( index === -1 ) {
+	        return null;
+	    } else {
+	        return this.parts().getAt(index);
+	    }
+    },
 
 
 });
