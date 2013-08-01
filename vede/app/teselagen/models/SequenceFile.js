@@ -7,7 +7,7 @@
 Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
-    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Teselagen.manager.SessionManager"],
+    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Teselagen.manager.SessionManager","Teselagen.manager.SequenceManager"],
 
     proxy: {
         type: "rest",
@@ -196,7 +196,11 @@ Ext.define("Teselagen.models.SequenceFile", {
     },{
         name: "user_id",
         type: "long"
-    }
+    },
+    {
+        name: 'serialize', 
+        type: "string"
+    },
 
     ],
     /*
@@ -394,5 +398,39 @@ Ext.define("Teselagen.models.SequenceFile", {
         } else {}
         //console.log(end);
         return end;
+    },
+
+    getSequenceManager: function(){
+        var data = this.get("serialize");
+        if(!data || data === "") {
+            console.log("No data");
+            return null;
+        }
+        else
+        {
+            var decodedData = JSON.parse(data);
+            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager");
+            sequenceManager.deSerialize(decodedData);
+            return sequenceManager;
+        }
+    },
+
+    setSequenceManager: function(sequenceManager){
+        var data = sequenceManager.serialize();
+        this.set("serialize",JSON.stringify(data));
+    },
+
+    saveSequenceManagerInContext: function(){
+        var context = Ext.getCmp("mainAppPanel").getActiveTab();
+        if( context.model &&
+        Ext.getClassName( context.model ) === "Teselagen.manager.SequenceManager" )
+        {
+            this.setSequenceManager( context.model );
+            console.log("Saved SequenceManager in context into model");
+        }
+        else
+        {
+            console.log("Context not found");
+        }
     }
 });

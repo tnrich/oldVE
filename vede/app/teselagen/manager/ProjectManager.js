@@ -156,7 +156,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
         this.currentUser.parts().load(
                 function (parts, operation, success){
                     for(var z=0; z<parts.length; z++) {
-                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                        if(parts[z].getSequenceFile()) {
+                            parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                        } else {
+                            parts[z].set("partSource", "None");
+                        }
                     }
                     partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
                     if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
@@ -235,7 +239,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {model} Receives a j5Report model (already loaded)
      */
     openSequence: function (sequence) {
-    	//console.log("Opening Sequence");
+    	console.log("Opening Sequence");
     	this.workingSequence = sequence;
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.workingSequence);
 

@@ -10,6 +10,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                "Teselagen.event.DeviceEvent",
                "Teselagen.models.EugeneRule",
                "Vede.view.de.PartDefinitionDialog",
+               "Vede.view.de.DeviceEditorPartLibrary",
                "Ext.layout.container.Border"],
 
     DeviceDesignManager: null,
@@ -211,123 +212,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onOpenPartLibrary: function () {
         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
         var currentTabEl = (currentTab.getEl());
-//        var selectedPartIndex = this.selectedBin.indexOfPart(this.selectedPart);
 
         if(this.selectedCell) {
-        currentTabEl.mask("Loading design", "loader rspin");
-        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
-
-        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
-            // If the part is not owned by a bin yet, add it to the bin.
-//            if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
-//                                                         this.selectedPart) < 0) {
-//                var selectedBinIndex = this.selectedBinIndex;
-//            }
-
-            var self = this;
-
-            // var loadingMsgBox = Ext.MessageBox.show({
-            //     title: "Loading Part",
-            //     progress: false,
-            //     width: 300,
-            //     renderTo: currentTabEl,
-            //     closable: false
-            // });
-
-            Ext.Ajax.request({
-                url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ""),
-                method: "GET",
-                success: function (response) {
-
-                currentTabEl.unmask();
-
-                response = JSON.parse(response.responseText);
-
-             var partLibrary = Ext.create("Teselagen.store.PartStore", {
-                 model: "Teselagen.models.Part",
-                 data:response,
-                 proxy: {
-                     type: "memory",
-                     reader: {
-                         type: "json",
-                         root: "parts"
-                     }
-                 },
-                 autoLoad: true,
-                 sorters: [{
-                    property: "name",
-                    direction: "ASC"
-                 }]
-             });
-
-                var selectWindow = Ext.create("Ext.window.Window", {
-                    title: "Part Library",
-                    height: 400,
-                    width: 400,
-                    layout: "fit",
-                    modal: true,
-                    items: {
-                        xtype: "grid",
-                        border: false,
-                        columns: {
-                            items: {
-                                text: "Name",
-                                dataIndex: "name"
-                            },
-                            defaults: {
-                                flex: 1
-                            }
-                        },
-                        store: partLibrary,
-                        listeners: {
-                            "itemclick": function(grid, part){
-                                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
-                                    var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    if(bin) {
-                                        // If the part already exists in the design,
-                                        // map it to the selected cell. If not,
-                                        // map the new part to the selected cell
-                                        // and add it to the design's parts store.
-                                        var partAdded = false;
-                                    	if(identicalPart) {
-                                            part = identicalPart;
-                                        } else {
-                                            self.activeProject.parts().add(part);
-                                            partAdded = true;
-                                        }
-                                        
-                                        var oldPart = self.selectedCell.getPart();
-                                        
-                                        self.selectedCell.setPart(part);
-                                        self.selectedPart = part;
-                                        var yIndex = self.activeProject.bins().getAt(self.selectedBinIndex).cells().indexOf(self.selectedCell);
-                                        
-                                        Teselagen.manager.GridCommandPatternManager.addCommand({
-                                        	type: "PART",
-                                        	data: {
-                                        		type: "ADD",
-                                        		x: self.selectedBinIndex,
-                                        		y: yIndex,
-                                        		oldPart: oldPart,
-                                        		newPart: part,
-                                        		partAdded: partAdded
-                                        	}
-                                		});
-                                        
-                                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, 
-                                        		self.selectedCell, self.selectedBinIndex, yIndex);
-                                        
-                                        selectWindow.close();
-                                    } else {
-                                        Ext.MessageBox.alert("Error","Failed mapping part from library");
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }).show();
-            //end ajax request
-            }});
+        	
+	        Teselagen.manager.ProjectManager.currentUser.parts().load(
+	                function (parts, operation, success){
+	                    for(var z=0; z<parts.length; z++) {
+	                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+	                    }
+	
+	                var selectWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary").show();
+	                selectWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
+	        });
         }
     },
 
