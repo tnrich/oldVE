@@ -218,15 +218,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
         
         Teselagen.manager.ProjectManager.currentUser.parts().load(
-                function (parts, operation, success){
-                    for(var z=0; z<parts.length; z++) {
-                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
-                    }
+            function (parts, operation, success){
+                for(var z=0; z<parts.length; z++) {
+                    parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                }
 
                 var selectWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary", {renderTo: currentTabEl}).show();
                 selectWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
-        });
-
+            });
         }
     },
 

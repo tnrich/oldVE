@@ -234,11 +234,11 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
             data.symbols.push(symbols[i].serialize());
         }
 
-        if(alphabet === Teselagen.bio.sequence.alphabets.DNAAlphabet) {
+        if(alphabet === "Teselagen.bio.sequence.alphabets.DNAAlphabet") {
             data.alphabet = "dna";
-        } else if(alphabet === Teselagen.bio.sequence.alphabets.RNAAlphabet) {
+        } else if(alphabet === "Teselagen.bio.sequence.alphabets.RNAAlphabet") {
             data.alphabet = "rna";
-        } else if(alphabet === Teselagen.bio.sequence.alphabets.ProteinAlphabet) {
+        } else if(alphabet === "Teselagen.bio.sequence.alphabets.ProteinAlphabet") {
             data.alphabet = "protein";
         } else {
             data.alphabet = "unknown";
@@ -265,11 +265,11 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
             }
 
             if(data.alphabet === "dna") {
-                this.setAlphabet(Teselagen.bio.sequence.alphabets.DNAAlphabet);
+                this.setAlphabet("Teselagen.bio.sequence.alphabets.DNAAlphabet");
             } else if(data.alphabet === "rna") {
-                this.setAlphabet(Teselagen.bio.sequence.alphabets.RNAAlphabet);
+                this.setAlphabet("Teselagen.bio.sequence.alphabets.RNAAlphabet");
             } else {
-                this.setAlphabet(Teselagen.bio.sequence.alphabets.AbstractAlphabet);
+                this.setAlphabet("Teselagen.bio.sequence.alphabets.AbstractAlphabet");
             }
         }
 
