@@ -261,7 +261,8 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
         } else {
             for(var i = 0; i < data.symbols.length; i++) {
                 symbol = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {});
-                symbols.push(symbol.deSerialize(data.symbols[i]));
+                symbol.deSerialize(data.symbols[i]);
+                symbols.push(symbol);
             }
 
             if(data.alphabet === "dna") {

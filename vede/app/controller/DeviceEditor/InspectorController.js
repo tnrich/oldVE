@@ -220,7 +220,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         Teselagen.manager.ProjectManager.currentUser.parts().load(
             function (parts, operation, success){
                 for(var z=0; z<parts.length; z++) {
-                    parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                    if(parts[z].getSequenceFile()) {
+                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                    } else{
+                        parts[z].set("partSource", "");
+                    }
                 }
 
                 var selectWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary", {renderTo: currentTabEl}).show();
