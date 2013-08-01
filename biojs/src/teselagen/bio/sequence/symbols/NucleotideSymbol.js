@@ -81,6 +81,21 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 		}
 
 		return this;
-	}
+	},
 
+    serialize: function() {
+        var data = {};
+
+        data.name = this.getName();
+        data.value = this.getValue();
+        data.ambiguousMatches = this.getAmbiguousMatches();
+
+        return data;
+    },
+
+    deSerialize: function(data) {
+        this.setName(data.name);
+        this.setValue(data.value);
+        this.setAmbiguousMatches(data.ambiguousMatches);
+    }
 });

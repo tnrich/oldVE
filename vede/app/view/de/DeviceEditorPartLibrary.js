@@ -6,6 +6,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
     height: 400,
     width: 700,
     layout: "fit",
+    modal: true,
     items: {
         xtype: "gridpanel",
         name: "deviceEditorPartLibraryGrid",
@@ -54,8 +55,9 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             ],
         listeners: {
             "itemclick": function(grid, part){
-                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
-                    var self = this;
+            	var partLibraryWindow = this.up();
+            	var self = Teselagen.manager.GridManager.InspectorController;//this;
+            	Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
                     if(bin) {
                         // If the part already exists in the design,
@@ -91,22 +93,12 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, 
                                 self.selectedCell, self.selectedBinIndex, yIndex);
                         
-                        selectWindow.close();
-                        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-                        var currentTabEl = (currentTab.getEl());
-                        currentTabEl.unmask(); 
+                        partLibraryWindow.close();
                     } else {
                         Ext.MessageBox.alert("Error","Failed mapping part from library");
                     }
                 });
             },
-        }
-    },
-    listeners: {
-        "close": function(win) {
-            var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-            var currentTabEl = (currentTab.getEl());
-            currentTabEl.unmask(); 
         }
     }
 });

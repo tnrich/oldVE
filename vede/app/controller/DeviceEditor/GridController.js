@@ -671,29 +671,31 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     	var gridManager = Teselagen.manager.GridManager;
     	var selectedCell = gridManager.selectedGridPart.datum();
     	if(gridManager.clipboardPart && selectedCell) {
-    		var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
-    		var yIndex = parseInt(gridManager.selectedGridPart.attr("deGridRowIndex"));
-    		var oldPart = selectedCell.getPart();
-    		var newPart = gridManager.clipboardPart;
-    		
-    		selectedCell.setPart(gridManager.clipboardPart);
-    		
-    		Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, selectedCell, xIndex, yIndex);
-    		
-	    	Teselagen.manager.GridCommandPatternManager.addCommand({
-	        	type: "PART",
-	        	data: {
-	        		type: "PASTE",
-	        		x: xIndex,
-	        		y: yIndex,
-	        		oldPart: oldPart,
-	        		newPart: newPart,
-	        		//oldFas: oldFas,
-	        		//newFas: newFas,
-	        		//rules: removedStuff.removedRules,
-	        		//part: removedStuff.removedPart,
-	        	}
-			});
+    		Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), function(identicalPart) {
+        		var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
+        		var yIndex = parseInt(gridManager.selectedGridPart.attr("deGridRowIndex"));
+        		var oldPart = selectedCell.getPart();
+        		var newPart = gridManager.clipboardPart;
+        		
+        		selectedCell.setPart(gridManager.clipboardPart);
+        		
+        		Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, selectedCell, xIndex, yIndex);
+        		
+    	    	Teselagen.manager.GridCommandPatternManager.addCommand({
+    	        	type: "PART",
+    	        	data: {
+    	        		type: "PASTE",
+    	        		x: xIndex,
+    	        		y: yIndex,
+    	        		oldPart: oldPart,
+    	        		newPart: newPart,
+    	        		//oldFas: oldFas,
+    	        		//newFas: newFas,
+    	        		//rules: removedStuff.removedRules,
+    	        		//part: removedStuff.removedPart,
+    	        	}
+    			});
+    		},"Invalid Paste"); 		
     	}
     },
     
