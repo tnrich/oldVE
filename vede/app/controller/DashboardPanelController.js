@@ -127,7 +127,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         var ext = record.data.sequenceFileName.split('.').pop();
-        //debugger;
         Ext.defer(function() {
             Teselagen.manager.ProjectManager.openSequence(record);
             currentTab.el.unmask();

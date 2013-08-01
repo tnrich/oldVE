@@ -409,7 +409,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         else
         {
             var decodedData = JSON.parse(data);
-            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager",data.inData);
+            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager",decodedData.inData);
             sequenceManager.deSerialize(decodedData);
             return sequenceManager;
         }
