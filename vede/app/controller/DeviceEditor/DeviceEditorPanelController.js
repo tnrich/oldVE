@@ -236,7 +236,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         if(associatedSequence)
                         {
                             var lastSequenceId = associatedSequence.get("id");
-                            console.log(associatedSequence);
                             associatedSequence.set("dateCreated", new Date());
                             associatedSequence.set("dateModified", new Date());
                             if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get("id"))
