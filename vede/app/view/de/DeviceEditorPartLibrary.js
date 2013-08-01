@@ -1,6 +1,6 @@
 Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
     extend: 'Ext.window.Window',
-
+    requires: ["Teselagen.event.DeviceEvent"],
     title: "Part Library",
     cls: 'deviceEditorPartLibrary',
     height: 400,
@@ -55,9 +55,10 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             ],
         listeners: {
             "itemclick": function(grid, part){
-                Vede.application.fireEvent(self.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
-                    var self = this;
-                    var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
+                    var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
+
+                    var bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(inspectorController.activeProject,inspectorController.selectedBinIndex);
                     if(bin) {
                         // If the part already exists in the design,
                         // map it to the selected cell. If not,
@@ -67,21 +68,21 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         if(identicalPart) {
                             part = identicalPart;
                         } else {
-                            self.activeProject.parts().add(part);
+                            inspectorController.activeProject.parts().add(part);
                             partAdded = true;
                         }
                         
-                        var oldPart = self.selectedCell.getPart();
+                        var oldPart = inspectorController.selectedCell.getPart();
                         
-                        self.selectedCell.setPart(part);
-                        self.selectedPart = part;
-                        var yIndex = self.activeProject.bins().getAt(self.selectedBinIndex).cells().indexOf(self.selectedCell);
+                        inspectorController.selectedCell.setPart(part);
+                        inspectorController.selectedPart = part;
+                        var yIndex = inspectorController.activeProject.bins().getAt(inspectorController.selectedBinIndex).cells().indexOf(inspectorController.selectedCell);
                         
                         Teselagen.manager.GridCommandPatternManager.addCommand({
                             type: "PART",
                             data: {
                                 type: "ADD",
-                                x: self.selectedBinIndex,
+                                x: inspectorController.selectedBinIndex,
                                 y: yIndex,
                                 oldPart: oldPart,
                                 newPart: part,
@@ -90,9 +91,9 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         });
                         
                         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, 
-                                self.selectedCell, self.selectedBinIndex, yIndex);
+                                inspectorController.selectedCell, inspectorController.selectedBinIndex, yIndex);
                         
-                        selectWindow.close();
+                        grid.up("window").close();
                         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
                         var currentTabEl = (currentTab.getEl());
                         currentTabEl.unmask(); 
