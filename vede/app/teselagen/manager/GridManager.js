@@ -332,6 +332,18 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
 		
+		var digestFasIndices = [];
+		if(columnIndex===0) {
+			var firstBinCells = this.activeProject.bins().getAt(0).cells();
+			for(var i=0;i<firstBinCells.count();i++) {
+				var cell = firstBinCells.getAt(i);
+				if(cell.get("fas")==="DIGEST") {
+					digestFasIndices.push(i);
+					cell.set("fas", "None");
+				}
+			}
+		}
+		
 		var newBin = this.activeProject.generateDefaultNewBin();
 		this.setListenersEnabled(true);
 		this.activeProject.bins().insert(columnIndex, newBin);
@@ -345,7 +357,7 @@ Ext.define("Teselagen.manager.GridManager", {
         		x: columnIndex,
         		loc: "LEFT",
         		data: newBin,
-        		//digests: digests
+        		digests: digestFasIndices
         	}
 		});
 	},
@@ -358,7 +370,10 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
 		
+		this.setListenersEnabled(false);
+		var removedStuff = Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithBin(this.activeProject, null, columnIndex);
 		var removedBin = this.activeProject.bins().getAt(columnIndex);
+		this.setListenersEnabled(true);
 		Teselagen.manager.DeviceDesignManager.removeBinByIndex(this.activeProject, columnIndex);
 		
 		if(this.activeProject.bins().count()===0) {
@@ -380,7 +395,8 @@ Ext.define("Teselagen.manager.GridManager", {
         		x: columnIndex,
         		data: removedBin,
         		oneBinLeft: oneBinLeft,
-        		//rules: removedRules
+        		rules: removedStuff.removedRules,
+        		parts: removedStuff.removedParts
         	}
 		});
 	},
@@ -395,6 +411,8 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 		this.selectedGridPart = null;
 		this.selectedGridBin = null;
+		
+		var removedStuff = Teselagen.manager.DeviceDesignManager.removeRulesAndPartsAssocWithRow(this.activeProject, rowIndex);
 		
 		if(this.activeProject.bins().getAt(0).cells().count()===1) {
 			oneRowLeft = true;
@@ -435,32 +453,10 @@ Ext.define("Teselagen.manager.GridManager", {
         		y: rowIndex,
         		data: removedRow,
         		oneRowLeft: oneRowLeft,
-        		//rules: removedRules
+        		rules: removedStuff.removedRules,
+        		parts: removedStuff.removedParts
         	}
 		});
-        
-		/*var rowIndex = parseInt(this.selectedGridPart.attr("deGridRowIndex"));
-		var removedRules = me.removeRuleDataInvolvingRow(rowIndex);
-		me.updatePartsWithRules();
-		var removedRow = [];
-		if(this.totalRows==1) {
-			for(var i=0;i<this.totalColumns;i++) {
-				removedRow.push(this.collectionData[i].parts.splice(rowIndex,1,{phantom: true})[0]);
-			}
-		} else {
-			for(var i=0;i<this.totalColumns;i++) {
-				removedRow.push(this.collectionData[i].parts.splice(rowIndex,1)[0]);
-			}
-			this.totalRows--;
-		}
-		
-		//Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
-		
-		this.GridController.toggleCutCopyPastePartOptions(false);
-        this.GridController.toggleInsertOptions(false);
-        this.GridController.toggleInsertRowAboveOptions(false);
-        this.GridController.toggleInsertRowBelowOptions(false);
-        me.clearPartInfo();*/
 	},
 	
 	clearSelectedPart: function() {

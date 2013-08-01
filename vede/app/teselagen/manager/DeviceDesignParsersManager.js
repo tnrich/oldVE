@@ -61,6 +61,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     generateDesign: function (binsArray, partsArray, eugeneRules, cb) {
     	Teselagen.manager.GridManager.selectedGridPart = null;
         Teselagen.manager.GridManager.selectedGridBin = null;
+    	
     	if(typeof(cb)==="function")
         {
             return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
@@ -80,6 +81,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 icon: Ext.Msg.QUESTION
             });
         }
+    	
     },
 
     /**

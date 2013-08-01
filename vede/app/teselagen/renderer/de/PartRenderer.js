@@ -136,6 +136,10 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 			  	    	  }
 				      }]
 				});
+				
+				contextMenu.on("hide", function() {
+					contextMenu.close();
+				});
 				if(!d.getPart()) {
 					contextMenu.items.items[0].setDisabled(true);
 					contextMenu.items.items[1].setDisabled(true);

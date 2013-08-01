@@ -265,9 +265,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     height: 400,
                     width: 400,
                     layout: "fit",
-                    renderTo: currentTabEl,
-                    //renderTo: currentTabEl,
-                    closeAction: "close",
                     modal: true,
                     items: {
                         xtype: "grid",

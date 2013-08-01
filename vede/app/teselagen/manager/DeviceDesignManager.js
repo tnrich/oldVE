@@ -265,7 +265,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                 highestRuleNameNumber = Number(match[1]);
             }
         }
-
+        
         return prefix + (highestRuleNameNumber + 1);
     },
     
@@ -306,14 +306,94 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     
     removeRulesAndPartsAssocWithBin: function(pDevice, pBin, binIndex) {
-    	var partsArray = [];
+    	if(!binIndex || binIndex===null || binIndex===undefined) binIndex = pDevice.bins().indexOf(pBin);
+    	if(!pBin || pBin===null || pBin===undefined) pBin = pDevice.bins().getAt(binIndex);
+    	
+    	var removedParts = [];
+    	var removedRules = [];
+    	
+    	var partsAssocArray = {};
     	for(var i=0;i<pBin.cells().count();i++) {
-    		partsArray.push(pBin.cells().getAt(i));
+    		var part = pBin.cells().getAt(i).getPart();
+    		if(part) partsAssocArray[part.internalId] = part;
+    	}
+    	for(var x in partsAssocArray) {
+    		var part = partsAssocArray[x];
+    		
+    		var otherParts = false;
+            loop:
+    		for(var i=0;i<pDevice.bins().count();i++) {
+    			var bin = pDevice.bins().getAt(i);
+    			if(i===binIndex) continue;
+    			for(var j=0;j<bin.cells().count();j++) {
+    				var cell = bin.cells().getAt(j);
+    				if(cell.getPart() === part) {
+    					otherParts = true;
+    					break loop;
+    				}
+    			}
+    		}
+    		if(!otherParts) {    			
+    			removedParts.push(part);
+    			
+    			this.getRulesInvolvingPart(pDevice, part, false);
+    			removedRules = removedRules.concat(pDevice.rules().getRange());
+    			
+    			pDevice.rules().removeAll();
+    			pDevice.rules().clearFilter(true);
+    			
+    			pDevice.parts().remove(part);
+    		}  	
     	}
     	
-    	console.log(partsArray);
+    	return {
+    		removedRules: removedRules,
+    		removedParts: removedParts
+		}
+    },
+    
+    removeRulesAndPartsAssocWithRow: function(pDevice, rowIndex) {
+    	var removedParts = [];
+    	var removedRules = [];
     	
+    	var partsAssocArray = {};
+    	for(var i=0;i<pDevice.bins().count();i++) {
+			var part = pDevice.bins().getAt(i).cells().getAt(rowIndex).getPart();
+    		if(part) partsAssocArray[part.internalId] = part;
+    	}
+    	for(var x in partsAssocArray) {
+    		var part = partsAssocArray[x];
+    		
+    		var otherParts = false;
+            loop:
+    		for(var i=0;i<pDevice.bins().count();i++) {
+    			var bin = pDevice.bins().getAt(i);
+    			for(var j=0;j<bin.cells().count();j++) {
+    				if(j===rowIndex) continue;
+    				var cell = bin.cells().getAt(j);
+    				if(cell.getPart() === part) {
+    					otherParts = true;
+    					break loop;
+    				}
+    			}
+    		}
+    		if(!otherParts) {
+    			removedParts.push(part);
+    			
+    			this.getRulesInvolvingPart(pDevice, part, false);
+    			removedRules = removedRules.concat(pDevice.rules().getRange());
+    			
+    			pDevice.rules().removeAll();
+    			pDevice.rules().clearFilter(true);
+    			
+    			pDevice.parts().remove(part);
+    		}  	
+    	}
     	
+    	return {
+    		removedRules: removedRules,
+    		removedParts: removedParts
+		}
     },
     
     //================================================================
