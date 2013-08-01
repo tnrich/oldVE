@@ -511,13 +511,6 @@ Ext.define("Teselagen.manager.GridManager", {
 		
 	},
 	
-    onGridPartRectSvgClick: function() {
-    	var gridCell = d3.select(this.parentNode);
-    	var xIndex = parseInt(d3.select(this.parentNode.parentNode.parentNode).attr("deGridBinIndex"));
-		var yIndex = parseInt(gridCell.attr("deGridRowIndex"));
-    	Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridCell.datum(), xIndex, yIndex);
-    },
-	
 	selectGridCell: function(gridCell) {
 		var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(true);
@@ -578,11 +571,6 @@ Ext.define("Teselagen.manager.GridManager", {
     	me.selectGridCell(gridCell);
     },
     
-	onGridBinHeaderRectSvgClick: function() {
-		var bin = d3.select(this.parentNode.parentNode);
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, bin.datum(), parseInt(bin.attr("deGridBinIndex")));
-	},
-	
     selectGridBinHeader: function(gridBin) {
         var gridManager = Teselagen.manager.GridManager;
 		gridManager.GridController.toggleCutCopyPastePartOptions(false);
@@ -658,12 +646,7 @@ Ext.define("Teselagen.manager.GridManager", {
         });
         
         //Teselagen.manager.GridManager.selectGridBinHeaderByIndex(xIndex);
-    },
-    
-    
-    
-    
-
+    }
 });
 
 

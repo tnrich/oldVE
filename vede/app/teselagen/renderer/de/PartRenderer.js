@@ -86,7 +86,12 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
                         }
 					});
 			})
-			.on("click", Teselagen.manager.GridManager.onGridPartRectSvgClick)
+			.on("click", function() {
+                var gridCell = d3.select(this.parentNode);
+                var xIndex = parseInt(d3.select(this.parentNode.parentNode.parentNode).attr("deGridBinIndex"));
+                var yIndex = parseInt(gridCell.attr("deGridRowIndex"));
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridCell.datum(), xIndex, yIndex);
+            })
 			.on("dblclick", function(d) {
 				if(!d.getPart()) {
 					// Remember to change the listener to the following event.

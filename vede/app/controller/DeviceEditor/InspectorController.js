@@ -431,7 +431,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
                 });
-            } else if (j5Part.get("sequencefile_id") === "" && j5Part.get("name") !== ""){
+            } else if (j5Part.get("name") !== ""){
             	self.changePartDefinitionBtn.disable();
                 self.openPartLibraryBtn.setText("Select Part From Library");
                 self.openPartLibraryBtn.addCls("selectPartFocus");
