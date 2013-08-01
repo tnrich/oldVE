@@ -23395,7 +23395,7 @@ img {
 /* line 128, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-row-selected .x-grid-cell, .x-grid-row-selected .x-grid-rowwrap-div, .x-grid-row-selected .x-grid-cell-rowbody {
   border: 0 none;
-  background: #ECF0F1 !important;
+  background: #E0E3E6 !important;
 }
 
 /* line 133, ../../../../sass/src/view/AppViewport.scss */
@@ -23415,7 +23415,7 @@ img {
 
 /* line 145, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-row-over .x-grid-cell {
-  background: #E0E3E6 !important;
+  background: #ECF0F1 !important;
 }
 
 /* line 149, ../../../../sass/src/view/AppViewport.scss */

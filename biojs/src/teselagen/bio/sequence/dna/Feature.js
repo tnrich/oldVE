@@ -177,7 +177,6 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             strand : this.getStrand()
         }
         data.notes = [];
-        debugger;
         this.getNotes().forEach(function(note){
             data.notes.push(note.serialize());
         });

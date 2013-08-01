@@ -142,6 +142,26 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         }
                     });
                 },
+                itemcontextmenu: function(view, record, item, index, event) {
+    //          Register the context node with the menu so that a Menu Item's handler function can access
+    //          it via its parentMenu property.
+                var menu = Ext.create("Ext.menu.Menu", {
+                    cls: 'partLibraryMenu',
+                    items: [{
+                        text: 'View in Vector Editor',
+                        cls: 'partLibraryViewBtn',
+                        listeners: {
+                            click: function(item, e, opt) {
+                                sequence = Teselagen.manager.ProjectManager.sequences.getById(record.data.sequencefile_id);
+                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
+                            }
+                        }
+                    }]
+                });
+                menu.showAt(event.getXY());
+                event.stopEvent();
+                event.preventDefault;
+            }
             }
         }
         ],
