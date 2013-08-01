@@ -98,7 +98,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             for(var j = 0; j < cells.length; j++) {
                 part = cells[j].getPart();
 
-                if(part && part.get("sequencefile_id") === "") {
+                if(part && !part.isMapped()) {
                     return false;
                 }
             }
@@ -193,7 +193,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         newSequenceFile.save({
             callback: function(){
-                selectedPart.setSequenceFileModel(newSequenceFile);
+                selectedPart.setSequenceFile(newSequenceFile);
                 selectedPart.save({
                     callback: function(){
                         //console.log(selectedPart);
@@ -399,7 +399,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
         	this.partPropertiesForm.loadRecord(j5Part);
 
-            if( j5Part.get("sequencefile_id")!=="")
+            if(j5Part.isMapped())
             {
             	j5Part.getSequenceFile({
                     callback: function(sequenceFile){
@@ -428,7 +428,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
                 });
-            } else if (j5Part.get("sequencefile_id") === "" && j5Part.get("name") !== ""){
+            } else if (j5Part.get("name") !== ""){
             	self.changePartDefinitionBtn.disable();
                 self.openPartLibraryBtn.setText("Select Part From Library");
                 self.openPartLibraryBtn.addCls("selectPartFocus");
@@ -460,7 +460,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                                             this.selectedPart);
             
             this.eugeneRulesGrid.reconfigure(rulesStore);
-            
         } else {
         	var newPart = Ext.create("Teselagen.models.Part");
             this.partPropertiesForm.loadRecord(newPart);
@@ -849,7 +848,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, this.selectedPart);
         this.activeProject.addToRules(newRule);
-        this.eugeneRulesGrid.reconfigure(rulesStore);
+        //this.eugeneRulesGrid.reconfigure(rulesStore);
         
         newEugeneRuleDialog.close();
 
@@ -1218,6 +1217,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.activeProject.parts().on("update", this.onUpdateParts, this);
             this.activeProject.parts().on("remove", this.onRemoveFromParts, this);
 
+            // Add listeners to the Eugene rules store.
+            this.activeProject.rules().on("add", this.onAddToRules, this);
+
             // Add listeners to each bin's cells store.
             this.activeBins.each(function (bin) {
                 var cells = bin.cells();
@@ -1336,6 +1338,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         } catch(err)
         {
             console.log("Failed removing part from bin. Error:", err);
+        }
+    },
+
+    /**
+     * Refreshes Eugene rules grid when a rule is added.
+     */
+    onAddToRules: function(rules, addedRules) {
+        if(this.selectedPart) {
+            var self = this;
+
+            Ext.defer(function() {
+                self.eugeneRulesGrid.getView().refresh();
+            }, 10);
         }
     },
 

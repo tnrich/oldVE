@@ -42,7 +42,10 @@ Ext.define("Teselagen.renderer.de.BinHeaderRenderer", {
 						else return gridManager.BIN_OUTLINE_COLOR;
 					});
 			})
-			.on("click", gridManager.onGridBinHeaderRectSvgClick);
+			.on("click", function() {
+                var bin = d3.select(this.parentNode.parentNode);
+                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, bin.datum(), parseInt(bin.attr("deGridBinIndex")));
+            });
 		
 		this.gridBinHeaderTextSVG = this.gridBinHeaderSVG
 		    .append("svg:text")
@@ -83,7 +86,26 @@ Ext.define("Teselagen.renderer.de.BinHeaderRenderer", {
 		    .attr("stroke", "#e0e3e6")
 		    .attr("stroke-width", 0.5)
 		    .style("cursor", "pointer")
-		    .on("click", gridManager.onFlipBinButtonClick);
+		    .on("click", function() {
+                var gridBin = d3.select(this.parentNode.parentNode);
+                var j5Bin = gridBin.datum();
+                var xIndex = parseInt(gridBin.attr("deGridBinIndex"));
+                var event = document.createEvent('UIEvents');
+
+                event.initUIEvent('click', true, true);
+                this.parentNode.parentNode.dispatchEvent(event);
+
+                j5Bin.set("directionForward", !j5Bin.get("directionForward"));
+                
+                Teselagen.manager.GridCommandPatternManager.addCommand({
+                    type: "BIN",
+                    data: {
+                        type: "DIR",
+                        x: xIndex,
+                        oldData: !j5Bin.get("directionForward")
+                    }
+                });
+            });
 		
 		this.gridBinHeaderFlipButtonArrowSVG = this.gridBinHeaderSVG
 		    .append("path")

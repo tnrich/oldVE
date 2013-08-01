@@ -228,12 +228,16 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         
         var saveAssociatedSequence = function (part, cb) {
             // Do not save sequence for a phantom or named part
-            if( !part.get("phantom") && !part.isNamed() )
+            
+            if( !part.isNamed() )
                 {
                     part.getSequenceFile({callback: function(associatedSequence){
+                        
                         if(associatedSequence)
                         {
                             var lastSequenceId = associatedSequence.get("id");
+                            associatedSequence.set("dateCreated", new Date());
+                            associatedSequence.set("dateModified", new Date());
                             if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get("id"))
                             {
                                 associatedSequence.save({
@@ -269,6 +273,15 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         var saveDesign = function () {
             var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
             design.rules().clearFilter(true);
+
+            design.rules().each(function(rule) {
+                debugger;
+                rule.set("operand1_id", rule.getOperand1().getId());
+
+                if(!rule.get("operand2isNumber")) {
+                    rule.set("operand2_id", rule.getOperand2().getId());
+                }
+            });
 
             design.save({
                 callback: function () {
@@ -314,6 +327,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 	                            }
 	                        });
 	                    } else {
+                            
 	                        saveAssociatedSequence(part,function(){
 	                        	if(countParts === 1) { saveDesign(); }
 	                        	countParts--;

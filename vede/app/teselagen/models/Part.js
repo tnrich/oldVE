@@ -53,6 +53,8 @@ Ext.define("Teselagen.models.Part", {
         highestDefaultNameIndex: 0
     },
 
+    hasSequenceFile: false,
+
     /**
      * @param {Number} id Part id
      * @param {Number} veproject_id VectorEditorProject id
@@ -74,7 +76,8 @@ Ext.define("Teselagen.models.Part", {
         type: "long"
     }, {
         name: "sequencefile_id",
-        type: "long"
+        type: "long",
+        defaultValue: null
     }, {
         name: "directionForward",
         type: "boolean",
@@ -177,7 +180,7 @@ Ext.define("Teselagen.models.Part", {
         type: "hasOne",
         model: "Teselagen.models.SequenceFile",
         foreignKey: "sequencefile_id",
-        getterName: "getSequenceFile",
+        getterName: "getSequenceFileModel",
         setterName: "setSequenceFileModel"
     }, {
         type: "belongsTo",
@@ -300,9 +303,31 @@ Ext.define("Teselagen.models.Part", {
             if (this.get("endBP") === 0) {
                 this.set("endBP", stop);
             }
+
             success = true;
+
+            this.hasSequenceFile = true;
         }
         return success;
+    },
+
+    /**
+     * Gets SequenceFile.
+     * @returns {Teselagen.models.SequenceFile} The sequencefile model.
+     */
+    getSequenceFile: function(callbackFn) {
+        if(this.hasSequenceFile || this.get("sequencefile_id")) {
+            if(typeof(callbackFn) === "object"){
+                return this.getSequenceFileModel({
+                    callback: callbackFn.callback
+                });
+            } else {
+                return this.getSequenceFileModel();
+            }
+        } else {
+            return null
+        }
+
     },
 
     /** (WEIRD PROBLEM--print part, does not show same seqFile from getSeqFile.)
@@ -313,7 +338,7 @@ Ext.define("Teselagen.models.Part", {
      * @returns {Boolean} True if removed, false if not.
      */
     removeSequenceFile: function() {
-        this.setSequenceFile(null);
+        this.setSequenceFileModel(null);
         this.setStart(0);
         this.setEnd(0);
         if (this.getSequenceFile().get("sequenceFileFormat") === "INIT") {
@@ -327,15 +352,10 @@ Ext.define("Teselagen.models.Part", {
      * Checks to see if part is mapped to a valid (nonempty) sequenceFile.
      */
     isMapped: function() {
-        if(this.get("sequencefile_id")) {
+        if(this.get("sequencefile_id") || this.hasSequenceFile) {
             return true;
         } else {
             return false;
         }
-
-        var sequenceFile = this.getSequenceFile();
-
-        return (Boolean(sequenceFile) && Boolean(sequenceFile.get("name")) && 
-                Boolean(sequenceFile.get("sequenceFileContent")));
     }
 });

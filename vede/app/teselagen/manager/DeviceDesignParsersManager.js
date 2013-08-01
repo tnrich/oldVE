@@ -181,7 +181,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                 newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
 
-                newPart.setSequenceFileModel(newSequence);
+                newPart.setSequenceFile(newSequence);
                 
                 fullPartsAssocArray[partId] = newPart;
                 partsArray.push(newPart);
@@ -409,7 +409,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                     newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
 
-                    newPart.setSequenceFileModel(newSequence);
+                    newPart.setSequenceFile(newSequence);
 
                     tempPartsArray.push(newPart);
                     fullPartsAssocArray[part.id] = newPart;
@@ -649,7 +649,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
                         newSequence.set("name",newPart.get("name"));
 
-                        newPart.setSequenceFileModel(newSequence);
+                        newPart.setSequenceFile(newSequence);
                     });
 
                     //binFases.push(newPart.get("fas"));

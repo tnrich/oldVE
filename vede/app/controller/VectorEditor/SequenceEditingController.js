@@ -40,7 +40,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
                     if(response.type === 'success') {
                         self.VEManager.saveSequence(function(){
-                            part.setSequenceFileModel(sequence);
+                            part.setSequenceFile(sequence);
                             part.set('sequencefile_id', sequence.data.id);
                             
                             part.save({
@@ -60,7 +60,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     } else if(response.type === 'warning') {
                         Ext.Msg.confirm('Duplicate Part Name', 'A different part with the same name ("' + part.get("name") + '") already exists in the Part Library. Continue to create a new part using this name?', function(btn) {
                             if(btn === 'yes') {
-                                part.setSequenceFileModel(sequence);
+                                part.setSequenceFile(sequence);
                                 part.set('sequencefile_id', sequence.data.id);
 
                                 part.save({
@@ -109,6 +109,8 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             });
             newTab.model = sequenceFileManager;
             newTab.sequenceFile = seq;
+
+            // Set VE tab options.
             newTab.options = Teselagen.constants.Constants.DEFAULT_VE_VIEW_OPTIONS;
             newTab.options.circular = sequenceFileManager.getCircular();
 

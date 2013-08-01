@@ -32,10 +32,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 var associatedData = record.getAssociatedData();
 
                 var parts = [];
-
                 associatedData.parts.forEach(function(part,partKey){
-                    if(part.id) parts.push(part.id);
-                    else console.warn("Trying to save non-saved part");
+                    if(part.id) {
+                        parts.push(part.id);
+                    } else {
+                        console.warn("Trying to save non-saved part");
+                    }
                 });
 
 
@@ -123,7 +125,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
             }
-            //debugger;
             console.log("No devicedesign url generated");
 
 
@@ -536,7 +537,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart, filterThenAndNextTo) {
-        
     	var constants = Teselagen.constants.Constants;
         
         // filterThenAndNextTo should default to true.
@@ -546,9 +546,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
         this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
-            if (rule.getOperand1().getId() === pPart.getId()) {
+            if (rule.getOperand1() === pPart) {
                 return true;
-            } else if(rule.getOperand2().getId() === pPart.getId()) {
+            } else if(rule.getOperand2() === pPart) {
                 if(filterThenAndNextTo &&
                    rule.get("compositionalOperator") !== constants.THEN &&
                    rule.get("compositionalOperator") !== constants.NEXTTO) {

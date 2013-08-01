@@ -127,13 +127,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         var ext = record.data.sequenceFileName.split('.').pop();
 
         Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.sequenceFileContent,ext,function(gb){
-            var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
-                "GENBANK",
-                gb,
-                record.data.name,
-                ""
-            );
-
+            var sequence = record;
             // Javascript waits to render the loading mask until after the call to
             // openSequence, so we force it to wait a millisecond before calling
             // to give it time to render the loading mask.
@@ -142,6 +136,18 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 currentTab.el.unmask();
             }, 10);
         });
+  },
+
+  onPartGridItemClick: function(row,record) {
+        var currentTab = Ext.getCmp("mainAppPanel");
+        currentTab.el.mask("Loading Sequence", "loader rspin")
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        sequence = Teselagen.manager.ProjectManager.sequences.getById(record.data.sequencefile_id);
+
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
+        currentTab.el.unmask();
+
   },
 
   onLaunch: function () {
@@ -166,6 +172,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
       "gridpanel[name='SequenceLibraryGrid']": {
                 itemclick: this.onSequenceGridItemClick
             },
+      "gridpanel[name='PartLibraryGrid']": {
+          itemclick: this.onPartGridItemClick
+      },
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}

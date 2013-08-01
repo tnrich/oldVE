@@ -109,7 +109,9 @@ Ext.define("Vede.controller.ProjectExplorerController", {
                 sequenceFileFormat: "GENBANK",
                 sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
-                partSource: "Untitled sequence"
+                partSource: "Untitled sequence",
+                dateCreated: new Date(),
+                dateModified: new Date(),
             });
 
             var newPart = Ext.create("Teselagen.models.Part", {
@@ -120,7 +122,7 @@ Ext.define("Vede.controller.ProjectExplorerController", {
 
             newSequenceFile.save({
                 callback: function () {
-                    newPart.setSequenceFileModel(newSequenceFile);
+                    newPart.setSequenceFile(newSequenceFile);
                     var selectedVEProjectID = selectedVEProject.data.id;
                     newPart.set("veproject_id", selectedVEProjectID);
                     selectedVEProject.set("id",selectedVEProjectID);
@@ -152,7 +154,7 @@ Ext.define("Vede.controller.ProjectExplorerController", {
         var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        project.sequences().load({
+        Teselagen.manager.ProjectManager.sequences.load({
             id: sequence_id,
             callback: function (loadedsequence) {
                 Teselagen.manager.ProjectManager.workingProject = project;

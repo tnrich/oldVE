@@ -552,7 +552,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
                         newSequenceFile.save({
                             callback: function(){
-                                j5Part.setSequenceFileModel(newSequenceFile);
+                                j5Part.setSequenceFile(newSequenceFile);
                                 j5Part.save({
                                     callback: function(){
                                         Vede.application.fireEvent(self.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
