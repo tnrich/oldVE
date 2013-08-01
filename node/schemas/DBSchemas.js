@@ -78,7 +78,8 @@ module.exports = function(db) {
 		hash: String,
 		partSource: String,
 		sequenceFileName: String,
-		firstTimeImported: Boolean
+		firstTimeImported: Boolean,
+		serialize: Mixed
 	});
 
 	//SequenceSchema.virtual('user_id').get(function() {

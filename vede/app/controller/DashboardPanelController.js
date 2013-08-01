@@ -125,23 +125,27 @@ Ext.define("Vede.controller.DashboardPanelController", {
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         var ext = record.data.sequenceFileName.split('.').pop();
-
-        Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.sequenceFileContent,ext,function(gb){
-            var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
-                "GENBANK",
-                gb,
-                record.data.name,
-                ""
-            );
-
-            // Javascript waits to render the loading mask until after the call to
-            // openSequence, so we force it to wait a millisecond before calling
-            // to give it time to render the loading mask.
-            Ext.defer(function() {
-                Teselagen.manager.ProjectManager.openSequence(sequence);
-                currentTab.el.unmask();
-            }, 10);
-        });
+        //debugger;
+        Ext.defer(function() {
+            Teselagen.manager.ProjectManager.openSequence(record);
+            currentTab.el.unmask();
+        }, 10);
+        //Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.sequenceFileContent,ext,function(gb){
+        //    var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+        //        "GENBANK",
+        //        gb,
+        //        record.data.name,
+        //        ""
+        //    );
+        //    
+        //    // Javascript waits to render the loading mask until after the call to
+        //    // openSequence, so we force it to wait a millisecond before calling
+        //    // to give it time to render the loading mask.
+        //    Ext.defer(function() {
+        //        Teselagen.manager.ProjectManager.openSequence(sequence);
+        //        currentTab.el.unmask();
+        //    }, 10);
+        //});
   },
 
   onLaunch: function () {
