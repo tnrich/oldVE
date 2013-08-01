@@ -83,18 +83,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
 
         if(combinatorial) {
-            store = new Ext.data.ArrayStore({
-                fields: ['assemblyMethod'],
-                data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
-            });
+            combobox.bindStore(this.combinatorialStore);
         } else {
-            store = new Ext.data.ArrayStore({
-                fields: ['assemblyMethod'],
-                data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
-            });
+            combobox.bindStore(this.nonCombinatorialStore);
         }
 
-        combobox.bindStore(store);
         combobox.setValue(store.first());
     },
 
@@ -1023,5 +1016,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         this.automationParameters = Ext.create("Teselagen.models.DownstreamAutomationParameters");
         this.automationParameters.setDefaultValues();
+
+        this.combinatorialStore = new Ext.data.ArrayStore({
+            fields: ['assemblyMethod'],
+            data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
+        });
+
+        this.nonCombinatorialStore = new Ext.data.ArrayStore({
+            fields: ['assemblyMethod'],
+            data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
+        });
     }
 });
