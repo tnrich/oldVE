@@ -21,7 +21,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	Ext.getCmp('saveAsWindowProjectsGrid').getSelectionModel().select(Teselagen.manager.ProjectManager.workingProject);
     	Ext.getCmp('saveAsWindowSequencesGrid').store.removeAll();
     	
-    	var sequences = Teselagen.manager.ProjectManager.workingProject.sequences();
+    	var sequences = Teselagen.manager.ProjectManager.sequences;
     	sequences.load({
             callback: function (records) {
                 Ext.getCmp('saveAsWindowSequencesGrid').store.add(records);
@@ -36,7 +36,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     onProjectsGridItemClick: function(view,record,item,index) { 	
     	Ext.getCmp('saveAsWindowSequencesGrid').store.removeAll();
     	
-    	var sequences = record.sequences();
+    	var sequences = Teselagen.manager.ProjectManager.sequences;
     	sequences.load({
             callback: function (records) {
                 Ext.getCmp('saveAsWindowSequencesGrid').store.add(records);
@@ -97,7 +97,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     		var project_id = selectedProj.internalId;
     		var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
             var sequencesNames = [];
-            project.sequences().load().each(function (sequence) {
+            Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
                 sequencesNames.push(sequence.data.name);
             });
             
@@ -149,10 +149,11 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 sequenceFileContent: genbank.toString(),
                 sequenceFileName: workingSequence.data.sequenceFileName,
                 partSource: workingSequence.data.partSource,
+                dateModified: new Date(),
                 name: name
             });
 
-    		selectedProj.sequences().add(newSequenceFile);
+    		Teselagen.manager.ProjectManager.sequences.add(newSequenceFile);
             newSequenceFile.set("project_id",selectedProj.data.id);
             
             newSequenceFile.save({

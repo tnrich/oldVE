@@ -361,7 +361,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onNewBlankVectorEditorMenuItemClick: function() {
     	var project = Teselagen.manager.ProjectManager.workingProject;
     	var sequencesNames = [];
-        project.sequences().load().each(function (sequence) {
+        Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
             sequencesNames.push(sequence.data.name);
         });
         Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);  	

@@ -120,6 +120,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                         newSequence.set('sequenceFileContent',seqMgr.toGenbank().toString());
                         newSequence.set('sequenceFileFormat',"GENBANK");
                         newSequence.set('sequenceFileName',name);
+                        newSequence.set('dateCreated', new Date());
+                        newSequence.set('dateModified', new Date());
                         newSequence.set('firstTimeImported',true);
                         toastr.info ("New Sequence Created");
                     }
@@ -142,6 +144,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                         sequence.set('sequenceFileFormat',"GENBANK");
                         sequence.set('sequenceFileName',pFile.name);
                         sequence.set('firstTimeImported',true);
+                        sequence.set('dateCreated', new Date());
+                        sequence.set('dateModified', new Date());
                     }
 
                     var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('tbtext[id="VectorEditorStatusBarAlert"]');
@@ -153,7 +157,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     if(typeof (cb) === "function") { cb(sequence); }
             };
 
-            if (sequence.get("project_id") == "") {
+            console.log(sequence);
+            if (sequence.get("size") == -1) {
                 performSequenceCreation();
             }
             else
@@ -196,7 +201,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                                     
                                                     Teselagen.manager.ProjectManager.workingProject = project;
                                                     var sequencesNames = [];
-                                                    project.sequences().load().each(function (sequence) {
+                                                    Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
                                                         sequencesNames.push(sequence.data.name);
                                                     });
 
@@ -236,10 +241,12 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                                         sequenceFileContent: "LOCUS      "+text+"                 0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                                                         sequenceFileName: "untitled.gb",
                                                         partSource: "Untitled sequence",
+                                                        dateCreated: new Date(),
+                                                        dateModified: new Date(),
                                                         name: text
                                                     });
 
-                                                    project.sequences().add(newSequenceFile);
+                                                    Teselagen.manager.ProjectManager.sequences.add(newSequenceFile);
                                                     newSequenceFile.set("project_id",project.data.id);
 
                                                     newSequenceFile.save({

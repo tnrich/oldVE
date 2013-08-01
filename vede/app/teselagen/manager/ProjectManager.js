@@ -153,8 +153,15 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openPartLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
-        if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
+        this.currentUser.parts().load(
+                function (parts, operation, success){
+                    for(var z=0; z<parts.length; z++) {
+                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                    }
+                    partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+                    if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
+                }
+        );
 
         dashPanel.getActiveTab().el.unmask();
     },
@@ -347,6 +354,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                         sequenceFileName: "untitled.gb",
                         partSource: "Untitled sequence",
+                        dateCreated: new Date(),
+                        dateModified: new Date(),
                         name: text
                     });
 

@@ -124,16 +124,11 @@ Ext.define("Vede.controller.DashboardPanelController", {
         currentTab.el.mask("Loading Sequence", "loader rspin")
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
+        console.log(record);
         var ext = record.data.sequenceFileName.split('.').pop();
 
         Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.sequenceFileContent,ext,function(gb){
-            var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
-                "GENBANK",
-                gb,
-                record.data.name,
-                ""
-            );
-
+            var sequence = record;
             // Javascript waits to render the loading mask until after the call to
             // openSequence, so we force it to wait a millisecond before calling
             // to give it time to render the loading mask.
