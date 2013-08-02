@@ -416,15 +416,26 @@ Ext.define("Teselagen.models.SequenceFile", {
         this.set("serialize",JSON.stringify(data));
     },
 
-    saveSequenceManagerInContext: function(){
-        var context = Ext.getCmp("mainAppPanel").getActiveTab();
-        if( context.model &&
-        Ext.getClassName( context.model ) === "Teselagen.manager.SequenceManager" )
+    processSequence: function(cb){
+        if(!this.get("serialize") && this.get("sequenceFileContent"))
         {
-            this.setSequenceManager( context.model );
+            if(this.get("sequenceFileFormat")==="Genbank")
+            {
+                var gb = Teselagen.utils.FormatUtils.fileToGenbank(this.get("sequenceFileContent"), "gb");
+                var seqMgr =  Teselagen.utils.FormatUtils.genbankToSequenceManager( gb );
+                if(seqMgr)
+                {
+                    this.setSequenceManager( seqMgr );
+                    return cb(false,seqMgr);
+                }
+                else return cb(true);
+            }
+            else
+            {
+                console.warn("not a genbank");
+                cb(true)
+            }
         }
-        else
-        {
-        }
+        else return cb(true);
     }
 });

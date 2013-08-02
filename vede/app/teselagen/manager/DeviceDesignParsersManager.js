@@ -61,6 +61,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     generateDesign: function (binsArray, partsArray, eugeneRules, cb) {
     	Teselagen.manager.GridManager.selectedGridPart = null;
         Teselagen.manager.GridManager.selectedGridBin = null;
+
+        this.backgroundSequenceProcessing(partsArray);
+
     	if(typeof(cb)==="function")
         {
             return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
@@ -1027,6 +1030,26 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             text = elem.textContent;
         }
         return text;
+    },
+
+    backgroundSequenceProcessing: function(parts){
+
+        var processFlag = true;
+        toastr.options.onclick = function(){
+            processFlag = false;
+        };
+        toastr.info("Parsing sequences in background (click to cancel)");
+        parts.forEach(function(part){
+            if(processFlag) {
+            part.getSequenceFile({
+                callback: function(sequence){
+                sequence.processSequence(function(err,seq){
+                    console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
+                    //if(err) debugger;
+                });
+            }});
+            }
+        });
     }
 
 });
