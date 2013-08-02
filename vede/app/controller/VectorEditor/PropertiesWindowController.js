@@ -330,7 +330,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             propertiesWindow.down('component[cls="propertiesWindowSequenceNameField"]').setFieldStyle("border-color:red");
         } else {
             var selectedProj = Teselagen.manager.ProjectManager.workingProject;
-            var sequenceStore = Teselagen.manager.ProjectManager.sequences;
+            var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
             var sequenceCount = sequenceStore.data.items.length;
             var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
             var oldName = workingSequence.data.name;
