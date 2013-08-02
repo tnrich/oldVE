@@ -8,23 +8,51 @@ Ext.define("Vede.view.ve.VectorViewer", {
     alias: "widget.vectorviewer",
     cls: "VectorViewer",
     floating: true,
-    width: 250,
-    height: 250,
-    listeners: {
-        render: function() {
-            if(this.part.getSequenceFile()) {
-                var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(this.part.getSequenceFile());
+    width: 320,
+    height: 320,
+    part: null,
+    viewManager: null,
+    setPart: function(part) {
+        this.part = part;
+        this.setTitle(part.get("name"));
+        this.renderViewer();
 
-                var pieManager = Ext.create("Teselagen.manager.PieManager", {
-                    sequenceManager: sequenceManager,
-                    center: {
-                        x: 125,
-                        y: 125
+        return this;
+    },
+    renderViewer: function() {
+        var self = this;
+        this.part.getSequenceFile({
+            callback: function(sequenceFile) {
+                if(sequenceFile) {
+                    var sequenceManager = sequenceFile.getSequenceManager();
+
+                    if(!sequenceManager) {
+                        if(sequenceFile.get("sequenceFileContent")) {
+                            sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequenceFile);
+                        } else {
+                            self.hide();
+                            return;
+                        }
                     }
-                });
 
-                pieManager.initPie(this);
+                    if(!this.viewManager) {
+                        this.viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
+                            sequenceManager: sequenceManager,
+                            center: {
+                                x: 100,
+                                y: 100
+                            },
+                            railRadius: 70
+                        });
+                    } else {
+                        this.viewManager.setSequenceManager(sequenceManager);
+                    }
+
+                    this.viewManager.initPie(self.down());
+                    this.viewManager.updateNameBox();
+                    this.viewManager.render();
+                }
             }
-        }
+        });
     }
 });
