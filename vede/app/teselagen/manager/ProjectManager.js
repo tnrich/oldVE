@@ -158,7 +158,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 function (parts, operation, success){
                     for(var z=0; z<parts.length; z++) {
                         if(parts[z].getSequenceFile()) {
-                            parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
+                            var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id);
+                            if(sequence) parts[z].data.partSource = sequence.data.name;
                         } else {
                             parts[z].set("partSource", "");
                         }
