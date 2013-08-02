@@ -13,8 +13,8 @@ Ext.define('Vede.view.rail.Frame', {
     },
 
     constructor: function(inData) {
-        var reference = this.self.RECT_REFERENCE;
-        var railWidth = this.self.RECT_WIDTH;
+        var reference = inData.reference || this.self.RECT_REFERENCE;
+        var railWidth = inData.railWidth || this.self.RECT_WIDTH;
         var railHeight = this.self.RECT_HEIGHT;
         var railGap = this.self.RECT_GAP;
         

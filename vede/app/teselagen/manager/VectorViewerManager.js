@@ -6,8 +6,11 @@
  */
 Ext.define("Teselagen.manager.VectorViewerManager", {
     requires: ["Teselagen.renderer.pie.FeatureRenderer",
+               "Teselagen.renderer.rail.FeatureRenderer",
                "Vede.view.pie.Frame",
-               "Vede.view.pie.NameBox"],
+               "Vede.view.pie.NameBox",
+               "Vede.view.rail.Frame",
+               "Vede.view.rail.NameBox"],
 
     statics: {
         NAMEBOX_FONT_SIZE: "8px"
@@ -17,6 +20,12 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
         sequenceManager: null,
         center: {},
         railRadius: 0,
+        railGap: 0,
+        railWidth: 300,
+        reference: {
+            x: 0,
+            y: 0
+        },
         features: []
     },
 
@@ -25,119 +34,117 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
 
         this.setFeatures(inData.sequenceManager.getFeatures());
 
-        if(this.getSequenceManager().getCircular()) {
-            this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
-                featureSVG: this.featureSVG,
-                sequenceManager: this.getSequenceManager(),
-                center: this.getCenter(),
-                railRadius: this.getRailRadius(),
-                features: this.getSequenceManager().getFeatures()
-            });
-        } else {
-            this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
-                featureSVG: this.featureSVG,
-                sequenceManager: this.getSequenceManager(),
-                center: this.getCenter(),
-                railRadius: this.getRailRadius(),
-                features: this.getSequenceManager().getFeatures()
-            });
-        }
+        this.pieRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+            featureSVG: this.pieFeatureSVG,
+            sequenceManager: this.getSequenceManager(),
+            center: this.getCenter(),
+            railRadius: this.getRailRadius(),
+            features: this.getSequenceManager().getFeatures()
+        });
+
+        this.railRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {
+            featureSVG: this.railFeatureSVG,
+            sequenceManager: this.getSequenceManager(),
+            railWidth: this.railWidth,
+            railHeight: this.railHeight,
+            reference: this.reference,
+            railGap: this.railGap,
+            railRadius: this.getRailRadius(),
+            features: this.getSequenceManager().getFeatures()
+        });
+
+        this.pieSelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {
+            center: this.center,
+            radius: this.railRadius,
+            sequenceManager: this.sequenceManager,
+            selectionSVG: this.pieSelectionSVG
+        });
+
+        this.railSelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {
+            reference: this.reference,
+            railWidth: this.railWidth,
+            sequenceManager: this.sequenceManager,
+            selectionSVG: this.railSelectionSVG
+        });
     },
 
     render: function() {
-        if(this.featureSVG) {
-            this.featureSVG.remove();
+        if(this.railFeatureSVG) {
+            this.railFeatureSVG.remove();
         }
 
-        this.featureSVG = this.parentSVG.append("svg:g")
-                                        .attr("class", "vectorViewerFeature");
+        if(this.pieFeatureSVG) {
+            this.pieFeatureSVG.remove();
+        }
 
-        this.featureRenderer.setFeatureSVG(this.featureSVG);
-        this.featureRenderer.setFeatures(this.features);
-        this.featureRenderer.render();
+        this.pieFeatureSVG = this.pieParentSVG.append("svg:g")
+                                            .attr("class", "vectorViewerPieFeature");
 
-        Ext.defer(function(){this.fitWidthToContent(this, false)}, 10, this);
+        this.railFeatureSVG = this.railParentSVG.append("svg:g")
+                                            .attr("class", "vectorViewerRailFeature");
+
+        if(this.sequenceManager.getCircular()) {
+            this.pieRenderer.setFeatureSVG(this.pieFeatureSVG);
+            this.pieRenderer.setFeatures(this.features);
+            this.pieRenderer.render();
+
+            this.pieParentSVG.style("visibility", "");
+            this.railParentSVG.style("visibility", "hidden");
+        } else {
+            this.railRenderer.setFeatureSVG(this.railFeatureSVG);
+            this.railRenderer.setFeatures(this.features);
+            this.railRenderer.render();
+
+            this.railParentSVG.style("visibility", "");
+            this.pieParentSVG.style("visibility", "hidden");
+        }
     },
 
-    /**
-     * Adjust the width of the surface to fit all content, ensuring that a 
-     * scrollbar appears.
-     */
-    fitWidthToContent: function(scrollToCenter) {
-        /*var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='VectorViewer']");
+    select: function(start, stop) {
+        if(this.sequenceManager.getCircular()) {
+            this.pieSelectionLayer.select(start, stop);
 
-        if(container && container.el) {
-            var pc = container.el.dom;
-            var frame = this.pie.select(".pieFrame").node();
-            var pcRect = pc.getBoundingClientRect();
-            var frameRect = frame.getBoundingClientRect();
-            var scrollWidthRatio = (pc.scrollLeft + pcRect.width / 2) / pc.scrollWidth;
-            var scrollHeightRatio = (pc.scrollTop + pcRect.height / 2) / pc.scrollHeight;
+            this.pieSelectionSVG.style("visibility", "");
+            this.railSelectionSVG.style("visibility", "hidden");
+        } else {
+            this.railSelectionLayer.select(start, stop);
 
-            for(var i = 0; i < 8; i++) {
-                pc = container.el.dom;
-                frame = this.pie.select(".pieFrame").node();
-                pcRect = pc.getBoundingClientRect();
-                frameRect = frame.getBoundingClientRect();
-
-                var pieBox = this.pie.node().getBBox();
-
-                if(pieBox.height === 0 || pieBox.width === 0) {
-                    return;
-                }
-
-
-                var distanceFromCenterX = pc.scrollWidth / 2 - (frameRect.left + pc.scrollLeft + frameRect.width / 2 - pcRect.left);
-                var distanceFromCenterY = pc.scrollHeight / 2 - (frameRect.top + pc.scrollTop + frameRect.height / 2 - pcRect.top);
-
-                // Get previous values for scale and transform.
-                var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
-                var scale = [Number(translateValues[0]), Number(translateValues[3])];
-                var translate = [Number(translateValues[4]), Number(translateValues[5])];
-
-                var transX = distanceFromCenterX + translate[0];
-                var transY = distanceFromCenterY + translate[1];
-
-                this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
-                                                          " " + transX + " " + transY + ")");
-
-                this.pie.attr("width", pieBox.width + transX)
-                         .attr("height", pieBox.height + transY);
-
-            }
-
-            if(scrollToCenter) {
-                container.el.setScrollLeft((this.pie.node().width.baseVal.value - container.getWidth()) / 2);
-                container.el.setScrollTop((this.pie.node().height.baseVal.value - container.getHeight()) / 2);
-            } else {
-                container.el.setScrollLeft(scrollWidthRatio * pc.scrollWidth - pcRect.width / 2);
-                container.el.setScrollTop(scrollHeightRatio * pc.scrollHeight - pcRect.height / 2);
-            }
-        }*/
+            this.pieSelectionSVG.style("visibility", "hidden");
+            this.railSelectionSVG.style("visibility", "");
+        }
     },
 
-    initPie: function(vectorViewer) {
+    init: function(vectorViewer) {
         var vectorViewerId = vectorViewer.el.dom.id;
+
         // If there's no SVG in the current tab, VE hasn't been rendered yet, so
         // add svg elements. Otherwise, just set this.pie to the pie in this tab,
         // and so on.
-
-
-
         if(!d3.select("#" + vectorViewerId + " .VectorViewer").node()) {
             this.pie = d3.select("#" + vectorViewerId)
                          .append("svg:svg")
                          .attr("class", "VectorViewer")
                          .attr("overflow", "auto");
 
-            this.parentSVG = this.pie.append("svg:g")
-                                     .attr("class", "vectorViewerParent")
+            this.pieParentSVG = this.pie.append("svg:g")
+                                     .attr("class", "vectorViewerPieParent")
                                      .attr("transform", "matrix(1.5 0 0 1.5 0 0)");
 
-            this.frame = Ext.create("Vede.view.pie.Frame", {
-                pie: this.parentSVG,
+            this.railParentSVG = this.pie.append("svg:g")
+                                     .attr("class", "vectorViewerRailParent")
+                                     .attr("transform", "matrix(1.5 0 0 1.5 0 0)");
+
+            this.pieFrame = Ext.create("Vede.view.pie.Frame", {
+                pie: this.pieParentSVG,
                 center: this.center,
                 radius: this.getRailRadius()
+            });
+
+            this.railFrame = Ext.create("Vede.view.rail.Frame", {
+                rail: this.railParentSVG,
+                railWidth: this.railWidth,
+                center: this.center,
+                reference: this.reference
             });
 
             var name = "unknown";
@@ -147,30 +154,68 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                 length = this.sequenceManager.getSequence().toString().length;
             }
 
-            this.nameBox = Ext.create("Vede.view.pie.NameBox", {
-                pie: this.parentSVG,
+            this.pieNameBox = Ext.create("Vede.view.pie.NameBox", {
+                pie: this.pieParentSVG,
                 center: this.center,
                 name: name,
                 length: length,
                 fontSize: this.self.NAMEBOX_FONT_SIZE
             });
 
-            this.labelSVG = this.parentSVG.append("svg:g")
-                                    .attr("class", "vectorViewerLabel");
+            this.railNameBox = Ext.create("Vede.view.rail.NameBox", {
+                rail: this.railParentSVG,
+                center: this.center,
+                name: name,
+                length: length,
+                fontSize: this.self.NAMEBOX_FONT_SIZE
+            });
 
-            this.featureSVG = this.parentSVG.append("svg:g")
-                                      .attr("class", "vectorViewerFeature");
+            this.pieFeatureSVG = this.pieParentSVG.append("svg:g")
+                                      .attr("class", "vectorViewerPieFeature");
+
+            this.pieSelectionSVG = this.pieParentSVG.append("svg:path")
+                                    .attr("class", "vectorViewerRailSelection")
+                                    .attr("stroke", Teselagen.manager.PieManager.SELECTION_FRAME_COLOR)
+                                    .attr("stroke-opacity", Teselagen.manager.PieManager.STROKE_OPACITY)
+                                    .attr("fill", Teselagen.manager.PieManager.SELECTION_COLOR)
+                                    .attr("fill-opacity", Teselagen.manager.PieManager.SELECTION_TRANSPARENCY)
+                                    .attr("class", "vectorViewerPieSelection");
+
+            this.railFeatureSVG = this.railParentSVG.append("svg:g")
+                                      .attr("class", "vectorViewerRailFeature");
+
+            this.railSelectionSVG = this.railParentSVG.append("svg:path")
+                                    .attr("class", "vectorViewerRailSelection")
+                                    .attr("stroke", Teselagen.manager.PieManager.SELECTION_FRAME_COLOR)
+                                    .attr("stroke-opacity", Teselagen.manager.PieManager.STROKE_OPACITY)
+                                    .attr("fill", Teselagen.manager.PieManager.SELECTION_COLOR)
+                                    .attr("fill-opacity", Teselagen.manager.PieManager.SELECTION_TRANSPARENCY);
         } else {
             this.pie = d3.select("#" + vectorViewerId + " .VectorViewer");
 
-            this.parentSVG = this.pie.select(".vectorViewerParent");
+            this.pieParentSVG = this.pie.select(".vectorViewerPieParent");
+            this.railParentSVG = this.pie.select(".vectorViewerRailParent");
 
-            this.frame = this.parentSVG.select(".pieFrame");
-            this.nameBox = this.parentSVG.select(".pieNameBox");
-            this.featureSVG = this.parentSVG.select(".vectorViewerFeature");
+            this.pieFrame = this.pieParentSVG.select(".pieFrame");
+            this.pieNameBox = this.pieParentSVG.select(".pieNameBox");
+
+            this.railFrame = this.railParentSVG.select(".railFrame");
+            this.railNameBox = this.railParentSVG.select(".railNameBox");
+
+            this.pieFeatureSVG = this.pieParentSVG.select(".vectorViewerPieFeature");
+            this.railFeatureSVG = this.railParentSVG.select(".vectorViewerRailFeature");
+
+            this.pieSelectionSVG = this.pieParentSVG.select(".vectorViewerPieSelection");
+            this.railSelectionSVG = this.railParentSVG.select(".vectorViewerRailSelection");
         }
 
-        this.featureRenderer.setFeatureSVG(this.featureSVG);
+        if(this.sequenceManager.getCircular()) {
+            this.pieRenderer.setFeatureSVG(this.pieFeatureSVG);
+            this.pieSelectionLayer.setSelectionSVG(this.pieSelectionSVG);
+        } else {
+            this.railRenderer.setFeatureSVG(this.railFeatureSVG);
+            this.railSelectionLayer.setSelectionSVG(this.railSelectionSVG);
+        }
     },
 
     updateNameBox: function() {
@@ -182,13 +227,25 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
             length = this.sequenceManager.getSequence().toString().length;
         }
 
-        this.nameBox.remove();
-        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
-            pie: this.parentSVG,
-            center: this.center,
-            name: name,
-            length: length,
-            fontSize: this.self.NAMEBOX_FONT_SIZE
-        });
+        this.pieNameBox.remove();
+        this.railNameBox.remove();
+
+        if(this.sequenceManager.getCircular()) {
+            this.pieNameBox = Ext.create("Vede.view.pie.NameBox", {
+                pie: this.pieParentSVG,
+                center: this.center,
+                name: name,
+                length: length,
+                fontSize: this.self.NAMEBOX_FONT_SIZE
+            });
+        } else {
+            this.railNameBox = Ext.create("Vede.view.rail.NameBox", {
+                rail: this.railParentSVG,
+                center: this.center,
+                name: name,
+                length: length,
+                fontSize: this.self.NAMEBOX_FONT_SIZE
+            });
+        }
     }
 });
