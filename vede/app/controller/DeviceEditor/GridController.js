@@ -657,6 +657,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
     		
             gridManager.clearSelectedPart();
+            gridManager.InspectorController.clearPartInfo();
     	}
     },
     

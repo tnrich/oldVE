@@ -579,7 +579,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     getRuleByName: function(pName) {
         this.rules().clearFilter(true);
-        var index = this.rules().find("name", pName);
+        var index = this.rules().find("name", pName, 0,false,false, true);
         if (index !== -1) {
             return this.rules().getAt(index);
         } else {
@@ -594,7 +594,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     isUniqueRuleName: function(pName) {
         this.rules().clearFilter(true);
-        var index = this.rules().find("name", pName);
+        var index = this.rules().find("name", pName, 0,false,false, true);
 
         if (index === -1) {
             return true;

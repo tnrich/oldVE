@@ -72,12 +72,14 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return device;
     },
     
-    clearDesignAndAddBinsAndParts: function(device,pBins,pParts) {
+    clearDesignAndAddBinsAndPartsAndRules: function(device,pBins,pParts,pRules) {
         var bins = device.bins();
         var parts = device.parts();
+        var rules = device.rules();
         
-        //bins.suspendEvents();
-        
+        rules.clearFilter(true);
+        rules.removeAll(true);
+        rules.add(pRules);
         
         parts.removeAll(true);
         parts.add(pParts);
@@ -86,10 +88,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         bins.add(pBins);
         
         Teselagen.manager.DeviceDesignManager.enforceColumnLength(device);
-        
-        //bins.resumeEvents();
-        //bins.fireEvent("datachanged");
-        
+                
         /*var err = device.validate();
         if (err.length > 0) {
             console.warn("Clearing DeviceDesign: " + err.length + " errors found.");

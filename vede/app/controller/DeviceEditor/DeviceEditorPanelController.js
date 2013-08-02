@@ -84,19 +84,63 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onDeviceEditorRenameBtnClick: function () {
         var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
+    	var project = Teselagen.manager.ProjectManager.projects.getById(deproject.get("project_id"));
+        var projectNames = [];
+        project.designs().load().each(function (design) {
+            if(design!==deproject) projectNames.push(design.data.name);
+        });
+        
         var onPromptClosed = function (answer, text) {
-                deproject.set("name", text);
-                deproject.save({
-                    callback: function () {
-                        Ext.getCmp("mainAppPanel").getActiveTab().setTitle("Device Editor | "+text);
-                        toastr.options.onclick = null;
-                        toastr.info("Design renamed");
-                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                            Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
-                        });
-                    }
-                });
-            };
+        	if(answer ==="ok") {
+	        	text = Ext.String.trim(text);
+	        	if(text === "") { return Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this); }
+	        	
+	            for (var j=0; j<projectNames.length; j++) {
+	                if (projectNames[j]===text) {
+	                    Ext.MessageBox.show({
+	                        title: "Name",
+	                        msg: "A design with this name already exists in this project. <p> Please enter another name:",
+	                        buttons: Ext.MessageBox.OKCANCEL,
+	                        fn: onPromptClosed,
+	                        prompt: true,
+	                        cls: "sequencePrompt-box",
+	                        scope: this,
+	                        style: {
+	                            "text-align": "center"
+	                        },
+	                        scope: this,
+	                        layout: {
+	                            align: "center"
+	                        },
+	                        items: [
+	                            {
+	                                xtype: "textfield",
+	                                layout: {
+	                                    align: "center"
+	                                },
+	                                width: 50
+	                            }
+	                        ]
+	                    });
+	                    return Ext.MessageBox;
+	                    
+	                }
+	            }
+	    		deproject.set("name", text);
+	            deproject.save({
+	                callback: function () {
+	                    Ext.getCmp("mainAppPanel").getActiveTab().setTitle(text);
+	                    toastr.options.onclick = null;
+	                    toastr.info("Design renamed");
+	                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+	                        Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
+	                    });
+	                }
+	            });
+        	} else {
+        		return false;
+        	}
+        };
 
         Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this, false, deproject.get("name"));
     },

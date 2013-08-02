@@ -293,6 +293,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             fasBox.store.loadData(fasArray);
         }
         
+        var rulesStore;
         // If selected part exists, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
@@ -355,10 +356,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.selectedPart = j5Part;
             
-            var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                            this.selectedPart);
-            
-            this.eugeneRulesGrid.reconfigure(rulesStore);
+            rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,this.selectedPart);
         } else {
         	var newPart = Ext.create("Teselagen.models.Part");
             this.partPropertiesForm.loadRecord(newPart);
@@ -371,12 +369,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             self.deletePartBtn.addCls("btnDisabled");
             self.openPartLibraryBtn.setText("Select Part From Library");
             self.openPartLibraryBtn.addCls("selectPartFocus");
-                        
-            this.eugeneRulesGrid.store.clearData();
-                        
+            
+            this.eugeneRulesGrid.store.clearData();            
             this.eugeneRulesGrid.view.refresh();
         }
         this.inspector.resumeLayouts();
+        if(j5Part) this.eugeneRulesGrid.reconfigure(rulesStore);
+        
         this.inspector.expand();
     },
 
@@ -417,7 +416,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.inspector.setActiveTab(1);
         
     	this.inspector.suspendLayouts(false);
-
+    	
+    	this.clearPartInfo();
         //console.log(selectedPart);
         selectionModel.select(j5Bin, false, true);
         
@@ -670,9 +670,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             Ext.Msg.confirm("Delete Rule", "Are you sure you want to delete this Eugene rule?", function(button) {
                 if(button === "yes") {
-                    this.activeProject.rules().clearFilter();
+                    this.activeProject.rules().clearFilter(true);
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
+                    this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,this.selectedPart);
                     toastr.options.onclick = null;
                     toastr.info("Eugene Rule Removed");
                 }
@@ -747,11 +748,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, this.selectedPart);
         this.activeProject.addToRules(newRule);
-        //this.eugeneRulesGrid.reconfigure(rulesStore);
         
         newEugeneRuleDialog.close();
-
-        Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
+        
+        this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject, this.selectedPart);
+        this.eugeneRulesGrid.reconfigure(rulesStore);
         
         
         toastr.options.onclick = null;

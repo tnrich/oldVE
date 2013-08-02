@@ -98,12 +98,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         	gridManager.setListenersEnabled(false);
         	
             var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
-            var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBinsAndParts(existingDesign,binsArray,partsArray);
+            var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBinsAndPartsAndRules(existingDesign,binsArray,partsArray,eugeneRules);
             
             Ext.getCmp("mainAppPanel").getActiveTab().model = design;
             
             // Load the Eugene Rules in the Design
-            design.rules().add(eugeneRules);
+            //design.rules().add(eugeneRules);
             /*for (var i = 0; i < eugeneRules.length; i++) {
                 design.addToRules(eugeneRules[i]);
             }*/
@@ -554,7 +554,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     parseEugeneRules: function(content,filename,design){
 
-
+    	
+    	design.rules().clearFilter(true);
         // Existing rules
         var existingRules = design.rules();
 
@@ -562,17 +563,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         var partIndex = {};
 
-        design.bins().each(function (bin) {
-            bin.cells().each(function (part) {
-                partIndex[part.data.name] = part;
-            });
+        design.parts().each(function (part) {
+            partIndex[part.get("name")] = part;
         });
     
         var lines = content.split("\n");
         var newRule, newEugeneRule;
         var operand2;
         
-        var parsedRules = Ext.create("Ext.data.Store", { model: "Teselagen.models.EugeneRule" });
+        var parsedRules = [];//Ext.create("Ext.data.Store", { model: "Teselagen.models.EugeneRule" });
 
 
         var conflictRules = [];
@@ -698,146 +697,112 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             newEugeneRule.set("operand2Number",newRule.operand2Number);
                         }
 
-                        parsedRules.add(newEugeneRule);
+                        parsedRules.push(newEugeneRule);
                     }
                 }
             }
         });
         
-        var checkForDuplicatedName = function(parsedRule,cb){
-            var rulesCounter = existingRules.count();
-            var duplicated = false;
-            var duplicatedRule;
-            if(rulesCounter === 0) {cb(duplicated,duplicatedRule);}
-            existingRules.each(function(existingRule){
-                if(
-                    parsedRule.data.name === existingRule.data.name
-                )
-                {
-                    duplicated = true;
-                    duplicatedRule = existingRule;
-                    rulesCounter--;
-                }
-                else
-                {
-                    rulesCounter--;
-                }
-                if(rulesCounter === 0) {cb(duplicated,duplicatedRule);}
-            });
-        };
-    
-        var checkForConflicts = function(rule,cb){
-
-            checkForDuplicatedName(rule,function(dup,existingRule){
-                if(dup) {
-                    var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
-                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+rule.data.name+"_1"});
-                    rule.set("name",rule.data.name+"_1");
-                    rule.set("originalRuleLine",rule.get("originalRuleLine").replace(existingRule.get("name"),rule.get("name")));
-                }
-                return cb(dup);
-            });
-        };
-
-        var checkForRepeatedRule = function(parsedRule,cb){
-            var rulesCounter = existingRules.count();
-            var duplicated = false;
-            if(rulesCounter === 0) {cb(duplicated);}
-            existingRules.each(function(existingRule){
-                if(
+        var ruleDuplNameMap = {};
+        var fullNamesArray = [];
+        for(var i=0;i<parsedRules.length;i++) {
+        	var parsedRule = parsedRules[i];
+        	var repeated = false;
+        	var nameConflict = false;
+        	for(var j=0;j<existingRules.count();j++) {
+        		var existingRule = existingRules.getAt(j);
+        		if(
                     parsedRule.data.operand1_id === existingRule.data.operand1_id &&
                     parsedRule.data.operand2_id === existingRule.data.operand2_id &&
                     parsedRule.data.negationOperator === existingRule.data.negationOperator &&
                     parsedRule.data.operand2isNumber === existingRule.data.operand2isNumber &&
                     parsedRule.data.operand2Number === existingRule.data.operand2Number &&
                     parsedRule.data.compositionalOperator === existingRule.data.compositionalOperator
-                )
-                {
-                    console.log("AAA");
-                	duplicated = true;
-                    rulesCounter--;
-                }
-                else
-                {
-                	console.log("BBB");
-                	rulesCounter--;
-                }
-                if(rulesCounter === 0) {console.log("CCC"); cb(duplicated);}
-            });
-        };
-
-
-        var endEugeneRulesProcessing = function(){
-        	
-	        var eugeneRulesImportWindow = Ext.create("Vede.view.de.EugeneRulesImportDialog").show();
-	
-	        eugeneRulesImportWindow.down("grid[name='new']").reconfigure(newRules);
-	
-	        var conflictRulesStore = new Ext.data.ArrayStore({
-	                fields: [
-	                   {name: "originalRuleLine"}
-	                ]
-	            });
-	        conflictRulesStore.loadData(conflictRules);
-	        eugeneRulesImportWindow.down("grid[name='conflict']").reconfigure(conflictRulesStore);
-	
-	        var ignoredRulesStore = new Ext.data.ArrayStore({
-	                fields: [
-	                   {name: "originalRuleLine"}
-	                ]
-	            });
-	        ignoredRulesStore.loadData(ignoredLines);
-	        eugeneRulesImportWindow.down("grid[name='ignored']").reconfigure(ignoredRulesStore);
-	
-	        var repeatedRulesStore = new Ext.data.ArrayStore({
-	                fields: [
-	                   {name: "originalRuleLine"}
-	                ]
-	            });
-	        repeatedRulesStore.loadData(repeatedRules);
-	        eugeneRulesImportWindow.down("grid[name='repeated']").reconfigure(repeatedRulesStore);
-	
-	        eugeneRulesImportWindow.down("button[text='Ok']").on("click", function() {
-	            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
-	
-	            // Load the Eugene Rules in the Design
-	            newRules.each(function(rule){
-	                design.addToRules(rule);
-	            });
-	            eugeneRulesImportWindow.close();
-	        });
-	
-	        eugeneRulesImportWindow.down("button[text='Cancel']").on("click", function() {
-	            eugeneRulesImportWindow.close();
-	        });
-
-        };
-
-        var processedRules = parsedRules.count();
+                ) {
+        			repeatedRules.push({"originalRuleLine": parsedRule.data.originalRuleLine});
+        			repeated = true;
+        			break;
+        		} else if(parsedRule.data.name === existingRule.data.name) {		
+        			nameConflict = true;
+        		} 
+        	}
+        	if(!repeated && !nameConflict) {
+    			newRules.add(parsedRule);
+    			fullNamesArray.push(parsedRule.get("name"));
+    		} else if(nameConflict && !repeated) {
+    			ruleDuplNameMap[parsedRule.data.name] = parsedRule;
+    		}
+        }
         
-        parsedRules.each(function(parsedRule)
-        {
-        	//sconsole.log("processing: ",parsedRule.data.name);
-            checkForRepeatedRule(parsedRule,function(repeated){
-            	if(repeated)
-                {
-            		repeatedRules.push({"originalRuleLine":parsedRule.data.originalRuleLine});
-                    processedRules--;
-                    if(processedRules === 0) {endEugeneRulesProcessing();}
-                }
-                else
-                {
-                    checkForConflicts(parsedRule,function(){
-                    	console.log("ybbjdfhj");
-                    	newRules.add(parsedRule);
-                        processedRules--;
-                        if(processedRules === 0) {endEugeneRulesProcessing();}
-                    });
-                }
+        if(!$.isEmptyObject(ruleDuplNameMap)) {
+        	for(var i=0;i<existingRules.count();i++) {
+        		fullNamesArray.push(existingRules.getAt(i).get("name"));
+        	}
+        	
+        	var existingSuffixes = {};
+	        for(var name in ruleDuplNameMap) {
+	        	var nameRegex = new RegExp("^"+(name+"_").replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")+"(\\d+)$");
+		        for(var i=0;i<fullNamesArray.length;i++) {
+		        	var match = nameRegex.exec(fullNamesArray[i]);
+		        	if(match && Number(match[1])) {
+		        		var maxNum = existingSuffixes[name];
+		        		existingSuffixes[name] = (maxNum>Number(match[1])) ? maxNum : Number(match[1]);
+		        	}
+		        }
+	        }
+	        for(var oldName in existingSuffixes) {
+	        	var rule = ruleDuplNameMap[oldName];
+	        	var newName = oldName+"_"+(existingSuffixes[oldName]+1);
+	        	var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
+	            conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
+	            rule.set("name", newName);
+	            rule.set("originalRuleLine",rule.get("originalRuleLine").replace(existingRule.get("name"),rule.get("name")));
+	            newRules.add(rule);
+	        }
+	        
+        }
+    	
+        var eugeneRulesImportWindow = Ext.create("Vede.view.de.EugeneRulesImportDialog").show();
+
+        eugeneRulesImportWindow.down("grid[name='new']").reconfigure(newRules);
+
+        var conflictRulesStore = new Ext.data.ArrayStore({
+                fields: [
+                   {name: "originalRuleLine"}
+                ]
             });
+        conflictRulesStore.loadData(conflictRules);
+        eugeneRulesImportWindow.down("grid[name='conflict']").reconfigure(conflictRulesStore);
+
+        var ignoredRulesStore = new Ext.data.ArrayStore({
+                fields: [
+                   {name: "originalRuleLine"}
+                ]
+            });
+        ignoredRulesStore.loadData(ignoredLines);
+        eugeneRulesImportWindow.down("grid[name='ignored']").reconfigure(ignoredRulesStore);
+
+        var repeatedRulesStore = new Ext.data.ArrayStore({
+                fields: [
+                   {name: "originalRuleLine"}
+                ]
+            });
+        repeatedRulesStore.loadData(repeatedRules);
+        eugeneRulesImportWindow.down("grid[name='repeated']").reconfigure(repeatedRulesStore);
+
+        eugeneRulesImportWindow.down("button[text='Ok']").on("click", function() {
+            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
+            // Load the Eugene Rules in the Design
+            newRules.each(function(rule){
+                design.addToRules(rule);
+            });
+            eugeneRulesImportWindow.close();
         });
-
-
+        
+        eugeneRulesImportWindow.down("button[text='Cancel']").on("click", function() {
+            eugeneRulesImportWindow.close();
+        });
     },
     
     /**
