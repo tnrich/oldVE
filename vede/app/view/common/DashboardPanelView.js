@@ -642,10 +642,16 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        flex: 1,
                                         text: 'Source Sequence',
                                         width: 80,
                                         dataIndex: 'partSource'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Features in Range',
+                                        width: 80,
+                                        dataIndex: 'features'
                                     }
                                 ]
                             }
