@@ -162,5 +162,5 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 event.preventDefault;
             }
             }
-        }
+        }]
 });
