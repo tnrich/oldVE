@@ -46,22 +46,6 @@ Ext.define("Teselagen.manager.UserManager", {
         });
         var user = userStore.first();
         this.setUser(user);
-
-        var parts = user.parts().getRange();
-        var sequenceId;
-
-        debugger;
-
-        // When the user's parts store is loaded, the parts have sequencefile_id
-        // fields, but the getSequenceFile method returns null. We iterate through
-        // the parts and call each one's setSequenceFile method as a fix.
-        for(var i = 0; i < parts.length; i++) {
-            sequenceId = parts[i].get("sequencefile_id");
-
-            if(sequenceId && !part.getSequenceFile()) {
-                part.setSequenceFile(user.sequences().getById(sequenceId));
-            }
-        }
     },
     
     /**

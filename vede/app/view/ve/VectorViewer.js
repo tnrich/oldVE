@@ -13,6 +13,21 @@ Ext.define("Vede.view.ve.VectorViewer", {
     part: null,
     sequenceFile: null,
     viewManager: null,
+    listeners: {
+        click: {
+            element: "el",
+            fn: function() {
+                if(this.sequenceFile) {
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
+                                               this.sequenceFile);
+                } else if(this.part) {
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
+                                               this.part.getSequenceFile(), this.part);
+                }
+            }
+        }
+    },
+
     setPart: function(part) {
         this.part = part;
 

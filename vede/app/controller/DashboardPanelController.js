@@ -196,7 +196,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
         currentTab.el.unmask();
-
     },
 
     /**
@@ -239,7 +238,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onVectorViewerMouseLeave: function(event, target) {
-        if(event.getRelatedTarget().className.indexOf("grid") === -1) {
+        var target = event.getRelatedTarget();
+
+        if(!target || target.className.indexOf("grid") === -1) {
             this.VectorViewer.hide();
         }
     },

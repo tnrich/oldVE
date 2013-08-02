@@ -15,14 +15,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     title: 'Dashboard',
     items: [
             {
-            xtype: 'panel',
-            title: 'Dashboard',
-            border: 0,
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            items: [
+                xtype: 'panel',
+                title: 'Dashboard',
+                border: 0,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [
                     {
                         xtype: 'container',
                         flex: 0.3,
