@@ -127,7 +127,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
       }
   },
 
-  onSequenceGridItemClick: function(row,record) {
+    onSequenceGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
         currentTab.el.mask("Loading Sequence", "loader rspin")
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
@@ -153,7 +153,39 @@ Ext.define("Vede.controller.DashboardPanelController", {
         //        currentTab.el.unmask();
         //    }, 10);
         //});
-  },
+    },
+
+    /**
+     * Show the vector viewer when the mouse moves over a part in the grid, if
+     * the part has a valid sequence file.
+     */
+    onSequenceGridItemMouseEnter: function(grid, sequenceFile, el, index, event) {
+        var boundingRect = el.getBoundingClientRect();
+
+        if(!this.VectorViewer) {
+            this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
+
+            this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
+        }
+
+        this.VectorViewer.show();
+        this.VectorViewer.setSequenceFile(sequenceFile);
+        this.VectorViewer.setPosition(boundingRect.left, boundingRect.top);
+    },
+
+    /**
+     * Hide the vector viewer when the mouse leaves the current grid
+     * element, as long as the mouse isn't moving into the vector viewer itself.
+     */
+    onSequenceGridItemMouseLeave: function(grid, part, el, index, event) {
+        if(this.VectorViewer) {
+            var movingToElement = event.getRelatedTarget();
+
+            if(!movingToElement || movingToElement.id.indexOf("vectorviewer") === -1) {
+                this.VectorViewer.hide();
+            }
+        }
+    },
 
     onPartGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
@@ -164,7 +196,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
         currentTab.el.unmask();
-
     },
 
     /**
@@ -177,6 +208,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
         if(part.getSequenceFile()) {
             if(!this.VectorViewer) {
                 this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
+
+                this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
             }
 
             this.VectorViewer.show();
@@ -201,6 +234,14 @@ Ext.define("Vede.controller.DashboardPanelController", {
             if(!movingToElement || movingToElement.id.indexOf("vectorviewer") === -1) {
                 this.VectorViewer.hide();
             }
+        }
+    },
+
+    onVectorViewerMouseLeave: function(event, target) {
+        var target = event.getRelatedTarget();
+
+        if(!target || target.className.indexOf("grid") === -1) {
+            this.VectorViewer.hide();
         }
     },
 
@@ -231,12 +272,14 @@ Ext.define("Vede.controller.DashboardPanelController", {
       				itemclick: this.onLastDEProjectsItemClick
       			},
             "gridpanel[name='SequenceLibraryGrid']": {
-                itemclick: this.onSequenceGridItemClick
+                itemclick: this.onSequenceGridItemClick,
+                itemmouseenter: this.onSequenceGridItemMouseEnter,
+                itemmouseleave: this.onSequenceGridItemMouseLeave
             },
             "gridpanel[name='PartLibraryGrid']": {
                 itemclick: this.onPartGridItemClick,
                 itemmouseenter: this.onPartGridItemMouseEnter,
-                itemmouseleave: this.onPartGridItemMouseLeave,
+                itemmouseleave: this.onPartGridItemMouseLeave
             },
             "dropZone[name='dropZone']": {
                 drop: this.onDropFile
