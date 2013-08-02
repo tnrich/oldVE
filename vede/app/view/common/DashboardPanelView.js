@@ -541,8 +541,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             val = Ext.Date.format(val, "F d, Y g:i A");
                                             return val;
                                         }
-                                    },
+                                    }
+                                    
                                     ]
+                            },
+                            {
+                                xtype: "dropZone",
+                                name: "dropZone"
                             }
                         ]
                     }
