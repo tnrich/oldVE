@@ -1,11 +1,12 @@
 /*global after, before, describe, expect, it, process*/
 var browser = process.env.BROWSER || "phantomjs";
+var url = process.env.URL || "http://teselagen.local"
 var driver = require("../../module/webdriverjs").getDriver(browser);
 
 describe("Regression test", function(){
     before(function(pDone) {
         driver.init();
-        driver.url("http://teselagen.local/", pDone);
+        driver.url(url, pDone);
     });
  
     it("should login", function(pDone) {
