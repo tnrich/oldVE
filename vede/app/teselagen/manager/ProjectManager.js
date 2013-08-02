@@ -64,13 +64,31 @@ Ext.define("Teselagen.manager.ProjectManager", {
             var sequencesStore = self.currentUser.sequences().load(
                function (sequences, operation, success){
                    self.sequences = sequencesStore;
-               }
-            );
 
-            var partsStore = self.currentUser.parts().load(
-                function (parts, operation, success){
-                    self.parts = partsStore;
-                }
+
+                    var partsStore = self.currentUser.parts().load(
+                        function (parts, operation, success){
+                            self.parts = partsStore;
+
+                            var parts = self.parts.getRange();
+                            var sequenceId;
+                            
+                            // When the user's parts store is loaded, the parts have sequencefile_id
+                            // fields, but the getSequenceFile method returns null. We iterate through
+                            // the parts and call each one's setSequenceFile method as a fix.
+                            for(var i = 0; i < parts.length; i++) {
+                                var part = parts[i];
+                                sequenceId = parts[i].get("sequencefile_id");
+                                if(sequenceId && !part.getSequenceFile()) {
+                                    part.setSequenceFile(user.sequences().getById(sequenceId));
+                                }
+                            }
+
+
+                        }
+                    );
+
+               }
             );
 
         });
