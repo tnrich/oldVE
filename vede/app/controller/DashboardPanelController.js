@@ -168,8 +168,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
     onPartGridItemMouseEnter: function(grid, part, el, index, event) {
         var boundingRect = el.getBoundingClientRect();
 
-        console.log("mouseenter " + part.get("name"));
-
         if(part.getSequenceFile()) {
             if(!this.VectorViewer) {
                 this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
@@ -191,7 +189,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
      * element, as long as the mouse isn't moving into the vector viewer itself.
      */
     onPartGridItemMouseLeave: function(grid, part, el, index, event) {
-        console.log("mouseleave " + part.get("name"));
         if(this.VectorViewer) {
             var movingToElement = event.getRelatedTarget();
 

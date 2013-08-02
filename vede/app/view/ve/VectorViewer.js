@@ -10,6 +10,8 @@ Ext.define("Vede.view.ve.VectorViewer", {
     floating: true,
     width: 320,
     height: 320,
+    part: null,
+    viewManager: null,
     setPart: function(part) {
         this.part = part;
         this.setTitle(part.get("name"));
@@ -33,19 +35,22 @@ Ext.define("Vede.view.ve.VectorViewer", {
                         }
                     }
 
-                    var viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
-                        sequenceManager: sequenceManager,
-                        center: {
-                            x: 100,
-                            y: 100
-                        },
-                        railRadius: 70,
-                        features: sequenceManager.getFeatures()
-                    });
+                    if(!this.viewManager) {
+                        this.viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
+                            sequenceManager: sequenceManager,
+                            center: {
+                                x: 100,
+                                y: 100
+                            },
+                            railRadius: 70
+                        });
+                    } else {
+                        this.viewManager.setSequenceManager(sequenceManager);
+                    }
 
-                    viewManager.initPie(self.down());
-                    viewManager.updateNameBox();
-                    viewManager.render();
+                    this.viewManager.initPie(self.down());
+                    this.viewManager.updateNameBox();
+                    this.viewManager.render();
                 }
             }
         });

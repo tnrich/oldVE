@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.manager.VectorViewerManager
- * Basically a scaled-down version of PieManager. To be used for the read-only
+ * Basically a scaled-down version of PieManager and RailManager. To be used for the read-only
  * Vector Viewer.
  * @author Nick Elsbree
  */
@@ -23,13 +23,25 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
-            featureSVG: this.featureSVG,
-            sequenceManager: this.getSequenceManager(),
-            center: this.getCenter(),
-            railRadius: this.getRailRadius(),
-            features: this.getFeatures()
-        });
+        this.setFeatures(inData.sequenceManager.getFeatures());
+
+        if(this.getSequenceManager().getCircular()) {
+            this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+                featureSVG: this.featureSVG,
+                sequenceManager: this.getSequenceManager(),
+                center: this.getCenter(),
+                railRadius: this.getRailRadius(),
+                features: this.getSequenceManager().getFeatures()
+            });
+        } else {
+            this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+                featureSVG: this.featureSVG,
+                sequenceManager: this.getSequenceManager(),
+                center: this.getCenter(),
+                railRadius: this.getRailRadius(),
+                features: this.getSequenceManager().getFeatures()
+            });
+        }
     },
 
     render: function() {
@@ -52,7 +64,7 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
      * scrollbar appears.
      */
     fitWidthToContent: function(scrollToCenter) {
-        var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='VectorViewer']");
+        /*var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='VectorViewer']");
 
         if(container && container.el) {
             var pc = container.el.dom;
@@ -101,7 +113,7 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                 container.el.setScrollLeft(scrollWidthRatio * pc.scrollWidth - pcRect.width / 2);
                 container.el.setScrollTop(scrollHeightRatio * pc.scrollHeight - pcRect.height / 2);
             }
-        }
+        }*/
     },
 
     initPie: function(vectorViewer) {
@@ -109,6 +121,9 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
         // If there's no SVG in the current tab, VE hasn't been rendered yet, so
         // add svg elements. Otherwise, just set this.pie to the pie in this tab,
         // and so on.
+
+
+
         if(!d3.select("#" + vectorViewerId + " .VectorViewer").node()) {
             this.pie = d3.select("#" + vectorViewerId)
                          .append("svg:svg")
@@ -145,9 +160,6 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
 
             this.featureSVG = this.parentSVG.append("svg:g")
                                       .attr("class", "vectorViewerFeature");
-            this.featureRenderer.setFeatureSVG(this.featureSVG);
-
-            this.fitWidthToContent(this, false);
         } else {
             this.pie = d3.select("#" + vectorViewerId + " .VectorViewer");
 
@@ -156,9 +168,9 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
             this.frame = this.parentSVG.select(".pieFrame");
             this.nameBox = this.parentSVG.select(".pieNameBox");
             this.featureSVG = this.parentSVG.select(".vectorViewerFeature");
-
-            this.featureRenderer.setFeatureSVG(this.featureSVG);
         }
+
+        this.featureRenderer.setFeatureSVG(this.featureSVG);
     },
 
     updateNameBox: function() {
