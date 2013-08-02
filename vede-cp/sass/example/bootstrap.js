@@ -159,6 +159,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.DataView.Animated": [],
   "Vede.view.ve.VectorEditorStatusPanel": [],
   "Teselagen.event.SequenceManagerEvent": [],
+  "Vede.view.common.dropZone": [],
   "Teselagen.renderer.rail.Layer": [],
   "Teselagen.bio.sequence.alphabets.RNAAlphabet": [],
   "Vede.view.de.DeviceEditorMenuPanel": [],
@@ -206,6 +207,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.common.ProjectPanelGrid": [],
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
+  "Teselagen.manager.VectorViewerManager": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
   "Teselagen.store.ErrorsStore": [],
   "Ext.ux.ajax.DataSimlet": [],
@@ -586,6 +588,9 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.VectorEditorStatusPanel"
   ],
   "Teselagen.event.SequenceManagerEvent": [],
+  "Vede.view.common.dropZone": [
+    "widget.dropZone"
+  ],
   "Teselagen.renderer.rail.Layer": [],
   "Teselagen.bio.sequence.alphabets.RNAAlphabet": [],
   "Vede.view.de.DeviceEditorMenuPanel": [
@@ -655,6 +660,7 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
+  "Teselagen.manager.VectorViewerManager": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
   "Teselagen.store.ErrorsStore": [],
   "Ext.ux.ajax.DataSimlet": [],

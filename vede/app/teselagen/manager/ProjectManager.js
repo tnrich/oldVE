@@ -173,15 +173,19 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var dashPanel = Ext.getCmp("DashboardPanel");
 
         var parts = this.parts;
-
-        for(var z=0; z<parts.length; z++) {
-            if(parts[z].getSequenceFile()) {
-                var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id);
-                if(sequence) parts[z].data.partSource = sequence.data.name;
+        parts.each(function(part) {
+            if(part.getSequenceFile()) {
+                var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(part.data.sequencefile_id);
+                var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+                var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
+                // debugger;
+                console.log(features);
+                if(sequence) part.data.partSource = sequence.data.name;
             } else {
-                parts[z].set("partSource", "");
+                part.set("partSource", "");
             }
-        }
+        });
+
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
         if(partGrid) partGrid.reconfigure(parts);
 

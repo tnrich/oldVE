@@ -151,6 +151,11 @@ Ext.define("Teselagen.models.Part", {
         defaultValue: ""
     },
     {
+        name: "features",
+        type: "string",
+        defaultValue: ""
+    },
+    {
         name: "user_id",
         type: "long"
     }

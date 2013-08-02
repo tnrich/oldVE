@@ -9,7 +9,6 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
         type: 'vbox',
         align: 'stretch'
     },
-    closeAction: "close",
     items: [
         {
             xtype: 'textfield',
@@ -164,12 +163,4 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             }
             }
         }
-        ],
-    listeners: {
-        "close": function(win) {
-            var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-            var currentTabEl = (currentTab.getEl());
-            currentTabEl.unmask(); 
-        }
-    }
 });
