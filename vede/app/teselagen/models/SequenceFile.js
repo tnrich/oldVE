@@ -59,7 +59,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             // GET SPECIFIC SEQUENCE WITHOUT ID!
             if( request.operation.action === "read" && !request.operation.filters && !request.params.id)
             {
-                console.warn("Trying to read sequence with no given id");
                 var url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
@@ -73,7 +72,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
             }
 
-            console.warn("No sequence url generated");
 
         }
     },
@@ -392,7 +390,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             end = jbei["seq:seq"]["seq:sequence"].length;
         } else if (format === constants.SBOLXML) {
             var sbol = Teselagen.bio.parsers.ParsersManager.sbolXmlToJson(content);
-            console.log(sbol);
             console.warn("Finding length for SBOL file not determined yet");
             end = -1;
         } else {}
@@ -403,7 +400,6 @@ Ext.define("Teselagen.models.SequenceFile", {
     getSequenceManager: function(){
         var data = this.get("serialize");
         if(!data || data === "") {
-            console.log("No data");
             return null;
         }
         else
@@ -417,7 +413,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     setSequenceManager: function(sequenceManager){
         var data = sequenceManager.serialize();
-        console.log(data);
         this.set("serialize",JSON.stringify(data));
     },
 
@@ -427,11 +422,9 @@ Ext.define("Teselagen.models.SequenceFile", {
         Ext.getClassName( context.model ) === "Teselagen.manager.SequenceManager" )
         {
             this.setSequenceManager( context.model );
-            console.log("Saved SequenceManager in context into model");
         }
         else
         {
-            console.log("Context not found");
         }
     }
 });

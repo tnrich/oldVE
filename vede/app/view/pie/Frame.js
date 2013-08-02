@@ -4,8 +4,7 @@
  */
 Ext.define('Vede.view.pie.Frame', {
     statics: {
-        OUTER_RADIUS: 100,
-        INNER_RADIUS: 97,
+        INNER_RADIUS_OFFSET: 3,
         OUTLINE_WIDTH: 0.5,
         OUTLINE_COLOR: "#8F8F8F",
         RING_COLOR: "#ffffb3" // The color of the area between the two circles.
@@ -13,8 +12,8 @@ Ext.define('Vede.view.pie.Frame', {
 
     constructor: function(inData) {
         var center = inData.center;
-        var outerRadius = this.self.OUTER_RADIUS;
-        var innerRadius = this.self.INNER_RADIUS;
+        var outerRadius = inData.radius;
+        var innerRadius = outerRadius - this.self.INNER_RADIUS_OFFSET;
         var outerStartPoint = {x: center.x - outerRadius, y: center.y};
         var innerStartPoint = {x: center.x - innerRadius, y: center.y};
 

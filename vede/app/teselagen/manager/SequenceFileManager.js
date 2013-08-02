@@ -77,6 +77,9 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
         default:
             console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
         }
+
+        pSequenceFile.setSequenceManager(seqMan);
+
         return seqMan;
     }
 
