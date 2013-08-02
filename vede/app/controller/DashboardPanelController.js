@@ -205,6 +205,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
 
+    onDropFile: function(files){
+      Teselagen.bio.parsers.ParsersManager.parseAndImportFiles(files);
+    },
+
 
 	init: function () {
     this.ProjectEvent = Teselagen.event.ProjectEvent;
@@ -225,6 +229,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
           itemmouseenter: this.onPartGridItemMouseEnter,
           itemmouseleave: this.onPartGridItemMouseLeave,
       },
+      "dropZone[name='dropZone']": {
+          drop: this.onDropFile
+      }
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}

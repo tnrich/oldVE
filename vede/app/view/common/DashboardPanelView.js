@@ -529,6 +529,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             }
                                         ]
                                     },
+                                    {
+                                        xtype: "dropZone",
+                                        name: "dropZone"
+                                    }
                                     // {
                                     //     xtype: "panel",
                                     //     border: 0,

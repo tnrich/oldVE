@@ -20,7 +20,8 @@ Ext.define('Vede.view.AppViewport', {
         'Vede.view.ve.VectorEditorPanel',
         'Vede.view.j5.AnalysisPanel',
         'Vede.view.j5Report.j5ReportPanel',
-        "Vede.view.HelpWindow"
+        "Vede.view.HelpWindow",
+        "Vede.view.common.dropZone"
     ],
 
     initComponent: function() {
@@ -51,11 +52,7 @@ Ext.define('Vede.view.AppViewport', {
                                     Vede.application.fireEvent("PopulateStats");
                                 }
                             }
-                        },
-
-                        /*{
-                            xtype: 'VectorEditorPanel'
-                        }*/
+                        }
                     ]
                 }
             ]
