@@ -10,6 +10,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.event.SequenceManagerEvent", 
                "Teselagen.store.UserStore", 
                "Teselagen.manager.SessionManager", 
+               "Teselagen.manager.SequenceManager", 
                "Teselagen.manager.DeviceDesignManager", 
                "Teselagen.utils.FormatUtils", 
                "Teselagen.models.J5Bin", 
@@ -159,7 +160,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         if(parts[z].getSequenceFile()) {
                             parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
                         } else {
-                            parts[z].set("partSource", "None");
+                            parts[z].set("partSource", "");
                         }
                     }
                     partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
