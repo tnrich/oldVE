@@ -23252,7 +23252,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   font-style: normal;
   font-weight: normal;
   src: url("/fonts/MavenPro-Regular.ttf");
-  src: local("Raleway"), local("Raleway"), url("/fonts/MavenPro-Regular.ttf") format("truetype");
+  src: local("Maven Pro"), local("Maven Pro"), url("/fonts/MavenPro-Regular.ttf") format("truetype");
 }
 
 /* line 13, ../../../../sass/src/view/AppViewport.scss */
@@ -23395,7 +23395,7 @@ img {
 /* line 128, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-row-selected .x-grid-cell, .x-grid-row-selected .x-grid-rowwrap-div, .x-grid-row-selected .x-grid-cell-rowbody {
   border: 0 none;
-  background: #E0E3E6 !important;
+  background: #ECF0F1 !important;
 }
 
 /* line 133, ../../../../sass/src/view/AppViewport.scss */
@@ -23508,7 +23508,7 @@ img {
 }
 
 /* line 225, ../../../../sass/src/view/AppViewport.scss */
-#VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
+.VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -23516,14 +23516,14 @@ img {
 }
 
 /* line 232, ../../../../sass/src/view/AppViewport.scss */
-#VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
-  border-color: #1585C5;
-  background-image: none;
-  background: #ECF0F1;
+.VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
+  border-color: #1585C5 !important;
+  background-image: none !important;
+  background: #ECF0F1 !important;
 }
 
 /* line 238, ../../../../sass/src/view/AppViewport.scss */
-#VectorEditorMainToolBar .x-btn-default-toolbar-medium-active, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-menu-active, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-pressed, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-focused, #VectorEditorMainToolBar .x-btn-default-toolbar-medium-focus {
+.VectorEditorMainToolBar .x-btn-default-toolbar-medium-active, .VectorEditorMainToolBar .x-btn-default-toolbar-medium-menu-active, .VectorEditorMainToolBar .x-btn-default-toolbar-medium-pressed, .VectorEditorMainToolBar .x-btn-default-toolbar-medium-focused, .VectorEditorMainToolBar .x-btn-default-toolbar-medium-focus {
   border-color: #1585C5;
   background-image: none;
   background: #E0E3E6;

@@ -132,7 +132,8 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
         part.getSequenceFile({
             callback: function (loadedsequence) {
                 //Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openSequence(loadedsequence);
+                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, loadedsequence, part);
+                // Teselagen.manager.ProjectManager.openSequence(loadedsequence);
                 if(typeof (cb) === "function") {cb(); }
             }
         });   
