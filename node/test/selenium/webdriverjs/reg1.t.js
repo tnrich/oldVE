@@ -25,7 +25,7 @@ describe("Regression test", function(){
     it("should create new project", function(pDone) {
         driver.waitFor("span.x-tree-node-text", 5000, function(err){
             expect(err).to.be.null;
-            driver.saveScreenshot("/tmp/screenshot.png", function(err) {
+            driver.saveScreenshot("screenshot.png", function(err) {
                 expect(err).to.be.null;
                 pDone();
             });
