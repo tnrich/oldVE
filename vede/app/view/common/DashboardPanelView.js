@@ -519,6 +519,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     return val;
                                                 }
                                             },
+                                            {
+                                                text     : 'alphabet',
+                                                width    : 75,
+                                                dataIndex: 'serialize',
+                                                renderer: function(value) {
+                                                    return value.sequence.alphabet;
+                                                }
+                                            }
                                         ]
                                     },
                                     // {

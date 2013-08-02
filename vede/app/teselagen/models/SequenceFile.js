@@ -199,7 +199,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     },
     {
         name: 'serialize', 
-        type: "string"
+        type: "auto"
     },
 
     ],
@@ -408,7 +408,8 @@ Ext.define("Teselagen.models.SequenceFile", {
         }
         else
         {
-            var decodedData = JSON.parse(data);
+            //var decodedData = JSON.parse(data);
+            var decodedData = data;
             var sequenceManager = Ext.create("Teselagen.manager.SequenceManager",decodedData.inData);
             sequenceManager.deSerialize(decodedData);
             return sequenceManager;
@@ -418,7 +419,8 @@ Ext.define("Teselagen.models.SequenceFile", {
     setSequenceManager: function(sequenceManager){
         var data = sequenceManager.serialize();
         //console.log(data);
-        this.set("serialize",JSON.stringify(data));
+        //this.set("serialize",JSON.stringify(data));
+        this.set("serialize",data);
     },
 
     processSequence: function(cb){
