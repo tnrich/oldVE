@@ -59,7 +59,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             // GET SPECIFIC SEQUENCE WITHOUT ID!
             if( request.operation.action === "read" && !request.operation.filters && !request.params.id)
             {
-                console.warn("Trying to read sequence with no given id");
                 var url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
@@ -73,7 +72,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
             }
 
-            console.warn("No sequence url generated");
 
         }
     },
@@ -199,7 +197,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     },
     {
         name: 'serialize', 
-        type: "string"
+        type: "auto"
     },
 
     ],
@@ -392,7 +390,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             end = jbei["seq:seq"]["seq:sequence"].length;
         } else if (format === constants.SBOLXML) {
             var sbol = Teselagen.bio.parsers.ParsersManager.sbolXmlToJson(content);
-            console.log(sbol);
             console.warn("Finding length for SBOL file not determined yet");
             end = -1;
         } else {}
@@ -403,13 +400,13 @@ Ext.define("Teselagen.models.SequenceFile", {
     getSequenceManager: function(){
         var data = this.get("serialize");
         if(!data || data === "") {
-            console.log("No data");
             return null;
         }
         else
         {
-            var decodedData = JSON.parse(data);
-            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager");
+            //var decodedData = JSON.parse(data);
+            var decodedData = data;
+            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager",decodedData.inData);
             sequenceManager.deSerialize(decodedData);
             return sequenceManager;
         }
@@ -417,20 +414,31 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     setSequenceManager: function(sequenceManager){
         var data = sequenceManager.serialize();
-        this.set("serialize",JSON.stringify(data));
+        //console.log(data);
+        //this.set("serialize",JSON.stringify(data));
+        this.set("serialize",data);
     },
 
-    saveSequenceManagerInContext: function(){
-        var context = Ext.getCmp("mainAppPanel").getActiveTab();
-        if( context.model &&
-        Ext.getClassName( context.model ) === "Teselagen.manager.SequenceManager" )
+    processSequence: function(cb){
+        if(!this.get("serialize") && this.get("sequenceFileContent"))
         {
-            this.setSequenceManager( context.model );
-            console.log("Saved SequenceManager in context into model");
+            if(this.get("sequenceFileFormat")==="Genbank")
+            {
+                var gb = Teselagen.utils.FormatUtils.fileToGenbank(this.get("sequenceFileContent"), "gb");
+                var seqMgr =  Teselagen.utils.FormatUtils.genbankToSequenceManager( gb );
+                if(seqMgr)
+                {
+                    this.setSequenceManager( seqMgr );
+                    return cb(false,seqMgr);
+                }
+                else return cb(true);
+            }
+            else
+            {
+                console.warn("not a genbank");
+                cb(true)
+            }
         }
-        else
-        {
-            console.log("Context not found");
-        }
+        else return cb(true);
     }
 });

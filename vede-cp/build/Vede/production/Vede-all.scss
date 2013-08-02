@@ -632,6 +632,7 @@ $include-teselagen-manager-tasksmonitor: true;
 $include-teselagen-manager-tracemanager: false;
 $include-teselagen-manager-usermanager: true;
 $include-teselagen-manager-vectoreditormanager: true;
+$include-teselagen-manager-vectorviewermanager: true;
 $include-teselagen-mappers-mapper: true;
 $include-teselagen-models-cell: true;
 $include-teselagen-models-dnafeature: false;
@@ -785,9 +786,11 @@ $include-vede-view-common-dashboardpanelview: true;
 $include-vede-view-common-headerpanelview: true;
 $include-vede-view-common-projectpanelgrid: false;
 $include-vede-view-common-projectpanelview: true;
+$include-vede-view-common-dropzone: true;
 $include-vede-view-de-deviceeditor: true;
 $include-vede-view-de-deviceeditorcanvaspanel: true;
 $include-vede-view-de-deviceeditormenupanel: true;
+$include-vede-view-de-deviceeditorpartlibrary: true;
 $include-vede-view-de-deviceeditorpartpanel: true;
 $include-vede-view-de-deviceeditorstatuspanel: true;
 $include-vede-view-de-deviceeditortitlepanel: true;
@@ -838,6 +841,7 @@ $include-vede-view-ve-vectoreditormaintoolbar: true;
 $include-vede-view-ve-vectoreditorpanel: true;
 $include-vede-view-ve-vectoreditorstatuspanel: true;
 $include-vede-view-ve-vectorpanel: true;
+$include-vede-view-ve-vectorviewer: true;
 /* including package ext-theme-base */
 @import '../../../ext/packages/ext-theme-base/sass/etc/all';
 /* including package ext-theme-neutral */

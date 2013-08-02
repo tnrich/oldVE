@@ -11,7 +11,13 @@ Ext.define("Vede.controller.DashboardPanelController", {
                "Teselagen.bio.parsers.ParsersManager",
                "Vede.view.ve.VectorViewer"],
 
-    CurrentVectorViewer: null,
+    VectorViewer: null,
+
+    onBeforeTabChange: function() {
+        if(this.VectorViewer) {
+            this.VectorViewer.hide();
+        }
+    },
 
 	onLastDEProjectsItemClick: function (item,record) {
 		Teselagen.manager.ProjectManager.openDeviceDesign(record);
@@ -121,13 +127,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
       }
   },
 
-  onSequenceGridItemClick: function(row,record) {
+    onSequenceGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
         currentTab.el.mask("Loading Sequence", "loader rspin")
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         var ext = record.data.sequenceFileName.split('.').pop();
-        //debugger;
         Ext.defer(function() {
             Teselagen.manager.ProjectManager.openSequence(record);
             currentTab.el.unmask();
@@ -148,9 +153,41 @@ Ext.define("Vede.controller.DashboardPanelController", {
         //        currentTab.el.unmask();
         //    }, 10);
         //});
-  },
+    },
 
-  onPartGridItemClick: function(row,record) {
+    /**
+     * Show the vector viewer when the mouse moves over a part in the grid, if
+     * the part has a valid sequence file.
+     */
+    onSequenceGridItemMouseEnter: function(grid, sequenceFile, el, index, event) {
+        var boundingRect = el.getBoundingClientRect();
+
+        if(!this.VectorViewer) {
+            this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
+
+            this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
+        }
+
+        this.VectorViewer.show();
+        this.VectorViewer.setSequenceFile(sequenceFile);
+        this.VectorViewer.setPosition(boundingRect.left, boundingRect.top);
+    },
+
+    /**
+     * Hide the vector viewer when the mouse leaves the current grid
+     * element, as long as the mouse isn't moving into the vector viewer itself.
+     */
+    onSequenceGridItemMouseLeave: function(grid, part, el, index, event) {
+        if(this.VectorViewer) {
+            var movingToElement = event.getRelatedTarget();
+
+            if(!movingToElement || movingToElement.id.indexOf("vectorviewer") === -1) {
+                this.VectorViewer.hide();
+            }
+        }
+    },
+
+    onPartGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
         currentTab.el.mask("Loading Sequence", "loader rspin")
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
@@ -159,53 +196,94 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
         currentTab.el.unmask();
+    },
 
-  },
-
-    onPartGridItemMouseEnter: function(grid, part, el) {
+    /**
+     * Show the vector viewer when the mouse moves over a part in the grid, if
+     * the part has a valid sequence file.
+     */
+    onPartGridItemMouseEnter: function(grid, part, el, index, event) {
         var boundingRect = el.getBoundingClientRect();
 
         if(part.getSequenceFile()) {
-            this.CurrentVectorViewer = Ext.create("Vede.view.ve.VectorViewer", {
-                title: part.get("name"),
-                part: part
-            }).show();
+            if(!this.VectorViewer) {
+                this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
 
-            this.CurrentVectorViewer.setPosition(boundingRect.left, boundingRect.top);
+                this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
+            }
+
+            this.VectorViewer.show();
+            this.VectorViewer.setPart(part);
+
+            this.VectorViewer.setPosition(boundingRect.left, boundingRect.top);
+        } else {
+            if(this.VectorViewer) {
+                this.VectorViewer.hide();
+            }
         }
     },
 
-  onPartGridItemMouseLeave: function(grid, part, el) {
-      this.CurrentVectorViewer.close();
-  },
+    /**
+     * Hide the vector viewer when the mouse leaves the current grid
+     * element, as long as the mouse isn't moving into the vector viewer itself.
+     */
+    onPartGridItemMouseLeave: function(grid, part, el, index, event) {
+        if(this.VectorViewer) {
+            var movingToElement = event.getRelatedTarget();
 
-  onLaunch: function () {
-      this.tabPanel = Ext.getCmp("mainAppPanel");
-      this.tabPanel.on("tabchange", this.populateStatisticts);
+            if(!movingToElement || movingToElement.id.indexOf("vectorviewer") === -1) {
+                this.VectorViewer.hide();
+            }
+        }
+    },
 
-      Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
-  },
+    onVectorViewerMouseLeave: function(event, target) {
+        var target = event.getRelatedTarget();
+
+        if(!target || target.className.indexOf("grid") === -1) {
+            this.VectorViewer.hide();
+        }
+    },
+
+    onLaunch: function () {
+        this.tabPanel = Ext.getCmp("mainAppPanel");
+        this.tabPanel.on("tabchange", this.populateStatisticts);
+
+        Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
+    },
+
+    onDropFile: function(files){
+      Teselagen.bio.parsers.ParsersManager.parseAndImportFiles(files);
+    },
 
 
 	init: function () {
-    this.ProjectEvent = Teselagen.event.ProjectEvent;
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-    this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
-    this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
-    this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
+        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
 
 		this.control({
-			"#designGrid_Panel": {
-				itemclick: this.onLastDEProjectsItemClick
-			},
-      "gridpanel[name='SequenceLibraryGrid']": {
-                itemclick: this.onSequenceGridItemClick
+            "#mainAppPanel": {
+                beforetabchange: this.onBeforeTabChange
             },
-      "gridpanel[name='PartLibraryGrid']": {
-          itemclick: this.onPartGridItemClick,
-          itemmouseenter: this.onPartGridItemMouseEnter,
-          itemmouseleave: this.onPartGridItemMouseLeave,
-      },
+      			"#designGrid_Panel": {
+      				itemclick: this.onLastDEProjectsItemClick
+      			},
+            "gridpanel[name='SequenceLibraryGrid']": {
+                itemclick: this.onSequenceGridItemClick,
+                itemmouseenter: this.onSequenceGridItemMouseEnter,
+                itemmouseleave: this.onSequenceGridItemMouseLeave
+            },
+            "gridpanel[name='PartLibraryGrid']": {
+                itemclick: this.onPartGridItemClick,
+                itemmouseenter: this.onPartGridItemMouseEnter,
+                itemmouseleave: this.onPartGridItemMouseLeave
+            },
+            "dropZone[name='dropZone']": {
+                drop: this.onDropFile
+            }
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}

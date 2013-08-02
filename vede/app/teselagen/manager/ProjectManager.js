@@ -10,6 +10,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.event.SequenceManagerEvent", 
                "Teselagen.store.UserStore", 
                "Teselagen.manager.SessionManager", 
+               "Teselagen.manager.SequenceManager", 
                "Teselagen.manager.DeviceDesignManager", 
                "Teselagen.utils.FormatUtils", 
                "Teselagen.models.J5Bin", 
@@ -63,13 +64,31 @@ Ext.define("Teselagen.manager.ProjectManager", {
             var sequencesStore = self.currentUser.sequences().load(
                function (sequences, operation, success){
                    self.sequences = sequencesStore;
-               }
-            );
 
-            var partsStore = self.currentUser.parts().load(
-                function (parts, operation, success){
-                    self.parts = partsStore;
-                }
+
+                    var partsStore = self.currentUser.parts().load(
+                        function (parts, operation, success){
+                            self.parts = partsStore;
+
+                            var parts = self.parts.getRange();
+                            var sequenceId;
+                            
+                            // When the user's parts store is loaded, the parts have sequencefile_id
+                            // fields, but the getSequenceFile method returns null. We iterate through
+                            // the parts and call each one's setSequenceFile method as a fix.
+                            for(var i = 0; i < parts.length; i++) {
+                                var part = parts[i];
+                                sequenceId = parts[i].get("sequencefile_id");
+                                if(sequenceId && !part.getSequenceFile()) {
+                                    part.setSequenceFile(user.sequences().getById(sequenceId));
+                                }
+                            }
+
+
+                        }
+                    );
+
+               }
             );
 
         });
@@ -153,19 +172,23 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openPartLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        this.currentUser.parts().load(
-                function (parts, operation, success){
-                    for(var z=0; z<parts.length; z++) {
-                        if(parts[z].getSequenceFile()) {
-                            parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
-                        } else {
-                            parts[z].set("partSource", "None");
-                        }
-                    }
-                    partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
-                    if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
-                }
-        );
+        var parts = this.parts;
+        parts.each(function(part) {
+            if(part.getSequenceFile()) {
+                var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(part.data.sequencefile_id);
+                var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+                var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
+                // debugger;
+                console.log(features);
+                if(sequence) part.data.partSource = sequence.data.name;
+            } else {
+                part.set("partSource", "");
+            }
+        });
+
+        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        if(partGrid) partGrid.reconfigure(parts);
+
 
         dashPanel.getActiveTab().el.unmask();
     },

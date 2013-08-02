@@ -44,7 +44,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                             part.set('sequencefile_id', sequence.data.id);
                             
                             part.save({
-                                callback: function () {
+                                success: function () {
                                     var now = new Date();
                                     nowTime = Ext.Date.format(now, "g:i:s A  ");
                                     nowDate = Ext.Date.format(now, "l, F d, Y");
@@ -52,6 +52,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                     toastr.options.onclick = null;
                                     toastr.info("Part Successfully Created");
+                                    Teselagen.manager.ProjectManager.parts.add(part);
                                 }
                             });
                         });
@@ -64,7 +65,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                 part.set('sequencefile_id', sequence.data.id);
 
                                 part.save({
-                                    callback: function () {
+                                    success: function () {
                                         var now = new Date();
                                         nowTime = Ext.Date.format(now, "g:i:s A  ");
                                         nowDate = Ext.Date.format(now, "l, F d, Y");
@@ -72,6 +73,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                         toastr.options.onclick = null;
                                         toastr.info("Part Sucessfully Created");
+                                        Teselagen.manager.ProjectManager.parts.add(part);
                                     }
                                 });
                             }
@@ -98,7 +100,11 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onOpenVectorEditor: function(seq, part){
-        var sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        if(seq.get("serialize")) {
+            var sequenceFileManager = seq.getSequenceManager();
+        } else {
+            var sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        }
         var self = this;
 
         Teselagen.manager.ProjectManager.checkDuplicatedTabs(seq, "VectorEditorPanel", function(tabPanel) {

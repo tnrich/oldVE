@@ -8,23 +8,137 @@ Ext.define("Vede.view.ve.VectorViewer", {
     alias: "widget.vectorviewer",
     cls: "VectorViewer",
     floating: true,
-    width: 250,
-    height: 250,
+    width: 320,
+    height: 320,
+    part: null,
+    sequenceFile: null,
+    viewManager: null,
     listeners: {
-        render: function() {
-            if(this.part.getSequenceFile()) {
-                var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(this.part.getSequenceFile());
+        click: {
+            element: "el",
+            fn: function() {
+                if(this.sequenceFile) {
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
+                                               this.sequenceFile);
+                } else if(this.part) {
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
+                                               this.part.getSequenceFile(), this.part);
+                }
+            }
+        }
+    },
 
-                var pieManager = Ext.create("Teselagen.manager.PieManager", {
+    setPart: function(part) {
+        this.part = part;
+
+        if(part) {
+            this.setSequenceFile(null);
+
+            this.setTitle(part.get("name"));
+            this.renderViewer();
+        }
+
+        return this;
+    },
+    setSequenceFile: function(sequenceFile) {
+        this.sequenceFile = sequenceFile;
+
+        if(sequenceFile) {
+            this.setPart(null);
+
+            this.setTitle(sequenceFile.get("name"));
+            this.renderViewer();
+        }
+
+        return this;
+    },
+    renderViewer: function() {
+        var self = this;
+        if(this.part) {
+            this.part.getSequenceFile({
+                callback: function(sequenceFile) {
+                    if(sequenceFile) {
+                        var sequenceManager = sequenceFile.getSequenceManager();
+
+                        if(!sequenceManager) {
+                            if(sequenceFile.get("sequenceFileContent")) {
+                                sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequenceFile);
+                            } else {
+                                self.hide();
+                                console.log("No sequence file content.");
+                                return;
+                            }
+                        }
+
+                        if(!this.viewManager) {
+                            this.viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
+                                sequenceManager: sequenceManager,
+                                center: {
+                                    x: 100,
+                                    y: 100
+                                },
+                                railRadius: 70,
+                                railWidth: 200,
+                                railHeight: 0,
+                                railGap: 0,
+                                reference: {
+                                    x: 0,
+                                    y: 50
+                                }
+                            });
+                        } else {
+                            this.viewManager.setSequenceManager(sequenceManager);
+                            this.viewManager.setFeatures(sequenceManager.getFeatures());
+                        }
+
+                        this.viewManager.init(self.down());
+                        this.viewManager.updateNameBox();
+                        this.viewManager.render();
+
+                        this.viewManager.select(self.part.get("genbankStartBP"),
+                                                self.part.get("endBP"));
+                    }
+                }
+            });
+        } else if(this.sequenceFile) {
+            var sequenceManager = this.sequenceFile.getSequenceManager();
+
+            if(!sequenceManager) {
+                if(sequenceFile.get("sequenceFileContent")) {
+                    sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(this.sequenceFile);
+                } else {
+                    self.hide();
+                    console.log("No sequence file content.");
+                    return;
+                }
+            }
+
+            if(!this.viewManager) {
+                this.viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
                     sequenceManager: sequenceManager,
                     center: {
-                        x: 125,
-                        y: 125
+                        x: 100,
+                        y: 100
+                    },
+                    railRadius: 70,
+                    railWidth: 200,
+                    railHeight: 0,
+                    railGap: 0,
+                    reference: {
+                        x: 0,
+                        y: 50
                     }
                 });
-
-                pieManager.initPie(this);
+            } else {
+                this.viewManager.setSequenceManager(sequenceManager);
+                this.viewManager.setFeatures(sequenceManager.getFeatures());
             }
+
+            this.viewManager.init(self.down());
+            this.viewManager.updateNameBox();
+            this.viewManager.render();
+        } else {
+            return;
         }
     }
 });

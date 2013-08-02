@@ -108,12 +108,23 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                     {
                         text: 'Delete',
                         cls: 'explorerMenuDeleteBtn',
+                        hidden: false,
                         listeners: {
                             click: function(item, e, opt) {
                                 Teselagen.manager.ProjectExplorerManager.onExplorerMenuItemClick(item, record);
                             }
                         }
-                    }]
+                    }],
+                    listeners: {
+                        beforerender: function() {
+                            if(record.data.hrefTarget == "part") {
+                                menu.items.items[1].hide();
+                            }
+                            if(record.data.hrefTarget == "j5reports" || record.data.text == "Parts" || record.data.text == "Create design") {
+                                menu.hide();
+                            }
+                        }
+                    }
                 });
                 menu.showAt(event.getXY());
                 event.stopEvent();

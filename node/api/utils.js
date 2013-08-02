@@ -71,20 +71,20 @@ module.exports = function(app) {
         var reqPart = JSON.parse(req.query.part);
         var reqSequence = req.query.sequence;
 
-        console.log(reqPart);
-
+        var User = app.db.model("User");
         var Part = app.db.model("part");
-        var Project = app.db.model("project");
 
-        Project.findById(reqPart.project_id, function(err,project){
+        User.findById(req.user._id)
+        .populate({ path: 'parts'})
+        .exec(function(err, user) {
             var FQDN_candidate = req.user.FQDN+'.'+reqPart.name;
 
             Part.generateDefinitionHash(req.user, reqPart, function(hash_candidate) {
                 var duplicatedName = false;
                 var identical = false;
                 var part;
-
-                Part.find({"project_id": reqPart.project_id, "user_id": reqPart.user_id}, function(err, parts) {
+                var parts = user.parts;
+                //Part.find({"user_id": reqPart.user_id}, function(err, parts) {
                     counter = parts.length;
                     for(var i = 0; i < parts.length; i++) {
                         part = parts[i];
@@ -113,9 +113,10 @@ module.exports = function(app) {
                             'type': 'success'
                         });
                     }
-                });
+                //});
             });
         });
+
     });
 
 

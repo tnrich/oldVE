@@ -80,7 +80,7 @@ Ext.define("Vede.controller.PartLibraryController", {
             }
         });
 
-        this.partLibraryStore = Teselagen.manager.ProjectManager.partLibrary;
+        this.partLibraryStore = Teselagen.manager.ProjectManager.parts;
 
         //this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onOpenPartLibrary, this);
 
