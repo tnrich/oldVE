@@ -160,7 +160,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(part.data.sequencefile_id);
                 var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
                 var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
-                debugger;
+                // debugger;
                 console.log(features);
                 if(sequence) part.data.partSource = sequence.data.name;
             } else {

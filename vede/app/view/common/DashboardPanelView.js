@@ -424,9 +424,22 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     align: 'stretch'
                 },
                 items: [
-                    {
-                        xtype: 'container'
-                    },
+                    // {
+                    //     xtype: 'button',
+                    //     id: 'dropzone-activate',
+                    //     cls: 'dropzone-activate-btn',
+                    //     overCls: 'dropzone-activate-btn-over',
+                    //     icon: '../../resources/images/ux/drop-import.png',
+                    //     iconCls: 'dropzone-activate-import-btn',
+                    //     text: 'Import Files',
+                    //     height: '35',
+                    //     width: '100',
+                    //     listeners: {
+                    //         click: function() {
+                    //             $("#dropZone-area").show();
+                    //         }
+                    //     }
+                    // },
                     {
                         xtype: 'container',
                         cls: 'sequenceLibraryContainer',
@@ -648,16 +661,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Source Sequence',
+                                        flex: 1,
                                         width: 80,
                                         dataIndex: 'partSource'
                                     },
-                                    {
-                                        xtype: 'gridcolumn',
-                                        flex: 1,
-                                        text: 'Features in Range',
-                                        width: 80,
-                                        dataIndex: 'features'
-                                    }
+                                    // {
+                                    //     xtype: 'gridcolumn',
+                                    //     flex: 1,
+                                    //     text: 'Features in Range',
+                                    //     width: 80,
+                                    //     dataIndex: 'features'
+                                    // }
                                 ]
                             }
                         ]
