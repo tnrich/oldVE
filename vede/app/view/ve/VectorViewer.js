@@ -31,6 +31,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
                             sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequenceFile);
                         } else {
                             self.hide();
+                            console.log("No sequence file content.");
                             return;
                         }
                     }
@@ -42,15 +43,25 @@ Ext.define("Vede.view.ve.VectorViewer", {
                                 x: 100,
                                 y: 100
                             },
-                            railRadius: 70
+                            railRadius: 70,
+                            railWidth: 200,
+                            railHeight: 0,
+                            railGap: 0,
+                            reference: {
+                                x: 0,
+                                y: 50
+                            }
                         });
                     } else {
                         this.viewManager.setSequenceManager(sequenceManager);
                     }
 
-                    this.viewManager.initPie(self.down());
+                    this.viewManager.init(self.down());
                     this.viewManager.updateNameBox();
                     this.viewManager.render();
+
+                    this.viewManager.select(self.part.get("genbankStartBP"),
+                                            self.part.get("endBP"));
                 }
             }
         });

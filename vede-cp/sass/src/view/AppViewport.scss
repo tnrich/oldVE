@@ -222,6 +222,10 @@ border-color: #E0E3E6;
   background:#E0E3E6;
 }
 
+.VectorEditorMainToolBar {
+  background: #F8F8F8 !important;
+}
+
 .VectorEditorMainToolBar .x-btn-default-toolbar-medium-over {
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;

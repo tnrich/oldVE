@@ -13,6 +13,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     VectorViewer: null,
 
+    onBeforeTabChange: function() {
+        if(this.VectorViewer) {
+            this.VectorViewer.hide();
+        }
+    },
+
 	onLastDEProjectsItemClick: function (item,record) {
 		Teselagen.manager.ProjectManager.openDeviceDesign(record);
 	},
@@ -211,27 +217,30 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
 
 	init: function () {
-    this.ProjectEvent = Teselagen.event.ProjectEvent;
+        this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-    this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
-    this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
-    this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
+        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
 
 		this.control({
-			"#designGrid_Panel": {
-				itemclick: this.onLastDEProjectsItemClick
-			},
-      "gridpanel[name='SequenceLibraryGrid']": {
+            "#mainAppPanel": {
+                beforetabchange: this.onBeforeTabChange
+            },
+      			"#designGrid_Panel": {
+      				itemclick: this.onLastDEProjectsItemClick
+      			},
+            "gridpanel[name='SequenceLibraryGrid']": {
                 itemclick: this.onSequenceGridItemClick
             },
-      "gridpanel[name='PartLibraryGrid']": {
-          itemclick: this.onPartGridItemClick,
-          itemmouseenter: this.onPartGridItemMouseEnter,
-          itemmouseleave: this.onPartGridItemMouseLeave,
-      },
-      "dropZone[name='dropZone']": {
-          drop: this.onDropFile
-      }
+            "gridpanel[name='PartLibraryGrid']": {
+                itemclick: this.onPartGridItemClick,
+                itemmouseenter: this.onPartGridItemMouseEnter,
+                itemmouseleave: this.onPartGridItemMouseLeave,
+            },
+            "dropZone[name='dropZone']": {
+                drop: this.onDropFile
+            }
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}
