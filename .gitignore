@@ -1,10 +1,11 @@
 *.swp
 *~
-node_modules
 # OS generated files #
 *.js.swp
+*.log
 *.un~
 log
+node_modules
 # OS generated files #
 ################
 .DS_Store
