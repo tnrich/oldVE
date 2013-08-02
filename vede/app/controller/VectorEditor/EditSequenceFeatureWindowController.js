@@ -186,7 +186,7 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
     			change: this.endFieldChange
     		}
     	});
-    	this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_EVENT,
+    	this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
                 this.onSequenceManagerChanged, this);
     	this.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, 
                 this.onPieAnnotationRightClicked, this);

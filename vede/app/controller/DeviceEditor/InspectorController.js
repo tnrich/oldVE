@@ -26,6 +26,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     selectedPartIndex: null,
     tabPanel: null,
+    partLibraryWindow: null,
 
     findBinByPart:function(findingPart,cb){
         var foundBin = null;
@@ -216,6 +217,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedCell) {
 	        Teselagen.manager.ProjectManager.currentUser.parts().load(
                 function (parts, operation, success){
+                currentTabEl.mask();
+                var self = this;
                 	for(var z=0; z<parts.length; z++) {
                         if(parts[z].getSequenceFile()) {
                             parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
@@ -224,8 +227,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
 
-                var selectWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary").show();
-                selectWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
+                self.partLibraryWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary", {renderTo: currentTabEl}).show();
+                self.partLibraryWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
 	        });
         }
     },

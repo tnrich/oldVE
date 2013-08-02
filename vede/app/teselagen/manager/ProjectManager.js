@@ -10,6 +10,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.event.SequenceManagerEvent", 
                "Teselagen.store.UserStore", 
                "Teselagen.manager.SessionManager", 
+               "Teselagen.manager.SequenceManager", 
                "Teselagen.manager.DeviceDesignManager", 
                "Teselagen.utils.FormatUtils", 
                "Teselagen.models.J5Bin", 
@@ -153,19 +154,19 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openPartLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        this.currentUser.parts().load(
-                function (parts, operation, success){
-                    for(var z=0; z<parts.length; z++) {
-                        if(parts[z].getSequenceFile()) {
-                            parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
-                        } else {
-                            parts[z].set("partSource", "None");
-                        }
-                    }
-                    partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
-                    if(partGrid) partGrid.reconfigure(Teselagen.manager.ProjectManager.parts);
-                }
-        );
+        var parts = this.parts;
+
+        for(var z=0; z<parts.length; z++) {
+            if(parts[z].getSequenceFile()) {
+                var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id);
+                if(sequence) parts[z].data.partSource = sequence.data.name;
+            } else {
+                parts[z].set("partSource", "");
+            }
+        }
+        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        if(partGrid) partGrid.reconfigure(parts);
+
 
         dashPanel.getActiveTab().el.unmask();
     },

@@ -1445,6 +1445,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
     serialize: function(){
         var data = {};
         data.features = [];
+        data.inData = {
+            name: this.getName(),
+            circular: this.getCircular(),
+            //complementSequence: this.getComplementSequence(),
+            reverseComplementSequence: this.getReverseComplementSequence(),
+            manualUpdateStarted: this.getManualUpdateStarted(),
+            needsRecalculateComplementSequence: this.getNeedsRecalculateComplementSequence(),
+            //needsRecalculateReverseComplementSequence: this.getNeedsRecalculateReverseComplementSequence()
+        }
         this.getFeatures().forEach(function(feature){
             data.features.push(feature.serialize());
         });
@@ -1456,7 +1465,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     deSerialize: function(data){
         var self = this;
         data.features.forEach(function(feature){
-            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{});
+            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",feature.inData);
             newFeature.deSerialize(feature);
             self.addFeature(newFeature,true);
         });

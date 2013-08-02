@@ -65,7 +65,9 @@ Ext.define("Teselagen.renderer.rail.Layer", {
         this.selected = false;
         this.selecting = false;
 
-        this.selectionSVG.style("visibility", "hidden");
+        if(this.selectionSVG) {
+            this.selectionSVG.style("visibility", "hidden");
+        }
     },
 
     startSelecting: function() {

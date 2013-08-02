@@ -4,7 +4,7 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.manager.PieManager", {
-    statics: {
+    inheritableStatics: {
         PAD: 50,
         LABEL_DISTANCE_FROM_RAIL: 35,
         LABEL_HEIGHT: 10,
@@ -842,11 +842,6 @@ Ext.define("Teselagen.manager.PieManager", {
                          .append("svg:svg")
                          .attr("class", "Pie")
                          .attr("overflow", "auto");
-                         /*.on("mousedown", function(){
-                             return function() {
-                                 if(d3.event.button == 2) d3.event.preventDefault();
-                             }
-                         });*/       
 
             this.parentSVG = this.pie.append("svg:g")
                                      .attr("class", "pieParent")
@@ -854,7 +849,8 @@ Ext.define("Teselagen.manager.PieManager", {
 
             this.frame = Ext.create("Vede.view.pie.Frame", {
                 pie: this.parentSVG,
-                center: this.center
+                center: this.center,
+                radius: this.railRadius
             });
 
             
