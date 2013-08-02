@@ -1447,7 +1447,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         data.features = [];
         data.inData = {
             name: this.getName(),
-            circulate: this.getCircular(),
+            circular: this.getCircular(),
             //complementSequence: this.getComplementSequence(),
             reverseComplementSequence: this.getReverseComplementSequence(),
             manualUpdateStarted: this.getManualUpdateStarted(),
