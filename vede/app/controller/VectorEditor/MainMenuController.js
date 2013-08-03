@@ -15,6 +15,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                "Vede.view.ve.GoToWindow",
                "Vede.view.ve.RestrictionEnzymesManagerWindow",
                "Vede.view.ve.PropertiesWindow",
+               "Vede.view.ve.PreferencesWindow",
                "Vede.view.ve.SelectWindow",
                "Vede.view.ve.SimulateDigestionWindow"],
 
@@ -384,57 +385,12 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onPrintLinearViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printLinearView();
     },
-    
-    onPropertiesMenuItemClick: function() {
-    	var propertiesWindow = Ext.create("Vede.view.ve.PropertiesWindow");
-    	this.activeTab.down('component[cls="propertiesWindowOwnerField"]').setFieldStyle('border-color:transparent;background-color:transparent');
-    	this.activeTab.down('component[cls="propertiesWindowCreatedField"]').setFieldStyle('border-color:transparent;background-color:transparent');
-    	this.activeTab.down('component[cls="propertiesWindowLastModifiedField"]').setFieldStyle('border-color:transparent;background-color:transparent');
-    	
-    	this.activeTab.down('component[cls="propertiesWindowSequenceNameField"]').setValue(
-            Teselagen.manager.ProjectManager.workingSequence.get("name"));
 
-    	propertiesWindow.show();
-    	propertiesWindow.center();
-    },
-    
-    onPropertiesWindowOKButtonClick: function() {
-    	var name = this.activeTab.down('component[cls="propertiesWindowSequenceNameField"]').getValue();
-    	if(name == null || name.match(/^\s*$/) || name.length==0) {
-    		this.activeTab.down('component[cls="propertiesWindowSequenceNameField"]').setFieldStyle("border-color:red");
-    	} else {
-    		var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
-    		var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
-    		var selectedProj = Teselagen.manager.ProjectManager.workingProject;
-    		
-    		var oldName = workingSequence.data.name;
-    		// It is very likely that the following code contains inconsistencies in what the name means.
-    		
-    		var idx = -1;
-    		//Maybe make more efficient in the future.
-    		for(var i=0;i<sequenceStore.data.items.length;i++) {
-    			if(name==sequenceStore.data.items[i].data.name && selectedProj.internalId==sequenceStore.data.items[i].data.project_id) {
-    				if(name!=oldName) {
-	    				// Put better way of alerting user. The following line of code is just temporary.
-	    				// Following code isn't completely correct. It's just in place for testing purposes.
-	    				Ext.alert('A sequence with the name "'+name+'" already exists in the project "'+selectedProj.data.name+'."\nPlease select another name.');
-						return;
-    				}
-    			}
-    		}
+    onPreferencesMenuItemClick: function() {
+        var preferencesWindow = Ext.create("Vede.view.ve.PreferencesWindow");
+        preferencesWindow.show();
+        // preferencesWindow.center();
 
-            this.sequenceManager.setName(name);
-            workingSequence.set("name", name);
-    		workingSequence.save({
-                callback: function () {
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                        this.activeTab.down("component[cls='projectTreePanel']").expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
-                    });
-                }
-            });
-    		
-    		this.activeTab.down('component[cls="PropertiesWindow"]').close();
-    	}
     },
     
     init: function() {
@@ -551,12 +507,9 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             "component[identifier*='printLinearViewMenuItem']": {
                 click: this.onPrintLinearViewMenuItemClick
             },
-            "component[identifier*='propertiesMenuItem']": {
-                click: this.onPropertiesMenuItemClick
+             "component[identifier*='preferencesMenuItem']": {
+                click: this.onPreferencesMenuItemClick
             },
-            "component[cls='propertiesWindowOKButton']": {
-                click: this.onPropertiesWindowOKButtonClick
-            }
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;
@@ -571,5 +524,8 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.on(this.VisibilityEvent.VIEW_MODE_CHANGED, this.onViewModeChanged, this);
         this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
                 this.onSequenceManagerChanged,this);
+
+        Vede.application.on('restrictionEnzymesManagerLinkClick', this.onRestrictionEnzymesManagerMenuItemClick, this);
+        Vede.application.on('preferencesLinkClick', this.onPreferencesMenuItemClick, this);
     }
 });
