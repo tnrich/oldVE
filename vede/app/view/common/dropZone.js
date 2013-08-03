@@ -6,6 +6,7 @@ Ext.define('Vede.view.common.dropZone', {
 	],
 
 	initComponent: function() {
+		console.log("dropzone");
 		var me = this;
 		me.callParent();
 	},
@@ -13,14 +14,15 @@ Ext.define('Vede.view.common.dropZone', {
 	onDestroy: function() {
 		this.callParent();
 	},
-	
+
 	autoEl: {
 		tag: 'div',
-		id:  'dropZone-area',
-		cls: 'batch-import-area',
+		//id:  'dropZone-area',
+		//cls: 'batch-import-area',
+		//html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
 		html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
 	},
-	
+
 	listeners: {
 		afterrender: function(cmp) {
 			var dropZone = cmp.getEl().dom;
@@ -30,19 +32,81 @@ Ext.define('Vede.view.common.dropZone', {
 		}
 	},
 
-	handleFileSelect: function (evt) {
+	handleFileSelect: function(evt) {
 		evt.stopPropagation();
 		evt.preventDefault();
-
+		
+		//this.processFile(evt);
+		//debugger;
 		var files = evt.dataTransfer.files;
 
-		this.fireEvent('drop',files);
+		this.fireEvent('drop', files);
 	},
 
-	handleDragOver: function (evt){
+	handleDragOver: function(evt) {
 		evt.stopPropagation();
 		evt.preventDefault();
 		evt.dataTransfer.dropEffect = 'copy';
+	},
+
+	uploadFile : function(file){
+		debugger;
+	},
+ 
+	//Handle onDrop
+	processFile: function(evt) {     
+	  var self = this;
+	  var dataTransfer = evt.dataTransfer;
+	  if(dataTransfer && dataTransfer.items){
+	  	  var items = dataTransfer.items, 
+	  	      len   = items.length,
+	  	      i, entry;
+	  	  for(i=0; i<len; i++){
+	 		 entry = items[i]
+	                 if(entry.getAsEntry){  //Standard HTML5 API
+	                    entry = entry.getAsEntry();
+	                 }else if(entry.webkitGetAsEntry){  //WebKit implementation of HTML5 API.
+	                    entry = entry.webkitGetAsEntry();
+	                 }
+	 		 if(entry.isFile){
+	 		 	//Handle FileEntry
+	 		 	self.readFile(entry, self.uploadFile);
+	 		 }else if(entry.isDirectory){
+	 		 	//Handle DirectoryEntry
+	 		 	self.readFileTree(entry, self.uploadFile);
+	 		 }
+	  	  }
+	  }
+	},
+
+	//Explore trough the file tree 
+	//@Traverse recursively trough File and Directory entries.
+	readFileTree: function(itemEntry, fileCallback) {
+		var self = this;
+		if (itemEntry.isFile) {
+			self.readFile(itemEntry, self.uploadFile);
+		} else if (itemEntry.isDirectory) {
+			var dirReader = itemEntry.createReader();
+			dirReader.readEntries(function(entries) {
+				var idx = entries.length;
+				while (idx--) {
+					console.log(entries[idx]);
+					debugger;
+					self.readFileTree(entries[idx], self.readFileTree);
+				}
+			});
+		}
+	},
+
+	//Read FileEntry to get Native File object.
+	readFile: function(fileEntry, callback) {
+		//Get File object from FileEntry
+		debugger;
+		fileEntry.file(function(callback, file) {
+			if (callback) {
+				callback(file);
+			}
+		});
 	}
 
 });
