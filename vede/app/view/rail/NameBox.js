@@ -35,7 +35,7 @@ Ext.define("Vede.view.rail.NameBox", {
                               .attr("text-anchor", "middle")
                               .attr("font-size", inData.fontSize || this.self.FONT_SIZE)
                               .attr("font-weight", this.self.FONT_WEIGHT)
-                              .on("click", function () {Vede.application.fireEvent(Teselagen.event.CaretEvent.RAIL_NAMEBOX_CLICKED)});
+                              .on("click", function () {Vede.application.fireEvent(Teselagen.event.CaretEvent.PIE_NAMEBOX_CLICKED)});
         if(!inData.name) {
             text1 = '(' + inData.length + ' bp)';
             group.append("svg:text")
