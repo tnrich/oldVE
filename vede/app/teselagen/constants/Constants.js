@@ -41,6 +41,14 @@ Ext.define("Teselagen.constants.Constants", {
     JEBISEQ_SUFFIX:         ".xml",
     SBOL_SUFFIX:            ".sbol", //?
 
+    SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP: {
+        Genbank: "gb",
+        FASTA: "fasta",
+        "jbei-seq": "xml",
+        SBOLXML: "xml",
+        JBEISEQJSON: "json"
+    },
+
     //================================================================
     // EugeneRule.js: compositionalOperator
 
