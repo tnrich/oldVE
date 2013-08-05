@@ -625,6 +625,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 xtype: 'gridpanel',
                                 border: 0,
                                 name: 'PartLibraryGrid',
+                                loadMask: true,
                                 cls: 'partLibraryGrid',
                                 id: 'partLibrary',
                                 columns: [

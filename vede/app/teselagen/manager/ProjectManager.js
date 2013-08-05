@@ -198,7 +198,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
         if(partGrid) partGrid.reconfigure(parts);
 
-
         dashPanel.getActiveTab().el.unmask();
     },
 

@@ -69,8 +69,8 @@ Ext.define("Teselagen.renderer.de.BinHeaderRenderer", {
 		    .attr("pointer-events", "none")
 		    .attr("fill", "none")
 		    .attr("transform", function(d) {
-	    		if(d.get("directionForward")==true) return "translate(38, -15)";
-    			else return "translate(38, -15)rotate(180,25,50)";
+	    		if(d.get("directionForward")==true) return "translate(38, -10)";
+    			else return "translate(38, -10)rotate(180,25,50)";
     		});
 		
 		this.gridBinHeaderFlipButtonSVG = this.gridBinHeaderSVG
