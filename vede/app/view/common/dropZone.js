@@ -2,7 +2,8 @@ Ext.define('Vede.view.common.dropZone', {
 	extend: 'Ext.Component',
 	alias: 'widget.dropZone',
 	requires: [
-			"Ext.Component"
+			"Ext.Component",
+			"Teselagen.bio.parsers.ParsersManager"
 	],
 
 	initComponent: function() {
@@ -48,12 +49,10 @@ Ext.define('Vede.view.common.dropZone', {
 		evt.stopPropagation();
 		evt.preventDefault();
 		
-		//this.processFile(evt);
-		//debugger;
-		var files = evt.dataTransfer.files;
+		this.processFiles(evt);
+
 		$(".batch-import-area").fadeOut("fast");
 
-		this.fireEvent('drop', files);
 	},
 
 	handleDragOver: function(evt) {
@@ -64,65 +63,76 @@ Ext.define('Vede.view.common.dropZone', {
 		// $(".batch-import-area").fadeIn("fast");
 		evt.dataTransfer.dropEffect = 'copy';
 	},
-
-	uploadFile : function(file){
-		debugger;
-	},
  
 	//Handle onDrop
-	processFile: function(evt) {     
-	  var self = this;
-	  var dataTransfer = evt.dataTransfer;
-	  if(dataTransfer && dataTransfer.items){
-	  	  var items = dataTransfer.items, 
-	  	      len   = items.length,
-	  	      i, entry;
-	  	  for(i=0; i<len; i++){
-	 		 entry = items[i]
-	                 if(entry.getAsEntry){  //Standard HTML5 API
-	                    entry = entry.getAsEntry();
-	                 }else if(entry.webkitGetAsEntry){  //WebKit implementation of HTML5 API.
-	                    entry = entry.webkitGetAsEntry();
-	                 }
-	 		 if(entry.isFile){
-	 		 	//Handle FileEntry
-	 		 	self.readFile(entry, self.uploadFile);
-	 		 }else if(entry.isDirectory){
-	 		 	//Handle DirectoryEntry
-	 		 	self.readFileTree(entry, self.uploadFile);
-	 		 }
-	  	  }
-	  }
+	processFiles: function(evt) {     
+
+		var length = evt.dataTransfer.items.length;
+
+        for (var i = 0; i < length; i++) {
+            var entries = [];
+            entries[0] = evt.dataTransfer.items[i].webkitGetAsEntry();
+            this.readDirectory(entries,this);
+        }
+
 	},
 
-	//Explore trough the file tree 
-	//@Traverse recursively trough File and Directory entries.
-	readFileTree: function(itemEntry, fileCallback) {
+	// Recursive directory read 
+	readDirectory: function (entries,scope) {
+		var self = scope;
+	    for (i = 0; i < entries.length; i++) {
+	        if (entries[i].isDirectory) {
+
+	            console.log("Reading folder: ",entries[i].name);
+	            var directoryReader = entries[i].createReader();
+	            self.getAllEntries(
+	                    directoryReader,
+	                    self.readDirectory
+	                );
+
+	        } else {
+	            console.log("Reading file: ",entries[i].name);
+	            entries[i].file(self.readFile, self.errorHandler);
+	        }
+	    }
+	},
+
+	// This is needed to get all directory entries as one 
+	// call of readEntries may not return all items. Works a 
+	// bit like stream reader.  
+	getAllEntries: function (directoryReader, callback) {
 		var self = this;
-		if (itemEntry.isFile) {
-			self.readFile(itemEntry, self.uploadFile);
-		} else if (itemEntry.isDirectory) {
-			var dirReader = itemEntry.createReader();
-			dirReader.readEntries(function(entries) {
-				var idx = entries.length;
-				while (idx--) {
-					console.log(entries[idx]);
-					debugger;
-					self.readFileTree(entries[idx], self.readFileTree);
-				}
-			});
-		}
+	    var entries = [];
+
+	    var toArray = function (list) {
+		    return Array.prototype.slice.call(list || [], 0);
+		};
+
+	    var readEntries = function () {
+	        directoryReader.readEntries(function (results) {
+	            if (!results.length) {
+	                entries.sort();
+	                callback(entries,self);
+	            } else {
+	                entries = entries.concat(toArray(results));
+	                readEntries();
+	            }
+	        }, self.errorHandler);
+	    };
+
+	    readEntries();
 	},
 
-	//Read FileEntry to get Native File object.
-	readFile: function(fileEntry, callback) {
-		//Get File object from FileEntry
-		debugger;
-		fileEntry.file(function(callback, file) {
-			if (callback) {
-				callback(file);
-			}
-		});
+	readFile: function (file) {
+	    Teselagen.bio.parsers.ParsersManager.parseAndImportFile(file);
+	},
+
+	errorHandler: function (e) {
+    	console.log('FileSystem API error code: ' + e.code)
 	}
+
+
+
+
 
 });
