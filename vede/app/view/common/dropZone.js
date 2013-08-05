@@ -7,7 +7,6 @@ Ext.define('Vede.view.common.dropZone', {
 	],
 
 	initComponent: function() {
-		console.log("dropzone");
 		var me = this;
 		me.callParent();
 	},
@@ -20,7 +19,6 @@ Ext.define('Vede.view.common.dropZone', {
 		tag: 'div',
 		id:  'dropZone',
 		cls: 'batch-import-area',
-		//html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
 		html: '<h2> + Drop files here</h2><div id="dropZone-close"></div>',
 	},
 

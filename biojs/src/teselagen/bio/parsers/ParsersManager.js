@@ -66,8 +66,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 var name = theFile.name;
                 var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-                toastr.info("Importing ", name);
-
+                var msg = toastr.info("Importing ", name);
+                //debugger;
                 self.parseSequence(data, ext, function(gb) {
                     var sequence = Ext.create("Teselagen.models.SequenceFile",{
                         sequenceFileContent: gb,
@@ -81,7 +81,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     sequence.processSequence(function(err){
                         sequence.save({
                             success: function(){
-                                Teselagen.manager.ProjectManager.sequences.add(sequence);
+                                var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+                                if(!duplicated) 
+                                {
+                                    Teselagen.manager.ProjectManager.sequences.add(sequence);
+                                }
+                                else
+                                {
+                                    $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
+                                    $(msg[0]).removeClass("toast-info");
+                                    $(msg[0]).addClass("toast-warning");                                }
                             }
                         });
                     });
