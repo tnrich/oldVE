@@ -588,7 +588,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                          errors = null;
                          errorsStore = null;
                     }
-
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='assemblies']").reconfigure(assemblies);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='j5parameters']").reconfigure(J5parametersValues);
 

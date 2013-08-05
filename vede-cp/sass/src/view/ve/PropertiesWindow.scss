@@ -1,0 +1,29 @@
+// PropertiesWindow.js CSS
+.restrictionEnzymeCollapsedCls .x-grid-cell-first,  .restrictionEnzymeCollapsedCls .x-grid-row-over .x-grid-cell-first{
+	padding-left: 16px;
+	background: url(images/properties-arrow-right.png) no-repeat !important;
+	background-position: 4px center !important;
+	background-size: 16px;
+	background-repeat: no-repeat;
+}
+
+.restrictionEnzymeExpandedCls .x-grid-cell-first,.restrictionEnzymeExpandedCls .x-grid-row-over .x-grid-cell-first {
+	padding-left: 16px;
+	background: url(images/properties-arrow-down.png) no-repeat !important;
+	background-position: 4px center !important;
+	background-size: 16px;
+	background-repeat: no-repeat;
+}
+
+.cutSiteCls 
+.x-grid-cell-first{
+	padding-left: 32px;
+}
+
+.cutSitesGridPanel .x-grid-row-alt .x-grid-cell {
+	background: white !important;
+}
+
+.cutSitesGridPanel .x-grid-row-over {
+	background: white !important;
+}

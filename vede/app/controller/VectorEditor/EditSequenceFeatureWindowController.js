@@ -24,6 +24,10 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
     	this.selectedStart = start;
     	this.selectedEnd = end;   	
     },
+
+    onGetSelectedFeature: function(featureObj) {
+        this.selectedFeature = featureObj;
+    },
     
     onWindowShow: function() {	
     	var seqLen = this.sequenceManager.getSequence().toString().length;
@@ -154,6 +158,8 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
             this.sequenceManager.features.push(newFeature);
             Vede.application.fireEvent(this.sequenceManager.updateSequenceChanged, this.sequenceManager.updateKindFeatureAdd, newFeature);
 	    	Ext.getCmp("EditSequenceFeature").close();
+            Vede.application.fireEvent('rerenderFeaturesGrid');
+            Vede.application.fireEvent('toggleFeatureEditOptions');
     	}
     },
 
@@ -186,7 +192,9 @@ Ext.define("Vede.controller.VectorEditor.EditSequenceFeatureWindowController", {
     			change: this.endFieldChange
     		}
     	});
-    	this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
+        Vede.application.on('getSelectedFeatureFromProperties', this.onGetSelectedFeature, this);
+
+    	this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_EVENT,
                 this.onSequenceManagerChanged, this);
     	this.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, 
                 this.onPieAnnotationRightClicked, this);

@@ -1,6 +1,7 @@
 /*global complete, fail, jake, process, task*/
 
 var _s = require("underscore.string");
+var fs = require("fs");
 var util = require("util");
 var DbManager = require("./manager/DbManager")();
 var ApiManager = require("./manager/ApiManager")();
@@ -95,4 +96,21 @@ task("resetdb", ["connectdb"], function() {
     });
 }, {async:true});
 
+/*
+ * Selenium
+ */
 
+var SEL_LOG = "/var/log/selenium";
+var SEL_PID = SEL_LOG + "/selenium.pid";
+task("seleniumStart", function() {
+    var SEL_OUT = SEL_LOG + "/selenium.out";
+    var SEL_ERR = SEL_LOG + "/selenium.err";
+    var cmd = util.format("/usr/local/sbin/daemonize -c /root -e %s -o %s -p %s -l %s -v /usr/local/bin/java -Djava.awt.headless=true -jar /usr/local/lib/selenium/selenium-server-standalone-2.33.0.jar", SEL_ERR, SEL_OUT, SEL_PID, SEL_PID);
+    JakeUtil.exec(cmd);
+});
+
+task("seleniumStop", function() {
+    var pid = fs.readFileSync(SEL_PID);
+    process.kill(pid);
+    fs.unlinkSync(SEL_PID);
+});

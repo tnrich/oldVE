@@ -376,10 +376,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.eugeneRulesGrid.store.clearData();            
             this.eugeneRulesGrid.view.refresh();
         }
-        this.inspector.resumeLayouts();
-        if(j5Part) this.eugeneRulesGrid.reconfigure(rulesStore);
         
-        this.inspector.expand();
+        this.inspector.resumeLayouts();
+
+        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+        
+        if(j5Part) this.eugeneRulesGrid.reconfigure(rulesStore);
+
+        Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
     },
 
     /**

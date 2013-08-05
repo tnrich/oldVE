@@ -56,6 +56,7 @@ Ext.application({
         'VectorEditor.MainMenuController',
         'VectorEditor.MainToolbarController',
         'VectorEditor.PieController',
+        'VectorEditor.PropertiesWindowController',
         'VectorEditor.RailController',
         'VectorEditor.SelectWindowController',
         'VectorEditor.SequenceController',

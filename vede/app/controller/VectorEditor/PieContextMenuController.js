@@ -63,13 +63,22 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 				click: this.onPieContextMenuDeleteFeatureClick
     		} 		
     	});	
-		
+
+		Vede.application.on('newFeatureinProperties', this.onPieContextMenuNewFeatureClick, this);
+		Vede.application.on('editFeatureinProperties', this.onPieContextMenuEditFeatureClick, this);
+		Vede.application.on('getSelectedFeatureFromProperties', this.getSelectedFeature, this);
+		Vede.application.on('removeFeatureinProperties', this.onPieContextMenuDeleteFeatureClick, this);
+
 		Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED, this.onPieRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_ANNOTATION_RIGHT_CLICKED, this.onPieAnnotationRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED, this.onPieSelectionLayerRightClicked, this);
     	Vede.application.on(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, this.onMouseDownAnyWhere, this);
     	Vede.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, this.onSequenceManagerChanged, this);
 	},
+
+	getSelectedFeature: function(featureObj) {
+        this.selectedFeature = featureObj;
+    },
 
     onTabChange: function(mainAppPanel, newTab) {
         if(newTab.initialCls === "VectorEditorPanel") {
@@ -159,7 +168,9 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 		this.isPieContextMenuOpen = false;
 		this.isPieAnnotationRightClicked = false;
 		this.isPieSelectionLayerRightClicked = false;
-		this.pieContextMenu.hide();
+		if (this.pieContextMenu) {
+			this.pieContextMenu.hide();
+		};
     },
     
     onPieContextMenuEditFeatureClick: function() {
@@ -171,7 +182,9 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
         this.isPieContextMenuOpen = false;
 		this.isPieAnnotationRightClicked = false;
 		this.isPieSelectionLayerRightClicked = false;
-		this.pieContextMenu.hide();
+		if (this.pieContextMenu) {
+			this.pieContextMenu.hide();
+		};
     },
     
     onPieContextMenuDeleteFeatureClick: function() {
@@ -179,7 +192,11 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     	this.isPieContextMenuOpen = false;
 		this.isPieAnnotationRightClicked = false;
 		this.isPieSelectionLayerRightClicked = false;
-		this.pieContextMenu.hide();
+		if (this.pieContextMenu) {
+			this.pieContextMenu.hide();
+		};
+		Vede.application.fireEvent('rerenderFeaturesGrid');
+		Vede.application.fireEvent('toggleFeatureEditOptions');
     }
 });
 

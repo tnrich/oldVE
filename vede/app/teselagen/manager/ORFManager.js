@@ -47,6 +47,24 @@ Ext.define("Teselagen.manager.ORFManager", {
         return this.orfs;
     },
 
+    getOrfsJSON: function() {
+        if(this.getDirty()) {
+            this.recalculate();
+            this.setDirty(false);
+        }
+
+        var orfs = this.orfs;
+        var newOrfs = [];
+        var length = orfs.length;
+
+        for (i = 0; i < length; i++) {
+            newOrf = orfs[i].toJSON();
+            newOrfs.push(newOrf);
+        };
+        return newOrfs;
+        console.log(newOrfs);
+    },
+
     /**
      * Sets the minimum ORF size. 
      * Checks to make sure it is a new size to avoid unnecessary recalculation.
