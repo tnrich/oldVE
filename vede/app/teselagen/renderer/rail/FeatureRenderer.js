@@ -41,7 +41,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
      * Converts the given features and their locations to sprites.
      * @return {Ext.draw.Sprite[]} The array of sprites.
      */
-    render: function() {
+    render: function(disableMouseEvents) {
         var path;
         var featureAlignment = this.Alignment.buildAlignmentMap(this.features, 
                                                          this.sequenceManager);
@@ -112,18 +112,29 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
                     path = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
                 }
 
-                this.featureSVG.append("svg:path")
-                               .attr("stroke", this.self.OUTLINE_COLOR)
-                               .attr("stroke-width", this.self.OUTLINE_WIDTH)
-                               .attr("fill", color)
-                               .attr("fill-rule", "evenodd")
-                               .attr("d", path)
-                               .on("mousedown", this.getClickListener(feature.getStart(),
-                                                                      feature.getEnd()))
-                               .on("contextmenu", this.getRightClickListener(
-                                                        feature))                                       
-                               .append("svg:title")
-                               .text(this.getToolTip(feature));
+                if(disableMouseEvents) {
+                    this.featureSVG.append("svg:path")
+                                   .attr("stroke", this.self.OUTLINE_COLOR)
+                                   .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                                   .attr("fill", color)
+                                   .attr("fill-rule", "evenodd")
+                                   .attr("d", path)
+                                   .append("svg:title")
+                                   .text(this.getToolTip(feature));
+                } else {
+                    this.featureSVG.append("svg:path")
+                                   .attr("stroke", this.self.OUTLINE_COLOR)
+                                   .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                                   .attr("fill", color)
+                                   .attr("fill-rule", "evenodd")
+                                   .attr("d", path)
+                                   .on("mousedown", this.getClickListener(feature.getStart(),
+                                                                          feature.getEnd()))
+                                   .on("contextmenu", this.getRightClickListener(
+                                                            feature))                                       
+                                   .append("svg:title")
+                                   .text(this.getToolTip(feature));
+                }
                 
             }, this);
             //this.addContextMenuListener(feature);

@@ -86,14 +86,14 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
         if(this.sequenceManager.getCircular()) {
             this.pieRenderer.setFeatureSVG(this.pieFeatureSVG);
             this.pieRenderer.setFeatures(this.features);
-            this.pieRenderer.render();
+            this.pieRenderer.render(true);
 
             this.pieParentSVG.style("visibility", "");
             this.railParentSVG.style("visibility", "hidden");
         } else {
             this.railRenderer.setFeatureSVG(this.railFeatureSVG);
             this.railRenderer.setFeatures(this.features);
-            this.railRenderer.render();
+            this.railRenderer.render(true);
 
             this.railParentSVG.style("visibility", "");
             this.pieParentSVG.style("visibility", "hidden");
