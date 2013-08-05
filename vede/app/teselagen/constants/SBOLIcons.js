@@ -74,7 +74,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             name: "five_prime_utr",
             url_small: "resources/images/icons/device/small/ribosome-entry-site.png",
             url_large: "resources/images/icons/device/large/ribosome-entry-site.png",
-            path: "M 12 50 L 38 50 L 38 45 C 38 35 32 30 25 30 C 18 30 12 35 12 45  Z"
+            path: "M 12 65 L 38 65 L 38 60 C 38 50 32 45 25 45 C 18 45 12 50 12 60  Z"
         },
         "FIVE-PRIME-STICKY-RESTRICTION-SITE": { //New in SBOL 1.0.0
             key: "FIVE_PRIME_RESTRICTION_SITE",
@@ -102,36 +102,36 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             name: "origin_of_replication",
             url_small: "resources/images/icons/device/small/origin-of-replication.png",
             url_large: "resources/images/icons/device/large/origin-of-replication.png",
-            path: "M 25, 50  m -12, 0  a 12,12 0 1,0 24,0  a 12,12 0 1,0 -24,0"
+            path: "M 25, 55  m -12, 0  a 12,12 0 1,0 24,0  a 12,12 0 1,0 -24,0"
         },
         "PRIMER-BINDING-SITE": {
             key: "PRIMER_BINDING_SITE",
             name: "primer_binding_site",
             url_small: "resources/images/icons/device/small/primer-binding-site.png",
             url_large: "resources/images/icons/device/large/primer-binding-site.png",
-            path: "M 12 45 L 38 45 L 28 38"
+            path: "M 12 55 L 38 55 L 28 48"
         },
         "PROMOTER": {
             key: "PROMOTER",
             name: "promoter",
             url_small: "resources/images/icons/device/small/promoter.png",
             url_large: "resources/images/icons/device/large/promoter.png",
-            path: "M 31.5 15.5 L 40 23 L 31.5 30.3333 M 10 50 L 10 23 L 39 23"
+            path: "M 31.5 30.5 L 40 38 L 31.5 45.3333 M 10 65 L 10 38 L 39 38"
         },
         "PROTEASE-SITE": {
             key: "PROTEASE_SITE",
             name: "protease_site",
             url_small: "resources/images/icons/device/small/protease-site.png",
             url_large: "resources/images/icons/device/large/protease-site.png",
-            path: "M 25 50 L 25 25 M 17 16 L 33 32 M 33 16 L 17 32"
+            path: "M 25 65 L 25 40 M 17 31 L 33 47 M 33 31 L 17 47"
         },
         "PROTEIN-STABILITY-ELEMENT": {
             key: "PROTEIN_STABILITY_ELEMENT",
             name: "protein_stability_element",
             url_small: "resources/images/icons/device/small/protein_stability_element.png",
             url_large: "resources/images/icons/device/large/protein-stability-element.png",
-            path: "M 25 50 L 25 37 " +
-            "M 25, 25  m -7, 0  a 7,7 0 1,0 14,0  a 7,7 0 1,0 -14,0"
+            path: "M 25 65 L 25 52 " +
+            "M 25, 40  m -7, 0  a 7,7 0 1,0 14,0  a 7,7 0 1,0 -14,0"
         },
         "RESTRICTION-ENZYME-RECOGNITION-SITE": {
             key: "RESTRICTION_ENZYME_RECOGNITION_SITE",
@@ -152,7 +152,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             name: "ribonuclease_site",
             url_small: "resources/images/icons/device/small/ribonuclease-site.png",
             url_large: "resources/images/icons/device/large/ribonuclease-site.png",
-            path: "M 25 50 L 25 45 M 25 38 L 25 33 M 17 16 L 33 32 M 33 16 L 17 32 "
+            path: "M 25 65 L 25 60 M 25 53 L 25 48 M 17 31 L 33 47 M 33 31 L 17 47 "
         },
         "RIBOSOME-ENTRY-SITE": {
             key: "RIBOSOME_ENTRY_SITE",
@@ -166,22 +166,22 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             name: "rna_stability_element",
             url_small: "resources/images/icons/device/small/rna-stability-element.png",
             url_large: "resources/images/icons/device/large/rna-stability-element.png",
-            path: "M 25 50 L 25 46 M 25 41 L 25 37 " +
-                    "M 25, 25  m -7, 0  a 7,7 0 1,0 14,0  a 7,7 0 1,0 -14,0"
+            path: "M 25 65 L 25 61 M 25 56 L 25 52 " +
+                    "M 25, 40  m -7, 0  a 7,7 0 1,0 14,0  a 7,7 0 1,0 -14,0"
         },
         "SIGNATURE": {
             key: "SIGNATURE",
             name: "signature",
             url_small: "resources/images/icons/device/small/signature.png",
             url_large: "resources/images/icons/device/large/signature.png",
-            path: "M 5 45 L 5 20 L 45 20 L 45 45 Z M 10 27 L 20 37 M 10 37 L 20 27 M 24 39 L 40 39"
+            path: "M 5 65 L 5 40 L 45 40 L 45 65 Z M 10 47 L 20 57 M 10 57 L 20 47 M 24 59 L 40 59"
         },
         "TERMINATOR": {
             key: "TERMINATOR",
             name: "terminator",
             url_small: "resources/images/icons/device/small/terminator.png",
             url_large: "resources/images/icons/device/large/terminator.png",
-            path: "M 25 50 L 25 26 M 10 25 L 40 25"
+            path: "M 25 65 L 25 41 M 10 40 L 40 40"
         },
         "THREE-PRIME-OVERHANG": {
             key: "THREE_PRIME_OVERHANG",

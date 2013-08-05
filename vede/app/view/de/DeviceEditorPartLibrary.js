@@ -4,6 +4,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
     title: "Part Library",
     cls: 'deviceEditorPartLibrary',
     height: 400,
+    closeAction: "close",
     width: 700,
     layout: {
         type: 'vbox',
@@ -135,7 +136,9 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                             grid.up("window").close();
                             var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
                             var currentTabEl = (currentTab.getEl());
-                            currentTabEl.unmask(); 
+                            currentTabEl.unmask();
+                            toastr.options.onclick = null;
+                            toastr.info("Part Added"); 
                         } else {
                             Ext.MessageBox.alert("Error","Failed mapping part from library");
                         }
@@ -162,5 +165,12 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 event.preventDefault;
             }
             }
-        }]
+        }],
+    listeners: {
+        close: function(win) {
+            var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+            var currentTabEl = (currentTab.getEl());
+            currentTabEl.unmask(); 
+        }
+    }
 });
