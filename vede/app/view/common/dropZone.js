@@ -17,8 +17,8 @@ Ext.define('Vede.view.common.dropZone', {
 
 	autoEl: {
 		tag: 'div',
-		//id:  'dropZone-area',
-		//cls: 'batch-import-area',
+		id:  'dropZone-area',
+		cls: 'batch-import-area',
 		//html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
 		html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
 	},
@@ -26,24 +26,39 @@ Ext.define('Vede.view.common.dropZone', {
 	listeners: {
 		afterrender: function(cmp) {
 			var dropZone = cmp.getEl().dom;
+			var sequenceLibrary = Ext.getCmp("sequenceLibrary").getEl().dom;
 			var handleFileSelect = cmp.handleFileSelect.bind(cmp);
+			sequenceLibrary.addEventListener('dragenter', cmp.handleDragEnter, false, cmp);
+			dropZone.addEventListener('dragleave', cmp.handleDragLeave, false, cmp);
 			dropZone.addEventListener('dragover', cmp.handleDragOver, false, cmp);
 			dropZone.addEventListener('drop', handleFileSelect, false, cmp);
 		}
 	},
 
+	handleDragEnter: function(evt, cmp) {
+		$(".batch-import-area").show();
+	},
+
+	handleDragLeave: function(evt, cmp) {
+		$(".batch-import-area").hide();
+	},
+
 	handleFileSelect: function(evt) {
+
 		evt.stopPropagation();
 		evt.preventDefault();
 		
 		//this.processFile(evt);
 		//debugger;
 		var files = evt.dataTransfer.files;
+		$(".batch-import-area").hide();
 
 		this.fireEvent('drop', files);
 	},
 
 	handleDragOver: function(evt) {
+		$(".batch-import-area").show();
+
 		evt.stopPropagation();
 		evt.preventDefault();
 		evt.dataTransfer.dropEffect = 'copy';
