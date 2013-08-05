@@ -380,6 +380,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.inspector.resumeLayouts();
 
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                        this.selectedPart);
         
         if(j5Part) this.eugeneRulesGrid.reconfigure(rulesStore);
 
