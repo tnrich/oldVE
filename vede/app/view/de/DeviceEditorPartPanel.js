@@ -125,17 +125,20 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
         }, {
             xtype: 'tbseparator',
             height: 40
-        }, {
-            xtype: 'button',
-            cls: 'restriction_site_w_no_overhang_Btn',
-            data: { iconKey : 'RESTRICTION-SITE-NO-OVERHANG' },
-            icon: 'resources/images/icons/device/small/restriction-site-with-no-overhang.png',
-            scale: 'large',
-            tooltip: 'Restriction Site With No Overhangs'
-        }, {
-            xtype: 'tbseparator',
-            height: 40
-        }, {
+        }, 
+        //DEPRECIATED
+        // {
+        //     xtype: 'button',
+        //     cls: 'restriction_site_w_no_overhang_Btn',
+        //     data: { iconKey : 'RESTRICTION-SITE-NO-OVERHANG' },
+        //     icon: 'resources/images/icons/device/small/restriction-site-with-no-overhang.png',
+        //     scale: 'large',
+        //     tooltip: 'Restriction Site With No Overhangs'
+        // }, {
+        //     xtype: 'tbseparator',
+        //     height: 40
+        // }, 
+        {
             xtype: 'button',
             cls: 'protease_site_Btn',
             data: { iconKey : 'PROTEASE-SITE' },

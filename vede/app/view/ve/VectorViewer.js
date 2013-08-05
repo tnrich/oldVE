@@ -5,6 +5,7 @@
  */
 Ext.define("Vede.view.ve.VectorViewer", {
     extend: "Ext.panel.Panel",
+    requires: ["Teselagen.manager.VectorViewerManager"],
     alias: "widget.vectorviewer",
     cls: "VectorViewer",
     floating: true,
@@ -13,6 +14,14 @@ Ext.define("Vede.view.ve.VectorViewer", {
     part: null,
     sequenceFile: null,
     viewManager: null,
+    header: {
+        style: {
+            cursor: "pointer"
+        }
+    },
+    style: {
+        cursor: "pointer"
+    },
     listeners: {
         afterrender: function() {
             var self = this;
@@ -25,8 +34,14 @@ Ext.define("Vede.view.ve.VectorViewer", {
                                                self.part.getSequenceFile(), self.part);
                 }
             });
+
+            this.el.setStyle("cursor", "pointer");
         }
     },
+    items: [{
+        xtype: 'container',
+        cls: 'vectorViewerContainer'
+    }],
 
     setPart: function(part) {
         this.part = part;
@@ -91,7 +106,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
                             this.viewManager.setFeatures(sequenceManager.getFeatures());
                         }
 
-                        this.viewManager.init(self.down());
+                        this.viewManager.init(self.down('container[cls="vectorViewerContainer"]'));
                         this.viewManager.updateNameBox();
                         this.viewManager.render();
 
@@ -134,7 +149,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
                 this.viewManager.setFeatures(sequenceManager.getFeatures());
             }
 
-            this.viewManager.init(self.down());
+            this.viewManager.init(self.down('container[cls="vectorViewerContainer"]'));
             this.viewManager.updateNameBox();
             this.viewManager.render();
 

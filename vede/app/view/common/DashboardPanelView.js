@@ -630,9 +630,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     return matcher.test(record.get('name')) ||
                                                         matcher.test(record.get('genbankStartBP')) ||
                                                         matcher.test(record.get('endBP')) ||
+                                                        matcher.test(record.get('length')) ||
                                                         matcher.test(record.get('fas')) ||
                                                         matcher.test(record.get('revComp')) || 
-                                                        matcher.test(record.get('partSource'));
+                                                        matcher.test(record.get('partSource')) ||
+                                                        matcher.test(record.get('features'));
                                                 }
                                             });
                                         }
@@ -643,24 +645,31 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 xtype: 'gridpanel',
                                 border: 0,
                                 name: 'PartLibraryGrid',
+                                loadMask: true,
                                 cls: 'partLibraryGrid',
                                 id: 'partLibrary',
                                 columns: [
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Name',
-                                        width: 320,
+                                        width: 220,
                                         dataIndex: 'name'
                                     }, {
                                         xtype: 'gridcolumn',
                                         text: 'Start BP',
-                                        width: 100,
+                                        width: 80,
                                         dataIndex: 'genbankStartBP'
                                     },{
                                         xtype: 'gridcolumn',
                                         text: 'Stop BP',
-                                        width: 100,
+                                        width: 80,
                                         dataIndex: 'endBP'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Length',
+                                        dataIndex: 'length',
+                                        width: 80
                                     },
                                     {
                                         xtype: 'gridcolumn',
@@ -672,7 +681,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'gridcolumn',
                                         text: 'Reverse Complement',
                                         dataIndex: 'revComp',
-                                        width: 150,
+                                        width: 120,
                                         renderer: function(val) {
                                             val = String(val);
                                             val = val.charAt(0).toUpperCase() + val.slice(1);
@@ -682,17 +691,16 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Source Sequence',
-                                        flex: 1,
-                                        width: 80,
+                                        width: 120,
                                         dataIndex: 'partSource'
                                     },
-                                    // {
-                                    //     xtype: 'gridcolumn',
-                                    //     flex: 1,
-                                    //     text: 'Features in Range',
-                                    //     width: 80,
-                                    //     dataIndex: 'features'
-                                    // }
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Features in Range',
+                                        width: 150,
+                                        dataIndex: 'features'
+                                    }
                                 ]
                             }
                         ]
