@@ -26,7 +26,7 @@ Ext.define('Vede.view.common.dropZone', {
 	listeners: {
 		afterrender: function(cmp) {
 			var dropZone = cmp.getEl().dom;
-			var sequenceLibrary = Ext.getCmp("sequenceLibrary").getEl().dom;
+			var sequenceLibrary = Ext.getCmp("sequenceLibraryArea").getEl().dom;
 			var handleFileSelect = cmp.handleFileSelect.bind(cmp);
 			sequenceLibrary.addEventListener('dragenter', cmp.handleDragEnter, false, cmp);
 			dropZone.addEventListener('dragleave', cmp.handleDragLeave, false, cmp);
