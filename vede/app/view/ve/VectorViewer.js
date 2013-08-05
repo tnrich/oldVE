@@ -14,17 +14,17 @@ Ext.define("Vede.view.ve.VectorViewer", {
     sequenceFile: null,
     viewManager: null,
     listeners: {
-        click: {
-            element: "el",
-            fn: function() {
-                if(this.sequenceFile) {
+        afterrender: function() {
+            var self = this;
+            this.el.on("click", function() {
+                if(self.sequenceFile) {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
-                                               this.sequenceFile);
-                } else if(this.part) {
+                                               self.sequenceFile);
+                } else if(self.part) {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
-                                               this.part.getSequenceFile(), this.part);
+                                               self.part.getSequenceFile(), self.part);
                 }
-            }
+            });
         }
     },
 
@@ -137,6 +137,8 @@ Ext.define("Vede.view.ve.VectorViewer", {
             this.viewManager.init(self.down());
             this.viewManager.updateNameBox();
             this.viewManager.render();
+
+            this.viewManager.deselect();
         } else {
             return;
         }

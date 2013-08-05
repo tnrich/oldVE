@@ -982,5 +982,17 @@ Ext.define("Teselagen.manager.PieManager", {
                 });*/
             }
         }
+    },
+
+    applySequenceManager: function(pSeqMan) {
+        if(this.pieRenderer) {
+            this.pieRenderer.setSequenceManager(pSeqMan);
+        }
+
+        if(this.railRenderer) {
+            this.railRenderer.setSequenceManager(pSeqMan);
+        }
+
+        return pSeqMan;
     }
 });
