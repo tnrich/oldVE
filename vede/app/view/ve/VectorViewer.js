@@ -5,6 +5,7 @@
  */
 Ext.define("Vede.view.ve.VectorViewer", {
     extend: "Ext.panel.Panel",
+    requires: ["Teselagen.manager.VectorViewerManager"],
     alias: "widget.vectorviewer",
     cls: "VectorViewer",
     floating: true,
