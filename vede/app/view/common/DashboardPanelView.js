@@ -629,12 +629,23 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 cls: 'partLibraryGrid',
                                 id: 'partLibrary',
                                 columns: [
+
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Name',
                                         width: 220,
                                         dataIndex: 'name'
                                     }, {
+                                        xtype: 'gridcolumn',
+                                        text: 'Preview',
+                                        tdCls: 'previewColumn',
+                                        width: 50,
+                                        // listeners: {
+                                        //     click: function (item) {
+                                        //         console.log(item);
+                                        //     }
+                                        // }
+                                    },{
                                         xtype: 'gridcolumn',
                                         text: 'Start BP',
                                         width: 80,
@@ -680,7 +691,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Features in Range',
                                         width: 150,
                                         dataIndex: 'features'
-                                    }
+                                    },
+
                                 ]
                             }
                         ]
