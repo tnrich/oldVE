@@ -114,6 +114,11 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
         }
     },
 
+    deselect: function() {
+        this.pieSelectionLayer.deselect();
+        this.railSelectionLayer.deselect();
+    },
+
     init: function(vectorViewer) {
         var vectorViewerId = vectorViewer.el.dom.id;
 
@@ -160,7 +165,7 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                 name: name,
                 length: length,
                 fontSize: this.self.NAMEBOX_FONT_SIZE
-            });
+            }).on("click", function(){});
 
             this.railNameBox = Ext.create("Vede.view.rail.NameBox", {
                 rail: this.railParentSVG,
@@ -168,7 +173,7 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                 name: name,
                 length: length,
                 fontSize: this.self.NAMEBOX_FONT_SIZE
-            });
+            }).on("click", function(){});
 
             this.pieFeatureSVG = this.pieParentSVG.append("svg:g")
                                       .attr("class", "vectorViewerPieFeature");
@@ -237,7 +242,7 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                 name: name,
                 length: length,
                 fontSize: this.self.NAMEBOX_FONT_SIZE
-            });
+            }).on("click", function(){});
         } else {
             this.railNameBox = Ext.create("Vede.view.rail.NameBox", {
                 rail: this.railParentSVG,
@@ -245,7 +250,19 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                 name: name,
                 length: length,
                 fontSize: this.self.NAMEBOX_FONT_SIZE
-            });
+            }).on("click", function(){});
         }
+    },
+
+    applySequenceManager: function(pSeqMan) {
+        if(this.pieRenderer) {
+            this.pieRenderer.setSequenceManager(pSeqMan);
+        }
+
+        if(this.railRenderer) {
+            this.railRenderer.setSequenceManager(pSeqMan);
+        }
+
+        return pSeqMan;
     }
 });

@@ -50,56 +50,54 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     //DNATools: null,
 
 
-    parseAndImportFiles: function(files) {
+    parseAndImportFile: function(file) {
         var self = this;
-        // Loop through the FileList and render image files as thumbnails.
-        for (var i = 0, f; f = files[i]; i++) {
+        var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
 
-            var file = files[i];
-            var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+        if(ext) {
 
-            // Only process image files.
-            if (!ext) {
-                continue;
-            }
+        var reader = new FileReader();
 
-            var reader = new FileReader();
+        // Closure to capture the file information.
+        reader.onload = (function(theFile) {
+            return function(e) {
 
-            // Closure to capture the file information.
-            reader.onload = (function(theFile) {
-                return function(e) {
+                var data = e.target.result;
+                var name = theFile.name;
+                var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-                    var data = e.target.result;
-                    var name = theFile.name;
-                    var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
+                toastr.info("Importing ", name);
 
-                    toastr.info("Importing ", name);
-
-                    self.parseSequence(data, ext, function(gb) {
-                        var sequence = Ext.create("Teselagen.models.SequenceFile",{
-                            sequenceFileContent: gb,
-                            sequenceFileFormat: "GENBANK",
-                            name: name,
-                            dateCreated:  new Date(),
-                            dateModified:  new Date(),
-                            firstTimeImported: true,
-                        });
-
-                        sequence.processSequence(function(err){
-                            sequence.save({
-                                success: function(){
-                                    Teselagen.manager.ProjectManager.sequences.add(sequence);
-                                }
-                            });
-                        });
-
+                self.parseSequence(data, ext, function(gb) {
+                    var sequence = Ext.create("Teselagen.models.SequenceFile",{
+                        sequenceFileContent: gb,
+                        sequenceFileFormat: "GENBANK",
+                        name: name,
+                        dateCreated:  new Date(),
+                        dateModified:  new Date(),
+                        firstTimeImported: true,
                     });
 
+                    sequence.processSequence(function(err){
+                        sequence.save({
+                            success: function(){
+                                Teselagen.manager.ProjectManager.sequences.add(sequence);
+                            }
+                        });
+                    });
 
-                };
-            })(f);
+                });
 
-            reader.readAsText(f);
+
+            };
+        })(file);
+
+        reader.readAsText(file);
+
+        }
+        else
+        {
+            console.warn("wrong file extension");
         }
     },
 
