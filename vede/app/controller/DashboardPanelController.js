@@ -265,9 +265,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
             "#mainAppPanel": {
                 beforetabchange: this.onBeforeTabChange
             },
-      			"#designGrid_Panel": {
-      				itemclick: this.onLastDEProjectsItemClick
-      			},
+            "#designGrid_Panel": {
+                itemclick: this.onLastDEProjectsItemClick
+            },
             "gridpanel[name='SequenceLibraryGrid']": {
                 itemclick: this.onSequenceGridItemClick,
                 itemmouseenter: this.onSequenceGridItemMouseEnter,
