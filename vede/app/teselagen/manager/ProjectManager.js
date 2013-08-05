@@ -178,8 +178,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(part.data.sequencefile_id);
                 var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
                 var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
-                // debugger;
-                console.log(features);
+                var partFeatures = [];
+                for(var z=0; z<features.length; z++)  {
+                    partFeatures.push(features[z].getName());
+                }
+                part.set("length", Math.abs(part.data.endBP - part.data.genbankStartBP));
+                part.set("features", partFeatures);
                 if(sequence) part.data.partSource = sequence.data.name;
             } else {
                 part.set("partSource", "");

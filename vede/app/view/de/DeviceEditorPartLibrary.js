@@ -136,7 +136,9 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                             grid.up("window").close();
                             var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
                             var currentTabEl = (currentTab.getEl());
-                            currentTabEl.unmask(); 
+                            currentTabEl.unmask();
+                            toastr.options.onclick = null;
+                            toastr.info("Part Added"); 
                         } else {
                             Ext.MessageBox.alert("Error","Failed mapping part from library");
                         }
