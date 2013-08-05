@@ -26,7 +26,7 @@ Ext.define('Vede.view.common.dropZone', {
 	listeners: {
 		afterrender: function(cmp) {
 			var dropZone = cmp.getEl().dom;
-			var sequenceLibrary = Ext.getCmp("sequenceLibrary").getEl().dom;
+			var sequenceLibrary = Ext.getCmp("sequenceLibraryArea").getEl().dom;
 			var handleFileSelect = cmp.handleFileSelect.bind(cmp);
 			sequenceLibrary.addEventListener('dragenter', cmp.handleDragEnter, false, cmp);
 			dropZone.addEventListener('dragleave', cmp.handleDragLeave, false, cmp);
@@ -36,11 +36,11 @@ Ext.define('Vede.view.common.dropZone', {
 	},
 
 	handleDragEnter: function(evt, cmp) {
-		$(".batch-import-area").show();
+		$(".batch-import-area").fadeIn("fast");
 	},
 
 	handleDragLeave: function(evt, cmp) {
-		$(".batch-import-area").hide();
+		$(".batch-import-area").stop().fadeOut("fast");
 	},
 
 	handleFileSelect: function(evt) {
@@ -51,16 +51,17 @@ Ext.define('Vede.view.common.dropZone', {
 		//this.processFile(evt);
 		//debugger;
 		var files = evt.dataTransfer.files;
-		$(".batch-import-area").hide();
+		$(".batch-import-area").fadeOut("fast");
 
 		this.fireEvent('drop', files);
 	},
 
 	handleDragOver: function(evt) {
-		$(".batch-import-area").show();
 
 		evt.stopPropagation();
 		evt.preventDefault();
+
+		// $(".batch-import-area").fadeIn("fast");
 		evt.dataTransfer.dropEffect = 'copy';
 	},
 

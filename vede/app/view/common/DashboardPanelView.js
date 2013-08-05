@@ -443,6 +443,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     {
                         xtype: 'container',
                         cls: 'sequenceLibraryContainer',
+                        id: 'sequenceLibraryArea',
                         flex: 1,
                         items : [
                             {
