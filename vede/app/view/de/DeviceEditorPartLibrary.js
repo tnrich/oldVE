@@ -4,6 +4,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
     title: "Part Library",
     cls: 'deviceEditorPartLibrary',
     height: 400,
+    closeAction: "close",
     width: 700,
     layout: {
         type: 'vbox',
@@ -162,5 +163,12 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 event.preventDefault;
             }
             }
-        }]
+        }],
+    listeners: {
+        close: function(win) {
+            var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+            var currentTabEl = (currentTab.getEl());
+            currentTabEl.unmask(); 
+        }
+    }
 });

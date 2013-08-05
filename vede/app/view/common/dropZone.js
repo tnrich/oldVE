@@ -17,10 +17,10 @@ Ext.define('Vede.view.common.dropZone', {
 
 	autoEl: {
 		tag: 'div',
-		id:  'dropZone-area',
+		id:  'dropZone',
 		cls: 'batch-import-area',
 		//html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
-		html: '<h2 id="dropZone"> + Drop files here</h2><div id="dropZone-close"></div>',
+		html: '<h2> + Drop files here</h2><div id="dropZone-close"></div>',
 	},
 
 	listeners: {
