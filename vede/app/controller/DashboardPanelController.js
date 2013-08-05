@@ -240,7 +240,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
     onVectorViewerMouseLeave: function(event, target) {
         var target = event.getRelatedTarget();
 
-        if(!target || target.className.indexOf("grid") === -1) {
+        // Check if we are mousing into an item on the grid. If not, hide the
+        // vector viewer.
+        if(!target || target.className.toString().indexOf("grid") === -1) {
             this.VectorViewer.hide();
         }
     },
