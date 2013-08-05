@@ -106,7 +106,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
                             this.viewManager.setFeatures(sequenceManager.getFeatures());
                         }
 
-                        this.viewManager.init(this.down('container[cls="vectorViewerContainer"]'));
+                        this.viewManager.init(self.down('container[cls="vectorViewerContainer"]'));
                         this.viewManager.updateNameBox();
                         this.viewManager.render();
 
@@ -149,7 +149,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
                 this.viewManager.setFeatures(sequenceManager.getFeatures());
             }
 
-            this.viewManager.init(this.down('container[cls="vectorViewerContainer"]'));
+            this.viewManager.init(self.down('container[cls="vectorViewerContainer"]'));
             this.viewManager.updateNameBox();
             this.viewManager.render();
 
