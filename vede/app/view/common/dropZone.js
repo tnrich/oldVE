@@ -57,6 +57,10 @@ Ext.define('Vede.view.common.dropZone', {
 	},
 
 	handleDragOver: function(evt) {
+
+		evt.stopPropagation();
+		evt.preventDefault();
+
 		// $(".batch-import-area").fadeIn("fast");
 		evt.dataTransfer.dropEffect = 'copy';
 	},
