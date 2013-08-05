@@ -116,8 +116,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             newTab.model = sequenceFileManager;
             newTab.sequenceFile = seq;
 
-            // Set VE tab options.
-            newTab.options = Teselagen.constants.Constants.DEFAULT_VE_VIEW_OPTIONS;
+            // Set VE tab options. Use JSON.parse and JSON.stringify on the default
+            // options object to prevent all tabs from sharing the options object.
+            // Gotta love pass-by-reference.
+            newTab.options = JSON.parse(JSON.stringify(Teselagen.constants.Constants.DEFAULT_VE_VIEW_OPTIONS));
             newTab.options.circular = sequenceFileManager.getCircular();
 
             if(part) {

@@ -132,17 +132,6 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
 
             this.caretIndex = 0;
         }
-
-        // Save the selection to the old tab so we can reselect it when we 
-        // switch back to it later.
-        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
-            if(this.SelectionLayer.selected) {
-                oldTab.options.selection = {
-                    start: this.SelectionLayer.start,
-                    end: this.SelectionLayer.end
-                }
-            }
-        }
     },
     
     onLaunch: function() {
