@@ -36,11 +36,11 @@ Ext.define('Vede.view.common.dropZone', {
 	},
 
 	handleDragEnter: function(evt, cmp) {
-		$(".batch-import-area").show();
+		$(".batch-import-area").fadeIn("fast");
 	},
 
 	handleDragLeave: function(evt, cmp) {
-		$(".batch-import-area").hide();
+		$(".batch-import-area").stop().fadeOut("fast");
 	},
 
 	handleFileSelect: function(evt) {
@@ -51,16 +51,13 @@ Ext.define('Vede.view.common.dropZone', {
 		//this.processFile(evt);
 		//debugger;
 		var files = evt.dataTransfer.files;
-		$(".batch-import-area").hide();
+		$(".batch-import-area").fadeOut("fast");
 
 		this.fireEvent('drop', files);
 	},
 
 	handleDragOver: function(evt) {
-		$(".batch-import-area").show();
-
-		evt.stopPropagation();
-		evt.preventDefault();
+		// $(".batch-import-area").fadeIn("fast");
 		evt.dataTransfer.dropEffect = 'copy';
 	},
 
