@@ -59,10 +59,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * @param {Function} (optional) Callback with design as argument 0.
      */
     generateDesign: function (binsArray, partsArray, eugeneRules, cb) {
-    	Teselagen.manager.GridManager.selectedGridPart = null;
+        Teselagen.manager.GridManager.selectedGridPart = null;
         Teselagen.manager.GridManager.selectedGridBin = null;
-    	
-    	if(typeof(cb)==="function")
+
+        this.backgroundSequenceProcessing(partsArray);
+
+        if(typeof(cb)==="function")
         {
             return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
         }
@@ -81,7 +83,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 icon: Ext.Msg.QUESTION
             });
         }
-    	
+        
     },
 
     /**
@@ -93,10 +95,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     loadDesign: function (binsArray, partsArray, eugeneRules, evt) {
         if (evt === "ok") {
-        	var gridManager = Teselagen.manager.GridManager;
-        	
-        	gridManager.setListenersEnabled(false);
-        	
+            var gridManager = Teselagen.manager.GridManager;
+            
+            gridManager.setListenersEnabled(false);
+            
             var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
             var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBinsAndPartsAndRules(existingDesign,binsArray,partsArray,eugeneRules);
             
@@ -120,7 +122,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * @param {Function} (optional) Callback with design as argument 0.
      */
     parseJSON: function (input,cb) {
-    	var jsonDoc = JSON.parse(input);
+        var jsonDoc = JSON.parse(input);
         jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
         
         var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
@@ -146,27 +148,27 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         
         // Parts Processing
         for (var i=0; i<parts.length; i++) {
-        	var part = parts[i];
-        	var partId;
-        	if (part["de:parts"]["de:part"] instanceof Array) {
+            var part = parts[i];
+            var partId;
+            if (part["de:parts"]["de:part"] instanceof Array) {
                 // Cover the special cases in which some structures parts are inside subnodes that are array
-        		partId = part["de:parts"]["de:part"][0].id;
+                partId = part["de:parts"]["de:part"][0].id;
             } else {
-            	partId = part["de:parts"]["de:part"].id;
+                partId = part["de:parts"]["de:part"].id;
             }
-        	
-        	getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
-        		var newPart = Ext.create("Teselagen.models.Part", {
+            
+            getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
+                var newPart = Ext.create("Teselagen.models.Part", {
                     //id: partId,
-        			name: part["de:name"],
+                    name: part["de:name"],
                     partSource: part["de:partSource"],
                     genbankStartBP: part["de:startBP"],
                     endBP: part["de:stopBP"],
                     revComp: part["de:revComp"],
                     fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]
                 });
-        		newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-        		
+                newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                
                 var partName;
                 partName = part.sequence.name;
                 if(part.sequence["de:fileName"]) {partName = part.sequence["de:fileName"].replace(".gb","");}
@@ -185,8 +187,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 
                 fullPartsAssocArray[partId] = newPart;
                 partsArray.push(newPart);
-        	});
-        	
+            });
+            
         }
         
         // Check the fas scheme
@@ -209,11 +211,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             
             if (typeof(binParts) === "number") {
                 // Cover special cases in which parts are inside sub array
-            	binParts = [];
+                binParts = [];
                 var itemsObj = bin["de:binItems"];
                 for (var prop in itemsObj) {
                     if (itemsObj.hasOwnProperty(prop)) {
-                    	binParts.push(itemsObj[prop]);
+                        binParts.push(itemsObj[prop]);
                     }
                 }
             }
@@ -223,18 +225,18 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             
             var temCellsArray = [];
             for (var j=0; j<binParts.length; j++) {
-            	var assocPart = fullPartsAssocArray[binParts[j]];
-            	var cellFas;
-            	if(isNewFasScheme) cellFas = cellFases[j];
-            	else cellFas = assocPart ? assocPart.get("fas") : "None";
-            	var newCell = Ext.create("Teselagen.models.Cell", {
+                var assocPart = fullPartsAssocArray[binParts[j]];
+                var cellFas;
+                if(isNewFasScheme) cellFas = cellFases[j];
+                else cellFas = assocPart ? assocPart.get("fas") : "None";
+                var newCell = Ext.create("Teselagen.models.Cell", {
                     index: j,
                     //part_id: binParts[j],
                     fas: cellFas
                 });
-            	newCell.setPart(assocPart);
-            	newCell.setJ5Bin(newBin);
-            	temCellsArray.push(newCell);
+                newCell.setPart(assocPart);
+                newCell.setJ5Bin(newBin);
+                temCellsArray.push(newCell);
             }
             
             newBin.cells().removeAll();
@@ -244,64 +246,64 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         
         
         if(typeof(cb) !== "function" ) { // Not parsing eugeneRules in tests
-	        
-	        //Process Eugene Rules
-	        var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
-	
-	        // Fix for issue caused by designs with eugeneRules not defined within array structures
-	        if (eugeneRules["de:eugeneRule"] instanceof Array) {
-	            eugeneRules = eugeneRules["de:eugeneRule"];
-	        }
-	
-	        if (eugeneRules.eugeneRule instanceof Array) {
-	            if(eugeneRules.eugeneRule.length === 0) {
-	                eugeneRules = [];
-	            }
-	        }
-	
-	        //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
-	        //else { console.log("Eugene rules found."); }
-	
-	        for (var k=0; k < eugeneRules.length; k++) {
-	            var rule = eugeneRules[k];
-	            var operand1 = fullPartsAssocArray[rule["de:operand1ID"]];
-	            var operand2;
-	            if(rule["de:operand2isNumber"]===true) operand2 = rule["de:operand2Number"];
-	            else operand2 = fullPartsAssocArray[rule["de:operand2ID"]];
-	            
-	            var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-	                name: rule["de:name"],
-	                compositionalOperator: rule["de:compositionalOperator"],
-	                negationOperator: rule["de:negationOperator"]
-	            });
-	            newEugeneRule.setOperand1(operand1);
-	            newEugeneRule.setOperand2(operand2);
-	            rulesArray.push(newEugeneRule);
-	            /*if(fullPartsAssocArray[operand1]) {
-	                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-	                    name: rule["de:name"],
-	                    compositionalOperator: rule["de:compositionalOperator"],
-	                    negationOperator: rule["de:negationOperator"]
-	                });
-	                fullPartsAssocArray[operand1].save({
-	                    callback: function(){
-	                        newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-	                    }
-	                });
-	                fullPartsAssocArray[operand2].save({
-	                    callback: function() {
-	                        newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
-	                    }
-	                });
-	                rulesArray.push(newEugeneRule);
-	            } else {
-	                //console.warn("Eugene rule possible not loaded");
-	            }*/
-	        }
+            
+            //Process Eugene Rules
+            var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
+    
+            // Fix for issue caused by designs with eugeneRules not defined within array structures
+            if (eugeneRules["de:eugeneRule"] instanceof Array) {
+                eugeneRules = eugeneRules["de:eugeneRule"];
+            }
+    
+            if (eugeneRules.eugeneRule instanceof Array) {
+                if(eugeneRules.eugeneRule.length === 0) {
+                    eugeneRules = [];
+                }
+            }
+    
+            //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
+            //else { console.log("Eugene rules found."); }
+    
+            for (var k=0; k < eugeneRules.length; k++) {
+                var rule = eugeneRules[k];
+                var operand1 = fullPartsAssocArray[rule["de:operand1ID"]];
+                var operand2;
+                if(rule["de:operand2isNumber"]===true) operand2 = rule["de:operand2Number"];
+                else operand2 = fullPartsAssocArray[rule["de:operand2ID"]];
+                
+                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                    name: rule["de:name"],
+                    compositionalOperator: rule["de:compositionalOperator"],
+                    negationOperator: rule["de:negationOperator"]
+                });
+                newEugeneRule.setOperand1(operand1);
+                newEugeneRule.setOperand2(operand2);
+                rulesArray.push(newEugeneRule);
+                /*if(fullPartsAssocArray[operand1]) {
+                    var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                        name: rule["de:name"],
+                        compositionalOperator: rule["de:compositionalOperator"],
+                        negationOperator: rule["de:negationOperator"]
+                    });
+                    fullPartsAssocArray[operand1].save({
+                        callback: function(){
+                            newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+                        }
+                    });
+                    fullPartsAssocArray[operand2].save({
+                        callback: function() {
+                            newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+                        }
+                    });
+                    rulesArray.push(newEugeneRule);
+                } else {
+                    //console.warn("Eugene rule possible not loaded");
+                }*/
+            }
         }
         
         //var devDes = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray);
-    	Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);    	
+        Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, partsArray, rulesArray, cb);     
     },
 
     /**
@@ -425,71 +427,69 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var binFases = [];
 
             for (j = 0; j < parts.length; j++) {
-                if(parts[j].textContent) {
-                    var partLookup = getPartByID(parts[j].textContent);
+                var partLookup = getPartByID(parts[j].textContent);
 
-                    if (!parts[j].nodeName) { 
-                        continue; 
-                    }
+                if (!parts[j].nodeName) { 
+                    continue; 
+                }
 
-                    part = partLookup.part;
+                part = partLookup.part;
 
-                    if(partLookup.linked) {
-                        delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
+                if(partLookup.linked) {
+                    delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
 
-                        var newCell = Ext.create("Teselagen.models.Cell", {
-                            index: j,
-                            fas: partLookup.fas || "None"
+                    var newCell = Ext.create("Teselagen.models.Cell", {
+                        index: j,
+                        fas: partLookup.fas || "None"
+                    });
+
+                    newCell.setPart(partLookup);
+                    newCell.setJ5Bin(newBin);
+
+                    newBin.cells.add(newCell);
+                } else {
+                    var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
+                    var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+                    var name = this.getTagText(part, "name");
+                    var startBP = this.getTagText(part, "startBP");
+                    var endBP = this.getTagText(part, "stopBP");
+                    var revComp = this.getTagText(part, "revComp");
+
+                    newPart = Ext.create("Teselagen.models.Part", {
+                        name: name,
+                        genbankStartBP: startBP,
+                        endBP: endBP,
+                        revComp: revComp ? true :  false,
+                    });
+
+                    getSequenceByID(hash, function (sequence) {
+                        // Sequence processing
+                        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                            sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
+                            sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
+                            sequenceFileName: me.getTagText(sequence, "fileName")
                         });
 
-                        newCell.setPart(partLookup);
-                        newCell.setJ5Bin(newBin);
+                        newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                        newSequence.set("name",newPart.get("name"));
 
-                        newBin.cells.add(newCell);
-                    } else {
-                        var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
-                        var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
-                        var name = this.getTagText(part, "name");
-                        var startBP = this.getTagText(part, "startBP");
-                        var endBP = this.getTagText(part, "stopBP");
-                        var revComp = this.getTagText(part, "revComp");
+                        newPart.setSequenceFile(newSequence);
+                    });
 
-                        newPart = Ext.create("Teselagen.models.Part", {
-                            name: name,
-                            genbankStartBP: startBP,
-                            endBP: endBP,
-                            revComp: revComp ? true :  false,
-                        });
+                    //binFases.push(newPart.get("fas"));
+                    
+                    var newCell = Ext.create("Teselagen.models.Cell", {
+                        index: j,
+                        fas: fas || "None"
+                    });
 
-                        getSequenceByID(hash, function (sequence) {
-                            // Sequence processing
-                            var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                                sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
-                                sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                                sequenceFileName: me.getTagText(sequence, "fileName")
-                            });
+                    newCell.setPart(newPart);
+                    newCell.setJ5Bin(newBin);
 
-                            newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-                            newSequence.set("name",newPart.get("name"));
+                    newBin.cells().add(newCell);
 
-                            newPart.setSequenceFile(newSequence);
-                        });
-
-                        //binFases.push(newPart.get("fas"));
-                        
-                        var newCell = Ext.create("Teselagen.models.Cell", {
-                            index: j,
-                            fas: fas || "None"
-                        });
-
-                        newCell.setPart(newPart);
-                        newCell.setJ5Bin(newBin);
-
-                        newBin.cells().add(newCell);
-
-                        tempPartsArray.push(newPart);
-                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
-                    }
+                    tempPartsArray.push(newPart);
+                    fullPartsAssocArray[part.getAttribute("id")] = newPart;
                 }
             }
 
@@ -556,8 +556,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     parseEugeneRules: function(content,filename,design){
 
-    	
-    	design.rules().clearFilter(true);
+        
+        design.rules().clearFilter(true);
         // Existing rules
         var existingRules = design.rules();
 
@@ -708,12 +708,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var ruleDuplNameMap = {};
         var fullNamesArray = [];
         for(var i=0;i<parsedRules.length;i++) {
-        	var parsedRule = parsedRules[i];
-        	var repeated = false;
-        	var nameConflict = false;
-        	for(var j=0;j<existingRules.count();j++) {
-        		var existingRule = existingRules.getAt(j);
-        		if(
+            var parsedRule = parsedRules[i];
+            var repeated = false;
+            var nameConflict = false;
+            for(var j=0;j<existingRules.count();j++) {
+                var existingRule = existingRules.getAt(j);
+                if(
                     parsedRule.data.operand1_id === existingRule.data.operand1_id &&
                     parsedRule.data.operand2_id === existingRule.data.operand2_id &&
                     parsedRule.data.negationOperator === existingRule.data.negationOperator &&
@@ -721,49 +721,49 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     parsedRule.data.operand2Number === existingRule.data.operand2Number &&
                     parsedRule.data.compositionalOperator === existingRule.data.compositionalOperator
                 ) {
-        			repeatedRules.push({"originalRuleLine": parsedRule.data.originalRuleLine});
-        			repeated = true;
-        			break;
-        		} else if(parsedRule.data.name === existingRule.data.name) {		
-        			nameConflict = true;
-        		} 
-        	}
-        	if(!repeated && !nameConflict) {
-    			newRules.add(parsedRule);
-    			fullNamesArray.push(parsedRule.get("name"));
-    		} else if(nameConflict && !repeated) {
-    			ruleDuplNameMap[parsedRule.data.name] = parsedRule;
-    		}
+                    repeatedRules.push({"originalRuleLine": parsedRule.data.originalRuleLine});
+                    repeated = true;
+                    break;
+                } else if(parsedRule.data.name === existingRule.data.name) {        
+                    nameConflict = true;
+                } 
+            }
+            if(!repeated && !nameConflict) {
+                newRules.add(parsedRule);
+                fullNamesArray.push(parsedRule.get("name"));
+            } else if(nameConflict && !repeated) {
+                ruleDuplNameMap[parsedRule.data.name] = parsedRule;
+            }
         }
         
         if(!$.isEmptyObject(ruleDuplNameMap)) {
-        	for(var i=0;i<existingRules.count();i++) {
-        		fullNamesArray.push(existingRules.getAt(i).get("name"));
-        	}
-        	
-        	var existingSuffixes = {};
-	        for(var name in ruleDuplNameMap) {
-	        	var nameRegex = new RegExp("^"+(name+"_").replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")+"(\\d+)$");
-		        for(var i=0;i<fullNamesArray.length;i++) {
-		        	var match = nameRegex.exec(fullNamesArray[i]);
-		        	if(match && Number(match[1])) {
-		        		var maxNum = existingSuffixes[name];
-		        		existingSuffixes[name] = (maxNum>Number(match[1])) ? maxNum : Number(match[1]);
-		        	}
-		        }
-	        }
-	        for(var oldName in existingSuffixes) {
-	        	var rule = ruleDuplNameMap[oldName];
-	        	var newName = oldName+"_"+(existingSuffixes[oldName]+1);
-	        	var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
-	            conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
-	            rule.set("name", newName);
-	            rule.set("originalRuleLine",rule.get("originalRuleLine").replace(existingRule.get("name"),rule.get("name")));
-	            newRules.add(rule);
-	        }
-	        
+            for(var i=0;i<existingRules.count();i++) {
+                fullNamesArray.push(existingRules.getAt(i).get("name"));
+            }
+            
+            var existingSuffixes = {};
+            for(var name in ruleDuplNameMap) {
+                var nameRegex = new RegExp("^"+(name+"_").replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")+"(\\d+)$");
+                for(var i=0;i<fullNamesArray.length;i++) {
+                    var match = nameRegex.exec(fullNamesArray[i]);
+                    if(match && Number(match[1])) {
+                        var maxNum = existingSuffixes[name];
+                        existingSuffixes[name] = (maxNum>Number(match[1])) ? maxNum : Number(match[1]);
+                    }
+                }
+            }
+            for(var oldName in existingSuffixes) {
+                var rule = ruleDuplNameMap[oldName];
+                var newName = oldName+"_"+(existingSuffixes[oldName]+1);
+                var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
+                conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
+                rule.set("name", newName);
+                rule.set("originalRuleLine",rule.get("originalRuleLine").replace(existingRule.get("name"),rule.get("name")));
+                newRules.add(rule);
+            }
+            
         }
-    	
+        
         var eugeneRulesImportWindow = Ext.create("Vede.view.de.EugeneRulesImportDialog").show();
 
         eugeneRulesImportWindow.down("grid[name='new']").reconfigure(newRules);
@@ -821,6 +821,27 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             text = elem.textContent;
         }
         return text;
+    },
+
+    backgroundSequenceProcessing: function(parts){
+        debugger;
+        var processFlag = true;
+        toastr.options.onclick = function(){
+            processFlag = false;
+        };
+        toastr.info("Parsing sequences in background (click to cancel)");
+        parts.forEach(function(part){
+            if(processFlag) {
+                debugger;
+            part.getSequenceFile({
+                callback: function(sequence){
+                sequence.processSequence(function(err,seq){
+                    console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
+                    //if(err) debugger;
+                });
+            }});
+            }
+        });
     }
 
 });
