@@ -34,19 +34,17 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         nowTime = Ext.Date.format(now, "g:i:s A  ");
         nowDate = Ext.Date.format(now, "l, F d, Y");
 
-        var successFullSavedCallback = function(){
+        var successFullSavedCallback = function(err){
             currentTabPanel.setLoading(false);
             var parttext = Ext.getCmp("mainAppPanel").getActiveTab().down("tbtext[cls=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
             toastr.info ("Sequence Saved");
-            Teselagen.manager.ProjectManager.sequences.add(self.sequence);
+            if(!err )Teselagen.manager.ProjectManager.sequences.add(self.sequence);
 
-            //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-            //                    Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id);
-                            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-            //                    Vede.application.fireEvent("PopulateStats");
-            //});
+
+            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+
 
             if(typeof (cb) === "function") { cb(); }
         };
@@ -57,12 +55,14 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     Ext.getCmp("mainAppPanel").getActiveTab().model = self.sequenceFileManager.clone();
                     Ext.getCmp("mainAppPanel").getActiveTab().modelId = self.sequence.id;
                     var response = JSON.parse(operation.response.responseText);
-                    successFullSavedCallback();
+                    
                     
                     if(response.duplicated)
                     {
-                        Ext.MessageBox.alert("Warning", "A part with the same name already exist in this project, using the unique instance of this sequence.");
+                        successFullSavedCallback(true);
+                        Ext.MessageBox.alert("Warning", "A sequence with the same name already exist in the database, using the unique instance of this sequence.");
                     }
+                    else successFullSavedCallback(false);
                 },
                 failure: function() {
                     Ext.MessageBox.alert("Error", "Error saving sequence.");
