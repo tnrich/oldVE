@@ -96,7 +96,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onBeforeTabChange: function(tabPanel, newTab, oldTab) {
         
-    	if(oldTab && oldTab.initialCls === "DeviceEditorTab") {
+    	if(oldTab && oldTab.initialCls === "DeviceEditorTab" && this.grid.el) {
             var selectedBin = this.GridManager.selectedGridBin;
             var selectedCell = this.GridManager.selectedGridPart;
 

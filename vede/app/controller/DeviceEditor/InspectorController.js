@@ -856,12 +856,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var self = this;
             newOperand2.save({
                 callback: function() {
-                    if (newOperand2 != oldOperand2) {                        
-                        Vede.application.fireEvent('getNewGridParts', newOperand2);
-                        if (oldrules <= 1) {
-                            Vede.application.fireEvent('getOldGridParts', oldOperand2);
-                        }
-                    }
                     rule.setOperand2(newOperand2)
                     var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                     self.eugeneRulesGrid.reconfigure(rulesStore);
@@ -883,8 +877,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var self = this;
             newOperand2.save({
                 callback: function() {
-                    Vede.application.fireEvent('getNewGridParts', newOperand2);
-
                     rule.setOperand2(newOperand2)
                     var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                     self.eugeneRulesGrid.reconfigure(rulesStore);
@@ -902,17 +894,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var oldOperand2 = this.DeviceDesignManager.getPartById(this.activeProject, oldId);
             var rule = this.DeviceDesignManager.getRuleByName(this.activeProject, ruleName);
             var self = this;
-                Vede.application.fireEvent('getOldGridParts', oldOperand2);
-
-                rule.setOperand2(newOperand2)
-                var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
-                self.eugeneRulesGrid.reconfigure(rulesStore);
-                    
-                //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
-                self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
-                self.onPartSelected(operand1, self.selectedBinIndex);
-                Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+            rule.setOperand2(newOperand2)
+            var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
+            self.eugeneRulesGrid.reconfigure(rulesStore);
+                
+            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
+            self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
+            self.onPartSelected(operand1, self.selectedBinIndex);
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
         } else {
             var newOperand2 = newId;
             var oldOperand2 = oldId;
@@ -938,9 +927,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var oldrules = this.DeviceDesignManager.getNumberOfRulesInvolvingPart(this.activeProject, oldOperand2);
         
         if (newCompOperator === "MORETHAN" && newCompOperator != oldCompOperator) {
-            if (oldrules <= 0) {
-                Vede.application.fireEvent('getOldGridParts', oldOperand2);
-            }
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1);
             Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
@@ -949,8 +935,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if (oldOperand2.data.id) {
                 oldOperand2.save({
                     callback: function() {
-                        Vede.application.fireEvent('getNewGridParts', oldOperand2);
-
                         rule.setOperand2(oldOperand2)
                         var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                         self.eugeneRulesGrid.reconfigure(rulesStore);
@@ -971,8 +955,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 firstPart.save({
                     callback: function() {
-                        Vede.application.fireEvent('getNewGridParts', firstPart);
-
                         rule.setOperand2(firstPart)
                         var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                         self.eugeneRulesGrid.reconfigure(rulesStore);
@@ -1002,6 +984,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             allowBlank: false,
             minValue: 0,
             allowDecimals: false,
+            value: 0
         });
         var nameField = Ext.create('Ext.form.field.ComboBox', {
             store: partsStore,
