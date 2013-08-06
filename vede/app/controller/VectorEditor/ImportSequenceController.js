@@ -40,16 +40,16 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     }
 
                     else {
-                        if(Teselagen.manager.ProjectManager.workingSequence) {
-                            var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
-                            if(name == "Untitled VEProject" || name == "" || sequence.get("project_id") == "") {
-                                Teselagen.manager.ProjectManager.workingSequence.set('name',seqMgr.name);
-                            }
-                            else {   
-                                Teselagen.manager.ProjectManager.workingSequence.set('name',name);
-                                seqMgr.setName(name);
-                            }
-                        }
+                        //if(Teselagen.manager.ProjectManager.workingSequence) {
+                        //    var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
+                        //    if(name == "Untitled VEProject" || name == "" || sequence.get("project_id") == "") {
+                        //        Teselagen.manager.ProjectManager.workingSequence.set('name',seqMgr.name);
+                        //    }
+                        //    else {   
+                        //        Teselagen.manager.ProjectManager.workingSequence.set('name',name);
+                        //        seqMgr.setName(name);
+                        //    }
+                        //}
                         
                         Vede.application.fireEvent(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, seqMgr);
                         sequence.set('sequenceFileContent',seqMgr.toGenbank().toString());

@@ -186,6 +186,8 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             return;
         }
 
+        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+
         this.callParent();
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
@@ -194,6 +196,10 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.pieManager.render();
 
         this.pieManager.updateNameBox();
+
+        if(currentTab.title !== this.SequenceManager.getName()) {
+            currentTab.setTitle(this.SequenceManager.getName());
+        }
     },
 
     onActiveEnzymesChanged: function() {
