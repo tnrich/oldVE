@@ -260,8 +260,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
             },
             "gridpanel[name='PartLibraryGrid']": {
                 itemclick: this.onPartGridItemClick,
-                mouseenter: this.onPartGridItemMouseEnter,
-                mouseleave: this.onPartGridItemMouseLeave
+                itemmouseenter: this.onPartGridItemMouseEnter,
+                itemmouseleave: this.onPartGridItemMouseLeave
             }
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
