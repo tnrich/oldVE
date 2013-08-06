@@ -28,7 +28,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 change: function(field, newValue, oldValue, eOpts) {
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
-                    grid.store.clearFilter();
+                    grid.store.clearFilter(true);
 
                     if (newValue) {
                         var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
@@ -51,6 +51,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             flex: 1,
             name: "deviceEditorPartLibraryGrid",
             border: false,
+            autoScroll: true,
             columns: [
                     {
                         xtype: 'gridcolumn',
