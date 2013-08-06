@@ -241,6 +241,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.models.j5Output.AssembledSequenceFile": [],
   "Teselagen.constants.SBOLIcons": [],
   "Teselagen.bio.parsers.GenbankFeatureQualifier": [],
+  "Teselagen.models.CutSite": [],
   "Vede.view.PartLibraryWindow": [],
   "Teselagen.bio.parsers.GenbankLocusKeyword": [],
   "Teselagen.renderer.annotate.TextRenderer": [],
@@ -286,6 +287,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.controller.DeviceEditor.J5Controller": [],
   "Teselagen.renderer.annotate.LineRenderer": [],
   "Ext.ux.TreePicker": [],
+  "Vede.view.ve.PreferencesWindow": [],
   "Teselagen.manager.SessionManager": [],
   "Teselagen.manager.GridManager": [],
   "Teselagen.renderer.rail.FeatureLabel": [],
@@ -299,6 +301,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.renderer.annotate.CutSiteRenderer": [],
   "Ext.ux.BoxReorderer": [],
   "Ext.ux.grid.filter.Filter": [],
+  "Vede.controller.VectorEditor.PropertiesWindowController": [],
   "Teselagen.models.DNAFeature": [],
   "Teselagen.manager.RestrictionEnzymeGroupManager": [],
   "Teselagen.bio.parsers.GenbankFeatureLocation": [],
@@ -310,6 +313,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.BioException": [],
   "Vede.controller.VectorEditor.SequenceController": [],
   "Teselagen.bio.tools.DigestionCalculator": [],
+  "Teselagen.models.ORF": [],
   "Vede.view.AppViewport": [],
   "Teselagen.bio.sequence.symbols.NucleotideSymbol": [],
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
@@ -701,6 +705,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.models.j5Output.AssembledSequenceFile": [],
   "Teselagen.constants.SBOLIcons": [],
   "Teselagen.bio.parsers.GenbankFeatureQualifier": [],
+  "Teselagen.models.CutSite": [],
   "Vede.view.PartLibraryWindow": [
     "widget.partLibrary"
   ],
@@ -758,6 +763,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.TreePicker": [
     "widget.treepicker"
   ],
+  "Vede.view.ve.PreferencesWindow": [],
   "Teselagen.manager.SessionManager": [],
   "Teselagen.manager.GridManager": [],
   "Teselagen.renderer.rail.FeatureLabel": [],
@@ -773,6 +779,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.renderer.annotate.CutSiteRenderer": [],
   "Ext.ux.BoxReorderer": [],
   "Ext.ux.grid.filter.Filter": [],
+  "Vede.controller.VectorEditor.PropertiesWindowController": [],
   "Teselagen.models.DNAFeature": [],
   "Teselagen.manager.RestrictionEnzymeGroupManager": [],
   "Teselagen.bio.parsers.GenbankFeatureLocation": [],
@@ -784,6 +791,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.BioException": [],
   "Vede.controller.VectorEditor.SequenceController": [],
   "Teselagen.bio.tools.DigestionCalculator": [],
+  "Teselagen.models.ORF": [],
   "Vede.view.AppViewport": [],
   "Teselagen.bio.sequence.symbols.NucleotideSymbol": [],
   "Teselagen.bio.sequence.symbols.GapSymbol": [],

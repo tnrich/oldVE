@@ -10,6 +10,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     singleton: true,
 
     requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper",
+                "Teselagen.bio.enzymes.RestrictionCutSite",
                "Teselagen.bio.sequence.DNATools"],
 
     config: {
@@ -56,6 +57,49 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     getAllCutSites: function() {
         this.recalcIfNeeded();
         return this.allCutSites;
+    },
+
+    /**
+     * Converts each Restriction Enzyme and it's number of cuts to JSON object to agree with the Teselagen.models.CutSite format
+     * for loading into properties window.
+     */
+    getRestrictionEnzymeNumCutsJSON: function() {
+        this.recalcIfNeeded();
+        var cutSites = this.allCutSites;
+        var restrictionEnzymes = [];
+        var cutSitesCount = cutSites.length;
+
+        for (i = 0; i < cutSitesCount; i++) {
+            restrictionEnzyme = cutSites[i].enzymeToJSON();
+            var restrictionEnzymesCount = restrictionEnzymes.length;
+            var addEnzyme = true;
+            for (j=0; j < restrictionEnzymesCount; j++) {
+                if (restrictionEnzymes[j].name === restrictionEnzyme.name) {
+                    addEnzyme = false;
+                }
+            }
+            if (addEnzyme) {
+                restrictionEnzymes.push(restrictionEnzyme);
+            }
+        };
+        return restrictionEnzymes;
+    },
+
+    /**
+     * Converts each Cut Site to JSON object to agree with the Teselagen.models.CutSite format
+     * for loading into properties window.
+     */
+    getAllCutSitesJSON: function() {
+        this.recalcIfNeeded();
+        var cutSites = this.allCutSites;
+        var newCutSites = [];
+        var cutSitesCount = cutSites.length;
+
+        for (i = 0; i < cutSitesCount; i++) {
+            newCutSite = cutSites[i].cutSiteToJSON();
+            newCutSites.push(newCutSite);
+        };
+        return newCutSites;
     },
 
     /**
@@ -226,6 +270,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         } else {
             sortedCutSites.sort(this.sortByEnd);
         }
+        console.log(sortedCutSites);
         return sortedCutSites;
     },
 

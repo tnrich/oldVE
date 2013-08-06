@@ -89,5 +89,9 @@ Ext.define("Teselagen.bio.orf.ORF", {
         };
 
         return this;
+    },
+
+    toJSON: function () {
+        return { "position": (this.getStart() + " - " + this.getEnd()), "length": ((this.getEnd() - this.getStart()) + 1), "strand": this.getStrand(), "frame": this.getFrame()};
     }
 });

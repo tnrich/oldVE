@@ -188,7 +188,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
      */
     onPartGridItemMouseEnter: function(grid, part, el, index, event) {
         var boundingRect = el.getBoundingClientRect();
-
+        // debugger;
+        console.log(el.children[1]);
         if(part.getSequenceFile()) {
             if(!this.VectorViewer) {
                 this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
@@ -259,8 +260,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
             },
             "gridpanel[name='PartLibraryGrid']": {
                 itemclick: this.onPartGridItemClick,
-                itemmouseenter: this.onPartGridItemMouseEnter,
-                itemmouseleave: this.onPartGridItemMouseLeave
+                mouseenter: this.onPartGridItemMouseEnter,
+                mouseleave: this.onPartGridItemMouseLeave
             }
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);

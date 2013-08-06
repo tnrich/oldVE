@@ -61,9 +61,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     generateDesign: function (binsArray, partsArray, eugeneRules, cb) {
     	Teselagen.manager.GridManager.selectedGridPart = null;
         Teselagen.manager.GridManager.selectedGridBin = null;
-
-        this.backgroundSequenceProcessing(partsArray);
-
+    	
     	if(typeof(cb)==="function")
         {
             return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
@@ -427,69 +425,71 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var binFases = [];
 
             for (j = 0; j < parts.length; j++) {
-                var partLookup = getPartByID(parts[j].textContent);
+                if(parts[j].textContent) {
+                    var partLookup = getPartByID(parts[j].textContent);
 
-                if (!parts[j].nodeName) { 
-                    continue; 
-                }
+                    if (!parts[j].nodeName) { 
+                        continue; 
+                    }
 
-                part = partLookup.part;
+                    part = partLookup.part;
 
-                if(partLookup.linked) {
-                    delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
+                    if(partLookup.linked) {
+                        delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
 
-                    var newCell = Ext.create("Teselagen.models.Cell", {
-                        index: j,
-                        fas: partLookup.fas || "None"
-                    });
-
-                    newCell.setPart(partLookup);
-                    newCell.setJ5Bin(newBin);
-
-                    newBin.cells.add(newCell);
-                } else {
-                    var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
-                    var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
-                    var name = this.getTagText(part, "name");
-                    var startBP = this.getTagText(part, "startBP");
-                    var endBP = this.getTagText(part, "stopBP");
-                    var revComp = this.getTagText(part, "revComp");
-
-                    newPart = Ext.create("Teselagen.models.Part", {
-                        name: name,
-                        genbankStartBP: startBP,
-                        endBP: endBP,
-                        revComp: revComp ? true :  false,
-                    });
-
-                    getSequenceByID(hash, function (sequence) {
-                        // Sequence processing
-                        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                            sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
-                            sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                            sequenceFileName: me.getTagText(sequence, "fileName")
+                        var newCell = Ext.create("Teselagen.models.Cell", {
+                            index: j,
+                            fas: partLookup.fas || "None"
                         });
 
-                        newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-                        newSequence.set("name",newPart.get("name"));
+                        newCell.setPart(partLookup);
+                        newCell.setJ5Bin(newBin);
 
-                        newPart.setSequenceFile(newSequence);
-                    });
+                        newBin.cells.add(newCell);
+                    } else {
+                        var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
+                        var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+                        var name = this.getTagText(part, "name");
+                        var startBP = this.getTagText(part, "startBP");
+                        var endBP = this.getTagText(part, "stopBP");
+                        var revComp = this.getTagText(part, "revComp");
 
-                    //binFases.push(newPart.get("fas"));
-                    
-                    var newCell = Ext.create("Teselagen.models.Cell", {
-                        index: j,
-                        fas: fas || "None"
-                    });
+                        newPart = Ext.create("Teselagen.models.Part", {
+                            name: name,
+                            genbankStartBP: startBP,
+                            endBP: endBP,
+                            revComp: revComp ? true :  false,
+                        });
 
-                    newCell.setPart(newPart);
-                    newCell.setJ5Bin(newBin);
+                        getSequenceByID(hash, function (sequence) {
+                            // Sequence processing
+                            var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
+                                sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
+                                sequenceFileName: me.getTagText(sequence, "fileName")
+                            });
 
-                    newBin.cells().add(newCell);
+                            newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                            newSequence.set("name",newPart.get("name"));
 
-                    tempPartsArray.push(newPart);
-                    fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                            newPart.setSequenceFile(newSequence);
+                        });
+
+                        //binFases.push(newPart.get("fas"));
+                        
+                        var newCell = Ext.create("Teselagen.models.Cell", {
+                            index: j,
+                            fas: fas || "None"
+                        });
+
+                        newCell.setPart(newPart);
+                        newCell.setJ5Bin(newBin);
+
+                        newBin.cells().add(newCell);
+
+                        tempPartsArray.push(newPart);
+                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                    }
                 }
             }
 
@@ -821,26 +821,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             text = elem.textContent;
         }
         return text;
-    },
-
-    backgroundSequenceProcessing: function(parts){
-
-        var processFlag = true;
-        toastr.options.onclick = function(){
-            processFlag = false;
-        };
-        toastr.info("Parsing sequences in background (click to cancel)");
-        parts.forEach(function(part){
-            if(processFlag) {
-            part.getSequenceFile({
-                callback: function(sequence){
-                sequence.processSequence(function(err,seq){
-                    console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
-                    //if(err) debugger;
-                });
-            }});
-            }
-        });
     }
 
 });
