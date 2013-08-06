@@ -256,7 +256,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
     },
 
     deleteDesign: function(selectedDesign, cb){
-        console.log("here");
         function DeleteDeviceDesignBtn (btn) {
             if (btn==="ok") {
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(selectedDesign);
