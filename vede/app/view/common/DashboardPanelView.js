@@ -490,6 +490,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 name: 'SequenceLibraryGrid',
                                 cls: 'sequenceLibraryGrid',
                                 id: 'sequenceLibrary',
+                                autoScroll: true,
                                 columns: [
                                     {
                                         xtype: 'gridcolumn',
