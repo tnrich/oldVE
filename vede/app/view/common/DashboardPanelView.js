@@ -444,14 +444,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         cls: 'sequenceLibraryContainer',
                         id: 'sequenceLibraryArea',
-                        flex: 1,
                         items : [
                             {
                                 xtype: 'textfield',
-                                layout: {
-                                    type: 'fit',
-                                    align: 'stretch'
-                                },
                                 anchor: '100%',
                                 height: 30,
                                 cls: 'sequenceLibrarySearchField',
@@ -485,7 +480,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             },
                             {
                                 xtype: 'gridpanel', 
-                                layout: 'fit',
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
                                 cls: 'sequenceLibraryGrid',
@@ -599,9 +593,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 },
                 items: [
                     {
-                        xtype: 'container'
-                    },
-                    {
                         xtype: 'container',
                         cls: 'partLibraryContainer',
                         flex: 1,
@@ -648,6 +639,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 name: 'PartLibraryGrid',
                                 loadMask: true,
                                 cls: 'partLibraryGrid',
+                                height: '100%',
+                                autoScroll: true,
                                 id: 'partLibrary',
                                 columns: [
 
