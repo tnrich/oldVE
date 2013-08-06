@@ -557,7 +557,27 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         }
                                     }
                                     
-                                    ]
+                                    ],
+                                listeners: {
+                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                        e.preventDefault();
+                                        var contextMenu = Ext.create('Ext.menu.Menu',{
+                                              items: [{
+                                                text: 'Open',
+                                                handler: function(){
+                                                    Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record);
+                                                }
+                                              },{
+                                                text: 'Download',
+                                                handler: function() {
+                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
+                                                    VEManager.saveSequenceToFile();
+                                                }
+                                              }]
+                                        }).show();
+                                        contextMenu.setPagePosition(e.getX(),e.getY()-5)
+                                    }
+                                }
                             },
                             {
                                 xtype: "dropZone",

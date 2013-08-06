@@ -144,15 +144,17 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         this.promptFormat(function(btn,dialog){
 
-                gb  = self.sequenceFileManager.toGenbank().toString();
-                var locusName = self.sequenceFileManager.getName();
+                var mgr = self.sequence.getSequenceManager();
+
+                gb  = mgr.toGenbank().toString();
+                var locusName = mgr.getName();
 
                 if (btn==="GENBANK") {
                     performSavingOperation(gb,locusName+'.gb');
                 }
                 else if (btn==="FASTA") {
                     var data = ">"+locusName+"\n";
-                    data += self.sequenceFileManager.sequence.toString();
+                    data += mgr.sequence.toString();
                     performSavingOperation(data,locusName+'.fas');
                 }
                 else if (btn==="SBOL XML/RDF") {

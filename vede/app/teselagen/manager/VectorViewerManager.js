@@ -126,6 +126,7 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
         // add svg elements. Otherwise, just set this.pie to the pie in this tab,
         // and so on.
         if(!d3.select("#" + vectorViewerId + " .VectorViewer").node()) {
+            console.log("new pie");
             this.pie = d3.select("#" + vectorViewerId)
                          .append("svg:svg")
                          .attr("class", "VectorViewer")
@@ -196,6 +197,8 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
                                     .attr("fill", Teselagen.manager.PieManager.SELECTION_COLOR)
                                     .attr("fill-opacity", Teselagen.manager.PieManager.SELECTION_TRANSPARENCY);
         } else {
+            console.log("old pie");
+
             this.pie = d3.select("#" + vectorViewerId + " .VectorViewer");
 
             this.pieParentSVG = this.pie.select(".vectorViewerPieParent");
@@ -213,6 +216,8 @@ Ext.define("Teselagen.manager.VectorViewerManager", {
             this.pieSelectionSVG = this.pieParentSVG.select(".vectorViewerPieSelection");
             this.railSelectionSVG = this.railParentSVG.select(".vectorViewerRailSelection");
         }
+
+        console.log(this.features);
 
         if(this.sequenceManager.getCircular()) {
             this.pieRenderer.setFeatureSVG(this.pieFeatureSVG);

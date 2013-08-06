@@ -420,25 +420,25 @@ Ext.define("Teselagen.models.SequenceFile", {
     },
 
     processSequence: function(cb){
-        if(!this.get("serialize") && this.get("sequenceFileContent"))
-        {
-            if(this.get("sequenceFileFormat")==="Genbank")
-            {
-                var gb = Teselagen.utils.FormatUtils.fileToGenbank(this.get("sequenceFileContent"), "gb");
-                var seqMgr =  Teselagen.utils.FormatUtils.genbankToSequenceManager( gb );
-                if(seqMgr)
-                {
-                    this.setSequenceManager( seqMgr );
-                    return cb(false,seqMgr);
-                }
-                else return cb(true);
+        var fileContent = this.get("sequenceFileContent");
+        var fileFormat = 
+            Teselagen.constants.Constants.SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP[
+                this.get("sequenceFileFormat")];
+
+        if(!this.get("serialize") && fileContent) {
+            var gb = Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
+                                                               fileFormat);
+
+            var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+
+            if(seqMgr) {
+                this.setSequenceManager( seqMgr );
+                return cb(false, seqMgr);
+            } else {
+                return cb(true);
             }
-            else
-            {
-                console.warn("not a genbank");
-                cb(true)
-            }
+        } else {
+            return cb(true);
         }
-        else return cb(true);
     }
 });

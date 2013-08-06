@@ -271,48 +271,46 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         var design = Ext.getCmp("mainAppPanel").getActiveTab().model; 
         
         var saveAssociatedSequence = function (part, cb) {
-            // Do not save sequence for a phantom or named part
-            
-            if( !part.isNamed() )
-                {
-                    part.getSequenceFile({callback: function(associatedSequence){
-                        
-                        if(associatedSequence)
+            // Do not save sequence for an unmapped part.
+            if(part.isMapped())
+            {
+                part.getSequenceFile({callback: function(associatedSequence){
+                    if(associatedSequence)
+                    {
+                        var lastSequenceId = associatedSequence.get("id");
+                        associatedSequence.set("dateCreated", new Date());
+                        associatedSequence.set("dateModified", new Date());
+                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId)
                         {
-                            var lastSequenceId = associatedSequence.get("id");
-                            associatedSequence.set("dateCreated", new Date());
-                            associatedSequence.set("dateModified", new Date());
-                            if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get("id"))
-                            {
-                                associatedSequence.save({
-                                    callback: function (sequencefile) {
-                                        if(!lastSequenceId)
-                                        {
-                                            part.set("sequencefile_id", sequencefile.get("id"));
-                                            part.save({
-                                                callback: function () {
-                                                    cb();
-                                                }
-                                            });
-                                        }
-                                        else { cb(); }
+                            associatedSequence.save({
+                                callback: function (sequencefile) {
+                                    if(!lastSequenceId)
+                                    {
+                                        part.set("sequencefile_id", sequencefile.get("id"));
+                                        part.save({
+                                            callback: function () {
+                                                cb();
+                                            }
+                                        });
                                     }
-                                });
-                            }
-                            else
-                            {
-                                cb();
-                            }
+                                    else { cb(); }
+                                }
+                            });
                         }
                         else
                         {
                             cb();
                         }
-                    }});
-                }
-                else { cb(); }
-                
-            };
+                    }
+                    else
+                    {
+                        cb();
+                    }
+                }});
+            }
+            else { cb(); }
+            
+        };
 
         var saveDesign = function () {
             var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
