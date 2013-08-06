@@ -38,6 +38,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
         this.control({
             "#mainAppPanel": {
+                beforetabchange: this.onBeforeTabChange,
                 tabchange: this.onTabChange
             },
             "menuitem[identifier='zoomInMenuItem']": {
@@ -47,6 +48,19 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 click: this.onZoomOutMenuItemClick
             }
         });
+    },
+
+    onBeforeTabChange: function(mainAppPanel, newTab, oldTab) {
+        // Save the selection to the old tab so we can reselect it when we 
+        // switch back to it later.
+        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
+            if(this.SelectionLayer.selected) {
+                oldTab.options.selection = {
+                    start: this.SelectionLayer.start,
+                    end: this.SelectionLayer.end
+                }
+            }
+        }
     },
 
     onTabChange: function(mainAppPanel, newTab, oldTab) {
@@ -60,9 +74,17 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             this.initPie(newTab);
 
             this.pieParent = d3.select("#" + newTab.el.dom.id + " .pieParent");
-        }
 
-        this.callParent(arguments);
+            this.callParent(arguments);
+
+            // Defer firing the selection event to give the sequence a chance
+            // to render.
+            Ext.defer(function() {
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       null, newTab.options.selection.start,
+                                       newTab.options.selection.end);
+            }, 10, this);
+        }
     },
 
     initPie: function(newTab) {
@@ -289,7 +311,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     		this.onRightMouseDown(self);
     	} else {
     		Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
-    		//console.log(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
     		self.startSelectionAngle = self.getClickAngle();
 	        self.mouseIsDown = true;
 	        
@@ -611,7 +632,6 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     onRightMouseDown: function(self) {
     	d3.event.preventDefault();
     	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
-    	//console.log(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
         
     	var svg = this.pieParent;
         var transformValues;
@@ -641,10 +661,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         
         if(angle>=startAngle && angle<=endAngle && relDist<=actualRadius) {
         	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
-        	//console.log(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
         }
-        //console.log(angle+":  ["+startAngle+", "+endAngle+"]");       
-        //console.log("("+relX+", "+relY+");  "+relDist);
     },
 
     onPieNameBoxClick: function(show) {

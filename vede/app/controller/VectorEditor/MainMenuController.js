@@ -36,27 +36,25 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             newTab.down("component[identifier*='sequenceLinearMenuItem']").setChecked(
                                             !this.sequenceManager.getCircular(), true);
 
-            // Store current feature/cut site/orf visibility settings on the old
-            // tab, and load those from the new tab.
-            if(oldTab.initialCls === "VectorEditorPanel") {
-                var menuPanel = oldTab.down("VectorEditorMainMenuPanel");
-
-                oldTab.options = {
-                    features: menuPanel.down("component[identifier='featuresMenuItem']").checked,
-                    cutSites: menuPanel.down("component[identifier='cutSitesMenuItem']").checked,
-                    orfs: menuPanel.down("component[identifier='orfsMenuItem']").checked,
-                    circular: menuPanel.down("component[identifier='circularViewMenuItem']").checked,
-                    mapCaret: menuPanel.down("component[identifier='mapCaretMenuItem']").checked,
-                    complementary: menuPanel.down("component[identifier='showComplementaryMenuItem']").checked,
-                    spaces: menuPanel.down("component[identifier='showSpacesMenuItem']").checked,
-                    sequenceAA: menuPanel.down("component[identifier='showSequenceAAMenuItem']").checked,
-                    revComAA: menuPanel.down("component[identifier='showRevcomAAMenuItem']").checked,
-                    featureLabels: menuPanel.down("component[identifier='featureLabelsMenuItem']").checked,
-                    cutSiteLabels: menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").checked
-                }
-            }
-
             this.loadTabOptions(newTab.options);
+        }
+
+        // Store current feature/cut site/orf visibility settings on the old
+        // tab, and load those from the new tab.
+        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
+            var menuPanel = oldTab.down("VectorEditorMainMenuPanel");
+
+            oldTab.options.features = menuPanel.down("component[identifier='featuresMenuItem']").checked,
+            oldTab.options.cutSites = menuPanel.down("component[identifier='cutSitesMenuItem']").checked,
+            oldTab.options.orfs = menuPanel.down("component[identifier='orfsMenuItem']").checked,
+            oldTab.options.circular = menuPanel.down("component[identifier='circularViewMenuItem']").checked,
+            oldTab.options.mapCaret = menuPanel.down("component[identifier='mapCaretMenuItem']").checked,
+            oldTab.options.complementary = menuPanel.down("component[identifier='showComplementaryMenuItem']").checked,
+            oldTab.options.spaces = menuPanel.down("component[identifier='showSpacesMenuItem']").checked,
+            oldTab.options.sequenceAA = menuPanel.down("component[identifier='showSequenceAAMenuItem']").checked,
+            oldTab.options.revComAA = menuPanel.down("component[identifier='showRevcomAAMenuItem']").checked,
+            oldTab.options.featureLabels = menuPanel.down("component[identifier='featureLabelsMenuItem']").checked,
+            oldTab.options.cutSiteLabels = menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").checked
         }
     },
 
@@ -364,7 +362,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onNewBlankVectorEditorMenuItemClick: function() {
     	var project = Teselagen.manager.ProjectManager.workingProject;
     	var sequencesNames = [];
-        project.sequences().load().each(function (sequence) {
+        Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
             sequencesNames.push(sequence.data.name);
         });
         Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);  	

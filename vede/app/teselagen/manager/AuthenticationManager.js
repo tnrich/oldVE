@@ -17,7 +17,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     autoAuthURL : null,
 
     updateSplashScreenMessage: function(message, stop) {
-        if (Ext.get("splash-text")) {Ext.get("splash-text").update(message); }
+        if (Ext.get("x-splash-message")) {Ext.get("x-splash-message").update(message); }
         if (stop) {
             Ext.select(".x-mask-msg.splashscreen div:nth(2)").setStyle("background-image", "url()");
             if (splashscreen) Ext.get("splash-retry").show();
@@ -142,7 +142,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {
-                if(response.status !== 200) return Ext.getCmp('auth-response').update(response.statusText);
+                if(response.status !== 200) { return function(){
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(response.statusText);
+                    };
+                }
                 var response = JSON.parse(response.responseText);
                 if(response) Ext.getCmp('auth-response').update(response.msg);
                 if (cb) {return cb(false, response.statusText); }

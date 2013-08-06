@@ -164,8 +164,33 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             this.getStart() + " to " + this.getEnd();
     },
 
-    toJSON: function() {
-        return {"strand": this.getStrand(), "name": this.getName(), "type": this.getType(), "locations": (this.getStart() + " - " + this.getEnd())};
+    serialize: function(){
+
+        var data = {};
+        data.inData = {
+            name : this.getName(),
+            type : this.getType(),
+            index : this.getIndex(),
+            start : this.getStart(),
+            end : this.getEnd(),
+            type : this.getType(),
+            strand : this.getStrand()
+        }
+        data.notes = [];
+        this.getNotes().forEach(function(note){
+            data.notes.push(note.serialize());
+        });
+
+        return data;
+    },
+
+    deSerialize: function(data){
+        var self = this;
+
+        data.notes.forEach(function(note){
+            var newNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", note.inData);
+            self.addNote(newNote);
+        });
     }
 
 });

@@ -50,7 +50,7 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
             }),
             columnLines: true,
             rowLines: true,
-            minHeight: 140,
+            minHeight: 130,
             columns: [
                 {
                     xtype: 'gridcolumn',
@@ -93,13 +93,43 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
                 {
                     xtype: 'gridcolumn',
                     text: 'Operand 2',
+                    flex: 1,
                     dataIndex: 'operand2_id',
                     cls: "operand2_field",
                     listeners: {
-                        dblclick: function () {
+                        dblclick: function (event, target, options) {
                             var column = this;
                             Vede.application.fireEvent('setOperand2Editor', column);
-                        }
+                        },
+                        /*render: function(column) {
+                            this.getEditor = function(record) {
+                                if(record.get("operand2isNumber")) {
+                                    return Ext.create("Ext.form.field.Number", {
+                                        allowBlank: false,
+                                        allowDecimals: false,
+                                        minValue: 0,
+                                        value: record.get("operand2Number") || 0
+                                    });
+                                } else {
+                                    var activeProject = Ext.getCmp("mainAppPanel").getActiveTab().model;
+                                    var operand1 = Teselagen.manager.DeviceDesignManager.getPartById(activeProject, record.get("operand1_id"));
+                                    var allParts = Teselagen.manager.DeviceDesignManager.getAllParts(activeProject, operand1);
+                                    var partsStore = [];
+                                    Ext.each(allParts, function(part) {
+                                        partsStore = partsStore.concat([[part.get('id'), part.get('name')]]);
+                                    });
+
+                                    return Ext.create("Ext.form.field.ComboBox", {
+                                        store: partsStore,
+                                        allowBlank: false,
+                                        editable: false,
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        cls: 'operand2_namefield'
+                                    });
+                                }
+                            };
+                        },*/
                     },
                     renderer: function(id, metaData, rule) {
                         if (rule.get("compositionalOperator") === "MORETHAN") {

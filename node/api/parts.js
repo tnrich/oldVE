@@ -3,7 +3,7 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
     var Part = app.db.model("part");
-    var Project = app.db.model("project");
+    var User = app.db.model("User");
 
     /**
      * POST Parts
@@ -13,7 +13,7 @@ module.exports = function(app) {
 
     /*
      * When a part is created a Fully quilified domain name (FQDN) should be generated.
-     * <company/institution>.<group>.<subgroup>.<user>.<project>.<design>.<part>
+     * <company/institution>.<group>.<subgroup>.<user>..<design>.<part>
      */
 
     app.get('/fqdn', restrict,  function(req, res) {
@@ -21,23 +21,17 @@ module.exports = function(app) {
     });
 
 
-    var savePart = function(req,res,existingPart){
+    var savePart = function(req,res,existingPart,cb){
         var newPart = existingPart;
-        var saveToProject = false;
-        if(!existingPart) { newPart = new Part(); saveToProject = true; }
+        if(!existingPart) { newPart = new Part(); }
         for (var prop in req.body) {
-            if(prop!=="project_id") newPart[prop] = req.body[prop];
+            if(prop!="user_id") newPart[prop] = req.body[prop];
         }
-
-        if(req.body.project_id!=="") newPart.project_id = req.body.project_id;
-
-        Project.findById(req.body.project_id,function(err,project){
-            if(err) return res.json(500,{"error":err,"info":"invalid project_id"});
-            if(!project) return res.json(500,{"error":"project not found"});
             
-            newPart.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
-            Part.generateDefinitionHash(req.user, project, newPart, function(hash){
+            newPart.FQDN = req.user.FQDN + '.' + req.body.name;
+            Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
+                newPart.user_id = new app.mongo.ObjectID(req.user._id);
 
                 newPart.save(function(err){
                     if(err)
@@ -57,21 +51,21 @@ module.exports = function(app) {
                     }
                     else 
                         {
-                            if(saveToProject) {
-                                project.parts.push(newPart);
-                                project.save();
-                            }
+                            if (typeof(cb) == 'function') cb(newPart);
                             res.json({'parts': newPart,"duplicated":false,"err":err});
                         }
                 });
             });
-        });
     };
 
 
     app.post('/parts', restrict,  function(req, res) {
-        if( req.body.name === "" || req.body.phantom ) return res.json({parts:app.constants.defaultEmptyPart});
-        savePart(req,res);
+        savePart(req,res,null,function(savedSequence){
+            User.findById(req.user._id).populate('parts').exec(function(err, user) {
+                user.parts.push(savedSequence);
+                user.save();
+            });
+        });
     });
 
     /**
@@ -80,9 +74,7 @@ module.exports = function(app) {
      * @method PUT 'parts'
      */
     app.put('/parts', restrict,  function(req, res) {
-
-        if(req.body.name === "" || req.body.phantom) { return res.json({parts:app.constants.defaultEmptyPart}); }
-        else if(!req.body.id) { savePart(req,res); }
+        if(!req.body.id) { savePart(req,res); }
         else
         {
             Part.findById(req.body.id, function(err, newPart) {
@@ -99,28 +91,12 @@ module.exports = function(app) {
      * @method GET 'parts'
      */
     app.get('/parts', restrict,  function(req, res) {
-
-        if (req.query.filter) {
-            var veproject_id = JSON.parse(req.query.filter)[0].value;
-
-            var VEProject = app.db.model("veproject");
-
-            VEProject.findById(veproject_id).populate("parts").exec(function(err, veproject) {
-                if (!veproject || err) return res.json({
-                    "fault": "Unexpected error"
-                }, 500);
-                res.send({
-                    "parts": veproject.parts
-                });
-            });
-        } else if (req.query.id) {
-            var Part = app.db.model("part");
-            Part.findById(req.body.id, function(err, part) {
-                res.json({
-                    'parts': part
-                });
-            });
-        }
+        User.findById(req.user._id)
+        .populate({ path: 'parts'})
+        .exec(function(err, user) {
+            res.json({"parts":user.parts});
+        });
+        
     });
 
 

@@ -1456,5 +1456,38 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             this.needsRecalculateReverseComplementSequence = false;
         }
+    },
+
+    serialize: function(){
+        var data = {};
+        data.features = [];
+        data.inData = {
+            name: this.getName(),
+            circular: this.getCircular(),
+            //complementSequence: this.getComplementSequence(),
+            reverseComplementSequence: this.getReverseComplementSequence(),
+            manualUpdateStarted: this.getManualUpdateStarted(),
+            needsRecalculateComplementSequence: this.getNeedsRecalculateComplementSequence(),
+            //needsRecalculateReverseComplementSequence: this.getNeedsRecalculateReverseComplementSequence()
+        }
+        this.getFeatures().forEach(function(feature){
+            data.features.push(feature.serialize());
+        });
+
+        data.sequence = this.getSequence().serialize();
+        return data;
+    },
+
+    deSerialize: function(data){
+        var self = this;
+        data.features.forEach(function(feature){
+            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",feature.inData);
+            newFeature.deSerialize(feature);
+            self.addFeature(newFeature,true);
+        });
+
+        var newSequence = Ext.create("Teselagen.bio.sequence.common.SymbolList",{});
+        newSequence.deSerialize(data.sequence);
+        this.setSequence(newSequence);
     }
 });

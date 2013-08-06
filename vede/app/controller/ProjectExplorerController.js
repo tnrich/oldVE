@@ -1,9 +1,9 @@
 /**
  * Project controller
- * @class Vede.controller.ProjectController
+ * @class Vede.controller.ProjectExplorerController
  * @author Rodrigo Pavez
  */
-Ext.define("Vede.controller.ProjectController", {
+Ext.define("Vede.controller.ProjectExplorerController", {
     extend: "Ext.app.Controller",
     requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager", "Teselagen.models.DeviceEditorProject", "Teselagen.models.SequenceFile", "Teselagen.models.Part", "Teselagen.models.VectorEditorProject"],
 
@@ -19,144 +19,9 @@ Ext.define("Vede.controller.ProjectController", {
     /**
      * Load the projectTree in ProjectExplorer Panel, method triggered by
      * @param {callback} Callback function (optional).
-     * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
      */
-    loadProjectTree: function (cb,cb2) {
-        var self = this;
-
-        var projects = Teselagen.manager.ProjectManager.projects; // Get projects store
-
-
-        var storesCounter = 0;
-
-        var finishedPreloading = function(){
-            if(storesCounter === 0)
-            {
-
-
-                var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
-                rootNode.removeAll(); // Remove existing subnodes
-
-                // Append create project at the top
-                rootNode.appendChild({
-                    text: "Create project",
-                    leaf: true,
-                    hrefTarget: "newproj",
-                    icon: "resources/images/add.png"
-                });
-
-                // Iterate over projects
-                projects.each(function (project) {
-
-                    // Append existing project
-                    var projectNode = rootNode.appendChild({
-                        text: project.data.name,
-                        id: project.data.id,
-                        hrefTarget: "openproj"
-                    });
-
-                    // Append design to project node
-                    projectNode.appendChild({
-                        text: "Create design",
-                        leaf: true,
-                        hrefTarget: "newde",
-                        icon: "resources/images/add.png"
-                    });
-
-                    // Append sequence to project node
-                    projectNode.appendChild({
-                        text: "Create sequence",
-                        leaf: true,
-                        hrefTarget: "newsequence",
-                        icon: "resources/images/add.png"
-                        //id: 0
-                    });
-
-                    var designs = project.designs(); // Get designs store from current project
-
-
-                            // Iterate over designs
-                            designs.each(function (design) {
-                                // Append design to project node
-                                var designnode = projectNode.appendChild({
-                                    text: design.data.name,
-                                    leaf: false,
-                                    id: design.data.id,
-                                    hrefTarget: "opende",
-                                    icon: "resources/images/ux/design-tree-icon-leaf.png",
-                                    qtip: "Design " + design.data.name
-                                });
-
-                                // Append j5Report to design
-                                designnode.appendChild({
-                                    text: "J5 Reports",
-                                    leaf: true,
-                                    id: design.data.id+"report",
-                                    hrefTarget: "j5reports",
-                                    icon: "resources/images/ux/j5-tree-icon-parent.png",
-                                    qtip: design.data.name + " Report"
-                                });
-                            });
-
-                    // Empty sequenceFile store
-
-                    Teselagen.manager.ProjectManager.sequenceStore =
-                        Ext.create("Ext.data.Store", {
-                        model: "Teselagen.models.SequenceFile"
-                    });
-                    
-                    var sequences = project.sequences(); // Get sequences store from current project
-
-
-                            // Iterate over sequences
-                            sequences.each(function (sequence) {
-                                Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
-
-                                // Append sequence to project store
-                                projectNode.appendChild({
-                                    text: sequence.data.name,
-                                    leaf: true,
-                                    id: sequence.data.id,
-                                    hrefTarget: "opensequence",
-                                    icon: "resources/images/ux/circular.png",
-                                    qtip: "Sequence " + sequence.data.name
-                                });
-                            });
-                            
-                            if(typeof (cb2) === "function") {cb2(); }
-                    
-                });
-
-                // For testing, execute callback
-                if(typeof (cb) === "function") {cb(); }
-            }
-        };
-
-        //console.log("Preloading data");
-
-        // PRELOAD DATA
-        projects.load({
-            callback: function(){
-                if(projects.count()===0) { finishedPreloading(); }
-                projects.each(function(project){
-                    storesCounter++;
-                    project.designs().load({
-                        callback: function(){
-                            storesCounter--;
-                            finishedPreloading();
-                        }
-                    });
-                    storesCounter++;
-                    project.sequences().load({
-                        callback: function(){
-                            storesCounter--;
-                            finishedPreloading();
-                        }
-                    });
-                });
-            }
-        });
-
+    loadProjectTree: function (cb) {
+        Teselagen.manager.ProjectExplorerManager.load(cb);
     },
 
     resolveAndopenDeviceDesign: function (record) {
@@ -166,29 +31,25 @@ Ext.define("Vede.controller.ProjectController", {
 
     	var design_id = record.data.id;
         var project_id = record.parentNode.data.id;
-        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        project.designs().load({
-            id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
-                oldTab.el.unmask();
-            }
+        Teselagen.manager.ProjectExplorerManager.openDesign(design_id,project_id,function(){
+            oldTab.el.unmask();
         });
     },
-    /*
-    resolveAndOpenj5Report: function (record) {
-        var deproject_id = record.parentNode.parentNode.data.id;
-        var project_id = record.parentNode.parentNode.parentNode.data.id;
-        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var deprojects = project.deprojects().load({
-            callback: function () {
-                var deproject = deprojects.getById(deproject_id);
-                Teselagen.manager.ProjectManager.openj5Report(deproject);
-            }
-        });
+
+    resolveAndOpenSequenceLibrary: function (record) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        tabPanel.setActiveTab(0);
+        dashPanel.setActiveTab(1);
     },
-    */
+
+    resolveAndOpenPartLibrary: function (record) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        tabPanel.setActiveTab(0);
+        dashPanel.setActiveTab(2);
+    },
+
 
     resolveAndOpenj5Reports: function (record) {
     	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
@@ -198,18 +59,11 @@ Ext.define("Vede.controller.ProjectController", {
 
     	var design_id = record.data.id.replace("report","");
         var project_id = record.parentNode.parentNode.data.id;
-        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        project.designs().load({
-            id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                var design = loadedDesign[0];
-                //console.log(design);
-                //var j5report = loadedDesign[0].j5runs();
-                Teselagen.manager.ProjectManager.openj5Report(design);
-                oldTab.el.unmask();
-            }
+        
+        Teselagen.manager.ProjectExplorerManager.openJ5Report(design_id,project_id,function(){
+            oldTab.el.unmask();
         });
+
     },
 
     resolveAndCreateDEProject: function (record) {
@@ -229,13 +83,7 @@ Ext.define("Vede.controller.ProjectController", {
 
     /* Creates a sequence and an associated sequence */
     createSequence: function (record) {
-        var project_id = record.parentNode.data.id;
-        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var sequencesNames = [];
-        project.sequences().load().each(function (sequence) {
-            sequencesNames.push(sequence.data.name);
-        });
-        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
+        Teselagen.manager.ProjectManager.createNewSequence();
     },
 
     promptPartName: function(cb){
@@ -261,7 +109,9 @@ Ext.define("Vede.controller.ProjectController", {
                 sequenceFileFormat: "GENBANK",
                 sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
-                partSource: "Untitled sequence"
+                partSource: "Untitled sequence",
+                dateCreated: new Date(),
+                dateModified: new Date(),
             });
 
             var newPart = Ext.create("Teselagen.models.Part", {
@@ -272,7 +122,7 @@ Ext.define("Vede.controller.ProjectController", {
 
             newSequenceFile.save({
                 callback: function () {
-                    newPart.setSequenceFileModel(newSequenceFile);
+                    newPart.setSequenceFile(newSequenceFile);
                     var selectedVEProjectID = selectedVEProject.data.id;
                     newPart.set("veproject_id", selectedVEProjectID);
                     selectedVEProject.set("id",selectedVEProjectID);
@@ -304,7 +154,7 @@ Ext.define("Vede.controller.ProjectController", {
         var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        project.sequences().load({
+        Teselagen.manager.ProjectManager.sequences.load({
             id: sequence_id,
             callback: function (loadedsequence) {
                 Teselagen.manager.ProjectManager.workingProject = project;
@@ -313,6 +163,19 @@ Ext.define("Vede.controller.ProjectController", {
                 oldTab.el.unmask();
             }
         });
+    },
+
+    resolveAndOpenPart: function (record){
+        var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        oldTab.el.mask("Loading part", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+        
+        var part_id = record.data.id.replace("part","");
+     
+        Teselagen.manager.ProjectExplorerManager.openPart(part_id,function(){
+            oldTab.el.unmask();
+        });
+
     },
 
     expandProject: function (record) {
@@ -340,9 +203,9 @@ Ext.define("Vede.controller.ProjectController", {
         case "opensequence":
             this.resolveAndOpenSequence(record);
             break;
-       // case "j5report":
-       //     this.resolveAndOpenj5Report(record);
-       //     break;
+        case "part":
+            this.resolveAndOpenPart(record);
+            break;
         case "j5reports":
             this.resolveAndOpenj5Reports(record);
             break;
@@ -397,7 +260,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     /**
-     * @member Vede.controller.ProjectController
+     * @member Vede.controller.ProjectExplorerController
      */
     init: function () {
         this.callParent();
@@ -417,6 +280,12 @@ Ext.define("Vede.controller.ProjectController", {
             },
             "#newProject_Btn": {
                 click: this.onNewProjectClick
+            },
+            "#openSequenceLibraryBtn": {
+                click: this.resolveAndOpenSequenceLibrary
+            },
+            "#openPartLibraryBtn": {
+                click: this.resolveAndOpenPartLibrary
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick

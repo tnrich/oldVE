@@ -22,23 +22,27 @@ Ext.define("Teselagen.manager.SessionManager", {
 
     maskApp: function(){
         // Start the mask on the body and get a reference to the mask
-        splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span><span id="splash-retry" style="visibility: hidden;"><button id="retry-btn">Retry</button></span>', 'splashscreen');
+        splashscreen = Ext.getBody().mask('Welcome Back', 'loader rspin');
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        Ext.get('retry-btn').on("click",function(){
-            Ext.get('splash-retry').hide();
-            Teselagen.manager.AuthenticationManager.Login();
-        });
+        // Ext.get('retry-btn').on("click",function(){
+        //     Ext.get('splash-retry').hide();
+        //     Teselagen.manager.AuthenticationManager.Login();
+        // });
 
         // Add a new class to this mask as we want it to look different from the default.
         splashscreen.addCls('splashscreen');
 
-        Ext.select('.x-mask-msg').setStyle('top','60px');
+        // Ext.select('.x-mask-msg').setStyle('top','60px');
 
 
+        Ext.DomHelper.insertFirst(Ext.query('.splashscreen')[0], {
+            id: 'x-splash-message'
+        });  
         // Insert a new div before the loading icon where we can place our logo.
-        Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
+        Ext.DomHelper.insertFirst(Ext.query('.splashscreen')[0], {
             cls: 'x-splash-icon'
-        });        
+        });    
     },
 
     unmaskApp: function(){

@@ -3,29 +3,31 @@
  * @class Vede.view.common.DashboardPanelView
  */
 Ext.define('Vede.view.common.DashboardPanelView', {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.tab.Panel',
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
+    padding: '10 0',
     layout: {
-        type: 'fit'
+        type: 'card'
     },
     frameHeader: false,
     border: 0,
     title: 'Dashboard',
     items: [
             {
-            xtype: 'panel',
-            border: 0,
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            items: [
+                xtype: 'panel',
+                title: 'Dashboard',
+                border: 0,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [
                     {
                         xtype: 'container',
                         flex: 0.3,
                         id: 'welcome_splash',
-                        border: 0
+                        border: 0,
                     },
                     {
                         xtype: 'container',
@@ -407,6 +409,311 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         ]
                                     }
                                 ]  
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                xtype: 'panel',
+                title: 'Sequence Library',
+                cls: 'sequenceLibraryPanel',
+                border: 0,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [
+                    // {
+                    //     xtype: 'button',
+                    //     id: 'dropzone-activate',
+                    //     cls: 'dropzone-activate-btn',
+                    //     overCls: 'dropzone-activate-btn-over',
+                    //     icon: '../../resources/images/ux/drop-import.png',
+                    //     iconCls: 'dropzone-activate-import-btn',
+                    //     text: 'Import Files',
+                    //     height: '35',
+                    //     width: '100',
+                    //     listeners: {
+                    //         click: function() {
+                    //             $("#dropZone-area").show();
+                    //         }
+                    //     }
+                    // },
+                    {
+                        xtype: 'container',
+                        cls: 'sequenceLibraryContainer',
+                        id: 'sequenceLibraryArea',
+                        flex: 1,
+                        items : [
+                            {
+                                xtype: 'textfield',
+                                layout: {
+                                    type: 'fit',
+                                    align: 'stretch'
+                                },
+                                anchor: '100%',
+                                height: 30,
+                                cls: 'sequenceLibrarySearchField',
+                                width: '98%',
+                                emptyText: 'Search Sequence Library',
+                                emptyCls: 'empty-search-field',
+                                margin: 13,
+                                listeners: {
+                                    change: function(field, newValue, oldValue, eOpts) {
+                                        var grid = Ext.getCmp('sequenceLibrary');
+                                        grid.store.clearFilter();
+
+                                        if (newValue) {
+                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
+                                            grid.store.filter({
+                                                filterFn: function(record) {
+                                                    var features = [];
+                                                    for(var i=0; i<record.get('serialize').features.length; i++) {
+                                                        features.push(record.get('serialize').features[i].inData.name);
+                                                    }
+                                                    return matcher.test(record.get('name')) ||
+                                                        matcher.test(record.get('sequenceFileFormat')) ||
+                                                        matcher.test(record.get('size')) || 
+                                                        matcher.test(record.get('serialize').sequence.alphabet) || 
+                                                        matcher.test(features);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                xtype: 'gridpanel', 
+                                layout: 'fit',
+                                border: 0,
+                                name: 'SequenceLibraryGrid',
+                                cls: 'sequenceLibraryGrid',
+                                id: 'sequenceLibrary',
+                                columns: [
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Name',
+                                        width: 220,
+                                        dataIndex: 'name'
+                                    }, 
+                                    {
+                                        text     : 'Type',
+                                        width    : 75,
+                                        dataIndex: 'serialize',
+                                        renderer: function(val) {
+                                            val = val.sequence.alphabet.toUpperCase();
+                                            return val;
+                                        }
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'File Format',
+                                        width: 100,
+                                        dataIndex: 'sequenceFileFormat'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Size',
+                                        width: 80,
+                                        dataIndex: 'size'
+                                    },
+                                    {
+                                        text     : 'Features',
+                                        width    : 200,
+                                        flex: 1,
+                                        dataIndex: 'serialize',
+                                        renderer: function(val) {
+                                            var features = [];
+                                            for(var i=0; i<val.features.length; i++) {
+                                                features.push(val.features[i].inData.name);
+                                            }
+                                            return features;
+                                            // return val;
+                                        }
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Date Created',
+                                        width: 100,
+                                        dataIndex: 'dateCreated',
+                                        renderer: function(val) {
+                                            val = new Date(val);
+                                            val = Ext.Date.format(val, "F d, Y g:i A");
+                                            return val;
+                                        }
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Last Modified',
+                                        width: 100,
+                                        dataIndex: 'dateModified',
+                                        renderer: function(val) {
+                                            val = new Date(val);
+                                            val = Ext.Date.format(val, "F d, Y g:i A");
+                                            return val;
+                                        }
+                                    }
+                                    
+                                    ],
+                                listeners: {
+                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                        e.preventDefault();
+                                        var contextMenu = Ext.create('Ext.menu.Menu',{
+                                              items: [{
+                                                text: 'Open',
+                                                handler: function(){
+                                                    Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record);
+                                                }
+                                              },{
+                                                text: 'Download',
+                                                handler: function() {
+                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
+                                                    VEManager.saveSequenceToFile();
+                                                }
+                                              }]
+                                        }).show();
+                                        contextMenu.setPagePosition(e.getX(),e.getY()-5)
+                                    }
+                                }
+                            },
+                            {
+                                xtype: "dropZone",
+                                name: "dropZone"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                xtype: 'panel',
+                title: 'Part Library',
+                cls: 'partLibraryPanel',
+                border: 0,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        xtype: 'container'
+                    },
+                    {
+                        xtype: 'container',
+                        cls: 'partLibraryContainer',
+                        flex: 1,
+                        items : [
+                            {
+                                xtype: 'textfield',
+                                layout: {
+                                    type: 'fit',
+                                    align: 'stretch'
+                                },
+                                anchor: '100%',
+                                height: 30,
+                                cls: 'partLibrarySearchField',
+                                width: '98%',
+                                emptyText: 'Search Part Library',
+                                emptyCls: 'empty-search-field',
+                                margin: 13,
+                                listeners: {
+                                    change: function(field, newValue, oldValue, eOpts) {
+                                        var grid = Ext.getCmp('partLibrary');
+                                        grid.store.clearFilter();
+
+                                        if (newValue) {
+                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
+                                            grid.store.filter({
+                                                filterFn: function(record) {
+                                                    return matcher.test(record.get('name')) ||
+                                                        matcher.test(record.get('genbankStartBP')) ||
+                                                        matcher.test(record.get('endBP')) ||
+                                                        matcher.test(record.get('length')) ||
+                                                        matcher.test(record.get('fas')) ||
+                                                        matcher.test(record.get('revComp')) || 
+                                                        matcher.test(record.get('partSource')) ||
+                                                        matcher.test(record.get('features'));
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                xtype: 'gridpanel',
+                                border: 0,
+                                name: 'PartLibraryGrid',
+                                loadMask: true,
+                                cls: 'partLibraryGrid',
+                                id: 'partLibrary',
+                                columns: [
+
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Name',
+                                        width: 220,
+                                        dataIndex: 'name'
+                                    }, {
+                                        xtype: 'gridcolumn',
+                                        text: 'Preview',
+                                        tdCls: 'previewColumn',
+                                        width: 50,
+                                        // listeners: {
+                                        //     click: function (item) {
+                                        //         console.log(item);
+                                        //     }
+                                        // }
+                                    },{
+                                        xtype: 'gridcolumn',
+                                        text: 'Start BP',
+                                        width: 80,
+                                        dataIndex: 'genbankStartBP'
+                                    },{
+                                        xtype: 'gridcolumn',
+                                        text: 'Stop BP',
+                                        width: 80,
+                                        dataIndex: 'endBP'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Length',
+                                        dataIndex: 'length',
+                                        width: 80
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'FAS',
+                                        width: 80,
+                                        dataIndex: 'fas'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Reverse Complement',
+                                        dataIndex: 'revComp',
+                                        width: 120,
+                                        renderer: function(val) {
+                                            val = String(val);
+                                            val = val.charAt(0).toUpperCase() + val.slice(1);
+                                            return val;
+                                        }
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Source Sequence',
+                                        width: 120,
+                                        dataIndex: 'partSource'
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Features in Range',
+                                        width: 150,
+                                        dataIndex: 'features'
+                                    },
+
+                                ]
                             }
                         ]
                     }

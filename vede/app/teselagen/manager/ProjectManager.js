@@ -10,14 +10,16 @@ Ext.define("Teselagen.manager.ProjectManager", {
                "Teselagen.event.SequenceManagerEvent", 
                "Teselagen.store.UserStore", 
                "Teselagen.manager.SessionManager", 
+               "Teselagen.manager.SequenceManager", 
                "Teselagen.manager.DeviceDesignManager", 
                "Teselagen.utils.FormatUtils", 
                "Teselagen.models.J5Bin", 
                "Teselagen.models.Part",
                "Teselagen.models.VectorEditorProject", 
                "Vede.view.de.DeviceEditor", 
-               "Ext.window.MessageBox"],
-
+               "Ext.window.MessageBox",
+                "Teselagen.manager.ProjectExplorerManager"
+               ],
     alias: "ProjectManager",
     mixins: {
         observable: "Ext.util.Observable"
@@ -25,10 +27,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null, // current User model
     projects: null, // Store of available projects
+    parts: null,
+    sequences: null,
     workingProject: null, // working Project model
     workingSequence: null, // working Sequence model
     workingSequenceFileManager: null, // Current SequenceFileManager (which controls Vector Editor)
-    sequenceStore: null,
 
     /**
      * @member Teselagen.manager.ProjectManager
@@ -48,15 +51,52 @@ Ext.define("Teselagen.manager.ProjectManager", {
             if(!success) { Ext.Error.raise("Error loading user"); }
             // Select first user in the store (current user)
             self.currentUser = usersStore.first();
-            //Load the projects store
+
             var projectsStore = self.currentUser.projects().load(
                 function (projects, operation, success) {
                     if(!success) { Ext.Error.raise("Error loading projects"); }
                     self.projects = projectsStore; //Set the working project
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+                    Teselagen.manager.ProjectExplorerManager.load();
+                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
                 }
             );
+
+            self.reloadSources();
+
         });
+    },
+
+    reloadSources: function(){
+        var self = this;
+        var sequencesStore = self.currentUser.sequences().load(
+           function (sequences, operation, success){
+                self.sequences = sequencesStore;
+
+
+                var partsStore = self.currentUser.parts().load(
+                    function (parts, operation, success){
+                        self.parts = partsStore;
+
+                        var parts = self.parts.getRange();
+                        var sequenceId;
+                        
+                        // When the user's parts store is loaded, the parts have sequencefile_id
+                        // fields, but the getSequenceFile method returns null. We iterate through
+                        // the parts and call each one's setSequenceFile method as a fix.
+                        for(var i = 0; i < parts.length; i++) {
+                            var part = parts[i];
+                            sequenceId = parts[i].get("sequencefile_id");
+                            if(sequenceId && !part.getSequenceFile()) {
+                                part.setSequenceFile(user.sequences().getById(sequenceId));
+                            }
+                        }
+
+
+                    }
+                );
+
+           }
+        );
     },
 
     /**
@@ -69,6 +109,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     checkDuplicatedTabs: function (model, tabName, cb, cb2) {
         var tabPanel = Ext.getCmp("mainAppPanel");
         var duplicated = false;
+        var duplicatedTab;
         var ModelId;
 
         if(tabName !== "VectorEditorPanel") {
@@ -77,6 +118,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 if(tab.model && tab.initialCls === tabName) {
                     if(tab.model.data.id === ModelId) {
                         duplicated = true;
+                        duplicatedTab = tab;
                         tabPanel.setActiveTab(key);
                         if(typeof (cb2) === "function") { cb2(); }
                     }
@@ -86,13 +128,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
             tabPanel.items.items.forEach(function (tab, key) {
                 if(tab.sequenceFile && model && tab.sequenceFile.get("id") === model.get("id")) {
                     duplicated = true;
+                    duplicatedTab = tab;
                     tabPanel.setActiveTab(key);
                 }
             });
         }
 
         if(!duplicated) { return cb(tabPanel); }
-        else { console.log("Trying to open duplicated tab!"); }
+        else { 
+            duplicatedTab.el.unmask();
+            //console.log("Trying to open duplicated tab!"); 
+        }
+
     },
 
     /**
@@ -119,6 +166,41 @@ Ext.define("Teselagen.manager.ProjectManager", {
         );
     },
 
+    openSequenceLibrary: function () {
+        var dashPanel = Ext.getCmp("DashboardPanel");
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");    
+        if(sequenceGrid) sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+
+        dashPanel.getActiveTab().el.unmask();
+    },
+
+    openPartLibrary: function () {
+        var dashPanel = Ext.getCmp("DashboardPanel");
+
+        var parts = this.parts;
+        parts.each(function(part) {
+            if(part.getSequenceFile()) {
+                var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(part.data.sequencefile_id);
+                var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+                var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
+                var partFeatures = [];
+                for(var z=0; z<features.length; z++)  {
+                    partFeatures.push(features[z].getName());
+                }
+                part.set("length", Math.abs(part.data.endBP - part.data.genbankStartBP));
+                part.set("features", partFeatures);
+                if(sequence) part.data.partSource = sequence.data.name;
+            } else {
+                part.set("partSource", "");
+            }
+        });
+
+        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        if(partGrid) partGrid.reconfigure(parts);
+
+        dashPanel.getActiveTab().el.unmask();
+    },
+
     /**
      * openDeviceDesign
      * Opens a DeviceDesign model in a new tab.
@@ -126,8 +208,22 @@ Ext.define("Teselagen.manager.ProjectManager", {
      */
     openDeviceDesign: function (selectedDesign) {
         this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
-            //Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
-            //Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+
+            // Set part_id fields on each cell.
+            selectedDesign.bins().each(function(bin){
+                bin.cells().each(function(cell){
+                    cell.setPart( selectedDesign.parts().getById( cell.data.part_id ) );
+                });
+            });
+
+            // Set sequencefile_id fields on each part.
+            selectedDesign.parts().each(function(part) {
+                var sequenceFile = part.getSequenceFile();
+                if(sequenceFile) {
+                    part.set("sequencefile_id", sequenceFile.getId());
+                }
+            });
+
             tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
                 title: selectedDesign.data.name,
                 model: selectedDesign,
@@ -137,7 +233,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
             })).show();
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
-
         });
     },
 
@@ -147,29 +242,23 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {Teselagen.models.DeviceDEsign} Receives a DeviceDesign model (already loaded)
      */
     DeleteDeviceDesign: function (devicedesign, tab) {
-        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Deleting design", "loader rspin");
-        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+        tab = Ext.getCmp("mainAppPanel").query("component[title='" + devicedesign.data.name + "']")[0]
         var project_id = devicedesign.data.project_id;
+        var project = Teselagen.manager.ProjectManager.currentUser.projects().getById(project_id);
+        this.workingProject = project;
+        Teselagen.manager.GridManager.setListenersEnabled(false);
         var designs = Teselagen.manager.ProjectManager.workingProject.designs();
         designs.remove(devicedesign);
-        devicedesign.destroy(true);
+        devicedesign.destroy();
         designs.sync();
+        Teselagen.manager.GridManager.setListenersEnabled(true);
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE,null, function () {
             Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
         });
-        Ext.getCmp("mainAppPanel").remove(tab);
-        /*
-        var store =  Teselagen.manager.ProjectManager.workingProject.designs();
-        store.remove(devicedesign);
-
-        store.sync({
-            callback: function () {
-                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
-                Ext.getCmp("mainAppPanel").remove(tab);
-            }
-        });
-        */
+        if(tab) {
+        	Ext.getCmp("mainAppPanel").remove(tab);
+        }
     },
 
     /**
@@ -178,7 +267,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {model} Receives a j5Report model (already loaded)
      */
     openSequence: function (sequence) {
-    	//console.log("Opening Sequence");
+    	console.log("Opening Sequence");
     	this.workingSequence = sequence;
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.workingSequence);
 
@@ -186,9 +275,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 //            new Ext.util.DelayedTask(function() {
         		
         		var sequence = Teselagen.manager.ProjectManager.workingSequence;
-                Ext.getCmp("projectTreePanel").expandPath('/root/'+sequence.data.project_id,null,null,function(item,item2){
-                    Ext.getCmp("projectTreePanel").getSelectionModel().select(item2.findChild('id',sequence.data.id,true));                    
-                });
+                //Ext.getCmp("projectTreePanel").expandPath('/root/',null,null,function(item,item2){
+                    var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
+                    var sequenceNode = rootNode.findChild('id',sequence.data.id,true);
+                    if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);                    
+                //});
                 
  //           }).delay(500);
         });
@@ -259,41 +350,42 @@ Ext.define("Teselagen.manager.ProjectManager", {
     * Creates a new Sequence given a project
     * @param {model} Project model
     */
-    createNewSequence: function (project, veprojectNames) {
+    createNewSequence: function (project) {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
                     text = Ext.String.trim(text);
                 	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
-                    for (var j=0; j<veprojectNames.length; j++) {
-                        if (veprojectNames[j]===text) {
-                            Ext.MessageBox.show({
-                                title: "Name",
-                                msg: "A sequence with this name already exists in this project. <p> Please enter another name:",
-                                buttons: Ext.MessageBox.OKCANCEL,
-                                fn: onPromptClosed,
-                                prompt: true,
-                                cls: "sequencePrompt-box",
-                                scope: this,
-                                style: {
-                                    "text-align": "center"
-                                },
-                                scope: this,
+
+                    /*
+                    Ext.MessageBox.show({
+                        title: "Name",
+                        msg: "A sequence with this name already exists in this project. <p> Please enter another name:",
+                        buttons: Ext.MessageBox.OKCANCEL,
+                        fn: onPromptClosed,
+                        prompt: true,
+                        cls: "sequencePrompt-box",
+                        scope: this,
+                        style: {
+                            "text-align": "center"
+                        },
+                        scope: this,
+                        layout: {
+                            align: "center"
+                        },
+                        items: [
+                            {
+                                xtype: "textfield",
                                 layout: {
                                     align: "center"
                                 },
-                                items: [
-                                    {
-                                        xtype: "textfield",
-                                        layout: {
-                                            align: "center"
-                                        },
-                                        width: 50
-                                    }
-                                ]
-                            });
-                            return Ext.MessageBox;                            
-                        }
-                    }
+                                width: 50
+                            }
+                        ]
+                    });
+                    return Ext.MessageBox;   
+                    */                         
+                        
+                    
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
@@ -304,16 +396,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                         sequenceFileName: "untitled.gb",
                         partSource: "Untitled sequence",
+                        dateCreated: new Date(),
+                        dateModified: new Date(),
                         name: text
                     });
 
-                    project.sequences().add(newSequenceFile);
-                    newSequenceFile.set("project_id",project.data.id);
+                    //project.sequences().add(newSequenceFile);
+                    //newSequenceFile.set("project_id",project.data.id);
                     
                     newSequenceFile.save({
                         callback: function () {
                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                                Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + newSequenceFile.data.id);
+                                Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
                                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
                                 self.openSequence(newSequenceFile);
                                 toastr.info ("New Sequence Created");
@@ -389,17 +483,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
                             var newBin = Ext.create("Teselagen.models.J5Bin", {
                                 binName: "Bin1"
                             });
-                            // Removing creation of phantom parts for #793.
-//                            var tempParts = [];
-//                            for(var i = 0; i < 2; i++) {
-//                                var newPart = Ext.create("Teselagen.models.Part", {
-//                                    name: "",
-//                                    phantom: true
-//                                });
-//                                parts.push(newPart);
-//                                tempParts.push(newPart);
-//                                newBin.parts().add(newPart);
-//                            }
+
+                            var newCell = Ext.create("Teselagen.models.Cell", {
+                                index: 0,
+                                part_id: null
+                            });
+
+                            var newCell2 = Ext.create("Teselagen.models.Cell", {
+                                index: 1,
+                                part_id: null
+                            });
+
+                            newBin.cells().insert(0, newCell);
+                            newBin.cells().insert(1, newCell2);
+
                             binsArray.push(newBin);
                         }
 
@@ -408,11 +505,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
                                 design.set("name",text);
                                 design.set("project_id",project.data.id);
-                                for (var i = 0; i < 2; i++) {
-                                    var newPart = Ext.create("Teselagen.models.Part",{phantom:true});
-                                    Teselagen.manager.DeviceDesignManager.addPartToBin(design, newPart, 0);
-                                }                            
                                 project.designs().add(design);
+
                                 design.save({
                                     success: function(record, operation) {
                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
@@ -515,6 +609,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
         */
-    }
+    },
+
 
 });

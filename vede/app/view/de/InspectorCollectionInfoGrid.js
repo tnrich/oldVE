@@ -20,12 +20,44 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
             minHeight:132,
             plugins: Ext.create('Ext.grid.plugin.RowEditing',{
                 clicksToEdit: 2,
-                errorSummary: false
+                errorSummary: false,
+                listeners: {
+                	validateedit: function(editor, e) {
+                		var oldBinName = e.originalValues.binName;
+                		var oldDirectionForward = e.originalValues.directionForward;
+                		var oldDsf = e.originalValues.dsf;
+                		var oldExtra3PrimeBps = e.originalValues.extra3PrimeBps;
+                		var oldExtra5PrimeBps = e.originalValues.extra5PrimeBps;
+                		var oldFro = e.originalValues.fro;
+                		
+                		var newBinName = e.record.fields.get("binName").convert(e.newValues.binName);
+                		var newDirectionForward = e.newValues.directionForward;
+                		var newDsf = e.newValues.dsf;
+                		var newExtra3PrimeBps = e.newValues.extra3PrimeBps;
+                		var newExtra5PrimeBps = e.newValues.extra5PrimeBps;
+                		var newFro = e.newValues.fro;
+                		
+                		if(oldBinName!==newBinName || oldDirectionForward!==newDirectionForward || oldDsf!==newDsf
+                				|| oldExtra3PrimeBps!==newExtra3PrimeBps || oldExtra5PrimeBps!==newExtra5PrimeBps 
+                				|| oldFro!==newFro) {
+                			Teselagen.manager.GridCommandPatternManager.addCommand({
+                	        	type: "BIN",
+                	        	data: {
+                	        		type: "EDIT",
+                	        		x: e.rowIdx,
+                	        		oldData: e.originalValues,
+                	        		newData: e.newValues
+                	        	}
+                			});
+                		}
+                		
+                	}
+                }
             }),
             columns: [
                 {
                     xtype: 'gridcolumn',
-                    width: 100,
+                    width: 120,
                     text: '<div data-qtip="Column Name">Column Name</div>',
                     dataIndex: 'binName',
                     editor: {
@@ -41,6 +73,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     xtype: 'gridcolumn',
                     text: '<div data-qtip="Direction">Direction</div>',
                     dataIndex: 'directionForward',
+                    width: 80,
                     editor: {
                         xtype: 'combobox',
                         store: [[true, "Forward"], [false, "Reverse"]]
@@ -55,13 +88,14 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 },
                 {
                     xtype: 'numbercolumn',
+                    width: 40,
                     text: '<div data-qtip="Items">Items</div>',
                     renderer: function(value, metadata, record) {
                         var numParts = 0;
-                        var partsArray = record.parts().getRange();
+                        var cells = record.cells().getRange();
 
-                        for(var i = 0; i < partsArray.length; i++) {
-                            if(!partsArray[i].get("phantom")) {
+                        for(var i = 0; i < cells.length; i++) {
+                            if(cells[i].getPart()) {
                                 numParts++;
                             }
                         }
@@ -76,9 +110,9 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     renderer: function(value, metadata, record) {
                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
-                        if(record.parts().getRange().length > 0) {
-                            metadata.tdAttr = 'data-qtip="' + record.parts().getRange()[0].get("fas") + '"';
-                            return record.parts().getRange()[0].get("fas");
+                        if(record.cells().getRange().length > 0) {
+                            metadata.tdAttr = 'data-qtip="' + record.cells().getRange()[0].get("fas") + '"';
+                            return record.cells().getRange()[0].get("fas");
                         } else {
                             metadata.tdAttr = 'data-qtip="' + value + '"';
                             return value;
@@ -125,6 +159,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     xtype: 'numbercolumn',
                     text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
                     dataIndex: 'extra3PrimeBps',
+                    flex: 1,
                     editor: {
                         xtype: 'numberfield',
                         allowDecimals: false,

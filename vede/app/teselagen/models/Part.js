@@ -22,7 +22,22 @@ Ext.define("Teselagen.models.Part", {
         writer: {
             type: "json"
         },
-        buildUrl: function() {
+        buildUrl: function(request) {
+            if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
+            {
+                var project_id = Teselagen.manager.ProjectManager.workingProject.data.id;
+                var url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+            }
+
+            if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
+            {
+                var url = "parts";
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         }
         /*
@@ -37,6 +52,8 @@ Ext.define("Teselagen.models.Part", {
         defaultNamePrefix: "Part",
         highestDefaultNameIndex: 0
     },
+
+    hasSequenceFile: false,
 
     /**
      * @param {Number} id Part id
@@ -55,16 +72,12 @@ Ext.define("Teselagen.models.Part", {
         name: "id",
         type: "long"
     }, {
-        name: "project_id",
-        type: "long"
-    },
-    // {name: "j5bin_id",        type: "long"},
-    {
         name: "eugenerule_id",
         type: "long"
     }, {
         name: "sequencefile_id",
-        type: "long"
+        type: "long",
+        defaultValue: null
     }, {
         name: "directionForward",
         type: "boolean",
@@ -76,7 +89,7 @@ Ext.define("Teselagen.models.Part", {
     },
     /*{
             name: "id",
-            convert: function() {
+            convert: function(id) {
                 var extraDigits = Math.floor(Math.random() * 1000).toString();
 
                 while (extraDigits.length < 3) {
@@ -133,13 +146,23 @@ Ext.define("Teselagen.models.Part", {
         defaultValue: 0
     }, //stopBP
     {
+        name: "length",
+        type: "int",
+        defaultValue: 0,
+    }, //sequlength
+    {
         name: "iconID",
         type: "string",
         defaultValue: ""
-    }, {
-        name: "phantom",
-        type: "boolean",
-        defaultValue: false
+    },
+    {
+        name: "features",
+        type: "string",
+        defaultValue: ""
+    },
+    {
+        name: "user_id",
+        type: "long"
     }
     ],
 
@@ -167,19 +190,29 @@ Ext.define("Teselagen.models.Part", {
         type: "hasOne",
         model: "Teselagen.models.SequenceFile",
         foreignKey: "sequencefile_id",
-        getterName: "getSequenceFile",
+        getterName: "getSequenceFileModel",
         setterName: "setSequenceFileModel"
     }, {
         type: "belongsTo",
-        model: "Teselagen.models.Project",
-        getterName: "getProject",
-        setterName: "setProject",
-        associationKey: "project",
-        foreignKey: "id"
+        model: "Teselagen.models.User",
+        getterName: "getUser",
+        setterName: "setUser",
+        associationKey: "user",
+        foreignKey: "user_id"
     }
 
     ],
-
+    
+    constructor: function() {
+        this.callParent(arguments);
+    },
+    
+    active: false,
+    
+    setActive: function(value) {
+    	this.active = value;
+    },
+    
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it has no set SequenceFile
@@ -280,11 +313,32 @@ Ext.define("Teselagen.models.Part", {
             if (this.get("endBP") === 0) {
                 this.set("endBP", stop);
             }
+
             success = true;
+
+            this.hasSequenceFile = true;
         }
         return success;
     },
 
+    /**
+     * Gets SequenceFile.
+     * @returns {Teselagen.models.SequenceFile} The sequencefile model.
+     */
+    getSequenceFile: function(callbackFn) {
+        if(this.hasSequenceFile || this.get("sequencefile_id")) {
+            if(typeof(callbackFn) === "object"){
+                return this.getSequenceFileModel({
+                    callback: callbackFn.callback
+                });
+            } else {
+                return this.getSequenceFileModel();
+            }
+        } else {
+            return null
+        }
+
+    },
 
     /** (WEIRD PROBLEM--print part, does not show same seqFile from getSeqFile.)
      * Removes the SequenceFile of Part. Resets the Sequence File format to INIT (?),
@@ -294,7 +348,7 @@ Ext.define("Teselagen.models.Part", {
      * @returns {Boolean} True if removed, false if not.
      */
     removeSequenceFile: function() {
-        this.setSequenceFile(null);
+        this.setSequenceFileModel(null);
         this.setStart(0);
         this.setEnd(0);
         if (this.getSequenceFile().get("sequenceFileFormat") === "INIT") {
@@ -302,6 +356,16 @@ Ext.define("Teselagen.models.Part", {
         } else {
             return false;
         }
-    }
+    },
 
+    /**
+     * Checks to see if part is mapped to a valid (nonempty) sequenceFile.
+     */
+    isMapped: function() {
+        if(this.get("sequencefile_id") || this.hasSequenceFile) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 });

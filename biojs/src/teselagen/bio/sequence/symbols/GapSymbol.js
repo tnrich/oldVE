@@ -1,12 +1,12 @@
-    /**
-    * @class Teselagen.bio.sequence.symbols.GapSymbol
-    * This class models a gap symbol.
-    * @author Micah Lerner
-    */
-   Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
+/**
+ * @class Teselagen.bio.sequence.symbols.GapSymbol
+ * This class models a gap symbol.
+ * @author Micah Lerner
+ */
+Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
 
-	constructor: function(inData){
-		var name;
+    constructor: function(inData){
+	    var name;
 		var value;
 
 		if (inData) {
@@ -52,9 +52,19 @@
 		}
 
 		return this;
-	}
+	},
 
+    serialize: function() {
+        var data = {};
 
+        data.name = this.getName();
+        data.value = this.getValue();
 
+        return data;
+    },
 
+    deSerialize: function(data) {
+        this.setName(data.name);
+        this.setValue(data.value);
+    }
 });

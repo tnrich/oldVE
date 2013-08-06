@@ -1029,7 +1029,7 @@ Ext.onReady(function() {
                 var device = Ext.create("Teselagen.models.DeviceDesign");
 
                 expect(device).not.toBe(null);
-                expect(Ext.getClassName(device.getJ5Collection())).toBe("Teselagen.models.J5Collection");
+                expect(Ext.getClassName(device())).toBe("Teselagen.models.J5Collection");
                 expect(Ext.getClassName(device.rules())).toBe("Ext.data.Store");
                 //expect(Ext.getClassName(device.runs())).toBe("Ext.data.Store");
 
@@ -1043,8 +1043,8 @@ Ext.onReady(function() {
                 expect(device).not.toBe(null);
                 device.createNewCollection(3);
 
-                expect(device.getJ5Collection().binCount()).toBe(3);
-                expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
+                expect(device().binCount()).toBe(3);
+                expect(device().bins().getAt(0).get("binName")).toBe("No_Name0");
             });
 
             it("Create DeviceDesign: createCollectionFromBins()", function(){
@@ -1056,8 +1056,8 @@ Ext.onReady(function() {
 
                 device.createCollectionFromBins([bin1, bin2]);
 
-                expect(device.getJ5Collection().binCount()).toBe(2);
-                expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("bin1");
+                expect(device().binCount()).toBe(2);
+                expect(device().bins().getAt(0).get("binName")).toBe("bin1");
             });
 
 

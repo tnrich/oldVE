@@ -221,6 +221,59 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		this.toString = function(){
 			return this.seqString();
 		}
+	},
 
-	}
+    serialize: function(){
+        var data = {};
+        var symbols = this.getSymbols();
+        var alphabet = this.getAlphabet();
+
+        data.symbols = [];
+
+        for(var i = 0; i < symbols.length; i++) {
+            data.symbols.push(symbols[i].serialize());
+        }
+
+        if(alphabet === "Teselagen.bio.sequence.alphabets.DNAAlphabet") {
+            data.alphabet = "dna";
+        } else if(alphabet === "Teselagen.bio.sequence.alphabets.RNAAlphabet") {
+            data.alphabet = "rna";
+        } else if(alphabet === "Teselagen.bio.sequence.alphabets.ProteinAlphabet") {
+            data.alphabet = "protein";
+        } else {
+            data.alphabet = "unknown";
+        }
+
+        return data;
+    },
+
+    deSerialize: function(data){
+        var symbols = [];
+        var symbol;
+
+        if(data.alphabet === "protein") {
+            for(var i = 0; i < data.symbols.length; i++) {
+                symbol = Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {});
+                symbols.push(symbol.deSerialize(data.symbols[i]));
+            }
+
+            this.setAlphabet(Teselagen.bio.sequence.alphabets.ProteinAlphabet);
+        } else {
+            for(var i = 0; i < data.symbols.length; i++) {
+                symbol = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {});
+                symbol.deSerialize(data.symbols[i]);
+                symbols.push(symbol);
+            }
+
+            if(data.alphabet === "dna") {
+                this.setAlphabet("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+            } else if(data.alphabet === "rna") {
+                this.setAlphabet("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+            } else {
+                this.setAlphabet("Teselagen.bio.sequence.alphabets.AbstractAlphabet");
+            }
+        }
+
+        this.setSymbols(symbols);
+    }
 });

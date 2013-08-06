@@ -65,10 +65,6 @@ module.exports = function(db) {
 
 	var SequenceSchema = new Schema({
 		FQDN: String,
-		project_id: {
-			type: oIDRef,
-			ref: 'project'
-		},
 		user_id: {
 			type: oIDRef,
 			ref: 'user'
@@ -82,8 +78,13 @@ module.exports = function(db) {
 		hash: String,
 		partSource: String,
 		sequenceFileName: String,
-		firstTimeImported: Boolean
+		firstTimeImported: Boolean,
+		serialize: Mixed
 	});
+
+	//SequenceSchema.virtual('user_id').get(function() {
+	//  return req.user._id;
+	//});
 
 	SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true })
 
@@ -92,7 +93,6 @@ module.exports = function(db) {
 	var PartSchema = new Schema({
 		FQDN: {type : String},
         definitionHash: {type: String},
-		project_id : { type: oIDRef, ref: 'project' },
 		user_id : { type: oIDRef, ref: 'user' },
 		name: String,
 		dateCreated: String,
@@ -102,13 +102,12 @@ module.exports = function(db) {
 		veproject_id      :  String,
 		j5bin_id          :  String,
 		eugenerule_id     :  String,
-		sequencefile_id   :  String,
+		sequencefile_id   : { type: oIDRef, ref: 'sequence' },
 		directionForward  :  String,
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
-		iconID            :  String,
-		phantom           :  Boolean
+		iconID            :  String
 	});
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});
@@ -118,7 +117,7 @@ module.exports = function(db) {
 		next();
 	});
 
-    PartSchema.statics.generateDefinitionHash = function(user, project, part, cb) {
+    PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
         db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
             var hashArray = [part.genbankStartBP,
                              part.endBP,
@@ -147,30 +146,51 @@ module.exports = function(db) {
 		dateCreated: String,
 		dateModified: String,
 		de_metadata: Mixed,
-		j5collection: {
+		directionForward: String,
+		combinatorial: String,
+		isCircular: String,
+		bins: [{
 			directionForward: String,
-			combinatorial: String,
-			isCircular: String,
-			bins: [{
-				directionForward: String,
-				dsf: String,
-				fro: String,
-				fases: [String],
-				extra5PrimeBps: String,
-				extra3PrimeBps: String,
-				binName: String,
-				iconID: String,
-				parts: [{
-					type: oIDRef,
-					ref: 'part'
-				}]
-			}]
-		},
-		rules: [Mixed],
+			dsf: String,
+			fro: String,
+			extra5PrimeBps: String,
+			extra3PrimeBps: String,
+            devicedesign_id: String,
+			binName: String,
+			iconID: String,
+			cells: [
+				{
+					index: String,
+					fas: String,
+					part_id :
+						{
+							type: oIDRef,
+							ref: 'part'
+						}
+				}
+			]
+		}],
+		parts: [{
+			type: oIDRef,
+			ref: 'part'
+		}],
+		rules: [
+			{
+				compositionalOperator: String,
+				name: String,
+				negationOperator: String,
+				operand1_id: String,
+				operand2Number: String,
+				operand2_id: String,
+				operand2isNumber: Boolean,
+				originalRuleLine: String,
+			}
+		],
 		j5runs: [{
 			type: oIDRef,
 			ref: 'j5run'
-		}]
+		}],
+		sequences: Mixed
 	});
 
 	DeviceDesignSchema.pre('remove',function (next) {
@@ -206,14 +226,6 @@ module.exports = function(db) {
 		dateCreated: String,
 		dateModified: String,
 		name: String,
-		sequences: [{
-			type: oIDRef,
-			ref: 'sequence'
-		}],
-		parts: [{
-			type: oIDRef,
-			ref: 'part'
-		}],
 		designs: [{
 			type: oIDRef,
 			ref: 'devicedesign'

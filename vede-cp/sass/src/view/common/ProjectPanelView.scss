@@ -106,7 +106,7 @@ $grid-row-cell-font-size: 12px;
 }
 
 #ProjectPanel-body {
-  border-width: 0 1px;
+  border-width: 0px;
   border-color: #ECF0F1;
   width:220px;
 }
@@ -139,3 +139,84 @@ $grid-row-cell-font-size: 12px;
   width: 220px;
   background: white;
 }
+
+.sequenceLibraryBtn, .partsLibraryBtn {
+  background: #006cab !important;
+  border-radius: 0px !important;
+  transition: background .2s ease-in-out;
+  -moz-transition: background .2s ease-in-out;
+  -webkit-transition: background .2s ease-in-out;
+}
+
+.sequenceLibraryBtn .x-btn-inner, .partsLibraryBtn .x-btn-inner {
+  color: white;
+  border: 0 !important;
+  border-bottom: 1px solid #4C85BE !important;
+}
+
+.x-sequenceLibraryBtn-over, .x-partsLibraryBtn-over {
+  background: #004065 !important;
+}
+
+.sequenceAddBtn {
+  left: 197px !important;
+  border-radius: 0px !important;
+  top: 4px !important;
+  background: none !important;
+  background-image: url(../resources/images/tree/addSequenceBtn.png) !important;
+  background-size: 19px !important;
+  background-position: center;
+  opacity: 0.4;
+  transition: background .2s ease-in-out;
+  -moz-transition: background .2s ease-in-out;
+  -webkit-transition: background .2s ease-in-out;
+}
+
+.x-sequenceAddBtn-over {
+  background: none;
+  opacity: 1;
+}
+
+.projectAddBtn {
+  left: 193px !important;
+  border-radius: 0px !important;
+  background: none !important;
+  background-size: 21px !important;
+  background-position: center;
+}
+
+.projectAddBtn .x-tool-img {
+  background-image: url(../resources/images/tree/addProjectBtn.png) !important;
+  opacity: 0.4;
+  background-size: 17px;
+}
+  
+.projectAddBtn .x-tool-plus {
+  background-position: center;
+}
+
+.x-projectAddBtn-over {
+  background: none;
+}
+
+#projectTreePanel_header-targetEl .x-tool img {
+  border-radius: 0px;
+}
+
+#projectTreePanel_header-targetEl .x-tool {
+  opacity: 0.4;
+  transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
+}
+
+#projectTreePanel_header-targetEl .x-tool-over .x-tool-plus {
+  opacity: 1;
+  background-position: center !important;
+}
+
+.explorerMenu {
+  border-radius: 3px !important;
+  background: rgba(236, 240, 241, 0.5) !important;
+}
+

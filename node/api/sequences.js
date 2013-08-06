@@ -5,6 +5,7 @@ module.exports = function(app) {
 
     var Sequence = app.db.model("sequence");
     var Project = app.db.model("project");
+    var User = app.db.model("User");
 
     /*
     function autoReassignDuplicatedSequence(res, sequence, cb) {
@@ -41,21 +42,19 @@ module.exports = function(app) {
     }
     */
 
-    var saveSequence = function(newSequence,req,res){
+    var saveSequence = function(newSequence,req,res,cb){
         for (var prop in req.body) {
-            if(prop!="project_id") { newSequence[prop] = req.body[prop]; }
+            if(prop!="user_id") newSequence[prop] = req.body[prop];
         }
 
-        if(req.body.project_id!="") newSequence.project_id = req.body.project_id;
+        //Project.findById(req.body.project_id,function(err,project){
+            //if(err) return res.json(500,{"error":err});
+            //if(!project) return res.json(500,{"error":"project not found"});
 
-        Project.findById(req.body.project_id,function(err,project){
-            if(err) return res.json(500,{"error":err});
-            if(!project) return res.json(500,{"error":"project not found"});
+            newSequence.FQDN = req.user.FQDN+'.'+req.body.name;
 
-            newSequence.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
-
-            project.sequences.push(newSequence);
-            project.save();
+            //project.sequences.push(newSequence);
+            //project.save();
             newSequence.save(function(err){
                 if(err)
                 {
@@ -71,10 +70,14 @@ module.exports = function(app) {
                         return res.json(500,{"error":err});
                     }
                 }
-                else res.json({'sequences': newSequence,"duplicated":false,"err":err});
+                else 
+                    {
+                        if (typeof(cb) == 'function') cb(newSequence);
+                        res.json({'sequences': newSequence,"duplicated":false,"err":err});
+                    }
             });
 
-        });
+        //});
 
         /*
         newSequence.save(function(err) {
@@ -99,7 +102,13 @@ module.exports = function(app) {
      */
     app.post('/sequences', restrict, function(req, res) {
         var newSequence = new Sequence();
-        saveSequence(newSequence,req,res);
+        newSequence.user_id = new app.mongo.ObjectID( req.user._id );
+        saveSequence(newSequence,req,res,function(savedSequence){
+            User.findById(req.user._id).populate('sequences').exec(function(err, user) {
+                user.sequences.push(savedSequence);
+                user.save();
+            });
+        });
     });
 
     /**
@@ -116,18 +125,16 @@ module.exports = function(app) {
     });
 
     /**
-     * GET SEQUENCES WITHIN A PROJECT
+     * GET SEQUENCES
      * @memberof module:./routes/api
      * @method GET '/sequences'
      */
-    app.get('/projects/:project_id/sequences', restrict, function(req, res) {
-            var Sequence = app.db.model("sequence");
-            var Project = app.db.model("project");
-            Project.findById(req.params.project_id).populate('sequences').exec(function(err, project) {
-                res.json({
-                    "sequences": project.sequences
+    app.get('/sequences', restrict, function(req, res) {
+        User.findById(req.user._id)
+                .populate({ path: 'sequences'})
+                .exec(function(err, user) {
+                    res.json({"sequences":user.sequences});
                 });
-            });
         }
     );
 
@@ -144,15 +151,6 @@ module.exports = function(app) {
                     "sequences": sequence
                 });
             });
-        }
-    );
-
-    /**
-     * GET EMPTY SEQUENCE
-     * @method GET '/sequences'
-     */
-    app.get('/sequences', restrict, function(req, res) {
-            return res.json({"sequences":app.constants.defaultEmptyPart});
         }
     );
 

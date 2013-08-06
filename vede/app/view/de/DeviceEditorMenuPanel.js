@@ -61,6 +61,16 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 xtype: 'menu',
                 items: [{
                     xtype: 'menuitem',
+                    text: 'Undo',
+                    cls: 'deUndoMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Redo',
+                    cls: 'deRedoMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
                     text: 'Clear Part',
                     cls: 'clearPartMenuItem',
                     disabled: true

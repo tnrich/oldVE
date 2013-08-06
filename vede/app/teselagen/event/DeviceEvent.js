@@ -16,6 +16,7 @@ Ext.define("Teselagen.event.DeviceEvent", {
 
     SELECT_BIN: "SelectBin",
     SELECT_PART: "SelectPart",
+    SELECT_CELL: "SelectCell",
     CLEAR_PART: "ClearPart",
     REMOVE_COLUMN: "RemoveColumn",
     REMOVE_ROW: "RemoveRow",
@@ -52,5 +53,10 @@ Ext.define("Teselagen.event.DeviceEvent", {
     // Fired when a new part has been defined.
     PART_CREATED: "PartCreated",
 
-    VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName"
+    VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName",
+    
+    CUT_PART: "CutPart",
+    COPY_PART: "CopyPart",
+    PASTE_PART: "PastePart"
+    
 });

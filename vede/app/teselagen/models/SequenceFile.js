@@ -7,7 +7,7 @@
 Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
-    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Teselagen.manager.SessionManager"],
+    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Teselagen.manager.SessionManager","Teselagen.manager.SequenceManager"],
 
     proxy: {
         type: "rest",
@@ -22,30 +22,16 @@ Ext.define("Teselagen.models.SequenceFile", {
         buildUrl: function(request) {
 
 
-            // GET SEQUENCES FROM PROJECT
-            if( request.action === "read" && request.operation.filters && !request.operation.id)
+            // GET SEQUENCES
+            if( request.action === "read" && !request.operation.id)
             {
-                if ( request.operation.filters[0].property === "project_id" )
-                {
-                    var url = "projects/" + request.operation.filters[0].value + "/sequences";
+                    var url = "sequences";
                     delete request.params;
                     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
-                }
             }
 
-            // GET SEQUENCES FROM PROJECT WITH PROJECT_ID
-            if( request.action === "read" && request.operation.filters && request.operation.id)
-            {
-                if ( request.operation.filters[0].property === "project_id" )
-                {
-                    // PROJECT_ID IS DISCARDED
-                    var url = "sequences/" + request.operation.id;
-                    delete request.params;
-                    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
-                }
-            }
 
-            // GET SPECIFIC SEQUENCE WITHOUT PROJECT_ID
+            // GET SPECIFIC SEQUENCE
             if( request.operation.action === "read" && !request.operation.filters && request.params.id)
             {
                 var url = "sequences/"+request.params.id;
@@ -54,8 +40,8 @@ Ext.define("Teselagen.models.SequenceFile", {
             }
 
             
-            // CREATE A NEW SEQUENCE WITH PROJECT_ID
-            if(request.action === "create" && request.records[0].data.project_id && !request.records[0].data.id)
+            // CREATE A NEW SEQUENCE
+            if(request.action === "create" && !request.records[0].data.id)
             {
                 var url = "sequences";
                 delete request.params;
@@ -73,7 +59,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             // GET SPECIFIC SEQUENCE WITHOUT ID!
             if( request.operation.action === "read" && !request.operation.filters && !request.params.id)
             {
-                console.warn("Trying to read sequence with no given id");
                 var url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
@@ -87,7 +72,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
             }
 
-            console.warn("No sequence url generated");
 
         }
     },
@@ -102,9 +86,6 @@ Ext.define("Teselagen.models.SequenceFile", {
      */
     fields: [{
         name: "id",
-        type: "long"
-    }, {
-        name: "project_id",
         type: "long"
     }, {
         name: "part_id",
@@ -185,11 +166,39 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             return name;
         }
-    }, {
+    }, 
+    {
+        name: "dateCreated",
+        type: "string",
+    },
+    {
+        name: "dateModified",
+        type: "string",
+    },
+    {
         name: "firstTimeImported",
         type: "boolean",
         defaultValue: "false"
-    }
+    }, {
+        name: "size",
+        type: "short",
+        convert: function(v, record) {
+            if (!(v === "" || v === undefined || v === null)) {
+                return v;
+            }
+
+            var length = record.getLength();
+
+            return length;
+        }
+    },{
+        name: "user_id",
+        type: "long"
+    },
+    {
+        name: 'serialize', 
+        type: "auto"
+    },
 
     ],
     /*
@@ -217,10 +226,11 @@ Ext.define("Teselagen.models.SequenceFile", {
         foreignKey: "part_id"
     }, {
         type: "belongsTo",
-        model: "Teselagen.models.Project",
-        getterName: "getProject",
-        setterName: "setProject",
-        foreignKey: "sequencefile_id"
+        model: "Teselagen.models.User",
+        getterName: "getUser",
+        setterName: "setUser",
+        associationKey: "user",
+        foreignKey: "user_id"
     }],
 
     /**
@@ -380,11 +390,55 @@ Ext.define("Teselagen.models.SequenceFile", {
             end = jbei["seq:seq"]["seq:sequence"].length;
         } else if (format === constants.SBOLXML) {
             var sbol = Teselagen.bio.parsers.ParsersManager.sbolXmlToJson(content);
-            console.log(sbol);
             console.warn("Finding length for SBOL file not determined yet");
             end = -1;
         } else {}
         //console.log(end);
         return end;
+    },
+
+    getSequenceManager: function(){
+        var data = this.get("serialize");
+        if(!data || data === "") {
+            return null;
+        }
+        else
+        {
+            //var decodedData = JSON.parse(data);
+            var decodedData = data;
+            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager",decodedData.inData);
+            sequenceManager.deSerialize(decodedData);
+            return sequenceManager;
+        }
+    },
+
+    setSequenceManager: function(sequenceManager){
+        var data = sequenceManager.serialize();
+        //console.log(data);
+        //this.set("serialize",JSON.stringify(data));
+        this.set("serialize",data);
+    },
+
+    processSequence: function(cb){
+        var fileContent = this.get("sequenceFileContent");
+        var fileFormat = 
+            Teselagen.constants.Constants.SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP[
+                this.get("sequenceFileFormat")];
+
+        if(!this.get("serialize") && fileContent) {
+            var gb = Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
+                                                               fileFormat);
+
+            var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+
+            if(seqMgr) {
+                this.setSequenceManager( seqMgr );
+                return cb(false, seqMgr);
+            } else {
+                return cb(true);
+            }
+        } else {
+            return cb(true);
+        }
     }
 });

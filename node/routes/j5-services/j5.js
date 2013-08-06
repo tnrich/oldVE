@@ -275,22 +275,25 @@ app.post('/getProtocol',restrict,function(req,res){
 });
 
 // Resolve sequences given a devicedesign, returns a callback
-var resolveSequences = function(devicedesign,cb){
-  devicedesign = devicedesign.toObject();
-  var Sequence = app.db.model("sequence");
-  var partsCounter = 0;
-  devicedesign.j5collection.bins.forEach(function(bin){
-      partsCounter += bin.parts.length;
-  });
+var DeviceDesignPreProcessing = function(devicedesignInput,cb){
 
-  devicedesign.j5collection.bins.forEach(function(bin,binKey){
-    bin.parts.forEach(function(part,partKey){
-      Sequence.findById(part.sequencefile_id,function(err,seq){
-        devicedesign.j5collection.bins[binKey].parts[partKey].SequenceFile = seq;
-        partsCounter--;
-        if(partsCounter===0) return cb(devicedesign);
-      });
+  var Part = app.db.model("part");
+  Part.populate( devicedesignInput.parts, { path: 'sequencefile_id' }, function(err,parts){
+
+    // Generate temporal sequences index
+    var sequenceIndex = {};
+    var partsIndex = {};
+    parts.forEach(function(part){
+      sequenceIndex[part.sequencefile_id._id] = part.sequencefile_id;
+      part.sequencefile_id = part.sequencefile_id._id;
+      partsIndex[part._id] = part;
     });
+    var devicedesign = devicedesignInput.toObject();
+    devicedesign.parts = partsIndex;
+    devicedesign.sequences = sequenceIndex;
+
+
+    cb(devicedesign);
   });
 };
 
@@ -301,15 +304,13 @@ app.post('/executej5',restrict,function(req,res){
   var DeviceDesign = app.db.model("devicedesign");
 
   //Find the DeviceDesign in the Database populating the parts
-  DeviceDesign.findById(req.body.deProjectId).populate('j5collection.bins.parts').exec(function(err,deviceDesignModel){
-
+  DeviceDesign.findById(req.body.deProjectId).populate('bins.cells.part_id.sequencefile_id parts').exec(function(err,deviceDesignModel){
     // Call resolve sequences to populate sequences (Further releases of mongoose may support multilevel chain population) so this can be refactored
-    resolveSequences(deviceDesignModel,function(devicedesign){
-
+    DeviceDesignPreProcessing(deviceDesignModel,function(devicedesign){
       // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
       var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
-
-      quicklog(JSON.stringify(data));
+      //return res.json(devicedesign);
+      //quicklog(JSON.stringify(data));
 
       // Credentials for RPC communication
       data["username"] = 'node';
@@ -430,7 +431,7 @@ app.post('/genbanktosbol',function(req,res){
       {
         var encodedFile = value["encoded_output_file"];
         var zip = new require('node-zip')(encodedFile, {base64: true, checkCRC32: true});
-        quicklog(require('util').inspect(zip.files,false,null));
+        //quicklog(require('util').inspect(zip.files,false,null));
         var file = zip.files["inputsequencefile.xml"].data;
         res.json({error:error,data:file});
       }

@@ -7,7 +7,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: ["Teselagen.constants.Constants",
                "Teselagen.models.J5Collection",
-               "Teselagen.models.EugeneRule"],
+               "Teselagen.models.EugeneRule",
+               "Teselagen.models.J5Bin"],
 
     proxy: {
         type: "rest",
@@ -20,37 +21,35 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: "json",
             //This method should resolve associations and prepare data before saving design
             getRecordData: function(record) {
+
+                record.bins().each(function(bin){
+                    bin.cells().each(function(cell){
+                        cell.setPart(cell.getPart());
+                    });
+                });
+
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                var j5Collection = associatedData.j5collection;
 
-                var rules = associatedData.rules;
-                data.j5collection = j5Collection;
-
-                var binsTempArray = [];
-
-                record.getJ5Collection().bins().each(function(bin) {
-                    var partsTempArray = [];
-                    bin.parts().each(function(part) {
-                        {partsTempArray.push(part.getData().id); }
-                    });
-                    binsTempArray.push(partsTempArray);
-                });
-
-                data.j5collection.bins.forEach(function(bin,binKey){
-                    var partIds = binsTempArray[binKey];
-                    bin.fases = [];
-                    for (var i= 0; i < partIds.length; i++) {
-                        bin.fases[i] = bin.parts[i].fas;
+                var parts = [];
+                associatedData.parts.forEach(function(part,partKey){
+                    if(part.id) {
+                        parts.push(part.id);
+                    } else {
+                    	console.warn("Trying to save non-saved part");
                     }
-                    bin.parts = partIds;
                 });
 
-                data.rules = rules;
 
-                data.rules.forEach(function(rule, ruleKey) {
-                    delete data.rules[ruleKey]["Teselagen.models.Part"];
-                    delete data.rules[ruleKey]["teselagen.models.devicedesign_id"];
+                data.bins = associatedData.bins;
+                data.parts = parts;
+                data.rules = associatedData.rules;
+
+                data.bins.forEach(function(bin){
+                    bin.cells.forEach(function(cell){
+                        delete cell.j5Bin;
+                        delete cell.j5bin_id;
+                    });
                 });
 
                 return data;
@@ -126,7 +125,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
             }
-
             console.log("No devicedesign url generated");
 
 
@@ -140,7 +138,49 @@ Ext.define("Teselagen.models.DeviceDesign", {
         sortParam: undefined,
         limitParam: undefined
     },
-
+    
+    constructor: function() {
+    	this.callParent(arguments);
+    	var self = this;
+    	
+        var binInsert = self.bins().insert;	
+    	self.bins().insert = function() {
+    		var records = arguments[1];
+    		if(!Ext.isIterable(records)) records = [records];
+    		for(var i=0;i<records.length;i++) {
+    			records[i].setDeviceDesign(self);
+    		}
+    	    return binInsert.apply(self.bins(), arguments) || null;
+		}
+    	
+    	this.bins().on("add", this.renderIfActive, this);
+        this.bins().on("update", this.renderIfActive, this);
+        this.bins().on("remove", this.renderIfActive, this);
+        
+        this.parts().on("add", this.renderIfActive, this);
+        this.parts().on("update", this.renderIfActive, this);
+        this.parts().on("remove", this.renderIfActive, this);
+        
+        this.rules().on("add", this.renderIfActive, this);
+        this.rules().on("update", this.renderIfActive, this);
+        this.rules().on("remove", this.renderIfActive, this);
+        
+    	var binFireEvent = self.bins().fireEvent;	
+    	self.bins().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return binFireEvent.apply(self.bins(), arguments) || null;
+		}
+    	
+    	var partFireEvent = self.parts().fireEvent;
+    	self.parts().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return partFireEvent.apply(self.parts(), arguments) || null;
+		}
+    	
+    	var ruleFireEvent = self.rules().fireEvent;
+    	self.rules().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return ruleFireEvent.apply(self.rules(), arguments) || null;
+		}
+    },
+    
     //constructor: function(inData) {
     //    this.callParent([inData]);
     //
@@ -161,17 +201,31 @@ Ext.define("Teselagen.models.DeviceDesign", {
         name: "name",
         type: "String",
         defaultValue: ""
-    }],
+    },
+        {
+        name: "combinatorial",
+        type: "boolean",
+        defaultValue: false
+    },
+        {
+        name: "isCircular",
+        type: "boolean",
+        defaultValue: true
+    }
+    ],
 
     validations: [],
 
-    associations: [{
-        type: "hasOne",
-        model: "Teselagen.models.J5Collection",
-        getterName: "getJ5Collection",
-        setterName: "setJ5Collection",
-        associationKey: "j5collection",
-        name: "j5collection" // Note: not a documented config, but specified for getRecordData
+    associations: [
+    {
+        type: "hasMany",
+        model: "Teselagen.models.J5Bin",
+        name: "bins"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.Part",
+        name: "parts",
+        foreignKey: "devicedesign_id"
     }, {
         type: "hasOne",
         model: "Teselagen.models.SBOLvIconInfo",
@@ -200,7 +254,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     }],
 
     modelIsLoaded: false,
-
+    active: false,
+    
     reload: function(callBack) {
 
         var me = this;
@@ -212,7 +267,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     me.data[k] = r.data[k];
                 }
 
-                me.setJ5Collection(r.getJ5Collection());
+                me.setJ5Collection(r());
                 me.j5runs().removeAll();
                 me.j5runs().insert(0, r.j5runs());
 
@@ -228,68 +283,206 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         });
     },
+    
+    setActive: function(value) {
+    	this.active = value;
+    	//this.bins().each(function(bin) {
+    		//bin.setActive(value);
+    	//});
+    	//this.parts().each(function(part) {
+    		//part.setActive(value);
+    	//});
+    	//this.rules().each(function(rule) {
+    		//rule.setActive(value);
+    	//});
+    },
+    
+    renderIfActive: function() {
+    	if(this.active) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+    /**
+     * Adds a default J5Bin given a name and index.
+     * @param {String} pName
+     * @param {Number} pIndex Index to insert new J5Bin. Optional. Defaults to end of of array if invalid or undefined value.
+     * @returns {Teselagen.models.J5Bin}
+     * ///@returns {Boolean} True if added, false if not.
+     */
+    addNewBinByIndex: function(pIndex, pName) {
+    	var added = false;
+        var cnt = this.bins().count();
+        var totalRows = Teselagen.manager.DeviceDesignManager.findMaxNumParts(this);
+        
+        if (pName === "" || pName === undefined || pName === null) {
+        	var maxBin = 0;
+        	this.bins().each(function(bin) {
+                var name = bin.get("binName");
+                var binNumber;
 
-    getDesign: function() {
-        /*
-        if(!this.modelIsLoaded)
-        {
-            this.modelIsLoaded = true;
-            this.reload(function(record){
-                if (Ext.isFunction(callback)) {
-                    callback(record);
+                if(name.match(/^Bin\d+$/)) {
+                    binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                    if(binNumber > maxBin) {
+                        maxBin = binNumber;
+                    }
                 }
             });
+
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (maxBin + 1)
+            });
+            
+        } else {
+        	 var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                 binName: pName
+             });
         }
-        */
-        return this;
-    },
+        
+        var phantomCells = [];
+		for(var i=0;i<totalRows;i++) {
+			var phantomCell = Ext.create("Teselagen.models.Cell", {
+				index: i
+			});
+			phantomCell.setJ5Bin(j5Bin);
+			phantomCells.push(phantomCell);
+		}	
+		j5Bin.cells().add(phantomCells);
 
-    /** (Untested)
-     * Get number of bins in J5Bin.
-     * @member Teselagen.models.DeviceDesign
-     * @returns {Number}
+        if (pIndex >= 0 && pIndex < cnt) this.bins().insert(pIndex, j5Bin); 
+        else this.bins().add(j5Bin);
+        
+		/*var newCnt  = this.bins().count();
+        if (newCnt > cnt) {
+            added = true;
+        }*/
+
+        // DW: NEED TO FIRE EVENT NEW_BIN_ADDED
+
+        //return added; //j5Bin;
+        return j5Bin;
+    },
+    
+    generateDefaultNewBin: function(pName) {
+    	var cnt = this.bins().count();
+        var totalRows = Teselagen.manager.DeviceDesignManager.findMaxNumParts(this);
+        
+        if (pName === "" || pName === undefined || pName === null) {
+        	var maxBin = 0;
+        	this.bins().each(function(bin) {
+                var name = bin.get("binName");
+                var binNumber;
+
+                if(name.match(/^Bin\d+$/)) {
+                    binNumber = parseInt(name.match(/\d+$/)[0]);
+
+                    if(binNumber > maxBin) {
+                        maxBin = binNumber;
+                    }
+                }
+            });
+
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (maxBin + 1)
+            });
+            
+        } else {
+        	 var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                 binName: pName
+             });
+        }
+        
+        var phantomCells = [];
+		for(var i=0;i<totalRows;i++) {
+			var phantomCell = Ext.create("Teselagen.models.Cell", {
+				index: i
+			});
+			phantomCell.setJ5Bin(j5Bin);
+			phantomCells.push(phantomCell);
+		}	
+		j5Bin.cells().add(phantomCells);
+		
+		return j5Bin;
+    },
+    
+    /**
+     * Checks to see if a given name is unique within the J5Bins names.
+     * @param {String} pName Name to check against bins.
+     * @returns {Boolean} True if unique, false if not.
      */
-    getBinCount: function() {
-        return this.getJ5Collection().binCount();
+    isUniqueBinName: function(pName) {
+        var index = this.bins().find("binName", pName);
+
+        if (index === -1) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
+    /**
+     * Adds a Part into the parts store.
+     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
+     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
+     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
+     * @returns {Boolean} True if added, false if not.
+     */
+     /*
+    addToParts: function(pPart, pPosition, pFas) {
+        var added = false;
+        var fasNone = Teselagen.constants.Constants.FAS.NONE;
+        var fas = fasNone;
+        var fases = this.get("fases");
+        var isArray = Ext.isArray(pPart);
+        
+        if (!Ext.isEmpty(pFas)) {
+            fas = pFas;
+        }
+        else {
+            if (isArray) {
+                fas = [];
+                for (var i=0; i < pPart.length; i++) {
+                    fas.push(fasNone);
+                }
+            }
+        }
+        if (!Ext.isEmpty(pPosition)) {
+            if (Ext.isNumber(pPosition) && pPosition >= 0) {
+                this.parts().insert(pPosition, pPart);
+                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
+                added = true;
+            } else {
+                console.warn("Invalid part index:", pPosition);
+            }
+        } else {
+            this.parts().add(pPart);
+            this.set("fases", fases.concat(fas));
+            added = true;
+        }
+
+        return added;
+    },
+    */
+    
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection
      * @returns {Teselagen.models.J5Collection}
      */
-    createNewCollection: function(pNumBins) {
-        if (this.getJ5Collection().binCount() > 0) {
+    createEmptyGridModel: function(pNumBins) {
+        var bins = this.bins();
+
+        if (bins.count() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
         }
-        var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
             var bin = Ext.create("Teselagen.models.J5Bin", {
                 binName: "No_Name" + i
             });
-            j5Coll.addToBin(bin, i);
+            bins.insertAt(i, bin);
         }
-        this.setJ5Collection(j5Coll);
-        return j5Coll;
-    },
 
-    /**
-     * Creates a J5Collection from given J5Bins.
-     * @param {Teselagen.models.J5Bin[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
-     * @returns {Teselagen.models.J5Collection}
-     */
-    createCollectionFromBins: function(pBins) {
-        if (this.getJ5Collection().binCount() > 0) {
-            console.warn("Warning. Overwriting existing J5Collection");
-        }
-        var j5Coll = Ext.create("Teselagen.models.J5Collection");
-        for (var i = 0; i < pBins.length; i++) {
-            j5Coll.addToBin(pBins[i], i);
-        }
-        this.setJ5Collection(j5Coll);
-        return j5Coll;
+        return bins;
     },
-
+    
     /**
      * Adds a EugeneRule into the Rules Store.
      * @param {Teselagen.models.EugeneRule} pRule. Can be a single rule or an array of rules.
@@ -338,19 +531,33 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * Returns the EugeneRules Store of EugeneRules that contain the Part in either operand.
      *
      * @param {Teselagen.models.Part} pPart
+     * @param {Boolean} filterThenAndNextTo If true, filter out rules that involve
+     * the part if they are THEN or NEXTTO rules. For rendering purposes, this
+     * flag should be true, which is the default value.
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
-    getRulesInvolvingPart: function(pPart) {
-        var constants = Teselagen.constants.Constants;
+    getRulesInvolvingPart: function(pPart, filterThenAndNextTo) {
+    	var constants = Teselagen.constants.Constants;
+        
+        // filterThenAndNextTo should default to true.
+        if(filterThenAndNextTo === undefined) {
+            filterThenAndNextTo = true;
+        }
 
         this.rules().clearFilter(true);
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart) {
                 return true;
-            } else if(rule.getOperand2() === pPart && 
-                      rule.get("compositionalOperator") !== constants.THEN &&
-                      rule.get("compositionalOperator") !== constants.NEXTTO) {
-                return true;
+            } else if(rule.getOperand2() === pPart) {
+                if(filterThenAndNextTo &&
+                   rule.get("compositionalOperator") !== constants.THEN &&
+                   rule.get("compositionalOperator") !== constants.NEXTTO) {
+                    return true;
+                } else if(!filterThenAndNextTo) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -360,15 +567,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     getNumberOfRulesInvolvingPart: function(pPart) {
-        this.rules().clearFilter(true);
-        var numRules = 0
-        var rules = this.rules();
-        rules.each(function (rule) {
-            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
-                numRules++
-            }
-        });  
-        return numRules;    
+    	this.rules().suspendEvents(false);
+    	var numberOfRules = this.getRulesInvolvingPart(pPart, true).count();
+    	this.rules().resumeEvents();
+    	return numberOfRules;
     },
 
     /**
@@ -377,7 +579,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     getRuleByName: function(pName) {
         this.rules().clearFilter(true);
-        var index = this.rules().find("name", pName);
+        var index = this.rules().find("name", pName, 0,false,false, true);
         if (index !== -1) {
             return this.rules().getAt(index);
         } else {
@@ -392,14 +594,24 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     isUniqueRuleName: function(pName) {
         this.rules().clearFilter(true);
-        var index = this.rules().find("name", pName);
+        var index = this.rules().find("name", pName, 0,false,false, true);
 
         if (index === -1) {
             return true;
         } else {
             return false;
         }
-    }
+    },
+    
+    getPartById: function(pId) {
+	    var index = this.parts().find("id", pId);
+	
+	    if ( index === -1 ) {
+	        return null;
+	    } else {
+	        return this.parts().getAt(index);
+	    }
+    },
 
 
 });

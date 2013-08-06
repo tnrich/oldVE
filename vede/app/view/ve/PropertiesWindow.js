@@ -31,33 +31,32 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                     xtype: 'textfield',
                                     cls: 'propertiesWindowSequenceNameField',
                                     fieldLabel: 'Sequence Name',
+                                    labelAlign: 'right',
                                     maxWidth: 400,
                                     allowBlank: false
                                 }, {
                                     xtype: 'textareafield',
                                     cls: 'propertiesWindowDescriptionArea',
                                     fieldLabel: 'Description',
+                                    labelAlign: 'right',
                                     maxWidth: 400,
                                     height: 100
                                 }, {
                                     xtype: 'displayfield',
                                     cls: 'propertiesWindowOwnerField',
-                                    fieldLabel: 'Owner'
+                                    fieldLabel: 'Owner',
+                                    labelAlign: 'right'
                                 }, {
                                     xtype: 'displayfield',
                                     cls: 'propertiesWindowCreatedField',
-                                    fieldLabel: 'Created'
+                                    fieldLabel: 'Created',
+                                    labelAlign: 'right'
                                 }, {
                                     xtype: 'displayfield',
                                     cls: 'propertiesWindowLastModifiedField',
-                                    fieldLabel: 'Last Modified'
-                                },
-                                // {
-                                //     xtype: 'gridpanel',
-                                //     forceFit: true,
-                                //     id: 'propertiesWindowPermissionsGrid',
-                                    
-                                // }
+                                    fieldLabel: 'Last Modified',
+                                    labelAlign: 'right'
+                                }
                             ]
                         },
                         {
@@ -73,7 +72,8 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                 {
                                     xtype: 'textfield',
                                     cls: 'featureSearchField',
-                                    emptyText: 'Enter Name or Type',
+                                    emptyText: 'Search by Name or Type',
+                                    enableKeyEvents: true,
                                     maxWidth: 300
                                 },
                                 {
@@ -88,6 +88,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             name: 'featuresGridPanel',
                                             width: 400,
                                             minHeight: 200,
+                                            maxHeight: 360,
                                             columns: [
                                                 {
                                                     xtype: 'gridcolumn',
@@ -184,38 +185,98 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                     },
                                     items: [
                                         {
+                                            xtype: 'container',
+                                            layout: {
+                                                align: 'stretch',
+                                                type: 'hbox'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: 'button',
+                                                    cls: 'expandAllCutSites',
+                                                    text: 'Expand All',
+                                                    margins: '0 5 5 0',
+                                                    handler: function () {
+                                                        Vede.application.fireEvent('expandAllCutSites');
+                                                    }
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    cls: 'collapseAllCutSites',
+                                                    text: 'Collapse All',
+                                                    disabled: true,
+                                                    margins: '0 0 5 0',
+                                                    handler: function () {
+                                                        Vede.application.fireEvent('collapseAllCutSites');
+                                                    }
+                                                },
+                                            ]
+                                        },
+                                        {
                                             xtype: 'gridpanel',
                                             cls: 'cutSitesGridPanel',
+                                            name: 'cutSitesGridPanel',
+                                            viewConfig: {
+                                                getRowClass: function(record, rowIndex, rowParams, store) {
+                                                    if (record.data.numCuts) {
+                                                        var expanded = Vede.application.fireEvent('setRestrictionEnzymeRowCls', record, rowIndex, store);
+                                                        if (expanded) {
+                                                            return 'restrictionEnzymeExpandedCls';
+                                                        } else {
+                                                            return 'restrictionEnzymeCollapsedCls';
+                                                        }
+                                                    } else {
+                                                        return 'cutSiteCls';
+                                                    }
+                                                }
+                                            },
                                             maxWidth: 470,
                                             minHeight: 200,
+                                            maxHeight: 320,
                                             columns: [
                                                 {
                                                     xtype: 'gridcolumn',
                                                     cls: 'cutSitesNameColumn',
+                                                    dataIndex: 'name',
                                                     text: 'Name',
                                                     width: 200
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
-                                                    cls: 'cutSites#CutsColumn',
+                                                    cls: 'cutSitesNumCutsColumn',
+                                                    dataIndex: 'numCuts',
                                                     text: '# Cuts',
+                                                    maxWidth: 50
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
                                                     cls: 'cutSitesPositionColumn',
+                                                    dataIndex: 'position',
                                                     text: 'Position',
+                                                    width: 170
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
                                                     cls: 'cutSitesStrandColumn',
+                                                    dataIndex: 'strand',
                                                     text: 'Strand',
+                                                    maxWidth: 50,
+                                                    renderer: function (value) {
+                                                        if (value > 0) {
+                                                            return '+'
+                                                        } else if (value < 0) {
+                                                            return '-'
+                                                        } else { return null}
+                                                    }
                                                 }
                                             ]
                                         },
                                         {
                                             xtype: 'displayfield',
                                             cls: 'maxCutOffsField',
+                                            value: '<b>unlimited</b>',
                                             fieldLabel: 'Max Cut Offs',
+                                            labelWidth: 80,
                                             margins: '10 0 5 0'
                                         },
                                         {
@@ -290,37 +351,51 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                         {
                                             xtype: 'gridpanel',
                                             cls: 'ORFsGridPanel',
+                                            name: 'ORFsGridPanel',
                                             maxWidth: 470,
                                             minHeight: 200,
+                                            maxHeight: 320,
+                                            columnLines: true,
                                             columns: [
                                                 {
                                                     xtype: 'gridcolumn',
                                                     cls: 'ORFsPositionColumn',
+                                                    dataIndex: 'position',
                                                     text: 'Position',
                                                     width: 200
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
                                                     cls: 'ORFsLengthColumn',
+                                                    dataIndex: 'length',
                                                     text: 'Length',
-                                                },
-                                                {
-                                                    xtype: 'gridcolumn',
-                                                    cls: 'ORFsStrandColumn',
-                                                    text: 'Strand',
+                                                    width: 120,
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
                                                     cls: 'ORFsFrameColumn',
+                                                    dataIndex: 'frame',
                                                     text: 'Frame',
+                                                },
+                                                {
+                                                    xtype: 'gridcolumn',
+                                                    cls: 'ORFsStrandColumn',
+                                                    dataIndex: 'strand',
+                                                    text: 'Strand',
+                                                    maxWidth: 50,
+                                                    renderer: function (value) {
+                                                        if (value > 0) {
+                                                            return '+'
+                                                        } else { return '-' }
+                                                    }
                                                 }
                                             ]
                                         },
                                         {
                                             xtype: 'displayfield',
                                             cls: 'minORFLengthField',
-                                            fieldLabel: 'Minimun ORF Length',
-                                            labelWidth: 200,
+                                            fieldLabel: 'Minimum ORF Length',
+                                            labelWidth: 130,
                                             margins: '10 0 5 0'
                                         },
                                         {
@@ -384,22 +459,15 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                     layout: {
                         type: 'hbox'
                     },
-                    margins: '0 0 0 400',
+                    margins: '0 0 0 415',
                     items: [
                         {
                             xtype: 'button',
                             cls: 'propertiesWindowOKButton',
                             text: 'Ok', 
+                            width: 70,
                             margin: '4 2 2 2',
                             padding: 2                                   
-                        }, {
-                            xtype: 'button',
-                            text: 'Cancel',
-                            margin: '4 2 2 2',
-                            padding: 2,
-                            handler: function() {
-                                me.close();
-                            }
                         }
                     ]
                 }

@@ -33,13 +33,15 @@ Ext.define("Teselagen.models.Project", {
         name: "designs",
         associationKey: "designs",
         foreignKey: "project_id"
-    }, {
-        type: "hasMany",
-        model: "Teselagen.models.SequenceFile",
-        name: "sequences",
-        associationKey: "sequences",
-        foreignKey: "project_id"
-    }, {
+    }, 
+    // {
+    //     type: "hasMany",
+    //     model: "Teselagen.models.SequenceFile",
+    //     name: "sequences",
+    //     associationKey: "sequences",
+    //     foreignKey: "project_id"
+    // }, 
+    {
         type: "hasMany",
         model: "Teselagen.models.Part",
         name: "parts",

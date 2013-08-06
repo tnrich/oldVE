@@ -25,22 +25,23 @@
  */
 
 Ext.define("Teselagen.bio.parsers.ParsersManager", {
-    requires:  [
+    requires: [
+
         "Teselagen.bio.util.XmlToJson",
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.util.Sha256",
 
         "Teselagen.bio.parsers.Genbank",
-        "Teselagen.bio.parsers.GenbankLocusKeyword",
-        "Teselagen.bio.parsers.GenbankOriginKeyword",
-        "Teselagen.bio.parsers.SbolParser",
-        "Teselagen.bio.parsers.JbeiseqParser",
-        "Teselagen.bio.sequence.DNATools",
+            "Teselagen.bio.parsers.GenbankLocusKeyword",
+            "Teselagen.bio.parsers.GenbankOriginKeyword",
+            "Teselagen.bio.parsers.SbolParser",
+            "Teselagen.bio.parsers.JbeiseqParser",
+            "Teselagen.bio.sequence.DNATools",
 
         "Ext.Ajax",
-        "Ext.data.Store",
-        "Ext.data.XmlStore",
-        "Ext.data.reader.Xml"
+            "Ext.data.Store",
+            "Ext.data.XmlStore",
+            "Ext.data.reader.Xml"
     ],
 
     singleton: true,
@@ -48,41 +49,98 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     //XmlToJson: null,
     //DNATools: null,
 
+
+    parseAndImportFile: function(file) {
+        var self = this;
+        var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+
+        if(ext) {
+
+        var reader = new FileReader();
+
+        // Closure to capture the file information.
+        reader.onload = (function(theFile) {
+            return function(e) {
+
+                var data = e.target.result;
+                var name = theFile.name;
+                var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
+
+                var msg = toastr.info("Importing ", name);
+                //debugger;
+                self.parseSequence(data, ext, function(gb) {
+                    var sequence = Ext.create("Teselagen.models.SequenceFile",{
+                        sequenceFileContent: gb,
+                        sequenceFileFormat: "GENBANK",
+                        name: name,
+                        dateCreated:  new Date(),
+                        dateModified:  new Date(),
+                        firstTimeImported: true,
+                    });
+
+                    sequence.processSequence(function(err){
+                        sequence.save({
+                            success: function(){
+                                var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+                                if(!duplicated) 
+                                {
+                                    Teselagen.manager.ProjectManager.sequences.add(sequence);
+                                }
+                                else
+                                {
+                                    $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
+                                    $(msg[0]).removeClass("toast-info");
+                                    $(msg[0]).addClass("toast-warning");                                }
+                            }
+                        });
+                    });
+
+                });
+
+
+            };
+        })(file);
+
+        reader.readAsText(file);
+
+        }
+        else
+        {
+            console.warn("wrong file extension");
+        }
+    },
+
     /**
      * @member Teselagen.bio.parsers.ParsersManager
      */
     constructor: function() {
-        XmlToJson   = Teselagen.bio.util.XmlToJson;
-        DNATools    = Teselagen.bio.sequence.DNATools;
-        SbolParser  = Teselagen.bio.parsers.SbolParser;
-        Sha256      = Teselagen.bio.util.Sha256;
+        XmlToJson = Teselagen.bio.util.XmlToJson;
+        DNATools = Teselagen.bio.sequence.DNATools;
+        SbolParser = Teselagen.bio.parsers.SbolParser;
+        Sha256 = Teselagen.bio.util.Sha256;
     },
 
-    detectXMLFormat: function(data,cb){
+    detectXMLFormat: function(data, cb) {
 
         var parser = new DOMParser();
         var xmlDoc = parser.parseFromString(data, "text/xml");
         var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
-        if(diff.length>0)
-        {
+        if (diff.length > 0) {
             // JBEI-SEQ
-            return cb(data,false);
-        }
-        else
-        {
+            return cb(data, false);
+        } else {
             // SBOL
-            Teselagen.bio.parsers.SbolParser.parse(data,cb);
+            Teselagen.bio.parsers.SbolParser.parse(data, cb);
         }
     },
 
-    parseSequence: function(result, pExt,cb){
+    parseSequence: function(result, pExt, cb) {
 
         var self = this;
         var asyncParseFlag = false;
 
         //console.log(ext);
-        switch(pExt)
-        {
+        switch (pExt) {
             case "fasta":
                 fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
                 break;
@@ -97,17 +155,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 break;
             case "xml":
                 asyncParseFlag = true;
-                fileContent = self.detectXMLFormat(result,function(pGB,isSBOL){
+                fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
                     var gb;
-                    if(isSBOL) gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
-                    else  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+                    if (isSBOL) gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
+                    else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
                     return cb(gb);;
                 });
                 break;
         }
-        
-        if(!asyncParseFlag)
-        {
+
+        if (!asyncParseFlag) {
             var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
             return cb(gb);;
         }
@@ -126,8 +183,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var result; // original wants this to be a FeaturedDNASequence NOT SeqMgr!
 
         var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
-        var seqArr  = [];
-        var name    = "";
+        var seqArr = [];
+        var name = "";
         var sequence = "";
 
         if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
@@ -137,8 +194,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             }
         }
 
-        for (var i=0; i < lineArr.length; i++) {
-            if ( !lineArr[i].match(/^\>/) ) {
+        for (var i = 0; i < lineArr.length; i++) {
+            if (!lineArr[i].match(/^\>/)) {
                 sequence += Ext.String.trim(lineArr[i]);
             }
         }
@@ -154,7 +211,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             date: Teselagen.bio.parsers.ParsersManager.todayDate()
         });
 
-        var origin =  Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+        var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
             sequence: sequence
         });
 
@@ -171,7 +228,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @returns {Teselagen.bio.parsers.Genbank} genbank
      * @param {String} pFasta FASTA formated string
      */
-     genbankToFasta: function(pGenbank) {
+    genbankToFasta: function(pGenbank) {
 
         var name = pGenbank.getLocus().getLocusName();
         var sequence = pGenbank.getOrigin().getSequence();
@@ -193,21 +250,21 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {String} xml XML file with one or more records in String format
      * @returns {Teselagen.bio.parsers.Genbank[]} Array of Genbank models
      */
-     jbeiseqXmlsToXmlArray: function (xml) {
+    jbeiseqXmlsToXmlArray: function(xml) {
 
         return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlsToXmlArray(xml);
-     },
+    },
 
-     /**  DOES NOT HAVE TEST CODE YET
-      * Scans through a JbeiSeq JSON object to see if it has the minimum structure
-      * requirements.
-      * @param {Object} json JbeiSeq JSON object
-      * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
-      */
-     validateJbeiseqJson: function (json) {
+    /**  DOES NOT HAVE TEST CODE YET
+     * Scans through a JbeiSeq JSON object to see if it has the minimum structure
+     * requirements.
+     * @param {Object} json JbeiSeq JSON object
+     * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
+     */
+    validateJbeiseqJson: function(json) {
 
         return Teselagen.bio.parsers.JbeiseqParser.validateJbeiseqJson(json);
-     },
+    },
 
     /**
      * Converts an JbeiSeqXML in string format to JSON format.
@@ -219,10 +276,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {String} xml XML file in String format
      * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
      */
-     jbeiseqXmlToJson: function (xmlStr) {
+    jbeiseqXmlToJson: function(xmlStr) {
 
         return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToJson(xmlStr);
-     },
+    },
 
     /**
      * Converts an JbeiSeqXML in string format to JSON format.
@@ -230,12 +287,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {Object} json Cleaned JSON object of the JbeiSeqXml
      * @returns {String} xml XML file in String format
      */
-     jbeiseqJsonToXml: function(json) {
+    jbeiseqJsonToXml: function(json) {
 
         return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToXml(json);
-     },
+    },
 
-     /**
+    /**
      * Converts a JbeiSeq JSON object into a Genbank model of the data.
      * Only one record per json.
      * @param {Object} json JbeiSeq JSON object with ONE record
@@ -281,14 +338,14 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqXml(pGenbank);
     },
 
-//    /**
-//     * Creates a Sequence Hash, from a sequence. Uses Sha256.js to create this id.
-//     * @param {Teselagen.} pSequence Sequence string
-//     * @returns {String} seqHash Hash of the sequence using sha256
-//     *
-//    makeSeqHash: function(pSequence) {
-//        Teselagen.bio.util.Sha256
-//    },*/
+    //    /**
+    //     * Creates a Sequence Hash, from a sequence. Uses Sha256.js to create this id.
+    //     * @param {Teselagen.} pSequence Sequence string
+    //     * @returns {String} seqHash Hash of the sequence using sha256
+    //     *
+    //    makeSeqHash: function(pSequence) {
+    //        Teselagen.bio.util.Sha256
+    //    },*/
 
     // ===========================================================================
     //   SBOL & JbeiSeq Conversions
@@ -307,7 +364,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      */
     sbolXmlToJson: function(xmlStr) {
         return Teselagen.bio.parsers.SbolParser.sbolXmlToJson(xmlStr);
-        
+
 
     },
 
@@ -352,7 +409,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             }
         });
         return str;
-     },
+    },
 
 
     /**
@@ -360,10 +417,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @returns {String} date Today's date in string format
      */
     todayDate: function() {
-        var date    = (new Date()).toDateString().split(" ");
+        var date = (new Date()).toDateString().split(" ");
         var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
         return dateStr;
-     },
+    },
 
     /**
      * isALabel

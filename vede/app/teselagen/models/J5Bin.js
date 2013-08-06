@@ -9,6 +9,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     requires: [
         "Teselagen.models.Part",
+        "Teselagen.models.Cell",
         "Teselagen.constants.Constants",
         "Teselagen.constants.SBOLIcons",
         "Teselagen.utils.FormatUtils",
@@ -46,7 +47,7 @@ Ext.define("Teselagen.models.J5Bin", {
             name: "binName",
             convert: function(v, record) {
                 var name;
-
+                v = Ext.String.trim(v+"");
                 if (v === "" || v === undefined || v === null) {
                     record.self.highestDefaultNameIndex += 1;
                     name = record.self.defaultNamePrefix/*+ record.self.highestDefaultNameIndex*/;
@@ -61,6 +62,7 @@ Ext.define("Teselagen.models.J5Bin", {
                 return name;
             }
         },
+
         {
             name: "iconID",
             convert: function(v) {
@@ -80,7 +82,8 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "fro",               type: "string",     defaultValue: ""},
         {name: "fases",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
+        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null},
+        {name: "devicedesign_id",    type: "long",       defaultValue: null}
 
 
         /* worry about this later. Original does not include this field.
@@ -120,18 +123,15 @@ Ext.define("Teselagen.models.J5Bin", {
     associations: [
         {
             type: "hasMany",
-            model: "Teselagen.models.Part",
-            name: "parts",
-            foreignKey: "j5bin_id"
-        },
-        {//Needed to find the parent of a child
+            model: "Teselagen.models.Cell",
+            name: "cells",
+            foreignKey: "cell_id"
+        }, {
             type: "belongsTo",
-            model: "Teselagen.models.J5Collection",
-            name: "j5collection",
-            getterName: "getJ5Collection",
-            setterName: "setJ5Collection",
-            associationKey: "j5Collection",
-            foreignKey: "j5collection_id"
+            model: "Teselagen.models.DeviceDesign",
+            getterName: "getDeviceDesign",
+            setterName: "setDeviceDesign",
+            foreignKey: "devicedesign_id"
         }
     ],
 
@@ -140,83 +140,39 @@ Ext.define("Teselagen.models.J5Bin", {
      * Needed to set fases array so that it will create an instance variable.
      */
     constructor: function(pCfg) {
-        var fases = pCfg && pCfg.fases ? pCfg.fases : [];
+        //var fases = pCfg && pCfg.fases ? pCfg.fases : [];
         this.callParent(arguments);
-        this.set("fases", fases);
-    },
-
-    /**
-     * @member Teselagen.models.J5Bin
-     * @returns {Number} count Number of Parts in parts
-     */
-    partCount: function() {
-        return this.parts().count();
-    },
-
-    /**
-     * @param {Teselagen.models.Part} pPart
-     * @returns {Boolean} True is in this J5Bin, False if not.
-     */
-    hasPart: function(pPart) {
-        if (this.indexOfPart(pPart) === -1) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-
-    /**
-     * @param {Teselagen.models.Part} pPart
-     * @returns {Number} Index of Part in Bin. -1 if not present.
-     */
-    indexOfPart: function(pPart) {
-        var index = -1;
-        index = this.parts().indexOf(pPart);
-        return index;
-    },
-
-    /**
-     * Adds a Part into the parts store.
-     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
-     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
-     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
-     * @returns {Boolean} True if added, false if not.
-     */
-    addToParts: function(pPart, pPosition, pFas) {
-        var added = false;
-        var fasNone = Teselagen.constants.Constants.FAS.NONE;
-        var fas = fasNone;
-        var fases = this.get("fases");
-        var isArray = Ext.isArray(pPart);
+        //this.set("fases", fases);
         
-        if (!Ext.isEmpty(pFas)) {
-            fas = pFas;
-        }
-        else {
-            if (isArray) {
-                fas = [];
-                for (var i=0; i < pPart.length; i++) {
-                    fas.push(fasNone);
-                }
-            }
-        }
-        if (!Ext.isEmpty(pPosition)) {
-            if (Ext.isNumber(pPosition) && pPosition >= 0) {
-                this.parts().insert(pPosition, pPart);
-                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
-                added = true;
-            } else {
-                console.warn("Invalid part index:", pPosition);
-            }
-        } else {
-            this.parts().add(pPart);
-            this.set("fases", fases.concat(fas));
-            added = true;
-        }
-
-        return added;
+        this.cells().on("add", this.renderIfActive, this);
+        this.cells().on("update", this.renderIfActive, this);
+        this.cells().on("remove", this.renderIfActive, this);
+        
+        var self = this;
+    	var cellFireEvent = self.cells().fireEvent;
+    	self.cells().fireEvent = function() {
+    		if(Teselagen.manager.GridManager.listenersEnabled) return cellFireEvent.apply(self.cells(), arguments) || null;
+		}
+    	
+    	var setDeviceDesign = self.setDeviceDesign;
+    	self.setDeviceDesign = function() {
+    		self.isActive = function() {
+				if(self.getDeviceDesign()) return self.getDeviceDesign().active;
+				else return false;		
+    		}
+    		return setDeviceDesign.apply(self, arguments) || null;
+		}
+    	
     },
-
+    
+    isActive: function() {
+    	return false;
+    },
+    
+    renderIfActive: function() {
+    	if(this.isActive()) Teselagen.manager.GridManager.renderGrid(Ext.getCmp("mainAppPanel").getActiveTab().model);
+    },
+    
     /**
      * Removes a Part from the parts.
      * This DOES NOT check if parts are in EugeneRules. Use deleteItem to check.
@@ -242,6 +198,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Number} index Part index
      * @returns {String} Null if not found.
      */
+     /*
     getFas: function(pIndex) {
         var fas = this.get("fases")[pIndex];
         if (!fas) {
@@ -250,12 +207,15 @@ Ext.define("Teselagen.models.J5Bin", {
         }
         return fas;
     },
+    */
     
     /** (From PartProxy)
      * Returns first matching Part with given Id number.
      * @param {Number} pId Index of Part in Bin.
      * @returns {Teselagen.models.Part}
      */
+
+     /*
     getPartById: function(pId) {
         var index = this.parts().find("id", pId);
 
@@ -265,12 +225,15 @@ Ext.define("Teselagen.models.J5Bin", {
             return this.parts().getAt(index);
         }
     },
+    */
 
     /** (From PartProxy)
      * Returns first matching Part with given name.
      * @param {Number} pName Name of Part in Bin.
      * @returns {Teselagen.models.Part}
      */
+
+     /*
     getPartByName: function(pName) {
         var index = this.parts().find("name", pName);
 
@@ -280,6 +243,7 @@ Ext.define("Teselagen.models.J5Bin", {
             return this.parts().getAt(index);
         }
     },
+    */
 
     /** From PartProxy.as.
      * Deletes a Part after checking if a EugeneRule should also be deleted.
@@ -289,6 +253,8 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.models.DeviceDesign} deviceDesign
      * @returns {Boolean} True if removed, false if not.
      */
+
+     /*
     deletePart: function(pPart, pDeviceDesign) {
         var cnt = this.partCount();
         var deleted = false;
@@ -310,6 +276,7 @@ Ext.define("Teselagen.models.J5Bin", {
         }
         return deleted;
     },
+    */
     
 
     /** IS THIS NECESSARY?
@@ -334,6 +301,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {String} pName Name to check against parts.
      * @returns {Boolean} if unique, false if not.
      */
+     /*
     isUniquePartName: function(pName) {
         var index = this.parts().find("name", pName);
 
@@ -343,4 +311,5 @@ Ext.define("Teselagen.models.J5Bin", {
             return false;
         }
     }
+    */
 });

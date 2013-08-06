@@ -80,12 +80,21 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 		 * @method clone
 		 * @return {Feature} cloned feature note
 		 */
-		this.clone =function(){
+		this.clone = function(){
 			return Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
 				name: name,
 				value: value,
 				quoted: quoted
 			});
 		}
+	},
+	serialize: function(){
+		var data = {};
+		data.inData = {
+			name : this.getName(),
+			value : this.getValue(),
+			quoted : this.getQuoted()
+		}
+		return data;
 	}
 });
