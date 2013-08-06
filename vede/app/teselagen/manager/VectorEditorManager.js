@@ -71,16 +71,17 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             });
         };
 
-        if( this.sequence.get("name") == "" )
+        if( this.sequence.get("name") == "NO_NAME" || this.sequence.get("name") == "" )
         {
-            console.log(this.sequence);
             Ext.MessageBox.prompt("Name", "Please enter a sequence name:", function(btn,text){
                 if(btn==="ok")
                 {
                     var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-                    var currentTabEl = (currentTab.getEl());
+                    currentTab.setTitle(text);
 
                     Teselagen.manager.ProjectManager.workingSequence.set("name",text);
+                    Teselagen.manager.ProjectManager.workingSequence.getSequenceManager().setName(text);
+                    
                     saveToServer();
 
                 }
