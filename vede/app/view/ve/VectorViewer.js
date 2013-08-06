@@ -119,7 +119,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
             var sequenceManager = this.sequenceFile.getSequenceManager();
 
             if(!sequenceManager) {
-                if(sequenceFile.get("sequenceFileContent")) {
+                if(this.sequenceFile.get("sequenceFileContent")) {
                     sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(this.sequenceFile);
                 } else {
                     self.hide();
