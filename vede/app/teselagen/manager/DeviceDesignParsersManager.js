@@ -834,7 +834,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         toastr.info("Parsing sequences in background (click to cancel)");
         parts.forEach(function(part){
             if(processFlag) {
-                debugger;
+                // debugger;
             part.getSequenceFile({
                 callback: function(sequence){
                 sequence.processSequence(function(err,seq){
