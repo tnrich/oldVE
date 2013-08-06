@@ -144,17 +144,22 @@ Ext.define("Vede.controller.DashboardPanelController", {
      * the part has a valid sequence file.
      */
     onSequenceGridItemMouseEnter: function(grid, sequenceFile, el, index, event) {
-        var boundingRect = el.getBoundingClientRect();
+        var sequenceContainer = grid.up("#sequenceLibraryArea");
 
         if(!this.VectorViewer) {
             this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
 
             this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
+
         }
 
         this.VectorViewer.show();
         this.VectorViewer.setSequenceFile(sequenceFile);
-        this.VectorViewer.setPosition(boundingRect.left, boundingRect.top);
+
+        console.log("container y: " + sequenceContainer.getY() + ", height: " + sequenceContainer.getHeight());
+
+        this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width, 
+                                      sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
     },
 
     /**
@@ -187,20 +192,22 @@ Ext.define("Vede.controller.DashboardPanelController", {
      * the part has a valid sequence file.
      */
     onPartGridItemMouseEnter: function(grid, part, el, index, event) {
-        var boundingRect = el.getBoundingClientRect();
-        // debugger;
+        var sequenceContainer = grid.up("#sequenceLibraryArea");
+
         console.log(el.children[1]);
         if(part.getSequenceFile()) {
             if(!this.VectorViewer) {
                 this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
 
                 this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
+
             }
 
             this.VectorViewer.show();
             this.VectorViewer.setPart(part);
 
-            this.VectorViewer.setPosition(boundingRect.left, boundingRect.top);
+            this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width, 
+                                          sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
         } else {
             if(this.VectorViewer) {
                 this.VectorViewer.hide();
