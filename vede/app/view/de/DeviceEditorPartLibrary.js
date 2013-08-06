@@ -37,7 +37,6 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                                 return matcher.test(record.get('name')) ||
                                     matcher.test(record.get('genbankStartBP')) ||
                                     matcher.test(record.get('endBP')) ||
-                                    matcher.test(record.get('fas')) ||
                                     matcher.test(record.get('revComp')) || 
                                     matcher.test(record.get('partSource'));
                             }
@@ -68,12 +67,6 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         text: 'Stop BP',
                         width: 100,
                         dataIndex: 'endBP'
-                    },
-                    {
-                        xtype: 'gridcolumn',
-                        text: 'FAS',
-                        width: 80,
-                        dataIndex: 'fas'
                     },
                     {
                         xtype: 'gridcolumn',

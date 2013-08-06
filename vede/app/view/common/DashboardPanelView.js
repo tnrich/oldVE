@@ -419,10 +419,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 title: 'Sequence Library',
                 cls: 'sequenceLibraryPanel',
                 border: 0,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
+                layout: 'fit',
                 items: [
                     // {
                     //     xtype: 'button',
@@ -444,7 +441,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         xtype: 'container',
                         cls: 'sequenceLibraryContainer',
                         id: 'sequenceLibraryArea',
-                        flex: 1,
+                        autoScroll: true,
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
                         items : [
                             {
                                 xtype: 'textfield',
@@ -484,11 +485,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 }
                             },
                             {
-                                xtype: 'gridpanel', 
-                                layout: 'fit',
+                                xtype: 'gridpanel',
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
                                 cls: 'sequenceLibraryGrid',
+                                layout: 'fit',
+                                autoHeight: true,
+                                flex: 1,
+                                autoScroll: true,
+                                viewConfig: {
+                                    style: 'overflow-y: auto'
+                                },
                                 id: 'sequenceLibrary',
                                 columns: [
                                     {
@@ -592,18 +599,16 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 title: 'Part Library',
                 cls: 'partLibraryPanel',
                 border: 0,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
+                layout: 'fit',
                 items: [
-                    {
-                        xtype: 'container'
-                    },
                     {
                         xtype: 'container',
                         cls: 'partLibraryContainer',
-                        flex: 1,
+                        autoScroll: true,
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
                         items : [
                             {
                                 xtype: 'textfield',
@@ -631,7 +636,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         matcher.test(record.get('genbankStartBP')) ||
                                                         matcher.test(record.get('endBP')) ||
                                                         matcher.test(record.get('length')) ||
-                                                        matcher.test(record.get('fas')) ||
                                                         matcher.test(record.get('revComp')) || 
                                                         matcher.test(record.get('partSource')) ||
                                                         matcher.test(record.get('features'));
@@ -646,6 +650,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 border: 0,
                                 name: 'PartLibraryGrid',
                                 loadMask: true,
+                                autoHeight: true,
+                                flex: 1,
+                                autoScroll: true,
+                                viewConfig: {
+                                    style: 'overflow-y: auto'
+                                },
                                 cls: 'partLibraryGrid',
                                 id: 'partLibrary',
                                 columns: [
@@ -655,16 +665,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Name',
                                         width: 220,
                                         dataIndex: 'name'
-                                    }, {
-                                        xtype: 'gridcolumn',
-                                        text: 'Preview',
-                                        tdCls: 'previewColumn',
-                                        width: 50,
-                                        // listeners: {
-                                        //     click: function (item) {
-                                        //         console.log(item);
-                                        //     }
-                                        // }
                                     },{
                                         xtype: 'gridcolumn',
                                         text: 'Start BP',
@@ -681,12 +681,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Length',
                                         dataIndex: 'length',
                                         width: 80
-                                    },
-                                    {
-                                        xtype: 'gridcolumn',
-                                        text: 'FAS',
-                                        width: 80,
-                                        dataIndex: 'fas'
                                     },
                                     {
                                         xtype: 'gridcolumn',
