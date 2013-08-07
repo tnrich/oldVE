@@ -197,7 +197,12 @@ Ext.define("Teselagen.models.SequenceFile", {
     },
     {
         name: 'serialize', 
-        type: "auto"
+        type: "auto",
+        convert: function(v, record) {
+            this.sequenceChanged = true;
+
+            return v;
+        }
     },
 
     ],
@@ -382,18 +387,15 @@ Ext.define("Teselagen.models.SequenceFile", {
         } else if (format === constants.FASTA) {
             var seq = content.replace(/>\s*(\S*)\s*/, "");
             seq = seq.replace(/\s/, "");
-            //console.log(seq);
             end = seq.length;
         } else if (format === constants.JBEISEQ) {
             var jbei = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(content);
-            //console.log(jbei);
             end = jbei["seq:seq"]["seq:sequence"].length;
         } else if (format === constants.SBOLXML) {
             var sbol = Teselagen.bio.parsers.ParsersManager.sbolXmlToJson(content);
             console.warn("Finding length for SBOL file not determined yet");
             end = -1;
         } else {}
-        //console.log(end);
         return end;
     },
 
@@ -401,21 +403,21 @@ Ext.define("Teselagen.models.SequenceFile", {
         var data = this.get("serialize");
         if(!data || data === "") {
             return null;
-        }
-        else
-        {
-            //var decodedData = JSON.parse(data);
+        } else if(!this.sequenceManager || this.sequenceChanged){
             var decodedData = data;
-            var sequenceManager = Ext.create("Teselagen.manager.SequenceManager",decodedData.inData);
-            sequenceManager.deSerialize(decodedData);
-            return sequenceManager;
+            this.sequenceManager = Ext.create("Teselagen.manager.SequenceManager", decodedData.inData);
+            this.sequenceManager.deSerialize(decodedData);
+
+            this.sequenceChanged = false;
+
+            return this.sequenceManager;
+        } else {
+            return this.sequenceManager;
         }
     },
 
     setSequenceManager: function(sequenceManager){
         var data = sequenceManager.serialize();
-        //console.log(data);
-        //this.set("serialize",JSON.stringify(data));
         this.set("serialize",data);
     },
 
