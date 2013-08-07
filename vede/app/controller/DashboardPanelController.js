@@ -105,7 +105,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
         var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
-        sequenceTab.el.mask("Loading j5 report", "loader rspin");
+        currentTab.el.mask("Loading j5 report", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         if (newTab == sequenceTab ) {

@@ -168,10 +168,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
-        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");    
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
+        
+        dashPanel.getActiveTab().el.unmask(); 
         if(sequenceGrid) sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
 
-        dashPanel.getActiveTab().el.unmask();
     },
 
     openPartLibrary: function () {
@@ -196,9 +197,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
 
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        dashPanel.getActiveTab().el.unmask();
         if(partGrid) partGrid.reconfigure(parts);
 
-        dashPanel.getActiveTab().el.unmask();
     },
 
     /**
