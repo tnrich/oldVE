@@ -36,7 +36,6 @@ Ext.define('Vede.view.common.dropZone', {
 	},
 
 	handleDragEnter: function(evt, cmp) {
-		console.log('hi');
 		$(".batch-import-area").fadeIn("fast");
 	},
 
