@@ -55,16 +55,18 @@ Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
 	},
 
     serialize: function() {
-        var data = {};
-
-        data.name = this.getName();
-        data.value = this.getValue();
-
-        return data;
+        return this.getValue();
     },
 
-    deSerialize: function(data) {
-        this.setName(data.name);
-        this.setValue(data.value);
+    deSerialize: function(data, alphabet) {
+        var symbol = alphabet.getGap();
+
+        if(!alphabet) {
+            this.setName(data.name);
+            this.setValue(data.value);
+        } else {
+            this.setName(symbol.getName());
+            this.setValue(symbol.getValue());
+        }
     }
 });

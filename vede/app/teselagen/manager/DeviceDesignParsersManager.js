@@ -437,17 +437,17 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     part = partLookup.part;
 
                     if(partLookup.linked) {
-                        delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
 
                         var newCell = Ext.create("Teselagen.models.Cell", {
                             index: j,
                             fas: partLookup.fas || "None"
                         });
 
-                        newCell.setPart(partLookup);
+                        delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas,"cell":newCell});
+
                         newCell.setJ5Bin(newBin);
 
-                        newBin.cells.add(newCell);
+                        newBin.cells().add(newCell);
                     } else {
                         var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
                         var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
@@ -468,11 +468,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                                 sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
                                 sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                                sequenceFileName: me.getTagText(sequence, "fileName")
+                                sequenceFileName: me.getTagText(sequence, "fileName"),
+                                name: me.getTagText(sequence, "fileName")
                             });
 
                             newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-                            newSequence.set("name",newPart.get("name"));
+                            //newSequence.set("name",newPart.get("name"));
 
                             newPart.setSequenceFile(newSequence);
                         });
@@ -502,6 +503,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 {
                     tempPartsArray.splice(delayed.position,0,originalPart);
                     fullPartsAssocArray[delayed.part.getAttribute("id")] = originalPart;
+                    delayed["cell"].setPart(originalPart);
                 }
                 else
                 {

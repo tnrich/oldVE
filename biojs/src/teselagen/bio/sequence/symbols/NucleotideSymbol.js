@@ -84,18 +84,22 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 	},
 
     serialize: function() {
-        var data = {};
-
-        data.name = this.getName();
-        data.value = this.getValue();
-        data.ambiguousMatches = this.getAmbiguousMatches();
-
-        return data;
+        return this.getValue();
     },
 
-    deSerialize: function(data) {
-        this.setName(data.name);
-        this.setValue(data.value);
-        this.setAmbiguousMatches(data.ambiguousMatches);
+    deSerialize: function(data, alphabet) {
+        var symbol;
+
+        if(!alphabet) {
+            this.setName(data.name);
+            this.setValue(data.value);
+            this.setAmbiguousMatches(data.ambiguousMatches);
+        } else {
+            symbol = alphabet[data];
+
+            this.setName(symbol.getName());
+            this.setValue(symbol.getValue());
+            this.setAmbiguousMatches(symbol.getAmbiguousMatches());
+        }
     }
 });

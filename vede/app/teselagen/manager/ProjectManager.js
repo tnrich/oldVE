@@ -168,28 +168,46 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
+<<<<<<< HEAD
         sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
         
         dashPanel.getActiveTab().el.unmask(); 
         if(sequenceGrid) sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+=======
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");    
+
+        sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+>>>>>>> 09ac207027ae4f7a70e071ab949585a818fba56c
 
     },
 
     openPartLibrary: function () {
+        Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
         var parts = this.parts;
+        var sequence;
         parts.each(function(part) {
-            if(part.getSequenceFile()) {
-                var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(part.data.sequencefile_id);
-                var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+            sequence = part.getSequenceFile();
+
+            if(sequence) {
+                var sequenceManager = sequence.getSequenceManager();
+
+                if(!sequenceManager) {
+                    sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+                }
+
                 var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
                 var partFeatures = [];
                 for(var z=0; z<features.length; z++)  {
                     partFeatures.push(features[z].getName());
                 }
-                part.set("length", Math.abs(part.data.endBP - part.data.genbankStartBP));
-                part.set("features", partFeatures);
+
+                part.set({
+                    length: Math.abs(part.get("endBP") - part.get("genbankStartBP")),
+                    features: partFeatures
+                });
+
                 if(sequence) part.data.partSource = sequence.data.name;
             } else {
                 part.set("partSource", "");
@@ -197,9 +215,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
 
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+<<<<<<< HEAD
         dashPanel.getActiveTab().el.unmask();
         if(partGrid) partGrid.reconfigure(parts);
 
+=======
+
+        partGrid.reconfigure(parts);
+
+        dashPanel.getActiveTab().el.unmask();
+
+        Ext.resumeLayouts(true);
+>>>>>>> 09ac207027ae4f7a70e071ab949585a818fba56c
     },
 
     /**

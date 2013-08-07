@@ -17,6 +17,10 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
     config: {
         featureSVG: null,
         features: [],
+        reference: {
+            x: 0,
+            y: 0
+        },
         railWidth: null,
         railHeight:null,
         railGap: null,
@@ -82,7 +86,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
                 
                 
                
-                var xStartPosition = (startPos*this.railWidth);
+                var xStartPosition = (startPos*this.railWidth + this.getReference().x);
                 var yEndPosition = (endPos*this.railWidth);
                 var yPosition = -(this.railHeight + this.railGap + featureGap);
                 
