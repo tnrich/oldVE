@@ -82,11 +82,12 @@ Ext.define("Teselagen.models.Part", {
         name: "directionForward",
         type: "boolean",
         defaultValue: true
-    }, {
-        name: "fas",
-        type: "string",
-        defaultValue: "None"
-    },
+    }, 
+    // {
+    //     name: "fas",
+    //     type: "string",
+    //     defaultValue: "None"
+    // },
     /*{
             name: "id",
             convert: function(id) {

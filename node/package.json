@@ -1,11 +1,10 @@
 {
     "name": "DeviceEditor"
-  , "version": "0.0.1"
+  , "version": "0.1.0"
   , "private": true
   , "dependencies": {
       "async":"0.1.22"
     , "bson":"0.1.5"
-    , "chai":"1.5.0"
     , "commander":"1.0.5"
     , "csv":"0.2.6"
     , "express": "3.0.0rc3"
@@ -22,11 +21,14 @@
     , "socket.io":"0.9.9"
     , "underscore":"1.4.4"
     , "underscore.string":"2.3.3"
-    , "webdriverjs":"0.7.8"
     , "xml2js":"0.2.2"
     , "xmlbuilder":"0.4.2"
     , "xmlrpc": "1.0.2"
     , "winston":"0.7.1"
     , "connect-mongo":"0.3.2"
+  }
+  , "devDependencies": {
+    "chai":"1.5.0",
+    "webdriverjs":"0.7.8"
   }
 }

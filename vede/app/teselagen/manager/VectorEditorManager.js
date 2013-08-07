@@ -40,7 +40,6 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
             toastr.info ("Sequence Saved");
-            if(!err )Teselagen.manager.ProjectManager.sequences.add(self.sequence);
 
 
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
@@ -49,7 +48,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             if(typeof (cb) === "function") { cb(); }
         };
 
-        var saveToServer = function(){
+        var saveToServer = function(cb){
             self.sequence.save({
                 success: function (msg,operation) {
                     Ext.getCmp("mainAppPanel").getActiveTab().model = self.sequenceFileManager.clone();
@@ -60,28 +59,37 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     if(response.duplicated)
                     {
                         successFullSavedCallback(true);
+                        if(typeof(cb)=="function") cb(true);
                         Ext.MessageBox.alert("Warning", "A sequence with the same name already exist in the database, using the unique instance of this sequence.");
                     }
-                    else successFullSavedCallback(false);
+                    else 
+                        {
+                            successFullSavedCallback(false);
+                            if(typeof(cb)=="function") cb(false);
+                        }
                 },
                 failure: function() {
                     Ext.MessageBox.alert("Error", "Error saving sequence.");
                     currentTabPanel.setLoading(false);
+                    if(typeof(cb)=="function") cb(false);
                 }
             });
         };
 
-        if( this.sequence.get("name") == "" )
+        if( this.sequence.get("name") == "NO_NAME" || this.sequence.get("name") == "" )
         {
-            console.log(this.sequence);
             Ext.MessageBox.prompt("Name", "Please enter a sequence name:", function(btn,text){
                 if(btn==="ok")
                 {
                     var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-                    var currentTabEl = (currentTab.getEl());
+                    currentTab.setTitle(text);
 
                     Teselagen.manager.ProjectManager.workingSequence.set("name",text);
-                    saveToServer();
+                    Teselagen.manager.ProjectManager.workingSequence.getSequenceManager().setName(text);
+                    
+                    saveToServer(function(err){
+                        if(!err) Teselagen.manager.ProjectManager.sequences.add(self.sequence);
+                    });
 
                 }
                 else { currentTabPanel.setLoading(false); }
