@@ -327,7 +327,19 @@ Ext.define("Teselagen.models.Part", {
      * @returns {Teselagen.models.SequenceFile} The sequencefile model.
      */
     getSequenceFile: function(callbackFn) {
+
+        //debugger;
         if(this.hasSequenceFile || this.get("sequencefile_id")) {
+
+            var sequences = Teselagen.manager.ProjectManager.sequences;
+            var sequence = sequences.getById(this.get("sequencefile_id"));
+
+            if(sequence) {
+                console.log("from memory store");
+                if(typeof(callbackFn) === "object") return callbackFn.callback(sequence);
+                else return sequence;
+            }
+
             if(typeof(callbackFn) === "object"){
                 return this.getSequenceFileModel({
                     callback: callbackFn.callback
