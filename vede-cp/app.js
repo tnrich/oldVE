@@ -82,7 +82,8 @@ Ext.application({
         "Teselagen.constants.Constants",
         "Teselagen.constants.SBOLIcons",
         "Teselagen.models.SequenceFile",
-        "Teselagen.manager.SessionManager"
+        "Teselagen.manager.SessionManager",
+        "Teselagen.manager.ProjectManager"
     ],
 
     init: function(){

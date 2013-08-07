@@ -5,6 +5,7 @@
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.DashboardPanelView',
+    //requires: ["Teselagen.manager.ProjectManager"],
     id: 'DashboardPanel',
     padding: '10 0',
     layout: {
@@ -563,6 +564,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     }
                                     
                                     ],
+
+                                    bbar: Ext.create('Ext.PagingToolbar', {
+                                        store: Teselagen.manager.ProjectManager.sequences,
+                                        displayInfo: true,
+                                        displayMsg: 'Displaying sequences {0} - {1} of {2}',
+                                        emptyMsg: "No sequences to display"
+                                    }),
+
                                 listeners: {
                                     itemcontextmenu: function( el, record, item, index, e, eOpts ){
                                         e.preventDefault();
