@@ -21,21 +21,21 @@ Ext.define("Teselagen.models.User", {
         model: "Teselagen.models.Project",
         name: "projects",
         associationKey: "projects",
-        autoLoad: true,
+        //autoLoad: true,
         foreignKey: "user_id"
     }, {
         type: "hasMany",
         model: "Teselagen.models.Part",
         name: "parts",
         associationKey: "parts",
-        autoLoad: true,
+        //autoLoad: true,
         foreignKey: "user_id"
     }, {
         type: "hasMany",
         model: "Teselagen.models.SequenceFile",
         name: "sequences",
         associationKey: "sequences",
-        autoLoad: true,
+        //autoLoad: true,
         foreignKey: "user_id"
     }, {
         type: "hasOne",

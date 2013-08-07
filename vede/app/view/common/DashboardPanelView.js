@@ -487,6 +487,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
                                 cls: 'sequenceLibraryGrid',
+                                //store: Teselagen.manager.ProjectManager.sequences,
                                 layout: 'fit',
                                 autoHeight: true,
                                 flex: 1,
@@ -565,12 +566,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     
                                     ],
 
-                                    bbar: Ext.create('Ext.PagingToolbar', {
-                                        store: Teselagen.manager.ProjectManager.sequences,
-                                        displayInfo: true,
-                                        displayMsg: 'Displaying sequences {0} - {1} of {2}',
-                                        emptyMsg: "No sequences to display"
-                                    }),
+                                    dockedItems: [{
+                                            xtype: 'pagingtoolbar',
+                                            pageSize: 25,
+                                            dock: 'bottom',
+                                            displayInfo: true
+                                    }],
 
                                 listeners: {
                                     itemcontextmenu: function( el, record, item, index, e, eOpts ){

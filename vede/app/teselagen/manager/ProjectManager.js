@@ -46,24 +46,47 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var users = Ext.create("Teselagen.store.UserStore"); //Store of users (Will only contain the current user)
         var self = this;
 
+        self.currentUser = Teselagen.manager.UserManager.user;
+        self.sequences = self.currentUser.sequences();
+
+        self.sequences.pageSize = 10;
+
+        //self.sequences.loadPage(1);
+
+        //store.load({
+        //    params:{
+        //        start:0,
+        //        limit: 10
+        //    }
+        //});
+
+        self.parts = self.currentUser.sequences();
+        self.projects = self.currentUser.projects();
+
+        var projectsStore = self.currentUser.projects().load(
+            function (projects, operation, success) {
+                if(!success) { Ext.Error.raise("Error loading projects"); }
+                self.projects = projectsStore;
+                Teselagen.manager.ProjectExplorerManager.load();
+            }
+        );
+
         // Load user store
-        var usersStore = users.load(function (users, operation, success) {
-            if(!success) { Ext.Error.raise("Error loading user"); }
-            // Select first user in the store (current user)
-            self.currentUser = usersStore.first();
-
-            var projectsStore = self.currentUser.projects().load(
-                function (projects, operation, success) {
-                    if(!success) { Ext.Error.raise("Error loading projects"); }
-                    self.projects = projectsStore; //Set the working project
-                    Teselagen.manager.ProjectExplorerManager.load();
-                    //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
-                }
-            );
-
-            self.reloadSources();
-
-        });
+        //var usersStore = users.load(function (users, operation, success) {
+        //    if(!success) { Ext.Error.raise("Error loading user"); }
+        //    // Select first user in the store (current user)
+        //    self.currentUser = usersStore.first();
+        //    var projectsStore = self.currentUser.projects().load(
+        //        function (projects, operation, success) {
+        //            if(!success) { Ext.Error.raise("Error loading projects"); }
+        //            self.projects = projectsStore; //Set the working project
+        //            Teselagen.manager.ProjectExplorerManager.load();
+        //            //Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE); // Fire the renderProject treeEvent to load ProjectExplorer
+        //        }
+        //    );
+        //    self.reloadSources();
+        //        
+        //});
     },
 
     reloadSources: function(){
@@ -168,11 +191,16 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
-        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
-        
-        dashPanel.getActiveTab().el.unmask(); 
-        if(sequenceGrid) sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+        var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
+        var sequences = Teselagen.manager.ProjectManager.sequences;
 
+        dashPanel.getActiveTab().el.unmask(); 
+        if(sequenceGrid) 
+        {
+            sequenceGrid.reconfigure(sequences);
+            dashPanel.down("gridpanel[name='SequenceLibraryGrid']").down('pagingtoolbar').bind(sequences);
+            sequences.loadPage(1);
+        }
     },
 
     openPartLibrary: function () {

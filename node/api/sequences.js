@@ -131,9 +131,17 @@ module.exports = function(app) {
      */
     app.get('/sequences', restrict, function(req, res) {
         User.findById(req.user._id)
-                .populate({ path: 'sequences'})
+                .populate({
+                    path: 'sequences',
+                    options: { limit: req.query.limit, skip: req.query.start }
+                })
                 .exec(function(err, user) {
-                    res.json({"sequences":user.sequences});
+                    res.json({
+                        "success": true,
+                        "results":user.sequences.length,
+                        "sequences":user.sequences,
+                        "total":req.user.sequences.length
+                    });
                 });
         }
     );
@@ -145,7 +153,7 @@ module.exports = function(app) {
      */
     app.get('/sequences/:sequence_id', restrict, function(req, res) {
             var Sequence = app.db.model("sequence");
-            Sequence.findById(req.params.sequence_id, function(err, sequence) {
+            Sequence.findById(req.params.sequence_id).exec(function(err, sequence) {
                 if (err) console.log("There was a problem with GET sequence");
                 res.json({
                     "sequences": sequence

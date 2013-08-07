@@ -14,7 +14,8 @@ Ext.define("Teselagen.models.SequenceFile", {
         url: "/vede/test/data/json/sequenceFiles.json",
         reader: {
             type: "json",
-            root: "sequences"
+            root: "sequences",
+            totalProperty: "total"
         },
         writer: {
             type: "json"
@@ -26,7 +27,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             if( request.action === "read" && !request.operation.id)
             {
                     var url = "sequences";
-                    delete request.params;
+                    //delete request.params;
                     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
