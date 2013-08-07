@@ -72,7 +72,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
            function (sequences, operation, success){
                 self.sequences = sequencesStore;
 
-
                 var partsStore = self.currentUser.parts().load(
                     function (parts, operation, success){
                         self.parts = partsStore;
@@ -90,12 +89,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 part.setSequenceFile(user.sequences().getById(sequenceId));
                             }
                         }
-
-
+                        // Filter the parts store so only mapped parts will appear (per
+                        // Nathan's request in ticket #869).
+                        self.parts.filterBy(function(part) {
+                            return part.isMapped();
+                        });
                     }
                 );
-
-           }
+            }
         );
     },
 
