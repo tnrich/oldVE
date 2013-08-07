@@ -568,7 +568,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
 
                                     dockedItems: [{
                                             xtype: 'pagingtoolbar',
-                                            pageSize: 25,
                                             dock: 'bottom',
                                             displayInfo: true
                                     }],
@@ -728,7 +727,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         // }
                                     },
 
-                                ]
+                                ],
+
+                                dockedItems: [{
+                                        xtype: 'pagingtoolbar',
+                                        dock: 'bottom',
+                                        displayInfo: true
+                                }]
+
                             }
                         ]
                     }

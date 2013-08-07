@@ -191,25 +191,34 @@ Ext.define("Vede.controller.DashboardPanelController", {
      */
     onPartGridItemMouseEnter: function(grid, part, el, index, event) {
         var sequenceContainer = grid.up("container[cls='partLibraryContainer']");
+        var self = this;
+        part.getSequenceFile(
+          {
+            callback: function(sequenceFile){
 
-        if(part.getSequenceFile()) {
-            if(!this.VectorViewer) {
-                this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
+              if(sequenceFile) {
 
-                this.VectorViewer.el.on("mouseleave", this.onVectorViewerMouseLeave, this);
+                if(!self.VectorViewer) {
+                    self.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
 
-            }
+                    self.VectorViewer.el.on("mouseleave", self.onVectorViewerMouseLeave, self);
 
-            this.VectorViewer.show();
-            this.VectorViewer.setPart(part);
+                }
 
-            this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width, 
-                                          sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
-        } else {
-            if(this.VectorViewer) {
-                this.VectorViewer.hide();
-            }
-        }
+                self.VectorViewer.show();
+                self.VectorViewer.setPart(part);
+
+                self.VectorViewer.setPosition(grid.getX() + grid.getWidth() - self.VectorViewer.width, 
+                                              sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - self.VectorViewer.height / 2);
+
+                
+                } 
+                else {
+                    if(self.VectorViewer) {
+                        self.VectorViewer.hide();
+                    }
+                }
+          }});
     },
 
     /**

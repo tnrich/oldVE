@@ -48,8 +48,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         self.currentUser = Teselagen.manager.UserManager.user;
         self.sequences = self.currentUser.sequences();
+        self.parts = self.currentUser.parts();
 
         self.sequences.pageSize = 10;
+        self.parts.pageSize = 10;
 
         //self.sequences.loadPage(1);
 
@@ -60,8 +62,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
         //    }
         //});
 
-        self.parts = self.currentUser.sequences();
-        self.projects = self.currentUser.projects();
+        //self.parts = self.currentUser.sequences();
+        //self.projects = self.currentUser.projects();
 
         var projectsStore = self.currentUser.projects().load(
             function (projects, operation, success) {
@@ -88,7 +90,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         //        
         //});
     },
-
+    /*
     reloadSources: function(){
         var self = this;
         var sequencesStore = self.currentUser.sequences().load(
@@ -122,6 +124,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         );
     },
+    */
 
     /**
      * checkDuplicatedTabs
@@ -199,7 +202,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         if(sequenceGrid) 
         {
             sequenceGrid.reconfigure(sequences);
-            dashPanel.down("gridpanel[name='SequenceLibraryGrid']").down('pagingtoolbar').bind(sequences);
+            sequenceGrid.down('pagingtoolbar').bind(sequences);
             sequences.loadPage(1);
         }
     },
@@ -208,6 +211,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
+        /*
         var parts = this.parts;
         var sequence;
         parts.each(function(part) {
@@ -236,10 +240,17 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 part.set("partSource", "");
             }
         });
+        */
 
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        var parts = Teselagen.manager.ProjectManager.parts;
 
-        partGrid.reconfigure(parts);
+        if(partGrid) {
+
+            partGrid.reconfigure(parts);
+            partGrid.down('pagingtoolbar').bind(parts);
+            parts.loadPage(1);
+        }
 
         dashPanel.getActiveTab().el.unmask();
 

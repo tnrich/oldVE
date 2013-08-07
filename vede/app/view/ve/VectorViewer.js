@@ -87,6 +87,7 @@ Ext.define("Vede.view.ve.VectorViewer", {
         if(this.part) {
             this.part.getSequenceFile({
                 callback: function(sequenceFile) {
+                    //debugger;
                     if(sequenceFile) {
                         var sequenceManager = sequenceFile.getSequenceManager();
 
