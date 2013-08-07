@@ -229,6 +229,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 self.partLibraryWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary", {renderTo: currentTabEl}).show();
                 self.partLibraryWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
+                self.partLibraryWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").store.clearFilter(true);
+                
 	        });
         }
     },

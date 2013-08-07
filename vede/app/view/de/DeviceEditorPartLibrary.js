@@ -28,7 +28,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 change: function(field, newValue, oldValue, eOpts) {
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
-                    grid.store.clearFilter();
+                    grid.store.clearFilter(true);
 
                     if (newValue) {
                         var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
@@ -37,7 +37,6 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                                 return matcher.test(record.get('name')) ||
                                     matcher.test(record.get('genbankStartBP')) ||
                                     matcher.test(record.get('endBP')) ||
-                                    matcher.test(record.get('fas')) ||
                                     matcher.test(record.get('revComp')) || 
                                     matcher.test(record.get('partSource'));
                             }
@@ -51,6 +50,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             flex: 1,
             name: "deviceEditorPartLibraryGrid",
             border: false,
+            autoScroll: true,
             columns: [
                     {
                         xtype: 'gridcolumn',
@@ -67,12 +67,6 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         text: 'Stop BP',
                         width: 100,
                         dataIndex: 'endBP'
-                    },
-                    {
-                        xtype: 'gridcolumn',
-                        text: 'FAS',
-                        width: 80,
-                        dataIndex: 'fas'
                     },
                     {
                         xtype: 'gridcolumn',

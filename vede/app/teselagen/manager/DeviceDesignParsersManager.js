@@ -437,17 +437,17 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     part = partLookup.part;
 
                     if(partLookup.linked) {
-                        delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas});
 
                         var newCell = Ext.create("Teselagen.models.Cell", {
                             index: j,
                             fas: partLookup.fas || "None"
                         });
 
-                        newCell.setPart(partLookup);
+                        delayedLinkedPartsLookup.push({"position":tempPartsArray.length,"part":part,"fas":partLookup.fas,"cell":newCell});
+
                         newCell.setJ5Bin(newBin);
 
-                        newBin.cells.add(newCell);
+                        newBin.cells().add(newCell);
                     } else {
                         var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
                         var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
@@ -502,6 +502,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 {
                     tempPartsArray.splice(delayed.position,0,originalPart);
                     fullPartsAssocArray[delayed.part.getAttribute("id")] = originalPart;
+                    delayed["cell"].setPart(originalPart);
                 }
                 else
                 {
@@ -834,7 +835,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         toastr.info("Parsing sequences in background (click to cancel)");
         parts.forEach(function(part){
             if(processFlag) {
-                debugger;
+                // debugger;
             part.getSequenceFile({
                 callback: function(sequence){
                 sequence.processSequence(function(err,seq){
