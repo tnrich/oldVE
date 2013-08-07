@@ -13,6 +13,7 @@ Ext.define('Vede.view.PartLibraryWindow', {
     items: {
         xtype: 'grid',
         id: 'partLibraryGridList',
+        autoScroll: true,
         border: false,
         columns: {
             items: {

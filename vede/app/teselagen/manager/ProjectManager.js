@@ -242,13 +242,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {Teselagen.models.DeviceDEsign} Receives a DeviceDesign model (already loaded)
      */
     DeleteDeviceDesign: function (devicedesign, tab) {
-        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Deleting design", "loader rspin");
-        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+        tab = Ext.getCmp("mainAppPanel").query("component[title='" + devicedesign.data.name + "']")[0]
         var project_id = devicedesign.data.project_id;
         var project = Teselagen.manager.ProjectManager.currentUser.projects().getById(project_id);
-        //console.log(project);
         this.workingProject = project;
-        //console.log(Teselagen.manager.ProjectManager.workingProject);
         Teselagen.manager.GridManager.setListenersEnabled(false);
         var designs = Teselagen.manager.ProjectManager.workingProject.designs();
         designs.remove(devicedesign);
