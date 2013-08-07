@@ -23,18 +23,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
 		            },
 		            flex: 0.9,
 		            padding: '20 15 20 15',
-		            items: [
-	                    {
-	                    	xtype: 'gridpanel',
-                            forceFit: true,
-                            id: 'saveAsWindowProjectsGrid',
-                            scroll: 'vertical',
-                            flex: 0.3,
-                            store: Teselagen.manager.ProjectManager.projects,
-                            columns: [
-                                {header: 'Projects', dataIndex: 'name'}
-                            ]
-	                    },{
+		            items: [{
 	                    	xtype: 'gridpanel',
                             forceFit: true,
                             id: 'saveAsWindowSequencesGrid',
@@ -66,13 +55,6 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                                   type: 'hbox'
                               },
                               items: [										
-									{
-									    xtype: 'button',
-									    id: 'saveAsWindowNewProjectButton',
-									    margin: 10,
-									    padding: 5,
-									    text: 'New Project'
-									},
                                   {
                                       xtype: 'button',
                                       margin: 10,
