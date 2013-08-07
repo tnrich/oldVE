@@ -254,6 +254,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
         this.SelectionLayer.setSequenceManager(pSeqMan);
         this.SelectionLayer.setSelectionSVG(this.pieManager.selectionSVG);
+
+        // Set the title of the tab.
+        Ext.getCmp("mainAppPanel").getActiveTab().setTitle(pSeqMan.getName());
     },
 
     onShowFeaturesChanged: function(show) {
