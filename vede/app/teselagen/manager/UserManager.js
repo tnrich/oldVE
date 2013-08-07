@@ -6,7 +6,7 @@
  * @author Yuri Bendana
  */
 Ext.define("Teselagen.manager.UserManager", {
-    requires:["Teselagen.models.User", "Teselagen.store.UserStore"],
+    requires:["Teselagen.models.User", "Teselagen.store.UserStore","Teselagen.manager.ProjectManager"],
     singleton: true,
     config: {
         user: null
@@ -36,7 +36,7 @@ Ext.define("Teselagen.manager.UserManager", {
      * Set current user from JSON response after login
      * @param {Object} user
      */
-    setUserFromJson: function(pUser) {
+    setUserFromJson: function(pUser,cb) {
         var userStore = Ext.create("Teselagen.store.UserStore", {
             data: pUser,
             proxy: {
@@ -46,6 +46,7 @@ Ext.define("Teselagen.manager.UserManager", {
         });
         var user = userStore.first();
         this.setUser(user);
+        if(typeof(cb)=="function") return cb(user);
     },
     
     /**
