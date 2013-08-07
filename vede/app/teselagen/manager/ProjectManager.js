@@ -169,11 +169,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function () {
         var dashPanel = Ext.getCmp("DashboardPanel");
-        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
-        
-        dashPanel.getActiveTab().el.unmask(); 
-        if(sequenceGrid) sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+        sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");    
 
+        sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+
+        dashPanel.getActiveTab().el.unmask();
     },
 
     openPartLibrary: function () {
@@ -187,6 +187,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
             if(sequence) {
                 var sequenceManager = sequence.getSequenceManager();
+                var newLength = Math.abs(part.get("endBP") - part.get("genbankStartBP"));
 
                 if(!sequenceManager) {
                     sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
@@ -198,14 +199,28 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     partFeatures.push(features[z].getName());
                 }
 
-                part.set({
-                    length: Math.abs(part.get("endBP") - part.get("genbankStartBP")),
-                    features: partFeatures
-                });
+                // We want to minimize the number of times we call part.set(),
+                // because it triggers a very costly update of the parts table.
+                if(part.get("length") === newLength && part.get("features") === partFeatures.toString()) {
+                    // Do nothing if neither length nor features have changed.
+                } else if(part.get("length") !== newLength && part.get("features") !== partFeatures.toString()) {
+                    part.set({
+                        length: newLength,
+                        features: partFeatures
+                    });
+                } else if(part.get("length") !== newLength) {
+                    part.set("length", newLength);
+                } else {
+                    part.set("features", partFeatures);
+                }
 
-                if(sequence) part.data.partSource = sequence.data.name;
+                if(part.get("partSource") !== sequence.get("name")) {
+                    part.set("partSource", sequence.get("name"));
+                }
             } else {
-                part.set("partSource", "");
+                if(part.get("partSource") !== "") {
+                    part.set("partSource", "");
+                }
             }
         });
 
