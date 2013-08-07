@@ -6187,19 +6187,19 @@ a.x-tab {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
-  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -o-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: linear-gradient(top, #ffffff, #eeeeee);
+  background-color: #f7f9fa;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eaf0f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: -moz-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: -o-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: linear-gradient(top, #ffffff, #eaf0f2);
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-btn-default-small-mc {
   background-image: url(images/btn/btn-default-small-fbg.gif);
   background-position: 0 top;
-  background-color: #f8f8f8;
+  background-color: #f7f9fa;
 }
 
 /* line 212, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -6365,7 +6365,7 @@ body.x-nbr .x-btn-default-small-frameInfo {
 }
 /* line 303, ../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
 .x-ie8m .x-btn-default-small .x-btn-glyph {
-  color: #959595;
+  color: #959696;
 }
 
 /* line 309, ../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
@@ -6747,19 +6747,19 @@ body.x-nbr .x-btn-default-small-frameInfo {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
-  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -o-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: linear-gradient(top, #ffffff, #eeeeee);
+  background-color: #f7f9fa;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eaf0f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: -moz-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: -o-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: linear-gradient(top, #ffffff, #eaf0f2);
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-btn-default-medium-mc {
   background-image: url(images/btn/btn-default-medium-fbg.gif);
   background-position: 0 top;
-  background-color: #f8f8f8;
+  background-color: #f7f9fa;
 }
 
 /* line 212, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -6925,7 +6925,7 @@ body.x-nbr .x-btn-default-medium-frameInfo {
 }
 /* line 303, ../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
 .x-ie8m .x-btn-default-medium .x-btn-glyph {
-  color: #959595;
+  color: #959696;
 }
 
 /* line 309, ../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
@@ -7307,19 +7307,19 @@ body.x-nbr .x-btn-default-medium-frameInfo {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
-  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -o-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: linear-gradient(top, #ffffff, #eeeeee);
+  background-color: #f7f9fa;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eaf0f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: -moz-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: -o-linear-gradient(top, #ffffff, #eaf0f2);
+  background-image: linear-gradient(top, #ffffff, #eaf0f2);
 }
 
 /* line 189, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
 .x-btn-default-large-mc {
   background-image: url(images/btn/btn-default-large-fbg.gif);
   background-position: 0 top;
-  background-color: #f8f8f8;
+  background-color: #f7f9fa;
 }
 
 /* line 212, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -7485,7 +7485,7 @@ body.x-nbr .x-btn-default-large-frameInfo {
 }
 /* line 303, ../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
 .x-ie8m .x-btn-default-large .x-btn-glyph {
-  color: #959595;
+  color: #959696;
 }
 
 /* line 309, ../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
@@ -13265,10 +13265,10 @@ body.x-nbr .x-window-default-frameInfo {
 /* */
 /* line 195, ../../../../ext/packages/ext-theme-neutral/sass/src/window/Window.scss */
 .x-window-body-default {
-  border-color: #f8f8f8;
+  border-color: #f7f9fa;
   border-width: 1px;
   border-style: solid;
-  background: #f8f8f8;
+  background: #f7f9fa;
   color: black;
 }
 
@@ -21172,7 +21172,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   min-height: 40px;
   padding-left: 20px;
   padding-right: 20px;
-  background: #F8F8F8;
+  background: #F7F9FA;
   border: 1px solid #ECF0F1;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -23156,7 +23156,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
 
 /* line 2, ../../../../sass/src/view/ve/VectorEditorMainToolBar.scss */
 #VectorEditorMainToolBar {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 6, ../../../../sass/src/view/ve/VectorEditorMainToolBar.scss */
@@ -23257,7 +23257,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
 
 /* line 23, ../../../../sass/src/view/ve/VectorEditorPanel.scss */
 #VectorEditorMainToolBar {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 27, ../../../../sass/src/view/ve/VectorEditorPanel.scss */
@@ -23426,7 +23426,7 @@ img {
 
 /* line 124, ../../../../sass/src/view/AppViewport.scss */
 .x-splitter-vertical {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 128, ../../../../sass/src/view/AppViewport.scss */
@@ -23437,7 +23437,7 @@ img {
 
 /* line 133, ../../../../sass/src/view/AppViewport.scss */
 .x-grid-row-alt .x-grid-cell {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 137, ../../../../sass/src/view/AppViewport.scss */
@@ -23468,7 +23468,7 @@ img {
 
 /* line 158, ../../../../sass/src/view/AppViewport.scss */
 .x-column-header-over {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 162, ../../../../sass/src/view/AppViewport.scss */
@@ -23546,7 +23546,7 @@ img {
 
 /* line 225, ../../../../sass/src/view/AppViewport.scss */
 .VectorEditorMainToolBar {
-  background: #F8F8F8 !important;
+  background: #F7F9FA !important;
 }
 
 /* line 229, ../../../../sass/src/view/AppViewport.scss */
@@ -23711,7 +23711,7 @@ img {
 /* line 363, ../../../../sass/src/view/AppViewport.scss */
 .x-column-header {
   border-right-color: #E0E3E6;
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 368, ../../../../sass/src/view/AppViewport.scss */
@@ -23767,17 +23767,17 @@ img {
 
 /* line 412, ../../../../sass/src/view/AppViewport.scss */
 .x-window-default {
-  background: #F8F8F8;
+  background: #F7F9FA;
   box-shadow: none;
   border-radius: 3px;
-  border-color: #F8F8F8;
+  border-color: #F7F9FA;
   border: 0 none !important;
 }
 
 /* line 420, ../../../../sass/src/view/AppViewport.scss */
 .x-window-body-default, .x-message-box .x-window-body {
   border: 0;
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 425, ../../../../sass/src/view/AppViewport.scss */
@@ -23871,7 +23871,7 @@ img {
 
 /* line 502, ../../../../sass/src/view/AppViewport.scss */
 .x-mask.splashscreen {
-  background: -webkit-linear-gradient(white 0%, #f8f8f8 100%);
+  background: -webkit-linear-gradient(white 0%, #f7f9fa 100%);
   background-image: url(images/bg/furley_bg.png);
   background-repeat: repeat;
   opacity: 1;
@@ -23960,7 +23960,7 @@ img {
 
 /* line 582, ../../../../sass/src/view/AppViewport.scss */
 #mainAppPanel .x-tab-default-top {
-  background: #F8F8F8;
+  background: #F7F9FA;
   font-size: 12px;
   border-color: #E0E3E6;
   box-shadow: none;
@@ -24022,7 +24022,7 @@ img {
 /* line 633, ../../../../sass/src/view/AppViewport.scss */
 .dashBtn {
   margin: 10px;
-  background: #f8f8f8;
+  background: #F7F9FA;
   box-shadow: none;
   border: #ECF0F1;
 }
@@ -24253,12 +24253,12 @@ img {
 
 /* line 829, ../../../../sass/src/view/AppViewport.scss */
 #DeviceEditorMainToolPanel {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 833, ../../../../sass/src/view/AppViewport.scss */
 .DeviceEditorToolPanel .x-toolbar-default {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 837, ../../../../sass/src/view/AppViewport.scss */
@@ -24384,12 +24384,12 @@ img {
 
 /* line 937, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Window, .j5Parameters_Window .x-window-body {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 941, ../../../../sass/src/view/AppViewport.scss */
 .j5Parameters_Buttons {
-  background: #F8F8F8;
+  background: #F7F9FA;
 }
 
 /* line 945, ../../../../sass/src/view/AppViewport.scss */

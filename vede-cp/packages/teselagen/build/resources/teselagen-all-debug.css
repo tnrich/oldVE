@@ -6050,7 +6050,7 @@ a.x-tab {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
   background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -6062,7 +6062,7 @@ a.x-tab {
 .x-btn-default-small-mc {
   background-image: url(images/btn/btn-default-small-fbg.gif);
   background-position: 0 top;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
 }
 
 /* line 212, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -6564,7 +6564,7 @@ body.x-nbr .x-btn-default-small-frameInfo {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
   background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -6576,7 +6576,7 @@ body.x-nbr .x-btn-default-small-frameInfo {
 .x-btn-default-medium-mc {
   background-image: url(images/btn/btn-default-medium-fbg.gif);
   background-position: 0 top;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
 }
 
 /* line 212, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */
@@ -7078,7 +7078,7 @@ body.x-nbr .x-btn-default-medium-frameInfo {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
   background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -7090,7 +7090,7 @@ body.x-nbr .x-btn-default-medium-frameInfo {
 .x-btn-default-large-mc {
   background-image: url(images/btn/btn-default-large-fbg.gif);
   background-position: 0 top;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
 }
 
 /* line 212, ../../../../ext/packages/ext-theme-base/sass/etc/mixins/frame.scss */

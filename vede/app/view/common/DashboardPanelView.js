@@ -483,7 +483,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             },
                             {
                                 xtype: 'gridpanel',
-                                xtype: 'gridpanel', 
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
                                 cls: 'sequenceLibraryGrid',
@@ -541,27 +540,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        flex: 1,
                                         text: 'Date Created',
-                                        width: 100,
+                                        width: 180,
                                         dataIndex: 'dateCreated',
-                                        renderer: function(val) {
-                                            val = new Date(val);
-                                            val = Ext.Date.format(val, "F d, Y g:i A");
-                                            return val;
-                                        }
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        flex: 1,
                                         text: 'Last Modified',
-                                        width: 100,
+                                        width: 180,
                                         dataIndex: 'dateModified',
-                                        renderer: function(val) {
-                                            val = new Date(val);
-                                            val = Ext.Date.format(val, "F d, Y g:i A");
-                                            return val;
-                                        }
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
                                     }
                                     
                                     ],
@@ -728,7 +717,27 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         // }
                                     },
 
-                                ]
+                                ],
+                                listeners: {
+                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                        e.preventDefault();
+                                        var contextMenu = Ext.create('Ext.menu.Menu',{
+                                              items: [{
+                                                text: 'Open',
+                                                handler: function(){
+                                                    Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record.getSequenceFile());
+                                                }
+                                              },{
+                                                text: 'Download',
+                                                handler: function() {
+                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
+                                                    VEManager.saveSequenceToFile();
+                                                }
+                                              }]
+                                        }).show();
+                                        contextMenu.setPagePosition(e.getX(),e.getY()-5)
+                                    }
+                                }
                             }
                         ]
                     }

@@ -1021,7 +1021,7 @@ tr.x-container:before {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
   background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -1032,7 +1032,7 @@ tr.x-container:before {
 /* line 102, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nlg .x-btn-default-small-mc {
   background-image: url('../../resources/themes/images/gray/btn/btn-default-small-bg.gif');
-  background-color: #f8f8f8; }
+  background-color: #F7F9FA; }
 
 /* line 115, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nbr .x-btn-default-small {
@@ -1353,7 +1353,7 @@ tr.x-container:before {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
   background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -1364,7 +1364,7 @@ tr.x-container:before {
 /* line 102, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nlg .x-btn-default-medium-mc {
   background-image: url('../../resources/themes/images/gray/btn/btn-default-medium-bg.gif');
-  background-color: #f8f8f8; }
+  background-color: #F7F9FA; }
 
 /* line 115, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nbr .x-btn-default-medium {
@@ -1685,7 +1685,7 @@ tr.x-container:before {
   border-width: 1px;
   border-style: solid;
   background-image: none;
-  background-color: #f8f8f8;
+  background-color: #F7F9FA;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
   background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -1696,7 +1696,7 @@ tr.x-container:before {
 /* line 102, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nlg .x-btn-default-large-mc {
   background-image: url('../../resources/themes/images/gray/btn/btn-default-large-bg.gif');
-  background-color: #f8f8f8; }
+  background-color: #F7F9FA; }
 
 /* line 115, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
 .x-nbr .x-btn-default-large {
