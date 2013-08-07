@@ -156,8 +156,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.VectorViewer.show();
         this.VectorViewer.setSequenceFile(sequenceFile);
 
-        console.log("container y: " + sequenceContainer.getY() + ", height: " + sequenceContainer.getHeight());
-
         this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width, 
                                       sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
     },
@@ -192,9 +190,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
      * the part has a valid sequence file.
      */
     onPartGridItemMouseEnter: function(grid, part, el, index, event) {
-        var sequenceContainer = grid.up("#sequenceLibraryArea");
+        var sequenceContainer = grid.up("container[cls='partLibraryContainer']");
 
-        console.log(el.children[1]);
         if(part.getSequenceFile()) {
             if(!this.VectorViewer) {
                 this.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
@@ -267,8 +264,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
             },
             "gridpanel[name='PartLibraryGrid']": {
                 itemclick: this.onPartGridItemClick,
-                mouseenter: this.onPartGridItemMouseEnter,
-                mouseleave: this.onPartGridItemMouseLeave
+                itemmouseenter: this.onPartGridItemMouseEnter,
+                itemmouseleave: this.onPartGridItemMouseLeave
             }
 		});
 		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
