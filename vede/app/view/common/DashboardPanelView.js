@@ -509,8 +509,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         width    : 75,
                                         dataIndex: 'serialize',
                                         renderer: function(val) {
-                                            val = val.sequence.alphabet.toUpperCase();
-                                            return val;
+                                            if(val) {
+                                                val = val.sequence.alphabet.toUpperCase();
+                                                return val;
+                                            } else {
+                                                return "";
+                                            }
                                         }
                                     },
                                     {
@@ -531,12 +535,15 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         flex: 1,
                                         dataIndex: 'serialize',
                                         renderer: function(val) {
-                                            var features = [];
-                                            for(var i=0; i<val.features.length; i++) {
-                                                features.push(val.features[i].inData.name);
+                                            if(val) {
+                                                var features = [];
+                                                for(var i=0; i<val.features.length; i++) {
+                                                    features.push(val.features[i].inData.name);
+                                                }
+                                                return features;
+                                            } else {
+                                                return "";
                                             }
-                                            return features;
-                                            // return val;
                                         }
                                     },
                                     {
@@ -568,7 +575,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
 
                                     dockedItems: [{
                                             xtype: 'pagingtoolbar',
-                                            pageSize: 25,
                                             dock: 'bottom',
                                             displayInfo: true
                                     }],
@@ -728,7 +734,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         // }
                                     },
 
-                                ]
+                                ],
+
+                                dockedItems: [{
+                                        xtype: 'pagingtoolbar',
+                                        dock: 'bottom',
+                                        displayInfo: true
+                                }]
+
                             }
                         ]
                     }
