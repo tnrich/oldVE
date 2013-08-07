@@ -84,9 +84,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 	},
 
     serialize: function() {
-        return {
-            value: this.getValue()
-        };
+        return this.getValue();
     },
 
     deSerialize: function(data, alphabet) {
@@ -97,7 +95,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
             this.setValue(data.value);
             this.setAmbiguousMatches(data.ambiguousMatches);
         } else {
-            symbol = alphabet[data.value];
+            symbol = alphabet[data];
 
             this.setName(symbol.getName());
             this.setValue(symbol.getValue());

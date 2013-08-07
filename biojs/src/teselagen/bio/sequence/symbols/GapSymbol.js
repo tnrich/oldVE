@@ -55,9 +55,7 @@ Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
 	},
 
     serialize: function() {
-        return {
-            value: "gap"
-        };
+        return this.getValue();
     },
 
     deSerialize: function(data, alphabet) {

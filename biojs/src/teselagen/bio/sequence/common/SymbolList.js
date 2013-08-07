@@ -238,11 +238,13 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
             data.alphabet = "unknown";
         }
 
-        data.symbols = [];
+        symbolsArray = [];
 
         for(var i = 0; i < symbols.length; i++) {
-            data.symbols.push(symbols[i].serialize(alphabet));
+            symbolsArray.push(symbols[i].serialize(alphabet));
         }
+
+        data.symbols = symbolsArray.join("");
 
         return data;
     },
@@ -260,16 +262,16 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
             }
         } else {
             if(data.alphabet === "dna") {
-                this.setAlphabet("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+                this.setAlphabet(Teselagen.bio.sequence.alphabets.DNAAlphabet);
             } else if(data.alphabet === "rna") {
-                this.setAlphabet("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+                this.setAlphabet(Teselagen.bio.sequence.alphabets.RNAAlphabet);
             } else {
-                this.setAlphabet("Teselagen.bio.sequence.alphabets.AbstractAlphabet");
+                this.setAlphabet(Teselagen.bio.sequence.alphabets.AbstractAlphabet);
             }
 
             for(var i = 0; i < data.symbols.length; i++) {
                 symbol = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {});
-                symbol.deSerialize(data.symbols[i]);
+                symbol.deSerialize(data.symbols.charAt(i), this.getAlphabet());
                 symbols.push(symbol);
             }
         }
