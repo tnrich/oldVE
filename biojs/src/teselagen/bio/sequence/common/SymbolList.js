@@ -228,13 +228,17 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
         var symbols = this.getSymbols();
         var alphabet = this.getAlphabet();
 
-        if(alphabet === "Teselagen.bio.sequence.alphabets.DNAAlphabet") {
+        if(alphabet === "Teselagen.bio.sequence.alphabets.DNAAlphabet" ||
+           alphabet === Teselagen.bio.sequence.alphabets.DNAAlphabet) {
             data.alphabet = "dna";
-        } else if(alphabet === "Teselagen.bio.sequence.alphabets.RNAAlphabet") {
+        } else if(alphabet === "Teselagen.bio.sequence.alphabets.RNAAlphabet" ||
+                  alphabet === Teselagen.bio.sequence.alphabets.RNAAlphabet) {
             data.alphabet = "rna";
-        } else if(alphabet === "Teselagen.bio.sequence.alphabets.ProteinAlphabet") {
+        } else if(alphabet === "Teselagen.bio.sequence.alphabets.ProteinAlphabet" ||
+                  alphabet === Teselagen.bio.sequence.alphabets.ProteinAlphabet) {
             data.alphabet = "protein";
         } else {
+            console.warn("Unknown alphabet in sequence.")
             data.alphabet = "unknown";
         }
 

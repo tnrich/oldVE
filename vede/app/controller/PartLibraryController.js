@@ -44,6 +44,12 @@ Ext.define("Vede.controller.PartLibraryController", {
                     autoLoad: true
                 });
 
+                // Filter the parts store so only mapped parts will appear (per
+                // Nathan's request in ticket #869).
+                self.partLibraryStore.filterBy(function(part) {
+                    return part.isMapped();
+                });
+
                 self.partLibraryWindow.show();
                 self.partLibraryWindow.down('grid').reconfigure(self.partLibraryStore);
 

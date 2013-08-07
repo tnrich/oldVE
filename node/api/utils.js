@@ -153,9 +153,5 @@ module.exports = function(app) {
             var countParts = user.parts.length;
             res.json({"numberProjects":countProjects, "numberDesigns":countDesigns, "numberSequences":countSequences, "numberParts":countParts});
         });
-
-
-
     });
-
 };
