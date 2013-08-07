@@ -5,7 +5,22 @@
  */
 Ext.define("Vede.view.ve.VectorViewer", {
     extend: "Ext.panel.Panel",
+
     requires: ["Teselagen.manager.VectorViewerManager"],
+
+    statics: {
+        PIE_CENTER: {
+            x: 107,
+            y: 97
+        },
+        RAIL_RADIUS: 70,
+        RAIL_WIDTH: 200,
+        RAIL_REFERENCE: {
+            x: 7,
+            y: 50
+        }
+    },
+
     alias: "widget.vectorviewer",
     cls: "VectorViewer",
     floating: true,
@@ -88,18 +103,12 @@ Ext.define("Vede.view.ve.VectorViewer", {
                         if(!this.viewManager) {
                             this.viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
                                 sequenceManager: sequenceManager,
-                                center: {
-                                    x: 100,
-                                    y: 100
-                                },
-                                railRadius: 70,
-                                railWidth: 200,
+                                center: self.self.PIE_CENTER,
+                                railRadius: self.self.RAIL_RADIUS,
+                                railWidth: self.self.RAIL_WIDTH,
                                 railHeight: 0,
                                 railGap: 0,
-                                reference: {
-                                    x: 0,
-                                    y: 50
-                                }
+                                reference: self.self.RAIL_REFERENCE
                             });
                         } else {
                             this.viewManager.setSequenceManager(sequenceManager);
@@ -131,18 +140,12 @@ Ext.define("Vede.view.ve.VectorViewer", {
             if(!this.viewManager) {
                 this.viewManager = Ext.create("Teselagen.manager.VectorViewerManager", {
                     sequenceManager: sequenceManager,
-                    center: {
-                        x: 100,
-                        y: 100
-                    },
-                    railRadius: 70,
-                    railWidth: 200,
+                    center: self.self.PIE_CENTER,
+                    railRadius: self.self.RAIL_RADIUS,
+                    railWidth: self.self.RAIL_WIDTH,
                     railHeight: 0,
                     railGap: 0,
-                    reference: {
-                        x: 0,
-                        y: 50
-                    }
+                    reference: self.self.RAIL_REFERENCE
                 });
             } else {
                 this.viewManager.setSequenceManager(sequenceManager);
