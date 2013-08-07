@@ -592,13 +592,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         contextMenu.setPagePosition(e.getX(),e.getY()-5)
                                     }
                                 }
-                            },
-                            {
-                                xtype: "dropZone",
-                                name: "dropZone"
                             }
                         ]
-                    }
+                    },
+                    {
+                        xtype: "dropZone",
+                        name: "dropZone",
+                    },
                 ]
             },
             {
@@ -705,7 +705,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Source Sequence',
-                                        width: 120,
+                                        width: 160,
                                         dataIndex: 'partSource'
                                     },
                                     {
@@ -714,6 +714,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Features in Range',
                                         width: 150,
                                         dataIndex: 'features'
+                                        // dataIndex: 'sequencefile_id',
+                                        // renderer: function(val, record) {
+                                        //     var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(val);
+                                        //     var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+                                        //     var features = sequenceManager.featuresByRange(record.genbankStartBP, record.endBP);
+                                        //     var partFeatures = [];
+                                        //     for(var z=0; z<features.length; z++)  {
+                                        //         partFeatures.push(features[z].getName());
+                                        //     }
+                                        //     return partFeatures;
+                                        // }
                                     },
 
                                 ]
