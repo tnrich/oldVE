@@ -592,8 +592,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var nonidentical = false;
         var identicalPart = null;
 
+        if(!pPart.isMapped()) {
+            cb(null);
+        }
+
         this.activeProject.parts().each(function(part, partIndex){
-            if(part.get("name") === name && part.get("id") !== pPart.get("id")) {
+            if(part.isMapped() && part.get("name") === name && part.get("id") !== pPart.get("id")) {
                 nonidentical = true;
             } else if(part.get("id") === pPart.get("id")) {
                 identicalPart = part;
