@@ -583,13 +583,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         contextMenu.setPagePosition(e.getX(),e.getY()-5)
                                     }
                                 }
-                            },
-                            {
-                                xtype: "dropZone",
-                                name: "dropZone"
                             }
                         ]
-                    }
+                    },
+                    {
+                        xtype: "dropZone",
+                        name: "dropZone",
+                    },
                 ]
             },
             {
