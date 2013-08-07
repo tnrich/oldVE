@@ -97,9 +97,11 @@ function encoded_parts_list_file(model)
 
     var bins = model["bins"];
 
-    bins.forEach(function(bin){
-        bin.cells.forEach(function(cell){
-            var part = model.parts[cell.part_id];
+    //bins.forEach(function(bin){
+    //    bin.cells.forEach(function(cell){
+    for( var partKey in model.parts) {
+            var part = model.parts[partKey];
+            //var part = model.parts[cell.part_id];
             if(part)
             {
                 var sequenceFile = model.sequences[part["sequencefile_id"]];
@@ -128,8 +130,9 @@ function encoded_parts_list_file(model)
                     console.log("Warning: Sequence file not found");
                 }
             }
-        });
-    });
+    }
+    //    });
+    //});
     //quicklog(out);
     return new Buffer(out).toString('base64');
 }
