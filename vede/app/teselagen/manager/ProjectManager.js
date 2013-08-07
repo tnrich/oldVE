@@ -60,7 +60,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         //    }
         //});
 
-        self.parts = self.currentUser.sequences();
+        self.parts = self.currentUser.parts();
         self.projects = self.currentUser.projects();
 
         var projectsStore = self.currentUser.projects().load(
