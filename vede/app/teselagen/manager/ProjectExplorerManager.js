@@ -161,6 +161,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                         break;
                     case "opende":
                         var selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
+                        console.log(selectedRecord.parentId);
                         selectedProject.designs().load({
                             id: selectedRecord.id,
                             callback: function (loadedDesign) {
@@ -169,8 +170,9 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                         });
                         break;
                     case "part":
+                        var designName = selectedNode.parentNode.parentNode.data.text;
                         var selectedPart = Teselagen.manager.ProjectManager.parts.getById(selectedRecord.id.replace("part",""));
-                        self.renamePart(selectedPart,expandPathCallback);
+                        self.renamePart(selectedPart, designName, expandPathCallback);
                         break;
                 }
             break;
@@ -197,8 +199,8 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
         }
     },
 
-    renamePart: function(selectedPart,cb){
-
+    renamePart: function(selectedPart, designName, cb){
+        var GridController = Vede.application.getController("DeviceEditor.GridController");
         var self = this;
         self.promptName("Please enter a part name:",function(text){
             selectedPart.set('name',text);
@@ -206,15 +208,29 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             selectedPart.save({
                 callback: function(){
                     self.load(function(){
-                        if(typeof (cb) === "function") {cb();}
+                        if(typeof (cb) === "function") {cb();
+                        GridController.ReRenderDevice();}
                     });
                 }
             });
-        });
+
+            if (designName) {
+                console.log(designName);
+                tab = Ext.getCmp("mainAppPanel").query("component[title='" + designName + "']")[0];
+                    if(tab) {
+                        Ext.getCmp("mainAppPanel").setActiveTab(tab);
+                        var gridPart = tab.model.partsStore.data.getByKey(selectedPart.data.id);
+                        gridPart.set('name', text);
+                    }
+            }
+        }, selectedPart.get('name'));
     },
 
     renameDesign: function(selectedDesign,cb){
         var self = this;
+
+        tab = Ext.getCmp("mainAppPanel").query("component[title='" + selectedDesign.get("name") + "']")[0]
+
         self.promptName("Please enter a design name:",function(text){
             selectedDesign.set('name',text);
 
@@ -225,7 +241,10 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                     });
                 }
             });
-        });
+
+        tab.setTitle(selectedDesign.get('name'));
+
+        }, selectedDesign.get('name'));
     },
 
     renameProject: function(selectedProject,cb){
@@ -240,10 +259,10 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                     });
                 }
             });
-        });
+        }, selectedProject.get('name'));
     },
 
-    promptName: function(promptText,cb){
+    promptName: function(promptText,cb, value){
         var onPromptClosed = function (btn, text){
             if(btn === "ok") {
                 text = Ext.String.trim(text);
@@ -252,7 +271,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             }
         };
 
-        Ext.MessageBox.prompt("Name", promptText, onPromptClosed, this);
+        Ext.MessageBox.prompt("Name", promptText, onPromptClosed, this, false, value);
     },
 
     deleteDesign: function(selectedDesign, cb){
