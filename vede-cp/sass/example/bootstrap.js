@@ -68,12 +68,12 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.ajax.Simlet": [],
   "Vede.view.de.DeviceEditorPartLibrary": [],
   "Ext.ux.SlidingPager": [],
-  "Vede.view.rail.NameBox": [],
-  "Teselagen.renderer.common.AnnotationRenderer": [],
   "Teselagen.bio.sequence.TranslationUtils": [
     "Teselagen.TranslationUtils"
   ],
   "Ext.ux.TabReorderer": [],
+  "Teselagen.renderer.common.AnnotationRenderer": [],
+  "Vede.view.rail.NameBox": [],
   "Ext.ux.grid.filter.NumericFilter": [],
   "Teselagen.bio.parsers.GenbankManager_noSing": [],
   "Ext.ux.event.Recorder": [],
@@ -165,9 +165,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.de.DeviceEditorMenuPanel": [],
   "Teselagen.bio.sequence.dna.Feature": [],
   "Vede.view.common.HeaderPanelView": [],
-  "Vede.view.rail.Frame": [],
-  "Teselagen.renderer.rail.RailRenderer": [],
   "Vede.view.j5.AnalysisPanel": [],
+  "Teselagen.renderer.rail.RailRenderer": [],
+  "Vede.view.rail.Frame": [],
   "Vede.view.de.j5AutomationParameters": [],
   "Ext.ux.statusbar.StatusBar": [
     "Ext.ux.StatusBar"
@@ -207,8 +207,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.common.ProjectPanelGrid": [],
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
-  "Teselagen.manager.VectorViewerManager": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
+  "Teselagen.manager.VectorViewerManager": [],
   "Teselagen.store.ErrorsStore": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Ext.ux.grid.TransformGrid": [],
@@ -270,11 +270,11 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.event.ActionStackEvent": [],
   "Teselagen.manager.PartManager": [],
   "Teselagen.renderer.pie.PieRenderer": [],
+  "Teselagen.models.j5Output.Assembly": [],
   "Teselagen.bio.util.XmlToJson": [],
   "Teselagen.bio.sequence.common.StrandType": [
     "Teselagen.StrandType"
   ],
-  "Teselagen.models.j5Output.Assembly": [],
   "Vede.controller.VectorEditor.MainMenuController": [],
   "Teselagen.store.ProjectStore": [],
   "Teselagen.renderer.annotate.ORFRenderer": [],
@@ -319,8 +319,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
   "Teselagen.manager.GridCommandPatternManager": [],
   "Vede.view.ve.PropertiesWindow": [],
-  "Teselagen.utils.NullableInt": [],
   "Teselagen.models.J5Results": [],
+  "Teselagen.utils.NullableInt": [],
   "Teselagen.bio.util.StringUtil": [
     "Teselagen.StringUtil"
   ],
@@ -381,9 +381,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.rail.Caret": [],
   "Vede.controller.VectorEditor.SaveAsWindowController": [],
   "Ext.ux.event.Maker": [],
+  "Teselagen.models.j5Output.Synthesis": [],
   "Teselagen.models.Preferences": [],
   "Vede.view.Viewport": [],
-  "Teselagen.models.j5Output.Synthesis": [],
   "Teselagen.bio.sequence.dna.DigestionFragment": [],
   "Teselagen.manager.SequenceAnnotationManager": [],
   "Teselagen.models.digest.SampleLane": [],
@@ -404,8 +404,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Vede.view.rail.Rail": [],
   "Vede.controller.VectorEditor.StatusBarController": [],
   "Teselagen.renderer.rail.CutSiteRenderer": [],
-  "Teselagen.utils.GraphicUtils": [],
   "Teselagen.event.VisibilityEvent": [],
+  "Teselagen.utils.GraphicUtils": [],
   "Teselagen.bio.sequence.dna.FeatureNote": [],
   "Vede.view.ve.VectorEditorMainMenuBar": []
 });
@@ -465,10 +465,10 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Vede.view.de.DeviceEditorPartLibrary": [],
   "Ext.ux.SlidingPager": [],
-  "Vede.view.rail.NameBox": [],
-  "Teselagen.renderer.common.AnnotationRenderer": [],
   "Teselagen.bio.sequence.TranslationUtils": [],
   "Ext.ux.TabReorderer": [],
+  "Teselagen.renderer.common.AnnotationRenderer": [],
+  "Vede.view.rail.NameBox": [],
   "Ext.ux.grid.filter.NumericFilter": [
     "gridfilter.numeric"
   ],
@@ -604,11 +604,11 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.common.HeaderPanelView": [
     "widget.HeaderPanelView"
   ],
-  "Vede.view.rail.Frame": [],
-  "Teselagen.renderer.rail.RailRenderer": [],
   "Vede.view.j5.AnalysisPanel": [
     "widget.AnalysisPanel"
   ],
+  "Teselagen.renderer.rail.RailRenderer": [],
+  "Vede.view.rail.Frame": [],
   "Vede.view.de.j5AutomationParameters": [],
   "Ext.ux.statusbar.StatusBar": [
     "widget.statusbar"
@@ -664,8 +664,8 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Vede.view.de.EugeneRuleDialog": [],
   "Vede.controller.VectorEditor.PieController": [],
-  "Teselagen.manager.VectorViewerManager": [],
   "Teselagen.renderer.pie.FeatureRenderer": [],
+  "Teselagen.manager.VectorViewerManager": [],
   "Teselagen.store.ErrorsStore": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Ext.ux.grid.TransformGrid": [],
@@ -742,9 +742,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.event.ActionStackEvent": [],
   "Teselagen.manager.PartManager": [],
   "Teselagen.renderer.pie.PieRenderer": [],
+  "Teselagen.models.j5Output.Assembly": [],
   "Teselagen.bio.util.XmlToJson": [],
   "Teselagen.bio.sequence.common.StrandType": [],
-  "Teselagen.models.j5Output.Assembly": [],
   "Vede.controller.VectorEditor.MainMenuController": [],
   "Teselagen.store.ProjectStore": [],
   "Teselagen.renderer.annotate.ORFRenderer": [],
@@ -797,8 +797,8 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.sequence.symbols.GapSymbol": [],
   "Teselagen.manager.GridCommandPatternManager": [],
   "Vede.view.ve.PropertiesWindow": [],
-  "Teselagen.utils.NullableInt": [],
   "Teselagen.models.J5Results": [],
+  "Teselagen.utils.NullableInt": [],
   "Teselagen.bio.util.StringUtil": [],
   "Vede.view.AuthWindow": [],
   "Vede.controller.HeaderPanelController": [],
@@ -869,9 +869,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.rail.Caret": [],
   "Vede.controller.VectorEditor.SaveAsWindowController": [],
   "Ext.ux.event.Maker": [],
+  "Teselagen.models.j5Output.Synthesis": [],
   "Teselagen.models.Preferences": [],
   "Vede.view.Viewport": [],
-  "Teselagen.models.j5Output.Synthesis": [],
   "Teselagen.bio.sequence.dna.DigestionFragment": [],
   "Teselagen.manager.SequenceAnnotationManager": [],
   "Teselagen.models.digest.SampleLane": [],
@@ -902,8 +902,8 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.rail.Rail": [],
   "Vede.controller.VectorEditor.StatusBarController": [],
   "Teselagen.renderer.rail.CutSiteRenderer": [],
-  "Teselagen.utils.GraphicUtils": [],
   "Teselagen.event.VisibilityEvent": [],
+  "Teselagen.utils.GraphicUtils": [],
   "Teselagen.bio.sequence.dna.FeatureNote": [],
   "Vede.view.ve.VectorEditorMainMenuBar": [
     "widget.VectorEditorMainMenuBar"

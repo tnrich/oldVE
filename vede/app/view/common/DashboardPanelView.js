@@ -5,6 +5,7 @@
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.DashboardPanelView',
+    //requires: ["Teselagen.manager.ProjectManager"],
     id: 'DashboardPanel',
     padding: '10 0',
     layout: {
@@ -563,6 +564,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     }
                                     
                                     ],
+
+                                    bbar: Ext.create('Ext.PagingToolbar', {
+                                        store: Teselagen.manager.ProjectManager.sequences,
+                                        displayInfo: true,
+                                        displayMsg: 'Displaying sequences {0} - {1} of {2}',
+                                        emptyMsg: "No sequences to display"
+                                    }),
+
                                 listeners: {
                                     itemcontextmenu: function( el, record, item, index, e, eOpts ){
                                         e.preventDefault();
@@ -583,13 +592,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         contextMenu.setPagePosition(e.getX(),e.getY()-5)
                                     }
                                 }
-                            },
-                            {
-                                xtype: "dropZone",
-                                name: "dropZone"
                             }
                         ]
-                    }
+                    },
+                    {
+                        xtype: "dropZone",
+                        name: "dropZone",
+                    },
                 ]
             },
             {
@@ -696,7 +705,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Source Sequence',
-                                        width: 120,
+                                        width: 160,
                                         dataIndex: 'partSource'
                                     },
                                     {
@@ -705,6 +714,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Features in Range',
                                         width: 150,
                                         dataIndex: 'features'
+                                        // dataIndex: 'sequencefile_id',
+                                        // renderer: function(val, record) {
+                                        //     var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(val);
+                                        //     var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
+                                        //     var features = sequenceManager.featuresByRange(record.genbankStartBP, record.endBP);
+                                        //     var partFeatures = [];
+                                        //     for(var z=0; z<features.length; z++)  {
+                                        //         partFeatures.push(features[z].getName());
+                                        //     }
+                                        //     return partFeatures;
+                                        // }
                                     },
 
                                 ]
