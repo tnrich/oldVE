@@ -51,6 +51,11 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             name: "deviceEditorPartLibraryGrid",
             border: false,
             autoScroll: true,
+            dockedItems: [{
+                xtype: 'pagingtoolbar',
+                dock: 'bottom',
+                displayInfo: true
+            }],
             columns: [
                     {
                         xtype: 'gridcolumn',
