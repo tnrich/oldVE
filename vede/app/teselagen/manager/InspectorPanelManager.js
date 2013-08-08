@@ -77,7 +77,7 @@ Ext.define("Teselagen.manager.InspectorPanelManager", {
 	        .style("background-color", function(d, i) {
 	        	return i % 2 ? "rgb(250, 250, 250)" : null;
 	        })
-	        .on("mouseover", function(d, i) {//background-color: #F8F8F8 on mouseover
+	        .on("mouseover", function(d, i) {//background-color: #F7F9FA on mouseover
 	        	
 	        })
 	        .on("mouseout", function(d, i) {

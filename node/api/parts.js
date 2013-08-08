@@ -92,9 +92,14 @@ module.exports = function(app) {
      */
     app.get('/parts', restrict,  function(req, res) {
         User.findById(req.user._id)
-        .populate({ path: 'parts'})
+        .populate({ path: 'parts', match: {sequencefile_id: {$ne: null}}, options: { limit: req.query.limit, skip: req.query.start }})
         .exec(function(err, user) {
-            res.json({"parts":user.parts});
+            res.json({
+                "success":true,
+                "parts":user.parts,
+                "results":user.parts.length,
+                "total":req.user.parts.length
+            });
         });
         
     });

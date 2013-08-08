@@ -54,6 +54,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.parts.pageSize = 10;
 
         self.sequences.loadPage(1);
+        self.parts.loadPage(1);
 
         //store.load({
         //    params:{
@@ -114,11 +115,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 part.setSequenceFile(user.sequences().getById(sequenceId));
                             }
                         }
-                        // Filter the parts store so only mapped parts will appear (per
-                        // Nathan's request in ticket #869).
-                        self.parts.filterBy(function(part) {
-                            return part.isMapped();
-                        });
                     }
                 );
             }
@@ -261,10 +257,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
-
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
-            parts.loadPage(1);
+            partGrid.down('pagingtoolbar').doRefresh();
         }
 
         dashPanel.getActiveTab().el.unmask();
@@ -606,6 +601,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
         };
         Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
 
+    },
+
+    renamePartinOpenDesigns: function(part, text) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var tabs = tabPanel.items.items;
+
+        tabs.forEach(function(tab) {
+            if(tab.initialCls == "DeviceEditorTab") {
+                var gridPart = tab.model.partsStore.data.getByKey(part.data.id);
+                if(gridPart) {
+                    gridPart.set('name', text);
+                }
+            }
+        });
     },
 
     createDirectVESession: function() {
