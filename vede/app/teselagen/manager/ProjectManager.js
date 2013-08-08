@@ -603,6 +603,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     },
 
+    renamePartinOpenDesigns: function(part, text) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var tabs = tabPanel.items.items;
+
+        tabs.forEach(function(tab) {
+            if(tab.initialCls == "DeviceEditorTab") {
+                var gridPart = tab.model.partsStore.data.getByKey(part.data.id);
+                if(gridPart) {
+                    gridPart.set('name', text);
+                }
+            }
+        });
+    },
+
     createDirectVESession: function() {
         this.directVEEditingMode = true;
 

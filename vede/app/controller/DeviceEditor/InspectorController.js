@@ -499,7 +499,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     }
 
                     self.selectedPart.set("name", newName);
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+
+                    if(self.selectedPart.hasSequenceFile) {
+                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+                    }
 
 
                     if (!self.selectedPart.isMapped() && self.selectedPart.get("name") !== ""){
