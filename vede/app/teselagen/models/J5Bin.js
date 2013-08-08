@@ -55,7 +55,7 @@ Ext.define("Teselagen.models.J5Bin", {
                     if (Teselagen.utils.FormatUtils.isLegalName(v)) {
                         name = v.toString();
                     } else {
-                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                        if(Vede.application.warnings) console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
                         name = Teselagen.utils.FormatUtils.reformatName(v);
                     }
                 }

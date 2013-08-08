@@ -499,6 +499,11 @@ border-color: #E0E3E6;
   background-size: 16px;  
 }
 
+.x-toolbar .x-toolbar-separator-horizontal {
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #E0E3E6;
+}
+
 /*Splash*/
 
 .x-mask {
@@ -564,6 +569,64 @@ border-color: #E0E3E6;
     margin-top: 10px;
 }
 
+
+.x-tbar-page-next {
+  background-image: url('images/ux/paging/arrow-right.png') !important;
+  background-size: 16px;
+  background-position:center;
+}
+
+.x-tbar-page-prev {
+  background-image: url('images/ux/paging/arrow-left.png') !important;
+  background-size: 16px;
+  background-position:center;
+}
+
+.x-tbar-page-first {
+  background-image: url('images/ux/paging/first.png') !important;
+  background-size: 14px;
+  background-position:center;
+}
+
+.x-tbar-page-last {
+  background-image: url('images/ux/paging/last.png') !important;
+  background-size: 14px;
+  background-position:center;
+}
+
+.x-item-disabled .x-tbar-page-next {
+  background-image: url('images/ux/paging/arrow-right.png') !important;
+  background-size: 16px;
+  background-position:center;
+  opacity: 0.4;
+}
+
+.x-item-disabled .x-tbar-page-prev {
+  background-image: url('images/ux/paging/arrow-left.png') !important;
+  background-size: 16px;
+  background-position:center;
+  opacity: 0.4;
+}
+
+.x-item-disabled .x-tbar-page-first {
+  background-image: url('images/ux/paging/first.png') !important;
+  background-size: 14px;
+  background-position:center;
+  opacity: 0.4;
+}
+
+.x-item-disabled .x-tbar-page-last {
+  background-image: url('images/ux/paging/last.png') !important;
+  background-size: 14px;
+  background-position:center;
+  opacity: 0.4;
+}
+
+.x-tbar-loading {
+  background-image: url('images/ux/paging/refresh.png') !important;
+  background-size: 16px;
+  background-position:center;
+}
 
 /*Header*/
 #headerPanel, #headerPanel-body {
@@ -849,9 +912,9 @@ background: #F7F9FA;
   border: 0 none !important;
 }
 
-.x-toolbar .x-toolbar-separator-horizontal {
-  border-left: 1px solid #00395A;
-  border-right: 1px solid #004A75;
+.parttoolbarseparator {
+  border-left: 1px solid #00395A !important;
+  border-right: 1px solid #004A75 !important;
 }
 
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {

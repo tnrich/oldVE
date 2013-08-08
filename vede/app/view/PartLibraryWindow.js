@@ -23,6 +23,11 @@ Ext.define('Vede.view.PartLibraryWindow', {
             defaults: {
                 flex: 1
             }
-        }
+        },
+        dockedItems: [{
+            xtype: 'pagingtoolbar',
+            dock: 'bottom',
+            displayInfo: true
+        }],
     }
 });
