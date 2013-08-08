@@ -1,0 +1,100 @@
+LOCUS       cat_amplicon_for         983 bp ds-DNA     linear       18-MAR-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     gene            complement(165..824)
+                     /note="[ZFP-GG destination LacUV5 p15A CmR]"
+                     /note="GENE [ZFP-GG destination LacUV5 p15A CmR]"
+                     /vntifkey="22"
+                     /gene="CmR"
+                     /label=cat
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     rep_origin      complement(20..38)
+                     /gene="ColE1 Origin"
+                     /vntifkey="33"
+                     /note="REP_ORIGIN REP_ORIGIN [ColE1]"
+                     /note="REP_ORIGIN [ColE1]"
+                     /label=colE1 origin
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     terminator      44..149
+                     /gene="Terminator"
+                     /note="TERMINATOR [p15A KanR]"
+                     /vntifkey="43"
+                     /note="TERMINATOR TERMINATOR [p15A KanR]"
+                     /label=T0
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     20..38
+                     /label=cat_GSP_fwd
+                     /ApEinfo_fwdcolor=#800000
+                     /ApEinfo_revcolor=#800000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     complement(950..968)
+                     /label=cat_GSP_rev
+                     /ApEinfo_fwdcolor=#800000
+                     /ApEinfo_revcolor=#800000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     protein_bind    9..14
+                     /label=NaeI_site
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     protein_bind    4..9
+                     /label=XhoI_5
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     protein_bind    14..19
+                     /label=AflII_5
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     protein_bind    975..980
+                     /label=SalI
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     protein_bind    969..974
+                     /label=AflII_3
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 caaCTCGAGC CGGCTTAAGt aagggatttt ggtcatgact agtgcttgga ttctcaccaa
+       61 taaaaaacgc ccggcggcaa ccgagcgttc tgaacaaatc cagatggagt tctgaggtca
+      121 ttactggatc tatcaacagg agtccaagcg agctcgatat caaattacgc cccgccctgc
+      181 cactcatcgc agtactgttg taattcatta agcattctgc cgacatggaa gccatcacaa
+      241 acggcatgat gaacctgaat cgccagcggc atcagcacct tgtcgccttg cgtataatat
+      301 ttgcccatgg tgaaaacggg ggcgaagaag ttgtccatat tggccacgtt taaatcaaaa
+      361 ctggtgaaac tcacccaggg attggctgag acgaaaaaca tattctcaat aaacccttta
+      421 gggaaatagg ccaggttttc accgtaacac gccacatctt gcgaatatat gtgtagaaac
+      481 tgccggaaat cgtcgtggta ttcactccag agcgatgaaa acgtttcagt ttgctcatgg
+      541 aaaacggtgt aacaagggtg aacactatcc catatcacca gctcaccgtc tttcattgcc
+      601 atacgaaatt ccggatgagc attcatcagg cgggcaagaa tgtgaataaa ggccggataa
+      661 aacttgtgct tatttttctt tacggtcttt aaaaaggccg taatatccag ctgaacggtc
+      721 tggttatagg tacattgagc aactgactga aatgcctcaa aatgttcttt acgatgccat
+      781 tgggatatat caacggtggt atatccagtg atttttttct ccattttagc ttccttagct
+      841 cctgaaaatc tcgataactc aaaaaatacg cccggtagtg atcttatttc attatggtga
+      901 aagttggaac ctcttacgtg ccgatcaacg tctcattttc gccagatatc gaattcatga
+      961 gatctttgCT TAAGGTCGAC gca   
+//

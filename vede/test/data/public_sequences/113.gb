@@ -1,0 +1,124 @@
+LOCUS       Synthetic_Intron         478 bp    DNA     linear   UNA 20-MAR-2012
+DEFINITION  Concatenation of 3 sequences.
+ACCESSION   urn.local...1333153733373.326
+VERSION     urn.local...1333153733373.326
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    <430..>478
+                     /note="Geneious type: gene"
+                     /label="H2B"
+     misc_difference <101..152
+                     /label="Intron 29"
+     primer_bind     86..102
+                     /label="int 29 site A fp"
+     misc_feature    <1..9
+                     /note="Geneious type: promoter uukaryotic"
+                     /label="PEF-1alpha"
+     misc_feature    72..82
+                     /note="Geneious type: motif"
+                     /label="Kozak + ATG"
+     misc_feature    411..420
+                     /note="Geneious type: motif"
+                     /label="Barcode"
+     misc_feature    83..390
+                     /note="Geneious type: Concatenated sequence"
+                     /label="Synthetic intron (concatenated sequence 2)"
+     misc_feature    1..82
+                     /note="Geneious type: Concatenated sequence"
+                     /label="BB 5' (concatenated sequence 1)"
+     misc_feature    427..478
+                     /note="Geneious type: Concatenated sequence"
+                     /label="BB 3' (concatenated sequence 3)"
+     misc_feature    <83..85
+                     /note="Geneious type: Editing History Insertion"
+                     /label
+     misc_feature    424..426
+                     /note="Geneious type: Editing History Insertion"
+                     /label
+     misc_feature    99..100
+                     /note="Geneious type: Editing History Insertion"
+                     /label
+     misc_feature    309
+                     /note="Geneious type: Editing History Insertion"
+                     /label
+     misc_feature    order(80..85,391..478)
+                     /note="Geneious type: ORF"
+                     /label="ORF1"
+     misc_feature    order(80..125,391..478)
+                     /note="Geneious type: ORF"
+                     /label="ORF2"
+     misc_feature    order(80..159,391..478)
+                     /note="Geneious type: ORF"
+                     /label="ORF3"
+     misc_feature    80..478
+                     /note="Geneious type: ORF"
+                     /label="ORF4"
+     misc_feature    26..45
+                     /label="T7"
+     misc_feature    157..166
+                     /label="SD3"
+     misc_feature    123..130
+                     /label="SD2"
+     misc_feature    86..93
+                     /label="SD1"
+     misc_feature    1..3
+                     /label="Ex start"
+     misc_feature    197..306
+                     /note="Geneious type: Editing History Replacement"
+                     /label="GCAGAGCTGTGGAGTGTGACAATGGTGTTTGTGTCTAAACTATCAAACGC
+                     CATTATCACACTAAATAGCTACTGCTAGGCAATCCTTC"
+     misc_feature    162..165
+                     /note="Geneious type: Editing History Replacement"
+                     /label="GAAG"
+     misc_feature    94..96
+                     /note="Geneious type: Editing History Replacement"
+                     /label="GAACG"
+     misc_feature    421..422
+                     /note="Geneious type: Editing History Replacement"
+                     /label="TGG"
+     misc_feature    63
+                     /note="Geneious type: Editing History Replacement"
+                     /label="G"
+     misc_feature    138
+                     /note="Geneious type: Editing History Replacement"
+                     /label="G"
+     misc_feature    169
+                     /note="Geneious type: Editing History Replacement"
+                     /label="A"
+     misc_feature    316
+                     /note="Geneious type: Editing History Replacement"
+                     /label="A"
+     misc_feature    349
+                     /note="Geneious type: Editing History Replacement"
+                     /label="A"
+     misc_feature    103
+                     /note="Geneious type: Editing History Replacement"
+                     /label="A"
+     misc_feature    106
+                     /note="Geneious type: Editing History Replacement"
+                     /label="A"
+     misc_feature    111
+                     /note="Geneious type: Editing History Replacement"
+                     /label="A"
+     misc_feature    141
+                     /note="Geneious type: Editing History Replacement"
+                     /label="G"
+     misc_feature    398..410
+                     /note="Geneious type: sequence variant"
+                     /label="STOP"
+     misc_feature    397
+                     /note="Geneious type: Editing History Insertion"
+                     /label
+ORIGIN      
+        1 gtgtcgtgag gaattagctt ggtactaata cgactcacta tagggagacc caagctggct
+       61 agttaagctt gtcgccacca tgcaggttgt tggaatcgat tgctacctat caggggtcga
+      121 cccaggttcg tgttctacat cattttcacg ttcctggagg tattcttatc accttcgtgg
+      181 ctacagagtt tccttatttg tctctgttgc cggcttatat ggacaagcat atcacagcca
+      241 tttatcggag cgcctccgta cacgctatta tcggacgcct cgcgagatca atacgtatac
+      301 cagctgccct cgatacatgt cttggcatcg tttgcttctc gagtactacc tggttcctct
+      361 tctttctttc tcttctcttt caggtcttag gtggtgctaa taactaataa cattccttgc
+      421 gatatccatc cagagccagc gaagtctgct cccgccccga aaaagggctc caagaagg
+//

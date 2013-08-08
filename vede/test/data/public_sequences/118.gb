@@ -1,0 +1,29 @@
+LOCUS       theophylline_int         140 bp    DNA     linear   UNA 05-MAY-2012
+DEFINITION  A new nucleotide sequence entered manually.
+ACCESSION   urn.local...1336177344110.69
+VERSION     urn.local...1336177344110.69
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    78..108
+                     /note="Geneious type: sequence variant"
+                     /label="theophylline aptamer"
+     misc_feature    41..57
+                     /label="SD2 compet"
+     misc_feature    complement(62..77)
+                     /label="SD2 anti"
+     misc_feature    109..122
+                     /label="anti bind"
+     misc_feature    110..120
+                     /label="SD2"
+     misc_feature    8..15
+                     /label="SD1"
+     CDS             1..7
+                     /label="Cit"
+ORIGIN      
+        1 cgtccaggtt gttggcatcc aatcacaagc gccaggggtc ggcaggatcg ttgggtcaaa
+       61 agacccaacg aacctgcgat accagcatcg tcttgatgcc cttggcaggc aggttcgttg
+      121 ggaagttagc atgggagaac
+//

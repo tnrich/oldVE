@@ -1,0 +1,123 @@
+LOCUS       pUC_Amp_plasmid_        3617 bp    DNA     circular UNA 27-MAR-2012
+DEFINITION  Backbone including pUC high copy number ori and Amp resistance.
+ACCESSION   urn.local...1332896970489.196
+VERSION     urn.local...1332896970489.196
+KEYWORDS    .
+SOURCE      E. Coli
+  ORGANISM  E. Coli
+            .
+FEATURES             Location/Qualifiers
+     binding_site    2191..2220
+                     /created_by="User"
+                     /label="RBS12032601"
+     motif           2155..2183
+                     /created_by="User"
+                     /label="RNAp binding motif"
+     misc_feature    complement(3598..3617)
+                     /created_by="User"
+                     /label="vr"
+                     /note="Geneious type: primer_bind_reverse"
+     misc_feature    complement(1855..1953)
+                     /invitrogen="""2330000"
+                     /label="bla promoter"
+                     /note="Geneious type: promoter prokaryotic"
+     rep_origin      complement(179..849)
+                     /invitrogen="""2540000"
+                     /label="pUC origin"
+     terminator      3454..3535
+                     /created_by="User"
+                     /label="rnpB_T1"
+     CDS             2221..3453
+                     /created_by="User"
+                     /label="CYP106A2"
+     CDS             complement(994..1854)
+                     /invitrogen="""1020000"
+                     /label="Amp(R)"
+     primer_bind     complement(2167..2190)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="sRNA primer rev"
+     primer_bind     1996..2015
+                     /created_by="User"
+                     /label="vf2"
+     spacer          1996..2135
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBricks left spacer"
+     spacer          3536..3617
+                     /created_by="User"
+                     /label="BioBrick right spacer"
+     protein_bind    2136..2190
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="R0011(pLac)"
+     protein_bind    2136..2156
+                     /created_by="User"
+                     /label="LacO"
+     protein_bind    2160..2178
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="lac1 core operator"
+ORIGIN      
+        1 gctgcattaa tgaatcggcc aacgcgcggg gagaggcggt ttgcgtattg ggcgctcttc
+       61 cgcttcctcg ctcactgact cgctgcgctc ggtcgttcgg ctgcggcgag cggtatcagc
+      121 tcactcaaag gcggtaatac ggttatccac agaatcaggg gataacgcag gaaagaacat
+      181 gtgagcaaaa ggccagcaaa aggccaggaa ccgtaaaaag gccgcgttgc tggcgttttt
+      241 ccataggctc cgcccccctg acgagcatca caaaaatcga cgctcaagtc agaggtggcg
+      301 aaacccgaca ggactataaa gataccaggc gtttccccct ggaagctccc tcgtgcgctc
+      361 tcctgttccg accctgccgc ttaccggata cctgtccgcc tttctccctt cgggaagcgt
+      421 ggcgctttct catagctcac gctgtaggta tctcagttcg gtgtaggtcg ttcgctccaa
+      481 gctgggctgt gtgcacgaac cccccgttca gcccgaccgc tgcgccttat ccggtaacta
+      541 tcgtcttgag tccaacccgg taagacacga cttatcgcca ctggcagcag ccactggtaa
+      601 caggattagc agagcgaggt atgtaggcgg tgctacagag ttcttgaagt ggtggcctaa
+      661 ctacggctac actagaagaa cagtatttgg tatctgcgct ctgctgaagc cagttacctt
+      721 cggaaaaaga gttggtagct cttgatccgg caaacaaacc accgctggta gcggtttttt
+      781 tgtttgcaag cagcagatta cgcgcagaaa aaaaggatct caagaagatc ctttgatctt
+      841 ttctacgggg tctgacgctc agtggaacga aaactcacgt taagggattt tggtcatgag
+      901 attatcaaaa aggatcttca cctagatcct tttaaattaa aaatgaagtt ttaaatcaat
+      961 ctaaagtata tatgagtaaa cttggtctga cagttaccaa tgcttaatca gtgaggcacc
+     1021 tatctcagcg atctgtctat ttcgttcatc catagttgcc tgactccccg tcgtgtagat
+     1081 aactacgata cgggagggct taccatctgg ccccagtgct gcaatgatac cgcgagaccc
+     1141 acgctcaccg gctccagatt tatcagcaat aaaccagcca gccggaaggg ccgagcgcag
+     1201 aagtggtcct gcaactttat ccgcctccat ccagtctatt aattgttgcc gggaagctag
+     1261 agtaagtagt tcgccagtta atagtttgcg caacgttgtt gccattgcta caggcatcgt
+     1321 ggtgtcacgc tcgtcgtttg gtatggcttc attcagctcc ggttcccaac gatcaaggcg
+     1381 agttacatga tcccccatgt tgtgcaaaaa agcggttagc tccttcggtc ctccgatcgt
+     1441 tgtcagaagt aagttggccg cagtgttatc actcatggtt atggcagcac tgcataattc
+     1501 tcttactgtc atgccatccg taagatgctt ttctgtgact ggtgagtact caaccaagtc
+     1561 attctgagaa tagtgtatgc ggcgaccgag ttgctcttgc ccggcgtcaa tacgggataa
+     1621 taccgcgcca catagcagaa ctttaaaagt gctcatcatt ggaaaacgtt cttcggggcg
+     1681 aaaactctca aggatcttac cgctgttgag atccagttcg atgtaaccca ctcgtgcacc
+     1741 caactgatct tcagcatctt ttactttcac cagcgtttct gggtgagcaa aaacaggaag
+     1801 gcaaaatgcc gcaaaaaagg gaataagggc gacacggaaa tgttgaatac tcatactctt
+     1861 cctttttcaa tattattgaa gcatttatca gggttattgt ctcatgagcg gatacatatt
+     1921 tgaatgtatt tagaaaaata aacaaatagg ggttccgcgc acatttcccc gaaaagtgcc
+     1981 acctgacgtc gacggtgcca cctgacgtct aagaaaccat tattatcatg acattaacct
+     2041 ataaaaatag gcgtatcacg aggcagaatt tcagataaaa aaaatcctta gctttcgcta
+     2101 aggatgattt ctggaattcg cggccgcttc tagagaattg tgagcggata acaattgaca
+     2161 ttgtgagcgg ataacaagat actgagcaca cagcacgtat acactataag gagggaagaa
+     2221 atgaaagaag ttattgcagt taaagaaatc actcgtttta aaacccgcac cgaggaattc
+     2281 tctccgtacg catggtgcaa acgcatgctg gaaaacgacc cggtaagcta ccatgaaggc
+     2341 actgacacct ggaacgtatt taagtacgaa gacgttaaac gtgttctgtc cgattacaaa
+     2401 catttcagca gcgttcgcaa acgtaccacc atcagcgtag gtaccgacag cgaggaaggt
+     2461 tccgttccgg aaaaaatcca aatcactgag tccgatccac cggatcaccg taaacgtcgt
+     2521 agcctgctgg cggccgcgtt tactccgcgt tccctgcaga actgggaacc acgtatccag
+     2581 gaaatcgcag acgagctgat tggccagatg gacggtggca ctgaaatcga cattgttgca
+     2641 agcctggcct ctccgctgcc tatcatcgta atggccgatc tgatgggtgt tccgtctaaa
+     2701 gatcgtctgc tgttcaaaaa atgggttgac accctgtttc tgcctttcga ccgcgaaaaa
+     2761 caggaagaag ttgacaagct gaaacaggtg gctgcaaaag aatactacca gtacctgtac
+     2821 ccgatcgtgg tgcagaagcg tctgaacccg gcggatgata tcatctctga tctgctgaaa
+     2881 tctgaagttg acggcgaaat gtttaccgat gacgaagttg ttcgtaccac tatgctgatt
+     2941 ctgggtgcag gcgtggaaac tacgtcccat ctgctggcta actcctttta cagcctgctg
+     3001 tacgacgaca aagaagtcta ccaggaactg catgagaacc tggacctggt tccacaggct
+     3061 gtggaagaaa tgctgcgttt ccgttttaac ctgatcaaac tggaccgcac cgtaaaagaa
+     3121 gataacgacc tgctgggtgt tgaactgaag gagggtgatt ctgtcgtggt atggatgtct
+     3181 gctgcgaaca tggacgaaga aatgtttgaa gacccattca ccctgaacat ccatcgtcct
+     3241 aacaacaaaa aacacctgac ttttggcaac ggtccgcact tctgtctggg cgctcctctg
+     3301 gctcgtctgg aagcaaagat cgcactgacc gcgtttctga aaaaattcaa acatattgaa
+     3361 gctgttccta gctttcagct ggaagaaaac ctgaccgata gcgcaaccgg ccagacgctg
+     3421 acctctctgc cgctgaaagc aagccgtatg taatcggtca gtttcacctg atttacgtaa
+     3481 aaacccgctt cggcgggttt ttgcttttgg aggggcagaa agatgaatga ctgtctgcag
+     3541 gcttcctcgc tcactgactc gctgcgctcg gtcgttcggc tgcggcgagc ggtatcagct
+     3601 cactcaaagg cggtaat
+//

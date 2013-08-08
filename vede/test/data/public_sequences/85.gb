@@ -1,0 +1,78 @@
+LOCUS       CYP106A2_lineari        1335 bp    DNA     linear   UNA 26-APR-2012
+DEFINITION  .
+ACCESSION   urn.local...1335483017848.4255
+VERSION     urn.local...1335483017848.4255
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     spacer          1302..>1335
+                     /Original_Bases
+                     /modified_by="User"
+                     /label="Spacer"
+     terminator      complement(<1..31)
+                     /label="T7 Terminator"
+     RBS             complement(1272..1301)
+                     /created_by="User"
+                     /label="RBS12032601"
+     CDS             complement(39..1271)
+                     /created_by="User"
+                     /label="CYP106A2"
+     primer_bind     complement(19..78)
+                     /created_by="User"
+                     /label="PR12042504"
+     primer_bind     1..60
+                     /created_by="User"
+                     /label="PR12042502"
+     primer_bind     complement(1276..1301)
+                     /created_by="User"
+                     /label="PR12042501_part"
+     primer_bind     39..60
+                     /created_by="User"
+                     /label="PR12042502_part"
+     primer_bind     complement(19..38)
+                     /created_by="User"
+                     /label="PR12042504_part"
+     primer          complement(1241..1271)
+                     /label="PR12041101"
+     primer          1092..1115
+                     /label="PR12041103"
+     primer          39..60
+                     /label="PR12041102"
+     primer          complement(171..191)
+                     /label="PR12041104"
+     primer_bind     1302..1317
+                     /created_by="User"
+                     /label="PR12042506_part"
+     primer_bind     1258..1317
+                     /created_by="User"
+                     /label="PR12042506"
+     primer_bind     complement(1276..1335)
+                     /created_by="User"
+                     /label="PR12042501"
+ORIGIN      
+        1 aactcagctt cctttcgggc tttgttagca gccggatctt acatacggct tgctttcagc
+       61 ggcagagagg tcagcgtctg gccggttgcg ctatcggtca ggttttcttc cagctgaaag
+      121 ctaggaacag cttcaatatg tttgaatttt ttcagaaacg cggtcagtgc gatctttgct
+      181 tccagacgag ccagaggagc gcccagacag aagtgcggac cgttgccaaa agtcaggtgt
+      241 tttttgttgt taggacgatg gatgttcagg gtgaatgggt cttcaaacat ttcttcgtcc
+      301 atgttcgcag cagacatcca taccacgaca gaatcaccct ccttcagttc aacacccagc
+      361 aggtcgttat cttcttttac ggtgcggtcc agtttgatca ggttaaaacg gaaacgcagc
+      421 atttcttcca cagcctgtgg aaccaggtcc aggttctcat gcagttcctg gtagacttct
+      481 ttgtcgtcgt acagcaggct gtaaaaggag ttagccagca gatgggacgt agtttccacg
+      541 cctgcaccca gaatcagcat agtggtacga acaacttcgt catcggtaaa catttcgccg
+      601 tcaacttcag atttcagcag atcagagatg atatcatccg ccgggttcag acgcttctgc
+      661 accacgatcg ggtacaggta ctggtagtat tcttttgcag ccacctgttt cagcttgtca
+      721 acttcttcct gtttttcgcg gtcgaaaggc agaaacaggg tgtcaaccca ttttttgaac
+      781 agcagacgat ctttagacgg aacacccatc agatcggcca ttacgatgat aggcagcgga
+      841 gaggccaggc ttgcaacaat gtcgatttca gtgccaccgt ccatctggcc aatcagctcg
+      901 tctgcgattt cctggatacg tggttcccag ttctgcaggg aacgcggagt aaacgcggcc
+      961 gccagcaggc tacgacgttt acggtgatcc ggtggatcgg actcagtgat ttggattttt
+     1021 tccggaacgg aaccttcctc gctgtcggta cctacgctga tggtggtacg tttgcgaacg
+     1081 ctgctgaaat gtttgtaatc ggacagaaca cgtttaacgt cttcgtactt aaatacgttc
+     1141 caggtgtcag tgccttcatg gtagcttacc gggtcgtttt ccagcatgcg tttgcaccat
+     1201 gcgtacggag agaattcctc ggtgcgggtt ttaaaacgag tgatttcttt aactgcaata
+     1261 acttctttca tttcttccct ccttatagtg tatacgtgct gttgggctgc aggtcgactc
+     1321 tagaattcga gctcg
+//

@@ -1,0 +1,61 @@
+LOCUS       CYP106A2_order_1         500 bp    DNA     linear   UNA 17-APR-2012
+DEFINITION  part 1-500.
+ACCESSION   urn.local...1334696502170.834
+VERSION     urn.local...1334696502170.834
+KEYWORDS    .
+SOURCE      E. Coli
+  ORGANISM  E. Coli
+            .
+FEATURES             Location/Qualifiers
+     CDS             226..>500
+                     /created_by="User"
+                     /label="CYP106A2"
+     RBS             196..225
+                     /created_by="User"
+                     /label="RBS12032601"
+     gBlock          1..500
+                     /created_by="User"
+                     /label="gBlock 1-500"
+     motif           160..188
+                     /created_by="User"
+                     /label="RNAp binding motif"
+     promoter        141..195
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="R0011(pLac)"
+     spacer          1..140
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBricks left spacer"
+     primer          226..256
+                     /label="PR12041101"
+     primer          complement(382..405)
+                     /label="PR12041103"
+     primer_bind     complement(172..195)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="sRNA primer rev"
+     primer_bind     1..20
+                     /created_by="User"
+                     /label="vf2"
+     protein_bind    141..161
+                     /created_by="User"
+                     /label="LacO"
+     protein_bind    165..183
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="lac1 core operator"
+     primer_bind     complement(<1..40)
+                     /created_by="User"
+                     /label="PR12041701"
+ORIGIN      
+        1 tgccacctga cgtctaagaa accattatta tcatgacatt aacctataaa aataggcgta
+       61 tcacgaggca gaatttcaga taaaaaaaat ccttagcttt cgctaaggat gatttctgga
+      121 attcgcggcc gcttctagag aattgtgagc ggataacaat tgacattgtg agcggataac
+      181 aagatactga gcacacagca cgtatacact ataaggaggg aagaaatgaa agaagttatt
+      241 gcagttaaag aaatcactcg ttttaaaacc cgcaccgagg aattctctcc gtacgcatgg
+      301 tgcaaacgca tgctggaaaa cgacccggta agctaccatg aaggcactga cacctggaac
+      361 gtatttaagt acgaagacgt taaacgtgtt ctgtccgatt acaaacattt cagcagcgtt
+      421 cgcaaacgta ccaccatcag cgtaggtacc gacagcgagg aaggttccgt tccggaaaaa
+      481 atccaaatca ctgagtccga
+//

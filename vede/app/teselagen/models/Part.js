@@ -17,32 +17,33 @@ Ext.define("Teselagen.models.Part", {
         type: "rest",
         reader: {
             type: "json",
-            root: "parts"
+            root: "parts",
+            totalProperty: "total"
         },
         writer: {
             type: "json",
 
-            getRecordData: function(record) {
-                var data = record.getData();
-                var associatedData = record.getAssociatedData();
-
-                var sequenceFile = record.getSequenceFile();
-                if(sequenceFile) {
-                    var sequenceManager = sequenceFile.getSequenceManager();
-                    
-                    if(sequenceManager) {
-                        data.length = sequenceManager.getSequence().toString().length;
-                        var features = sequenceManager.featuresByRange(
-                                            record.get("genbankStartBP"),
-                                            record.get("endBP"));
-                        data.features = [];
-                        features.forEach(function(feature) {
-                            data.features.push(feature.getName());
-                        });
-                    }
-                }
-                return data;
-            }
+            //getRecordData: function(record) {
+            //    var data = record.getData();
+            //    var associatedData = record.getAssociatedData();
+//
+            //    var sequenceFile = record.getSequenceFile();
+            //    if(sequenceFile) {
+            //        var sequenceManager = sequenceFile.getSequenceManager();
+            //        
+            //        if(sequenceManager) {
+            //            data.length = record.get("genbankStartBP") - record.get("endBP");
+            //            var features = sequenceManager.featuresByRange(
+            //                                record.get("genbankStartBP"),
+            //                                record.get("endBP"));
+            //            data.features = [];
+            //            features.forEach(function(feature) {
+            //                data.features.push(feature.getName());
+            //            });
+            //        }
+            //    }
+            //    return data;
+            //}
 
         },
         buildUrl: function(request) {
@@ -57,7 +58,6 @@ Ext.define("Teselagen.models.Part", {
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
             {
                 var url = "parts";
-                delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 

@@ -1,0 +1,107 @@
+LOCUS       32-32                   3039 bp    DNA     circular 
+DEFINITION                    3039 bp    DNA     circular  COUNT      773 a    7
+            94 c    799 g    673 t 
+
+holtz
+
+FEATURES             Location/Qualifiers
+     gene            complement(2208..3002)
+                     /gene="KanR"
+                     /note="GENE GENE encodes nptII (aka AphA, neoR), gives kan 
+                     and n eo re sistance, with native promoter in on AatII and 
+                     SpeI f rom Lu tz vector pZE2PLtetO-1 MCS2 encodes nptII (ak
+                     a AphA, neoR), gives kan and neo re"
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo re
+                     "
+                     /vntifkey="22"
+                     /label="Kan/neoR"
+     CDS             340..1044
+                     /gene="mCherry"
+                     /note="CDS CDS"
+                     /note="CDS"
+                     /codon_start="1"
+     rep_origin      complement(1389..2071)
+                     /gene="ColE1"
+                     /note="REP_ORIGIN REP_ORIGIN"
+                     /note="REP_ORIGIN"
+                     /vntifkey="33"
+                     /label="colE1\origin"
+     misc_feature    115..258
+                     /gene="insulator"
+     terminator      1127..1255
+                     /gene="terminator"
+                     /note="TERMINATOR TERMINATOR"
+                     /note="TERMINATOR"
+                     /vntifkey="21"
+                     /label="dbl\term"
+     terminator      2077..2182
+                     /gene="Terminator"
+                     /note="TERMINATOR TERMINATOR TERMINATOR TERMINATOR"
+                     /note="TERMINATOR"
+                     /vntifkey="43"
+                     /label="T0"
+     terminator      1057..1102
+                     /gene="terminator BBa_B0011"
+                     /note="TERMINATOR TERMINATOR"
+                     /note="TERMINATOR"
+     promoter        277..311
+                     /gene="BioFAB RPL-83"
+                     /note="PROMOTER "
+     misc_feature    312..339
+                     /gene="Bujard 5'-UTR"
+     misc_feature    259..276
+                     /gene="ZFP-3 binding site"
+BASE COUNT      773 a    794 c    799 g    673 t
+ORIGIN
+        1 gatcccctgc gccatcagat ccttggcggc aagaaagcca tccagtttac tttgcagggc
+       61 ttcccaacct taccagaggg cgccccagct ggcaattccg aattcatgag atcttaagta
+      121 agtaagagta tacgtatatc ggctaataac gtattaaggc gcttcggcgc ctttttttat
+      181 gggggtattt tcatcccaat ccacacgtcc aacgcacagc aaacaccacg tcgaccctat
+      241 cagctgcgtg ctttctatga gagggaagga gaggagttga caattaatca tcggctcata
+      301 acctttgtgg aacaattcat taaagaggag aaaggtacca tgcgtaaagg agaagaagat
+      361 aacatggcta tcattaaaga gttcatgcgc ttcaaagttc acatggaggg ttctgttaac
+      421 ggtcacgagt tcgagatcga aggcgaaggc gagggccgtc cgtatgaagg cacccagacc
+      481 gccaaactga aagtgactaa aggcggcccg ctgccttttg cgtgggacat cctgagcccg
+      541 caatttatgt acggttctaa agcgtatgtt aaacacccag cggatatccc ggactatctg
+      601 aagctgtctt ttccggaagg tttcaagtgg gaacgcgtaa tgaattttga agatggtggt
+      661 gtcgtgaccg tcactcagga ctcctccctg caggatggcg agttcatcta taaagttaaa
+      721 ctgcgtggta ctaattttcc atctgatggc ccggtgatgc agaaaaagac gatgggttgg
+      781 gaggcgtcta gcgaacgcat gtatccggaa gatggtgcgc tgaaaggcga aattaaacag
+      841 cgcctgaaac tgaaagatgg cggccattat gacgctgaag tgaaaaccac gtacaaagcc
+      901 aagaaacctg tgcagctgcc tggcgcgtac aatgtgaata ttaaactgga catcacctct
+      961 cataatgaag attatacgat cgtagagcaa tatgagcgcg cggagggtcg tcattctacc
+     1021 ggtggcatgg atgaactata caaataataa ggatctagag aatataaaaa gccagattat
+     1081 taatccggct tttttattat ttggatccta actcgagtaa ggatctccag gcatcaaata
+     1141 aaacgaaagg ctcagtcgaa agactgggcc tttcgtttta tctgttgttt gtcggtgaac
+     1201 gctctctact agagtcacac tggctcacct tcgggtgggc ctttctgcgt ttatacctag
+     1261 ggcgttcggc tgcggcgagc ggtatcagct cactcaaagg cggtaatacg gttatccaca
+     1321 gaatcagggg ataacgcagg aaagaacatg tgagcaaaag gccagcaaaa ggccaggaac
+     1381 cgtaaaaagg ccgcgttgct ggcgtttttc cataggctcc gcccccctga cgagcatcac
+     1441 aaaaatcgac gctcaagtca gaggtggcga aacccgacag gactataaag ataccaggcg
+     1501 tttccccctg gaagctccct cgtgcgctct cctgttccga ccctgccgct taccggatac
+     1561 ctgtccgcct ttctcccttc gggaagcgtg gcgctttctc atagctcacg ctgtaggtat
+     1621 ctcagttcgg tgtaggtcgt tcgctccaag ctgggctgtg tgcacgaacc ccccgttcag
+     1681 cccgaccgct gcgccttatc cggtaactat cgtcttgagt ccaacccggt aagacacgac
+     1741 ttatcgccac tggcagcagc cactggtaac aggattagca gagcgaggta tgtaggcggt
+     1801 gctacagagt tcttgaagtg gtggcctaac tacggctaca ctagaaggac agtatttggt
+     1861 atctgcgctc tgctgaagcc agttaccttc ggaaaaagag ttggtagctc ttgatccggc
+     1921 aaacaaacca ccgctggtag cggtggtttt tttgtttgca agcagcagat tacgcgcaga
+     1981 aaaaaaggat ctcaagaaga tcctttgatc ttttctacgg ggtctgacgc tcagtggaac
+     2041 gaaaactcac gttaagggat tttggtcatg actagtgctt ggattctcac caataaaaaa
+     2101 cgcccggcgg caaccgagcg ttctgaacaa atccagatgg agttctgagg tcattactgg
+     2161 atctatcaac aggagtccaa gcgagctctc gaaccccaga gtcccgctca gaagaactcg
+     2221 tcaagaaggc gatagaaggc gatgcgctgc gaatcgggag cggcgatacc gtaaagcacg
+     2281 aggaagcggt cagcccattc gccgccaagc tcttcagcaa tatcacgggt agccaacgct
+     2341 atgtcctgat agcggtccgc cacacccagc cggccacagt cgatgaatcc agaaaagcgg
+     2401 ccattttcca ccatgatatt cggcaagcag gcatcgccat gggtcacgac gagatcctcg
+     2461 ccgtcgggca tgcgcgcctt gagcctggcg aacagttcgg ctggcgcgag cccctgatgc
+     2521 tcttcgtcca gatcatcctg atcgacaaga ccggcttcca tccgagtacg tgctcgctcg
+     2581 atgcgatgtt tcgcttggtg gtcgaatggg caggtagccg gatcaagcgt atgcagccgc
+     2641 cgcattgcat cagccatgat ggatactttc tcggcaggag caaggtgaga tgacaggaga
+     2701 tcctgccccg gcacttcgcc caatagcagc cagtcccttc ccgcttcagt gacaacgtcg
+     2761 agcacagctg cgcaaggaac gcccgtcgtg gccagccacg atagccgcgc tgcctcgtcc
+     2821 tgcagttcat tcagggcacc ggacaggtcg gtcttgacaa aaagaaccgg gcgcccctgc
+     2881 gctgacagcc ggaacacggc ggcatcagag cagccgattg tctgttgtgc ccagtcatag
+     2941 ccgaatagcc tctccaccca agcggccgga gaacctgcgt gcaatccatc ttgttcaatc
+     3001 atgcgaaacg atcctcatcc tgtctcttga tcagatcat                       
+//

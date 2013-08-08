@@ -1,0 +1,12 @@
+LOCUS       New_DNA                   77 bp ds-DNA     linear       06-FEB-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+ORIGIN
+        1 catgataata atggtttctt agacgtcgat atctggcgaa aatgagacgt tgatcggcac
+       61 gtaagaggtt ccaactt    
+//

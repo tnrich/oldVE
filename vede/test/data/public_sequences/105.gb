@@ -1,0 +1,383 @@
+LOCUS       NM_152594               7255 bp    mRNA    linear   PRI 11-MAY-2012
+DEFINITION  Homo sapiens sprouty-related, EVH1 domain containing 1 (SPRED1),
+            mRNA.
+ACCESSION   NM_152594
+VERSION     NM_152594.2  GI:187169267
+KEYWORDS    .
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 7255)
+  AUTHORS   Zhuang,L., Villiger,P. and Trueb,B.
+  TITLE     Interaction of the receptor FGFRL1 with the negative regulator
+            Spred1
+  JOURNAL   Cell. Signal. 23 (9), 1496-1504 (2011)
+   PUBMED   21616146
+  REMARK    GeneRIF: Interaction of FGFRL1 with Spred1 increases the proportion
+            of the receptor at the plasma membrane.
+REFERENCE   2  (bases 1 to 7255)
+  AUTHORS   Quintanar-Audelo,M., Yusoff,P., Sinniah,S., Chandramouli,S. and
+            Guy,G.R.
+  TITLE     Sprouty-related Ena/vasodilator-stimulated phosphoprotein homology
+            1-domain-containing protein (SPRED1), a tyrosine-protein
+            phosphatase non-receptor type 11 (SHP2) substrate in the
+            Ras/extracellular signal-regulated kinase (ERK) pathway
+  JOURNAL   J. Biol. Chem. 286 (26), 23102-23112 (2011)
+   PUBMED   21531714
+  REMARK    GeneRIF: SPRED1 is a likely substrate of SHP2, whose tyrosine
+            dephosphorylation is required to attenuate the inhibitory action of
+            SPRED1 in the Ras/ERK pathway.
+REFERENCE   3  (bases 1 to 7255)
+  AUTHORS   Laycock-van Spyk,S., Jim,H.P., Thomas,L., Spurlock,G., Fares,L.,
+            Palmer-Smith,S., Kini,U., Saggar,A., Patton,M., Mautner,V.,
+            Pilz,D.T. and Upadhyaya,M.
+  TITLE     Identification of five novel SPRED1 germline mutations in Legius
+            syndrome
+  JOURNAL   Clin. Genet. 80 (1), 93-96 (2011)
+   PUBMED   21649642
+  REMARK    GeneRIF: a cohort of 115 NF1-like patients were screened for SPRED1
+            gene mutations and six mutations were identified. 12 potentially
+            pathogenic SPRED1 mutations have been detected in 200 such NF1-like
+            patients
+REFERENCE   4  (bases 1 to 7255)
+  AUTHORS   Garcia-Dominguez,C.A., Martinez,N., Gragera,T., Perez-Rodriguez,A.,
+            Retana,D., Leon,G., Sanchez,A., Oliva,J.L., Perez-Sala,D. and
+            Rojas,J.M.
+  TITLE     Sprouty2 and Spred1-2 proteins inhibit the activation of the ERK
+            pathway elicited by cyclopentenone prostanoids
+  JOURNAL   PLoS ONE 6 (2), E16787 (2011)
+   PUBMED   21364986
+  REMARK    GeneRIF: Sprouty and Spred proteins are negative regulators of the
+            ERK/Elk-1 pathway activation induced not only by growth-factors,
+            but also by reactive lipidic mediators.
+            Publication Status: Online-Only
+REFERENCE   5  (bases 1 to 7255)
+  AUTHORS   Bailey,S.D., Xie,C., Do,R., Montpetit,A., Diaz,R., Mohan,V.,
+            Keavney,B., Yusuf,S., Gerstein,H.C., Engert,J.C. and Anand,S.
+  CONSRTM   DREAM investigators
+  TITLE     Variation at the NFATC2 locus increases the risk of
+            thiazolidinedione-induced edema in the Diabetes REduction
+            Assessment with ramipril and rosiglitazone Medication (DREAM) study
+  JOURNAL   Diabetes Care 33 (10), 2250-2253 (2010)
+   PUBMED   20628086
+  REMARK    GeneRIF: Observational study of gene-disease association,
+            gene-environment interaction, and pharmacogenomic / toxicogenomic.
+            (HuGE Navigator)
+REFERENCE   6  (bases 1 to 7255)
+  AUTHORS   King,J.A., Straffon,A.F., D'Abaco,G.M., Poon,C.L., I,S.T.,
+            Smith,C.M., Buchert,M., Corcoran,N.M., Hall,N.E., Callus,B.A.,
+            Sarcevic,B., Martin,D., Lock,P. and Hovens,C.M.
+  TITLE     Distinct requirements for the Sprouty domain for functional
+            activity of Spred proteins
+  JOURNAL   Biochem. J. 388 (PT 2), 445-454 (2005)
+   PUBMED   15683364
+  REMARK    GeneRIF: We show here that Spred-1 and Spred-2 appear to have
+            distinct mechanisms whereby they induce their effects, as the
+            Sprouty domain of Spred-1 is not required to block MAPK
+            (mitogen-activated protein kinase) activation, while that of
+            Spred-2 is required.
+REFERENCE   7  (bases 1 to 7255)
+  AUTHORS   Nonami,A., Kato,R., Taniguchi,K., Yoshiga,D., Taketomi,T.,
+            Fukuyama,S., Harada,M., Sasaki,A. and Yoshimura,A.
+  TITLE     Spred-1 negatively regulates interleukin-3-mediated
+            ERK/mitogen-activated protein (MAP) kinase activation in
+            hematopoietic cells
+  JOURNAL   J. Biol. Chem. 279 (50), 52543-52551 (2004)
+   PUBMED   15465815
+REFERENCE   8  (bases 1 to 7255)
+  AUTHORS   Colland,F., Jacq,X., Trouplin,V., Mougin,C., Groizeleau,C.,
+            Hamburger,A., Meil,A., Wojcik,J., Legrain,P. and Gauthier,J.M.
+  TITLE     Functional proteomics mapping of a human signaling pathway
+  JOURNAL   Genome Res. 14 (7), 1324-1332 (2004)
+   PUBMED   15231748
+REFERENCE   9  (bases 1 to 7255)
+  AUTHORS   Kato,R., Nonami,A., Taketomi,T., Wakioka,T., Kuroiwa,A., Matsuda,Y.
+            and Yoshimura,A.
+  TITLE     Molecular cloning of mammalian Spred-3 which suppresses tyrosine
+            kinase-mediated Erk activation
+  JOURNAL   Biochem. Biophys. Res. Commun. 302 (4), 767-772 (2003)
+   PUBMED   12646235
+REFERENCE   10 (bases 1 to 7255)
+  AUTHORS   Wakioka,T., Sasaki,A., Kato,R., Shouda,T., Matsumoto,A.,
+            Miyoshi,K., Tsuneoka,M., Komiya,S., Baron,R. and Yoshimura,A.
+  TITLE     Spred is a Sprouty-related suppressor of Ras signalling
+  JOURNAL   Nature 412 (6847), 647-651 (2001)
+   PUBMED   11493923
+COMMENT     REVIEWED REFSEQ: This record has been curated by NCBI staff. The
+            reference sequence was derived from DA405650.1, AY299089.1 and
+            AC069381.8.
+            This sequence is a reference standard in the RefSeqGene project.
+            On May 1, 2008 this sequence version replaced gi:22749220.
+            
+            Summary: The protein encoded by this gene is a member of the
+            Sprouty family of proteins and is phosphorylated by tyrosine kinase
+            in response to several growth factors. The encoded protein can act
+            as a homodimer or as a heterodimer with SPRED2 to regulate
+            activation of the MAP kinase cascade. Defects in this gene are a
+            cause of neurofibromatosis type 1-like syndrome (NFLS). [provided
+            by RefSeq, Jul 2008].
+            
+            Sequence Note: This RefSeq record was created from transcript and
+            genomic sequence data because no single transcript was available
+            for the full length of the gene. The extent of this transcript is
+            supported by transcript alignments.
+            
+            Publication Note:  This RefSeq record includes a subset of the
+            publications that are available for this gene. Please see the Gene
+            record to access additional publications.
+            COMPLETENESS: complete on the 3' end.
+PRIMARY     REFSEQ_SPAN         PRIMARY_IDENTIFIER PRIMARY_SPAN        COMP
+            1-562               DA405650.1         1-562
+            563-1703            AY299089.1         563-1703
+            1704-7255           AC069381.8         184922-190473
+FEATURES             Location/Qualifiers
+     source          1..7255
+                     /organism="Homo sapiens"
+                     /mol_type="mRNA"
+                     /db_xref="taxon:9606"
+                     /chromosome="15"
+                     /map="15q14"
+     gene            1..7255
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /note="sprouty-related, EVH1 domain containing 1"
+                     /db_xref="GeneID:161742"
+                     /db_xref="HGNC:20249"
+                     /db_xref="HPRD:11601"
+                     /db_xref="MIM:609291"
+     exon            1..367
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=1
+     misc_feature    210..212
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /note="upstream in-frame stop codon"
+     CDS             336..1670
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /note="suppressor of Ras/MAPK activation"
+                     /codon_start=1
+                     /product="sprouty-related, EVH1 domain-containing protein
+                     1"
+                     /protein_id="NP_689807.1"
+                     /db_xref="GI:22749221"
+                     /db_xref="CCDS:CCDS32193.1"
+                     /db_xref="GeneID:161742"
+                     /db_xref="HGNC:20249"
+                     /db_xref="HPRD:11601"
+                     /db_xref="MIM:609291"
+                     /translation="MSEETATSDNDNSYARVRAVVMTRDDSSGGWLPLGGSGLSSVTV
+                     FKVPHQEENGCADFFIRGERLRDKMVVLECMLKKDLIYNKVTPTFHHWKIDDKKFGLT
+                     FQSPADARAFDRGIRRAIEDISQGCPESKNEAEGADDLQANEEDSSSSLVKDHLFQQE
+                     TVVTSEPYRSSNIRPSPFEDLNARRVYMQSQANQITFGQPGLDIQSRSMEYVQRQISK
+                     ECGSLKSQNRVPLKSIRHVSFQDEDEIVRINPRDILIRRYADYRHPDMWKNDLERDDA
+                     DSSIQFSKPDSKKSDYLYSCGDETKLSSPKDSVVFKTQPSSLKIKKSKRRKEDGERSR
+                     CVYCQERFNHEENVRGKCQDAPDPIKRCIYQVSCMLCAESMLYHCMSDSEGDFSDPCS
+                     CDTSDDKFCLRWLALVALSFIVPCMCCYVPLRMCHRCGEACGCCGGKHKAAG"
+     exon            368..542
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=2
+     STS             409..1013
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /standard_name="Spred1"
+                     /db_xref="UniSTS:528299"
+     exon            543..711
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=3
+     exon            712..758
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=4
+     exon            759..917
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=5
+     exon            918..1019
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=6
+     exon            1020..7255
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /inference="alignment:Splign"
+                     /number=7
+     STS             3266..4157
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /standard_name="SPRED1__5300"
+                     /db_xref="UniSTS:463907"
+     polyA_signal    4037..4042
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_site      4058
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     STS             5770..5919
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /standard_name="WI-14940"
+                     /db_xref="UniSTS:5676"
+     STS             5899..6048
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+                     /standard_name="RH104263"
+                     /db_xref="UniSTS:98588"
+     polyA_signal    6083..6088
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_site      6102
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_signal    6108..6113
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_site      6139
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_signal    6440..6445
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_site      6467
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_signal    7232..7237
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+     polyA_site      7255
+                     /gene="SPRED1"
+                     /gene_synonym="hSpred1; NFLS; spred-1"
+ORIGIN      
+        1 agtggctgga ggagcagctc tccagtcagc ctttgcagcc cctctctttt tccctttcca
+       61 ccgggcctcc tcggatccct tggctgggca ctgaggcggg ggaagaggct ggggtcgcca
+      121 cggcggaggt tgctgccgcc acccccctgc gggggtggcc ggggttcccg gctggggggg
+      181 taccgttctg ggtgaggcat ccaccatggt gaggcccctg tgccgctgcc cccgcgcccc
+      241 cccggccgcc gctgcctcct gcccctcggt gctgctgttg ctcccccgcc tgctgttgct
+      301 cctccatctc cagatcggat cacggtgagg gaaagatgag cgaggagacg gcgacttctg
+      361 acaacgataa tagttatgca cgagtgcgag ctgtggtgat gacccgagat gactcaagtg
+      421 gtggatggtt accacttgga gggagtggac taagcagcgt cactgtcttc aaagtccctc
+      481 atcaggaaga gaatggctgt gctgactttt ttatccgtgg agagcgactc agggacaaaa
+      541 tggtggtttt ggaatgtatg cttaaaaaag acctcattta taataaggtc actccaacat
+      601 ttcaccactg gaagattgat gacaagaagt ttggtcttac gtttcaaagt cctgctgatg
+      661 ctagggcttt tgatagaggt atccgaagag ctatagagga tatttctcaa ggatgccccg
+      721 aatcaaaaaa tgaagctgaa ggggcagatg acttacaagc aaatgaagag gattcttcca
+      781 gttctctagt gaaggatcac ctttttcagc aagagacagt tgttaccagt gagccttata
+      841 gaagctcaaa tataagacct tctccctttg aagatctgaa tgccagaaga gtctacatgc
+      901 aaagccaagc caatcagata acatttggtc agccaggctt ggacattcag agcagaagta
+      961 tggaatacgt acagcggcaa atatccaagg aatgtggaag cctaaagtcc caaaataggg
+     1021 tccctttgaa atcaatcaga catgtcagct ttcaagatga ggatgagatt gtcagaataa
+     1081 accctcgaga tatcttaata cgtcgctatg cagactacag acatcctgac atgtggaaaa
+     1141 atgacttgga aagagatgat gctgattcca gtattcagtt ttctaaacca gacagtaaaa
+     1201 aatcagacta tctgtactct tgtggggatg agactaagtt aagttcaccc aaagactctg
+     1261 tggtatttaa gacgcagcct tcctcattaa aaattaagaa gtcaaaacga agaaaagagg
+     1321 atggtgaacg ttctcgctgc gtatactgcc aggaaaggtt taatcatgaa gaaaatgtta
+     1381 ggggaaaatg tcaggatgct ccagacccta ttaaaagatg catatatcaa gttagttgca
+     1441 tgctctgtgc agagagcatg ttgtatcatt gtatgtcaga ctcagaggga gatttttctg
+     1501 atccctgttc gtgtgacact agcgacgaca agttctgctt gcgatggtta gccctggtag
+     1561 ctttgtcttt cattgtacca tgtatgtgct gctacgtccc tttgagaatg tgccatcgct
+     1621 gtggtgaggc atgtggttgc tgtggtggga aacataaagc tgctggatga aatggtccag
+     1681 tgccaaaatg agcttaaaat ctttgtttcc aggaattagc taacttggat ttgtggaagc
+     1741 ttttggcaag caatatggaa tcttgcctgg tatcattgag cccacacatg gaggaagcag
+     1801 aactcatcag ttcttggcgt ttcacgccat gcctaacttt tcccttgagt gcatggcatg
+     1861 ttttgttaca ggttgtagag tatttgcaga aggaaaccat ttctggttat ttggctataa
+     1921 aaagtcagca taaaatatga tccaactaaa agggattaat ttttggcatt tttgtatatt
+     1981 tatgcattag gtgatgggac ttttaaaggt ttgaatttat taggacacga actaaaaata
+     2041 aaagtgcact aggggacagt tgatttcaat ctaagaaaag ttaacacttg ggaattacaa
+     2101 gaagtaaaac aagtgcaact aaatcattta ttagttgttt tttgaaagca gttttatgta
+     2161 taaataacaa atgtttatat ttaactaaat gtaaggtacg aattattaca tattaaactt
+     2221 ttcttcccct tcctagttct gaagtagata tatatatata tatatctact gtcacattcc
+     2281 atatattttg aatatttaac tcatctagtt aataatgttt ttattccatg cgaatgattt
+     2341 gatattttca tccttatttc tctttggcta caatttatat tgagttatat ctgtacattc
+     2401 tggtaatcta aaatccttaa aaatactcta atagccttga gtgaccaact ttttttttaa
+     2461 agcacagatg taattgtcta atgttctgat gggaacgtaa cacttatttt tatataaaaa
+     2521 gagactgagt aaacaaacat tatagaaaaa aagtgaagtt ttttagttgt tttttgtggt
+     2581 attcaaccag caagttgttt tctttcagag tttcctcctt caaaaagtta tattgcattt
+     2641 acaaatgttt tacaaggcag aaagtttgac tggatagtta gtgtaaaagc ttcatgttga
+     2701 gatcttcacg tatcattctg ctaaaccaga atatgttcag ctgtgttact aatttttcag
+     2761 cttaatcctc agtgcttatt atttacataa caataacttt ttatcagtta cattttattt
+     2821 ttatttaaac tggccaaaag caaaattatt ttatgttaaa atgtgtgcta aactatccca
+     2881 ggaaagtatt taatccaaca ttgtaaatga agtatcttgt acatataaat ttatttcttt
+     2941 tgcagagcat tatattactg gatgtttaat ttacaaaata gttgggtaaa tgttccaaca
+     3001 aactttaaag taccttgaag tcaaattgtc tgtttttgtt ttgttgttgt tgttgttgtt
+     3061 ttcttaagtg ttacattaaa actctaacca aggaaagggt tctttaagaa cattccctta
+     3121 gagggataaa gttgagaagt gtgccttttt tttaatggct tgaagtttca gaggtgataa
+     3181 aaattaaaat cacactacta tttgaagctc attttctatg caggttttta aacgtcattt
+     3241 atgtatcatt ctttttatat atcacactta agcttgtgtt agcttttttc ttttgcccca
+     3301 gatcaaactg aacaatgtat ataacactat ctgtctgtaa aatacttttt ttaagaaagc
+     3361 atttatattt atatgacagc ttgaactgac aacattgtgt atatagatca tcttgaagta
+     3421 ttatttcaca ttgaaaagaa gaaaatatat tgataactat agatgttatg aagaagaggg
+     3481 tatttctagt tttgtactaa aaatcaattg gatgaactaa atccaaaaca tgacactgta
+     3541 ggcagcagtt ttaagtctta tttttactgt ttatatattt gaatgctgct acaacagatg
+     3601 atcttcatcc ctgaagtttt cagctaaact tggtttccta gaatagactg ttaactttca
+     3661 aaatttttat tggtgaaatg gaaatactgt ttttccttgt gaatgaattt tcatatttgt
+     3721 aagtgctaag tttataattc aggtttgatc aaggtgtgaa taactgaaga aaataacttg
+     3781 ctggctatat aggaaaatgc tgtggaaatg aactgtgtat atacttctgg gaggaacaaa
+     3841 tttaatcatt tcttctgtta agcactaatc agtatagtgc aactcctggt tctgtactgt
+     3901 attttatatg caacatatat gctttaatat tttaatgttt gtgcattaat attttcaatt
+     3961 tgtttaacca ctttgctgct aagattttgc cgtcccattc ccattttttc ctttacaatt
+     4021 ttaaacaagt ttcttcatta aaaactatgg tgatgaaatg gtttttattt taccttggat
+     4081 ctttatagtt aacataccca gtttcttaat cagtctacaa gactaactga tgatataatg
+     4141 ttctctgaat ccctatatgg aaattttctt ttgagtaaat gagaattcct ttgtgaaagc
+     4201 aaatgggtag tttaaatcac tgattcttaa acatgtgtat aggcaccttc aggaacattt
+     4261 tctcattctc tgtacagatt cggcactgcc aattggcttt tcctctaaaa cttttctttg
+     4321 tttttatctg atataagcag atggctcaag acaactgctt gagtaatagt attgaaaatg
+     4381 gaatcatcta gacggcatga caagcaagac tggtctgatg aacttgttca gaattgataa
+     4441 ttcttaaata tttctcttgg cttcaaaagg gacatcattt gatttctgaa gaagtatgtc
+     4501 gtgtggagct tcagcaccac ctactggatg atttccaggc cagagacatg agatggcaat
+     4561 agggatctga cagggttcat cactactacc attaaagggc tatttatgtg gtgaccacct
+     4621 ctaccaggga aaccaggaat aagaactgtc tcaaaggaat tgtaaaatgg ttatttacct
+     4681 aatgtgtctt gttggcttgc tgaaagattt taagcacttt tttcttacat atcctgtttt
+     4741 aaaatatttg ttgatatttg ggactggcaa tcaaacttaa tggatgtact gaggcattta
+     4801 tagaaccagt tgctttaact ctcaaaagcc attaccaaaa tggtattttt ttcctccttc
+     4861 cgccagtcag ggagaatttt taaaaataat aatcaaaaca tgaaaaaaca taatcacacc
+     4921 tgtattttat catgacagct tcagagagtg tgtgtgtacg tttttctctc ttttatttga
+     4981 gacggagttt cactcttgtt gcccaggctg gagtgcaatg gtgcgatctc agctcactgc
+     5041 aacctccgcc tcctgggttc aagcgattct cctgcctcag cctcccaagt agctgggatt
+     5101 acaggcaccc accaccatgc ccagctaagt tttggtattt tagtagagat ggggtttcac
+     5161 catgttggcc aggctggtct tgaactcctg accttaggtg atccacccac ctcggcctcc
+     5221 caaagtgctg ggattacagg catgagctac tgcgcccagc cgtgtgtatg tttctgaaat
+     5281 gatgatgggg tggggttaaa atctaaaggg aaaaacttga aactacctat tttcattggt
+     5341 tattcagcag tgcctaaaat gagcttttga agtaatgtaa atgcactttc aattcatgtg
+     5401 tatagtgcca tctgatatct tgggtaagtc ttgctttttc ttttcttttt cctctcccct
+     5461 gcccccttaa ttaaatggca cggaaatgtt tcttaatatg cacgtgagtc tccagagtac
+     5521 aggaaatgtg ctttcctcta aatggtcaat gtaaagaatc ttaaggatat ttcttgtgtt
+     5581 gaaatttaca ttcgattttg tgattacact tggaagtatg tgttaaattg ggtttttaat
+     5641 tgtagcccaa aggtgcatta agcaagtgta acattttttc cacataaaac ttagaaaact
+     5701 ttagttacct gaaaagcaag gattctttac taattattat gctcattctt gatttgactt
+     5761 ccatgttcac acttcaaagt gtaagaggaa gcactagaaa ctggcattat tgttgcacta
+     5821 aaaaagtcta taaatcataa tagcaccatg aggtgttttg caatgagaca aacatgaaga
+     5881 atgaatttct ttaagagaga aacacaaccg gaggtgattt atataaacca aaagaaaaaa
+     5941 aaaggcttta aggtattagg tactgtttgc ctagcagcca ggtggttata aaagattcat
+     6001 atgctttggt acactgataa atgttagcca ttattcctga aagcttctta aattgcatca
+     6061 gttgttttga aattttttca agaataaact agttgaaaag tctttgtatt aaaaatacac
+     6121 atagattttt gtgaacattt ccagtgtgta gtgtcgtttg ctttctattt ctgacctcaa
+     6181 aagtgcctca cttgtatatt atttccatta aaagcttgac tgcattcttt ctaatgaaca
+     6241 atgaaaaact gtttaactca tgtcataatg tgtctcctca gatatagtta actagcttga
+     6301 tagttttgag tatataatgt aaataataca ttataagttt gtaaccattt ctgttacttc
+     6361 atacccgtgt aattggacat agcagatgat tatcataaga atttgtttta atggtttttt
+     6421 tccctcctgg aattacctga ttaaacctgt catgaattat aaaaggactt tttcttattc
+     6481 tcctagagct tatcaaatta tcacataaga gataattact ggaggagaaa gtaaaaatgg
+     6541 aagcttttga taattagctc tgttctttaa aagtatactt ttaaactgaa agttcacata
+     6601 tagttcatct taataacata tttattcatc cttaattgta ttcagatttt tttttaagtc
+     6661 tctaagctaa taatgttata tttattggtt tggtaacatg ttgcagctaa gctaatgacc
+     6721 ttaagtggca attgtttaac ccaggactac tgattttttt atattcaagt cagtttcatc
+     6781 gttttactta actcgccata taaccaaaaa taacgaataa tctaaaggaa aggttattag
+     6841 gacagtaata aaaaattata gtgtatctca acactagaat aagttggatt actatattat
+     6901 agtttatttg aaaaatcaag gagtaactgt atctttacca ttaattatga aatgtagtct
+     6961 catgtgctta tttacaggtt tttcagaatt tgctttacat tcttcacatc aagttaatac
+     7021 ccacaagtaa gtagaatagc ttttataaca aggaaattga aactagggtt ctagcttggc
+     7081 tatcaatata agtgtcatgc acatagtgct ccttaaagaa aaagacatcg acatcaatgg
+     7141 tatgaaagct gtagtcactc tttaaattga actgctctaa gatttgcagt tttagtgaga
+     7201 tctgaaatga tggttcaaaa aatacattca taataaaagt cttaacaaaa tcaca
+//

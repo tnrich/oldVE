@@ -1,0 +1,56 @@
+LOCUS       tetR_spacer              893 bp ds-DNA     linear       02-MAY-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     misc_feature    1..34
+                     /label=sRBS (50,000)
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     terminator      662..766
+                     /label=T1
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     468..488
+                     /label=JT461
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             35..661
+                     /label=tetR
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     complement(104..127)
+                     /label=SR360
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 ccagccagag aaacactctt taacaggggg tagtatgatg tctcgtttag ataaaagtaa
+       61 agtgattaac agcgcattag agctgcttaa tgaggtcgga atcgaaggtt taacaacccg
+      121 taaactcgcc cagaagctag gtgtagagca gcctacattg tattggcatg taaaaaataa
+      181 gcgggctttg ctcgacgcct tagccattga gatgttagat aggcaccata ctcacttttg
+      241 ccctttagaa ggggaaagct ggcaagattt tttacgtaat aacgctaaaa gttttagatg
+      301 tgctttacta agtcatcgcg atggagcaaa agtacattta ggtacacggc ctacagaaaa
+      361 acagtatgaa actctcgaaa atcaattagc ctttttatgc caacaaggtt tttcactaga
+      421 gaatgcatta tatgcactca gcgcagtggg gcattttact ttaggttgcg tattggaaga
+      481 tcaagagcat caagtcgcta aagaagaaag ggaaacacct actactgata gtatgccgcc
+      541 attattacga caagctatcg aattatttga tcaccaaggt gcagagccag ccttcttatt
+      601 cggccttgaa ttgatcatat gcggattaga aaaacaactt aaatgtgaaa gtgggtctta
+      661 aggcatcaaa taaaacgaaa ggctcagtcg aaagactggg cctttcgttt tatctgttgt
+      721 ttgtcggtga acgctctcct gagtaggaca aatccgccgc cctagaccta gggcgttcgg
+      781 ctgcggcgag cggtatcagc tcactcaaag gcggtaatac ggttatccac agaatcaggg
+      841 gataacgcat gcaagaacat gtgagcaaaa ggccagcaaa aggccaggaa ccg
+//

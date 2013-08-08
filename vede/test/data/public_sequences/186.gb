@@ -1,0 +1,626 @@
+LOCUS       chb_original            6128 bp ds-DNA     linear       26-SEP-2012
+DEFINITION  Escherichia coli str. K-12 substr. MG1655, complete genome.
+ACCESSION   U00096 REGION: complement(1813688..1820983)
+VERSION     U00096.2  GI:48994873
+DBLINK      Project: 225
+KEYWORDS    .
+SOURCE      Escherichia coli str. K-12 substr. MG1655
+  ORGANISM  Escherichia coli str. K-12 substr. MG1655 Bacteria; Proteobacteria;
+            Gammaproteobacteria; Enterobacteriales; Enterobacteriaceae;
+            Escherichia.
+REFERENCE   1  (bases 1 to 7296)
+  AUTHORS   Blattner,F.R., Plunkett,G. III, Bloch,C.A., Perna,N.T., Burland,V.,
+            Riley,M., Collado-Vides,J., Glasner,J.D., Rode,C.K., Mayhew,G.F.,
+            Gregor,J., Davis,N.W., Kirkpatrick,H.A., Goeden,M.A., Rose,D.J.,
+            Mau,B. and Shao,Y.
+  TITLE     The complete genome sequence of Escherichia coli K-12
+  JOURNAL   Science 277 (5331), 1453-1474 (1997)
+   PUBMED   9278503
+REFERENCE   2  (bases 1 to 7296)
+  AUTHORS   Riley,M., Abe,T., Arnaud,M.B., Berlyn,M.K., Blattner,F.R.,
+            Chaudhuri,R.R., Glasner,J.D., Horiuchi,T., Keseler,I.M., Kosuge,T.,
+            Mori,H., Perna,N.T., Plunkett,G. III, Rudd,K.E., Serres,M.H.,
+            Thomas,G.H., Thomson,N.R., Wishart,D. and Wanner,B.L.
+  TITLE     Escherichia coli K-12: a cooperatively developed annotation
+            snapshot--2005
+  JOURNAL   Nucleic Acids Res. 34 (1), 1-9 (2006)
+   PUBMED   16397293
+  REMARK    Publication Status: Online-Only
+REFERENCE   3  (bases 1 to 7296)
+  AUTHORS   Arnaud,M., Berlyn,M.K.B., Blattner,F.R., Galperin,M.Y.,
+            Glasner,J.D., Horiuchi,T., Kosuge,T., Mori,H., Perna,N.T.,
+            Plunkett,G. III, Riley,M., Rudd,K.E., Serres,M.H., Thomas,G.H. and
+            Wanner,B.L.
+  TITLE     Workshop on Annotation of Escherichia coli K-12
+  JOURNAL   Unpublished
+  REMARK    Woods Hole, Mass., on 14-18 November 2003 (sequence corrections)
+REFERENCE   4  (bases 1 to 7296)
+  AUTHORS   Glasner,J.D., Perna,N.T., Plunkett,G. III, Anderson,B.D.,
+            Bockhorst,J., Hu,J.C., Riley,M., Rudd,K.E. and Serres,M.H.
+  TITLE     ASAP: Escherichia coli K-12 strain MG1655 version m56
+  JOURNAL   Unpublished
+  REMARK    ASAP download 10 June 2004 (annotation updates)
+REFERENCE   5  (bases 1 to 7296)
+  AUTHORS   Hayashi,K., Morooka,N., Mori,H. and Horiuchi,T.
+  TITLE     A more accurate sequence comparison between genomes of Escherichia
+            coli K12 W3110 and MG1655 strains
+  JOURNAL   Unpublished
+  REMARK    GenBank accessions AG613214 to AG613378 (sequence corrections)
+REFERENCE   6  (bases 1 to 7296)
+  AUTHORS   Perna,N.T.
+  TITLE     Escherichia coli K-12 MG1655 yqiK-rfaE intergenic region, genomic
+            sequence correction
+  JOURNAL   Unpublished
+  REMARK    GenBank accession AY605712 (sequence corrections)
+REFERENCE   7  (bases 1 to 7296)
+  AUTHORS   Rudd,K.E.
+  TITLE     A manual approach to accurate translation start site annotation: an
+            E. coli K-12 case study
+  JOURNAL   Unpublished
+REFERENCE   8  (bases 1 to 7296)
+  AUTHORS   Blattner,F.R. and Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (16-JAN-1997) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   9  (bases 1 to 7296)
+  AUTHORS   Blattner,F.R. and Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (02-SEP-1997) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   10 (bases 1 to 7296)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-OCT-1998) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   11 (bases 1 to 7296)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-JUN-2004) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+  REMARK    Sequence update by submitter
+REFERENCE   12 (bases 1 to 7296)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-FEB-2006) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+  REMARK    Protein updates by submitter
+REFERENCE   13 (bases 1 to 7296)
+  AUTHORS   Rudd,K.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (24-APR-2007) Department of Biochemistry and Molecular
+            Biology, University of Miami Miller School of Medicine, 118 Gautier
+            Bldg., Miami, FL 33136, USA
+  REMARK    Annotation update from ecogene.org as a multi-database
+            collaboration
+REFERENCE   14 (bases 1 to 7296)
+  AUTHORS   Rudd,K.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (01-SEP-2011) Department of Biochemistry and Molecular
+            Biology, University of Miami Miller School of Medicine, 118 Gautier
+            Bldg., Miami, FL 33136, USA
+  REMARK    Annotation update from ecogene.org as a multi-database
+            collaboration
+COMMENT     On or before Jun 21, 2004 this sequence version
+            replacedgi:1786181,gi:1786192, gi:2367095, gi:1786217,
+            gi:1786230,gi:1786240,gi:1786250, gi:1786262, gi:1786283,
+            gi:1786298,gi:1786306,gi:1786315, gi:1786327, gi:1786339,
+            gi:1786348,gi:1786358,gi:1786370, gi:1786383, gi:1786395,
+            gi:1786402,gi:1786415,gi:2367098, gi:2367099, gi:1786454,
+            gi:1786465,gi:2367103,gi:2367108, gi:1786501, gi:1786510,
+            gi:1786520,gi:1786532,gi:1786542, gi:1786554, gi:1786568,
+            gi:1786580,gi:1786596,gi:1786603, gi:1786614, gi:1786628,
+            gi:1786639,gi:1786649,gi:1786660, gi:1786671, gi:1786683,
+            gi:1786692,gi:1786705,gi:1786716, gi:1786728, gi:1786739,
+            gi:1786751,gi:1786766,gi:1786782, gi:1786790, gi:1786800,
+            gi:1786808,gi:1786819,gi:1786836, gi:1786849, gi:1786862,
+            gi:1786875,gi:1786888,gi:1786896, gi:1786910, gi:1786920,
+            gi:1786934,gi:1786947,gi:1786955, gi:1786967, gi:1786978,
+            gi:1786988,gi:1786998,gi:1787015, gi:1787025, gi:1787036,
+            gi:1787047,gi:1787058,gi:1787070, gi:1787084, gi:1787097,
+            gi:1787106,gi:1787115,gi:1787125, gi:1787134, gi:1787148,
+            gi:1787156,gi:1787169,gi:1787180, gi:1787189, gi:1787202,
+            gi:2367111,gi:2367113,gi:1787233, gi:1787248, gi:1787256,
+            gi:1787265,gi:1787282,gi:1787293, gi:1787308, gi:1787322,
+            gi:1787332,gi:1787345,gi:1787358, gi:1787371, gi:1787382,
+            gi:1787405,gi:1787417,gi:1787434, gi:1787444, gi:1787453,
+            gi:1787467,gi:1787476,gi:1787486, gi:1787496, gi:1787509,
+            gi:1787523,gi:2367115,gi:1787543, gi:2367117, gi:1787566,
+            gi:1787578,gi:1787588,gi:1787600, gi:1787613, gi:1787633,
+            gi:1787643,gi:1787652,gi:1787665, gi:1787673, gi:1787682,
+            gi:1787695,gi:1787706,gi:1787720, gi:1787730, gi:1787742,
+            gi:1787752,gi:1787764,gi:1787773, gi:1787783, gi:1787790,
+            gi:1787801,gi:1787814,gi:2367119, gi:1787841, gi:1787862,
+            gi:1787875,gi:1787888,gi:1787898, gi:2367121, gi:1787921,
+            gi:1787935,gi:1787945,gi:1787955, gi:1787966, gi:1787978,
+            gi:2367122,gi:1787997,gi:1788011, gi:1788022, gi:1788033,
+            gi:1788045,gi:1788058,gi:1788067, gi:1788078, gi:1788089,
+            gi:1788106,gi:1788117,gi:1788129, gi:1788139, gi:1788154,
+            gi:1788163,gi:1788179,gi:1788189, gi:1788200, gi:1788214,
+            gi:1788229,gi:1788241,gi:1788257, gi:2367124, gi:1788285,
+            gi:2367125,gi:1788298,gi:1788310, gi:2367127, gi:1788338,
+            gi:1788354,gi:1788373,gi:1788382, gi:1788395, gi:1788413,
+            gi:1788425,gi:2367129,gi:1788447, gi:1788456, gi:1788470,
+            gi:1788479,gi:1788489,gi:1788498, gi:1788508, gi:1788520,
+            gi:2367131,gi:1788547,gi:1788555, gi:2367132, gi:1788570,
+            gi:1788582,gi:1788594,gi:1788605, gi:1788623, gi:1788634,
+            gi:1788647,gi:1788659,gi:1788672, gi:1788684, gi:1788694,
+            gi:1788709,gi:1788718,gi:1788731, gi:2367135, gi:2367137,
+            gi:1788763,gi:1788775,gi:1788789, gi:1788805, gi:1788813,
+            gi:1788821,gi:1788839,gi:1788850, gi:1788862, gi:1788870,
+            gi:1788883,gi:1788899,gi:1788907, gi:2367139, gi:1788927,
+            gi:1788939,gi:2367141,gi:2367142, gi:1788975, gi:2367143,
+            gi:2367147,gi:1789011,gi:1789024, gi:1789037, gi:2367149,
+            gi:2367151,gi:2367153,gi:2367155, gi:2367156, gi:1789110,
+            gi:2367157,gi:2367160,gi:1789143, gi:1789153, gi:2367162,
+            gi:2367163,gi:1789185,gi:1789195, gi:2367165, gi:2367168,
+            gi:2367170,gi:1789239,gi:2367171, gi:2367173, gi:1789270,
+            gi:1789282,gi:2367176,gi:2367178, gi:1789319, gi:2367179,
+            gi:1789344,gi:2367181,gi:2367182, gi:2367184, gi:2367186,
+            gi:1789405,gi:2367187,gi:1789431, gi:1789441, gi:1789451,
+            gi:2367189,gi:2367191,gi:2367194, gi:1789499, gi:2367197,
+            gi:1789524,gi:1789536,gi:2367199, gi:1789562, gi:2367201,
+            gi:2367203,gi:1789607,gi:1789619, gi:2367205, gi:2367207,
+            gi:1789659,gi:2367209,gi:2367211, gi:1789694, gi:1789718,
+            gi:1789734,gi:2367213,gi:1789758, gi:2367215, gi:1789783,
+            gi:1789798,gi:2367219,gi:2367220, gi:2367222, gi:2367227,
+            gi:1789840,gi:1789854,gi:1789868, gi:1789880, gi:2367230,
+            gi:2367232,gi:1789910,gi:1789919, gi:1789931, gi:2367235,
+            gi:2367238,gi:1789957,gi:2367241, gi:1789977, gi:1789989,
+            gi:2367244,gi:2367246,gi:2367249, gi:2367251, gi:1790036,
+            gi:2367252,gi:1790063,gi:2367253, gi:2367255, gi:2367258,
+            gi:1790105,gi:2367261,gi:2367266, gi:1790142, gi:2367269,
+            gi:1790166,gi:2367272,gi:1790188, gi:2367276, gi:2367278,
+            gi:2367282,gi:2367291,gi:2367294, gi:2367299, gi:2367306,
+            gi:2367315,gi:2367318,gi:1790295, gi:2367320, gi:2367324,
+            gi:2367326,gi:2367328,gi:1790356, gi:1790374, gi:1790385,
+            gi:2367332,gi:1790404,gi:2367333, gi:2367336, gi:1790440,
+            gi:1790448,gi:1790456,gi:2367338, gi:2367339, gi:2367340,
+            gi:2367344,gi:2367346,gi:2367349, gi:2367351, gi:2367352,
+            gi:1790563,gi:1790574,gi:1790582, gi:2367354, gi:1790607,
+            gi:2367356,gi:2367357,gi:1790649, gi:2367360, gi:1790670,
+            gi:2367361,gi:2367366,gi:1790711, gi:2367368, gi:1790732,
+            gi:2367369,gi:2367372,gi:2367374, gi:1790777, gi:1790789,
+            gi:2367375,gi:2367377,gi:2367380, gi:2367382, gi:2367383,
+            gi:1790858,gi:6626251.CurrentU00096 annotation updates are derived
+            fromEcoGenehttp://ecogene.org. Suggestions for updates can be sent
+            toDr.Kenneth Rudd (krudd@miami.edu). These updates are
+            beinggeneratedfrom a collaboration that also includes ASAP/ERIC,
+            theColi GeneticStock Center, EcoliHub, EcoCyc, RegulonDB
+            andUniProtKB/Swiss-Prot.
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     gene            1..339
+                     /gene="osmE"
+                     /locus_tag="b1739"
+                     /gene_synonym="anr"
+                     /gene_synonym="ECK1737"
+                     /gene_synonym="JW1728"
+                     /db_xref="EcoGene:EG10044"
+                     /label=osmE
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             1..339
+                     /gene="osmE"
+                     /locus_tag="b1739"
+                     /gene_synonym="anr"
+                     /gene_synonym="ECK1737"
+                     /gene_synonym="JW1728"
+                     /function="regulator; Global regulatory functions"
+                     /note="activator of ntrL gene; GO_component: GO:0005737 -
+                     cytoplasm; GO_function: GO:0016563 - transcription
+                     activator activity; GO_process: GO:0006350 -
+                     transcription; GO_process: GO:0006970 - response to
+                     osmotic stress"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="DNA-binding transcriptional activator"
+                     /protein_id="AAC74809.1"
+                     /db_xref="GI:1788035"
+                     /db_xref="ASAP:ABE-0005799"
+                     /db_xref="UniProtKB/Swiss-Prot:P0ADB1"
+                     /db_xref="EcoGene:EG10044"
+                     /translation="MNKNMAGILSAAAVLTMLAGCTAYDRTKDQFVQPVVKDVKKGMS
+                     RAQVAQIAGKPSSEVSMIHARGTCQTYILGQRDGKAETYFVALDDTGHVINSGYQTCA
+                     EYDTDPQAAK"
+                     /label=DNA-binding transcriptional activator
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            638..958
+                     /gene="chbB"
+                     /locus_tag="b1738"
+                     /gene_synonym="celA"
+                     /gene_synonym="ECK1736"
+                     /gene_synonym="JW1727"
+                     /db_xref="EcoGene:EG10140"
+                     /label=chbB
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             638..958
+                     /gene="chbB"
+                     /locus_tag="b1738"
+                     /gene_synonym="celA"
+                     /gene_synonym="ECK1736"
+                     /gene_synonym="JW1727"
+                     /EC_number="2.7.1.69"
+                     /function="enzyme; Transport of small molecules:
+                     Carbohydrates, organic acids, alcohols"
+                     /note="PTS family enzyme IIB, cellobiose/arbutin/salicin
+                     sugar-specific; GO_process: GO:0016052 - carbohydrate
+                     catabolic process"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="N,N'-diacetylchitobiose-specific enzyme IIB
+                     component of PTS"
+                     /protein_id="AAC74808.1"
+                     /db_xref="GI:1788034"
+                     /db_xref="ASAP:ABE-0005797"
+                     /db_xref="UniProtKB/Swiss-Prot:P69795"
+                     /db_xref="EcoGene:EG10140"
+                     /translation="MEKKHIYLFCSAGMSTSLLVSKMRAQAEKYEVPVIIEAFPETLA
+                     GEKGQNADVVLLGPQIAYMLPEIQRLLPNKPVEVIDSLLYGKVDGLGVLKAAVAAIKK
+                     AAAN"
+                     /label=N,N'-diacetylchitobiose-specific enzyme IIB compon
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            1043..2401
+                     /gene="chbC"
+                     /locus_tag="b1737"
+                     /gene_synonym="celB"
+                     /gene_synonym="ECK1735"
+                     /gene_synonym="JW1726"
+                     /db_xref="EcoGene:EG10141"
+                     /label=chbC
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             1043..2401
+                     /gene="chbC"
+                     /locus_tag="b1737"
+                     /gene_synonym="celB"
+                     /gene_synonym="ECK1735"
+                     /gene_synonym="JW1726"
+                     /EC_number="2.7.1.69"
+                     /function="enzyme; Transport of small molecules:
+                     Carbohydrates, organic acids, alcohols"
+                     /note="PEP-dependent phosphotransferase enzyme II for
+                     cellobiose, arbutin, and salicin; GO_component: GO:0009274
+                     - peptidoglycan-based cell wall; GO_component: GO:0019866
+                     - organelle inner membrane; GO_process: GO:0016052 -
+                     carbohydrate catabolic process"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="N,N'-diacetylchitobiose-specific enzyme IIC
+                     component of PTS"
+                     /protein_id="AAC74807.1"
+                     /db_xref="GI:1788032"
+                     /db_xref="ASAP:ABE-0005795"
+                     /db_xref="UniProtKB/Swiss-Prot:P17334"
+                     /db_xref="EcoGene:EG10141"
+                     /translation="MSNVIASLEKVLLPFAVKIGKQPHVNAIKNGFIRLMPLTLAGAM
+                     FVLINNVFLSFGEGSFFYSLGIRLDASTIETLNGLKGIGGNVYNGTLGIMSLMAPFFI
+                     GMALAEERKVDALAAGLLSVAAFMTVTPYSVGEAYAVGANWLGGANIISGIIIGLVVA
+                     EMFTFIVRRNWVIKLPDSVPASVSRSFSALIPGFIILSVMGIIAWALNTWGTNFHQII
+                     MDTISTPLASLGSVVGWAYVIFVPLLWFFGIHGALALTALDNGIMTPWALENIATYQQ
+                     YGSVEAALAAGKTFHIWAKPMLDSFIFLGGSGATLGLILAIFIASRRADYRQVAKLAL
+                     PSGIFQINEPILFGLPIIMNPVMFIPFVLVQPILAAITLAAYYMGIIPPVTNIAPWTM
+                     PTGLGAFFNTNGSVAALLVALFNLGIATLIYLPFVVVANKAQNAIDKEESEEDIANAL
+                     KF"
+                     /label=N,N'-diacetylchitobiose-specific enzyme IIC compon
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            2452..2802
+                     /gene="chbA"
+                     /locus_tag="b1736"
+                     /gene_synonym="celC"
+                     /gene_synonym="ECK1734"
+                     /gene_synonym="JW1725"
+                     /db_xref="EcoGene:EG10142"
+                     /label=chbA
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             2452..2802
+                     /gene="chbA"
+                     /locus_tag="b1736"
+                     /gene_synonym="celC"
+                     /gene_synonym="ECK1734"
+                     /gene_synonym="JW1725"
+                     /EC_number="2.7.1.69"
+                     /function="enzyme; Transport of small molecules:
+                     Carbohydrates, organic acids, alcohols"
+                     /note="PTS family enzyme IIA, cellobiose/arbutin/salicin
+                     sugar-specific; GO_process: GO:0016052 - carbohydrate
+                     catabolic process"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="N,N'-diacetylchitobiose-specific enzyme IIA
+                     component of PTS"
+                     /protein_id="AAC74806.1"
+                     /db_xref="GI:1788031"
+                     /db_xref="ASAP:ABE-0005792"
+                     /db_xref="UniProtKB/Swiss-Prot:P69791"
+                     /db_xref="EcoGene:EG10142"
+                     /translation="MMDLDNIPDTQTEAEELEEVVMGLIINSGQARSLAYAALKQAKQ
+                     GDFAAAKAMMDQSRMALNEAHLVQTKLIEGDAGEGKMKVSLVLVHAQDHLMTSMLARE
+                     LITELIELHEKLKA"
+                     /label=N,N'-diacetylchitobiose-specific enzyme IIA compon
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            2810..3652
+                     /gene="chbR"
+                     /locus_tag="b1735"
+                     /gene_synonym="celD"
+                     /gene_synonym="ECK1733"
+                     /gene_synonym="JW1724"
+                     /db_xref="EcoGene:EG10143"
+                     /label=chbR
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             2810..3652
+                     /gene="chbR"
+                     /locus_tag="b1735"
+                     /gene_synonym="celD"
+                     /gene_synonym="ECK1733"
+                     /gene_synonym="JW1724"
+                     /function="regulator; Degradation of small molecules:
+                     Carbon compounds"
+                     /note="negative transcriptional regulator of cel operon;
+                     GO_component: GO:0005737 - cytoplasm; GO_function:
+                     GO:0016564 - transcription repressor activity; GO_process:
+                     GO:0016052 - carbohydrate catabolic process; GO_process:
+                     GO:0006350 - transcription"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="rRepressor, chb operon for
+                     N,N'-diacetylchitobiose utilization"
+                     /protein_id="AAC74805.1"
+                     /db_xref="GI:1788030"
+                     /db_xref="ASAP:ABE-0005790"
+                     /db_xref="UniProtKB/Swiss-Prot:P17410"
+                     /db_xref="EcoGene:EG10143"
+                     /translation="MMQPVINAPEIATAREQQLFNGKNFHVFIYNKTESISGLHQHDY
+                     YEFTLVLTGRYFQEINGKRVLLERGDFVFIPLGSHHQSFYEFGATRILNVGISKRFFE
+                     QHYLPLLPYCFVASQVYRTNNAFLTYVETVISSLNFRETGLEEFVEMVTFYVINRLRH
+                     YREEQVIDDVPQWLKSTVEKMHDKEQFSESALENMVALSAKSQEYLTRATQRYYGKTP
+                     MQIINEIRINFAKKQLEMTNYSVTDIAFEAGYSSPSLFIKTFKKLTSFTPKSYRKKLT
+                     EFNQ"
+                     /label=rRepressor, chb operon for N,N'-diacetylchitobiose
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            3757..5109
+                     /gene="chbF"
+                     /locus_tag="b1734"
+                     /gene_synonym="celF"
+                     /gene_synonym="ECK1732"
+                     /gene_synonym="JW1723"
+                     /gene_synonym="ydjD"
+                     /db_xref="EcoGene:EG10144"
+                     /label=chbF
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             3757..5109
+                     /gene="chbF"
+                     /locus_tag="b1734"
+                     /gene_synonym="celF"
+                     /gene_synonym="ECK1732"
+                     /gene_synonym="JW1723"
+                     /gene_synonym="ydjD"
+                     /EC_number="3.2.1.86"
+                     /function="enzyme; Degradation of small molecules:
+                     N,N'-diacetylchitobiose"
+                     /note="GO_component: GO:0005737 - cytoplasm; GO_process:
+                     GO:0016052 - carbohydrate catabolic process; GO_process:
+                     GO:0009435 - NAD biosynthetic process"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="phospho-chitobiase; general
+                     6-phospho-beta-glucosidase activity"
+                     /protein_id="AAC74804.1"
+                     /db_xref="GI:1788029"
+                     /db_xref="ASAP:ABE-0005785"
+                     /db_xref="UniProtKB/Swiss-Prot:P17411"
+                     /db_xref="EcoGene:EG10144"
+                     /translation="MSQKLKVVTIGGGSSYTPELLEGFIKRYHELPVSELWLVDVEGG
+                     KPKLDIIFDLCQRMIDNAGVPMKLYKTLDRREALKDADFVTTQLRVGQLPARELDERI
+                     PLSHGYLGQETNGAGGLFKGLRTIPVIFDIVKDVEELCPNAWVINFTNPAGMVTEAVY
+                     RHTGFKRFIGVCNIPIGMKMFIRDVLMLKDSDDLSIDLFGLNHMVFIKDVLINGKSRF
+                     AELLDGVASGQLKASSVKNIFDLPFSEGLIRSLNLLPCSYLLYYFKQKEMLAIEMGEY
+                     YKGGARAQVVQKVEKQLFELYKNPELKVKPKELEQRGGAYYSDAACEVINAIYNDKQA
+                     EHYVNIPHHGQIDNIPADWAVEMTCKLGRDGATPHPRITHFDDKVMGLIHTIKGFEIA
+                     ASNAALSGEFNDVLLALNLSPLVHSDRDAELLAREMILAHEKWLPNFADCIAELKKAH
+                     "
+                     /label=phospho-chitobiase; general 6-phospho-beta-glucosi
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     mat_peptide     3760..5106
+                     /gene="chbF"
+                     /locus_tag="b1734"
+                     /gene_synonym="celF"
+                     /gene_synonym="ECK1732"
+                     /gene_synonym="JW1723"
+                     /gene_synonym="ydjD"
+                     /product="phospho-chitobiase; general
+                     6-phospho-beta-glucosidase activity"
+                     /experiment="N-terminus verified by Edman degradation:
+                     PMID 10572139"
+                     /label=phospho-chitobiase; general
+                     6-phospho-beta-glucosi(1)
+                     /ApEinfo_label=phospho-chitobiase; general
+                     6-phospho-beta-glucosi
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            5122..5871
+                     /gene="chbG"
+                     /locus_tag="b1733"
+                     /gene_synonym="celG"
+                     /gene_synonym="ECK1731"
+                     /gene_synonym="JW1722"
+                     /gene_synonym="ydjC"
+                     /db_xref="EcoGene:EG12198"
+                     /label=chbG
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     CDS             5122..5871
+                     /gene="chbG"
+                     /locus_tag="b1733"
+                     /gene_synonym="celG"
+                     /gene_synonym="ECK1731"
+                     /gene_synonym="JW1722"
+                     /gene_synonym="ydjC"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="UPF0249 family protein"
+                     /protein_id="AAC74803.1"
+                     /db_xref="GI:1788028"
+                     /db_xref="ASAP:ABE-0005783"
+                     /db_xref="UniProtKB/Swiss-Prot:P37794"
+                     /db_xref="EcoGene:EG12198"
+                     /translation="MERLLIVNADDFGLSKGQNYGIIEACRNGIVTSTTALVNGQAID
+                     HAVQLSRDEPSLAIGMHFVLTMGKPLTAMPGLTRDGVLGKWIWQLAEEDALPLEEITQ
+                     ELVSQYLRFIELFGRKPTHLDSHHHVHMFPQIFPIVARFAAEQGIALRADRQMAFDLP
+                     VNLRTTQGFSSAFYGEEISESLFLQVLDDAGHRGDRSLEVMCHPAFIDNTIRQSAYCF
+                     PRLTELDVLTSASLKGAIAQRGYRLGSYRDV"
+                     /label=UPF0249 family protein
+                     /ApEinfo_fwdcolor=#ebed3a
+                     /ApEinfo_revcolor=#dadb36
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     repeat_region   complement(5884..6072)
+                     /note="RIP129 (repetitive extragenic palindromic) element;
+                     contains 3 REP sequences and 1 IHF site"
+                     /label=RIP129 (repetitive extragenic palindromic) element
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 atgaacaaga atatggcagg aattctgagt gcagcggcgg tattaaccat gctggcgggt
+       61 tgtacggctt atgatcgtac caaagaccag tttgtacagc ctgtggtgaa agacgtcaaa
+      121 aaaggcatga gccgggcgca ggttgcacaa attgcgggta aaccttcgtc tgaagtgagc
+      181 atgatccatg ctcgcggtac ttgccagacc tacatcctgg gtcaacgtga tggtaaagca
+      241 gaaacctact ttgtcgcgtt agatgatacc ggacatgtca tcaactccgg ttatcagacc
+      301 tgtgctgaat acgacactga tccacaggct gcgaagtaat caattcgtct gaaagcttga
+      361 gtaacaacgg aaaccggcca ttgcgccggt tttttttggc ctgagttctt aattatcttc
+      421 gcgaattatt tgcccgaaat gtgaagaggg tcataaccac aggtcaagga gaaacaattt
+      481 ataaggtcaa agaaatacta ttgctcaggt ctataccgta tactcctttc agccacaaaa
+      541 aaagtcatgt tggtttcgca agttacccag agcatggaag caggttaagg cttgcggagt
+      601 gtctggctga cagataatcg tcgatgaggg cagttttatg gaaaagaaac acatttatct
+      661 gttttgttct gcgggcatgt ctacctcttt actggtatca aaaatgcgcg cacaggcaga
+      721 aaaatatgaa gttccggtca ttattgaagc atttccggaa acactggctg gtgaaaaagg
+      781 tcagaatgcc gatgtcgtgt tattagggcc gcagattgct tatatgttgc ccgaaatcca
+      841 gcgtttgtta cccaacaaac cggttgaagt aattgactcg ctgctttatg gcaaagtcga
+      901 tggtttaggc gtgcttaagg ctgcggttgc agcgattaaa aaagccgcag caaattaatt
+      961 tattttaaat tttcccgtca aagagttatt tcataaatca ataccgcaat atttaaattg
+     1021 cggtttttaa gggtattttt ctatgagtaa tgttattgca tcgcttgaaa aggtactcct
+     1081 cccttttgca gttaaaatag gaaagcagcc acacgttaat gcaatcaaaa atggctttat
+     1141 tcgcttaatg ccgttaaccc ttgcgggggc catgtttgta ttaattaaca acgtttttct
+     1201 aagctttggg gaggggtcgt ttttttattc cttaggtatt cgcctcgacg cctcaaccat
+     1261 tgaaacactt aatggtctga aaggtattgg cggcaacgta tataacggaa cattaggaat
+     1321 aatgtcttta atggcaccgt tctttattgg catggcgctg gcagaagagc gtaaagtcga
+     1381 tgcgctggcg gctgggttgt tatccgttgc agcatttatg accgtcaccc catatagtgt
+     1441 cggtgaggcc tatgcggttg gtgcaaactg gttaggtggg gcgaatatca tctccgggat
+     1501 tattattggc ctggtggtgg cagaaatgtt tacctttatt gtccgccgca attgggtcat
+     1561 taaactgccc gacagcgtac ctgcttcagt atcgcgttcc ttctcggcat taattcccgg
+     1621 ctttattatt ctttccgtga tggggattat tgcctgggcg ttgaatacct ggggcaccaa
+     1681 cttccatcag atcattatgg ataccatctc aaccccactg gcatcgttgg gtagcgtggt
+     1741 gggctgggcc tatgtgatct ttgttccact gctctggttc ttcggtattc atggcgcgct
+     1801 ggcgctgacc gcactggaca acggcattat gacgccgtgg gcactggaaa atatcgcgac
+     1861 ctatcagcaa tatggttccg tcgaagcggc gctggcagcc ggtaagacct tccatatctg
+     1921 ggccaagccg atgctggact cctttatttt ccttgggggc agtggtgcga ctttaggcct
+     1981 gatcctggct atctttatcg cctctcgccg tgctgattat cgtcaggtgg caaaactggc
+     2041 gctgccgtcc ggcatcttcc agattaacga accgattctg tttggtctgc caattatcat
+     2101 gaacccggtg atgtttatcc cgtttgtact ggtacaaccg attctggcgg caatcaccct
+     2161 cgcagcgtac tacatgggca ttattcctcc ggtgaccaat attgcaccgt ggaccatgcc
+     2221 aaccggtctg ggagccttct ttaacaccaa cggtagcgtc gccgcattgc tggtcgcact
+     2281 cttcaacctt ggcatcgcaa cgttaattta tctgcccttt gttgtggtgg ctaacaaagc
+     2341 acaaaatgcg attgataaag aagagagcga agaagatatc gctaacgccc tgaaatttta
+     2401 atcgatgccg gtacgggtaa tcgtgccggt aagaaaagag aggaacgatg tatgatggat
+     2461 ctcgataaca ttcccgatac gcaaacggaa gctgaagagc tggaagaagt ggtgatgggg
+     2521 ctgatcatca actccggaca agcgcgcagc ctggcgtatg cggcactgaa acaggcgaag
+     2581 cagggcgatt ttgccgcagc aaaagccatg atggatcagt cacggatggc attgaatgaa
+     2641 gcgcatctgg tacagacgaa actgattgaa ggcgatgcgg gcgaaggtaa gatgaaagtg
+     2701 agtctggtgc tggtccacgc tcaggatcat ttaatgacgt ccatgcttgc gcgtgaactg
+     2761 attactgaat taattgagct tcatgaaaaa ctgaaggcat aaggagtcga tgatgcagcc
+     2821 agtgattaac gcgccggaaa ttgccactgc ccgagaacag cagttgttta atggcaaaaa
+     2881 cttccatgtg tttatctata acaaaactga gagtatcagc ggactgcatc agcacgacta
+     2941 ttatgaattt actctggtat taaccgggcg ttatttccag gagattaacg gtaagcgcgt
+     3001 gttactggaa cggggcgatt ttgtttttat tccgttaggt tcgcaccatc aaagttttta
+     3061 tgagtttggt gccacgcgca tattgaacgt tgggatcagt aaacgctttt ttgagcagca
+     3121 ttacctgcca ttgttgcctt attgctttgt cgcttcgcag gtataccgga ccaataacgc
+     3181 ttttctcacc tatgtggaaa cagtgatttc ttcattgaat ttccgcgaaa cagggctgga
+     3241 agagtttgtt gagatggtta ctttttatgt cattaaccgt ttacgtcatt accgcgaaga
+     3301 acaggtgatt gatgatgtac cgcagtggct gaaaagtacg gtagaaaaga tgcatgataa
+     3361 agagcagttt agtgaatcgg cgctggagaa tatggtggcg ttgtcagcca aatcacagga
+     3421 atatttgacg cgagcgactc aacgatatta tggcaaaacg ccaatgcaga ttattaatga
+     3481 aatccgtatt aattttgcca aaaaacaact ggaaatgacc aactattcag tgacggatat
+     3541 tgcgtttgag gccggttata gtagcccgag tttgtttatt aaaacgttta agaaattaac
+     3601 gtcctttacg cctaagagct atcgtaagaa attgactgaa tttaatcagt aagtcgttat
+     3661 acctgacaat tcacatatct gtcctgttgc tggattattt atgtccgggg gggcagatat
+     3721 gccagatatc agtattctgt actgaaggga gaaattatga gccagaaatt aaaagtcgtc
+     3781 actattggtg gcgggagcag ctataccccg gagttactgg aaggatttat taagcgttat
+     3841 cacgaattgc cggtcagcga attatggctg gtggatgtcg aaggtggtaa accgaaactg
+     3901 gatattattt tcgatctctg ccaacggatg attgataacg ctggcgtccc gatgaagctt
+     3961 tataaaacgc tggatcgccg cgaagcattg aaagatgctg atttcgttac tacccaactg
+     4021 cgcgttggcc aattaccggc gcgtgaactg gatgaacgta ttccattaag tcatggttat
+     4081 cttggtcagg aaaccaacgg cgcgggcggt ttgtttaaag gtctgcgtac cattccggtg
+     4141 atttttgaca tcgtaaaaga tgtcgaagaa ctttgtccga atgcatgggt gattaacttc
+     4201 actaacccgg cgggaatggt cactgaagcc gtttatcgtc ataccggatt taaacgcttt
+     4261 atcggcgtgt gtaatattcc gatcggcatg aagatgttta ttcgcgatgt tctgatgctg
+     4321 aaagacagcg atgatttatc tatcgatttg ttcggcctca accatatggt gttcattaag
+     4381 gatgtgctga taaatggcaa gtcgcgcttt gccgaattgc ttgatggtgt ggcgtcaggg
+     4441 cagttaaaag cgtcctctgt aaaaaatatt ttcgatctgc catttagtga gggcttaatt
+     4501 cgttcgttga atctgctgcc atgttcttat ctgctgtatt acttcaagca gaaagagatg
+     4561 ctggctattg aaatgggcga atactacaaa ggcggcgcac gagcgcaggt agtacagaaa
+     4621 gtcgagaaac aactttttga gctgtataaa aatcctgagc tgaaagttaa gccgaaagaa
+     4681 ctggaacagc gcggtggggc ttattactct gatgcagcat gcgaagtgat caacgctatc
+     4741 tacaacgaca agcaagcaga acattacgtt aatatcccgc atcatgggca gattgataat
+     4801 attccggcag actgggcagt agaaatgacc tgtaagctgg ggcgcgatgg cgcgacgcca
+     4861 catccgcgca ttacgcattt cgatgataaa gtaatggggc tgattcacac cattaaaggc
+     4921 ttcgagattg ctgccagtaa cgccgcactt agcggagaat ttaacgatgt gttactggcg
+     4981 ctaaacctta gtccgttggt gcattccgat cgcgatgctg agctgctggc acgcgagatg
+     5041 attctggcgc acgagaaatg gctgccaaac tttgccgact gcatcgcaga gcttaaaaaa
+     5101 gcacattaac cgaggctgat tatggaacgc ttactgattg ttaatgccga tgattttggc
+     5161 ttaagcaaag gtcagaacta cggcattatc gaggcctgtc gcaatgggat tgtcacgtcg
+     5221 acgacggcgc tggtgaatgg gcaggctatt gaccatgcgg tgcagttgag tcgtgatgaa
+     5281 ccgagtctgg ccatagggat gcactttgtc cttactatgg gtaagccact gacagctatg
+     5341 ccggggttaa cccgcgatgg tgtgctggga aaatggatct ggcagttggc agaagaagat
+     5401 gctttaccgc tggaagaaat tactcaggag cttgtcagtc agtatttgcg tttcattgag
+     5461 ctatttggac gcaaacctac gcatcttgat agccatcatc atgtgcatat gttcccgcag
+     5521 attttcccga ttgttgccag gtttgcggca gagcagggca ttgcgttgcg ggcggatcgt
+     5581 cagatggcgt ttgatttgcc ggtcaacctg cgcactaccc agggattcag cagtgcattc
+     5641 tacggtgaag agatcagtga gtcgctgttc ctgcaagtgc tggatgacgc aggccatcgg
+     5701 ggtgatcgtt cgctggaggt gatgtgtcat ccggcgttta tcgataatac tatccgtcag
+     5761 agtgcttact gtttcccacg cttaacggag ctggatgtgt tgacatcagc gtcgttgaaa
+     5821 ggtgctatcg ctcagcgtgg ttatcggttg gggagttatc gggatgtgta agtgaggatg
+     5881 tttgccagat gcggcgtgaa ccttgcatcc ggcgattaat tcctacaaag gcggcgtaac
+     5941 tgcgccgctt gagactgctg acaaacgcaa aactgcctga tgcgcttcgc ttatcaggcc
+     6001 tacgtgtttc ctgcaatata ttgaatttgc acagttttgt aggccggata aggcgttcac
+     6061 gccgcatccg gcataaacaa agcgcactat gtaaatcatt tgaggcggcg caattgcgcc
+     6121 gcctccca     
+//

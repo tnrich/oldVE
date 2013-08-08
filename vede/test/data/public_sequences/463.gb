@@ -1,0 +1,75 @@
+LOCUS       wolfcry                 1032 bp ds-DNA     linear       07-FEB-2013
+ACCESSION   P0017
+VERSION     P0017.1
+KEYWORDS    .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     misc_feature    843..971
+                     /label=Terminator B0015
+                     /ApEinfo_fwdcolor=#ff0000
+                     /ApEinfo_revcolor=#ff0000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    123..842
+                     /label=superfolder GFP
+                     /ApEinfo_fwdcolor=#ff80ff
+                     /ApEinfo_revcolor=#ff80ff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    89..122
+                     /label=sRBS (2,500)
+                     /ApEinfo_fwdcolor=cyan
+                     /ApEinfo_revcolor=#00ffff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     complement(996..1032)
+                     /label=JS47
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    15..88
+                     /label=RiboJ
+                     /ApEinfo_fwdcolor=#800080
+                     /ApEinfo_revcolor=#800080
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     57..116
+                     /label=JS46
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     27..86
+                     /label=JS45
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     1..49
+                     /label=JS44
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 cacaccaggt ctcagctgtc accggatgtg ctttccggtc tgatgagtcc gtgaggacga
+       61 aacagcctct acaaataatt ttgtttaata agtatcctct aaccctaaag gggcacaaaa
+      121 tcatgcgtaa aggcgaagag ctgttcactg gtgtcgtccc tattctggtg gaactggatg
+      181 gtgatgtcaa cggtcataag ttttccgtgc gtggcgaggg tgaaggtgac gcaactaatg
+      241 gtaaactgac gctgaagttc atctgtacta ctggtaaact gccggtacct tggccgactc
+      301 tggtaacgac gctgacttat ggtgttcagt gctttgctcg ttatccggac catatgaagc
+      361 agcatgactt cttcaagtcc gccatgccgg aaggctatgt gcaggaacgc acgatttcct
+      421 ttaaggatga cggcacgtac aaaacgcgtg cggaagtgaa atttgaaggc gataccctgg
+      481 taaaccgcat tgagctgaaa ggcattgact ttaaagaaga cggcaatatc ctgggccata
+      541 agctggaata caattttaac agccacaatg tttacatcac cgccgataaa caaaaaaatg
+      601 gcattaaagc gaattttaaa attcgccaca acgtggagga tggcagcgtg cagctggctg
+      661 atcactacca gcaaaacact ccaatcggtg atggtcctgt tctgctgcca gacaatcact
+      721 atctgagcac gcaaagcgtt ctgtctaaag atccgaacga gaaacgcgat catatggttc
+      781 tgctggagtt cgtaaccgca gcgggcatca cgcatggtat ggatgaactg tacaaatgat
+      841 gaccaggcat caaataaaac gaaaggctca gtcgaaagac tgggcctttc gttttatctg
+      901 ttgtttgtcg gtgaacgctc tctactagag tcacactggc tcaccttcgg gtgggccttt
+      961 ctgcgtttat aggtacccgg ggatcctcta gagtcgacct gcaggcatgc aagcttcctg
+     1021 agacctggtg tg    
+//

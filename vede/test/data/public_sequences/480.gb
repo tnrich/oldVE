@@ -1,0 +1,107 @@
+LOCUS       pJH2-81                 2823 bp    DNA     circular 
+DEFINITION    
+  
+  Digestion of pJH3-1 with SalI to remove sRNA.
+  
+  antisense
+             A04
+  apFAB126_op-16-64  mRFP1
+  
+
+FEATURES             Location/Qualifiers
+     misc_feature    complement(583..1323)
+                     /gene="Kan"
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo re
+                      encodes nptII (aka AphA, neoR), gives kan and neo re"
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo re
+                     "
+                     /vntifkey="22"
+                     /label="kan/neoR"
+     rep_origin      complement(2473..361)
+                     /gene="p15a"
+                     /note="REP_ORIGIN REP_ORIGIN REP_ORIGIN REP_ORIGIN REP_ORIG
+                     IN REP_ORIGIN"
+                     /note="REP_ORIGIN"
+                     /vntifkey="33"
+                     /label="p15a"
+     CDS             complement(1536..2211)
+                     /gene="RFP"
+                     /note="CDS CDS CDS CDS"
+                     /note="CDS"
+                     /codon_start="0"
+     terminator      2338..2466
+                     /gene="dbl term"
+                     /note="TERMINATOR TERMINATOR"
+                     /note="TERMINATOR"
+                     /vntifkey="21"
+                     /label="dbl\term"
+     terminator      452..557
+                     /gene="Terminator"
+                     /note="TERMINATOR TERMINATOR TERMINATOR TERMINATOR TERMINAT
+                     OR TERMINATOR"
+                     /note="TERMINATOR"
+                     /vntifkey="43"
+                     /label="T0"
+     misc_feature    complement(2286..2309)
+                     /gene="insulator"
+                     /label="insulator"
+     promoter        complement(2232..2267)
+                     /gene="pBFAB126"
+                     /note="PROMOTER PROMOTER PROMOTER PROMOTER PROMOTER PROMOTE
+                     R PROMOTE R PROMOTE R PROMOTE R PROMOTE R PROMOTE R PROMOTE
+                      R a const PROMOTER"
+                     /note="PROMOTER"
+                     /label="pBFAB126"
+     misc_feature    complement(2212..2231)
+                     /gene="RFP RBS"
+BASE COUNT      658 a    786 c    710 g    669 t
+ORIGIN
+        1 ttccgggtag gcagttcgct ccaagctgga ctgtatgcac gaaccccccg ttcagtccga
+       61 ccgctgcgcc ttatccggta actatcgtct tgagtccaac ccggaaagac atgcaaaagc
+      121 accactggca gcagccactg gtaattgatt tagaggagtt agtcttgaag tcatgcgccg
+      181 gttaaggcta aactgaaagg acaagttttg gtgactgcgc tcctccaagc cagttacctc
+      241 ggttcaaaga gttggtagct cagagaacct tcgaaaaacc gccctgcaag gcggtttttt
+      301 cgttttcaga gcaagagatt acgcgcagac caaaacgatc tcaagaagat catcttatta
+      361 atcagataaa atatttctag atttcagtgc aatttatctc ttcaaatgta gcacctgaag
+      421 tcagccccat acgatataag ttgttactag tgcttggatt ctcaccaata aaaaacgccc
+      481 ggcggcaacc gagcgttctg aacaaatcca gatggagttc tgaggtcatt actggatcta
+      541 tcaacaggag tccaagcgag ctctcgaacc ccagagtccc gctcagaaga actcgtcaag
+      601 aaggcgatag aaggcgatgc gctgcgaatc gggagcggcg ataccgtaaa gcacgaggaa
+      661 gcggtcagcc cattcgccgc caagctcttc agcaatatca cgggtagcca acgctatgtc
+      721 ctgatagcgg tccgccacac ccagccggcc acagtcgatg aatccagaaa agcggccatt
+      781 ttccaccatg atattcggca agcaggcatc gccatgggtc acgacgagat cctcgccgtc
+      841 gggcatgcgc gccttgagcc tggcgaacag ttcggctggc gcgagcccct gatgctcttc
+      901 gtccagatca tcctgatcga caagaccggc ttccatccga gtacgtgctc gctcgatgcg
+      961 atgtttcgct tggtggtcga atgggcaggt agccggatca agcgtatgca gccgccgcat
+     1021 tgcatcagcc atgatggata ctttctcggc aggagcaagg tgagatgaca ggagatcctg
+     1081 ccccggcact tcgcccaata gcagccagtc ccttcccgct tcagtgacaa cgtcgagcac
+     1141 agctgcgcaa ggaacgcccg tcgtggccag ccacgatagc cgcgctgcct cgtcctgcag
+     1201 ttcattcagg gcaccggaca ggtcggtctt gacaaaaaga accgggcgcc cctgcgctga
+     1261 cagccggaac acggcggcat cagagcagcc gattgtctgt tgtgcccagt catagccgaa
+     1321 tagcctctcc acccaagcgg ccggagaacc tgcgtgcaat ccatcttgtt caatcatgcg
+     1381 aaacgatcct catcctgtct cttgatcaga tcatgatccc ctgcgccatc agatccttgg
+     1441 cggcaagaaa gccatccagt ttactttgca gggcttccca accttaccag agggcgcccc
+     1501 agctggcaat tccgaattca tgagatctta ttattaagca ccggtggagt gacgaccttc
+     1561 agcacgttcg tactgttcaa cgatggtgta gtcttcgttg tgggaggtga tgtccagttt
+     1621 gatgtcggtt ttgtaagcac ccggcagctg aaccggtttt ttagccatgt aggtggtttt
+     1681 aacttcagcg tcgtagtgac caccgtcttt cagtttcaga cgcattttga tttcaccttt
+     1741 cagagcaccg tcttccgggt acatacgttc ggtggaagct tcccaaccca tggttttttt
+     1801 ctgcataacc ggaccgtcgg acgggaagtt ggtaccacgc agtttaactt tgtagatgaa
+     1861 ctcaccgtct tgcagggagg agtcctgggt aacggtaaca acaccaccgt cttcgaagtt
+     1921 cataacacgt tcccatttga aaccttccgg gaaggacagt ttcaggtagt ccgggatgtc
+     1981 agccgggtgt ttaacgtaag ctttggaacc gtactggaac tgcggggaca ggatgtccca
+     2041 agcgaacggc agcggaccac ctttggtaac tttcagttta gcggtctggg taccttcgta
+     2101 cggacgacct tcaccctcac cttcgatttc gaactcgtga ccgttaacgg aaccttccat
+     2161 acgaactttg aaacgcatga actctttgat aacgtcttcg ctactcgcca tatgtatatc
+     2221 tccttcttaa atccacacac gctatgagcc ggatgattaa ttgtcaattc cctctctccc
+     2281 actatataga aagcacgcag ctgatagggt cgacacatgg tgctcgagta aggatctcca
+     2341 ggcatcaaat aaaacgaaag gctcagtcga aagactgggc ctttcgtttt atctgttgtt
+     2401 tgtcggtgaa cgctctctac tagagtcaca ctggctcacc ttcgggtggg cctttctgcg
+     2461 tttataccta gggatatatt ccgcttcctc gctcactgac tcgctacgct cggtcgttcg
+     2521 actgcggcga gcggaaatgg cttacgaacg gggcggagat ttcctggaag atgccaggaa
+     2581 gatacttaac agggaagtga gagggccgcg gcaaagccgt ttttccatag gctccgcccc
+     2641 cctgacaagc atcacgaaat ctgacgctca aatcagtggt ggcgaaaccc gacaggacta
+     2701 taaagatacc aggcgtttcc ccctggcggc tccctcgtgc gctctcctgt tcctgccttt
+     2761 cggtttaccg gtgtcattcc gctgttatgg ccgcgtttgt ctcattccac gcctgacact
+     2821 cag                                                              
+//
