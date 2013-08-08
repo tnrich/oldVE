@@ -1058,7 +1058,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
         result = namesArray.join(", ");
 
         // Remove empty feature names.
-        return result.replace(", ,", ", ");
+        result = result.replace(", ,", ", ");
+
+        if(result.charAt(result.length - 1) === ",") {
+            result = result.substring(0, result.length - 1);
+        }
+
+        return result;
      },
 
      /**

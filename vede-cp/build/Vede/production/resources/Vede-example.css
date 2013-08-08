@@ -23154,6 +23154,16 @@ body.x-nbr .x-tab-default-right-frameInfo {
   opacity: 1;
 }
 
+/* line 177, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.sequenceLibraryImportButton {
+  padding: 2px 10px;
+}
+
+/* line 181, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.sequenceLibraryImportButtonIcon {
+  background-size: 14px;
+}
+
 /* line 2, ../../../../sass/src/view/ve/VectorEditorMainToolBar.scss */
 #VectorEditorMainToolBar {
   background: #F7F9FA;

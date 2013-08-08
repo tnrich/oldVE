@@ -422,22 +422,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 border: 0,
                 layout: 'fit',
                 items: [
-                    // {
-                    //     xtype: 'button',
-                    //     id: 'dropzone-activate',
-                    //     cls: 'dropzone-activate-btn',
-                    //     overCls: 'dropzone-activate-btn-over',
-                    //     icon: '../../resources/images/ux/drop-import.png',
-                    //     iconCls: 'dropzone-activate-import-btn',
-                    //     text: 'Import Files',
-                    //     height: '35',
-                    //     width: '100',
-                    //     listeners: {
-                    //         click: function() {
-                    //             $("#dropZone-area").show();
-                    //         }
-                    //     }
-                    // },
                     {
                         xtype: 'container',
                         cls: 'sequenceLibraryContainer',
@@ -448,6 +432,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             align: 'stretch'
                         },
                         items : [
+                            
                             {
                                 xtype: 'textfield',
                                 anchor: '100%',
@@ -567,7 +552,24 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     dockedItems: [{
                                             xtype: 'pagingtoolbar',
                                             dock: 'bottom',
-                                            displayInfo: true
+                                            displayInfo: true,
+                                            items: [
+                                                {
+                                                    xtype: 'container',
+                                                    cls: 'sequenceLibraryOptionsContainer',
+                                                    items: [
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'sequenceLibraryImportButton',
+                                                            icon: 'resources/images/ux/paging/publish.png',
+                                                            iconCls: 'sequenceLibraryImportButtonIcon',
+                                                            overCls: 'sequenceLibraryImportButton-over',
+                                                            text: 'Import Sequence(s)',
+                                                            tooltip: 'You can drop your sequence files or folders into the table above.'
+                                                        }
+                                                    ]
+                                                },
+                                            ]
                                     }],
 
                                 listeners: {

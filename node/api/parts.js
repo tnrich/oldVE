@@ -94,13 +94,13 @@ module.exports = function(app) {
         User.findById(req.user._id)
         .populate({ path: 'parts', match: {sequencefile_id: {$ne: null}}})
         .exec(function(err, user) {
-            Part.find(user.parts).limit(req.query.limit).skip(req.query.start).exec(function(err,parts){
-            res.json({
-                "success":true,
-                "parts":parts,
-                "results":parts.length,
-                "total":user.parts.length
-            });
+            Part.find(user.parts).where('sequencefile_id').ne(null).limit(req.query.limit).skip(req.query.start).exec(function(err,parts) {
+                res.json({
+                    "success":true,
+                    "parts":parts,
+                    "results":parts.length,
+                    "total": user.parts.length
+                });
             });
         });
         
