@@ -508,8 +508,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         width    : 75,
                                         dataIndex: 'serialize',
                                         renderer: function(val) {
-                                            val = val.sequence.alphabet.toUpperCase();
-                                            return val;
+                                            if(val) {
+                                                val = val.sequence.alphabet.toUpperCase();
+                                                return val;
+                                            } else {
+                                                return "";
+                                            }
                                         }
                                     },
                                     {
@@ -530,12 +534,15 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         flex: 1,
                                         dataIndex: 'serialize',
                                         renderer: function(val) {
-                                            var features = [];
-                                            for(var i=0; i<val.features.length; i++) {
-                                                features.push(val.features[i].inData.name);
+                                            if(val) {
+                                                var features = [];
+                                                for(var i=0; i<val.features.length; i++) {
+                                                    features.push(val.features[i].inData.name);
+                                                }
+                                                return features;
+                                            } else {
+                                                return "";
                                             }
-                                            return features;
-                                            // return val;
                                         }
                                     },
                                     {
@@ -703,17 +710,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Features in Range',
                                         width: 150,
                                         dataIndex: 'features'
-                                        // dataIndex: 'sequencefile_id',
-                                        // renderer: function(val, record) {
-                                        //     var sequence = Teselagen.manager.ProjectManager.currentUser.sequences().getById(val);
-                                        //     var sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
-                                        //     var features = sequenceManager.featuresByRange(record.genbankStartBP, record.endBP);
-                                        //     var partFeatures = [];
-                                        //     for(var z=0; z<features.length; z++)  {
-                                        //         partFeatures.push(features[z].getName());
-                                        //     }
-                                        //     return partFeatures;
-                                        // }
                                     },
 
                                 ],

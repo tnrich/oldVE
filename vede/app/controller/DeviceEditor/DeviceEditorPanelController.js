@@ -332,7 +332,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
                         toastr.options.onclick = null;
                         toastr.info("Design Saved");
-                        Teselagen.manager.ProjectManager.reloadSources();
                     });
                     gridManager.setListenersEnabled(true);
                     if(typeof (cb) === "function") { cb(); }

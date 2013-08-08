@@ -53,7 +53,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.sequences.pageSize = 10;
         self.parts.pageSize = 10;
 
-        //self.sequences.loadPage(1);
+        self.sequences.loadPage(1);
 
         //store.load({
         //    params:{
@@ -203,7 +203,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         {
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
-            sequences.loadPage(1);
+            sequenceGrid.down('pagingtoolbar').doRefresh();
         }
     },
 

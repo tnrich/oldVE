@@ -20,7 +20,30 @@ Ext.define("Teselagen.models.Part", {
             root: "parts"
         },
         writer: {
-            type: "json"
+            type: "json",
+
+            getRecordData: function(record) {
+                var data = record.getData();
+                var associatedData = record.getAssociatedData();
+
+                var sequenceFile = record.getSequenceFile();
+                if(sequenceFile) {
+                    var sequenceManager = sequenceFile.getSequenceManager();
+                    
+                    if(sequenceManager) {
+                        data.length = sequenceManager.getSequence().toString().length;
+                        var features = sequenceManager.featuresByRange(
+                                            record.get("genbankStartBP"),
+                                            record.get("endBP"));
+                        data.features = [];
+                        features.forEach(function(feature) {
+                            data.features.push(feature.getName());
+                        });
+                    }
+                }
+                return data;
+            }
+
         },
         buildUrl: function(request) {
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
@@ -39,7 +62,7 @@ Ext.define("Teselagen.models.Part", {
             }
 
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
-        }
+        },
         /*
         afterRequest: function(req, res) {
             console.log(JSON.parse(req.operation.response.responseText).duplicated);
@@ -335,7 +358,6 @@ Ext.define("Teselagen.models.Part", {
             var sequence = sequences.getById(this.get("sequencefile_id"));
 
             if(sequence) {
-                console.log("from memory store");
                 if(typeof(callbackFn) === "object") return callbackFn.callback(sequence);
                 else return sequence;
             }

@@ -179,7 +179,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         currentTab.el.mask("Loading Sequence", "loader rspin")
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        sequence = Teselagen.manager.ProjectManager.sequences.getById(record.data.sequencefile_id);
+        sequence = record.getSequenceFile();
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
         currentTab.el.unmask();

@@ -107,6 +107,8 @@ module.exports = function(db) {
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
+        length            :  Number,
+        features          :  String,
 		iconID            :  String
 	});
 
