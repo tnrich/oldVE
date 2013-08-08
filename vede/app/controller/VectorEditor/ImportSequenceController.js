@@ -159,7 +159,6 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                                         name: text
                                                     });
 
-                                                    Teselagen.manager.ProjectManager.sequences.add(newSequenceFile);
                                                     newSequenceFile.set("project_id",project.data.id);
 
                                                     newSequenceFile.save({

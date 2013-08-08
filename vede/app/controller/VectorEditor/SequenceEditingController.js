@@ -52,7 +52,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                     toastr.options.onclick = null;
                                     toastr.info("Part Successfully Created");
-                                    Teselagen.manager.ProjectManager.parts.add(part);
                                 }
                             });
                         });
@@ -73,7 +72,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
                                         toastr.options.onclick = null;
                                         toastr.info("Part Sucessfully Created");
-                                        Teselagen.manager.ProjectManager.parts.add(part);
                                     }
                                 });
                             }

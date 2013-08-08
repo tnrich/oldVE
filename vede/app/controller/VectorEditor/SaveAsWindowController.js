@@ -88,8 +88,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 name: name
             });
 
-    		Teselagen.manager.ProjectManager.sequences.add(newSequenceFile);
-            
+    		            
             newSequenceFile.save({
                 callback: function () {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
