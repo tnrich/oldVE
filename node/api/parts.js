@@ -92,13 +92,15 @@ module.exports = function(app) {
      */
     app.get('/parts', restrict,  function(req, res) {
         User.findById(req.user._id)
-        .populate({ path: 'parts', options: { limit: req.query.limit, skip: req.query.start }})
+        .populate({ path: 'parts'})
         .exec(function(err, user) {
+            Part.find(user.parts).limit(req.query.limit).skip(req.query.start).exec(function(err,parts){
             res.json({
                 "success":true,
-                "parts":user.parts,
-                "results":user.parts.length,
-                "total":req.user.parts.length
+                "parts":parts,
+                "results":parts.length,
+                "total":user.parts.length
+            });
             });
         });
         

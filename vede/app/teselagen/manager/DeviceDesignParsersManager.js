@@ -112,6 +112,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
             gridManager.setListenersEnabled(true);
+
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
             //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         }
     },
@@ -834,13 +836,16 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             processFlag = false;
         };
         toastr.info("Parsing sequences in background (click to cancel)");
-        parts.forEach(function(part){
+        var countPartProcessing = parts.length;
+        parts.forEach(function(part,partKey){
             if(processFlag) {
                 // debugger;
             part.getSequenceFile({
                 callback: function(sequence){
                 sequence.processSequence(function(err,seq){
+                    countPartProcessing--;
                     console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
+                    if(!countPartProcessing) Vede.application.fireEvent("allSequencesProcessed")
                     //if(err) debugger;
                 });
             }});

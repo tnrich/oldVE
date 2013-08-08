@@ -49,7 +49,16 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         }
     },
 
+
+    onAllSequencesProcessed: function(){
+        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").down("menuitem[text='Save Design']").enable();
+    },
+
     onImportFileLoad: function(pFile, pExt, pEvt) {
+        
+        // Disable Save during import process
+        Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").down("menuitem[text='Save Design']").disable();
+
         //try
         //{
         if(pExt === 'json' || pExt === 'JSON') {
@@ -105,6 +114,10 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     init: function() {
+
+
+        this.application.on("allSequencesProcessed",this.onAllSequencesProcessed ,this)
+
         this.control({
             "button[cls='add_row_Btn']": {
                 click: this.onAddRowClick
