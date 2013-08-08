@@ -91,10 +91,25 @@ module.exports = function(app) {
      * @method GET 'parts'
      */
     app.get('/parts', restrict,  function(req, res) {
+
+        console.log(JSON.stringify(req.query.filter));
+
+        var filter = "";
+        if(req.query.filter)
+        {
+            var filterOptions = JSON.parse(req.query.filter); 
+            if(filterOptions[0] && filterOptions[0].property==="name")
+            {
+                filter = filterOptions[0].value;
+            }
+        }
+
+        console.log("USING FILTER: ",filter);
+        
         User.findById(req.user._id)
         .populate({ path: 'parts', match: {sequencefile_id: {$ne: null}}})
         .exec(function(err, user) {
-            Part.find(user.parts).where('sequencefile_id').ne(null).limit(req.query.limit).skip(req.query.start).exec(function(err,parts) {
+            Part.find(user.parts).where('sequencefile_id').ne(null).limit(req.query.limit).skip(req.query.start).where('name').regex(filter).exec(function(err,parts) {
                 res.json({
                     "success":true,
                     "parts":parts,

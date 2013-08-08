@@ -134,9 +134,9 @@ module.exports = function(app) {
         var filter = "";
         if(req.query.filter)
         {
-            if(req.query.filter[0] && req.query.filter[0].property==="name")
+            var filterOptions = JSON.parse(req.query.filter); 
+            if(filterOptions[0] && filterOptions[0].property==="name")
             {
-                var filterOptions = JSON.parse(req.query.filter);
                 filter = filterOptions[0].value;
             }
         }

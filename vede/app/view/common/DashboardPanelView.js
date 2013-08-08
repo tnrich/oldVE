@@ -452,25 +452,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         }, this, { single: true })
                                         
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
-                                        //var grid = Ext.getCmp('sequenceLibrary');
-                                        //grid.store.clearFilter();
-                                        //
-                                        //if (newValue) {
-                                        //    var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
-                                        //    grid.store.filter({
-                                        //        filterFn: function(record) {
-                                        //            var features = [];
-                                        //            for(var i=0; i<record.get('serialize').features.length; i++) {
-                                        //                features.push(record.get('serialize').features[i].inData.name);
-                                        //            }
-                                        //            return matcher.test(record.get('name')) ||
-                                        //                matcher.test(record.get('sequenceFileFormat')) ||
-                                        //                matcher.test(record.get('size')) || 
-                                        //                matcher.test(record.get('serialize').sequence.alphabet) || 
-                                        //                matcher.test(features);
-                                        //        }
-                                        //    });
-                                        //}
                                     }
                                 }
                             },
@@ -634,21 +615,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('partLibrary');
                                         grid.store.clearFilter();
-
-                                        if (newValue) {
-                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
-                                            grid.store.filter({
-                                                filterFn: function(record) {
-                                                    return matcher.test(record.get('name')) ||
-                                                        matcher.test(record.get('genbankStartBP')) ||
-                                                        matcher.test(record.get('endBP')) ||
-                                                        matcher.test(record.get('length')) ||
-                                                        matcher.test(record.get('revComp')) || 
-                                                        matcher.test(record.get('partSource')) ||
-                                                        matcher.test(record.get('features'));
-                                                }
-                                            });
-                                        }
+                                        grid.store.remoteFilter = true;
+                                        grid.store.on('load', function(s){ 
+                                            s.remoteFilter = false; 
+                                        }, this, { single: true })
+                                        
+                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
                             },
