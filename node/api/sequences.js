@@ -130,18 +130,26 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
+
+        var filter = JSON.parse(req.query.filter);
+
         User.findById(req.user._id)
                 .populate({
-                    path: 'sequences',
-                    options: { limit: req.query.limit, skip: req.query.start }
+                    path: 'sequences'
                 })
                 .exec(function(err, user) {
-                    res.json({
-                        "success": true,
-                        "results":user.sequences.length,
-                        "sequences":user.sequences,
-                        "total":req.user.sequences.length
+
+                    Sequence.find(user.sequences).limit(req.query.limit).skip(req.query.start).where('name').regex(filter[0].value).exec(function(err,sequences){
+
+                        res.json({
+                            "success": true,
+                            "results": sequences.length,
+                            "sequences": sequences,
+                            "total": user.sequences.length
+                        });
+
                     });
+
                 });
         }
     );
