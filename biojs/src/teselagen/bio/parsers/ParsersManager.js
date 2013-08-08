@@ -89,7 +89,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                 {
                                     $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
                                     $(msg[0]).removeClass("toast-info");
-                                    $(msg[0]).addClass("toast-warning");                                }
+                                    $(msg[0]).addClass("toast-warning"); 
+                                    var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+                                    sequenceLibrary.el.unmask();
+                               }
                             }
                         });
                     });
