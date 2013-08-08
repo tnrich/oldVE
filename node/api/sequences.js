@@ -130,18 +130,34 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
+        
+        var filter = "";
+        if(req.query.filter)
+        {
+            var filterOptions = JSON.parse(req.query.filter); 
+            if(filterOptions[0] && filterOptions[0].property==="name")
+            {
+                filter = filterOptions[0].value;
+            }
+        }
+
         User.findById(req.user._id)
                 .populate({
-                    path: 'sequences',
-                    options: { limit: req.query.limit, skip: req.query.start }
+                    path: 'sequences'
                 })
                 .exec(function(err, user) {
-                    res.json({
-                        "success": true,
-                        "results":user.sequences.length,
-                        "sequences":user.sequences,
-                        "total":req.user.sequences.length
+
+                    Sequence.find(user.sequences).limit(req.query.limit).skip(req.query.start).where('name').regex(filter).exec(function(err,sequences){
+
+                        res.json({
+                            "success": true,
+                            "results": sequences.length,
+                            "sequences": sequences,
+                            "total": user.sequences.length
+                        });
+
                     });
+
                 });
         }
     );

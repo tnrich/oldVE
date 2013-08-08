@@ -91,16 +91,32 @@ module.exports = function(app) {
      * @method GET 'parts'
      */
     app.get('/parts', restrict,  function(req, res) {
-        Part.find({user_id: req.user._id})
-            .where('sequencefile_id').ne(null)
-            .limit(req.query.limit)
-            .skip(req.query.start)
-            .exec(function(err,parts) {
-                res.json({
-                    "success":true,
-                    "parts":parts,
-                    "results":parts.length,
-                    "total": user.parts.length
+
+        var filter = "";
+        var totalCount = 0;
+        if(req.query.filter)
+        {
+            var filterOptions = JSON.parse(req.query.filter); 
+            if(filterOptions[0] && filterOptions[0].property==="name")
+            {
+                filter = new RegExp(filterOptions[0].value, "i");
+            }
+        }
+
+        User.findById(req.user._id).populate('parts').exec(function(err, user) {
+            totalCount = user.parts.length;
+
+            User.findById(req.user._id).populate({
+                path: 'parts', 
+                match: {name: {$regex: filter}, 
+                sequencefile_id: {$ne: null}}})
+                .exec(function(err, user) {
+                    res.json({
+                        success: true,
+                        parts: user.parts,
+                        results: user.parts.length,
+                        total: totalCount
+                    });
                 });
         });
     });
