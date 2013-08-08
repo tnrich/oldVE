@@ -23,27 +23,27 @@ Ext.define("Teselagen.models.Part", {
         writer: {
             type: "json",
 
-            getRecordData: function(record) {
-                var data = record.getData();
-                var associatedData = record.getAssociatedData();
-
-                var sequenceFile = record.getSequenceFile();
-                if(sequenceFile) {
-                    var sequenceManager = sequenceFile.getSequenceManager();
-                    
-                    if(sequenceManager) {
-                        data.length = record.get("genbankStartBP") - record.get("endBP");
-                        var features = sequenceManager.featuresByRange(
-                                            record.get("genbankStartBP"),
-                                            record.get("endBP"));
-                        data.features = [];
-                        features.forEach(function(feature) {
-                            data.features.push(feature.getName());
-                        });
-                    }
-                }
-                return data;
-            }
+            //getRecordData: function(record) {
+            //    var data = record.getData();
+            //    var associatedData = record.getAssociatedData();
+//
+            //    var sequenceFile = record.getSequenceFile();
+            //    if(sequenceFile) {
+            //        var sequenceManager = sequenceFile.getSequenceManager();
+            //        
+            //        if(sequenceManager) {
+            //            data.length = record.get("genbankStartBP") - record.get("endBP");
+            //            var features = sequenceManager.featuresByRange(
+            //                                record.get("genbankStartBP"),
+            //                                record.get("endBP"));
+            //            data.features = [];
+            //            features.forEach(function(feature) {
+            //                data.features.push(feature.getName());
+            //            });
+            //        }
+            //    }
+            //    return data;
+            //}
 
         },
         buildUrl: function(request) {
