@@ -1,0 +1,221 @@
+LOCUS       pJH3-63                 5079 bp    DNA     circular 
+DEFINITION    
+  
+  ZFP inverter on p15a.  For use with Julius Lucks' sRNA locat
+            ed on a separate plasmid.
+  
+  sense LS, antisense LS, RBS ?
+  pBAD_
+            zfp-16-59
+  pBFAB258_araC
+  pBFRPL-83_op-16-59_mRFP1
+  
+
+FEATURES             Location/Qualifiers
+     rep_origin      complement(4733..365)
+                     /gene="p15a"
+     terminator      456..561
+                     /gene="term"
+     misc_feature    complement(587..1381)
+                     /gene="KanR"
+     terminator      4598..4726
+                     /gene="dbl term"
+     CDS             complement(1524..2402)
+                     /gene="araC"
+                     /codon_start="0"
+     CDS             3896..4573
+                     /gene="mRFP1"
+                     /codon_start="0"
+     misc_feature    3876..3895
+                     /gene="RFP RBS"
+     misc_feature    complement(2403..2437)
+                     /gene="araC 5'-UTR"
+     promoter        complement(2438..2473)
+                     /gene="apFAB258"
+     CDS             complement(2550..3083)
+                     /gene="ZFP 16-59"
+                     /codon_start="0"
+     CDS             complement(3107..3202)
+                     /gene="repC mini cistron"
+                     /codon_start="0"
+     misc_feature    complement(3093..3100)
+                     /gene="ZFP RBS"
+     misc_feature    complement(3299..3389)
+                     /gene="UT sense RNA"
+     misc_feature    complement(3655..3672)
+                     /gene="operator O2"
+     misc_feature    complement(3493..3514)
+                     /gene="operator O1"
+     promoter        3521..3549
+                     /gene="pCinactive"
+     misc_feature    complement(3458..3471)
+                     /gene="CAP site"
+     misc_feature    complement(3424..3462)
+                     /gene="operator I2 and I1"
+     promoter        complement(3398..3425)
+                     /gene="pBAD"
+     misc_feature    3786..3803
+                     /gene="ZFP-3 binding site"
+     promoter        3804..3838
+                     /gene="BioFAB RPL-83"
+     misc_feature    3712..3785
+                     /gene="insulator"
+     terminator      2505..2533
+                     /gene="term?"
+                     545..565
+                     /gene="o2-55"
+                     /note="Sequencing primer, 21 matches Primer length is 21bp 
+                     Leading Original primer sequence : TCAACAGGAGTCCAAGCGAGC"
+                     complement(2477..2497)
+                     /gene="o2-56"
+                     /note="Sequencing primer, 21 matches Primer length is 21bp 
+                     Complement Original primer sequence : TCAGCAAAAGGCCAGGAACCG
+                     "
+                     2371..2392
+                     /gene="o2-57"
+                     /note="Sequencing primer, 22 matches Primer length is 22bp 
+                     Leading Original primer sequence : GGCAGCAGGGGATCATTTTGCG"
+                     complement(3464..3486)
+                     /gene="o2-59"
+                     /note="Sequencing primer, 23 matches Primer length is 23bp 
+                     Complement Original primer sequence : CACGGCGTCACACTTTGCTAT
+                     GC"
+                     complement(4751..4773)
+                     /gene="o3-9"
+                     /note="Sequencing primer, 23 matches Primer length is 23bp 
+                     Complement Original primer sequence : CCGAGCGTAGCGAGTCAGTGA
+                     GC"
+                     1303..1327
+                     /gene="o3-10"
+                     /note="Sequencing primer, 25 matches Primer length is 25bp 
+                     Leading Original primer sequence : GTTGTGCCCAGTCATAGCCGAATA
+                     G"
+                     complement(3552..3571)
+                     /gene="o1-50"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Complement Original primer sequence : GTAACAAAGCGGGACCAAAG"
+                     complement(3064..3083)
+                     /gene="o1-52"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Complement Original primer sequence : CTGGAACCAGGATCTAAACC"
+                     510..529
+                     /gene="o1-58"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Leading Original primer sequence : ATCCAGATGGAGTTCTGAGG"
+                     1613..1632
+                     /gene="o1-60"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Leading Original primer sequence : CCCGCGAGAAATAGAGTTGA"
+                     2104..2123
+                     /gene="o1-61"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Leading Original primer sequence : GGACGAAAGTAAACCCACTG"
+                     complement(4515..4534)
+                     /gene="o2-53"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Complement Original primer sequence : CTGTTCAACGATGGTGTAGT"
+                     complement(4031..4050)
+                     /gene="o2-54"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Complement Original primer sequence : CCACCTTTGGTAACTTTCAG"
+                     1791..1810
+                     /gene="o2-63"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Leading Original primer sequence : AACATGCTGTGCGACGCTGG"
+                     4115..4134
+                     /gene="o2-64"
+                     /note="Sequencing primer, 20 matches Primer length is 20bp 
+                     Leading Original primer sequence : AAACACCCGGCTGACATCCC"
+                     complement(4230..4250)
+                     /gene="o2-65"
+                     /note="Sequencing primer, 21 matches Primer length is 21bp 
+                     Complement Original primer sequence : TGAACTCACCGTCTTGCAGGG
+                     "
+BASE COUNT     1320 a   1272 c   1248 g   1239 t
+ORIGIN
+        1 tcagttccgg gtaggcagtt cgctccaagc tggactgtat gcacgaaccc cccgttcagt
+       61 ccgaccgctg cgccttatcc ggtaactatc gtcttgagtc caacccggaa agacatgcaa
+      121 aagcaccact ggcagcagcc actggtaatt gatttagagg agttagtctt gaagtcatgc
+      181 gccggttaag gctaaactga aaggacaagt tttggtgact gcgctcctcc aagccagtta
+      241 cctcggttca aagagttggt agctcagaga accttcgaaa aaccgccctg caaggcggtt
+      301 ttttcgtttt cagagcaaga gattacgcgc agaccaaaac gatctcaaga agatcatctt
+      361 attaatcaga taaaatattt ctagatttca gtgcaattta tctcttcaaa tgtagcacct
+      421 gaagtcagcc ccatacgata taagttgtta ctagtgcttg gattctcacc aataaaaaac
+      481 gcccggcggc aaccgagcgt tctgaacaaa tccagatgga gttctgaggt cattactgga
+      541 tctatcaaca ggagtccaag cgagctctcg aaccccagag tcccgctcag aagaactcgt
+      601 caagaaggcg atagaaggcg atgcgctgcg aatcgggagc ggcgataccg taaagcacga
+      661 ggaagcggtc agcccattcg ccgccaagct cttcagcaat atcacgggta gccaacgcta
+      721 tgtcctgata gcggtccgcc acacccagcc ggccacagtc gatgaatcca gaaaagcggc
+      781 cattttccac catgatattc ggcaagcagg catcgccatg ggtcacgacg agatcctcgc
+      841 cgtcgggcat gcgcgccttg agcctggcga acagttcggc tggcgcgagc ccctgatgct
+      901 cttcgtccag atcatcctga tcgacaagac cggcttccat ccgagtacgt gctcgctcga
+      961 tgcgatgttt cgcttggtgg tcgaatgggc aggtagccgg atcaagcgta tgcagccgcc
+     1021 gcattgcatc agccatgatg gatactttct cggcaggagc aaggtgagat gacaggagat
+     1081 cctgccccgg cacttcgccc aatagcagcc agtcccttcc cgcttcagtg acaacgtcga
+     1141 gcacagctgc gcaaggaacg cccgtcgtgg ccagccacga tagccgcgct gcctcgtcct
+     1201 gcagttcatt cagggcaccg gacaggtcgg tcttgacaaa aagaaccggg cgcccctgcg
+     1261 ctgacagccg gaacacggcg gcatcagagc agccgattgt ctgttgtgcc cagtcatagc
+     1321 cgaatagcct ctccacccaa gcggccggag aacctgcgtg caatccatct tgttcaatca
+     1381 tgcgaaacga tcctcatcct gtctcttgat cagatcatga tcccctgcgc catcagatcc
+     1441 ttggcggcaa gaaagccatc cagtttactt tgcagggctt cccaacctta ccagagggcg
+     1501 ccccagctgg caattccgac gtcttatgac aacttgacgg ctacatcatt cactttttct
+     1561 tcacaaccgg cacggaactc gctcgggctg gccccggtgc attttttaaa tacccgcgag
+     1621 aaatagagtt gatcgtcaaa accaacattg cgaccgacgg tggcgatagg catccgggtg
+     1681 gtgctcaaaa gcagcttcgc ctggctgata cgttggtcct cgcgccagct taagacgcta
+     1741 atccctaact gctggcggaa aagatgtgac agacgcgacg gcgacaagca aacatgctgt
+     1801 gcgacgctgg cgatatcaaa attgctgtct gccaggtgat cgctgatgta ctgacaagcc
+     1861 tcgcgtaccc gattatccat cggtggatgg agcgactcgt taatcgcttc catgcgccgc
+     1921 agtaacaatt gctcaagcag atttatcgcc agcagctccg aatagcgccc ttccccttgc
+     1981 ccggcgttaa tgatttgccc aaacaggtcg ctgaaatgcg gctggtgcgc ttcatccggg
+     2041 cgaaagaacc ccgtattggc aaatattgac ggccagttaa gccattcatg ccagtaggcg
+     2101 cgcggacgaa agtaaaccca ctggtgatac cattcgcgag cctccggatg acgaccgtag
+     2161 tgatgaatct ctcctggcgg gaacagcaaa atatcacccg gtcggcaaac aaattctcgt
+     2221 ccctgatttt tcaccacccc ctgaccgcga atggtgagat tgagaatata acctttcatt
+     2281 cccagcggtc ggtcgataaa aaaatcgaga taaccgttgg cctcaatcgg cgttaaaccc
+     2341 gccaccagat gggcattaaa cgagtatccc ggcagcaggg gatcattttg cgcttcagcc
+     2401 attttattag tgcttgcgtc gttcttttct gttttaatcc acagaaacta ggagccggat
+     2461 gattaattgt caaactcggt tcctggcctt ttgctgaaat aataaaaaag ccggattaat
+     2521 aatctggctt tttatattct ctagatcttt tattaagagg ttttagatcc agtgtgagta
+     2581 cgttgatgac gtaccagatt atcagaacgg gagaaggatt taccacattc cggacatttg
+     2641 tacggtttag atccagtgtg agtacgttga tgattagtca gatgatcgga acgggagaag
+     2701 gatttaccac attccggaca tttgtacggt ttagatccag tgtgagtacg ttgatgacga
+     2761 accagattgg aagattggga gaaggattta ccacattccg gacatttgta cggtttagat
+     2821 ccagtgtgag tacgttgatg acgttccaga tgagcacgct gggagaagga tttaccacat
+     2881 tccggacatt tgtacggttt agatccagtg tgagtacgtt gatgacgtac cagattatca
+     2941 gaacgggaga aggatttacc acattccgga catttgtacg gtttagatcc agtgtgagta
+     3001 cgttgatgac gtaccagatt atcagaacgg gagaaggatt taccacattc cggacatttg
+     3061 tacggtttag atcctggttc cagcatagat ccttcctcct agatccttac aaccggctat
+     3121 tagagtagcc ggttttagaa aaattgtcta aatcgtgatt ttccaaatga tttgaatgat
+     3181 ttgcatgatt gtttttatac ataaaaaaga gcgactcctt aatctcaatt tcgtttaagg
+     3241 aatcgctcac ccaaatatat atctttatgt atatttaaat atcgtttaat atctaaatat
+     3301 acaagattat aaaaacaact cagtgttttt ttctttgaat gatgtcgttc tgcaactttg
+     3361 gcgagggaca gagcgactcc tttttattta tggagaaaca gtagagagtt gcgataaaaa
+     3421 gcgtcaggta gaatccgcta atcttatgga taaaaatgct atggcatagc aaagtgtgac
+     3481 gccgtgcaaa taatcaatgt ggacttttct gccgtgatta gcggctaaaa cgcgtaacaa
+     3541 aagtctattg gctttggtcc cgctttgtta cagaatgctt ttaataagcg gggttaccgg
+     3601 tttggttagc gagaagagcc agtaaaagac gcagtgacgg caatgtctga tgcaatatgg
+     3661 acaattggtt tcttctctga atggcgggag tatgaaacat gaggccgaac ggtattttca
+     3721 tcccaatcca cacgtccaac gcacagcaaa caccacgtcg accctatcag ctgcgtgctt
+     3781 tctatgagag ggaaggagag gagttgacaa ttaatcatcg gctcataacc tttgtggatt
+     3841 ctccataccc gtttttttgg gaattcaaaa gatcttttaa gaaggagata tacatatggc
+     3901 gagtagcgaa gacgttatca aagagttcat gcgtttcaaa gttcgtatgg aaggttccgt
+     3961 taacggtcac gagttcgaaa tcgaaggtga aggtgaaggt cgtccgtacg aaggtaccca
+     4021 gaccgctaaa ctgaaagtta ccaaaggtgg tccgctgccg ttcgcttggg acatcctgtc
+     4081 cccgcagttc cagtacggtt ccaaagctta cgttaaacac ccggctgaca tcccggacta
+     4141 cctgaaactg tccttcccgg aaggtttcaa atgggaacgt gttatgaact tcgaagacgg
+     4201 tggtgttgtt accgttaccc aggactcctc cctgcaagac ggtgagttca tctacaaagt
+     4261 taaactgcgt ggtaccaact tcccgtccga cggtccggtt atgcagaaaa aaaccatggg
+     4321 ttgggaagct tccaccgaac gtatgtaccc ggaagacggt gctctgaaag gtgaaatcaa
+     4381 aatgcgtctg aaactgaaag acggtggtca ctacgacgct gaagttaaaa ccacctacat
+     4441 ggctaaaaaa ccggttcagc tgccgggtgc ttacaaaacc gacatcaaac tggacatcac
+     4501 ctcccacaac gaagactaca ccatcgttga acagtacgaa cgtgctgaag gtcgtcactc
+     4561 caccggtgct taaggatcca aactcgagta aggatctcca ggcatcaaat aaaacgaaag
+     4621 gctcagtcga aagactgggc ctttcgtttt atctgttgtt tgtcggtgaa cgctctctac
+     4681 tagagtcaca ctggctcacc ttcgggtggg cctttctgcg tttataccta gggatatatt
+     4741 ccgcttcctc gctcactgac tcgctacgct cggtcgttcg actgcggcga gcggaaatgg
+     4801 cttacgaacg gggcggagat ttcctggaag atgccaggaa gatacttaac agggaagtga
+     4861 gagggccgcg gcaaagccgt ttttccatag gctccgcccc cctgacaagc atcacgaaat
+     4921 ctgacgctca aatcagtggt ggcgaaaccc gacaggacta taaagatacc aggcgtttcc
+     4981 ccctggcggc tccctcgtgc gctctcctgt tcctgccttt cggtttaccg gtgtcattcc
+     5041 gctgttatgg ccgcgtttgt ctcattccac gcctgacac                       
+//

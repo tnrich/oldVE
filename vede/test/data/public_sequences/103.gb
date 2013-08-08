@@ -1,0 +1,24 @@
+LOCUS       GFPuv.sig_pep            783 bp ds-DNA     linear       1-MAY-2012
+ACCESSION   GFPuv.sig_pep
+VERSION     GFPuv.sig_pep
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     CDS             1..783
+                     /label="gfpuv_sig_pep"
+                     /vntifkey=4
+ORIGIN      
+        1 atgagtaaag gagaagaact tttcactgga gttgtcccaa ttcttgttga attagatggt
+       61 gatgttaatg ggcacaaatt ttctgtcagt ggagagggtg aaggtgatgc aacatacgga
+      121 aaacttaccc ttaaatttat ttgcactact ggaaaactac ctgttccatg gccaacactt
+      181 gtcactactt tctcttatgg tgttcaatgc ttttcccgtt atccggatca tatgaaacgg
+      241 catgactttt tcaagagtgc catgcccgaa ggttatgtac aggaacgcac tatatctttc
+      301 aaagatgacg ggaactacaa gacgcgtgct gaagtcaagt ttgaaggtga tacccttgtt
+      361 aatcgtatcg agttaaaagg tattgatttt aaagaagatg gaaacattct cggacacaaa
+      421 ctcgagtaca actataactc acacaatgta tacatcacgg cagacaaaca aaagaatgga
+      481 atcaaagcta acttcaaaat tcgccacaac attgaagatg gatccgttca actagcagac
+      541 cattatcaac aaaatactcc aattggcgat ggccctgtcc ttttaccaga caaccattac
+      601 ctgtcgacac aatctgccct ttcgaaagat cccaacgaaa agcgtgacca catggtcctt
+      661 cttgagtttg taactgctgc tgggattaca catggcatgg atgagctcgg cggcggcggc
+      721 agcaaggtct acggcaagga acagtttttg cggatgcgcc agagcatgtt ccccgatcgc
+      781 taa     
+//

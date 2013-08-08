@@ -1,0 +1,140 @@
+LOCUS       NewSequenc              3511 bp ds-DNA     circular     14-MAR-2013
+ACCESSION   NewSequenc
+VERSION     NewSequenc
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    8..46
+                     /label="Combo"
+     5'UTR           13..42
+                     /label="IS10-3"
+     RBS             27..32
+                     /label="RBS"
+     primer          2527..2542
+                     /label="M13F"
+                     /label=M13F
+     CDS             complement(2294..3454)
+                     /label="lacZ"
+                     /label=lacZ
+     CDS             complement(1133..1948)
+                     /label="kan"
+                     /label=kan
+     misc_RNA        complement(374..926)
+                     /label="RNAII transcript (complementary strand)"
+                     /label=RNAII transcript (complementary strand)
+                     /note=RNAII transcript (complementary strand)
+     primer          complement(255..274)
+                     /label="G00101"
+                     /label=G00101
+     protein_bind    complement(70..82)
+                     /label="CAP protein binding site"
+                     /label=CAP protein binding site
+                     /bound_moiety=catabolite activator protein (CAP)
+                     /note=CAP protein binding site
+     misc_feature    47..53
+                     /label="BsaIReverse"
+                     /label=BsaIReverse
+     -10_signal      complement(936..941)
+                     /label="RNAII promoter (counter-clockwise); CGTAAT"
+                     /note=RNAII promoter (counter-clockwise); CGTAAT
+                     /label=RNAII promoter (counter-clockwise); CGTAAT
+     -10_signal      802..807
+                     /label="RNAI promoter (clockwise); GCTACA"
+                     /note=RNAI promoter (clockwise); GCTACA
+                     /label=RNAI promoter (clockwise); GCTACA
+     misc_feature    54
+                     /label="marker"
+                     /label=marker
+     -35_signal      complement(957..962)
+                     /label="RNAII promoter (counter-clockwise); TTGAGA"
+                     /label=RNAII promoter (counter-clockwise); TTGAGA
+                     /note=RNAII promoter (counter-clockwise); TTGAGA
+     misc_RNA        816..923
+                     /label="RNAI transcript"
+                     /label=RNAI transcript
+                     /note=RNAI transcript
+     primer          2500..2523
+                     /label="M13F (-47)"
+                     /label=M13F (-47)
+     primer          2071..2090
+                     /label="G00100"
+                     /label=G00100
+     -35_signal      780..785
+                     /label="RNAI promoter (clockwise); TTGAAG"
+                     /label=RNAI promoter (clockwise); TTGAAG
+                     /note=RNAI promoter (clockwise); TTGAAG
+     rep_origin      complement(374..962)
+                     /label="pMB1 origin of replication (counter-clockwise)
+                     (RNA II -35 to RNA/DNA switch point)"
+                     /note=pMB1 origin of replication (counter-clockwise)
+                     (RNAII -35 to RNA/DNA switch point)
+                     /label=pMB1 origin of replication (counter-clockwise)
+                     (RNA II -35 to RNA/DNA switch point)
+     misc_feature    2580..3402
+                     /label="TetR Cassette"
+                     /label=TetR Cassette
+     primer          complement(3476..3499)
+                     /label="M13R (-48)"
+                     /label=M13R (-48)
+     misc_feature    1..7
+                     /label="BsaI Forward"
+ORIGIN      
+        1 ggtctcattt aagggaaaaa tcaataagga gacaacaaga tgcgtaagag acctggggtg
+       61 cctaatgagt gagctaactc acattaattg cgttgcgctc actgcccgct ttccagtcgg
+      121 gaaacctgtc gtgccagctg cattaatgaa tcggccaacg cgcggggaga ggcggtttgc
+      181 gtattgggcg ctcttccgct tcctcgctca ctgactcgct gcgctcggtc gttcggctgc
+      241 ggcgagcggt atcagctcac tcaaaggcgg taatacggtt atccacagaa tcaggggata
+      301 acgcaggaaa gaacatgtga gcaaaaggcc agcaaaaggc caggaaccgt aaaaaggccg
+      361 cgttgctggc gtttttccat aggctccgcc cccctgacga gcatcacaaa aatcgacgct
+      421 caagtcagag gtggcgaaac ccgacaggac tataaagata ccaggcgttt ccccctggaa
+      481 gctccctcgt gcgctctcct gttccgaccc tgccgcttac cggatacctg tccgcctttc
+      541 tcccttcggg aagcgtggcg ctttctcata gctcacgctg taggtatctc agttcggtgt
+      601 aggtcgttcg ctccaagctg ggctgtgtgc acgaaccccc cgttcagccc gaccgctgcg
+      661 ccttatccgg taactatcgt cttgagtcca acccggtaag acacgactta tcgccactgg
+      721 cagcagccac tggtaacagg attagcagag cgaggtatgt aggcggtgct acagagttct
+      781 tgaagtggtg gcctaactac ggctacacta gaagaacagt atttggtatc tgcgctctgc
+      841 tgaagccagt taccttcgga aaaagagttg gtagctcttg atccggcaaa caaaccaccg
+      901 ctggtagcgg tggttttttt gtttgcaagc agcagattac gcgcagaaaa aaaggatctc
+      961 aagaagatcc tttgatcttt tctacggggt ctgacgctca gtggaacgaa aactcacgtt
+     1021 aagggatttt ggtcatgaga ttatcaaaaa ggatcttcac ctagatcctt ttaaattaaa
+     1081 aatgaagttt taaatcaatc taaagtatat atgagtaaac ttggtctgac agttagaaaa
+     1141 actcatcgag catcaaatga aactgcaatt tattcatatc aggattatca ataccatatt
+     1201 tttgaaaaag ccgtttctgt aatgaaggag aaaactcacc gaggcagttc cataggatgg
+     1261 caagatcctg gtatcggtct gcgattccga ctcgtccaac atcaatacaa cctattaatt
+     1321 tcccctcgtc aaaaataagg ttatcaagtg agaaatcacc atgagtgacg actgaatccg
+     1381 gtgagaatgg caaaagttta tgcatttctt tccagacttg ttcaacaggc cagccattac
+     1441 gctcgtcatc aaaatcactc gcatcaacca aaccgttatt cattcgtgat tgcgcctgag
+     1501 cgagacgaaa tacgcgatcg ctgttaaaag gacaattaca aacaggaatc gaatgcaacc
+     1561 ggcgcaggaa cactgccagc gcatcaacaa tattttcacc tgaatcagga tattcttcta
+     1621 atacctggaa tgctgttttc ccagggatcg cagtggtgag taaccatgca tcatcaggag
+     1681 tacggataaa atgcttgatg gtcggaagag gcataaattc cgtcagccag tttagtctga
+     1741 ccatctcatc tgtaacatca ttggcaacgc tacctttgcc atgtttcaga aacaactctg
+     1801 gcgcatcggg cttcccatac aatcgataga ttgtcgcacc tgattgcccg acattatcgc
+     1861 gagcccattt atacccatat aaatcagcat ccatgttgga atttaatcgc ggcctagagc
+     1921 aagacgtttc ccgttgaata tggctcatac tcttcctttt tcaatattat tgaagcattt
+     1981 atcagggtta ttgtctcatg agcggataca tatttgaatg tatttagaaa aataaacaaa
+     2041 taggggttcc gcgcacattt ccccgaaaag tgccacctga cgtctaagaa accattatta
+     2101 tcatgacatt aacctataaa aataggcgta tcacgaggcc ctttcgtctc gcgcgtttcg
+     2161 gtgatgacgg tgaaaacctc tgacacatgc agctcccgga gacggtcaca gcttgtctgt
+     2221 aagcggatgc cgggagcaga caagcccgtc agggcgcgtc agcgggtgtt ggcgggtgtc
+     2281 ggggctggct taactatgcg gcatcagagc agattgtact gagagtgcac catatgcggt
+     2341 gtgaaatacc gcacagatgc gtaaggagaa aataccgcat caggcgccat tcgccattca
+     2401 ggctgcgcaa ctgttgggaa gggcgatcgg tgcgggcctc ttcgctatta cgccagctgg
+     2461 cgaaaggggg atgtgctgca aggcgattaa gttgggtaac gccagggttt tcccagtcac
+     2521 gacgttgtaa aacgacggcc agtgaattcg agctcggtac ctcgcgaatg catctagatt
+     2581 ttacggctag ctcagcccta ggtattatgc tagcaattac aacagtactg cgatgagtgg
+     2641 cagggcgggg cgtaatagga attaatgatg agccgcctgg acaagagcaa agtgatcaac
+     2701 agcgccctgg agctgctgaa cgaggttggc atcgagggtc tgaccacccg taagctggcc
+     2761 cagaagctgg gtgtggagca gccgacactg tactggcacg tgaagaataa gcgcgccctg
+     2821 ctggatgcac tggccatcga aatgctggac cgccaccata cccacttctg cccgctggag
+     2881 ggcgagagtt ggcaggactt cctgcgcaac aacgccaaaa gcttccgctg cgccttactg
+     2941 agccaccgcg atggtgccaa agtgcatctg ggcacccgcc cgacagagaa gcagtatgaa
+     3001 accctggaga accagctggc cttcctgtgc cagcagggct tcagcctgga gaacgccctg
+     3061 tacgcactga gcgccgtggg tcacttcacc ttaggctgtg tgctggagga ccaggaacac
+     3121 caggtggcca aagaggagcg cgaaaccccg accacagaca gcatgccgcc tctgctgcgt
+     3181 caggccattg agctgtttga ccaccagggt gccgaacctg ccttcctgtt cggtctggag
+     3241 ctgatcatct gcggtctgga gaagcagctg aaatgcgaga gcggcagctg atctagaggc
+     3301 atcaaataaa acgaaaggct cagtcgaaag actgggcctt tcgttttatc tgttgtttgt
+     3361 cggtgaacgc tctcctgagt aggacaaatc cgccgcccta gaggacatcg gatcccgggc
+     3421 ccgtcgactg cagaggcctg catgcaagct tggctcgagc atggtcatag ctgtttcctg
+     3481 tgtgaaattg ttatccgctc acaattccac a  
+//

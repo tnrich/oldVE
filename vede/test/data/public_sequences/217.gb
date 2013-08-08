@@ -1,0 +1,33 @@
+LOCUS       CYP106A2_order_8         500 bp    DNA     linear   UNA 17-APR-2012
+DEFINITION  part 800-1300.
+ACCESSION   urn.local...1334696502118.832
+VERSION     urn.local...1334696502118.832
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     CDS             <1..>500
+                     /created_by="User"
+                     /label="CYP106A2"
+     primer_bind     417..476
+                     /created_by="User"
+                     /label="PR12041702"
+     primer_bind     458..476
+                     /created_by="User"
+                     /label="PR12041702_bb_part"
+     gBlock          1..500
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="gBlock 800-1300"
+ORIGIN      
+        1 aaaagaatac taccagtacc tgtacccgat cgtggtgcag aagcgtctga acccggcgga
+       61 tgatatcatc tctgatctgc tgaaatctga agttgacggc gaaatgttta ccgatgacga
+      121 agttgttcgt accactatgc tgattctggg tgcaggcgtg gaaactacgt cccatctgct
+      181 ggctaactcc ttttacagcc tgctgtacga cgacaaagaa gtctaccagg aactgcatga
+      241 gaacctggac ctggttccac aggctgtgga agaaatgctg cgtttccgtt ttaacctgat
+      301 caaactggac cgcaccgtaa aagaagataa cgacctgctg ggtgttgaac tgaaggaggg
+      361 tgattctgtc gtggtatgga tgtctgctgc gaacatggac gaagaaatgt ttgaagaccc
+      421 attcaccctg aacatccatc gtcctaacaa caaaaaacac ctgacttttg gcaacggtcc
+      481 gcacttctgt ctgggcgctc
+//

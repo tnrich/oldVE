@@ -1,0 +1,89 @@
+LOCUS       CYP106A2_order_1         541 bp    DNA     linear   UNA 17-APR-2012
+DEFINITION  part 1-500.
+ACCESSION   urn.local...1334700952110.1114
+VERSION     urn.local...1334700952110.1114
+KEYWORDS    .
+SOURCE      E. Coli
+  ORGANISM  E. Coli
+            .
+FEATURES             Location/Qualifiers
+     CDS             230..>504
+                     /created_by="User"
+                     /label="CYP106A2"
+     RBS             200..229
+                     /created_by="User"
+                     /label="RBS12032601"
+     motif           164..192
+                     /created_by="User"
+                     /label="RNAp binding motif"
+     promoter        145..199
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="R0011(pLac)"
+     spacer          <1..144
+                     /created_by="User"
+                     /modified_by="User"
+                     /modified_by="User"
+                     /label="BioBricks left spacer"
+     gBlock          1..541
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="gBlock 1-500 after PCR"
+     gBlock          405..>541
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="gBlock 400-900"
+     primer          230..260
+                     /label="PR12041101"
+     primer          complement(386..409)
+                     /label="PR12041103"
+     protein_bind    145..165
+                     /created_by="User"
+                     /label="LacO"
+     protein_bind    169..187
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="lac1 core operator"
+     primer_bind     complement(482..541)
+                     /created_by="User"
+                     /label="PR12041705"
+     primer_bind     complement(<1..43)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="PR12041703"
+     primer_bind     25..60
+                     /created_by="User"
+                     /label="PR12041704_gBlock_part"
+     primer_bind     complement(176..199)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="sRNA primer rev"
+     primer_bind     <1..24
+                     /created_by="primer3"
+                     /%GC="52.0"
+                     /Tm="56.41"
+                     /Hairpin="7.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="CACCTACTACTGATAGTATGCCGCC"
+                     /label="BBa_G00400"
+     primer_bind     complement(482..504)
+                     /created_by="User"
+                     /label="PR12041705_gBlock_part"
+     primer_bind     1..60
+                     /created_by="User"
+                     /label="PR12041704"
+ORIGIN      
+        1 acctactact gatagtatgc cgccaccatt attatcatga cattaaccta taaaaatagg
+       61 cgtatcacga ggcagaattt cagataaaaa aaatccttag ctttcgctaa ggatgatttc
+      121 tggaattcgc ggccgcttct agagaattgt gagcggataa caattgacat tgtgagcgga
+      181 taacaagata ctgagcacac agcacgtata cactataagg agggaagaaa tgaaagaagt
+      241 tattgcagtt aaagaaatca ctcgttttaa aacccgcacc gaggaattct ctccgtacgc
+      301 atggtgcaaa cgcatgctgg aaaacgaccc ggtaagctac catgaaggca ctgacacctg
+      361 gaacgtattt aagtacgaag acgttaaacg tgttctgtcc gattacaaac atttcagcag
+      421 cgttcgcaaa cgtaccacca tcagcgtagg taccgacagc gaggaaggtt ccgttccgga
+      481 aaaaatccaa atcactgagt ccgatccacc ggatcaccgt aaacgtcgta gcctgctggc
+      541 g
+//

@@ -1,0 +1,44 @@
+LOCUS       New_DNA                 1587 bp ds-DNA     linear       02-MAY-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     gene            1..1587
+                     /label=dCas9
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 attgttccac aaagtttcct taaagacgat tcaatagaca ataaggtctt aacgcgttct
+       61 gataaaaatc gtggtaaatc ggataacgtt ccaagtgaag aagtagtcaa aaagatgaaa
+      121 aactattgga gacaacttct aaacgccaag ttaatcactc aacgtaagtt tgataattta
+      181 acgaaagctg aacgtggagg tttgagtgaa cttgataaag ctggttttat caaacgccaa
+      241 ttggttgaaa ctcgccaaat cactaagcat gtggcacaaa ttttggatag tcgcatgaat
+      301 actaaatacg atgaaaatga taaacttatt cgagaggtta aagtgattac cttaaaatct
+      361 aaattagttt ctgacttccg aaaagatttc caattctata aagtacgtga gattaacaat
+      421 taccatcatg cccatgatgc gtatctaaat gccgtcgttg gaactgcttt gattaagaaa
+      481 tatccaaaac ttgaatcgga gtttgtctat ggtgattata aagtttatga tgttcgtaaa
+      541 atgattgcta agtctgagca agaaataggc aaagcaaccg caaaatattt cttttactct
+      601 aatatcatga acttcttcaa aacagaaatt acacttgcaa atggagagat tcgcaaacgc
+      661 cctctaatcg aaactaatgg ggaaactgga gaaattgtct gggataaagg gcgagatttt
+      721 gccacagtgc gcaaagtatt gtccatgccc caagtcaata ttgtcaagaa aacagaagta
+      781 cagacaggcg gattctccaa ggagtcaatt ttaccaaaaa gaaattcgga caagcttatt
+      841 gctcgtaaaa aagactggga tccaaaaaaa tatggtggtt ttgatagtcc aacggtagct
+      901 tattcagtcc tagtggttgc taaggtggaa aaagggaaat cgaagaagtt aaaatccgtt
+      961 aaagagttac tagggatcac aattatggaa agaagttcct ttgaaaaaaa tccgattgac
+     1021 tttttagaag ctaaaggata taaggaagtt aaaaaagact taatcattaa actacctaaa
+     1081 tatagtcttt ttgagttaga aaacggtcgt aaacggatgc tggctagtgc cggagaatta
+     1141 caaaaaggaa atgagctggc tctgccaagc aaatatgtga attttttata tttagctagt
+     1201 cattatgaaa agttgaaggg tagtccagaa gataacgaac aaaaacaatt gtttgtggag
+     1261 cagcataagc attatttaga tgagattatt gagcaaatca gtgaattttc taagcgtgtt
+     1321 attttagcag atgccaattt agataaagtt cttagtgcat ataacaaaca tagagacaaa
+     1381 ccaatacgtg aacaagcaga aaatattatt catttattta cgttgacgaa tcttggagct
+     1441 cccgctgctt ttaaatattt tgatacaaca attgatcgta aacgatatac gtctacaaaa
+     1501 gaagttttag atgccactct tatccatcaa tccatcactg gtctttatga aacacgcatt
+     1561 gatttgagtc agctaggagg tgactga   
+//

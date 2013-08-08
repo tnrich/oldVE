@@ -1,0 +1,48 @@
+LOCUS       JPUB_000801__1_           86 bp ds-DNA     linear       06-FEB-2013
+ACCESSION   P0009
+VERSION     P0009.1
+KEYWORDS    .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     promoter        19..64
+                     /label=native cI promoter (BBa_R0051)
+                     /ApEinfo_fwdcolor=#00ff00
+                     /ApEinfo_revcolor=#00ff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     promoter        65..67
+                     /label=native cI promoter (BBa_R0051)(1)
+                     /ApEinfo_label=native cI promoter (BBa_R0051)
+                     /ApEinfo_fwdcolor=#00ff00
+                     /ApEinfo_revcolor=#00ff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     -35_signal      33..38
+                     /label=-35
+                     /ApEinfo_fwdcolor=#ff8000
+                     /ApEinfo_revcolor=#ff8000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     -10_signal      56..61
+                     /label=-10
+                     /ApEinfo_fwdcolor=#ff8000
+                     /ApEinfo_revcolor=#ff8000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    19..35
+                     /label=OR2
+                     /ApEinfo_fwdcolor=#0080ff
+                     /ApEinfo_revcolor=#0080ff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    43..59
+                     /label=OR1
+                     /ApEinfo_fwdcolor=#0080ff
+                     /ApEinfo_revcolor=#0080ff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 CACACCAGGT CTCATTTCta acaccgtgcg tgttgactat tttacctctg gcggtgataa
+       61 tggttgcaGC TGTGAGACCT GGTGTG   
+//

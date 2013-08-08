@@ -1,0 +1,43 @@
+LOCUS       JPUB_000736__1_          928 bp ds-DNA     linear       06-FEB-2013
+ACCESSION   temp P0009
+VERSION     temp P0009.1
+KEYWORDS    .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     terminator      755..883
+                     /label=Terminator B0015
+                     /ApEinfo_fwdcolor=#ff0000
+                     /ApEinfo_revcolor=#ff0000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    35..754
+                     /label=superfolder GFP
+                     /ApEinfo_fwdcolor=#ff80ff
+                     /ApEinfo_revcolor=#ff80ff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     RBS             1..34
+                     /label=sRBS (2,500)
+                     /ApEinfo_fwdcolor=cyan
+                     /ApEinfo_revcolor=cyan
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 taagtatcct ctaaccctaa aggggcacaa aatcatgcgt aaaggcgaag agctgttcac
+       61 tggtgtcgtc cctattctgg tggaactgga tggtgatgtc aacggtcata agttttccgt
+      121 gcgtggcgag ggtgaaggtg acgcaactaa tggtaaactg acgctgaagt tcatctgtac
+      181 tactggtaaa ctgccggtac cttggccgac tctggtaacg acgctgactt atggtgttca
+      241 gtgctttgct cgttatccgg accatatgaa gcagcatgac ttcttcaagt ccgccatgcc
+      301 ggaaggctat gtgcaggaac gcacgatttc ctttaaggat gacggcacgt acaaaacgcg
+      361 tgcggaagtg aaatttgaag gcgataccct ggtaaaccgc attgagctga aaggcattga
+      421 ctttaaagaa gacggcaata tcctgggcca taagctggaa tacaatttta acagccacaa
+      481 tgtttacatc accgccgata aacaaaaaaa tggcattaaa gcgaatttta aaattcgcca
+      541 caacgtggag gatggcagcg tgcagctggc tgatcactac cagcaaaaca ctccaatcgg
+      601 tgatggtcct gttctgctgc cagacaatca ctatctgagc acgcaaagcg ttctgtctaa
+      661 agatccgaac gagaaacgcg atcatatggt tctgctggag ttcgtaaccg cagcgggcat
+      721 cacgcatggt atggatgaac tgtacaaatg atgaccaggc atcaaataaa acgaaaggct
+      781 cagtcgaaag actgggcctt tcgttttatc tgttgtttgt cggtgaacgc tctctactag
+      841 agtcacactg gctcaccttc gggtgggcct ttctgcgttt ataggtaccc ggggatcctc
+      901 tagagtcgac ctgcaggcat gcaagctt   
+//

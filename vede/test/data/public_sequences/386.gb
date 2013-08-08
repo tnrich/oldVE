@@ -1,0 +1,92 @@
+LOCUS       New_DNA                  140 bp ds-DNA     linear       22-JAN-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     misc_feature    17..91
+                     /label=RiboJ
+                     /ApEinfo_fwdcolor=#690f96
+                     /ApEinfo_revcolor=#690f96
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    92..126
+                     /label=sRBS (500)
+                     /ApEinfo_fwdcolor=cyan
+                     /ApEinfo_revcolor=#00ffff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     promoter        15..16
+                     /label=PLTetO-1
+                     /ApEinfo_fwdcolor=#ff00ff
+                     /ApEinfo_revcolor=#ff00ff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    35..36
+                     /label=middle1
+                     /ApEinfo_fwdcolor=#ff0080
+                     /ApEinfo_revcolor=#ff0080
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    70..71
+                     /label=middle2
+                     /ApEinfo_fwdcolor=#ff0080
+                     /ApEinfo_revcolor=#ff0080
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    105..106
+                     /label=middle3
+                     /ApEinfo_fwdcolor=#ff0080
+                     /ApEinfo_revcolor=#ff0080
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    27..44
+                     /label=overlap1
+                     /ApEinfo_fwdcolor=#00ff00
+                     /ApEinfo_revcolor=#00ff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    59..80
+                     /label=overlap2
+                     /ApEinfo_fwdcolor=#00ff00
+                     /ApEinfo_revcolor=#00ff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    97..115
+                     /label=overlap3
+                     /ApEinfo_fwdcolor=#00ff00
+                     /ApEinfo_revcolor=green
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     1..44
+                     /label=JS32
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    complement(27..80)
+                     /label=JS33
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     59..115
+                     /label=JS34
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     complement(97..140)
+                     /label=JS35
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 CACACCAGGT CTCACCAGCT GTCACCGGAT GTGCTTTCCG GTCTGATGAG TCCGTGAGGA
+       61 CGAAACAGCC TCTACAAATA ATTTTGTTTA AGCATAAAGG ACTTAGCAAA GCCCAATTTT
+      121 AAACAATGAG ACCTGGTGTG    
+//

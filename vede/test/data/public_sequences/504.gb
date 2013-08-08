@@ -1,0 +1,233 @@
+LOCUS       NC_000913               2906 bp    DNA     linear   BCT 04-MAR-2013
+DEFINITION  Escherichia coli str. K-12 substr. MG1655, complete genome.
+ACCESSION   NC_000913 REGION: complement(3384243..3387148)
+VERSION     NC_000913.2  GI:49175990
+DBLINK      Project: 57779
+            BioProject: PRJNA57779
+KEYWORDS    .
+SOURCE      Escherichia coli str. K-12 substr. MG1655
+  ORGANISM  Escherichia coli str. K-12 substr. MG1655
+            Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+            Enterobacteriaceae; Escherichia.
+REFERENCE   1  (bases 1 to 2906)
+  AUTHORS   Riley,M., Abe,T., Arnaud,M.B., Berlyn,M.K., Blattner,F.R.,
+            Chaudhuri,R.R., Glasner,J.D., Horiuchi,T., Keseler,I.M., Kosuge,T.,
+            Mori,H., Perna,N.T., Plunkett,G. III, Rudd,K.E., Serres,M.H.,
+            Thomas,G.H., Thomson,N.R., Wishart,D. and Wanner,B.L.
+  TITLE     Escherichia coli K-12: a cooperatively developed annotation
+            snapshot--2005
+  JOURNAL   Nucleic Acids Res. 34 (1), 1-9 (2006)
+   PUBMED   16397293
+  REMARK    Publication Status: Online-Only
+REFERENCE   2  (bases 1 to 2906)
+  AUTHORS   Blattner,F.R., Plunkett,G. III, Bloch,C.A., Perna,N.T., Burland,V.,
+            Riley,M., Collado-Vides,J., Glasner,J.D., Rode,C.K., Mayhew,G.F.,
+            Gregor,J., Davis,N.W., Kirkpatrick,H.A., Goeden,M.A., Rose,D.J.,
+            Mau,B. and Shao,Y.
+  TITLE     The complete genome sequence of Escherichia coli K-12
+  JOURNAL   Science 277 (5331), 1453-1474 (1997)
+   PUBMED   9278503
+REFERENCE   3  (bases 1 to 2906)
+  AUTHORS   Arnaud,M., Berlyn,M.K.B., Blattner,F.R., Galperin,M.Y.,
+            Glasner,J.D., Horiuchi,T., Kosuge,T., Mori,H., Perna,N.T.,
+            Plunkett,G. III, Riley,M., Rudd,K.E., Serres,M.H., Thomas,G.H. and
+            Wanner,B.L.
+  TITLE     Workshop on Annotation of Escherichia coli K-12
+  JOURNAL   Unpublished
+  REMARK    Woods Hole, Mass., on 14-18 November 2003 (sequence corrections)
+REFERENCE   4  (bases 1 to 2906)
+  AUTHORS   Glasner,J.D., Perna,N.T., Plunkett,G. III, Anderson,B.D.,
+            Bockhorst,J., Hu,J.C., Riley,M., Rudd,K.E. and Serres,M.H.
+  TITLE     ASAP: Escherichia coli K-12 strain MG1655 version m56
+  JOURNAL   Unpublished
+  REMARK    ASAP download 10 June 2004 (annotation updates)
+REFERENCE   5  (bases 1 to 2906)
+  AUTHORS   Hayashi,K., Morooka,N., Mori,H. and Horiuchi,T.
+  TITLE     A more accurate sequence comparison between genomes of Escherichia
+            coli K12 W3110 and MG1655 strains
+  JOURNAL   Unpublished
+  REMARK    GenBank accessions AG613214 to AG613378 (sequence corrections)
+REFERENCE   6  (bases 1 to 2906)
+  AUTHORS   Perna,N.T.
+  TITLE     Escherichia coli K-12 MG1655 yqiK-rfaE intergenic region, genomic
+            sequence correction
+  JOURNAL   Unpublished
+  REMARK    GenBank accession AY605712 (sequence corrections)
+REFERENCE   7  (bases 1 to 2906)
+  AUTHORS   Rudd,K.E.
+  TITLE     A manual approach to accurate translation start site annotation: an
+            E. coli K-12 case study
+  JOURNAL   Unpublished
+REFERENCE   8  (bases 1 to 2906)
+  CONSRTM   NCBI Genome Project
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2013) National Center for Biotechnology
+            Information, NIH, Bethesda, MD 20894, USA
+REFERENCE   9  (bases 1 to 2906)
+  AUTHORS   Rudd,K.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (06-FEB-2013) Department of Biochemistry and Molecular
+            Biology, University of Miami Miller School of Medicine, 118 Gautier
+            Bldg., Miami, FL 33136, USA
+  REMARK    Sequence update by submitter
+REFERENCE   10 (bases 1 to 2906)
+  AUTHORS   Rudd,K.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (24-APR-2007) Department of Biochemistry and Molecular
+            Biology, University of Miami Miller School of Medicine, 118 Gautier
+            Bldg., Miami, FL 33136, USA
+  REMARK    Annotation update from ecogene.org as a multi-database
+            collaboration
+REFERENCE   11 (bases 1 to 2906)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-FEB-2006) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+  REMARK    Protein updates by submitter
+REFERENCE   12 (bases 1 to 2906)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-JUN-2004) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+  REMARK    Sequence update by submitter
+REFERENCE   13 (bases 1 to 2906)
+  AUTHORS   Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-OCT-1998) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   14 (bases 1 to 2906)
+  AUTHORS   Blattner,F.R. and Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (02-SEP-1997) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+REFERENCE   15 (bases 1 to 2906)
+  AUTHORS   Blattner,F.R. and Plunkett,G. III.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (16-JAN-1997) Laboratory of Genetics, University of
+            Wisconsin, 425G Henry Mall, Madison, WI 53706-1580, USA
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence is identical to U00096.
+            On Jun 24, 2004 this sequence version replaced gi:16127994.
+            Current U00096 annotation updates are derived from EcoGene
+            http://ecogene.org. Suggestions for updates can be sent to Dr.
+            Kenneth Rudd (krudd@miami.edu). These updates are being generated
+            from a collaboration that also includes ASAP/ERIC, the Coli Genetic
+            Stock Center, EcoliHub, EcoCyc, RegulonDB and UniProtKB/Swiss-Prot.
+            COMPLETENESS: full length.
+FEATURES             Location/Qualifiers
+     source          1..2906
+                     /organism="Escherichia coli str. K-12 substr. MG1655"
+                     /mol_type="genomic DNA"
+                     /strain="K-12"
+                     /sub_strain="MG1655"
+                     /db_xref="taxon:511145"
+     gene            1..933
+                     /gene="aaeA"
+                     /locus_tag="b3241"
+                     /gene_synonym="ECK3230; JW3210; yhcQ"
+                     /db_xref="EcoGene:EG12823"
+                     /db_xref="GeneID:947748"
+     CDS             1..933
+                     /gene="aaeA"
+                     /locus_tag="b3241"
+                     /gene_synonym="ECK3230; JW3210; yhcQ"
+                     /GO_component="GO:0019866 - organelle inner membrane;
+                     GO:0009274 - peptidoglycan-based cell wall"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="p-hydroxybenzoic acid efflux system component"
+                     /protein_id="NP_417708.1"
+                     /db_xref="GI:16131131"
+                     /db_xref="ASAP:ABE-0010631"
+                     /db_xref="UniProtKB/Swiss-Prot:P46482"
+                     /db_xref="EcoGene:EG12823"
+                     /db_xref="GeneID:947748"
+                     /translation="MKTLIRKFSRTAITVVLVILAFIAIFNAWVYYTESPWTRDARFS
+                     ADVVAIAPDVSGLITQVNVHDNQLVKKGQILFTIDQPRYQKALEEAQADVAYYQVLAQ
+                     EKRQEAGRRNRLGVQAMSREEIDQANNVLQTVLHQLAKAQATRDLAKLDLERTVIRAP
+                     ADGWVTNLNVYTGEFITRGSTAVALVKQNSFYVLAYMEETKLEGVRPGYRAEITPLGS
+                     NKVLKGTVDSVAAGVTNASSTRDDKGMATIDSNLEWVRLAQRVPVRIRLDNQQENIWP
+                     AGTTATVVVTGKQDRDESQDSFFRKMAHRLREFG"
+     gene            939..2906
+                     /gene="aaeB"
+                     /locus_tag="b3240"
+                     /gene_synonym="ECK3229; JW3209; yhcP"
+                     /db_xref="EcoGene:EG12822"
+                     /db_xref="GeneID:947747"
+     CDS             939..2906
+                     /gene="aaeB"
+                     /locus_tag="b3240"
+                     /gene_synonym="ECK3229; JW3209; yhcP"
+                     /GO_component="GO:0009274 - peptidoglycan-based cell wall"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="p-hydroxybenzoic acid efflux system component"
+                     /protein_id="NP_417707.1"
+                     /db_xref="GI:16131130"
+                     /db_xref="ASAP:ABE-0010629"
+                     /db_xref="UniProtKB/Swiss-Prot:P46481"
+                     /db_xref="EcoGene:EG12822"
+                     /db_xref="GeneID:947747"
+                     /translation="MGIFSIANQHIRFAVKLATAIVLALFVGFHFQLETPRWAVLTAA
+                     IVAAGTAFAAGGEPYSGAIRYRGFLRIIGTFIGCIAGLVIIIAMIRAPLLMILVCCIW
+                     AGFCTWISSLVRIENSYAWGLAGYTALIIVITIQPEPLLTPQFAVERCSEIVIGIVCA
+                     IMADLLFSPRSIKQEVDRELESLLVAQYQLMQLCIKHGDGEVVDKAWGDLVRRTTALQ
+                     GMRSNLNMESSRWARANRRLKAINTLSLTLITQSCETYLIQNTRPELITDTFREFFDT
+                     PVETAQDVHKQLKRLRRVIAWTGERETPVTIYSWVAAATRYQLLKRGVISNTKINATE
+                     EEILQGEPEVKVESAERHHAMVNFWRTTLSCILGTLFWLWTGWTSGSGAMVMIAVVTS
+                     LAMRLPNPRMVAIDFIYGTLAALPLGLLYFLVIIPNTQQSMLLLCISLAVLGFFLGIE
+                     VQKRRLGSMGALASTINIIVLDNPMTFHFSQFLDSALGQIVGCVLAFTVILLVRDKSR
+                     DRTGRVLLNQFVSAAVSAMTTNVARRKENHLPALYQQLFLLMNKFPGDLPKFRLALTM
+                     IIAHQRLRDAPIPVNEDLSAFHRQMRRTADHVISARSDDKRRRYFGQLLEELEIYQEK
+                     LRIWQAPPQVTEPVNRLAGMLHKYQHALTDS"
+ORIGIN      
+        1 gtgaaaacac taataagaaa attctcccgt acggccatca cggtcgtatt agtcattctg
+       61 gccttcatcg caatttttaa tgcctgggtc tattacaccg aatccccctg gacgcgtgac
+      121 gcgcgcttta gcgctgacgt cgttgcgatc gcgccggacg tttctggact cattacccag
+      181 gtgaatgttc atgataacca gctggtgaaa aaaggacaga tactgttcac catcgaccag
+      241 ccgcgctatc aaaaggcgct tgaggaagcg caagccgatg ttgcttatta tcaggtactg
+      301 gcacaggaga aacgccagga ggccggacgt cgtaaccgtc tcggtgtgca ggcgatgtct
+      361 cgcgaagaga tcgaccaggc caacaacgta ctacaaacgg ttctgcatca gttagcgaaa
+      421 gcgcaggcga cccgcgatct ggcaaaactg gatcttgaac gcacggtgat ccgcgcgcca
+      481 gcagatggct gggtgaccaa cctcaacgtc tataccggtg agtttattac tcgaggatca
+      541 acggcggttg cgctggtgaa acagaactcc ttctatgtac tggcctatat ggaagaaact
+      601 aagctggaag gggtgcgtcc ggggtatcgt gcagagatca cgccgcttgg cagtaacaaa
+      661 gtgctgaaag ggactgttga tagtgttgcc gcaggggtca ccaacgccag cagcacgcgt
+      721 gacgacaaag ggatggcgac tatagactct aaccttgaat gggtgcgtct tgcgcaacgt
+      781 gttccggttc gtattcgtct cgacaaccag caagagaaca tctggcctgc gggcaccact
+      841 gctacagtgg tggtcactgg caaacaagat cgcgacgaaa gccaggattc gttcttccgt
+      901 aaaatggccc atcgcctgcg tgagtttggt taatcacgat gggtattttc tccattgcta
+      961 accaacatat tcgctttgcg gtaaaactgg cgaccgccat tgtactggcg ctgtttgttg
+     1021 gctttcactt ccagctggaa acgccacgct gggcggtact gacagcggcg attgttgccg
+     1081 ccggtacggc ctttgctgcg ggaggtgaac cgtattctgg cgctattcgc tatcgtggct
+     1141 ttttgcgcat catcggcaca tttattggct gtattgccgg actggtgatc atcattgcga
+     1201 tgatccgcgc accattattg atgattctgg tgtgctgtat ctgggccggt ttttgtacct
+     1261 ggatatcctc gctggtacga atagaaaact cgtatgcgtg ggggctggcc ggttataccg
+     1321 cgctgatcat tgtgatcacc attcagccgg aaccattgct tacgccgcag tttgccgtcg
+     1381 aacgttgtag cgagatcgtt atcggtattg tgtgtgcgat tatggcggat ttgctctttt
+     1441 ctccgcgatc gatcaaacaa gaagtggatc gagagctgga aagtttgctg gtcgcgcaat
+     1501 atcaattaat gcaactctgt atcaagcatg gcgatggtga agttgtcgat aaagcctggg
+     1561 gcgacctggt gcgacgcacc acggcgctac aaggcatgcg cagcaacctg aatatggaat
+     1621 cttcccgctg ggcgcgggcc aatcgacgtt taaaagcgat caatacgcta tcgctgacgc
+     1681 tgattaccca atcctgcgaa acttatctta ttcagaatac gcgcccggaa ttgatcactg
+     1741 atactttccg cgaatttttt gacacgccgg tagaaaccgc gcaggacgtc cacaagcagc
+     1801 tcaaacgcct gcggagagtt atcgcctgga ccggggaacg ggaaacgcct gtcaccattt
+     1861 atagctgggt cgcggcggca acgcgttatc agcttctcaa gcgcggcgtt atcagtaaca
+     1921 caaaaatcaa cgccaccgaa gaagagatcc tgcaaggcga accggaagta aaagtagagt
+     1981 cagccgaacg tcatcatgca atggttaact tctggcgaac cacactttcc tgcattctgg
+     2041 gcacgctttt ctggctgtgg acgggctgga cttccggcag tggtgcaatg gtgatgattg
+     2101 cggtagtgac gtcactggca atgcgtttgc cgaatccacg catggtggcg atcgacttta
+     2161 tctacgggac gctggccgcg ctgccgttag ggctgctcta ctttttggtg attatcccta
+     2221 atacccaaca gagcatgttg ctgctgtgca ttagcctggc agtgctggga ttcttcctcg
+     2281 gtatagaagt acagaaacgg cgactgggct cgatgggggc actggccagc accataaata
+     2341 ttatcgtgct ggataacccg atgactttcc atttcagtca gtttctcgac agcgcattag
+     2401 ggcaaatcgt cggctgtgtg ctcgcgttca ccgttatttt gctggtgcgg gataaatcgc
+     2461 gcgacaggac cggacgtgta ctgcttaatc agtttgtttc tgccgctgtt tccgcgatga
+     2521 ctaccaatgt ggcacgtcgt aaagagaacc acctcccggc actttatcag cagctgtttt
+     2581 tgctgatgaa taagttccca ggggatttgc cgaaatttcg cctggcgctg acgatgatta
+     2641 tcgcgcacca gcgcctgcgt gatgcaccga tcccggttaa cgaggattta tcggcgtttc
+     2701 accgacaaat gcgccgcaca gcagaccatg tgatatctgc ccgtagcgat gataaacgtc
+     2761 gtcggtactt tggccagttg ctggaagaac tggaaatcta ccaggaaaag ctacgcatct
+     2821 ggcaagcgcc accgcaggtg acggaaccgg taaatcggct ggcggggatg ctccataagt
+     2881 atcaacatgc gttgaccgat agttaa
+//

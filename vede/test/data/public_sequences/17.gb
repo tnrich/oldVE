@@ -1,0 +1,54 @@
+LOCUS       pSB1A2                  2079 bp ds-DNA     circular     25-FEB-2011
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     >pSB1A2 Part-only sequence (2079 bp)
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     rep_origin      complement(180..862)
+                     /label=ColE1 origin
+                     /ApEinfo_fwdcolor=gray50
+                     /ApEinfo_revcolor=gray50
+     CDS             complement(960..1619)
+                     /label=AmpR
+                     /ApEinfo_fwdcolor=yellow
+                     /ApEinfo_revcolor=yellow
+ORIGIN
+        1 tactagtagc ggccgctgca ggcttcctcg ctcactgact cgctgcgctc ggtcgttcgg
+       61 ctgcggcgag cggtatcagc tcactcaaag gcggtaatac ggttatccac agaatcaggg
+      121 gataacgcag gaaagaacat gtgagcaaaa ggccagcaaa aggccaggaa ccgtaaaaag
+      181 gccgcgttgc tggcgttttt ccataggctc cgcccccctg acgagcatca caaaaatcga
+      241 cgctcaagtc agaggtggcg aaacccgaca ggactataaa gataccaggc gtttccccct
+      301 ggaagctccc tcgtgcgctc tcctgttccg accctgccgc ttaccggata cctgtccgcc
+      361 tttctccctt cgggaagcgt ggcgctttct catagctcac gctgtaggta tctcagttcg
+      421 gtgtaggtcg ttcgctccaa gctgggctgt gtgcacgaac cccccgttca gcccgaccgc
+      481 tgcgccttat ccggtaacta tcgtcttgag tccaacccgg taagacacga cttatcgcca
+      541 ctggcagcag ccactggtaa caggattagc agagcgaggt atgtaggcgg tgctacagag
+      601 ttcttgaagt ggtggcctaa ctacggctac actagaagga cagtatttgg tatctgcgct
+      661 ctgctgaagc cagttacctt cggaaaaaga gttggtagct cttgatccgg caaacaaacc
+      721 accgctggta gcggtggttt ttttgtttgc aagcagcaga ttacgcgcag aaaaaaagga
+      781 tctcaagaag atcctttgat cttttctacg gggtctgacg ctcagtggaa cgaaaactca
+      841 cgttaaggga ttttggtcat gagattatca aaaaggatct tcacctagat ccttttaaat
+      901 taaaaatgaa gttttaaatc aatctaaagt atatatgagt aaacttggtc tgacagttac
+      961 caatgcttaa tcagtgaggc acctatctca gcgatctgtc tatttcgttc atccatagtt
+     1021 gcctgactcc ccgtcgtgta gataactacg atacgggagg gcttaccatc tggccccagt
+     1081 gctgcaatga taccgcgaga cccacgctca ccggctccag atttatcagc aataaaccag
+     1141 ccagccggaa gggccgagcg cagaagtggt cctgcaactt tatccgcctc catccagtct
+     1201 attaattgtt gccgggaagc tagagtaagt agttcgccag ttaatagttt gcgcaacgtt
+     1261 gttgccattg ctacaggcat cgtggtgtca cgctcgtcgt ttggtatggc ttcattcagc
+     1321 tccggttccc aacgatcaag gcgagttaca tgatccccca tgttgtgcaa aaaagcggtt
+     1381 agctccttcg gtcctccgat cgttgtcaga agtaagttgg ccgcagtgtt atcactcatg
+     1441 gttatggcag cactgcataa ttctcttact gtcatgccat ccgtaagatg cttttctgtg
+     1501 actggtgagt actcaaccaa gtcattctga gaatagtgta tgcggcgacc gagttgctct
+     1561 tgcccggcgt caatacggga taataccgcg ccacatagca gaactttaaa agtgctcatc
+     1621 attggaaaac gttcttcggg gcgaaaactc tcaaggatct taccgctgtt gagatccagt
+     1681 tcgatgtaac ccactcgtgc acccaactga tcttcagcat cttttacttt caccagcgtt
+     1741 tctgggtgag caaaaacagg aaggcaaaat gccgcaaaaa agggaataag ggcgacacgg
+     1801 aaatgttgaa tactcatact cttccttttt caatattatt gaagcattta tcagggttat
+     1861 tgtctcatga gcggatacat atttgaatgt atttagaaaa ataaacaaat aggggttccg
+     1921 cgcacatttc cccgaaaagt gccacctgac gtctaagaaa ccattattat catgacatta
+     1981 acctataaaa ataggcgtat cacgaggcag aatttcagat aaaaaaaatc cttagctttc
+     2041 gctaaggatg atttctggaa ttcgcggccg cttctagag  
+//

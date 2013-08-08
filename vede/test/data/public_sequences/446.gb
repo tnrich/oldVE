@@ -1,0 +1,21 @@
+LOCUS       New_DNA                  205 bp ds-DNA     linear       02-MAY-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     terminator      1..105
+                     /label=T1
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 ggcatcaaat aaaacgaaag gctcagtcga aagactgggc ctttcgtttt atctgttgtt
+       61 tgtcggtgaa cgctctcctg agtaggacaa atccgccgcc ctagaaggtc cgccacgcag
+      121 acgacagccc acggagatca ccgaccgatc tatctgatcg gcgaccattt gtgtggtact
+      181 ggggcgtggt ctatacggtc tagtc   
+//
