@@ -1,10 +1,18 @@
 /*global casper*/
 var system = require("system");
 var url = system.env.URL || "http://teselagen.local";
+if (system.env.URL) {
+    casper.options.pageSettings = {
+            userName: "dev",
+            password: "dev#rocks"
+    };
+}
 
 casper.test.begin("Regression test", function suite(test) {
     casper.start(url, function() {
-        test.assertExists("#AuthWindow", "Authentication Window exists");
+        this.waitForSelector("#AuthWindow", function() {
+            test.assertExists("#AuthWindow", "Authentication Window exists");
+        });
     });
     
     casper.then(function() {
