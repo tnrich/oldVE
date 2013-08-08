@@ -84,7 +84,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                 var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
                                 if(!duplicated) 
                                 {
-                                    Teselagen.manager.ProjectManager.sequences.add(sequence);
                                 }
                                 else
                                 {

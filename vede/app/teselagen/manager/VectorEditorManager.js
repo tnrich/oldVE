@@ -60,7 +60,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     {
                         successFullSavedCallback(true);
                         if(typeof(cb)=="function") cb(true);
-                        Ext.MessageBox.alert("Warning", "A sequence with the same name already exist in the database, using the unique instance of this sequence.");
+                        Ext.MessageBox.alert("Warning", "An identical sequence with the same name already exists in the sequence library, no changes to save!");
                     }
                     else 
                         {
@@ -84,11 +84,10 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
                     currentTab.setTitle(text);
 
-                    Teselagen.manager.ProjectManager.workingSequence.set("name",text);
-                    Teselagen.manager.ProjectManager.workingSequence.getSequenceManager().setName(text);
+                    self.sequence.set("name",text);
+                    self.sequence.getSequenceManager().setName(text);
                     
                     saveToServer(function(err){
-                        if(!err) Teselagen.manager.ProjectManager.sequences.add(self.sequence);
                     });
 
                 }

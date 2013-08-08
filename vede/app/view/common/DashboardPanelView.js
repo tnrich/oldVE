@@ -503,12 +503,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        text: 'File Format',
-                                        width: 100,
-                                        dataIndex: 'sequenceFileFormat'
-                                    },
-                                    {
-                                        xtype: 'gridcolumn',
                                         text: 'Size',
                                         width: 80,
                                         dataIndex: 'size'
@@ -686,8 +680,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Length',
-                                        dataIndex: 'length',
-                                        width: 80
+                                        width: 80,
+                                        dataIndex: 'genbankStartBP',
+                                        renderer: function(val, metadata, record) {
+                                            return Math.abs(val - record.get("endBP"));
+                                        }
                                     },
                                     {
                                         xtype: 'gridcolumn',

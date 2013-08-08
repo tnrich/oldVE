@@ -438,7 +438,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             if(seqMgr) {
                 this.setSequenceManager( seqMgr );
-                return cb(false, seqMgr);
+                return cb(false, seqMgr, gb);
             } else {
                 return cb(true);
             }

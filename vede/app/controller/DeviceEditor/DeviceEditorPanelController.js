@@ -354,11 +354,25 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 	        design.bins().each(function (bin) {
 	            bin.cells().each(function (cell) {
 	                var part = cell.getPart();
+                    var sequenceFile;
+                    var sequenceManager;
 	
 	                if(part) {
 	                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
 	
 	                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                            sequenceFile = part.getSequenceFile();
+                            if(sequenceFile) {
+                                sequenceManager = sequenceFile.getSequenceManager();
+
+                                if(sequenceManager) {
+                                    part.set("features", sequenceManager.featuresByRangeText(
+                                        part.get("genbankStartBP"), part.get("endBP")).toString());
+                                }
+
+                                part.set("partSource", sequenceFile.get("name"));
+                            }
+
 	                        part.save({
 	                            callback: function (part) {
 	                                saveAssociatedSequence(part, function () {

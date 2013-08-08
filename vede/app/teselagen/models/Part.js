@@ -168,11 +168,6 @@ Ext.define("Teselagen.models.Part", {
         defaultValue: 0
     }, //stopBP
     {
-        name: "length",
-        type: "int",
-        defaultValue: 0,
-    }, //sequlength
-    {
         name: "iconID",
         type: "string",
         defaultValue: ""
@@ -348,7 +343,6 @@ Ext.define("Teselagen.models.Part", {
      * @returns {Teselagen.models.SequenceFile} The sequencefile model.
      */
     getSequenceFile: function(callbackFn) {
-
         //debugger;
         if(this.hasSequenceFile || this.get("sequencefile_id")) {
 

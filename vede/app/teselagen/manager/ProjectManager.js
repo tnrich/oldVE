@@ -210,52 +210,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        /*
-        var parts = this.parts;
-        var sequence;
-        parts.each(function(part) {
-            sequence = part.getSequenceFile();
-
-            if(sequence) {
-                var sequenceManager = sequence.getSequenceManager();
-                var newLength = Math.abs(part.get("endBP") - part.get("genbankStartBP"));
-
-                if(!sequenceManager) {
-                    sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
-                }
-
-                var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
-                var partFeatures = [];
-                for(var z=0; z<features.length; z++)  {
-                    partFeatures.push(features[z].getName());
-                }
-
-                // We want to minimize the number of times we call part.set(),
-                // because it triggers a very costly update of the parts table.
-                if(part.get("length") === newLength && part.get("features") === partFeatures.toString()) {
-                    // Do nothing if neither length nor features have changed.
-                } else if(part.get("length") !== newLength && part.get("features") !== partFeatures.toString()) {
-                    part.set({
-                        length: newLength,
-                        features: partFeatures
-                    });
-                } else if(part.get("length") !== newLength) {
-                    part.set("length", newLength);
-                } else {
-                    part.set("features", partFeatures);
-                }
-
-                if(part.get("partSource") !== sequence.get("name")) {
-                    part.set("partSource", sequence.get("name"));
-                }
-            } else {
-                if(part.get("partSource") !== "") {
-                    part.set("partSource", "");
-                }
-            }
-        });
-        */
-
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
         var parts = Teselagen.manager.ProjectManager.parts;
 
