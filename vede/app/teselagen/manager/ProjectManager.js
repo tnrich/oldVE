@@ -45,13 +45,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
         // Generate empty user store
         var users = Ext.create("Teselagen.store.UserStore"); //Store of users (Will only contain the current user)
         var self = this;
+        var sequenceLibraryGrid = Ext.getCmp("sequenceLibrary");
 
         self.currentUser = Teselagen.manager.UserManager.user;
         self.sequences = self.currentUser.sequences();
         self.parts = self.currentUser.parts();
 
-        self.sequences.pageSize = 10;
-        self.parts.pageSize = 10;
+        self.sequences.pageSize = 20;
+        self.parts.pageSize = 20;
 
         self.sequences.loadPage(1);
         self.parts.loadPage(1);
@@ -197,6 +198,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
         dashPanel.getActiveTab().el.unmask(); 
         if(sequenceGrid) 
         {
+            if(Math.round(sequenceGrid.getHeight()/31)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/31);}
+            sequences.loadPage(1);
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
             sequenceGrid.down('pagingtoolbar').doRefresh();
@@ -257,6 +260,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
+            if(Math.round(partGrid.getHeight()/31)>20){parts.pageSize = Math.round(partGrid.getHeight()/31);}
+            parts.loadPage(1);
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
             partGrid.down('pagingtoolbar').doRefresh();
