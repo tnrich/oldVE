@@ -130,8 +130,16 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
-
-        var filter = JSON.parse(req.query.filter);
+        
+        var filter = "";
+        if(req.query.filter)
+        {
+            if(req.query.filter[0] && req.query.filter[0].property==="name")
+            {
+                var filterOptions = JSON.parse(req.query.filter);
+                filter = filterOptions[0].value;
+            }
+        }
 
         User.findById(req.user._id)
                 .populate({
@@ -139,7 +147,7 @@ module.exports = function(app) {
                 })
                 .exec(function(err, user) {
 
-                    Sequence.find(user.sequences).limit(req.query.limit).skip(req.query.start).where('name').regex(filter[0].value).exec(function(err,sequences){
+                    Sequence.find(user.sequences).limit(req.query.limit).skip(req.query.start).where('name').regex(filter).exec(function(err,sequences){
 
                         res.json({
                             "success": true,
