@@ -1,0 +1,25 @@
+LOCUS       CYP106A2_order_4         500 bp    DNA     linear   UNA 17-APR-2012
+DEFINITION  part 400-900.
+ACCESSION   urn.local...1334696502143.833
+VERSION     urn.local...1334696502143.833
+KEYWORDS    .
+SOURCE      E. Coli
+  ORGANISM  E. Coli
+            .
+FEATURES             Location/Qualifiers
+     primer          complement(<1..5)
+                     /label="PR12041103"
+     CDS             <1..>500
+                     /created_by="User"
+                     /label="CYP106A2"
+ORIGIN      
+        1 acaaacattt cagcagcgtt cgcaaacgta ccaccatcag cgtaggtacc gacagcgagg
+       61 aaggttccgt tccggaaaaa atccaaatca ctgagtccga tccaccggat caccgtaaac
+      121 gtcgtagcct gctggcggcc gcgtttactc cgcgttccct gcagaactgg gaaccacgta
+      181 tccaggaaat cgcagacgag ctgattggcc agatggacgg tggcactgaa atcgacattg
+      241 ttgcaagcct ggcctctccg ctgcctatca tcgtaatggc cgatctgatg ggtgttccgt
+      301 ctaaagatcg tctgctgttc aaaaaatggg ttgacaccct gtttctgcct ttcgaccgcg
+      361 aaaaacagga agaagttgac aagctgaaac aggtggctgc aaaagaatac taccagtacc
+      421 tgtacccgat cgtggtgcag aagcgtctga acccggcgga tgatatcatc tctgatctgc
+      481 tgaaatctga agttgacggc
+//

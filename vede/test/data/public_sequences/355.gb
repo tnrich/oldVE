@@ -1,0 +1,29 @@
+LOCUS       RiboJ_GG1                100 bp ds-DNA     linear       18-JAN-2013
+ACCESSION   NewSequence
+VERSION     NewSequence.1
+KEYWORDS    .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     primer_bind     1..59
+                     /label=JS30
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     complement(42..100)
+                     /label=JS31
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    15..86
+                     /label=RiboJ
+                     /ApEinfo_fwdcolor=#690f96
+                     /ApEinfo_revcolor=#690f96
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 cacaccaggt ctcaagctgt caccggatgt gctttccggt ctgatgagtc cgtgaggacg
+       61 aaacagcctc tacaaatttt gtttaatgag acctggtgtg  
+//

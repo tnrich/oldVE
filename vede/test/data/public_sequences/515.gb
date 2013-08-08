@@ -1,0 +1,202 @@
+LOCUS       pJH3-77                 5328 bp    DNA     circular 
+DEFINITION    
+  
+  ZFP inverter on p15a using lacI instead of araC.  For use wi
+            th Julius Lucks' sRNA located on a separate plasmid.
+
+  sense LS, an
+            tisense LS, RBS ?
+  pBAD_zfp-16-59
+  <some promoter>_lacI
+  pBFRPL-8
+            3_op-16-59_mRFP1
+  
+
+FEATURES             Location/Qualifiers
+     CDS             complement(1566..2648)
+                     /gene="lacI"
+                     /note="CDS lacI does not contain internal EcoRV site"
+                     /label="lacI"
+                     /vntifkey="4"
+                     /note="lacI does not contain internal EcoRV site"
+                     /codon_start="0"
+     misc_feature    complement(587..1381)
+                     /gene="KanR"
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo re
+                     sistance, with native promoter in on AatII and SpeI from Lu
+                     tz vector pZE2PLtetO-1 MCS2"
+                     /label="kan/neoR"
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo re
+                     sistance, with native promoter in on AatII and SpeI from Lu
+                     tz vector pZE2PLtetO-1 MCS2"
+                     /vntifkey="22"
+     rep_origin      complement(4982..365)
+                     /gene="p15a"
+                     /note="REP_ORIGIN "
+                     /label="p15a"
+                     /vntifkey="33"
+     terminator      456..561
+                     /gene="Terminator"
+                     /note="TERMINATOR "
+                     /label="T0"
+                     /vntifkey="43"
+     CDS             complement(2981..3658)
+                     /gene="mRFP1"
+                     /codon_start="0"
+     terminator      complement(2828..2956)
+                     /gene="dbl term"
+     misc_feature    complement(3769..3842)
+                     /gene="insulator"
+     terminator      complement(3716..3750)
+                     /gene="BioFAB RPL-83"
+     misc_feature    complement(3659..3678)
+                     /gene="RFP RBS"
+     misc_feature    complement(3751..3768)
+                     /gene="ZFP-3 binding site"
+     misc_feature    4063..4153
+                     /gene="UT sense RNA"
+     promoter        4009..4062
+                     /gene="pLlacO-1"
+                     /note="PROMOTER "
+     CDS             4369..4902
+                     /gene="ZFP 16-59"
+                     /note="CDS "
+                     /codon_start="0"
+     CDS             4250..4345
+                     /gene="repC mini cistron"
+                     /note="CDS "
+                     /codon_start="0"
+     terminator      complement(4919..4947)
+                     /gene="o2-65"
+                     /note="TERMINATOR Sequencing primer, 21 matches Primer leng
+                     th is 21bp Leading Original primer sequence : TCAACAGGAGTCC
+                     AAGCGAGC' complement(2477..2497) Sequencing primer, 21 matc
+                     hes Primer length is 21bp Complement Original primer sequen
+                     ce : TCAGCAAAAGGCCAGGAACCG ' 2371..2392 Sequencing primer, 
+                     22 matches Primer length is 22bp Leading Original primer se
+                     quence : GGCAGCAGGGGATCATTTTGCG' complement(3464..3486) Seq
+                     uencing primer, 23 matches Primer length is 23bp Complement
+                      Original primer sequence : CACGGCGTCACACTTTGCTAT GC' compl
+                     ement(4751..4773) Sequencing primer, 23 matches Primer leng
+                     th is 23bp Complement Original primer sequence : CCGAGCGTAG
+                     CGAGTCAGTGA GC' 1303..1327 Sequencing primer, 25 matches Pr
+                     imer length is 25bp Leading Original primer sequence : GTTG
+                     TGCCCAGTCATAGCCGAATA G' complement(3552..3571) Sequencing p
+                     rimer, 20 matches Primer length is 20bp Complement Original
+                      primer sequence : GTAACAAAGCGGGACCAAAG' complement(3064..3
+                     083) Sequencing primer, 20 matches Primer length is 20bp Co
+                     mplement Original primer sequence : CTGGAACCAGGATCTAAACC' 5
+                     10..529 Sequencing primer, 20 matches Primer length is 20bp
+                      Leading Original primer sequence : ATCCAGATGGAGTTCTGAGG' 1
+                     613..1632 Sequencing primer, 20 matches Primer length is 20
+                     bp Leading Original primer sequence : CCCGCGAGAAATAGAGTTGA'
+                      2104..2123 Sequencing primer, 20 matches Primer length is 
+                     20bp Leading Original primer sequence : GGACGAAAGTAAACCCACT
+                     G' complement(4515..4534) Sequencing primer, 20 matches Pri
+                     mer length is 20bp Complement Original primer sequence : CT
+                     GTTCAACGATGGTGTAGT' complement(4031..4050) Sequencing prime
+                     r, 20 matches Primer length is 20bp Complement Original pri
+                     mer sequence : CCACCTTTGGTAACTTTCAG' 1791..1810 Sequencing 
+                     primer, 20 matches Primer length is 20bp Leading Original p
+                     rimer sequence : AACATGCTGTGCGACGCTGG' 4115..4134 Sequencin
+                     g primer, 20 matches Primer length is 20bp Leading Original
+                      primer sequence : AAACACCCGGCTGACATCCC' complement(4230..4
+                     250) Sequencing primer, 21 matches Primer length is 21bp Co
+                     mplement Original primer sequence : TGAACTCACCGTCTTGCAGGG"
+                     /note="Sequencing primer, 21 matches Primer length is 21bp 
+                     Complement Original primer sequence : TGAACTCACCGTCTTGCAGGG
+                     "
+     misc_feature    4352..4359
+                     /gene="ZFP RBS"
+BASE COUNT     1306 a   1437 c   1315 g   1270 t
+ORIGIN
+        1 tcagttccgg gtaggcagtt cgctccaagc tggactgtat gcacgaaccc cccgttcagt
+       61 ccgaccgctg cgccttatcc ggtaactatc gtcttgagtc caacccggaa agacatgcaa
+      121 aagcaccact ggcagcagcc actggtaatt gatttagagg agttagtctt gaagtcatgc
+      181 gccggttaag gctaaactga aaggacaagt tttggtgact gcgctcctcc aagccagtta
+      241 cctcggttca aagagttggt agctcagaga accttcgaaa aaccgccctg caaggcggtt
+      301 ttttcgtttt cagagcaaga gattacgcgc agaccaaaac gatctcaaga agatcatctt
+      361 attaatcaga taaaatattt ctagatttca gtgcaattta tctcttcaaa tgtagcacct
+      421 gaagtcagcc ccatacgata taagttgtta ctagtgcttg gattctcacc aataaaaaac
+      481 gcccggcggc aaccgagcgt tctgaacaaa tccagatgga gttctgaggt cattactgga
+      541 tctatcaaca ggagtccaag cgagctctcg aaccccagag tcccgctcag aagaactcgt
+      601 caagaaggcg atagaaggcg atgcgctgcg aatcgggagc ggcgataccg taaagcacga
+      661 ggaagcggtc agcccattcg ccgccaagct cttcagcaat atcacgggta gccaacgcta
+      721 tgtcctgata gcggtccgcc acacccagcc ggccacagtc gatgaatcca gaaaagcggc
+      781 cattttccac catgatattc ggcaagcagg catcgccatg ggtcacgacg agatcctcgc
+      841 cgtcgggcat gcgcgccttg agcctggcga acagttcggc tggcgcgagc ccctgatgct
+      901 cttcgtccag atcatcctga tcgacaagac cggcttccat ccgagtacgt gctcgctcga
+      961 tgcgatgttt cgcttggtgg tcgaatgggc aggtagccgg atcaagcgta tgcagccgcc
+     1021 gcattgcatc agccatgatg gatactttct cggcaggagc aaggtgagat gacaggagat
+     1081 cctgccccgg cacttcgccc aatagcagcc agtcccttcc cgcttcagtg acaacgtcga
+     1141 gcacagctgc gcaaggaacg cccgtcgtgg ccagccacga tagccgcgct gcctcgtcct
+     1201 gcagttcatt cagggcaccg gacaggtcgg tcttgacaaa aagaaccggg cgcccctgcg
+     1261 ctgacagccg gaacacggcg gcatcagagc agccgattgt ctgttgtgcc cagtcatagc
+     1321 cgaatagcct ctccacccaa gcggccggag aacctgcgtg caatccatct tgttcaatca
+     1381 tgcgaaacga tcctcatcct gtctcttgat cagatcatga tcccctgcgc catcagatcc
+     1441 ttggcggcaa gaaagccatc cagtttactt tgcagggctt cccaacctta ccagagggcg
+     1501 ccccagctgg caattccgac gtcggtgcct aatgagtgag ctaacttaca ttaattgcgt
+     1561 tgcgctcact gcccgctttc cagtcgggaa acctgtcgtg ccagctgcat taatgaatcg
+     1621 gccaacgcgc ggggagaggc ggtttgcgta ttgggcgcca gggtggtttt tcttttcacc
+     1681 agtgagacgg gcaacagctg attgcccttc accgcctggc cctgagagag ttgcagcaag
+     1741 cggtccacgc tggtttgccc cagcaggcga aaatcctgtt tgatggtggt taacggcggg
+     1801 atataacatg agctgtcttc ggtatcgtcg tatcccacta ccgagatgtc cgcaccaacg
+     1861 cgcagcccgg actcggtaat ggcgcgcatt gcgcccagcg ccatctgatc gttggcaacc
+     1921 agcatcgcag tgggaacgat gccctcattc agcatttgca tggtttgttg aaaaccggac
+     1981 atggcactcc agtcgccttc ccgttccgct atcggctgaa tttgattgcg agtgagatat
+     2041 ttatgccagc cagccagacg cagacgcgcc gagacagaac ttaatgggcc cgctaacagc
+     2101 gcgatttgct ggtgacccaa tgcgaccaga tgctccacgc ccagtcgcgt accgtcttca
+     2161 tgggagaaaa taatactgtt gatgggtgtc tggtcagaga catcaagaaa taacgccgga
+     2221 acattagtgc aggcagcttc cacagcaatg gcatcctggt catccagcgg atagttaatg
+     2281 atcagcccac tgacgcgttg cgcgagaaga ttgtgcaccg ccgctttaca ggcttcgacg
+     2341 ccgcttcgtt ctaccatcga caccaccacg ctggcaccca gttgatcggc gcgagattta
+     2401 atcgccgcga caatttgcga cggcgcgtgc agggccagac tggaggtggc aacgccaatc
+     2461 agcaacgact gtttgcccgc cagttgttgt gccacgcggt tgggaatgta attcagctcc
+     2521 gccatcgccg cttccacttt ttcccgcgtt ttcgcagaaa cgtggctggc ctggttcacc
+     2581 acgcgggaaa cggtctgata agagacaccg gcatactctg cgacatcgta taacgttact
+     2641 ggtttcacat tcaccaccct gaattgactc tcttccgggc gctatcatgc cataccgcga
+     2701 aaggttttgc gccattcgat ggtgtccggg atctcgacgc tctcccttat gcgactcctg
+     2761 cattaggaag cagcccagta gtaggttgag gccgttgagc accgccgccg caaggaatgg
+     2821 tgcatgctat aaacgcagaa aggcccaccc gaaggtgagc cagtgtgact ctagtagaga
+     2881 gcgttcaccg acaaacaaca gataaaacga aaggcccagt ctttcgactg agcctttcgt
+     2941 tttatttgat gcctggagat ccttactcga gtttggatcc ttaagcaccg gtggagtgac
+     3001 gaccttcagc acgttcgtac tgttcaacga tggtgtagtc ttcgttgtgg gaggtgatgt
+     3061 ccagtttgat gtcggttttg taagcacccg gcagctgaac cggtttttta gccatgtagg
+     3121 tggttttaac ttcagcgtcg tagtgaccac cgtctttcag tttcagacgc attttgattt
+     3181 cacctttcag agcaccgtct tccgggtaca tacgttcggt ggaagcttcc caacccatgg
+     3241 tttttttctg cataaccgga ccgtcggacg ggaagttggt accacgcagt ttaactttgt
+     3301 agatgaactc accgtcttgc agggaggagt cctgggtaac ggtaacaaca ccaccgtctt
+     3361 cgaagttcat aacacgttcc catttgaaac cttccgggaa ggacagtttc aggtagtccg
+     3421 ggatgtcagc cgggtgttta acgtaagctt tggaaccgta ctggaactgc ggggacagga
+     3481 tgtcccaagc gaacggcagc ggaccacctt tggtaacttt cagtttagcg gtctgggtac
+     3541 cttcgtacgg acgaccttca ccttcacctt cgatttcgaa ctcgtgaccg ttaacggaac
+     3601 cttccatacg aactttgaaa cgcatgaact ctttgataac gtcttcgcta ctcgccatat
+     3661 gtatatctcc ttcttaaaag atcttttgaa ttcccaaaaa aacgggtatg gagaatccac
+     3721 aaaggttatg agccgatgat taattgtcaa ctcctctcct tccctctcat agaaagcacg
+     3781 cagctgatag ggtcgacgtg gtgtttgctg tgcgttggac gtgtggattg ggatgaaaat
+     3841 accccggcca cggggcctgc caccataccc acgccgaaac aagcgctcat gagcccgaag
+     3901 tggcgagccc gatcttcccc atcggtgatg tcggcgatat aggcgccagc aaccgcacct
+     3961 gtggcgccgg tgatgccggc cacgatgcgt ccggcgtaga ggatcgagaa ttgtgagcgg
+     4021 ataacaattg acattgtgag cggataacaa gatactgagc acaaataaaa aggagtcgct
+     4081 ctgtccctcg ccaaagttgc agaacgacat cattcaaaga aaaaaacact gagttgtttt
+     4141 tataatcttg tatatttaga tattaaacga tatttaaata tacataaaga tatatatttg
+     4201 ggtgagcgat tccttaaacg aaattgagat taaggagtcg ctctttttta tgtataaaaa
+     4261 caatcatgca aatcattcaa atcatttgga aaatcacgat ttagacaatt tttctaaaac
+     4321 cggctactct aatagccggt tgtaaggatc taggaggaag gatctatgct ggaaccagga
+     4381 tctaaaccgt acaaatgtcc ggaatgtggt aaatccttct cccgttctga taatctggta
+     4441 cgtcatcaac gtactcacac tggatctaaa ccgtacaaat gtccggaatg tggtaaatcc
+     4501 ttctcccgtt ctgataatct ggtacgtcat caacgtactc acactggatc taaaccgtac
+     4561 aaatgtccgg aatgtggtaa atccttctcc cagcgtgctc atctggaacg tcatcaacgt
+     4621 actcacactg gatctaaacc gtacaaatgt ccggaatgtg gtaaatcctt ctcccaatct
+     4681 tccaatctgg ttcgtcatca acgtactcac actggatcta aaccgtacaa atgtccggaa
+     4741 tgtggtaaat ccttctcccg ttccgatcat ctgactaatc atcaacgtac tcacactgga
+     4801 tctaaaccgt acaaatgtcc ggaatgtggt aaatccttct cccgttctga taatctggta
+     4861 cgtcatcaac gtactcacac tggatctaaa acctcttaat aaaagatcta gagaatataa
+     4921 aaagccagat tattaatccg gcttttttat tatttcagca aaaggccagg aaccgcctag
+     4981 ggatatattc cgcttcctcg ctcactgact cgctacgctc ggtcgttcga ctgcggcgag
+     5041 cggaaatggc ttacgaacgg ggcggagatt tcctggaaga tgccaggaag atacttaaca
+     5101 gggaagtgag agggccgcgg caaagccgtt tttccatagg ctccgccccc ctgacaagca
+     5161 tcacgaaatc tgacgctcaa atcagtggtg gcgaaacccg acaggactat aaagatacca
+     5221 ggcgtttccc cctggcggct ccctcgtgcg ctctcctgtt cctgcctttc ggtttaccgg
+     5281 tgtcattccg ctgttatggc cgcgtttgtc tcattccacg cctgacac             
+//

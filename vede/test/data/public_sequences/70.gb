@@ -1,0 +1,79 @@
+LOCUS       Cyp106A2_biobric        1584 bp    DNA     linear   UNA 26-MAR-2012
+DEFINITION  .
+ACCESSION   urn.local...1332801525684.37
+VERSION     urn.local...1332801525684.37
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     CDS             226..1458
+                     /created_by="User"
+                     /label="CYP106A2"
+     binding_site    196..225
+                     /created_by="User"
+                     /label="RBS12032601"
+     motif           160..188
+                     /created_by="User"
+                     /label="RNAp binding motif"
+     misc_feature    complement(1565..1584)
+                     /created_by="User"
+                     /label="vr"
+                     /note="Geneious type: primer_bind_reverse"
+     terminator      1459..1502
+                     /created_by="User"
+                     /label="rrnB terminator"
+     primer_bind     complement(172..195)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="sRNA primer rev"
+     primer_bind     1..20
+                     /created_by="User"
+                     /label="vf2"
+     spacer          1..140
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBricks left spacer"
+     spacer          1503..1584
+                     /created_by="User"
+                     /label="BioBrick right spacer"
+     protein_bind    141..195
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="R0011(pLac)"
+     protein_bind    141..161
+                     /created_by="User"
+                     /label="LacO"
+     protein_bind    165..183
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="lac1 core operator"
+ORIGIN      
+        1 tgccacctga cgtctaagaa accattatta tcatgacatt aacctataaa aataggcgta
+       61 tcacgaggca gaatttcaga taaaaaaaat ccttagcttt cgctaaggat gatttctgga
+      121 attcgcggcc gcttctagag aattgtgagc ggataacaat tgacattgtg agcggataac
+      181 aagatactga gcacacagca cgtatacact ataaggaggg aagaaatgaa agaagttatt
+      241 gcagttaaag aaatcactcg ttttaaaacc cgcaccgagg aattctctcc gtacgcatgg
+      301 tgcaaacgca tgctggaaaa cgacccggta agctaccatg aaggcactga cacctggaac
+      361 gtatttaagt acgaagacgt taaacgtgtt ctgtccgatt acaaacattt cagcagcgtt
+      421 cgcaaacgta ccaccatcag cgtaggtacc gacagcgagg aaggttccgt tccggaaaaa
+      481 atccaaatca ctgagtccga tccaccggat caccgtaaac gtcgtagcct gctggcggcc
+      541 gcgtttactc cgcgttccct gcagaactgg gaaccacgta tccaggaaat cgcagacgag
+      601 ctgattggcc agatggacgg tggcactgaa atcgacattg ttgcaagcct ggcctctccg
+      661 ctgcctatca tcgtaatggc cgatctgatg ggtgttccgt ctaaagatcg tctgctgttc
+      721 aaaaaatggg ttgacaccct gtttctgcct ttcgaccgcg aaaaacagga agaagttgac
+      781 aagctgaaac aggtggctgc aaaagaatac taccagtacc tgtacccgat cgtggtgcag
+      841 aagcgtctga acccggcgga tgatatcatc tctgatctgc tgaaatctga agttgacggc
+      901 gaaatgttta ccgatgacga agttgttcgt accactatgc tgattctggg tgcaggcgtg
+      961 gaaactacgt cccatctgct ggctaactcc ttttacagcc tgctgtacga cgacaaagaa
+     1021 gtctaccagg aactgcatga gaacctggac ctggttccac aggctgtgga agaaatgctg
+     1081 cgtttccgtt ttaacctgat caaactggac cgcaccgtaa aagaagataa cgacctgctg
+     1141 ggtgttgaac tgaaggaggg tgattctgtc gtggtatgga tgtctgctgc gaacatggac
+     1201 gaagaaatgt ttgaagaccc attcaccctg aacatccatc gtcctaacaa caaaaaacac
+     1261 ctgacttttg gcaacggtcc gcacttctgt ctgggcgctc ctctggctcg tctggaagca
+     1321 aagatcgcac tgaccgcgtt tctgaaaaaa ttcaaacata ttgaagctgt tcctagcttt
+     1381 cagctggaag aaaacctgac cgatagcgca accggccaga cgctgacctc tctgccgctg
+     1441 aaagcaagcc gtatgtaaat aaaacgaaag gctcagtcgg aagactgggc ctttcgtttt
+     1501 attgcaggct tcctcgctca ctgactcgct gcgctcggtc gttcggctgc ggcgagcggt
+     1561 atcagctcac tcaaaggcgg taat
+//

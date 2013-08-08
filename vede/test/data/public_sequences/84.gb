@@ -1,0 +1,94 @@
+LOCUS       AdR_linearized          1558 bp    DNA     linear   UNA 26-APR-2012
+DEFINITION  .
+ACCESSION   urn.local...1335482978393.4253
+VERSION     urn.local...1335482978393.4253
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     protein_bind    complement(1484..1491)
+                     /created_by="User"
+                     /label="RBS"
+     spacer          45..94
+                     /Original_Bases
+                     /modified_by="User"
+                     /label="Spacer"
+     RBS             complement(15..44)
+                     /created_by="User"
+                     /label="RBS12032601"
+     CDS             complement(95..1480)
+                     /created_by="User"
+                     /label="Adrenodoxin Reductase"
+     CDS             complement(<1..14)
+                     /created_by="User"
+                     /label="CYP106A2"
+     CDS             complement(1521..>1558)
+                     /modified_by="User"
+                     /label="Adx_His_Tag"
+     primer_bind     1479..1538
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="PR12042505"
+     primer_bind     complement(19..44)
+                     /created_by="User"
+                     /label="PR12042501_part"
+     primer_bind     1521..1538
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="PR12042505_part"
+     primer          complement(<1..14)
+                     /label="PR12041101"
+     primer          1356..1380
+                     /label="PR12040805"
+     primer          127..147
+                     /label="PR12040804"
+     primer          complement(187..205)
+                     /label="PR12040806"
+     primer          complement(1434..1450)
+                     /label="PR12040803"
+     primer_bind     45..60
+                     /created_by="User"
+                     /label="PR12042506_part"
+     primer_bind     1..60
+                     /created_by="User"
+                     /label="PR12042506"
+     primer_bind     complement(19..78)
+                     /created_by="User"
+                     /label="PR12042501"
+     primer_bind     complement(1499..1520)
+                     /created_by="User"
+                     /label="PR12042507_part"
+     primer_bind     complement(1499..1558)
+                     /created_by="User"
+                     /label="PR12042507"
+     origin          1520^1521
+                     /label="origin"
+ORIGIN      
+        1 ataacttctt tcatttcttc cctccttata gtgtatacgt gctgttgggc tgcaggtcga
+       61 ctctagaatt cgagctcggt acccggatct aggctcagtg ccccagcagc cgcagcatct
+      121 cctgaggatc cagcagcttc tctctgggct tccccgaggc ctggccccgg gacacctcct
+      181 cagcatccag tttctcccag tccgagaaag acacgggcca gacccctcgg ctgtccagca
+      241 gggccttgat gaatgcagag cccggcctgg ggccagacgg caggtgcccg gccttcaggt
+      301 cctgtagcag aatctggccg gtgaggaagc tgtcggtcat ggtggtggtg atgacacctg
+      361 tgggtccccg cttcacccag ccgctgcagt agaggcctgg cacatccaca acccggccct
+      421 ccatattggg gacaaccccg agcttggggt caaagggcac actggggtcg atggggcggc
+      481 tcttataccc aatgctgctc agcaccagcc cacaggggag gtcctccaca tccccagtgg
+      541 gcactgcccg ggtggcctct ccaatgccct ccagtctggt gactgccagg cggatgcctg
+      601 ccgcccgccg cccatctggc gagggcagga cctgctgcgg gcttcggaag aagcggaggc
+      661 cccaggcacg ggaggctgat gcccggcggg cagcctcctc cacccctggc ttctccgtgg
+      721 ctgttcgaag cagcagttcc atcagccgct tcctcgggcg agcggcctcc ttgattctgt
+      781 cctggagacc caagaaatcc gcaggatcca acatgggccg agttcctggt aactgaatca
+      841 tctcccgaag ctcctttatg gtgaaggcca cttgtagggg tccacgtcgg cccacgatcc
+      901 acaccgtctt cacccgactc tgtctcaggg ctcccagggc ggcctcagtg atgtccgttt
+      961 tctccaggtg gtcggggggg gtcagcagga tccgggccac gtccagagcc acattcccct
+     1021 gccccagaat cacggctgtg tcacagctca ggtccggggc cagctcccgg ttctcaggaa
+     1081 gcccattgta ccagcccaca aaggcccggg ccgagaacac gccgggcaac tcctcaccag
+     1141 ggatatccag ggcctgatgg tcctctgccc catagctcag caccacggcg tggtaggcgt
+     1201 cctgcagctc ctgcacagtc acatccctgc ccacctccac gttgccatag aaggcacagc
+     1261 ggtcagagcg ggccgtctgg gtaaaggtgt tgataacatt cttgacctcg gggtggtcag
+     1321 gcgccacgcc aaagcgcacc aggccgaagg gcaccagctg tttctcgtag atatccacgt
+     1381 gggcccggga gtggtgcttt agcaggtgct gggccgtgta aaagccagct gggccactgc
+     1441 ccaccacaca gatctgggga gtttgttctt gagtgctcat atgacctcct aagcatcgat
+     1501 ggatcctgtt tcctgtgtga tcagtggtgg tggtggtggt gctcgagttc tatctttg
+//

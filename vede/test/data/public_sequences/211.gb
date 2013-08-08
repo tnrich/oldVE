@@ -1,0 +1,36 @@
+LOCUS       CYP106A2_order_1         422 bp    DNA     linear   UNA 17-APR-2012
+DEFINITION  part 1200-1622.
+ACCESSION   urn.local...1334689069320.767
+VERSION     urn.local...1334689069320.767
+KEYWORDS    .
+SOURCE      E. Coli
+  ORGANISM  E. Coli
+            .
+FEATURES             Location/Qualifiers
+     CDS             <1..258
+                     /created_by="User"
+                     /label="CYP106A2"
+     terminator      259..340
+                     /created_by="User"
+                     /label="rnpB_T1"
+     spacer          341..422
+                     /created_by="User"
+                     /label="BioBrick right spacer"
+     misc_feature    complement(403..422)
+                     /created_by="User"
+                     /label="vr"
+                     /note="Geneious type: primer_bind_reverse"
+     primer          complement(237..258)
+                     /label="PR12041102"
+     primer          106..126
+                     /label="PR12041104"
+ORIGIN      
+        1 gaagaaatgt ttgaagaccc attcaccctg aacatccatc gtcctaacaa caaaaaacac
+       61 ctgacttttg gcaacggtcc gcacttctgt ctgggcgctc ctctggctcg tctggaagca
+      121 aagatcgcac tgaccgcgtt tctgaaaaaa ttcaaacata ttgaagctgt tcctagcttt
+      181 cagctggaag aaaacctgac cgatagcgca accggccaga cgctgacctc tctgccgctg
+      241 aaagcaagcc gtatgtaatc ggtcagtttc acctgattta cgtaaaaacc cgcttcggcg
+      301 ggtttttgct tttggagggg cagaaagatg aatgactgtc tgcaggcttc ctcgctcact
+      361 gactcgctgc gctcggtcgt tcggctgcgg cgagcggtat cagctcactc aaaggcggta
+      421 at
+//

@@ -1,0 +1,13 @@
+LOCUS       Bugged_sequence          355 bp ds-DNA     circular     9-JUL-2012
+ACCESSION   Bugged_sequence
+VERSION     Bugged_sequence
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+ORIGIN      
+        1 catttacgtt gacaccatcg aatggtgcaa aacctttcgc ggtatggcat gatagcgccc
+       61 ggaagagagt caattcaggg tggtgaatgt gaaaccagta acgttatacg atgtcgcaga
+      121 gtatgccggt gtctcttatc agaccgtttc ccgcgtggtg aaccaggcca gccacgtttc
+      181 tgcgaaaacg cgggaaaaag tggaagcggc gatggcggag ctgaattaca ttcccaaccg
+      241 cgtggcacaa caactggcgg gcaaacagtc gttgctgatt ggcgttgcca cctccagtct
+      301 ggcgcttgcc gtaggtggca tcgccctcgc gagtgcgcga aggcgaagcg gcatg
+//

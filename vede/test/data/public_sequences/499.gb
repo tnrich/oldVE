@@ -1,0 +1,56 @@
+LOCUS       partme                   893 bp ds-DNA     linear       26-FEB-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     rep_origin      403..893
+                     /label=p15A
+                     /ApEinfo_fwdcolor=#e6e6e6
+                     /ApEinfo_revcolor=#e6e6e6
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     terminator      223..351
+                     /label=Terminator B0015
+                     /ApEinfo_fwdcolor=#ff0000
+                     /ApEinfo_revcolor=#ff0000
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     gene            1..222
+                     /label=superfolder GFP
+                     /ApEinfo_fwdcolor=#ff80ff
+                     /ApEinfo_revcolor=#ff80ff
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     1..18
+                     /label=CJ32
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     primer_bind     complement(878..893)
+                     /label=PR86
+                     /ApEinfo_fwdcolor=#ffff00
+                     /ApEinfo_revcolor=#ffff00
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 attcgccaca acgtggagga tggcagcgtg cagctggctg atcactacca gcaaaacact
+       61 ccaatcggtg atggtcctgt tctgctgcca gacaatcact atctgagcac gcaaagcgtt
+      121 ctgtctaaag atccgaacga gaaacgcgat catatggttc tgctggagtt cgtaaccgca
+      181 gcgggcatca cgcatggtat ggatgaactg tacaaatgat gaccaggcat caaataaaac
+      241 gaaaggctca gtcgaaagac tgggcctttc gttttatctg ttgtttgtcg gtgaacgctc
+      301 tctactagag tcacactggc tcaccttcgg gtgggccttt ctgcgtttat aggtacccgg
+      361 ggatcctcta gagtcgacct gcaggcatgc aagcttccta ggggatatat tccgcttcct
+      421 cgctcactga ctcgctacgc tcggtcgttc gactgcggcg agcggaaatg gcttacgaac
+      481 ggggcggaga tttcctggaa gatgccagga agatacttaa cagggaagtg agagggccgc
+      541 ggcaaagccg tttttccata ggctccgccc ccctgacaag catcacgaaa tctgacgctc
+      601 aaatcagtgg tggcgaaacc cgacaggact ataaagatac caggcgtttc cccctggcgg
+      661 ctccctcgtg cgctctcctg ttcctgcctt tcggtttacc ggtgtcattc cgctgttatg
+      721 gccgcgtttg tctcattcca cgcctgacac tcagttccgg gtaggcagtt cgctccaagc
+      781 tggactgtat gcacgaaccc cccgttcagt ccgaccgctg cgccttatcc ggtaactatc
+      841 gtcttgagtc caacccggaa agacatgcaa aagcaccact ggcagcagcc act
+//

@@ -1,0 +1,120 @@
+LOCUS       pUC_Amp_part_CYP        2284 bp    DNA     linear   UNA 18-APR-2012
+DEFINITION  .
+ACCESSION   urn.local...1334797508141.1290
+VERSION     urn.local...1334797508141.1290
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    complement(387..406)
+                     /created_by="User"
+                     /label="vr"
+                     /note="Geneious type: primer_bind_reverse"
+     misc_feature    complement(2123..2221)
+                     /invitrogen=233000
+                     /label="bla promoter"
+                     /note="Geneious type: promoter prokaryotic"
+     rep_origin      complement(447..1117)
+                     /invitrogen=254000
+                     /label="pUC origin"
+     terminator      243..324
+                     /created_by="User"
+                     /label="rnpB_T1"
+     CDS             <1..242
+                     /created_by="User"
+                     /label="CYP106A2"
+     CDS             complement(1262..2122)
+                     /invitrogen=102000
+                     /label="Amp(R)"
+     spacer          order(325..>332,<333..406)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBrick right spacer"
+     spacer          <2266..>2284
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBricks left spacer"
+     gBlock          2242..>2284
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="gBlock 1-500 after PCR"
+     gBlock          <1..84
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="gBlock 800-1300"
+     gBlock          <1..>332
+                     /created_by="User"
+                     /label="gBlock1200-1622"
+     primer          complement(221..242)
+                     /label="PR12041102"
+     primer          90..110
+                     /label="PR12041104"
+     primer_bind     1..60
+                     /created_by="User"
+                     /label="PR12041702"
+     primer_bind     42..60
+                     /created_by="User"
+                     /label="PR12041702_bb_part"
+     primer_bind     complement(2225..2284)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="PR12041703"
+     primer_bind     complement(2225..2240)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="PR12041703_bb_part"
+     primer_bind     2241..2265
+                     /created_by="primer3"
+                     /%GC="52.0"
+                     /Tm="56.41"
+                     /Hairpin="7.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="CACCTACTACTGATAGTATGCCGCC"
+                     /label="BBa_G00400"
+     origin          332^333
+                     /label="origin"
+ORIGIN      
+        1 acccattcac cctgaacatc catcgtccta acaacaaaaa acacctgact tttggcaacg
+       61 gtccgcactt ctgtctgggc gctcctctgg ctcgtctgga agcaaagatc gcactgaccg
+      121 cgtttctgaa aaaattcaaa catattgaag ctgttcctag ctttcagctg gaagaaaacc
+      181 tgaccgatag cgcaaccggc cagacgctga cctctctgcc gctgaaagca agccgtatgt
+      241 aatcggtcag tttcacctga tttacgtaaa aacccgcttc ggcgggtttt tgcttttgga
+      301 ggggcagaaa gatgaatgac tgtctgcagg cttcctcgct cactgactcg ctgcgctcgg
+      361 tcgttcggct gcggcgagcg gtatcagctc actcaaaggc ggtaatacgg ttatccacag
+      421 aatcagggga taacgcagga aagaacatgt gagcaaaagg ccagcaaaag gccaggaacc
+      481 gtaaaaaggc cgcgttgctg gcgtttttcc ataggctccg cccccctgac gagcatcaca
+      541 aaaatcgacg ctcaagtcag aggtggcgaa acccgacagg actataaaga taccaggcgt
+      601 ttccccctgg aagctccctc gtgcgctctc ctgttccgac cctgccgctt accggatacc
+      661 tgtccgcctt tctcccttcg ggaagcgtgg cgctttctca tagctcacgc tgtaggtatc
+      721 tcagttcggt gtaggtcgtt cgctccaagc tgggctgtgt gcacgaaccc cccgttcagc
+      781 ccgaccgctg cgccttatcc ggtaactatc gtcttgagtc caacccggta agacacgact
+      841 tatcgccact ggcagcagcc actggtaaca ggattagcag agcgaggtat gtaggcggtg
+      901 ctacagagtt cttgaagtgg tggcctaact acggctacac tagaagaaca gtatttggta
+      961 tctgcgctct gctgaagcca gttaccttcg gaaaaagagt tggtagctct tgatccggca
+     1021 aacaaaccac cgctggtagc ggtttttttg tttgcaagca gcagattacg cgcagaaaaa
+     1081 aaggatctca agaagatcct ttgatctttt ctacggggtc tgacgctcag tggaacgaaa
+     1141 actcacgtta agggattttg gtcatgagat tatcaaaaag gatcttcacc tagatccttt
+     1201 taaattaaaa atgaagtttt aaatcaatct aaagtatata tgagtaaact tggtctgaca
+     1261 gttaccaatg cttaatcagt gaggcaccta tctcagcgat ctgtctattt cgttcatcca
+     1321 tagttgcctg actccccgtc gtgtagataa ctacgatacg ggagggctta ccatctggcc
+     1381 ccagtgctgc aatgataccg cgagacccac gctcaccggc tccagattta tcagcaataa
+     1441 accagccagc cggaagggcc gagcgcagaa gtggtcctgc aactttatcc gcctccatcc
+     1501 agtctattaa ttgttgccgg gaagctagag taagtagttc gccagttaat agtttgcgca
+     1561 acgttgttgc cattgctaca ggcatcgtgg tgtcacgctc gtcgtttggt atggcttcat
+     1621 tcagctccgg ttcccaacga tcaaggcgag ttacatgatc ccccatgttg tgcaaaaaag
+     1681 cggttagctc cttcggtcct ccgatcgttg tcagaagtaa gttggccgca gtgttatcac
+     1741 tcatggttat ggcagcactg cataattctc ttactgtcat gccatccgta agatgctttt
+     1801 ctgtgactgg tgagtactca accaagtcat tctgagaata gtgtatgcgg cgaccgagtt
+     1861 gctcttgccc ggcgtcaata cgggataata ccgcgccaca tagcagaact ttaaaagtgc
+     1921 tcatcattgg aaaacgttct tcggggcgaa aactctcaag gatcttaccg ctgttgagat
+     1981 ccagttcgat gtaacccact cgtgcaccca actgatcttc agcatctttt actttcacca
+     2041 gcgtttctgg gtgagcaaaa acaggaaggc aaaatgccgc aaaaaaggga ataagggcga
+     2101 cacggaaatg ttgaatactc atactcttcc tttttcaata ttattgaagc atttatcagg
+     2161 gttattgtct catgagcgga tacatatttg aatgtattta gaaaaataaa caaatagggg
+     2221 ttccgcgcac atttccccga cacctactac tgatagtatg ccgccaccat tattatcatg
+     2281 acat
+//

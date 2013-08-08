@@ -1,0 +1,36 @@
+LOCUS       New_DNA                  750 bp ds-DNA     linear       23-JAN-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     misc_feature    1..750
+                     /label=C0051 (cI.LVA)
+                     /ApEinfo_fwdcolor=#ff8080
+                     /ApEinfo_revcolor=#ff8080
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+     misc_feature    712..744
+                     /label=LVA tag
+                     /ApEinfo_fwdcolor=#ff8040
+                     /ApEinfo_revcolor=#ff8040
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 atgagcacaa aaaagaaacc attaacacaa gagcagcttg aggacgcacg tcgccttaaa
+       61 gcaatttatg aaaaaaagaa aaatgaactt ggcttatccc aggaatctgt cgcagacaag
+      121 atggggatgg ggcagtcagg cgttggtgct ttatttaatg gcatcaatgc attaaatgct
+      181 tataacgccg cattgcttgc aaaaattctc aaagttagcg ttgaagaatt tagcccttca
+      241 atcgccagag aaatctacga gatgtatgaa gcggttagta tgcagccgtc acttagaagt
+      301 gagtatgagt accctgtttt ttctcatgtt caggcaggga tgttctcacc tgagcttaga
+      361 acctttacca aaggtgatgc ggagagatgg gtaagcacaa ccaaaaaagc cagtgattct
+      421 gcattctggc ttgaggttga aggtaattcc atgaccgcac caacaggctc caagccaagc
+      481 tttcctgacg gaatgttaat tctcgttgac cctgagcagg ctgttgagcc aggtgatttc
+      541 tgcatagcca gacttggggg tgatgagttt accttcaaga aactgatcag ggatagcggt
+      601 caggtgtttt tacaaccact aaacccacag tacccaatga tcccatgcaa tgagagttgt
+      661 tccgttgtgg ggaaagttat cgctagtcag tggcctgaag agacgtttgg cgctgcaaac
+      721 gacgaaaact acgctttagt agcttaataa   
+//

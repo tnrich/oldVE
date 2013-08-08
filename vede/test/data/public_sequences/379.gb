@@ -1,0 +1,19 @@
+LOCUS       New_DNA                   75 bp ds-DNA     linear       21-JAN-2013
+DEFINITION  .
+ACCESSION   
+VERSION     
+SOURCE      .
+  ORGANISM  .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     misc_feature    1..75
+                     /label=RiboJ
+                     /ApEinfo_fwdcolor=#690f96
+                     /ApEinfo_revcolor=#690f96
+                     /ApEinfo_graphicformat=arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0
+ORIGIN
+        1 AGCTGTCACC GGATGTGCTT TCCGGTCTGA TGAGTCCGTG AGGACGAAAC AGCCTCTACA
+       61 AATAATTTTG TTTAA    
+//

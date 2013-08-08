@@ -1,0 +1,149 @@
+LOCUS       pJH2-45                 3152 bp    DNA     circular 
+DEFINITION    
+  
+  pJH2-35 with sRNA promoter changed to apFAB82 (o2-49/o2-50).
+            
+  
+  apFAB82_sRNA (390)
+  antisense A04
+  
+
+FEATURES             Location/Qualifiers
+     CDS             complement(481..1275)
+                     /gene="AAB05990.1"
+                     /note="CDS CDS CDS kanamycin resistance determinant db_xref
+                      : G I:77 3415 (http://www.ncbi.nlm.nih.gov/entrez/viewer.f
+                     cgi?d b=pro tein&val=773415) CDS kanamycin resistance deter
+                     minant CDS kanamycin resistance determinant [Cloning vector
+                      kanamycin resistance determinant db_xref : GI:773415 (http
+                     ://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&val=7
+                     73415)"
+                     /note="CDS kanamycin resistance determinant [Cloning vector
+                     "
+                     /product="kanamycin resistance determinant"
+                     /db_xref="GI:773415"
+                     /translation="MIEQDGLHAGSPAAWVERLFGYDWAQQTIGCSDAAVFRLSAQG R
+                     "
+                     /transl_table="11"
+                     /codon_start="1"
+     rep_origin      complement(2814..344)
+                     /gene="ColE1"
+                     /note="REP_ORIGIN REP_ORIGIN REP_ORIGIN REP_ORIGIN REP_ORIG
+                     IN REP_ORIGIN"
+                     /note="REP_ORIGIN"
+                     /vntifkey="33"
+                     /label="colE1\origin"
+     CDS             complement(1434..2109)
+                     /gene="RFP"
+                     /note="CDS CDS"
+                     /note="CDS"
+                     /codon_start="0"
+     terminator      2552..2680
+                     /gene="double term"
+                     /note="TERMINATOR TERMINATOR TERMINATOR [p15A KanR] [p15A K
+                     anR] [p15A KanR]"
+                     /note="[p15A KanR]"
+                     /vntifkey="21"
+                     /label="dbl\term"
+     misc_feature    2358..2472
+                     /gene="RNA-OUT"
+                     /label="RNA-OUT"
+                     /apeinfo_fwdcolor="#ff8080"
+                     /apeinfo_revcolor="green"
+     terminator      350..455
+                     /gene="Terminator"
+                     /note="TERMINATOR TERMINATOR TERMINATOR TERMINATOR TERMINAT
+                     OR TERMINATOR"
+                     /note="TERMINATOR"
+                     /vntifkey="43"
+                     /label="T0"
+     misc_feature    complement(2251..2308)
+                     /gene="term spacer"
+                     /label="term spacer"
+     misc_feature    complement(2184..2227)
+                     /gene="insulator"
+                     /label="insulator"
+     terminator      2479..2517
+                     /gene="BBa_B1006T"
+                     /note="TERMINATOR TERMINATOR TERMINATOR TERMINATOR TERMINAT
+                     OR from Bio Fab.org fro m BioFab.or g from BioFab.org from 
+                     BioFab.org from BioFab.org"
+                     /note="from BioFab.org"
+     promoter        complement(2130..2165)
+                     /gene="pBFAB126"
+                     /note="PROMOTER PROMOTER PROMOTER PROMOTER PROMOTER PROMOTE
+                     R PROMOTE R PROMOTE R PROMOTE R PROMOTE R PROMOTE R a const
+                      itutive p PROMOTER"
+                     /note="PROMOTER"
+                     /label="pBFAB126"
+     promoter        2309..2357
+                     /gene="apFAB82"
+                     /note="PROMOTER PROMOTER PROMOTER PROMOTER PROMOTER PROMOTE
+                     R PROMOTE R PROMOTE R PROMOTE R PROMOTE R PROMOTE R PROMOTE
+                      R PROMOTE PROMOTER"
+                     /note="PROMOTER"
+                     /label="pJ23118-start"
+     misc_feature    complement(2228..2250)
+                     /gene="Pause site"
+                     /label="Pause site"
+     misc_feature    complement(2110..2129)
+                     /gene="RFP RBS"
+     misc_feature    2388..2391
+                     /gene="antisense change"
+                     /label="antisense change"
+BASE COUNT      750 a    847 c    799 g    756 t
+ORIGIN
+        1 ggtaagacac gacttatcgc cactggcagc agccactggt aacaggatta gcagagcgag
+       61 gtatgtaggc ggtgctacag agttcttgaa gtggtggcct aactacggct acactagaag
+      121 gacagtattt ggtatctgcg ctctgctgaa gccagttacc ttcggaaaaa gagttggtag
+      181 ctcttgatcc ggcaaacaaa ccaccgctgg tagcggtggt ttttttgttt gcaagcagca
+      241 gattacgcgc agaaaaaaag gatctcaaga agatcctttg atcttttcta cggggtctga
+      301 cgctcagtgg aacgaaaact cacgttaagg gattttggtc atgactagtg cttggattct
+      361 caccaataaa aaacgcccgg cggcaaccga gcgttctgaa caaatccaga tggagttctg
+      421 aggtcattac tggatctatc aacaggagtc caagcgagct ctcgaacccc agagtcccgc
+      481 tcagaagaac tcgtcaagaa ggcgatagaa ggcgatgcgc tgcgaatcgg gagcggcgat
+      541 accgtaaagc acgaggaagc ggtcagccca ttcgccgcca agctcttcag caatatcacg
+      601 ggtagccaac gctatgtcct gatagcggtc cgccacaccc agccggccac agtcgatgaa
+      661 tccagaaaag cggccatttt ccaccatgat attcggcaag caggcatcgc catgggtcac
+      721 gacgagatcc tcgccgtcgg gcatgcgcgc cttgagcctg gcgaacagtt cggctggcgc
+      781 gagcccctga tgctcttcgt ccagatcatc ctgatcgaca agaccggctt ccatccgagt
+      841 acgtgctcgc tcgatgcgat gtttcgcttg gtggtcgaat gggcaggtag ccggatcaag
+      901 cgtatgcagc cgccgcattg catcagccat gatggatact ttctcggcag gagcaaggtg
+      961 agatgacagg agatcctgcc ccggcacttc gcccaatagc agccagtccc ttcccgcttc
+     1021 agtgacaacg tcgagcacag ctgcgcaagg aacgcccgtc gtggccagcc acgatagccg
+     1081 cgctgcctcg tcctgcagtt cattcagggc accggacagg tcggtcttga caaaaagaac
+     1141 cgggcgcccc tgcgctgaca gccggaacac ggcggcatca gagcagccga ttgtctgttg
+     1201 tgcccagtca tagccgaata gcctctccac ccaagcggcc ggagaacctg cgtgcaatcc
+     1261 atcttgttca atcatgcgaa acgatcctca tcctgtctct tgatcagatc atgatcccct
+     1321 gcgccatcag atccttggcg gcaagaaagc catccagttt actttgcagg gcttcccaac
+     1381 cttaccagag ggcgccccag ctggcaattc cgaattcatg agatcttatt attaagcacc
+     1441 ggtggagtga cgaccttcag cacgttcgta ctgttcaacg atggtgtagt cttcgttgtg
+     1501 ggaggtgatg tccagtttga tgtcggtttt gtaagcaccc ggcagctgaa ccggtttttt
+     1561 agccatgtag gtggttttaa cttcagcgtc gtagtgacca ccgtctttca gtttcagacg
+     1621 cattttgatt tcacctttca gagcaccgtc ttccgggtac atacgttcgg tggaagcttc
+     1681 ccaacccatg gtttttttct gcataaccgg accgtcggac gggaagttgg taccacgcag
+     1741 tttaactttg tagatgaact caccgtcttg cagggaggag tcctgggtaa cggtaacaac
+     1801 accaccgtct tcgaagttca taacacgttc ccatttgaaa ccttccggga aggacagttt
+     1861 caggtagtcc gggatgtcag ccgggtgttt aacgtaagct ttggaaccgt actggaactg
+     1921 cggggacagg atgtcccaag cgaacggcag cggaccacct ttggtaactt tcagtttagc
+     1981 ggtctgggta ccttcgtacg gacgaccttc accctcacct tcgatttcga actcgtgacc
+     2041 gttaacggaa ccttccatac gaactttgaa acgcatgaac tctttgataa cgtcttcgct
+     2101 actcgccata tgtatatctc cttcttaaat ccacacacgc tatgagccgg atgattaatt
+     2161 gtcaattccc tctctcccac tatatagaaa gcacgcagct gatagggtcg acgtggtgtt
+     2221 tgctgtgcgt tggacgtgtg gattgggatg aaaatacccc cataaaaaaa ggcgccgaag
+     2281 cgccttaata cgttattagc cgatatacaa aaaatttatt tgctttaaag tctaacctat
+     2341 aggcataatt atttcattcg cacatcttgt tgtctgatta ttgatttttg gcgaaaccat
+     2401 ttgatcatat gacaagatgt gtatccacct taacttaatg atttttacca aaatcattag
+     2461 gggattcatc agggatccaa aaaaaaaccc cgcccctgac agggcggggt tttttttcga
+     2521 tcgtcgacac atggtgctcg agtaaggatc tccaggcatc aaataaaacg aaaggctcag
+     2581 tcgaaagact gggcctttcg ttttatctgt tgtttgtcgg tgaacgctct ctactagagt
+     2641 cacactggct caccttcggg tgggcctttc tgcgtttata cctagggcgt tcggctgcgg
+     2701 cgagcggtat cagctcactc aaaggcggta atacggttat ccacagaatc aggggataac
+     2761 gcaggaaaga acatgtgagc aaaaggccag caaaaggcca ggaaccgtaa aaaggccgcg
+     2821 ttgctggcgt ttttccatag gctccgcccc cctgacgagc atcacaaaaa tcgacgctca
+     2881 agtcagaggt ggcgaaaccc gacaggacta taaagatacc aggcgtttcc ccctggaagc
+     2941 tccctcgtgc gctctcctgt tccgaccctg ccgcttaccg gatacctgtc cgcctttctc
+     3001 ccttcgggaa gcgtggcgct ttctcatagc tcacgctgta ggtatctcag ttcggtgtag
+     3061 gtcgttcgct ccaagctggg ctgtgtgcac gaaccccccg ttcagcccga ccgctgcgcc
+     3121 ttatccggta actatcgtct tgagtccaac cc                              
+//

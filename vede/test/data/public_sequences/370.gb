@@ -1,0 +1,195 @@
+LOCUS       pUC_Amp_AdR             3634 bp    DNA     circular UNA 26-DEC-2012
+DEFINITION  Expected plasmid.
+ACCESSION   urn.local...1357675193198.511
+VERSION     urn.local...1357675193198.511
+KEYWORDS    .
+SOURCE      
+  ORGANISM  
+            .
+FEATURES             Location/Qualifiers
+     RBS             3605..3634
+                     /created_by="User"
+                     /label="RBS12032601"
+     origin          1497^1498
+                     /label="origin"
+     misc_feature    complement(1552..1571)
+                     /created_by="User"
+                     /label="vr"
+                     /note="Geneious type: primer_bind_reverse"
+     promoter        3550..3604
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="R0011(pLac)"
+     misc_feature    complement(3288..3386)
+                     /invitrogen=233000
+                     /label="bla promoter"
+                     /note="Geneious type: promoter prokaryotic"
+     rep_origin      complement(1612..2282)
+                     /invitrogen=254000
+                     /label="pUC origin"
+     terminator      1408..1489
+                     /created_by="User"
+                     /label="rnpB_T1"
+     CDS             1..1407
+                     /Original_Bases
+                     /modified_by="User"
+                     /label="AdR Ecoli Opt"
+     CDS             complement(2427..3287)
+                     /invitrogen=102000
+                     /label="Amp(R)"
+     protein_bind    3550..3570
+                     /created_by="User"
+                     /label="LacO"
+     protein_bind    3574..3592
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="lac1 core operator"
+     spacer          3410..3549
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBricks left spacer"
+     spacer          order(1490..>1497,<1498..1571)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="BioBrick right spacer"
+     motif           3569..3597
+                     /created_by="User"
+                     /label="RNAp binding motif"
+     motif           1381..1398
+                     /created_by="User"
+                     /label="His tag"
+     motif           1399..1401
+                     /created_by="User"
+                     /label="Cys"
+     primer_bind     complement(3393..3449)
+                     /created_by="User"
+                     /label="PR12041701"
+     primer_bind     complement(3581..3604)
+                     /created_by="User"
+                     /modified_by="User"
+                     /label="sRNA primer rev"
+     primer_bind     3410..3429
+                     /created_by="User"
+                     /label="vf2"
+     gBlock          3408..273
+                     /created_by="User"
+                     /label="GBL12121001"
+     gBlock          178..677
+                     /created_by="User"
+                     /label="GBL12121002"
+     gBlock          581..1080
+                     /created_by="User"
+                     /label="GBL12121003"
+     gBlock          981..1480
+                     /created_by="User"
+                     /label="GBL12121004"
+     misc_feature    2614..2624
+                     /Recognition_pattern="GCCNNNN^NGGC"
+                     /annotation_group="GCCNNNNNGGC"
+                     /label="BglI"
+                     /note="Geneious type: restriction site"
+     misc_feature    3534..3541
+                     /Recognition_pattern="GC^GGCCGC"
+                     /annotation_group="GCGGCCGC"
+                     /label="NotI"
+                     /note="Geneious type: restriction site"
+     misc_feature    3528..3533
+                     /Recognition_pattern="G^AATTC"
+                     /annotation_group="GAATTC"
+                     /label="EcoRI"
+                     /note="Geneious type: restriction site"
+     misc_feature    2720..2725
+                     /Recognition_pattern="TGC^GCA"
+                     /annotation_group="TGCGCA"
+                     /label="AviII"
+                     /note="Geneious type: restriction site"
+     misc_feature    3566..3571
+                     /Recognition_pattern="C^AATTG"
+                     /annotation_group="CAATTG"
+                     /label="MfeI"
+                     /note="Geneious type: restriction site"
+     misc_feature    1489..1494
+                     /Recognition_pattern="CTGCA^G"
+                     /annotation_group="CTGCAG"
+                     /label="PstI"
+                     /note="Geneious type: restriction site"
+     misc_feature    2978..2983
+                     /Recognition_pattern="AGT^ACT"
+                     /annotation_group="AGTACT"
+                     /label="ScaI"
+                     /note="Geneious type: restriction site"
+     primer_bind     1..23
+                     /created_by="User"
+                     /label="PRC12122601"
+     primer_bind     complement(1366..1380)
+                     /created_by="User"
+                     /label="PRC12122602"
+     primer_bind     complement(172..200)
+                     /created_by="User"
+                     /label="PRC12122603"
+     primer_bind     1222..1240
+                     /created_by="User"
+                     /label="PRC12122604"
+ORIGIN      
+        1 atgtctaccc aggagcagac tccgcagatc tgtgtggttg gcagcggtcc tgctggtttc
+       61 tacactgcgc agcatctgct gaaacaccac tctcgtgcac atgtggacat ctacgagaaa
+      121 cagctggtac ctttcggtct ggttcgtttc ggtgtagcgc cggatcatcc ggaagttaaa
+      181 aacgtgatca acacctttac ccagaccgcg cgcagcgacc gctgtgcttt ttacggcaat
+      241 gttgaggtcg gccgtgatgt aaccgttcag gagctgcagg acgcatacca tgcagtggtt
+      301 ctgtcttatg gtgcagaaga tcaccaagct ctggacatcc cgggtgaaga actgccgggc
+      361 gttttctccg ctcgcgcttt tgttggctgg tacaacggcc tgccggaaaa ccgcgagctg
+      421 gctccagatc tgtcttgcga caccgcggtg attctgggcc agggcaacgt tgcactggac
+      481 gtggctcgta tcctgctgac tccaccggat catctggaaa aaactgatat caccgaagca
+      541 gctctgggcg ctctgcgcca gagccgtgtt aaaactgtat ggatcgtagg tcgtcgtggt
+      601 cctctgcagg ttgcattcac cattaaggaa ctgcgtgaaa tgattcagct gcctggcacc
+      661 cgtccgatgc tggacccggc agacttcctg ggcctgcagg atcgtatcaa agaggccgca
+      721 cgtccgcgta aacgtctgat ggaactgctg ctgcgtactg cgaccgaaaa accgggtgtc
+      781 gaggaagctg cacgtcgtgc ctccgcgagc cgtgcatggg gtctgcgctt cttccgtagc
+      841 ccacagcaag tcctgccgag cccggatggt cgtcgtgcag cgggcatccg tctggccgtg
+      901 acccgtctgg aaggcatcgg cgaagcaacc cgtgctgttc cgactggtga cgttgaagac
+      961 ctgccgtgtg gcctggttct gtctagcatc ggctacaaaa gccgtccgat cgatccaagc
+     1021 gttccgttcg acccgaaact gggtgttgtt ccgaacatgg aaggccgcgt agtcgatgtc
+     1081 ccgggcctgt actgctccgg ttgggttaaa cgtggcccga cgggtgttat caccaccact
+     1141 atgactgact cttttctgac tggtcagatc ctgctgcagg atctgaaagc tggccacctg
+     1201 ccgtctggcc cacgtccggg cagcgcattt atcaaggccc tgctggatag ccgtggcgtt
+     1261 tggccggtat ccttcagcga ctgggagaaa ctggatgcgg aggaagtaag ccgtggccag
+     1321 gcgtccggca agccgcgtga gaaactgctg gacccgcagg agatgctgcg cctgctgggt
+     1381 caccaccacc accaccactg ttaataatcg gtcagtttca cctgatttac gtaaaaaccc
+     1441 gcttcggcgg gtttttgctt ttggaggggc agaaagatga atgactgtct gcaggcttcc
+     1501 tcgctcactg actcgctgcg ctcggtcgtt cggctgcggc gagcggtatc agctcactca
+     1561 aaggcggtaa tacggttatc cacagaatca ggggataacg caggaaagaa catgtgagca
+     1621 aaaggccagc aaaaggccag gaaccgtaaa aaggccgcgt tgctggcgtt tttccatagg
+     1681 ctccgccccc ctgacgagca tcacaaaaat cgacgctcaa gtcagaggtg gcgaaacccg
+     1741 acaggactat aaagatacca ggcgtttccc cctggaagct ccctcgtgcg ctctcctgtt
+     1801 ccgaccctgc cgcttaccgg atacctgtcc gcctttctcc cttcgggaag cgtggcgctt
+     1861 tctcatagct cacgctgtag gtatctcagt tcggtgtagg tcgttcgctc caagctgggc
+     1921 tgtgtgcacg aaccccccgt tcagcccgac cgctgcgcct tatccggtaa ctatcgtctt
+     1981 gagtccaacc cggtaagaca cgacttatcg ccactggcag cagccactgg taacaggatt
+     2041 agcagagcga ggtatgtagg cggtgctaca gagttcttga agtggtggcc taactacggc
+     2101 tacactagaa gaacagtatt tggtatctgc gctctgctga agccagttac cttcggaaaa
+     2161 agagttggta gctcttgatc cggcaaacaa accaccgctg gtagcggttt ttttgtttgc
+     2221 aagcagcaga ttacgcgcag aaaaaaagga tctcaagaag atcctttgat cttttctacg
+     2281 gggtctgacg ctcagtggaa cgaaaactca cgttaaggga ttttggtcat gagattatca
+     2341 aaaaggatct tcacctagat ccttttaaat taaaaatgaa gttttaaatc aatctaaagt
+     2401 atatatgagt aaacttggtc tgacagttac caatgcttaa tcagtgaggc acctatctca
+     2461 gcgatctgtc tatttcgttc atccatagtt gcctgactcc ccgtcgtgta gataactacg
+     2521 atacgggagg gcttaccatc tggccccagt gctgcaatga taccgcgaga cccacgctca
+     2581 ccggctccag atttatcagc aataaaccag ccagccggaa gggccgagcg cagaagtggt
+     2641 cctgcaactt tatccgcctc catccagtct attaattgtt gccgggaagc tagagtaagt
+     2701 agttcgccag ttaatagttt gcgcaacgtt gttgccattg ctacaggcat cgtggtgtca
+     2761 cgctcgtcgt ttggtatggc ttcattcagc tccggttccc aacgatcaag gcgagttaca
+     2821 tgatccccca tgttgtgcaa aaaagcggtt agctccttcg gtcctccgat cgttgtcaga
+     2881 agtaagttgg ccgcagtgtt atcactcatg gttatggcag cactgcataa ttctcttact
+     2941 gtcatgccat ccgtaagatg cttttctgtg actggtgagt actcaaccaa gtcattctga
+     3001 gaatagtgta tgcggcgacc gagttgctct tgcccggcgt caatacggga taataccgcg
+     3061 ccacatagca gaactttaaa agtgctcatc attggaaaac gttcttcggg gcgaaaactc
+     3121 tcaaggatct taccgctgtt gagatccagt tcgatgtaac ccactcgtgc acccaactga
+     3181 tcttcagcat cttttacttt caccagcgtt tctgggtgag caaaaacagg aaggcaaaat
+     3241 gccgcaaaaa agggaataag ggcgacacgg aaatgttgaa tactcatact cttccttttt
+     3301 caatattatt gaagcattta tcagggttat tgtctcatga gcggatacat atttgaatgt
+     3361 atttagaaaa ataaacaaat aggggttccg cgcacatttc cccgaaaagt gccacctgac
+     3421 gtctaagaaa ccattattat catgacatta acctataaaa ataggcgtat cacgaggcag
+     3481 aatttcagat aaaaaaaatc cttagctttc gctaaggatg atttctggaa ttcgcggccg
+     3541 cttctagaga attgtgagcg gataacaatt gacattgtga gcggataaca agatactgag
+     3601 cacacagcac gtatacacta taaggaggga agaa
+//
