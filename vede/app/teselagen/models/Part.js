@@ -31,7 +31,7 @@ Ext.define("Teselagen.models.Part", {
                     var sequenceManager = sequenceFile.getSequenceManager();
                     
                     if(sequenceManager) {
-                        data.length = record.get("genbankStartBP") - record.get("endBP");
+                        data.length = Math.abs(record.get("endBP") - record.get("genbankStartBP"));
                         var features = sequenceManager.featuresByRange(
                                             record.get("genbankStartBP"),
                                             record.get("endBP"));
@@ -39,6 +39,8 @@ Ext.define("Teselagen.models.Part", {
                         features.forEach(function(feature) {
                             data.features.push(feature.getName());
                         });
+
+                        data.features = data.features.join(" ");
                     }
                 }
                 return data;
