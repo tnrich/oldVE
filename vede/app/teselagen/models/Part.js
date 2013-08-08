@@ -17,7 +17,8 @@ Ext.define("Teselagen.models.Part", {
         type: "rest",
         reader: {
             type: "json",
-            root: "parts"
+            root: "parts",
+            totalProperty: "total"
         },
         writer: {
             type: "json",
@@ -57,7 +58,6 @@ Ext.define("Teselagen.models.Part", {
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
             {
                 var url = "parts";
-                delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 

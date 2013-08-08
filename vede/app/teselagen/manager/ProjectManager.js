@@ -54,6 +54,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.parts.pageSize = 10;
 
         self.sequences.loadPage(1);
+        self.parts.loadPage(1);
 
         //store.load({
         //    params:{
@@ -264,7 +265,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
-            parts.loadPage(1);
+            partGrid.down('pagingtoolbar').doRefresh();
         }
 
         dashPanel.getActiveTab().el.unmask();
