@@ -1034,6 +1034,33 @@ Ext.define("Teselagen.manager.SequenceManager", {
         return result;
      },
 
+    /**
+     * Get list of feature names in range.
+     *
+     * @param {Number} start Start inclusive
+     * @param {Number} end End expclusive
+     * @returns {String[]} List of features' names, cleaned up for display in the
+     * library.
+     */
+     featuresByRangeText: function(pStart, pEnd) {
+        var features = this.featuresByRange(pStart, pEnd);
+        var namesArray = [];
+        var result;
+
+        if(features.length === 0) {
+            return "None";
+        }
+
+        for(var i = 0; i < features.length; i++) {
+            namesArray.push(features[i].getName());
+        }
+
+        result = namesArray.join(", ");
+
+        // Remove empty feature names.
+        return result.replace(", ,", ", ");
+     },
+
      /**
       * Get list of features at position
       *

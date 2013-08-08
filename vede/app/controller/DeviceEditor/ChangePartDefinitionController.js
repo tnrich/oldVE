@@ -153,7 +153,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             partSource: partSource.getValue(),
             genbankStartBP: startBP.getValue(),
             endBP: stopBP.getValue(),
-            revComp: revComp.getValue()
+            revComp: revComp.getValue(),
+            features: this.selectedSequence.getSequenceManager().featuresByRangeText(
+                            startBP.getValue(), stopBP.getValue())
         };
         
         this.selectedSequence.set({
