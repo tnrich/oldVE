@@ -115,11 +115,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 part.setSequenceFile(user.sequences().getById(sequenceId));
                             }
                         }
-                        // Filter the parts store so only mapped parts will appear (per
-                        // Nathan's request in ticket #869).
-                        self.parts.filterBy(function(part) {
-                            return part.isMapped();
-                        });
                     }
                 );
             }
@@ -262,7 +257,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
-
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
             partGrid.down('pagingtoolbar').doRefresh();
@@ -607,6 +601,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
         };
         Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
 
+    },
+
+    renamePartinOpenDesigns: function(part, text) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var tabs = tabPanel.items.items;
+
+        tabs.forEach(function(tab) {
+            if(tab.initialCls == "DeviceEditorTab") {
+                var gridPart = tab.model.partsStore.data.getByKey(part.data.id);
+                if(gridPart) {
+                    gridPart.set('name', text);
+                }
+            }
+        });
     },
 
     createDirectVESession: function() {

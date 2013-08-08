@@ -222,6 +222,12 @@ border-color: #E0E3E6;
   background:#E0E3E6;
 }
 
+.VectorEditorMainMenuBar .x-btn-default-toolbar-small-focus {
+  border-color: white !important;
+  background: #E0E3E6 !important;
+}
+
+
 .VectorEditorMainToolBar {
   background: #F7F9FA !important;
 }
@@ -822,7 +828,7 @@ border-color: #E0E3E6;
 }
 
 .DeviceEditorMenuPanel .x-btn-default-toolbar-small-focus {
-  border: 0 none !important;
+  border-color: white !important;
   background: #E0E3E6 !important;
 }
 

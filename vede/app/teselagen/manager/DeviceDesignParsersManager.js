@@ -844,7 +844,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 callback: function(sequence){
                 sequence.processSequence(function(err,seq){
                     countPartProcessing--;
-                    console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
+                    //console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
                     if(!countPartProcessing) Vede.application.fireEvent("allSequencesProcessed")
                     //if(err) debugger;
                 });

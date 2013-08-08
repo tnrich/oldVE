@@ -75,7 +75,7 @@ module.exports = function(app) {
         var Part = app.db.model("part");
 
         User.findById(req.user._id)
-        .populate({ path: 'parts'})
+        .populate({ path: 'parts', match: {sequencefile_id: {$ne: null}}})
         .exec(function(err, user) {
             var FQDN_candidate = req.user.FQDN+'.'+reqPart.name;
 
