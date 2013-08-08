@@ -845,7 +845,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 sequence.processSequence(function(err,seqMgr,gb){
                     countPartProcessing--;
                     sequence.set("name",gb.getLocus().locusName);
-                    if(!countPartProcessing) Vede.application.fireEvent("allSequencesProcessed")
+                    if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
                     //if(err) debugger;
                 });
             }});

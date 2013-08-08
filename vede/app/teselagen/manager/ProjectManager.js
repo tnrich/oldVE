@@ -198,7 +198,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         dashPanel.getActiveTab().el.unmask(); 
         if(sequenceGrid) 
         {
-            if(Math.round(sequenceGrid.getHeight()/31)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/31);}
+            if(Math.round(sequenceGrid.getHeight()/33)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/33);}
             sequences.loadPage(1);
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
@@ -214,7 +214,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
-            if(Math.round(partGrid.getHeight()/31)>20){parts.pageSize = Math.round(partGrid.getHeight()/31);}
+            if(Math.round(partGrid.getHeight()/33)>20){parts.pageSize = Math.round(partGrid.getHeight()/33);}
             parts.loadPage(1);
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
