@@ -214,15 +214,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 }
             });
 
-            if (designName) {
-                console.log(designName);
-                tab = Ext.getCmp("mainAppPanel").query("component[title='" + designName + "']")[0];
-                    if(tab) {
-                        Ext.getCmp("mainAppPanel").setActiveTab(tab);
-                        var gridPart = tab.model.partsStore.data.getByKey(selectedPart.data.id);
-                        gridPart.set('name', text);
-                    }
-            }
+            Teselagen.manager.ProjectManager.renamePartinOpenDesigns(selectedPart, text);
         }, selectedPart.get('name'));
     },
 
