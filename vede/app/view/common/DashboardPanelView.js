@@ -717,15 +717,22 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     itemcontextmenu: function( el, record, item, index, e, eOpts ){
                                         e.preventDefault();
                                         var contextMenu = Ext.create('Ext.menu.Menu',{
-                                              items: [{
+                                              items: [
+                                              {
+                                                text: 'Rename',
+                                                handler: function() {
+                                                    Teselagen.manager.ProjectExplorerManager.renamePart(record);
+                                                }
+                                              },
+                                              {
                                                 text: 'Open',
                                                 handler: function(){
                                                     Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record.getSequenceFile());
                                                 }
                                               },{
-                                                text: 'Download',
+                                                text: 'Download Source Sequence',
                                                 handler: function() {
-                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
+                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceFile().getSequenceManager());
                                                     VEManager.saveSequenceToFile();
                                                 }
                                               }]
