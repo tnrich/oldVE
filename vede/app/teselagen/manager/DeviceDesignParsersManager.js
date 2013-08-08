@@ -840,7 +840,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             part.getSequenceFile({
                 callback: function(sequence){
                 sequence.processSequence(function(err,seq){
-                    console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
+                    // console.log("sequence processed ", ( err ? "failed" : "sucess" ) );
                     //if(err) debugger;
                 });
             }});
