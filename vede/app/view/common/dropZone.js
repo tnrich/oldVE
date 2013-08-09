@@ -49,14 +49,14 @@ Ext.define('Vede.view.common.dropZone', {
 
 		evt.stopPropagation();
 		evt.preventDefault();
-		
-		this.processFiles(evt);
 
 		var sequenceLibrary = Ext.getCmp("sequenceLibrary");
 		sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+        
+        var self = this;
 
-
+        self.processFiles(evt.dataTransfer.items);
 	},
 
 	handleDragOver: function(evt) {
@@ -69,15 +69,22 @@ Ext.define('Vede.view.common.dropZone', {
 	},
  
 	//Handle onDrop
-	processFiles: function(evt) {     
-
-		var length = evt.dataTransfer.items.length;
+	processFiles: function(items) {     
+		var length = items.length;
 
         for (var i = 0; i < length; i++) {
             var entries = [];
-            entries[0] = evt.dataTransfer.items[i].webkitGetAsEntry();
+            entries[0] = items[i].webkitGetAsEntry();
             this.readDirectory(entries,this);
         }
+
+
+        var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+
+        Ext.defer(function() {
+            sequenceLibrary.el.unmask();
+        }, 10);
+
 	},
 
 	// Recursive directory read 
