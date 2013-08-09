@@ -95,7 +95,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                 } else {
 
-                    context.callback();
+                    context.cb();
 
                 }
             });
