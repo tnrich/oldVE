@@ -1,0 +1,24 @@
+{
+  "browser": true,
+  "curly": true,
+  "eqeqeq": true,
+  "expr": true,
+  "forin": true,
+  "immed": true,
+  "indent": 4,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "node": true,
+  "nonew": true,
+  "quotmark": true,
+  "strict": false,
+  "trailing": true,
+  "undef": true,
+  "unused": true,
+  "white": false,
+  "globals": {
+    "require": false,
+    "module": false
+  }
+}

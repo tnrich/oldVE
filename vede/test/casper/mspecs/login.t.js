@@ -37,5 +37,5 @@ describe("Normal login", function () {
                 //casper.capture("screenshot.png");
             });
         });
-    })
+    });
 });

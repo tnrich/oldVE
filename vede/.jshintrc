@@ -18,13 +18,16 @@
   "forin": false,
   "immed": true,
   "indent": 4,
+  "jquery": true,
   "latedef": true,
   "newcap": true,
   "noarg": true,
   "nonew": true,
   "quotmark": true,
+  "strict": false,
   "regexp": true,
   "trailing": true,
   "undef": true,
-  "unused": true
+  "unused": true,
+  "white": false
 }

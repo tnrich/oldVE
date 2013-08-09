@@ -1,0 +1,11 @@
+{
+    "name": "seleniumjs"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+    "chai": "*",
+    "selenium-webdriver":"*",
+    "webdriverjs": "*",
+    "wd": "*"
+  }
+}

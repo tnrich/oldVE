@@ -1,11 +1,13 @@
 /*global casper*/
-var system = require("system");
-var url = system.env.URL || "http://teselagen.local";
-if (system.env.URL) {
+var url = casper.cli.get("url");
+if (url) {
     casper.options.pageSettings = {
             userName: "dev",
             password: "dev#rocks"
     };
+}
+else {
+    url = "http://teselagen.local";
 }
 
 casper.test.begin("Normal login", function suite(test) {
@@ -16,18 +18,16 @@ casper.test.begin("Normal login", function suite(test) {
     });
     
     casper.then(function() {
-	test.assertExists("#auth-username-field-inputEl", 
-			  "When I enter my username");
+        test.assertExists("#auth-username-field-inputEl", "When I enter my username");
         this.sendKeys("#auth-username-field-inputEl", "testUser");
     });
     
     casper.then(function() {
-	test.info("And I enter my password");
+        test.info("And I enter my password");
     });
     
     casper.then(function() {
-	test.assertExists("#auth-login-btn-btnIconEl", 
-			  "And I click on the Login button");
+        test.assertExists("#auth-login-btn-btnIconEl", "And I click on the Login button");
         this.click("#auth-login-btn-btnIconEl");
     });
     

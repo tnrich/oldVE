@@ -7,7 +7,7 @@
 var Webdriver = require("selenium-webdriver");
 // This is a wrapper for Mocha functions so they work with the Promise control flow without using then().
 //var test = require('selenium-webdriver/testing');
-var driver = require("../../module/sel_webdriver").driver;
+var driver = require("../module/selwebdriver").driver;
 
 describe("Regression test", function(){
 
