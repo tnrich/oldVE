@@ -137,10 +137,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                     try {
 
-                    sequence.processSequence(function(err){
+                    sequence.processSequence(function(err,seqMgr){
 
                         if(!err)
                         {
+
+                        if(seqMgr) sequence.set('name',seqMgr.toGenbank().getLocus().locusName);
 
                         sequence.save({
                             success: function(){
