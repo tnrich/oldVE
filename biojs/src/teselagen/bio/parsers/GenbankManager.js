@@ -548,15 +548,17 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var quoted = false;
         var val = lineArr[1];
 
-        val = val.replace(/\\/g, " ");
+        if(val) {
+            val = val.replace(/\\/g, " ");
 
-        if (line.match(/=\"/g)) {
-            quoted = true;
-            val = val.replace(/\".*/g, "");
-        } else if (val.match(/^\d+$/g)) {
-            val = parseInt(val);
-        } else {
-            quoted = false;
+            if (line.match(/=\"/g)) {
+                quoted = true;
+                val = val.replace(/\".*/g, "");
+            } else if (val.match(/^\d+$/g)) {
+                val = parseInt(val);
+            } else {
+                quoted = false;
+            }
         }
 
         featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {

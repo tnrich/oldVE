@@ -96,8 +96,9 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 "itemclick": function(grid, part){
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
                         var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
+                        var activeProject = inspectorController.activeProject;
 
-                        var bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(inspectorController.activeProject,inspectorController.selectedBinIndex);
+                        var bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(activeProject, inspectorController.selectedBinIndex);
                         if(bin) {
                             // If the part already exists in the design,
                             // map it to the selected cell. If not,
@@ -107,15 +108,22 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                             if(identicalPart) {
                                 part = identicalPart;
                             } else {
-                                inspectorController.activeProject.parts().add(part);
+                                activeProject.parts().add(part);
                                 partAdded = true;
                             }
                             
+                            // Get the old part, and check to see if it is still
+                            // in any cells. If not, remove it from the design's
+                            // parts store.
                             var oldPart = inspectorController.selectedCell.getPart();
+
+                            if(Teselagen.manager.DeviceDesignManager.getOwnerBinIndices(activeProject, oldPart).length === 0) {
+                                activeProject.parts().remove(oldPart);
+                            }
                             
                             inspectorController.selectedCell.setPart(part);
                             inspectorController.selectedPart = part;
-                            var yIndex = inspectorController.activeProject.bins().getAt(inspectorController.selectedBinIndex).cells().indexOf(inspectorController.selectedCell);
+                            var yIndex = activeProject.bins().getAt(inspectorController.selectedBinIndex).cells().indexOf(inspectorController.selectedCell);
                             
                             Teselagen.manager.GridCommandPatternManager.addCommand({
                                 type: "PART",
