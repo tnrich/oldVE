@@ -1,0 +1,13 @@
+{
+    "name": "casper"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+    "casper-chai":"*",
+    "chai": "*",
+    "icolor": "*",
+    "lodash": "*",
+    "mocha": "*",
+    "underscore.string": "*"
+  }
+}

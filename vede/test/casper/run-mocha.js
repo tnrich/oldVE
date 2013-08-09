@@ -15,33 +15,14 @@ var fs          = require('fs'),
   casper;
 
 /*
- * Include modules that were installed with npm.
- */
-function require_node_module(name) {
-  var node_modules, pkg, pkg_main;
-  node_modules = "../../node_modules/";
-
-  pkg = JSON.parse(fs.read("./node_modules/" + name + "/package.json"));
-  pkg_main = node_modules + name + "/" + pkg.main;
-  return require(pkg_main);
-}
-
-/*
  * Load dependencies
  */
-_ = require_node_module("lodash");
-_.str = require_node_module('underscore.string');
-require_node_module('icolor');
+_ = require("./node_modules/lodash/dist/lodash");
+_.str = require('./node_modules/underscore.string/lib/underscore.string');
+require('./node_modules/icolor/build/icolor');
 
-
-/*
- * While we could use an npm module for the following, it's a pain because
- * PhantomJS does not have some modules (eg 'path') that Node does.
- *
- * The simple solution we use is to download a "pre-compiled" coffee-script.
- */
-require('./mocha');
-chai = require("./chai");
+require('./node_modules/mocha/mocha.js');
+chai = require('./node_modules/chai/chai.js');
 
 /* chai-isms
  */
@@ -166,7 +147,6 @@ function CasperReporter(runner) {
  */
 mocha.setup({
   ui: 'bdd',
-//  reporter: 'spec'
   reporter: CasperReporter,
   timeout: 20000
 });
@@ -217,13 +197,13 @@ casper.on('page.error', function(msg, trace) {
 
 // Set up casperChai.
 // TODO: option to use ../lib/casper-chai (i.e. unbuilt coffeescript)
-casperChai = require("./casper-chai");
+casperChai = require("./node_modules/casper-chai/build/casper-chai");
 chai.use(casperChai);
 
 /*
  * Load the specs
  */
-phantom.injectJs(cli.get(0));
+phantom.injectJs(casper.cli.get(0));
 
 /*
  * Start casper.
