@@ -75,7 +75,7 @@ module.exports = function(app) {
         var Part = app.db.model("part");
 
         User.findById(req.user._id)
-        .populate({ path: 'parts'})
+        .populate({ path: 'parts', match: {sequencefile_id: {$ne: null}}})
         .exec(function(err, user) {
             var FQDN_candidate = req.user.FQDN+'.'+reqPart.name;
 
@@ -143,6 +143,7 @@ module.exports = function(app) {
 
         var User = app.db.model("User");
         User.findById(req.user._id).populate('projects')
+        .populate('parts')
         .exec(function(err, user) {
             var countDesigns=0;
             user.projects.forEach(function(project){
@@ -150,7 +151,12 @@ module.exports = function(app) {
             });
             var countProjects = user.projects.length;
             var countSequences = user.sequences.length;
-            var countParts = user.parts.length;
+            var countParts = 0;
+            for(var i = 0; i < user.parts.length; i++) {
+                if(user.parts[i].sequencefile_id) {
+                    countParts += 1;
+                }
+            }
             res.json({"numberProjects":countProjects, "numberDesigns":countDesigns, "numberSequences":countSequences, "numberParts":countParts});
         });
     });

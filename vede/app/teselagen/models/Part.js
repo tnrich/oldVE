@@ -22,7 +22,6 @@ Ext.define("Teselagen.models.Part", {
         },
         writer: {
             type: "json",
-
             //getRecordData: function(record) {
             //    var data = record.getData();
             //    var associatedData = record.getAssociatedData();
@@ -44,7 +43,6 @@ Ext.define("Teselagen.models.Part", {
             //    }
             //    return data;
             //}
-
         },
         buildUrl: function(request) {
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
@@ -169,11 +167,6 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0
     }, //stopBP
-    {
-        name: "length",
-        type: "int",
-        defaultValue: 0,
-    }, //sequlength
     {
         name: "iconID",
         type: "string",
@@ -350,7 +343,6 @@ Ext.define("Teselagen.models.Part", {
      * @returns {Teselagen.models.SequenceFile} The sequencefile model.
      */
     getSequenceFile: function(callbackFn) {
-
         //debugger;
         if(this.hasSequenceFile || this.get("sequencefile_id")) {
 

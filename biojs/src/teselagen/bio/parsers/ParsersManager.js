@@ -84,13 +84,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                 var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
                                 if(!duplicated) 
                                 {
-                                    Teselagen.manager.ProjectManager.sequences.add(sequence);
                                 }
                                 else
                                 {
                                     $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
                                     $(msg[0]).removeClass("toast-info");
-                                    $(msg[0]).addClass("toast-warning");                                }
+                                    $(msg[0]).addClass("toast-warning"); 
+                                    var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+                                    sequenceLibrary.el.unmask();
+                               }
                             }
                         });
                     });

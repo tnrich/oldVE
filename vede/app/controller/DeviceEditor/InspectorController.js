@@ -218,22 +218,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 	        Teselagen.manager.ProjectManager.currentUser.parts().load(function (parts, operation, success){
                 currentTabEl.mask();
                 var self = this;
-                for(var z=0; z<parts.length; z++) {
-                    if(parts[z].getSequenceFile()) {
-                        parts[z].data.partSource = Teselagen.manager.ProjectManager.currentUser.sequences().getById(parts[z].data.sequencefile_id).data.name;
-                    } else{
-                        parts[z].set("partSource", "");
-                    }
-                }
-
-                // Filter the parts store so only mapped parts will appear (per
-                // Nathan's request in ticket #869).
-                Teselagen.manager.ProjectManager.parts.filterBy(function(part) {
-                    return part.isMapped();
-                });
 
                 self.partLibraryWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary", {renderTo: currentTabEl}).show();
                 self.partLibraryWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
+
+                self.partLibraryWindow.down('pagingtoolbar').bind(Teselagen.manager.ProjectManager.parts);
+                self.partLibraryWindow.down('pagingtoolbar').doRefresh();
             });
         }
     },
@@ -499,7 +489,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     }
 
                     self.selectedPart.set("name", newName);
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+
+                    if(self.selectedPart.hasSequenceFile) {
+                        Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
+                    }
 
 
                     if (!self.selectedPart.isMapped() && self.selectedPart.get("name") !== ""){

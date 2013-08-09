@@ -422,22 +422,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 border: 0,
                 layout: 'fit',
                 items: [
-                    // {
-                    //     xtype: 'button',
-                    //     id: 'dropzone-activate',
-                    //     cls: 'dropzone-activate-btn',
-                    //     overCls: 'dropzone-activate-btn-over',
-                    //     icon: '../../resources/images/ux/drop-import.png',
-                    //     iconCls: 'dropzone-activate-import-btn',
-                    //     text: 'Import Files',
-                    //     height: '35',
-                    //     width: '100',
-                    //     listeners: {
-                    //         click: function() {
-                    //             $("#dropZone-area").show();
-                    //         }
-                    //     }
-                    // },
                     {
                         xtype: 'container',
                         cls: 'sequenceLibraryContainer',
@@ -448,6 +432,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             align: 'stretch'
                         },
                         items : [
+                            
                             {
                                 xtype: 'textfield',
                                 anchor: '100%',
@@ -461,23 +446,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
                                         grid.store.clearFilter();
-
-                                        if (newValue) {
-                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
-                                            grid.store.filter({
-                                                filterFn: function(record) {
-                                                    var features = [];
-                                                    for(var i=0; i<record.get('serialize').features.length; i++) {
-                                                        features.push(record.get('serialize').features[i].inData.name);
-                                                    }
-                                                    return matcher.test(record.get('name')) ||
-                                                        matcher.test(record.get('sequenceFileFormat')) ||
-                                                        matcher.test(record.get('size')) || 
-                                                        matcher.test(record.get('serialize').sequence.alphabet) || 
-                                                        matcher.test(features);
-                                                }
-                                            });
-                                        }
+                                        grid.store.remoteFilter = true;
+                                        grid.store.on('load', function(s){ 
+                                            s.remoteFilter = false; 
+                                        }, this, { single: true })
+                                        
+                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
                             },
@@ -501,7 +475,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'gridcolumn',
                                         text: 'Name',
                                         width: 220,
-                                        dataIndex: 'name'
+                                        dataIndex: 'name',
+                                        sortable: true,
                                     }, 
                                     {
                                         text     : 'Type',
@@ -518,15 +493,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        text: 'File Format',
-                                        width: 100,
-                                        dataIndex: 'sequenceFileFormat'
-                                    },
-                                    {
-                                        xtype: 'gridcolumn',
                                         text: 'Size',
                                         width: 80,
-                                        dataIndex: 'size'
+                                        dataIndex: 'size',
+                                        sortable: false,
                                     },
                                     {
                                         text     : 'Features',
@@ -543,14 +513,16 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             } else {
                                                 return "";
                                             }
-                                        }
+                                        },
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Date Created',
                                         width: 180,
                                         dataIndex: 'dateCreated',
-                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'),
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
@@ -565,7 +537,24 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     dockedItems: [{
                                             xtype: 'pagingtoolbar',
                                             dock: 'bottom',
-                                            displayInfo: true
+                                            displayInfo: true,
+                                            items: [
+                                                {
+                                                    xtype: 'container',
+                                                    cls: 'sequenceLibraryOptionsContainer',
+                                                    items: [
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'sequenceLibraryImportButton',
+                                                            icon: 'resources/images/ux/paging/publish.png',
+                                                            iconCls: 'sequenceLibraryImportButtonIcon',
+                                                            overCls: 'sequenceLibraryImportButton-over',
+                                                            text: 'Import Sequence(s)',
+                                                            tooltip: 'You can drop your sequence files or folders into the table above.'
+                                                        }
+                                                    ]
+                                                },
+                                            ]
                                     }],
 
                                 listeners: {
@@ -630,21 +619,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('partLibrary');
                                         grid.store.clearFilter();
-
-                                        if (newValue) {
-                                            var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
-                                            grid.store.filter({
-                                                filterFn: function(record) {
-                                                    return matcher.test(record.get('name')) ||
-                                                        matcher.test(record.get('genbankStartBP')) ||
-                                                        matcher.test(record.get('endBP')) ||
-                                                        matcher.test(record.get('length')) ||
-                                                        matcher.test(record.get('revComp')) || 
-                                                        matcher.test(record.get('partSource')) ||
-                                                        matcher.test(record.get('features'));
-                                                }
-                                            });
-                                        }
+                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
                             },
@@ -669,23 +644,30 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         xtype: 'gridcolumn',
                                         text: 'Name',
                                         width: 220,
-                                        dataIndex: 'name'
+                                        dataIndex: 'name',
+                                        sortable: true
                                     },{
                                         xtype: 'gridcolumn',
                                         text: 'Start BP',
                                         width: 80,
-                                        dataIndex: 'genbankStartBP'
+                                        dataIndex: 'genbankStartBP',
+                                        sortable: false
                                     },{
                                         xtype: 'gridcolumn',
                                         text: 'Stop BP',
                                         width: 80,
-                                        dataIndex: 'endBP'
+                                        dataIndex: 'endBP',
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Length',
-                                        dataIndex: 'length',
-                                        width: 80
+                                        width: 80,
+                                        dataIndex: 'genbankStartBP',
+                                        renderer: function(val, metadata, record) {
+                                            return Math.abs(val - record.get("endBP"));
+                                        },
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
@@ -696,20 +678,23 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             val = String(val);
                                             val = val.charAt(0).toUpperCase() + val.slice(1);
                                             return val;
-                                        }
+                                        },
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Source Sequence',
                                         width: 160,
-                                        dataIndex: 'partSource'
+                                        dataIndex: 'partSource',
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
                                         flex: 1,
                                         text: 'Features in Range',
                                         width: 150,
-                                        dataIndex: 'features'
+                                        dataIndex: 'features',
+                                        sortable: false
                                     },
 
                                 ],

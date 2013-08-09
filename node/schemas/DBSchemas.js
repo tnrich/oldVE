@@ -107,9 +107,9 @@ module.exports = function(db) {
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
-        length            :  Number,
         features          :  String,
-		iconID            :  String
+		iconID            :  String,
+        partSource        :  String
 	});
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});

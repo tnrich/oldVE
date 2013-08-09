@@ -24,6 +24,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
 	},
 
 	populateStatisticts: function () {
+
+    var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+    var pagingToolbar;
+    if(currentTab) pagingToolbar = currentTab.down('pagingtoolbar')
+    if(pagingToolbar) pagingToolbar.doRefresh();
+
 		Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("getStats", ''),
             // params: {
@@ -104,12 +110,17 @@ Ext.define("Vede.controller.DashboardPanelController", {
       if(newTab.initialCls == "sequenceLibraryPanel") {
 
         var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+
         var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
         currentTab.el.mask("Loading j5 report", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         if (newTab == sequenceTab ) {
           Teselagen.manager.ProjectManager.openSequenceLibrary();
+        }
+        else
+        {
+          currentTab.down('pagingtoolbar').doRefresh();
         }
 
       }
@@ -122,6 +133,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         if (newTab == partTab ) {
           Teselagen.manager.ProjectManager.openPartLibrary();
+        }
+        else
+        {
+          currentTab.down('pagingtoolbar').doRefresh();
         }
 
       }
@@ -251,6 +266,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
+
 
   	init: function () {
         this.ProjectEvent = Teselagen.event.ProjectEvent;

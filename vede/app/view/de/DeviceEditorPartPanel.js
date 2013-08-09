@@ -44,6 +44,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'CDS'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -54,6 +55,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: '5\' Overhang'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -64,6 +66,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: '3\' Overhang'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -74,6 +77,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Promoter'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -84,6 +88,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Primer Binding Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -94,6 +99,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: '5\' Sticky Restriction Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         },{
             xtype: 'button',
@@ -104,6 +110,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: '3\' Sticky Restriction Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         },{
             xtype: 'button',
@@ -114,6 +121,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Restriction Enzyme Recognition Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         },{
             xtype: 'button',
@@ -124,6 +132,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Blunt Restriction Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, 
         //DEPRECIATED
@@ -147,6 +156,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Protease Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -157,6 +167,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Protein Stability Element'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -167,6 +178,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Assembly Junction'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -177,6 +189,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Insulator'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -187,6 +200,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Operator'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -197,6 +211,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Ribonuclease Site'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -207,6 +222,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'RNA Stability Element'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -217,6 +233,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Terminator'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -228,6 +245,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Signature'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',
@@ -239,6 +257,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             tooltip: 'Five Prime UTR'
         }, {
             xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
             height: 40
         }, {
             xtype: 'button',

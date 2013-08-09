@@ -130,21 +130,51 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
-        User.findById(req.user._id)
-                .populate({
-                    path: 'sequences',
-                    options: { limit: req.query.limit, skip: req.query.start }
-                })
+        
+        var filter = "";
+        var sortName = 1;
+        var sortDate = 1;
+        var totalCount = 0;
+        if(req.query.filter)
+        {
+            var filterOptions = JSON.parse(req.query.filter); 
+            if(filterOptions[0] && filterOptions[0].property==="name")
+            {
+                filter = new RegExp(filterOptions[0].value, "i");
+            }
+        }
+
+        if(req.query.sort)
+        {
+            var sortOptions = JSON.parse(req.query.sort); 
+            if(sortOptions[0] && sortOptions[0].property==="name")
+            {
+                var sortName = (sortOptions[0].direction==="DESC") ? -1 : 1;
+            }
+            if(sortOptions[0] && sortOptions[0].property==="dateModified")
+            {
+                var sortDate = (sortOptions[0].direction==="DESC") ? -1 : 1;
+            }
+        }
+
+        User.findById(req.user._id).populate('sequences').exec(function(err, user) {
+            totalCount = user.sequences.length;
+
+            User.findById(req.user._id).populate({
+                path: 'sequences', 
+                match: {name: {$regex: filter}},
+                options: { sort: { name: sortName, dateModified: sortDate } }
+            })
                 .exec(function(err, user) {
                     res.json({
-                        "success": true,
-                        "results":user.sequences.length,
-                        "sequences":user.sequences,
-                        "total":req.user.sequences.length
+                        success: true,
+                        sequences: user.sequences,
+                        results: user.sequences.length,
+                        total: totalCount
                     });
                 });
-        }
-    );
+        });
+    });
 
     /**
      * GET SEQUENCES BY ID

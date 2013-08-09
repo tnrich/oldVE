@@ -45,13 +45,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
         // Generate empty user store
         var users = Ext.create("Teselagen.store.UserStore"); //Store of users (Will only contain the current user)
         var self = this;
+        var sequenceLibraryGrid = Ext.getCmp("sequenceLibrary");
 
         self.currentUser = Teselagen.manager.UserManager.user;
         self.sequences = self.currentUser.sequences();
         self.parts = self.currentUser.parts();
 
-        self.sequences.pageSize = 10;
-        self.parts.pageSize = 10;
+        self.sequences.pageSize = 20;
+        self.parts.pageSize = 20;
+
+        self.sequences.remoteFilter = true;
+        self.sequences.remoteSort = true;
+        self.parts.remoteFilter = true;
+        self.parts.remoteSort = true;
+
 
         self.sequences.loadPage(1);
         self.parts.loadPage(1);
@@ -115,11 +122,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 part.setSequenceFile(user.sequences().getById(sequenceId));
                             }
                         }
-                        // Filter the parts store so only mapped parts will appear (per
-                        // Nathan's request in ticket #869).
-                        self.parts.filterBy(function(part) {
-                            return part.isMapped();
-                        });
                     }
                 );
             }
@@ -202,6 +204,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
         dashPanel.getActiveTab().el.unmask(); 
         if(sequenceGrid) 
         {
+            if(Math.round(sequenceGrid.getHeight()/33)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/33);}
+            sequences.loadPage(1);
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
             sequenceGrid.down('pagingtoolbar').doRefresh();
@@ -212,57 +216,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        /*
-        var parts = this.parts;
-        var sequence;
-        parts.each(function(part) {
-            sequence = part.getSequenceFile();
-
-            if(sequence) {
-                var sequenceManager = sequence.getSequenceManager();
-                var newLength = Math.abs(part.get("endBP") - part.get("genbankStartBP"));
-
-                if(!sequenceManager) {
-                    sequenceManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(sequence);
-                }
-
-                var features = sequenceManager.featuresByRange(part.data.genbankStartBP, part.data.endBP);
-                var partFeatures = [];
-                for(var z=0; z<features.length; z++)  {
-                    partFeatures.push(features[z].getName());
-                }
-
-                // We want to minimize the number of times we call part.set(),
-                // because it triggers a very costly update of the parts table.
-                if(part.get("length") === newLength && part.get("features") === partFeatures.toString()) {
-                    // Do nothing if neither length nor features have changed.
-                } else if(part.get("length") !== newLength && part.get("features") !== partFeatures.toString()) {
-                    part.set({
-                        length: newLength,
-                        features: partFeatures
-                    });
-                } else if(part.get("length") !== newLength) {
-                    part.set("length", newLength);
-                } else {
-                    part.set("features", partFeatures);
-                }
-
-                if(part.get("partSource") !== sequence.get("name")) {
-                    part.set("partSource", sequence.get("name"));
-                }
-            } else {
-                if(part.get("partSource") !== "") {
-                    part.set("partSource", "");
-                }
-            }
-        });
-        */
-
         partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
-
+            if(Math.round(partGrid.getHeight()/33)>20){parts.pageSize = Math.round(partGrid.getHeight()/33);}
+            parts.loadPage(1);
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
             partGrid.down('pagingtoolbar').doRefresh();
@@ -607,6 +566,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
         };
         Ext.MessageBox.prompt("Name", "Please enter a design name:", onPromptClosed, this);
 
+    },
+
+    renamePartinOpenDesigns: function(part, text) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var tabs = tabPanel.items.items;
+
+        tabs.forEach(function(tab) {
+            if(tab.initialCls == "DeviceEditorTab") {
+                var gridPart = tab.model.partsStore.data.getByKey(part.data.id);
+                if(gridPart) {
+                    gridPart.set('name', text);
+                }
+            }
+        });
     },
 
     createDirectVESession: function() {
