@@ -171,8 +171,15 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.VectorViewer.show();
         this.VectorViewer.setSequenceFile(sequenceFile);
 
-        this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width, 
-                                      sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
+        var scrollOffset = grid.el.dom.scrollHeight > grid.el.dom.offsetHeight;
+
+        if(scrollOffset) {
+            this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width - 15,
+                                          sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
+        } else {
+            this.VectorViewer.setPosition(grid.getX() + grid.getWidth() - this.VectorViewer.width,
+                                          sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - this.VectorViewer.height / 2);
+        }
     },
 
     /**
@@ -207,27 +214,31 @@ Ext.define("Vede.controller.DashboardPanelController", {
     onPartGridItemMouseEnter: function(grid, part, el, index, event) {
         var sequenceContainer = grid.up("container[cls='partLibraryContainer']");
         var self = this;
-        part.getSequenceFile(
-          {
+        part.getSequenceFile({
             callback: function(sequenceFile){
 
-              if(sequenceFile) {
+                if(sequenceFile) {
 
-                if(!self.VectorViewer) {
-                    self.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
+                    if(!self.VectorViewer) {
+                        self.VectorViewer = Ext.create("Vede.view.ve.VectorViewer").show();
 
-                    self.VectorViewer.el.on("mouseleave", self.onVectorViewerMouseLeave, self);
+                        self.VectorViewer.el.on("mouseleave", self.onVectorViewerMouseLeave, self);
 
+                    }
+
+                    self.VectorViewer.show();
+                    self.VectorViewer.setPart(part);
+
+                    var scrollOffset = grid.el.dom.scrollHeight > grid.el.dom.offsetHeight;
+
+                    if(scrollOffset) {
+                        self.VectorViewer.setPosition(grid.getX() + grid.getWidth() - self.VectorViewer.width - 15, 
+                                                      sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - self.VectorViewer.height / 2);
+                    } else {
+                        self.VectorViewer.setPosition(grid.getX() + grid.getWidth() - self.VectorViewer.width,
+                                                      sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - self.VectorViewer.height / 2);
+                    }
                 }
-
-                self.VectorViewer.show();
-                self.VectorViewer.setPart(part);
-
-                self.VectorViewer.setPosition(grid.getX() + grid.getWidth() - self.VectorViewer.width, 
-                                              sequenceContainer.getY() + sequenceContainer.getHeight() / 2 - self.VectorViewer.height / 2);
-
-                
-                } 
                 else {
                     if(self.VectorViewer) {
                         self.VectorViewer.hide();
