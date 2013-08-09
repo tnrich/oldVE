@@ -34,7 +34,8 @@ module.exports = function(app, express) {
                 {
                     db: app.dbname,
                     host: 'localhost',
-                    collection: 'sessions'
+                    collection: 'sessions',
+                    auto_reconnect: true
                 }
             )
         })); // Sessions managed using cookies
