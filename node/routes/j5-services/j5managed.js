@@ -59,7 +59,7 @@ var processXMLResponse = function(xml){
 app.get("/executej5m",restrict,function(req,res){
 
       var data = generateXML('DesignAssembly',data);
-      quicklog(data);
+      //quicklog(data);
 
       var newChild = spawn('/usr/bin/perl', ['-t','/Users/rpavez/bin/j5Test.pl']);
       console.log("Process started with pid: "+newChild.pid);
