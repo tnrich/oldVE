@@ -6,6 +6,7 @@ if (!phantom.casperLoaded) {
 }
 
 var fs          = require('fs'),
+  cli           = require('cli'),
   colorizer     = require('colorizer'),
   utils         = require('utils'),
   cwd           = fs.workingDirectory,
@@ -222,7 +223,7 @@ chai.use(casperChai);
 /*
  * Load the specs
  */
-phantom.injectJs("./test/casper/reg3.t.js");
+phantom.injectJs(cli.get(0));
 
 /*
  * Start casper.
