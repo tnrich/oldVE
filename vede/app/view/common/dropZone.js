@@ -78,9 +78,6 @@ Ext.define('Vede.view.common.dropZone', {
             entries[0] = evt.dataTransfer.items[i].webkitGetAsEntry();
             this.readDirectory(entries,this);
         }
-
-        var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-        sequenceLibrary.el.unmask();
 	},
 
 	// Recursive directory read 
@@ -89,7 +86,7 @@ Ext.define('Vede.view.common.dropZone', {
 	    for (i = 0; i < entries.length; i++) {
 	        if (entries[i].isDirectory) {
 
-	            console.log("Reading folder: ",entries[i].name);
+	            //console.log("Reading folder: ",entries[i].name);
 	            var directoryReader = entries[i].createReader();
 	            self.getAllEntries(
 	                    directoryReader,
@@ -97,7 +94,7 @@ Ext.define('Vede.view.common.dropZone', {
 	                );
 
 	        } else {
-	            console.log("Reading file: ",entries[i].name);
+	            //console.log("Reading file: ",entries[i].name);
 	            entries[i].file(self.readFile, self.errorHandler);
 	        }
 	    }
@@ -130,7 +127,8 @@ Ext.define('Vede.view.common.dropZone', {
 	},
 
 	readFile: function (file) {
-	    Teselagen.bio.parsers.ParsersManager.parseAndImportFile(file);
+	    Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
+	    Teselagen.bio.parsers.ParsersManager.processQueue();
 	},
 
 	errorHandler: function (e) {

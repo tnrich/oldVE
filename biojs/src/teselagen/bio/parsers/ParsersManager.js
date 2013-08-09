@@ -49,9 +49,63 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     //XmlToJson: null,
     //DNATools: null,
 
+    batchImportQueue: [],
+    processingBusy: false,
 
-    parseAndImportFile: function(file) {
+    processQueue: function(){
         var self = this;
+        if(!self.processingBusy)
+        {
+            self.processingBusy = true;
+            this.processArray(this.batchImportQueue,this.parseAndImportFile, self, function(){
+                console.log("Work done!");
+                self.processingBusy = false;
+            });
+        }
+
+        /*
+        var recursiveProcessing = function(){
+            console.log("Queue length: "+Teselagen.bio.parsers.ParsersManager.batchImportQueue.length);
+            if(Teselagen.bio.parsers.ParsersManager.batchImportQueue.length>0)
+            {
+                setTimeout(function(){
+                    console.log("Start processing");
+                    Teselagen.bio.parsers.ParsersManager.parseAndImportFile(Teselagen.bio.parsers.ParsersManager.batchImportQueue.shift(),recursiveProcessing);
+                }, 2000);
+            }
+            else Teselagen.bio.parsers.ParsersManager.processingBusy = false;
+        };
+
+        if(!Teselagen.bio.parsers.ParsersManager.processingBusy) recursiveProcessing();
+        */
+    },
+
+    processArray: function (todo, process, context, callback){
+
+        setTimeout(function(){
+
+            context.args = arguments.callee;
+            context.cb = callback;
+            context.todo = todo;
+
+            process(todo.shift(),context,function(err,self){
+                if (self.todo.length > 0){
+
+                    setTimeout(self.args, 200);
+
+                } else {
+
+                    context.callback();
+
+                }
+            });
+
+        }, 200); 
+
+    },
+
+    parseAndImportFile: function(file,context,cb) {
+        var self = context;
         var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
 
         if(ext) {
@@ -63,12 +117,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             return function(e) {
 
                 var data = e.target.result;
-                var name = theFile.name;
+                var name = theFile.name.match(/(.*)\.[^.]+$/)[1];
                 var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
                 var msg = toastr.info("Importing ", name);
                 //debugger;
                 self.parseSequence(data, ext, function(gb) {
+
+                Ext.getCmp("sequenceLibrary").el.unmask();
+
                     var sequence = Ext.create("Teselagen.models.SequenceFile",{
                         sequenceFileContent: gb,
                         sequenceFileFormat: "GENBANK",
@@ -78,24 +135,47 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                         firstTimeImported: true,
                     });
 
+                    try {
+
                     sequence.processSequence(function(err){
+
+                        if(!err)
+                        {
+
                         sequence.save({
                             success: function(){
                                 var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
                                 if(!duplicated) 
                                 {
+                                    Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
+                                    return cb(false,self);
                                 }
                                 else
                                 {
                                     $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
                                     $(msg[0]).removeClass("toast-info");
                                     $(msg[0]).addClass("toast-warning"); 
-                                    var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-                                    sequenceLibrary.el.unmask();
+                                    return cb(true,self);
                                }
+                            },
+                            failure: function(){
+                                return cb(true,self);
                             }
                         });
+
+                        }
+                        else
+                        {
+                            console.warn("Sequence: "+sequence.get('name')+' failed to import');
+                        }
                     });
+
+                    }
+                    catch(err)
+                    {
+                        console.warn(err.toString());
+                        return cb(true,self);
+                    }
 
                 });
 
@@ -144,10 +224,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         //console.log(ext);
         switch (pExt) {
             case "fasta":
-                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+                asyncParseFlag = true;
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result,function(gb){
+                    return cb(gb);
+                });
                 break;
             case "fas":
-                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
+                asyncParseFlag = true;
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result,function(gb){
+                    return cb(gb);
+                });
                 break;
             case "json":
                 fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
@@ -161,7 +247,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     var gb;
                     if (isSBOL) gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
                     else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
-                    return cb(gb);;
+                    return cb(gb);
                 });
                 break;
         }
@@ -181,32 +267,114 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {String} pFasta FASTA formated string
      * @returns {Teselagen.bio.parsers.Genbank} genbank
      */
-    fastaToGenbank: function(pFasta) {
+    fastaToGenbank: function(pFasta,cb) {
         var result; // original wants this to be a FeaturedDNASequence NOT SeqMgr!
 
-        var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
-        var seqArr = [];
-        var name = "";
-        var sequence = "";
+        var headers = pFasta.match(/>(.+)/g);
+        var sequences = [];
 
-        if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
-            var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
-            if (nameArr !== null && nameArr.length >= 1) {
-                name = nameArr[0].replace(/^>/, "");
-            }
+        headers.forEach(function(header){
+            sequences.push({
+                name : pFasta.match(/>(.+)/)[1].toLowerCase(),
+                sequence: pFasta.match(header+'\n(.+)')[1]
+            });
+        })
+
+
+        var performImportSequence = function(sequence){
+            var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+                locusName: sequence.name,
+                sequenceLength: sequence.sequence.length,
+                date: Teselagen.bio.parsers.ParsersManager.todayDate()
+            });
+
+            var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+                sequence: sequence.sequence
+            });
+
+            result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+
+            result.addKeyword(locus);
+            result.addKeyword(origin);
+
+            return cb(result);
+        };
+
+        if(sequences.length>1)
+        {
+
+        //var sequences  = [
+        //    {
+        //        "name":"sequence1",
+        //        "sequence":"GTAAGTA"
+        //    }
+        //];
+
+        var tempStore = new Ext.data.JsonStore({
+              fields: [ 'name', 'sequence' ],
+              data: sequences
+          });  
+
+        var win = Ext.create("Ext.window.Window", {
+            title: "Select sequence to import",
+            width: 600,
+            height: 300,
+            items:[{
+                xtype: 'grid',
+                store: tempStore,
+                columns: [
+                    {header: 'name', dataIndex: 'name'},
+                    {header: 'sequence', dataIndex: 'sequence'}
+                ],
+                listeners: {
+                    itemclick: function(dv, record, item, index, e) {
+                        win.close();
+                        performImportSequence({
+                            name : record.get('name'),
+                            sequence: record.get('sequence')
+                        });                    
+                    }
+                }
+            }]
+        });
+        win.show();
+
+        }
+        else if(sequences.length === 0)
+        {
+            performImportSequence(sequences[0]);
+        }
+        else
+        {
+            console.warn("no sequences found in fas file.");
         }
 
-        for (var i = 0; i < lineArr.length; i++) {
-            if (!lineArr[i].match(/^\>/)) {
-                sequence += Ext.String.trim(lineArr[i]);
-            }
-        }
-        sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
-        if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
-            //illegalcharacters
-            return null;
-        }
 
+        
+        //var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
+        //var seqArr = [];
+        //var name = "";
+        //var sequence = "";
+
+        //if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
+        //    var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
+        //    if (nameArr !== null && nameArr.length >= 1) {
+        //        name = nameArr[0].replace(/^>/, "");
+        //    }
+        //}
+
+        //for (var i = 0; i < lineArr.length; i++) {
+        //    if (!lineArr[i].match(/^\>/)) {
+        //        sequence += Ext.String.trim(lineArr[i]);
+        //    }
+        //}
+        //sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
+        //if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
+        //    //illegalcharacters
+        //    return null;
+        //}
+        
+        /*
         var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
             locusName: name,
             sequenceLength: sequence.length,
@@ -221,8 +389,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         result.addKeyword(locus);
         result.addKeyword(origin);
-
-        return result;
+        */
     },
 
     /**
