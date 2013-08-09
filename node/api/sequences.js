@@ -164,7 +164,7 @@ module.exports = function(app) {
             User.findById(req.user._id).populate({
                 path: 'sequences', 
                 match: {name: {$regex: filter}},
-                options: { sort: { name: sortName, dateModified: sortDate }, limit: req.query.limit }
+                options: { sort: { name: sortName, dateModified: sortDate }, limit: req.query.limit, skip: req.query.start }
             })
                 .exec(function(err, user) {
                     res.json({
