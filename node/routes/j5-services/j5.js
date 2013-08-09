@@ -342,7 +342,7 @@ app.post('/executej5',restrict,function(req,res){
       });
       // file_id , j5Input and j5Results are filled once the job is completed.
 
-      quicklog(require('util').inspect(data,false,null));
+      //quicklog(require('util').inspect(data,false,null));
 
       // Call to j5Client to DesignAssembly 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
