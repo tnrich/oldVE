@@ -93,6 +93,8 @@ module.exports = function(app) {
     app.get('/parts', restrict,  function(req, res) {
 
         var filter = "";
+        var sortName = 1;
+        var sortDate = 1;
         var totalCount = 0;
         if(req.query.filter)
         {
@@ -103,13 +105,28 @@ module.exports = function(app) {
             }
         }
 
+        if(req.query.sort)
+        {
+            var sortOptions = JSON.parse(req.query.sort); 
+            if(sortOptions[0] && sortOptions[0].property==="name")
+            {
+                var sortName = (sortOptions[0].direction==="DESC") ? -1 : 1;
+            }
+            if(sortOptions[0] && sortOptions[0].property==="dateModified")
+            {
+                var sortDate = (sortOptions[0].direction==="DESC") ? -1 : 1;
+            }
+        }
+
         User.findById(req.user._id).populate('parts').exec(function(err, user) {
             totalCount = user.parts.length;
 
             User.findById(req.user._id).populate({
                 path: 'parts', 
                 match: {name: {$regex: filter}, 
-                sequencefile_id: {$ne: null}}})
+                sequencefile_id: {$ne: null}},
+                options: { sort: { name: sortName, dateModified: sortDate } }
+            })
                 .exec(function(err, user) {
                     res.json({
                         success: true,

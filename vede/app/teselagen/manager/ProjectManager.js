@@ -54,6 +54,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.sequences.pageSize = 20;
         self.parts.pageSize = 20;
 
+        self.sequences.remoteFilter = true;
+        self.sequences.remoteSort = true;
+        self.parts.remoteFilter = true;
+        self.parts.remoteSort = true;
+
+
         self.sequences.loadPage(1);
         self.parts.loadPage(1);
 
