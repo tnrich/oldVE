@@ -277,7 +277,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         headers.forEach(function(header){
             sequences.push({
-                name : pFasta.match(/>(.+)/)[1].toLowerCase(),
+                name : header.replace(">",""),
                 sequence: pFasta.match(header+'\n(.+)')[1]
             });
         })
