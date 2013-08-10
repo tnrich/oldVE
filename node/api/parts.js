@@ -125,7 +125,7 @@ module.exports = function(app) {
                 path: 'parts', 
                 match: {name: {$regex: filter}, 
                 sequencefile_id: {$ne: null}},
-                options: { sort: { name: sortName, dateModified: sortDate } }
+                options: { sort: { name: sortName, dateModified: sortDate, }, limit: req.query.limit, skip: req.query.start }
             })
                 .exec(function(err, user) {
                     res.json({
