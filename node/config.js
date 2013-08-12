@@ -46,7 +46,11 @@ module.exports = function(app, express) {
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
     });
 
-    app.configure('test', function() {        
+    app.configure('test', function() {      
+
+        var redis = require("redis").createClient();
+        var RedisStore = require('connect-redis')(express)
+
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade'); // Jade engine for templates (http://jade-lang.com/)
         app.set('view options', {
@@ -56,7 +60,7 @@ module.exports = function(app, express) {
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
             secret: 'j5',
-            store: require("redis").createClient()
+            store: new RedisStore({client: redis})
         })); // Sessions managed using cookies
 	app.logger.info("USING REDIS SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
