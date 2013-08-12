@@ -169,7 +169,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                 if(attributes.length > 0) {
                     messages.push("Feature with attribute " + attributesText + " has no defined label.");
                 } else {
-                    messages.push("Feature " + i + " has no attributes.");
+                    messages.push("Feature " + (i + 1) + " has no attributes.");
                 }
             }
         }
