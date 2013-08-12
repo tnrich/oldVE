@@ -550,7 +550,7 @@ Ext.define("Teselagen.manager.GridManager", {
 						
 		d3.select(gridCell).transition()
 		    .duration(30)
-		    .attr("stroke", gridManager.PART_MAPPED_OUTLINE_COLOR)
+		    .attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR)
 		    .attr("fill", gridManager.PART_SELECTED_FILL_COLOR)
 		    .attr("isSelected", "true");
 		

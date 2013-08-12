@@ -87,102 +87,74 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                         if (btn==="yes") {
                             var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
                             var currentTabEl = (currentTab.getEl());
-                            var selectWindow = Ext.create("Ext.window.Window", {
-                                title: "Please choose a project",
-                                height: 200,
-                                width: 400,
-                                layout: "fit",
-                                renderTo: currentTabEl,
-                                items: {
-                                    xtype: "grid",
-                                    border: false,
-                                    columns: {
-                                        items: {
-                                            dataIndex: "name"
-                                        },
-                                        defaults: {
-                                            flex: 1
-                                        }
-                                    },
-                                    store: Teselagen.manager.ProjectManager.projects,
-                                    listeners: {
-                                        "itemclick": function(grid, project){
-                                            selectWindow.close();
-                                            var onSequencePromptClosed = function(btn, text) {
-                                                if(btn==="ok") {
-                                                    if(text === "") {return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName); }
-                                                    
-                                                    Teselagen.manager.ProjectManager.workingProject = project;
-                                                    var sequencesNames = [];
-                                                    Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
-                                                        sequencesNames.push(sequence.data.name);
-                                                    });
+                            var onSequencePromptClosed = function(btn, text) {
+                                if(btn==="ok") {
+                                    if(text === "") {return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName); }
+                                    
+                                    Teselagen.manager.ProjectManager.workingProject = project;
+                                    var sequencesNames = [];
+                                    Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
+                                        sequencesNames.push(sequence.data.name);
+                                    });
 
-                                                    for (var j=0; j < sequencesNames.length; j++) {
-                                                        if (sequencesNames[j]===text) {
-                                                            var conflictName = sequencesNames[j];
-                                                                Ext.MessageBox.show({
-                                                                    title: "Name",
-                                                                    msg: "A sequence with the name  <i> <q>"+ conflictName +"</q> </i>  already exists in this project. <p> Please enter another name:",
-                                                                    buttons: Ext.MessageBox.OKCANCEL,
-                                                                    fn: onSequencePromptClosed,
-                                                                    prompt: true,
-                                                                    value: conflictName + "(1)",
-                                                                    cls: "sequencePrompt-box",
-                                                                    style: {
-                                                                        "text-align": "center"
-                                                                    },
-                                                                    layout: {
-                                                                        align: "center"
-                                                                    },
-                                                                    items: [
-                                                                        {
-                                                                            xtype: "textfield",
-                                                                            layout: {
-                                                                                align: "center"
-                                                                            },
-                                                                            width: 50
-                                                                        }
-                                                                    ]
-                                                                });
-                                                                return Ext.MessageBox;
-                                                            
+                                    for (var j=0; j < sequencesNames.length; j++) {
+                                        if (sequencesNames[j]===text) {
+                                            var conflictName = sequencesNames[j];
+                                                Ext.MessageBox.show({
+                                                    title: "Name",
+                                                    msg: "A sequence with the name  <i> <q>"+ conflictName +"</q> </i>  already exists in this project. <p> Please enter another name:",
+                                                    buttons: Ext.MessageBox.OKCANCEL,
+                                                    fn: onSequencePromptClosed,
+                                                    prompt: true,
+                                                    value: conflictName + "(1)",
+                                                    cls: "sequencePrompt-box",
+                                                    style: {
+                                                        "text-align": "center"
+                                                    },
+                                                    layout: {
+                                                        align: "center"
+                                                    },
+                                                    items: [
+                                                        {
+                                                            xtype: "textfield",
+                                                            layout: {
+                                                                align: "center"
+                                                            },
+                                                            width: 50
                                                         }
-                                                    }
-                                                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                                                        sequenceFileFormat: "GENBANK",
-                                                        sequenceFileContent: "LOCUS      "+text+"                 0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                                                        sequenceFileName: "untitled.gb",
-                                                        partSource: "Untitled sequence",
-                                                        dateCreated: new Date(),
-                                                        dateModified: new Date(),
-                                                        name: text
-                                                    });
-
-                                                    newSequenceFile.set("project_id",project.data.id);
-
-                                                    newSequenceFile.save({
-                                                        callback: function () {
-                                                            Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-
-                                                            performSequenceCreation(newSequenceFile,function(){
-                                                                newSequenceFile.save({callback:function(){
-                                                                    Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
-                                                                }});
-                                                            });
-                                                        }
-                                                    });
-                                                }
-                                            };
-                                            Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
-                                        },
-                                        "destroy": function(selectWindow) {
-                                            Ext.getCmp("mainAppPanel").setLoading(false);
+                                                    ]
+                                                });
+                                                return Ext.MessageBox;
+                                            
                                         }
                                     }
+                                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                                        sequenceFileFormat: "GENBANK",
+                                        sequenceFileContent: "LOCUS      "+text+"                 0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                                        sequenceFileName: "untitled.gb",
+                                        partSource: "Untitled sequence",
+                                        dateCreated: new Date(),
+                                        dateModified: new Date(),
+                                        name: text
+                                    });
+
+                                    newSequenceFile.set("project_id",project.data.id);
+
+                                    newSequenceFile.save({
+                                        callback: function () {
+                                            Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
+
+                                            performSequenceCreation(newSequenceFile,function(){
+                                                newSequenceFile.save({callback:function(){
+                                                    Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
+                                                }});
+                                            });
+                                        }
+                                    });
                                 }
-                            }).show();
-                        } else if (btn==="no") {
+                            };
+                        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
+                    } else if (btn==="no") {
                             performSequenceCreation();
                         }
                     }
