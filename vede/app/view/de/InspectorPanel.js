@@ -224,7 +224,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'radiogroup',
                             anchor: '100%',
                             cls: 'plasmid_geometry',
-                            fieldLabel: 'Plasmid Type',
+                            fieldLabel: 'Design Type',
                             allowBlank: false,
                             items: [
                                 {
