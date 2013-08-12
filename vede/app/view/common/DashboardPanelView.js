@@ -542,18 +542,57 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 {
                                                     xtype: 'container',
                                                     cls: 'sequenceLibraryOptionsContainer',
+                                                    margin: '0 0 0 10',
                                                     items: [
                                                         {
+                                                            xtype: 'text',
+                                                            text: 'Show:'
+                                                        },
+                                                        {
                                                             xtype: 'button',
-                                                            cls: 'sequenceLibraryImportButton',
-                                                            icon: 'resources/images/ux/paging/publish.png',
-                                                            iconCls: 'sequenceLibraryImportButtonIcon',
-                                                            overCls: 'sequenceLibraryImportButton-over',
-                                                            text: 'Import Sequence(s)',
-                                                            tooltip: 'You can drop your sequence files or folders into the table above.'
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '20',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '40',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '60',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
+                                                                }
+                                                            }
                                                         }
                                                     ]
                                                 },
+                                                {
+                                                    xtype: 'button',
+                                                    cls: 'sequenceLibraryImportButton',
+                                                    icon: 'resources/images/ux/paging/publish.png',
+                                                    iconCls: 'sequenceLibraryImportButtonIcon',
+                                                    overCls: 'sequenceLibraryImportButton-over',
+                                                    text: 'Import Sequence(s)',
+                                                    tooltip: 'You can drop your sequence files or folders into the table above.',
+                                                    margin: '0 0 0 10'
+                                                }
                                             ]
                                     }],
 
@@ -728,7 +767,52 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 dockedItems: [{
                                         xtype: 'pagingtoolbar',
                                         dock: 'bottom',
-                                        displayInfo: true
+                                        displayInfo: true,
+                                        items: [
+                                                {
+                                                    xtype: 'container',
+                                                    cls: 'partLibraryOptionsContainer',
+                                                    items: [
+                                                        {
+                                                            xtype: 'text',
+                                                            text: 'Show:'
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '20',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '40',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '60',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                            ]
                                 }]
                             }
                         ]

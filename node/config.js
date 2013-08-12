@@ -8,19 +8,20 @@ module.exports = function(app, express) {
     var config = this;
 
     var server = require('http').Server(app);
-
+   
     // LOGGING
     require('./logging').configLogging(app, express);
 
     // LOAD ENVIRONMENT VARIABLES
     require('./environments').readEnvironments(app);
-    require('./environments').configEnvironments(app, express);
-
-
-    var MongoStore = app.mongostore(express);
+    //require('./environments').configEnvironments(app, express);
 
     // Express Framework Configuration
-    app.configure(function() {
+
+    app.configure('development', function() {
+
+        var MongoStore = app.mongostore(express);
+        
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade'); // Jade engine for templates (http://jade-lang.com/)
         app.set('view options', {
@@ -39,10 +40,34 @@ module.exports = function(app, express) {
                 }
             )
         })); // Sessions managed using cookies
+	app.logger.info("USING MONGODB SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
     });
+
+    app.configure('test', function() {      
+
+        var redis = require("redis").createClient();
+        var RedisStore = require('connect-redis')(express)
+
+        app.set('views', __dirname + '/views');
+        app.set('view engine', 'jade'); // Jade engine for templates (http://jade-lang.com/)
+        app.set('view options', {
+            layout: false
+        }); // This opt allow extends
+        app.use(express.bodyParser()); // Use express response body parser (recommended)
+        app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
+        app.use(express.session({ 
+            secret: 'j5',
+            store: new RedisStore({client: redis})
+        })); // Sessions managed using cookies
+	app.logger.info("USING REDIS SESSION STORE");
+        app.use(express.methodOverride()); // This config put express top methods on top of the API config
+        app.use(app.router); // Use express routing system
+        //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
+    });
+
 
     // Init MONGODB (Native Driver)
     /*

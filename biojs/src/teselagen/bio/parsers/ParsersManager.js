@@ -232,6 +232,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         else
         {
             console.warn("wrong file extension");
+            cb(true,self);
         }
     },
 

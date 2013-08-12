@@ -95,6 +95,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var part;
 
         for(var i = 0; i < bins.length; i++) {
+            var emptyCnt = 0;
             cells = bins[i].cells().getRange();
 
             for(var j = 0; j < cells.length; j++) {
@@ -103,6 +104,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 if(part && !part.isMapped()) {
                     return false;
                 }
+
+                if(!part) {
+                    emptyCnt++;
+                }
+            }
+            if (emptyCnt==cells.length) {
+                return false;
             }
         }
         
