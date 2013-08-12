@@ -134,6 +134,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 //debugger;
                 self.parseSequence(data, ext, function(gb) {
 
+                if(!gb) return cb(true,self);
+
                 Ext.getCmp("sequenceLibrary").el.unmask();
 
                     var sequence = Ext.create("Teselagen.models.SequenceFile",{
@@ -397,6 +399,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         else
         {
             console.warn("no sequences found in fas file.");
+            return cb(null);
         }
 
 
