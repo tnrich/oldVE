@@ -157,14 +157,20 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
             for (j=0; j < ft["seq:location"].length; j++) {
                 if (ft["seq:location"][j]["seq:genbankStart"] === undefined) {
-                    messages.push("Feature with attribute " + attributesText + " has an undefined location.");
+                    if(attributes.length > 0) {
+                        messages.push("Feature with attribute " + attributesText + " has an undefined location.");
+                    }
                 }
             }
             //===============
             // ATTRIBUTES
 
             if (ft["seq:label"] === undefined ) {
-                messages.push("Feature with attributes " + attributesText + "has no defined label.");
+                if(attributes.length > 0) {
+                    messages.push("Feature with attribute " + attributesText + " has no defined label.");
+                } else {
+                    messages.push("Feature " + i + " has no attributes.");
+                }
             }
         }
 

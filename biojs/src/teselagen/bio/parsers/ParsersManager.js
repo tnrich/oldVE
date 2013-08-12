@@ -163,7 +163,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                 var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
 
                                 context.batchImportMessages.add({
-                                    fileName: name,
+                                    fileName: name + '.' + ext,
                                     messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
                                 });
                             }
@@ -186,16 +186,22 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                         $(msg[0]).addClass("toast-warning"); 
 
                                         var messageIndex = context.batchImportMessages.find('fileName', name);
+                                        var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
+                                        var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
+
+                                        var duplicateMessage = 'Exact sequence already exists in library with' + 
+                                                               ' file name ' + duplicateFileName + ' and sequence name' +
+                                                               duplicateSequenceName;
 
                                         if(messageIndex < 0) {
                                             context.batchImportMessages.add({
-                                                fileName: name,
-                                                messages: ['Exact sequence already exists in library.']
+                                                fileName: name + '.' + ext,
+                                                messages: duplicateMessage
                                             });
                                         } else {
                                             var record = context.batchImportMessages.getAt(messageIndex);
                                             record.set('messages', 
-                                                record.get('messages').concat(['Exact sequence already exists in library.']));
+                                                record.get('messages').concat([duplicateMessage]));
                                         }
 
                                         return cb(true,self);
