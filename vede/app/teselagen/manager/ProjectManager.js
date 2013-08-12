@@ -196,7 +196,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         );
     },
 
-    openSequenceLibrary: function () {
+    openSequenceLibrary: function (itemCount) {
         var dashPanel = Ext.getCmp("DashboardPanel");
         var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
         var sequences = Teselagen.manager.ProjectManager.sequences;
@@ -204,7 +204,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
         dashPanel.getActiveTab().el.unmask(); 
         if(sequenceGrid) 
         {
-            if(Math.round(sequenceGrid.getHeight()/33)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/33);}
+            if(!itemCount) {
+                if(Math.round(sequenceGrid.getHeight()/33)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/33);}
+            } else {
+                sequences.pageSize = itemCount;
+            }
             sequences.loadPage(1);
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
@@ -212,7 +216,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         }
     },
 
-    openPartLibrary: function () {
+    openPartLibrary: function (itemCount) {
         Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
@@ -220,7 +224,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
-            if(Math.round(partGrid.getHeight()/33)>20){parts.pageSize = Math.round(partGrid.getHeight()/33);}
+            if(!itemCount) {
+                if(Math.round(partGrid.getHeight()/33)>20){parts.pageSize = Math.round(partGrid.getHeight()/33);}
+            } else {
+                parts.pageSize = itemCount;
+            }
             parts.loadPage(1);
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
