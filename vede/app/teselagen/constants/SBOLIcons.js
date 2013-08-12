@@ -102,7 +102,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             name: "origin_of_replication",
             url_small: "resources/images/icons/device/small/origin-of-replication.png",
             url_large: "resources/images/icons/device/large/origin-of-replication.png",
-            path: "M 25, 55  m -12, 0  a 12,12 0 1,0 24,0  a 12,12 0 1,0 -24,0"
+            path: "M 25, 50  m -12, 0  a 12,12 0 1,0 24,0  a 12,12 0 1,0 -24,0"
         },
         "PRIMER-BINDING-SITE": {
             key: "PRIMER_BINDING_SITE",
