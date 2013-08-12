@@ -71,18 +71,17 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
       * Scans through a JbeiSeq JSON object to see if it has the minimum structure
       * requirements.
       * @param {Object} json JbeiSeq JSON object
-      * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
+      * @returns {String[]} Array of error messages. Empty if valid JSON.
       */
      validateJbeiseqJson: function (json) {
         var i, j;
-        var result = false;
+        var messages = [];
 
         if (json["seq:seq"] === undefined) {
-            console.warn("Invalid JbeiSeqXML file. No root or record tag 'seq'");
+            messages.push("Invalid JbeiSeqXML file. No root or record tag 'seq'");
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"
             });
-            //return result;
         }
 
         //===============
@@ -91,21 +90,18 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
 
         if (json["seq:seq"]["seq:name"] === undefined) {
-            console.warn("jbeiseqXmlToJson: No sequence name detected");
-            return result;
+            messages.push("jbeiseqXmlToJson: No sequence name detected");
         }
 
         if (json["seq:seq"]["seq:circular"] === undefined) {
-            console.warn("jbeiseqXmlToJson: No linear status detected; default to linear");
-            return result;
+            messages.push("jbeiseqXmlToJson: No linear status detected; default to linear");
         }
 
         if (json["seq:seq"]["seq:sequence"] === undefined) {
-            console.warn("jbeiseqXmlToJson: No sequence detected");
+            messages.push("jbeiseqXmlToJson: No sequence detected");
             //throw Ext.create("Teselagen.bio.BioException", {
             //    message: "Invalid JbeiSeqXML file. No sequence detected"
             //});
-            return result;
         }
 
         if (json["seq:seq"]["seq:seqHash"] === undefined) {
@@ -119,11 +115,10 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         var jFeats;
 
         if (json["seq:seq"]["seq:features"] === undefined) {
-            console.warn("Invalid JbeiSeqXML file. No Features detected");
+            messages.push("Invalid JbeiSeqXML file. No Features detected");
             //throw Ext.create("Teselagen.bio.BioException", {
             //    message: "Invalid JbeiSeqXML file. No Features detected"
             //});
-            return result;
         } else {
             jFeats  = json["seq:seq"]["seq:features"];
         }
@@ -131,9 +126,22 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         for (i=0; i < jFeats.length; i++) {
 
             var locations   = [];
-            var attributes  = []; //qualifiers  = [];
-            
             var ft = jFeats[i]["seq:feature"];
+            
+            var attributes = ft["seq:attribute"];
+            var attribute;
+            var attributesText = "";
+            if(attributes.length > 0) {
+                attributesText = "'" + attributes[0]._name + "': " + "'" + attributes[0].__text + "'";
+            }
+
+            /*for(var i = 0; i < attributes.length; i++) {
+                attribute = attributes[i];
+
+                //attributesText.push("'" + attribute._name + "': '" + attribute.__text + "'");
+            }*/
+
+            //attributesText = attributesText.join(", ");
 
             if (ft["seq:type"] === undefined) {
                 //return result;
@@ -148,27 +156,19 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             // asArray will detect if there are locations; ie length=0 means no locations
 
             for (j=0; j < ft["seq:location"].length; j++) {
-
                 if (ft["seq:location"][j]["seq:genbankStart"] === undefined) {
-                    console.warn("feature['seq:location'][" + j +"]['seq:genbankStart'] undefined");
-                    return result;
+                    messages.push("Feature with attribute " + attributesText + " has an undefined location.");
                 }
             }
             //===============
             // ATTRIBUTES
 
             if (ft["seq:label"] === undefined ) {
-                console.warn("json['seq:seq']['seq:features']["+i+"]'seq:feature][seq:label'] undefined");
-                return result;
+                messages.push("Feature with attributes " + attributesText + "has no defined label.");
             }
-
-            for (j=0; j < ft["seq:attribute"].length; j++) {
-                //
-            }
-
         }
-        result = true;
-        return result;
+
+        return messages;
      },
 
     /**
@@ -386,9 +386,8 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             return null;
         }
 
-        var isJSON;
         try {
-            isJSON = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
+            messages = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
         } catch (e) {
             console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
             return null; // jbeiSeq Structure is bad.
@@ -823,7 +822,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
      */
     isALabel: function(name) {
         if (name === "label" || name === "name"|| name === "ApEinfo_label" ||
-            name === "note" || name === "gene" || name === "organism"  ) {
+            name === "note" || name === "gene" || name === "organism" || name === "locus_tag") {
 
             return true;
         } else {

@@ -3,7 +3,8 @@ Ext.define('Vede.view.common.dropZone', {
 	alias: 'widget.dropZone',
 	requires: [
 			"Ext.Component",
-			"Teselagen.bio.parsers.ParsersManager"
+			"Teselagen.bio.parsers.ParsersManager",
+            "Vede.view.common.ImportWarningsWindow"
 	],
 
 	initComponent: function() {
@@ -135,15 +136,13 @@ Ext.define('Vede.view.common.dropZone', {
 
 	readFile: function (file) {
 	    Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
-	    Teselagen.bio.parsers.ParsersManager.processQueue();
+	    Teselagen.bio.parsers.ParsersManager.processQueue(function(errorStore) {
+            var warningsWindow = Ext.create('Vede.view.common.ImportWarningsWindow').show();
+            warningsWindow.down('gridpanel').reconfigure(errorStore);
+        });
 	},
 
 	errorHandler: function (e) {
     	console.log('FileSystem API error code: ' + e.code)
 	}
-
-
-
-
-
 });

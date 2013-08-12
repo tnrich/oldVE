@@ -50,9 +50,17 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     //DNATools: null,
 
     batchImportQueue: [],
+    batchImportMessages: null,
     processingBusy: false,
 
-    processQueue: function(){
+    processQueue: function(callback){
+        this.batchImportMessages = Ext.create("Ext.data.Store", {
+            fields: [
+                {name: 'fileName', type: 'string'},
+                {name: 'messages', type: 'auto'}
+            ]
+        });
+
         var self = this;
         if(!self.processingBusy)
         {
@@ -60,6 +68,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             this.processArray(this.batchImportQueue,this.parseAndImportFile, self, function(){
                 console.log("Work done!");
                 self.processingBusy = false;
+
+                callback(self.batchImportMessages);
             });
         }
 
@@ -137,33 +147,64 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                     try {
 
-                    sequence.processSequence(function(err,seqMgr){
+                    sequence.processSequence(function(err, seqMgr, genbankObject){
 
                         if(!err)
                         {
-
-                        if(seqMgr) sequence.set('name',seqMgr.toGenbank().getLocus().locusName);
-
-                        sequence.save({
-                            success: function(){
-                                var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
-                                if(!duplicated) 
-                                {
-                                    Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
-                                    return cb(false,self);
-                                }
-                                else
-                                {
-                                    $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
-                                    $(msg[0]).removeClass("toast-info");
-                                    $(msg[0]).addClass("toast-warning"); 
-                                    return cb(true,self);
-                               }
-                            },
-                            failure: function(){
-                                return cb(true,self);
+                            if(seqMgr) {
+                                sequence.set('name',seqMgr.toGenbank().getLocus().locusName);
                             }
-                        });
+
+                            // Aggregate parse messages/warnings from the genbank
+                            // and sequence manager objects to display in the
+                            // import warnings window.
+                            
+                            if(genbankObject && seqMgr) {
+                                var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+
+                                context.batchImportMessages.add({
+                                    fileName: name,
+                                    messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                                });
+                            }
+
+                            sequence.save({
+                                success: function(){
+                                    seqMgr = null;
+                                    sequence.sequenceManager = null;
+
+                                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+                                    if(!duplicated) 
+                                    {
+                                        Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
+                                        return cb(false,self);
+                                    }
+                                    else
+                                    {
+                                        $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
+                                        $(msg[0]).removeClass("toast-info");
+                                        $(msg[0]).addClass("toast-warning"); 
+
+                                        var messageIndex = context.batchImportMessages.find('fileName', name);
+
+                                        if(messageIndex < 0) {
+                                            context.batchImportMessages.add({
+                                                fileName: name,
+                                                messages: ['Exact sequence already exists in library.']
+                                            });
+                                        } else {
+                                            var record = context.batchImportMessages.getAt(messageIndex);
+                                            record.set('messages', 
+                                                record.get('messages').concat(['Exact sequence already exists in library.']));
+                                        }
+
+                                        return cb(true,self);
+                                   }
+                                },
+                                failure: function(){
+                                    return cb(true,self);
+                                }
+                            });
 
                         }
                         else

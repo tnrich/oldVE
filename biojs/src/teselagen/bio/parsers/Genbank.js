@@ -23,7 +23,8 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
      */
     config: {
         keywordsTag: [],
-        keywords: []
+        keywords: [],
+        messages: []
     },
 
     /**
@@ -54,6 +55,14 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
             }
         }
         return entry;
+    },
+
+    /**
+     * Adds a message to the messages array.
+     * @param {String} message The message to add.
+     */
+    addMessage: function(message) {
+        this.messages.push(message);
     },
 
     /**

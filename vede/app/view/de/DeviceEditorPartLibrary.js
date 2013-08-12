@@ -117,7 +117,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                             // parts store.
                             var oldPart = inspectorController.selectedCell.getPart();
 
-                            if(Teselagen.manager.DeviceDesignManager.getOwnerBinIndices(activeProject, oldPart).length === 0) {
+                            if(oldPart && Teselagen.manager.DeviceDesignManager.getOwnerBinIndices(activeProject, oldPart).length === 0) {
                                 activeProject.parts().remove(oldPart);
                             }
                             

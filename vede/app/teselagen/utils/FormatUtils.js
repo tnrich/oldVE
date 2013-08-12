@@ -293,18 +293,13 @@ Ext.define("Teselagen.utils.FormatUtils", {
     jbeiseqJsonToSequenceManager: function(jbeiSeqJson) {
         var result = {}; /// original wants this to be a FeaturedDNASequence NOT SeqMgr!
         var json = jbeiSeqJson;
-        var isJSON;
+        var messages = [];
 
         try {
-            isJSON = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
+            messages = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
         } catch (e) {
-            console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
+            messages.push("Parsing failed: " + e.message);
             return null; // jbeiSeq Structure is bad.
-        }
-
-        if ( isJSON === false) {
-            console.warn("FormatUtils.jbeiseqJsonToSequenceManager(): Invalid jbeiSeq JSON input.");
-            //return null;
         }
 
         var name    = json["seq:seq"]["seq:name"];
@@ -377,7 +372,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
             name: name,
             circular: circ,
             sequence: sequence,
-            features: features
+            features: features,
+            parseMessages: messages
         });
         
         return result;
