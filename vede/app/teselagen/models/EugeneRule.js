@@ -72,7 +72,7 @@ Ext.define("Teselagen.models.EugeneRule", {
 
                 var constants = Teselagen.constants.Constants;
 
-                if (compOp === constants.AFTER || compOp === constants.BEFORE || compOp === constants.WITH || compOp === constants.THEN || compOp === constants.NEXTTO || compOp === constants.MORETHAN ) {
+                if (compOp === constants.AFTER || compOp === constants.BEFORE || compOp === constants.THEN || compOp === constants.NEXTTO || compOp === constants.MORETHAN ) {
                     // These check out
                 } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) {
                     console.warn("Using deprecated compositionalOperator: ",compOp);
