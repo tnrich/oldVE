@@ -119,7 +119,6 @@ module.exports = function(app) {
      * @method GET "/users/:username/projects/:project_id/devicedesigns/:devicedesign_id"
      */
     app.get("/users/:username/projects/:project_id/devicedesigns/:devicedesign_id", restrict, function(req, res) {
-        console.log("Get device design by id #1");
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.params.devicedesign_id, function(err) {
 //            var originalDesign = design.toObject();
@@ -153,7 +152,6 @@ module.exports = function(app) {
      * @method GET "/users/:username/projects/:project_id/devicedesigns"
      */
     app.get("/users/:username/projects/:project_id/devicedesigns/:devicedesign_id", restrict, function(req, res) {
-        console.log("Get device design by id #2");
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.params.devicedesign_id, function(err, design) {console.log(design.j5collection.bins[0]);});
         DeviceDesign.findById(req.params.devicedesign_id).populate("j5collection.bins.parts").exec(function(err, design) {
