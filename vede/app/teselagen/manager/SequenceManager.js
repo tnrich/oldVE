@@ -67,7 +67,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
         manualUpdateStarted: false,
 
         needsRecalculateComplementSequence: true,
-        needsRecalculateReverseComplementSequence: true
+        needsRecalculateReverseComplementSequence: true,
+
+        parseMessages: []
     },
 
     DNATools:                   null,
@@ -183,6 +185,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.self.prototype.setFeatures = function(pFeatures) {
             this.features = pFeatures;
         }
+    },
+
+    /**
+     * Adds a message to the parseMessages array. This is meant to hold warnings
+     * to be displayed by the import warnings window.
+     * @param {String} message The message to add.
+     */
+    addParseMessage: function(message) {
+        this.parseMessages.push(message);
     },
 
     /**

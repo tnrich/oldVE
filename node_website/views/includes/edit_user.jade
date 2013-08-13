@@ -1,0 +1,44 @@
+extends layout
+
+block container
+    .row
+        .span12
+            .span8
+                .span7.well
+                  h1 Edit Account
+                  br
+                  form.form-horizontal#edit-profile(action="/profile/me/update",method="POST")
+                      fieldset
+                          .control-group
+                            label.control-label(for='user[firstName]') First Name
+                            .controls
+                              input.input-xlarge(type='text',name="user[firstName]",value="#{dbuser.firstName}")
+                          .control-group
+                            label.control-label(for='user[lastName]') Last Name
+                            .controls
+                              input.input-xlarge(type='text',name="user[lastName]",value="#{dbuser.lastName}")
+                          .control-group
+                            label.control-label(for='user[email]') Email
+                            .controls
+                              input.input-xlarge(type='text',name="user[email]",value="#{dbuser.email}")
+                          .form-actions
+                            button#save.btn.btn-primary(type='submit', data-complete-text="saved!") Save changes
+                            button.btn Cancel
+            .span3
+                include includes/dashboard_menu
+
+block append scripts
+    script
+        $('form#edit-profile').live("submit", function() {
+        $('#save').button('loading');
+        $.ajax({
+            type: "POST",
+            url: '/profile/me/update',
+            data: $('form#edit-profile').serialize(),
+            success: function(data) {
+              $('.btn').button('complete')
+            } 
+          });
+        
+          return false;
+        });
