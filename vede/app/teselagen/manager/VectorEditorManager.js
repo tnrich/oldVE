@@ -48,6 +48,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             if(typeof (cb) === "function") { cb(); }
         };
 
+        self.sequence.set('size', this.sequenceFileManager.getSequence().getSymbolsLength());
+
         var saveToServer = function(cb){
             self.sequence.save({
                 success: function (msg,operation) {

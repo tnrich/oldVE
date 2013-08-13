@@ -6,8 +6,8 @@
   font-family: 'Maven Pro';
   font-style: normal;
   font-weight: normal;
-  src: url('/fonts/MavenPro-Regular.ttf');
-  src: local('Maven Pro'), local('Maven Pro'), url('/fonts/MavenPro-Regular.ttf') format('truetype');
+  src: url('../fonts/MavenPro-Regular.ttf');
+  src: local('Maven Pro'), local('Maven Pro'), url('../fonts/MavenPro-Regular.ttf') format('truetype');
 }
 
 body {
@@ -1231,32 +1231,48 @@ background: #F7F9FA;
   left:420px !important;
 }
 
-#headerProgressBar{
+#headerProgressBox {
   display: none;
+  width:325px; 
+  height:20px; 
+  margin: 10px 60px 5px 5px;
+}
+
+#headerProgressBar{
+  height:5px;
+  border-radius: 30px;
 }
 
 #headerProgress {
   width: 0%;
+  height: 5px;
+  border-radius: 30px;
+}
+
+#headerProgressText {
+  text-align: left;
+  color: #D1D1D1;
+  font-weight: 500;
 }
 
 .progress {
     overflow: hidden;
-    height: 18px;
-    background-color: #f7f7f7;
-    background-image: -moz-linear-gradient(top, #f5f5f5, #f9f9f9);
-    background-image: -ms-linear-gradient(top, #f5f5f5, #f9f9f9);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
-    background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
-    background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
-    background-image: linear-gradient(top, #f5f5f5, #f9f9f9);
+    height: 5px;
+    background-color: #949496;
+    background-image: -moz-linear-gradient(top,#f5f5f5,#f9f9f9);
+    background-image: -ms-linear-gradient(top,#f5f5f5,#f9f9f9);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#f5f5f5),to(#f9f9f9));
+    background-image: -webkit-linear-gradient(top,#F7FAFF,#F3F3F3);
+    background-image: -o-linear-gradient(top,#f5f5f5,#f9f9f9);
+    background-image: linear-gradient(top,#f5f5f5,#f9f9f9);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#f9f9f9', GradientType=0);
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5',endColorstr='#f9f9f9',GradientType=0);
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: inset 0 1px 2px rgba(57, 75, 122, 0.39);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-    border-radius: 3px;
+    border-radius: 30px;
 }
 
 .progress .bar {
@@ -1371,7 +1387,7 @@ background: #F7F9FA;
 }
 
 .progress-info.progress-striped .bar {
-    background-color: #006cab;
+    background-color: #0A84CA;
     background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
     background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);

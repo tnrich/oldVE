@@ -72,8 +72,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             console.log('importing');
             this.processArray(this.batchImportQueue, this.parseAndImportFile, self, function(){
                 var progressBar = $("#headerProgress");
-                progressBar.html("Done!");
-                $("#headerProgressBar").hide();
+                $("#headerProgressText").html("Done!");
+                $("#headerProgressBox").hide();
                 progressBar.css("width","0%");
                 var msg = toastr.success("Successfully Imported Sequences.");
 
@@ -138,13 +138,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 var name = theFile.name.match(/(.*)\.[^.]+$/)[1];
                 var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-                
-                // var msg = toastr.info("Importing ", name);
                 var progressBar = $("#headerProgress");
-                progressBar.html("Importing "+ name);
+                $("#headerProgressText").html("Importing "+ name);
 
                 self.startCount = self.startCount+self.progressIncrement;
-                console.log(self.startCount);
                 progressBar.css("width", self.startCount+'%');
                 //debugger;
                 self.parseSequence(data, ext, function(gb) {
@@ -175,7 +172,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                         if(!err)
                         {
                             if(seqMgr) {
-                                sequence.set('name',seqMgr.toGenbank().getLocus().locusName);
+                                sequence.set('name', genbankObject.getLocus().locusName);
                             }
 
                             // Aggregate parse messages/warnings from the genbank
@@ -205,9 +202,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                     }
                                     else
                                     {
-                                        $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
-                                        $(msg[0]).removeClass("toast-info");
-                                        $(msg[0]).addClass("toast-warning"); 
+                                        var msg = toastr.warning("Error: Duplicated Sequence");
 
                                         var messageIndex = context.batchImportMessages.find('fileName', name);
                                         var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;

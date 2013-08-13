@@ -128,14 +128,18 @@ Ext.define("Teselagen.models.SequenceFile", {
     {
         name: "hash",
         convert: function(v, record) {
-            var content = record.get("sequenceFileContent");
+            if(v) {
+                return v;
+            } else {
+                var content = record.get("sequenceFileContent");
 
-            content = content.replace(/&amp;/g,'');
-            content = content.replace(/amp;/g,'');
-            content = content.replace(/&quot;/g,'"');
-            content = content.replace(/quot;/g,'"');
+                content = content.replace(/&amp;/g,'');
+                content = content.replace(/amp;/g,'');
+                content = content.replace(/&quot;/g,'"');
+                content = content.replace(/quot;/g,'"');
 
-            return Teselagen.bio.util.Sha256.hex_sha256(content);
+                return Teselagen.bio.util.Sha256.hex_sha256(content);
+            }
         }
     },
 
@@ -183,7 +187,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     }, {
         name: "size",
         type: "short",
-        convert: function(v, record) {
+        /*convert: function(v, record) {
             if (!(v === "" || v === undefined || v === null)) {
                 return v;
             }
@@ -191,7 +195,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             var length = record.getLength();
 
             return length;
-        }
+        }*/
     },{
         name: "user_id",
         type: "long"
@@ -420,24 +424,28 @@ Ext.define("Teselagen.models.SequenceFile", {
     setSequenceManager: function(sequenceManager){
         if(sequenceManager) {
             var data = sequenceManager.serialize();
+            this.set('size', sequenceManager.getSequence().getSymbolsLength());
             this.set("serialize",data);
         }
     },
 
-    processSequence: function(cb){
+    processSequence: function(cb, gb){
         var fileContent = this.get("sequenceFileContent");
         var fileFormat = 
             Teselagen.constants.Constants.SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP[
                 this.get("sequenceFileFormat")];
 
         if(!this.get("serialize") && fileContent) {
-            var gb = Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
+            // If gb is not defined, calculate it.
+            if(!gb) {
+                gb = Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
                                                                fileFormat);
+            }
 
             var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
 
             if(seqMgr) {
-                this.setSequenceManager( seqMgr );
+                this.setSequenceManager(seqMgr);
                 return cb(false, seqMgr, gb);
             } else {
                 return cb(true);

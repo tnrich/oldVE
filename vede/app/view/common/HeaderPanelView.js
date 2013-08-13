@@ -17,7 +17,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 		xtype: 'container',
 		id: 'headerPanel-navbar',
 		cls: 'navbar-inner',
-		html: '<ul class="nav"><li><div style="width:325px; height:20px; margin: 5px 60px 5px 5px;"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress">Importing..</div></div></div></li><li id="headerUserIcon"><a href="" class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>',
+		html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div></div></li><li id="headerUserIcon"><a href="" class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>',
 		items: [
 		{
 			xtype: 'image',
