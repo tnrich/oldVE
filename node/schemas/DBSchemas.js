@@ -76,6 +76,7 @@ module.exports = function(db) {
 		sequenceFileContent: String,
 		sequenceFileFormat: String,
 		hash: String,
+        size: Number,
 		partSource: String,
 		sequenceFileName: String,
 		firstTimeImported: Boolean,

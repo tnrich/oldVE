@@ -170,7 +170,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                         if(!err)
                         {
                             if(seqMgr) {
-                                sequence.set('name',seqMgr.toGenbank().getLocus().locusName);
+                                sequence.set('name', genbankObject.getLocus().locusName);
                             }
 
                             // Aggregate parse messages/warnings from the genbank
