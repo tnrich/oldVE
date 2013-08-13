@@ -1,0 +1,13 @@
+{
+    "name": "Teselagen"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.5.10"
+    , "jade": ">= 0.0.1"
+    , "mongoose":">=2.7.1"
+    , "bcrypt":">=0.6.0"
+    , "everyauth":">=0.0.0"
+    , "nodemailer":"0.5.2"
+  }
+}

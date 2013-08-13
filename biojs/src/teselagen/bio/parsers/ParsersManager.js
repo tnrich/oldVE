@@ -134,10 +134,18 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 //debugger;
                 self.parseSequence(data, ext, function(gb) {
 
-                Ext.getCmp("sequenceLibrary").el.unmask();
+                if(!gb) return cb(true,self);
+
+                if(!(gb instanceof Array)) gb = [gb];
+
+                var counter = gb.length;
+
+                gb.forEach(function(currentGB){
+
+                    Ext.getCmp("sequenceLibrary").el.unmask();
 
                     var sequence = Ext.create("Teselagen.models.SequenceFile",{
-                        sequenceFileContent: gb,
+                        sequenceFileContent: currentGB,
                         sequenceFileFormat: "GENBANK",
                         name: name,
                         dateCreated:  new Date(),
@@ -170,6 +178,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                             sequence.save({
                                 success: function(){
+                                    counter--;
                                     seqMgr = null;
                                     sequence.sequenceManager = null;
 
@@ -177,7 +186,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                     if(!duplicated) 
                                     {
                                         Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
-                                        return cb(false,self);
+                                        if(counter===0) return cb(false,self);
                                     }
                                     else
                                     {
@@ -203,17 +212,19 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                                 record.get('messages').concat([duplicateMessage]));
                                         }
 
-                                        return cb(true,self);
+                                        if(counter===0) return cb(true,self);
                                    }
                                 },
                                 failure: function(){
-                                    return cb(true,self);
+                                    counter--;
+                                    if(counter===0) return cb(true,self);
                                 }
                             });
 
                         }
                         else
                         {
+                            counter--;
                             console.warn("Sequence: "+sequence.get('name')+' failed to import');
                         }
                     });
@@ -221,9 +232,13 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     }
                     catch(err)
                     {
+                        counter--;
                         console.warn(err.toString());
-                        return cb(true,self);
+                        if(counter===0) return cb(true,self);
                     }
+
+                });
+
 
                 });
 
@@ -274,14 +289,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         switch (pExt) {
             case "fasta":
                 asyncParseFlag = true;
-                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result,function(gb){
-                    return cb(gb);
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result,function(gbs){
+                    // FAS may return an array of genbanks !
+                    return cb(gbs);
                 });
                 break;
             case "fas":
                 asyncParseFlag = true;
-                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result,function(gb){
-                    return cb(gb);
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result,function(gbs){
+                    // FAS may return an array of genbanks !
+                    return cb(gbs);
                 });
                 break;
             case "json":
@@ -323,9 +340,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var sequences = [];
 
         headers.forEach(function(header){
+            var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
             sequences.push({
                 name : header.replace(">",""),
-                sequence: pFasta.match(header+'\n(.+)')[1]
+                sequence: pFasta.match(escapedHeader+'\n(.+)')[1]
             });
         })
 
@@ -349,53 +367,38 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             return cb(result);
         };
 
-        if(sequences.length>1)
+
+
+        if(sequences.length>0)
         {
 
-        //var sequences  = [
-        //    {
-        //        "name":"sequence1",
-        //        "sequence":"GTAAGTA"
-        //    }
-        //];
+            var returnSequences = [];
 
-        var tempStore = new Ext.data.JsonStore({
-              fields: [ 'name', 'sequence' ],
-              data: sequences
-          });  
+            sequences.forEach(function(seq){
+                var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+                    locusName: seq.name,
+                    sequenceLength: seq.sequence.length,
+                    date: Teselagen.bio.parsers.ParsersManager.todayDate()
+                });
 
-        var win = Ext.create("Ext.window.Window", {
-            title: "Select sequence to import",
-            width: 600,
-            height: 300,
-            items:[{
-                xtype: 'grid',
-                store: tempStore,
-                columns: [
-                    {header: 'name', dataIndex: 'name'},
-                    {header: 'sequence', dataIndex: 'sequence'}
-                ],
-                listeners: {
-                    itemclick: function(dv, record, item, index, e) {
-                        win.close();
-                        performImportSequence({
-                            name : record.get('name'),
-                            sequence: record.get('sequence')
-                        });                    
-                    }
-                }
-            }]
-        });
-        win.show();
+                var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+                    sequence: seq.sequence
+                });
 
-        }
-        else if(sequences.length === 0)
-        {
-            performImportSequence(sequences[0]);
+                result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+
+                result.addKeyword(locus);
+                result.addKeyword(origin);  
+
+                returnSequences.push(result);              
+            });
+            return cb(returnSequences);
+
         }
         else
         {
             console.warn("no sequences found in fas file.");
+            return cb(null);
         }
 
 

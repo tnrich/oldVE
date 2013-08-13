@@ -1,0 +1,17 @@
+- if (typeof(user) != 'undefined')
+    ul.nav.btn-group.pull-right(data-toggle="buttons-checkbox",style="width: 240px;")
+        a.btn.btn-primary(href="/dashboard")
+            i.icon-th
+            span  Dashboard
+        a#logout-btn.btn(href="/logout",style="width:80px;")
+          i.icon-user
+          span  Logout
+- else
+    ul.nav.btn-group.pull-right
+        a#login-btn.btn.dropdown-tootle(datatoggle="dropdown",href="#",style="width:50px;")
+          i.icon-user
+          span  Login
+    //
+        ul.btn-group.pull-right(data-toggle="buttons-checkbox")
+        a.btn Left
+        a#login-btn.btn Login
