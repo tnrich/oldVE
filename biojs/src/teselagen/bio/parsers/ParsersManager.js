@@ -208,7 +208,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                     {
                                         var msg = toastr.warning("Error: Duplicated Sequence");
 
-                                        var messageIndex = context.batchImportMessages.find('fileName', name);
+                                        var messageIndex = context.batchImportMessages.findBy(function(record) {
+                                            return record.get('fileName') === name &&
+                                                   record.get('partSource') === genbankObject.getLocus().locusName;
+                                        });
                                         var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
                                         var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
@@ -220,7 +223,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                             context.batchImportMessages.add({
                                                 fileName: name + '.' + ext,
                                                 partSource: partSource,
-                                                messages: duplicateMessage
+                                                messages: [duplicateMessage]
                                             });
                                         } else {
                                             var record = context.batchImportMessages.getAt(messageIndex);
