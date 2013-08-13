@@ -234,18 +234,18 @@ function encoded_eugene_rules_list_file(model)
         var operand1 = val["operand1_id"];
         var operator = val["compositionalOperator"];
         var operand2 = val["operand2_id"];
+        var negationOperationModifier = (val["negationOperator"])? "NOT " : "";
 
         part1 = partsIndex[operand1];
         if(!val["operand2isNumber"])
         {
-            part2 = partsIndex[operand2];
-            if(val["negationOperator"]) out += "Rule "+name+"(NOT "+part1["name"]+" "+operator+" "+part2["name"]+");\n";
-            else out += "Rule "+name+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+            part2 = partsIndex[operand2];            
+            out += "Rule "+name+"("+negationOperationModifier+part1["name"]+" "+operator+" "+part2["name"]+");\n";
         }
         else
         {
             operand2 = val["operand2Number"];
-            out += "Rule "+name+"("+part1["name"]+" "+operator+" "+operand2+");\n";
+            out += "Rule "+name+"("+negationOperationModifier+part1["name"]+" "+operator+" "+operand2+");\n";
         }
 
 

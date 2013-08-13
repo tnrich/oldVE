@@ -181,7 +181,7 @@ module.exports = function(db) {
 			{
 				compositionalOperator: String,
 				name: String,
-				negationOperator: String,
+				negationOperator: Boolean,
 				operand1_id: String,
 				operand2Number: String,
 				operand2_id: String,
