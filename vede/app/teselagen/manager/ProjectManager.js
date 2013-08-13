@@ -289,7 +289,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var designs = Teselagen.manager.ProjectManager.workingProject.designs();
         designs.remove(devicedesign);
         devicedesign.destroy();
-        designs.sync();
         Teselagen.manager.GridManager.setListenersEnabled(true);
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE,null, function () {
             Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
@@ -298,6 +297,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         if(tab) {
         	Ext.getCmp("mainAppPanel").remove(tab);
         }
+        Vede.application.fireEvent("PopulateStats");
     },
 
     /**
