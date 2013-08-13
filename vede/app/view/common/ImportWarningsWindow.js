@@ -32,6 +32,10 @@ Ext.define('Vede.view.common.ImportWarningsWindow', {
             dataIndex: 'fileName',
         }, {
             xtype: 'gridcolumn',
+            text: 'Sequence Name',
+            dataIndex: 'partSource'
+        }, {
+            xtype: 'gridcolumn',
             text: 'Messages',
             autoScroll: true,
             dataIndex: 'messages',
