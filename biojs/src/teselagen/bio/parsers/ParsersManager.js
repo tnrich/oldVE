@@ -57,6 +57,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         this.batchImportMessages = Ext.create("Ext.data.Store", {
             fields: [
                 {name: 'fileName', type: 'string'},
+                {name: 'partSource', type: 'string'},
                 {name: 'messages', type: 'auto'}
             ]
         });
@@ -164,6 +165,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                                 context.batchImportMessages.add({
                                     fileName: name + '.' + ext,
+                                    partSource: genbankObject.getLocus().locusName,
                                     messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
                                 });
                             }
@@ -191,14 +193,17 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                                         var duplicateMessage = 'Exact sequence already exists in library with' + 
                                                                ' name ' + duplicateFileName;
+                                        var partSource = genbankObject.getLocus().locusName;
 
                                         if(messageIndex < 0) {
                                             context.batchImportMessages.add({
                                                 fileName: name + '.' + ext,
+                                                partSource: partSource,
                                                 messages: duplicateMessage
                                             });
                                         } else {
                                             var record = context.batchImportMessages.getAt(messageIndex);
+                                            record.set('partSource', partSource);
                                             record.set('messages', 
                                                 record.get('messages').concat([duplicateMessage]));
                                         }
