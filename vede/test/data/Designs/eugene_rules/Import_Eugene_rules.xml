@@ -303,6 +303,27 @@ GACGTCTTATGACAACTTGACGGCTACATCATTCACTTTTTCTTCACAACCGGCACGGAACTCGCTCGGGCTGGCCCCGG
       <de:compositionalOperator>THEN</de:compositionalOperator>
       <de:operand2ID>1322097039292721</de:operand2ID>
     </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule3</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039287388</de:operand1ID>
+      <de:compositionalOperator>WITH</de:compositionalOperator>
+      <de:operand2ID>1322097039291364</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule4</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039292721</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule5</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039291364</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>2</de:operand2Number>
+    </de:eugeneRule>
   </de:eugeneRules>
   <de:j5Collection>
     <de:isCircular>true</de:isCircular>

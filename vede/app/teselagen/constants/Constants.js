@@ -59,7 +59,7 @@ Ext.define("Teselagen.constants.Constants", {
     
     AFTER:              "AFTER",
     BEFORE:             "BEFORE",
-    WITH:               "WITH",
+    // WITH:               "WITH",
     THEN:               "THEN",
     NEXTTO:             "NEXTTO",
     MORETHAN:           "MORETHAN",
@@ -67,7 +67,7 @@ Ext.define("Teselagen.constants.Constants", {
     COMPOP_LIST: [
         "AFTER",
         "BEFORE",
-        "WITH",
+        // "WITH",
         "THEN",
         "NEXTTO",
         "MORETHAN"
