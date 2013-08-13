@@ -41,7 +41,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         "Ext.Ajax",
             "Ext.data.Store",
             "Ext.data.XmlStore",
-            "Ext.data.reader.Xml"
+            "Ext.data.reader.Xml",
+
+        "Ext.ux.CheckColumn"
     ],
 
     singleton: true,
@@ -354,7 +356,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
             sequences.push({
                 name : header.replace(">",""),
-                sequence: pFasta.match(escapedHeader+'\n(.+)')[1]
+                sequence: pFasta.match(escapedHeader+'\n(.+)')[1],
+                "import": true
             });
         })
 
@@ -383,27 +386,75 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(sequences.length>0)
         {
 
-            var returnSequences = [];
+            var generate = function(selectedSequences){
+                var returnSequences = [];
 
-            sequences.forEach(function(seq){
-                var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-                    locusName: seq.name,
-                    sequenceLength: seq.sequence.length,
-                    date: Teselagen.bio.parsers.ParsersManager.todayDate()
+                selectedSequences.forEach(function(seq){
+                    var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+                        locusName: seq.get('name'),
+                        sequenceLength: seq.get('sequence').length,
+                        date: Teselagen.bio.parsers.ParsersManager.todayDate()
+                    });
+
+                    var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+                        sequence: seq.get('sequence')
+                    });
+
+                    result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+
+                    result.addKeyword(locus);
+                    result.addKeyword(origin);  
+
+                    returnSequences.push(result);              
                 });
+                return cb(returnSequences);
+            };
 
-                var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
-                    sequence: seq.sequence
-                });
 
-                result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+            var tempStore = new Ext.data.JsonStore({
+                  fields: [ 
+                      {name:'name',type:'string'},
+                      {name: 'sequence', type:'string'},
+                      {name: 'import', type: 'boolean' }
+                ],
+                  data: sequences
+              });  
 
-                result.addKeyword(locus);
-                result.addKeyword(origin);  
+            var sm = Ext.create('Ext.selection.CheckboxModel');
 
-                returnSequences.push(result);              
+            var win = Ext.create("Ext.window.Window", {
+                title: "Select sequence to import",
+                width: 600,
+                height: 300,
+                items:[{
+                    xtype: 'grid',
+                    store: tempStore,
+                    columns: [
+                        {header: 'name', dataIndex: 'name'},
+                        {header: 'sequence', dataIndex: 'sequence'},
+                        {
+                            xtype: 'checkcolumn',
+                            text: 'import',
+                            dataIndex: 'import'
+                        }
+                    ],
+                    selModel: sm,
+                    columnLines: true,
+                    columnWidth: 50
+                },
+                {
+                    xtype: 'button',
+                    text: 'Import',
+                    handler: function(){
+                        
+                        var selected = arguments[0].up("[xtype='window']").down('grid').getSelectionModel().getSelection();
+                        win.close();
+                        generate(selected);
+                    }
+                }
+                ]
             });
-            return cb(returnSequences);
+            win.show();
 
         }
         else

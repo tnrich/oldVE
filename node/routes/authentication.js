@@ -117,7 +117,7 @@ module.exports = function(app){
             else
             {
                 return res.json({
-                    "msg": "Another user is already logged in, please logout first."
+                    "msg": "Another user is already logged in, please login as "+req.session.user.username+" and logout."
                 }, 403);
             }
         }
