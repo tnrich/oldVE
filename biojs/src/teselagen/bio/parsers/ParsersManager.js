@@ -51,14 +51,22 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     batchImportQueue: [],
     processingBusy: false,
+    startCount: 0,
+    progressIncrement: 0,
 
     processQueue: function(){
         var self = this;
         if(!self.processingBusy)
         {
             self.processingBusy = true;
-            this.processArray(this.batchImportQueue,this.parseAndImportFile, self, function(){
-                console.log("Work done!");
+            console.log('importing');
+            this.processArray(this.batchImportQueue, this.parseAndImportFile, self, function(){
+                var progressBar = $("#headerProgress");
+                progressBar.html("Done!");
+                $("#headerProgressBar").hide();
+                progressBar.css("width","0%");
+                var msg = toastr.success("Successfully Imported Sequences.");
+
                 self.processingBusy = false;
             });
         }
@@ -81,7 +89,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     },
 
     processArray: function (todo, process, context, callback){
-
         setTimeout(function(){
 
             context.args = arguments.callee;
@@ -90,7 +97,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
             process(todo.shift(),context,function(err,self){
                 if (self.todo.length > 0){
-
                     setTimeout(self.args, 200);
 
                 } else {
@@ -120,7 +126,14 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 var name = theFile.name.match(/(.*)\.[^.]+$/)[1];
                 var ext = theFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-                var msg = toastr.info("Importing ", name);
+                
+                // var msg = toastr.info("Importing ", name);
+                var progressBar = $("#headerProgress");
+                progressBar.html("Importing "+ name);
+
+                self.startCount = self.startCount+self.progressIncrement;
+                console.log(self.startCount);
+                progressBar.css("width", self.startCount+'%');
                 //debugger;
                 self.parseSequence(data, ext, function(gb) {
 
@@ -154,9 +167,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                 }
                                 else
                                 {
-                                    $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
-                                    $(msg[0]).removeClass("toast-info");
-                                    $(msg[0]).addClass("toast-warning"); 
+                                    var msg = toastr.warning("Error: Duplicated sequence");
+                                    // $(msg[0]).children(".toast-message").html("Error: Duplicated sequence");
+                                    // $(msg[0]).removeClass("toast-info");
+                                    // $(msg[0]).addClass("toast-warning"); 
                                     return cb(true,self);
                                }
                             },
