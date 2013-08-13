@@ -496,7 +496,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Size',
                                         width: 80,
                                         dataIndex: 'size',
-                                        sortable: false,
+                                        sortable: true,
                                     },
                                     {
                                         text     : 'Features',
@@ -522,7 +522,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         width: 180,
                                         dataIndex: 'dateCreated',
                                         renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'),
-                                        sortable: false
+                                        sortable: true
                                     },
                                     {
                                         xtype: 'gridcolumn',
