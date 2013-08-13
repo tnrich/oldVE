@@ -5,4 +5,8 @@ module.exports = function(grunt) {
             "../../../lib/selenium-server-standalone-2.33.0.jar"], opts:{stdio:"inherit"}});
     });
     
+    grunt.registerTask("testSelWd", function() {
+        grunt.util.spawn({cmd:"mocha", args:["-b", "-R", "spec", "-t", "20s", "./selwebdriver"], opts:{stdio:"inherit"}});
+    });
+    
 };

@@ -23,7 +23,9 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
             callback: function (records) {
                 Ext.getCmp('saveAsWindowSequencesGrid').store.add(records);
             }
-        });  	 	
+        });
+
+        Ext.getCmp('saveAsWindowSequenceNameField').setValue(this.sequenceManager.getName());
     },
     
     onSaveAsWindowOKButtonClick: function() {  	
