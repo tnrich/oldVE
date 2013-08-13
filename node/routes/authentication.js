@@ -66,7 +66,6 @@ module.exports = function(app){
                 if(remember) {res.cookie("sessionname", username, { signed: true });}
                 else { res.clearCookie("sessionname"); }
 
-                console.log("LOGIN: " + username);
                 req.session.regenerate(function() {
                     req.session.user = results;
                     req.user = results;
@@ -103,23 +102,11 @@ module.exports = function(app){
         //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
 
 
-        if(req.session && req.session.user)
+        if(!req.signedCookies.sessionname && req.session && req.session.user && req.session.user.username !== username)
         {
-            if(req.session.user.username === username)
-            {
-                return res.json({
-                    "firstTime": false,
-                    "msg": "Welcome back " + req.session.user.username + "!",
-                    "user": req.session.user,
-                    "remember":remember
-                });
-            }
-            else
-            {
-                return res.json({
-                    "msg": "Another user is already logged in, please logout first."
-                }, 403);
-            }
+            return res.json({
+                "msg": "Another user is already logged in, please login as "+req.session.user.username+" and logout."
+            }, 403);
         }
 
 

@@ -5,11 +5,6 @@ module.exports = function(app) {
     var Part = app.db.model("part");
     var User = app.db.model("User");
 
-    /**
-     * POST Parts
-     * @memberof module:./routes/api
-     * @method POST 'parts'
-     */
 
     /*
      * When a part is created a Fully quilified domain name (FQDN) should be generated.
@@ -58,7 +53,11 @@ module.exports = function(app) {
             });
     };
 
-
+    /**
+     * Create Part
+     * @memberof module:./routes/api
+     * @method POST 'parts'
+     */
     app.post('/parts', restrict,  function(req, res) {
         savePart(req,res,null,function(savedSequence){
             User.findById(req.user._id).populate('parts').exec(function(err, user) {

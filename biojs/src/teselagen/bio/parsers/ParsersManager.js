@@ -41,7 +41,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         "Ext.Ajax",
             "Ext.data.Store",
             "Ext.data.XmlStore",
-            "Ext.data.reader.Xml"
+            "Ext.data.reader.Xml",
+
+        "Ext.ux.CheckColumn"
     ],
 
     singleton: true,
@@ -150,6 +152,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 if(!(gb instanceof Array)) gb = [gb];
 
                 var counter = gb.length;
+
+                if(counter === 0) cb(false,self)
 
                 gb.forEach(function(currentGB){
 
@@ -384,27 +388,86 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(sequences.length>0)
         {
 
-            var returnSequences = [];
+            var generate = function(selectedSequences){
+                var returnSequences = [];
 
-            sequences.forEach(function(seq){
-                var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-                    locusName: seq.name,
-                    sequenceLength: seq.sequence.length,
-                    date: Teselagen.bio.parsers.ParsersManager.todayDate()
+                selectedSequences.forEach(function(seq){
+                    var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+                        locusName: seq.get('name'),
+                        sequenceLength: seq.get('sequence').length,
+                        date: Teselagen.bio.parsers.ParsersManager.todayDate()
+                    });
+
+                    var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+                        sequence: seq.get('sequence')
+                    });
+
+                    result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+
+                    result.addKeyword(locus);
+                    result.addKeyword(origin);  
+
+                    returnSequences.push(result);              
                 });
+                return cb(returnSequences);
+            };
 
-                var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
-                    sequence: seq.sequence
-                });
 
-                result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+            var tempStore = new Ext.data.JsonStore({
+                  fields: [ 
+                      {name:'name',type:'string'},
+                      {name: 'sequence', type:'string'}
+                ],
+                  data: sequences
+              });  
 
-                result.addKeyword(locus);
-                result.addKeyword(origin);  
 
-                returnSequences.push(result);              
+            var win = Ext.create("Ext.window.Window", {
+                title: "Select sequence to import",
+                shrinkWrap: true,
+                closable: false,
+                width: 600,
+                height: 300,
+                items:[{
+                    xtype: 'grid',
+                    store: tempStore,
+                    forceFit: true,
+                    columns: [
+                        {header: 'name', dataIndex: 'name'},
+                        {header: 'sequence', dataIndex: 'sequence'}
+                    ],
+                    selModel: {
+                        selType: 'checkboxmodel',
+                        injectCheckbox: 'first',
+                        showHeaderCheckbox: true,
+                        checkOnly: true,
+                        mode: 'MULTI',
+                        headerWidth: 33
+                    },
+                    columnLines: true,
+                    columnWidth: 50,
+                    listeners: {
+                        afterrender: function(){
+                            this.getSelectionModel().selectAll();
+                            var grid = arguments[0].up("[xtype='window']").down('grid');
+                            grid.reconfigure(tempStore);
+                            win.setHeight(grid.getHeight()+80);
+                        }
+                    }
+                },
+                {
+                    xtype: 'button',
+                    text: 'Import',
+                    handler: function(){
+                        var grid = arguments[0].up("[xtype='window']").down('grid');
+                        var selected = grid.getSelectionModel().getSelection();
+                        win.close();
+                        generate(selected);
+                    }
+                }
+                ]
             });
-            return cb(returnSequences);
+            win.show();
 
         }
         else
