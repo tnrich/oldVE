@@ -70,7 +70,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(!self.processingBusy)
         {
             self.processingBusy = true;
-            console.log('importing');
             this.processArray(this.batchImportQueue, this.parseAndImportFile, self, function(){
                 var progressBar = $("#headerProgress");
                 $("#headerProgressText").html("Done!");

@@ -59,7 +59,7 @@ Ext.define("Teselagen.constants.Constants", {
     
     AFTER:              "AFTER",
     BEFORE:             "BEFORE",
-    // WITH:               "WITH",
+    WITH:               "WITH",
     THEN:               "THEN",
     NEXTTO:             "NEXTTO",
     MORETHAN:           "MORETHAN",
