@@ -211,8 +211,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                         var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
                                         var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
-                                        var duplicateMessage = 'Exact sequence already exists in library with' + 
-                                                               ' name ' + duplicateFileName;
+                                        var duplicateMessage = 'Exact same sequence already exists in the sequence library';
 
                                         if(messageIndex < 0) {
                                             context.batchImportMessages.add({
