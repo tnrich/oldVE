@@ -298,6 +298,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         if(tab) {
         	Ext.getCmp("mainAppPanel").remove(tab);
         }
+        Vede.application.fireEvent("PopulateStats");
     },
 
     /**
