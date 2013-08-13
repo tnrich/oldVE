@@ -146,30 +146,7 @@ module.exports = function(app) {
         
     });
     
-    /**
-     * GET device design by id
-     * @memberof module:./routes/api
-     * @method GET "/users/:username/projects/:project_id/devicedesigns"
-     */
-    app.get("/users/:username/projects/:project_id/devicedesigns/:devicedesign_id", restrict, function(req, res) {
-        var DeviceDesign = app.db.model("devicedesign");
-        DeviceDesign.findById(req.params.devicedesign_id, function(err, design) {console.log(design.j5collection.bins[0]);});
-        DeviceDesign.findById(req.params.devicedesign_id).populate("j5collection.bins.parts").exec(function(err, design) {
-            if(!design) {return res.json(500,{"error":"design not found"});}
-            design = design.toObject();
-            design.id = design._id;
-            //delete design.rules; // Eugene rules to be send on a different request
 
-            if (err) {
-                app.errorHandler(err, req, res);
-            } else {
-                res.json({
-                    "designs": design
-                });
-            }
-        });
-    });
-    
     /**
      * GET device design parts
      * @memberof module:./routes/api

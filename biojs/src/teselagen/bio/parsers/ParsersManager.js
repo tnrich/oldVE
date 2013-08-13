@@ -153,6 +153,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                 var counter = gb.length;
 
+                if(counter === 0) cb(false,self)
+
                 gb.forEach(function(currentGB){
 
                     Ext.getCmp("sequenceLibrary").el.unmask();
@@ -357,8 +359,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
             sequences.push({
                 name : header.replace(">",""),
-                sequence: pFasta.match(escapedHeader+'\n(.+)')[1],
-                "import": true
+                sequence: pFasta.match(escapedHeader+'\n(.+)')[1]
             });
         })
 
@@ -415,16 +416,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             var tempStore = new Ext.data.JsonStore({
                   fields: [ 
                       {name:'name',type:'string'},
-                      {name: 'sequence', type:'string'},
-                      {name: 'import', type: 'boolean' }
+                      {name: 'sequence', type:'string'}
                 ],
                   data: sequences
               });  
 
-            var sm = Ext.create('Ext.selection.CheckboxModel');
 
             var win = Ext.create("Ext.window.Window", {
                 title: "Select sequence to import",
+                shrinkWrap: true,
+                closable: false,
                 width: 600,
                 height: 300,
                 items:[{
@@ -433,23 +434,33 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     forceFit: true,
                     columns: [
                         {header: 'name', dataIndex: 'name'},
-                        {header: 'sequence', dataIndex: 'sequence'},
-                        {
-                            xtype: 'checkcolumn',
-                            text: 'import',
-                            dataIndex: 'import'
-                        }
+                        {header: 'sequence', dataIndex: 'sequence'}
                     ],
-                    selModel: sm,
+                    selModel: {
+                        selType: 'checkboxmodel',
+                        injectCheckbox: 'first',
+                        showHeaderCheckbox: true,
+                        checkOnly: true,
+                        mode: 'MULTI',
+                        headerWidth: 33
+                    },
                     columnLines: true,
-                    columnWidth: 50
+                    columnWidth: 50,
+                    listeners: {
+                        afterrender: function(){
+                            this.getSelectionModel().selectAll();
+                            var grid = arguments[0].up("[xtype='window']").down('grid');
+                            grid.reconfigure(tempStore);
+                            win.setHeight(grid.getHeight()+80);
+                        }
+                    }
                 },
                 {
                     xtype: 'button',
                     text: 'Import',
                     handler: function(){
-                        
-                        var selected = arguments[0].up("[xtype='window']").down('grid').getSelectionModel().getSelection();
+                        var grid = arguments[0].up("[xtype='window']").down('grid');
+                        var selected = grid.getSelectionModel().getSelection();
                         win.close();
                         generate(selected);
                     }
