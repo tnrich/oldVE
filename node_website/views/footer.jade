@@ -1,0 +1,85 @@
+footer.jade
+
+  //  
+    footer
+        .container
+            .row
+              .span6
+                .row
+                  .span2
+                    h4 Product
+                    ul.unstyled
+                      li
+                        a(href='/') Home
+                      li
+                        a(href='/why') Why Fleetio?
+                      li
+                        a(href='/tour') Feature Tour
+                      li
+                        a(href='/pricing') Pricing
+                      li
+                        a(href='/faq') FAQ
+                  .span2
+                    h4 More
+                    ul.unstyled
+                      li
+                        a(href='http://blog.fleetio.com') Fleetio Blog
+                      li
+                        a(href='/roi') ROI Calculator
+                      li
+                        a(href='/fleet-management-software') Fleet Management Software
+                      li
+                        a(href='/vehicle-maintenance-software') Vehicle Maintenance Software
+                  .span2
+                    h4 Company
+                    ul.unstyled
+                      li
+                        a(href='/about') About
+                      li
+                        script(type='text/javascript')
+                          //<![CDATA[
+                          { coded = "TbyyH@hybbiuH.ZHL"
+                          key = "8IQ0LK3zyfjrHuOM1pCSnJYd7khwXVGNRcWqBU9egt5TFAP4EmZsvl6aboi2xD"
+                          shift=coded.length
+                          link=""
+                          for (i=0; i<coded.length; i++) {
+                          if (key.indexOf(coded.charAt(i))==-1) {
+                          ltr = coded.charAt(i)
+                          link += (ltr)
+                          }
+                          else {
+                          ltr = (key.indexOf(coded.charAt(i))-shift+key.length) % key.length
+                          link += (key.charAt(ltr))
+                          }
+                          }
+                          document.write("<a href='mailto:"+link+"'>Contact Us</a>")
+                          }
+                          //]]>
+                        a(href='mailto:hello@fleetio.com') Contact Us
+              .span6
+                h4
+                  | Subscribe to our newsletter
+                p
+                  | Hear about new features, tips & other updates.
+                form#newsletter_list_form(action='http://rarestep.us1.list-manage.com/subscribe/post?u=d4a006f9816053fb9b37816ea&id=61cdd86e5c', method='post', name='mc-embedded-subscribe-form', target='_blank')
+                  .clearfix
+                    input.span4(name='EMAIL', placeholder='email address', type='email')
+                    input.btn(name='subscribe', type='submit', value='Subscribe')
+          #footer-floor
+            .container
+              .row
+                .span6
+                  h3#phone
+                    | 1-800-975-5304
+                  p
+                    | © 2011
+                    a(href='http://www.rarestep.com', title='RareStep - Remarkable web-based software and websites in Birmingham, AL') RareStep, LLC
+                    | . All Rights Reserved.
+                    a(href='/terms') Terms
+                    | &
+                    a(href='/privacy') Privacy
+                    | .
+                #elsewhere-msg.span3.ar
+                  h4 Stay in touch:
+                #elsewhere-icons.span2
+                  a.twitter(href='http://twitter.com/fleetio') Twitter
