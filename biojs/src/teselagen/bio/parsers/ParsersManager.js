@@ -424,6 +424,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 items:[{
                     xtype: 'grid',
                     store: tempStore,
+                    forceFit: true,
                     columns: [
                         {header: 'name', dataIndex: 'name'},
                         {header: 'sequence', dataIndex: 'sequence'},
