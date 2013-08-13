@@ -230,6 +230,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.manager.J5CommunicationManager": [],
   "Vede.view.de.InspectorPanel": [],
   "Teselagen.store.PartStore": [],
+  "Vede.view.common.ImportWarningsWindow": [],
   "Teselagen.renderer.de.BinHeaderRenderer": [],
   "Ext.ux.form.MultiSelect": [
     "Ext.ux.Multiselect"
@@ -693,6 +694,9 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.InspectorPanel"
   ],
   "Teselagen.store.PartStore": [],
+  "Vede.view.common.ImportWarningsWindow": [
+    "widget.importwarningswindow"
+  ],
   "Teselagen.renderer.de.BinHeaderRenderer": [],
   "Ext.ux.form.MultiSelect": [
     "widget.multiselect",

@@ -51,7 +51,7 @@ Ext.define('Vede.view.common.dropZone', {
 
 		setTimeout(function(){
 		$(".batch-import-area").fadeOut("fast");
-		$("#headerProgressBar").fadeIn();
+		$("#headerProgressBox").fadeIn();
 		},25);
 
 		var sequenceLibrary = Ext.getCmp("sequenceLibrary");
