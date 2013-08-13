@@ -23298,8 +23298,8 @@ body.x-nbr .x-tab-default-right-frameInfo {
   font-family: 'Maven Pro';
   font-style: normal;
   font-weight: normal;
-  src: url("/fonts/MavenPro-Regular.ttf");
-  src: local("Maven Pro"), local("Maven Pro"), url("/fonts/MavenPro-Regular.ttf") format("truetype");
+  src: url("../fonts/MavenPro-Regular.ttf");
+  src: local("Maven Pro"), local("Maven Pro"), url("../fonts/MavenPro-Regular.ttf") format("truetype");
 }
 
 /* line 13, ../../../../sass/src/view/AppViewport.scss */
@@ -24739,27 +24739,55 @@ img {
 }
 
 /* line 1234, ../../../../sass/src/view/AppViewport.scss */
+#headerProgressBox {
+  display: none;
+  width: 325px;
+  height: 20px;
+  margin: 10px 60px 5px 5px;
+}
+
+/* line 1241, ../../../../sass/src/view/AppViewport.scss */
+#headerProgressBar {
+  height: 5px;
+  border-radius: 30px;
+}
+
+/* line 1246, ../../../../sass/src/view/AppViewport.scss */
+#headerProgress {
+  width: 0%;
+  height: 5px;
+  border-radius: 30px;
+}
+
+/* line 1252, ../../../../sass/src/view/AppViewport.scss */
+#headerProgressText {
+  text-align: left;
+  color: #D1D1D1;
+  font-weight: 500;
+}
+
+/* line 1258, ../../../../sass/src/view/AppViewport.scss */
 .progress {
   overflow: hidden;
-  height: 18px;
-  background-color: #f7f7f7;
+  height: 5px;
+  background-color: #949496;
   background-image: -moz-linear-gradient(top, #f5f5f5, #f9f9f9);
   background-image: -ms-linear-gradient(top, #f5f5f5, #f9f9f9);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
-  background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
+  background-image: -webkit-linear-gradient(top, #f7faff, #f3f3f3);
   background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
   background-image: linear-gradient(top, #f5f5f5, #f9f9f9);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#f9f9f9', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5',endColorstr='#f9f9f9',GradientType=0);
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(57, 75, 122, 0.39);
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
-  border-radius: 3px;
+  border-radius: 30px;
 }
 
-/* line 1254, ../../../../sass/src/view/AppViewport.scss */
+/* line 1278, ../../../../sass/src/view/AppViewport.scss */
 .progress .bar {
   width: 0%;
   height: 18px;
@@ -24792,7 +24820,7 @@ img {
   transition: width 0.6s ease;
 }
 
-/* line 1286, ../../../../sass/src/view/AppViewport.scss */
+/* line 1310, ../../../../sass/src/view/AppViewport.scss */
 .progress-striped .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24807,14 +24835,14 @@ img {
   background-size: 40px 40px;
 }
 
-/* line 1300, ../../../../sass/src/view/AppViewport.scss */
+/* line 1324, ../../../../sass/src/view/AppViewport.scss */
 .progress.active .bar {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
   -moz-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
-/* line 1306, ../../../../sass/src/view/AppViewport.scss */
+/* line 1330, ../../../../sass/src/view/AppViewport.scss */
 .progress-danger .bar {
   background-color: #dd514c;
   background-image: -moz-linear-gradient(top, #ee5f5b, #c43c35);
@@ -24827,7 +24855,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
 }
 
-/* line 1318, ../../../../sass/src/view/AppViewport.scss */
+/* line 1342, ../../../../sass/src/view/AppViewport.scss */
 .progress-danger.progress-striped .bar {
   background-color: #ee5f5b;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24838,7 +24866,7 @@ img {
   background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 1328, ../../../../sass/src/view/AppViewport.scss */
+/* line 1352, ../../../../sass/src/view/AppViewport.scss */
 .progress-success .bar {
   background-color: #5eb95e;
   background-image: -moz-linear-gradient(top, #62c462, #57a957);
@@ -24851,7 +24879,7 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
 
-/* line 1340, ../../../../sass/src/view/AppViewport.scss */
+/* line 1364, ../../../../sass/src/view/AppViewport.scss */
 .progress-success.progress-striped .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -24862,9 +24890,9 @@ img {
   background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 1350, ../../../../sass/src/view/AppViewport.scss */
+/* line 1374, ../../../../sass/src/view/AppViewport.scss */
 .progress-info .bar {
-  background-color: #4bb1cf;
+  background-color: #006CAB;
   background-image: -moz-linear-gradient(top, #5bc0de, #339bb9);
   background-image: -ms-linear-gradient(top, #5bc0de, #339bb9);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5bc0de), to(#339bb9));
@@ -24878,9 +24906,9 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bc0de', endColorstr='#339bb9', GradientType=0);
 }
 
-/* line 1365, ../../../../sass/src/view/AppViewport.scss */
+/* line 1389, ../../../../sass/src/view/AppViewport.scss */
 .progress-info.progress-striped .bar {
-  background-color: #5bc0de;
+  background-color: #0A84CA;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -24890,54 +24918,54 @@ img {
 }
 
 @-webkit-keyframes progress-bar-stripes {
-  /* line 1376, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1400, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1378, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1402, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @-moz-keyframes progress-bar-stripes {
-  /* line 1382, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1406, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1384, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1408, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @keyframes progress-bar-stripes {
-  /* line 1388, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1412, ../../../../sass/src/view/AppViewport.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 1390, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1414, ../../../../sass/src/view/AppViewport.scss */
   to {
     background-position: 40px 0;
   }
 }
 
-/* line 1394, ../../../../sass/src/view/AppViewport.scss */
+/* line 1418, ../../../../sass/src/view/AppViewport.scss */
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner {
   color: black;
   text-decoration: underline;
 }
 
-/* line 1399, ../../../../sass/src/view/AppViewport.scss */
+/* line 1423, ../../../../sass/src/view/AppViewport.scss */
 .plasmidsGrid .x-grid-cell-first .x-grid-cell-inner:hover {
   color: blue;
   text-decoration: underline;
 }
 
-/* line 1404, ../../../../sass/src/view/AppViewport.scss */
+/* line 1428, ../../../../sass/src/view/AppViewport.scss */
 .gridcolumn-wrap-text {
   white-space: normal;
 }

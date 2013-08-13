@@ -7,6 +7,7 @@ Ext.define('Vede.view.common.ImportWarningsWindow', {
     height: 400,
     title: 'Batch Import Summary',
     layout: 'fit',
+    modal: true,
 
     items: [{
         xtype: 'gridpanel',

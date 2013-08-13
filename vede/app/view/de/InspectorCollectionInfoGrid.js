@@ -61,6 +61,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     text: '<div data-qtip="Column Name">Column Name</div>',
                     dataIndex: 'binName',
                     sortable: false,
+                    menuDisabled: true,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
@@ -73,6 +74,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'gridcolumn',
                     text: '<div data-qtip="Direction">Direction</div>',
+                    menuDisabled: true,
                     sortable: false,
                     dataIndex: 'directionForward',
                     width: 80,
@@ -91,6 +93,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'numbercolumn',
                     width: 40,
+                    menuDisabled: true,
                     sortable: false,
                     text: '<div data-qtip="Items">Items</div>',
                     renderer: function(value, metadata, record) {
@@ -109,6 +112,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'gridcolumn',
                     text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
+                    menuDisabled: true,
                     sortable: false,
                     dataIndex: 'fas',
                     renderer: function(value, metadata, record) {
@@ -126,6 +130,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'booleancolumn',
                     text: '<div data-qtip="Direct Synthesis Firewall">DSF</div>',
+                    menuDisabled: true,
                     sortable: false,
                     dataIndex: 'dsf',
                     editor: {
@@ -135,6 +140,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'gridcolumn',
                     text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
+                    menuDisabled: true,
                     sortable: false,
                     dataIndex: 'fro',
                     editor: {
@@ -151,6 +157,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'numbercolumn',
                     text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>',
+                    menuDisabled: true,
                     sortable: false,
                     dataIndex: 'extra5PrimeBps',
                     editor: {
@@ -165,6 +172,7 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                 {
                     xtype: 'numbercolumn',
                     text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
+                    menuDisabled: true,
                     sortable: false,
                     dataIndex: 'extra3PrimeBps',
                     flex: 1,

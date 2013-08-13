@@ -1,0 +1,72 @@
+.modal.hide#loginModal
+  .modal-header
+    button.close(type="button",data-dismiss="modal")
+      span x
+    .modal-body
+      form.form-horizontal#login-form
+        fieldset
+          legend
+            span Login
+          .control-group
+            label.control-label(for="username") 
+              span Email
+            .controls
+              .input-prepend
+                span.add-on
+                  i.icon-user
+                input.input-xlarge#username(type="text")
+          .control-group
+            label.control-label(for="password") 
+              span Password
+            .controls
+              .input-prepend
+                span.add-on
+                  i.icon-lock
+                input.input-xlarge#password(type="password")
+          .control-group
+            label.control-label(for="remember") 
+              span Remember me
+            .controls
+              input.checkbox#remember(type="checkbox")
+          .control-group.error.hide
+                .controls
+                  span.help-inline
+          .control-group.success.hide
+                .controls
+                  span.help-inline
+          .form-actions
+            button.btn.btn-primary(type="submit") Login
+            button.btn#login-cancel Cancel
+
+.modal.hide#usereditModal
+  .modal-header
+    button.close(type="button",data-dismiss="modal")
+      span x
+    .modal-body(style="max-height: 500px;")
+      form.form-horizontal#edit-user
+        fieldset
+          input(type='hidden',name="user[_id]")
+          .control-group
+            label.control-label(for='user[firstName]') First Name
+            .controls
+              input.input-xlarge(type='text',name="user[firstName]")
+          .control-group
+            label.control-label(for='user[lastName]') Last Name
+            .controls
+              input.input-xlarge(type='text',name="user[lastName]")
+          .control-group
+            label.control-label(for='user[email]') Email
+            .controls
+              input.input-xlarge(type='text',name="user[email]")
+          .control-group
+            label.control-label(for='user[type]') User type
+            .controls
+              select.input-xlarge(type='select',name="user[type]")
+                option root
+                option user
+                option guest
+          .form-actions
+            button#save.btn.btn-primary(type='submit', data-complete-text="done!") Save
+            button.btn(type="cancel") Cancel
+          .form-actions
+            button#btn.btn-danger Delete this account

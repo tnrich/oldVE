@@ -46,10 +46,13 @@ Ext.define('Vede.view.common.dropZone', {
 
 	handleFileSelect: function(evt) {
 
-		$(".batch-import-area").fadeOut("fast");
-
 		evt.stopPropagation();
 		evt.preventDefault();
+
+		setTimeout(function(){
+		$(".batch-import-area").fadeOut("fast");
+		$("#headerProgressBox").fadeIn();
+		},25);
 
 		var sequenceLibrary = Ext.getCmp("sequenceLibrary");
 		sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
@@ -73,6 +76,9 @@ Ext.define('Vede.view.common.dropZone', {
 	processFiles: function(items) {     
 		var length = items.length;
 
+		Teselagen.bio.parsers.ParsersManager.startCount = 0;
+		
+		Teselagen.bio.parsers.ParsersManager.progressIncrement = 100/items.length;
         for (var i = 0; i < length; i++) {
             var entries = [];
             entries[0] = items[i].webkitGetAsEntry();

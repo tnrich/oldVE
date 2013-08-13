@@ -199,12 +199,16 @@ module.exports = function(app) {
     
     app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
-        DeviceDesign.findById(req.params.devicedesign_id,function(err,devicedesign) {
-            if(err||!devicedesign) return res.json(500,{"error":err});
-            devicedesign.remove();
-            res.json({
-                "designs": devicedesign
+        DeviceDesign.findById(req.params.devicedesign_id).exec(function(err,design) {
+            if(err) return res.json(500,{"error":err});
+            if(!design) return res.json(500,{"error":"design not found"});
+
+            design.remove(function(err){
+                res.json({
+                    "designs": {}
+                });
             });
+
         });
     });
 
