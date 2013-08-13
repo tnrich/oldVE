@@ -4,8 +4,7 @@
  * Takes in Genbank file (as a string) and creates the Genbank class.
  * Static class changed to singleton. (Replaces GenbankFormat.js) \n
  *
- * Currently, this does not log errors in the Genbank file.
- * Need to include enhancement in the future.
+ * GENBANK FILE FORMAT: ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt
  *
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFormat.js)
@@ -592,8 +591,15 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @private
      */
     getLineKey: function(line) {
-        line    = line.replace(/^[\s]*/, "");
-        var arr = line.split(/[\s]+/);
+        var arr;
+        line = line.replace(/^[\s]*/, "");
+
+        if(line.indexOf("=") < 0) {
+            arr = line.split(/[\s]+/);
+        } else {
+            arr = line.split(/=/);
+        }
+
         return arr[0];
     },
     /**
@@ -603,9 +609,16 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @private
      */
     getLineVal: function(line) {
-        line = line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");
-        line = Ext.String.trim(line);
-        return line;
+        var arr;
+
+        if(line.indexOf("=") < 0) {
+            line = line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");
+            line = Ext.String.trim(line);
+            return line;
+        } else {
+            arr = line.split(/=/);
+            return arr[1];
+        }
     },
     /**
      * Checks if line is a Keyword line. If there is NO whitespace greater than before keyword, then it's a subkeyword.
@@ -706,12 +719,18 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      *  @private
      */
     isLineRunon: function(line) {
-        var runon = false;
-        //if ( Ext.String.trim(line.substr(0,20)) === ""  && Ext.String.trim(line).charAt(0).match(/[\d]/) && line.match(/[.]{2}/g) ) {
-        if ( Ext.String.trim(line.substr(0,10)) === "" && ( !Ext.String.trim(line).charAt(0).match(/\//) ||  Ext.String.trim(line).match(/complement/g) || Ext.String.trim(line).match(/join/g) ) ) {
-            runon = true;
-        }
-        return runon;
+        var trimmed = Ext.String.trim(line);
+
+        // Regex to be applied to the trimmed line to determine if the line
+        // contains a prefix like complement( or join( for the definition of the
+        // feature location, as per specifications here:
+        // ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt
+        //
+        // Prefixes can be in the form: ^<prefix> (
+        // I've made the space after the prefix optional to increase flexibility.
+        var prefixRegex = /^(order|join|complement)\s*\(/;
+
+        return Ext.String.trim(line.substr(0,10)) === "" && (!trimmed.charAt(0).match(/\//) || trimmed.match(prefixRegex));
     },
 
     setType: function(key, isKey) {
