@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <de:version>4.0</de:version>
+  <de:sequenceFiles>
+    <de:sequenceFile hash="09415e9963be53629572f0b8248e3a951e9f26278917d8cf000edd3449cdbc5c">
+      <de:format>Genbank</de:format>
+      <de:content><![CDATA[LOCUS               pBbB2a_GFP        4035 bp ds-DNA   circular     20-DEC-2010
+KEYWORDS    .
+COMMENT     
+COMMENT     ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     RBS             722..741
+                     /vntifkey="32"
+                     /label=RBS
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     misc_feature    1483..1611
+                     /vntifkey="21"
+                     /label=dbl term
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     CDS             742..1458
+                     /vntifkey="4"
+                     /label=GFP
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     rep_origin      complement(1618..2908)
+                     /vntifkey="33"
+                     /note="From pMBIS, introduced point mutation to increase
+                     copy number as described in Tao et al construct pDCQ318M2"
+                     /label=BBR1 ori
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     misc_marker     complement(3050..3905)
+                     /vntifkey="22"
+                     /label=Amp
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     terminator      2915..3020
+                     /vntifkey="43"
+                     /label=T0
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     CDS             complement(7..633)
+                     /vntifkey="4"
+                     /label=tetR
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     promoter        634..706
+                     /vntifkey="30"
+                     /label=Tet promoter region
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     protein_bind    655..673
+                     /vntifkey="31"
+                     /label=Q1
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+     protein_bind    685..701
+                     /vntifkey="31"
+                     /label=Q2
+                     /ApEinfo_fwdcolor=pink
+                     /ApEinfo_revcolor=pink
+ORIGIN
+        1 gacgtcttaa gacccacttt cacatttaag ttgtttttct aatccgcata tgatcaattc
+       61 aaggccgaat aagaaggctg gctctgcacc ttggtgatca aataattcga tagcttgtcg
+      121 taataatggc ggcatactat cagtagtagg tgtttccctt tcttctttag cgacttgatg
+      181 ctcttgatct tccaatacgc aacctaaagt aaaatgcccc acagcgctga gtgcatataa
+      241 tgcattctct agtgaaaaac cttgttggca taaaaaggct aattgatttt cgagagtttc
+      301 atactgtttt tctgtaggcc gtgtacctaa atgtactttt gctccatcgc gatgacttag
+      361 taaagcacat ctaaaacttt tagcgttatt acgtaaaaaa tcttgccagc tttccccttc
+      421 taaagggcaa aagtgagtat ggtgcctatc taacatctca atggctaagg cgtcgagcaa
+      481 agcccgctta ttttttacat gccaatacaa tgtaggctgc tctacaccta gcttctgggc
+      541 gagtttacgg gttgttaaac cttcgattcc gacctcatta agcagctcta atgcgctgtt
+      601 aatcacttta cttttatcta atctagacat cattaattcc taatttttgt tgacactcta
+      661 tcgttgatag agttatttta ccactcccta tcagtgatag agaaaagaat tcaaaagatc
+      721 ttttaagaag gagatataca tatgagtaaa ggagaagaac ttttcactgg agttgtccca
+      781 attcttgttg aattagatgg tgatgttaat gggcacaaat tttctgtcag tggagagggt
+      841 gaaggtgatg caacatacgg aaaacttacc cttaaattta tttgcactac tggaaaacta
+      901 cctgttccgt ggccaacact tgtcactact ttctcttatg gtgttcaatg cttttcccgt
+      961 tatccggatc acatgaaacg gcatgacttt ttcaagagtg ccatgcccga aggttatgta
+     1021 caggaacgca ctatatcttt caaagatgac gggaactaca agacgcgtgc tgaagtcaag
+     1081 tttgaaggtg atacccttgt taatcgtatc gagttaaaag gtattgattt taaagaagat
+     1141 ggaaacattc tcggacacaa actggagtac aactataact cacacaatgt atacatcacg
+     1201 gcagacaaac aaaagaatgg aatcaaagct aacttcaaaa ttcgccacaa cattgaagat
+     1261 ggctccgttc aactagcaga ccattatcaa caaaatactc caattggcga tggccctgtc
+     1321 cttttaccag acaaccatta cctgtccaca caatctgccc tttcgaaaga tcccaacgaa
+     1381 aagcgtgacc acatggtcct tcttgagttt gtaactgctg ctgggattac acatggcatg
+     1441 gatgagctct acaaataagg atccaaactc gagtaaggat ctccaggcat caaataaaac
+     1501 gaaaggctca gtcgaaagac tgggcctttc gttttatctg ttgtttgtcg gtgaacgctc
+     1561 tctactagag tcacactggc tcaccttcgg gtgggccttt ctgcgtttat acctaggcta
+     1621 cagccgatag tctggaacag cgcacttacg ggttgctgcg caacccaagt gctaccggcg
+     1681 cggcagcgtg acccgtgtcg gcggctccaa cggctcgcca tcgtccagaa aacacggctc
+     1741 atcgggcatc ggcaggcgct gctgcccgcg ccgttcccat tcctccgttt cggtcaaggc
+     1801 tggcaggtct ggttccatgc ccggaatgcc gggctggctg ggcggctcct cgccggggcc
+     1861 ggtcggtagt tgctgctcgc ccggatacag ggtcgggatg cggcgcaggt cgccatgccc
+     1921 caacagcgat tcgtcctggt cgtcgtgatc aaccaccacg gcggcactga acaccgacag
+     1981 gcgcaactgg tcgcggggct ggccccacgc cacgcggtca ttgaccacgt aggccaacac
+     2041 ggtgccgggg ccgttgagct tcacgacgga gatccagcgc tcggccacca agtccttgac
+     2101 tgcgtattgg accgtccgca aagaacgtcc gatgagcttg gaaagtgtct tctggctgac
+     2161 caccacggcg ttctggtggc ccatctgcgc cacgaggtga tgcagcagca ttgccgccgt
+     2221 gggtttcctc gcaataagcc cggcccacgc ctcatgcgct ttgcgttccg tttgcaccca
+     2281 gtgaccgggc ttgttcttgg cttgaatgcc gatttctctg gactgcgtgg ccatgcttat
+     2341 ctccatgcgg taggggtgcc gcacggttgc ggcaccatgc gcaatcagct gcaacttttc
+     2401 ggcagcgcga caacaattat gcgttgcgta aaagtggcag tcaattacag attttcttta
+     2461 acctacgcaa tgagctattg cggggggtgc cgcaatgagc tgttgcgtac cccccttttt
+     2521 taagttgttg atttttaagt ctttcgcatt tcgccctata tctagttctt tggtgcccaa
+     2581 agaagggcac ccctgcgggg ttcccccacg ccttcggcgc ggctccccct ccggcaaaaa
+     2641 gtggcccctc cggggcttgt tgatcgactg cgcggccttc ggccttgccc aaggtggcgc
+     2701 tgcccccttg gaacccccgc actcgccgcc gtgaggctcg gggggcaggc gggcgggctt
+     2761 cgcccttcga ctgcccccac tcgcataggc ttgggtcgtt ccaggcgcgt caaggccaag
+     2821 ccgctgcgcg gtcgctgcgc gagccttgac ccgccttcca cttggtgtcc aaccggcaag
+     2881 cgaagcgcgc aggccgcagg ccggaggcac tagtgcttgg attctcacca ataaaaaacg
+     2941 cccggcggca accgagcgtt ctgaacaaat ccagatggag ttctgaggtc attactggat
+     3001 ctatcaacag gagtccaagc gagctcgtaa acttggtctg acagttacca atgcttaatc
+     3061 agtgaggcac ctatctcagc gatctgtcta tttcgttcat ccatagttgc ctgactcccc
+     3121 gtcgtgtaga taactacgat acgggagggc ttaccatctg gccccagtgc tgcaatgata
+     3181 ccgcgagacc cacgctcacc ggctccagat ttatcagcaa taaaccagcc agccggaagg
+     3241 gccgagcgca gaagtggtcc tgcaacttta tccgcctcca tccagtctat taattgttgc
+     3301 cgggaagcta gagtaagtag ttcgccagtt aatagtttgc gcaacgttgt tgccattgct
+     3361 acaggcatcg tggtgtcacg ctcgtcgttt ggtatggctt cattcagctc cggttcccaa
+     3421 cgatcaaggc gagttacatg atcccccatg ttgtgcaaaa aagcggttag ctccttcggt
+     3481 cctccgatcg ttgtcagaag taagttggcc gcagtgttat cactcatggt tatggcagca
+     3541 ctgcataatt ctcttactgt catgccatcc gtaagatgct tttctgtgac tggtgagtac
+     3601 tcaaccaagt cattctgaga atagtgtatg cggcgaccga gttgctcttg cccggcgtca
+     3661 atacgggata ataccgcgcc acatagcaga actttaaaag tgctcatcat tggaaaacgt
+     3721 tcttcggggc gaaaactctc aaggatctta ccgctgttga gatccagttc gatgtaaccc
+     3781 actcgtgcac ccaactgatc ttcagcatct tttactttca ccagcgtttc tgggtgagca
+     3841 aaaacaggaa ggcaaaatgc cgcaaaaaag ggaataaggg cgacacggaa atgttgaata
+     3901 ctcatactct tcctttttca atattattga agcatttatc agggttattg tctcatgagc
+     3961 ggatacatat ttgaatgtat ttagaaaaat aaacaaatag gggttccgcg cacatttccc
+     4021 cgaaaagtgc cacct    
+//
+]]></de:content>
+      <de:fileName>pBbB2a_GFP.gb</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="a61a617ff6070871187e7dcf9b3e337afaa13a1e76bf4c6edddaaf52fb40c39c">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>pBbE5a-GFP</seq:name>
+<seq:circular>true</seq:circular>
+<seq:features>
+    <seq:feature>
+        <seq:label>lacI</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbank_start>49</seq:genbank_start>
+            <seq:end>1131</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">4</seq:attribute>
+        <seq:attribute name="note">lacI does not contain internal EcoRV site</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>lac operator</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_binding</seq:type>
+        <seq:location>
+            <seq:genbank_start>1516</seq:genbank_start>
+            <seq:end>1579</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">20</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>lacUV5 promoter</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbank_start>1500</seq:genbank_start>
+            <seq:end>1575</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">30</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>RBS</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>RBS</seq:type>
+        <seq:location>
+            <seq:genbank_start>1595</seq:genbank_start>
+            <seq:end>1614</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">32</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>dbl term</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbank_start>2356</seq:genbank_start>
+            <seq:end>2484</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">21</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>colE1</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbank_start>2618</seq:genbank_start>
+            <seq:end>3300</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">33</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>T0</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>terminator</seq:type>
+        <seq:location>
+            <seq:genbank_start>3306</seq:genbank_start>
+            <seq:end>3411</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">43</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>Amp</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_marker</seq:type>
+        <seq:location>
+            <seq:genbank_start>3441</seq:genbank_start>
+            <seq:end>4296</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">22</seq:attribute>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>GFP</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbank_start>1615</seq:genbank_start>
+            <seq:end>2331</seq:end>
+        </seq:location>
+        <seq:attribute name="vntifkey">4</seq:attribute>
+    </seq:feature>
+</seq:features>
+<seq:sequence>gacgtcggtgcctaatgagtgagctaacttacattaattgcgttgcgctcactgcccgctttccagtcgggaaacctgtcgtgccagctgcattaatgaatcggccaacgcgcggggagaggcggtttgcgtattgggcgccagggtggtttttcttttcaccagtgagacgggcaacagctgattgcccttcaccgcctggccctgagagagttgcagcaagcggtccacgctggtttgccccagcaggcgaaaatcctgtttgatggtggttaacggcgggatataacatgagctgtcttcggtatcgtcgtatcccactaccgagatgtccgcaccaacgcgcagcccggactcggtaatggcgcgcattgcgcccagcgccatctgatcgttggcaaccagcatcgcagtgggaacgatgccctcattcagcatttgcatggtttgttgaaaaccggacatggcactccagtcgccttcccgttccgctatcggctgaatttgattgcgagtgagatatttatgccagccagccagacgcagacgcgccgagacagaacttaatgggcccgctaacagcgcgatttgctggtgacccaatgcgaccagatgctccacgcccagtcgcgtaccgtcttcatgggagaaaataatactgttgatgggtgtctggtcagagacatcaagaaataacgccggaacattagtgcaggcagcttccacagcaatggcatcctggtcatccagcggatagttaatgatcagcccactgacgcgttgcgcgagaagattgtgcaccgccgctttacaggcttcgacgccgcttcgttctaccatcgacaccaccacgctggcacccagttgatcggcgcgagatttaatcgccgcgacaatttgcgacggcgcgtgcagggccagactggaggtggcaacgccaatcagcaacgactgtttgcccgccagttgttgtgccacgcggttgggaatgtaattcagctccgccatcgccgcttccactttttcccgcgttttcgcagaaacgtggctggcctggttcaccacgcgggaaacggtctgataagagacaccggcatactctgcgacatcgtataacgttactggtttcacattcaccaccctgaattgactctcttccgggcgctatcatgccataccgcgaaaggttttgcgccattcgatggtgtccgggatctcgacgctctcccttatgcgactcctgcattaggaagcagcccagtagtaggttgaggccgttgagcaccgccgccgcaaggaatggtgcatgcaaggagatggcgcccaacagtcccccggccacggggcctgccaccatacccacgccgaaacaagcgctcatgagcccgaagtggcgagcccgatcttccccatcggtgatgtcggcgatataggcgccagcaaccgcacctgtggcgccggtgatgccggccacgatgcgtccggcgtagaggatcgagatcgtttaggcaccccaggctttacactttatgcttccggctcgtataatgtgtggaattgtgagcggataacaatttcagaattcaaaagatcttttaagaaggagatatacatatgagtaaaggagaagaacttttcactggagttgtcccaattcttgttgaattagatggtgatgttaatgggcacaaattttctgtcagtggagagggtgaaggtgatgcaacatacggaaaacttacccttaaatttatttgcactactggaaaactacctgttccgtggccaacacttgtcactactttctcttatggtgttcaatgcttttcccgttatccggatcacatgaaacggcatgactttttcaagagtgccatgcccgaaggttatgtacaggaacgcactatatctttcaaagatgacgggaactacaagacgcgtgctgaagtcaagtttgaaggtgatacccttgttaatcgtatcgagttaaaaggtattgattttaaagaagatggaaacattctcggacacaaactggagtacaactataactcacacaatgtatacatcacggcagacaaacaaaagaatggaatcaaagctaacttcaaaattcgccacaacattgaagatggctccgttcaactagcagaccattatcaacaaaatactccaattggcgatggccctgtccttttaccagacaaccattacctgtccacacaatctgccctttcgaaagatcccaacgaaaagcgtgaccacatggtccttcttgagtttgtaactgctgctgggattacacatggcatggatgagctctacaaataaggatccaaactcgagtaaggatctccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctgcgtttatacctagggcgttcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccggtaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaaggacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacgttaagggattttggtcatgactagtgcttggattctcaccaataaaaaacgcccggcggcaaccgagcgttctgaacaaatccagatggagttctgaggtcattactggatctatcaacaggagtccaagcgagctcgtaaacttggtctgacagttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctatttcgttcatccatagttgcctgactccccgtcgtgtagataactacgatacgggagggcttaccatctggccccagtgctgcaatgataccgcgagacccacgctcaccggctccagatttatcagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaattgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgcaacgttgttgccattgctacaggcatcgtggtgtcacgctcgtcgtttggtatggcttcattcagctccggttcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcagtgttatcactcatggttatggcagcactgcataattctcttactgtcatgccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatacgggataataccgcgccacatagcagaactttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatccagttcgatgtaacccactcgtgcacccaactgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatgttgaatactcatactcttcctttttcaatattattgaagcatttatcagggttattgtctcatgagcggatacatatttgaatgtatttagaaaaataaacaaataggggttccgcgcacatttccccgaaaagtgccacct</seq:sequence>
+</seq:seq>
+]]></de:content>
+      <de:fileName>pBbE5a-GFP.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="35cd4d19fd421236f0ef4fd72389cb4ded036526d61a632984a2a3ecff1174ec">
+      <de:format>FASTA</de:format>
+      <de:content><![CDATA[>pBbS8c-RFP
+GACGTCTTATGACAACTTGACGGCTACATCATTCACTTTTTCTTCACAACCGGCACGGAACTCGCTCGGGCTGGCCCCGGTGCATTTTTTAAATACCCGCGAGAAATAGAGTTGATCGTCAAAACCAACATTGCGACCGACGGTGGCGATAGGCATCCGGGTGGTGCTCAAAAGCAGCTTCGCCTGGCTGATACGTTGGTCCTCGCGCCAGCTTAAGACGCTAATCCCTAACTGCTGGCGGAAAAGATGTGACAGACGCGACGGCGACAAGCAAACATGCTGTGCGACGCTGGCGATATCAAAATTGCTGTCTGCCAGGTGATCGCTGATGTACTGACAAGCCTCGCGTACCCGATTATCCATCGGTGGATGGAGCGACTCGTTAATCGCTTCCATGCGCCGCAGTAACAATTGCTCAAGCAGATTTATCGCCAGCAGCTCCGAATAGCGCCCTTCCCCTTGCCCGGCGTTAATGATTTGCCCAAACAGGTCGCTGAAATGCGGCTGGTGCGCTTCATCCGGGCGAAAGAACCCCGTATTGGCAAATATTGACGGCCAGTTAAGCCATTCATGCCAGTAGGCGCGCGGACGAAAGTAAACCCACTGGTGATACCATTCGCGAGCCTCCGGATGACGACCGTAGTGATGAATCTCTCCTGGCGGGAACAGCAAAATATCACCCGGTCGGCAAACAAATTCTCGTCCCTGATTTTTCACCACCCCCTGACCGCGAATGGTGAGATTGAGAATATAACCTTTCATTCCCAGCGGTCGGTCGATAAAAAAATCGAGATAACCGTTGGCCTCAATCGGCGTTAAACCCGCCACCAGATGGGCATTAAACGAGTATCCCGGCAGCAGGGGATCATTTTGCGCTTCAGCCATACTTTTCATACTCCCGCCATTCAGAGAAGAAACCAATTGTCCATATTGCATCAGACATTGCCGTCACTGCGTCTTTTACTGGCTCTTCTCGCTAACCAAACCGGTAACCCCGCTTATTAAAAGCATTCTGTAACAAAGCGGGACCAAAGCCATGACAAAAACGCGTAACAAAAGTGTCTATAATCACGGCAGAAAAGTCCACATTGATTATTTGCACGGCGTCACACTTTGCTATGCCATAGCATTTTTATCCATAAGATTAGCGGATTCTACCTGACGCTTTTTATCGCAACTCTCTACTGTTTCTCCATACCCGTTTTTTTGGGAATTCAAAAGATCTTTTAAGAAGGAGATATACATATGGCGAGTAGCGAAGACGTTATCAAAGAGTTCATGCGTTTCAAAGTTCGTATGGAAGGTTCCGTTAACGGTCACGAGTTCGAAATCGAAGGTGAAGGTGAAGGTCGTCCGTACGAAGGTACCCAGACCGCTAAACTGAAAGTTACCAAAGGTGGTCCGCTGCCGTTCGCTTGGGACATCCTGTCCCCGCAGTTCCAGTACGGTTCCAAAGCTTACGTTAAACACCCGGCTGACATCCCGGACTACCTGAAACTGTCCTTCCCGGAAGGTTTCAAATGGGAACGTGTTATGAACTTCGAAGACGGTGGTGTTGTTACCGTTACCCAGGACTCCTCCCTGCAAGACGGTGAGTTCATCTACAAAGTTAAACTGCGTGGTACCAACTTCCCGTCCGACGGTCCGGTTATGCAGAAAAAAACCATGGGTTGGGAAGCTTCCACCGAACGTATGTACCCGGAAGACGGTGCTCTGAAAGGTGAAATCAAAATGCGTCTGAAACTGAAAGACGGTGGTCACTACGACGCTGAAGTTAAAACCACCTACATGGCTAAAAAACCGGTTCAGCTGCCGGGTGCTTACAAAACCGACATCAAACTGGACATCACCTCCCACAACGAAGACTACACCATCGTTGAACAGTACGAACGTGCTGAAGGTCGTCACTCCACCGGTGCTTAAGGATCCAAACTCGAGTAAGGATCTCCAGGCATCAAATAAAACGAAAGGCTCAGTCGAAAGACTGGGCCTTTCGTTTTATCTGTTGTTTGTCGGTGAACGCTCTCTACTAGAGTCACACTGGCTCACCTTCGGGTGGGCCTTTCTGCGTTTATACCTAGGGTACGGGTTTTGCTGCCCGCAAACGGGCTGTTCTGGTGTTGCTAGTTTGTTATCAGAATCGCAGATCCGGCTTCAGCCGGTTTGCCGGCTGAAAGCGCTATTTCTTCCAGAATTGCCATGATTTTTTCCCCACGGGAGGCGTCACTGGCTCCCGTGTTGTCGGCAGCTTTGATTCGATAAGCAGCATCGCCTGTTTCAGGCTGTCTATGTGTGACTGTTGAGCTGTAACAAGTTGTCTCAGGTGTTCAATTTCATGTTCTAGTTGCTTTGTTTTACTGGTTTCACCTGTTCTATTAGGTGTTACATGCTGTTCATCTGTTACATTGTCGATCTGTTCATGGTGAACAGCTTTGAATGCACCAAAAACTCGTAAAAGCTCTGATGTATCTATCTTTTTTACACCGTTTTCATCTGTGCATATGGACAGTTTTCCCTTTGATATGTAACGGTGAACAGTTGTTCTACTTTTGTTTGTTAGTCTTGATGCTTCACTGATAGATACAAGAGCCATAAGAACCTCAGATCCTTCCGTATTTAGCCAGTATGTTCTCTAGTGTGGTTCGTTGTTTTTGCGTGAGCCATGAGAACGAACCATTGAGATCATACTTACTTTGCATGTCACTCAAAAATTTTGCCTCAAAACTGGTGAGCTGAATTTTTGCAGTTAAAGCATCGTGTAGTGTTTTTCTTAGTCCGTTATGTAGGTAGGAATCTGATGTAATGGTTGTTGGTATTTTGTCACCATTCATTTTTATCTGGTTGTTCTCAAGTTCGGTTACGAGATCCATTTGTCTATCTAGTTCAACTTGGAAAATCAACGTATCAGTCGGGCGGCCTCGCTTATCAACCACCAATTTCATATTGCTGTAAGTGTTTAAATCTTTACTTATTGGTTTCAAAACCCATTGGTTAAGCCTTTTAAACTCATGGTAGTTATTTTCAAGCATTAACATGAACTTAAATTCATCAAGGCTAATCTCTATATTTGCCTTGTGAGTTTTCTTTTGTGTTAGTTCTTTTAATAACCACTCATAAATCCTCATAGAGTATTTGTTTTCAAAAGACTTAACATGTTCCAGATTATATTTTATGAATTTTTTTAACTGGAAAAGATAAGGCAATATCTCTTCACTAAAAACTAATTCTAATTTTTCGCTTGAGAACTTGGCATAGTTTGTCCACTGGAAAATCTCAAAGCCTTTAACCAAAGGATTCCTGATTTCCACAGTTCTCGTCATCAGCTCTCTGGTTGCTTTAGCTAATACACCATAAGCATTTTCCCTACTGATGTTCATCATCTGAGCGTATTGGTTATAAGTGAACGATACCGTCCGTTCTTTCCTTGTAGGGTTTTCAATCGTGGGGTTGAGTAGTGCCACACAGCATAAAATTAGCTTGGTTTCATGCTCCGTTAAGTCATAGCGACTAATCGCTAGTTCATTTGCTTTGAAAACAACTAATTCAGACATACATCTCAATTGGTCTAGGTGATTTTAATCACTATACCAATTGAGATGGGCTAGTCAATGATAATTACTAGTCCTTTTCCCGGGTGATCTGGGTATCTGTAAATTCTGCTAGACCTTTGCTGGAAAACTTGTAAATTCTGCTAGACCCTCTGTAAATTCCGCTAGACCTTTGTGTGTTTTTTTTGTTTATATTCAAGTGGTTATAATTTATAGAATAAAGAAAGAATAAAAAAAGATAAAAAGAATAGATCCCAGCCCTGTGTATAACTCACTACTTTAGTCAGTTCCGCAGTATTACAAAAGGATGTCGCAAACGCTGTTTGCTCCTCTACAAAACAGACCTTAAAACCCTAAAGGCTTAAGTAGCACCCTCGCAAGCTCGGGCAAATCGCTGAATATTCCTTTTGTCTCCGACCATCAGGCACCTGAGTCGCTGTCTTTTTCGTGACATTCAGTTCGCTGCGCTCACGGCTCTGGCAGTGAATGGGGGTAAATGGCACTACAGGCGCCTTTTATGGATTCATGCAAGGAAACTACCCATAATACAAGAAAAGCCCGTCACGGGCTTCTCAGGGCGTTTTATGGCGGGTCTGCTATGTGGTGCTATCTGACTTTTTGCTGTTCAGCAGTTCCTGCCCTCTGATTTTCCAGTCTGACCACTTCGGATTATCCCGTGACAGGTCATTCAGACTGGCTAATGCACCCAGTAAGGCAGCGGTATCATCAACAGGCTTACCCGTCTTACTGTCCCTAGTGCTTGGATTCTCACCAATAAAAAACGCCCGGCGGCAACCGAGCGTTCTGAACAAATCCAGATGGAGTTCTGAGGTCATTACTGGATCTATCAACAGGAGTCCAAGCGAGCTCGATATCAAATTACGCCCCGCCCTGCCACTCATCGCAGTACTGTTGTAATTCATTAAGCATTCTGCCGACATGGAAGCCATCACAAACGGCATGATGAACCTGAATCGCCAGCGGCATCAGCACCTTGTCGCCTTGCGTATAATATTTGCCCATGGTGAAAACGGGGGCGAAGAAGTTGTCCATATTGGCCACGTTTAAATCAAAACTGGTGAAACTCACCCAGGGATTGGCTGAGACGAAAAACATATTCTCAATAAACCCTTTAGGGAAATAGGCCAGGTTTTCACCGTAACACGCCACATCTTGCGAATATATGTGTAGAAACTGCCGGAAATCGTCGTGGTATTCACTCCAGAGCGATGAAAACGTTTCAGTTTGCTCATGGAAAACGGTGTAACAAGGGTGAACACTATCCCATATCACCAGCTCACCGTCTTTCATTGCCATACGAAATTCCGGATGAGCATTCATCAGGCGGGCAAGAATGTGAATAAAGGCCGGATAAAACTTGTGCTTATTTTTCTTTACGGTCTTTAAAAAGGCCGTAATATCCAGCTGAACGGTCTGGTTATAGGTACATTGAGCAACTGACTGAAATGCCTCAAAATGTTCTTTACGATGCCATTGGGATATATCAACGGTGGTATATCCAGTGATTTTTTTCTCCATTTTAGCTTCCTTAGCTCCTGAAAATCTCGATAACTCAAAAAATACGCCCGGTAGTGATCTTATTTCATTATGGTGAAAGTTGGAACCTCTTACGTGCCGATCAACGTCTCATTTTCGCCAGATATC
+]]></de:content>
+      <de:fileName>pBbS8c-RFP.fas</de:fileName>
+    </de:sequenceFile>
+  </de:sequenceFiles>
+  <de:partVOs>
+    <de:partVO id="1322097039287388">
+      <de:name>BBR1_ori</de:name>
+      <de:revComp>true</de:revComp>
+      <de:startBP>1618</de:startBP>
+      <de:stopBP>2908</de:stopBP>
+      <de:sequenceFileHash>09415e9963be53629572f0b8248e3a951e9f26278917d8cf000edd3449cdbc5c</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1322097039287773">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1322097039291364">
+      <de:name>GFPuv</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1615</de:startBP>
+      <de:stopBP>2331</de:stopBP>
+      <de:sequenceFileHash>a61a617ff6070871187e7dcf9b3e337afaa13a1e76bf4c6edddaaf52fb40c39c</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1322097039291638">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1322097039292721">
+      <de:name>double_terminator</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1948</de:startBP>
+      <de:stopBP>2076</de:stopBP>
+      <de:sequenceFileHash>35cd4d19fd421236f0ef4fd72389cb4ded036526d61a632984a2a3ecff1174ec</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1322097039292390">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+  </de:partVOs>
+  <de:eugeneRules>
+    <de:eugeneRule>
+      <de:name>rule1</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039292721</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule2</de:name>
+      <de:negationOperator>false</de:negationOperator>
+      <de:operand1ID>1322097039291364</de:operand1ID>
+      <de:compositionalOperator>THEN</de:compositionalOperator>
+      <de:operand2ID>1322097039292721</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule3</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039287388</de:operand1ID>
+      <de:compositionalOperator>WITH</de:compositionalOperator>
+      <de:operand2ID>1322097039291364</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule4</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039292721</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule5</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1322097039291364</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>2</de:operand2Number>
+    </de:eugeneRule>
+  </de:eugeneRules>
+  <de:j5Collection>
+    <de:isCircular>true</de:isCircular>
+    <de:j5Bins>
+      <de:j5Bin>
+        <de:binName>No_Name0</de:binName>
+        <de:iconID>origin_of_replication</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1322097039287773</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name1</de:binName>
+        <de:iconID>cds</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1322097039291638</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>No_Name2</de:binName>
+        <de:iconID>terminator</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1322097039292390</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+    </de:j5Bins>
+  </de:j5Collection>
+</de:design>
