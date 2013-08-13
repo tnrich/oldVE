@@ -133,9 +133,9 @@ module.exports = function(app) {
     app.get('/sequences', restrict, function(req, res) {
         
         var filter = "";
-        var sortName = 1;
-        var sortDate = 1;
         var totalCount = 0;
+        var sortOpts = {};
+
         if(req.query.filter)
         {
             var filterOptions = JSON.parse(req.query.filter); 
@@ -150,11 +150,19 @@ module.exports = function(app) {
             var sortOptions = JSON.parse(req.query.sort); 
             if(sortOptions[0] && sortOptions[0].property==="name")
             {
-                var sortName = (sortOptions[0].direction==="DESC") ? -1 : 1;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="dateModified")
             {
-                var sortDate = (sortOptions[0].direction==="DESC") ? -1 : 1;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+            }
+            if(sortOptions[0] && sortOptions[0].property==="size")
+            {
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+            }
+            if(sortOptions[0] && sortOptions[0].property==="dateCreated")
+            {
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
             }
         }
 
@@ -164,7 +172,7 @@ module.exports = function(app) {
             User.findById(req.user._id).populate({
                 path: 'sequences', 
                 match: {name: {$regex: filter}},
-                options: { sort: { name: sortName, dateModified: sortDate }, limit: req.query.limit, skip: req.query.start }
+                options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
             })
                 .exec(function(err, user) {
                     res.json({
