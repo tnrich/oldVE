@@ -48,7 +48,7 @@ app.everyauth.password
         }
         if (didSucceed) 
           {
-            if(req.body.remember=='true') 
+            if(req.body && req.body.remember=='true') 
               {
                 console.log("Session will not expire!");
                 req.session.cookie.expires = false;
