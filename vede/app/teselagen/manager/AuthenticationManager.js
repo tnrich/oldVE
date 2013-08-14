@@ -33,10 +33,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
-        //if(Ext.util.Cookies.get("last_server"))
-        //{
-        //    this.autoAuthURL = Ext.util.Cookies.get("last_server");
-        //}
 
 
         if(Ext.util.Cookies.get("sessionname"))
@@ -45,25 +41,16 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             return this.sendAuthRequest({}, cb, true);
         }
 
+        this.updateServerPath();
 
+        //this.autoAuthAttempt();
+
+
+    },
+
+
+    autoAuthAttempt: function(){
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
-
-        var updateServerPath = function(){
-            //if(Ext.util.Cookies.get("last_server"))
-            //{
-            //    Ext.getCmp('select-server-combo').setValue( Ext.util.Cookies.get("last_server") );
-            //}
-            //else
-            //{
-            //    var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-            //    Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
-            //}
-
-
-            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );
-
-        };
 
         var self = this;
         if(Vede.application.autoCredentialsFetch)
@@ -85,21 +72,24 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     }
                     else
                     {
-                        Ext.create("Vede.view.AuthWindow").show();
-                        updateServerPath();                        
+                        self.updateServerPath();                    
                     }
                 },
                 failure: function() {
-                    Ext.create("Vede.view.AuthWindow").show();
-                    updateServerPath();
+                    self.updateServerPath();
                 }
             });
         }
         else
         {
-           Ext.create("Vede.view.AuthWindow").show();
-           updateServerPath();
-        }
+           self.updateServerPath();
+        }        
+    },
+
+    updateServerPath: function(){
+            Ext.create("Vede.view.AuthWindow").show();
+            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );        
     },
 
     /**
@@ -117,6 +107,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
 
         self.updateSplashScreenMessage("Authenticating to server");
+
+        // Force cookies
+        remember = true;
 
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("login"),
