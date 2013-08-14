@@ -607,7 +607,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if (selectedBin) {
             Ext.Msg.show({
                     title: "Are you sure you want to delete this column?",
-                    msg: "WARNING: This will delete the current selected column. This process cannot be undone.",
+                    msg: "WARNING: This will delete the current selected column.",
                     buttons: Ext.Msg.OKCANCEL,
                     cls: "messageBox",
                     fn: this.removeColumn.bind(this, selectedBin),

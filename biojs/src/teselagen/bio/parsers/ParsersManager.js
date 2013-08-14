@@ -206,17 +206,27 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                                     else
                                     {
                                         var msg = toastr.warning("Error: Duplicated Sequence");
-
-                                        var messageIndex = context.batchImportMessages.findBy(function(record) {
-                                            return record.get('fileName') === name &&
-                                                   record.get('partSource') === genbankObject.getLocus().locusName;
-                                        });
+                                        
                                         var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
                                         var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
                                         var duplicateMessage = 'Exact sequence already exists in library with' + 
                                                                ' name ' + duplicateFileName;
+
                                         var partSource = genbankObject.getLocus().locusName;
+
+                                        var messageIndex = context.batchImportMessages.findBy(function(record) {
+                                            var messages = record.get('messages');
+
+                                            for(var i = 0; i < messages.length; i++) {
+                                                if(messages[i] === duplicateMessage) {
+                                                    return false;
+                                                }
+                                            }
+
+                                            return record.get('fileName') === (name + '.' + ext) &&
+                                                   record.get('partSource') === partSource;
+                                        });
 
                                         if(messageIndex < 0) {
                                             context.batchImportMessages.add({
