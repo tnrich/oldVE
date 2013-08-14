@@ -221,8 +221,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
                 if(newTab.options.selection) {
                     if(newTab.options.selection.y !== undefined) {
-                        this.GridManager.selectGridCellByIndex(newTab.options.selection.x,
-                                                               newTab.options.selection.y);
+                        var coords = newTab.options.selection;
+                        var cell = this.activeProject.bins().getAt(coords.x)
+                                                     .cells().getAt(coords.y);
+
+                        this.application.fireEvent(this.DeviceEvent.SELECT_CELL,
+                                                   cell, coords.x, coords.y);
                     } else {
                         this.GridManager.selectGridBinHeaderByIndex(newTab.options.selection.x);
                     }
@@ -675,6 +679,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPastePart: function() {
     	var gridManager = Teselagen.manager.GridManager;
     	var selectedCell = gridManager.selectedGridPart.datum();
+        var self = this;
     	if(gridManager.clipboardPart && selectedCell) {
     		Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), function(identicalPart) {
         		var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
@@ -684,7 +689,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         		
         		selectedCell.setPart(gridManager.clipboardPart);
         		
-        		Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, selectedCell, xIndex, yIndex);
+        		Vede.application.fireEvent(self.DeviceEvent.SELECT_CELL, selectedCell, xIndex, yIndex);
         		
     	    	Teselagen.manager.GridCommandPatternManager.addCommand({
     	        	type: "PART",

@@ -482,6 +482,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             if(!this.selectedPart) {
                 this.selectedPart = this.partPropertiesForm.getRecord();
+
+                var yIndex = this.activeProject.bins().getAt(this.selectedBinIndex).cells().indexOf(this.selectedCell);
+
+                Teselagen.manager.GridCommandPatternManager.addCommand({
+                    type: "PART",
+                    data: {
+                        type: "ADD",
+                        x: this.selectedBinIndex,
+                        y: yIndex,
+                        oldPart: null,
+                        newPart: this.selectedPart,
+                        partAdded: true
+                    }
+                });
             }
 
             // Only validate/set the part's name if the name is different from
@@ -554,6 +568,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onPlasmidGeometryChange: function (radioGroup, newValue) {
         this.activeProject.set("isCircular", newValue);
+
+        Teselagen.manager.GridCommandPatternManager.addCommand({
+            type: "MISC",
+            data: {
+                type: "GEO",
+                data: !newValue
+            }
+        });
     },
 
     /**
@@ -585,7 +607,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if (selectedBin) {
             Ext.Msg.show({
                     title: "Are you sure you want to delete this column?",
-                    msg: "WARNING: This will delete the current selected column. This process cannot be undone.",
+                    msg: "WARNING: This will delete the current selected column.",
                     buttons: Ext.Msg.OKCANCEL,
                     cls: "messageBox",
                     fn: this.removeColumn.bind(this, selectedBin),
@@ -659,20 +681,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             });
 
             var self = this;
-            //this.selectedPart.save({
-            //    callback: function(){
-                    newEugeneRule.setOperand1(self.selectedPart);
+            newEugeneRule.setOperand1(self.selectedPart);
 
-                    newEugeneRuleDialog.show();
+            newEugeneRuleDialog.show();
 
-                    ruleForm.loadRecord(newEugeneRule);
-                    ruleForm.down("displayfield[cls='operand1Field']").setValue(
-                                                self.selectedPart.get("name"));
+            ruleForm.loadRecord(newEugeneRule);
+            ruleForm.down("displayfield[cls='operand1Field']").setValue(
+                                        self.selectedPart.get("name"));
 
-                    operand2Field.bindStore(partsStore);
-                    operand2Field.setValue(partsStore[0]);
-            //    }
-            //});
+            operand2Field.bindStore(partsStore);
+            operand2Field.setValue(partsStore[0]);
         }
     },
 
@@ -692,6 +710,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,this.selectedPart);
                     toastr.options.onclick = null;
                     toastr.info("Eugene Rule Removed");
+
+                    Teselagen.manager.GridCommandPatternManager.addCommand({
+                        type: "RULE",
+                        data: {
+                            type: "DEL",
+                            data: selectedRule
+                        }
+                    });
                 }
             }, this);
         }
@@ -775,14 +801,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         toastr.info("Eugene Rule Added");
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         
-        /*Teselagen.manager.GridCommandPatternManager.addCommand({
+        Teselagen.manager.GridCommandPatternManager.addCommand({
             type: "RULE",
             data: {
                 type: "ADD",
                 data: newRule
             }
-        });*/
-        
+        });
         
         /*var self = this;
         // newOperand2.save({
