@@ -267,17 +267,18 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
     },
 
     deleteDesign: function(selectedDesign, cb){
+        var designName = selectedDesign.data.name;
         function DeleteDeviceDesignBtn (btn) {
             if (btn==="ok") {
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(selectedDesign);
                 toastr.options.onclick = null;
-                toastr.info("Design Deleted");
+                toastr.info("Design '" + designName +  "' Deleted");
              }
          }
 
         Ext.Msg.show({
              title:"Are you sure you want to delete this design?",
-             msg: "WARNING: This will remove the current design. This action is not undoable!",
+             msg: "WARNING: This will remove design '" + designName + "'. This action is not undoable!",
              cls: "messageBox",
              buttons: Ext.Msg.OKCANCEL,
              fn: DeleteDeviceDesignBtn,
