@@ -16,7 +16,7 @@ directory(DOCSROOT);
 
 task("deploy", function() {
     JakeUtil.exec("cp conf/subdomains.conf /etc/httpd/conf.d");
-    JakeUtil.exec("/usr/sbin/apachectl restart");
+    JakeUtil.exec("/sbin/service httpd restart");
 });
 
 task("jsduck", [DOCSROOT], function() {

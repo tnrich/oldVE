@@ -690,6 +690,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
                 gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(pContent);
                 break;
             case "fasta":
+                gb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(pContent);
+                break;
             case "fas":
                 gb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(pContent);
                 break;

@@ -375,6 +375,28 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             });
         })
 
+        // Single Entry case - No Callback (Sync) - No popup
+        if(sequences.length === 1 && typeof(cb)!=="function")
+        {
+            var sequence = sequences[0];
+            var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+                locusName: sequence.name,
+                sequenceLength: sequence.sequence.length,
+                date: Teselagen.bio.parsers.ParsersManager.todayDate()
+            });
+
+            var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+                sequence: sequence.sequence
+            });
+
+            result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+
+            result.addKeyword(locus);
+            result.addKeyword(origin);
+
+            return result;       
+        }
+
 
         var performImportSequence = function(sequence){
             var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
@@ -395,10 +417,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             return cb(result);
         };
 
-
-
-        if(sequences.length>0)
-        {
 
             var generate = function(selectedSequences){
                 var returnSequences = [];
@@ -421,9 +439,11 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                     returnSequences.push(result);              
                 });
-                return cb(returnSequences);
-            };
 
+                if(typeof(cb==="function")) return cb(returnSequences);
+                else if(returnSequences.length === 1) return returnSequences[0];
+                else return returnSequences;
+            };
 
             var tempStore = new Ext.data.JsonStore({
                   fields: [ 
@@ -432,6 +452,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 ],
                   data: sequences
               });  
+
+        if(sequences.length>1)
+        {
 
 
             var win = Ext.create("Ext.window.Window", {
@@ -482,6 +505,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             win.show();
 
         }
+        else if(sequences.length === 1)
+        {
+            var selectionArr = [];
+            selectionArr.push( tempStore.getAt(0) );
+            generate(selectionArr);
+        } 
         else
         {
             console.warn("no sequences found in fas file.");
