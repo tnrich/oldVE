@@ -9,7 +9,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
     	align: 'stretch'
     },
     height: 400,
-    width: 540,
+    width: 600,
     
     initComponent: function() {
     	var me = this;
@@ -42,8 +42,30 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                     id: 'saveAsWindowSequencesGrid',
                     scroll: 'vertical',
                     columns: [{
-                            header: 'Sequences',
+                            text: 'Sequences',
                             dataIndex: 'name'
+                        }, {
+                            text: 'Size',
+                            dataIndex: 'size',
+                        }, {
+                            text: 'Features',
+                            dataIndex: 'serialize',
+                            sortable: false,
+                            renderer: function(val) {
+                                if(val) {
+                                    var features = [];
+                                    for(var i=0; i<val.features.length; i++) {
+                                        features.push(val.features[i].inData.name);
+                                    }
+                                    return features;
+                                } else {
+                                    return "";
+                                }
+                            }
+                        }, {
+                            text: 'Last Modified',
+                            dataIndex: 'dateModified',
+                            renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
                         }
                     ],
                     dockedItems: [{
