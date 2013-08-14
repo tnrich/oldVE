@@ -64,6 +64,8 @@ Ext.define("Teselagen.models.J5Parameters", {
         OSF:        "OUTPUT_SEQUENCE_FORMAT",
         APT:        "ASSEMBLY_PRODUCT_TYPE",
         SPP:        "SUPPRESS_PURE_PRIMERS",
+        HMLB:        "HOMOLOGY_MIN_LENGTH_BPS",
+        HMFM:        "HOMOLOGY_MAX_FRACTION_MISMATCHES",
         
         //parameter descriptions
         MONOD_DESC:     "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits",
@@ -148,6 +150,9 @@ Ext.define("Teselagen.models.J5Parameters", {
         OSF_Default:            "Genbank",//Teselagen.constants.Constants.self.GENBANK,
 
         SPP_Default:            true,
+
+        HMLB_Default:           26,
+        HMFM_Default:           0.05,
         
         //combobox choices data providers
         //outputSequenceFormatOptions:   [Teselagen.constants.Constants.self.GENBANK, Teselagen.constants.Constants.self.FASTA, Teselagen.constants.Constants.self.JBEI_SEQ, Teselagen.constants.Constants.self.SBOL_XML],
@@ -214,7 +219,12 @@ Ext.define("Teselagen.models.J5Parameters", {
                  return false;
              }
          }
-        }
+        },
+
+        {name: "homologyMinLengthBPS",                              type: "int",      defaultValue: this.self.HMLB_Default},
+        {name: "homologyMaxFractionMisMatches",                     type: "Float",    defaultValue: this.self.HMFM_Default},
+       
+
     ],
 
     validation: [
@@ -322,6 +332,9 @@ Ext.define("Teselagen.models.J5Parameters", {
         if(values.MISPRIMING_OLIGO_CONC                                ) this.set("misprimingOligoConcValue" , values.MISPRIMING_OLIGO_CONC                  );
         if(values.OUTPUT_SEQUENCE_FORMAT                               ) this.set("outputSequenceFormatValue" , values.OUTPUT_SEQUENCE_FORMAT                 );
         if(values.SUPPRESS_PURE_PRIMERS                                ) this.set("SPP_Default" , values.SUPPRESS_PURE_PRIMERS                               );
+
+        if(values.HOMOLOGY_MIN_LENGTH_BPS                              ) this.set("homologyMinLengthBPS" , values.HOMOLOGY_MIN_LENGTH_BPS                               );
+        if(values.HOMOLOGY_MAX_FRACTION_MISMATCHES                     ) this.set("homologyMaxFractionMisMatches" , values.HOMOLOGY_MAX_FRACTION_MISMATCHES                               );
     },
 
     setDefaultValues: function() {
@@ -368,6 +381,10 @@ Ext.define("Teselagen.models.J5Parameters", {
         this.set("outputSequenceFormatValue", this.self.OSF_Default);
         
         this.set("suppressPurePrimersValue", this.self.SPP_Default);
+
+        this.set("homologyMinLengthBPS", this.self.HMLB_Default);
+        this.set("homologyMaxFractionMisMatches", this.self.HMFM_Default);
+
     },
 
     /**
@@ -419,6 +436,9 @@ Ext.define("Teselagen.models.J5Parameters", {
             //+ this.self.SPP + "," + (this.get("suppressPurePrimersValue") ? "TRUE" : "FALSE") + "," + (this.self.SPP_Default ? "TRUE" : "FALSE") + "," + J5Parameters.SPP_DESC + "\n";
             this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
 
+            this.self.HMLB + "," + this.get("homologyMinLengthBPS") + "," + this.self.HMLB_Default+"\n";
+            this.self.HMFM + "," + this.get("homologyMaxFractionMisMatches") + "," + this.self.HMFM_Default +"\n";
+
             return returnString;
     },
 
@@ -461,6 +481,9 @@ Ext.define("Teselagen.models.J5Parameters", {
         arr.push( { value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue" } );
         arr.push( { value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue" } );
         arr.push( { value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue" } );
+
+        arr.push( { value: this.get("homologyMinLengthBPS"), name: "homologyMinLengthBPS" } );
+        arr.push( { value: this.get("homologyMaxFractionMisMatches"), name: "homologyMaxFractionMisMatches" } );
         
         return arr;
     },
@@ -527,6 +550,10 @@ Ext.define("Teselagen.models.J5Parameters", {
         obj[this.self.OSF]      =   this.get("outputSequenceFormatValue");
         obj[this.self.SPP]      =   this.get("suppressPurePrimersValue");
         obj[this.self.APT]      =   isCollectionCircular ? "circular" : "linear";
+
+        obj[this.self.HMLB]      =   this.get("homologyMinLengthBPS");
+        obj[this.self.HMFM]      =   this.get("homologyMaxFractionMisMatches");
+
         return obj;
     }
 });

@@ -456,13 +456,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         var name = this.getTagText(part, "name");
                         var startBP = this.getTagText(part, "startBP");
                         var endBP = this.getTagText(part, "stopBP");
-                        var revComp = this.getTagText(part, "revComp");
+                        var revComp = (this.getTagText(part, "revComp")==="true");
 
                         newPart = Ext.create("Teselagen.models.Part", {
                             name: name,
                             genbankStartBP: startBP,
                             endBP: endBP,
-                            revComp: revComp ? true :  false,
+                            revComp: revComp,
                         });
 
                         getSequenceByID(hash, function (sequence) {

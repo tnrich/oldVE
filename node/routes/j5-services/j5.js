@@ -181,7 +181,7 @@ function readFile(objectId,cb)
     stream.on("close", function() {
       // Have we received the same file back?
       //assert.equal(fileBuffer, fileBody);
-      console.log(fileBuffer);
+      //console.log(fileBuffer);
       cb(fileBuffer);
       app.GridStoreDB.close();
     });
@@ -252,7 +252,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   var o_id = new app.mongoose.mongo.ObjectID(req.params.id);
   
   j5Runs.findOne({'file_id':req.params.id},function(err,j5run){
-  console.log(j5run);
+  //console.log(j5run);
   readFile(o_id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
       var filename = "j5Results-"+j5run.date+'-'+req.user.username;

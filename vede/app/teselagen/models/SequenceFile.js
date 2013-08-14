@@ -132,13 +132,20 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return v;
             } else {
                 var content = record.get("sequenceFileContent");
-
+                if(content)
+                {
                 content = content.replace(/&amp;/g,'');
                 content = content.replace(/amp;/g,'');
                 content = content.replace(/&quot;/g,'"');
                 content = content.replace(/quot;/g,'"');
 
                 return Teselagen.bio.util.Sha256.hex_sha256(content);
+                }
+                else
+                {
+                    console.warn("Working with a sequence with empty content");
+                    return "";
+                }
             }
         }
     },
