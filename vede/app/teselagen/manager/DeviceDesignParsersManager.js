@@ -743,30 +743,64 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         }
         
         if(!$.isEmptyObject(ruleDuplNameMap)) {
-            for(var i=0;i<existingRules.count();i++) {
-                fullNamesArray.push(existingRules.getAt(i).get("name"));
-            }
-            
-            var existingSuffixes = {};
-            for(var name in ruleDuplNameMap) {
-                var nameRegex = new RegExp("^"+(name+"_").replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")+"(\\d+)$");
-                for(var i=0;i<fullNamesArray.length;i++) {
-                    var match = nameRegex.exec(fullNamesArray[i]);
-                    if(match && Number(match[1])) {
-                        var maxNum = existingSuffixes[name];
-                        existingSuffixes[name] = (maxNum>Number(match[1])) ? maxNum : Number(match[1]);
+
+            for(var item in ruleDuplNameMap) {
+                var currentRule = ruleDuplNameMap[item];
+
+                var existingDesign = Ext.getCmp('mainAppPanel').getActiveTab().model;
+
+                var existingRule = existingDesign.rules().findRecord('name', currentRule.get('name'));
+
+                var prefix = Teselagen.models.EugeneRule.defaultNamePrefix;
+                var rules = existingDesign.rules().getRange().concat(parsedRules);
+                rules.splice(rules.indexOf(currentRule),1);
+                var re = new RegExp("^" + prefix + "(\\d+)$");
+                var highestRuleNameNumber = -1;
+                var match;
+
+                for(var i = 0; i < rules.length; i++) {
+                    match = re.exec(rules[i].get("name"));
+
+                    if(match && Number(match[1]) > highestRuleNameNumber) {
+                        highestRuleNameNumber = Number(match[1]);
                     }
                 }
-            }
-            for(var oldName in existingSuffixes) {
-                var rule = ruleDuplNameMap[oldName];
-                var newName = oldName+"_"+(existingSuffixes[oldName]+1);
-                var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
-                conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
-                rule.set("name", newName);
-                rule.set("originalRuleLine",rule.get("originalRuleLine").replace(existingRule.get("name"),rule.get("name")));
-                newRules.add(rule);
-            }
+                
+                var highest =  prefix + (highestRuleNameNumber + 1);
+                var previousName = currentRule.get('name');
+                currentRule.set('name',highest);
+                var operand2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
+                conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+operand2+" )"+" and the rule to be imported, "+currentRule.data.originalRuleLine +" Renaming the rule to be imported: "+currentRule.get('name')});
+
+                newRules.add(currentRule);
+
+                /*
+                for(var i=0;i<existingRules.count();i++) {
+                    fullNamesArray.push(existingRules.getAt(i).get("name"));
+                }
+                
+                var existingSuffixes = {};
+                for(var name in ruleDuplNameMap) {
+                    for(var i=0;i<fullNamesArray.length;i++) {
+                        var match = fullNamesArray[i].match(/.*(\d+)$/);
+                        if(match && Number(match[1])) {
+                            var maxNum = existingSuffixes[name];
+                            existingSuffixes[name] = (maxNum>Number(match[1])) ? maxNum : Number(match[1]);
+                        }
+                    }
+                }
+                for(var oldName in existingSuffixes) {
+                    var rule = ruleDuplNameMap[oldName];
+                    //debugger;
+                    var newName = oldName+(parseInt(existingSuffixes[oldName])+1);
+                    var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
+                    conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
+                    rule.set("name", newName);
+                    rule.set("originalRuleLine",rule.get("originalRuleLine").replace(existingRule.get("name"),rule.get("name")));
+                    newRules.add(rule);
+                }
+                */
+            };
             
         }
         
@@ -843,8 +877,17 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             part.getSequenceFile({
                 callback: function(sequence){
                 sequence.processSequence(function(err,seqMgr,gb){
-                    countPartProcessing--;
-                    sequence.set("name",gb.getLocus().locusName);
+                    if(err)
+                    {
+                        countPartProcessing--;
+                        console.log("Sequence not imported");
+                        console.log(sequence);
+                    }
+                    else
+                    {
+                        countPartProcessing--;
+                        sequence.set("name",gb.getLocus().locusName);
+                    }
                     if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
                     //if(err) debugger;
                 });
