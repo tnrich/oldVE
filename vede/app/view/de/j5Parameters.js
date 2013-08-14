@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 620,
+    height: 690,
     maxHeight: 830,
     width: 845,
     maxWidth: 845,
@@ -367,6 +367,25 @@ Ext.define('Vede.view.de.j5Parameters', {
                         labelSeparator: ' ',
                         labelWidth: 200,
                         checked: true
+                    }, {
+                        xtype: 'numberfield',
+                        cls: 'homologyMinLengthBPS',
+                        padding: 3,
+                        fieldLabel: 'Homology Min Length BPS (26)',
+                        labelSeparator: ' ',
+                        labelWidth: 200,
+                        emptyText: '100',
+                        minValue: 0
+                    }, {
+                        xtype: 'numberfield',
+                        cls: 'homologyMaxFractionMisMatches',
+                        padding: 3,
+                        fieldLabel: 'Homology Max Fraction Mis matches (0.05)',
+                        labelSeparator: ' ',
+                        labelWidth: 200,
+                        emptyText: '100',
+                        minValue: 0,
+                        step: 0.01
                     }]
                 }]
             }, {
