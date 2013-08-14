@@ -348,31 +348,34 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoRuleDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
+        var gridController = Vede.application.getController("DeviceEditor.GridController");
 		
-		gridManager.rulesData.push(command.data.rule);
-		gridManager.updatePartsWithRules();
+		gridManager.activeProject.rules().add(command.data.data);
+
+        // Clear rules grid.
+        Ext.defer(function() {
+            Teselagen.manager.DeviceDesignManager.getRulesInvolvingPart(
+                                                gridManager.activeProject, null);
+        }, 10);
 		
 		gridManager.selectedGridPart = null;
 		gridManager.selectedGridBin = null;
 		
 		gridManager.removeGrid();
-		gridManager.renderGrid();
+		gridManager.renderGrid(gridManager.activeProject);
 		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
-		
+		gridController.toggleCutCopyPastePartOptions(false);
+		gridController.toggleInsertOptions(false);
+		gridController.toggleInsertRowAboveOptions(false);
+		gridController.toggleInsertRowBelowOptions(false);
 	},
 	
 	undoMiscGeo: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
 		
-		gridManager.isCircular = command.data.data;
-		gridManager.deviceDesignData.j5collection.isCircular = command.data.data;
-		
-		Teselagen.manager.InspectorPanelManager.refreshPlasmidGeometry();
+        Ext.getCmp("mainAppPanel").getActiveTab().down("radiofield[cls='circular_plasmid_radio']").setValue(command.data.data);
+        Ext.getCmp("mainAppPanel").getActiveTab().down("radiofield[cls='linear_plasmid_radio']").setValue(!command.data.data);
 	},
 	
 	
@@ -665,61 +668,27 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	redoRuleDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
-		
-		for (var i=0;i<gridManager.rulesData.length;i++) {
-			if(gridManager.rulesData[i].name==command.data.rule.name) {
-				gridManager.rulesData.splice(i,1);
-				break;
-			}
-		}
-		gridManager.updatePartsWithRules();
+        var gridController = Vede.application.getController("DeviceEditor.GridController");
+
+        gridManager.activeProject.rules().remove(command.data.data);
 		
 		gridManager.selectedGridPart = null;
 		gridManager.selectedGridBin = null;
 		
 		gridManager.removeGrid();
-		gridManager.renderGrid();
+		gridManager.renderGrid(gridManager.activeProject);
 		
-		gridManager.toggleCutCopyPastePartOptions(false);
-		gridManager.toggleInsertOptions(false);
-		gridManager.toggleInsertRowAboveOptions(false);
-		gridManager.toggleInsertRowBelowOptions(false);
-		
+		gridController.toggleCutCopyPastePartOptions(false);
+		gridController.toggleInsertOptions(false);
+		gridController.toggleInsertRowAboveOptions(false);
+		gridController.toggleInsertRowBelowOptions(false);
 	},
 	
 	redoMiscGeo: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
 
-		gridManager.isCircular = !command.data.data;
-		gridManager.deviceDesignData.j5collection.isCircular = !command.data.data;
-		
-		Teselagen.manager.InspectorPanelManager.refreshPlasmidGeometry();		
-	},
-	
-	
-	
-	
-	
+        Ext.getCmp("mainAppPanel").getActiveTab().down("radiofield[cls='circular_plasmid_radio']").setValue(command.data.data);
+        Ext.getCmp("mainAppPanel").getActiveTab().down("radiofield[cls='linear_plasmid_radio']").setValue(!command.data.data);
+	}
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
