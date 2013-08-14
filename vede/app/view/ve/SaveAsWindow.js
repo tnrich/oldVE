@@ -15,73 +15,75 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
     	var me = this;
     	Ext.applyIf(me, {
     		items: [
-		        {
-		        	xtype: 'container',
-		        	layout: {
-		            	type: 'hbox',
-		            	align: 'stretch'
-		            },
-		            flex: 0.9,
-		            padding: '20 15 20 15',
-		            items: [{
-	                    	xtype: 'gridpanel',
-                            forceFit: true,
-                            id: 'saveAsWindowSequencesGrid',
-                            scroll: 'vertical',
-                            flex: 0.7,
-                            //store: Teselagen.manager.ProjectManager.projects.getAt(0).sequencesStore,
-                            columns: [
-                                {header: 'Sequences', dataIndex: 'name'}
-                            ]
-	                    }
-                    ]
-		        },{
+                {
                     xtype: 'textfield',
-                    fieldLabel: 'Sequence Name',
+                    anchor: '100%',
+                    height: 30,
+                    cls: 'saveAsWindowSearchField',
+                    width: '98%',
+                    emptyText: 'Filter By Name',
+                    listeners: {
+                        change: function(field, newValue, oldValue, eOpts) {
+                            var store = Teselagen.manager.ProjectManager.sequences;
+                            store.clearFilter();
+                            store.remoteFilter = true;
+                            store.on('load', function(s){ 
+                                s.remoteFilter = false; 
+                            }, this, { single: true })
+                            
+                            store.filter("name", Ext.String.escapeRegex(newValue));
+                        }
+                    }
+                },
+		        {
+                    xtype: 'gridpanel',
+                    forceFit: true,
+                    flex: 1,
+                    id: 'saveAsWindowSequencesGrid',
+                    scroll: 'vertical',
+                    columns: [{
+                            header: 'Sequences',
+                            dataIndex: 'name'
+                        }
+                    ],
+                    dockedItems: [{
+                        xtype: 'pagingtoolbar',
+                        dock: 'bottom',
+                        store: Teselagen.manager.ProjectManager.sequences,
+                        displayInfo: true
+                    }]
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Save As:',
+                    maxHeight: 30,
                     id: 'saveAsWindowSequenceNameField',
                     allowBlank: false,
-                    padding: '20 15 10 15'
-                },{
-                      xtype: 'panel',
-                      dock: 'bottom',
-                      border: 0,
-                      height: 50,
-                      dockedItems: [
-                          {
-                              xtype: 'panel',
-                              dock: 'top',
-                              layout: {
-                                  pack: 'end',
-                                  type: 'hbox'
-                              },
-                              items: [										
-                                  {
-                                      xtype: 'button',
-                                      margin: 10,
-                                      padding: 5,
-                                      text: 'Cancel',
-                                      handler: function() {me.close();}
-                                  },
-                                  {
-                                      xtype: 'tbseparator'
-                                  },
-                                  {
-                                      xtype: 'button',
-                                      id: 'saveAsWindowOKButton',
-                                      margin: 10,
-                                      padding: 5,
-                                      text: 'Ok'                                          
-                                  }
-                              ]
-                          }
-                      ]
-                  }
-                          
+                }, {
+                    xtype: 'container',
+                    maxHeight: 40,
+                    layout: {
+                        pack: 'end',
+                        type: 'hbox'
+                    },
+                    items: [{
+                            xtype: 'button',
+                            margin: 10,
+                            text: 'Cancel',
+                            handler: function() {me.close();}
+                        }, {
+                            xtype: 'tbseparator'
+                        }, {
+                            xtype: 'button',
+                            id: 'saveAsWindowOKButton',
+                            margin: 10,
+                            text: 'Ok'                                          
+                        }
+                    ]
+                }
 	        ]
     	});
     	me.callParent(arguments);
     }
-    
 });
 
 
