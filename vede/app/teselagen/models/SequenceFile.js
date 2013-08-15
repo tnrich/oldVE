@@ -449,7 +449,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                                                                fileFormat);
             }
             if(!gb) {
-                debugger;
+                // debugger;
                 Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
                                                                fileFormat);
             }

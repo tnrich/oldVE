@@ -29,10 +29,12 @@ Ext.define('Vede.view.common.dropZone', {
 			var dropZone = cmp.getEl().dom;
 			var sequenceLibrary = Ext.getCmp("sequenceLibraryArea").getEl().dom;
 			var handleFileSelect = cmp.handleFileSelect.bind(cmp);
+			var progressCancelBtn = $("#headerProgressCancelBtn");
 			sequenceLibrary.addEventListener('dragenter', cmp.handleDragEnter, false, cmp);
 			dropZone.addEventListener('dragleave', cmp.handleDragLeave, false, cmp);
 			dropZone.addEventListener('dragover', cmp.handleDragOver, false, cmp);
 			dropZone.addEventListener('drop', handleFileSelect, false, cmp);
+			// progressCancelBtn.addEventListener('click', cancelProgressClick, false);
 		}
 	},
 
@@ -52,6 +54,11 @@ Ext.define('Vede.view.common.dropZone', {
 		setTimeout(function(){
 		$(".batch-import-area").fadeOut("fast");
 		$("#headerProgressBox").fadeIn();
+		$("#headerProgressCancelBtn").on("click", function() {
+			Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
+			console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
+			return false;
+		});
 		},25);
 
 		var sequenceLibrary = Ext.getCmp("sequenceLibrary");
