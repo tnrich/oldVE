@@ -114,9 +114,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(!file) return cb(true);
 
         var self = Teselagen.bio.parsers.ParsersManager;
-        var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-        if(!ext)  return cb(true,context);
+        var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+        if(match&&match[1]) { var ext = match[1]; }
+        else return cb(true,context);
 
         var reader = new FileReader();
 
@@ -178,8 +179,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             sequenceFileContent: currentGB,
             sequenceFileFormat: "GENBANK",
             name: name,
-            dateCreated:  new Date(),
-            dateModified:  new Date(),
             firstTimeImported: true,
         });
 

@@ -26,7 +26,6 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         var rawGenbank = this.sequenceFileManager.toGenbank().toString();
         this.sequence.setSequenceFileContent(rawGenbank);
         this.sequence.setSequenceManager(this.sequenceFileManager);
-        this.sequence.set("dateModified", new Date());
 
         var self = this;
 

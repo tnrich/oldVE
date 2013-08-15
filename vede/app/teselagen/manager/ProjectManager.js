@@ -363,9 +363,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                     var self = this;
                     var project = Ext.create("Teselagen.models.Project", {
-                        name: text,
-                        dateCreated: new Date(),
-                        dateModified: new Date()
+                        name: text
                     });
 
                     this.currentUser.projects().add(project);
@@ -438,8 +436,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                         sequenceFileName: "untitled.gb",
                         partSource: "Untitled sequence",
-                        dateCreated: new Date(),
-                        dateModified: new Date(),
                         name: text
                     });
 
@@ -593,79 +589,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
     },
 
-    createDirectVESession: function() {
-        this.directVEEditingMode = true;
-
-                //Create empty VEProject/Sequence
-                this.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {
-                    name: "Untitled VEProject",
-                    dateCreated: new Date(),
-                    dateModified: new Date()
-                });
-
-                this.workingSequence = Ext.create("Teselagen.models.SequenceFile", {
-                    sequenceFileFormat: "GENBANK",
-                    sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                    sequenceFileName: "untitled.gb",
-                    partSource: "Untitled sequence"
-                });
-
-                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.workingSequence);
-
-                var menuItem = Ext.ComponentQuery.query('#saveSequenceBtn')[0];
-    },
-
-    /*
-    * Creates a new VEProject based on an existing sequence
-    * @deprecated
-    */
-    createNewVEProject: function(){
-        console.log("Deprecated");
-        /*
-        var self = this;
-        var onPromptClosed = function (btn, text) {
-                if(btn === "ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a vector editor project name:", onPromptClosed, this); }
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new ve project");
-                    var self = this;
-                    var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
-                        name: text,
-                        dateCreated: new Date(),
-                        dateModified: new Date()
-                    });
-
-                    var project = Teselagen.manager.ProjectManager.workingProject;
-
-                    project.veprojects().add(veproject);
-                    veproject.setSequenceFile(sequence);
-                    veproject.save({callback: function(){
-
-                        sequence.setVectorEditorProject(veproject);
-                        sequence.set("veproject_id",veproject.data.id);
-
-                        sequence.save({
-                            callback: function () {
-
-                                veproject.set("sequencefile_id",sequence.data.id);
-                                veproject.save();
-
-                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                                    Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + veproject.data.id);
-                                    Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-                                    self.openSequence(veproject);
-                                });
-                            }
-                        });
-                    }});
-
-                } else {
-                    return false;
-                }
-            };
-
-        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
-        */
-    },
 
 
 });

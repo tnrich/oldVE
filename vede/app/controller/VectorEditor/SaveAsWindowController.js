@@ -88,7 +88,6 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 sequenceFileContent: genbank.toString(),
                 sequenceFileName: workingSequence.data.sequenceFileName,
                 partSource: workingSequence.data.partSource,
-                dateModified: new Date(),
                 name: name
             });
 
