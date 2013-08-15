@@ -4,6 +4,7 @@
 
 /*global after, before, describe, expect, it*/
 
+var fs = require("fs");
 var Webdriver = require("selenium-webdriver");
 // This is a wrapper for Mocha functions so they work with the Promise control flow without using then().
 //var test = require('selenium-webdriver/testing');
@@ -12,12 +13,16 @@ var browser = require("../module/selwebdriver").getBrowser(browserName);
 var url = process.env.URL || "http://teselagen.local";
 
 describe("Normal login", function(){
-    var inputField = "auth-username-field-inputEl";
     var inputFieldEl;
     
     before(function(pDone) {
         browser.get(url).then(function() {
-            pDone();
+//            browser.takeScreenshot().then(function(img) {
+//                fs.writeFileSync("screenshot.png", img, {encoding:"base64"});
+//            browser.getPageSource().then(function(pSource) {
+//                fs.writeFileSync("source.html", pSource);
+                pDone();
+//            });
         });
      });
     
