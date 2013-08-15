@@ -1043,7 +1043,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Ext.tab.Panel} tabPanel The tabpanel.
      * @param {Ext.Component} newTab The tab that is being switched to.
      */
-    onTabChange: function (tabPanel, newTab) {
+    onTabChange: function (tabPanel, newTab, oldTab) {
         if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
         	//Ext.suspendLayouts();
         	
@@ -1130,6 +1130,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.renderCollectionInfo();
             this.inspector.setActiveTab(1);
+
+            if(this.activeTab.partLibraryWindow) {
+                if(this.activeTab.partLibraryWindow.down("textfield[cls='partLibrarySearchField']").value) {
+                    this.activeTab.partLibraryWindow.down("textfield[cls='partLibrarySearchField']").setValue(null);
+                }
+            }
+        }
+
+        if (oldTab.initialCls === "DeviceEditorTab") {
+            if(oldTab.partLibraryWindow) {
+                if(oldTab.partLibraryWindow.down("textfield[cls='partLibrarySearchField']").value) {
+                    oldTab.partLibraryWindow.down("textfield[cls='partLibrarySearchField']").setValue(null);
+                }
+            }
         }
     },
 
