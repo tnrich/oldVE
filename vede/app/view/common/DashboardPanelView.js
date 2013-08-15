@@ -493,7 +493,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        text: 'Size',
+                                        text: 'Size (bp)',
                                         width: 80,
                                         dataIndex: 'size',
                                         sortable: true,
@@ -700,13 +700,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     },
                                     {
                                         xtype: 'gridcolumn',
-                                        text: 'Length',
+                                        text: 'Size (bp)',
                                         width: 80,
-                                        dataIndex: 'genbankStartBP',
-                                        renderer: function(val, metadata, record) {
-                                            return Math.abs(val - record.get("endBP"));
-                                        },
-                                        sortable: false
+                                        dataIndex: 'size',
+                                        sortable: true
                                     },
                                     {
                                         xtype: 'gridcolumn',
@@ -725,7 +722,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         text: 'Source Sequence',
                                         width: 160,
                                         dataIndex: 'partSource',
-                                        sortable: false
+                                        sortable: true
                                     },
                                     {
                                         xtype: 'gridcolumn',
@@ -735,6 +732,21 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         dataIndex: 'features',
                                         sortable: false
                                     },
+                                    //{
+                                    //    xtype: 'gridcolumn',
+                                    //    text: 'Date Created',
+                                    //    width: 180,
+                                    //    dataIndex: 'dateCreated',
+                                    //    renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'),
+                                    //    sortable: true
+                                    //},
+                                    //{
+                                    //    xtype: 'gridcolumn',
+                                    //    text: 'Last Modified',
+                                    //    width: 180,
+                                    //    dataIndex: 'dateModified',
+                                    //    renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
+                                    //}
 
                                 ],
                                 listeners: {

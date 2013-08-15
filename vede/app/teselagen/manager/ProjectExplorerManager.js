@@ -82,7 +82,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 	            });
 
 	            design.parts.forEach(function(part){
-
 		            partnode.appendChild({
 		                text: part.name,
 		                leaf: true,
@@ -91,9 +90,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 		                icon: "resources/images/ux/circular.png",
 		                qtip: "Part " + part.name
 		            });
-
 	            });
-
 			});
 	});
 	if(typeof (cb) === "function") {cb(); }

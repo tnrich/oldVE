@@ -48,13 +48,13 @@ Ext.define('Vede.controller.AuthWindowController', {
         Teselagen.manager.AuthenticationManager.Login();
     },
 
-    onRemember: function(el, newValue, oldValue, eOpts){
-        if(newValue) 
-        {
-            this.rememberSession = true;
-            // Remember case         
-        }
-    },
+    //onRemember: function(el, newValue, oldValue, eOpts){
+    //    if(newValue) 
+    //    {
+    //        this.rememberSession = true;
+    //        // Remember case         
+    //    }
+    //},
 
     init: function () {
         var that = this;
@@ -90,9 +90,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             "#auth-config-btn": {
                 click: this.onConfigClick
             },
-            "#rememberSession": {
-                change: this.onRemember
-            }
+            //"#rememberSession": {
+            //    change: this.onRemember
+            //}
         });
     },
 
