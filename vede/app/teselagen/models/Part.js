@@ -168,6 +168,14 @@ Ext.define("Teselagen.models.Part", {
         defaultValue: 0
     }, //stopBP
     {
+        name: "size",
+        type: "int",
+        convert: function(v,record)
+        {
+            return Math.abs(record.get("genbankStartBP") - record.get("endBP"));
+        }
+    }, //stopBP
+    {
         name: "iconID",
         type: "string",
         defaultValue: ""
