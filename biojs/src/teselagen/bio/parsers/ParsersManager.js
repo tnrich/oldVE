@@ -168,7 +168,11 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     createAndProcessSequenceFromGenbank: function(currentGB,name,cb){
         var self = this;
-        Ext.getCmp("sequenceLibrary").el.unmask();
+        var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+
+        if(sequenceLibrary.el) {
+            sequenceLibrary.el.unmask();
+        }
 
         var sequence = Ext.create("Teselagen.models.SequenceFile",{
             sequenceFileContent: currentGB,
@@ -195,85 +199,80 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     {
             var self = Teselagen.bio.parsers.ParsersManager;
 
-                
+            if(seqMgr) {
+                sequence.set('name', genbankObject.getLocus().locusName);
+            }
 
-                    if(seqMgr) {
-                        sequence.set('name', genbankObject.getLocus().locusName);
+            // Aggregate parse messages/warnings from the genbank
+            // and sequence manager objects to display in the
+            // import warnings window.
+            
+            if(genbankObject && seqMgr) {
+                var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+
+                self.batchImportMessages.add({
+                    fileName: name + '.' + ext,
+                    partSource: genbankObject.getLocus().locusName,
+                    messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                });
+            }
+
+            sequence.save({
+                success: function(){
+                    seqMgr = null;
+                    sequence.sequenceManager = null;
+
+                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+                    if(!duplicated) 
+                    {
+                        Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
+                        return cb(false);
                     }
+                    else
+                    {
+                        var msg = toastr.warning("Error: Duplicated Sequence");
+                        
+                        var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
+                        var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
-                    // Aggregate parse messages/warnings from the genbank
-                    // and sequence manager objects to display in the
-                    // import warnings window.
-                    
-                    if(genbankObject && seqMgr) {
-                        var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                        var duplicateMessage = 'Exact sequence already exists in library with' + 
+                                               ' name ' + duplicateFileName;
 
-                        self.batchImportMessages.add({
-                            fileName: name + '.' + ext,
-                            partSource: genbankObject.getLocus().locusName,
-                            messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
-                        });
-                    }
+                        var partSource = genbankObject.getLocus().locusName;
 
-                    sequence.save({
-                        success: function(){
-                            seqMgr = null;
-                            sequence.sequenceManager = null;
+                        var messageIndex = self.batchImportMessages.findBy(function(record) {
+                            var messages = record.get('messages');
 
-                            var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
-                            if(!duplicated) 
-                            {
-                                Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
-                                return cb(false);
-                            }
-                            else
-                            {
-                                var msg = toastr.warning("Error: Duplicated Sequence");
-                                
-                                var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
-                                var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
-
-                                var duplicateMessage = 'Exact sequence already exists in library with' + 
-                                                       ' name ' + duplicateFileName;
-
-                                var partSource = genbankObject.getLocus().locusName;
-
-                                var messageIndex = self.batchImportMessages.findBy(function(record) {
-                                    var messages = record.get('messages');
-
-                                    for(var i = 0; i < messages.length; i++) {
-                                        if(messages[i] === duplicateMessage) {
-                                            return false;
-                                        }
-                                    }
-
-                                    return record.get('fileName') === (name + '.' + ext) &&
-                                           record.get('partSource') === partSource;
-                                });
-
-                                if(messageIndex < 0) {
-                                    self.batchImportMessages.add({
-                                        fileName: name + '.' + ext,
-                                        partSource: partSource,
-                                        messages: [duplicateMessage]
-                                    });
-                                } else {
-                                    var record = self.batchImportMessages.getAt(messageIndex);
-                                    record.set('partSource', partSource);
-                                    record.set('messages', 
-                                        record.get('messages').concat([duplicateMessage]));
+                            for(var i = 0; i < messages.length; i++) {
+                                if(messages[i] === duplicateMessage) {
+                                    return false;
                                 }
+                            }
 
-                                return cb(false);
-                           }
-                        },
-                        failure: function(){
-                            return cb(true);
+                            return record.get('fileName') === (name + '.' + ext) &&
+                                   record.get('partSource') === partSource;
+                        });
+
+                        if(messageIndex < 0) {
+                            self.batchImportMessages.add({
+                                fileName: name + '.' + ext,
+                                partSource: partSource,
+                                messages: [duplicateMessage]
+                            });
+                        } else {
+                            var record = self.batchImportMessages.getAt(messageIndex);
+                            record.set('partSource', partSource);
+                            record.set('messages', 
+                                record.get('messages').concat([duplicateMessage]));
                         }
-                    });
 
-
-
+                        return cb(false);
+                   }
+                },
+                failure: function(){
+                    return cb(true);
+                }
+            });
     },
 
     /**
