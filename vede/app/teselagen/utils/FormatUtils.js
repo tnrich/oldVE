@@ -723,6 +723,10 @@ Ext.define("Teselagen.utils.FormatUtils", {
             negationOperator = true;
             cconsole.warn("Compositional operator updated to WITH and NOT? True");
         }
+        else
+        {
+            if(negationOperator&&negationOperator!="") negationOperator = true;
+        }
         return {"compOp":compOp,"negOp":negationOperator};
     }
 
