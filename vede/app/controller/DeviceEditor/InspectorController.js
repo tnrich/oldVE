@@ -30,7 +30,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     findBinByPart:function(findingPart,cb){
         var foundBin = null;
-        var deviceDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+        var deviceDesign = this.activeProject;
 
         deviceDesign.model.bins().each(function(bin){
             bin.cells().each(function(cell){
@@ -69,20 +69,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     checkCombinatorial:function(deviceDesign,cb){
         var tmpC = 0;
         var bins = deviceDesign.bins().getRange();
-        var parts;
+        var partsLength;
 
         for(var i = 0; i < bins.length; i++) {
             cells = bins[i].cells().getRange();
 
-            var parts = [];
+            var partsLength = 0;
             for(var k = 0; k < cells.length; k++) {
                 if(cells[k].getPart()) {
-                    parts.push(cells[k].getPart());
-                }
-            }
+                    partsLength += 1;
 
-            if(parts.length > 1) {
-                return cb(true);
+                    if(partsLength > 1) {
+                        return cb(true);
+                    }
+                }
             }
         }
 
@@ -123,12 +123,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         combinatorial designs: each collection bin must contain at least one mapped part, and at least
         one bin must contain more than one mapped part. No column should contained a non-mapped (but named) part.
         */
-        var tab = Ext.getCmp("mainAppPanel").getActiveTab();
+        var tab = this.activeTab;
         var deviceDesign = tab.model;
-        var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
-        var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
-        var runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
-        var runj5Btn2 = tab.down("button[cls='j5button']");
         var inspector = this.inspector;
         var self = this;
 
@@ -137,33 +133,33 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             if( !notChangeMethod ) {Vede.application.fireEvent(self.CommonEvent.LOAD_ASSEMBLY_METHODS, combinatorial);}
 
-            tab.down("component[cls='combinatorial_field']").inputEl.setHTML(combinatorial);
-            tab.down("component[cls='j5_ready_field']").inputEl.setHTML(j5ready);
+            self.combinatorialField.inputEl.setHTML(combinatorial);
+            self.j5ReadyField.inputEl.setHTML(j5ready);
             if (j5ready) {
-                    j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
+                    self.j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
 
-                    runj5Btn1.enable();
-                    runj5Btn1.removeCls("btnDisabled");
+                    self.runj5Btn1.enable();
+                    self.runj5Btn1.removeCls("btnDisabled");
 
-                    runj5Btn2.enable();
-                    runj5Btn2.removeCls("btnDisabled");
+                    self.runj5Btn2.enable();
+                    self.runj5Btn2.removeCls("btnDisabled");
 
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
                 } else {
-                    j5ReadyField.setFieldStyle("color:red");
+                    self.j5ReadyField.setFieldStyle("color:red");
 
-                    runj5Btn1.disable();
-                    runj5Btn1.addCls("btnDisabled");
+                    self.runj5Btn1.disable();
+                    self.runj5Btn1.addCls("btnDisabled");
 
-                    runj5Btn2.disable();
-                    runj5Btn2.addCls("btnDisabled");
+                    self.runj5Btn2.disable();
+                    self.runj5Btn2.addCls("btnDisabled");
 
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
                 }
             if (combinatorial) {
-                    combinatorialField.setFieldStyle("color:purple");
+                    self.combinatorialField.setFieldStyle("color:purple");
                 } else {
-                    combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
+                    self.combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
                 }
 
             if (typeof(cb) === "function") {cb(combinatorial,j5ready);}
@@ -186,7 +182,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * Handler for the Circular Plasmid radio button.
      */
     onCircularPlasmidRadioChange: function(radio){
-        var tab = Ext.getCmp("mainAppPanel").getActiveTab();
+        var tab = this.activeTab;
         tab.model.set("isCircular", radio.getValue());
     },
 
@@ -219,7 +215,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     
     
     onOpenPartLibrary: function () {
-        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        var currentTab = this.activeTab;
         var currentTabEl = (currentTab.getEl());
 
         if(this.selectedCell) {
@@ -238,7 +234,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     onReRenderDECanvasEvent: function (silent) {
         if(!silent) {
-	    	var tab = Ext.getCmp("mainAppPanel").getActiveTab();
+	    	var tab = this.activeTab;
 	        this.onTabChange(tab, tab, tab);
         }
     },
@@ -421,7 +417,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onBinSelected: function (j5Bin, binIndex) {
     	if(!j5Bin) j5Bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         var selectionModel = this.columnsGrid.getSelectionModel();
-        //var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
+        //var removeColumnMenuItem =  this.activeTab.down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
         
         this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
@@ -601,7 +597,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onRemoveColumnButtonClick: function () {
 
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var removeColumnMenuItem =  Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
+        var removeColumnMenuItem =  this.activeTab.down("DeviceEditorMenuPanel").query("menuitem[text='Remove Column']")[0];
  
 
         if (selectedBin) {
@@ -1131,6 +1127,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.activeProject.parts().un("remove", this.onRemoveFromParts, this);
             }
 
+            this.activeTab = newTab;
             this.activeProject = newTab.model;
 
             this.activeBins = this.activeProject.bins();
@@ -1167,8 +1164,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel");
 
-            this.renderCollectionInfo();
-            this.inspector.setActiveTab(1);
+            this.j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
+            this.combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
+
+            this.runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
+            this.runj5Btn2 = newTab.down("button[cls='j5button']");
 
             this.partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
             this.openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
@@ -1188,6 +1188,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.openPartLibraryBtn.setText("Select Part From Library");
             this.openPartLibraryBtn.removeCls("selectPartFocus");
             this.openPartLibraryBtn.addCls("btnDisabled");
+
+            this.renderCollectionInfo();
+            this.inspector.setActiveTab(1);
         }
     },
 
@@ -1336,7 +1339,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         Ext.suspendLayouts();
 
 //        var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
-//        var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
         var circularPlasmidField = this.inspector.down("radiofield[cls='circular_plasmid_radio']");
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
 
