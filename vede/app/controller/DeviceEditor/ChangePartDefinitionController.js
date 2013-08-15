@@ -1,7 +1,8 @@
 Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     extend: 'Ext.app.Controller',
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.event.MapperEvent"],
+               "Teselagen.event.MapperEvent",
+               "Teselagen.event.ProjectEvent"],
 
     selectedPart: null,
     selectedWindow: null,
@@ -14,6 +15,13 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
     onCancelPartDefinitionBtnClick: function(){
         this.selectedWindow.close();
+    },
+
+    onOpenPartInVEBtnClick: function() {
+        this.selectedWindow.close();
+
+        this.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
+                                   this.selectedSequence, this.selectedPart);
     },
 
     onSequenceSelectionChanged: function(pieController,start,end){
@@ -101,7 +109,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     open: function(selectedPart,selectedBinIndex,selectedSequence){
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
-        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog', {renderTo: currentTabEl}).show();
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex =selectedBinIndex;
@@ -219,6 +227,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             },
             "button[cls='cancelPartDefinitionBtn']": {
                 click: this.onCancelPartDefinitionBtnClick
+            },
+            "button[cls='openPartInVEBtn']": {
+                click: this.onOpenPartInVEBtnClick
             },
             "combobox[name='specifiedSequence']": {
                 change: this.onSpecifiedSequenceChange

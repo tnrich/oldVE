@@ -30,7 +30,6 @@ module.exports = function(app) {
         });
     });
 
-
     app.get('/users/:username/projectExplorer/getData', restrict, function(req, res) {
         User.findById(req.user._id)
         .populate({ path: 'projects', select: 'name designs id' })
@@ -41,7 +40,7 @@ module.exports = function(app) {
 
             populatedProjects.forEach(function(populatedProject){
                 projectDesignsPopulateCallbacks.push(function(callback){
-                    DeviceDesign.populate( populatedProject.designs, { path: 'parts', select: 'name id'}, function(err, populatedDeviceDesigns){
+                    DeviceDesign.populate( populatedProject.designs, { path: 'parts', match: {sequencefile_id: {'$ne': null}}, select: 'name id'}, function(err, populatedDeviceDesigns){
                         populatedProject.designs = populatedDeviceDesigns;
                         callback(null, null);
                     });                    
