@@ -102,6 +102,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 }
             });    		
     		
+            this.sequenceGrid.store.clearFilter();
     		Ext.getCmp('SaveAsWindow').close();
     	}	
     },

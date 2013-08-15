@@ -22,8 +22,9 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			tab.commandIndex = 0;
 			tab.commandPattern.push(command);
 		}
-		gridManager.currentTab.down("button[cls='editMenu'] > menu > menuitem[text='Undo']").setDisabled(false);
-		gridManager.currentTab.down("button[cls='editMenu'] > menu > menuitem[text='Redo']").setDisabled(true);
+
+		gridManager.undoMenuItem.setDisabled(false);
+		gridManager.redoMenuItem.setDisabled(true);
 	},
 	
 	undo: function() {
