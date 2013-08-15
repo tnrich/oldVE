@@ -17,6 +17,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         if(this.VectorViewer) {
             this.VectorViewer.hide();
         }
+        Teselagen.manager.ProjectManager.parts.clearFilter();
     },
 
 	onLastDEProjectsItemClick: function (item,record) {

@@ -219,14 +219,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var currentTabEl = (currentTab.getEl());
 
         if(this.selectedCell) {
+            Teselagen.manager.ProjectManager.parts.clearFilter();
 	        Teselagen.manager.ProjectManager.currentUser.parts().load(function (parts, operation, success){
                 currentTabEl.mask();
                 var self = this;
 
                 self.partLibraryWindow = Ext.create("Vede.view.de.DeviceEditorPartLibrary", {renderTo: currentTabEl}).show();
                 self.partLibraryWindow.down("gridpanel[name='deviceEditorPartLibraryGrid']").reconfigure(Teselagen.manager.ProjectManager.parts);
-
                 self.partLibraryWindow.down('pagingtoolbar').bind(Teselagen.manager.ProjectManager.parts);
+
                 self.partLibraryWindow.down('pagingtoolbar').doRefresh();
             });
         }

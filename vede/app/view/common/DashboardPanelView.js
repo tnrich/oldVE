@@ -656,8 +656,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 margin: 13,
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
+                                        Teselagen.manager.ProjectManager.parts.clearFilter();
                                         var grid = Ext.getCmp('partLibrary');
-                                        grid.store.clearFilter();
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
