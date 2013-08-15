@@ -4,6 +4,7 @@
 
 /*global after, before, describe, expect, it*/
 
+var fs = require("fs");
 var Webdriver = require("selenium-webdriver");
 // This is a wrapper for Mocha functions so they work with the Promise control flow without using then().
 //var test = require('selenium-webdriver/testing');
@@ -17,7 +18,10 @@ describe("Normal login", function(){
     
     before(function(pDone) {
         browser.get(url).then(function() {
-            pDone();
+//            browser.takeScreenshot().then(function(img) {
+//                fs.writeFileSync("screenshot.png", img, {encoding:"base64"});
+                pDone();
+//            });
         });
      });
     
