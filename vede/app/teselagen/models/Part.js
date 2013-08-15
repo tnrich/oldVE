@@ -22,27 +22,6 @@ Ext.define("Teselagen.models.Part", {
         },
         writer: {
             type: "json",
-            //getRecordData: function(record) {
-            //    var data = record.getData();
-            //    var associatedData = record.getAssociatedData();
-//
-            //    var sequenceFile = record.getSequenceFile();
-            //    if(sequenceFile) {
-            //        var sequenceManager = sequenceFile.getSequenceManager();
-            //        
-            //        if(sequenceManager) {
-            //            data.length = record.get("genbankStartBP") - record.get("endBP");
-            //            var features = sequenceManager.featuresByRange(
-            //                                record.get("genbankStartBP"),
-            //                                record.get("endBP"));
-            //            data.features = [];
-            //            features.forEach(function(feature) {
-            //                data.features.push(feature.getName());
-            //            });
-            //        }
-            //    }
-            //    return data;
-            //}
         },
         buildUrl: function(request) {
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
@@ -61,11 +40,6 @@ Ext.define("Teselagen.models.Part", {
 
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         },
-        /*
-        afterRequest: function(req, res) {
-            console.log(JSON.parse(req.operation.response.responseText).duplicated);
-        }
-        */
     },
 
     statics: {
@@ -104,25 +78,6 @@ Ext.define("Teselagen.models.Part", {
         type: "boolean",
         defaultValue: true
     }, 
-    // {
-    //     name: "fas",
-    //     type: "string",
-    //     defaultValue: "None"
-    // },
-    /*{
-            name: "id",
-            convert: function(id) {
-                var extraDigits = Math.floor(Math.random() * 1000).toString();
-
-                while (extraDigits.length < 3) {
-                    extraDigits = "0" + extraDigits;
-                }
-                var id = (Date.now()) + extraDigits;
-                return id;
-            }
-        },
-        */
-    // Fields from PartVO
     {
         name: "name",
         sortType: function (s) {
@@ -130,23 +85,8 @@ Ext.define("Teselagen.models.Part", {
         },
         convert: function(v) {
             var name;
-            /*
-                if (v === "" || v === undefined || v === null) {
-                    name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
-                    record.self.highestDefaultNameIndex += 1;
-                } else {
-                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
-                        name = v.toString();
-                    } else {
-                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                        name = Teselagen.utils.FormatUtils.reformatName(v);
-                    }
-                }
-                return name;
-                */
             name = v;
             if (v === undefined || v === null) {name = "";}
-            //if ( name !== "" ) record.set('phantom',false);
             return name;
     }}, {
         name: "partSource",

@@ -10,12 +10,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                "Teselagen.renderer.pie.WireframeSelectionLayer",
                "Teselagen.event.CaretEvent",
                "Teselagen.event.ContextMenuEvent",
-               "Teselagen.event.VisibilityEvent"],
-
-    /*refs: [
-        {ref: "pieContainer", selector: "#PieContainer"}
-    ],*/
-    
+               "Teselagen.event.VisibilityEvent"],    
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360,
         PIE_CENTER: {x: 100, y: 100},
@@ -137,10 +132,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
             center: this.self.PIE_CENTER,
-            railRadius: this.self.RAIL_RADIUS,
-            /*showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
-            showFeatures: Ext.getCmp("featuresMenuItem").checked,
-            showOrfs: Ext.getCmp("orfsMenuItem").checked*/
+            railRadius: this.self.RAIL_RADIUS
         });
 
         pie = this.pieManager.getPie();

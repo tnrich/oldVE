@@ -286,15 +286,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
     
     setActive: function(value) {
     	this.active = value;
-    	//this.bins().each(function(bin) {
-    		//bin.setActive(value);
-    	//});
-    	//this.parts().each(function(part) {
-    		//part.setActive(value);
-    	//});
-    	//this.rules().each(function(rule) {
-    		//rule.setActive(value);
-    	//});
     },
     
     renderIfActive: function() {
@@ -350,14 +341,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
         if (pIndex >= 0 && pIndex < cnt) this.bins().insert(pIndex, j5Bin); 
         else this.bins().add(j5Bin);
         
-		/*var newCnt  = this.bins().count();
-        if (newCnt > cnt) {
-            added = true;
-        }*/
-
-        // DW: NEED TO FIRE EVENT NEW_BIN_ADDED
-
-        //return added; //j5Bin;
         return j5Bin;
     },
     
@@ -417,50 +400,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             return false;
         }
     },
-
-    /**
-     * Adds a Part into the parts store.
-     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
-     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
-     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
-     * @returns {Boolean} True if added, false if not.
-     */
-     /*
-    addToParts: function(pPart, pPosition, pFas) {
-        var added = false;
-        var fasNone = Teselagen.constants.Constants.FAS.NONE;
-        var fas = fasNone;
-        var fases = this.get("fases");
-        var isArray = Ext.isArray(pPart);
-        
-        if (!Ext.isEmpty(pFas)) {
-            fas = pFas;
-        }
-        else {
-            if (isArray) {
-                fas = [];
-                for (var i=0; i < pPart.length; i++) {
-                    fas.push(fasNone);
-                }
-            }
-        }
-        if (!Ext.isEmpty(pPosition)) {
-            if (Ext.isNumber(pPosition) && pPosition >= 0) {
-                this.parts().insert(pPosition, pPart);
-                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
-                added = true;
-            } else {
-                console.warn("Invalid part index:", pPosition);
-            }
-        } else {
-            this.parts().add(pPart);
-            this.set("fases", fases.concat(fas));
-            added = true;
-        }
-
-        return added;
-    },
-    */
     
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.

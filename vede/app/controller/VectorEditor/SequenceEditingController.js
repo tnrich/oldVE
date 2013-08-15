@@ -156,57 +156,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     	
     	saveAsWindow.show();
     	saveAsWindow.center();
-          
-    	/*var self = this;
-          var onPromptClosed = function (btn, sequenceName) {
-                  var self = this;
-                  var selectWindow = Ext.create('Ext.window.Window', {
-                      title: 'Select Project',
-                      height: 200,
-                      width: 400,
-                      layout: 'fit',
-                      items: {
-                          xtype: 'grid',
-                          border: false,
-                          columns: {
-                              items: {
-                                  text: "Name",
-                                  dataIndex: "name"
-                              },
-                              defaults: {
-                                  flex: 1
-                              }
-                          },
-                          store: Teselagen.manager.ProjectManager.projects,
-                          listeners: {
-                              "itemclick": function (grid, project, item) {
-                                  Teselagen.manager.ProjectManager.workingSequence.set('name', sequenceName);
-                                  project.veprojects().add(Teselagen.manager.ProjectManager.workingSequence);
-                                  project.save({
-                                      callback: function () {
-                                          Teselagen.manager.ProjectManager.workingSequence.save({
-                                             callback: function () {
-                                                  Teselagen.manager.ProjectManager.workingSequence.save({
-                                                      callback: function () {
-                                                          selectWindow.close();
-                                                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
-                                                          self.saveSequenceBtn.un('click',self);
-                                                      }
-                                                  });
-                                              }
-                                          });
-                                      }
-                                 });
-                                  selectWindow.close();
-                             }
-                          }
-                      }
-                  }).show();
-              };
 
-
-          Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
-    	*/
     },
 
     onTabChange: function(mainAppPanel, newTab) {

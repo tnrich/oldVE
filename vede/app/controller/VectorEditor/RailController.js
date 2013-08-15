@@ -15,10 +15,6 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
     
-    /*refs: [
-        {ref: "railContainer", selector: "#RailContainer"}
-    ],*/
-
     railManager: null,
 
     mouseIsDown: false,

@@ -387,7 +387,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onPreferencesMenuItemClick: function() {
         var preferencesWindow = Ext.create("Vede.view.ve.PreferencesWindow");
         preferencesWindow.show();
-        // preferencesWindow.center();
 
     },
     
