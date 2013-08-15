@@ -187,6 +187,7 @@ module.exports = function(app) {
      */
     app.delete("/users/:username/projects/:project_id/devicedesigns/:devicedesign_id", restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
+        var User = app.db.model("User");
         DeviceDesign.findById(req.params.devicedesign_id).exec(function(err,design) {
             if(err) {return res.json(500,{"error":err});}
             if(!design) {return res.json(500,{"error":"design not found"});}
@@ -196,14 +197,15 @@ module.exports = function(app) {
                     app.errorHandler(err, req, res);
                 }
                 else {
-
-                    req.user.designs[designs_id] = null;
-                    req.user.save({
-                        callback: function(err){
-                            res.json({
-                                "designs": {}
-                            });
+                    User.findById(req.user._id,function(err,user){
+                        user.designs[designs_id] = null;
+                        user.save({
+                            callback: function(err){
+                                res.json({
+                                    "designs": {}
+                                });
                         }});
+                    });
                     
                 }
             });
