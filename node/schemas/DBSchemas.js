@@ -110,7 +110,8 @@ module.exports = function(db) {
 		endBP             :  String,
         features          :  String,
 		iconID            :  String,
-        partSource        :  String
+        partSource        :  String,
+        size 			  :  Number
 	});
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});

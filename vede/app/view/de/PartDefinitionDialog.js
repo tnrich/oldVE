@@ -95,6 +95,12 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             margin: '0 0 0 10',
                             text: 'Cancel',
                             cls: 'cancelPartDefinitionBtn'
+                        },
+                        {
+                            xtype: 'button',
+                            margin: '0 0 0 325',
+                            text: 'View in Vector Editor',
+                            cls: 'openPartInVEBtn'
                         }
                     ]
                 }

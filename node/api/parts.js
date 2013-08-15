@@ -123,6 +123,14 @@ module.exports = function(app) {
             {
                 sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
             }
+            if(sortOptions[0] && sortOptions[0].property==="size")
+            {
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+            }
+            if(sortOptions[0] && sortOptions[0].property==="partSource")
+            {
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+            }
         }
 
         User.findById(req.user._id).populate('parts').exec(function(err, user) {

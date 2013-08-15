@@ -10,31 +10,33 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                "Teselagen.constants.Constants"],
                
     sequenceManager: null,
+    sequenceGrid: null,
+    sequenceNameField: null,
    
     onSequenceManagerChanged: function(sequenceManager) {
         this.sequenceManager = sequenceManager;
     },
    
     onWindowShow: function() {
-    	Ext.getCmp('saveAsWindowSequencesGrid').store.removeAll();
-    	
-    	var sequences = Teselagen.manager.ProjectManager.sequences;
-    	sequences.load({
-            callback: function (records) {
-                Ext.getCmp('saveAsWindowSequencesGrid').store.add(records);
-            }
-        });
+    	this.sequenceGrid = Ext.getCmp('saveAsWindowSequencesGrid');
+        this.sequenceNameField = Ext.getCmp('saveAsWindowSequenceNameField');
 
-        Ext.getCmp('saveAsWindowSequenceNameField').setValue(this.sequenceManager.getName());
+        this.sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
+    	
+        this.sequenceNameField.setValue(this.sequenceManager.getName());
+    },
+
+    onGridItemClick: function(grid, sequence, el) {
+        this.sequenceNameField.setValue(sequence.get('name'));
     },
     
     onSaveAsWindowOKButtonClick: function() {  	
     	var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
     	var sequencesNames = [];
-    	var name = Ext.String.trim(Ext.getCmp('saveAsWindowSequenceNameField').getValue());
+    	var name = Ext.String.trim(this.sequenceNameField.getValue());
 
     	if(name==null || name.match(/^\s*$/) || name.length==0) {
-    		Ext.getCmp('saveAsWindowSequenceNameField').setFieldStyle("border-color:red");
+    		this.sequenceNameField.setFieldStyle("border-color:red");
     	} else {
             Teselagen.manager.UserManager.getUser().sequences().load().each(function (sequence) {
                 sequencesNames.push(sequence.data.name);
@@ -118,6 +120,9 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     		'#SaveAsWindow': {
     			show: this.onWindowShow,
     		},
+            '#saveAsWindowSequencesGrid': {
+                itemclick: this.onGridItemClick,
+            },
     		'#saveAsWindowOKButton': {
     			click: this.onSaveAsWindowOKButtonClick
     		}

@@ -91,16 +91,19 @@ Ext.define('Vede.view.AuthWindow', {
 								['Server', 'http://production.teselagen.com/api/']
 
 							]
-						}, {
-							xtype: 'fieldcontainer',
-							fieldLabel: 'Keep me signed in',
-							defaultType: 'checkboxfield',
-							items: [{
-								name: 'remember',
-								inputValue: '1',
-								id: 'rememberSession'
-							}]
-						}]
+						}, 
+						//{
+						//	xtype: 'fieldcontainer',
+						//	fieldLabel: 'Keep me signed in',
+						//	defaultType: 'checkboxfield',
+						//	items: [{
+						//		name: 'remember',
+						//		inputValue: '1',
+						//		id: 'rememberSession'
+						//	}]
+						//}
+
+						]
 					},
 					{
 						xtype: 'container',
