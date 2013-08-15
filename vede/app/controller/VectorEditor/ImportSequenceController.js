@@ -58,7 +58,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     }
 
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                    if(typeof (cb) === "function") { cb(sequence); }
+                    if(typeof (cb) === "function") { cb(sequence); 
+                                Ext.getCmp("mainAppPanel").getActiveTab().query("button[cls='saveSequenceBtn']")[0].el.dom.click(); }
             };
 
             if (sequence.get("size") == -1) {
@@ -67,7 +68,9 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
             else
             {
                 Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                Ext.MessageBox.show({
+
+                if(Ext.getCmp('mainAppPanel').getActiveTab().title!="NO_NAME") {
+                    Ext.MessageBox.show({
                     title: "Import Preferences",
                     msg: "Would you like to create a new sequence, or overwrite the current sequence?",
                     buttons: Ext.Msg.YESNOCANCEL,
@@ -130,7 +133,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                     newSequenceFile.save({
                                         callback: function () {
                                             Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-                                            
+
                                             performSequenceCreation(newSequenceFile,function(){
                                                 newSequenceFile.save({callback:function(){
                                                     Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
@@ -142,12 +145,15 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                                     });
                                 }
                             };
-                        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
-                    } else if (btn==="no") {
-                            performSequenceCreation();
+                            Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onSequencePromptClosed, this, false, locusName);
+                        } else if (btn==="no") {
+                                performSequenceCreation();
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    performSequenceCreation();
+                }
             }
         });
     },
