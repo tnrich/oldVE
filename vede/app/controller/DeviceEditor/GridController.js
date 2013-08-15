@@ -178,6 +178,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.rowAboveMenuItem = this.activeTab.down("menuitem[text='Row Above']");
             this.rowBelowMenuItem = this.activeTab.down("menuitem[text='Row Below']");
 
+            // These two are used by the GridCommandPatternManager.
+            this.undoMenuItem = this.activeTab.down("menuitem[text='Undo']");
+            this.redoMenuItem = this.activeTab.down("menuitem[text='Redo']");
+
             this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
             //this.activeProject.rules().on("add", this.onAddToEugeneRules, this);

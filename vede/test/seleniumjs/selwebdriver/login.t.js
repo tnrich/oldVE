@@ -13,13 +13,14 @@ var browser = require("../module/selwebdriver").getBrowser(browserName);
 var url = process.env.URL || "http://teselagen.local";
 
 describe("Normal login", function(){
-    var inputField = "auth-username-field-inputEl";
     var inputFieldEl;
     
     before(function(pDone) {
         browser.get(url).then(function() {
 //            browser.takeScreenshot().then(function(img) {
 //                fs.writeFileSync("screenshot.png", img, {encoding:"base64"});
+//            browser.getPageSource().then(function(pSource) {
+//                fs.writeFileSync("source.html", pSource);
                 pDone();
 //            });
         });
