@@ -36,6 +36,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 var rules = response.rules;
                 var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject);
 
+                var savedRulesArray = [];
+
                 rules.forEach(function(rule){
                     var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                         name: rule.name,
@@ -63,8 +65,10 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         newEugeneRule.set("operand2isNumber",true);
                     }
 
-                    currentProject.addToRules(newEugeneRule);
+                    savedRulesArray.push(newEugeneRule);
                 });
+
+                currentProject.rules().add(savedRulesArray);
             },
             failure: function() {
                 Ext.MessageBox.alert("Error","Problem while loading Eugene Rules");

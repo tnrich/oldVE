@@ -91,7 +91,10 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                             xtype: 'button',
                             margin: 10,
                             text: 'Cancel',
-                            handler: function() {me.close();}
+                            handler: function() {
+                                me.down('grid').store.clearFilter();
+                                me.close();
+                            }
                         }, {
                             xtype: 'tbseparator'
                         }, {
