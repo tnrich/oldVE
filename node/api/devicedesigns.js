@@ -190,15 +190,21 @@ module.exports = function(app) {
         DeviceDesign.findById(req.params.devicedesign_id).exec(function(err,design) {
             if(err) {return res.json(500,{"error":err});}
             if(!design) {return res.json(500,{"error":"design not found"});}
-
+            var designs_id = design._id;
             design.remove(function(err){
                 if (err) {
                     app.errorHandler(err, req, res);
                 }
                 else {
-                    res.json({
-                        "designs": {}
-                    });
+
+                    req.user.designs[designs_id] = null;
+                    req.user.save({
+                        callback: function(err){
+                            res.json({
+                                "designs": {}
+                            });
+                        }});
+                    
                 }
             });
 
