@@ -105,31 +105,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     },
 
 
-    createAndProcessSequenceFromGenbank: function(currentGB,name,cb){
-        var self = this;
-        Ext.getCmp("sequenceLibrary").el.unmask();
-
-        var sequence = Ext.create("Teselagen.models.SequenceFile",{
-            sequenceFileContent: currentGB,
-            sequenceFileFormat: "GENBANK",
-            name: name,
-            dateCreated:  new Date(),
-            dateModified:  new Date(),
-            firstTimeImported: true,
-        });
-
-        try {
-            sequence.processSequence(function(err,seqMgr,gb){
-                return cb(false,sequence,seqMgr,gb);
-            },null);
-        }
-        catch(err)
-        {
-            console.warn(err.toString());
-            return cb(true,sequence,null,null);
-        }
-    },
-
     /*
         INPUT: File -> From File API
         CONTEXT: this from anywhere
@@ -189,6 +164,31 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         reader.readAsText(file);
 
+    },
+
+    createAndProcessSequenceFromGenbank: function(currentGB,name,cb){
+        var self = this;
+        Ext.getCmp("sequenceLibrary").el.unmask();
+
+        var sequence = Ext.create("Teselagen.models.SequenceFile",{
+            sequenceFileContent: currentGB,
+            sequenceFileFormat: "GENBANK",
+            name: name,
+            dateCreated:  new Date(),
+            dateModified:  new Date(),
+            firstTimeImported: true,
+        });
+
+        try {
+            sequence.processSequence(function(err,seqMgr,gb){
+                return cb(false,sequence,seqMgr,gb);
+            },null);
+        }
+        catch(err)
+        {
+            console.warn(err.toString());
+            return cb(true,sequence,null,null);
+        }
     },
 
     saveSequence: function (sequence,name,ext,seqMgr,genbankObject,cb)
