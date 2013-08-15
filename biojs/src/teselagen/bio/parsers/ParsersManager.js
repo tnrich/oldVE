@@ -136,24 +136,24 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 self.parseSequence(data, ext, function(gb) {
 
                
-                if(!gb) return cb(true,context); // If no gb then parsing failed.
-                if(!(gb instanceof Array)) gb = [gb];  // gb can be or not an array, we will enforce being an array
+                    if(!gb) return cb(true,context); // If no gb then parsing failed.
+                    if(!(gb instanceof Array)) gb = [gb];  // gb can be or not an array, we will enforce being an array
 
-                // Processing for each gb received.
-                var counter = gb.length;
-                if(counter === 0) cb(false,context)
+                    // Processing for each gb received.
+                    var counter = gb.length;
+                    if(counter === 0) cb(false,context)
 
-                gb.forEach(function(currentGB){
-                    self.createAndProcessSequenceFromGenbank(currentGB,name,function(err,sequence,seqMgr,gb){
+                    gb.forEach(function(currentGB){
+                        self.createAndProcessSequenceFromGenbank(currentGB,name,function(err,sequence,seqMgr,gb){
 
-                        if(err) { console.warn("Sequence: "+sequence.get('name')+' failed to import'); cb(true);}
+                            if(err) { console.warn("Sequence: "+sequence.get('name')+' failed to import'); cb(true);}
 
-                        self.saveSequence(sequence,name,ext,seqMgr,gb,function(err){
-                            counter--;
-                            if(counter===0) return cb(err,context);
+                            self.saveSequence(sequence,name,ext,seqMgr,gb,function(err){
+                                counter--;
+                                if(counter===0) return cb(err,context);
+                            });
                         });
                     });
-                });
 
 
                 });
