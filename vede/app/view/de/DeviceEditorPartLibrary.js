@@ -26,22 +26,10 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             margin: 13,
             listeners: {
                 change: function(field, newValue, oldValue, eOpts) {
+                    Teselagen.manager.ProjectManager.parts.clearFilter();
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
-                    grid.store.clearFilter(true);
-
-                    if (newValue) {
-                        var matcher = new RegExp(Ext.String.escapeRegex(newValue), "i");
-                        grid.store.filter({
-                            filterFn: function(record) {
-                                return matcher.test(record.get('name')) ||
-                                    matcher.test(record.get('genbankStartBP')) ||
-                                    matcher.test(record.get('endBP')) ||
-                                    matcher.test(record.get('revComp')) || 
-                                    matcher.test(record.get('partSource'));
-                            }
-                        });
-                    }
+                    grid.store.filter("name", Ext.String.escapeRegex(newValue));
                 }
             }
         },

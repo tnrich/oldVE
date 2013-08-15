@@ -186,6 +186,14 @@ Ext.define("Teselagen.models.Part", {
         defaultValue: ""
     },
     {
+        name: "dateCreated",
+        type: "string",
+    },
+    {
+        name: "dateModified",
+        type: "string",
+    },
+    {
         name: "user_id",
         type: "long"
     }

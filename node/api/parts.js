@@ -27,7 +27,7 @@ module.exports = function(app) {
             Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
                 newPart.user_id = new app.mongo.ObjectID(req.user._id);
-
+                newPart.dateModified = new Date();
                 newPart.save(function(err){
                     if(err)
                     {
@@ -63,6 +63,7 @@ module.exports = function(app) {
      * @method POST 'parts'
      */
     app.post('/parts', restrict,  function(req, res) {
+        req.body.dateCreated = new Date();
         savePart(req,res,null,function(savedSequence){
             User.findById(req.user._id).populate('parts').exec(function(err, user) {
                 user.parts.push(savedSequence);

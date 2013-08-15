@@ -656,8 +656,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 margin: 13,
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
+                                        Teselagen.manager.ProjectManager.parts.clearFilter();
                                         var grid = Ext.getCmp('partLibrary');
-                                        grid.store.clearFilter();
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
@@ -732,21 +732,21 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         dataIndex: 'features',
                                         sortable: false
                                     },
-                                    //{
-                                    //    xtype: 'gridcolumn',
-                                    //    text: 'Date Created',
-                                    //    width: 180,
-                                    //    dataIndex: 'dateCreated',
-                                    //    renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'),
-                                    //    sortable: true
-                                    //},
-                                    //{
-                                    //    xtype: 'gridcolumn',
-                                    //    text: 'Last Modified',
-                                    //    width: 180,
-                                    //    dataIndex: 'dateModified',
-                                    //    renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
-                                    //}
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Date Created',
+                                        width: 180,
+                                        dataIndex: 'dateCreated',
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'),
+                                        sortable: true
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Last Modified',
+                                        width: 180,
+                                        dataIndex: 'dateModified',
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
+                                    }
 
                                 ],
                                 listeners: {

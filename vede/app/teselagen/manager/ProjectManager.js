@@ -209,6 +209,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             } else {
                 sequences.pageSize = itemCount;
             }
+            sequences.clearFilter();
             sequences.loadPage(1);
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
@@ -229,6 +230,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             } else {
                 parts.pageSize = itemCount;
             }
+            parts.clearFilter();
             parts.loadPage(1);
             partGrid.reconfigure(parts);
             partGrid.down('pagingtoolbar').bind(parts);
