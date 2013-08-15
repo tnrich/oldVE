@@ -122,6 +122,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {Teselagen.models.DeviceDesign} Receives a DeviceDesign model (already loaded)
      */
     openj5Report: function (DeviceDesign,cb) {
+        var self = this;
         this.checkDuplicatedTabs(DeviceDesign, "j5ReportTab", function () {
             var tabPanel = Ext.getCmp("mainAppPanel");
             var newj5ReportPanel = Ext.create("Vede.view.j5Report.j5ReportPanel", {
@@ -130,6 +131,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 icon: "resources/images/ux/tab-report-icon.png",
                 iconCls: "tab-icon"
             });
+
             tabPanel.add(newj5ReportPanel).show();
             tabPanel.setActiveTab(newj5ReportPanel);
             if(typeof (cb) === "function") { cb(); }
@@ -192,6 +194,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {Teselagen.models.DeviceDesign} Receives a DeviceDesign model (already loaded)
      */
     openDeviceDesign: function (selectedDesign) {
+        var self = this;
         this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
 
             // Set part_id fields on each cell.
@@ -209,13 +212,15 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 }
             });
 
-            tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
+            var newTab = Ext.create("Vede.view.de.DeviceEditor", {
                 title: selectedDesign.data.name,
                 model: selectedDesign,
                 icon: "resources/images/ux/tab-design-icon.png",
                 iconCls: "tab-icon",
                 modelId: selectedDesign.data.id
-            })).show();
+            });
+
+            tabPanel.add(newTab).show();
             
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
@@ -489,8 +494,5 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 }
             }
         });
-    },
-
-
-
+    }
 });

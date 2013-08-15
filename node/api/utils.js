@@ -142,11 +142,13 @@ module.exports = function(app) {
         //var numProjects = req.user.projects.length;    
 
         var User = app.db.model("User");
-        User.findById(req.user._id).populate('projects')
+        User.findById(req.user._id)
+        .populate('projects')
         .populate('parts')
         .exec(function(err, user) {
-            var countDesigns=0;
+            var countDesigns = 0;
             user.projects.forEach(function(project){
+                console.log("Project ",project.name," ",project.designs.length," designs.");
                 countDesigns += project.designs.length;
             });
             var countProjects = user.projects.length;

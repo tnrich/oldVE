@@ -13,6 +13,7 @@ Ext.define('Vede.view.AppViewport', {
     },
 
     requires: [
+        'Ext.ux.TabCloseMenu',
         'Vede.view.common.HeaderPanelView',
         'Vede.view.common.ProjectPanelView',
         'Vede.view.common.DashboardPanelView',
@@ -53,7 +54,32 @@ Ext.define('Vede.view.AppViewport', {
                                 }
                             }
                         }
-                    ]
+                    ],
+                    plugins: Ext.create('Ext.ux.TabCloseMenu', {
+                        extraItemsTail: [
+                            '-',
+                            {
+                                text: 'Closable',
+                                checked: true,
+                                hideOnClick: true,
+                                handler: function (item) {
+                                    currentItem.tab.setClosable(item.checked);
+                                }
+                            }
+                        ],
+                        listeners: {
+                            aftermenu: function () {
+                                currentItem = null;
+                                console.log("listening aftermenu");
+                            },
+                            beforemenu: function (menu, item) {
+                                var menuitem = menu.child('*[text="Closable"]');
+                                currentItem = item;
+                                menuitem.setChecked(item.closable);
+                                console.log("listening before menu");
+                            }
+                        }
+                    })
                 }
             ]
         });
