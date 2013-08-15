@@ -110,9 +110,7 @@ Ext.define("Vede.controller.ProjectExplorerController", {
                 sequenceFileFormat: "GENBANK",
                 sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
-                partSource: "Untitled sequence",
-                dateCreated: new Date(),
-                dateModified: new Date(),
+                partSource: "Untitled sequence"
             });
 
             var newPart = Ext.create("Teselagen.models.Part", {
@@ -274,7 +272,6 @@ Ext.define("Vede.controller.ProjectExplorerController", {
         this.control({
             "#projectTreePanel": {
                 itemclick: this.onProjectPanelItemClick
-                //itemcontextmenu: this.onProjectPanelItemContextMenu
             },
             "#projectPartsPanel": {
                 itemclick: this.onProjectPartsPanelItemClick

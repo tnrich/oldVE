@@ -35,7 +35,6 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
                 var fr = new FileReader();
                 fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
                 fr.onerror = this.onImportFileError;
-//              fr.onprogress = importFileProgress; // Unimplemented handler to show load progress
                 fr.readAsText(file);
             }
             else {

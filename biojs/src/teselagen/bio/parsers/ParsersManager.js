@@ -114,9 +114,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(!file) return cb(true);
 
         var self = Teselagen.bio.parsers.ParsersManager;
-        var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-        if(!ext)  return cb(true,context);
+        var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+        if(match&&match[1]) { var ext = match[1]; }
+        else return cb(true,context);
 
         var reader = new FileReader();
 
@@ -168,14 +169,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     createAndProcessSequenceFromGenbank: function(currentGB,name,cb){
         var self = this;
-        Ext.getCmp("sequenceLibrary").el.unmask();
+        var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+
+        if(sequenceLibrary.el) {
+            sequenceLibrary.el.unmask();
+        }
 
         var sequence = Ext.create("Teselagen.models.SequenceFile",{
             sequenceFileContent: currentGB,
             sequenceFileFormat: "GENBANK",
             name: name,
-            dateCreated:  new Date(),
-            dateModified:  new Date(),
             firstTimeImported: true,
         });
 
@@ -195,85 +198,80 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     {
             var self = Teselagen.bio.parsers.ParsersManager;
 
-                
+            if(seqMgr) {
+                sequence.set('name', genbankObject.getLocus().locusName);
+            }
 
-                    if(seqMgr) {
-                        sequence.set('name', genbankObject.getLocus().locusName);
+            // Aggregate parse messages/warnings from the genbank
+            // and sequence manager objects to display in the
+            // import warnings window.
+            
+            if(genbankObject && seqMgr) {
+                var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+
+                self.batchImportMessages.add({
+                    fileName: name + '.' + ext,
+                    partSource: genbankObject.getLocus().locusName,
+                    messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                });
+            }
+
+            sequence.save({
+                success: function(){
+                    seqMgr = null;
+                    sequence.sequenceManager = null;
+
+                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+                    if(!duplicated) 
+                    {
+                        Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
+                        return cb(false);
                     }
+                    else
+                    {
+                        var msg = toastr.warning("Error: Duplicated Sequence");
+                        
+                        var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
+                        var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
-                    // Aggregate parse messages/warnings from the genbank
-                    // and sequence manager objects to display in the
-                    // import warnings window.
-                    
-                    if(genbankObject && seqMgr) {
-                        var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                        var duplicateMessage = 'Exact sequence already exists in library with' + 
+                                               ' name ' + duplicateFileName;
 
-                        self.batchImportMessages.add({
-                            fileName: name + '.' + ext,
-                            partSource: genbankObject.getLocus().locusName,
-                            messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
-                        });
-                    }
+                        var partSource = genbankObject.getLocus().locusName;
 
-                    sequence.save({
-                        success: function(){
-                            seqMgr = null;
-                            sequence.sequenceManager = null;
+                        var messageIndex = self.batchImportMessages.findBy(function(record) {
+                            var messages = record.get('messages');
 
-                            var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
-                            if(!duplicated) 
-                            {
-                                Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
-                                return cb(false);
-                            }
-                            else
-                            {
-                                var msg = toastr.warning("Error: Duplicated Sequence");
-                                
-                                var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
-                                var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
-
-                                var duplicateMessage = 'Exact sequence already exists in library with' + 
-                                                       ' name ' + duplicateFileName;
-
-                                var partSource = genbankObject.getLocus().locusName;
-
-                                var messageIndex = self.batchImportMessages.findBy(function(record) {
-                                    var messages = record.get('messages');
-
-                                    for(var i = 0; i < messages.length; i++) {
-                                        if(messages[i] === duplicateMessage) {
-                                            return false;
-                                        }
-                                    }
-
-                                    return record.get('fileName') === (name + '.' + ext) &&
-                                           record.get('partSource') === partSource;
-                                });
-
-                                if(messageIndex < 0) {
-                                    self.batchImportMessages.add({
-                                        fileName: name + '.' + ext,
-                                        partSource: partSource,
-                                        messages: [duplicateMessage]
-                                    });
-                                } else {
-                                    var record = self.batchImportMessages.getAt(messageIndex);
-                                    record.set('partSource', partSource);
-                                    record.set('messages', 
-                                        record.get('messages').concat([duplicateMessage]));
+                            for(var i = 0; i < messages.length; i++) {
+                                if(messages[i] === duplicateMessage) {
+                                    return false;
                                 }
+                            }
 
-                                return cb(false);
-                           }
-                        },
-                        failure: function(){
-                            return cb(true);
+                            return record.get('fileName') === (name + '.' + ext) &&
+                                   record.get('partSource') === partSource;
+                        });
+
+                        if(messageIndex < 0) {
+                            self.batchImportMessages.add({
+                                fileName: name + '.' + ext,
+                                partSource: partSource,
+                                messages: [duplicateMessage]
+                            });
+                        } else {
+                            var record = self.batchImportMessages.getAt(messageIndex);
+                            record.set('partSource', partSource);
+                            record.set('messages', 
+                                record.get('messages').concat([duplicateMessage]));
                         }
-                    });
 
-
-
+                        return cb(false);
+                   }
+                },
+                failure: function(){
+                    return cb(true);
+                }
+            });
     },
 
     /**
@@ -510,46 +508,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         }
 
 
-        
-        //var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
-        //var seqArr = [];
-        //var name = "";
-        //var sequence = "";
-
-        //if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
-        //    var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
-        //    if (nameArr !== null && nameArr.length >= 1) {
-        //        name = nameArr[0].replace(/^>/, "");
-        //    }
-        //}
-
-        //for (var i = 0; i < lineArr.length; i++) {
-        //    if (!lineArr[i].match(/^\>/)) {
-        //        sequence += Ext.String.trim(lineArr[i]);
-        //    }
-        //}
-        //sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
-        //if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
-        //    //illegalcharacters
-        //    return null;
-        //}
-        
-        /*
-        var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-            locusName: name,
-            sequenceLength: sequence.length,
-            date: Teselagen.bio.parsers.ParsersManager.todayDate()
-        });
-
-        var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
-            sequence: sequence
-        });
-
-        result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-
-        result.addKeyword(locus);
-        result.addKeyword(origin);
-        */
     },
 
     /**

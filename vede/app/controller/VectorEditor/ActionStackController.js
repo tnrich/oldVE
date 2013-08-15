@@ -79,18 +79,6 @@ Ext.define("Vede.controller.VectorEditor.ActionStackController", {
         if(this.SequenceManager && this.ActionStackManager.redoStack.length != 0) {
             this.ActionStackManager.redo();
         }
-    },
+    }
 
-    /**
-     * @deprecated
-     */
-    /*onsaveCurrentVEProject: function() {
-        var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
-        var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();
-        workingSequence.set('sequenceFileFormat',updatedGenbankSequence);
-        workingSequence.save({
-            callback:function(){
-                console.log("Working sequence updated!");
-        }});
-    }*/
 });

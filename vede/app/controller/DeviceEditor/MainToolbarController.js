@@ -59,8 +59,8 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         // Disable Save during import process
         Ext.getCmp("mainAppPanel").getActiveTab().down("DeviceEditorMenuPanel").down("menuitem[text='Save Design']").disable();
 
-        //try
-        //{
+        try
+        {
         if(pExt === 'json' || pExt === 'JSON') {
             Teselagen.manager.DeviceDesignParsersManager.parseJSON(pEvt.target.result,pFile.name);
         } else if(pExt === 'xml' || pExt === 'XML') {
@@ -68,28 +68,28 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         } else {
             Ext.MessageBox.alert('Error', 'Invalid file format');
         }
-        //}
-        //catch(exception)
-        //{
-        //    console.log(exception);
-        //    console.log(exception.stack);
-        //    Ext.MessageBox.alert('Error', "Error parsing file");
-        //    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-        //}
+        }
+        catch(exception)
+        {
+            console.log(exception);
+            console.log(exception.stack);
+            Ext.MessageBox.alert('Error', "Error parsing file");
+            Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        }
     },
 
     onImportEugeneRulesFileLoad: function(pFile, pExt, pEvt) {
-        //try
-        //{
-            var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
-            Teselagen.manager.DeviceDesignParsersManager.parseEugeneRules(pEvt.target.result,pFile.name,design);
-        //}
-        //catch(exception)
-        //{
-        //    console.log(exception);
-        //    Ext.MessageBox.alert('Error', "Error parsing file");
-        //    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-        //}
+        try
+        {
+          var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
+          Teselagen.manager.DeviceDesignParsersManager.parseEugeneRules(pEvt.target.result,pFile.name,design);
+        }
+        catch(exception)
+        {
+            console.log(exception);
+            Ext.MessageBox.alert('Error', "Error parsing file");
+            Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        }
     },
 
     onImportEugeneRulesBtnChange: function(pBtn){
@@ -101,7 +101,6 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             var file = fileInput.files[0];
             var ext = file.name.match(/^.*\.(eug)$/i);
             if (ext) {
-                //Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Eugene Rules');
                 var fr = new FileReader();
                 fr.onload = this.onImportEugeneRulesFileLoad.bind(this, file, ext[1]);
                 fr.onerror = this.onImportFileError;

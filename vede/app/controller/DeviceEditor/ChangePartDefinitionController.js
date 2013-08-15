@@ -185,15 +185,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             toastr.info("Part Definition Changed");
                             Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                             Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
-                            /*Teselagen.manager.GridCommandPatternManager.addCommand({
-                            	type: "PART",
-                            	data: {
-                            		type: "DEF",
-                            		part: record,
-                            		oldDef: oldDef,
-                            		newDef: newDef
-                            	}
-                    		});*/
+
                         } else {
                             Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
                             record.reject();
@@ -240,16 +232,5 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.application.on(this.DeviceEvent.CREATE_PART_DEFINITION, this.openCreatePart, this);
 
         this.application.on(this.SelectionEvent.SELECTION_CHANGED, this.onSequenceSelectionChanged, this);
-
-        /*+
-        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-        this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
-
-        this.j5Parameters = Ext.create("Teselagen.models.J5Parameters");
-        this.j5Parameters.setDefaultValues();
-
-        this.automationParameters = Ext.create("Teselagen.models.DownstreamAutomationParameters");
-        this.automationParameters.setDefaultValues();
-        */
     }
 });

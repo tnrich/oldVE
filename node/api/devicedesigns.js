@@ -29,6 +29,7 @@ module.exports = function(app) {
         var reqDesign = req.body;
 
         var newDesign = new DeviceDesign(reqDesign);
+        newDesign.dateCreated = new Date();
 
         newDesign.save(function(err) {
             if (err) {
@@ -70,6 +71,8 @@ module.exports = function(app) {
                     devicedesign[prop] = model[prop];
                 }
             }
+
+            devicedesign.dateModified = new Date();
 
             devicedesign.save(function(err) {
                 if (err) {console.log(err);}

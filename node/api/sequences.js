@@ -47,7 +47,7 @@ module.exports = function(app) {
         for (var prop in req.body) {
             if(prop!="user_id") newSequence[prop] = req.body[prop];
         }
-
+        newSequence.dateModified = new Date();
         //Project.findById(req.body.project_id,function(err,project){
             //if(err) return res.json(500,{"error":err});
             //if(!project) return res.json(500,{"error":"project not found"});
@@ -104,6 +104,7 @@ module.exports = function(app) {
     app.post('/sequences', restrict, function(req, res) {
         var newSequence = new Sequence();
         newSequence.user_id = new app.mongo.ObjectID( req.user._id );
+        req.body.dateCreated = new Date();
         saveSequence(newSequence,req,res,function(savedSequence){
             User.findById(req.user._id).populate('sequences').exec(function(err, user) {
                 user.sequences.push(savedSequence);

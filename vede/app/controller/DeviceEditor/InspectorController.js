@@ -189,7 +189,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onEmptySequenceBtnClick: function(){
         var selectedPart = this.selectedPart;
 
-//        console.log("Creating empty sequence");
         var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileFormat: "Genbank",
             sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
@@ -202,7 +201,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 selectedPart.setSequenceFile(newSequenceFile);
                 selectedPart.save({
                     callback: function(){
-                        //console.log(selectedPart);
+
                     }
                 });
             }
@@ -806,43 +805,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
         });
         
-        /*var self = this;
-        // newOperand2.save({
-        //     callback: function(){
-        //         newRule.setOperand2(newOperand2);   
-        //     }
-        // });
-        if(newCompositionalOperator !== Teselagen.constants.Constants.MORETHAN) {
-            newOperand2.save({
-                callback: function(){
-                    var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
-                                                                       self.selectedPart);
-
-                    newRule.setOperand2(newOperand2);
-                    self.activeProject.addToRules(newRule);
-
-                    self.eugeneRulesGrid.reconfigure(rulesStore);
-                    
-                    newEugeneRuleDialog.close();
-
-                    Ext.getCmp('mainAppPanel').getActiveTab().model.rules().clearFilter(true);
-                }
-            });
-        } 
-        else {
-            self.activeProject.addToRules(newRule);        
-
-            var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
-                                                                            self.selectedPart);
-
-            self.eugeneRulesGrid.reconfigure(rulesStore);
-
-            newEugeneRuleDialog.close();
-        }
-
-        toastr.options.onclick = null;
-        toastr.info("Eugene Rule Added");
-        Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);*/
     },
 
     /**
@@ -890,7 +852,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                     self.eugeneRulesGrid.reconfigure(rulesStore);
 
-                    //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
                     self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
                     self.onPartSelected(operand1, self.selectedBinIndex);
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
@@ -911,7 +872,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                     self.eugeneRulesGrid.reconfigure(rulesStore);
                     
-                    //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
                     self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
                     self.onPartSelected(operand1, self.selectedBinIndex);
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
@@ -928,7 +888,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
             self.eugeneRulesGrid.reconfigure(rulesStore);
                 
-            //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
             self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
             self.onPartSelected(operand1, self.selectedBinIndex);
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
@@ -942,7 +901,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject, self.selectedPart);
                 self.eugeneRulesGrid.reconfigure(rulesStore);
                 
-                //Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, operand1Bin);
                 self.selectedBinIndex = self.DeviceDesignManager.getBinIndex(self.activeProject, operand1Bin);
                 self.onPartSelected(operand1, self.selectedBinIndex);
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_PART, operand1, self.selectedBinIndex);
@@ -1050,26 +1008,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
         
-
-        // var newEugeneRuleDialog = Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
-        // var newRule = newEugeneRuleDialog.down("form").getForm().getRecord();
-        // newRule.set("name", newOperand2);
-        // var self = this;
-        // newOperand2.save({
-        //     callback: function(){
-        //         newRule.setOperand2(newOperand2);
-
-        //         self.activeProject.addToRules(newRule);
-
-        //         var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
-        //                                                                         self.selectedPart)
-
-        //         self.eugeneRulesGrid.reconfigure(rulesStore);
-
-        //         newEugeneRuleDialog.close();
-        //     }
-        // });
-
     /**
      * Handler for the Eugene Rule Dialog compositional operator combobox.
      * Ensures that the operator 2 field is the appropriate type of input field
@@ -1229,14 +1167,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.columnsGrid.getSelectionModel().deselect(selectedPart);
 
-        // Remove the highlighting from the selected row- it appears that a bug
-        // is preventing this from happening automatically. EDIT: Not happening
-        // with the new Ext version.
-        /*this.columnsGrid.getView().removeRowCls(selectedPart,
-                                    this.columnsGrid.getView().selectedItemCls);
-        this.columnsGrid.getView().removeRowCls(selectedPart,
-                                    this.columnsGrid.getView().focusedItemCls);*/
-
         this.renderCollectionInfo(true);
     },
     
@@ -1353,30 +1283,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     renderCollectionInfo: function (skipReconfigureGrid) {
         Ext.suspendLayouts();
 
-//        var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         var circularPlasmidField = this.inspector.down("radiofield[cls='circular_plasmid_radio']");
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
 
         if(this.activeProject) {
             Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
-            // j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
-            //                                                 this.activeProject));
-
-            //  if (this.DeviceDesignManager.checkJ5Ready(this.activeProject)) {
-            //         j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
-            //     } else {
-            //         j5ReadyField.setFieldStyle("color:red");
-            //     }
-
-            // combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
-            //                                                 this.activeProject));
-            // console.log(this.DeviceDesignManager.setCombinatorial(this.activeProject));
-
-            // if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
-            //         combinatorialField.setFieldStyle("color:purple");
-            //     } else {
-            //         combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
-            //     }
 
             if(this.activeProject.get("isCircular")) {
                 circularPlasmidField.setValue(true);
@@ -1423,7 +1334,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.CLEAR_PART, this.onClearPart, this);
 
-        //this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumnButtonClick, this);
         this.application.on(this.DeviceEvent.REMOVE_COLUMN, this.onRemoveColumn, this);
 
         this.application.on(this.DeviceEvent.REMOVE_ROW, this.onRemoveRow, this);
