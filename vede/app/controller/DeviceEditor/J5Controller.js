@@ -45,10 +45,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         var inspector = currentTab.down('InspectorPanel');
 
-        // if(!currentTab) currentTab = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
-        // else currentTab.show();
-        // this = currentTab;
-
         var self = this;
 
         Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY, function(combinatorial,j5ready) {
@@ -168,7 +164,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
         
-        //this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
         this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
 
         this.previousJ5ParameterData = this.j5Parameters.getData();
@@ -581,9 +576,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         this.onOpenJ5();
 
-        // var loadingMessage = currentTab.down('container[cls="j5progressContainer"]').show();
-        // var responseMessage = currentTab.down('displayfield[cls="j5ResponseTextField"]').show();
-
         var self = this;
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -653,12 +645,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         this.j5Running = true;
 
-        //responseMessage.setValue("Saving design");
 
         this.disableAllJ5RunButtons();
 
         Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function () {
-            //responseMessage.setValue("Executing j5 Run...Please wait...");
             if (!Teselagen.manager.TasksMonitor.disabled) {
                 Teselagen.manager.TasksMonitor.start();
             }
@@ -667,8 +657,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     toastr.options.onclick = null;
                     toastr.info("j5 Run Submitted");
                 } else {
-                    //loadingMessage.hide();
-                    //responseMessage.hide();
+
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
                         msg: responseData.error,
@@ -715,17 +704,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
         data.assemblyFileText = this.assemblyFileText;
         data.params = this.automationParameters.data;
-        // data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
 
-        // var loadingMessage = this.createLoadingMessage();
-
-        // loadingMessage.update(60, "Executing request");
         inspector.j5comm.distributePCRRequest(data, function (success, responseData) {
             if(success) {
-                // loadingMessage.update(100, "Completed");
-                // loadingMessage.close();
+
             } else {
-                // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,
@@ -863,15 +846,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.down("component[cls='zippedAssemblyFilesSelector']"));
         condenseParams["zippedFiles"]["content"] = this.zippedPlateFilesSelector;
 
-        // var loadingMessage = this.createLoadingMessage();
 
-        // loadingMessage.update(60, "Executing request");
         inspector.j5comm.condenseAssemblyFiles(condenseParams, function (success, responseData) {
             if(success) {
-                // loadingMessage.update(100, "Completed");
-                // loadingMessage.close();
+
             } else {
-                // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,

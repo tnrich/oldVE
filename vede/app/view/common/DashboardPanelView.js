@@ -5,7 +5,6 @@
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.DashboardPanelView',
-    //requires: ["Teselagen.manager.ProjectManager"],
     id: 'DashboardPanel',
     padding: '10 0',
     layout: {
@@ -460,7 +459,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
                                 cls: 'sequenceLibraryGrid',
-                                //store: Teselagen.manager.ProjectManager.sequences,
                                 layout: 'fit',
                                 autoHeight: true,
                                 flex: 1,
@@ -489,7 +487,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             } else {
                                                 return "";
                                             }
-                                        }
+                                        },
+                                        sortable: false
                                     },
                                     {
                                         xtype: 'gridcolumn',
@@ -832,15 +831,5 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 ]
             }
         ]
-
-
-            // require: ["Teselagen.event.AuthenticationEvent"],
-            // listeners: {
-            //     tabchange: function(tabPanel, tab) {
-            //         Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.POPULATE_STATS);;
-            //     }
-            // }
-
-    
 
 });

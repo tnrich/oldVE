@@ -273,7 +273,6 @@ Ext.define("Vede.controller.ProjectExplorerController", {
         this.control({
             "#projectTreePanel": {
                 itemclick: this.onProjectPanelItemClick
-                //itemcontextmenu: this.onProjectPanelItemContextMenu
             },
             "#projectPartsPanel": {
                 itemclick: this.onProjectPartsPanelItemClick

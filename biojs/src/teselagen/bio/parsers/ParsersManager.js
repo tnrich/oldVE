@@ -508,46 +508,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         }
 
 
-        
-        //var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
-        //var seqArr = [];
-        //var name = "";
-        //var sequence = "";
-
-        //if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
-        //    var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
-        //    if (nameArr !== null && nameArr.length >= 1) {
-        //        name = nameArr[0].replace(/^>/, "");
-        //    }
-        //}
-
-        //for (var i = 0; i < lineArr.length; i++) {
-        //    if (!lineArr[i].match(/^\>/)) {
-        //        sequence += Ext.String.trim(lineArr[i]);
-        //    }
-        //}
-        //sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
-        //if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
-        //    //illegalcharacters
-        //    return null;
-        //}
-        
-        /*
-        var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-            locusName: name,
-            sequenceLength: sequence.length,
-            date: Teselagen.bio.parsers.ParsersManager.todayDate()
-        });
-
-        var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
-            sequence: sequence
-        });
-
-        result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-
-        result.addKeyword(locus);
-        result.addKeyword(origin);
-        */
     },
 
     /**

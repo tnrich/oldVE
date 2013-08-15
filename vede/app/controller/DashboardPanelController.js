@@ -294,6 +294,5 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemmouseleave: this.onPartGridItemMouseLeave
             }
 		});
-		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}
 });

@@ -66,16 +66,6 @@ Ext.define("Vede.controller.PartLibraryController", {
         this.callbackFn(grid,part,item,this.partLibraryWindow);
     },
 
-//    onOpenPartLibrary: function(inCallbackFn) {
-//        //console.log("Opening part Library");
-//        if (this.partLibraryWindow === null)
-//        {
-//            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow');
-//            this.partLibraryWindow.render(Ext.getCmp('mainAppPanel').getActiveTab().getEl());
-//        }
-//        this.fetchPartLibrary();
-//        this.callbackFn = inCallbackFn;
-//    },
 
     init: function() {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
@@ -87,8 +77,6 @@ Ext.define("Vede.controller.PartLibraryController", {
         });
 
         this.partLibraryStore = Teselagen.manager.ProjectManager.parts;
-
-        //this.application.on(this.DeviceEvent.OPEN_PART_LIBRARY, this.onOpenPartLibrary, this);
 
         this.callParent();
     }

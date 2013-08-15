@@ -12,7 +12,6 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
         var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
         
         var finishedPreloadingResources = function(){
-//            console.log("finished preloading resources");
             return cb(model);
         };
 
@@ -34,16 +33,12 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
     },
 
     onExportToJSONClick: function () {
-    	/*var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
-    	Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);*/
     	this.preloadResources(function(model){
             Teselagen.manager.DeviceDesignExporterManager.exportToJSON(model);
         });
     },
 
     onExportToXMLClick: function () {
-    	/*var model = Ext.getCmp("mainAppPanel").getActiveTab().model;
-    	Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);*/
     	this.preloadResources(function(model){
             Teselagen.manager.DeviceDesignExporterManager.exportToXML(model);
         });
@@ -52,23 +47,12 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
     onNewDesignClick: function() {
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
-//    onOpenDEProjectClick: function() {
-//
-//    },
-//    onSaveDesignClick: function() {
-//
-//    },
+
     init: function() {
         this.control({
             "button[cls='newDesign']": {
                 click: this.onNewDesignClick
             },
-//            "#openDEProject": {
-//                click: this.onOpenDEProjectClick
-//            },
-//            "#saveDesign": {
-//                click: this.onSaveDesignClick
-//            },
             "button[cls='exportMenu'] > menu > menuitem[text='JSON file']": {
                 click: this.onExportToJSONClick
             },
