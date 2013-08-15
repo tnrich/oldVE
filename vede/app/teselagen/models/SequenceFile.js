@@ -463,7 +463,9 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return cb(true);
             }
         } else {
-            return cb(true);
+            var seqMgr = this.getSequenceManager();
+            var gb = seqMgr.toGenbank();
+            return cb(false,seqMgr,gb);
         }
     }
 });
