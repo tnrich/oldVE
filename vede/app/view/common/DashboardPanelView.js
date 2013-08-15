@@ -649,6 +649,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 },
                                 anchor: '100%',
                                 height: 30,
+                                id: 'partLibrarySearch',
                                 cls: 'partLibrarySearchField',
                                 width: '98%',
                                 emptyText: 'Search Part Library',

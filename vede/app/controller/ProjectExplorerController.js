@@ -46,7 +46,6 @@ Ext.define("Vede.controller.ProjectExplorerController", {
     resolveAndOpenPartLibrary: function (record) {
         var tabPanel = Ext.getCmp("mainAppPanel");
         var dashPanel = Ext.getCmp("DashboardPanel");
-        Teselagen.manager.ProjectManager.parts.clearFilter();
 
         tabPanel.setActiveTab(0);
         dashPanel.setActiveTab(2);

@@ -17,7 +17,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
         if(this.VectorViewer) {
             this.VectorViewer.hide();
         }
-        Teselagen.manager.ProjectManager.parts.clearFilter();
+
+        if(Ext.getCmp("partLibrarySearch").value) {
+           Ext.getCmp("partLibrarySearch").setValue("");
+         }
     },
 
 	onLastDEProjectsItemClick: function (item,record) {
@@ -137,11 +140,20 @@ Ext.define("Vede.controller.DashboardPanelController", {
         }
         else
         {
+          Teselagen.manager.ProjectManager.parts.clearFilter();
           currentTab.down('pagingtoolbar').doRefresh();
         }
 
       }
   },
+
+  // onMainTabChange: function(tabPanel, newTab, oldTab) {
+  //   console.log(newTab);
+  //   if(newTab.xtype == "DashboardPanelView") {
+  //         Teselagen.manager.ProjectManager.parts.clearFilter();
+  //         Ext.getCmp("partLibrarySearch").setValue("");
+  //   }
+  // },
 
     onSequenceGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
@@ -275,7 +287,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     onLaunch: function () {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.tabPanel.on("tabchange", this.populateStatisticts);
-
+        // this.tabPanel.on("tabChange", this.onMainTabChange);
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
 
