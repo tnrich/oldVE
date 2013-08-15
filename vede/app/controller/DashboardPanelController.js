@@ -17,7 +17,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
         if(this.VectorViewer) {
             this.VectorViewer.hide();
         }
-        Teselagen.manager.ProjectManager.parts.clearFilter();
+
+        if(Ext.getCmp("partLibrarySearch").value) {
+           Ext.getCmp("partLibrarySearch").setValue("");
+         }
     },
 
 	onLastDEProjectsItemClick: function (item,record) {
@@ -81,31 +84,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
         });
 	},
 
-    /**
-     * TODO: Not used anymore?
-     * @deprecated
-     */
-  DashNewSequence: function () {
-      Teselagen.manager.ProjectManager.directVEEditingMode = true;
-
-      //Create empty VEProject/Sequence
-      Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {
-          name: "Untitled VEProject",
-          dateCreated: new Date(),
-          dateModified: new Date()
-      });
-
-      Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {
-          sequenceFileFormat: "GENBANK",
-          sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-          sequenceFileName: "untitled.gb",
-          partSource: "Untitled sequence"
-      });
-
-      //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
-      Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, Teselagen.manager.ProjectManager.workingSequence);
-  },
-
   onTabChange: function(tabPanel, newTab, oldTab) {
 
       if(newTab.initialCls == "sequenceLibraryPanel") {
@@ -137,11 +115,20 @@ Ext.define("Vede.controller.DashboardPanelController", {
         }
         else
         {
+          Teselagen.manager.ProjectManager.parts.clearFilter();
           currentTab.down('pagingtoolbar').doRefresh();
         }
 
       }
   },
+
+  // onMainTabChange: function(tabPanel, newTab, oldTab) {
+  //   console.log(newTab);
+  //   if(newTab.xtype == "DashboardPanelView") {
+  //         Teselagen.manager.ProjectManager.parts.clearFilter();
+  //         Ext.getCmp("partLibrarySearch").setValue("");
+  //   }
+  // },
 
     onSequenceGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
@@ -248,6 +235,20 @@ Ext.define("Vede.controller.DashboardPanelController", {
           }});
     },
 
+    DashNewSequence: function () {
+        Teselagen.manager.ProjectManager.directVEEditingMode = true;
+  
+        Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileFormat: "GENBANK",
+            sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+            sequenceFileName: "untitled.gb",
+            partSource: "Untitled sequence"
+        });
+  
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, Teselagen.manager.ProjectManager.workingSequence);
+    },
+  
+
     /**
      * Hide the vector viewer when the mouse leaves the current grid
      * element, as long as the mouse isn't moving into the vector viewer itself.
@@ -275,7 +276,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     onLaunch: function () {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.tabPanel.on("tabchange", this.populateStatisticts);
-
+        // this.tabPanel.on("tabChange", this.onMainTabChange);
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
 
@@ -305,6 +306,5 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemmouseleave: this.onPartGridItemMouseLeave
             }
 		});
-		//this.application.on(Teselagen.event.MenuItemEvent.SELECT_WINDOW_OPENED, this.onSelectWindowOpened, this);
 	}
 });

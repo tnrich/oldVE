@@ -29,6 +29,7 @@ module.exports = function(app) {
         var reqDesign = req.body;
 
         var newDesign = new DeviceDesign(reqDesign);
+        newDesign.dateCreated = new Date();
 
         newDesign.save(function(err) {
             if (err) {
@@ -70,6 +71,8 @@ module.exports = function(app) {
                     devicedesign[prop] = model[prop];
                 }
             }
+
+            devicedesign.dateModified = new Date();
 
             devicedesign.save(function(err) {
                 if (err) {console.log(err);}
@@ -184,18 +187,26 @@ module.exports = function(app) {
      */
     app.delete("/users/:username/projects/:project_id/devicedesigns/:devicedesign_id", restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
+        var User = app.db.model("User");
         DeviceDesign.findById(req.params.devicedesign_id).exec(function(err,design) {
             if(err) {return res.json(500,{"error":err});}
             if(!design) {return res.json(500,{"error":"design not found"});}
-
+            var designs_id = design._id;
             design.remove(function(err){
                 if (err) {
                     app.errorHandler(err, req, res);
                 }
                 else {
-                    res.json({
-                        "designs": {}
+                    User.findById(req.user._id,function(err,user){
+                        user.designs[designs_id] = null;
+                        user.save({
+                            callback: function(err){
+                                res.json({
+                                    "designs": {}
+                                });
+                        }});
                     });
+                    
                 }
             });
 

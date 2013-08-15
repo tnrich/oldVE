@@ -103,16 +103,11 @@ Ext.define("Teselagen.models.SequenceFile", {
             if(format==="Fasta") format = "FASTA";
             if(format==="JBEISEQXML") format = "jbei-seq";
 
-            //var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
-            //format = format.toUpperCase().replace("-", "");
-            //format = format.toUpperCase().replace("JBEISEQ", "JBEISEQXML");
             var constants = Teselagen.constants.Constants;
 
             if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
                 return format;
             } else {
-                // COMMENTING THIS OUT FOR NOW
-                //console.warn("Teselagen.models.SequenceFile: File format, '" + v + "' for this sequence is not recognized. Format not set.");
                 return "INIT";
             }
 
@@ -193,16 +188,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         defaultValue: "false"
     }, {
         name: "size",
-        type: "short",
-        /*convert: function(v, record) {
-            if (!(v === "" || v === undefined || v === null)) {
-                return v;
-            }
-
-            var length = record.getLength();
-
-            return length;
-        }*/
+        type: "short"
     },{
         name: "user_id",
         type: "long"
@@ -218,23 +204,6 @@ Ext.define("Teselagen.models.SequenceFile", {
     },
 
     ],
-    /*
-    validations: [{
-        field: "sequenceFileFormat",
-        type: "presence"
-    }, {
-        field: "sequenceFileFormat",
-        type: "inclusion",
-        list: ["GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML"]
-    }, {
-        field: "sequenceFileContent",
-        type: "presence"
-    }
-    //{field: "sequenceFileName",     type: "presence"},
-    //{field: "partSource",           type: "presence"},
-    //{field: "hash",                 type: "presence"}
-    ],
-    */
     associations: [{
         type: "belongsTo",
         model: "Teselagen.models.Part",

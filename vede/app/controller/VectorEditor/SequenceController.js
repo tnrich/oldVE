@@ -155,21 +155,6 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         this.RestrictionEnzymeManager.setSequenceManager(this.SequenceManager);
         this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(this.RestrictionEnzymeGroupManager.getActiveGroup());
 
-        /*this.AAManager = Ext.create("Teselagen.manager.AAManager", {
-            sequenceManager: this.SequenceManager
-        });
-        
-        this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {
-            sequenceManager: this.SequenceManager
-        });
-
-        this.RestrictionEnzymeManager = 
-            Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
-                sequenceManager: this.SequenceManager,
-                restrictionEnzymeGroup: 
-                    this.RestrictionEnzymeGroupManager.getActiveGroup()
-        });*/
-
         this.Managers = [this.AAManager, 
                          this.RestrictionEnzymeManager,
                          this.ORFManager];
@@ -538,8 +523,6 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         if(!this.SequenceManager) {
             return;
         }
-
-        //console.log("sequence changed");
 
         Ext.suspendLayouts();
 

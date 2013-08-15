@@ -114,9 +114,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(!file) return cb(true);
 
         var self = Teselagen.bio.parsers.ParsersManager;
-        var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
 
-        if(!ext)  return cb(true,context);
+        var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+        if(match&&match[1]) { var ext = match[1]; }
+        else return cb(true,context);
 
         var reader = new FileReader();
 
@@ -178,8 +179,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             sequenceFileContent: currentGB,
             sequenceFileFormat: "GENBANK",
             name: name,
-            dateCreated:  new Date(),
-            dateModified:  new Date(),
             firstTimeImported: true,
         });
 
@@ -509,46 +508,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         }
 
 
-        
-        //var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
-        //var seqArr = [];
-        //var name = "";
-        //var sequence = "";
-
-        //if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
-        //    var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
-        //    if (nameArr !== null && nameArr.length >= 1) {
-        //        name = nameArr[0].replace(/^>/, "");
-        //    }
-        //}
-
-        //for (var i = 0; i < lineArr.length; i++) {
-        //    if (!lineArr[i].match(/^\>/)) {
-        //        sequence += Ext.String.trim(lineArr[i]);
-        //    }
-        //}
-        //sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
-        //if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
-        //    //illegalcharacters
-        //    return null;
-        //}
-        
-        /*
-        var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-            locusName: name,
-            sequenceLength: sequence.length,
-            date: Teselagen.bio.parsers.ParsersManager.todayDate()
-        });
-
-        var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
-            sequence: sequence
-        });
-
-        result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-
-        result.addKeyword(locus);
-        result.addKeyword(origin);
-        */
     },
 
     /**
