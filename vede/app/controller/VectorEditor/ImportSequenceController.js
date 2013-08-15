@@ -18,6 +18,39 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
 
     ParsersManager: Teselagen.bio.parsers.ParsersManager,
 
+
+    createOrOverrideWindowMessageBox: function(importMessages,cb){
+        var dialog = Ext.create('Ext.window.MessageBox', {
+            buttons: [{
+                text: 'Create new Sequence',
+                handler: function() {
+                    dialog.close();
+                    cb("yes");
+                }
+            },{
+                text: 'Overwrite',
+                handler: function() {
+                    dialog.close();
+                    cb("no");
+                }
+            },{
+                text: 'Cancel',
+                handler: function() {
+                    dialog.close();
+                }
+            }]
+        });
+
+        dialog.show({
+            title: 'Import preferences',
+            msg: '<p>Would you like to create a new sequence, or overwrite the current sequence?</p><br>' + importMessages.join("<br>"),
+            closable: false,
+            modal: true
+
+        });
+
+    },
+
     onImportFileToSequence: function(pFile, pExt, pEvt, sequence) {
         var self = this;
         var importMessages = [];
@@ -37,18 +70,11 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
 
                 var locusName = gb.getLocus().locusName;
 
-                importMessages.concat(sequenceManager.getParseMessages()).concat(gb.messages);
+                importMessages = importMessages.concat(sequenceManager.getParseMessages()).concat(gb.messages);
 
                 Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
 
-                Ext.MessageBox.show({
-                    title: "Import Preferences",
-                    msg: "Would you like to create a new sequence, or overwrite the current sequence?<br>" + importMessages.join("<br>"),
-                    buttons: Ext.Msg.YESNOCANCEL,
-                    buttonText: {yes: "Create a new sequence",no: "Overwrite"},
-                    icon: Ext.Msg.QUESTION,
-                    modal: true,
-                    fn: function (btn) {
+                self.createOrOverrideWindowMessageBox(importMessages, function (btn) {
                         if (btn==="yes") {
                             // Create a new sequence.
 
@@ -111,10 +137,18 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
 
                             Vede.application.fireEvent(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, sequenceManager);
                         }
-                    }
-                });
-                });
+                    });
             });
+        });
+
+    },
+    init: function() {
+
+        this.application.on(Teselagen.event.ProjectEvent.IMPORT_FILE_TO_SEQUENCE,this.onImportFileToSequence, this);
+    }
+});
+
+            
 
             /*performSequenceCreation = function(newSequence,cb){
 
@@ -248,9 +282,3 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                     performSequenceCreation();
                 }
             }*/
-    },
-    init: function() {
-
-        this.application.on(Teselagen.event.ProjectEvent.IMPORT_FILE_TO_SEQUENCE,this.onImportFileToSequence, this);
-    }
-});
