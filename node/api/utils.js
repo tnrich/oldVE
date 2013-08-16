@@ -138,7 +138,6 @@ module.exports = function(app) {
     });   
 
     app.get('/getStats', restrict, function(req, res) {
-        //var numProjects = req.user.projects.length;    
 
         var User = app.db.model("User");
         User.findById(req.user._id)
@@ -147,7 +146,6 @@ module.exports = function(app) {
         .exec(function(err, user) {
             var countDesigns = 0;
             user.projects.forEach(function(project){
-                console.log("Project ",project.name," ",project.designs.length," designs.");
                 countDesigns += project.designs.length;
             });
             var countProjects = user.projects.length;
