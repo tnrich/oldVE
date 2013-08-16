@@ -125,16 +125,32 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 	},
 
 	openPart: function(part_id,cb){
-        var part = Teselagen.manager.ProjectManager.currentUser.parts().getById(part_id);
+        var continueProcess = function(part){
+            part.getSequenceFile({
+                callback: function (loadedsequence) {
+                    //Teselagen.manager.ProjectManager.workingProject = project;
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, loadedsequence, part);
+                    // Teselagen.manager.ProjectManager.openSequence(loadedsequence);
+                    if(typeof (cb) === "function") {cb(); }
+                }
+            });
+        };
 
-        part.getSequenceFile({
-            callback: function (loadedsequence) {
-                //Teselagen.manager.ProjectManager.workingProject = project;
-                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, loadedsequence, part);
-                // Teselagen.manager.ProjectManager.openSequence(loadedsequence);
-                if(typeof (cb) === "function") {cb(); }
-            }
-        });   
+        var partsStore = Teselagen.manager.ProjectManager.parts;
+        var part = partsStore.getById(part_id);
+
+        if(part) continueProcess(part);
+        else
+        {
+            partsStore.load({
+                params: {
+                    id: part_id
+                },
+                callback: function(parts){
+                    continueProcess(parts[0]);
+                }
+            })
+        }
 	},
 
 
