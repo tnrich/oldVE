@@ -12,11 +12,6 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
                "Teselagen.models.digest.GelLane",
                "Teselagen.models.digest.Ladder"],
     config: {
-        sampleLane: null,
-        /**
-         * The {Teselagen.models.digest.Gel} which represents this digestion gel
-         */
-        gel: null,
         /**
          * The {Teselagen.models.digest.Ladder} which contains definition of various ladders
          */
@@ -31,8 +26,15 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
          */
         dnaSequence: null
     },
+    /*
+     * The panel where the gel is drawn
+     */
     digestPanel: null,
-    enzymeListSelector: null,
+    /*
+     * The object that represents the multiSelect control for selecting enzymes
+     */
+    selectedLadder: null,
+    ladderSpriteGroup: null,
     GroupManager: null,
     
     /**
@@ -121,19 +123,20 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: this.dnaSequence, enzymes: this.enzymes});
         gel.insertLane(sampleLane);
         var sprites = gel.draw();
-        if (this.ladderSpriteGroup !== undefined && this.ladderSpriteGroup !== null) {
-            this.ladderSpriteGroup.destroy();
+        var ladderSpriteGroup;
+        if (ladderSpriteGroup !== undefined && ladderSpriteGroup !== null) {
+            ladderSpriteGroup.destroy();
         }
-        this.ladderSpriteGroup = Ext.create("Ext.draw.CompositeSprite", {
+        ladderSpriteGroup = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.digestPanel.surface
         });
         for (var i=0; i < sprites.length; i++){
-            this.ladderSpriteGroup.add(sprites[i]);
+            ladderSpriteGroup.add(sprites[i]);
         }
-        this.ladderSpriteGroup.each(function(band){
+        ladderSpriteGroup.each(function(band){
             tempSurface.add(band);
         });
-        this.ladderSpriteGroup.show(true);
+        ladderSpriteGroup.show(true);
 
         for (i = 0; i < sprites.length; i++){
             //only show tooltips for the products of digestion. I tried to make these tooltips while making the sprites but
@@ -148,5 +151,16 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
                 });
             }
         }
+    },
+    
+    /**
+     * Cleans up objects
+     */
+    destroy: function() {
+//        this.ladderSpriteGroup.destroy();
+        //        this.Ladder = null;
+//        this.enzymes = null;
+//        this.dnaSequence = null;
+//        this.digestPanel = null;
     }
 });

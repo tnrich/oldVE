@@ -31,10 +31,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       */
      managerWindow: null,
      /*
-      * The panel where the gel is drawn
-      */
-     digestPanel: null,
-     /*
       * The dnaSequence to be digested
       */
      dnaSequence: null,
@@ -56,7 +52,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
         this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
         this.DNATools = Teselagen.bio.sequence.DNATools;
-        this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
         this.Logger = Teselagen.utils.Logger;
         this.control({
             "#mainAppPanel": {
@@ -88,14 +83,14 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
             }
         });
 
-        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
+        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
                             this.getSequenceManagerData, this);
 
         this.application.on(Teselagen.event.MenuItemEvent.SIMULATE_DIGESTION_WINDOW_OPENED,
                             this.onSimulateDigestionOpened, this);
     },
 
-    onTabChange: function(mainAppPanel, newTab, oldTab) {
+    onTabChange: function(mainAppPanel, newTab) {
         this.activeTab = newTab;
 
         if(newTab.initialCls === "VectorEditorPanel") {
@@ -113,7 +108,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          } else {
              this.dnaSequence = "";
          }
-         this.digestManager.setDnaSequence(this.dnaSequence);
+//         this.digestManager.setDnaSequence(this.dnaSequence);
      },
      /**
       * Initializes several items in this controller and the manager
@@ -125,11 +120,11 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
          this.searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
          var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
-         this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
          this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
          this.addAllBtn = this.enzymeListSelector.down("button[cls=enzymeSelector-btn]");
-         this.digestManager.digestPanel = this.digestPanel;
-         this.digestManager.enzymeListSelector = this.enzymeListSelector;
+         this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager");
+         this.digestManager.setDnaSequence(this.dnaSequence);
+         this.digestManager.digestPanel = this.managerWindow.query("#drawingSurface")[0];
          this.enzymeListSelector.toField.bindStore(this.GroupManager.getActiveUserGroup().userRestrictionEnzymes());
          if(!me.GroupManager.getIsInitialized()) {
              me.GroupManager.initialize();
@@ -218,12 +213,26 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.digestManager.updateLadderLane(combobox.getValue());
      },
      
+     destroy: function() {
+         this.enzymeListSelector.fromField.getStore().removeAll();
+         this.enzymeListSelector.toField.bindStore(null);
+         this.enzymeListSelector = null;
+         this.groupSelector.store.removeAll();
+         this.groupSelector = null;
+         this.dnaSequence = null;
+         this.addAllBtn = null;
+         this.digestManager = null;
+         this.managerWindow.destroy();
+         this.managerWindow = null;
+     },
+     
      /**
      * After window is closed.
      */
     onWindowClose: function() {
         // Reload user to rollback any unsaved changes
         this.GroupManager.loadUserGroups();
+        this.destroy();
     },
     
     /**
