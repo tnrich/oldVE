@@ -136,11 +136,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
                 return Teselagen.bio.util.Sha256.hex_sha256(content);
                 }
-                else
-                {
-                    console.warn("Working with a sequence with empty content");
-                    return "";
-                }
+                else return "";
             }
         }
     },
