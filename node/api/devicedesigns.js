@@ -124,7 +124,6 @@ module.exports = function(app) {
     app.get("/users/:username/projects/:project_id/devicedesigns/:devicedesign_id", restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.params.devicedesign_id, function(err) {
-//            var originalDesign = design.toObject();
             if (err) {
                 app.errorHandler(err, req, res);
             } else {
@@ -162,7 +161,6 @@ module.exports = function(app) {
 
             var parts = JSON.parse(JSON.stringify(design.parts));
             parts.forEach(function(part){
-               // part.devicedesign_id = req.params.devicedesign_id;
                 delete part.__v;
                 delete part._id;
                 delete part.definitionHash;

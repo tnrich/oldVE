@@ -84,7 +84,6 @@ module.exports = function(app) {
                 var identical = false;
                 var part;
                 var parts = user.parts;
-                //Part.find({"user_id": reqPart.user_id}, function(err, parts) {
                     counter = parts.length;
                     for(var i = 0; i < parts.length; i++) {
                         part = parts[i];

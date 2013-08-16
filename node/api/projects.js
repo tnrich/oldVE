@@ -16,7 +16,6 @@ module.exports = function(app) {
             dateModified: req.body.dateModified
         }, function(err, project) {
             if (!err) {
-//                console.log("New project Saved");
                 res.json({
                     "projects": project
                 });
@@ -87,7 +86,6 @@ module.exports = function(app) {
                         proj.veprojects = undefined;
                     });
                 }
-            //console.log("Returning "+user.projects.length+" projects");
             res.json({
                 "projects": user.projects
             });
