@@ -6,8 +6,8 @@
   font-family: 'Maven Pro';
   font-style: normal;
   font-weight: normal;
-  src: url('../fonts/MavenPro-Regular.ttf');
-  src: local('Maven Pro'), local('Maven Pro'), url('../fonts/MavenPro-Regular.ttf') format('truetype');
+  src: url('fonts/MavenPro-Regular.ttf');
+  src: local('Maven Pro'), local('Maven Pro'), url('fonts/MavenPro-Regular.ttf') format('truetype');
 }
 
 body {
