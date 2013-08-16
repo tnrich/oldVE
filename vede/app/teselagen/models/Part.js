@@ -32,6 +32,12 @@ Ext.define("Teselagen.models.Part", {
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
             }
 
+            if(request.action === "read" && request.params && request.params.id )
+            {
+                var url = "parts/"+request.params.id;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
             {
                 var url = "parts";

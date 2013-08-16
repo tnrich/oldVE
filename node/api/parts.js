@@ -156,6 +156,28 @@ module.exports = function(app) {
 
 
     /**
+     * GET Parts by id
+     * @memberof module:./routes/api
+     * @method GET 'parts/:part_id'
+     */
+    app.get('/parts/:part_id', restrict,  function(req, res) {
+
+        User.findById(req.user._id).populate('parts').exec(function(err, user) {
+            User.findById(req.user._id).populate({
+                path: 'parts', 
+                match: {_id: req.params.part_id}
+            })
+            .exec(function(err, user) {
+                res.json({
+                    success: true,
+                    parts: user.parts,
+                    results: user.parts.length
+                });
+            });
+        });
+    });
+
+    /**
      * DELETE Parts
      * @memberof module:./routes/api
      * @method DELETE 'parts'
