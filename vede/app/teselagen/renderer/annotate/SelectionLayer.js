@@ -197,14 +197,12 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         this.selectionSVG.append("svg:rect")
             .attr("class", "selectionRectangle")
             .attr("x", startMetrics.x - 10)
-            .attr("y", startMetrics.y)
+            .attr("y", startMetrics.y + 8)
             .attr("width", 20)
             .attr("height", this.sequenceAnnotationManager.caret.height)
             .attr("fill-opacity", 0)
+            .style("cursor", "w-resize")
             .on("mousedown", function(e) {
-                // For some reason, changing the cursor is extremely slow.
-                //Ext.getBody().setStyle("cursor", "col-resize");
-                
                 Vede.application.fireEvent(
                     that.SelectionLayerEvent.HANDLE_CLICKED, "left");
             });
@@ -213,14 +211,12 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         this.selectionSVG.append("svg:rect")
             .attr("class", "selectionRectangle")
             .attr("x", endMetrics.x - 10)
-            .attr("y", endMetrics.y)
+            .attr("y", endMetrics.y + 8)
             .attr("width", 20)
             .attr("height", this.sequenceAnnotationManager.caret.height)
             .attr("fill-opacity", 0)
+            .style("cursor", "e-resize")
             .on("mousedown", function(e) {
-                // For some reason, changing the cursor is extremely slow.
-                //Ext.getBody().setStyle("cursor", "col-resize");
-
                 Vede.application.fireEvent(
                     that.SelectionLayerEvent.HANDLE_CLICKED, "right");
             });

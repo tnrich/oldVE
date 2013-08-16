@@ -118,13 +118,22 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
 
             this.selectionPositionText.el.setHTML(selectionLabelText);
 
-            meltingTemperature = this.TemperatureCalculator.calculateTemperature(selection);
-                
+            var self = this;
 
-            if(meltingTemperature > 0) {
-                this.meltingTemperatureText.el.setHTML(meltingTemperature.toFixed(2) + "&deg;C");
-                this.meltingTemperatureText.el.setStyle("top", "1px");
-            }
+            // With large sequences, calculating the melting temperature takes a
+            // long time, adding lag to the app when selecting. This code will
+            // only calculate the temperature if the selection doesn't change
+            // for 500 milliseconds.
+            clearTimeout(this.tempTimeout);
+
+            this.tempTimeout = setTimeout(function() {
+                meltingTemperature = self.TemperatureCalculator.calculateTemperature(selection);
+                
+                if(meltingTemperature > 0) {
+                    self.meltingTemperatureText.el.setHTML(meltingTemperature.toFixed(2) + "&deg;C");
+                    self.meltingTemperatureText.el.setStyle("top", "1px");
+                }
+            }, 500);
         }
     },
 

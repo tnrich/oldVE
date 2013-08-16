@@ -125,7 +125,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 	},
 
 	openPart: function(part_id,cb){
-
         var continueProcess = function(part){
             part.getSequenceFile({
                 callback: function (loadedsequence) {
@@ -152,8 +151,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 }
             })
         }
-
-
 	},
 
 

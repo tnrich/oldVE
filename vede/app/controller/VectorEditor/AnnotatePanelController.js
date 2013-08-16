@@ -209,11 +209,15 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         } else {
             this.endHandleResizing = true;
         }
+
+        this.mouseIsDown = true;
     },
 
     onHandleReleased: function() {
         this.startHandleResizing = false;
         this.endHandleResizing = false;
+
+        this.mouseIsDown = false;
     },
 
     onHighlight: function(indices) {
