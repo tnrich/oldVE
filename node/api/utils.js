@@ -84,7 +84,6 @@ module.exports = function(app) {
                 var identical = false;
                 var part;
                 var parts = user.parts;
-                //Part.find({"user_id": reqPart.user_id}, function(err, parts) {
                     counter = parts.length;
                     for(var i = 0; i < parts.length; i++) {
                         part = parts[i];
@@ -139,7 +138,6 @@ module.exports = function(app) {
     });   
 
     app.get('/getStats', restrict, function(req, res) {
-        //var numProjects = req.user.projects.length;    
 
         var User = app.db.model("User");
         User.findById(req.user._id)
@@ -148,7 +146,6 @@ module.exports = function(app) {
         .exec(function(err, user) {
             var countDesigns = 0;
             user.projects.forEach(function(project){
-                console.log("Project ",project.name," ",project.designs.length," designs.");
                 countDesigns += project.designs.length;
             });
             var countProjects = user.projects.length;

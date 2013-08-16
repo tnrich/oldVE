@@ -13,7 +13,8 @@ Ext.define('Vede.view.AppViewport', {
     },
 
     requires: [
-        'Ext.ux.TabCloseMenu',
+    'Ext.tab.*',
+    'Ext.ux.TabCloseMenu',
         'Vede.view.common.HeaderPanelView',
         'Vede.view.common.ProjectPanelView',
         'Vede.view.common.DashboardPanelView',
@@ -55,6 +56,18 @@ Ext.define('Vede.view.AppViewport', {
                             }
                         }
                     ],
+                    /*
+                    listeners: {
+                        add: function( tabpanel, tab, index, eOpts )
+                        {   
+                            tab.tab.on("render",function(){
+                                arguments[0].getEl().on("contextmenu",function(){
+                                    tab = Ext.getCmp(yourelement.id);
+                                });
+                            });
+                        }
+                    },
+                    // WAITING FOR EXT PEOPLE FIX THIS PLUGIN
                     plugins: Ext.create('Ext.ux.TabCloseMenu', {
                         extraItemsTail: [
                             '-',
@@ -65,21 +78,34 @@ Ext.define('Vede.view.AppViewport', {
                                 handler: function (item) {
                                     currentItem.tab.setClosable(item.checked);
                                 }
+                            },
+                            '-',
+                            {
+                                text: 'Enabled',
+                                checked: true,
+                                hideOnClick: true,
+                                handler: function(item) {
+                                    currentItem.tab.setDisabled(!item.checked);
+                                }
                             }
                         ],
                         listeners: {
-                            aftermenu: function () {
-                                currentItem = null;
-                                console.log("listening aftermenu");
-                            },
                             beforemenu: function (menu, item) {
-                                var menuitem = menu.child('*[text="Closable"]');
+                                var enabled = menu.child('[text="Enabled"]'); 
+                                menu.child('[text="Closable"]').setChecked(item.closable);
+                                if (item.tab.active) {
+                                    enabled.disable();
+                                } else {
+                                    enabled.enable();
+                                    enabled.setChecked(!item.tab.isDisabled());
+                                }
+
                                 currentItem = item;
-                                menuitem.setChecked(item.closable);
-                                console.log("listening before menu");
                             }
                         }
                     })
+                    */
+                       
                 }
             ]
         });

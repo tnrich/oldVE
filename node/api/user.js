@@ -13,15 +13,6 @@ module.exports = function(app) {
         res.json({
             "user": req.user
         });
-        //userManager.getById(req.user._id, function(err, user) {
-        //    if (err) {
-        //        app.errorHandler(err, req, res);
-        //    } else {
-        //        res.json({
-        //            "user": user
-        //        });
-        //    }
-        //});
     });
 
     /**
