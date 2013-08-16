@@ -126,6 +126,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
 	openPart: function(part_id,cb){
         var part = Teselagen.manager.ProjectManager.currentUser.parts().getById(part_id);
+
         part.getSequenceFile({
             callback: function (loadedsequence) {
                 //Teselagen.manager.ProjectManager.workingProject = project;
