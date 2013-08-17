@@ -34,7 +34,6 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      * The object that represents the multiSelect control for selecting enzymes
      */
     selectedLadder: null,
-    ladderSpriteGroup: null,
     GroupManager: null,
     
     /**

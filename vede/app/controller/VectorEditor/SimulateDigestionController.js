@@ -213,9 +213,11 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.digestManager.updateLadderLane(combobox.getValue());
      },
      
+     /**
+     * Cleanup objects
+     */
      destroy: function() {
          this.enzymeListSelector.fromField.getStore().removeAll();
-         this.enzymeListSelector.toField.bindStore(null);
          this.enzymeListSelector.destroy();
          this.enzymeListSelector = null;
          this.groupSelector.store.removeAll();
@@ -224,9 +226,9 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          this.dnaSequence = null;
          this.addAllBtn = null;
          this.digestManager = null;
+         this.searchCombobox = null;
          this.managerWindow.destroy();
          this.managerWindow = null;
-         this.searchComboBox = null;
      },
      
      /**

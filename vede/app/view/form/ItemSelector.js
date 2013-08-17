@@ -371,7 +371,6 @@ Ext.define('Vede.view.form.ItemSelector', {
 
     onBindStore: function(store, initial) {
         var me = this;
-        console.log("Store is bound");
         if (me.fromField) {
             me.fromField.store.removeAll()
             me.toField.store.removeAll();
@@ -422,12 +421,16 @@ Ext.define('Vede.view.form.ItemSelector', {
     },
 
     onDestroy: function(){
-        console.log("Destroy ItemSelector");
-        this.bindStore(null);
-        this.toField.bindStore(null);
+        this.toField.boundList.destroy();
+        this.toField.boundList.scope = null;
+        this.toField.boundList = null;
         this.toField.destroy();
-        this.fromField.bindStore(null);
+        this.toField = null;
+        this.fromField.boundList.destroy();
+        this.fromField.boundList.scope = null;
+        this.fromField.boundList = null;
         this.fromField.destroy();
+        this.fromField = null;
         this.callParent();
     }
 });

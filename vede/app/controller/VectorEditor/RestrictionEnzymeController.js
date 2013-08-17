@@ -265,11 +265,25 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
         }
     },
 
-    /**
+     /**
+     * Cleanup objects
+     */
+     destroy: function() {
+         this.enzymeSelector.fromField.getStore().removeAll();
+         this.enzymeSelector.destroy();
+         this.enzymeSelector = null;
+         this.userEnzymeGroupSelector.destroy();
+         this.userEnzymeGroupSelector = null;
+         this.managerWindow.destroy();
+         this.managerWindow = null;
+     },
+
+     /**
      * After window is closed.
      */
     onWindowClose: function() {
         // Reload user to rollback any unsaved changes
         this.GroupManager.loadUserGroups();
+        this.destroy();
     }
 });
