@@ -142,7 +142,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         );
     },
 
-    openSequenceLibrary: function (itemCount) {
+    openSequenceLibrary: function (itemCount, searchString) {
         var dashPanel = Ext.getCmp("DashboardPanel");
         var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
         var sequences = Teselagen.manager.ProjectManager.sequences;
@@ -155,8 +155,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
             } else {
                 sequences.pageSize = itemCount;
             }
-            // sequences.clearFilter();
-            sequences.loadPage(1);
+
+            if(searchString) {
+                sequences.remoteFilter = true;
+                sequences.on('load', function(s){ 
+                    s.remoteFilter = false; 
+                }, this, { single: true });
+                
+                sequences.filter("name", Ext.String.escapeRegex(searchString));
+            } else {
+                sequences.loadPage(1);
+            }
+
             sequenceGrid.reconfigure(sequences);
             sequenceGrid.down('pagingtoolbar').bind(sequences);
             sequenceGrid.down('pagingtoolbar').doRefresh();

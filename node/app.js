@@ -10,6 +10,8 @@
 var express = require('express');
 var app = express();
 
+var agent = require('webkit-devtools-agent');
+
 /* Dependencies loading */
 app.async = require('async');
 app.fs = require('fs');

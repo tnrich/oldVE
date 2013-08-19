@@ -21,6 +21,9 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	this.sequenceGrid = Ext.getCmp('saveAsWindowSequencesGrid');
         this.sequenceNameField = Ext.getCmp('saveAsWindowSequenceNameField');
 
+        Teselagen.manager.ProjectManager.sequences.clearFilter();
+        Teselagen.manager.ProjectManager.sequences.loadPage(1);
+
         this.sequenceGrid.reconfigure(Teselagen.manager.ProjectManager.sequences);
     	
         this.sequenceNameField.setValue(this.sequenceManager.getName());
@@ -38,17 +41,6 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
     	if(name==null || name.match(/^\s*$/) || name.length==0) {
     		this.sequenceNameField.setFieldStyle("border-color:red");
     	} else {
-            Teselagen.manager.UserManager.getUser().sequences().load().each(function (sequence) {
-                sequencesNames.push(sequence.data.name);
-            });
-            
-            for (var j=0; j<sequencesNames.length; j++) {
-                if (sequencesNames[j]===name) {
-                	Ext.MessageBox.alert('','A sequence with the name "'+name+'" already exists. \nPlease select another name.');
-    				return;
-                }
-            }
-                		
     		var genbank = this.sequenceManager.toGenbank();
     		var locus = genbank.getLocus();
     		locus.locusName = name;
@@ -62,19 +54,28 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                 partSource: workingSequence.data.partSource,
                 name: name
             });
-
     		            
             newSequenceFile.save({
-                callback: function () {
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                        Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-                        Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
-                    });
+                success: function () {
+                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+
+                    if(!duplicated) {
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                            Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
+                        });
+
+                        this.sequenceGrid.store.clearFilter();
+    		            Ext.getCmp('SaveAsWindow').close();
+                    } else {
+                	    Ext.MessageBox.alert('', 'A sequence with the name "' + 
+                            name + '" already exists. \nPlease select another name.');
+                    }
+                },
+                failure: function() {
+                    Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
                 }
-            });    		
-    		
-            this.sequenceGrid.store.clearFilter();
-    		Ext.getCmp('SaveAsWindow').close();
+            });
     	}	
     },
 

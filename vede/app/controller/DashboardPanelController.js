@@ -19,8 +19,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
         }
 
         if(Ext.getCmp("partLibrarySearch").value) {
-           Ext.getCmp("partLibrarySearch").setValue("");
-         }
+            Ext.getCmp("partLibrarySearch").setValue("");
+        }
+    },
+
+    onMainAppPanelTabChange: function(mainAppPanel, newTab, oldTab) {
+        
     },
 
 	onLastDEProjectsItemClick: function (item,record) {
@@ -84,43 +88,41 @@ Ext.define("Vede.controller.DashboardPanelController", {
         });
 	},
 
-  onTabChange: function(tabPanel, newTab, oldTab) {
+    onTabChange: function(tabPanel, newTab, oldTab) {
+        if(newTab.initialCls == "sequenceLibraryPanel") {
+            var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+            var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
 
-      if(newTab.initialCls == "sequenceLibraryPanel") {
+            var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
+            currentTab.el.mask("Loading j5 report", "loader rspin");
+            $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
-
-        var sequenceTab = Ext.getCmp("DashboardPanel").down("panel[cls='sequenceLibraryPanel']");
-        currentTab.el.mask("Loading j5 report", "loader rspin");
-        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
-
-        if (newTab == sequenceTab ) {
-          Teselagen.manager.ProjectManager.openSequenceLibrary();
+            if (newTab == sequenceTab ) {
+                Teselagen.manager.ProjectManager.openSequenceLibrary(null, 
+                                                        searchField.getValue());
+            }
+            else
+            {
+              currentTab.down('pagingtoolbar').doRefresh();
+            }
         }
-        else
-        {
-          currentTab.down('pagingtoolbar').doRefresh();
+        else if(newTab.initialCls == "partLibraryPanel") {
+
+            var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+            var partTab = Ext.getCmp("DashboardPanel").down("panel[cls='partLibraryPanel']");
+            currentTab.el.mask("Loading Part Library", "loader rspin");
+            $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+            if (newTab == partTab ) {
+              Teselagen.manager.ProjectManager.openPartLibrary();
+            }
+            else
+            {
+              Teselagen.manager.ProjectManager.parts.clearFilter();
+              currentTab.down('pagingtoolbar').doRefresh();
+            }
         }
-
-      }
-      else if(newTab.initialCls == "partLibraryPanel") {
-
-        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
-        var partTab = Ext.getCmp("DashboardPanel").down("panel[cls='partLibraryPanel']");
-        currentTab.el.mask("Loading Part Library", "loader rspin");
-        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
-
-        if (newTab == partTab ) {
-          Teselagen.manager.ProjectManager.openPartLibrary();
-        }
-        else
-        {
-          Teselagen.manager.ProjectManager.parts.clearFilter();
-          currentTab.down('pagingtoolbar').doRefresh();
-        }
-
-      }
-  },
+    },
 
   // onMainTabChange: function(tabPanel, newTab, oldTab) {
   //   console.log(newTab);
@@ -290,7 +292,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
 	     	this.control({
             "#mainAppPanel": {
-                beforetabchange: this.onBeforeTabChange
+                beforetabchange: this.onBeforeTabChange,
+                tabchange: this.onMainAppPanelTabChange
             },
             "#designGrid_Panel": {
                 itemclick: this.onLastDEProjectsItemClick
