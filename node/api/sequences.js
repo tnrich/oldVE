@@ -23,7 +23,7 @@ module.exports = function(app) {
                     {
                         // Duplicated Sequence
                         Sequence.findOne({"FQDN":newSequence.FQDN}).exec(function(err,sequence){
-                            res.json({'sequences': sequence,"duplicated":true});
+                            return res.json({'sequences': sequence,"duplicated":true});
                         });
                     }
                     else
@@ -34,7 +34,7 @@ module.exports = function(app) {
                 else 
                     {
                         if (typeof(cb) == 'function') cb(newSequence);
-                        res.json({'sequences': newSequence,"duplicated":false,"err":err});
+                        return res.json({'sequences': newSequence,"duplicated":false,"err":err});
                     }
             });
     };
