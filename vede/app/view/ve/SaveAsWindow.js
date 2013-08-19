@@ -92,7 +92,6 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                             margin: 10,
                             text: 'Cancel',
                             handler: function() {
-                                debugger;
                                 me.down('grid').store.clearFilter();
                                 me.down('grid').store.load();
                                 me.close();
