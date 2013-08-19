@@ -232,19 +232,29 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		
 		gridManager.setListenersEnabled(false);
 
+		this.selected
 		var loc = command.data.loc;
 		var rowIndex;
+		var subRowIndex;
 		if(loc=="ABOVE") {
 			rowIndex = command.data.y;
+			subRowIndex = command.data.y;
 		} else if(loc=="BELOW") {
 			rowIndex = command.data.y+1;
+			subRowIndex = command.data.y;
 		}
 			
 		for(var i=0;i<gridManager.activeProject.bins().count();i++) {
 			gridManager.activeProject.bins().getAt(i).cells().removeAt(rowIndex);
+			gridManager.selectedGridPart = null;
 		}
 		
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS, true);
+
+		if(gridManager.selectedColumnIndex !== null) {
+            gridManager.selectGridCellByIndex(gridManager.selectedColumnIndex, subRowIndex, true);
+        }
+		
 		gridManager.setListenersEnabled(true);
 	},
 	
