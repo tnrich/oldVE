@@ -118,7 +118,13 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         convert: function(v,record)
         {
-            return Math.abs(record.get("genbankStartBP") - record.get("endBP"));
+            if(record.get("genbankStartBP")>record.get("endBP")) {
+                return Math.abs(record.get("endBP") - record.get("genbankStartBP"));
+            } else if (record.get("genbankStartBP")==record.get("endBP")) {
+                return 1;
+            } else {
+                return Math.abs(record.get("genbankStartBP") - record.get("endBP"));
+            }
         }
     }, //stopBP
     {
