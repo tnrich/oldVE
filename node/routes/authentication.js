@@ -19,7 +19,7 @@ module.exports = function(app){
      * Set current user from user session, otherwise send an error.
      */
     var restrict = function(req, res, next) {
-        if (req.session.user) {
+        if (req.session && req.session.user && req.session.user._id) {
             req.user = req.session.user;
             next();
         } else {
