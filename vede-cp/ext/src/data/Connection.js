@@ -1028,7 +1028,15 @@ Ext.define('Ext.data.Connection', {
             };
 
         }
-        success = me.isXdr ? xdrResult : result.success;
+        if(me.isXdr)
+        { 
+            success = xdrResult 
+        }
+        else if(result.success && !request.timedout)
+        {
+            success = result.success;
+        }
+        else sucess = false;
 
         if (success) {
             response = me.createResponse(request);
