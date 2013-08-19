@@ -304,12 +304,15 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		var gridManager = Teselagen.manager.GridManager;
 		var xIndex = command.data.x;
 		var yIndex = command.data.y;
+        var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
+		var cell = gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex);
 		
 		if(command.data.partAdded) {
 			gridManager.activeProject.parts().remove(command.data.newPart);			
 			//gridManager.activeProject.parts().add(command.data.oldPart);
 		}
 		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).setPart(command.data.oldPart);
+		inspectorController.onCellSelected(cell, xIndex, yIndex);
 	},
 	
 	undoPartFas: function(command) {

@@ -263,9 +263,8 @@ Ext.define("Teselagen.manager.GridManager", {
 		var binCount = this.activeProject.bins().count();
 		
 		this.setListenersEnabled(false);
-		
-		this.selectedGridPart = null;
-		this.selectedGridBin = null;
+
+	    this.selectedColumnIndex = Number(this.selectedGridBin.attr("deGridBinIndex"));
 		
 		for(var i=0;i<binCount;i++) {
 			bin = this.activeProject.bins().getAt(i);
@@ -295,6 +294,13 @@ Ext.define("Teselagen.manager.GridManager", {
         		loc: "ABOVE"
         	}
 		});
+       
+
+		// if(this.selectedColumnIndex !== null) {
+  //           this.selectGridBinHeaderByIndex(this.selectedColumnIndex, true);
+            
+  //               this.selectGridCellByIndex(this.selectedColumnIndex, rowIndex+1, true);
+  //       }
 	},
 	
 	addColumnRight: function() {
