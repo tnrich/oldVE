@@ -50,6 +50,7 @@ module.exports = function(app) {
         req.body.dateCreated = new Date();
         saveSequence(newSequence,req,res,function(savedSequence){
             User.findById(req.user._id).populate('sequences').exec(function(err, user) {
+                if(!user) return res.json(500,{"error":"User not found!"});
                 user.sequences.push(savedSequence);
                 user.save();
             });

@@ -64,6 +64,9 @@ Ext.define("Vede.controller.J5ReportController", {
         item.addCls("j5-menuitem-active");
 
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
+
+        if(!this.activeJ5Run) {return;}
+
         var assemblyMethod = this.activeJ5Run.get('assemblyMethod');
         var status = this.activeJ5Run.get('status');
         var startDate = new Date(this.activeJ5Run.get('date'));
@@ -190,33 +193,35 @@ Ext.define("Vede.controller.J5ReportController", {
 
     elapsedDate: function (seconds)
     {
-    var numdays = Math.floor((seconds % 31536000) / 86400); 
-    var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-    var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-    if (numdays>0) {
-        return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-    }else if (numhours>0) {
-        return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-    }else if (numminutes>0) {
-        return numminutes + " minutes " + numseconds + " seconds";
-    } else {
-    return numseconds + " seconds";
-    }
+        var numdays = Math.floor((seconds % 31536000) / 86400); 
+        var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+        var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+        var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+        if (numdays>0) {
+            return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+        }else if (numhours>0) {
+            return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+        }else if (numminutes>0) {
+            return numminutes + " minutes " + numseconds + " seconds";
+        } else {
+        return numseconds + " seconds";
+        }
     },
 
     renderMenu: function(){
-       var menu = this.tabPanel.down('menu');
-       menu.removeAll();
-       this.j5runs.forEach(function(j5run){
-            var date = new Date(j5run.data.date);
-            menu.add([{text:j5run.getItemTitle(),id:j5run.data.id,cls:'j5runselect'}]);
-       });
+        var menu = this.tabPanel.down('menu');
+        menu.removeAll();
+        this.j5runs.forEach(function(j5run){
+             var date = new Date(j5run.data.date);
+             menu.add([{text:j5run.getItemTitle(),id:j5run.data.id,cls:'j5runselect'}]);
+        });
+
+        if(!this.j5runs.length) menu.add({text:"No j5 results to show"});
 
         if(this.activeJ5Run) {
             var item =  Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='"+this.activeJ5Run.internalId+"']")[0];
             if(item) {
-            item.addCls("j5-menuitem-active");
+                item.addCls("j5-menuitem-active");
             }
         }
 

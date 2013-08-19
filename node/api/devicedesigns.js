@@ -110,6 +110,7 @@ module.exports = function(app) {
         var Project = app.db.model("project");
         var project_id = req.params.project_id;
         Project.findById(project_id).populate({path:"designs", select:"name id project_id"}).exec(function(err, project) {
+            if(!project) {return res.json(500,{"error":"project not found"});}
             res.json({
                 "designs": project.designs
             });
