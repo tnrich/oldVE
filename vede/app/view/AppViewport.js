@@ -47,6 +47,7 @@ Ext.define('Vede.view.AppViewport', {
                         {
                             xtype: 'DashboardPanelView',
                             title: null,
+                            cls: 'DashboardPanelTab',
                             iconCls: 'home-dash-icon',
                             iconAlign: 'top',
                             listeners: {
