@@ -279,6 +279,7 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	undoPartDel: function(command) {
 		var me = Teselagen.manager.GridCommandPatternManager;
 		var gridManager = Teselagen.manager.GridManager;
+        var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
 
 		gridManager.setListenersEnabled(false);
 		
@@ -296,6 +297,7 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		if(rules.length!==0) gridManager.activeProject.rules().add(rules);
 		
 		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
+		inspectorController.onCellSelected(cell, xIndex, yIndex);
 		gridManager.setListenersEnabled(true);
 	},
 	
