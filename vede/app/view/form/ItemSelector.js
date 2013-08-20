@@ -254,8 +254,7 @@ Ext.define('Vede.view.form.ItemSelector', {
         var recsUnique = [];
         // Filter out duplicates
         for (var i=0; i < recs.length; i++) {
-            if (toStore.findExact(this.displayField, recs[i].get(this.displayField)) 
-                    === -1) {
+            if (toStore.findExact(this.displayField, recs[i].get(this.displayField)) === -1) {
                 recsUnique.push(recs[i]);
             }
         }
@@ -373,7 +372,7 @@ Ext.define('Vede.view.form.ItemSelector', {
     onBindStore: function(store, initial) {
         var me = this;
         if (me.fromField) {
-            me.fromField.store.removeAll()
+            me.fromField.store.removeAll();
             me.toField.store.removeAll();
 
             // Add everything to the from field as soon as the Store is loaded
@@ -424,11 +423,15 @@ Ext.define('Vede.view.form.ItemSelector', {
     onDestroy: function(){
         this.toField.boundList.destroy();
         this.toField.boundList.scope = null;
+        this.toField.boundList.itemdblclick = null;
+        this.toField.boundList.drop = null;
         this.toField.boundList = null;
         this.toField.destroy();
         this.toField = null;
         this.fromField.boundList.destroy();
         this.fromField.boundList.scope = null;
+        this.fromField.boundList.itemdblclick = null;
+        this.fromField.boundList.drop = null;
         this.fromField.boundList = null;
         this.fromField.destroy();
         this.fromField = null;

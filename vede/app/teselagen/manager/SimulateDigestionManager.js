@@ -34,6 +34,7 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      * The object that represents the multiSelect control for selecting enzymes
      */
     selectedLadder: null,
+    ladderSpriteGroup: null,
     GroupManager: null,
     
     /**
@@ -122,20 +123,19 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: this.dnaSequence, enzymes: this.enzymes});
         gel.insertLane(sampleLane);
         var sprites = gel.draw();
-        var ladderSpriteGroup;
-        if (ladderSpriteGroup !== undefined && ladderSpriteGroup !== null) {
-            ladderSpriteGroup.destroy();
+        if (this.ladderSpriteGroup !== undefined && this.ladderSpriteGroup !== null) {
+            this.ladderSpriteGroup.destroy();
         }
-        ladderSpriteGroup = Ext.create("Ext.draw.CompositeSprite", {
+        this.ladderSpriteGroup = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.digestPanel.surface
         });
         for (var i=0; i < sprites.length; i++){
-            ladderSpriteGroup.add(sprites[i]);
+            this.ladderSpriteGroup.add(sprites[i]);
         }
-        ladderSpriteGroup.each(function(band){
+        this.ladderSpriteGroup.each(function(band){
             tempSurface.add(band);
         });
-        ladderSpriteGroup.show(true);
+        this.ladderSpriteGroup.show(true);
 
         for (i = 0; i < sprites.length; i++){
             //only show tooltips for the products of digestion. I tried to make these tooltips while making the sprites but
