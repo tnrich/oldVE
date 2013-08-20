@@ -12,11 +12,6 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
                "Teselagen.models.digest.GelLane",
                "Teselagen.models.digest.Ladder"],
     config: {
-        sampleLane: null,
-        /**
-         * The {Teselagen.models.digest.Gel} which represents this digestion gel
-         */
-        gel: null,
         /**
          * The {Teselagen.models.digest.Ladder} which contains definition of various ladders
          */
@@ -31,8 +26,15 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
          */
         dnaSequence: null
     },
+    /*
+     * The panel where the gel is drawn
+     */
     digestPanel: null,
-    enzymeListSelector: null,
+    /*
+     * The object that represents the multiSelect control for selecting enzymes
+     */
+    selectedLadder: null,
+    ladderSpriteGroup: null,
     GroupManager: null,
     
     /**
@@ -149,4 +151,5 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
             }
         }
     }
+    
 });

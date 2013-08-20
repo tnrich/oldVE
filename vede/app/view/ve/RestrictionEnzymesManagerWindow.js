@@ -23,13 +23,15 @@ Ext.define("Vede.view.ve.RestrictionEnzymesManagerWindow", {
     initComponent: function() {
         var groupStore = Ext.create("Ext.data.Store", {
             fields: [{name: "name", type: "string"}],
-            data: []
+            data: [],
+            autoDestroy: true
         });
 
         var enzymeListStore = Ext.create("Ext.data.Store", {
             fields: [{name: "name", type: "string"}],
             data: [],
-            sorters: [{property: "name", direction: "ASC"}]
+            sorters: [{property: "name", direction: "ASC"}],
+            autoDestroy: true
         });
 
         var me = this;
