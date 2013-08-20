@@ -317,12 +317,12 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
             if(this.startHandleResizing) {
                 this.startSelectionIndex = bpIndex;
-                this.selectionDirection = 1; // ignore direction on resizing
+                this.selectionDirection = 0;
 
                 this.changeCaretPosition(bpIndex, false, false); 
             } else if(this.endHandleResizing) {
                 this.endSelectionIndex = bpIndex;
-                this.selectionDirection = 1;
+                this.selectionDirection = 0;
 
                 this.changeCaretPosition(this.startSelectionIndex, false, false);
             } else {
@@ -365,9 +365,6 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             return;
         }
 
-        this.startHandleResizing = false;
-        this.endHandleResizing = false;
-
         this.mouseIsDown = false;
         
         if(this.SelectionLayer.selected && this.SelectionLayer.selecting) {
@@ -379,7 +376,11 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
             // Depending on selection direction, move caret either to start or 
             // end of selection.
-            if(this.selectionDirection === 1) {
+            if(this.startHandleResizing) {
+                this.changeCaretPosition(this.SelectionLayer.start, false, false);
+            } else if(this.endHandleResizing) {
+                this.changeCaretPosition(this.SelectionLayer.end, false, false);
+            } else if(this.selectionDirection === 1) {
                 this.changeCaretPosition(this.SelectionLayer.end, false, false);
             } else {
                 this.changeCaretPosition(this.SelectionLayer.start, false, false);
@@ -402,6 +403,9 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
+
+        this.startHandleResizing = false;
+        this.endHandleResizing = false;
     },
     
     select: function(start, end) {
