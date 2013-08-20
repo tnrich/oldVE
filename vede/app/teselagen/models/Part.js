@@ -119,11 +119,12 @@ Ext.define("Teselagen.models.Part", {
         convert: function(v,record)
         {
             if(record.get("genbankStartBP")>record.get("endBP")) {
-                return Math.abs(record.get("endBP") - record.get("genbankStartBP"));
+                var tSize = record.getSequenceFile().data.size;
+                return (tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
             } else if (record.get("genbankStartBP")==record.get("endBP")) {
                 return 1;
             } else {
-                return Math.abs(record.get("genbankStartBP") - record.get("endBP"));
+                return (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
             }
         }
     }, //stopBP

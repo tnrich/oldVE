@@ -239,11 +239,11 @@ Ext.define("Teselagen.manager.GridManager", {
             });
 			newCell.setJ5Bin(bin);
             bin.cells().insert(rowIndex + 1, newCell);
+            this.selectedGridPart = null;
 		}
 		
 		//this.totalRows++;
 		
-		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS, true);
         this.setListenersEnabled(true);
         Teselagen.manager.GridCommandPatternManager.addCommand({
         	type: "ROW",
@@ -253,6 +253,13 @@ Ext.define("Teselagen.manager.GridManager", {
         		loc: "BELOW"       		
         	}
 		});
+		
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS, true);
+
+		if(this.selectedColumnIndex !== null) {
+            this.selectGridBinHeaderByIndex(this.selectedColumnIndex, true);
+            this.selectGridCellByIndex(this.selectedColumnIndex, rowIndex, true);
+        }
 	},
 	
 	addRowAbove: function() {
@@ -265,7 +272,7 @@ Ext.define("Teselagen.manager.GridManager", {
 		this.setListenersEnabled(false);
 
 	    this.selectedColumnIndex = Number(this.selectedGridBin.attr("deGridBinIndex"));
-		
+
 		for(var i=0;i<binCount;i++) {
 			bin = this.activeProject.bins().getAt(i);
 			newCell = Ext.create("Teselagen.models.Cell", {
@@ -273,12 +280,13 @@ Ext.define("Teselagen.manager.GridManager", {
             });
 			newCell.setJ5Bin(bin);
             bin.cells().insert(rowIndex, newCell);
+            this.selectedGridPart = null;
 		}
 		
         this.setListenersEnabled(true);
         // Fire event to re-render grid. This might be the wrong event or wrong eventArgs to fire, though.
-        this.activeProject.bins().getAt(0).cells().fireEvent("add");
-        this.InspectorController.clearPartInfo();
+        // this.activeProject.bins().getAt(0).cells().fireEvent("add");
+        // this.InspectorController.clearPartInfo();
         //this.activeProject.bins().fireEvent("update");
         
         this.GridController.toggleCutCopyPastePartOptions(false);
@@ -294,13 +302,13 @@ Ext.define("Teselagen.manager.GridManager", {
         		loc: "ABOVE"
         	}
 		});
-       
 
-		// if(this.selectedColumnIndex !== null) {
-  //           this.selectGridBinHeaderByIndex(this.selectedColumnIndex, true);
-            
-  //               this.selectGridCellByIndex(this.selectedColumnIndex, rowIndex+1, true);
-  //       }
+		Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS, true);
+
+		if(this.selectedColumnIndex !== null) {
+            this.selectGridBinHeaderByIndex(this.selectedColumnIndex, true);
+            this.selectGridCellByIndex(this.selectedColumnIndex, rowIndex+1, true);
+        }
 	},
 	
 	addColumnRight: function() {
