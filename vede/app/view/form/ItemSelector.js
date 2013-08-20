@@ -85,7 +85,8 @@ Ext.define('Vede.view.form.ItemSelector', {
             title: title,
             store: {
                 model: me.store.model,
-                data: []
+                data: [],
+                autoDestroy: true
             },
             displayField: me.displayField,
             valueField: me.valueField,
