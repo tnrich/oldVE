@@ -150,16 +150,6 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
                 });
             }
         }
-    },
-    
-    /**
-     * Cleans up objects
-     */
-    destroy: function() {
-//        this.ladderSpriteGroup.destroy();
-        //        this.Ladder = null;
-//        this.enzymes = null;
-//        this.dnaSequence = null;
-//        this.digestPanel = null;
     }
+    
 });
