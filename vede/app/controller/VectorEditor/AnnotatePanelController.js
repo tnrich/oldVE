@@ -405,6 +405,9 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
     
     select: function(start, end) {
+        this.startSelectionIndex = start;
+        this.endSelectionIndex = end;
+
         this.changeCaretPosition(start, true, true);
         this.SelectionLayer.select(start, end);
     },
