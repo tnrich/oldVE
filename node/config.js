@@ -97,7 +97,7 @@ module.exports = function(app, express) {
             password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
             authRequired : true
         };
-        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
     }
 
     var MongoDBServer = new app.mongo.Server(Opts.host, Opts.port, {
@@ -128,7 +128,7 @@ module.exports = function(app, express) {
     /*
      * MONGOOSE (ODM) Initialization using app.dbname
      */
-
+    console.log(Opts.authHost);
     app.db = app.mongoose.createConnection(Opts.authHost);
     if (app.db) {
         app.logger.log("info","Mongoose: connected to database \"%s\"", app.dbname);
