@@ -13,10 +13,6 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
     GroupManager: null,
     Logger: null,
     UserManager: null,
-    managerWindow: null,
-
-    enzymeSelector: null,
-    userEnzymeGroupSelector: null,
     
     refs: [{ref:"deleteGroupBtn", selector:"button[cls=deleteGroupButton]"},
            {ref:"makeActiveBtn", selector:"button[cls=makeActiveButton]"},
@@ -77,11 +73,11 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
      * Populates the group selector combobox when the restriction enzyme
      * manage window is opened.
      */
-    onEnzymeManagerOpened: function(manager) {
+    onEnzymeManagerOpened: function() {
         var me = this;
-        this.managerWindow = manager;
-        this.enzymeSelector = this.getEnzymeSelector();
+        var enzymeSelector = this.getEnzymeSelector();
         var groupSelector = this.getEnzymeGroupSelector();
+        var userEnzymeGroupSelector = this.getUserEnzymeGroupSelector();
         
         if(!me.GroupManager.getIsInitialized()) {
             me.GroupManager.initialize();
@@ -100,14 +96,13 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
         Ext.each(startGroup.getEnzymes(), function(enzyme) {
             groupArray.push({name: enzyme.getName()});
         });
-        me.enzymeSelector.store.loadData(groupArray);
-        me.enzymeSelector.bindStore(me.enzymeSelector.store);
+        enzymeSelector.store.loadData(groupArray);
+        enzymeSelector.bindStore(enzymeSelector.store);
 
         // Set user enzyme selector
         me.GroupManager.initActiveUserGroup();
-        me.userEnzymeGroupSelector = me.getUserEnzymeGroupSelector();
-        me.userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
-        me.userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
+        userEnzymeGroupSelector.bindStore(me.UserManager.getUser().userRestrictionEnzymeGroups());
+        userEnzymeGroupSelector.setValue(me.GroupManager.ACTIVE);
     },
     
     /**
@@ -125,11 +120,12 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
     onEnzymeGroupChange: function(combobox) {
         var newGroup = this.GroupManager.groupByName(combobox.getValue());
         var enzymeArray = [];
+        var enzymeSelector = this.getEnzymeSelector();
 
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
-        var fromStore = this.enzymeSelector.fromField.getStore();
+        var fromStore = enzymeSelector.fromField.getStore();
         fromStore.loadData(enzymeArray);
         fromStore.sort("name", "ASC");
     },
@@ -141,7 +137,8 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
     onUserEnzymeGroupChange: function(combobox) {
         var groupName = combobox.getValue();
         var record = combobox.findRecordByValue(groupName);
-        this.enzymeSelector.toField.bindStore(record.userRestrictionEnzymes());
+        var enzymeSelector = this.getEnzymeSelector();
+        enzymeSelector.toField.bindStore(record.userRestrictionEnzymes());
         if (groupName === this.GroupManager.ACTIVE) {
             this.getDeleteGroupBtn().disable();
             this.getMakeActiveBtn().disable();
@@ -156,21 +153,24 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
      * Filters the itemselector fromField based on input in the search field.
      */
     onEnzymeSearchFieldKeyup: function(field) {
-        this.enzymeSelector.fromField.store.filterBy(function(rec) {
+        var enzymeSelector = this.getEnzymeSelector();
+        enzymeSelector.fromField.store.filterBy(function(rec) {
             if(rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) {
                 return true;
             }
         });
 
-        this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+        enzymeSelector.fromField.bindStore(enzymeSelector.fromField.store);
     },
 
      /**
       * When the enzyme list is changed.
       */
      onEnzymeListChange: function(){
-         this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
-         if (this.userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
+         var enzymeSelector = this.getEnzymeSelector();
+         var userEnzymeGroupSelector = this.getUserEnzymeGroupSelector();
+         enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
+         if (userEnzymeGroupSelector.getValue()===this.GroupManager.ACTIVE) {
              this.GroupManager.setActiveEnzymesChanged(true);
          }
      },
@@ -186,16 +186,18 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
      * Deletes the currently shown user enzyme group.
      */
     onDeleteGroupButtonClick: function() {
-        var name = this.userEnzymeGroupSelector.getValue();
+        var userEnzymeGroupSelector = this.getUserEnzymeGroupSelector();
+        var name = userEnzymeGroupSelector.getValue();
         this.GroupManager.removeUserGroup(name);
-        this.userEnzymeGroupSelector.setValue(this.GroupManager.ACTIVE);
+        userEnzymeGroupSelector.setValue(this.GroupManager.ACTIVE);
     },
 
     /**
      * Makes active the currently shown user enzyme group.
      */
     onMakeActiveButtonClick: function() {
-        this.GroupManager.makeActive(this.userEnzymeGroupSelector.getValue());
+        var userEnzymeGroupSelector = this.getUserEnzymeGroupSelector();
+        this.GroupManager.makeActive(userEnzymeGroupSelector.getValue());
     },
         
     /**
@@ -213,8 +215,8 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
     /**
      * Closes the window and does not save to database.
      */
-    onCancelButtonClick: function() {
-        this.managerWindow.close();
+    onCancelButtonClick: function(pBtn) {
+        pBtn.up("window").close();
     },
     
      /**
@@ -238,8 +240,9 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
      * @param {String} text Group name entered
      */
     onGroupPrompt: function(pIsNew, pBtnId, pText) {
+        var userEnzymeGroupSelector = this.getUserEnzymeGroupSelector();
         if (pBtnId==="ok") {
-            var foundRec = this.userEnzymeGroupSelector.findRecordByValue(pText);
+            var foundRec = userEnzymeGroupSelector.findRecordByValue(pText);
             if (!pText || foundRec) {
                 if (foundRec) {
                     this.Logger.notifyWarn(Ext.String.format("The group '{0}' already exists.", pText));
@@ -258,14 +261,14 @@ Ext.define("Vede.controller.VectorEditor.RestrictionEnzymeController", {
                     this.GroupManager.createUserGroup(pText, []);
                 }
                 else {
-                    this.GroupManager.copyUserGroup(this.userEnzymeGroupSelector.getValue(), pText);
+                    this.GroupManager.copyUserGroup(userEnzymeGroupSelector.getValue(), pText);
                 }
-                this.userEnzymeGroupSelector.setValue(pText);
+                userEnzymeGroupSelector.setValue(pText);
             }
         }
     },
 
-    /**
+     /**
      * After window is closed.
      */
     onWindowClose: function() {

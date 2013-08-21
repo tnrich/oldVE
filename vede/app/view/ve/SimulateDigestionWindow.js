@@ -21,7 +21,8 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
     initComponent: function() {
         var groupStore = Ext.create("Ext.data.Store",{
             fields: [ {name: "name", type: "string"} ],
-            data: []
+            data: [],
+            autoDestroy: true
         });
 
         var enzymeListStore = Ext.create("Ext.data.Store",{
@@ -29,7 +30,8 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
             fields: [ {name: "name", type: "string"} ],
             data: [],
             autoLoad: true,
-            sorters: [{property: "name", direction: "ASC"}]
+            sorters: [{property: "name", direction: "ASC"}],
+            autoDestroy: true
         });
 
         var me = this;
@@ -63,14 +65,14 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                                                 hideTrigger: true,
                                                 valueField: "name",
                                                 emptyText: "Search for Enzyme in...",
-                                                id: "enzymeGroupSelector-search",
+                                                cls: "enzymeGroupSelector-search",
                                                 queryMode: "local",
                                                 disabled: false,
                                                 maxWidth: 134
                                             },
                                             {
                                                 xtype: "combobox",
-                                                id: "enzymeGroupSelector-digest",
+                                                cls: "enzymeGroupSelector-digest",
                                                 store: groupStore, //change this store to query database
                                                 editable: false,
                                                 queryMode: "local",
@@ -84,7 +86,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                                     xtype: "itemselectorvede",
                                     name: "itemselectorvede",
                                     flex: 1,
-                                    id: "enzymeListSelector-digest",
+                                    cls: "enzymeListSelector-digest",
                                     store: enzymeListStore,
                                     displayField: "name",
                                     valueField: "name",
@@ -135,7 +137,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                             items: [ {
                                 xtype: "combobox",
                                 height: 21,
-                                id: "ladderSelector",
+                                cls: "ladderSelector",
                                 padding: " 10 0 0 10",
                                 width: 425,
                                 value: "GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp",
@@ -157,7 +159,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                                 },
                                 items: [{
                                     xtype: "draw",
-                                    id: "drawingSurface",
+                                    cls: "drawingSurface",
                                     flex: 1,
                                     x: 0,
                                     y: 0
