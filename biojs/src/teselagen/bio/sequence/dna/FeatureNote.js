@@ -88,6 +88,11 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 			});
 		}
 	},
+
+	/**
+     * Serialize FeatureNote
+     * @return {Object}
+     */
 	serialize: function(){
 		var data = {};
 		data.inData = {
