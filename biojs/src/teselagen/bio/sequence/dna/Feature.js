@@ -162,11 +162,21 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
      * @return {String}
      */
     toJSON: function() {
-        var obj = this.serialize();
-        var json = obj.inData;
-        json.notes = obj.notes;
-        return json;
+        return {
+            "strand": this.getStrand(),
+            "name": this.getName(),
+            "type": this.getType(),
+            "locations": (this.getStart() + " - " + this.getEnd())
+        };
     },
+
+//    toJSON: function() {
+//        var obj = this.serialize();
+//        var json = obj.inData;
+//        json.notes = obj.notes;
+//        json.locations = [{genbankStart: this.getStart(), end: this.getEnd()}];
+//        return json;
+//    },
 
     /**
      * String representation of Feature.
