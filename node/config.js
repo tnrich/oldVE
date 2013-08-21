@@ -93,8 +93,8 @@ module.exports = function(app, express) {
         var Opts = {
             host: "54.215.198.196",
             port: 27017,
-            username: "root",
-            password: "tesela#rocks",
+            username: "prod",
+            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
             authRequired : true
         };
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port
@@ -113,12 +113,12 @@ module.exports = function(app, express) {
         {
             db.authenticate(Opts.username,Opts.password,function(err,result){
                 if (!err) {
-                    app.logger.info("GRIDFS: Online (Authenticated)");
-                }
+                    app.logger.info("GRIDFS: Online (Authenticated on remote server)");
+                } else console.log(err);
             });
         }
         else if (!err) {
-            app.logger.info("GRIDFS: Online");
+            app.logger.info("GRIDFS: Online (Local DB)");
         }
     });
     app.GridStoreDB = db;
