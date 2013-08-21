@@ -2,13 +2,46 @@ extends layout
 
 block container
 
-  center
-    img(src="img/teselagen_newlogo.png",style="width:500px;margin-top:20px;margin-bottom:80px;")
+	.row
+		.large-12.small-12.large-centered.small-centered.columns
+			#banner_head Revolutionizing biologicial systems design.
+		.large-12.small-12.large-centered.small-centered.columns
+			#banner_head_sub A DNA design and assembly platform providing the most advanced Bio CAD/CAM system available.
+	.row#banner
+		#banner_around
+			#banner_back
+				.large-12.small-12#banner_front
+					#banner_content
+						.large-3.small-3.columns.bandiv
+							.large-12.small-12.icon
+								img(src="img/icons/icon-design.png")
+							.large-12.small-12.icon-content
+								.icon-text Design
+								.icon-desc Create biological parts and arrange them into complete DNA constructs.
+						.large-1.small-1.columns.step-sep
+							img(src='img/icons/blue_arrow2.png')
+						.large-3.small-3.columns.bandiv
+							.large-12.small-12.icon
+								img(src="img/icons/icon-scarless.png")
+							.large-12.small-12.icon-content
+								.icon-text Optimize
+								.icon-desc Automatically generate effective and cost-efficient assembly instructions.
+						.large-1.small-1.columns.step-sep
+							img(src='img/icons/blue_arrow2.png')
+						.large-3.small-3.columns.bandiv
+							.large-12.small-12.icon
+								img(src="img/icons/icon-automate.png")
+							.large-12.small-12.icon-content
+								.icon-text Assemble
+								.icon-desc Assemble DNA through downstream integration to liquid-handling robots
+	#section
+		.large-12.small-12#showcase
+			#header2 TeselaGen is developing a fully integrated solution for synthetic biology.
+		.large-12.small-12
+			.large-3.small-3.showcase_block_back
+				a(href='/about')
+					#ve_blocl
+						.large-12.small-12.showcase_head
+							h4 User Friendly
+						.large-12.small-12.showcase_text
 
-  h1.welcome1 
-    | We are developing a revolutionary Biological Design Automation system, and currently testing our 
-    span.highlight beta 
-    | product with over 
-    span.highlight 100 scientists
-    |  and 
-    span.highlight engineers.
