@@ -150,6 +150,24 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
                 });
             }
         }
+    },
+    
+    destroy: function() {
+        if (this.digestPanel) {
+            this.digestPanel.destroy();
+        }
+        this.digestPanel = null;
+        if (this.Ladder) {
+            this.Ladder.destroy();
+        }
+        this.Ladder = null;
+        this.enzymes = null;
+        this.dnaSequence = null;
+        if (this.ladderSpriteGroup) {
+            this.ladderSpriteGroup.destroy();
+        }
+        this.ladderSpriteGroup = null;
+        this.GroupManager = null;
     }
     
 });
