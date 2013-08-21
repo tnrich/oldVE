@@ -18,6 +18,26 @@ module.exports = function(app, express) {
 
     // Express Framework Configuration
 
+
+    var Opts = {
+        host: "localhost",
+        port: 27017,
+        authHost: "mongodb://localhost/" + app.dbname
+    }; 
+
+    if(app.get("env") === "production") {
+        var Opts = {
+            host: "54.215.198.196",
+            port: 27017,
+            username: "prod",
+            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
+            authRequired : true
+        };
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
+    }
+
+
+
     app.configure('development', function() {
 
         var MongoStore = app.mongostore(express);
@@ -52,7 +72,7 @@ module.exports = function(app, express) {
 
     app.configure('production', function() {      
 
-        var redis = require("redis").createClient();
+        var redis = require("redis").createClient(6379,Opts.host);
         var RedisStore = require('connect-redis')(express)
 
         app.set('views', __dirname + '/views');
@@ -70,7 +90,7 @@ module.exports = function(app, express) {
         app.use(app.passport.initialize());
         app.use(app.passport.session());
 
-	    app.logger.info("USING REDIS SESSION STORE");
+	    app.logger.info("USING REDIS SESSION STORE (Remote Server)");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
@@ -83,22 +103,7 @@ module.exports = function(app, express) {
      * DB Operations managed by Mongoose loaded below
      */
 
-    var Opts = {
-        host: "localhost",
-        port: 27017,
-        authHost: "mongodb://localhost/" + app.dbname
-    }; 
 
-    if(app.get("env") === "production") {
-        var Opts = {
-            host: "54.215.198.196",
-            port: 27017,
-            username: "prod",
-            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
-            authRequired : true
-        };
-        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
-    }
 
     var MongoDBServer = new app.mongo.Server(Opts.host, Opts.port, {
         auto_reconnect: true
@@ -128,7 +133,6 @@ module.exports = function(app, express) {
     /*
      * MONGOOSE (ODM) Initialization using app.dbname
      */
-    console.log(Opts.authHost);
     app.db = app.mongoose.createConnection(Opts.authHost);
     if (app.db) {
         app.logger.log("info","Mongoose: connected to database \"%s\"", app.dbname);
@@ -217,7 +221,7 @@ module.exports = function(app, express) {
             });
         }
     } else {
-        console.log('OPTIONS: MYSQL OMITTED');
+        app.logger.info('OPTIONS: MYSQL OMITTED');
     }
     app.mysql = connection;
 
