@@ -9,7 +9,7 @@ Ext.define('Vede.controller.AuthWindowController', {
     rememberSession: false,
 
     onRegisterClick: function(){
-        console.log("Register");  
+        Ext.create('Vede.view.RegisterWindow').show();
     },
 
     onConfigClick: function(){
@@ -89,10 +89,7 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-config-btn": {
                 click: this.onConfigClick
-            },
-            //"#rememberSession": {
-            //    change: this.onRemember
-            //}
+            }
         });
     },
 

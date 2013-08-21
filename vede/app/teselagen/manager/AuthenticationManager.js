@@ -39,20 +39,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             url: Teselagen.manager.SessionManager.buildUrl("users"),
             method: 'GET',
             params: {},
-            success: function(response) {
-                self.authResponse = JSON.parse(response.responseText);
-                self.username = self.authResponse.user.username;
-                Teselagen.manager.SessionManager.setBaseUser(self.username);
-                self.updateSplashScreenMessage(self.authResponse.msg);
-                if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
-                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
-                    Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
-                });
-                Teselagen.manager.TasksMonitor.bootMonitoring();
-                Teselagen.manager.TasksMonitor.startMonitoring();
-
-                if (cb) { return cb(true); }// for Testing
-            },
+            success: self.continue,
             failure: function(response) {
                 if(response.status !== 200) { 
                     var msg = "";
@@ -73,6 +60,21 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         });
 
         this.updateServerPath();
+    },
+
+    continue: function(response) {
+        this.authResponse = JSON.parse(response.responseText);
+        if(!this.authResponse.error) {
+            this.username = this.authResponse.user.username;
+            Teselagen.manager.SessionManager.setBaseUser(this.username || this.authResponse.user.username);
+            this.updateSplashScreenMessage(this.authResponse.msg);
+            if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
+            Teselagen.manager.UserManager.setUserFromJson(this.authResponse.user,function(){
+                Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
+            });
+            Teselagen.manager.TasksMonitor.bootMonitoring();
+            Teselagen.manager.TasksMonitor.startMonitoring();
+        }
     },
 
     autoAuthAttempt: function(){
