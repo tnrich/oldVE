@@ -46,7 +46,7 @@ module.exports = function(app) {
      */
     app.post('/sequences', restrict, function(req, res) {
         var newSequence = new Sequence();
-        newSequence.user_id = new app.mongo.ObjectID( req.user._id );
+        newSequence.user_id = req.user._id;
         req.body.dateCreated = new Date();
         saveSequence(newSequence,req,res,function(savedSequence){
             User.findById(req.user._id).populate('sequences').exec(function(err, user) {

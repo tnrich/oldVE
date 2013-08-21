@@ -33,21 +33,47 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
      */
 
     Login: function(cb) {
+        var self = this;
 
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("users"),
+            method: 'GET',
+            params: {},
+            success: function(response) {
+                self.authResponse = JSON.parse(response.responseText);
+                self.username = self.authResponse.user.username;
+                Teselagen.manager.SessionManager.setBaseUser(self.username);
+                self.updateSplashScreenMessage(self.authResponse.msg);
+                if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
+                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
+                    Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
+                });
+                Teselagen.manager.TasksMonitor.bootMonitoring();
+                Teselagen.manager.TasksMonitor.startMonitoring();
 
-        if(Ext.util.Cookies.get("sessionname"))
-        {
-            console.log("Authenticating using cookies");
-            return this.sendAuthRequest({}, cb, true);
-        }
+                if (cb) { return cb(true); }// for Testing
+            },
+            failure: function(response) {
+                if(response.status !== 200) { 
+                    var msg = "";
+                    try
+                    {
+                        msg = JSON.parse(response.responseText).msg;
+                    }
+                    catch(err)
+                    {}
+
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(msg);
+                    return;
+                }
+                var response = JSON.parse(response.responseText);
+                if(response) Ext.getCmp('auth-response').update(response.msg);
+                if (cb) {return cb(false, response.statusText); }
+            }
+        });
 
         this.updateServerPath();
-
-        //this.autoAuthAttempt();
-
-
     },
-
 
     autoAuthAttempt: function(){
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
@@ -87,9 +113,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     },
 
     updateServerPath: function(){
-            Ext.create("Vede.view.AuthWindow").show();
-            var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-            Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );        
+        Ext.create("Vede.view.AuthWindow").show();
+        var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+        Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );        
     },
 
     /**
@@ -113,6 +139,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("login"),
+            method: 'POST',
             params: {
                 username: params.username || "",
                 password: params.password || "",

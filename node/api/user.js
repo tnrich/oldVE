@@ -16,6 +16,21 @@ module.exports = function(app) {
     });
 
     /**
+     * Get user by id stored in session
+     * @memberof module:./routes/api
+     * @method GET "/users/:username"
+     */
+    app.get("/users", restrict, function(req, res) {
+        if(req.isAuthenticated()) {
+            return res.json({
+                user: req.user
+            });
+        } else {
+            res.send("Not authenticated", 401);
+        }
+    });
+
+    /**
      * PUT USER
      * @memberof module:./routes/api
      * @method PUT "/users/:username"

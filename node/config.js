@@ -40,7 +40,11 @@ module.exports = function(app, express) {
                 }
             )
         })); // Sessions managed using cookies
-	app.logger.info("USING MONGODB SESSION STORE");
+
+        app.use(app.passport.initialize());
+        app.use(app.passport.session());
+
+	    app.logger.info("USING MONGODB SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
@@ -62,7 +66,11 @@ module.exports = function(app, express) {
             secret: 'j5',
             store: new RedisStore({client: redis})
         })); // Sessions managed using cookies
-	app.logger.info("USING REDIS SESSION STORE");
+
+        app.use(app.passport.initialize());
+        app.use(app.passport.session());
+
+	    app.logger.info("USING REDIS SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
