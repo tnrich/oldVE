@@ -91,7 +91,7 @@ module.exports = function(app, express) {
 
     if(app.get("env") === "production") {
         var Opts = {
-            host: "172.31.12.226",
+            host: "54.215.198.196",
             port: 27017,
             username: "root",
             password: "tesela#rocks",
