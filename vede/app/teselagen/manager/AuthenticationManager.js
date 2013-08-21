@@ -63,13 +63,14 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     },
 
     continue: function(response) {
-        this.authResponse = JSON.parse(response.responseText);
-        if(!this.authResponse.error) {
-            this.username = this.authResponse.user.username;
-            Teselagen.manager.SessionManager.setBaseUser(this.username || this.authResponse.user.username);
-            this.updateSplashScreenMessage(this.authResponse.msg);
+        var self = Teselagen.manager.AuthenticationManager;
+        self.authResponse = JSON.parse(response.responseText);
+        if(!self.authResponse.error) {
+            self.username = self.authResponse.user.username;
+            Teselagen.manager.SessionManager.setBaseUser(self.username || self.authResponse.user.username);
+            self.updateSplashScreenMessage(self.authResponse.msg);
             if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
-            Teselagen.manager.UserManager.setUserFromJson(this.authResponse.user,function(){
+            Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
             });
             Teselagen.manager.TasksMonitor.bootMonitoring();

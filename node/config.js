@@ -83,14 +83,41 @@ module.exports = function(app, express) {
      * DB Operations managed by Mongoose loaded below
      */
 
-    var MongoDBServer = new app.mongo.Server('localhost', 27017, {
+    var Opts = {
+        host: "localhost",
+        port: 27017,
+        authHost: "mongodb://localhost/" + app.dbname
+    }; 
+
+    if(app.get("env") === "production") {
+        var Opts = {
+            host: "172.31.12.226",
+            port: 27017,
+            username: "root",
+            password: "tesela#rocks",
+            authRequired : true
+        };
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port
+    }
+
+    var MongoDBServer = new app.mongo.Server(Opts.host, Opts.port, {
         auto_reconnect: true
     });
+
     var db = new app.mongo.Db(app.dbname, MongoDBServer, {
         safe: true
     });
     db.open(function(err, db) {
-        if (!err) {
+        
+        if(Opts.authRequired)
+        {
+            db.authenticate(Opts.username,Opts.password,function(err,result){
+                if (!err) {
+                    app.logger.info("GRIDFS: Online (Authenticated)");
+                }
+            });
+        }
+        else if (!err) {
             app.logger.info("GRIDFS: Online");
         }
     });
@@ -102,7 +129,7 @@ module.exports = function(app, express) {
      * MONGOOSE (ODM) Initialization using app.dbname
      */
 
-    app.db = app.mongoose.createConnection('localhost', app.dbname);
+    app.db = app.mongoose.createConnection(Opts.authHost);
     if (app.db) {
         app.logger.log("info","Mongoose: connected to database \"%s\"", app.dbname);
         require('./schemas/DBSchemas.js')(app.db);
