@@ -50,7 +50,7 @@ module.exports = function(app, express) {
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
     });
 
-    app.configure('test', function() {      
+    app.configure('production', function() {      
 
         var redis = require("redis").createClient();
         var RedisStore = require('connect-redis')(express)
