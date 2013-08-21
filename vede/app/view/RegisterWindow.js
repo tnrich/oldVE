@@ -80,7 +80,11 @@ Ext.define('Vede.view.RegisterWindow', {
                             Teselagen.manager.AuthenticationManager.continue(action.response);  
                         },
                         failure: function(form, action) {
-                            Ext.Msg.alert('Error!', action.result.msg);
+                            if(action && action.result) {
+                                Ext.Msg.alert('Error!', action.result.msg);
+                            } else {
+                                Ext.Msg.alert('Error!', "Server is down.");
+                            }
                         }
                     });
                 }
