@@ -31,15 +31,28 @@ Ext.define('Vede.controller.AuthWindowController', {
         Ext.getCmp('AuthWindow').destroy();
     },
     onLogoutClick: function (button, e, options) {
+
+        var onLoggedOut = function(){
+
+            Teselagen.manager.ProjectManager.currentUser = null;
+            Ext.getCmp("mainAppPanel").items.items.map(function(tab){
+                if(tab.xtype!="DashboardPanelView") return tab;
+            }).forEach(function(tab){
+                if(tab) tab.close();
+            });
+
+            Teselagen.manager.SessionManager.maskApp();
+            Ext.create("Vede.view.AuthWindow").show();
+
+        };
+
         
-        Ext.util.Cookies.clear('last_server');
         var self = this;
         Ext.Ajax.request({
             url: '/api/logout',
             method: 'POST',
             success: function (response) {
-                Teselagen.manager.SessionManager.maskApp();
-                Ext.create("Vede.view.AuthWindow").show();
+                onLoggedOut();
             }
         });
     },

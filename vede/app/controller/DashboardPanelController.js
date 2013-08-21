@@ -39,6 +39,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
 	populateStatisticts: function () {
 
+    if(!Teselagen.manager.ProjectManager.currentUser) return;
+
     var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
     var pagingToolbar;
     if(currentTab) pagingToolbar = currentTab.down('pagingtoolbar')

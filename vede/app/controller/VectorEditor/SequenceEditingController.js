@@ -160,11 +160,11 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onTabChange: function(mainAppPanel, newTab, oldTab) {
-        if(oldTab.initialCls === "VectorEditorPanel") {
+        if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
             oldTab.model = this.VEManager.sequenceFileManager;
         }
 
-        if(newTab.initialCls === "VectorEditorPanel") {
+        if(newTab && newTab.initialCls === "VectorEditorPanel") {
             this.onSequenceManagerChanged(newTab.model);
         }
     },
