@@ -18,6 +18,26 @@ module.exports = function(app, express) {
 
     // Express Framework Configuration
 
+
+    var Opts = {
+        host: "localhost",
+        port: 27017,
+        authHost: "mongodb://localhost/" + app.dbname
+    }; 
+
+    if(app.get("env") === "production") {
+        var Opts = {
+            host: "54.215.198.196",
+            port: 27017,
+            username: "prod",
+            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
+            authRequired : true
+        };
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
+    }
+
+
+
     app.configure('development', function() {
 
         var MongoStore = app.mongostore(express);
@@ -50,9 +70,9 @@ module.exports = function(app, express) {
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
     });
 
-    app.configure('test', function() {      
+    app.configure('production', function() {      
 
-        var redis = require("redis").createClient();
+        var redis = require("redis").createClient(6379,Opts.host);
         var RedisStore = require('connect-redis')(express)
 
         app.set('views', __dirname + '/views');
@@ -70,7 +90,7 @@ module.exports = function(app, express) {
         app.use(app.passport.initialize());
         app.use(app.passport.session());
 
-	    app.logger.info("USING REDIS SESSION STORE");
+	    app.logger.info("USING REDIS SESSION STORE (Remote Server)");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
@@ -83,15 +103,27 @@ module.exports = function(app, express) {
      * DB Operations managed by Mongoose loaded below
      */
 
-    var MongoDBServer = new app.mongo.Server('localhost', 27017, {
+
+
+    var MongoDBServer = new app.mongo.Server(Opts.host, Opts.port, {
         auto_reconnect: true
     });
+
     var db = new app.mongo.Db(app.dbname, MongoDBServer, {
         safe: true
     });
     db.open(function(err, db) {
-        if (!err) {
-            app.logger.info("GRIDFS: Online");
+        
+        if(Opts.authRequired)
+        {
+            db.authenticate(Opts.username,Opts.password,function(err,result){
+                if (!err) {
+                    app.logger.info("GRIDFS: Online (Authenticated on remote server)");
+                } else console.log(err);
+            });
+        }
+        else if (!err) {
+            app.logger.info("GRIDFS: Online (Local DB)");
         }
     });
     app.GridStoreDB = db;
@@ -101,8 +133,7 @@ module.exports = function(app, express) {
     /*
      * MONGOOSE (ODM) Initialization using app.dbname
      */
-
-    app.db = app.mongoose.createConnection('localhost', app.dbname);
+    app.db = app.mongoose.createConnection(Opts.authHost);
     if (app.db) {
         app.logger.log("info","Mongoose: connected to database \"%s\"", app.dbname);
         require('./schemas/DBSchemas.js')(app.db);
@@ -139,7 +170,7 @@ module.exports = function(app, express) {
 
 
     // MYSQL CONNECTION
-    if (app.program.alpha || app.program.beta || app.program.prod) {
+    if (app.program.mysql) {
         // Init MYSQL
         var connection = app.mysql.createConnection({
             host: 'localhost',
@@ -190,7 +221,7 @@ module.exports = function(app, express) {
             });
         }
     } else {
-        console.log('OPTIONS: MYSQL OMITTED');
+        app.logger.info('OPTIONS: MYSQL OMITTED');
     }
     app.mysql = connection;
 
