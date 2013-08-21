@@ -41,7 +41,7 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
      * @returns {Teselagen.manager.SequenceManager}
      */
     sequenceFileToSequenceManager: function(pSequenceFile) {
-        var name    = pSequenceFile.get("partSource");
+        var name    = pSequenceFile.get("name");
         var format  = pSequenceFile.get("sequenceFileFormat");
         var content = pSequenceFile.get("sequenceFileContent");
         var seqMan;
@@ -78,6 +78,7 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
             console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
         }
 
+        seqMan.setName(name);
         pSequenceFile.setSequenceManager(seqMan);
 
         return seqMan;

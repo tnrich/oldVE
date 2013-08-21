@@ -499,7 +499,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var length = features.length;
 
         for (i = 0; i < length; i++) {
-            newFeature = features[i].toJSON();
+            newFeature = features[i].serialize().inData;
             newFeatures.push(newFeature);
         };
         return newFeatures;
