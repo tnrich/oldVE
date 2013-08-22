@@ -21,4 +21,16 @@ app.get('/faq', function(req, res){
   res.render('faq', {});
 });
 
+app.get('/careers', function(req, res){
+  res.render('careers', {});
+});
+
+app.get('/terms', function(req,res) {
+  res.render('terms', {});
+});
+
+app.get('/terms/commercialuse', function(req,res) {
+	res.render('commercialuse', {});
+});
+
 };
