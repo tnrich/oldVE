@@ -39,7 +39,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             url: Teselagen.manager.SessionManager.buildUrl("users"),
             method: 'GET',
             params: {},
-            success: self.continue,
+            success: self.continueLogin,
             failure: function(response) {
                 if(response.status !== 200) { 
                     var msg = "";
@@ -62,7 +62,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         this.updateServerPath();
     },
 
-    continue: function(response) {
+    continueLogin: function(response) {
         var self = Teselagen.manager.AuthenticationManager;
         self.authResponse = JSON.parse(response.responseText);
         if(!self.authResponse.error) {

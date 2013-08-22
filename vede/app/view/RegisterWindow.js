@@ -77,7 +77,7 @@ Ext.define('Vede.view.RegisterWindow', {
                     form.submit({
                         success: function(form, action) {
                             window.close();
-                            Teselagen.manager.AuthenticationManager.continue(action.response);  
+                            Teselagen.manager.AuthenticationManager.continueLogin(action.response);  
                         },
                         failure: function(form, action) {
                             if(action && action.result) {
