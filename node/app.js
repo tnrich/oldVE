@@ -31,7 +31,7 @@ app.nodemailer = require("nodemailer");
 app._ = require("underscore");
 app.winston = require('winston');
 
-//require('./api/rest.js')(app);
+require('./api/rest.js')(app);
 
 // CONFIGURATION
 require('./config.js')(app, express);
