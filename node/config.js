@@ -31,7 +31,8 @@ module.exports = function(app, express) {
             port: 27017,
             username: "prod",
             password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
-            authRequired : true
+            authRequired : true,
+            redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
         };
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
     }
@@ -72,7 +73,7 @@ module.exports = function(app, express) {
 
     app.configure('production', function() {      
 
-        var redis = require("redis").createClient(6379,Opts.host);
+        var redis = require("redis").createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
         var RedisStore = require('connect-redis')(express)
 
         app.set('views', __dirname + '/views');
@@ -87,10 +88,16 @@ module.exports = function(app, express) {
             store: new RedisStore({client: redis})
         })); // Sessions managed using cookies
 
+        redis.auth(Opts.redis_pass,function(err,ok){
+            if(!err&&ok=="OK") app.logger.info("REDIS: Online (Remote Server)");
+            else app.logger.error("REDIS: CONNECTION PROBLEMS",err);
+        });
+
+        redis.on('error'       , function(err){app.logger.error("REDIS: CONNECTION PROBLEMS",err);});
+
         app.use(app.passport.initialize());
         app.use(app.passport.session());
 
-	    app.logger.info("USING REDIS SESSION STORE (Remote Server)");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
@@ -119,7 +126,7 @@ module.exports = function(app, express) {
             db.authenticate(Opts.username,Opts.password,function(err,result){
                 if (!err) {
                     app.logger.info("GRIDFS: Online (Authenticated on remote server)");
-                } else console.log(err);
+                } else app.logger.error("GRIDFS: Offile (Authenticated on remote server)",err);
             });
         }
         else if (!err) {
@@ -133,13 +140,15 @@ module.exports = function(app, express) {
     /*
      * MONGOOSE (ODM) Initialization using app.dbname
      */
-    app.db = app.mongoose.createConnection(Opts.authHost);
-    if (app.db) {
-        app.logger.log("info","Mongoose: connected to database \"%s\"", app.dbname);
-        require('./schemas/DBSchemas.js')(app.db);
-    } else {
-        throw new Error("Cannot create Mongoose connection");
-    }
+    app.db = app.mongoose.createConnection(Opts.authHost, function(data) {
+        if (data) { app.logger.error("info","MONGOOSE: Offline", data[0]); console.log(data); }
+        else { 
+            app.logger.log("info","MONGOOSE: Online", app.dbname);
+        }
+    });
+    require('./schemas/DBSchemas.js')(app.db);
+    
+    
 
     // Init XML-RPC
     /*
