@@ -373,12 +373,6 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
-                                                    cls: 'ORFsFrameColumn',
-                                                    dataIndex: 'frame',
-                                                    text: 'Frame',
-                                                },
-                                                {
-                                                    xtype: 'gridcolumn',
                                                     cls: 'ORFsStrandColumn',
                                                     dataIndex: 'strand',
                                                     text: 'Strand',
@@ -388,6 +382,12 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                             return '+';
                                                         } else { return '-'; }
                                                     }
+                                                },
+                                                {
+                                                    xtype: 'gridcolumn',
+                                                    cls: 'ORFsFrameColumn',
+                                                    dataIndex: 'frame',
+                                                    text: 'Frame',
                                                 }
                                             ]
                                         },
