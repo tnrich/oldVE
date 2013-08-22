@@ -4,6 +4,11 @@
  */
 module.exports = function(app) {
 
+
+    app.all('/', function(req,res) {
+        return res.send(200);
+    });
+
     require('../routes/constants')(app);
 
     require('./authentication.js')(app);
