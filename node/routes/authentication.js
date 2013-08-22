@@ -19,7 +19,7 @@ module.exports = function(app) {
                             groupType: "com"
                         }, function(err, user) {
                             if(err) {
-                                return done(err, null);
+                                return done(err, null, {message: "Could not create user."});
                             }
 
                             return done(null, user);
@@ -33,8 +33,13 @@ module.exports = function(app) {
                     "username": username,
                     //"password": app.crypto.createHash("md5").update(password).digest("hex")
                 }, function(err, user) {
-                    if (err) {return done(new Error("cannot find user"));}
-                    return done(null, user);
+                    if(err) {
+                        return done(err, user);
+                    } else if(!user) {
+                        return done(null, user, {message: "Incorrect username or password."})
+                    } else {
+                        return done(null, user);
+                    }
                 });
             }
         }
@@ -63,15 +68,38 @@ module.exports = function(app) {
         }
     };
 
-    app.post('/login',
-        app.passport.authenticate('local'),
-        function(req, res) {
-            res.json({
-                user: req.user,
-                msg: "Welcome back " + req.user.username + "!"
-            });
-        }
-    );
+    app.post('/login', function(req, res, next) {
+        app.passport.authenticate('local', function(err, user, info) {
+            if(err) {
+                return res.json({
+                    success: false,
+                    user: null,
+                    msg: "Server error. Please try again."
+                });
+            } else if(!user) {
+                return res.json({
+                    success: false,
+                    user: user,
+                    msg: info.message
+                });
+            } else {
+                req.logIn(user, function(err) {
+                    if(err) {
+                        return res.json({
+                            success: false,
+                            user: null,
+                            msg: err
+                        });
+                    } else {
+                        return res.json({
+                            user: req.user,
+                            msg: "Welcome back " + req.user.username + "!"
+                        });
+                    }
+                });
+            }
+        })(req, res, next);
+    });
 
     app.all("/logout", function(req, res) {
         req.logout();

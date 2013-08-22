@@ -39,7 +39,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             url: Teselagen.manager.SessionManager.buildUrl("users"),
             method: 'GET',
             params: {},
-            success: self.continue,
+            success: self.continueLogin,
             failure: function(response) {
                 if(response.status !== 200) { 
                     var msg = "";
@@ -50,11 +50,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     catch(err)
                     {}
 
-                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(msg);
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').setValue(msg);
                     return;
                 }
                 var response = JSON.parse(response.responseText);
-                if(response) Ext.getCmp('auth-response').update(response.msg);
+                if(response) Ext.getCmp('auth-response').setValue(response.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
         });
@@ -62,7 +62,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         this.updateServerPath();
     },
 
-    continue: function(response) {
+    continueLogin: function(response) {
         var self = Teselagen.manager.AuthenticationManager;
 
         self.authResponse = JSON.parse(response.responseText);
@@ -146,25 +146,18 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             method: 'POST',
             params: {
                 username: params.username || "",
-                password: params.password || "",
+                password: params.password || null,
                 sessionId: params.sessionId || "",
                 remember: remember
             },
             success: function(response) {
-                self.authResponse = JSON.parse(response.responseText);
-                self.username = self.authResponse.user.username;
-                Teselagen.manager.SessionManager.setBaseUser(self.username);
-                self.updateSplashScreenMessage(self.authResponse.msg);
-                if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
-                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
-                    Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
-                });
-                Teselagen.manager.TasksMonitor.bootMonitoring();
-                Teselagen.manager.TasksMonitor.startMonitoring();
+                var result = JSON.parse(response.responseText);
 
-                //Ext.util.Cookies.set("last_server",Teselagen.manager.SessionManager.baseURL);
-
-                if (cb) { return cb(true); }// for Testing
+                if(result.success !== false) {
+                    self.continueLogin(response);
+                } else {
+                    Ext.getCmp('auth-response').setValue(result.msg);
+                }
             },
             failure: function(response) {
                 if(response.status !== 200) { 
@@ -176,11 +169,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     catch(err)
                     {}
 
-                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(msg);
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').setValue(msg);
                     return;
                 }
                 var response = JSON.parse(response.responseText);
-                if(response) Ext.getCmp('auth-response').update(response.msg);
+                if(response) Ext.getCmp('auth-response').setValue(response.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
         });

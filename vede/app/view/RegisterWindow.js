@@ -77,13 +77,13 @@ Ext.define('Vede.view.RegisterWindow', {
                     form.submit({
                         success: function(form, action) {
                             window.close();
-                            Teselagen.manager.AuthenticationManager.continue(action.response);  
+                            Teselagen.manager.AuthenticationManager.continueLogin(action.response);  
                         },
                         failure: function(form, action) {
                             if(action && action.result) {
-                                Ext.Msg.alert('Error!', action.result.msg);
+                                Ext.Msg.alert('Error', action.result.msg);
                             } else {
-                                Ext.Msg.alert('Error!', "Server is down.");
+                                Ext.Msg.alert('Error', "Request timed out.");
                             }
                         }
                     });
