@@ -212,7 +212,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
             complimentary = ", complimentary";
         }
 
-        var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) +
+        var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd()) +
             ", frame: " + orf.getFrame() + 
             ", length: " + bp + " BP" + 
             ", " + aa + " AA" + complimentary;
