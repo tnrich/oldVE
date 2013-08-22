@@ -5,7 +5,7 @@ module.exports = function(app) {
         function(username, password, done) {
             var User = app.db.model("User");
 
-            if(app.get("env") === "test" || app.get("env") === "development") {
+            if(app.get("env") === "development") {
                 User.findOne({
                     "username": username,
                     //"password": app.crypto.createHash("md5").update(password).digest("hex")
