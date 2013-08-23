@@ -147,7 +147,7 @@ module.exports = function(app) {
                                 res.json({
                                     user: user,
                                     success: true,
-                                    msg: "Welcome... To the wooooorrrrrllllld of tomorrrrroooooowwwww"
+                                    msg: "Welcome, " + user.username + "!"
                                 });
                             }
                         });
