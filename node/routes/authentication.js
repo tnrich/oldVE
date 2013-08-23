@@ -8,7 +8,7 @@ module.exports = function(app) {
             if(app.get("env") === "development") {
                 User.findOne({
                     "username": username,
-                    #"password": app.crypto.createHash("md5").update(password).digest("hex")
+                   //"password": app.crypto.createHash("md5").update(password).digest("hex")
                 }, function(err, user) {
                     if (err) {return done(new Error("cannot find user"));}
                     if(!user) {
