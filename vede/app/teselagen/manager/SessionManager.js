@@ -71,7 +71,8 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     constructor: function() {
         this.constants = Teselagen.constants.Constants;
-        this.setBaseURL(location.href.substring(0,location.href.indexOf("/",7)+1) + "api/");
+        //this.setBaseURL(location.href.substring(0,location.href.indexOf("/",7)+1) + "api/");
+        this.setBaseURL("http://api.teselagen.com/");
         this.setEnv(this.constants.ENV_DEV);
     },
 

@@ -49,7 +49,7 @@ Ext.define('Vede.controller.AuthWindowController', {
         
         var self = this;
         Ext.Ajax.request({
-            url: '/api/logout',
+            url: Teselagen.manager.SessionManager.buildUrl("logout", ""),
             method: 'POST',
             success: function (response) {
                 onLoggedOut();
