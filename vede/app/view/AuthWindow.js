@@ -71,7 +71,7 @@ Ext.define('Vede.view.AuthWindow', {
 						name: 'Config'
 					}, {
 						xtype: 'fieldset',
-						//hidden: true,
+						hidden: true,
 						id: 'auth-config',
 						margin: 10,
 						width: 370,
@@ -125,7 +125,7 @@ Ext.define('Vede.view.AuthWindow', {
 				}, {
 					xtype: 'panel',
 					flex: 1,
-					html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p></div>'
+					html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Aug 23, 1pm PST</small></div>'
 				}]
 			}]
 		});
