@@ -35,6 +35,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     Login: function(cb) {
         var self = this;
 
+        if(Vede.application.paramsHost) Teselagen.manager.SessionManager.baseURL = Vede.application.paramsHost;
+
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("users"),
             method: 'GET',
