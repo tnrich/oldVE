@@ -80,7 +80,7 @@ module.exports = function(app) {
                     } else {
                         return res.json({
                             user: req.user,
-                            msg: "Welcome back " + req.user.username + "!"
+                            msg: "Welcome, " + req.user.username + "!"
                         });
                     }
                 });
@@ -96,12 +96,13 @@ module.exports = function(app) {
 
     var sendRegisteredMail = function(user,activationCode)
     {
-        var html;
+        var html = app.constants.activationEmailText;
+        html = html.replace("<username>", user.firstName);
 
         if(app.get("env") === "production") {
-            html = '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">Click here to activate your account.</a>';
+            html = html.replace("<activation>", '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">');
         } else {
-            html = '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">Click here to activate your account.</a><br><a href="http://teselagen.local/api/users/activate/' + activationCode + '">Or click here.</a>';
+            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
         }
       var mailOptions = {
         from: "Teselagen ✔ <teselagen.testing@gmail.com>",
