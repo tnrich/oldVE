@@ -89,8 +89,15 @@ Ext.define('Vede.view.AuthWindow', {
                             listeners: {
                                 change: function(combobox, newValue) {
                                     Teselagen.manager.SessionManager.baseURL = combobox.getValue();
+                                },
+                                render: function(combobox){
+                                	if(Vede.application.paramsHost) 
+                            		{
+                            			combobox.setValue(Vede.application.paramsHost);
+                            			Teselagen.manager.SessionManager.baseURL = combobox.getValue();
+                            		}
                                 }
-                            }
+                            },
 						}, 
 						//{
 						//	xtype: 'fieldcontainer',

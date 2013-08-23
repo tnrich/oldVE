@@ -12,9 +12,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     mixins: {
         observable: "Ext.util.Observable"
     },
-    authResponse: null,
+    //authResponse: null,
     username: null,
-    autoAuthURL : null,
+    //autoAuthURL : null,
 
     updateSplashScreenMessage: function(message, stop) {
         if (Ext.get("x-splash-message")) {Ext.get("x-splash-message").update(message); }
@@ -79,6 +79,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         }
     },
 
+    /*
     autoAuthAttempt: function(){
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
 
@@ -115,6 +116,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
            self.updateServerPath();
         }        
     },
+    */
 
     updateServerPath: function(){
         Ext.create("Vede.view.AuthWindow").show();

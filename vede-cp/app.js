@@ -101,10 +101,6 @@ Ext.application({
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
         /*
-         * autoCredentialsFetch
-         * This option enable fetching username and password from /deviceeditor file
-         * to be used for automatic login (for testing).
-         */
         Vede.application.autoCredentialsFetch = true;
 
         //if (document.location.href.split('?').length > 0 && Ext.Object.fromQueryString(document.location.href.split('?')[1]).autoauth === "false") Vede.application.autoCredentialsFetch = false;
@@ -113,6 +109,10 @@ Ext.application({
                 Vede.application.autoCredentialsFetch = true;
                 Teselagen.manager.AuthenticationManager.autoAuthURL = Ext.Object.fromQueryString(document.location.href.split('?')[1]).authurl;
             }
+        */
+
+        var params = Ext.urlDecode(location.search.substring(1));
+        if(params && params.host) Vede.application.paramsHost = params.host;
 
 
         Teselagen.manager.AuthenticationManager.Login(); // Start Authentication process
