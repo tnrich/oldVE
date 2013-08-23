@@ -78,7 +78,11 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
             console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
         }
 
-        seqMan.setName(name);
+        // Directly set name of the sequence manager to avoid the getName method.
+        // This prevents the sequence manager firing an update event when it
+        // hasn't been rendered yet.
+        seqMan.name = name || "NO NAME";
+
         pSequenceFile.setSequenceManager(seqMan);
 
         return seqMan;
