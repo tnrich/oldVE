@@ -5,43 +5,23 @@ module.exports = function(app) {
         function(username, password, done) {
             var User = app.db.model("User");
 
-            if(app.get("env") === "development") {
-                User.findOne({
-                    "username": username,
-                   //"password": app.crypto.createHash("md5").update(password).digest("hex")
-                }, function(err, user) {
-                    if (err) {return done(new Error("cannot find user"));}
-                    if(!user) {
-                        User.create({
-                            username: username,
-                            //password: "",
-                            groupName: "Teselagen",
-                            groupType: "com"
-                        }, function(err, user) {
-                            if(err) {
-                                return done(err, null, {message: "Could not create user."});
-                            }
-
+            User.findOne({
+                "username": username
+            }, function(err, user) {
+                if(err) {
+                    return done(err, null);
+                } else if(!user) {
+                    return done(null, null, {message: "User " + username + " does not exist."})
+                } else {
+                    user.comparePassword(password, function(err, isMatch) {
+                        if(isMatch) {
                             return done(null, user);
-                        });
-                    } else {
-                        return done(null, user);
-                    }
-                });
-            } else {
-                User.findOne({
-                    "username": username,
-                    "password": app.crypto.createHash("md5").update(password).digest("hex")
-                }, function(err, user) {
-                    if(err) {
-                        return done(err, user);
-                    } else if(!user) {
-                        return done(null, user, {message: "Incorrect username or password."})
-                    } else {
-                        return done(null, user);
-                    }
-                });
-            }
+                        } else {
+                            return done(null, null, {message: "Incorrect password."});
+                        }
+                    });
+                }
+            });
         }
     ));
 
@@ -118,6 +98,7 @@ module.exports = function(app) {
                     msg: err
                 });
             } else if(user) {
+                console.log(user);
                 res.json({
                     success: false,
                     msg: "User '" + req.body.username + "' already exists."

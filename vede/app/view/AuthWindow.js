@@ -83,11 +83,14 @@ Ext.define('Vede.view.AuthWindow', {
 							value: 'http://api.teselagen.com/',
 							fieldLabel: 'Server to connect:',
 							name: 'server',
-							store: [
-								['Server', 'http://api.teselagen.com/'],
-								['Server', 'http://teselagen.local/api/']
-
-							]
+							store: ['http://api.teselagen.com/',
+								'http://teselagen.local/api/'
+							],
+                            listeners: {
+                                change: function(combobox, newValue) {
+                                    Teselagen.manager.SessionManager.baseURL = combobox.getValue();
+                                }
+                            }
 						}, 
 						//{
 						//	xtype: 'fieldcontainer',

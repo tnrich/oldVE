@@ -83,9 +83,6 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     buildUrl: function(pAction, pDefault) {
         var url = this.getBaseURL() + pAction;
-        if (pDefault && this.getEnv() === this.constants.ENV_TEST) {
-            url = pDefault;
-        }
         return url;
     },
 

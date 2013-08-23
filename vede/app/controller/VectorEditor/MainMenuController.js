@@ -44,17 +44,19 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
             var menuPanel = oldTab.down("VectorEditorMainMenuPanel");
 
-            oldTab.options.features = menuPanel.down("component[identifier='featuresMenuItem']").checked,
-            oldTab.options.cutSites = menuPanel.down("component[identifier='cutSitesMenuItem']").checked,
-            oldTab.options.orfs = menuPanel.down("component[identifier='orfsMenuItem']").checked,
-            oldTab.options.circular = menuPanel.down("component[identifier='circularViewMenuItem']").checked,
-            oldTab.options.mapCaret = menuPanel.down("component[identifier='mapCaretMenuItem']").checked,
-            oldTab.options.complementary = menuPanel.down("component[identifier='showComplementaryMenuItem']").checked,
-            oldTab.options.spaces = menuPanel.down("component[identifier='showSpacesMenuItem']").checked,
-            oldTab.options.sequenceAA = menuPanel.down("component[identifier='showSequenceAAMenuItem']").checked,
-            oldTab.options.revComAA = menuPanel.down("component[identifier='showRevcomAAMenuItem']").checked,
-            oldTab.options.featureLabels = menuPanel.down("component[identifier='featureLabelsMenuItem']").checked,
-            oldTab.options.cutSiteLabels = menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").checked
+            if(menuPanel) {
+                oldTab.options.features = menuPanel.down("component[identifier='featuresMenuItem']").checked,
+                oldTab.options.cutSites = menuPanel.down("component[identifier='cutSitesMenuItem']").checked,
+                oldTab.options.orfs = menuPanel.down("component[identifier='orfsMenuItem']").checked,
+                oldTab.options.circular = menuPanel.down("component[identifier='circularViewMenuItem']").checked,
+                oldTab.options.mapCaret = menuPanel.down("component[identifier='mapCaretMenuItem']").checked,
+                oldTab.options.complementary = menuPanel.down("component[identifier='showComplementaryMenuItem']").checked,
+                oldTab.options.spaces = menuPanel.down("component[identifier='showSpacesMenuItem']").checked,
+                oldTab.options.sequenceAA = menuPanel.down("component[identifier='showSequenceAAMenuItem']").checked,
+                oldTab.options.revComAA = menuPanel.down("component[identifier='showRevcomAAMenuItem']").checked,
+                oldTab.options.featureLabels = menuPanel.down("component[identifier='featureLabelsMenuItem']").checked,
+                oldTab.options.cutSiteLabels = menuPanel.down("component[identifier='cutSiteLabelsMenuItem']").checked
+            }
         }
     },
 

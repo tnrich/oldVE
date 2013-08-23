@@ -134,7 +134,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     sendAuthRequest: function(params, cb, remember) {
         var self = this;
 
-        if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
+        //if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
 
         self.updateSplashScreenMessage("Authenticating to server");
 
