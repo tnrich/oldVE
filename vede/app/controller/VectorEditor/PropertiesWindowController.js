@@ -113,8 +113,9 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
 
     onFeatureSearchFieldKeyup: function(textfield) {
         var featuresGrid = Ext.ComponentQuery.query("window[cls='PropertiesWindow']")[0].down("gridpanel[name='featuresGridPanel']");
+        var fieldValue = textfield.getValue();
         featuresGrid.store.filterBy(function(record) {
-            if (record.data.name.search(textfield.getValue()) !== -1 || record.data.type.search(textfield.getValue()) !== -1) {
+            if (record.data.name.toLowerCase().indexOf(fieldValue) !== -1 || record.data.type.toLowerCase().indexOf(fieldValue) !== -1) {
                 return true;
             }
         });
