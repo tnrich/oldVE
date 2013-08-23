@@ -22,7 +22,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
         
         for(var i = 0; i < restrictionEnzymes.length; i++) {
             var re = restrictionEnzymes[i];
-            reCuts.add(re, this.cutSequenceByRestrictionEnzyme(re, symbolList));
+            reCuts.add(re.getName(), this.cutSequenceByRestrictionEnzyme(re, symbolList));
         }
         
         return reCuts;

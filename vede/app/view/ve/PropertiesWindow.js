@@ -1,6 +1,8 @@
 Ext.define('Vede.view.ve.PropertiesWindow', {
     extend: 'Ext.window.Window',
-    requires: ['Teselagen.manager.ProjectManager'],
+    requires: ['Ext.form.Label',
+               'Ext.grid.column.Template', 
+               'Teselagen.manager.ProjectManager'],
     title: 'Properties',
     cls: 'PropertiesWindow',
     modal: true,
@@ -86,7 +88,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             xtype: 'gridpanel',
                                             cls: 'featuresGridPanel',
                                             name: 'featuresGridPanel',
-                                            width: 400,
+                                            width: 402,
                                             minHeight: 200,
                                             maxHeight: 360,
                                             columns: [
@@ -114,7 +116,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     cls: 'featuresStrandColumn',
                                                     dataIndex: 'strand',
                                                     text: 'Strand',
-                                                    width: 50,
+                                                    width:50,
                                                     renderer: function (value) {
                                                         if (value > 0) {
                                                             return '+';
@@ -230,7 +232,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     }
                                                 }
                                             },
-                                            maxWidth: 470,
+                                            maxWidth: 472,
                                             minHeight: 200,
                                             maxHeight: 320,
                                             columns: [
@@ -352,16 +354,16 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             xtype: 'gridpanel',
                                             cls: 'ORFsGridPanel',
                                             name: 'ORFsGridPanel',
-                                            maxWidth: 470,
+                                            maxWidth: 472,
                                             minHeight: 200,
                                             maxHeight: 320,
                                             columnLines: true,
                                             columns: [
                                                 {
-                                                    xtype: 'gridcolumn',
+                                                    xtype: 'templatecolumn',
                                                     cls: 'ORFsPositionColumn',
-                                                    dataIndex: 'position',
                                                     text: 'Position',
+                                                    tpl: '{start} - {end}',
                                                     width: 200
                                                 },
                                                 {

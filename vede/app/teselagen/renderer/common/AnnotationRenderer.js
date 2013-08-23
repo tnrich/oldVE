@@ -75,7 +75,52 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
             Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
         };
     },
+    
+    /**
+     * @private
+     * Generates the tooltip label for an ORF
+     * @param {Teselagen.bio.orf.ORF} orf The orf to calculate a tooltip for.
+     * @return {String} The calculated tooltip.
+     */
+    getORFTooltipLabel: function(orf) {
+        var bp = Math.abs(orf.getEnd() - orf.getStart());
+        var aa = Math.floor(bp / 3);
+        var complimentary = "";
+        var orfDisplay = orf.toJSON();
+        
+        if(orf.getStrand() === 1 && orf.getStartCodons().length > 1) {
+            complimentary = ", complimentary";
+        }
 
+        var tooltipLabel = orfDisplay.start + ".." + orfDisplay.end +
+            ", frame: " + orfDisplay.frame +
+            ", length: " + bp + " BP" +
+            ", " + aa + " AA" + complimentary;
+
+        if(orf.getStartCodons().length > 1) {
+            tooltipLabel += "\nStart Codons: ";
+            
+            var codonsArray = [];
+            var codonString;
+            Ext.each(orf.getStartCodons(), function(codon, index) {
+                if(index !== orf.getStartCodons().length - 1) {
+                    codonString = (codon + 1) + ", ";
+                } else {
+                    codonString = codon + 1;
+                }
+
+                codonsArray.push(codonString);
+            });
+
+            tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
+        }
+
+        return tooltipLabel;
+    },
+
+    /**
+     * Creates a right click listener for a feature
+     */
     getRightClickListener: function(feature) {
         var sequenceManager = this.sequenceManager;
         return function() {
@@ -103,6 +148,7 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
             contextMenu.setPagePosition(d3.event.pageX+1, d3.event.pageY - 5);*/
         };
     }
+
 });
 
 

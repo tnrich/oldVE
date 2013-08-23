@@ -8,7 +8,7 @@ Ext.define("Teselagen.bio.orf.ORF", {
     extend: "Teselagen.bio.sequence.common.StrandedAnnotation",
 
     /**
-     * Constructor.  
+     * Constructor.
      * The ORF coordinates are [start, end).  The frame length is end-start.
      * @param {Int} start 0-based frame start location.
      * @param {Int} end 0-based index of the nucleotide after the last nucleotide in the frame.
@@ -86,18 +86,28 @@ Ext.define("Teselagen.bio.orf.ORF", {
 
         this.toString = function() {
             return "ORF on strand " + strand + " and start codon indices " +
-                startCodons + " from " + inData.start + " to " + inData.end;
+                startCodons + " from " + this.getStart() + " to " + this.getEnd();
         };
 
         return this;
     },
-
+    
+    /**
+     * Outputs in 1-based display format
+     */
     toJSON: function () {
+        var strand = this.getStrand();
+        var start = this.getStart() + 1;
+        var end = this.getEnd();
+        if (strand < 0) {
+            end++;
+        }
         return {
-            "position": (this.getStart()+1) + " - " + this.getEnd(),
-            "length": this.getEnd() - this.getStart(),
-            "strand": this.getStrand(),
-            "frame": this.getFrame()
+            "start": start,
+            "end": end,
+            "length": end - start + 1,
+            "strand": strand,
+            "frame": this.getFrame() + 1
         };
     }
 });

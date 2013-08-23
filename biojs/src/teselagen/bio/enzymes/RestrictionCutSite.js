@@ -68,12 +68,12 @@ Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
         
         return this;
     },
-
-    enzymeToJSON: function() {
-        return { "name": this.getRestrictionEnzyme().getName(), "numCuts": this.getNumCuts()};
-    },
-
-    cutSiteToJSON: function() {
-        return {"name": this.getRestrictionEnzyme().getName(), "numCuts": null, "position": (this.getStart() + " - " + this.getEnd()), "strand": this.getStrand()};
+    
+    toJSON: function() {
+        return {
+            "name": this.getRestrictionEnzyme().getName(),
+            "position": (this.getStart()+1) + " - " + this.getEnd(),
+            "strand": this.getStrand()
+        };
     }
 });

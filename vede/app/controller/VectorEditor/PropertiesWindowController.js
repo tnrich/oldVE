@@ -14,10 +14,13 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                "Teselagen.models.CutSite",
                "Teselagen.models.ORF"],
 
+    FormatUtils: null,
     MenuItemEvent: null,
     ProjectManager: null,
+    RestrictionEnzymeManager: null,
     SequenceManagerEvent: null,
     SequenceManager: null,
+    SequenceController: null,
     sequenceFeatures: null,
     VEManager: null,
 
@@ -29,17 +32,16 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var lastModified;
 
         var sequenceName = Teselagen.manager.ProjectManager.workingSequence.get("name");
-        var genbankData = Teselagen.manager.ProjectManager.workingSequence.data.sequenceFileContent;
-
-        var sequenceFeatures = Vede.application.getVectorEditorSequenceControllerController().Managers[0].getSequenceManager().getFeaturesJSON();
+        var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
+        var genbankData = this.FormatUtils.sequenceManagerToGenbank(sequenceManager);
+        
+        var sequenceFeatures = sequenceManager.getFeaturesJSON();
         var sequenceFeaturesStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.DNAFeature",
             data: sequenceFeatures
         });
         
-        var restrictionEnzymes = Teselagen.manager.RestrictionEnzymeManager.getRestrictionEnzymeNumCutsJSON();
-        var cutSites = Teselagen.manager.RestrictionEnzymeManager.getAllCutSitesJSON();
-        var cutSiteData = restrictionEnzymes.concat(cutSites);
+        var cutSiteData = this.RestrictionEnzymeManager.getCutSitesForProperties();
         var cutSitesStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.CutSite",
             data: cutSiteData,
@@ -144,7 +146,6 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             var currentStoreCount = currentStore.data.items.length;
             var currentStoreData = currentStore.data;
             var selectedName = row.selected.items[0].data.name;
-//            var selectedNumCuts = row.selected.items[0].data.numCuts;
             var duplicates = 0;
             var duplicateNames = [];
             var duplicateData = [];
@@ -170,9 +171,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                 }
             }
             
-            var restrictionEnzymes = Teselagen.manager.RestrictionEnzymeManager.getRestrictionEnzymeNumCutsJSON();
-            var cutSites = Teselagen.manager.RestrictionEnzymeManager.getAllCutSitesJSON();
-            var cutSiteData = restrictionEnzymes.concat(cutSites);
+            var cutSiteData = this.RestrictionEnzymeManager.getCutSitesForProperties();
             var cutSitesStore = Ext.create("Ext.data.Store", {
                 model: "Teselagen.models.CutSite",
                 data: cutSiteData,
@@ -267,9 +266,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
 
     onExpandAllCutSites: function () {
         var propertiesWindow = Ext.ComponentQuery.query("window[cls='PropertiesWindow']")[0];
-        var restrictionEnzymes = Teselagen.manager.RestrictionEnzymeManager.getRestrictionEnzymeNumCutsJSON();
-        var cutSites = Teselagen.manager.RestrictionEnzymeManager.getAllCutSitesJSON();
-        var cutSiteData = restrictionEnzymes.concat(cutSites);
+        var cutSiteData = this.RestrictionEnzymeManager.getCutSitesForProperties();
         var cutSitesStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.CutSite",
             data: cutSiteData,
@@ -292,9 +289,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
 
     onCollapseAllCutSites: function () {
         var propertiesWindow = Ext.ComponentQuery.query("window[cls='PropertiesWindow']")[0];
-        var restrictionEnzymes = Teselagen.manager.RestrictionEnzymeManager.getRestrictionEnzymeNumCutsJSON();
-        var cutSites = Teselagen.manager.RestrictionEnzymeManager.getAllCutSitesJSON();
-        var cutSiteData = restrictionEnzymes.concat(cutSites);
+        var cutSiteData = this.RestrictionEnzymeManager.getCutSitesForProperties();
         var cutSitesStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.CutSite",
             data: cutSiteData,
@@ -386,7 +381,10 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         this.application.on("expandAllCutSites", this.onExpandAllCutSites, this);
         this.application.on("collapseAllCutSites", this.onCollapseAllCutSites, this);
 
+        this.FormatUtils = Teselagen.utils.FormatUtils;
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.ProjectManager = Teselagen.manager.ProjectManager;
+        this.RestrictionEnzymeManager = Teselagen.manager.RestrictionEnzymeManager;
+        this.SequenceController = this.application.getVectorEditorSequenceControllerController();
     }
 });
