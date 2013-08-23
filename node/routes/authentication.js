@@ -17,7 +17,7 @@ module.exports = function(app) {
                         if(isMatch) {
                             if(!user.activated) {
                                 return done(null, null, {
-                                    message: "You must activated your account by email before you can log in."
+                                    message: "You must activate your account by email before you can log in."
                                 });
                             } else {
                                 return done(null, user);
@@ -67,12 +67,6 @@ module.exports = function(app) {
                     success: false,
                     user: user,
                     msg: info.message
-                });
-            } else if(!user.activated){
-                return res.json({
-                    success: false,
-                    user: null,
-                    msg: 
                 });
             } else {
                 req.logIn(user, function(err) {

@@ -1,6 +1,6 @@
 module.exports = function(app) {
 
-    var User = app.db.=model("User");
+    var User = app.db.model("User");
     var UserManager = require("../manager/UserManager")();
     var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
@@ -24,9 +24,14 @@ module.exports = function(app) {
             activationCode: activationCode
         }, function(err, user) {
             if(err) {
-                return res.redirect('/');
+                return res.send("Error finding the user associated with this code.<br>Are you sure this is the correct URL?");
             } else if(user) {
-                
+                user.activated = true;
+                user.save(function(err) {
+                    return res.redirect('/');
+                });
+            } else {
+                return res.send("Activation code invalid.");
             }
         });
     });
