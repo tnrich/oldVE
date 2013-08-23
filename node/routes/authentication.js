@@ -15,7 +15,13 @@ module.exports = function(app) {
                 } else {
                     user.comparePassword(password, function(err, isMatch) {
                         if(isMatch) {
-                            return done(null, user);
+                            if(!user.activated) {
+                                return done(null, null, {
+                                    message: "You must activated your account by email before you can log in."
+                                });
+                            } else {
+                                return done(null, user);
+                            }
                         } else {
                             return done(null, null, {message: "Incorrect password."});
                         }
@@ -61,6 +67,12 @@ module.exports = function(app) {
                     success: false,
                     user: user,
                     msg: info.message
+                });
+            } else if(!user.activated){
+                return res.json({
+                    success: false,
+                    user: null,
+                    msg: 
                 });
             } else {
                 req.logIn(user, function(err) {
@@ -110,7 +122,8 @@ module.exports = function(app) {
                     groupType: req.body.orgType,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    email: req.body.email
+                    email: req.body.email,
+                    activated: false
                 }, function(err, user) {
                     if(err) {
                         res.json({
@@ -118,7 +131,11 @@ module.exports = function(app) {
                             msg: "Error creating user."
                         });
                     } else {
-                        req.logIn(user, function(err) {
+                        res.json({
+                            success: false,
+                            msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."
+                        });
+                        /*req.logIn(user, function(err) {
                             if(err) {
                                 return res.json({
                                     success: false,
@@ -131,7 +148,7 @@ module.exports = function(app) {
                                     msg: "Welcome, " + user.username + "!"
                                 });
                             }
-                        });
+                        });*/
                     }
                 });
             }

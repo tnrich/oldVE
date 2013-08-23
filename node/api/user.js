@@ -1,5 +1,6 @@
 module.exports = function(app) {
 
+    var User = app.db.=model("User");
     var UserManager = require("../manager/UserManager")();
     var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
@@ -12,6 +13,21 @@ module.exports = function(app) {
     app.get("/users/:username", restrict, function(req, res) {
         res.json({
             "user": req.user
+        });
+    });
+
+    /**
+     * Activation url sent to users in an email.
+     */
+    app.get("/users/activate/:activationCode", function(req, res) {
+        User.findOne({
+            activationCode: activationCode
+        }, function(err, user) {
+            if(err) {
+                return res.redirect('/');
+            } else if(user) {
+                
+            }
         });
     });
 

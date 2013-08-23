@@ -246,6 +246,8 @@ module.exports = function(db) {
 		firstName: String,
 		lastName: String,
 		email: String,
+        activated: {type: Boolean, default: false},
+        activationCode: String,
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
