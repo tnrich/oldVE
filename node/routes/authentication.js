@@ -1,5 +1,6 @@
 module.exports = function(app) {
     var LocalStrategy = require("passport-local").Strategy;
+    var crypto = require("crypto");
 
     app.passport.use(new LocalStrategy(
         function(username, password, done) {
@@ -95,12 +96,19 @@ module.exports = function(app) {
 
     var sendRegisteredMail = function(user,activationCode)
     {
+        var html;
+
+        if(app.get("env") === "production") {
+            html = '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">Click here to activate your account.</a>';
+        } else {
+            html = '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">Click here to activate your account.</a><br><a href="http://teselagen.local/api/users/activate/' + activationCode + '">Or click here.</a>';
+        }
       var mailOptions = {
         from: "Teselagen ✔ <teselagen.testing@gmail.com>",
         to: user.email,
         subject: "Registration ✔",
         text: "Teselagen activation code",
-        html: '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">Click here to activate your account.</a>'
+        html: html
       }
 
       app.mailer.sendMail(mailOptions, function(error, response){
@@ -137,7 +145,8 @@ module.exports = function(app) {
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
-                    activated: false
+                    activated: false,
+                    activationCode: crypto.randomBytes(32).toString("hex")
                 }, function(err, user) {
                     if(err) {
                         res.json({
@@ -145,7 +154,7 @@ module.exports = function(app) {
                             msg: "Error creating user."
                         });
                     } else {
-                        sendRegisteredMail(user,"");
+                        sendRegisteredMail(user, user.activationCode);
                         res.json({
                             success: false,
                             msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."

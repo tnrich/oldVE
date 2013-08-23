@@ -21,14 +21,18 @@ module.exports = function(app) {
      */
     app.get("/users/activate/:activationCode", function(req, res) {
         User.findOne({
-            activationCode: activationCode
+            activationCode: req.params.activationCode
         }, function(err, user) {
             if(err) {
                 return res.send("Error finding the user associated with this code.<br>Are you sure this is the correct URL?");
             } else if(user) {
                 user.activated = true;
                 user.save(function(err) {
-                    return res.redirect('/');
+                    if(app.get("env") === "production") {
+                        return res.redirect("http://app.teselagen.com");
+                    } else {
+                        return res.redirect("http://dev.teselagen.com");
+                    }
                 });
             } else {
                 return res.send("Activation code invalid.");
