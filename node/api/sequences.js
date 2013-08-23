@@ -45,7 +45,7 @@ module.exports = function(app) {
                     if(nameChanged) {
                         // Update associated parts' partSource fields.
                         Part.update({
-                            "sequencefile_id": newSequence._id
+                            "sequencefile_id": ObjectId(newSequence._id)
                         }, {
                             "partSource": newSequence.name
                         }, function() {
