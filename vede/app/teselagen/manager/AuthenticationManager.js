@@ -118,8 +118,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
     updateServerPath: function(){
         Ext.create("Vede.view.AuthWindow").show();
-        var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
-        Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );        
+        //var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+        //Ext.getCmp('select-server-combo').setValue( baseURL + 'api/' );        
     },
 
     /**

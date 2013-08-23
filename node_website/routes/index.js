@@ -10,11 +10,15 @@ app.get('/', function(req, res){
 });
 
 app.get('/about', function(req, res){
-  res.render('about', { title: 'Express' })
+  res.render('about', {});
 });
 
 app.get('/contact', function(req, res){
-  res.render('contact', { title: 'Express' })
+  res.render('contact', {});
+});
+
+app.get('/faq', function(req, res){
+  res.render('faq', {});
 });
 
 };

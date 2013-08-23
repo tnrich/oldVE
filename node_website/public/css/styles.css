@@ -59,7 +59,7 @@ body {
 
 /*Banner*/
 #banner {
-    margin-top: 40px;
+    margin-top: 20px;
     min-height: 400px;
 }
 
@@ -67,6 +67,9 @@ body {
     padding: 5px;
     background: rgb(223, 223, 223);
     min-height: 400px;
+    position: relative;
+    z-index: 100;
+    top:20px;
 }
 
 #banner_back {
@@ -138,16 +141,41 @@ body {
 }
 
 .showcase_block_back {
-    /*background-image: url(../images/grid_bg2.png);*/
+    background-image: url(../img/bg/grid_bg2.png);
     background-repeat: repeat;
     background-attachment: fixed;
     border-radius:4px;
+    min-height:240px;
 }
 
 .showcase_block {
     min-height:240px;
     border-radius: 4px;
     text-align: center;
+    background:rgba(16, 16, 19, 0.7);
+}
+
+.showcase_head {
+    margin-top: 30px;
+}
+
+.showcase_head h4 {
+    color: white;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.showcase_text {
+    font-family: "myriad-pro", sans-serif;
+    font-style: normal;
+    font-weight:300;
+    line-height: 18px;
+    margin-top:10px;
+    color: white;
+}
+
+.showcase_text {
+    font-size: 15px;
 }
 
 #header2 {
@@ -155,7 +183,198 @@ body {
     font-family: 'Raleway', sans-serif;
     text-align: center;
     color: white;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 200;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/*Sponsors*/
+#section-sponsors {
+    padding: 30px;
+    background: rgb(62, 68, 74);
+}
+
+#section-sponsors h4 {
+    text-align: center;
+    color: rgb(134, 143, 158);
+    text-shadow: 1px 1px 1px rgb(192, 196, 209);
+    margin-bottom: 25px;
+}
+
+#section-sponsors img {
+    width: 70%;
+    margin-left:15%;
+}
+
+#section-updates {
+    margin-top: 85px;
+    margin-bottom: 85px;
+}
+
+#section-updates h4 {
+    color: #125B85;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 0px #ECF0F1;
+}
+
+.update-box {
+    background: #E0E3E6;
+    padding: 20px;
+    border-radius:3px;
+}
+
+.twitter-timeline {
+    width: 100%;
+    height: 307px;
+}
+
+/*Footer*/
+#push,
+#footer {
+    height: 150px;
+}
+
+#footer {
+    background:rgb(40, 43, 48);
+}
+
+#footer_links .top-bar {
+    background: none;
+    padding-top:40px;
+}
+
+.social-footer-link {
+position: relative;
+width: 24px;
+padding: 7px 13px 9px 12px !important;
+margin: 0px 10px;
+}
+
+.social-footer-link {
+    top: -7px;
+}
+
+.social-footer-link:hover {
+background: none;
+}
+
+#footer_links .top-bar-section ul {
+    background: none;
+}
+
+#footer_links .top-bar-section ul li>a, .top-bar-section li a:not(.button) {
+    background: none;
+}
+
+.social-footer-link img {
+width: 32px;
+}
+
+/*Pages*/
+.box-content {
+    background: rgba(255, 255, 255, 0.70);
+    padding: 30px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 2px;
+    color: #555;
+    text-align: justify;
+}
+
+ .box-content h4 {
+    color: black;
+    font-size: 26px;
+    margin-bottom: 30px;
+    font-weight: 300;
+ }
+
+.circle_outer {
+    margin-top: 60px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    padding:4px;
+    background: #E0E3E6;
+}
+
+.circle_inner {
+    width:150px;
+    height:150px;
+    border-radius: 50%;
+    background: #ffffff;
+    }
+
+.page-header {
+    font-size: 30px;
+    font-weight: 300;
+    color: #1585C5;
+    margin: 30px 0px 30px 0px;
+    line-height: 65px;
+    border-bottom: 1px inset #1585C5;
+}
+
+.team-member{
+    margin-bottom: 60px !important;
+}
+
+#team .circle_outer {
+    background: #eeeeee;
+}
+
+.team-head {
+    font-size: 24px;
+    color:#000000;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.team-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+.team-info {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #555;
+    background: white;
+    border-radius: 2px;
+}
+
+/*Pictures*/
+#mike-pic .circle_inner{
+    background: url(../img/team/mfero_pic.jpg);
+}
+
+#ed-pic .circle_inner{
+    background: url(../img/team/ed_pic.jpg);
+}
+
+#nat-pic .circle_inner{
+    background: url(../img/team/nat_pic.jpg);
+}
+
+#prav-pic .circle_inner{
+    background: url(../img/team/prav_pic.jpg);
+}
+
+#jay-pic .circle_inner{
+    background: url(../img/team/jay_pic.jpg);
+}
+
+#ark-pic .circle_inner{
+    background: url(../img/team/ark_pic.jpg);
+}
+
+#wilson-pic .circle_inner{
+    background: url(../img/team/wilson_teselagen_pic.jpg);
+}
+
+#richardson-pic .circle_inner{
+    background: url(../img/team/richardson_teselagen_pic.jpg);
 }

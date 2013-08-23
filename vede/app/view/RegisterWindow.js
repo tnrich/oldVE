@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.view.RegisterWindow', {
     extend: 'Ext.window.Window',
-    requires: ['Teselagen.manager.AuthenticationManager'],
+    requires: ['Teselagen.manager.AuthenticationManager','Teselagen.manager.SessionManager'],
     id: 'RegisterWindow',
     floating: true,
     closable: true,
@@ -13,7 +13,7 @@ Ext.define('Vede.view.RegisterWindow', {
 
     items: [{
         xtype: 'form',
-        url: 'api/register',
+        url: Teselagen.manager.SessionManager.buildUrl("register", ""),
         id: 'registerForm',
         items: [{
             xtype: 'textfield',

@@ -1,6 +1,6 @@
 [
 	{"script":"app.js",
 	 "name":"Dev",
-	 "args":"['--test','-r', '3000']",
+	 "args":"['--prod','-r', '3000']",
 	 "instances":"1"}
 ]

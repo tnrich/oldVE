@@ -1,4 +1,4 @@
-$image-search-path: '/Users/tim98210/Sites/Teselagen/ve/vede-cp/build/Vede/production/resources';
+$image-search-path: '/Users/rpavez/Sites/Teselagen/VEDERepo/vede-cp/build/Vede/production/resources';
 $theme-name:  'teselagen' !default;
 $include-ext-abstractcomponent: true;
 $include-ext-abstractmanager: true;
@@ -782,6 +782,7 @@ $include-vede-view-authwindow: true;
 $include-vede-view-enzymeselector: true;
 $include-vede-view-helpwindow: true;
 $include-vede-view-partlibrarywindow: true;
+$include-vede-view-registerwindow: true;
 $include-vede-view-viewport: true;
 $include-vede-view-annotate-annotator: true;
 $include-vede-view-annotate-caret: true;
