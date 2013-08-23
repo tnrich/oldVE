@@ -5,38 +5,59 @@ module.exports = function(app) {
     var constants = require('../routes/constants');
 
     var Sequence = app.db.model("sequence");
+    var Part = app.db.model("part");
     var Project = app.db.model("project");
     var User = app.db.model("User");
 
 
     var saveSequence = function(newSequence,req,res,cb){
+        var nameChanged = false;
+
+        // Set the nameChanged flag. If true, we need to update the partSource 
+        // field on parts associated with this sequence.
+        if(req.body.name !== newSequence.name) {
+            nameChanged = true;
+        }
+
         for (var prop in req.body) {
             if(prop!="user_id") newSequence[prop] = req.body[prop];
         }
         newSequence.dateModified = new Date();
 
-            newSequence.FQDN = req.user.FQDN+'.'+req.body.name;
-            newSequence.save(function(err){
-                if(err)
+        newSequence.FQDN = req.user.FQDN+'.'+req.body.name;
+        newSequence.save(function(err){
+            if(err)
+            {
+                if(err.code===11000)
                 {
-                    if(err.code===11000)
-                    {
-                        // Duplicated Sequence
-                        Sequence.findOne({"FQDN":newSequence.FQDN}).exec(function(err,sequence){
-                            return res.json({'sequences': sequence,"duplicated":true});
-                        });
-                    }
-                    else
-                    {
-                        return res.json(500,{"error":err});
-                    }
+                    // Duplicated Sequence
+                    Sequence.findOne({"FQDN":newSequence.FQDN}).exec(function(err,sequence){
+                        return res.json({'sequences': sequence,"duplicated":true});
+                    });
                 }
-                else 
-                    {
+                else
+                {
+                    return res.json(500,{"error":err});
+                }
+            }
+            else 
+                {
+                    if(nameChanged) {
+                        // Update associated parts' partSource fields.
+                        Part.update({
+                            "sequencefile_id": ObjectId(newSequence._id)
+                        }, {
+                            "partSource": newSequence.name
+                        }, function() {
+                            if (typeof(cb) == 'function') cb(newSequence);
+                            return res.json({'sequences': newSequence,"duplicated":false,"err":err});
+                        });
+                    } else {
                         if (typeof(cb) == 'function') cb(newSequence);
                         return res.json({'sequences': newSequence,"duplicated":false,"err":err});
                     }
-            });
+                }
+        });
     };
 
     /**

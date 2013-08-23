@@ -151,7 +151,16 @@ Ext.define("Teselagen.models.SequenceFile", {
             var format = record.get("sequenceFileFormat");
             var content = record.get("sequenceFileContent");
 
-            return record.makePartSource(format, content);
+            var partSource = record.makePartSource(format, content);
+
+            // Update the serialized data with the new name.
+            var serialize = record.get("serialize");
+            if(serialize) {
+                serialize.inData.name = partSource;
+                record.set("serialize", serialize);
+            }
+
+            return partSource;
         }
     },
 
