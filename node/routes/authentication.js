@@ -92,6 +92,26 @@ module.exports = function(app) {
         res.send();
     });
 
+
+    var sendRegisteredMail = function(user,activationCode)
+    {
+      var mailOptions = {
+        from: "Teselagen ✔ <teselagen.testing@gmail.com>",
+        to: user.email,
+        subject: "Registration ✔",
+        text: "Teselagen activation code",
+        html: '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">Click here to activate your account.</a>'
+      }
+
+      app.mailer.sendMail(mailOptions, function(error, response){
+          if(error){
+              console.log(error);
+          }else{
+              console.log("Message sent: " + response.message);
+          }
+      });
+    }
+
     app.post('/register', function(req, res) {
         var User = app.db.model("User");
 
@@ -125,6 +145,7 @@ module.exports = function(app) {
                             msg: "Error creating user."
                         });
                     } else {
+                        sendRegisteredMail(user,"");
                         res.json({
                             success: false,
                             msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."

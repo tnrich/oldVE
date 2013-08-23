@@ -37,6 +37,9 @@ module.exports = function(app, express) {
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
     }
 
+    /* User should be added to production like
+        db.addUser('prod', 'o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=')
+    */
 
 
     app.configure('development', function() {
@@ -168,13 +171,13 @@ module.exports = function(app, express) {
      */
     app.xmlparser = new app.xml2js.Parser();
 
-    // INIT NodeMailer
-    /*
-     * NodeMailer user to send emails using local SMTP server
-     */
-
-    app.mailer = app.nodemailer.createTransport("SMTP", {
-        host: 'localhost'
+    //NodeMailer Config
+    app.mailer = app.nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "teselagen.testing@gmail.com",
+            pass: "teselagen#rocks"
+        }
     });
 
 
