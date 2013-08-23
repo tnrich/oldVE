@@ -331,10 +331,17 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         } else {
             var selectedProj = Teselagen.manager.ProjectManager.workingProject;
             var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
+            var serialize = workingSequence.get("serialize");
 
-            workingSequence.set("name", name);
-            workingSequence.set("partSource", name);
-            workingSequence.set("sequenceFileName", name);
+            serialize.inData.name = name;
+
+            workingSequence.set({
+                name: name,
+                partSource: name,
+                sequenceFileName: name,
+                serialize: serialize
+            });
+
             workingSequence.save({
                 success: function () {
                     var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
