@@ -72,7 +72,7 @@ module.exports = function(app) {
                 return res.json({
                     success: false,
                     user: null,
-                    msg: 
+                    msg: ""
                 });
             } else {
                 req.logIn(user, function(err) {
@@ -151,7 +151,7 @@ module.exports = function(app) {
                             msg: "Error creating user."
                         });
                     } else {
-                        sendRegisteredMail(user,"00000");
+                        sendRegisteredMail(user,"");
                         res.json({
                             success: false,
                             msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."

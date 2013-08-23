@@ -1,6 +1,6 @@
 module.exports = function(app) {
 
-    var User = app.db.=model("User");
+    var User = app.db.model("User");
     var UserManager = require("../manager/UserManager")();
     var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
