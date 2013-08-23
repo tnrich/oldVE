@@ -84,7 +84,8 @@ Ext.define('Vede.view.AuthWindow', {
 							fieldLabel: 'Server to connect:',
 							name: 'server',
 							store: ['http://api.teselagen.com/',
-								'http://teselagen.local/api/'
+								'http://teselagen.local/api/',
+                                'http://dev.teselagen.com/api/'
 							],
                             listeners: {
                                 change: function(combobox, newValue) {
