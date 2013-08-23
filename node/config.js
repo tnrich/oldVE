@@ -156,7 +156,7 @@ module.exports = function(app, express) {
      */
 
     app.j5client = app.xmlrpc.createClient({
-        host: 'dev.teselagen.com',
+        host: 'j5dev.teselagen.com',
         port: 80,
         path: '/j5/j5_xml_rpc.pl'
     });
