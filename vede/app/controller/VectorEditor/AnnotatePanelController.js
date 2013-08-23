@@ -317,12 +317,22 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
             if(this.startHandleResizing) {
                 this.startSelectionIndex = bpIndex;
-                this.selectionDirection = 0;
+
+                // If we've selected across the origin, set the selection direction.
+                // This prevents weird behavior when dragging the edge of the selection.
+                if(this.SelectionLayer.start > this.SelectionLayer.end) {
+                    this.selectionDirection = 1;
+                }
 
                 this.changeCaretPosition(bpIndex, false, false); 
             } else if(this.endHandleResizing) {
                 this.endSelectionIndex = bpIndex;
-                this.selectionDirection = 0;
+
+                // If we've selected across the origin, set the selection direction.
+                // This prevents weird behavior when dragging the edge of the selection.
+                if(this.SelectionLayer.start > this.SelectionLayer.end) {
+                    this.selectionDirection = 1;
+                }
 
                 this.changeCaretPosition(this.startSelectionIndex, false, false);
             } else {
