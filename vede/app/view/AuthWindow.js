@@ -125,7 +125,7 @@ Ext.define('Vede.view.AuthWindow', {
 				}, {
 					xtype: 'panel',
 					flex: 1,
-					html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Aug 23, 1pm PST</small></div>'
+					html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Aug 23, 4:23pm PST</small></div>'
 				}]
 			}]
 		});
