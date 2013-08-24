@@ -215,12 +215,16 @@ function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
   var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'w');
     // Open the file
     gridStore.open(function(err, gridStore) {
+      if(err) {console.log(err); return;}
       // Write some data to the file
       gridStore.write(fileData, function(err, gridStore) {
+        if(err) {console.log(err); return;}
         // Close (Flushes the data to MongoDB)
         gridStore.close(function(err, result) {
+          if(err) {console.log(err); return;}
           // Verify that the file exists
           app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
+            if(err) {console.log(err); return;}
 
             var j5Run = app.db.model("j5run");
             
@@ -236,7 +240,7 @@ function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
               newj5Run.save(function(){
                 deproject.j5runs.push(newj5Run);
                 deproject.save(function(){
-                  app.GridStoreDB.close();
+                  //app.GridStoreDB.close();
                   //return cb(newj5Run,warnings);
                 });
               });
