@@ -28,11 +28,12 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var propertiesWindow = Ext.create("Vede.view.ve.PropertiesWindow");
 
         var userName = Teselagen.manager.UserManager.getUser().data.username;
-        var created;
-        var lastModified;
-
-        var sequenceName = Teselagen.manager.ProjectManager.workingSequence.get("name");
+        var sequence = this.ProjectManager.workingSequence;
+        var created = sequence.get("dateCreated");
+        var lastModified = sequence.get("dateModified");
         var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
+        var sequenceName = sequenceManager.getName();
+        var circular = sequenceManager.getCircular();
         var genbankData = this.FormatUtils.sequenceManagerToGenbank(sequenceManager);
         
         var sequenceFeatures = sequenceManager.getFeaturesJSON();
@@ -76,8 +77,9 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         if (!lastModified) {
             propertiesWindow.down("component[cls='propertiesWindowLastModifiedField']").setValue("---");
         }
-        propertiesWindow.down("component[cls='propertiesWindowOwnerField']").setValue(userName);
         propertiesWindow.down("component[cls='propertiesWindowSequenceNameField']").setValue(sequenceName);
+        propertiesWindow.down("component[cls='propertiesWindowCircularField']").setValue(circular);
+        propertiesWindow.down("component[cls='propertiesWindowOwnerField']").setValue(userName);
         propertiesWindow.down("component[cls='propertiesWindowGenBankData']").setValue(genbankData);
         propertiesWindow.down("gridpanel[name='featuresGridPanel']").reconfigure(sequenceFeaturesStore);
         propertiesWindow.down("gridpanel[name='cutSitesGridPanel']").reconfigure(cutSitesStore);
