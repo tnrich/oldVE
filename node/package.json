@@ -3,7 +3,8 @@
   , "version": "0.1.0"
   , "private": true
   , "dependencies": {
-      "async":"0.1.22"
+      "airbrake":"0.3.4"
+    , "async":"0.1.22"
     , "bson":"0.1.5"
     , "bcrypt":"0.7.6"
     , "commander":"1.0.5"
