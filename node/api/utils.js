@@ -11,12 +11,15 @@ module.exports = function(app) {
      * @method POST /sendFeedback
      */
     app.post('/sendFeedback', function(req, res) {
+
+        variables = "{type:Feedback}";
+
         if (req.body.feedback) {
             app.mailer.sendMail({
                 from: "Teselagen <root@localhost>",
-                to: "rpavez@gmail.com",
+                to: "newticket+7ltwtp2jebrcwkne@email.codebasehq.com",
                 subject: "Feedback",
-                text: req.body.feedback
+                text: req.body.feedback + variables
             }, function(error, response) {
                 if (error) {
                     console.log(error);
@@ -27,9 +30,9 @@ module.exports = function(app) {
         } else if (req.body.error) {
             app.mailer.sendMail({
                 from: "Teselagen <root@localhost>",
-                to: "rpavez@gmail.com",
+                to: "newticket+7ltwtp2jebrcwkne@email.codebasehq.com",
                 subject: "Error",
-                text: req.body.error + '\n' + req.body.error_feedback
+                text: req.body.error + '\n' + req.body.error_feedback + variables
             }, function(error, response) {
                 if (error) {
                     console.log(error);
