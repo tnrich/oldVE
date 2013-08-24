@@ -5,6 +5,10 @@ module.exports = function(app) {
     var Part = app.db.model("part");
     var J5Runs = app.db.model("j5run");
 
+    app.post('/error', function(req, res) {
+        throw new Error("OH NOOO");
+    });
+
     /**
      * Send feedback
      * @memberof module:./routes/api
