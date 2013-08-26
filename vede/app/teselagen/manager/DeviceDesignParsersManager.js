@@ -223,7 +223,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             }
             
             var cellFases;
-            if(isNewFasScheme) cellFases = bin["de:binItems"]["de:fas"];
+            cellFases = bin["de:binItems"]["de:fas"];
             
             var temCellsArray = [];
             for (var j=0; j<binParts.length; j++) {
