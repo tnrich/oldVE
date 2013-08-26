@@ -1,13 +1,30 @@
 body {
     background: #ecf0f1;
     font-family: 'proxima-nova';
+    font-weight: normal;
+    font-weight: 300;
 }
 
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: -150px;
+}
+
+.wrapper:after {
+    display: block;
+}
+
+#footer, .wrapper:after {
+    height:150px;
+}
 /*TopBar*/
 
 .top-bar {
     background: white;
     height: 70px;
+    padding: 0px 15px;
 }
 
 .top-bar-section ul {
@@ -18,6 +35,7 @@ body {
 .top-bar-section ul li>a, .top-bar-section li a:not(.button) {
     color: #555;
     background: white;
+    font-weight: normal;
 }
 
 .top-bar-section ul li.active>a {
@@ -26,18 +44,19 @@ body {
 }
 
 .name img {
-    width: 45%;
+    width: 40%;
     position: relative;
-    top:10px;
+    top:15px;
     left:10px;
 }
 
 /*Header*/
 #banner_head {
-    font-size: 45px;
+    font-family: "proxima-nova", sans-serif;
+    font-size: 42px;
     font-weight:600;
     margin-top: 45px;
-    color: #333;
+    color: 414C57;
     padding: 10px;
     font-style: normal;
     /*display: none;*/
@@ -47,14 +66,16 @@ body {
 }
 
 #banner_head_sub {
-    font-family: "myriad-pro";
+    font-family: "proxima-nova", sans-serif;
+    font-style: normal;
+    font-weight: 400;
     font-size: 18px;
-    font-weight: 300;
     margin-top: 5px;
-    color: #555;
+    color: #747B86;
     padding: 10px;
     text-shadow: 1px 1px 0px white;
     text-align: center;
+    letter-spacing: 1px;
 }
 
 /*Banner*/
@@ -65,7 +86,7 @@ body {
 
 #banner_around {
     padding: 5px;
-    background: rgb(223, 223, 223);
+    background: #E0E4E6;
     min-height: 400px;
     position: relative;
     z-index: 100;
@@ -106,7 +127,7 @@ body {
 }
 
 .icon-text {
-    font-family: "myriad-pro";
+    font-family:"PT Sans", sans-serif;
     position: relative;
     text-align: center;
     font-weight: 700;
@@ -116,13 +137,14 @@ body {
 }
 
 .icon-desc {
-    font-family: "myriad-pro";
+    font-family: "PT Sans", sans-serif;
     position: relative;
     text-align: center;
     font-weight: 300;
     font-size:16px;
     line-height:22px;
     font-style: normal;
+    color: rgb(224, 227, 235)
 }
 
 .step-sep {
@@ -152,7 +174,8 @@ body {
     min-height:240px;
     border-radius: 4px;
     text-align: center;
-    background:rgba(16, 16, 19, 0.7);
+    background:rgba(16, 16, 19, 0.5);
+    box-shadow: 0px 0px 10px 1px rgba(39, 41, 43, 0.65) inset;
 }
 
 .showcase_head {
@@ -161,37 +184,36 @@ body {
 
 .showcase_head h4 {
     color: white;
+    font-family: "proxima-nova";
     font-style: normal;
-    font-weight: 600;
+    font-weight: 100;
+    letter-spacing: 1px;
 }
 
 .showcase_text {
-    font-family: "myriad-pro", sans-serif;
+    font-family:"PT Sans", sans-serif;
     font-style: normal;
     font-weight:300;
     line-height: 18px;
-    margin-top:10px;
-    color: white;
-}
-
-.showcase_text {
-    font-size: 15px;
+    margin-top:20%;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 #header2 {
     margin-bottom: 50px;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'proxima-nova', sans-serif;
     text-align: center;
     color: white;
     font-size: 28px;
     font-weight: 200;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
 }
 
 /*Sponsors*/
 #section-sponsors {
     padding: 30px;
-    background: rgb(62, 68, 74);
+    background: rgb(51, 56, 61);
 }
 
 #section-sponsors h4 {
@@ -208,6 +230,7 @@ body {
 
 #section-updates {
     margin-top: 85px;
+    display: none;
     margin-bottom: 85px;
 }
 
@@ -233,6 +256,7 @@ body {
 #push,
 #footer {
     height: 150px;
+    clear: both;
 }
 
 #footer {
@@ -265,10 +289,12 @@ background: none;
 
 #footer_links .top-bar-section ul li>a, .top-bar-section li a:not(.button) {
     background: none;
+    color: rgb(189, 191, 201)
 }
 
 .social-footer-link img {
-width: 32px;
+    width: 32px;
+    opacity: 0.8;
 }
 
 /*Pages*/
@@ -285,10 +311,16 @@ width: 32px;
 
  .box-content h4 {
     color: black;
-    font-size: 26px;
+    font-size: 23px;
     margin-bottom: 30px;
     font-weight: 300;
+    letter-spacing: 2px;
  }
+
+ .press-date {
+    font-size: 18px !important;
+    margin-bottom: 0px;
+}
 
 .circle_outer {
     margin-top: 60px;
@@ -307,12 +339,14 @@ width: 32px;
     }
 
 .page-header {
-    font-size: 30px;
+    font-size: 28px;
+    font-family: 'proxima-nova' sans-serif;
     font-weight: 300;
     color: #1585C5;
     margin: 30px 0px 30px 0px;
     line-height: 65px;
     border-bottom: 1px inset #1585C5;
+    letter-spacing: 4px;
 }
 
 .team-member{
@@ -346,6 +380,25 @@ width: 32px;
     border-radius: 2px;
 }
 
+#contact-info {
+    position: relative;
+    background: rgba(255, 255, 255, 0.80);
+    float: right;
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+#contact-info h4 {
+    color: black;
+    font-size: 23px;
+    margin-bottom: 30px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+#contact-info p {
+    margin-top: 40px;
+}
 /*Pictures*/
 #mike-pic .circle_inner{
     background: url(../img/team/mfero_pic.jpg);
