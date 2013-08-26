@@ -1,0 +1,26 @@
+extends layout
+
+block container
+
+    #login
+        .row
+            .large-12.small-12.page-header Log In
+            .large-6.small-6.large-centered.small-centered.columns
+                form#signup_form.custom
+                    .row
+                        .large-12.small-12
+                            .large-3.small-3.columns
+                                label.right.inline(for='username') Username
+                            .large-9.small-9.columns
+                                input(type="text", id='username', placeholder='Username')
+                        .large-12.small-12
+                            .large-3.small-3.columns
+                                label.right.inline(for='password') Password
+                            .large-9.small-9.columns
+                                input(type="password", id='password')
+                        .large-12.small-12
+                            a.lost_pw_link Lost Password?
+                        .large-12.small-12
+                            a.button.radius.expand Log In
+                            a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
+

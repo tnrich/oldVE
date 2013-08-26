@@ -1,0 +1,40 @@
+extends layout
+
+block container
+
+    #commercial.row
+        .large-2.small-2.columns
+            p TERMS
+            ul.side-nav
+                li
+                    a(href="/terms") Terms of Service
+                li
+                    a(href="/commercialuse") Commercial Use
+                li
+                    a(href="/acceptableuse") Acceptable Use
+                li
+                    a(href="/pricingterms") Pricing Terms
+                li.active
+                    a(href="/security") Security
+
+        .large-10.small-10.box-content.columns
+                h3 Security
+                p We provide this overview so that you can better understand the security measures we've put in place to protect the information that you store using TeselaGen.
+                h4 Secure Storage
+                p We encrypt the files that you store on TeselaGen using the AES-256 standard, which is the same encryption standard used by banks to secure customer data. Encryption for storage is applied after files are uploaded, and we manage the encryption keys. TeselaGen uses Firehost.com for our cloud based servers and data storage. Firehost stores data over several large-scale data centers. According to Firehost, they use military grade perimeter control berms, video surveillance, and professional security staff to keep their data centers physically secure to HIPPA and higher level standards. You can find more information about Firehost's security at the Firehost.com website. Firehost and TeselaGen also employ significant protection against network security issues such as Distributed Denial of Service (DDoS) attacks, Man in the Middle (MITM) attacks, and packet sniffing.
+                h4 Secure Transfers
+                p Your files are sent between TeselaGen's desktop clients and our servers over a secure channel using 256-bit SSL (Secure Sockets Layer) encryption, the standard for secure Internet network connections.
+                h4 Data Backups
+                p TeselaGen and Firehost keep redundant backups of all data over multiple locations to prevent the remote possibility of data loss.
+                h4 Privacy
+                p A copy of our full privacy policy can be found at 
+                    a(href="/privacy") here.
+                p We guard your privacy to the best of our ability and work hard to protect your information from unauthorized access.TeselaGen employees are prohibited from viewing the content of data you store in your TeselaGen account, and are only permitted to view metadata (e.g., names and locations). Like most online services, we have a small number of employees who must be able to access user data for the reasons stated in our privacy policy (e.g., when legally required to do so). But that's the rare exception, not the rule. We have strict policy and technical access controls that prohibit employee access except in these rare circumstances. In addition, we employ a number of physical and electronic security measures to protect user information from unauthorized access.
+                h4 Third-party Apps
+                p If you choose to access TeselaGen using third-party applications ("apps"), be aware that those apps utilize their own security protocols and have their own privacy policies. If you're not comfortable with the privacy and security features of those apps, you shouldn't use them to access TeselaGen. For example, third-party apps might not employ encryption when transmitting data, might collect information that TeselaGen does not, and might use information differently than TeselaGen does.
+                h4 Compliance with Lays & Law Enforcement
+                p As set forth in our privacy policy, and in compliance with United States law, TeselaGen cooperates with United States law enforcement when it receives valid legal process, which may require TeselaGen to provide the contents of your private TeselaGen. In these cases, TeselaGen will remove TeselaGen's encryption from the files before providing them to law enforcement.
+                h4 How to Add Your Own Layer of Encryption to TeselaGen
+                p TeselaGen applies encryption to your files after they have been uploaded, and we manage the encryption keys. Users who wish to manage their own encryption keys can apply encryption before placing files in their TeselaGen. Please note that if you encrypt files before uploading them, some features will not be available, such as creating public links. Doing so will also make it impossible for us to recover your data if you lose your encryption key.
+                h4 Reporting Security Concerns.
+                p We take a number of measures to ensure that the data you store on TeselaGen is safe and secure. While we're very confident in our technology, we recognize that no system can guarantee data security with 100% certainty. For that reason, we will continue to innovate to make sure that our security measures are state of the art, and we will investigate any and all reported security issues concerning TeselaGen's services or software. For a direct line to our security experts, report security issues to security@TeselaGen.com. We'll fully credit anybody whose reports lead to the improvement of TeselaGen security. A list of those who have contributed reports leading to a bug or security issue can be found on our special thanks page.
