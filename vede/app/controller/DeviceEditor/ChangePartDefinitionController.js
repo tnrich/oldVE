@@ -59,6 +59,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     populateFields:function(){
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var form = this.selectedWindow.down('form').getForm();
         var name = form.findField('partName');
         var partSource = form.findField('partSource');
@@ -73,11 +74,18 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         name.setValue(this.selectedPart.get('name'));
         partSource.setValue(this.selectedSequence.get('partSource'));
 
+        console.log(this.selectedPart);
+
         if(this.selectedStartBP!==null && this.selectedStopBP!==null)
         {
-            startBP.setValue(this.selectedStartBP);
-            stopBP.setValue(this.selectedStopBP);        }
-        else
+            if(currentTab.initialCls!="DeviceEditorTab") {
+                startBP.setValue(this.selectedStartBP);
+                stopBP.setValue(this.selectedStopBP);
+            } else {
+                startBP.setValue(this.selectedPart.get('genbankStartBP'));
+                stopBP.setValue(this.selectedPart.get('endBP'));
+            }
+        } else
         {
             startBP.setValue(this.selectedPart.get('genbankStartBP'));
             stopBP.setValue(this.selectedPart.get('endBP'));
@@ -106,13 +114,69 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         revComp.setValue(this.selectedPart.get('revComp'));
     },
 
+
+    populateFields:function(){
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var form = this.selectedWindow.down('form').getForm();
+        var name = form.findField('partName');
+        var partSource = form.findField('partSource');
+        var sourceData = form.findField('sourceData');
+        var specifiedSequence = form.findField('specifiedSequence');
+        var startBP = form.findField('startBP');
+        var stopBP = form.findField('stopBP');
+        var revComp = form.findField('revComp');
+
+        var sequenceLength = this.selectedSequence.getLength();
+        
+        name.setValue(this.selectedPart.get('name'));
+        partSource.setValue(this.selectedSequence.get('partSource'));
+
+        console.log(this.selectedPart);
+
+        if(this.selectedSequence)
+        {
+            if(this.selectedVEProject)
+            partSource.setValue(this.selectedVEProject.get('name'));
+            sourceData.setValue(this.selectedSequence.get('sequenceFileContent'));
+            if(startBP.getValue()===1 && stopBP.getValue()===sequenceLength)
+            {
+                startBP.setReadOnly(true);
+                stopBP.setReadOnly(true);
+                specifiedSequence.setValue('Whole sequence');
+            }
+            else specifiedSequence.setValue('Specified sequence');
+        }
+
+        if(this.selectedStartBP!==null && this.selectedStopBP!==null)
+        {
+            if(currentTab.initialCls!="DeviceEditorTab") {
+                startBP.setValue(this.selectedStartBP);
+                stopBP.setValue(this.selectedStopBP);
+            } else {
+                startBP.setValue(this.selectedPart.get('genbankStartBP'));
+                stopBP.setValue(this.selectedPart.get('endBP'));
+            }
+        } else
+        {
+            startBP.setValue(this.selectedPart.get('genbankStartBP'));
+            stopBP.setValue(this.selectedPart.get('endBP'));
+        }
+
+        partSource.disable();
+
+        startBP.setMaxValue(sequenceLength);
+        stopBP.setMaxValue(sequenceLength);
+
+        revComp.setValue(this.selectedPart.get('revComp'));
+    },
+
     open: function(selectedPart,selectedBinIndex,selectedSequence){
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
         this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
-        this.selectedBinIndex =selectedBinIndex;
+        this.selectedBinIndex = selectedBinIndex;
         this.selectedVEProject = null,
         this.populateFields();
     },
