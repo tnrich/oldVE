@@ -431,3 +431,28 @@ background: none;
 #richardson-pic .circle_inner{
     background: url(../img/team/richardson_teselagen_pic.jpg);
 }
+
+/*Signup,Login*/
+.page-logo {
+    margin: 60px 0px;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.registration-buts {
+    margin-top: 40px;
+}
+
+.registration-buts a{
+    box-shadow: none;
+}
+
+.lost_pw_link {
+    text-align: right;
+}
+
+.lost_pw_link a{
+    font-size: 12px;
+    font-weight: 600;
+    margin: 10px 0px 30px 0px;
+}
