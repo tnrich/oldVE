@@ -289,7 +289,7 @@ background: none;
 
 #footer_links .top-bar-section ul li>a, .top-bar-section li a:not(.button) {
     background: none;
-    color: rgb(189, 191, 201)
+    color: rgb(189, 191, 201);
 }
 
 .social-footer-link img {
@@ -455,4 +455,29 @@ background: none;
     font-size: 12px;
     font-weight: 600;
     margin: 10px 0px 30px 0px;
+}
+
+#footer_copy {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: rgb(189, 191, 201);
+}
+
+#footer2_links {
+    padding-left: 3%;
+}
+
+#footer2_links .top-bar {
+    background: none;
+    padding-top:40px;
+}
+
+#footer2_links .top-bar-section ul {
+    background: none;
+}
+
+#footer2_links .top-bar-section ul li>a, .top-bar-section li a:not(.button) {
+    background: none;
+    color: rgb(189, 191, 201);
 }
