@@ -74,8 +74,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         name.setValue(this.selectedPart.get('name'));
         partSource.setValue(this.selectedSequence.get('partSource'));
 
-        console.log(this.selectedPart);
-
         if(this.selectedStartBP!==null && this.selectedStopBP!==null)
         {
             if(currentTab.initialCls!="DeviceEditorTab") {
@@ -130,8 +128,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         
         name.setValue(this.selectedPart.get('name'));
         partSource.setValue(this.selectedSequence.get('partSource'));
-
-        console.log(this.selectedPart);
 
         if(this.selectedSequence)
         {
@@ -194,7 +190,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
 
-        //console.log(this.selectedStartBP);
         startBP.setValue(this.selectedStartBP);
         stopBP.setValue(this.selectedStopBP);
 
