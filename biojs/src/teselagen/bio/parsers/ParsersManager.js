@@ -197,6 +197,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     saveSequence: function (sequence,name,ext,seqMgr,genbankObject,cb)
     {
             var self = Teselagen.bio.parsers.ParsersManager;
+            var partSource = genbankObject.getLocus().locusName;
 
             if(seqMgr) {
                 sequence.set('name', genbankObject.getLocus().locusName);
@@ -211,7 +212,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                 self.batchImportMessages.add({
                     fileName: name + '.' + ext,
-                    partSource: genbankObject.getLocus().locusName,
+                    partSource: partSource,
                     messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
                 });
             }
@@ -236,8 +237,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                         var duplicateMessage = 'Exact sequence already exists in library with' + 
                                                ' name ' + duplicateFileName;
-
-                        var partSource = genbankObject.getLocus().locusName;
 
                         var messageIndex = self.batchImportMessages.findBy(function(record) {
                             var messages = record.get('messages');
@@ -269,6 +268,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                    }
                 },
                 failure: function(){
+                    self.batchImportMessages.add({
+                        fileName: name + '.' + ext,
+                        partSource: partSource,
+                        messages: "Failed to upload due to network error. Please try again."
+                    });
+
                     return cb(true);
                 }
             });

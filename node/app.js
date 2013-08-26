@@ -8,11 +8,6 @@
  * Module dependencies.
  */
 
-require('nodetime').profile({
-    accountKey: '7a81c5694843fb2ead319abf624219460dad4f47', 
-    appName: 'Teselagen App'
-});
-
 var express = require('express');
 var app = express();
 
