@@ -31,16 +31,17 @@ html(lang='en')
                 img(src="/img/teselagen_toplogo.png")
             .large-6.small-6.page-header.large-centered.small-centered.columns Log In
             .large-6.small-6.large-centered.small-centered.columns
-                form#signup_form.custom
+                form(data-abide)#signup_form.custom
                     .row
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='username') Username
                             .large-9.small-9.columns
-                                input(type="text", id='username', placeholder='Username')
+                                input(type="text", id='username', placeholder='Username', required)
+                                small.error A username is required.
                         .row
                             .large-3.small-3.columns
-                                label.right.inline(for='password') Password
+                                label.right.inline(for='password', required) Password
                             .large-9.small-9.columns
                                 input(type="password", id='password')
                         .row
@@ -73,4 +74,8 @@ html(lang='en')
     .large-6.small-6.large-centered.small-centered.columns#footer_copy
         © Teselagen 2013
                
-
+script document.write('<script src=/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js><\/script>');
+script(src='/js/jquery-1.10.2.min.js')
+script(src='/js/application.js')
+script(src='/js/foundation.min.js')
+script $(document).foundation();

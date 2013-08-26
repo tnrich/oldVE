@@ -9,11 +9,7 @@ body {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin-bottom: -150px;
-}
-
-.wrapper:after {
-    display: block;
+    margin-bottom: 0 auto -150px;
 }
 
 #footer, .wrapper:after {
