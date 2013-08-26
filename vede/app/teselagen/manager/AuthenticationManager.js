@@ -12,9 +12,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     mixins: {
         observable: "Ext.util.Observable"
     },
-    authResponse: null,
+    //authResponse: null,
     username: null,
-    autoAuthURL : null,
+    //autoAuthURL : null,
 
     updateSplashScreenMessage: function(message, stop) {
         if (Ext.get("x-splash-message")) {Ext.get("x-splash-message").update(message); }
@@ -35,6 +35,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     Login: function(cb) {
         var self = this;
 
+        if(Vede.application.paramsHost) Teselagen.manager.SessionManager.baseURL = Vede.application.paramsHost;
+
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("users"),
             method: 'GET',
@@ -50,11 +52,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     catch(err)
                     {}
 
-                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(msg);
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').setValue(msg);
                     return;
                 }
                 var response = JSON.parse(response.responseText);
-                if(response) Ext.getCmp('auth-response').update(response.msg);
+                if(response) Ext.getCmp('auth-response').setValue(response.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
         });
@@ -64,6 +66,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
     continueLogin: function(response) {
         var self = Teselagen.manager.AuthenticationManager;
+
         self.authResponse = JSON.parse(response.responseText);
         if(!self.authResponse.error) {
             self.username = self.authResponse.user.username;
@@ -78,6 +81,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         }
     },
 
+    /*
     autoAuthAttempt: function(){
         if(!this.autoAuthURL) this.autoAuthURL = "http://dev2.teselagen.com/api";
 
@@ -114,6 +118,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
            self.updateServerPath();
         }        
     },
+    */
 
     updateServerPath: function(){
         Ext.create("Vede.view.AuthWindow").show();
@@ -133,7 +138,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     sendAuthRequest: function(params, cb, remember) {
         var self = this;
 
-        if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
+        //if(params.server) { Teselagen.manager.SessionManager.baseURL = params.server; } // Set base URL 
 
         self.updateSplashScreenMessage("Authenticating to server");
 
@@ -145,25 +150,18 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             method: 'POST',
             params: {
                 username: params.username || "",
-                password: params.password || "",
+                password: params.password || null,
                 sessionId: params.sessionId || "",
                 remember: remember
             },
             success: function(response) {
-                self.authResponse = JSON.parse(response.responseText);
-                self.username = self.authResponse.user.username;
-                Teselagen.manager.SessionManager.setBaseUser(self.username);
-                self.updateSplashScreenMessage(self.authResponse.msg);
-                if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
-                Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
-                    Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
-                });
-                Teselagen.manager.TasksMonitor.bootMonitoring();
-                Teselagen.manager.TasksMonitor.startMonitoring();
+                var result = JSON.parse(response.responseText);
 
-                //Ext.util.Cookies.set("last_server",Teselagen.manager.SessionManager.baseURL);
-
-                if (cb) { return cb(true); }// for Testing
+                if(result.success !== false) {
+                    self.continueLogin(response);
+                } else {
+                    Ext.getCmp('auth-response').setValue(result.msg);
+                }
             },
             failure: function(response) {
                 if(response.status !== 200) { 
@@ -175,11 +173,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     catch(err)
                     {}
 
-                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').update(msg);
+                    if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').setValue(msg);
                     return;
                 }
                 var response = JSON.parse(response.responseText);
-                if(response) Ext.getCmp('auth-response').update(response.msg);
+                if(response) Ext.getCmp('auth-response').setValue(response.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
         });

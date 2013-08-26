@@ -330,35 +330,42 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             propertiesWindow.down('component[cls="propertiesWindowSequenceNameField"]').setFieldStyle("border-color:red");
         } else {
             var selectedProj = Teselagen.manager.ProjectManager.workingProject;
-            var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
-            var sequenceCount = sequenceStore.data.items.length;
             var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
-            var oldName = workingSequence.data.name;
+            var serialize = workingSequence.get("serialize");
 
-            for (var i=0; i < sequenceCount; i++) {
-                if (name == sequenceStore.data.items[i].data.name && selectedProj.internalId == sequenceStore.data.items[i].data.project_id) {
-                    if (name != oldName) {
-                        Ext.MessageBox.show({
-                            title: "Name conflict",
-                            msg: 'A sequence with the name "'+name+'" already exists in this project. <p> Please enter another name.',
-                            buttons: Ext.MessageBox.OK,
-                        });                                      
-                        return Ext.MessageBox;
-                    }
-                }
-            }
+            serialize.inData.name = name;
 
-            workingSequence.set("name", name);
+            workingSequence.set({
+                name: name,
+                partSource: name,
+                sequenceFileName: name,
+                serialize: serialize
+            });
+
             workingSequence.save({
-                callback: function () {
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                        var projectTreePanel = Ext.ComponentQuery.query("component[id='projectTreePanel']")[0];
-                        projectTreePanel.expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
-                    });
+                success: function () {
+                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+
+                    if(!duplicated) {
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            if(selectedProj) {
+                                var projectTreePanel = Ext.ComponentQuery.query("component[id='projectTreePanel']")[0];
+                                projectTreePanel.expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
+                            }
+                        });
+
+                        Ext.getCmp("mainAppPanel").getActiveTab().model.setName(name);
+
+                        propertiesWindow.close();
+                    } else {
+                	    Ext.MessageBox.alert('', 'A sequence with the name "' + 
+                            name + '" already exists. \nPlease select another name.');
+                    }
+                },
+                failure: function() {
+                    Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
                 }
             });
-            
-            propertiesWindow.close();
         }
     },
 

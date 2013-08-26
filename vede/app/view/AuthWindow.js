@@ -71,7 +71,7 @@ Ext.define('Vede.view.AuthWindow', {
 						name: 'Config'
 					}, {
 						xtype: 'fieldset',
-						//hidden: true,
+						hidden: true,
 						id: 'auth-config',
 						margin: 10,
 						width: 370,
@@ -83,11 +83,22 @@ Ext.define('Vede.view.AuthWindow', {
 							value: 'http://api.teselagen.com/',
 							fieldLabel: 'Server to connect:',
 							name: 'server',
-							store: [
-								['Server', 'http://api.teselagen.com/'],
-								['Server', 'http://teselagen.local/api/']
-
-							]
+							store: ['http://api.teselagen.com/',
+								'http://teselagen.local/api/',
+                                'http://dev.teselagen.com/api/'
+							],
+                            listeners: {
+                                change: function(combobox, newValue) {
+                                    Teselagen.manager.SessionManager.baseURL = combobox.getValue();
+                                },
+                                render: function(combobox){
+                                	if(Vede.application.paramsHost) 
+                            		{
+                            			combobox.setValue(Vede.application.paramsHost);
+                            			Teselagen.manager.SessionManager.baseURL = combobox.getValue();
+                            		}
+                                }
+                            },
 						}, 
 						//{
 						//	xtype: 'fieldcontainer',
@@ -103,7 +114,7 @@ Ext.define('Vede.view.AuthWindow', {
 						]
 					},
 					{
-						xtype: 'container',
+						xtype: 'displayfield',
 						id: 'auth-response',
 						border: 0,
 						width: 350,
@@ -114,7 +125,7 @@ Ext.define('Vede.view.AuthWindow', {
 				}, {
 					xtype: 'panel',
 					flex: 1,
-					html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p></div>'
+					html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Aug 23, 4:23pm PST</small></div>'
 				}]
 			}]
 		});

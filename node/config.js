@@ -37,6 +37,9 @@ module.exports = function(app, express) {
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
     }
 
+    /* User should be added to production like
+        db.addUser('prod', 'o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=')
+    */
 
 
     app.configure('development', function() {
@@ -72,6 +75,12 @@ module.exports = function(app, express) {
     });
 
     app.configure('production', function() {      
+        process.env.NODE_ENV = 'production';
+
+        var airbrake = require('airbrake').createClient("40e870e0-c0a6-c307-8bef-37371fd86407");
+        airbrake.serviceHost = "exceptions.codebasehq.com"
+        airbrake.protocol = "https"
+        airbrake.handleExceptions();
 
         var redis = require("redis").createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
         var RedisStore = require('connect-redis')(express)
@@ -101,8 +110,8 @@ module.exports = function(app, express) {
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
+        app.use(airbrake.expressHandler());
     });
-
 
     // Init MONGODB (Native Driver)
     /*
@@ -168,13 +177,13 @@ module.exports = function(app, express) {
      */
     app.xmlparser = new app.xml2js.Parser();
 
-    // INIT NodeMailer
-    /*
-     * NodeMailer user to send emails using local SMTP server
-     */
-
-    app.mailer = app.nodemailer.createTransport("SMTP", {
-        host: 'localhost'
+    //NodeMailer Config
+    app.mailer = app.nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "teselagen.testing@gmail.com",
+            pass: "teselagen#rocks"
+        }
     });
 
 

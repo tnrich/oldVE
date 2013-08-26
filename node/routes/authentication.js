@@ -1,42 +1,34 @@
 module.exports = function(app) {
     var LocalStrategy = require("passport-local").Strategy;
+    var crypto = require("crypto");
 
     app.passport.use(new LocalStrategy(
         function(username, password, done) {
             var User = app.db.model("User");
 
-            if(app.get("env") === "development") {
-                User.findOne({
-                    "username": username,
-                   //"password": app.crypto.createHash("md5").update(password).digest("hex")
-                }, function(err, user) {
-                    if (err) {return done(new Error("cannot find user"));}
-                    if(!user) {
-                        User.create({
-                            username: username,
-                            //password: "",
-                            groupName: "Teselagen",
-                            groupType: "com"
-                        }, function(err, user) {
-                            if(err) {
-                                return done(err, null);
+            User.findOne({
+                "username": username
+            }, function(err, user) {
+                if(err) {
+                    return done(err, null);
+                } else if(!user) {
+                    return done(null, null, {message: "User " + username + " does not exist."})
+                } else {
+                    user.comparePassword(password, function(err, isMatch) {
+                        if(isMatch) {
+                            if(!user.activated) {
+                                return done(null, null, {
+                                    message: "You must activate your account by email before you can log in."
+                                });
+                            } else {
+                                return done(null, user);
                             }
-
-                            return done(null, user);
-                        });
-                    } else {
-                        return done(null, user);
-                    }
-                });
-            } else {
-                User.findOne({
-                    "username": username,
-                    "password": app.crypto.createHash("md5").update(password).digest("hex")
-                }, function(err, user) {
-                    if (err) {return done(new Error("cannot find user"));}
-                    return done(null, user);
-                });
-            }
+                        } else {
+                            return done(null, null, {message: "Incorrect password."});
+                        }
+                    });
+                }
+            });
         }
     ));
 
@@ -63,20 +55,71 @@ module.exports = function(app) {
         }
     };
 
-    app.post('/login',
-        app.passport.authenticate('local'),
-        function(req, res) {
-            res.json({
-                user: req.user,
-                msg: "Welcome back " + req.user.username + "!"
-            });
-        }
-    );
+    app.post('/login', function(req, res, next) {
+        app.passport.authenticate('local', function(err, user, info) {
+            if(err) {
+                return res.json({
+                    success: false,
+                    user: null,
+                    msg: "Server error. Please try again."
+                });
+            } else if(!user) {
+                return res.json({
+                    success: false,
+                    user: user,
+                    msg: info.message
+                });
+            } else {
+                req.logIn(user, function(err) {
+                    if(err) {
+                        return res.json({
+                            success: false,
+                            user: null,
+                            msg: err
+                        });
+                    } else {
+                        return res.json({
+                            user: req.user,
+                            msg: "Welcome, " + req.user.username + "!"
+                        });
+                    }
+                });
+            }
+        })(req, res, next);
+    });
 
     app.all("/logout", function(req, res) {
         req.logout();
         res.send();
     });
+
+
+    var sendRegisteredMail = function(user,activationCode)
+    {
+        var html = app.constants.activationEmailText;
+        html = html.replace("<username>", user.firstName);
+
+        if(app.get("env") === "production") {
+            html = html.replace("<activation>", '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">');
+        } else {
+            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
+        }
+      var mailOptions = {
+        from: "Teselagen ✔ <teselagen.testing@gmail.com>",
+        to: user.email,
+        subject: "Registration ✔",
+        text: "Teselagen activation code",
+        html: html
+      }
+
+      app.mailer.sendMail(mailOptions, function(error, response){
+          if(error){
+              console.log(error);
+          }else{
+              console.log("Message sent: " + response.message);
+          }
+      });
+    }
 
     app.post('/register', function(req, res) {
         var User = app.db.model("User");
@@ -90,6 +133,7 @@ module.exports = function(app) {
                     msg: err
                 });
             } else if(user) {
+                console.log(user);
                 res.json({
                     success: false,
                     msg: "User '" + req.body.username + "' already exists."
@@ -101,7 +145,9 @@ module.exports = function(app) {
                     groupType: req.body.orgType,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    email: req.body.email
+                    email: req.body.email,
+                    activated: false,
+                    activationCode: crypto.randomBytes(32).toString("hex")
                 }, function(err, user) {
                     if(err) {
                         res.json({
@@ -109,7 +155,12 @@ module.exports = function(app) {
                             msg: "Error creating user."
                         });
                     } else {
-                        req.logIn(user, function(err) {
+                        sendRegisteredMail(user, user.activationCode);
+                        res.json({
+                            success: false,
+                            msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."
+                        });
+                        /*req.logIn(user, function(err) {
                             if(err) {
                                 return res.json({
                                     success: false,
@@ -119,10 +170,10 @@ module.exports = function(app) {
                                 res.json({
                                     user: user,
                                     success: true,
-                                    msg: "Welcome... To the wooooorrrrrllllld of tomorrrrroooooowwwww"
+                                    msg: "Welcome, " + user.username + "!"
                                 });
                             }
-                        });
+                        });*/
                     }
                 });
             }
