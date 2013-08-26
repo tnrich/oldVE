@@ -16,6 +16,7 @@
     , "markdown-js":"0.0.3"
     , "mysql":"2.0.0-alpha3"
     , "nodemailer": "0.3.35"
+    , "nodetime": "0.8.13"
     , "node-zip":"0.0.1"
     , "passport": "0.1.17"
     , "passport-local": "0.1.6"
