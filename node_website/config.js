@@ -30,8 +30,8 @@ module.exports = function(app, express){
     app.use(express.session({ key:'teselagen', secret: 'topsecret', cookie: { path: '/', httpOnly: true, maxAge: 14400000 } }));
     app.use(app.everyauth.middleware());
     app.use(express.methodOverride());
-    app.use(app.router);
     app.use(express.static(__dirname + '/public'));
+    app.use(app.router);
   });
 
   if (!app.settings.env) {app.settings.env="development";}

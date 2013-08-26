@@ -448,6 +448,13 @@ background: none;
     margin: 60px 0px;
     opacity: 0.8;
     text-align: center;
+    transition: opacity 0.2s ease;
+    -moz-transition: opacity 0.2s ease;
+    -webkit-transition: opacity 0.2s ease;
+}
+
+.page-logo:hover {
+    opacity: 1;
 }
 
 .registration-buts {
