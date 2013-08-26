@@ -1,26 +1,76 @@
-extends layout
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title TeselaGen Biotechnology
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='Teselagen Biotechnology')
+    meta(name='author', content='')
+    
+    // Le styles
+    link(href='/css/foundation.min.css', rel='stylesheet')
+    link(href='/css/normalize.css', rel='stylesheet')
+    link(href='/css/styles.css', rel='stylesheet')
 
-block container
+    // fav and touch icons 
+    //- link(rel='shortcut icon', href='ico/favicon.ico')
+    //- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
+    //- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
+    //- link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
+    //- link(rel='apple-touch-icon-precomposed', href='/ico/apple-touch-icon-57-precomposed.png')
+
+    // fonts
+    script(type='text/javascript', src='//use.typekit.net/wnz0zph.js')
+    script(type='text/javascript') try{Typekit.load();}catch(e){}
+    link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,700italic', rel='stylesheet', type='text/css')
+    
+  body
 
     #login
         .row
-            .large-12.small-12.page-header Log In
+            .large-6.small.6.large-centered.small-centered.page-logo.columns
+                img(src="/img/teselagen_toplogo.png")
+            .large-6.small-6.page-header.large-centered.small-centered.columns Log In
             .large-6.small-6.large-centered.small-centered.columns
                 form#signup_form.custom
                     .row
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='username') Username
                             .large-9.small-9.columns
                                 input(type="text", id='username', placeholder='Username')
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='password') Password
                             .large-9.small-9.columns
                                 input(type="password", id='password')
-                        .large-12.small-12
-                            a.lost_pw_link Lost Password?
-                        .large-12.small-12
+                        .row
+                            .large-3.small-3.columns.right.lost_pw_link 
+                                a Lost Password?
+                        .large-12.small-12.registration-buts
                             a.button.radius.expand Log In
                             a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
+                                .large-6.small-6.large-centered.small-centered.columns#footer_links
+        .large-6.small-6.large-centered.small-centered.columns#footer_links
+          nav.top-bar
+            section.top-bar-section#footer_2
+              ul(style='text-alight:center')
+                li
+                  a(href='/', target='blank') Home
+                li
+                  a(href='/about', target='blank') About
+                li
+                  a(href='/faq', target='blank') FAQ 
+                li
+                  a(href='/contact', target='blank') Contact
+                li
+                  a(href='/careers', target='blank') Careers
+                li
+                  a(href='http://help.teselagen.com', target='_blank') Manual
+                li
+                  a(href='/terms') Terms
+                li
+                  a(href='/privacy', target='_blank') Privacy          
+                li
+                  a  © Teselagen 2013
+               
 

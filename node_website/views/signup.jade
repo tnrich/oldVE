@@ -27,37 +27,38 @@ html(lang='en')
 
     #signup
         .row
-            .large-12.small-12.page-header Sign Up
+            .large-6.small.6.large-centered.small-centered.page-logo.columns
+                img(src="/img/teselagen_toplogo.png")
+            .large-6.small-6.page-header.large-centered.small-centered.columns Sign Up
             .large-6.small-6.large-centered.small-centered.columns
                 form#signup_form.custom
                     .row
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='first_name') First Name
                             .large-9.small-9.columns
                                 input(type="text", id='first_name', placeholder='First Name')
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='last_name') Last Name
                             .large-9.small-9.columns
                                 input(type="text", id='last_name', placeholder='Last Name')
-                        
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='username') Username
                             .large-9.small-9.columns
                                 input(type="text", id='username', placeholder='Username')
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='password') Password
                             .large-9.small-9.columns
                                 input(type="password", id='password')
-                        .large-12.small-12
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='email') Email
                             .large-9.small-9.columns
-                                input(type="email", id='email', placeholder='Email')
-                        .large-12.small-12
+                                input(type='email', id='email', placeholder='Email')
+                        .row
                             .large-3.small-3.columns
                                 label.right.inline(for='organization') Organization
                             .large-9.small-9.columns
@@ -69,22 +70,22 @@ html(lang='en')
                                     option Academic Lab
                                     option Gene Hacker
                                     option Other
-                        .large-12.small-12
+                        .row.registration-buts
                                 a.button.radius.expand Sign Up Now
                                 a.button.radius.secondary.expand(href='/loginuser') Already on TeselaGen? Log In Now.
 
-        .large-6.small-6.large-centered.small-centered.columns#footer_links
+    .large-6.small-6.large-centered.small-centered.columns#footer_links
           nav.top-bar
-            section.top-bar-section
+            section.top-bar-section#footer_2
               ul(style='text-alight:center')
                 li
-                  a(href='/careers', target='blank') Home
+                  a(href='/', target='blank') Home
                 li
-                  a(href='/careers', target='blank') About
+                  a(href='/about', target='blank') About
                 li
-                  a(href='/careers', target='blank') FAQ 
+                  a(href='/faq', target='blank') FAQ 
                 li
-                  a(href='/careers', target='blank') Contact
+                  a(href='/contact', target='blank') Contact
                 li
                   a(href='/careers', target='blank') Careers
                 li
@@ -94,15 +95,6 @@ html(lang='en')
                 li
                   a(href='/privacy', target='_blank') Privacy          
                 li
-                  a.social-footer-link(href='https://www.facebook.com/Teselagen', target='_blank')
-                    img(src='img/icons/img-footer-facebook.png')
-                li
-                  a.social-footer-link(href='https://twitter.com/teselagen', target='_blank')
-                    img(src='img/icons/img-footer-twitter.png')
-                li
-                  a.social-footer-link(href='http://www.linkedin.com/company/2838822', target='_blank')
-                    img(src='img/icons/img-footer-linkedin.png')
-                li
-                  a Teselagen 2013
+                  a  © Teselagen 2013
                
 
