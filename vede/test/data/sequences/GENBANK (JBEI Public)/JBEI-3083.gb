@@ -1,0 +1,39 @@
+LOCUS       JBEI-3083                963 bp    DNA     linear
+ACCESSION   JBEI-3083
+VERSION     JBEI-3083.1
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    471..500
+                     /label=homology1
+                     /ApEinfo_fwdcolor="#0000ff ApEinfo_revcolor=green"
+     misc_feature    501..530
+                     /label=homology3
+                     /ApEinfo_fwdcolor="#ff0000 ApEinfo_revcolor=green"
+     CDS             1..375
+                     /label=clpP
+                     /ApEinfo_fwdcolor="#00ffff ApEinfo_revcolor=#00ffff"
+     CDS             651..963
+                     /label=lon
+                     /ApEinfo_fwdcolor="#00ffff ApEinfo_revcolor=#00ffff"
+     RBS             638..642
+                     /label=lon shine delgarno
+                     /ApEinfo_fwdcolor="#0000ff ApEinfo_revcolor=#0000ff"
+ORIGIN
+        1 atcactgccg ggatgtctat ctatgacacc atgcagttta tcaagcctga tgtcagcacc
+       61 atctgtatgg gccaggcggc ctcgatgggc gctttcttgc tgaccgcagg ggcaaaaggt
+      121 aaacgttttt gcctgccgaa ttcgcgcgtg atgattcacc aaccgttggg cggctaccag
+      181 ggccaggcga ccgatatcga aattcatgcc cgtgaaattc tgaaagttaa agggcgcatg
+      241 aatgaactta tggcgcttca tacgggtcaa tcattagaac agattgaacg tgataccgag
+      301 cgcgatcgct tcctttccgc ccctgaagcg gtggaatacg gtctggtcga ttcgattctg
+      361 acccatcgta attgatgcca gaggcgcaac tgtgccgcta tacttatcca gggcggcaca
+      421 acgctgtaag cggcttgcgc ctgagaatgg catttgcgtc gtcgtgtgcg gcacaaagaa
+      481 caaagaagag gttttgaccc ggattttatc tcccctttaa tttttcctct attctcggcg
+      541 ttgaatgtgg gggaaacatc cccatatact gacgtacatg ttaatagatg gcgtgaagca
+      601 cagtcgtgtc atctgattac ctggcggaaa ttaaactaag agagagctct atgaatcctg
+      661 agcgttctga acgcattgaa atccccgtat tgccgctgcg cgatgtggtg gtttatccgc
+      721 acatggtcat ccccttattt gtcgggcggg aaaaatctat ccgttgtctg gaagcggcga
+      781 tggaccatga taaaaaaatt atgctggtcg cgcagaaaga agcttcaacg gatgagccgg
+      841 gtgtaaacga tcttttcacc gtcgggaccg tggcctctat attgcagatg ctgaaactgc
+      901 ctgacggcac cgtcaaagtg ctggtcgagg ggttacagcg cgcgcgtatt tctgcgctct
+      961 ctg
+//
