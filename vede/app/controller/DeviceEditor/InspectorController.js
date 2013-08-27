@@ -1138,7 +1138,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
         }
 
-        if (oldTab.initialCls === "DeviceEditorTab") {
+        if (oldTab && oldTab.initialCls === "DeviceEditorTab") {
             if(oldTab.partLibraryWindow) {
                 if(oldTab.partLibraryWindow.down("textfield[cls='partLibrarySearchField']").value) {
                     oldTab.partLibraryWindow.down("textfield[cls='partLibrarySearchField']").setValue(null);

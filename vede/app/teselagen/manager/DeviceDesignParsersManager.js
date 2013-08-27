@@ -167,7 +167,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     genbankStartBP: part["de:startBP"],
                     endBP: part["de:stopBP"],
                     revComp: part["de:revComp"],
-                    fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]
                 });
                 newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
                 
@@ -223,7 +222,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             }
             
             var cellFases;
-            if(isNewFasScheme) cellFases = bin["de:binItems"]["de:fas"];
+            cellFases = bin["de:binItems"]["de:fas"];
             
             var temCellsArray = [];
             for (var j=0; j<binParts.length; j++) {

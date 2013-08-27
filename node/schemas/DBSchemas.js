@@ -11,6 +11,8 @@
  * @module ./schemas/DBSchemas
  */
 
+var bcrypt = require('bcrypt');
+
 module.exports = function(db) {
 
 	var mongoose = require("mongoose");
@@ -59,7 +61,8 @@ module.exports = function(db) {
 		user_id: { type: oIDRef, ref: 'user' },
 		project_id: { type: oIDRef, ref: 'project' },
 		devicedesign_id: { type: oIDRef, ref: 'devicedesign' },
-		devicedesign_name: String
+		devicedesign_name: String,
+		data: Mixed
 	});
 	registerSchema('j5run', j5RunSchema);
 
@@ -240,9 +243,12 @@ module.exports = function(db) {
 
 	var UserSchema = new Schema({
 		username: String,
+        password: String,
 		firstName: String,
 		lastName: String,
 		email: String,
+        activated: {type: Boolean, default: false},
+        activationCode: String,
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
@@ -269,6 +275,39 @@ module.exports = function(db) {
 		    }]
 		}]
 	});
+
+    UserSchema.pre('save', function(next) {
+        var user = this;
+
+        if(!user.isModified('password')) {
+            return next();
+        } else {
+            bcrypt.genSalt(10, function(err, salt) {
+                if(err) {
+                    return next(err);
+                } else {
+                    bcrypt.hash(user.password, salt, function(err, hash) {
+                        if(err) {
+                            return next(err);
+                        } else {
+                            user.password = hash;
+                            next();
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    UserSchema.methods.comparePassword = function(candidatePassword, next) {
+        bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+            if(err) {
+                return next(err);
+            } else {
+                return next(null, isMatch);
+            }
+        });
+    };
 
 	UserSchema.virtual('FQDN').get(function () {
 	  return this.groupType + '.' + this.groupName + '.' + this.username;

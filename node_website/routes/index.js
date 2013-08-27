@@ -10,11 +10,60 @@ app.get('/', function(req, res){
 });
 
 app.get('/about', function(req, res){
-  res.render('about', { title: 'Express' })
+  res.render('about', {});
 });
 
 app.get('/contact', function(req, res){
-  res.render('contact', { title: 'Express' })
+  res.render('contact', {});
+});
+
+app.get('/faq', function(req, res){
+  res.render('faq', {});
+});
+
+app.get('/news', function(req, res){
+  res.render('news', {});
+});
+
+app.get('/careers', function(req, res){
+  res.render('careers', {});
+});
+
+app.get('/terms', function(req,res) {
+  res.render('terms', {});
+});
+
+app.get('/commercialuse', function(req,res) {
+	res.render('commercialuse', {});
+});
+
+app.get('/acceptableuse', function(req,res) {
+	res.render('acceptableuse', {});
+});
+
+app.get('/pricingterms', function(req,res) {
+	res.render('pricingterms', {});
+});
+
+app.get('/security', function(req,res) {
+	res.render('security', {});
+});
+
+app.get('/privacy', function(req,res) {
+	res.render('privacy', {});
+});
+
+app.get('/signup', function(req,res) {
+	res.render('signup', {});
+});
+
+app.get('/loginuser', function(req,res) {
+	console.log("getting to login");
+	res.render('login', {});
+});
+
+app.get('*', function(req, res){
+  res.render('notfound', {});
 });
 
 };

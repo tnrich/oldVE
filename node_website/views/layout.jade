@@ -8,103 +8,76 @@ html(lang='en')
     meta(name='author', content='')
     
     // Le styles
-    link(href='/css/bootstrap.css', rel='stylesheet')
+    link(href='/css/foundation.min.css', rel='stylesheet')
+    link(href='/css/normalize.css', rel='stylesheet')
     link(href='/css/styles.css', rel='stylesheet')
-    link(href='/css/bootstrap-responsive.css', rel='stylesheet')
-    
+
     // fav and touch icons 
-    link(rel='shortcut icon', href='ico/favicon.ico')
-    link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', href='/ico/apple-touch-icon-57-precomposed.png')
+    //- link(rel='shortcut icon', href='ico/favicon.ico')
+    //- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
+    //- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
+    //- link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
+    //- link(rel='apple-touch-icon-precomposed', href='/ico/apple-touch-icon-57-precomposed.png')
+
+    // fonts
+    script(type='text/javascript', src='//use.typekit.net/wnz0zph.js')
+    script(type='text/javascript') try{Typekit.load();}catch(e){}
+    link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,700italic', rel='stylesheet', type='text/css')
     
   body
-  
-    block modals
-      .modal.hide#loginModal
-        .modal-header
-          button.close(type="button",data-dismiss="modal")
-            span x
-          .modal-body
-            form.form-horizontal#login-form
-              fieldset
-                legend
-                  span Login
-                .control-group
-                  label.control-label(for="username") 
-                    span Email
-                  .controls
-                    .input-prepend
-                      span.add-on
-                        i.icon-user
-                      input.input-xlarge#username(type="text")
-                .control-group
-                  label.control-label(for="password") 
-                    span Password
-                  .controls
-                    .input-prepend
-                      span.add-on
-                        i.icon-lock
-                      input.input-xlarge#password(type="password")
-                .control-group
-                  label.control-label(for="remember") 
-                    span Remember me
-                  .controls
-                    input.checkbox#remember(type="checkbox")
-                .control-group.error.hide
-                      .controls
-                        span.help-inline
-                .control-group.success.hide
-                      .controls
-                        span.help-inline
-                .form-actions
-                  button.btn.btn-primary(type="submit") Login
-                  button.btn#login-cancel Cancel
-          
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='#',style="color:#fff") Teselagen
-          .nav-collapse
-            ul.nav
-              li
-                a(href="/")
-                  i.icon-home.icon-white
-                  span  Home
-              li
-                a(href="/about")
-                  i.icon-tag.icon-white
-                  span  About
-              li
-                a(href="/contact")
-                  i.icon-envelope.icon-white
-                  span  Contact
-            include includes/profile
+    nav.top-bar.hide-for-small
+      ul.title-area
+        li.name
+          a(href="/")
+            img(src='img/teselagen_toplogo.png')
+        li.toggle-topbar
+      section.top-bar-section
+        ul.right
+          li#home_tab
+            a.active_top_menu(href='/') Home
+          li#about_tab
+            a(href='/about') About
+          li#faq_tab
+            a(href='/faq') FAQ
+          li#news_tab
+            a(href='/news') News
+          li#blog_tab
+            a(href='http://blog.teselagen.com/') Blog
+          li#contact_tab
+            a(href='/contact') Contact  
+          li.signup_btn
+            a(href='/signup') Sign Up
+          li.login_btn
+            a(href='/loginuser') Login
+    
+    block container
 
-    .container
-      block container
-
+    #footer
+        .large-12.small-12#footer_links
+          nav.top-bar
+            section.top-bar-section
+              ul.right
+                li
+                  a(href='/careers', target='blank') Careers
+                li
+                  a(href='http://help.teselagen.com', target='_blank') Manual
+                li
+                  a(href='/terms') Terms
+                li
+                  a(href='/privacy', target='_blank') Privacy          
+                li
+                  a.social-footer-link(href='https://www.facebook.com/Teselagen', target='_blank')
+                    img(src='img/icons/img-footer-facebook.png')
+                li
+                  a.social-footer-link(href='https://twitter.com/teselagen', target='_blank')
+                    img(src='img/icons/img-footer-twitter.png')
+                li
+                  a.social-footer-link(href='http://www.linkedin.com/company/2838822', target='_blank')
+                    img(src='img/icons/img-footer-linkedin.png')
 
     block scripts
       // le javascripts
-      script(src='/js/jquery.js')
-      script(src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js")
-      script(src='/js/bootstrap-transition.js')
-      script(src='/js/bootstrap-alert.js')
-      script(src='/js/bootstrap-modal.js')
-      script(src='/js/bootstrap-dropdown.js')
-      script(src='/js/bootstrap-scrollspy.js')
-      script(src='/js/bootstrap-tab.js')
-      script(src='/js/bootstrap-tooltip.js')
-      script(src='/js/bootstrap-popover.js')
-      script(src='/js/bootstrap-button.js')
-      script(src='/js/bootstrap-collapse.js')
-      script(src='/js/bootstrap-carousel.js')
-      script(src='/js/bootstrap-typeahead.js')
-      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
-      script(src='/js/teselagen.js')
+      script(src='/js/jquery-1.10.2.min.js')
+      script(src='/js/application.js')
+      script(src='/js/foundation.min.js')
+      //- script(src='/js/teselagen.js')

@@ -22,8 +22,8 @@ Ext.define("Teselagen.manager.SessionManager", {
 
     maskApp: function(){
         // Start the mask on the body and get a reference to the mask
-        splashscreen = Ext.getBody().mask('Welcome Back', 'loader rspin');
-        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+        splashscreen = Ext.getBody().mask();
+        // $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
         // Ext.get('retry-btn').on("click",function(){
         //     Ext.get('splash-retry').hide();
@@ -71,7 +71,8 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     constructor: function() {
         this.constants = Teselagen.constants.Constants;
-        this.setBaseURL(location.href.substring(0,location.href.indexOf("/",7)+1) + "api/");
+        //this.setBaseURL(location.href.substring(0,location.href.indexOf("/",7)+1) + "api/");
+        this.setBaseURL("http://api.teselagen.com/");
         this.setEnv(this.constants.ENV_DEV);
     },
 
@@ -82,9 +83,6 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     buildUrl: function(pAction, pDefault) {
         var url = this.getBaseURL() + pAction;
-        if (pDefault && this.getEnv() === this.constants.ENV_TEST) {
-            url = pDefault;
-        }
         return url;
     },
 

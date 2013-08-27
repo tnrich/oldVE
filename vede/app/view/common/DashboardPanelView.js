@@ -768,7 +768,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                               },{
                                                 text: 'Download Source Sequence',
                                                 handler: function() {
-                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceFile().getSequenceManager());
+                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
                                                     VEManager.saveSequenceToFile();
                                                 }
                                               }]

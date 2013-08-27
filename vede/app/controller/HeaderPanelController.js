@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.controller.HeaderPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Teselagen.manager.ProjectManager","Teselagen.event.ProjectEvent",'Ext.window.MessageBox'],
+    requires: ["Teselagen.manager.ProjectManager","Teselagen.event.ProjectEvent",'Ext.window.MessageBox','Teselagen.manager.SessionManager'],
     ProjectManagerWindow : null,
     header: null,
 
@@ -21,7 +21,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
         var feedback = btn.up('form').getForm().findField('feedback').getValue();
         var self = this;
         Ext.Ajax.request({
-            url: '/api/sendFeedback',
+            url: Teselagen.manager.SessionManager.buildUrl("sendFeedback", ""),
             params: {
                 feedback: feedback,
                 user_id: Teselagen.manager.ProjectManager.currentUser.data.id,
@@ -41,7 +41,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
         var error_feedback = btn.up('form').getForm().findField('error_feedback').getValue();
         var self = this;
         Ext.Ajax.request({
-            url: '/api/sendFeedback',
+            url: Teselagen.manager.SessionManager.buildUrl("sendFeedback", ""),
             params: {
                 error: error,
                 error_feedback: error_feedback,

@@ -3,6 +3,25 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TeselaGen</title>
+    <!-- Jade code to include airbrake notifier only in production.
+    if environment === "production"
+        script(type="text/javascript").
+            //<![CDATA[
+            var notifierJsScheme = (("https:" == document.location.protocol) ? "https://" : "http://");
+            document.write(unescape("%3Cscript src='" + notifierJsScheme + "airbrake.io/javascripts/notifier.js' type='text/javascript'%3E%3C/script%3E"));
+            //]]>
+
+        script(type="text/javascript").
+            Hoptoad.setKey('40e870e0-c0a6-c307-8bef-37371fd86407');
+            Hoptoad.setHost('exceptions.codebasehq.com');
+            Hoptoad.setEnvironment('production');
+            //
+                Hoptoad.setErrorDefaults({
+                    url: "http://example.com/pages/home",
+                    component: "pages",
+                    action: "show"
+                });
+    -->
 
     <!-- Styles -->
     <!-- Enabling the Bootstrap CSS styles causes some ExtJS components to display incorrectly. -->

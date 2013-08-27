@@ -207,6 +207,11 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             data.notes.push(note.serialize());
         });
 
+        data.inData.locations = [];
+        this.getLocations().forEach(function(location) {
+            data.inData.locations.push(location.serialize());
+        });
+
         return data;
     },
 
@@ -222,5 +227,4 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             self.addNote(newNote);
         });
     }
-
 });

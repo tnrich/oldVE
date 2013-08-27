@@ -79,5 +79,17 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 		this.getLength = function (){
 			return Math.abs(end -start);
 		}
-	}
+	},
+
+    serialize: function() {
+        return {
+            start: this.getStart(),
+            end: this.getEnd()
+        };
+    },
+
+    deSerialize: function(data) {
+        this.setStart(data.start);
+        this.setEnd(data.end);
+    }
 });

@@ -347,6 +347,43 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             }
             
             propertiesWindow.close();
+//            var selectedProj = Teselagen.manager.ProjectManager.workingProject;
+//            var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
+//            var serialize = workingSequence.get("serialize");
+//
+//            serialize.inData.name = name;
+//
+//            workingSequence.set({
+//                name: name,
+//                partSource: name,
+//                sequenceFileName: name,
+//                serialize: serialize
+//            });
+//
+//            workingSequence.save({
+//                success: function () {
+//                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+//
+//                    if(!duplicated) {
+//                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+//                            if(selectedProj) {
+//                                var projectTreePanel = Ext.ComponentQuery.query("component[id='projectTreePanel']")[0];
+//                                projectTreePanel.expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
+//                            }
+//                        });
+//
+//                        Ext.getCmp("mainAppPanel").getActiveTab().model.setName(name);
+//
+//                        propertiesWindow.close();
+//                    } else {
+//                	    Ext.MessageBox.alert('', 'A sequence with the name "' + 
+//                            name + '" already exists. \nPlease select another name.');
+//                    }
+//                },
+//                failure: function() {
+//                    Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+//                }
+//            });
         }
     },
     

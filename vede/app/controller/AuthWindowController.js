@@ -9,7 +9,7 @@ Ext.define('Vede.controller.AuthWindowController', {
     rememberSession: false,
 
     onRegisterClick: function(){
-        console.log("Register");  
+        Ext.create('Vede.view.RegisterWindow').show();
     },
 
     onConfigClick: function(){
@@ -31,15 +31,28 @@ Ext.define('Vede.controller.AuthWindowController', {
         Ext.getCmp('AuthWindow').destroy();
     },
     onLogoutClick: function (button, e, options) {
+
+        var onLoggedOut = function(){
+
+            Teselagen.manager.ProjectManager.currentUser = null;
+            Ext.getCmp("mainAppPanel").items.items.map(function(tab){
+                if(tab.xtype!="DashboardPanelView") return tab;
+            }).forEach(function(tab){
+                if(tab) tab.close();
+            });
+
+            Teselagen.manager.SessionManager.maskApp();
+            Ext.create("Vede.view.AuthWindow").show();
+
+        };
+
         
-        Ext.util.Cookies.clear('last_server');
         var self = this;
         Ext.Ajax.request({
-            url: '/api/logout',
+            url: Teselagen.manager.SessionManager.buildUrl("logout", ""),
             method: 'POST',
             success: function (response) {
-                Teselagen.manager.SessionManager.maskApp();
-                Ext.create("Vede.view.AuthWindow").show();
+                onLoggedOut();
             }
         });
     },
@@ -89,10 +102,7 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-config-btn": {
                 click: this.onConfigClick
-            },
-            //"#rememberSession": {
-            //    change: this.onRemember
-            //}
+            }
         });
     },
 

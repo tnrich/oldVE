@@ -116,6 +116,9 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     cls: 'featuresPositionColumn',
                                                     dataIndex: 'locations',
                                                     text: 'Position',
+                                                    renderer: function(value, feature) {
+                                                        return value[0].start + " - " + value[0].end;
+                                                    }
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',

@@ -7,13 +7,13 @@
 /*
  * Module dependencies.
  */
+
 var express = require('express');
 var app = express();
 
-var agent = require('webkit-devtools-agent');
-
 /* Dependencies loading */
 app.async = require('async');
+app.crypto = require("crypto");
 app.fs = require('fs');
 app.xmlrpc = require('xmlrpc');
 app.fs = require('fs');
@@ -22,6 +22,7 @@ app.mongoose = require('mongoose');
 app.mongostore = require('connect-mongo')
 app.mysql = require('mysql');
 app.markdown = require("markdown-js");
+app.passport = require("passport");
 app.soap = require("soap");
 app.xml2js = require('xml2js');
 app.program = require('commander');

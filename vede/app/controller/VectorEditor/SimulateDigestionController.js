@@ -102,7 +102,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       * @param {Object} pSequenceManager the sequenceManager with the sequence in it
       */
      getSequenceManagerData: function(pSequenceManager){
-         if (pSequenceManager.getSequence().seqString()){
+         if (pSequenceManager && pSequenceManager.getSequence().seqString()){
              this.dnaSequence = this.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
          } else {
              this.dnaSequence = null;

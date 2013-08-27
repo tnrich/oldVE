@@ -26,7 +26,7 @@ module.exports = function(app) {
             newPart.FQDN = req.user.FQDN + '.' + req.body.name;
             Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
-                newPart.user_id = new app.mongo.ObjectID(req.user._id);
+                newPart.user_id = req.user._id;
                 newPart.dateModified = new Date();
                 newPart.save(function(err){
                     if(err)
@@ -192,5 +192,4 @@ module.exports = function(app) {
             }
         });
     });
-
 };

@@ -1,31 +1,31 @@
 extends layout
-  
+
 block container
-  .row
-    .span8.offset2
-      h1(style="margin-top:20px;margin-bottom:20px;") Contact Us
-  .row
-    .span8.offset2(style="border:1px solid #DDD;margin-top:10px;")
-      .row
-        .span4
-          img(src="img/teselagen_office.jpg",style="margin-left:10px;margin-top:10px;")
-        .span4
-          ul.unstyled
-            ul 
-              h3 Mailing Address:
-            ul TeselaGen Biotechnology, Inc.
-            ul 1700 4th Street, MC 2522
-            ul San Francisco, CA 94158
-            br
-            ul 
-              h3 Street Address:
-            ul TeselaGen Biotechnology, Inc.
-            ul QB3/Pharm-Chem Digital Health Garage
-            ul 600 16th Street, Genentech Hall N474D
-            ul San Francisco, CA 
-            br
-            ul If you have business inquiries or other questions,
-            ul 
-              | please contact 
-              code
-                Contact [at] Teselagen [dot] com
+
+    #contact
+        .row
+            .large-12.small-12.page-header Contact Us
+            .large-12.small-12#contact-map
+              iframe(width='100%', height='465', max-height='525', frameborder='0', src='http://a.tiles.mapbox.com/v3/tim98210.map-0t3qsyen.html#13/37.78061965350541/-122.40692138671874')
+            .large-12.small-12#contact-info
+              .large-6.small-6.columns
+                h4 Mailing Address:
+                | TeselaGen Biotechnology, Inc.
+                br
+                | 1700 4th Street, MC 2522
+                br
+                | San Francisco, CA 94158
+                br
+              .large-6.small-6.columns
+                h4 Street Address:
+                | TeselaGen Biotechnology, Inc.
+                br
+                | QB3/Pharm-Chem Digital Health Garage
+                br
+                | 600 16th Street, Genentech Hall N474D
+                br
+                | San Francisco, CA
+                br
+              .large-12.small-12.columns
+                p For business inquiries or other questions, please contact: Contact [at] Teselagen [dot] com
+    #push

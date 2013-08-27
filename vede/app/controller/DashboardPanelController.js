@@ -31,13 +31,19 @@ Ext.define("Vede.controller.DashboardPanelController", {
             Teselagen.manager.ProjectManager.openSequenceLibrary(null, 
                                                         searchField.getValue());
         }
+
+        this.populateStatistics();
     },
 
 	onLastDEProjectsItemClick: function (item,record) {
 		Teselagen.manager.ProjectManager.openDeviceDesign(record);
 	},
 
-	populateStatisticts: function () {
+	populateStatistics: function () {
+
+    if(!Teselagen.manager.UserManager.user) {
+        return;
+    }
 
     var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
     var pagingToolbar;
@@ -282,18 +288,14 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onLaunch: function () {
-        this.tabPanel = Ext.getCmp("mainAppPanel");
-        this.tabPanel.on("tabchange", this.populateStatisticts);
-        // this.tabPanel.on("tabChange", this.onMainTabChange);
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
-
 
   	init: function () {
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatisticts);
-        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatisticts);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatistics);
+        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatistics);
         this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
 
 	     	this.control({

@@ -11,7 +11,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     currentResults: null,
 
-    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Ext.data.Store"],
+    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Ext.data.Store","Teselagen.manager.SessionManager.buildUrl"],
 
     statics: {},
 
@@ -170,7 +170,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         
     },
     downloadResults: function (btn) {
-        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.zipfile;
+        if(this.currentResults) location.href="data:application/zip;base64,"+Teselagen.manager.SessionManager.buildUrl(this.currentResults.zipfile, "");
         btn.toggle();
     },
 
