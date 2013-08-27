@@ -58,7 +58,6 @@ app.get('/signup', function(req,res) {
 });
 
 app.get('/loginuser', function(req,res) {
-	console.log("getting to login");
 	res.render('login', {});
 });
 
