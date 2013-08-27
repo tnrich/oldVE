@@ -1,0 +1,377 @@
+LOCUS       pBADTCalRB              7036 bp    DNA     circular
+ACCESSION   pBADTCalRBSHC
+VERSION     pBADTCalRBSHC.1
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     RBS             6284..6316
+                     /label=cal RBS(1)
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+                     /vntifkey="32"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_label="cal RBS"
+     misc_feature    5101..5116
+                     /label=I2box
+                     /vntifkey="21"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_revcolor="pink"
+     misc_feature    5152..5188
+                     /label=T7 stem loop
+                     /vntifkey="21"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+     CDS             6317..7012
+                     /label=Decarb_codon_opt
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="4"
+     source          302..2878
+                     /label=modification of cloning vector pBBR1MCS, GenBank
+                     Ac(2)
+                     /lab_host="Bordetella bronchiseptica"
+                     /vntifkey="98"
+                     /plasmid="pBBR1MCS-2"
+                     /mol_type="genomic DNA"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_label="modification of cloning vector pBBR1MCS,
+                     GenBank Ac"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_fwdcolor="pink"
+                     /db_xref="taxon:39477"
+     gene            complement(150..1100)
+                     /label=gene
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /vntifkey="60"
+     protein_bind    4868..4885
+                     /label=operator O2
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /vntifkey="31"
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_revcolor="pink"
+     source          289..301
+                     /label=modification of cloning vector pBBR1MCS, GenBank
+                     Ac(1)
+                     /db_xref="taxon:39477"
+                     /vntifkey="98"
+                     /ApEinfo_label="modification of cloning vector pBBR1MCS,
+                     GenBank Ac"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+                     /mol_type="genomic DNA"
+                     /ApEinfo_revcolor="pink"
+                     /lab_host="Bordetella bronchiseptica"
+                     /plasmid="pBBR1MCS-2"
+     misc_marker     complement(3024..3818)
+                     /label=Kan/neoR
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo
+                     resistance, with native promoter in on AatII and SpeI from
+                     Lutz vector pZE2PLtetO-1 MCS2"
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="22"
+     CDS             2094..2756
+                     /label=rep
+                     /codon_start=1
+                     /function="required for plasmid replication"
+                     /protein_id="AAB05988.1"
+                     /vntifkey="4"
+                     /db_xref="GI:773413.0"
+                     /transl_table=11
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_fwdcolor="pink"
+                     /product="Rep"
+     source          2880..2892
+                     /label=modification of cloning vector pBBR1MCS, GenBank
+                     Ac(4)
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_label="modification of cloning vector pBBR1MCS,
+                     GenBank Ac"
+                     /vntifkey="98"
+                     /mol_type="genomic DNA"
+                     /lab_host="Bordetella bronchiseptica"
+                     /db_xref="taxon:39477"
+                     /plasmid="pBBR1MCS-2"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+     misc_feature    1..129
+                     /label=dbl term
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="21"
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+     source          150..288
+                     /label=modification of cloning vector pBBR1MCS, GenBank Ac
+                     /db_xref="taxon:39477"
+                     /mol_type="genomic DNA"
+                     /lab_host="Bordetella bronchiseptica"
+                     /vntifkey="98"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+                     /plasmid="pBBR1MCS-2"
+                     /ApEinfo_revcolor="pink"
+     CDS             complement(302..1100)
+                     /label=mob(1)
+                     /ApEinfo_label="mob"
+                     /function="required for plasmid mobilization"
+                     /product="Mob"
+                     /vntifkey="4"
+                     /codon_start=1
+                     /transl_table=11
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_revcolor="pink"
+                     /protein_id="AAB05991.1"
+                     /ApEinfo_fwdcolor="pink"
+                     /db_xref="GI:773416.0"
+     source          2879
+                     /label=modification of cloning vector pBBR1MCS, GenBank
+                     Ac(3)
+                     /plasmid="pBBR1MCS-2"
+                     /lab_host="Bordetella bronchiseptica"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /db_xref="taxon:39477"
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_label="modification of cloning vector pBBR1MCS,
+                     GenBank Ac"
+                     /mol_type="genomic DNA"
+                     /vntifkey="98"
+     misc_binding    5069..5082
+                     /label=CAP site
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="20"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+     protein_bind    5026..5047
+                     /label=operator O1
+                     /ApEinfo_fwdcolor="pink"
+                     /vntifkey="31"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_revcolor="pink"
+     protein_bind    5078..5116
+                     /label=operator I2 and I1
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_fwdcolor="pink"
+                     /vntifkey="31"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+     gene            2094..2756
+                     /label=gene(1)
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /vntifkey="60"
+                     /ApEinfo_label="gene"
+                     /ApEinfo_revcolor="pink"
+     promoter        complement(4990..5018)
+                     /label=araC promoter
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="30"
+     promoter        5078..5142
+                     /label=PBAD
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="30"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+     CDS             complement(3961..4839)
+                     /label=araC
+                     /ApEinfo_fwdcolor="pink"
+                     /vntifkey="4"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+     misc_feature    5151
+                     /label=transcriptional start
+                     /vntifkey="21"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+     misc_feature    5079..5095
+                     /label=I1 box
+                     /ApEinfo_fwdcolor="pink"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /vntifkey="21"
+     CDS             5240..6265
+                     /label=Acyl_AP_codon_opt
+                     /ApEinfo_revcolor="pink"
+                     /vntifkey="4"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+     RBS             5205..5239
+                     /label=cal RBS
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_fwdcolor="pink"
+                     /vntifkey="32"
+     CDS             complement(150..1099)
+                     /label=mob
+                     /ApEinfo_revcolor="pink"
+                     /product="Mob"
+                     /codon_start=1
+                     /ApEinfo_fwdcolor="pink"
+                     /protein_id="AAB05991.1"
+                     /function="required for plasmid mobilization"
+                     /vntifkey="4"
+                     /db_xref="GI:773416.0"
+                     /transl_table=11
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+     terminator      2893..2998
+                     /label=T0
+                     /ApEinfo_revcolor="pink"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}
+                     width 5 offset 0"
+                     /ApEinfo_fwdcolor="pink"
+                     /vntifkey="43"
+ORIGIN
+        1 ccaggcatca aataaaacga aaggctcagt cgaaagactg ggcctttcgt tttatctgtt
+       61 gtttgtcggt gaacgctctc tactagagtc acactggctc accttcgggt gggcctttct
+      121 gcgtttatac ctagggcgtt cggctgcggc tggcgctggg cctgtttctg gcgctggact
+      181 tcccgctgtt ccgtcagcag cttttcgccc acggccttga tgatcgcggc ggccttggcc
+      241 tgcatatccc gattcaacgg ccccagggcg tccagaacgg gcttcaggcg ctcccgaagg
+      301 tctcgggccg tctcttgggc ttgatcggcc ttcttgcgca tctcacgcgc tcctgcggcg
+      361 gcctgtaggg caggctcata cccctgccga accgcttttg tcagccggtc ggccacggct
+      421 tccggcgtct caacgcgctt tgagattccc agcttttcgg ccaatccctg cggtgcatag
+      481 gcgcgtggct cgaccgcttg cgggctgatg gtgacgtggc ccactggtgg ccgctccagg
+      541 gcctcgtaga acgcctgaat gcgcgtgtga cgtgccttgc tgccctcgat gccccgttgc
+      601 agccctagat cggccacagc ggccgcaaac gtggtctggt cgcgggtcat ctgcgctttg
+      661 ttgccgatga actccttggc cgacagcctg ccgtcctgcg tcagcggcac cacgaacgcg
+      721 gtcatgtgcg ggctggtttc gtcacggtgg atgctggccg tcacgatgcg atccgccccg
+      781 tacttgtccg ccagccactt gtgcgccttc tcgaagaacg ccgcctgctg ttcttggctg
+      841 gccgacttcc accattccgg gctggccgtc atgacgtact cgaccgccaa cacagcgtcc
+      901 ttgcgccgct tctctggcag caactcgcgc agtcggccca tcgcttcatc ggtgctgctg
+      961 gccgcccagt gctcgttctc tggcgtcctg ctggcgtcag cgttgggcgt ctcgcgctcg
+     1021 cggtaggcgt gcttgagact ggccgccacg ttgcccattt tcgccagctt cttgcatcgc
+     1081 atgatcgcgt atgccgccat gcctgcccct cccttttggt gtccaaccgg ctcgacgggg
+     1141 gcagcgcaag gcggtgcctc cggcgggcca ctcaatgctt gagtatactc actagacttt
+     1201 gcttcgcaaa gtcgtgaccg cctacggcgg ctgcggcgcc ctacgggctt gctctccggg
+     1261 cttcgccctg cgcggtcgct gcgctccctt gccagcccgt ggatatgtgg acgatggccg
+     1321 cgagcggcca ccggctggct cgcttcgctc ggcccgtgga caaccctgct ggacaagctg
+     1381 atggacaggc tgcgcctgcc cacgagcttg accacaggga ttgcccaccg gctacccagc
+     1441 cttcgaccac atacccaccg gctccaactg cgcggcctgc ggccttgccc catcaatttt
+     1501 tttaattttc tctggggaaa agcctccggc ctgcggcctg cgcgcttcgc ttgccggttg
+     1561 gacaccaagt ggaaggcggg tcaaggctcg cgcagcgacc gcgcagcggc ttggccttga
+     1621 cgcgcctgga acgacccaag cctatgcgag tgggggcagt cgaaggcgaa gcccgcccgc
+     1681 ctgccccccg agcctcacgg cggcgagtgc gggggttcca agggggcagc gccaccttgg
+     1741 gcaaggccga aggccgcgca gtcgatcaac aagccccgga ggggccactt tttgccggag
+     1801 ggggagccgc gccgaaggcg tgggggaacc ccgcaggggt gcccttcttt gggcaccaaa
+     1861 gaactagata tagggcgaaa tgcgaaagac ttaaaaatca acaacttaaa aaaggggggt
+     1921 acgcaacagc tcattgcggc accccccgca atagctcatt gcgtaggtta aagaaaatct
+     1981 gtaattgact gccactttta cgcaacgcat aattgttgtc gcgctgccga aaagttgcag
+     2041 ctgattgcgc atggtgccgc aaccgtgcgg caccctaccg catggagata agcatggcca
+     2101 cgcagtccag agaaatcggc attcaagcca agaacaagcc cggtcactgg gtgcaaacgg
+     2161 aacgcaaagc gcatgaggcg tgggccgggc ttattgcgag gaaacccacg gcggcaatgc
+     2221 tgctgcatca cctcgtggcg cagatgggcc accagaacgc cgtggtggtc agccagaaga
+     2281 cactttccaa gctcatcgga cgttctttgc ggacggtcca atacgcagtc aaggacttgg
+     2341 tggccgagcg ctggatctcc gtcgtgaagc tcaacggccc cggcaccgtg tcggcctacg
+     2401 tggtcaatga ccgcgtggcg tggggccagc cccgcgacca gttgcgcctg tcggtgttca
+     2461 gtgccgccgt ggtggttgat cacgacgacc aggacgaatc gctgttgggg catggcgacc
+     2521 tgcgccgcat cccgaccctg tatccgggcg agcagcaact accgaccggc cccggcgagg
+     2581 agccgcccag ccagcccggc attccgggca tggaaccaga cctgccagcc ttgaccgaaa
+     2641 cggaggaatg ggaacggcgc gggcagcagc gcctgccgat gcccgatgag ccgtgttttc
+     2701 tggacgatgg cgagccgttg gagccgccga cacgggtcac gctgccgcgc cggtagcact
+     2761 tgggttgcgc agcaacccgt aagtgcgctg ttccagacta tcggctgtag ccgcctcgcc
+     2821 gccctatacc ttgtctgcct ccccgcgttg cgtcgcggtg catggagccg ggccacctcg
+     2881 acctgaatgg aagcttggat tctcaccaat aaaaaacgcc cggcggcaac cgagcgttct
+     2941 gaacaaatcc agatggagtt ctgaggtcat tactggatct atcaacagga gtccaagcga
+     3001 gctctcgaac cccagagtcc cgctcagaag aactcgtcaa gaaggcgata gaaggcgatg
+     3061 cgctgcgaat cgggagcggc gataccgtaa agcacgagga agcggtcagc ccattcgccg
+     3121 ccaagctctt cagcaatatc acgggtagcc aacgctatgt cctgatagcg gtccgccaca
+     3181 cccagccggc cacagtcgat gaatccagaa aagcggccat tttccaccat gatattcggc
+     3241 aagcaggcat cgccatgggt cacgacgaga tcctcgccgt cgggcatgcg cgccttgagc
+     3301 ctggcgaaca gttcggctgg cgcgagcccc tgatgctctt cgtccagatc atcctgatcg
+     3361 acaagaccgg cttccatccg agtacgtgct cgctcgatgc gatgtttcgc ttggtggtcg
+     3421 aatgggcagg tagccggatc aagcgtatgc agccgccgca ttgcatcagc catgatggat
+     3481 actttctcgg caggagcaag gtgagatgac aggagatcct gccccggcac ttcgcccaat
+     3541 agcagccagt cccttcccgc ttcagtgaca acgtcgagca cagctgcgca aggaacgccc
+     3601 gtcgtggcca gccacgatag ccgcgctgcc tcgtcctgca gttcattcag ggcaccggac
+     3661 aggtcggtct tgacaaaaag aaccgggcgc ccctgcgctg acagccggaa cacggcggca
+     3721 tcagagcagc cgattgtctg ttgtgcccag tcatagccga atagcctctc cacccaagcg
+     3781 gccggagaac ctgcgtgcaa tccatcttgt tcaatcatgc gaaacgatcc tcatcctgtc
+     3841 tcttgatcag atcatgatcc cctgcgccat cagatccttg gcggcaagaa agccatccag
+     3901 tttactttgc agggcttccc aaccttacca gagggcgccc cagctggcaa ttccgacgtc
+     3961 ttatgacaac ttgacggcta catcattcac tttttcttca caaccggcac ggaactcgct
+     4021 cgggctggcc ccggtgcatt ttttaaatac ccgcgagaaa tagagttgat cgtcaaaacc
+     4081 aacattgcga ccgacggtgg cgataggcat ccgggtggtg ctcaaaagca gcttcgcctg
+     4141 gctgatacgt tggtcctcgc gccagcttaa gacgctaatc cctaactgct ggcggaaaag
+     4201 atgtgacaga cgcgacggcg acaagcaaac atgctgtgcg acgctggcga tatcaaaatt
+     4261 gctgtctgcc aggtgatcgc tgatgtactg acaagcctcg cgtacccgat tatccatcgg
+     4321 tggatggagc gactcgttaa tcgcttccat gcgccgcagt aacaattgct caagcagatt
+     4381 tatcgccagc agctccgaat agcgcccttc cccttgcccg gcgttaatga tttgcccaaa
+     4441 caggtcgctg aaatgcggct ggtgcgcttc atccgggcga aagaaccccg tattggcaaa
+     4501 tattgacggc cagttaagcc attcatgcca gtaggcgcgc ggacgaaagt aaacccactg
+     4561 gtgataccat tcgcgagcct ccggatgacg accgtagtga tgaatctctc ctggcgggaa
+     4621 cagcaaaata tcacccggtc ggcaaacaaa ttctcgtccc tgatttttca ccaccccctg
+     4681 accgcgaatg gtgagattga gaatataacc tttcattccc agcggtcggt cgataaaaaa
+     4741 atcgagataa ccgttggcct caatcggcgt taaacccgcc accagatggg cattaaacga
+     4801 gtatcccggc agcaggggat cattttgcgc ttcagccata cttttcatac tcccgccatt
+     4861 cagagaagaa accaattgtc catattgcat cagacattgc cgtcactgcg tcttttactg
+     4921 gctcttctcg ctaaccaaac cggtaacccc gcttattaaa agcattctgt aacaaagcgg
+     4981 gaccaaagcc atgacaaaaa cgcgtaacaa aagtgtctat aatcacggca gaaaagtcca
+     5041 cattgattat ttgcacggcg tcacactttg ctatgccata gcatttttat ccataagatt
+     5101 agcggattct acctgacgct ttttatcgca actctctact gtttctccat agggagacca
+     5161 caacggtttc cctctagaaa taattttgga attcaaaaga tctttagttc tacattaaat
+     5221 aaaaagggag aaaaactata tgttcggcct gatcggccat ctgacctcgc tggagcaggc
+     5281 ccgcgacgtg agccgccgca tgggctacga cgaatacgcc gaccagggcc tggagttctg
+     5341 gtcgagcgca ccgccgcaga tcgtggacga aatcaccgtc acgtcggcca ccggcaaggt
+     5401 gatccacggc cgctacatcg agagctgctt cctgccggaa atgctggccg cgcgccgctt
+     5461 caagaccgcg acgcgcaagg tgctgaacgc gatgtcgcac gcccagaagc atggcatcga
+     5521 catctcggcg ctgggcggct tcaccagcat catcttcgag aacttcgacc tggccagcct
+     5581 gcgccaggtg cgcgacacca cgctggagtt cgaacgcttc accacgggca acacccatac
+     5641 ggcctacgtg atctgccgcc aggtcgaggc cgccgcaaag accctgggca tcgacatcac
+     5701 ccaggcgacg gtggccgtgg tcggcgcgac gggcgacatc ggctcggccg tgtgccgctg
+     5761 gctggacctg aagctgggcg tcggcgacct gatcctgacc gcgcgcaacc aggagcgcct
+     5821 ggacaacctc caggccgaac tgggccgcgg caagatcctg ccgctggagg cggccctgcc
+     5881 ggaagcggac ttcatcgtgt gggtcgccag catgccgcag ggcgtggtca tcgacccggc
+     5941 caccctgaag cagccgtgcg tgctgatcga cggcggctac ccgaagaacc tgggctcgaa
+     6001 ggtgcagggc gagggcatct acgtcctgaa cggcggcgtg gtcgaacact gcttcgacat
+     6061 cgactggcag atcatgagcg cggccgagat ggcacgcccg gaacgccaga tgttcgcctg
+     6121 cttcgcggag gccatgctgc tggagttcga aggctggcat accaacttct cgtggggccg
+     6181 caaccagatc acgatcgaaa agatggaggc catcggcgag gcgtcggtcc gccacggctt
+     6241 ccagccgctg gccctggcga tctgagttaa cggaaccttc catgggggta tacccagagc
+     6301 aagaaggagg aattaaatgc cgcagctgga agcgagcctg gaactggact tccagagcga
+     6361 atcgtacaag gacgcctaca gccgcatcaa cgccatcgtc atcgagggcg aacaggaggc
+     6421 gttcgacaac tacaaccgcc tggccgaaat gctgccggac cagcgcgacg agctgcacaa
+     6481 gctggcgaag atggaacagc gccacatgaa gggcttcatg gcctgcggca agaacctgtc
+     6541 ggtgaccccg gacatgggct tcgcgcagaa gttcttcgaa cgcctgcacg agaacttcaa
+     6601 ggccgcggcc gcggagggca aggtggtcac gtgcctgctg atccagagcc tgatcatcga
+     6661 gtgcttcgcc atcgccgcgt acaacatcta catcccggtc gccgacgcgt tcgcccgcaa
+     6721 gatcaccgaa ggcgtggtcc gcgacgagta cctgcatcgc aacttcggcg aggaatggct
+     6781 gaaggcgaac ttcgacgcgt cgaaggccga gctggaggaa gccaaccgcc agaacctgcc
+     6841 gctggtgtgg ctgatgctga acgaagtcgc ggacgacgcc cgcgagctgg gcatggaacg
+     6901 cgagagcctg gtggaggact tcatgatcgc gtacggcgaa gccctggaga acatcggctt
+     6961 caccacccgc gaaatcatgc gcatgtcggc gtacggcctg gcggcggtct gaggatccaa
+     7021 actcgagtaa ggatct
+//
