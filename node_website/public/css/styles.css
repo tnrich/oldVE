@@ -461,6 +461,12 @@ background: none;
     margin-top: 40px;
 }
 
+.registration-buts button {
+    margin-top: 20px;
+    box-shadow: none;
+    margin-bottom: 20px;
+}
+
 .registration-buts a{
     box-shadow: none;
 }
