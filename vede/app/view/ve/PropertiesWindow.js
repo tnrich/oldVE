@@ -1,21 +1,24 @@
 Ext.define('Vede.view.ve.PropertiesWindow', {
     extend: 'Ext.window.Window',
-    requires: ["Teselagen.manager.ProjectManager"],
+    requires: ['Ext.form.Label',
+               'Ext.grid.column.Template',
+               'Teselagen.manager.ProjectManager'],
     title: 'Properties',
     cls: 'PropertiesWindow',
     modal: true,
     layout: {
-    	type: 'vbox'
+        type: 'vbox'
     },
-    width: 500,
+    width: 520,
     resizable: false,
     initComponent: function() {
-    	var me = this;
-    	Ext.applyIf(me, {
-    		items: [
+        var me = this;
+        Ext.applyIf(me, {
+            items: [
                 {
                     xtype: 'tabpanel',
-                    width: 500,
+                    width: 520,
+                    cls: 'propertiesWindowTabpanel',
                     items: [
                         {
                             xtype: 'panel',
@@ -41,6 +44,11 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                     labelAlign: 'right',
                                     maxWidth: 400,
                                     height: 100
+                                }, {
+                                    xtype: 'checkboxfield',
+                                    cls: 'propertiesWindowCircularField',
+                                    fieldLabel: 'Circular',
+                                    labelAlign: 'right'
                                 }, {
                                     xtype: 'displayfield',
                                     cls: 'propertiesWindowOwnerField',
@@ -86,7 +94,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             xtype: 'gridpanel',
                                             cls: 'featuresGridPanel',
                                             name: 'featuresGridPanel',
-                                            width: 400,
+                                            width: 420,
                                             minHeight: 200,
                                             maxHeight: 360,
                                             columns: [
@@ -117,11 +125,11 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     cls: 'featuresStrandColumn',
                                                     dataIndex: 'strand',
                                                     text: 'Strand',
-                                                    width: 50,
+                                                    width:68,
                                                     renderer: function (value) {
                                                         if (value > 0) {
-                                                            return '+'
-                                                        } else { return '-' }
+                                                            return '+';
+                                                        } else { return '-'; }
                                                     }
                                                 }
                                             ]
@@ -233,7 +241,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     }
                                                 }
                                             },
-                                            maxWidth: 470,
+                                            maxWidth: 492,
                                             minHeight: 200,
                                             maxHeight: 320,
                                             columns: [
@@ -263,13 +271,13 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     cls: 'cutSitesStrandColumn',
                                                     dataIndex: 'strand',
                                                     text: 'Strand',
-                                                    maxWidth: 50,
+                                                    maxWidth: 70,
                                                     renderer: function (value) {
                                                         if (value > 0) {
-                                                            return '+'
+                                                            return '+';
                                                         } else if (value < 0) {
-                                                            return '-'
-                                                        } else { return null}
+                                                            return '-';
+                                                        } else { return null;}
                                                     }
                                                 }
                                             ]
@@ -355,16 +363,16 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             xtype: 'gridpanel',
                                             cls: 'ORFsGridPanel',
                                             name: 'ORFsGridPanel',
-                                            maxWidth: 470,
+                                            maxWidth: 492,
                                             minHeight: 200,
                                             maxHeight: 320,
                                             columnLines: true,
                                             columns: [
                                                 {
-                                                    xtype: 'gridcolumn',
+                                                    xtype: 'templatecolumn',
                                                     cls: 'ORFsPositionColumn',
-                                                    dataIndex: 'position',
                                                     text: 'Position',
+                                                    tpl: '{start} - {end}',
                                                     width: 200
                                                 },
                                                 {
@@ -376,21 +384,21 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
-                                                    cls: 'ORFsFrameColumn',
-                                                    dataIndex: 'frame',
-                                                    text: 'Frame',
-                                                },
-                                                {
-                                                    xtype: 'gridcolumn',
                                                     cls: 'ORFsStrandColumn',
                                                     dataIndex: 'strand',
                                                     text: 'Strand',
-                                                    maxWidth: 50,
+                                                    maxWidth: 70,
                                                     renderer: function (value) {
                                                         if (value > 0) {
-                                                            return '+'
-                                                        } else { return '-' }
+                                                            return '+';
+                                                        } else { return '-'; }
                                                     }
+                                                },
+                                                {
+                                                    xtype: 'gridcolumn',
+                                                    cls: 'ORFsFrameColumn',
+                                                    dataIndex: 'frame',
+                                                    text: 'Frame',
                                                 }
                                             ]
                                         },
@@ -449,7 +457,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                 {
                                     xtype: 'textareafield',
                                     cls: 'propertiesWindowGenBankData',
-                                    maxWidth: 470,
+                                    maxWidth: 490,
                                     height: 400,
                                     readOnly: true
                                 }
@@ -467,15 +475,15 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                         {
                             xtype: 'button',
                             cls: 'propertiesWindowOKButton',
-                            text: 'Ok', 
+                            text: 'Ok',
                             width: 70,
                             margin: '4 2 2 2',
-                            padding: 2                                   
+                            padding: 2
                         }
                     ]
                 }
-	        ]
-    	});
-    	me.callParent(arguments);
+            ]
+        });
+        me.callParent(arguments);
     }
 });

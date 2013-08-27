@@ -42,11 +42,14 @@ Ext.define("Teselagen.manager.ORFManager", {
         if(this.getDirty()) {
             this.recalculate();
             this.setDirty(false);
-        } 
+        }
 
         return this.orfs;
     },
 
+    /**
+     * Get ORFs in JSON format.
+     */
     getOrfsJSON: function() {
         if(this.getDirty()) {
             this.recalculate();
@@ -57,21 +60,20 @@ Ext.define("Teselagen.manager.ORFManager", {
         var newOrfs = [];
         var length = orfs.length;
 
-        for (i = 0; i < length; i++) {
-            newOrf = orfs[i].toJSON();
+        for (var i = 0; i < length; i++) {
+            var newOrf = orfs[i].toJSON();
             newOrfs.push(newOrf);
-        };
+        }
         return newOrfs;
-        console.log(newOrfs);
     },
 
     /**
-     * Sets the minimum ORF size. 
+     * Sets the minimum ORF size.
      * Checks to make sure it is a new size to avoid unnecessary recalculation.
      * @param {Int} pSize The new minimum ORF size.
      */
     setMinORFSize: function(pSize) {
-        if(this.minORFSize != pSize) {
+        if(this.minORFSize !== pSize) {
             this.minORFSize = pSize;
             this.setDirty(true);
         }
@@ -128,7 +130,7 @@ Ext.define("Teselagen.manager.ORFManager", {
 
         var recalcOrfs = [];
         var normalOrfs = [];
-        var orf = null;
+//        var orf = null;
 
         Ext.each(orfsSequence, function(orf) {
             if(orf.getStart() >= maxLength) {
@@ -148,16 +150,16 @@ Ext.define("Teselagen.manager.ORFManager", {
             }
         });
         
-        var normalOrf = null;
-        var circularOrf = null;
+//        var normalOrf = null;
+//        var circularOrf = null;
 
         // Eliminate the orf that overlaps with circular orfs.
         Ext.each(normalOrfs, function(normalOrf) {
             var skip = false;
 
             Ext.each(recalcOrfs, function(circularOrf) {
-                if(circularOrf.getEnd() == normalOrf.getEnd() &&
-                   circularOrf.getStrand() == normalOrf.getStrand()) {
+                if(circularOrf.getEnd() === normalOrf.getEnd() &&
+                   circularOrf.getStrand() === normalOrf.getStrand()) {
                     skip = true;
                     return false;
                 }

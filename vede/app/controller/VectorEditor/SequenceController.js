@@ -122,6 +122,10 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         this.application.on(listenersObject, this);
     },
 
+    getActiveTab: function() {
+        return Ext.getCmp('mainAppPanel').getActiveTab();
+    },
+    
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         this.activeTab = newTab;
 
@@ -431,8 +435,9 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
 
     onSequenceManagerChanged: function(pSeqMan) {
         this.SequenceManager = pSeqMan;
-
-        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        var activeTab = this.getActiveTab();
+        activeTab.el.unmask();
+        activeTab.sequenceManager = pSeqMan;
 
         Ext.suspendLayouts();
 
