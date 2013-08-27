@@ -16,7 +16,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     config: {
         restrictionEnzymeGroup: null,
         allCutSites: [],
-        allCutSitesMap: Ext.create("Ext.util.HashMap"), 
+        allCutSitesMap: Ext.create("Ext.util.HashMap"),
         cutSites: [],
         cutSitesMap: [],
         maxCuts: -1
@@ -47,7 +47,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     setRestrictionEnzymeGroup: function(pRestrictionEnzymeGroup) {
         this.restrictionEnzymeGroup = pRestrictionEnzymeGroup;
         this.recalculate();
-        dirty = false;
+        this.setDirty(true);
     },
 
     /**
@@ -57,49 +57,6 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     getAllCutSites: function() {
         this.recalcIfNeeded();
         return this.allCutSites;
-    },
-
-    /**
-     * Converts each Restriction Enzyme and it's number of cuts to JSON object to agree with the Teselagen.models.CutSite format
-     * for loading into properties window.
-     */
-    getRestrictionEnzymeNumCutsJSON: function() {
-        this.recalcIfNeeded();
-        var cutSites = this.allCutSites;
-        var restrictionEnzymes = [];
-        var cutSitesCount = cutSites.length;
-
-        for (i = 0; i < cutSitesCount; i++) {
-            restrictionEnzyme = cutSites[i].enzymeToJSON();
-            var restrictionEnzymesCount = restrictionEnzymes.length;
-            var addEnzyme = true;
-            for (j=0; j < restrictionEnzymesCount; j++) {
-                if (restrictionEnzymes[j].name === restrictionEnzyme.name) {
-                    addEnzyme = false;
-                }
-            }
-            if (addEnzyme) {
-                restrictionEnzymes.push(restrictionEnzyme);
-            }
-        };
-        return restrictionEnzymes;
-    },
-
-    /**
-     * Converts each Cut Site to JSON object to agree with the Teselagen.models.CutSite format
-     * for loading into properties window.
-     */
-    getAllCutSitesJSON: function() {
-        this.recalcIfNeeded();
-        var cutSites = this.allCutSites;
-        var newCutSites = [];
-        var cutSitesCount = cutSites.length;
-
-        for (i = 0; i < cutSitesCount; i++) {
-            newCutSite = cutSites[i].cutSiteToJSON();
-            newCutSites.push(newCutSite);
-        };
-        return newCutSites;
     },
 
     /**
@@ -120,6 +77,22 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         return this.allCutSitesMap;
     },
 
+    /**
+     * Return cut site data in format for display in Properties window
+     * @return {Array} Ann array containing each restriction enzyme followed by its cut sites
+     */
+    getCutSitesForProperties: function() {
+        var cutSitesMap = this.getCutSitesMap();
+        var cutSites = [];
+        cutSitesMap.each(function(k,v) {
+            cutSites.push({name:k, numCuts:v.length});
+            for (var i =0; i< v.length; i++) {
+                cutSites.push(v[i].toJSON());
+            }
+        });
+        return cutSites;
+    },
+    
     /**
      * Recalculates (if needed) and returns cutSitesMap.
      * @return {Ext.util.HashMap} A map of enzymes to arrays of cut sites filtered by maxCuts.
@@ -144,7 +117,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
      * Sets maxCuts and flags mapper as dirty if provided value is different from current value.
      */
     setMaxCuts: function(pMaxCuts) {
-        if(pMaxCuts!= this.maxCuts) {
+        if(pMaxCuts!== this.maxCuts) {
             this.maxCuts = pMaxCuts;
             this.setDirty(true);
         }
@@ -153,7 +126,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     /**
      * @private
      * Calls appropriate cut site recalculation function, depending on whether the sequence is linear or circular.
-     */ 
+     */
     recalculate: function() {
         if(this.getSequenceManager() &&
            this.getRestrictionEnzymeGroup() &&
@@ -230,7 +203,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         var newAllCutSitesMap = pCutSites;
         
         Ext.each(pCutSites.getKeys(), function(enzyme) {
-            var sitesForOneEnzyme = pCutSites.get(enzyme);    
+            var sitesForOneEnzyme = pCutSites.get(enzyme);
             var numCuts = sitesForOneEnzyme.length;
 
             // Set numCuts for each site.
@@ -244,7 +217,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
             // Add only the cut sites of enzymes which have made fewer than maxCuts,
             // or add them all if maxCuts is -1 (default).
             if(this.getMaxCuts() < 0 || numCuts <= this.getMaxCuts()) {
-                newCutSitesMap[enzyme] = sitesForOneEnzyme;
+                newCutSitesMap.add(enzyme, sitesForOneEnzyme);
                 newCutSites = newCutSites.concat(sitesForOneEnzyme);
             }
         }, this);
@@ -262,7 +235,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
      */
     getAllCutsSorted: function(sortCriteria) {
         //default to sorting byStart
-        sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
+        sortCriteria = typeof sortCriteria !== "undefined" ? sortCriteria : "byStart";
         //Make a shallow copy of the array
         var sortedCutSites = this.getAllCutSites().slice();
         if (sortCriteria === "byStart") {
@@ -281,7 +254,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
      */
     getFirstCut: function(sortCriteria) {
         //default to sorting byStart
-        sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
+        sortCriteria = typeof sortCriteria !== "undefined" ? sortCriteria : "byStart";
         //Get the sorted array
         var sortedCutSites = this.getAllCutsSorted(sortCriteria);
         return sortedCutSites[0];
@@ -294,7 +267,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
      */
     getLastCut: function(sortCriteria) {
         //default to sorting byEnd
-        sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byEnd";
+        sortCriteria = typeof sortCriteria !== "undefined" ? sortCriteria : "byEnd";
         //Get the sorted array
         var sortedCutSites = this.getAllCutsSorted(sortCriteria);
         return sortedCutSites.pop();

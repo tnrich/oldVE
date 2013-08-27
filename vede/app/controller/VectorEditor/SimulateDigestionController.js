@@ -215,6 +215,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
     onWindowClose: function() {
         // Reload user to rollback any unsaved changes
         this.GroupManager.loadUserGroups();
+        this.digestManager.destroy();
         this.digestManager = null;
     },
     

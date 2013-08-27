@@ -165,40 +165,9 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
      * @return {String} The calculated tooltip.
      */
     getToolTip: function(orf) {
-        var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
-        var aa = Math.floor(bp / 3);
-        var complimentary = "";
-        
-        if(orf.getStrand() == 1 && orf.getStartCodons().length > 1) {
-            complimentary = ", complimentary";
-        }
-
-        var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) +
-            ", frame: " + orf.getFrame() + 
-            ", length: " + bp + " BP" + 
-            ", " + aa + " AA" + complimentary;
-
-        if(orf.getStartCodons().length > 1) {
-            tooltipLabel += "\nStart Codons: ";
-            
-            var codonsArray = [];
-            var codonString;
-            Ext.each(orf.getStartCodons(), function(codon, index) {
-                if(index != orf.getStartCodons().length - 1) {
-                    codonString = (codon + 1) + ", ";
-                } else {
-                    codonString = codon + 1;
-                }
-
-                codonsArray.push(codonString);
-            });
-
-            tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
-        }
-
-        return tooltipLabel;
+        return this.getORFTooltipLabel(orf);
     },
-
+    
     /**
      * @private
      * Called when orfs are changed. Flags the renderer for recalculation.

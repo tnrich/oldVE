@@ -11,7 +11,7 @@ Ext.define('Vede.view.ve.EditSequenceFeatureWindow', {
     layout: {
         type: 'fit'
     },
-    title: 'Edit Sequence Feature',
+    title: 'Edit Feature',
 
     initComponent: function() {
     	var me = this;

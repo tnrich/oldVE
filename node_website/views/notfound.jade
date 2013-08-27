@@ -12,7 +12,6 @@ html(lang='en')
     link(href='/css/styles.css', rel='stylesheet')
 
     // fav and touch icons 
-    link(rel='shortcut icon', href='img/favicon.ico')
     //- link(rel='shortcut icon', href='ico/favicon.ico')
     //- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
     //- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
@@ -26,37 +25,16 @@ html(lang='en')
     
   body
 
-    #login
+    #signup
         .row
             .large-6.small.6.large-centered.small-centered.page-logo.columns
                 img(src="/img/teselagen_toplogo.png")
-            .large-6.small-6.page-header.large-centered.small-centered.columns Log In
-            .large-6.small-6.large-centered.small-centered.columns
-                form(data-abide)#signup_form.custom
-                    .row
-                        .row
-                            .large-3.small-3.columns
-                                label.right.inline(for='username') Username
-                            .large-9.small-9.columns
-                                input(type="text", id='username', placeholder='Username', required)
-                                small.error A username is required.
-                        .row
-                            .large-3.small-3.columns
-                                label.right.inline(for='password', required) Password
-                            .large-9.small-9.columns
-                                input(type="password", id='password')
-                                small.error A username is required.
-                        .row
-                            .large-3.small-3.columns.right.lost_pw_link 
-                                a Lost Password?
-                        .large-12.small-12.registration-buts
-                            a.button.radius.expand Log In
-                            a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
-                                .large-6.small-6.large-centered.small-centered.columns#footer_links
+            .large-6.small-6.large-centered.small-centered.columns(style='text-align:center') Page Not Found.
+
     .large-5.small-5.large-centered.small-centered.columns#footer2_links
           nav.top-bar
             section.top-bar-section#footer_2
-              ul(style='text-alight:center')
+              ul(style='text-align:center')
                 li
                   a(href='/', target='blank') Home
                 li
@@ -66,6 +44,8 @@ html(lang='en')
                 li
                   a(href='/contact', target='blank') Contact
                 li
+                  a(href='/careers', target='blank') Careers
+                li
                   a(href='http://help.teselagen.com', target='_blank') Manual
                 li
                   a(href='/terms') Terms
@@ -73,7 +53,7 @@ html(lang='en')
                   a(href='/privacy', target='_blank') Privacy          
     .large-6.small-6.large-centered.small-centered.columns#footer_copy
         © Teselagen 2013
-               
+
 script document.write('<script src=/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js><\/script>');
 script(src='/js/jquery-1.10.2.min.js')
 script(src='/js/application.js')

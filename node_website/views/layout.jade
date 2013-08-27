@@ -13,7 +13,9 @@ html(lang='en')
     link(href='/css/styles.css', rel='stylesheet')
 
     // fav and touch icons 
-    //- link(rel='shortcut icon', href='ico/favicon.ico')
+    <link rel="shortcut icon" href="resources/images/favicon.ico">
+
+    link(rel='shortcut icon', href='img/favicon.ico')
     //- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
     //- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
     //- link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
@@ -28,11 +30,12 @@ html(lang='en')
     nav.top-bar.hide-for-small
       ul.title-area
         li.name
-          img(src='img/teselagen_toplogo.png')
+          a(href="/")
+            img(src='img/teselagen_toplogo.png')
         li.toggle-topbar
       section.top-bar-section
         ul.right
-          li#home_tab.active
+          li#home_tab
             a.active_top_menu(href='/') Home
           li#about_tab
             a(href='/about') About
@@ -49,9 +52,7 @@ html(lang='en')
           li.login_btn
             a(href='/loginuser') Login
     
-    .wrapper
-      block container
-      #push
+    block container
 
     #footer
         .large-12.small-12#footer_links

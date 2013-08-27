@@ -1,6 +1,10 @@
-$(".footer, .push").height($(".footer .row").height()+"px");
-$(".wrapper").css({'margin-bottom':(-1*$(".footer .row").height())+"px"});
-window.onresize = function(){
-    $(".footer, .push").height($(".footer .row").height()+"px");
-    $(".wrapper").css({'margin-bottom':(-1*$(".footer .row").height())+"px"});
-}
+$(document).ready(function() {
+	$('#mission, #contact, #news').css("display","none");
+	
+	$('#mission, #contact, #news').fadeIn(100);
+	// $('#icon_container div').fadeIn(600);
+	
+	$("#home_tab").addClass("navactive");
+	
+});
+

@@ -5,6 +5,7 @@
  * @author Zinovii Dmytriv (original author of ORFRenderer.as)
  */
 Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
+    extend: "Teselagen.renderer.common.AnnotationRenderer",
     statics: {
         CODON_SHIFT: -6,
         ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"],
@@ -204,38 +205,8 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
     },
 
     addToolTip: function(orf) {
-        var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
-        var aa = Math.floor(bp / 3);
-        var complimentary = "";
-        
-        if(orf.getStrand() == 1 && orf.getStartCodons().length > 1) {
-            complimentary = ", complimentary";
-        }
-
-        var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) +
-            ", frame: " + orf.getFrame() + 
-            ", length: " + bp + " BP" + 
-            ", " + aa + " AA" + complimentary;
-
-        if(orf.getStartCodons().length > 1) {
-            tooltipLabel += "\nStart Codons: ";
-            
-            var codonsArray = [];
-            var codonString;
-            Ext.each(orf.getStartCodons(), function(codon, index) {
-                if(index != orf.getStartCodons().length - 1) {
-                    codonString = (codon + 1) + ", ";
-                } else {
-                    codonString = codon + 1;
-                }
-
-                codonsArray.push(codonString);
-            });
-
-            tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
-        }
-
+        var label = this.getORFTooltipLabel(orf);
         this.orfSVG.append("svg:title")
-            .text(tooltipLabel);
+            .text(label);
     }
 });

@@ -11,7 +11,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
     layout: {
         type: 'fit'
     },
-    title: 'Annotate as new Sequence Feature',
+    title: 'Create New Feature',
 
     initComponent: function() {
     	var me = this;

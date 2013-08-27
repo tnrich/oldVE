@@ -1,7 +1,7 @@
 /**
 * @class Teselagen.bio.sequence.dna.Feature
 * DNA feature holder.
-* 
+*
 * @author Micah Lerner
 * @author Zinovii Dmytriv (original author)
 * @extends Teselagen.bio.sequence.common.StrandedAnnotation
@@ -23,11 +23,12 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
      * @param {Integer} Index unique index
      */
     constructor: function (inData) {
+        var name, type, notes, index;
         if (inData) {
-            var name = inData.name || "";
-            var type = inData.type || "";
-            var notes = inData.notes || [];
-            var index = inData.index || 0;
+            name = inData.name || "";
+            type = inData.type || "";
+            notes = inData.notes || [];
+            index = inData.index || 0;
             this.callParent([inData]);
         } else {
             Teselagen.bio.BioException.raise("Arguments needed");
@@ -39,7 +40,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.getName = function(){
             return name;
-        }
+        };
 
         /**
          * Sets Name
@@ -48,7 +49,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.setName = function(pName){
             name = pName;
-        }
+        };
 
         /**
          * Get Type
@@ -57,7 +58,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.getType = function(){
             return type;
-        }
+        };
 
         /**
          * Sets Type
@@ -66,7 +67,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.setType = function(pType){
             type = pType;
-        }
+        };
 
         /**
          * Add a FeatureNote
@@ -75,7 +76,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.addNote = function(pNote){
             notes.push(pNote);
-        }
+        };
         
         /**
          * Get Notes
@@ -84,7 +85,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.getNotes = function(){
             return notes;
-        }
+        };
 
         /**
          * Set Notes
@@ -93,7 +94,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.setNotes = function(pNotes){
             notes = pNotes;
-        }
+        };
 
         /**
          * Get Index
@@ -102,7 +103,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.getIndex = function(){
             return index;
-        }
+        };
 
         /**
          * Set Index
@@ -111,14 +112,15 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
          */
         this.setIndex = function(pIndex){
             index = pIndex;
-        }
+        };
+        
         /**
          * Clones the feature
          * @method clone
          * @return {Feature} cloned feature
          */
         this.clone = function(){
-            var clonedFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", 
+            var clonedFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",
                     {
                         name: name,
                         start: inData.start,
@@ -142,9 +144,9 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
             if (notes && notes.length > 0) {
                 var clonedNotes = [];
-                for (var i = 0; i < notes.length; i++) {
+                for (i = 0; i < notes.length; i++) {
                     clonedNotes.push(notes[i].clone());
-                };
+                }
 
                 clonedFeature.setNotes(clonedNotes);
             }
@@ -156,14 +158,39 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
     },
 
     /**
+     * JSON representation of Feature to match Teselagen.models.DNAFeature.
+     * @return {String}
+     */
+    toJSON: function() {
+        return {
+            "strand": this.getStrand(),
+            "name": this.getName(),
+            "type": this.getType(),
+            "locations": (this.getStart() + " - " + this.getEnd())
+        };
+    },
+
+//    toJSON: function() {
+//        var obj = this.serialize();
+//        var json = obj.inData;
+//        json.notes = obj.notes;
+//        json.locations = [{genbankStart: this.getStart(), end: this.getEnd()}];
+//        return json;
+//    },
+
+    /**
      * String representation of Feature.
      * @return {String}
      */
     toString: function() {
-        return "Feature " + this.getName() + " of type " + this.getType() + " from " + 
+        return "Feature " + this.getName() + " of type " + this.getType() + " from " +
             this.getStart() + " to " + this.getEnd();
     },
 
+    /**
+     * Serialize Feature.
+     * @return {Object}
+     */
     serialize: function(){
 
         var data = {};
@@ -173,9 +200,8 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             index : this.getIndex(),
             start : this.getStart(),
             end : this.getEnd(),
-            type : this.getType(),
             strand : this.getStrand()
-        }
+        };
         data.notes = [];
         this.getNotes().forEach(function(note){
             data.notes.push(note.serialize());
@@ -189,6 +215,10 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
         return data;
     },
 
+    /**
+     * Deserialize Feature.
+     * @return {Object}
+     */
     deSerialize: function(data){
         var self = this;
 
