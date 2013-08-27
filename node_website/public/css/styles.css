@@ -499,3 +499,17 @@ background: none;
     background: none;
     color: rgb(189, 191, 201);
 }
+
+.error input, .error textarea, .error select {
+    border-color: #006cab;
+    background-color: rgba(0, 108, 171, 0.05);
+    margin-bottom: 0;
+}
+
+[data-abide] .error small.error, [data-abide] span.error, [data-abide] small.error {
+    font-size: 0.75em;
+    font-weight: bold;
+    background: 006cab;
+    color: #fff;
+    margin-top: 0;
+}
