@@ -2,6 +2,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.MenuItemEvent",
+               "Teselagen.event.VisibilityEvent",
                "Teselagen.manager.ProjectManager",
                "Teselagen.manager.SequenceManager",
                "Teselagen.manager.VectorEditorManager",
@@ -23,18 +24,19 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
     SequenceController: null,
     sequenceFeatures: null,
     VEManager: null,
+    VisibilityEvent: null,
 
     onPropertiesMenuItemClick: function() {
         var propertiesWindow = Ext.create("Vede.view.ve.PropertiesWindow");
 
         var userName = Teselagen.manager.UserManager.getUser().data.username;
         var sequence = this.ProjectManager.workingSequence;
-        var created = sequence.get("dateCreated");
-        var lastModified = sequence.get("dateModified");
+        var description = sequence.get("description");
+        var dateCreated = sequence.get("dateCreated") || "---";
+        var dateModified = sequence.get("dateModified") || "---";
+        var sequenceName = sequence.get("name");
         var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
-        var sequenceName = sequenceManager.getName();
         var circular = sequenceManager.getCircular();
-        var genbankData = this.FormatUtils.sequenceManagerToGenbank(sequenceManager);
         
         var sequenceFeatures = sequenceManager.getFeaturesJSON();
         var sequenceFeaturesStore = Ext.create("Ext.data.Store", {
@@ -71,16 +73,12 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         });
         var minOrfLength = Teselagen.manager.ORFManager.getMinORFSize();
 
-        if (!created) {
-            propertiesWindow.down("component[cls='propertiesWindowCreatedField']").setValue("---");
-        }
-        if (!lastModified) {
-            propertiesWindow.down("component[cls='propertiesWindowLastModifiedField']").setValue("---");
-        }
+        propertiesWindow.down("component[cls='propertiesWindowDescriptionArea']").setValue(description);
+        propertiesWindow.down("component[cls='propertiesWindowCreatedField']").setValue(dateCreated);
+        propertiesWindow.down("component[cls='propertiesWindowLastModifiedField']").setValue(dateModified);
         propertiesWindow.down("component[cls='propertiesWindowSequenceNameField']").setValue(sequenceName);
         propertiesWindow.down("component[cls='propertiesWindowCircularField']").setValue(circular);
         propertiesWindow.down("component[cls='propertiesWindowOwnerField']").setValue(userName);
-        propertiesWindow.down("component[cls='propertiesWindowGenBankData']").setValue(genbankData);
         propertiesWindow.down("gridpanel[name='featuresGridPanel']").reconfigure(sequenceFeaturesStore);
         propertiesWindow.down("gridpanel[name='cutSitesGridPanel']").reconfigure(cutSitesStore);
         propertiesWindow.down("gridpanel[name='ORFsGridPanel']").reconfigure(orfsStore);
@@ -322,41 +320,47 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
     onPropertiesWindowOKButtonClick: function() {
         var propertiesWindow = Ext.ComponentQuery.query("window[cls='PropertiesWindow']")[0];
         var name = propertiesWindow.down("component[cls='propertiesWindowSequenceNameField']").getValue();
+        var description = propertiesWindow.down("component[cls='propertiesWindowDescriptionArea']").getValue();
+        var circular = propertiesWindow.down("component[cls='propertiesWindowCircularField']").getValue();
+        var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
+        var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
+        var viewMode;
         
         if(name === null || name.match(/^\s*$/) || name.length===0) {
             propertiesWindow.down("component[cls='propertiesWindowSequenceNameField']").setFieldStyle("border-color:red");
         } else {
-            var selectedProj = Teselagen.manager.ProjectManager.workingProject;
-            var sequenceStore = Teselagen.manager.ProjectManager.sequenceStore;
-            var sequenceCount = sequenceStore.data.items.length;
-            var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
-            var oldName = workingSequence.data.name;
-
-            for (var i=0; i < sequenceCount; i++) {
-                if (name === sequenceStore.data.items[i].data.name && selectedProj.internalId === sequenceStore.data.items[i].data.project_id) {
-                    if (name !== oldName) {
-                        Ext.MessageBox.show({
-                            title: "Name conflict",
-                            msg: "A sequence with the name '"+name+"' already exists in this project. <p> Please enter another name.",
-                            buttons: Ext.MessageBox.OK,
-                        });
-                        return Ext.MessageBox;
-                    }
-                }
-            }
-
             workingSequence.set("name", name);
-            workingSequence.save({
-                callback: function () {
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                        var projectTreePanel = Ext.ComponentQuery.query("component[id='projectTreePanel']")[0];
-                        projectTreePanel.expandPath("/root/" + selectedProj.data.id + "/" + workingSequence.data.id);
-                    });
-                }
-            });
+            workingSequence.set("description", description);
+            sequenceManager.setName(name);
+            if (circular !== sequenceManager.getCircular()) {
+                sequenceManager.setCircular(circular);
+                viewMode = circular ? "circular" : "linear";
+                this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
+            }
+            workingSequence.setSequenceManager(sequenceManager);
+
+            if (workingSequence.dirty) {
+                workingSequence.save({
+                    callback: function () {
+                    }
+                });
+            }
             
             propertiesWindow.close();
         }
+    },
+    
+    onTabChange: function(pTabpanel, pNewCard) {
+        if (pNewCard.cls === "propertiesGenBank") {
+            this.onSelectGenbank();
+        }
+    },
+    
+    onSelectGenbank: function() {
+        var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
+        var genbankData = this.FormatUtils.sequenceManagerToGenbank(sequenceManager);
+        var propertiesWindow = Ext.ComponentQuery.query("window[cls='PropertiesWindow']")[0];
+        propertiesWindow.down("component[cls='propertiesWindowGenBankData']").setValue(genbankData);
     },
 
     init: function() {
@@ -375,6 +379,9 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             },
             "gridpanel[name='cutSitesGridPanel']": {
                 select: this.onToggleShowCutSites,
+            },
+            "tabpanel[cls='propertiesWindowTabpanel']": {
+                tabchange: this.onTabChange
             }
         });
 
@@ -389,5 +396,6 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         this.ProjectManager = Teselagen.manager.ProjectManager;
         this.RestrictionEnzymeManager = Teselagen.manager.RestrictionEnzymeManager;
         this.SequenceController = this.application.getVectorEditorSequenceControllerController();
+        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
     }
 });

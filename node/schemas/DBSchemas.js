@@ -70,6 +70,7 @@ module.exports = function(db) {
 			ref: 'user'
 		},
 		name: String,
+		description: String,
 		dateCreated: String,
 		dateModified: String,
 		ve_metadata: Mixed,

@@ -95,6 +95,9 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "name",
         type: "string"
     }, {
+        name: "description",
+        type: "string"
+    }, {
         name: "sequenceFileFormat",
         convert: function(v) {
             var format = v;
@@ -198,7 +201,10 @@ Ext.define("Teselagen.models.SequenceFile", {
             return v;
         }
     },
-
+    {
+        name: "ve_metadata", 
+        type: "auto"
+    }
     ],
     associations: [{
         type: "belongsTo",

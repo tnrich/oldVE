@@ -18,6 +18,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                 {
                     xtype: 'tabpanel',
                     width: 520,
+                    cls: 'propertiesWindowTabpanel',
                     items: [
                         {
                             xtype: 'panel',
