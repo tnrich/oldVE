@@ -185,10 +185,9 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         btn.toggle();
     },
 
-    setParameters: function(j5Parameters,masterFiles,assemblyMethod){
-        this.j5Parameters = j5Parameters.getParametersAsArray(true);
+    setParameters: function(j5Parameters, masterFiles, assemblyMethod, circular) {
+        this.j5Parameters = j5Parameters.getParametersAsArray(circular);
         this.masterFiles = masterFiles;
         this.assemblyMethod = assemblyMethod;
     }
-
 });
