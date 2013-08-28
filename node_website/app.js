@@ -25,8 +25,9 @@ var config = require('./config.js')(app, express);
 // models.users = require('./models/user')(app.mongoose).model;
 
 // Routes
-require('./routes/index.js')(app);
-require('./routes/authentication.js')(app);
+require('./routes/index.js')(app, express);
+require('./routes/constants')(app, express);
+require('./routes/authentication.js')(app, express);
 
 // require('./routes/user-admin.js')(app, models);
 

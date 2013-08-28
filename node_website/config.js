@@ -8,9 +8,6 @@ module.exports = function(app, express){
 
   var config = this;
 
-  //EveryAuth Config
-  // require('./auth.js')(app, express);
-
   var server = require('http').Server(app);
 
   require('./environments').readEnvironments(app);
@@ -19,9 +16,9 @@ module.exports = function(app, express){
 
 
    var Opts = {
-        host: "localhost",
+        host: "127.0.0.1",
         port: 27017,
-        authHost: "mongodb://localhost/" + app.dbname
+        authHost: "mongodb://127.0.0.1/" + app.dbname
     }; 
 
   if (!app.settings.env) {app.settings.env="development";}
@@ -42,7 +39,7 @@ module.exports = function(app, express){
                 store: new MongoStore(
                     {
                         db: app.dbname,
-                        host: 'localhost',
+                        host: '127.0.0.1',
                         collection: 'sessions',
                         auto_reconnect: true
                     }
@@ -128,6 +125,14 @@ module.exports = function(app, express){
           }
       });
       app.GridStoreDB = db;
+  
+      app.mailer = app.nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "teselagen.testing@gmail.com",
+            pass: "teselagen#rocks"
+        }
+        });
 
 
       // Init MONGODB - MONGOOSE (ODM)
