@@ -13,13 +13,13 @@ function registerUser(registrationInfo) {
         }
 	})
 		.done(
-			function(user) {
-				console.log("User Registered");
+			function(data) {
+				window.location.replace(data.redirect);
 			}
 			)
 		.fail(
 			function() { 
-				console.log("Error registering User");
+				window.location.replace("/loginUser");
 			}
 			)
 		.always();	
@@ -27,18 +27,26 @@ function registerUser(registrationInfo) {
 
 
 $(document).ready(function() {
-	$('#signup_form')
-		.on('valid', function() {
-			var registrationInfo = {
-				registerFirstNameField: 			$("#first_name").val(),
-				registerLastNameField: 				$("#last_name").val(),
-				registerUsernameField: 				$("#username").val(),
-				registerPasswordField: 				$("#password").val(),
-				registerEmailField:     			$("#email").val(),
-				registerOrganizationTypeComboBox: 	$("#organization").val(),
-			}
-			registerUser(registrationInfo);
-		});
 	
+	$("a#signup_submit").on("click", function() {
+    	$( '#signup_form' ).parsley('validate');
+
+		if($('#signup_form').parsley('isValid')) {
+				var registrationInfo = {
+					registerFirstNameField: 			$("#first_name").val(),
+					registerLastNameField: 				$("#last_name").val(),
+					registerUsernameField: 				$("#username").val(),
+					registerPasswordField: 				$("#password").val(),
+					registerEmailField:     			$("#email").val(),
+					registerOrganizationTypeComboBox: 	$("#organization").val(),
+				}
+				registerUser(registrationInfo);
+		}
+	});
+
+	$("a#login_submit").on("click", function() {
+    	$( '#login_form' ).parsley('validate');
+	});
+
 });
 

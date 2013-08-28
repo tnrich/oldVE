@@ -32,38 +32,33 @@ html(lang='en')
                 img(src="/img/teselagen_toplogo.png")
             .large-6.small-6.page-header.large-centered.small-centered.columns Sign Up
             .large-6.small-6.large-centered.small-centered.columns
-                form(data-abide)#signup_form.custom
+                form(data-validate="parsley")#signup_form.custom
                     .row
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='first_name') First Name
                             .large-9.small-9.columns
-                                input(type='text', id='first_name', placeholder='First Name', required)
-                                small.error First Name is required and must be a string.
+                                input(type='text', id='first_name', placeholder='First Name', data-required="true")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='last_name') Last Name
                             .large-9.small-9.columns
-                                input(type='text', id='last_name', placeholder='Last Name', required)
-                                small.error Last Name is required and must be a string.
+                                input(type='text', id='last_name', placeholder='Last Name', data-required="true")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='username') Username
                             .large-9.small-9.columns
-                                input(type='text', id='username', placeholder='Username', required)
-                                small.error Username is required and must be a string.
+                                input(type='text', id='username', placeholder='Username', data-required="true", data-type="alphanum")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='password') Password
                             .large-9.small-9.columns
-                                input(type="password", id='password', required)
-                                small.error Passwords must be at least 8 characters with 1 capital letter, 1 number, and one special character.
+                                input(type="password", id='password', data-required="true")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='email') Email
                             .large-9.small-9.columns
-                                input(type='email', id='email', placeholder='Email')
-                                small.error Valid email is required.
+                                input(type='email', id='email', placeholder='Email', data-required="true", data-type="email")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='organization') Organization
@@ -76,9 +71,8 @@ html(lang='en')
                                     option Academic Lab
                                     option Gene Hacker
                                     option Other
-                                small.error Organization is required.
                         .row.registration-buts
-                                button(type="submit").radius.expand Sign Up Now
+                                a.button.radius.expand#signup_submit Sign Up Now
                                 a.button.radius.secondary.expand(href='/loginuser') Already on TeselaGen? Log In Now.
 
     .large-5.small-5.large-centered.small-centered.columns#footer2_links
@@ -104,6 +98,7 @@ html(lang='en')
 
 script document.write('<script src=/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js><\/script>');
 script(src='/js/jquery-1.10.2.min.js')
+script(src='/js/parsley.js')
 script(src='/js/application.js')
 script(src='/js/foundation.min.js')
 script $(document).foundation();

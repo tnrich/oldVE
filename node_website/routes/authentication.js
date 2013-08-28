@@ -123,7 +123,6 @@ module.exports = function(app, express) {
 
     app.post('/registerUser', function(req, res) {
         var User = app.db.model("User");
-        console.log(req.body.username);
         User.findOne({
             username: req.body.username
         }, function(err, user) {
@@ -150,7 +149,6 @@ module.exports = function(app, express) {
                     activationCode: crypto.randomBytes(32).toString("hex")
                 }, function(err, user) {
                     if(err) {
-                        throw err;
                         res.json({
                             success: false,
                             msg: "Error creating user."
@@ -159,6 +157,7 @@ module.exports = function(app, express) {
                         sendRegisteredMail(user, user.activationCode);
                         res.json({
                             success: false,
+                            redirect: '/loginUser',
                             msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."
                         });
                     }
