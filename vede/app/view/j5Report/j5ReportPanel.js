@@ -237,6 +237,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     title: 'Output Assembled Constructs',
                     overflowY: 'auto',
                     layout: 'fit',
+                    forceFit: true,
                     columns: [
                         {
                             xtype: 'gridcolumn',
@@ -263,11 +264,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'parts',
-                            flex: 1,
                             dirty: false,
+                            flex: 2,
                             text: 'Parts Contained',
                             renderer: function(val) {
-                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ",");
+                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ", ");
                                 return '<div style="white-space:normal !important;">'+ val +'</div>';
                             }
                         }

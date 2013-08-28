@@ -231,7 +231,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 self.populateJ5ParametersDialog();
                 isCircular = r.ASSEMBLY_PRODUCT_TYPE == 'circular' ? true : false;
-                Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign()().set('isCircular',isCircular);
+                Ext.getCmp('mainAppPanel').getActiveTab().model.set('isCircular',isCircular);
+
+                var radio = Ext.getCmp('mainAppPanel').getActiveTab().down('radiogroup[cls="plasmid_geometry"]');
+
+                if(isCircular) {
+                    radio.setValue({plasmidType: 'circular'});
+                } else {
+                    radio.setValue({plasmidType: 'linear'});
+                }
             },
             failure: function(responseData, opts) {
                 self.j5ParamsWindow.setLoading(false);
@@ -640,8 +648,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         if(assemblyMethod == "Combinatorial SLIC/Gibson/CPEC") assemblyMethod = "CombinatorialSLICGibsonCPEC";
         if(assemblyMethod == "Combinatorial Golden Gate") assemblyMethod = "CombinatorialGoldenGate";
 
+        var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
+
         inspector.j5comm = Teselagen.manager.J5CommunicationManager;
-        inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
+        inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod, design.get("isCircular"));
 
         this.j5Running = true;
 

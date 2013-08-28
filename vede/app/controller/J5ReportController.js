@@ -25,14 +25,16 @@ Ext.define("Vede.controller.J5ReportController", {
         var mask = new Ext.LoadMask({target: currentTab});
         mask.setVisible(true, false);
 
-        var ext = record.data.name.split('.').pop();
+        var splitByPeriod = record.data.name.split(".");
+        var ext = splitByPeriod.pop();
+        var partSource = splitByPeriod.join(".");
 
         Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.fileContent,ext,function(gb){
             var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
                 "GENBANK",
                 gb,
                 record.data.name,
-                ""
+                partSource
             );
 
             // Javascript waits to render the loading mask until after the call to
