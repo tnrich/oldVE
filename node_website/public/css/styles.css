@@ -457,6 +457,10 @@ background: none;
     opacity: 1;
 }
 
+.page-logo img {
+    width: 70%;
+}
+
 .registration-buts {
     margin-top: 40px;
 }
