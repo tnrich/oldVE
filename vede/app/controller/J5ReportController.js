@@ -47,7 +47,8 @@ Ext.define("Vede.controller.J5ReportController", {
 
     downloadResults: function(){
         if (this.activeJ5Run) {
-            location.href = '/api/getfile/'+this.activeJ5Run.data.file_id;
+            var url = 'getfile/'+this.activeJ5Run.data.file_id;
+            location.href = Teselagen.manager.SessionManager.buildUrl(url, '')
         }
     },
 

@@ -73,6 +73,10 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         hidden: true,
         autoScroll: true,
         border: 0,
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
         dockedItems: [{
                     xtype: 'toolbar',
                     height: 100,
@@ -231,9 +235,8 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     name: 'assemblies',
                     margin: '10 10 20 10',
                     title: 'Output Assembled Constructs',
-                    minHeight: 100,
+                    overflowY: 'auto',
                     layout: 'fit',
-                    autoScroll: true,
                     columns: [
                         {
                             xtype: 'gridcolumn',
