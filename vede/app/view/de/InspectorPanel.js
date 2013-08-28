@@ -243,10 +243,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             ]
                         },
                         {
-                            xtype: 'gridpanel',
+                            xtype: 'collectioninfogrid',
                             cls: 'inspectorGrid',
-                            anchor:"100% 65%",
-                            xtype: 'collectioninfogrid'
+                            anchor:"100% 65%"
                         }
                             
                         // {
