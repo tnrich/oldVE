@@ -212,8 +212,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             forceFit: true,
                             flex: 1,
                             renderer: function(val) {
-                                val = val.substring(0, val.indexOf(" at")).substring(0, val.indexOf("."));
-                                return '<div style="white-space:normal !important;">'+ val +'.</div>';
+                                //val = val.substring(0, val.indexOf(" at")).substring(0, val.indexOf("."));
+                                //return '<div style="white-space:normal !important;">'+ val +'.</div>';
+                                return val;
                             }
                         }
                     ],
