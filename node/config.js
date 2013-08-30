@@ -174,7 +174,8 @@ module.exports = function(app, express) {
     app.j5client = app.xmlrpc.createClient({
         host: 'j5dev.teselagen.com',
         port: 80,
-        path: '/j5/j5_xml_rpc.pl'
+        path: '/j5/j5_xml_rpc.pl',
+        timeout: 5000
     });
 
     // Init XML PARSER
