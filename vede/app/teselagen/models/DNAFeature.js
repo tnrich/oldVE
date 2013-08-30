@@ -22,6 +22,7 @@ Ext.define("Teselagen.models.DNAFeature", {
 		{name: "type", type: "string", defaultValue: ""},
 		{name: "annotationType", type: "string", defaultValue: ""},
 		{name: "notes",	type: "auto", defaultValue: null},
-		{name: "locations", type: "auto", defaultValue: null}
+		{name: "start", type: "int", defaultValue: 0},
+		{name: "end", type: "int", defaultValue: 0}
 	]
 });
