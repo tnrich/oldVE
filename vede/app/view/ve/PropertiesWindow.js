@@ -112,13 +112,11 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     text: 'Type',
                                                 },
                                                 {
-                                                    xtype: 'gridcolumn',
+                                                    xtype: 'templatecolumn',
                                                     cls: 'featuresPositionColumn',
-                                                    dataIndex: 'locations',
+                                                    dataIndex: 'start',
                                                     text: 'Position',
-                                                    renderer: function(value, feature) {
-                                                        return value[0].start + " - " + value[0].end;
-                                                    }
+                                                    tpl: '{start} - {end}'
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
