@@ -2,31 +2,30 @@
  * @class Teselagen.manager.ProjectExplorerManager
  */
 Ext.define("Teselagen.manager.ProjectExplorerManager", {
-	
-	requires: [],
-    
-	singleton: true,
-	projectsData: {},
+    requires: [],
 
-	load: function(cb){
-		this.loadData(this.reRenderProjectExplorer,cb,this);
-	},
+    singleton: true,
+    projectsData: {},
 
-	loadData: function(cb,cb2,scope){
-		var self = scope;
-		Ext.Ajax.request({
-		    url: Teselagen.manager.SessionManager.buildUserResUrl("/projectExplorer/getData", ""),
-		    success: function(response){
-		        self.projectsData = JSON.parse(response.responseText);
-		        return cb(self,cb2);
-		    }
-		});
-	},
+    load: function(cb){
+        this.loadData(this.reRenderProjectExplorer,cb,this);
+    },
 
-	reRenderProjectExplorer: function(scope,cb){
-		var projects = scope.projectsData;
-		var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
-        
+    loadData: function(cb,cb2,scope){
+        var self = scope;
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUserResUrl("/projectExplorer/getData", ""),
+            success: function(response){
+                self.projectsData = JSON.parse(response.responseText);
+                return cb(self,cb2);
+            }
+        });
+    },
+
+    reRenderProjectExplorer: function(scope,cb){
+        var projects = scope.projectsData;
+        var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
+
         rootNode.removeAll(); // Remove existing subnodes
 
         projects.forEach(function (project) {
@@ -47,56 +46,55 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 icon: "resources/images/add.png"
             });
 
-            
             project.designs.forEach(function(design){
 
-	            // Append design to project node
-	            var designnode = projectNode.appendChild({
-	                text: design.name,
-	                type: "design",
-	                leaf: false,
-	                id: design.id,
-	                hrefTarget: "opende",
-	                icon: "resources/images/ux/design-tree-icon-leaf.png",
-	                qtip: "Design " + design.name
-	            });
+                    // Append design to project node
+                    var designnode = projectNode.appendChild({
+                        text: design.name,
+                        type: "design",
+                        leaf: false,
+                        id: design.id,
+                        hrefTarget: "opende",
+                        icon: "resources/images/ux/design-tree-icon-leaf.png",
+                        qtip: "Design " + design.name
+                    });
 
-	            // Append j5Report to design
-	            designnode.appendChild({
-	                text: "J5 Reports",
-	                leaf: true,
-	                type: "report",
-	                id: design.id+"report",
-	                hrefTarget: "j5reports",
-	                icon: "resources/images/ux/j5-tree-icon-parent.png",
-	                qtip: design.name + " Report"
-	            });
+                    // Append j5Report to design
+                    designnode.appendChild({
+                        text: "J5 Reports",
+                        leaf: true,
+                        type: "report",
+                        id: design.id+"report",
+                        hrefTarget: "j5reports",
+                        icon: "resources/images/ux/j5-tree-icon-parent.png",
+                        qtip: design.name + " Report"
+                    });
 
-	            // Append parts node to design
-	            var partnode = designnode.appendChild({
-	                text: "Parts",
-	                leaf: false,
-	                id: design.id+"parts",
-	                icon: "resources/images/ux/circular.png",
-	                qtip: design.name + " Parts"
-	            });
+                    // Append parts node to design
+                    var partnode = designnode.appendChild({
+                        text: "Parts",
+                        leaf: false,
+                        id: design.id+"parts",
+                        icon: "resources/images/ux/circular.png",
+                        qtip: design.name + " Parts"
+                    });
 
-	            design.parts.forEach(function(part){
-		            partnode.appendChild({
-		                text: part.name,
-		                leaf: true,
-		                id: part.id+"part",
-		                hrefTarget: "part",
-		                icon: "resources/images/ux/circular.png",
-		                qtip: "Part " + part.name
-		            });
-	            });
-			});
-	});
-	if(typeof (cb) === "function") {cb(); }
-	},
+                    design.parts.forEach(function(part){
+                            partnode.appendChild({
+                                text: part.name,
+                                leaf: true,
+                                id: part.id+"part",
+                                hrefTarget: "part",
+                                icon: "resources/images/ux/circular.png",
+                                qtip: "Part " + part.name
+                            });
+                    });
+                        });
+        });
+        if(typeof (cb) === "function") {cb(); }
+        },
 
-	openDesign: function(design_id,project_id,cb){
+        openDesign: function(design_id,project_id,cb){
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         
         project.designs().load({
@@ -107,51 +105,51 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 if(typeof (cb) === "function") {cb(); }
             }
         });
-	},
+    },
 
-	openJ5Report: function(design_id,project_id,cb){
-		var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        project.designs().load({
-            id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                var design = loadedDesign[0];
-                //console.log(design);
-                //var j5report = loadedDesign[0].j5runs();
-                Teselagen.manager.ProjectManager.openj5Report(design);
+    openJ5Report: function(design_id,project_id,cb){
+            var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+    project.designs().load({
+        id: design_id,
+        callback: function (loadedDesign) {
+            Teselagen.manager.ProjectManager.workingProject = project;
+            var design = loadedDesign[0];
+            //console.log(design);
+            //var j5report = loadedDesign[0].j5runs();
+            Teselagen.manager.ProjectManager.openj5Report(design);
+            if(typeof (cb) === "function") {cb(); }
+        }
+    });	
+    },
+
+    openPart: function(part_id,cb){
+    var continueProcess = function(part){
+        part.getSequenceFile({
+            callback: function (loadedsequence) {
+                //Teselagen.manager.ProjectManager.workingProject = project;
+                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, loadedsequence, part);
+                // Teselagen.manager.ProjectManager.openSequence(loadedsequence);
                 if(typeof (cb) === "function") {cb(); }
             }
-        });	
-	},
+        });
+    };
 
-	openPart: function(part_id,cb){
-        var continueProcess = function(part){
-            part.getSequenceFile({
-                callback: function (loadedsequence) {
-                    //Teselagen.manager.ProjectManager.workingProject = project;
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, loadedsequence, part);
-                    // Teselagen.manager.ProjectManager.openSequence(loadedsequence);
-                    if(typeof (cb) === "function") {cb(); }
-                }
-            });
-        };
+    var partsStore = Teselagen.manager.ProjectManager.parts;
+    var part = partsStore.getById(part_id);
 
-        var partsStore = Teselagen.manager.ProjectManager.parts;
-        var part = partsStore.getById(part_id);
-
-        if(part) continueProcess(part);
-        else
-        {
-            partsStore.load({
-                params: {
-                    id: part_id
-                },
-                callback: function(parts){
-                    continueProcess(parts[0]);
-                }
-            })
-        }
-	},
+    if(part) continueProcess(part);
+    else
+    {
+        partsStore.load({
+            params: {
+                id: part_id
+            },
+            callback: function(parts){
+                continueProcess(parts[0]);
+            }
+        });
+    }
+    },
 
 
     onExplorerMenuItemClick: function(menuitem, record) {
@@ -160,6 +158,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
         var selectedRecord = selectedNode.data;
         var selectedRecordType = selectedRecord.hrefTarget;
         var selectedRecordId = selectedRecord.id;
+        var selectedProject;
         var self = this;
 
         var expandPathCallback = function(){
@@ -167,14 +166,14 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
         };
 
         switch (menuitem.text) {
-            case "Rename": 
+            case "Rename":
                 switch(selectedRecordType) {
                     case "openproj":
-                        var selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecordId);
+                        selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecordId);
                         self.renameProject(selectedProject, expandPathCallback);
                         break;
                     case "opende":
-                        var selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
+                        selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
                         console.log(selectedRecord.parentId);
                         selectedProject.designs().load({
                             id: selectedRecord.id,
@@ -197,7 +196,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                         break;
                     case "opende":
                         console.log("delete design");
-                        var selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
+                        selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
                         selectedProject.designs().load({
                             id: selectedRecord.id,
                             callback: function (loadedDesign) {
@@ -235,7 +234,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
     renameDesign: function(selectedDesign,cb){
         var self = this;
 
-        tab = Ext.getCmp("mainAppPanel").query("component[title='" + selectedDesign.get("name") + "']")[0]
+        var tab = Ext.getCmp("mainAppPanel").query("component[title='" + selectedDesign.get("name") + "']")[0];
 
         self.promptName("Please enter a design name:",function(text){
             selectedDesign.set('name',text);
@@ -272,7 +271,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
         var onPromptClosed = function (btn, text){
             if(btn === "ok") {
                 text = Ext.String.trim(text);
-                if(text === "") { return Ext.MessageBox.prompt("Name", promptText, onPromptClosed, this); }
+                if(text === "") {return Ext.MessageBox.prompt("Name", promptText, onPromptClosed, this);}
                 cb(text);
             }
         };

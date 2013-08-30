@@ -25,11 +25,11 @@ Ext.define("Vede.controller.ProjectExplorerController", {
     },
 
     resolveAndopenDeviceDesign: function (record) {
-    	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
-    	oldTab.el.mask("Loading design", "loader rspin");
+        var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        oldTab.el.mask("Loading design", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-    	var design_id = record.data.id;
+        var design_id = record.data.id;
         var project_id = record.parentNode.data.id;
         Teselagen.manager.ProjectExplorerManager.openDesign(design_id,project_id,function(){
             oldTab.el.unmask();
@@ -53,14 +53,14 @@ Ext.define("Vede.controller.ProjectExplorerController", {
 
 
     resolveAndOpenj5Reports: function (record) {
-    	var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
-    	oldTab.el.mask("Loading j5 report", "loader rspin");
-    	
+        var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        oldTab.el.mask("Loading j5 report", "loader rspin");
+
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-    	var design_id = record.data.id.replace("report","");
+        var design_id = record.data.id.replace("report","");
         var project_id = record.parentNode.parentNode.data.id;
-        
+
         Teselagen.manager.ProjectExplorerManager.openJ5Report(design_id,project_id,function(){
             oldTab.el.unmask();
         });
