@@ -175,7 +175,7 @@ module.exports = function(app, express) {
         host: 'j5dev.teselagen.com',
         port: 80,
         path: '/j5/j5_xml_rpc.pl',
-        timeout: 180000
+        timeout: 600000 //ms timeout
     });
 
     // Init XML PARSER
