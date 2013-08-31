@@ -1,4 +1,3 @@
-
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;

@@ -1207,7 +1207,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             sequenceFileFormat: pSequenceFileFormat,
             sequenceFileContent: pSequenceFileContent,
             sequenceFileName: pSequenceFileName,
-            partSource: pPartSource
+            partSource: pPartSource,
+            name: pPartSource
         });
 
         // GO BACK AND FIX THIS VALIDATOR

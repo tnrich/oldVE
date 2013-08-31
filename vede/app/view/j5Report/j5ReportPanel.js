@@ -73,6 +73,10 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         hidden: true,
         autoScroll: true,
         border: 0,
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
         dockedItems: [{
                     xtype: 'toolbar',
                     height: 100,
@@ -208,8 +212,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             forceFit: true,
                             flex: 1,
                             renderer: function(val) {
-                                val = val.substring(0, val.indexOf(" at")).substring(0, val.indexOf("."));
-                                return '<div style="white-space:normal !important;">'+ val +'.</div>';
+                                //val = val.substring(0, val.indexOf(" at")).substring(0, val.indexOf("."));
+                                //return '<div style="white-space:normal !important;">'+ val +'.</div>';
+                                return val;
                             }
                         }
                     ],
@@ -231,9 +236,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     name: 'assemblies',
                     margin: '10 10 20 10',
                     title: 'Output Assembled Constructs',
-                    minHeight: 100,
+                    overflowY: 'auto',
                     layout: 'fit',
-                    autoScroll: true,
+                    forceFit: true,
                     columns: [
                         {
                             xtype: 'gridcolumn',
@@ -260,11 +265,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         {
                             xtype: 'gridcolumn',
                             dataIndex: 'parts',
-                            flex: 1,
                             dirty: false,
+                            flex: 2,
                             text: 'Parts Contained',
                             renderer: function(val) {
-                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ",");
+                                val = val.replace(/\(/g, "").replace(/\)_/g, ", ").replace(/\)/g, "").replace(/\,/g, ", ");
                                 return '<div style="white-space:normal !important;">'+ val +'</div>';
                             }
                         }

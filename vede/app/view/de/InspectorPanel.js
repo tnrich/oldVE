@@ -228,25 +228,24 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             allowBlank: false,
                             items: [
                                 {
-                                    xtype: 'radiofield',
                                     cls: 'circular_plasmid_radio',
-                                    name: 'plasmidtype',
+                                    name: 'plasmidType',
+                                    inputValue: 'circular',
                                     boxLabel: 'Circular',
                                     checked: true
                                 },
                                 {
-                                    xtype: 'radiofield',
                                     cls: 'linear_plasmid_radio',
-                                    name: 'plasmidtype',
+                                    name: 'plasmidType',
+                                    inputValue: 'linear',
                                     boxLabel: 'Linear'
                                 }
                             ]
                         },
                         {
-                            xtype: 'gridpanel',
+                            xtype: 'collectioninfogrid',
                             cls: 'inspectorGrid',
-                            anchor:"100% 65%",
-                            xtype: 'collectioninfogrid'
+                            anchor:"100% 65%"
                         }
                             
                         // {

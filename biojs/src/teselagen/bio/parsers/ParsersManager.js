@@ -135,8 +135,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 progressBar.css("width", context.startCount+'%');
                 
                 self.parseSequence(data, ext, function(gb) {
-
-               
                     if(!gb) return cb(true,context); // If no gb then parsing failed.
                     if(!(gb instanceof Array)) gb = [gb];  // gb can be or not an array, we will enforce being an array
 
@@ -179,7 +177,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             sequenceFileContent: currentGB,
             sequenceFileFormat: "GENBANK",
             name: name,
-            firstTimeImported: true,
+            sequenceFileName: name,
+            firstTimeImported: true
         });
 
         try {
@@ -232,11 +231,11 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     {
                         var msg = toastr.warning("Error: Duplicated Sequence");
                         
-                        var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.name;
+                        var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
                         var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
                         var duplicateMessage = 'Exact sequence already exists in library with' + 
-                                               ' name ' + duplicateFileName;
+                                               ' filename ' + duplicateFileName;
 
                         var messageIndex = self.batchImportMessages.findBy(function(record) {
                             var messages = record.get('messages');

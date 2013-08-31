@@ -208,12 +208,13 @@ function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
-
   var handleErrors = function(err,newj5Run){
+    console.log(err);
     newj5Run.status = "Error";
     newj5Run.endDate = Date.now();
     newj5Run.error_list.push({"error":err});
     newj5Run.save();
+    throw new Error(err);
   };
 
 
@@ -222,16 +223,16 @@ function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
   var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'w');
     // Open the file
     gridStore.open(function(err, gridStore) {
-      if(err) {console.log(err); return handleErrors(err,newj5Run);}
+      if(err) return handleErrors(err,newj5Run);
       // Write some data to the file
       gridStore.write(fileData, function(err, gridStore) {
-        if(err) {console.log(err); return handleErrors(err,newj5Run);}
+        if(err) return handleErrors(err,newj5Run);
         // Close (Flushes the data to MongoDB)
         gridStore.close(function(err, result) {
-          if(err) {console.log(err); return handleErrors(err,newj5Run);}
+          if(err) return handleErrors(err,newj5Run);
           // Verify that the file exists
           app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
-            if(err) {console.log(err); return handleErrors(err,newj5Run);}
+            if(err) return handleErrors(err,newj5Run);
             
             processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
 
@@ -244,9 +245,7 @@ function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
 
               newj5Run.save(function(){
                 deproject.j5runs.push(newj5Run);
-                deproject.save(function(){
-                  app.GridStoreDB.close();
-                });
+                deproject.save();
               });
 
             });
@@ -356,8 +355,8 @@ app.post('/executej5',restrict,function(req,res){
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error)
         {
-          // Catch error during j5 RPC execution
-          console.log(error);
+          if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
+          
           newj5Run.status = "Error";
           newj5Run.endDate = Date.now();
           newj5Run.error_list.push({"error":error});

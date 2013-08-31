@@ -9,7 +9,7 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 	
 	addCommand: function(command) {
 		var gridManager = Teselagen.manager.GridManager;
-		var tab = gridManager.currentTab;
+		var tab = Ext.getCmp("mainAppPanel").getActiveTab();
 
         if(!tab.commandPattern) {
             tab.commandPattern = [];
@@ -23,8 +23,10 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 			tab.commandPattern.push(command);
 		}
 
-		gridManager.undoMenuItem.setDisabled(false);
-		gridManager.redoMenuItem.setDisabled(true);
+        if(gridManager.undoMenuItem) {
+            gridManager.undoMenuItem.setDisabled(false);
+            gridManager.redoMenuItem.setDisabled(true);
+        }
 	},
 	
 	undo: function() {
@@ -321,7 +323,7 @@ Ext.define("Teselagen.manager.GridCommandPatternManager", {
 		
 		if(command.data.partAdded) {
 			gridManager.activeProject.parts().remove(command.data.newPart);			
-			//gridManager.activeProject.parts().add(command.data.oldPart);
+			gridManager.activeProject.parts().add(command.data.oldPart);
 		}
 		gridManager.activeProject.bins().getAt(xIndex).cells().getAt(yIndex).setPart(command.data.oldPart);
 		inspectorController.onCellSelected(cell, xIndex, yIndex);

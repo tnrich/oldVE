@@ -60,7 +60,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * delete the part from the correct bin.
      */
     onClearPart: function() {
+        var newPart = Ext.create("Teselagen.models.Part");
+
         this.clearPartInfo();
+        this.selectedPart = null;
+
+        this.partPropertiesForm.loadRecord(newPart);
         toastr.options.onclick = null;
         toastr.info("Part Cleared");
         this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);

@@ -11,7 +11,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     currentResults: null,
 
-    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Ext.data.Store","Teselagen.manager.SessionManager.buildUrl"],
+    requires: ["Teselagen.bio.util.Sha256", "Teselagen.constants.Constants", "Ext.data.Store","Teselagen.manager.SessionManager"],
 
     statics: {},
 
@@ -185,10 +185,9 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         btn.toggle();
     },
 
-    setParameters: function(j5Parameters,masterFiles,assemblyMethod){
-        this.j5Parameters = j5Parameters.getParametersAsArray(true);
+    setParameters: function(j5Parameters, masterFiles, assemblyMethod, circular) {
+        this.j5Parameters = j5Parameters.getParametersAsArray(circular);
         this.masterFiles = masterFiles;
         this.assemblyMethod = assemblyMethod;
     }
-
 });

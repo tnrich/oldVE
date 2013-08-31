@@ -23,7 +23,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         xtype: 'container',
         layout: {
             type: 'vbox',
-            align: 'stretch',
+            align: 'stretch'
         },
         border: 0,
         width: 220,
@@ -43,7 +43,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         overCls: 'sequenceLibraryBtn-over',
                         textAlign: 'left',
                         margin: 0,
-                        height: 30,
+                        height: 30
                     },
                     {
                         xtype: 'button',
@@ -69,7 +69,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                 overCls: 'partsLibraryBtn-over',
                 textAlign: 'left',
                 margin: 0,
-                height: 30,
+                height: 30
             }]
     },
     {
@@ -128,7 +128,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                 });
                 menu.showAt(event.getXY());
                 event.stopEvent();
-                event.preventDefault;
+                event.preventDefault();
             }
         }
 

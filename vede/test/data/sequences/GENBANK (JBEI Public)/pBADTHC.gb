@@ -1,0 +1,277 @@
+LOCUS       pBADTHC                 6990 bp    DNA     circular
+ACCESSION   pBADTHC
+VERSION     pBADTHC.1
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     CDS             complement(3961..4839)
+                     /label=araC
+                     /vntifkey="4"
+     source          289..301
+                     /label=Cloning vector pBBR1MCS-2
+                     /plasmid="pBBR1MCS-2"
+                     /lab_host="Bordetella bronchiseptica"
+                     /vntifkey="98"
+                     /mol_type="genomic DNA"
+                     /note="modification of cloning vector pBBR1MCS, GenBank
+                     Accession Number U02374; gene encoding chloramphenical
+                     resistance replaced by gene encoding kanamycin resistance"
+                     /db_xref="taxon:39477"
+                     /organism="Cloning vector pBBR1MCS-2"
+     CDS             6288..6983
+                     /label=Decarb_codon_opt
+                     /vntifkey="4"
+     promoter        complement(4990..5018)
+                     /label=araC promoter
+                     /vntifkey="30"
+     promoter        5078..5142
+                     /label=PBAD
+                     /vntifkey="30"
+     misc_binding    5069..5082
+                     /label=CAP site
+                     /vntifkey="20"
+     misc_feature    1..129
+                     /label=dbl term
+                     /vntifkey="21"
+     CDS             complement(302..1100)
+                     /label=mob
+                     /db_xref="GI:773416.0"
+                     /gene="mob"
+                     /codon_start=1
+                     /vntifkey="4"
+                     /transl_table=11
+                     /product="Mob"
+                     /protein_id="AAB05991.1"
+                     /function="required for plasmid mobilization"
+     misc_feature    5152..5188
+                     /label=T7 stem loop
+                     /vntifkey="21"
+     gene            2094..2756
+                     /label=rep
+                     /vntifkey="60"
+                     /gene="rep"
+     misc_feature    5101..5116
+                     /label=I2box
+                     /vntifkey="21"
+     CDS             2094..2756
+                     /label=rep
+                     /transl_table=11
+                     /vntifkey="4"
+                     /gene="rep"
+                     /product="Rep"
+                     /db_xref="GI:773413.0"
+                     /codon_start=1
+                     /protein_id="AAB05988.1"
+                     /function="required for plasmid replication"
+     source          150..288
+                     /label=Cloning vector pBBR1MCS-2
+                     /mol_type="genomic DNA"
+                     /vntifkey="98"
+                     /db_xref="taxon:39477"
+                     /lab_host="Bordetella bronchiseptica"
+                     /plasmid="pBBR1MCS-2"
+                     /note="modification of cloning vector pBBR1MCS, GenBank
+                     Accession Number U02374; gene encoding chloramphenical
+                     resistance replaced by gene encoding kanamycin resistance"
+                     /organism="Cloning vector pBBR1MCS-2"
+     misc_feature    5151
+                     /label=transcriptional start
+                     /vntifkey="21"
+     source          2880..2892
+                     /label=Cloning vector pBBR1MCS-2
+                     /organism="Cloning vector pBBR1MCS-2"
+                     /mol_type="genomic DNA"
+                     /vntifkey="98"
+                     /db_xref="taxon:39477"
+                     /note="modification of cloning vector pBBR1MCS, GenBank
+                     Accession Number U02374; gene encoding chloramphenical
+                     resistance replaced by gene encoding kanamycin resistance"
+                     /lab_host="Bordetella bronchiseptica"
+                     /plasmid="pBBR1MCS-2"
+     source          302..2878
+                     /label=Cloning vector pBBR1MCS-2
+                     /db_xref="taxon:39477"
+                     /plasmid="pBBR1MCS-2"
+                     /note="modification of cloning vector pBBR1MCS, GenBank
+                     Accession Number U02374; gene encoding chloramphenical
+                     resistance replaced by gene encoding kanamycin resistance"
+                     /mol_type="genomic DNA"
+                     /organism="Cloning vector pBBR1MCS-2"
+                     /lab_host="Bordetella bronchiseptica"
+                     /vntifkey="98"
+     misc_marker     complement(3024..3818)
+                     /label=Kan/neoR
+                     /note="encodes nptII (aka AphA, neoR), gives kan and neo
+                     resistance, with native promoter in on AatII and SpeI from
+                     Lutz vector pZE2PLtetO-1 MCS2"
+                     /vntifkey="22"
+     RBS             6268..6287
+                     /label=E. coli RBS
+                     /vntifkey="32"
+     protein_bind    4868..4885
+                     /label=operator O2
+                     /vntifkey="31"
+     CDS             5224..6249
+                     /label=Acyl_AP_codon_opt
+                     /vntifkey="4"
+     misc_feature    5079..5095
+                     /label=I1 box
+                     /vntifkey="21"
+     CDS             complement(150..1099)
+                     /label=mob
+                     /transl_table=11
+                     /codon_start=1
+                     /db_xref="GI:773416.0"
+                     /gene="mob"
+                     /protein_id="AAB05991.1"
+                     /vntifkey="4"
+                     /product="Mob"
+                     /function="required for plasmid mobilization"
+     misc_feature    6250..6267
+                     /label=spacer
+                     /vntifkey="21"
+     RBS             5204..5223
+                     /label=RBS
+                     /vntifkey="32"
+     source          2879
+                     /label=Cloning vector pBBR1MCS-2
+                     /plasmid="pBBR1MCS-2"
+                     /note="modification of cloning vector pBBR1MCS, GenBank
+                     Accession Number U02374; gene encoding chloramphenical
+                     resistance replaced by gene encoding kanamycin resistance"
+                     /vntifkey="98"
+                     /lab_host="Bordetella bronchiseptica"
+                     /mol_type="genomic DNA"
+                     /organism="Cloning vector pBBR1MCS-2"
+                     /db_xref="taxon:39477"
+     protein_bind    5078..5116
+                     /label=operator I2 and I1
+                     /vntifkey="31"
+     terminator      2893..2998
+                     /label=T0
+                     /vntifkey="43"
+     protein_bind    5026..5047
+                     /label=operator O1
+                     /vntifkey="31"
+     gene            complement(150..1100)
+                     /label=mob
+                     /vntifkey="60"
+                     /gene="mob"
+ORIGIN
+        1 ccaggcatca aataaaacga aaggctcagt cgaaagactg ggcctttcgt tttatctgtt
+       61 gtttgtcggt gaacgctctc tactagagtc acactggctc accttcgggt gggcctttct
+      121 gcgtttatac ctagggcgtt cggctgcggc tggcgctggg cctgtttctg gcgctggact
+      181 tcccgctgtt ccgtcagcag cttttcgccc acggccttga tgatcgcggc ggccttggcc
+      241 tgcatatccc gattcaacgg ccccagggcg tccagaacgg gcttcaggcg ctcccgaagg
+      301 tctcgggccg tctcttgggc ttgatcggcc ttcttgcgca tctcacgcgc tcctgcggcg
+      361 gcctgtaggg caggctcata cccctgccga accgcttttg tcagccggtc ggccacggct
+      421 tccggcgtct caacgcgctt tgagattccc agcttttcgg ccaatccctg cggtgcatag
+      481 gcgcgtggct cgaccgcttg cgggctgatg gtgacgtggc ccactggtgg ccgctccagg
+      541 gcctcgtaga acgcctgaat gcgcgtgtga cgtgccttgc tgccctcgat gccccgttgc
+      601 agccctagat cggccacagc ggccgcaaac gtggtctggt cgcgggtcat ctgcgctttg
+      661 ttgccgatga actccttggc cgacagcctg ccgtcctgcg tcagcggcac cacgaacgcg
+      721 gtcatgtgcg ggctggtttc gtcacggtgg atgctggccg tcacgatgcg atccgccccg
+      781 tacttgtccg ccagccactt gtgcgccttc tcgaagaacg ccgcctgctg ttcttggctg
+      841 gccgacttcc accattccgg gctggccgtc atgacgtact cgaccgccaa cacagcgtcc
+      901 ttgcgccgct tctctggcag caactcgcgc agtcggccca tcgcttcatc ggtgctgctg
+      961 gccgcccagt gctcgttctc tggcgtcctg ctggcgtcag cgttgggcgt ctcgcgctcg
+     1021 cggtaggcgt gcttgagact ggccgccacg ttgcccattt tcgccagctt cttgcatcgc
+     1081 atgatcgcgt atgccgccat gcctgcccct cccttttggt gtccaaccgg ctcgacgggg
+     1141 gcagcgcaag gcggtgcctc cggcgggcca ctcaatgctt gagtatactc actagacttt
+     1201 gcttcgcaaa gtcgtgaccg cctacggcgg ctgcggcgcc ctacgggctt gctctccggg
+     1261 cttcgccctg cgcggtcgct gcgctccctt gccagcccgt ggatatgtgg acgatggccg
+     1321 cgagcggcca ccggctggct cgcttcgctc ggcccgtgga caaccctgct ggacaagctg
+     1381 atggacaggc tgcgcctgcc cacgagcttg accacaggga ttgcccaccg gctacccagc
+     1441 cttcgaccac atacccaccg gctccaactg cgcggcctgc ggccttgccc catcaatttt
+     1501 tttaattttc tctggggaaa agcctccggc ctgcggcctg cgcgcttcgc ttgccggttg
+     1561 gacaccaagt ggaaggcggg tcaaggctcg cgcagcgacc gcgcagcggc ttggccttga
+     1621 cgcgcctgga acgacccaag cctatgcgag tgggggcagt cgaaggcgaa gcccgcccgc
+     1681 ctgccccccg agcctcacgg cggcgagtgc gggggttcca agggggcagc gccaccttgg
+     1741 gcaaggccga aggccgcgca gtcgatcaac aagccccgga ggggccactt tttgccggag
+     1801 ggggagccgc gccgaaggcg tgggggaacc ccgcaggggt gcccttcttt gggcaccaaa
+     1861 gaactagata tagggcgaaa tgcgaaagac ttaaaaatca acaacttaaa aaaggggggt
+     1921 acgcaacagc tcattgcggc accccccgca atagctcatt gcgtaggtta aagaaaatct
+     1981 gtaattgact gccactttta cgcaacgcat aattgttgtc gcgctgccga aaagttgcag
+     2041 ctgattgcgc atggtgccgc aaccgtgcgg caccctaccg catggagata agcatggcca
+     2101 cgcagtccag agaaatcggc attcaagcca agaacaagcc cggtcactgg gtgcaaacgg
+     2161 aacgcaaagc gcatgaggcg tgggccgggc ttattgcgag gaaacccacg gcggcaatgc
+     2221 tgctgcatca cctcgtggcg cagatgggcc accagaacgc cgtggtggtc agccagaaga
+     2281 cactttccaa gctcatcgga cgttctttgc ggacggtcca atacgcagtc aaggacttgg
+     2341 tggccgagcg ctggatctcc gtcgtgaagc tcaacggccc cggcaccgtg tcggcctacg
+     2401 tggtcaatga ccgcgtggcg tggggccagc cccgcgacca gttgcgcctg tcggtgttca
+     2461 gtgccgccgt ggtggttgat cacgacgacc aggacgaatc gctgttgggg catggcgacc
+     2521 tgcgccgcat cccgaccctg tatccgggcg agcagcaact accgaccggc cccggcgagg
+     2581 agccgcccag ccagcccggc attccgggca tggaaccaga cctgccagcc ttgaccgaaa
+     2641 cggaggaatg ggaacggcgc gggcagcagc gcctgccgat gcccgatgag ccgtgttttc
+     2701 tggacgatgg cgagccgttg gagccgccga cacgggtcac gctgccgcgc cggtagcact
+     2761 tgggttgcgc agcaacccgt aagtgcgctg ttccagacta tcggctgtag ccgcctcgcc
+     2821 gccctatacc ttgtctgcct ccccgcgttg cgtcgcggtg catggagccg ggccacctcg
+     2881 acctgaatgg aagcttggat tctcaccaat aaaaaacgcc cggcggcaac cgagcgttct
+     2941 gaacaaatcc agatggagtt ctgaggtcat tactggatct atcaacagga gtccaagcga
+     3001 gctctcgaac cccagagtcc cgctcagaag aactcgtcaa gaaggcgata gaaggcgatg
+     3061 cgctgcgaat cgggagcggc gataccgtaa agcacgagga agcggtcagc ccattcgccg
+     3121 ccaagctctt cagcaatatc acgggtagcc aacgctatgt cctgatagcg gtccgccaca
+     3181 cccagccggc cacagtcgat gaatccagaa aagcggccat tttccaccat gatattcggc
+     3241 aagcaggcat cgccatgggt cacgacgaga tcctcgccgt cgggcatgcg cgccttgagc
+     3301 ctggcgaaca gttcggctgg cgcgagcccc tgatgctctt cgtccagatc atcctgatcg
+     3361 acaagaccgg cttccatccg agtacgtgct cgctcgatgc gatgtttcgc ttggtggtcg
+     3421 aatgggcagg tagccggatc aagcgtatgc agccgccgca ttgcatcagc catgatggat
+     3481 actttctcgg caggagcaag gtgagatgac aggagatcct gccccggcac ttcgcccaat
+     3541 agcagccagt cccttcccgc ttcagtgaca acgtcgagca cagctgcgca aggaacgccc
+     3601 gtcgtggcca gccacgatag ccgcgctgcc tcgtcctgca gttcattcag ggcaccggac
+     3661 aggtcggtct tgacaaaaag aaccgggcgc ccctgcgctg acagccggaa cacggcggca
+     3721 tcagagcagc cgattgtctg ttgtgcccag tcatagccga atagcctctc cacccaagcg
+     3781 gccggagaac ctgcgtgcaa tccatcttgt tcaatcatgc gaaacgatcc tcatcctgtc
+     3841 tcttgatcag atcatgatcc cctgcgccat cagatccttg gcggcaagaa agccatccag
+     3901 tttactttgc agggcttccc aaccttacca gagggcgccc cagctggcaa ttccgacgtc
+     3961 ttatgacaac ttgacggcta catcattcac tttttcttca caaccggcac ggaactcgct
+     4021 cgggctggcc ccggtgcatt ttttaaatac ccgcgagaaa tagagttgat cgtcaaaacc
+     4081 aacattgcga ccgacggtgg cgataggcat ccgggtggtg ctcaaaagca gcttcgcctg
+     4141 gctgatacgt tggtcctcgc gccagcttaa gacgctaatc cctaactgct ggcggaaaag
+     4201 atgtgacaga cgcgacggcg acaagcaaac atgctgtgcg acgctggcga tatcaaaatt
+     4261 gctgtctgcc aggtgatcgc tgatgtactg acaagcctcg cgtacccgat tatccatcgg
+     4321 tggatggagc gactcgttaa tcgcttccat gcgccgcagt aacaattgct caagcagatt
+     4381 tatcgccagc agctccgaat agcgcccttc cccttgcccg gcgttaatga tttgcccaaa
+     4441 caggtcgctg aaatgcggct ggtgcgcttc atccgggcga aagaaccccg tattggcaaa
+     4501 tattgacggc cagttaagcc attcatgcca gtaggcgcgc ggacgaaagt aaacccactg
+     4561 gtgataccat tcgcgagcct ccggatgacg accgtagtga tgaatctctc ctggcgggaa
+     4621 cagcaaaata tcacccggtc ggcaaacaaa ttctcgtccc tgatttttca ccaccccctg
+     4681 accgcgaatg gtgagattga gaatataacc tttcattccc agcggtcggt cgataaaaaa
+     4741 atcgagataa ccgttggcct caatcggcgt taaacccgcc accagatggg cattaaacga
+     4801 gtatcccggc agcaggggat cattttgcgc ttcagccata cttttcatac tcccgccatt
+     4861 cagagaagaa accaattgtc catattgcat cagacattgc cgtcactgcg tcttttactg
+     4921 gctcttctcg ctaaccaaac cggtaacccc gcttattaaa agcattctgt aacaaagcgg
+     4981 gaccaaagcc atgacaaaaa cgcgtaacaa aagtgtctat aatcacggca gaaaagtcca
+     5041 cattgattat ttgcacggcg tcacactttg ctatgccata gcatttttat ccataagatt
+     5101 agcggattct acctgacgct ttttatcgca actctctact gtttctccat agggagacca
+     5161 caacggtttc cctctagaaa taattttgga attcaaaaga tcttttaaga aggagatata
+     5221 catatgttcg gcctgatcgg ccatctgacc tcgctggagc aggcccgcga cgtgagccgc
+     5281 cgcatgggct acgacgaata cgccgaccag ggcctggagt tctggtcgag cgcaccgccg
+     5341 cagatcgtgg acgaaatcac cgtcacgtcg gccaccggca aggtgatcca cggccgctac
+     5401 atcgagagct gcttcctgcc ggaaatgctg gccgcgcgcc gcttcaagac cgcgacgcgc
+     5461 aaggtgctga acgcgatgtc gcacgcccag aagcatggca tcgacatctc ggcgctgggc
+     5521 ggcttcacca gcatcatctt cgagaacttc gacctggcca gcctgcgcca ggtgcgcgac
+     5581 accacgctgg agttcgaacg cttcaccacg ggcaacaccc atacggccta cgtgatctgc
+     5641 cgccaggtcg aggccgccgc aaagaccctg ggcatcgaca tcacccaggc gacggtggcc
+     5701 gtggtcggcg cgacgggcga catcggctcg gccgtgtgcc gctggctgga cctgaagctg
+     5761 ggcgtcggcg acctgatcct gaccgcgcgc aaccaggagc gcctggacaa cctccaggcc
+     5821 gaactgggcc gcggcaagat cctgccgctg gaggcggccc tgccggaagc ggacttcatc
+     5881 gtgtgggtcg ccagcatgcc gcagggcgtg gtcatcgacc cggccaccct gaagcagccg
+     5941 tgcgtgctga tcgacggcgg ctacccgaag aacctgggct cgaaggtgca gggcgagggc
+     6001 atctacgtcc tgaacggcgg cgtggtcgaa cactgcttcg acatcgactg gcagatcatg
+     6061 agcgcggccg agatggcacg cccggaacgc cagatgttcg cctgcttcgc ggaggccatg
+     6121 ctgctggagt tcgaaggctg gcataccaac ttctcgtggg gccgcaacca gatcacgatc
+     6181 gaaaagatgg aggccatcgg cgaggcgtcg gtccgccacg gcttccagcc gctggccctg
+     6241 gcgatctgag ttaacggaac cttccatttt aagaaggaga tatacatatg ccgcagctgg
+     6301 aagcgagcct ggaactggac ttccagagcg aatcgtacaa ggacgcctac agccgcatca
+     6361 acgccatcgt catcgagggc gaacaggagg cgttcgacaa ctacaaccgc ctggccgaaa
+     6421 tgctgccgga ccagcgcgac gagctgcaca agctggcgaa gatggaacag cgccacatga
+     6481 agggcttcat ggcctgcggc aagaacctgt cggtgacccc ggacatgggc ttcgcgcaga
+     6541 agttcttcga acgcctgcac gagaacttca aggccgcggc cgcggagggc aaggtggtca
+     6601 cgtgcctgct gatccagagc ctgatcatcg agtgcttcgc catcgccgcg tacaacatct
+     6661 acatcccggt cgccgacgcg ttcgcccgca agatcaccga aggcgtggtc cgcgacgagt
+     6721 acctgcatcg caacttcggc gaggaatggc tgaaggcgaa cttcgacgcg tcgaaggccg
+     6781 agctggagga agccaaccgc cagaacctgc cgctggtgtg gctgatgctg aacgaagtcg
+     6841 cggacgacgc ccgcgagctg ggcatggaac gcgagagcct ggtggaggac ttcatgatcg
+     6901 cgtacggcga agccctggag aacatcggct tcaccacccg cgaaatcatg cgcatgtcgg
+     6961 cgtacggcct ggcggcggtc tgaggatcca
+//

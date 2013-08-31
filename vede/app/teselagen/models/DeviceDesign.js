@@ -24,7 +24,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 record.bins().each(function(bin){
                     bin.cells().each(function(cell){
-                        cell.setPart(cell.getPart());
+                        if(!cell.get("part_id")) {
+                            cell.setPart(cell.getPart());
+                        }
                     });
                 });
 
@@ -36,7 +38,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     if(part.id) {
                         parts.push(part.id);
                     } else {
-                    	console.warn("Trying to save non-saved part");
+                        console.warn("Trying to save non-saved part");
                     }
                 });
 
@@ -80,7 +82,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
 
             // CASE 2: CREATE A NEW DEVICEDESIGN AT PROJECT
-            if(request.action === "create" && request.records[0].data.project_id!="")
+            if(request.action === "create" && request.records[0].data.project_id !== "")
             {
                 var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns";
                 if(this.debugFlag) console.log("CREATING DEVICE DESIGN AT PROJECT: ",url);
