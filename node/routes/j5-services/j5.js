@@ -390,20 +390,17 @@ app.post('/executej5',restrict,function(req,res){
             console.log("J5 execution finished");
 
             require('xml2js').parseString(newChild.output, function (err, result) {
-              console.log(require('util').inspect(result,false,null));
-                //if(result.methodResponse.fault)
-                //{
-                //  console.log(result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0]);
-                //}
-                //else
-                //{
-                //  //quicklog(require('util').inspect(result,false,null))
-                //  var result = result.methodResponse.params[0].value[0]
-                //  var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
-                //  var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
-                //  //var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
-                //  saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
-                //}
+                //console.log(require('util').inspect(result,false,null));
+                if(result.methodResponse.fault)
+                {
+                  console.log(result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0]);
+                }
+                else
+                {
+                  var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
+                  var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
+                  saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
+                }
             });
 
         });
@@ -425,7 +422,6 @@ app.post('/executej5',restrict,function(req,res){
             // Get and decode the zip file returned by j5 server
             var encodedFileData = value['encoded_output_file'];
             var fileName = value['output_filename'];
-            //var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
             saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
           }
