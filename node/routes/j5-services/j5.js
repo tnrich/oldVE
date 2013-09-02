@@ -23,7 +23,6 @@ var spawn = require('child_process').spawn
 var path = require('path');
 
 var Serializer = require("./Serializer");
-var parseString = require('xml2js').parseString;
 /**
  * Write to quick.log
  */
@@ -391,7 +390,7 @@ app.post('/executej5',restrict,function(req,res){
         newChild.on('exit', function () {
             console.log("J5 execution finished");
 
-            parseString(newChild.output, function (err, result) {
+            require('xml2js').parseString(newChild.output, function (err, result) {
                 console.log(result);
             });
 
