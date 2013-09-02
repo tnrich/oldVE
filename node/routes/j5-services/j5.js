@@ -19,6 +19,10 @@ var j5Runs = app.db.model("j5run");
 
 var fs = require("fs");
 
+var spawn = require('child_process').spawn
+var path = require('path');
+
+var Deserializer = require("./Deserializer");
 /**
  * Write to quick.log
  */
@@ -324,6 +328,8 @@ app.post('/executej5',restrict,function(req,res){
       data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
+      //quicklog(JSON.stringify(data));
+
       /* Everything is ready for j5 communication - j5run is generated on pending status */
 
       var newj5Run = new j5Runs({
@@ -352,37 +358,60 @@ app.post('/executej5',restrict,function(req,res){
       //quicklog(require('util').inspect(data,false,null));
 
       // Call to j5Client to DesignAssembly 
-      app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-        if(error)
-        {
-          if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
-          
-          newj5Run.status = "Error";
-          newj5Run.endDate = Date.now();
-          newj5Run.error_list.push({"error":error});
-          newj5Run.save();
-        }
-        else
-        {
-          // Get and decode the zip file returned by j5 server
-          var encodedFileData = value['encoded_output_file'];
-          var fileName = value['output_filename'];
-          var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
+      if(app.get("env") === "production" && deviceDesignModel.name == "test") {
+        console.log("Executing experimental j5 through pipe");
+        var scriptPath = path.resolve(__dirname,'j5Interface.pl');
 
-          saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel
-            /*
-            ,function(j5run,warnings){
-            res.send(
-              {
-                j5Results : j5run.j5Results,
-                warnings: warnings,
-                zipfile: encodedFileData
-              });
+        var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
+        console.log("Process started with pid: "+newChild.pid);
+
+        newChild.stdin.setEncoding = 'utf-8';
+        newChild.stdin.write(data+"\n");
+
+        newChild.output = '';
+
+        newChild.stdout.on('data', function (stoutData) {
+          newChild.output += stoutData;
+        });
+
+        newChild.stderr.on('data', function (stoutData) {
+            //Errors
+        });
+
+        newChild.on('exit', function () {
+            console.log("J5 execution finished");
+            var response = newChild.output;
+            var deserializer = new Deserializer();
+            deserializer.deserializeMethodResponse(response, function(err,outputData){
+              console.log(err);
+              console.log(outputData);
+            });
+        });
+      }
+      else
+      {
+        app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
+          if(error)
+          {
+            if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
+            
+            newj5Run.status = "Error";
+            newj5Run.endDate = Date.now();
+            newj5Run.error_list.push({"error":error});
+            newj5Run.save();
           }
-          */
-          );
-        }
-      });
+          else
+          {
+            // Get and decode the zip file returned by j5 server
+            var encodedFileData = value['encoded_output_file'];
+            var fileName = value['output_filename'];
+            var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
+
+            saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel
+            );
+          }
+        });
+      }
 
     });
 
