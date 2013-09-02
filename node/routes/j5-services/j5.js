@@ -364,8 +364,6 @@ app.post('/executej5',restrict,function(req,res){
       // Call to j5Client to DesignAssembly 
       if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
 
-        newj5Run.status = "Testing";
-
         console.log("Executing experimental j5 through pipe");
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
@@ -393,7 +391,18 @@ app.post('/executej5',restrict,function(req,res){
                 quicklog(require('util').inspect(newChild.output,false,null));
                 if(result.methodResponse.fault)
                 {
-                  console.log(result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0]);
+                  var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
+                  console.log(error);
+                  if(error == 'can\'t copy file masterplasmidlist.csv to the upload directory')
+                  {
+                    error = "No previous master plasmids, please generate empty plasmid file";
+                  }
+
+                  newj5Run.status = "Error";
+                  newj5Run.endDate = Date.now();
+                  newj5Run.error_list.push({"error":error});
+                  newj5Run.save();
+
                 }
                 else
                 { 
