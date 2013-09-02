@@ -23,7 +23,7 @@ var spawn = require('child_process').spawn
 var path = require('path');
 
 var Serializer = require("./Serializer");
-var Deserializer = require("./Deserializer");
+var parseString = require('xml2js').parseString;
 /**
  * Write to quick.log
  */
@@ -378,11 +378,24 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
-            var deserializer = new Deserializer('utf8');
-            deserializer.deserializeMethodResponse(newChild.stdout, function(err,outputData){
-              console.log(err);
-              console.log(outputData);
+        newChild.output = [];
+
+        newChild.stdout.on('data', function (stoutData) {
+          newChild.output += stoutData;
+        });
+
+        newChild.stderr.on('data', function (stoutData) {
+            //Errors
+        });
+
+        newChild.on('exit', function () {
+            console.log("J5 execution finished");
+
+            parseString(newChild.output, function (err, result) {
+                console.log(result);
             });
+
+        });
       }
       else
       {
