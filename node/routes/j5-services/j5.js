@@ -360,7 +360,7 @@ app.post('/executej5',restrict,function(req,res){
           newChild.output += stoutData;
         });
 
-        // newChild.stderr.on('data', function (stoutData) {}); // For further development
+        newChild.stderr.on('data', function (stoutData) {}); // For further development
 
         newChild.on('exit', function () {
             require('xml2js').parseString(newChild.output, function (err, result) {
