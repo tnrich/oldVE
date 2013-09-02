@@ -342,9 +342,8 @@ app.post('/executej5',restrict,function(req,res){
       // file_id , j5Input and j5Results are filled once the job is completed.
 
       // In production mode use internal script
+      var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
       if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
-
-        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 
         //console.log("Executing experimental j5 through pipe");
 
@@ -365,7 +364,7 @@ app.post('/executej5',restrict,function(req,res){
 
         newChild.on('exit', function () {
             require('xml2js').parseString(newChild.output, function (err, result) {
-                quicklog(require('util').inspect(newChild.output,false,null));
+                //quicklog(require('util').inspect(newChild.output,false,null));
                 if(result.methodResponse.fault)
                 {
                   var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
