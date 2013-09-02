@@ -366,13 +366,13 @@ app.post('/executej5',restrict,function(req,res){
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("Process started with pid: "+newChild.pid);
 
-        newChild.stdin.setEncoding = 'utf-8';
+        newzChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(data+"\n");
 
-        newChild.output = '';
+        newChild.outputChunks = [];
 
         newChild.stdout.on('data', function (stoutData) {
-          newChild.output += stoutData;
+          newChild.outputChunks.push(stoutData);
         });
 
         newChild.stderr.on('data', function (stoutData) {
@@ -381,9 +381,9 @@ app.post('/executej5',restrict,function(req,res){
 
         newChild.on('exit', function () {
             console.log("J5 execution finished");
-            var response = newChild.output;
+            var responseBuffer = Buffer.concat(newChild.outputChunks);
             var deserializer = new Deserializer();
-            deserializer.deserializeMethodResponse(response, function(err,outputData){
+            deserializer.deserializeMethodResponseBuffer(response, function(err,outputData){
               console.log(err);
               console.log(outputData);
             });
