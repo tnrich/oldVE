@@ -342,17 +342,20 @@ app.post('/executej5',restrict,function(req,res){
       // file_id , j5Input and j5Results are filled once the job is completed.
 
       // In production mode use internal script
-      var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-      if(app.get("env") === "production") {
+      //var testing = true;
+      if(testing )scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+
+      if(app.get("env") === "production" || testing) {
 
         //console.log("Executing experimental j5 through pipe");
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
+        scriptPath = "/Users/rpavez/bin/j5.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("J5 Process started with pid: "+newChild.pid);
 
-        newChild.stdin.setEncoding = 'utf-8';
-        newChild.stdin.write(xml+"\n");
+        if(!testing) newChild.stdin.setEncoding = 'utf-8';
+        if(!testing) newChild.stdin.write(xml+"\n");
 
         newChild.output = "";
 
@@ -363,8 +366,9 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stderr.on('data', function (stoutData) {}); // For further development
 
         newChild.on('exit', function () {
+            //quicklog(require('util').inspect(newChild.output,false,null));
             require('xml2js').parseString(newChild.output, function (err, result) {
-                //quicklog(require('util').inspect(newChild.output,false,null));
+                //quicklog(require('util').inspect(result,false,null));
                 if(result.methodResponse.fault)
                 {
                   var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
