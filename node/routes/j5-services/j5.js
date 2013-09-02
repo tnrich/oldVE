@@ -375,7 +375,7 @@ app.post('/executej5',restrict,function(req,res){
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("Process started with pid: "+newChild.pid);
 
-        newzChild.stdin.setEncoding = 'utf-8';
+        newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
         newChild.outputChunks = [];
