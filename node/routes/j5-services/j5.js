@@ -357,10 +357,11 @@ app.post('/executej5',restrict,function(req,res){
 
       //quicklog(require('util').inspect(data,false,null));
 
+      var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+
       // Call to j5Client to DesignAssembly 
-      if(app.get("env") === "production" && deviceDesignModel.name == "test") {
+      if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
         console.log("Executing experimental j5 through pipe");
-        var scriptPath = path.resolve(__dirname,'j5Interface.pl');
 
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("Process started with pid: "+newChild.pid);
