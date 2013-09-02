@@ -343,7 +343,7 @@ app.post('/executej5',restrict,function(req,res){
 
       // In production mode use internal script
       var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-      if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
+      if(app.get("env") === "production") {
 
         //console.log("Executing experimental j5 through pipe");
 
