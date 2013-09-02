@@ -343,7 +343,6 @@ app.post('/executej5',restrict,function(req,res){
 
       // In production mode use internal script
       var testing = false;
-      if(testing) scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 
       if(app.get("env") === "production" || testing) {
 
@@ -351,6 +350,7 @@ app.post('/executej5',restrict,function(req,res){
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
         scriptPath = "/Users/rpavez/bin/j5.pl";
+        if(testing) scriptPath = "/home/teselagen/j5service/j5Interface.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("J5 Process started with pid: "+newChild.pid);
 
