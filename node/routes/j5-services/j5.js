@@ -392,7 +392,7 @@ app.post('/executej5',restrict,function(req,res){
             console.log("J5 execution finished");
             var responseBuffer = Buffer.concat(newChild.outputChunks);
             var deserializer = new Deserializer();
-            deserializer.deserializeMethodResponseBuffer(response, function(err,outputData){
+            deserializer.deserializeMethodResponseBuffer(responseBuffer, function(err,outputData){
               console.log(err);
               console.log(outputData);
             });
