@@ -22,6 +22,7 @@ var fs = require("fs");
 var spawn = require('child_process').spawn
 var path = require('path');
 
+var Serializer = require("./Serializer");
 var Deserializer = require("./Deserializer");
 /**
  * Write to quick.log
@@ -356,18 +357,26 @@ app.post('/executej5',restrict,function(req,res){
       // file_id , j5Input and j5Results are filled once the job is completed.
 
       //quicklog(require('util').inspect(data,false,null));
+      var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
+      //quicklog(require('util').inspect(xml,false,null));
 
       var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 
       // Call to j5Client to DesignAssembly 
       if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
+
+        newj5Run.status = "testing";
+        newj5Run.save();
+
         console.log("Executing experimental j5 through pipe");
+
+        var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
 
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("Process started with pid: "+newChild.pid);
 
         newzChild.stdin.setEncoding = 'utf-8';
-        newChild.stdin.write(data+"\n");
+        newChild.stdin.write(xml+"\n");
 
         newChild.outputChunks = [];
 
