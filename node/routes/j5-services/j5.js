@@ -400,7 +400,7 @@ app.post('/executej5',restrict,function(req,res){
 
                   newj5Run.status = "Error";
                   newj5Run.endDate = Date.now();
-                  newj5Run.error_list.push({"error":error});
+                  newj5Run.error_list.push({"error":{faultString: error}});
                   newj5Run.save();
 
                 }
