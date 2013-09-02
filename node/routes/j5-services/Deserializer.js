@@ -43,7 +43,7 @@ Deserializer.prototype.deserializeMethodResponse = function(stream, callback) {
     }
   }
 
-  stream.setEncoding(this.encoding)
+  //stream.setEncoding(this.encoding)
   stream.on('error', this.onError.bind(this))
   stream.pipe(this.parser)
   //stream.pipe(process.stdout)
