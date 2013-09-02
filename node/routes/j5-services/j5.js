@@ -343,7 +343,7 @@ app.post('/executej5',restrict,function(req,res){
 
       // In production mode use internal script
       //var testing = true;
-      if(testing )scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+      if(testing) scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 
       if(app.get("env") === "production" || testing) {
 
