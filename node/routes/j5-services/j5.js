@@ -369,7 +369,7 @@ app.post('/executej5',restrict,function(req,res){
         console.log("Executing experimental j5 through pipe");
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-        quicklog(require('util').inspect(xml,false,null));
+        //quicklog(require('util').inspect(xml,false,null));
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("Process started with pid: "+newChild.pid);
 
