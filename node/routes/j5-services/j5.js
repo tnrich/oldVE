@@ -390,7 +390,7 @@ app.post('/executej5',restrict,function(req,res){
             console.log("J5 execution finished");
 
             require('xml2js').parseString(newChild.output, function (err, result) {
-              console.log(result);
+              console.log(require('util').inspect(result,false,null));
                 //if(result.methodResponse.fault)
                 //{
                 //  console.log(result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0]);
