@@ -377,7 +377,7 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
-        newChild.output = [];
+        newChild.output = "";
 
         newChild.stdout.on('data', function (stoutData) {
           newChild.output += stoutData;
