@@ -389,6 +389,7 @@ app.post('/executej5',restrict,function(req,res){
 
         newChild.on('exit', function () {
             console.log("J5 execution finished");
+            console.log(newChild.output);
 
             require('xml2js').parseString(newChild.output, function (err, result) {
                 //quicklog(require('util').inspect(result,false,null))
