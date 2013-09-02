@@ -390,19 +390,20 @@ app.post('/executej5',restrict,function(req,res){
             console.log("J5 execution finished");
 
             require('xml2js').parseString(newChild.output, function (err, result) {
-                if(result.methodResponse.fault)
-                {
-                  console.log(result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0]);
-                }
-                else
-                {
-                  //quicklog(require('util').inspect(result,false,null))
-                  var result = result.methodResponse.params[0].value[0]
-                  var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
-                  var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
-                  //var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
-                  saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
-                }
+              console.log(result);
+                //if(result.methodResponse.fault)
+                //{
+                //  console.log(result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0]);
+                //}
+                //else
+                //{
+                //  //quicklog(require('util').inspect(result,false,null))
+                //  var result = result.methodResponse.params[0].value[0]
+                //  var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
+                //  var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
+                //  //var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
+                //  saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
+                //}
             });
 
         });
