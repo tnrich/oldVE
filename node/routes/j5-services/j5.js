@@ -393,7 +393,7 @@ app.post('/executej5',restrict,function(req,res){
                 {
                   var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
                   console.log(error);
-                  if(error.match('can\'t copy file masterplasmidlist.csv to the upload directory'))
+                  if(error.match('Can\'t copy file masterplasmidlist.csv to the upload directory'))
                   {
                     error = "No previous master plasmids, please generate empty plasmid file";
                   }
