@@ -12,16 +12,13 @@ var parser = new xml2js.Parser();
 module.exports = function (app) {
 
 var restrict = app.auth.restrict;
-var j5rpcEncode = require('./j5rpc');
-var processJ5Response = require('./j5parser');
-
 var j5Runs = app.db.model("j5run");
 
+var j5rpcEncode = require('./j5rpc');
+var processJ5Response = require('./j5parser');
 var fs = require("fs");
-
 var spawn = require('child_process').spawn
 var path = require('path');
-
 var Serializer = require("./Serializer");
 /**
  * Write to quick.log
@@ -166,8 +163,6 @@ function readFile(objectId,cb)
     stream.on("data", function(item) {
       // Pause stream
       stream.pause();
-      // Check if cursor is paused
-      // assert.equal(true, stream.paused);
 
       fileBuffer += item.toString('utf8');
 
@@ -183,9 +178,6 @@ function readFile(objectId,cb)
     });
     // When the stream is done
     stream.on("close", function() {
-      // Have we received the same file back?
-      //assert.equal(fileBuffer, fileBody);
-      //console.log(fileBuffer);
       cb(fileBuffer);
       app.GridStoreDB.close();
     });
@@ -321,16 +313,10 @@ app.post('/executej5',restrict,function(req,res){
     DeviceDesignPreProcessing(deviceDesignModel,function(devicedesign){
       // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
       var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
-      //return res.json(devicedesign);
-      //quicklog(JSON.stringify(data));
 
       // Credentials for RPC communication
-      data["username"] = 'node';
+      data["username"] = req.user.username;
       data["api_key"] = 'teselarocks';
-
-      //quicklog(JSON.stringify(data));
-
-      /* Everything is ready for j5 communication - j5run is generated on pending status */
 
       var newj5Run = new j5Runs({
         name: "newResult",
@@ -355,21 +341,16 @@ app.post('/executej5',restrict,function(req,res){
       });
       // file_id , j5Input and j5Results are filled once the job is completed.
 
-      //quicklog(require('util').inspect(data,false,null));
-      var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-      //quicklog(require('util').inspect(xml,false,null));
-
-      var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-
-      // Call to j5Client to DesignAssembly 
+      // In production mode use internal script
       if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
 
-        console.log("Executing experimental j5 through pipe");
+        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+
+        //console.log("Executing experimental j5 through pipe");
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-        //quicklog(require('util').inspect(xml,false,null));
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
-        console.log("Process started with pid: "+newChild.pid);
+        console.log("J5 Process started with pid: "+newChild.pid);
 
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
@@ -380,13 +361,9 @@ app.post('/executej5',restrict,function(req,res){
           newChild.output += stoutData;
         });
 
-        newChild.stderr.on('data', function (stoutData) {
-            //Errors
-        });
+        // newChild.stderr.on('data', function (stoutData) {}); // For further development
 
         newChild.on('exit', function () {
-            console.log("J5 execution finished");
-
             require('xml2js').parseString(newChild.output, function (err, result) {
                 quicklog(require('util').inspect(newChild.output,false,null));
                 if(result.methodResponse.fault)
@@ -414,7 +391,7 @@ app.post('/executej5',restrict,function(req,res){
 
         });
       }
-      else
+      else // Run as XML_RPC Depending on remote server (With timeout limit)
       {
         app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
           if(error)
