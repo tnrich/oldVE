@@ -378,10 +378,10 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
-        newChild.outputChunks = [];
+        newChild.output = [];
 
         newChild.stdout.on('data', function (stoutData) {
-          newChild.outputChunks.push(stoutData);
+          newChild.output += stoutData;
         });
 
         newChild.stderr.on('data', function (stoutData) {
@@ -390,7 +390,7 @@ app.post('/executej5',restrict,function(req,res){
 
         newChild.on('exit', function () {
             console.log("J5 execution finished");
-            var responseBuffer = Buffer.concat(newChild.outputChunks);
+            var responseBuffer = new Buffer(newChild.output);
             var deserializer = new Deserializer('utf8');
             deserializer.deserializeMethodResponse(responseBuffer, function(err,outputData){
               console.log(err);
