@@ -364,13 +364,12 @@ app.post('/executej5',restrict,function(req,res){
       // Call to j5Client to DesignAssembly 
       if(app.get("env") === "production" && deviceDesignModel.name == "test" && fs.lstatSync(scriptPath).isFile()) {
 
-        newj5Run.status = "Completed";
-        newj5Run.save();
+        newj5Run.status = "Testing";
 
         console.log("Executing experimental j5 through pipe");
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-
+        quicklog(require('util').inspect(xml,false,null));
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("Process started with pid: "+newChild.pid);
 
