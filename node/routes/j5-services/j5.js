@@ -349,8 +349,8 @@ app.post('/executej5',restrict,function(req,res){
         //console.log("Executing experimental j5 through pipe");
 
         var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-        scriptPath = "/Users/rpavez/bin/j5.pl";
-        if(testing) scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+        if(testing) scriptPath = "/Users/rpavez/bin/j5.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("J5 Process started with pid: "+newChild.pid);
 
