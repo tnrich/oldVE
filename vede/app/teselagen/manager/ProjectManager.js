@@ -104,6 +104,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     duplicated = true;
                     duplicatedTab = tab;
                     tabPanel.setActiveTab(key);
+                    if(typeof (cb2) === "function") { cb2(duplicatedTab); }
                 }
             });
         }
