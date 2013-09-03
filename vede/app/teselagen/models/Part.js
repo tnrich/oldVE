@@ -102,38 +102,22 @@ Ext.define("Teselagen.models.Part", {
         name: "revComp",
         type: "boolean",
         defaultValue: false
-    }, //revComp
+    },
     {
         name: "genbankStartBP",
         type: "int",
         defaultValue: 0
-    }, //startBP
+    },
     {
         name: "endBP",
         type: "int",
         defaultValue: 0
-    }, //stopBP
+    },
     {
         name: "size",
         type: "int",
-        convert: function(v,record)
-        {
-            if(record.getSequenceFile()) {
-                if(record.get("genbankStartBP")>record.get("endBP")) {
-                    var tSize = record.getSequenceFile().data.size;
-                    return (tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
-                } else if (record.get("genbankStartBP")==record.get("endBP")) {
-                    return 1;
-                } else {
-                    return (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
-                }
-            }
-            else
-            {
-                return 0;
-            }
-        }
-    }, //stopBP
+        defaultValue: 0
+    },
     {
         name: "iconID",
         type: "string",
@@ -284,6 +268,20 @@ Ext.define("Teselagen.models.Part", {
         return this.get("endBP");
     },
 
+    calculateSize: function(){
+        var record = this;
+        if(record.getSequenceFile()) {
+            if(record.get("genbankStartBP")>record.get("endBP")) {
+                var tSize = record.getSequenceFile().data.size;
+                record.set('size', (tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1) );
+            } else if (record.get("genbankStartBP")==record.get("endBP")) {
+                return 1;
+            } else {
+                record.set('size', (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1) );
+            }
+        }
+    },
+
     /**
      * Sets SequenceFile with default genbankStartBP and endBP based on a set SequenceFileContent.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
@@ -309,6 +307,7 @@ Ext.define("Teselagen.models.Part", {
             success = true;
 
             this.hasSequenceFile = true;
+            this.calculateSize();
         }
         return success;
     },
