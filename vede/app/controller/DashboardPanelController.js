@@ -47,7 +47,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
     var pagingToolbar;
-    if(currentTab) pagingToolbar = currentTab.down('pagingtoolbar')
+    if(currentTab) pagingToolbar = currentTab.down('pagingtoolbar');
+
     if(pagingToolbar) pagingToolbar.doRefresh();
 
 		Ext.Ajax.request({
@@ -57,48 +58,48 @@ Ext.define("Vede.controller.DashboardPanelController", {
             // },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-               	var projectsData = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-num"]');
-               	var projectsLabel = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-desc"]');
-               	var designsData = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-num"]');
-               	var designsLabel = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-desc"]');
-               	var sequencesData = Ext.getCmp('dashboardStats').down('field[cls="sequencesCountBox-num"]');
-               	var sequencesLabel = Ext.getCmp('dashboardStats').down('field[cls="sequencesCountBox-desc"]');
-               	var partsData = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-num"]');
-               	var partsLabel = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-desc"]');
-                
-               	projectsData.setValue(response.numberProjects);
+                var projectsData = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-num"]');
+                var projectsLabel = Ext.getCmp('dashboardStats').down('field[cls="projectsCountBox-desc"]');
+                var designsData = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-num"]');
+                var designsLabel = Ext.getCmp('dashboardStats').down('field[cls="designsCountBox-desc"]');
+                var sequencesData = Ext.getCmp('dashboardStats').down('field[cls="sequencesCountBox-num"]');
+                var sequencesLabel = Ext.getCmp('dashboardStats').down('field[cls="sequencesCountBox-desc"]');
+                var partsData = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-num"]');
+                var partsLabel = Ext.getCmp('dashboardStats').down('field[cls="partsCountBox-desc"]');
+
+                projectsData.setValue(response.numberProjects);
                 designsData.setValue(response.numberDesigns);
                 sequencesData.setValue(response.numberSequences);
                 partsData.setValue(response.numberParts);
 
                 if (response.numberProjects == 1) {
-                	projectsLabel.setValue("Project");
+                    projectsLabel.setValue("Project");
                 }
                 else {
-               		projectsLabel.setValue("Projects");
+                    projectsLabel.setValue("Projects");
                 }
                 if (response.numberDesigns == 1) {
-                	designsLabel.setValue("Design");
+                    designsLabel.setValue("Design");
                 }
                 else {
-               		designsLabel.setValue("Designs");
+                    designsLabel.setValue("Designs");
                 }if (response.numberSequences == 1) {
-                	sequencesLabel.setValue("Sequence");
+                    sequencesLabel.setValue("Sequence");
                 }
                 else {
-               		sequencesLabel.setValue("Sequences");
+                    sequencesLabel.setValue("Sequences");
                 }if (response.numberParts == 1) {
-                	partsLabel.setValue("Part");
+                    partsLabel.setValue("Part");
                 }
                 else {
-               		partsLabel.setValue("Parts");
+                    partsLabel.setValue("Parts");
                 }
             },
             failure: function(response) {
                 console.log('getting stats failed');
             }
         });
-	},
+    },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
         if(newTab.initialCls == "sequenceLibraryPanel") {

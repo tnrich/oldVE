@@ -112,13 +112,11 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     text: 'Type',
                                                 },
                                                 {
-                                                    xtype: 'gridcolumn',
+                                                    xtype: 'templatecolumn',
                                                     cls: 'featuresPositionColumn',
-                                                    dataIndex: 'locations',
+                                                    dataIndex: 'start',
                                                     text: 'Position',
-                                                    renderer: function(value, feature) {
-                                                        return value[0].start + " - " + value[0].end;
-                                                    }
+                                                    tpl: '{start} - {end}'
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
@@ -371,6 +369,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                 {
                                                     xtype: 'templatecolumn',
                                                     cls: 'ORFsPositionColumn',
+                                                    dataIndex: 'start',
                                                     text: 'Position',
                                                     tpl: '{start} - {end}',
                                                     width: 200
@@ -405,8 +404,8 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                         {
                                             xtype: 'displayfield',
                                             cls: 'minORFLengthField',
-                                            fieldLabel: 'Minimum ORF Length',
-                                            labelWidth: 130,
+                                            fieldLabel: 'Minimum ORF Length (bps)',
+                                            labelWidth: 160,
                                             margins: '10 0 5 0'
                                         },
                                         {

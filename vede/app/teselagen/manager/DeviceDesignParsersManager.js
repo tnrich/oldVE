@@ -168,6 +168,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     endBP: part["de:stopBP"],
                     revComp: part["de:revComp"],
                 });
+                newPart.fas = part["de:parts"]["de:part"]["de:fas"] || "None";
                 newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
                 
                 var partName;
@@ -229,7 +230,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 var assocPart = fullPartsAssocArray[binParts[j]];
                 var cellFas;
                 if(isNewFasScheme) cellFas = cellFases[j];
-                else cellFas = assocPart ? assocPart.get("fas") : "None";
+                else cellFas = assocPart ? assocPart.fas : "None";
                 var newCell = Ext.create("Teselagen.models.Cell", {
                     index: j,
                     //part_id: binParts[j],

@@ -355,8 +355,8 @@ app.post('/executej5',restrict,function(req,res){
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error)
         {
-          // Catch error during j5 RPC execution
-          console.log(error);
+          if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
+          
           newj5Run.status = "Error";
           newj5Run.endDate = Date.now();
           newj5Run.error_list.push({"error":error});
