@@ -1,10 +1,52 @@
+
+function registerUser(registrationInfo) {
+	$.ajax({
+        method: 'POST',
+		url: '/registerUser',
+		data: {
+                username: 	registrationInfo.registerUsernameField,
+                password: 	registrationInfo.registerPasswordField,
+                groupType: 	registrationInfo.registerOrganizationTypeComboBox,
+                firstName: 	registrationInfo.registerFirstNameField,
+                lastName: 	registrationInfo.registerLastNameField,
+                email: 		registrationInfo.registerEmailField,
+        }
+	})
+		.done(
+			function(data) {
+				window.location.replace(data.redirect);
+			}
+			)
+		.fail(
+			function() { 
+				window.location.replace("/loginUser");
+			}
+			)
+		.always();	
+}
+
+
 $(document).ready(function() {
-	$('#mission, #contact, #news').css("display","none");
 	
-	$('#mission, #contact, #news').fadeIn(100);
-	// $('#icon_container div').fadeIn(600);
-	
-	$("#home_tab").addClass("navactive");
-	
+	$("a#signup_submit").on("click", function() {
+    	$( '#signup_form' ).parsley('validate');
+
+		if($('#signup_form').parsley('isValid')) {
+				var registrationInfo = {
+					registerFirstNameField: 			$("#first_name").val(),
+					registerLastNameField: 				$("#last_name").val(),
+					registerUsernameField: 				$("#username").val(),
+					registerPasswordField: 				$("#password").val(),
+					registerEmailField:     			$("#email").val(),
+					registerOrganizationTypeComboBox: 	$("#organization").val(),
+				}
+				registerUser(registrationInfo);
+		}
+	});
+
+	$("a#login_submit").on("click", function() {
+    	$( '#login_form' ).parsley('validate');
+	});
+
 });
 

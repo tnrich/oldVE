@@ -3,7 +3,7 @@
 --------------
 */
 
-module.exports = function(app, models){
+module.exports = function(app, express){
 
 app.get('/', function(req, res){
     res.render('index.jade', {});

@@ -457,8 +457,18 @@ background: none;
     opacity: 1;
 }
 
+.page-logo img {
+    width: 70%;
+}
+
 .registration-buts {
     margin-top: 40px;
+}
+
+.registration-buts button {
+    margin-top: 20px;
+    box-shadow: none;
+    margin-bottom: 20px;
 }
 
 .registration-buts a{
@@ -512,13 +522,15 @@ label.inline {
     color: #006cab;
 }
 
-.error input, .error textarea, .error select {
-    border-color: #006cab;
-    background-color: rgba(0, 108, 171, 0.05);
-    margin-bottom: 0;
+.parsley-error {
+    border-color: #006cab !important;
+    background-color: rgba(0, 108, 171, 0.05) !important;
+    margin-bottom: 0 !important;
 }
 
-[data-abide] .error small.error, [data-abide] span.error, [data-abide] small.error {
+.parsley-error-list li {
+    padding-left: 5px;
+    list-style: none;
     font-size: 0.75em;
     font-weight: bold;
     background: 006cab;

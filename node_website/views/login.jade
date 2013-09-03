@@ -32,25 +32,23 @@ html(lang='en')
                 img(src="/img/teselagen_toplogo.png")
             .large-6.small-6.page-header.large-centered.small-centered.columns Log In
             .large-6.small-6.large-centered.small-centered.columns
-                form(data-abide)#signup_form.custom
+                form(data-validate="parsley")#login_form.custom
                     .row
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='username') Username
                             .large-9.small-9.columns
-                                input(type="text", id='username', placeholder='Username', required)
-                                small.error A username is required.
+                                input(type="text", id='username', placeholder='Username', data-required)
                         .row
                             .large-3.small-3.columns
-                                label.right.inline(for='password', required) Password
+                                label.right.inline(for='password', data-required) Password
                             .large-9.small-9.columns
                                 input(type="password", id='password')
-                                small.error A username is required.
                         .row
                             .large-3.small-3.columns.right.lost_pw_link 
                                 a Lost Password?
                         .large-12.small-12.registration-buts
-                            a.button.radius.expand Log In
+                            a.button.radius.expand#login_submit Log In
                             a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
                                 .large-6.small-6.large-centered.small-centered.columns#footer_links
     .large-5.small-5.large-centered.small-centered.columns#footer2_links
@@ -76,6 +74,7 @@ html(lang='en')
                
 script document.write('<script src=/js/vendor/' + ('__proto__' in {} ? 'zepto' : 'jquery') + '.js><\/script>');
 script(src='/js/jquery-1.10.2.min.js')
+script(src='/js/parsley.js')
 script(src='/js/application.js')
 script(src='/js/foundation.min.js')
 script $(document).foundation();

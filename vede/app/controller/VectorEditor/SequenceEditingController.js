@@ -132,6 +132,17 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             tabPanel.add(newTab).show();
 
             Teselagen.manager.ProjectManager.workingSequence = seq;
+        }, function(duplicatedTab) {
+            if(duplicatedTab) {
+                if(part) {
+                    duplicatedTab.options.selection = {
+                        start: part.get("genbankStartBP"),
+                        end: part.get("endBP")
+                    }
+                }
+
+                duplicatedTab.show();
+            }
         });
     },
 
