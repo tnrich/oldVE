@@ -174,9 +174,11 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                         break;
                     case "opende":
                         selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
-                        console.log(selectedRecord.parentId);
                         selectedProject.designs().load({
                             id: selectedRecord.id,
+                            params: {
+                                includeEugeneRules: true
+                            },
                             callback: function (loadedDesign) {
                                 self.renameDesign( loadedDesign[0], expandPathCallback);
                             }
@@ -247,8 +249,8 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 }
             });
 
-        tab.setTitle(selectedDesign.get('name'));
-
+            tab.model.set('name', selectedDesign.get('name'));
+            tab.setTitle(selectedDesign.get('name'));
         }, selectedDesign.get('name'));
     },
 

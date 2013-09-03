@@ -131,23 +131,22 @@ module.exports = function(app) {
                     if(!design) {return res.json(500,{"error":"design not found"});}
                     design = design.toObject();
                     design.id = design._id;
-                    delete design.rules; // Eugene rules to be send on a different request
-    
+
+                    if(!req.query.includeEugeneRules) {
+                      delete design.rules; // Eugene rules to be send on a different request
+                    }
+
                     if (err) {
                         app.errorHandler(err, req, res);
                     } else {
-    
                         res.json({
                             "designs": design
                         });
                     }
                 });
-                
             }
         });
-        
     });
-    
 
     /**
      * GET device design parts
