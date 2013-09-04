@@ -273,7 +273,8 @@ module.exports = function(db) {
 		    userRestrictionEnzymes: [{
 		        name: String
 		    }]
-		}]
+		}],
+		masterSources: Mixed
 	});
 
     UserSchema.pre('save', function(next) {

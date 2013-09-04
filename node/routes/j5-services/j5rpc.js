@@ -306,6 +306,24 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         "SUPPRESS_PURE_PRIMERS": "TRUE"\
         }');
 
+    var emptySources = 
+    {
+        masterPlasmidsList: 
+        { 
+            name: "j5_plasmids.csv",
+            data: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
+        },
+        masterOligosList: 
+        {
+            name: "j5_oligos.csv",
+            data: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="
+        },
+        masterDirectSynthesesList: {
+            name: "j5_directsyntheses.csv",
+            data: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
+        }
+    };
+
     var execParams = JSON.parse('\
         { \
             "reuse_master_oligos_file": "false", \
@@ -328,6 +346,17 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     execParams["assembly_method"] = assemblyMethod;
 
+    var customSources = {};
+
+    function updateUserLatestsMasterSources(user,sources){
+        if(!user.masterSources) user.masterSources = {};
+        if(sources.masterPlasmidsList) user.masterSources.masterPlasmidsList = sources.masterPlasmidsList;
+        if(sources.masterOligosList) user.masterSources.masterOligosList = sources.masterOligosList;
+        if(sources.masterDirectSynthesesList) user.masterSources.masterDirectSynthesesList = sources.masterDirectSynthesesList;
+
+        if(Object.keys(sources).length>0) user.save();
+    }
+
 
     function checkReuseIsPossible(masterParam){
         if(testing) return true;
@@ -340,9 +369,17 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
-            execParams[reuse] = checkReuseIsPossible(ParamFileEncoded);
-        }        
+            if(!checkReuseIsPossible(ParamFileEncoded))
+            {
+                execParams[fileEncoded] = emptySources[ParamFileEncoded].data;
+                execParams[filename] = emptySources[ParamFileEncoded].name;
+                execParams[reuse] = false;
+            }
+        }
+        else customSources[ParamFileEncoded] = {"filename":filename,"fileEncoded":fileEncoded};
     };
+
+    updateUserLatestsMasterSources(user,customSources);
 
     processMasterFiles(
         "reuse_master_plasmids_file",
