@@ -121,8 +121,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             newTab.options.circular = sequenceFileManager.getCircular();
 
             if(part) {
+                console.log(part.get("genbankStartBP"));
                 newTab.options.selection = {
-                    start: part.get("genbankStartBP"),
+                    start: part.get("genbankStartBP") - 1,
                     end: part.get("endBP")
                 }
             }
@@ -136,7 +137,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             if(duplicatedTab) {
                 if(part) {
                     duplicatedTab.options.selection = {
-                        start: part.get("genbankStartBP"),
+                        start: part.get("genbankStartBP") - 1,
                         end: part.get("endBP")
                     }
                 }
