@@ -274,7 +274,23 @@ module.exports = function(db) {
 		        name: String
 		    }]
 		}],
-		masterSources: Mixed
+		masterSources: 
+		{
+	        masterplasmidlist: 
+	        { 
+	            name: {type: String, default: "masterplasmidlist.csv"},
+	            fileContent: {type: String, default: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="}
+	        },
+	        masteroligolist: 
+	        {
+	            name: {type: String, default: "masteroligolist.csv"},
+	            fileContent: {type: String, default: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="}
+	        },
+	        masterdirectsyntheseslist: {
+	            name: {type: String, default: "masterdirectsyntheseslist.csv"},
+	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="}
+	        }
+		}
 	});
 
     UserSchema.pre('save', function(next) {

@@ -306,34 +306,16 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         "SUPPRESS_PURE_PRIMERS": "TRUE"\
         }');
 
-    var emptySources = 
-    {
-        masterPlasmidsList: 
-        { 
-            name: "j5_plasmids.csv",
-            data: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
-        },
-        masterOligosList: 
-        {
-            name: "j5_oligos.csv",
-            data: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="
-        },
-        masterDirectSynthesesList: {
-            name: "j5_directsyntheses.csv",
-            data: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
-        }
-    };
-
     var execParams = JSON.parse('\
         { \
             "reuse_master_oligos_file": "false", \
-            "master_oligos_list_filename": "j5_oligos.csv",  \
+            "master_oligos_list_filename": "masteroligolist.csv",  \
             "encoded_master_oligos_file": "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg==", \
             "reuse_master_plasmids_file": "false",  \
-            "master_plasmids_list_filename": "j5_plasmids.csv",  \
+            "master_plasmids_list_filename": "masterplasmidslist.csv",  \
             "encoded_master_plasmids_file": "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo=", \
             "reuse_master_direct_syntheses_file": "false",  \
-            "master_direct_syntheses_list_filename": "j5_directsyntheses.csv",  \
+            "master_direct_syntheses_list_filename": "masterdirectsyntheseslist.csv",  \
             "encoded_master_direct_syntheses_file": "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo=",  \
             "reuse_eugene_rules_list_file": "FALSE",  \
             "assembly_method": "CombinatorialMock",  \
@@ -344,49 +326,94 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
             "reuse_zipped_sequences_file": "FALSE" \
         }');
 
+
+    var emptySources = 
+    {
+        masterPlasmidsList: 
+        { 
+            name: "masterplasmidlist.csv",
+            data: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
+        },
+        masterOligosList: 
+        {
+            name: "masteroligolist.csv",
+            data: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="
+        },
+        masterDirectSynthesesList: {
+            name: "masterdirectsyntheseslist.csv",
+            data: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
+        }
+    };
+
     execParams["assembly_method"] = assemblyMethod;
 
-    var customSources = {};
-
-    function updateUserLatestsMasterSources(user,sources){
+    
+    function updateMasterSources(user,sources){
+        console.log(sources);
         if(!user.masterSources) user.masterSources = {};
         if(sources.masterPlasmidsList) user.masterSources.masterPlasmidsList = sources.masterPlasmidsList;
         if(sources.masterOligosList) user.masterSources.masterOligosList = sources.masterOligosList;
         if(sources.masterDirectSynthesesList) user.masterSources.masterDirectSynthesesList = sources.masterDirectSynthesesList;
 
-        if(Object.keys(sources).length>0) user.save();
+         user.save();
     }
 
 
-    function checkReuseIsPossible(masterParam){
-        if(testing) return true;
-        return fs.existsSync("/home/teselagen/j5service/usr/"+user.username+"/"+masterParam.toLowerCase()+".csv")
-    };
+    //function checkReuseIsPossible(masterParam){
+    //    // In Further implementation this will be deprecated
+    //    if(testing) return true;
+    //    return fs.existsSync("/home/teselagen/j5service/usr/"+user.username+"/"+masterParam.toLowerCase()+".csv")
+    //};
 
-    function processMasterFiles(reuse,filename,fileEncoded,ParamFilename,ParamFileEncoded){
+    var customSources = {};
+
+    function processMasterFiles(reuse,filename,fileEncoded,ParamFilename,ParamFileEncoded,baseName){
         execParams[filename] = masterFiles[ParamFilename];
         execParams[fileEncoded] = masterFiles[ParamFileEncoded];
+        execParams[filename] = emptySources[ParamFileEncoded].name; // Force standard name
 
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
-            if(!checkReuseIsPossible(ParamFileEncoded))
+            // Asking for reuse
+            execParams[reuse] = checkReuseIsPossible(ParamFileEncoded);
+
+            if(checkReuseIsPossible(ParamFileEncoded))
             {
+                // Reuse is OK
+
+                //execParams[reuse] = true; // Reuse from file system
+
+                // Reuse from DB
+                execParams[fileEncoded] = req.user.masterSources[baseName].sequenceFileContent;
+                execParams[filename] = req.user.masterSources[baseName].name;
+                execParams[reuse] = false;
+            }
+            else
+            {
+                //Reuse not OK
                 execParams[fileEncoded] = emptySources[ParamFileEncoded].data;
                 execParams[filename] = emptySources[ParamFileEncoded].name;
                 execParams[reuse] = false;
             }
         }
-        else customSources[ParamFileEncoded] = {"filename":filename,"fileEncoded":fileEncoded};
-    };
+        else 
+        {
+            //Use custom master source
+            //customSources[ParamFileEncoded] = {
+            //    name: execParams[filename],
+            //    data: execParams[fileEncoded]
+            //};
+        }
 
-    updateUserLatestsMasterSources(user,customSources);
+    };
 
     processMasterFiles(
         "reuse_master_plasmids_file",
         "master_plasmids_list_filename",
         "encoded_master_plasmids_file",
         "masterPlasmidsListFileName",
-        "masterPlasmidsList"
+        "masterPlasmidsList",
+        "masterplasmidlist"
     );
 
     processMasterFiles(
@@ -394,7 +421,8 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         "master_oligos_list_filename",
         "encoded_master_oligos_file",
         "masterOligosListFileName",
-        "masterOligosList"
+        "masterOligosList",
+        "masteroligolist"
     );
     
     processMasterFiles(
@@ -402,8 +430,12 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         "master_direct_syntheses_list_filename",
         "encoded_master_direct_syntheses_file",
         "masterDirectSynthesesListFileName",
-        "masterDirectSynthesesList"
+        "masterDirectSynthesesList",
+        "masterdirectsyntheseslist"
     );
+
+    // If using custom source, update them.
+    //if(Object.keys(customSources).length>0) updateMasterSources(user,customSources);
 
     //quicklog(require('util').inspect(execParams, true, 5));
 
