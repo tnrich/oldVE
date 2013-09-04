@@ -279,7 +279,7 @@ app.post('/executej5',restrict,function(req,res){
       // file_id , j5Input and j5Results are filled once the job is completed.
 
       // In production mode use internal script
-      var testing = false;
+      var testing = !(app.get("env") === "production");
 
       if(app.get("env") === "production" || testing) {
 

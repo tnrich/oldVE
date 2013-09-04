@@ -280,7 +280,7 @@ Ext.define("Teselagen.models.Part", {
         }
                 
         if(record.get("genbankStartBP")>record.get("endBP")) {
-            debugger;
+            //debugger;
             var tSize = record.getSequenceFile().getLength();
             if(tSize === 0 || tSize === "") console.warn("Associating Part with sequence with length zero.");
             size = (tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
