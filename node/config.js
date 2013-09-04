@@ -120,44 +120,17 @@ module.exports = function(app, express) {
         app.use(airbrake.expressHandler());
     });
 
-    // Init MONGODB (Native Driver)
-    /*
-     * Reason to open MongoDB Native Driver is support for GridSTORE
-     * DB Operations managed by Mongoose loaded below
-     */
-
-
-
-    var MongoDBServer = new app.mongo.Server(Opts.host, Opts.port, {
-        auto_reconnect: true
-    });
-
-    var db = new app.mongo.Db(app.dbname, MongoDBServer, {
-        safe: true
-    });
-    db.open(function(err, db) {
-        
-        if(Opts.authRequired)
-        {
-            db.authenticate(Opts.username,Opts.password,function(err,result){
-                if (!err) {
-                    app.logger.info("GRIDFS: Online (Authenticated on remote server)");
-                } else app.logger.error("GRIDFS: Offile (Authenticated on remote server)",err);
-            });
-        }
-        else if (!err) {
-            app.logger.info("GRIDFS: Online (Local DB)");
-        }
-    });
-    app.GridStoreDB = db;
-
-
     // Init MONGODB - MONGOOSE (ODM)
     /*
      * MONGOOSE (ODM) Initialization using app.dbname
      */
-    app.db = app.mongoose.createConnection(Opts.authHost, function(data) {
-        if (data) { app.logger.error("info","MONGOOSE: Offline", data[0]); console.log(data); }
+
+
+    app.db = app.mongoose.createConnection(Opts.authHost, function(err) {
+        if (err) {
+            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(data); 
+            //app.mongoose.connection.db.serverConfig.connection.autoReconnect = true;
+        }
         else { 
             app.logger.log("info","MONGOOSE: Online", app.dbname);
         }

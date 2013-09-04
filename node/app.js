@@ -16,7 +16,6 @@ app.async = require('async');
 app.crypto = require("crypto");
 app.fs = require('fs');
 app.xmlrpc = require('xmlrpc');
-app.mongo = require('mongodb');
 app.mongoose = require('mongoose');
 app.mongostore = require('connect-mongo');
 app.mysql = require('mysql');

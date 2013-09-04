@@ -20,6 +20,8 @@ var fs = require("fs");
 var spawn = require('child_process').spawn
 var path = require('path');
 var Serializer = require("./Serializer");
+var gridfs = require("./gridfs")(app);
+
 /**
  * Write to quick.log
  */
@@ -145,118 +147,13 @@ app.post('/condenseAssemblyFiles',restrict, function(req,res){
 /**
  * Read file.
  */
-function readFile(objectId,cb)
-{
-  var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'r');
-  
-  gridStore.open(function(err, file) {
-    // Peform a find to get a cursor
-    var stream = file.stream(true);
 
-    // Pause the stream initially
-    stream.pause();
-
-    // Save read content here
-    var fileBuffer = '';
-
-    // For each data item
-    stream.on("data", function(item) {
-      // Pause stream
-      stream.pause();
-
-      fileBuffer += item.toString('utf8');
-
-      // Restart the stream after 1 miliscecond
-      setTimeout(function() {
-        stream.resume();
-        // Check if cursor is paused
-      }, 100);
-    });
-
-    // For each data item
-    stream.on("end", function(item) {
-    });
-    // When the stream is done
-    stream.on("close", function() {
-      cb(fileBuffer);
-      app.GridStoreDB.close();
-    });
-
-    // Resume the stream
-    stream.resume();
-  });
-
-  // Open the file
-  /*
-  gridStore.open(function(err, gridStore) {
-    cb(gridStore.stream());
-    gridStore.read(gridStore.length,function(err,data){
-      cb(data);
-    });
-  });
-  */
-}
-
-/**
- * Save file.
- */
-function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
-{
-  var assert = require('assert');
-
-  var handleErrors = function(err,newj5Run){
-    console.log(err);
-    newj5Run.status = "Error";
-    newj5Run.endDate = Date.now();
-    newj5Run.error_list.push({"error":err});
-    newj5Run.save();
-    throw new Error(err);
-  };
-
-
-  var objectId = new app.mongoose.mongo.ObjectID();
-
-  var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'w');
-    // Open the file
-    gridStore.open(function(err, gridStore) {
-      if(err) return handleErrors(err,newj5Run);
-      // Write some data to the file
-      gridStore.write(fileData, function(err, gridStore) {
-        if(err) return handleErrors(err,newj5Run);
-        // Close (Flushes the data to MongoDB)
-        gridStore.close(function(err, result) {
-          if(err) return handleErrors(err,newj5Run);
-          // Verify that the file exists
-          app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
-            if(err) return handleErrors(err,newj5Run);
-            
-            processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
-
-              newj5Run.j5Parameters = { j5Parameters : JSON.parse(j5parameters) };
-              newj5Run.file_id = objectId.toString();
-              newj5Run.j5Results = parsedResults;
-              newj5Run.endDate = new Date();
-              newj5Run.status = (warnings.length > 0) ? "Completed with warnings" : "Completed";
-              newj5Run.warnings = warnings;
-
-              newj5Run.save(function(){
-                deproject.j5runs.push(newj5Run);
-                deproject.save();
-              });
-
-            });
-          });
-        });
-      });
-    });
-}
 
 app.get('/getfile/:id',restrict,function(req,res){
-  var o_id = new app.mongoose.mongo.ObjectID(req.params.id);
   
   j5Runs.findOne({'file_id':req.params.id},function(err,j5run){
   //console.log(j5run);
-  readFile(o_id,function(inputStream){
+  gridfs.readFile(req.params.id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
       var filename = "j5Results-"+j5run.date+'-'+req.user.username;
       res.set({
@@ -276,6 +173,43 @@ app.post('/getProtocol',restrict,function(req,res){
   var protocol = req.user.protocols.id(o_id);
   res.json(protocol);
 });
+
+
+function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData)
+{
+
+  var handleErrors = function(err,newj5Run){
+    console.log(err);
+    newj5Run.status = "Error";
+    newj5Run.endDate = Date.now();
+    newj5Run.error_list.push({"error":err.toString()});
+    newj5Run.save();
+  };
+
+  //console.log("Attemping to write output");
+  //console.log(gridfs);
+  gridfs.saveFile(fileData,function(err,objectId){
+    if(err) return handleErrors(err,newj5Run);
+    //console.log("Output saved");
+    //console.log("Processing output");
+    processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
+      //console.log("Output processed");
+      newj5Run.j5Parameters = { j5Parameters : JSON.parse(j5parameters) };
+      newj5Run.file_id = objectId.toString();
+      newj5Run.j5Results = parsedResults;
+      newj5Run.endDate = new Date();
+      newj5Run.status = (warnings.length > 0) ? "Completed with warnings" : "Completed";
+      newj5Run.warnings = warnings;
+
+      newj5Run.save(function(){
+        //console.log("j5run updated");
+      });
+
+    });    
+
+  });
+
+}
 
 // Resolve sequences given a devicedesign, returns a callback
 var DeviceDesignPreProcessing = function(devicedesignInput,cb){
@@ -336,13 +270,16 @@ app.post('/executej5',restrict,function(req,res){
       });
 
       newj5Run.save(function(err){
-        if(err) return res.json(500,{error: "Unexpected error, j5 task couldn't start."});
-        res.json({status:"In progress"});
+        deviceDesignModel.j5runs.push(newj5Run);
+        deviceDesignModel.save(function(err){
+          if(err) return res.json(500,{error: "Database error."});
+          res.json({status:"In progress"});
+        });
       });
       // file_id , j5Input and j5Results are filled once the job is completed.
 
       // In production mode use internal script
-      var testing = false;
+      var testing = true;
 
       if(app.get("env") === "production" || testing) {
 
@@ -366,10 +303,19 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stderr.on('data', function (stoutData) {}); // For further development
 
         newChild.on('exit', function () {
+            console.log("Design assembly Complete! (j5Interface pipe)");
             //quicklog(require('util').inspect(newChild.output,false,null));
             require('xml2js').parseString(newChild.output, function (err, result) {
                 //quicklog(require('util').inspect(result,false,null));
-                if(result.methodResponse.fault)
+                if(err)
+                {
+                  console.log(err);
+                  newj5Run.status = "Error";
+                  newj5Run.endDate = Date.now();
+                  newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output"}});
+                  newj5Run.save();
+                }
+                else if(result.methodResponse.fault)
                 {
                   var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
                   console.log(error);
@@ -388,7 +334,7 @@ app.post('/executej5',restrict,function(req,res){
                 { 
                   var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
                   var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
-                  saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
+                  onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData);
                 }
             });
 
@@ -412,7 +358,7 @@ app.post('/executej5',restrict,function(req,res){
             var encodedFileData = value['encoded_output_file'];
             var fileName = value['output_filename'];
 
-            saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel);
+            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData);
           }
         });
       }
