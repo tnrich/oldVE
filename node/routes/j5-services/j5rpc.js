@@ -384,7 +384,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
                 //execParams[reuse] = true; // Reuse from file system
 
                 // Reuse from DB
-                execParams[fileEncoded] = req.user.masterSources[baseName].sequenceFileContent;
+                execParams[fileEncoded] = req.user.masterSources[baseName].fileContent;
                 execParams[filename] = req.user.masterSources[baseName].name;
                 execParams[reuse] = false;
             }
