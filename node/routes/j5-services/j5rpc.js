@@ -260,7 +260,7 @@ function encoded_eugene_rules_list_file(model)
 /**
  * Encode j5 inputs
  */
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user,testing) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);
@@ -330,7 +330,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
 
     function checkReuseIsPossible(masterParam){
-        if(app.get("env") !== "production") return true;
+        if(testing) return true;
         return fs.existsSync("/home/teselagen/j5service/usr/"+req.user.username+"/"+masterParam.toLowerCase()+".csv")
     };
 

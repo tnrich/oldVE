@@ -246,7 +246,7 @@ app.post('/executej5',restrict,function(req,res){
     // Call resolve sequences to populate sequences (Further releases of mongoose may support multilevel chain population) so this can be refactored
     DeviceDesignPreProcessing(deviceDesignModel,function(devicedesign){
       // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
-      var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,req.user);
+      var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,req.user,testing);
 
       // Credentials for RPC communication
       data["username"] = req.user.username;
