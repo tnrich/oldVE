@@ -3,6 +3,8 @@
  * @module ./routes/j5rpc
  */
 
+var fs = require("fs");
+
 /**
  * Loop and splice.
  */
@@ -258,7 +260,7 @@ function encoded_eugene_rules_list_file(model)
 /**
  * Encode j5 inputs
  */
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);
@@ -327,13 +329,18 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
     execParams["assembly_method"] = assemblyMethod;
 
 
+    function checkReuseIsPossible(masterParam){
+        if(app.get("env") !== "production") return true;
+        return fs.existsSync("/home/teselagen/j5service/usr/"+req.user.username+"/"+masterParam.toLowerCase()+".csv")
+    };
+
     function processMasterFiles(reuse,filename,fileEncoded,ParamFilename,ParamFileEncoded){
         execParams[filename] = masterFiles[ParamFilename];
         execParams[fileEncoded] = masterFiles[ParamFileEncoded];
 
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
-            execParams[reuse] = "true";
+            execParams[reuse] = checkReuseIsPossible(ParamFileEncoded);
         }        
     };
 
