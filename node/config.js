@@ -41,6 +41,10 @@ module.exports = function(app, express) {
         db.addUser('prod', 'o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=')
     */
 
+    /*
+    For quick activation
+    db.users.update({"username" : "rpavez"},{$set:{"activated":true}})
+    */
 
     app.configure('development', function() {
 
