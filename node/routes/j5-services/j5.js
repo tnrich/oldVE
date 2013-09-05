@@ -185,6 +185,12 @@ function updateMasterSources(sources,user){
   //}
 };
 
+var clearUserFolder = function(){
+  require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/"+, function puts(error, stdout, stderr) { 
+      console.log("User folder cleared");
+  });
+};
+
 function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 {
 
@@ -213,7 +219,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 
       newj5Run.save();
       updateMasterSources(parsedResults.masterSources,user);
-      fs.rmdirSync("/home/teselagen/j5service/usr/"+user.username+"/"); // Clear user folder!
+      clearUserFolder();
     });    
 
   });
