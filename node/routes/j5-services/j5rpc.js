@@ -332,8 +332,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         masterplasmidlist: 
         { 
             name: "masterplasmidlist.csv",
-            fileContent: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KcGo1XzAwMDAwLCws
-LA=="
+            fileContent: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KcGo1XzAwMDAwLCwsLA=="
         },
         masteroligolist: 
         {
@@ -342,8 +341,7 @@ LA=="
         },
         masterdirectsyntheseslist: {
             name: "masterdirectsyntheseslist.csv",
-            fileContent: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNq
-NV8wMDAwMCwsLCw="
+            fileContent: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw="
         }
     };
 
