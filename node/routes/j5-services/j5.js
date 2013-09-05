@@ -219,7 +219,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 
       newj5Run.save();
       updateMasterSources(parsedResults.masterSources,user);
-      clearUserFolder(req.user);
+      clearUserFolder(user);
     });    
 
   });
