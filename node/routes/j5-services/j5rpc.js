@@ -347,57 +347,22 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     execParams["assembly_method"] = assemblyMethod;
 
-    
-    function updateMasterSources(user,sources){
-        console.log(sources);
-        if(!user.masterSources) user.masterSources = {};
-        if(sources.masterPlasmidsList) user.masterSources.masterPlasmidsList = sources.masterPlasmidsList;
-        if(sources.masterOligosList) user.masterSources.masterOligosList = sources.masterOligosList;
-        if(sources.masterDirectSynthesesList) user.masterSources.masterDirectSynthesesList = sources.masterDirectSynthesesList;
-
-         user.save();
-    }
-
-
-    //function checkReuseIsPossible(masterParam){
-    //    // In Further implementation this will be deprecated
-    //    if(testing) return true;
-    //    return fs.existsSync("/home/teselagen/j5service/usr/"+user.username+"/"+masterParam.toLowerCase()+".csv")
-    //};
-
-    var customSources = {};
 
     function processMasterFiles(reuse,filename,fileEncoded,ParamFilename,ParamFileEncoded,baseName){
         execParams[filename] = masterFiles[ParamFilename];
         execParams[fileEncoded] = masterFiles[ParamFileEncoded];
-        execParams[filename] = emptySources[baseName].name; // Force standard name
-
+        
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
-            // Asking for reuse
-            if(checkReuseIsPossible(ParamFileEncoded))
-            {
-                // Reuse is OK
-
-                //execParams[reuse] = true; // Reuse from file system
-
-                // Reuse from DB
-                execParams[fileEncoded] = req.user.masterSources[baseName].fileContent;
-                execParams[filename] = req.user.masterSources[baseName].name;
-                execParams[reuse] = false;
-            }
-            else
-            {
-                //Reuse not OK
-                execParams[fileEncoded] = emptySources[baseName].fileContent;
-                execParams[filename] = emptySources[baseName].name;
-                execParams[reuse] = false;
-            }
+            // Reuse Source from DB
+            execParams[fileEncoded] = req.user.masterSources[baseName].fileContent;
+            execParams[filename] = req.user.masterSources[baseName].name;
+            execParams[reuse] = false;
+            
         }
-        else 
-        {
-            //Use custom master source
-        }
+
+        execParams[filename] = emptySources[baseName].name; // Force standard name
+
 
     };
 
