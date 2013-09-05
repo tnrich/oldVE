@@ -329,17 +329,17 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     var emptySources = 
     {
-        masterPlasmidsList: 
+        masterplasmidlist: 
         { 
             name: "masterplasmidlist.csv",
             fileContent: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
         },
-        masterOligosList: 
+        masteroligolist: 
         {
             name: "masteroligolist.csv",
             fileContent: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="
         },
-        masterDirectSynthesesList: {
+        masterdirectsyntheseslist: {
             name: "masterdirectsyntheseslist.csv",
             fileContent: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
         }
@@ -389,8 +389,8 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
             else
             {
                 //Reuse not OK
-                execParams[fileEncoded] = emptySources[ParamFileEncoded].fileContent;
-                execParams[filename] = emptySources[ParamFileEncoded].name;
+                execParams[fileEncoded] = emptySources[baseName].fileContent;
+                execParams[filename] = emptySources[baseName].name;
                 execParams[reuse] = false;
             }
         }
