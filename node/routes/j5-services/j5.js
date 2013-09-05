@@ -186,7 +186,7 @@ function updateMasterSources(sources,user){
 };
 
 var clearUserFolder = function(){
-  require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/"+, function puts(error, stdout, stderr) { 
+  require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/", function puts(error, stdout, stderr) { 
       console.log("User folder cleared");
   });
 };
