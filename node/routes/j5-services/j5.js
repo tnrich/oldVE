@@ -182,7 +182,9 @@ function updateMasterSources(sources,user){
   //{
     if(sources.masterplasmidlist) user.masterSources.masterplasmidlist.fileContent = new Buffer(sources.masterplasmidlist.fileContent).toString('base64');
     if(sources.masteroligolist) user.masterSources.masteroligolist.fileContent = new Buffer(sources.masteroligolist.fileContent).toString('base64');
-    if(sources.masterdirectsyntheseslist) user.masterSources.fileContent = new Buffer(sources.masterdirectsyntheseslist.fileContent).toString('base64');
+    if(sources.masterdirectsyntheseslist) user.masterSources.masterdirectsyntheseslist.fileContent = new Buffer(sources.masterdirectsyntheseslist.fileContent).toString('base64');
+
+    console.log(user.masterSources);
 
     user.save();
   //}
