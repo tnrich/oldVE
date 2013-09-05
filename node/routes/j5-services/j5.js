@@ -185,7 +185,7 @@ function updateMasterSources(sources,user){
   //}
 };
 
-var clearUserFolder = function(){
+var clearUserFolder = function(user){
   require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/", function puts(error, stdout, stderr) { 
       console.log("User folder cleared");
   });
@@ -219,7 +219,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 
       newj5Run.save();
       updateMasterSources(parsedResults.masterSources,user);
-      clearUserFolder();
+      clearUserFolder(req.user);
     });    
 
   });
