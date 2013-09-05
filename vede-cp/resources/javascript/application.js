@@ -350,9 +350,9 @@ $( document ).bind( 'loadDE', function() {
         execParams["reuse_sequences_list_file"] = "FALSE";
         execParams["j5_session_id"] = sessionID;
 
-        execParams["master_plasmids_list_filename"] = "j5_plasmids.csv";
-        execParams["master_oligos_list_filename"] = "j5_oligos.csv";
-        execParams["master_direct_syntheses_list_filename"] = "j5_directsyntheses.csv";
+        execParams["master_plasmids_list_filename"] = "masterplasmidlist.csv";
+        execParams["master_oligos_list_filename"] = "masteroligolist.csv";
+        execParams["master_direct_syntheses_list_filename"] = "masterdirectsyntheseslist.csv";
       
         if(!execParams["encoded_master_oligos_file"]) execParams["encoded_master_oligos_file"] = "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg==";
         if(!execParams["encoded_master_direct_syntheses_file"]) execParams["encoded_master_direct_syntheses_file"] = "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="; 
