@@ -355,8 +355,8 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
             // Reuse Source from DB
-            execParams[fileEncoded] = req.user.masterSources[baseName].fileContent;
-            execParams[filename] = req.user.masterSources[baseName].name;
+            execParams[fileEncoded] = user.masterSources[baseName].fileContent;
+            execParams[filename] = user.masterSources[baseName].name;
             execParams[reuse] = false;
             
         }
