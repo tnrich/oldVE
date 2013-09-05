@@ -176,16 +176,11 @@ app.post('/getProtocol',restrict,function(req,res){
 
 
 function updateMasterSources(sources,user){
-  console.log("Updating master sources");
-  console.log(sources);
   //if(Object.keys(sources).length>0)
   //{
     if(sources.masterplasmidlist) user.masterSources.masterplasmidlist.fileContent = new Buffer(sources.masterplasmidlist.fileContent).toString('base64');
     if(sources.masteroligolist) user.masterSources.masteroligolist.fileContent = new Buffer(sources.masteroligolist.fileContent).toString('base64');
     if(sources.masterdirectsyntheseslist) user.masterSources.masterdirectsyntheseslist.fileContent = new Buffer(sources.masterdirectsyntheseslist.fileContent).toString('base64');
-
-    console.log(user.masterSources);
-
     user.save();
   //}
 };
@@ -218,7 +213,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 
       newj5Run.save();
       updateMasterSources(parsedResults.masterSources,user);
-
+      fs.rmdirSync("/home/teselagen/j5service/usr/"+user.username+"/"); // Clear user folder!
     });    
 
   });
