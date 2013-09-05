@@ -332,16 +332,16 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         masterPlasmidsList: 
         { 
             name: "masterplasmidlist.csv",
-            data: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
+            fileContent: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
         },
         masterOligosList: 
         {
             name: "masteroligolist.csv",
-            data: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="
+            fileContent: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg=="
         },
         masterDirectSynthesesList: {
             name: "masterdirectsyntheseslist.csv",
-            data: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
+            fileContent: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo="
         }
     };
 
@@ -375,8 +375,6 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
             // Asking for reuse
-            execParams[reuse] = checkReuseIsPossible(ParamFileEncoded);
-
             if(checkReuseIsPossible(ParamFileEncoded))
             {
                 // Reuse is OK
@@ -391,7 +389,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
             else
             {
                 //Reuse not OK
-                execParams[fileEncoded] = emptySources[ParamFileEncoded].data;
+                execParams[fileEncoded] = emptySources[ParamFileEncoded].fileContent;
                 execParams[filename] = emptySources[ParamFileEncoded].name;
                 execParams[reuse] = false;
             }
@@ -399,10 +397,6 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         else 
         {
             //Use custom master source
-            //customSources[ParamFileEncoded] = {
-            //    name: execParams[filename],
-            //    data: execParams[fileEncoded]
-            //};
         }
 
     };
@@ -433,9 +427,6 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         "masterDirectSynthesesList",
         "masterdirectsyntheseslist"
     );
-
-    // If using custom source, update them.
-    //if(Object.keys(customSources).length>0) updateMasterSources(user,customSources);
 
     //quicklog(require('util').inspect(execParams, true, 5));
 
