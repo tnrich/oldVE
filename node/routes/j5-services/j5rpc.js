@@ -370,7 +370,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
     function processMasterFiles(reuse,filename,fileEncoded,ParamFilename,ParamFileEncoded,baseName){
         execParams[filename] = masterFiles[ParamFilename];
         execParams[fileEncoded] = masterFiles[ParamFileEncoded];
-        execParams[filename] = emptySources[ParamFileEncoded].name; // Force standard name
+        execParams[filename] = emptySources[baseName].name; // Force standard name
 
         if(execParams[filename]==='' && execParams[fileEncoded]==='') 
         {
