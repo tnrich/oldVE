@@ -98,12 +98,13 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                                 // Fire change
+                    console.log(j5run);
                     Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, j5run._id, j5run.status);
-                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",j5run);}
                     toastr.options.timeOut = 0;
+                    jumpRun = j5run;
+                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
                     toastr.success("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});
                     toastr.options.timeOut = 5000;
-
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
                     changes = true;
