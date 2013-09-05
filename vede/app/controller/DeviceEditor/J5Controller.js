@@ -599,7 +599,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             masterPlasmidsListFileName = "";
         } else if(inspector.down("radio[cls='useEmptyPlasmidsRadioBtn']").getValue()) {
             masterPlasmidsList = this.J5ControlsUtils.generateEmptyPlasmidsList();
-            masterPlasmidsListFileName = "j5_plasmids.csv";
+            masterPlasmidsListFileName = "masterplasmidlist.csv";
         } else {
             masterPlasmidsList = this.plasmidsListText;
             masterPlasmidsListFileName = this.getFileNameFromField(
@@ -611,9 +611,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             masterOligosListFileName = "";
         } else if(inspector.down("radio[cls='useEmptyOligosRadioBtn']").getValue()) {
             masterOligosList = this.J5ControlsUtils.generateEmptyOligosList();
-            masterOligosListFileName = "j5_oligos.csv";
+            masterOligosListFileName = "masteroligolist.csv";
         } else {
-            masterOligosList = this.plasmidsListText;
+            masterOligosList = this.oligosListText;
             masterOligosListFileName = this.getFileNameFromField(
             inspector.down("component[cls='oligosListFileSelector']"));
         }
@@ -623,9 +623,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             masterDirectSynthesesListFileName = "";
         } else if(inspector.down("radio[cls='useEmptySynthesesRadioBtn']").getValue()) {
             masterDirectSynthesesList = this.J5ControlsUtils.generateEmptyDirectSynthesesList();
-            masterDirectSynthesesListFileName = "j5_directsyntheses.csv";
+            masterDirectSynthesesListFileName = "masterdirectsyntheseslist.csv";
         } else {
-            masterDirectSynthesesList = this.plasmidsListText;
+            masterDirectSynthesesList = this.directSynthesesListText;
             masterDirectSynthesesListFileName = this.getFileNameFromField(
             inspector.down("component[cls='directSynthesesFileSelector']"));
         }
@@ -637,6 +637,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterOligosListFileName"] = masterOligosListFileName;
         masterFiles["masterDirectSynthesesList"] = Base64.encode(masterDirectSynthesesList);
         masterFiles["masterDirectSynthesesListFileName"] = masterDirectSynthesesListFileName;
+
+        //console.log(masterFiles);
 
         var assemblyMethod = inspector.down("component[cls='assemblyMethodSelector']").getValue();
 

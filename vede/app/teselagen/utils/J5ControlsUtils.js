@@ -46,15 +46,15 @@ singleton: true,
     },
 
     generateEmptyPlasmidsList: function() {
-        return "Plasmid Name,Alias,Contents,Length,Sequence\n";
+        return "Plasmid Name,Alias,Contents,Length,Sequence\npj5_00000,,,,";
     },
 
     generateEmptyOligosList: function() {
-        return "Oligo Name,Length,Tm,Tm (3' only),Sequence\n";
+        return "Oligo Name,Length,Tm,Tm (3' only),Sequence\nj5_00000,,,,";
     },
 
     generateEmptyDirectSynthesesList: function() {
-        return "Direct Synthesis Name,Alias,Contents,Length,Sequence\n";
+        return "Direct Synthesis Name,Alias,Contents,Length,Sequence\ndsj5_00000,,,,";
     },
 
     createSeqListHeader: function() {

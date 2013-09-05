@@ -175,7 +175,23 @@ app.post('/getProtocol',restrict,function(req,res){
 });
 
 
-function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData)
+function updateMasterSources(sources,user){
+  //if(Object.keys(sources).length>0)
+  //{
+    if(sources.masterplasmidlist) user.masterSources.masterplasmidlist.fileContent = new Buffer(sources.masterplasmidlist.fileContent).toString('base64');
+    if(sources.masteroligolist) user.masterSources.masteroligolist.fileContent = new Buffer(sources.masteroligolist.fileContent).toString('base64');
+    if(sources.masterdirectsyntheseslist) user.masterSources.masterdirectsyntheseslist.fileContent = new Buffer(sources.masterdirectsyntheseslist.fileContent).toString('base64');
+    user.save();
+  //}
+};
+
+var clearUserFolder = function(user){
+  require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/", function puts(error, stdout, stderr) { 
+      console.log("User folder cleared");
+  });
+};
+
+function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 {
 
   var handleErrors = function(err,newj5Run){
@@ -201,10 +217,9 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData)
       newj5Run.status = (warnings.length > 0) ? "Completed with warnings" : "Completed";
       newj5Run.warnings = warnings;
 
-      newj5Run.save(function(){
-        //console.log("j5run updated");
-      });
-
+      newj5Run.save();
+      updateMasterSources(parsedResults.masterSources,user);
+      clearUserFolder(user);
     });    
 
   });
@@ -281,7 +296,7 @@ app.post('/executej5',restrict,function(req,res){
       // In production mode use internal script
       var testing = !(app.get("env") === "production");
 
-      if(app.get("env") === "production" || testing) {
+      if(app.get("env") === "production") {
 
         //console.log("Executing experimental j5 through pipe");
 
@@ -334,7 +349,7 @@ app.post('/executej5',restrict,function(req,res){
                 { 
                   var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
                   var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
-                  onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData);
+                  onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
                 }
             });
 
@@ -358,7 +373,7 @@ app.post('/executej5',restrict,function(req,res){
             var encodedFileData = value['encoded_output_file'];
             var fileName = value['output_filename'];
 
-            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData);
+            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
           }
         });
       }

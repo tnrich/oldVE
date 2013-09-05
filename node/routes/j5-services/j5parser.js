@@ -1185,6 +1185,7 @@ var processJ5Response = function(method,encodedFileData,callback) {
     files.partslist = {};
     files.zips = [];
     files.assembly = {}; // Non Combinatorial Assembly
+    files.masterSources = {};
     
     for(var file in zip.files)
     {
@@ -1196,18 +1197,20 @@ var processJ5Response = function(method,encodedFileData,callback) {
             fileContent: zip.files[file]['data']
         };
 
-        if     ( fileName.match(/\w+.(\w+)/)[1] == "gb" )       files.assemblies.push(newFile);
-        else if( fileName.match(/\w+.(\w+)/)[1] == "xml" )       files.assemblies.push(newFile);
-        else if( fileName.match(/\w+.(\w+)/)[1] == "fas" )       files.assemblies.push(newFile);
-        else if( fileName.match(/.+combinatorial.csv/) )   files.combinatorial = newFile;
-        else if( fileName.match(/.+\d\d.csv/) )            files.assembly = newFile;
-        else if( fileName.match(/eugeneruleslist.eug/) )   files.eugenerules = newFile;
-        else if( fileName.match(/j5_plasmids.csv/) )       files.j5plasmids = newFile;
-        else if( fileName.match(/j5parameters.csv/) )      files.j5parameters = newFile;
-        else if( fileName.match(/mastersequences.csv/) )   files.mastersequences = newFile;
-        else if( fileName.match(/partslist.csv/) )         files.partslist = newFile;
-        else if( fileName.match(/targetpartsorder.csv/) )  files.targetpartsorder = newFile;
-        else if( fileName.match(/\w+.(\w+)/)[1] == "zip" ) files.zips.push(newFile);
+        if     ( fileName.match(/\w+.(\w+)/)[1] == "gb" )           files.assemblies.push(newFile);
+        else if( fileName.match(/\w+.(\w+)/)[1] == "xml" )          files.assemblies.push(newFile);
+        else if( fileName.match(/\w+.(\w+)/)[1] == "fas" )          files.assemblies.push(newFile);
+        else if( fileName.match(/.+combinatorial.csv/) )            files.combinatorial = newFile;
+        else if( fileName.match(/.+\d\d.csv/) )                     files.assembly = newFile;
+        else if( fileName.match(/eugeneruleslist.eug/) )            files.eugenerules = newFile;
+        else if( fileName.match(/j5parameters.csv/) )               files.j5parameters = newFile;
+        else if( fileName.match(/mastersequences.csv/) )            files.mastersequences = newFile;
+        else if( fileName.match(/partslist.csv/) )                  files.partslist = newFile;
+        else if( fileName.match(/targetpartsorder.csv/) )           files.targetpartsorder = newFile;
+        else if( fileName.match(/masterplasmidlist.csv/) )          files.masterSources.masterplasmidlist = newFile;
+        else if( fileName.match(/masteroligolist.csv/) )            files.masterSources.masteroligolist = newFile;
+        else if( fileName.match(/masterdirectsyntheseslist.csv/) )  files.masterSources.masterdirectsyntheseslist = newFile;
+        else if( fileName.match(/\w+.(\w+)/)[1] == "zip" )          files.zips.push(newFile);
         else console.log("Warning, file "+newFile.name+" not processed");
     }
 
@@ -1218,6 +1221,9 @@ var processJ5Response = function(method,encodedFileData,callback) {
 
     async.parallel({
 
+        masterSources: function(callback){
+                    callback(null, files.masterSources);
+        },
         combinatorialAssembly: function(callback){
             //processAssemblies(files.assemblies,
                 //function(){
