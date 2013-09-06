@@ -55,19 +55,10 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     onCancelJ5RunClick: function(){
-        if (this.activeJ5Run) {
-            var self = this;
-            Ext.Ajax.request({
-                url: 'http://'+self.activeJ5Run.raw.process.server+'/cancelj5run',
-                method: 'POST',
-                params: {
-                    id: this.activeJ5Run.data.id
-                },
-                success: function(){
-                    self.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue("Canceled");
-                }
-            });
-        }        
+        var self = this;
+        Teselagen.manager.J5CommunicationManager.cancelj5run(function(){
+            self.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue("Canceled");
+        });      
     },
 
     onJ5RunSelect: function( item, e, eOpts ){

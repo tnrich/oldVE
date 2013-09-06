@@ -25,6 +25,30 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     constructor: function () {},
 
+    cancelj5Run: function(cb){
+        var self = this;
+        var j5run = self.currentResults.j5run;
+        if(j5run)
+        {
+
+            Ext.Ajax.request({
+                url: 'http://'+j5run.raw.process.server+'/cancelj5run',
+                method: 'POST',
+                params: {
+                    id: j5run.data.id
+                },
+                success: function(){
+                    if(typeof(cb) == "function") return cb(false);
+                }
+            });
+
+        }
+        else
+        {
+            console.log("No j5run to cancel");
+        }
+    },
+
     downloadCondenseAssemblyResults: function(btn){
         var response = this.condenseAssemblyFilesResults;
         var endDate = new Date(response.endDate);
@@ -114,15 +138,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
      * Generates an AJAX request to the j5 server.
      */
     generateAjaxRequest: function (cb) {
-//        console.log("Starting Ajax Request");
 
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        // var runj5Btn = currentTab.j5Window.query('button[cls=//runj5Btn]')[0];
-        // var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
-        
-        //resultsGrid.store.removeAll();
-
-        //runj5Btn.toggle();
 
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
 
@@ -140,25 +156,6 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
-
-                //var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
-                /*
-                var store = new Ext.data.JsonStore({
-                    proxy: {
-                        type: 'memory',
-                        data:  self.currentResults.j5Results.assemblies,
-                        reader: {
-                            type: 'json',
-                            root: 'files'
-                        }
-                    },
-                    fields: ['name','sizeBP','size','fileContent']
-                });
-                */
-                //store.load();
-                //store.sort('name','ASC');
-                //resultsGrid.reconfigure(store);
-                //ownloadBtn.show();
 
                 return cb(true,response);
             },

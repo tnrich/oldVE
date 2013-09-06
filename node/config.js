@@ -237,12 +237,6 @@ module.exports = function(app, express) {
         var decoder = new (require('string_decoder').StringDecoder)('utf-8');
         app.localIP = decoder.write(stdout);
     });
-        
-
-    setTimeout(function(){
-        app.logger.info("LOCAL HOSTNAME: ",app.localIP);
-    }, 5000);
-
 
     /*
      * Load Manager classes

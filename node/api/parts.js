@@ -134,8 +134,6 @@ module.exports = function(app) {
             }
         }
 
-            console.log("Default order ",!Object.keys(sortOpts).length);
-
             if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
 
         User.findById(req.user._id).populate('parts').exec(function(err, user) {

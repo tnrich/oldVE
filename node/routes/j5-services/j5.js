@@ -288,7 +288,6 @@ app.post('/executej5',restrict,function(req,res){
         deviceDesignModel.j5runs.push(newj5Run);
         deviceDesignModel.save(function(err){
           if(err) return res.json(500,{error: "Database error."});
-          res.json({status:"In progress"});
         });
       });
       // file_id , j5Input and j5Results are filled once the job is completed.
@@ -296,7 +295,7 @@ app.post('/executej5',restrict,function(req,res){
       // In production mode use internal script
       var testing = !(app.get("env") === "production");
 
-      if(app.get("env") === "production" || true) {
+      if(app.get("env") === "production") {
 
         //console.log("Executing experimental j5 through pipe");
 
@@ -310,6 +309,8 @@ app.post('/executej5',restrict,function(req,res){
           pid: newChild.pid,
           server: app.localIP
         };
+
+        res.json({status:"In progress",j5run:newj5Run});
 
         if(!testing) newChild.stdin.setEncoding = 'utf-8';
         if(!testing) newChild.stdin.write(xml+"\n");
@@ -367,6 +368,7 @@ app.post('/executej5',restrict,function(req,res){
       }
       else // Run as XML_RPC Depending on remote server (With timeout limit)
       {
+        res.json({status:"In progress"});
         app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
           if(error)
           {
