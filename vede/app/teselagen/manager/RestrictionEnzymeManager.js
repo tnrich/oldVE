@@ -85,7 +85,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         var cutSitesMap = this.getCutSitesMap();
         var cutSites = [];
         cutSitesMap.each(function(k,v) {
-            cutSites.push({name:k, numCuts:v.length});
+            cutSites.push({name:k, numCuts:v.length, position: "<span class='cutSitePositionCell'>expand row to view</span>"});
             for (var i =0; i< v.length; i++) {
                 cutSites.push(v[i].toJSON());
             }

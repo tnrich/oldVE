@@ -25057,6 +25057,11 @@ img {
   padding-left: 32px;
 }
 
+/* line 24, ../../../../sass/src/view/ve/PropertiesWindow.scss */
+.cutSitePositionCell {
+  color: grey;
+}
+
 /*.cutSitesGridPanel .x-grid-row-alt .x-grid-cell {
 	background: white !important;
 }
