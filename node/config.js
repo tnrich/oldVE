@@ -234,8 +234,9 @@ module.exports = function(app, express) {
     
     // Resolver server external address
     require('child_process').exec('curl http://169.254.169.254/latest/meta-data/public-ipv4', function (error, stdout, stderr) { 
-        app.localIP = stdout;
-        app.logger.info("EXTERNAL IP: ",app.localIP);
+        var decoder = new (require('string_decoder').StringDecoder)('utf-8')
+        app.localIP = decoder.write(stdout);
+        app.logger.info("EXTERNAL IP: ",decoder.write(stdout));
     });
         
 
