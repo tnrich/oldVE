@@ -56,14 +56,17 @@ Ext.define("Vede.controller.J5ReportController", {
 
     onCancelJ5RunClick: function(){
         if (this.activeJ5Run) {
+            var self = this;
+            console.log(this.activeJ5Run);
+
             Ext.Ajax.request({
-                url: Teselagen.manager.SessionManager.buildUrl(url, 'cancelj5run'),
+                url: 'http://'+self.activeJ5Run.raw.process.server+'/cancelj5run',
                 method: 'POST',
                 params: {
                     id: this.activeJ5Run.data.id
                 },
                 success: function(){
-                    this.activeJ5Run.set('status',"Canceled");
+                    self.activeJ5Run.set('status',"Canceled");
                 }
             });
         }        
