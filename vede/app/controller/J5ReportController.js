@@ -54,6 +54,21 @@ Ext.define("Vede.controller.J5ReportController", {
         }
     },
 
+    onCancelJ5RunClick: function(){
+        if (this.activeJ5Run) {
+            Ext.Ajax.request({
+                url: Teselagen.manager.SessionManager.buildUrl(url, 'cancelj5run'),
+                method: 'POST',
+                params: {
+                    id: this.activeJ5Run.data.id
+                },
+                success: function(){
+                    this.activeJ5Run.set('status',"Canceled");
+                }
+            });
+        }        
+    },
+
     onJ5RunSelect: function( item, e, eOpts ){
          this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
             this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
@@ -363,6 +378,9 @@ Ext.define("Vede.controller.J5ReportController", {
             },
             'button[cls="downloadResults"]': {
                 click: this.downloadResults
+            },
+            'button[cls="cancelj5run"]': {
+                click: this.onCancelJ5RunClick
             },
             "gridpanel[name='assemblies']": {
                 itemclick: this.onPlasmidsItemClick
