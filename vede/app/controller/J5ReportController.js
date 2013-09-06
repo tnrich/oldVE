@@ -86,7 +86,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
         var j5parameters = Ext.create("Teselagen.models.J5Parameters");
         j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
-        J5parametersValues = j5parameters.getParametersAsStore();
+        var J5parametersValues = j5parameters.getParametersAsStore();
         //console.log(j5parameters);
         //console.log(this.activeJ5Run);
 

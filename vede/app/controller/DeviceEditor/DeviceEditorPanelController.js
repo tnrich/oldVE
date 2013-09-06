@@ -491,15 +491,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
                     assemblies.sort("name", "ASC");
                     
-//                    var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
 
                     var j5parameters = Ext.create("Teselagen.models.J5Parameters");
-                    j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+                    j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);
                     var J5parametersValues = j5parameters.getParametersAsStore();
-                    //console.log(self.activeJ5Run.getJ5Input().getJ5Parameters());
-                    //console.log(j5parameters);
-                    //console.log(self.activeJ5Run);
-
+                    
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5AssemblyType").setValue(assemblyMethod);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStatus").setValue(status);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStart").setValue(startDate);
@@ -616,9 +612,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             id: design_id,
             callback: function (loadedDesign) {
                 Teselagen.manager.ProjectManager.workingProject = project;
+                console.log(loadedDesign);
+                console.log(design_id);
                 var design = loadedDesign[0];
-                //console.log(design);
-                //var j5report = loadedDesign[0].j5runs();
                 Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
             }
         });
