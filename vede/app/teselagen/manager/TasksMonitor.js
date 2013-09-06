@@ -98,7 +98,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                                 // Fire change
-                    console.log(j5run);
+                    //console.log(j5run);
                     Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, j5run._id, j5run.status);
                     toastr.options.timeOut = 0;
                     jumpRun = j5run;
