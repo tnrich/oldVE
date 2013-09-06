@@ -322,10 +322,12 @@ app.post('/executej5',restrict,function(req,res){
 
         newChild.stderr.on('data', function (stoutData) {}); // For further development
 
-        newChild.on('exit', function () {
+        newChild.on('exit', function (code,signal) {
             console.log("Design assembly Complete! (j5Interface pipe)");
             //quicklog(require('util').inspect(newChild.output,false,null));
             console.log(newChild.output);
+            console.log(code);
+            console.log(signal);
             require('xml2js').parseString(newChild.output, function (err, result) {
                 //quicklog(require('util').inspect(result,false,null));
                 console.log(result);
