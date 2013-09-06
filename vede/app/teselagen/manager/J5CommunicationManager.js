@@ -25,20 +25,27 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     constructor: function () {},
 
-    cancelj5Run: function(cb){
+    cancelj5Run: function(j5run_id,server,cb){
         var self = this;
-        var j5run = self.currentResults.j5run;
-        if(j5run)
+        var j5run = (self.currentResults) ? self.currentResults.j5run : null;
+        if(j5run || j5run_id&&server)
         {
+            if(j5run&&!j5run_id&!server)
+            {
+                j5run_id = j5run.id;
+                server = j5run.process.server
+            }
+
 
             Ext.Ajax.request({
-                url: 'http://'+j5run.process.server+'/cancelj5run',
+                url: 'http://'+server+'/cancelj5run',
                 method: 'POST',
                 params: {
-                    id: j5run.id
+                    id: j5run_id
                 },
-                success: function(){
+                success: function(response){
                     if(typeof(cb) == "function") return cb(false);
+                    console.log(JSON.parse(response.responseText));
                 }
             });
 

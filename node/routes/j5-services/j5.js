@@ -398,10 +398,9 @@ app.post('/executej5',restrict,function(req,res){
 app.post('/cancelj5run',function(req,res){
   var j5Runs = app.db.model("j5run");
   j5Runs.findById(req.body.id).exec(function(err,j5run){
-    if(err || !j5run) res.json({},500);
+    if(err || !j5run) res.json({"fault":"j5 run not found"},500);
     var pid = j5run.process.pid;
     require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
-        console.log("j5 with pid ",pid," killed.");
         res.json(arguments);
     });
   });

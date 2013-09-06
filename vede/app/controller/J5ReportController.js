@@ -56,9 +56,12 @@ Ext.define("Vede.controller.J5ReportController", {
 
     onCancelJ5RunClick: function(){
         var self = this;
-        Teselagen.manager.J5CommunicationManager.cancelj5run(function(){
-            self.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue("Canceled");
-        });      
+        if(self.activeJ5Run)
+        {
+            Teselagen.manager.J5CommunicationManager.cancelj5Run(self.activeJ5Run.data.id,self.activeJ5Run.raw.process.server,function(){
+                self.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue("Canceled");
+            });
+        }      
     },
 
     onJ5RunSelect: function( item, e, eOpts ){

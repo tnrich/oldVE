@@ -16,7 +16,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     runFlag : true,
 
     mon: {}, // Object to observe
-    delay: 1000,
+    delay: 3000,
 
     constructor: function(){
         if(this.debugFlag) console.log("Tasks Monitor created!");

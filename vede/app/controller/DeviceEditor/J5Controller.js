@@ -668,6 +668,17 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 if(success) {
                     toastr.options.onclick = null;
                     toastr.info("j5 Run Submitted");
+
+                    var button = Ext.ComponentQuery.query("button[cls='runj5Btn']")[0];
+                    if(button) {
+                        button.enable();
+                        button.setText("Click to cancel");
+                        button.on("click",function(){
+                            Teselagen.manager.J5CommunicationManager.cancelj5Run(null,null,null);
+                        });
+                    }
+
+
                 } else {
 
                     var messagebox = Ext.MessageBox.show({
@@ -699,10 +710,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             button.disable();
 
             if(button.cls === "runj5Btn") {
-                button.setText("Click to cancel");
-                button.on("click",function(){
-                    Teselagen.manager.J5CommunicationManager.cancelj5Run();
-                })
+                button.setText("J5 Running...");
             }
         }
     },
