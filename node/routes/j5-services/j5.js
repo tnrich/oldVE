@@ -393,7 +393,7 @@ app.post('/executej5',restrict,function(req,res){
   });
 });
 
-app.post('/cancelj5run',restrict,function(req,res){
+app.post('/cancelj5run',function(req,res){
   var j5Runs = app.db.model("j5run");
   j5Runs.findById(req.body.id).exec(function(err,j5run){
     if(err || !j5run) res.json({},500);
