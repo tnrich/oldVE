@@ -328,6 +328,8 @@ app.post('/executej5',restrict,function(req,res){
             require('xml2js').parseString(newChild.output, function (err, result) {
                 //quicklog(require('util').inspect(result,false,null));
                 console.log(result);
+                console.log(err);
+                console.log("///");
                 if(err)
                 {
                   console.log(err);
