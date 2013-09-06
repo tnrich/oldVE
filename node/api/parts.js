@@ -105,7 +105,7 @@ module.exports = function(app) {
             var filterOptions = JSON.parse(req.query.filter); 
             if(filterOptions[0] && filterOptions[0].property==="name")
             {
-                filter = new RegExp(filterOptions[0].value, "i");
+                filter = new RegExp("^"+filterOptions[0].value, "i");
             }
         }
 
@@ -114,26 +114,26 @@ module.exports = function(app) {
             var sortOptions = JSON.parse(req.query.sort); 
             if(sortOptions[0] && sortOptions[0].property==="name")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="dateModified")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="dateCreated")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="size")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="partSource")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
             }
 
-            if(sortOptions.length === 0) sortOpts = { name: 1 }; // Sorted by name by default
+            if(sortOptions.length === 0) sortOpts = { name: -1 }; // Sorted by name by default
         }
 
         User.findById(req.user._id).populate('parts').exec(function(err, user) {
