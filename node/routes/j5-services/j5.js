@@ -323,10 +323,11 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stderr.on('data', function (stoutData) {}); // For further development
 
         newChild.on('exit', function (code,signal) {
-            //console.log("Design assembly Complete! (j5Interface pipe)");
+            console.log("Design assembly Complete! (j5Interface pipe)");
+            console.log("Process finished with code ",code," and signal ",signal);
             //quicklog(require('util').inspect(newChild.output,false,null));
             require('xml2js').parseString(newChild.output, function (err, result) {
-                if(signal === "SIGTERM")
+                if(code === 15)
                 {
                   newj5Run.status = "Canceled";
                   newj5Run.endDate = Date.now();
@@ -398,7 +399,7 @@ app.post('/cancelj5run',function(req,res){
   j5Runs.findById(req.body.id).exec(function(err,j5run){
     if(err || !j5run) res.json({},500);
     var pid = j5run.process.pid;
-    require('child_process').exec('kill -SIGTERM '+pid, function (error, stdout, stderr) {
+    require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
         console.log("j5 with pid ",pid," killed.");
         res.json(arguments);
     });
