@@ -323,20 +323,16 @@ app.post('/executej5',restrict,function(req,res){
         newChild.stderr.on('data', function (stoutData) {}); // For further development
 
         newChild.on('exit', function (code,signal) {
-            console.log("Design assembly Complete! (j5Interface pipe)");
+            //console.log("Design assembly Complete! (j5Interface pipe)");
             //quicklog(require('util').inspect(newChild.output,false,null));
-            console.log(newChild.output);
-            console.log(arguments);
-            return false;
-
-
-
             require('xml2js').parseString(newChild.output, function (err, result) {
-                //quicklog(require('util').inspect(result,false,null));
-                console.log(result);
-                console.log(err);
-                console.log("///");
-                if(err)
+                if(signal === "SIGTERM")
+                {
+                  newj5Run.status = "Canceled";
+                  newj5Run.endDate = Date.now();
+                  newj5Run.save();
+                }
+                else if(err)
                 {
                   console.log(err);
                   newj5Run.status = "Error";
