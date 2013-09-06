@@ -109,7 +109,7 @@ module.exports = function(app) {
             var filterOptions = JSON.parse(req.query.filter); 
             if(filterOptions[0] && filterOptions[0].property==="name")
             {
-                filter = new RegExp(filterOptions[0].value, "i");
+                filter = new RegExp("^"+filterOptions[0].value, "i");
             }
         }
 
@@ -132,6 +132,8 @@ module.exports = function(app) {
             {
                 sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
             }
+
+            if(sortOptions.length === 0) sortOpts = { name: 1 }; // Sorted by name by default
         }
 
         User.findById(req.user._id).populate('sequences').exec(function(err, user) {
