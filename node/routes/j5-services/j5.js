@@ -186,7 +186,7 @@ function updateMasterSources(sources,user){
 };
 
 var clearUserFolder = function(user){
-  require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/", function puts(error, stdout, stderr) { 
+  require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/", function (error, stdout, stderr) { 
       console.log("User folder cleared");
   });
 };
@@ -296,7 +296,7 @@ app.post('/executej5',restrict,function(req,res){
       // In production mode use internal script
       var testing = !(app.get("env") === "production");
 
-      if(app.get("env") === "production") {
+      if(app.get("env") === "production" || true) {
 
         //console.log("Executing experimental j5 through pipe");
 
@@ -305,6 +305,11 @@ app.post('/executej5',restrict,function(req,res){
         if(testing) scriptPath = "/Users/rpavez/bin/j5.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("J5 Process started with pid: "+newChild.pid);
+
+        newj5Run.process = {
+          pid: newChild.pid,
+          server: app.localIP
+        };
 
         if(!testing) newChild.stdin.setEncoding = 'utf-8';
         if(!testing) newChild.stdin.write(xml+"\n");

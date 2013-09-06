@@ -56,6 +56,10 @@ module.exports = function(db) {
 		assemblyMethod: String,
 		endDate: Date,
 		status: String,
+		process: {
+			server: String,
+			pid: Number
+		},
 		warnings: [],
 		error_list: [],
 		user_id: { type: oIDRef, ref: 'user' },
