@@ -326,7 +326,7 @@ app.post('/executej5',restrict,function(req,res){
             console.log("Process finished with code ",code," and signal ",signal);
             //quicklog(require('util').inspect(newChild.output,false,null));
             require('xml2js').parseString(newChild.output, function (err, result) {
-                if(status === "SIGTERM")
+                if(signal === "SIGTERM")
                 {
                   newj5Run.status = "Canceled";
                   newj5Run.endDate = Date.now();
