@@ -356,6 +356,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         {
             // Reuse Source from DB
             execParams[fileEncoded] = user.masterSources[baseName].fileContent;
+            console.log(user.masterSources[baseName].fileContent);
             execParams[filename] = user.masterSources[baseName].name;
             execParams[reuse] = false;
             

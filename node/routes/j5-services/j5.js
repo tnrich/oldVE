@@ -260,8 +260,12 @@ app.post('/executej5',restrict,function(req,res){
   DeviceDesign.findById(req.body.deProjectId).populate('bins.cells.part_id.sequencefile_id parts').exec(function(err,deviceDesignModel){
     // Call resolve sequences to populate sequences (Further releases of mongoose may support multilevel chain population) so this can be refactored
     DeviceDesignPreProcessing(deviceDesignModel,function(devicedesign){
+
+      var User = app.db.model("User");
+      User.findById(req.user._id).select({ "masterSources.masterplasmidlist.fileContent": 1, "masterSources.masteroligolist.fileContent": 1,"masterSources.masterdirectsyntheseslist.fileContent": 1 }).exec(function(err,user){
+
       // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
-      var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,req.user,testing);
+      var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user,testing);
 
       // Credentials for RPC communication
       data["username"] = req.user.username;
@@ -389,6 +393,8 @@ app.post('/executej5',restrict,function(req,res){
           }
         });
       }
+
+    });
 
     });
 
