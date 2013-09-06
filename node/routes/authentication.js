@@ -8,7 +8,7 @@ module.exports = function(app) {
 
             User.findOne({
                 "username": username
-            }, function(err, user) {
+            }).select('-masterSources').exec(function(err, user) {
                 if(err) {
                     return done(err, null);
                 } else if(!user) {
@@ -39,7 +39,7 @@ module.exports = function(app) {
     app.passport.deserializeUser(function(id, done) {
         var User = app.db.model("User");
 
-        User.findById(id, function(err, user) {
+        User.findById(id).select('-masterSources').exec(function(err, user) {
             done(err, user);
         });
     });
