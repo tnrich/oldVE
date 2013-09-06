@@ -326,8 +326,11 @@ app.post('/executej5',restrict,function(req,res){
             console.log("Design assembly Complete! (j5Interface pipe)");
             //quicklog(require('util').inspect(newChild.output,false,null));
             console.log(newChild.output);
-            console.log(code);
-            console.log(signal);
+            console.log(arguments);
+            return false;
+
+
+
             require('xml2js').parseString(newChild.output, function (err, result) {
                 //quicklog(require('util').inspect(result,false,null));
                 console.log(result);
