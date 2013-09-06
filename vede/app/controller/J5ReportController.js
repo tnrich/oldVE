@@ -57,8 +57,6 @@ Ext.define("Vede.controller.J5ReportController", {
     onCancelJ5RunClick: function(){
         if (this.activeJ5Run) {
             var self = this;
-            console.log(this.activeJ5Run);
-
             Ext.Ajax.request({
                 url: 'http://'+self.activeJ5Run.raw.process.server+'/cancelj5run',
                 method: 'POST',
@@ -66,7 +64,7 @@ Ext.define("Vede.controller.J5ReportController", {
                     id: this.activeJ5Run.data.id
                 },
                 success: function(){
-                    self.activeJ5Run.set('status',"Canceled");
+                    self.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue("Canceled");
                 }
             });
         }        
