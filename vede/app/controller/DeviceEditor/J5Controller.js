@@ -701,7 +701,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             if(button.cls === "runj5Btn") {
                 button.setText("Click to cancel");
                 button.on("click",function(){
-                    Teselagen.manager.J5CommunicationManager.cancelj5run();
+                    Teselagen.manager.J5CommunicationManager.cancelj5Run();
                 })
             }
         }

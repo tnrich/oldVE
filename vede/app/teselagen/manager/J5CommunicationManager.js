@@ -32,10 +32,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         {
 
             Ext.Ajax.request({
-                url: 'http://'+j5run.raw.process.server+'/cancelj5run',
+                url: 'http://'+j5run.process.server+'/cancelj5run',
                 method: 'POST',
                 params: {
-                    id: j5run.data.id
+                    id: j5run.id
                 },
                 success: function(){
                     if(typeof(cb) == "function") return cb(false);
