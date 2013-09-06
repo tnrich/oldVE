@@ -133,7 +133,9 @@ module.exports = function(app) {
                 sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
             }
 
-            if(Object.keys(sortOptions).length === 0) sortOpts = { name: 1 }; // Sorted by name by default
+            console.log("Default order ",!Object.keys(sortOpts).length);
+
+            if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
         }
 
         User.findById(req.user._id).populate('sequences').exec(function(err, user) {
