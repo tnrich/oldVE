@@ -262,7 +262,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     cls: 'cutSitesPositionColumn',
                                                     dataIndex: 'position',
                                                     text: 'Position',
-                                                    width: 170
+                                                    width: 170,
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
@@ -284,8 +284,8 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             xtype: 'displayfield',
                                             cls: 'maxCutOffsField',
                                             value: '<b>unlimited</b>',
-                                            fieldLabel: 'Max Cut Offs',
-                                            labelWidth: 80,
+                                            fieldLabel: 'Max Cut Sites shown per enzyme',
+                                            labelWidth: 200,
                                             margins: '10 0 5 0'
                                         },
                                         {
@@ -297,7 +297,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                             items: [
                                                 {
                                                     xtype: 'label',
-                                                    text: 'Adjust Max Cut Offs in',
+                                                    text: 'Adjust Max Cut Sites in',
                                                     margins: '0 5 15 0'
                                                 },
                                                 {

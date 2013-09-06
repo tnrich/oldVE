@@ -70,9 +70,13 @@ Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
     },
     
     toJSON: function() {
+        var start = this.getStart()+1;
+        var end = this.getEnd();
         return {
             "name": this.getRestrictionEnzyme().getName(),
-            "position": (this.getStart()+1) + " - " + this.getEnd(),
+            "start": start,
+            "end": end,
+            "position": start + " - " + end,
             "strand": this.getStrand()
         };
     }
