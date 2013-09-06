@@ -239,7 +239,9 @@ module.exports = function(app, express) {
     });
         
 
-    
+    setTimeout(function(){
+        app.logger.info("LOCAL HOSTNAME: ",app.localIP);
+    }, 5000);
 
 
     /*
