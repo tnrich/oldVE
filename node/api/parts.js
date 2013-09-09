@@ -136,7 +136,10 @@ module.exports = function(app) {
 
             if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
 
-        User.findById(req.user._id).populate('parts').exec(function(err, user) {
+        User.findById(req.user._id).populate({
+                path: 'parts',
+                match: {name: {$regex: filter}} 
+            }).exec(function(err, user) {
             totalCount = user.parts.length;
 
             User.findById(req.user._id).populate({
