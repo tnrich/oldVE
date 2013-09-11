@@ -35,7 +35,7 @@ methodCall: function(methodName,data,cb){
         newChild.stdin.write(xml+"\n");
 
         newChild.stderr.on('data', function (stoutData) {
-        	process.stdout.write(stoutData);
+        	//process.stdout.write(stoutData);
         });
 
         newChild.on('exit', function (code,signal) {
