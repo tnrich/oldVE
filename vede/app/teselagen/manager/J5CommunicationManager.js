@@ -166,6 +166,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
+                Teselagen.manager.TasksMonitor.addJ5RunObserver(self.currentResults.j5run);
 
                 return cb(true,response);
             },
