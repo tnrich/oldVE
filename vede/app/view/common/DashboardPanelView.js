@@ -444,12 +444,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
-                                        grid.store.clearFilter();
-                                        grid.store.remoteFilter = true;
-                                        grid.store.on('load', function(s){ 
-                                            s.remoteFilter = false; 
-                                        }, this, { single: true })
-                                        
+                                        grid.store.clearFilter(true);
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
@@ -656,7 +651,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 margin: 13,
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
-                                        Teselagen.manager.ProjectManager.parts.clearFilter();
+                                        Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
