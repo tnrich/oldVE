@@ -29,12 +29,21 @@ methodCall: function(methodName,data,cb){
         var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
         //var scriptPath = "/Users/rpavez/bin/downstream.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
-        console.log("J5 Process started with pid: "+newChild.pid);
+        console.log(methodName + " started with pid: "+newChild.pid);
 
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
+        newChild.stderr.on('data', function (stoutData) {
+        	process.stdout.write(stoutData);
+        });
+
+        newChild.on('exit', function (code,signal) {
+            console.log("Process finished with code ",code," and signal ",signal);
+        });
+
 		deserializer.deserializeMethodResponse(newChild.stdout, function(err,data){
+			//quicklog(require('util').inspect(data,false,null));
 			return cb(false,data);
 		});
 
