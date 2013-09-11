@@ -26,13 +26,16 @@ methodCall: function(methodName,data,cb){
 
         var deserializer = new Deserializer();
 
-        //var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-        var scriptPath = "/Users/rpavez/bin/downstream.pl";
+        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+        //var scriptPath = "/Users/rpavez/bin/downstream.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log("J5 Process started with pid: "+newChild.pid);
 
+        newChild.stdin.setEncoding = 'utf-8';
+        newChild.stdin.write(xml+"\n");
+
 		deserializer.deserializeMethodResponse(newChild.stdout, function(err,data){
-			cb(false,data);
+			return cb(false,data);
 		});
 
 }
