@@ -22,6 +22,9 @@ var path = require('path');
 var Serializer = require("./Serializer");
 var gridfs = require("./gridfs")(app);
 
+if(app.get("env") === "production") {
+  app.j5client = require("./j5communication")();
+};
 /**
  * Write to quick.log
  */
@@ -104,12 +107,10 @@ app.post('/DesignDownstreamAutomation', restrict, function(req,res){
   data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
-
     if(error)
     {
       console.log(error);
       res.send(error["faultString"], 500);
-      // res.json(500, {"error":error["faultString"], "endDate": Date.now()});
     }
     else
     {
@@ -134,7 +135,6 @@ app.post('/condenseAssemblyFiles',restrict, function(req,res){
     {
       console.log(error);
       res.send(error["faultString"], 500);
-      // res.json(500, {"error":error["faultString"], "endDate": Date.now()});
     }
     else
     {
