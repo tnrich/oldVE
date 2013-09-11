@@ -561,9 +561,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
         buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
         var button;
+        var cancelBtn = Ext.ComponentQuery.query("button[cls='cancelj5Btn']")[0];
+        cancelBtn.hide();
 
         for(var i = 0; i < buttonsToEnable.length; i++) {
             button = buttonsToEnable[i];
+            button.show();
             button.enable();
             button.setLoading(false);
 
@@ -669,11 +672,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     toastr.options.onclick = null;
                     toastr.info("j5 Run Submitted");
 
-                    var button = Ext.ComponentQuery.query("button[cls='runj5Btn']")[0];
-                    if(button) {
-                        button.enable();
-                        button.setText("Click to cancel");
-                        button.on("click",function(){
+                    var runBtn = Ext.ComponentQuery.query("button[cls='runj5Btn']")[0];
+                    var cancelBtn = Ext.ComponentQuery.query("button[cls='cancelj5Btn']")[0];
+                    if(cancelBtn) {
+                        runBtn.hide();
+                        cancelBtn.show();
+                        cancelBtn.on("click",function(){
                             Teselagen.manager.J5CommunicationManager.cancelj5Run(null,null,null);
                         });
                     }
@@ -703,6 +707,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         if(!skipAppendLoader) {
             $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+            $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".cancelj5Btn span span span");
         }
 
         for(var i = 0; i < buttonsToDisable.length; i++) {

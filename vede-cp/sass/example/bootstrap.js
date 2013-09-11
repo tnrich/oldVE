@@ -33,8 +33,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.sequence.dna.DNASequence": [],
   "Teselagen.models.UserRestrictionEnzymeGroup": [],
   "Vede.view.EnzymeSelector": [],
-  "Teselagen.models.j5Output.CombinatorialNonMockAssembly": [],
   "Vede.view.ve.VectorEditorMainMenuPanel": [],
+  "Teselagen.models.j5Output.CombinatorialNonMockAssembly": [],
   "Vede.view.pie.NameBox": [],
   "Vede.controller.VectorEditor.MainToolbarController": [],
   "Vede.view.ve.PieContextMenu": [],
@@ -420,10 +420,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Vede.view.EnzymeSelector": [
     "widget.enzymeselector"
   ],
-  "Teselagen.models.j5Output.CombinatorialNonMockAssembly": [],
   "Vede.view.ve.VectorEditorMainMenuPanel": [
     "widget.VectorEditorMainMenuPanel"
   ],
+  "Teselagen.models.j5Output.CombinatorialNonMockAssembly": [],
   "Vede.view.pie.NameBox": [],
   "Vede.controller.VectorEditor.MainToolbarController": [],
   "Vede.view.ve.PieContextMenu": [],
