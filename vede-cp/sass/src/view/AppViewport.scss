@@ -660,7 +660,7 @@ border-right: 1px solid #E0E3E6;
 }
 
 #mainAppPanel .x-tab-top-active {
-  background: #E0E3E6;
+  background: #E2E6EB;
   border-color: rgb(209, 213, 218);
   box-shadow: none;
   border-bottom: 1px solid rgb(209, 213, 218) !important;
@@ -684,6 +684,10 @@ border-right: 1px solid #E0E3E6;
 /*Dashboard*/
 #DashboardPanel {
   background: none;
+}
+
+.DashboardPanelTab .x-tab-top-active {
+  background: none !important;
 }
 
 #welcome_splash {
