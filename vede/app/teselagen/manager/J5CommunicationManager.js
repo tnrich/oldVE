@@ -46,7 +46,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 success: function(response){
                     if(typeof(cb) == "function") return cb(false);
                     console.log(JSON.parse(response.responseText));
-                }
+                },
+                timeout: 100000
             });
 
         }
@@ -96,7 +97,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             failure: function(response, opts) {
                 return cb(false,response);
-            }
+            },
+            timeout: 100000
         });
     },
 
@@ -137,7 +139,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             failure: function(response, opts) {
                 return cb(false,response);
-            }
+            },
+            timeout: 100000
         });
     },
 
@@ -163,6 +166,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
+                Teselagen.manager.TasksMonitor.addJ5RunObserver(self.currentResults.j5run);
 
                 return cb(true,response);
             },

@@ -75,6 +75,10 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         });
     },
 
+    addJ5RunObserver: function(j5run){
+        this.mon[j5run.id] = j5run.status;
+    },
+
     observeChanges: function(data){
         if(this.debugFlag) console.log("-----------------------");
         if(this.debugFlag) console.log("Observing");
