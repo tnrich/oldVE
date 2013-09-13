@@ -111,8 +111,8 @@ module.exports = function(app, express){
         app.use(app.passport.session());
 
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
-        app.use(app.router); // Use express routing system
         app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
+        app.use(app.router); // Use express routing system
         app.use(airbrake.expressHandler());
       });
   
