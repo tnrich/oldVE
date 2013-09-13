@@ -17,6 +17,7 @@ app.mongostore = require('connect-mongo');
 app.mongoose = require('mongoose');
 app.nodemailer = require("nodemailer");
 app.winston = require('winston');
+app.program = require('commander');
 
 var config = require('./config.js')(app, express);
 
