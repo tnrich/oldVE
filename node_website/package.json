@@ -16,5 +16,8 @@
     , "redis":"0.8.4"
     , "connect-redis":"1.4.5"
     , "winston":"0.7.1"
+    , "commander":"1.0.5"
+    , "airbrake":"0.3.4"
+    , "nodetime":"0.8.13"
   }
 }
