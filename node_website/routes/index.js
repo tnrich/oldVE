@@ -62,7 +62,7 @@ app.get('/loginuser', function(req,res) {
 });
 
 app.all('/update', function(req,res) {
-  require('child_process').exec("/home/teselagen/selfUpdate.sh", function puts(error, stdout, stderr) { 
+  require('child_process').exec("/bin/sh /home/teselagen/selfUpdate.sh", function puts(error, stdout, stderr) { 
       var op = stdout;
       return res.send(op,200);
   });
