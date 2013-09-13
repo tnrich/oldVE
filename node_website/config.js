@@ -21,6 +21,19 @@ module.exports = function(app, express){
         authHost: "mongodb://127.0.0.1/" + app.dbname
     }; 
 
+
+    if(app.get("env") === "production") {
+        var Opts = {
+            host: "54.215.198.196",
+            port: 27017,
+            username: "prod",
+            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
+            authRequired : true,
+            redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
+        };
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
+    }
+
   if (!app.settings.env) {app.settings.env="development";}
 
   //env specific config
@@ -35,15 +48,15 @@ module.exports = function(app, express){
             app.use(express.bodyParser()); // Use express response body parser (recommended)
             app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
             app.use(express.session({ 
-                secret: 'j5',
-                store: new MongoStore(
-                    {
-                        db: app.dbname,
-                        host: '127.0.0.1',
-                        collection: 'sessions',
-                        auto_reconnect: true
-                    }
-                )
+              secret: 'teselagen',
+              store: new MongoStore(
+                  {
+                      db: app.dbname,
+                      host: 'localhost',
+                      collection: 'web_sessions',
+                      auto_reconnect: true
+                  }
+              )
             })); // Sessions managed using cookies
 
             app.use(app.passport.initialize());
@@ -101,30 +114,7 @@ module.exports = function(app, express){
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
         app.use(airbrake.expressHandler());
-    });
-
-    var MongoDBServer = new app.mongo.Server(Opts.host, Opts.port, {
-          auto_reconnect: true
       });
-
-      var db = new app.mongo.Db(app.dbname, MongoDBServer, {
-          safe: true
-      });
-      db.open(function(err, db) {
-          
-          if(Opts.authRequired)
-          {
-              db.authenticate(Opts.username,Opts.password,function(err,result){
-                  if (!err) {
-                      app.logger.info("GRIDFS: Online (Authenticated on remote server)");
-                  } else app.logger.error("GRIDFS: Offile (Authenticated on remote server)",err);
-              });
-          }
-          else if (!err) {
-              app.logger.info("GRIDFS: Online (Local DB)");
-          }
-      });
-      app.GridStoreDB = db;
   
       app.mailer = app.nodemailer.createTransport("SMTP",{
         service: "Gmail",
