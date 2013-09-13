@@ -64,6 +64,12 @@ Ext.define('Vede.view.RegisterWindow', {
             allowBlank: false,
             name: 'email',
             vtype: 'email'
+        }, {
+            xtype: 'textfield',
+            id: 'invitationCodeField',
+            fieldLabel: 'Invitation Code',
+            allowBlank: false,
+            name: 'invitationCode',
         }],
         buttons: [{
             text: 'Submit',
