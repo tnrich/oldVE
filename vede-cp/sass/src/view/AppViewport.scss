@@ -660,7 +660,7 @@ border-right: 1px solid #E0E3E6;
 }
 
 #mainAppPanel .x-tab-top-active {
-  background: #E0E3E6;
+  background: #E2E6EB;
   border-color: rgb(209, 213, 218);
   box-shadow: none;
   border-bottom: 1px solid rgb(209, 213, 218) !important;
@@ -684,6 +684,10 @@ border-right: 1px solid #E0E3E6;
 /*Dashboard*/
 #DashboardPanel {
   background: none;
+}
+
+.DashboardPanelTab .x-tab-top-active {
+  background: none !important;
 }
 
 #welcome_splash {
@@ -1024,18 +1028,18 @@ background: #F7F9FA;
   margin: 10px;
 }
 
-.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
+.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .cancelj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
   -webkit-transition: background .2s ease-in-out;
 }
 
-.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .buildBtn .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner{
+.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .cancelj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .buildBtn .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner{
   color: white;
 }
 
-.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over{
+.x-openPartLibraryBtn-over, .x-changePartDefinitionBtn-over, .x-deletePartBtn-over, .x-runj5Btn-over, .x-cancelj5Btn-over, .x-downloadResults-over, .x-buildBtn-over, .x-condenseAssembliesBtn-over, .x-distributePCRBtn-over{
   background: #006CAB;
 }
 

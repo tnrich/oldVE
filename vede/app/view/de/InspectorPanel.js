@@ -304,7 +304,17 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
-                    text : 'Edit J5 Parameters',
+                    text : 'Cancel j5 Run',
+                    cls: 'cancelj5Btn',
+                    overCls: 'cancelj5Btn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 40,
+                    hidden: true,
+                    border: 0
+                },
+                {
+                    xtype: 'button',
+                    text : 'Edit j5 Parameters',
                     cls: 'editj5ParamsBtn',
                     overCls: 'editj5ParamsBtn-over',
                     margin: '2.5 0 2.5 0',
