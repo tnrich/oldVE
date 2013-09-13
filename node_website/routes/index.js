@@ -61,18 +61,6 @@ app.get('/loginuser', function(req,res) {
 	res.render('login', {});
 });
 
-app.all('/update', function(req,res) {
-  var spawn = require('child_process').spawn;
-  var newChild = spawn("/bin/sh /home/teselagen/selfUpdate.sh");
-  newChild.on('exit', function(){
-    response.statusCode = 200;
-    res.end();
-  });
-  newChild.stdout.on('data', function (data) {
-    response.write(data);
-  });
-});
-
 app.get('*', function(req, res){
   res.render('notfound', {});
 });
