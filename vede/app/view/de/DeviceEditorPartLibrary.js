@@ -26,7 +26,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
             margin: 13,
             listeners: {
                 change: function(field, newValue, oldValue, eOpts) {
-                    Teselagen.manager.ProjectManager.parts.clearFilter();
+                    Teselagen.manager.ProjectManager.parts.clearFilter(true);
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
                     grid.down('pagingtoolbar').doRefresh();
