@@ -306,7 +306,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     margin: '10 10 20 10',
                     collapsible: true,
                     collapseDirection: 'top',
-                    collapsed: true,
+                    collapsed: false,
                     title: 'j5 Parameters',
                     minHeight: 100,
                     layout: 'fit',
