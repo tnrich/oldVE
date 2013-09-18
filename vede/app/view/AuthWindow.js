@@ -8,11 +8,13 @@ Ext.define('Vede.view.AuthWindow', {
 	floating: true,
 	frame: false,
 	style: 'z-index:8000',
+	layout: {
+		type: 'vbox',
+		align: 'center',
+	},
 	bodyBorder: false,
 	closable: false,
 	title: 'Authentication',
-	x: 80,
-	y: 30,
 
 	initComponent: function() {
 		var me = this;
@@ -40,7 +42,7 @@ Ext.define('Vede.view.AuthWindow', {
 							fieldLabel: 'Username',
 							name: 'username',
 							id: 'auth-username-field',
-							width: 300
+							width: 300,
 						}, {
 							xtype: 'textfield',
 							inputType: 'password',
@@ -48,7 +50,6 @@ Ext.define('Vede.view.AuthWindow', {
 							fieldLabel: 'Password',
 							name: 'password',
 							id: 'auth-password-field',
-							readOnly: false,
 							width: 300
 						}]
 					}, {
@@ -56,17 +57,20 @@ Ext.define('Vede.view.AuthWindow', {
 						id: 'auth-login-btn',
 						margin: '0 0 0 15',
 						text: 'Login',
+						padding: 3,
 						name: 'login'
 					}, {
 						xtype: 'button',
 						id: 'auth-register-btn',
 						margin: '0 0 0 15',
+						padding: 3,
 						text: 'Register',
 						name: 'register'
 					}, {
 						xtype: 'button',
 						id: 'auth-config-btn',
 						margin: '0 0 0 15',
+						padding: 3,
 						text: 'Config',
 						name: 'Config'
 					}, {

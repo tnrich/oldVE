@@ -15,6 +15,8 @@ Ext.define('Vede.view.RegisterWindow', {
         xtype: 'form',
         url: Teselagen.manager.SessionManager.buildUrl("register", ""),
         id: 'registerForm',
+        bodyStyle: 'background: none; border: 0 none;',
+        padding: 10,
         items: [{
             xtype: 'textfield',
             id: 'registerFirstNameField',
