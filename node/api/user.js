@@ -4,7 +4,26 @@ module.exports = function(app) {
     var UserManager = require("../manager/UserManager")();
     var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
+    var sendRegisteredMail = function(user)
+    {
+        var html = app.constants.activationResponseEmailText;
+        html = html.replace("<username>", user.firstName);
 
+      var mailOptions = {
+        from: "Teselagen <teselagen.testing@gmail.com>",
+        to: user.email,
+        subject: "Welcome!",
+        html: html
+      }
+
+      app.mailer.sendMail(mailOptions, function(error, response){
+          if(error){
+              console.log(error);
+          }else{
+              console.log("Message sent: " + response.message);
+          }
+      });
+    }
     /**
      * Get user by id stored in session
      * @memberof module:./routes/api
@@ -27,6 +46,8 @@ module.exports = function(app) {
                 return res.send("Error finding the user associated with this code.<br>Are you sure this is the correct URL?");
             } else if(user) {
                 user.activated = true;
+                
+                sendRegisteredMail(user);
                 user.save(function(err) {
                     if(app.get("env") === "production") {
                         return res.redirect("http://app.teselagen.com");

@@ -94,10 +94,15 @@ module.exports = function(app, express) {
     });
 
 
-    var sendRegisteredMail = function(user,activationCode)
+    var sendActivationMail = function(user,activationCode)
     {
         var html = app.constants.activationEmailText;
-        html = html.replace("<username>", user.firstName);
+        html = html.replace("<firstName>", user.firstName);
+        html = html.replace("<lastName>", user.lastName);
+        html = html.replace("<email>", user.email);
+        html = html.replace("<organization>", user.groupType);
+        html = html.replace("<username>", user.username);
+
 
         if(app.get("env") === "production") {
             html = html.replace("<activation>", '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">');
@@ -105,10 +110,31 @@ module.exports = function(app, express) {
             html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
         }
       var mailOptions = {
-        from: "Teselagen ✔ <teselagen.testing@gmail.com>",
+        from: "Teselagen <teselagen.testing@gmail.com>",
         to: user.email,
-        subject: "Registration ✔",
+        subject: "New Registered User",
         text: "Teselagen activation code",
+        html: html
+      }
+
+      app.mailer.sendMail(mailOptions, function(error, response){
+          if(error){
+              console.log(error);
+          }else{
+              console.log("Message sent: " + response.message);
+          }
+      });
+    }
+
+    var sendRegisteredMail = function(user)
+    {
+        var html = app.constants.registrationEmailText;
+        html = html.replace("<username>", user.firstName);
+
+      var mailOptions = {
+        from: "Teselagen <teselagen.testing@gmail.com>",
+        to: user.email,
+        subject: "Welcome!",
         html: html
       }
 
@@ -154,7 +180,8 @@ module.exports = function(app, express) {
                             msg: "Error creating user."
                         });
                     } else {
-                        sendRegisteredMail(user, user.activationCode);
+                        sendActivationMail(user, user.activationCode);
+                        sendRegisteredMail(user);
                         res.json({
                             success: false,
                             redirect: '/loginUser',

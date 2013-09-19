@@ -6,7 +6,7 @@ function registerUser(registrationInfo) {
 		data: {
                 username: 	registrationInfo.registerUsernameField,
                 password: 	registrationInfo.registerPasswordField,
-                groupType: 	registrationInfo.registerOrganizationTypeComboBox,
+                orgType: 	registrationInfo.registerOrganizationTypeComboBox,
                 firstName: 	registrationInfo.registerFirstNameField,
                 lastName: 	registrationInfo.registerLastNameField,
                 email: 		registrationInfo.registerEmailField,
