@@ -1,6 +1,7 @@
 module.exports = function(app, express) {
     var LocalStrategy = require("passport-local").Strategy;
     var crypto = require("crypto");
+    var flash = require('connect-flash');
 
     app.passport.use(new LocalStrategy(
         function(username, password, done) {
@@ -161,6 +162,7 @@ module.exports = function(app, express) {
                 console.log(user);
                 res.json({
                     success: false,
+                    redirect: "/loginUser",
                     msg: "User '" + req.body.username + "' already exists."
                 });
             } else {
@@ -180,6 +182,7 @@ module.exports = function(app, express) {
                             msg: "Error creating user."
                         });
                     } else {
+                        console.log("here");
                         sendActivationMail(user, user.activationCode);
                         sendRegisteredMail(user);
                         res.json({

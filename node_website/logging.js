@@ -10,9 +10,9 @@ var configLogging = function(app,express) {
                 json: false,
                 colorize: true
             }),
-            new app.winston.transports.File({
-                filename: '/log/node_debug.log', json: true
-            })
+            //new app.winston.transports.File({
+                //filename: '/tmp/node_debug.log', json: true
+            //})
     ],
         /*
         exceptionHandlers: [

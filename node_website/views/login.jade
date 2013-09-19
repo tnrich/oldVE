@@ -30,25 +30,27 @@ html(lang='en')
         .row
             .large-6.small.6.large-centered.small-centered.page-logo.columns
                 img(src="/img/teselagen_toplogo.png")
-            .large-6.small-6.page-header.large-centered.small-centered.columns Log In
+            .large-6.small-6.large-centered.small-centered.columns 
+                h4(style="text-align:center;") It looks like you already have an account on TeselaGen! 
+                h6(style="text-align:center;") Click below to Log In.
             .large-6.small-6.large-centered.small-centered.columns
                 form(data-validate="parsley")#login_form.custom
                     .row
-                        .row
-                            .large-3.small-3.columns
-                                label.right.inline(for='username') Username
-                            .large-9.small-9.columns
-                                input(type="text", id='username', placeholder='Username', data-required)
-                        .row
-                            .large-3.small-3.columns
-                                label.right.inline(for='password', data-required) Password
-                            .large-9.small-9.columns
-                                input(type="password", id='password')
-                        .row
-                            .large-3.small-3.columns.right.lost_pw_link 
-                                a Lost Password?
+                        //- .row
+                        //-     .large-3.small-3.columns
+                        //-         label.right.inline(for='username') Username
+                        //-     .large-9.small-9.columns
+                        //-         input(type="text", id='username', placeholder='Username', data-required)
+                        //- .row
+                        //-     .large-3.small-3.columns
+                        //-         label.right.inline(for='password', data-required) Password
+                        //-     .large-9.small-9.columns
+                        //-         input(type="password", id='password')
+                        //- .row
+                        //-     .large-3.small-3.columns.right.lost_pw_link 
+                        //-         a Lost Password?
                         .large-12.small-12.registration-buts
-                            a.button.radius.expand#login_submit Log In
+                            a.button.radius.expand(href='http://app.teselagen.com/') Log In
                             a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
                                 .large-6.small-6.large-centered.small-centered.columns#footer_links
     .large-5.small-5.large-centered.small-centered.columns#footer2_links
