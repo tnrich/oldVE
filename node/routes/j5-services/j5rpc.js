@@ -183,8 +183,7 @@ function encoded_target_part_order_list_file(model,method)
                 var part = model.parts[cell.part_id];
                 if(part)
                 {
-                    fas = cell.fas;
-                    fas = (fas === 'None') ? '' : fas;
+                    fas = (cell.fas === 'None') ? '' : cell.fas;
                     fro = (bin['fro'] === 'None') ? '' : bin['fro'];
                     direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
                     dsf = (bin['dsf'] === false) ? '' : '';
@@ -196,6 +195,8 @@ function encoded_target_part_order_list_file(model,method)
             });
 
             fas = "";
+            var firstCell = bins.cells[0];
+            if(firstCell) fas = (firstCell.fas === 'None') ? '' : firstCell.fas;
             tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';
             out += tempBinHeader;
             out += tempOut;
