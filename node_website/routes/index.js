@@ -61,6 +61,10 @@ app.get('/loginuser', function(req,res) {
 	res.render('login', {});
 });
 
+app.get('/thanks', function(req,res) {
+  res.render('thanks', {});
+});
+
 app.get('*', function(req, res){
   res.render('notfound', {});
 });
