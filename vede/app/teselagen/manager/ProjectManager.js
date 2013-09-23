@@ -269,14 +269,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {model} Receives a j5Report model (already loaded)
      */
     openSequence: function (sequence) {
-    	console.log("Opening Sequence");
-    	this.workingSequence = sequence;
+        console.log("Opening Sequence");
+        this.workingSequence = sequence;
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, this.workingSequence);
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-//            new Ext.util.DelayedTask(function() {
-        		
-        		var sequence = Teselagen.manager.ProjectManager.workingSequence;
+            //new Ext.util.DelayedTask(function() {
+                var sequence = Teselagen.manager.ProjectManager.workingSequence;
                 //Ext.getCmp("projectTreePanel").expandPath('/root/',null,null,function(item,item2){
                     var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
                     var sequenceNode = rootNode.findChild('id',sequence.data.id,true);
