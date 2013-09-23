@@ -205,6 +205,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                                 self.deleteDesign( loadedDesign[0], expandPathCallback);
                             }
                         });
+
                         break;
                     case "opensequence":
                         console.log("delete sequence");

@@ -232,7 +232,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             });
 
             tabPanel.add(newTab).show();
-            
+
             if(selectedDesign.data.id) Vede.application.fireEvent(Teselagen.event.DeviceEvent.LOAD_EUGENE_RULES); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
         });
@@ -244,22 +244,31 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {Teselagen.models.DeviceDEsign} Receives a DeviceDesign model (already loaded)
      */
     DeleteDeviceDesign: function (devicedesign, tab) {
-        tab = Ext.getCmp("mainAppPanel").query("component[title='" + devicedesign.data.name + "']")[0]
+        var tabPanel = Ext.getCmp("mainAppPanel");
         var project_id = devicedesign.data.project_id;
         var project = Teselagen.manager.ProjectManager.currentUser.projects().getById(project_id);
+
         this.workingProject = project;
         Teselagen.manager.GridManager.setListenersEnabled(false);
         var designs = Teselagen.manager.ProjectManager.workingProject.designs();
+
         designs.remove(devicedesign);
         devicedesign.destroy();
+
         Teselagen.manager.GridManager.setListenersEnabled(true);
+
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
             Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
         });
-        if(tab) {
-        	Ext.getCmp("mainAppPanel").remove(tab);
-        }
+
+        // Delete all tabs which have the design as a model. (Includes J5 Reports tabs.)
+        tabPanel.items.each(function(tab) {
+            if(tab.model && tab.model.getId() === devicedesign.getId()) {
+                tabPanel.remove(tab);
+            }
+        });
+
         Vede.application.fireEvent("PopulateStats");
     },
 
