@@ -184,7 +184,7 @@ function encoded_target_part_order_list_file(model,method)
                 if(part)
                 {
                     fas = cell.fas;
-                    if(fas === 'None') fas = '';
+                    fas = (fas === 'None') ? '' : fas;
                     fro = (bin['fro'] === 'None') ? '' : bin['fro'];
                     direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
                     dsf = (bin['dsf'] === false) ? '' : '';
