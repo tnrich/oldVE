@@ -301,14 +301,4 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
              icon: Ext.Msg.QUESTION
         });
     }
-
-
-
 });
-
-
-
-
-
-
-
