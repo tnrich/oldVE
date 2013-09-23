@@ -117,7 +117,7 @@ module.exports = function(app, express) {
             "from_email": "registration@teselagen.com",
             "from_name": "TeselaGen",
             "to": [{
-                    "email": "tim@teselagen.com",
+                    "email": "mike.fero@teselagen.com",
                 }],
             "headers": {
                 "Reply-To": "registration@teselagen.com"
@@ -131,7 +131,7 @@ module.exports = function(app, express) {
                 "website": "www.teselagen.com"
             },
             "recipient_metadata": [{
-                "rcpt": "tim@teselagen.com"
+                "rcpt": "mike.fero@teselagen.com"
             }]
         };
 
