@@ -79,7 +79,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-
+        
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -87,6 +87,8 @@ function processNonCombinatorial_MOCK(lines,cb){
             obj.warnings.push({"message": currentWarning});
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
+
+        lines.splice(0,1)[0] //Empty space
 
         //Target Parts
         lines.splice(0,1)[0]; //Header
@@ -205,7 +207,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-
+        
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -213,6 +215,8 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
             obj.warnings.push({"message": currentWarning});
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
+
+        lines.splice(0,1)[0] //Empty space
 
         //Target Parts
         lines.splice(0,1)[0]; //Header
@@ -466,7 +470,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-
+        
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -474,6 +478,8 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
             obj.warnings.push({"message": currentWarning});
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
+
+        lines.splice(0,1)[0] //Empty space
 
         //Target Parts
         lines.splice(0,1)[0]; //Header

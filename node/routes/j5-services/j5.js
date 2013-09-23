@@ -22,7 +22,7 @@ var path = require('path');
 var Serializer = require("./Serializer");
 var gridfs = require("./gridfs")(app);
 
-if(app.get("env") === "production" || true) {
+if(app.get("env") === "production") {
   app.j5client = require("./j5communication")();
 };
 /**
