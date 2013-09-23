@@ -63,9 +63,10 @@ Ext.define('Vede.view.AuthWindow', {
 						xtype: 'button',
 						id: 'auth-register-btn',
 						margin: '0 0 0 15',
+						href: "http://beta.teselagen.com/signup"
 						padding: 3,
 						text: 'Register',
-						name: 'register'
+						name: 'register',
 					}, {
 						xtype: 'button',
 						id: 'auth-config-btn',
