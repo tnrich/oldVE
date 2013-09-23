@@ -195,7 +195,7 @@ function encoded_target_part_order_list_file(model,method)
             });
 
             fas = "";
-            var firstCell = bins.cells[0];
+            var firstCell = bin.cells[0];
             if(firstCell) fas = (firstCell.fas === 'None') ? '' : firstCell.fas;
             tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';
             out += tempBinHeader;
