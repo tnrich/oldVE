@@ -124,6 +124,7 @@ module.exports = function(app) {
     app.post('/register', function(req, res) {
         var User = app.db.model("User");
 
+        /*
         if(req.body.invitationCode !== "tesfo13")
         {
             res.json({
@@ -131,6 +132,7 @@ module.exports = function(app) {
                 msg: "Wrong invitation code. This is a private beta."
             });
         }
+        */
 
         User.findOne({
             username: req.body.username
