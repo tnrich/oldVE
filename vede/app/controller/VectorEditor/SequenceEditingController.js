@@ -27,7 +27,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         var self = this;
 
         executeRequest = function(){
-            
             Ext.Ajax.request({
                 url: Teselagen.manager.SessionManager.buildUrl("checkDuplicatedPartName", ''),
                 method: 'GET',
@@ -42,7 +41,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                         self.VEManager.saveSequence(function(){
                             part.setSequenceFile(sequence);
                             part.set('sequencefile_id', sequence.data.id);
-                            
                             part.save({
                                 success: function () {
                                     var now = new Date();
@@ -98,18 +96,21 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onOpenVectorEditor: function(seq, part){
+        var sequenceFileManager;
+
         if(seq.get("serialize")) {
-            var sequenceFileManager = seq.getSequenceManager();
+            sequenceFileManager = seq.getSequenceManager();
         } else {
-            var sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+            sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
         }
+
         var self = this;
 
         Teselagen.manager.ProjectManager.checkDuplicatedTabs(seq, "VectorEditorPanel", function(tabPanel) {
             var newTab = Ext.create("Vede.view.ve.VectorEditorPanel", {
                 title: sequenceFileManager.getName(),
                 icon: "resources/images/ux/tab-circular-icon.png",
-                iconCls: "tab-icon",
+                iconCls: "tab-icon"
             });
             newTab.model = sequenceFileManager;
             newTab.sequenceFile = seq;
@@ -125,7 +126,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                 newTab.options.selection = {
                     start: part.get("genbankStartBP") - 1,
                     end: part.get("endBP")
-                }
+                };
             }
 
             self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager", seq, sequenceFileManager);
@@ -139,7 +140,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     duplicatedTab.options.selection = {
                         start: part.get("genbankStartBP") - 1,
                         end: part.get("endBP")
-                    }
+                    };
                 }
 
                 duplicatedTab.show();
@@ -158,16 +159,16 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     onExportToFileMenuItemClick: function(){
         this.VEManager.saveSequenceToFile();
     },
-    
+
     onSaveMenuItemClick: function() {
-    	this.VEManager.saveSequence();
+        this.VEManager.saveSequence();
     },
-    
+
     onSaveAsMenuItemClick: function() {
-    	var saveAsWindow = Ext.create("Vede.view.ve.SaveAsWindow");
-    	
-    	saveAsWindow.show();
-    	saveAsWindow.center();
+        var saveAsWindow = Ext.create("Vede.view.ve.SaveAsWindow");
+
+        saveAsWindow.show();
+        saveAsWindow.center();
 
     },
 
@@ -180,7 +181,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             this.onSequenceManagerChanged(newTab.model);
         }
     },
-    
+
     init: function () {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
