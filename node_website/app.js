@@ -18,6 +18,7 @@ app.mongoose = require('mongoose');
 app.nodemailer = require("nodemailer");
 app.winston = require('winston');
 app.program = require('commander');
+app.mandrill = require('mandrill-api/mandrill');
 
 var config = require('./config.js')(app, express);
 

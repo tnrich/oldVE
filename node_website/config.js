@@ -115,14 +115,9 @@ module.exports = function(app, express){
         app.use(app.router); // Use express routing system
         app.use(airbrake.expressHandler());
       });
-  
-      app.mailer = app.nodemailer.createTransport("SMTP",{
-        service: "Gmail",
-        auth: {
-            user: "teselagen.testing@gmail.com",
-            pass: "teselagen#rocks"
-        }
-        });
+      
+      var mandrill = require('mandrill-api/mandrill');
+      app.mailer = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
 
 
       // Init MONGODB - MONGOOSE (ODM)

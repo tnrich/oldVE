@@ -17,7 +17,7 @@ module.exports = function(app) {
     app.post('/sendFeedback', function(req, res) {
 
         variables = "{type:Feedback}";
-
+        
         if (req.body.feedback) {
             app.mailer.sendMail({
                 from: "Teselagen <root@localhost>",
