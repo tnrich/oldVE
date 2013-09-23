@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:s="http://sbols.org/v1#" xmlns:so="http://purl.obolibrary.org/obo/" xmlns:d="https://benchling.com/sbol/">
+  <s:DnaComponent rdf:about="https://benchling.com/sbol/s/jqIFBG#component">
+    <s:displayId>ph6htn-with-e1010</s:displayId>
+    <s:name>pH6HTN-With-E1010</s:name>
+    <s:description></s:description>
+    <s:dnaSequence>
+      <s:DnaSequence rdf:about="https://benchling.com/sbol/s/jqIFBG#bases">
+        <s:nucleotides>ggatctcgatcccgcgaaattaatacgactcactatagggtattttaactttactaaggagaattcatcatgaaacatcatcaccatcaccacgcagaaatcggtactggctttccattcgacccccattatgtggaagtcctgggcgagcgcatgcactacgtcgatgttggtccgcgcgatggcacccctgtgctgttcctgcacggtaacccgacctcctcctacgtgtggcgcaacatcatcccgcatgttgcaccgacccatcgctgcattgctccagacctgatcggtatgggcaaatccgacaaaccagacctgggttatttcttcgacgaccacgtccgcttcatggatgccttcatcgaagccctgggtctggaagaggtcgtcctggtcattcacgactggggctccgctctgggtttccactgggccaagcgcaatccagagcgcgtcaaaggtattgcatttatggagttcatccgccctatcccgacctgggacgaatggccagaatttgcccgcgagaccttccaggccttccgcaccaccgacgtcggccgcaagctgatcatcgatcagaacgtttttatcgagggtacgctgccgatgggtgtcgtccgcccgctgactgaagtcgagatggaccattaccgcgagccgttcctgaatcctgttgaccgcgagccactgtggcgcttcccaaacgagctgccaatcgccggtgagccagcgaacatcgtcgcgctggtcgaagaatacatggactggctgcaccagtcccctgtcccgaagctgctgttctggggcaccccaggcgttctgatcccaccggccgaagccgctcgcctggccaaaagcctgcctaactgcaaggctgtggacatcggcccgggtctgaatctgctgcaagaagacaacccggacctgatcggcagcgagatcgcgcgctggctgtcgacgctcgagatttccggcgagccaaccactgaggatctgtactttcagagcgataacgcgatcgcttccgaattcagagctcaaccgcggatatctagagatggcttcctccgaagacgttatcaaagagttcatgcgtttcaaagttcgtatggaaggttccgttaacggtcacgagttcgaaatcgaaggtgaaggtgaaggtcgtccgtacgaaggtacccagaccgctaaactgaaagttaccaaaggtggtccgctgccgttcgcttgggacatcctgtccccgcagttccagtacggttccaaagcttacgttaaacacccggctgacatcccggactacctgaaactgtccttcccggaaggtttcaaatgggaacgtgttatgaacttcgaagacggtggtgttgttaccgttacccaggactcctccctgcaagacggtgagttcatctacaaagttaaactgcgtggtaccaacttcccgtccgacggtccggttatgcagaaaaaaaccatgggttgggaagcttccaccgaacgtatgtacccggaagacggtgctctgaaaggtgaaatcaaaatgcgtctgaaactgaaagacggtggtcactacgacgctgaagttaaaaccacctacatggctaaaaaaccggttcagctgccgggtgcttacaaaaccgacatcaaactggacatcacctcccacaacgaagactacaccatcgttgaacagtacgaacgtgctgaaggtcgtcactccaccggtgcttaataacgctgatagtgctagtgtagatcgctactagtagcggccgctgcaggattttgcggccgcttgctgagttggctgctgccaccgctgagcaataactagcataaccccttggggcctctaaacgggtcttgaggggttttttgctgaaaggaggaactatatccggttcgcttgctgtccataaaaccgcccagtctagctatcgccatgtaagcccactgcaagctacctgctttctctttgcgcttgcgttttcccttgtccagatagcccagtagctgacattcatccggggtcagcaccgtttctgcggactggctttctacgtaatggtttcttagacgtcaggtggcacttttcggggaaatgtgcgcggaacccctatttgtttatttttctaaatacattcaaatatgtatccgctcatgagacaataaccctgataaatgcttcaataatattgaaaaaggaagagtatgagtattcaacatttccgtgtcgcccttattcccttttttgcggcattttgccttcctgtttttgctcacccagaaacgctggtgaaagtaaaagatgctgaagatcagttgggtgcacgagtgggttacatcgaactggatctcaacagcggtaagatccttgagagttttcgccccgaagaacgttttccaatgatgagcactttcaaagttctgctatgtggcgcggtattatcccgtattgacgccgggcaagagcaactcggtcgccgcatacactattctcagaatgacttggttgagtactcaccagtcacagaaaagcatcttacggatggcatgacagtaagagaattatgcagtgctgccataaccatgagtgataacactgcggccaacttacttctgacaactatcggaggaccgaaggagctaaccgcttttttgcacaacatgggggatcatgtaactcgccttgatcgttgggaaccggagctgaatgaagccataccaaacgacgagcgtgacaccacgatgcctgtagcaatggcaacaacgttgcgcaaactattaactggcgaactacttactctagcttcccggcaacaattaatagactggatggaggcggataaagttgcaggaccacttctgcgctcggcccttccggctggctggtttattgctgataaatctggagccggtgagcgtgggtctcgcggtatcattgcagcactggggccagatggtaagccctcccgtatcgtagttatctacacgacggggagtcaggcaactatggatgaacgaaatagacagatcgctgagataggtgcctcactgattaagcattggtaattcgaaatgaccgaccaagcgacgcccaaccggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccggtaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaaggacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatttcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacgttaagggattttggtcatgagattatcaaaaaggatcttcacctagatccttttatagtccggaaatacaggaacgcacgctggatggcccttcgctgggatggtgaaaccatgaaaaatggcagcttcagtggattaagtgggggtaatgtggcctgtaccctctggttgcataggtattcatacggttaaaatttatcaggcgcgattgcggcagtttttcgggtggtttgttgccatttttacctgtctgctgccgtgatcgcgctgaacgcgttttagcggtgcgtacaattaagggattatggtaaatccacttactgtctgccctcgtagccatcgagataaaccgcagtactccggccacgatgcgtccggcgtagaggatcgagatcttttcagcctgatacagattaaatcagaacgcagaagcggtctgataaaacagaatttgcctggcggcagtagcgcggtggtcccacctgaccccatgccgaactcagaagtgaaacgccgtagcgccgatggtagtgtggggtctccccatgcgagagtagggaactgccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctcctgagtaggacaaatccgccgggagcggatttgaacgttgcgaagcaacggcccggagggtggcgggcaggacgcccgccataaactgccaggcatcaaattaagcagaaggccatcctgacggatggcctttttgcgtttctacaaactcttttgtttatttttctaaatacattcaaatatgtatccgctcat</s:nucleotides>
+      </s:DnaSequence>
+    </s:dnaSequence>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26444#annotation">
+        <s:bioStart>1021</s:bioStart>
+        <s:bioEnd>1804</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26444#component">
+            <s:displayId>"anno_26444"</s:displayId>
+            <s:name>N-terminal multiple cloning region</s:name>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26435#annotation">
+        <s:bioStart>3236</s:bioStart>
+        <s:bioEnd>3272</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26435#component">
+            <s:displayId>"anno_26435"</s:displayId>
+            <s:name>ColE1-derived plasmid origin of replication</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000296"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26436#annotation">
+        <s:bioStart>70</s:bioStart>
+        <s:bioEnd>981</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26436#component">
+            <s:displayId>"anno_26436"</s:displayId>
+            <s:name>His6HaloTag(R) gene</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000704"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26438#annotation">
+        <s:bioStart>982</s:bioStart>
+        <s:bioEnd>1020</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26438#component">
+            <s:displayId>"anno_26438"</s:displayId>
+            <s:name>HaloTag linker region</s:name>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26448#annotation">
+        <s:bioStart>1058</s:bioStart>
+        <s:bioEnd>1063</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26448#component">
+            <s:displayId>"anno_26448"</s:displayId>
+            <s:name>BioBrick prefix</s:name>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26439#annotation">
+        <s:bioStart>2221</s:bioStart>
+        <s:bioEnd>3081</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26439#component">
+            <s:displayId>"anno_26439"</s:displayId>
+            <s:name>CDS</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000316"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26441#annotation">
+        <s:bioStart>94</s:bioStart>
+        <s:bioEnd>981</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26441#component">
+            <s:displayId>"anno_26441"</s:displayId>
+            <s:name>His6HaloTag(R) misc_feature</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000110"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26437#annotation">
+        <s:bioStart>994</s:bioStart>
+        <s:bioEnd>1014</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26437#component">
+            <s:displayId>"anno_26437"</s:displayId>
+            <s:name>TEV protease region</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0001091"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26447#annotation">
+        <s:bioStart>1770</s:bioStart>
+        <s:bioEnd>1789</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26447#component">
+            <s:displayId>"anno_26447"</s:displayId>
+            <s:name>BioBrick suffix</s:name>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26446#annotation">
+        <s:bioStart>1064</s:bioStart>
+        <s:bioEnd>1769</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26446#component">
+            <s:displayId>"anno_26446"</s:displayId>
+            <s:name>BBa_E1010</s:name>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26443#annotation">
+        <s:bioStart>4279</s:bioStart>
+        <s:bioEnd>4680</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26443#component">
+            <s:displayId>"anno_26443"</s:displayId>
+            <s:name>rrnB transcription terminator</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000141"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26442#annotation">
+        <s:bioStart>1840</s:bioStart>
+        <s:bioEnd>1887</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26442#component">
+            <s:displayId>"anno_26442"</s:displayId>
+            <s:name>T7 terminator region</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000141"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26440#annotation">
+        <s:bioStart>76</s:bioStart>
+        <s:bioEnd>93</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26440#component">
+            <s:displayId>"anno_26440"</s:displayId>
+            <s:name>His6HaloTag(R) misc_feature</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000110"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+    <s:annotation>
+      <s:SequenceAnnotation rdf:about="https://benchling.com/sbol/a/26445#annotation">
+        <s:bioStart>21</s:bioStart>
+        <s:bioEnd>40</s:bioEnd>
+        <s:strand>+</s:strand>
+        <s:subComponent>
+          <s:DnaComponent rdf:about="https://benchling.com/sbol/a/26445#component">
+            <s:displayId>"anno_26445"</s:displayId>
+            <s:name>promoter</s:name>
+            <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000167"></rdf:type>
+          </s:DnaComponent>
+        </s:subComponent>
+      </s:SequenceAnnotation>
+    </s:annotation>
+  </s:DnaComponent>
+</rdf:RDF>

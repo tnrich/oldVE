@@ -115,7 +115,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         var self = Teselagen.bio.parsers.ParsersManager;
 
-        var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+        var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
         if(match&&match[1]) { var ext = match[1]; }
         else return cb(true,context);
 
@@ -330,6 +330,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 fileContent = result;
                 break;
             case "xml":
+                asyncParseFlag = true;
+                fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
+                    var gb;
+                    if (isSBOL) gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
+                    else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+                    return cb(gb);
+                });
+                break;
+            case "rdf":
                 asyncParseFlag = true;
                 fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
                     var gb;
