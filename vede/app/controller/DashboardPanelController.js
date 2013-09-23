@@ -35,23 +35,22 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.populateStatistics();
     },
 
-	onLastDEProjectsItemClick: function (item,record) {
-		Teselagen.manager.ProjectManager.openDeviceDesign(record);
-	},
+    onLastDEProjectsItemClick: function (item,record) {
+        Teselagen.manager.ProjectManager.openDeviceDesign(record);
+    },
 
-	populateStatistics: function () {
+    populateStatistics: function () {
+        if(!Teselagen.manager.UserManager.user) {
+            return;
+        }
 
-    if(!Teselagen.manager.UserManager.user) {
-        return;
-    }
+        var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
+        var pagingToolbar;
+        if(currentTab) pagingToolbar = currentTab.down('pagingtoolbar');
 
-    var currentTab = Ext.getCmp("DashboardPanel").getActiveTab();
-    var pagingToolbar;
-    if(currentTab) pagingToolbar = currentTab.down('pagingtoolbar');
+        if(pagingToolbar) pagingToolbar.doRefresh();
 
-    if(pagingToolbar) pagingToolbar.doRefresh();
-
-		Ext.Ajax.request({
+        Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("getStats", ''),
             // params: {
             //     data: data
@@ -147,10 +146,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     onSequenceGridItemClick: function(row,record) {
         var currentTab = Ext.getCmp("mainAppPanel");
-        currentTab.el.mask("Loading Sequence", "loader rspin")
+        currentTab.el.mask("Loading Sequence", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        var ext = record.data.sequenceFileName.split('.').pop();
         Ext.defer(function() {
             Teselagen.manager.ProjectManager.openSequence(record);
             currentTab.el.unmask();
@@ -206,8 +204,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         sequence = record.getSequenceFile();
 
-        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
-        currentTab.el.unmask();
+        Ext.defer(function() {
+            Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, sequence, record);
+            currentTab.el.unmask();
+        }, 10);
     },
 
     /**

@@ -110,21 +110,39 @@ module.exports = function(app, express) {
         } else {
             html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
         }
-      var mailOptions = {
-        from: "Teselagen <teselagen.testing@gmail.com>",
-        to: user.email,
-        subject: "New Registered User",
-        text: "Teselagen activation code",
-        html: html
-      }
 
-      app.mailer.sendMail(mailOptions, function(error, response){
-          if(error){
-              console.log(error);
-          }else{
-              console.log("Message sent: " + response.message);
-          }
-      });
+        var message = {
+            "html": html,
+            "subject": "New Registered User",
+            "from_email": "registration@teselagen.com",
+            "from_name": "TeselaGen",
+            "to": [{
+                    "email": "mike.fero@teselagen.com",
+                }],
+            "headers": {
+                "Reply-To": "registration@teselagen.com"
+            },
+            "track_opens": true,
+            "track_clicks": true,
+            "tags": [
+                "user-activation"
+            ],
+            "metadata": {
+                "website": "www.teselagen.com"
+            },
+            "recipient_metadata": [{
+                "rcpt": "mike.fero@teselagen.com"
+            }]
+        };
+
+        var async = false;
+        var ip_pool = "Beta Registers";
+
+        app.mailer.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
     }
 
     var sendRegisteredMail = function(user)
@@ -132,20 +150,39 @@ module.exports = function(app, express) {
         var html = app.constants.registrationEmailText;
         html = html.replace("<username>", user.firstName);
 
-      var mailOptions = {
-        from: "Teselagen <teselagen.testing@gmail.com>",
-        to: user.email,
-        subject: "Welcome!",
-        html: html
-      }
+        var message = {
+            "html": html,
+            "subject": "Welcome!",
+            "from_email": "registration@teselagen.com",
+            "from_name": "TeselaGen Biotechnology",
+            "to": [{
+                    "email": user.email,
+                    "name": user.firstName
+                }],
+            "headers": {
+                "Reply-To": "registration@teselagen.com"
+            },
+            "track_opens": true,
+            "track_clicks": true,
+            "tags": [
+                "user-registration"
+            ],
+            "metadata": {
+                "website": "www.teselagen.com"
+            },
+            "recipient_metadata": [{
+                "rcpt": user.email
+            }]
+        };
 
-      app.mailer.sendMail(mailOptions, function(error, response){
-          if(error){
-              console.log(error);
-          }else{
-              console.log("Message sent: " + response.message);
-          }
-      });
+        var async = false;
+        var ip_pool = "Beta Registers";
+
+        app.mailer.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
     }
 
     app.post('/registerUser', function(req, res) {
@@ -182,12 +219,11 @@ module.exports = function(app, express) {
                             msg: "Error creating user."
                         });
                     } else {
-                        console.log("here");
                         sendActivationMail(user, user.activationCode);
                         sendRegisteredMail(user);
                         res.json({
                             success: false,
-                            redirect: '/loginUser',
+                            redirect: '/thanks',
                             msg: "An activation email has been sent to your account.<br>Please click the link in the email to continue."
                         });
                     }

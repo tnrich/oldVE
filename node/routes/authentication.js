@@ -1,6 +1,8 @@
 module.exports = function(app) {
     var LocalStrategy = require("passport-local").Strategy;
     var crypto = require("crypto");
+    var mandrill = require('mandrill-api/mandrill');
+    var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
 
     app.passport.use(new LocalStrategy(
         function(username, password, done) {

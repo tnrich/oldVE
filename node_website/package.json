@@ -19,5 +19,6 @@
     , "commander":"1.0.5"
     , "airbrake":"0.3.4"
     , "nodetime":"0.8.13"
+    , "mandrill-api": "1.0.35"
   }
 }

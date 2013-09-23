@@ -213,24 +213,24 @@ Ext.define("Vede.controller.ProjectExplorerController", {
             break;
         }
     },
-    
+
     onProjectPanelItemContextMenu: function(store, record, item, index, e) {
-    	e.preventDefault();
+        e.preventDefault();
         var contextMenu = Ext.create('Ext.menu.Menu',{
-        	  items: [{
-        	    text: 'Open'
-        	    //handler: this.resolveAndOpenSequence(record)
-        	  },{
-          	    text: 'Open in New Tab'/*,
-          	    handler: function() {
-          	    	sequenceManager.removeFeature(feature,false);
-          	    }*/
-          	  }]
-        });                  
-        contextMenu.show(); 
+            items: [{
+                text: 'Open'
+                //handler: this.resolveAndOpenSequence(record)
+            },{
+                text: 'Open in New Tab'/*,
+                handler: function() {
+                    sequenceManager.removeFeature(feature,false);
+                }*/
+            }]
+        });
+        contextMenu.show();
         contextMenu.setPagePosition(e.getX(),e.getY()-5);
     },
-    
+
     onProjectPartsPanelItemClick: function (store, record) {
         switch(record.data.hrefTarget) {
         case "addpart":

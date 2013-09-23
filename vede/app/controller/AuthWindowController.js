@@ -78,9 +78,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             "#auth-login-btn": {
                 click: this.onAuthLoginClick
             },
-            "#auth-register-btn": {
-                click: this.onRegisterClick
-            },
+            // "#auth-register-btn": {
+            //     click: this.onRegisterClick
+            // },
             "#auth-logout-btn": {
                 click: this.onLogoutClick
             },
