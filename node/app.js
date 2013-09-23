@@ -27,6 +27,7 @@ app.program = require('commander');
 app.nodemailer = require("nodemailer");
 app._ = require("underscore");
 app.winston = require('winston');
+app.memcached = require('memcached');
 
 require('./api/rest.js')(app);
 
