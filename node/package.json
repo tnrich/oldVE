@@ -36,6 +36,7 @@
     , "webkit-devtools-agent": "latest"
     , "sax":"0.5.5"
     , "xmlbuilder":"0.4.2"
+    , "memcached":"0.2.5"
     , "mandrill-api": "1.0.35"
   }
   , "devDependencies": {
