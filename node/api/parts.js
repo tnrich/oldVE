@@ -105,7 +105,7 @@ module.exports = function(app) {
             var filterOptions = JSON.parse(req.query.filter); 
             if(filterOptions[0] && filterOptions[0].property==="name")
             {
-                filter = new RegExp("^"+filterOptions[0].value, "i");
+                filter = new RegExp(filterOptions[0].value, "i");
             }
         }
 
