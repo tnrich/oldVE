@@ -55,6 +55,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     if(Ext.getCmp('auth-response')) Ext.getCmp('auth-response').setValue(msg);
                     return;
                 }
+
                 var response = JSON.parse(response.responseText);
                 if(response) Ext.getCmp('auth-response').setValue(response.msg);
                 if (cb) {return cb(false, response.statusText); }
