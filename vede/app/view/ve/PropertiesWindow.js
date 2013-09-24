@@ -262,7 +262,7 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     cls: 'cutSitesPositionColumn',
                                                     dataIndex: 'position',
                                                     text: 'Position',
-                                                    width: 170,
+                                                    width: 170
                                                 },
                                                 {
                                                     xtype: 'gridcolumn',
@@ -270,12 +270,16 @@ Ext.define('Vede.view.ve.PropertiesWindow', {
                                                     dataIndex: 'strand',
                                                     text: 'Strand',
                                                     maxWidth: 70,
-                                                    renderer: function (value) {
-                                                        if (value > 0) {
+                                                    renderer: function (value, metadata, cutSite) {
+                                                        if(cutSite.get("palindromic")) {
+                                                            return null;
+                                                        } else if (value > 0) {
                                                             return '+';
                                                         } else if (value < 0) {
                                                             return '-';
-                                                        } else { return null;}
+                                                        } else {
+                                                            return null;
+                                                        }
                                                     }
                                                 }
                                             ]

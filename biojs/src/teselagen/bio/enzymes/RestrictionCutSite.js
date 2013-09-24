@@ -23,12 +23,12 @@ Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
 
         this.callParent([inData]);
 
-        if (inData){        
+        if (inData){
             that.start = inData.start;
             that.end = inData.end;
             restrictionEnzyme = inData.restrictionEnzyme;
         }
-        
+
         /**
          * Get restriction enzyme.
          * @return {Teselagen.bio.enzymes.RestrictionEnzyme}
@@ -65,19 +65,21 @@ Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
             return inData.start + ".." + inData.end + " " + 
                 inData.restrictionEnzyme;
         };
-        
+
         return this;
     },
-    
+
     toJSON: function() {
         var start = this.getStart()+1;
         var end = this.getEnd();
+
         return {
-            "name": this.getRestrictionEnzyme().getName(),
-            "start": start,
-            "end": end,
-            "position": start + " - " + end,
-            "strand": this.getStrand()
+            name: this.getRestrictionEnzyme().getName(),
+            start: start,
+            end: end,
+            position: start +  "-"  + end,
+            strand: this.getStrand(),
+            palindromic: this.getRestrictionEnzyme().isPalindromic()
         };
     }
 });
