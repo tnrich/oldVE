@@ -3,9 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TeselaGen</title>
-    <!-- Jade code to include airbrake notifier only in production. -->
     <script type="text/javascript">
-        if(document.URL.indexOf("app.teselagen") >= 0) {
+            if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
             //<![CDATA[
             var notifierJsScheme = (("https:" == document.location.protocol) ? "https://" : "http://");
             document.write(unescape("%3Cscript src='" + notifierJsScheme + "airbrake.io/javascripts/notifier.js' type='text/javascript'%3E%3C/script%3E"));
@@ -13,14 +12,24 @@
         }
     </script>
     <script type="text/javascript">
-        if(document.URL.indexOf("app.teselagen") >= 0) {
+        if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
+            var env;
+
+            if(document.URL.indexOf("app.teselagen") >= 0) {
+                env = "production";
+            } else if(document.URL.indexOf("dev.teselagen") >= 0) {
+                env = "development";
+            } else {
+                env = "unknown";
+            }
+
             Hoptoad.setKey('40e870e0-c0a6-c307-8bef-37371fd86407');
             Hoptoad.setHost('exceptions.codebasehq.com');
             Hoptoad.setEnvironment('production');
             Hoptoad.setErrorDefaults({
                 url: "app.teselagen.com",
-                component: "app",
-                action: ""
+                cookie: document.cookie,
+                environment: env
             });
         }
     </script>
