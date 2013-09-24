@@ -90,13 +90,13 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
                     messageBox.close();
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                     var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-                    sequenceLibrary.el.unmask();
+                    if(sequenceLibrary && sequenceLibrary.el) sequenceLibrary.el.unmask();
                     cb(response.data,true);
                 },
                 failure: function(response, opts) {
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();                    
                     var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-                    sequenceLibrary.el.unmask();
+                    if(sequenceLibrary && sequenceLibrary.el) sequenceLibrary.el.unmask();
                     messageBox.close();
                     Ext.MessageBox.alert('Failed','Conversion failed');
                 }

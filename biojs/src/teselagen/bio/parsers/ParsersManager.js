@@ -307,7 +307,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var self = this;
         var asyncParseFlag = false;
 
-        //console.log(ext);
+        console.log(pExt);
         switch (pExt) {
             case "fasta":
                 asyncParseFlag = true;

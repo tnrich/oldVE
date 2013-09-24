@@ -27,7 +27,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         else {
             var fileInput = pBtn.extractFileInput();
             var file = fileInput.files[0];
-            var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+            var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
             if (ext) {
                 Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File', "loader rspin");
                 $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
