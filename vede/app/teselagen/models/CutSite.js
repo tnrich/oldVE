@@ -21,6 +21,7 @@ Ext.define("Teselagen.models.CutSite", {
 		{name: "start", type: "auto", defaultValue: null},
 		{name: "end", type: "auto", defaultValue: null},
 		{name: "position", type: "auto", defaultValue: null},
-		{name: "strand", type: "auto", defaultValue: null}
+		{name: "strand", type: "auto", defaultValue: null},
+                {name: "palindromic", type: "boolean", defaultValue: false}
 	]
 });

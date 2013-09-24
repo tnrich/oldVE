@@ -37,13 +37,13 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var sequenceName = sequence.get("name");
         var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
         var circular = sequenceManager.getCircular();
-        
+
         var sequenceFeatures = sequenceManager.getFeaturesJSON();
         var sequenceFeaturesStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.DNAFeature",
             data: sequenceFeatures
         });
-        
+
         var cutSiteData = this.RestrictionEnzymeManager.getCutSitesForProperties();
         var cutSitesStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.CutSite",
@@ -65,7 +65,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             var expandAllCutSitesBtn = Ext.ComponentQuery.query("button[cls='expandAllCutSites']")[0];
             expandAllCutSitesBtn.disable();
         }
-        
+
         var orfs = Teselagen.manager.ORFManager.getOrfsJSON();
         var orfsStore = Ext.create("Ext.data.Store", {
             model: "Teselagen.models.ORF",
@@ -126,7 +126,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var removeFeatureButton = Ext.ComponentQuery.query("button[cls='featuresRemoveButton']")[0];
         editFeatureButton.enable();
         removeFeatureButton.enable();
-        
+
         var features = Vede.application.getVectorEditorSequenceControllerController().Managers[0].getSequenceManager().features;
         var featureCount = Vede.application.getVectorEditorSequenceControllerController().Managers[0].getSequenceManager().features.length;
         var selection = Ext.ComponentQuery.query("gridpanel[name='featuresGridPanel']")[0].getSelectionModel().selected.items[0];
@@ -150,7 +150,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             var duplicates = 0;
             var duplicateNames = [];
             var duplicateData = [];
-            
+
             for (var i=0; i < currentStoreCount; i++) {
                 if (currentStoreData.items[i].data.numCuts) {
                     var name = currentStoreData.items[i].data.name;
@@ -171,7 +171,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                     duplicateData = [];
                 }
             }
-            
+
             var cutSiteData = this.RestrictionEnzymeManager.getCutSitesForProperties();
             var cutSitesStore = Ext.create("Ext.data.Store", {
                 model: "Teselagen.models.CutSite",
@@ -184,11 +184,9 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                     direction: "DESC"
                 }]
             });
-            
+
             var duplicateNamesCount = duplicateNames.length;
-            console.log(duplicateNames);
-            console.log(duplicateNamesCount);
-            
+
             cutSitesStore.filterBy(function (record) {
                 var restrictionEnzyme = record.data.name;
                 var numCuts = record.data.numCuts;
@@ -214,7 +212,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                     return true;
                 }
             });
-            
+
             propertiesWindow.down("gridpanel[name='cutSitesGridPanel']").reconfigure(cutSitesStore);
 
             var collapseAllCutSitesBtn = Ext.ComponentQuery.query("button[cls='collapseAllCutSites']")[0];
@@ -224,13 +222,13 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             var newStoreData = newStore.data;
             var oldStoreCount = newStore.snapshot.items.length;
             var children = 0;
-            
+
             for (var n=0; n<newStoreCount; n++) {
                 if (!newStoreData.items[n].numCuts) {
                     children++;
                 }
             }
-            
+
             if (children > 0) {
                 collapseAllCutSitesBtn.enable();
             } else {
@@ -250,7 +248,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var recordName = record.data.name;
         var childCutSites = -1;
         var expanded = false;
-        
+
         for (var i=0; i < cutSiteDataStoreCount; i++) {
             var renderedName = cutSiteDataStore.items[i].raw.name;
             if (recordName === renderedName) {
@@ -302,7 +300,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                 direction: "DESC"
             }]
         });
-        
+
         cutSitesStore.filterBy(function (record) {
             if (record.data.numCuts) {
                 return true;
@@ -325,7 +323,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
         var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
         var viewMode;
-        
+
         if(name === null || name.match(/^\s*$/) || name.length===0) {
             propertiesWindow.down("component[cls='propertiesWindowSequenceNameField']").setFieldStyle("border-color:red");
         } else {
@@ -345,7 +343,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                     }
                 });
             }
-            
+
             propertiesWindow.close();
 //            var selectedProj = Teselagen.manager.ProjectManager.workingProject;
 //            var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
@@ -376,7 +374,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
 //
 //                        propertiesWindow.close();
 //                    } else {
-//                	    Ext.MessageBox.alert('', 'A sequence with the name "' + 
+//                	    Ext.MessageBox.alert('', 'A sequence with the name "' +
 //                            name + '" already exists. \nPlease select another name.');
 //                    }
 //                },
@@ -386,13 +384,13 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
 //            });
         }
     },
-    
+
     onTabChange: function(pTabpanel, pNewCard) {
         if (pNewCard.cls === "propertiesGenBank") {
             this.onSelectGenbank();
         }
     },
-    
+
     onSelectGenbank: function() {
         var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
         var genbankData = this.FormatUtils.sequenceManagerToGenbank(sequenceManager);

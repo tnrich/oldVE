@@ -92,12 +92,25 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-username-field": {
                 specialkey: function (field, e) {
-                    if(e.getKey() == e.ENTER) that.onAuthLoginClick();
+                    if(e.getKey() === e.ENTER) {
+                        that.onAuthLoginClick();
+                    }
                 }
             },
             "#auth-password-field": {
                 specialkey: function (field, e) {
-                    if(e.getKey() == e.ENTER) that.onAuthLoginClick();
+                    if(e.getKey() == e.ENTER) {
+                        that.onAuthLoginClick();
+                    } else if(e.getKey() === e.BACKSPACE) {
+                        // Custom backspace functionality because Ext is FUBAR.
+                        var val = field.getValue();
+
+                        if(val.length > 1) {
+                            field.setValue(val.substr(0, val.length - 1));
+                        } else {
+                            field.setValue('');
+                        }
+                    }
                 }
             },
             "#auth-config-btn": {
