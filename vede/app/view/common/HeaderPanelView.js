@@ -22,7 +22,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 		{
 			xtype: 'image',
 			id: 'headerIcon',
-			src: 'resources/images/teselagen_toplogo_alt.png'
+			src: 'resources/images/teselagen_toplogo.png'
 		}
 		]
 	}]

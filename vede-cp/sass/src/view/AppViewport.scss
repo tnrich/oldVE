@@ -546,7 +546,7 @@ border-right: 1px solid #E0E3E6;
     width:330px;
     height:85px;
     margin: 0 auto;
-    margin-top:220px;
+    margin-top:250px;
 }
 
 #x-splash-message {
@@ -554,7 +554,7 @@ border-right: 1px solid #E0E3E6;
     margin: 0 auto;
     height: 40px;
     text-align: center;
-    margin-top: 180px;
+    margin-top: 80px;
     font-size: 14px;
     font-weight: 700;
     color: #006cab;
@@ -1030,9 +1030,9 @@ background: #F7F9FA;
 
 .openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .cancelj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
-  transition: background .2s ease-in-out;
-  -moz-transition: background .2s ease-in-out;
-  -webkit-transition: background .2s ease-in-out;
+  transition: all .1s;
+  -moz-transition: all .1s;
+  -webkit-transition: all .1s;
 }
 
 .openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .cancelj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .buildBtn .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner{
@@ -1045,9 +1045,9 @@ background: #F7F9FA;
 
 .addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn,  .editj5ParamsBtn, .customizeAutomationParamsBtn, .downloadCondenseAssemblyResultsBtn, .downloadDownstreamAutomationBtn {
   background: rgb(146, 164, 182);
-  transition: background .2s ease-in-out;
-  -moz-transition: background .2s ease-in-out;
-  -webkit-transition: background .2s ease-in-out;
+  transition: all .1s;
+  -moz-transition: all .1s;
+  -webkit-transition: all .1s;
 }
 
 .addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner, .editj5ParamsBtn .x-btn-inner, .customizeAutomationParamsBtn .x-btn-inner, .downloadCondenseAssemblyResultsBtn .x-btn-inner, .downloadDownstreamAutomationBtn .x-btn-inner {

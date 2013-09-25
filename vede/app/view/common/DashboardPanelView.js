@@ -117,6 +117,27 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 xtype: 'button',
                                 cls: 'dashBtn',
                                 height: 100,
+                                id: 'seeTutsBtn',
+                                scale: 'medium',
+                                flex: 1,
+                                overCls: 'tutorial-over',
+                                iconAlign: 'top',
+                                iconCls: 'tutorial-icon',
+                                text: 'Tutorials',
+                                href: 'http://classroom.tv/teselagen',
+                                listeners: {
+                                    afterrender: function(cmp) {
+                                        cmp.getEl().set({
+                                            "data-intro": 'See some tutorials to help you get started.',
+                                            "data-step": 5
+                                        });
+                                    }
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                cls: 'dashBtn',
+                                height: 100,
                                 id: 'tourBtn',
                                 scale: 'medium',
                                 flex: 1,

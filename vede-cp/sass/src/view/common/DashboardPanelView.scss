@@ -10,7 +10,7 @@
 	margin-left: 1px;
 }
 
-.tour-icon, .manuals-icon, .newProject-icon {
+.tour-icon, .manuals-icon, .tutorial-icon, .newProject-icon {
 	display: inline-block;
 	width: 32px !important;
 	height: 32px !important;
@@ -24,12 +24,16 @@
 	background-position: 0 0 !important;
 }
 
-.tour-icon {
+.tutorial-icon {
 	background-position: -64px 0 !important;
 }
 
-.newProject-icon {
+.tour-icon {
 	background-position: -128px 0 !important;
+}
+
+.newProject-icon {
+	background-position: -192px 0 !important;
 }
 
 .newSequence-icon {

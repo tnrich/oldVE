@@ -22968,7 +22968,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
 }
 
 /* line 13, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.tour-icon, .manuals-icon, .newProject-icon {
+.tour-icon, .manuals-icon, .tutorial-icon, .newProject-icon {
   display: inline-block;
   width: 32px !important;
   height: 32px !important;
@@ -22984,16 +22984,21 @@ body.x-nbr .x-tab-default-right-frameInfo {
 }
 
 /* line 27, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.tour-icon {
+.tutorial-icon {
   background-position: -64px 0 !important;
 }
 
 /* line 31, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.newProject-icon {
+.tour-icon {
   background-position: -128px 0 !important;
 }
 
 /* line 35, ../../../../sass/src/view/common/DashboardPanelView.scss */
+.newProject-icon {
+  background-position: -192px 0 !important;
+}
+
+/* line 39, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .newSequence-icon {
   display: inline-block;
   width: 32px !important;
@@ -23004,7 +23009,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   margin: 0 auto;
 }
 
-/* line 45, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 49, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projects-icon, .designs-icon {
   display: inline-block;
   width: 64px !important;
@@ -23013,7 +23018,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   background-repeat: no-repeat;
 }
 
-/* line 53, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 57, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .sequences-icon {
   display: inline-block;
   width: 64px !important;
@@ -23022,7 +23027,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   background-repeat: no-repeat;
 }
 
-/* line 61, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 65, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .parts-icon {
   display: inline-block;
   width: 64px !important;
@@ -23031,36 +23036,36 @@ body.x-nbr .x-tab-default-right-frameInfo {
   background-repeat: no-repeat;
 }
 
-/* line 69, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 73, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projects-icon {
   background-position: -128px 0 !important;
 }
 
-/* line 73, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 77, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .designs-icon {
   background-position: 0 0 !important;
 }
 
-/* line 77, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 81, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .dashProjectsData, .dashDesignsData, .dashSequencesData, .dashPartsData {
   border: 2px solid #006CAB;
   border-radius: 3px;
   background: #006CAB;
 }
 
-/* line 83, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 87, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-icon, .designsCountBox-icon, .sequencesCountBox-icon, .partsCountBox-icon {
   border: 1px solid #006CAB;
   background: #006CAB;
 }
 
-/* line 88, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 92, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-data, .designsCountBox-data, .sequencesCountBox-data, .partsCountBox-data {
   background: #1585C5;
   border: 1px solid #1585C5;
 }
 
-/* line 93, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 97, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-num input, .designsCountBox-num input, .sequencesCountBox-num input, .partsCountBox-num input {
   background: #1585C5;
   font-size: 54px;
@@ -23070,7 +23075,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   border: none;
 }
 
-/* line 102, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 106, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .projectsCountBox-desc input, .designsCountBox-desc input, .sequencesCountBox-desc input, .partsCountBox-desc input {
   background: #1585C5;
   font-size: 28px;
@@ -23081,20 +23086,20 @@ body.x-nbr .x-tab-default-right-frameInfo {
   border: none;
 }
 
-/* line 112, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 116, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #DashboardPanel .x-tab-top-active {
   background: 0 none;
   border: 0 none;
   opacity: 1 !important;
 }
 
-/* line 118, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 122, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #DashboardPanel .x-tab-default-active .x-tab-inner {
   color: #006cab;
   opacity: 1 !important;
 }
 
-/* line 123, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 127, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #DashboardPanel .x-tab-default-top {
   background: 0 !important;
   border: 0 !important;
@@ -23102,7 +23107,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   opacity: 0.5;
 }
 
-/* line 130, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 134, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .sequenceLibrarySearchField .x-form-text, .partLibrarySearchField .x-form-text {
   background-image: url(images/ux/magnifier.png) !important;
   background-position: 12px center;
@@ -23111,13 +23116,13 @@ body.x-nbr .x-tab-default-right-frameInfo {
   padding-left: 40px;
 }
 
-/* line 138, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 142, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .empty-search-field {
   padding-left: 40px;
   opacity: 0.6;
 }
 
-/* line 143, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 147, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .batch-import-area {
   position: absolute !important;
   width: 100% !important;
@@ -23134,7 +23139,7 @@ body.x-nbr .x-tab-default-right-frameInfo {
   display: none;
 }
 
-/* line 159, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 163, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #dropZone-close {
   position: relative;
   float: right;
@@ -23149,17 +23154,17 @@ body.x-nbr .x-tab-default-right-frameInfo {
   -webkit-transition: all .3s ease-in-out;
 }
 
-/* line 173, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 177, ../../../../sass/src/view/common/DashboardPanelView.scss */
 #dropZone-close:hover {
   opacity: 1;
 }
 
-/* line 177, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 181, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .sequenceLibraryImportButton {
   padding: 2px 10px;
 }
 
-/* line 181, ../../../../sass/src/view/common/DashboardPanelView.scss */
+/* line 185, ../../../../sass/src/view/common/DashboardPanelView.scss */
 .sequenceLibraryImportButtonIcon {
   background-size: 14px;
 }
@@ -23931,7 +23936,7 @@ img {
   width: 330px;
   height: 85px;
   margin: 0 auto;
-  margin-top: 220px;
+  margin-top: 250px;
 }
 
 /* line 552, ../../../../sass/src/view/AppViewport.scss */
@@ -23940,7 +23945,7 @@ img {
   margin: 0 auto;
   height: 40px;
   text-align: center;
-  margin-top: 180px;
+  margin-top: 80px;
   font-size: 14px;
   font-weight: 700;
   color: #006cab;
@@ -24504,9 +24509,9 @@ img {
 /* line 1031, ../../../../sass/src/view/AppViewport.scss */
 .openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .cancelj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn, .buildBtn {
   background: #1585C5;
-  transition: background .2s ease-in-out;
-  -moz-transition: background .2s ease-in-out;
-  -webkit-transition: background .2s ease-in-out;
+  transition: all .1s;
+  -moz-transition: all .1s;
+  -webkit-transition: all .1s;
 }
 
 /* line 1038, ../../../../sass/src/view/AppViewport.scss */
@@ -24522,9 +24527,9 @@ img {
 /* line 1046, ../../../../sass/src/view/AppViewport.scss */
 .addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn, .editj5ParamsBtn, .customizeAutomationParamsBtn, .downloadCondenseAssemblyResultsBtn, .downloadDownstreamAutomationBtn {
   background: #92a4b6;
-  transition: background .2s ease-in-out;
-  -moz-transition: background .2s ease-in-out;
-  -webkit-transition: background .2s ease-in-out;
+  transition: all .1s;
+  -moz-transition: all .1s;
+  -webkit-transition: all .1s;
 }
 
 /* line 1053, ../../../../sass/src/view/AppViewport.scss */
