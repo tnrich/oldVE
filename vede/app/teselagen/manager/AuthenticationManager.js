@@ -56,7 +56,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     return;
                 }
 
-                var response = JSON.parse(response.responseText);
+                response = JSON.parse(response.responseText);
                 if(response) Ext.getCmp('auth-response').setValue(response.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
@@ -79,6 +79,34 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             });
             Teselagen.manager.TasksMonitor.bootMonitoring();
             Teselagen.manager.TasksMonitor.startMonitoring();
+
+            var user = self.authResponse.user;
+
+            // Identify user and pass traits in error logging.
+            if(typeof Hoptoad !== "undefined") {
+                Hoptoad.setErrorDefaults({
+                    url: document.URL,
+                    component: 'user: ' + user.username
+                });
+            }
+
+            // Identify the user and pass traits in UserVoice logging.
+            // To enable, replace sample data with actual user traits and uncomment the line
+            UserVoice.push(['identify', {
+                email: user.email,
+                name: user.firstName + ' ' + user.lastName,
+                id: user._id
+
+                // TODO: Maybe use this when we have corporate accounts?
+                /*account: {
+                    id:                     123, // Optional: associate multiple users with a single account
+                    name:                 'Acme, Co.', // Account name
+                    created_at:     1364406966, // Unix timestamp for the date the account was created
+                    monthly_rate: 9.99, // Decimal; monthly rate of the account
+                    ltv:                    1495.00, // Decimal; lifetime value of the account
+                    plan:                 'Enhanced' // Plan name for the account
+                }*/
+            }]);
         }
     },
 
