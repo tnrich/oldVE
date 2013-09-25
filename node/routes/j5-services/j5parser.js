@@ -43,16 +43,13 @@ function processNonCombinatorial_MOCK(lines,cb){
         //Warnings
         obj.warnings = [];
         var currentWarning = lines.splice(0,1)[0];
-        while(currentWarning.match(/"Warning:/) !== null)
+        while(currentWarning.match(/"Note:/) !== null)
         {
             obj.warnings.push({"message": currentWarning});
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
 
         obj.note = currentWarning; // In this method there is not space between warnings and note
-
-        lines.splice(0,1)[0] //Empty space
-
 
         //Non degenerate Part IDs and Sources
         lines.splice(0,1)[0]; // Header
@@ -88,12 +85,12 @@ function processNonCombinatorial_MOCK(lines,cb){
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
 
-        lines.splice(0,1)[0] //Empty space
-
         //Target Parts
-        lines.splice(0,1)[0]; //Header
+        //lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Part
         lines.splice(0,1)[0]; //Columns
+
+        console.log(lines);
 
         obj.targetParts = [];
         var currentPart = lines.splice(0,1)[0];

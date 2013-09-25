@@ -124,6 +124,36 @@ module.exports = function(app, express) {
         app.use(airbrake.expressHandler());
     });
 
+    // Init MEMCACHED
+    var memCacheHost = Opts.host+':11211';
+    memCacheHost = "54.215.198.196:11211";
+    app.cache = new app.memcached(memCacheHost);
+
+    app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
+    app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
+
+    if(app.get("env") === "production") {
+    setTimeout(function(){        
+        console.log("writing to memcache");
+        app.cache.set('test', 'hello', 0, function (err, result) {
+            if(err) {
+                app.logger.error("MEMCACHE: CONNECTION PROBLEMS");
+                console.log(arguments);
+            }
+            else {
+                console.log("reading to memcache");
+                app.cache.get('test', function (err, data) {
+                  if(err) console.log("Error reading data from memcache");
+                  console.log(data);
+                });
+            }
+        });
+        
+    },1000);
+    }
+    
+
+
     // Init MONGODB - MONGOOSE (ODM)
     /*
      * MONGOOSE (ODM) Initialization using app.dbname
