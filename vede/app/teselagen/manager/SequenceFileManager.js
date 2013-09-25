@@ -27,7 +27,7 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
 
     constructor: function(inData) {
         //this.Sha256          = Teselagen.bio.util.Sha256;
-        
+
         this.Constants          = Teselagen.constants.Constants;
         this.SequenceManager    = Teselagen.manager.SequenceManager;
         this.GenbankManager      = Teselagen.bio.parsers.GenbankManager;
@@ -45,7 +45,7 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
         var format  = pSequenceFile.get("sequenceFileFormat");
         var content = pSequenceFile.get("sequenceFileContent");
         var seqMan;
-        
+
         if(!this.FormatUtils)
         {
             console.log("Fixing FormatUtils loading");
@@ -76,6 +76,7 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
             break;
         default:
             console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
+            return null;
         }
 
         // Directly set name of the sequence manager to avoid the getName method.

@@ -24,7 +24,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         var currentProject = Ext.getCmp("mainAppPanel").getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
-        
+
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/"+currentProject.data.project_id+"/devicedesigns/"+currentProject.data.id+"/eugenerules", ""),
             method: "GET",
@@ -317,7 +317,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
 
         var saveDesign = function () {
-            var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
             design.rules().clearFilter(true);
 
             design.rules().each(function(rule) {

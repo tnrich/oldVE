@@ -104,6 +104,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
         }
 
+        if(!sequenceFileManager) {
+            return;
+        }
+
         var self = this;
 
         Teselagen.manager.ProjectManager.checkDuplicatedTabs(seq, "VectorEditorPanel", function(tabPanel) {
