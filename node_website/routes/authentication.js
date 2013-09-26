@@ -122,6 +122,7 @@ module.exports = function(app, express) {
             "headers": {
                 "Reply-To": "registration@teselagen.com"
             },
+            "bcc_address": "nathan@teselagen.com",
             "track_opens": true,
             "track_clicks": true,
             "tags": [
