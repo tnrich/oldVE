@@ -36,13 +36,14 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     },    
 
     startMonitoring: function() {
-        var self = this;
-        var task = new Ext.util.DelayedTask(function(){
-            self.monitorServerTasks();
-            if(self.runFlag) task.delay(self.delay);
-        });
-        
-        task.delay(this.delay);
+        //var self = this;
+        //var task = new Ext.util.DelayedTask(function(){
+        //    self.monitorServerTasks();
+        //    if(self.runFlag) task.delay(self.delay);
+        //});
+        //
+        //task.delay(this.delay);
+        this.monitorServerTasks();
     },
 
     start: function(){
@@ -56,23 +57,40 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         if(!boot) console.log("Tasks Monitor has been disabled.");
     },
 
+
     monitorServerTasks: function(cb){
         var self = this;
-        Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUrl('monitorTasks', ''),
-            params: {
-            },
-            method: 'GET',
-            withCredentials: true,
-            success: function(response){
-                var parsedResponse = JSON.parse(response.responseText);
-                self.observeChanges(parsedResponse.j5runs);
-                if(typeof (cb) === "function") {cb(parsedResponse); }
-            },
-            failure: function(){
-                self.stop();
-            }
-        });
+
+        (function poll(){
+           //$.ajax({ url: "server", success: function(data){
+           //    //Update your dashboard gauge
+           //    salesGauge.setValue(data.value);
+
+           //}, dataType: "json", complete: poll, timeout: 30000 });
+
+            setTimeout(function(){
+
+                Ext.Ajax.request({
+                    url: Teselagen.manager.SessionManager.buildUrl('monitorTasks', ''),
+                    params: {
+                    },
+                    method: 'GET',
+                    withCredentials: true,
+                    success: function(response){
+                        var parsedResponse = JSON.parse(response.responseText);
+                        self.observeChanges(parsedResponse.j5runs);
+                        if(typeof(cb)=="function") cb(parsedResponse.j5runs);
+                        if(self.runFlag) poll();
+                    },
+                    failure: function(){
+                        self.stop();
+                    }
+                });
+
+            },self.delay);
+
+
+        })();
     },
 
     addJ5RunObserver: function(j5run){
