@@ -4,25 +4,48 @@ module.exports = function(app) {
     var UserManager = require("../manager/UserManager")();
     var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
+
+    var mandrill = require('mandrill-api/mandrill');
+    var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
+    
     var sendRegisteredMail = function(user)
     {
         var html = app.constants.activationResponseEmailText;
         html = html.replace("<username>", user.firstName);
 
-      var mailOptions = {
-        from: "Teselagen <teselagen.testing@gmail.com>",
-        to: user.email,
-        subject: "Welcome!",
-        html: html
-      }
+        var message = {
+          "html": html,
+          "subject": "TeselaGen Beta Access",
+          "from_email": "registration@teselagen.com",
+          "from_name": "TeselaGen",
+          "to": [{
+                  "email": user.email,
+                  "name": user.firstName
+              }],
+          "headers": {
+              "Reply-To": "registration@teselagen.com"
+          },
+          "track_opens": true,
+          "track_clicks": true,
+          "tags": [
+              "user-activation"
+          ],
+          "metadata": {
+              "website": "www.teselagen.com"
+          },
+          "recipient_metadata": [{
+              "rcpt": user.email
+          }]
+      };
 
-      app.mailer.sendMail(mailOptions, function(error, response){
-          if(error){
-              console.log(error);
-          }else{
-              console.log("Message sent: " + response.message);
-          }
-      });
+      var async = false;
+      var ip_pool = "Beta Registers";
+
+      mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
     }
     /**
      * Get user by id stored in session
