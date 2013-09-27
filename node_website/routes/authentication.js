@@ -212,7 +212,7 @@ module.exports = function(app, express) {
                     lastName: req.body.lastName,
                     email:    req.body.email,
                     activated: false,
-                    activationCode: crypto.randomBytes(32).toString("hex")m
+                    activationCode: crypto.randomBytes(32).toString("hex"),
                     affiliationName: req.body.affiliationName,
                     affiliationType: req.body.affiliationType,
                     dateCreated: new Date()
