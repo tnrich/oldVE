@@ -274,9 +274,7 @@ module.exports = function(db) {
 		        name: String
 		    }]
 		}],
-		dateCreated: Date,
-		affiliationType: String,
-		affiliationName: String
+		dateCreated: Date
 	});
 
     UserSchema.pre('save', function(next) {

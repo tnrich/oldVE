@@ -207,14 +207,13 @@ module.exports = function(app, express) {
                 User.create({
                     username: req.body.username,
                     password: req.body.password,
-                    groupType: req.body.orgType,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email:    req.body.email,
                     activated: false,
                     activationCode: crypto.randomBytes(32).toString("hex"),
-                    affiliationName: req.body.affiliationName,
-                    affiliationType: req.body.affiliationType,
+                    groupName: req.body.organizationName,
+                    groupType: req.body.organizationType,
                     dateCreated: new Date()
                 }, function(err, user) {
                     if(err) {

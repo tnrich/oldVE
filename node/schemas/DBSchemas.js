@@ -292,9 +292,7 @@ module.exports = function(db) {
 	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
 	        }
 		},
-		dateCreated: Date,
-		affiliationType: String,
-		affiliationName: String
+		dateCreated: Date
 	});
 
     UserSchema.pre('save', function(next) {
