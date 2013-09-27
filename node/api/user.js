@@ -61,6 +61,30 @@ module.exports = function(app) {
         });
     });
 
+    /*
+    Temporal user listing
+    */
+    app.get("/fixResources/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().exec(function(err,users){
+          users.forEach(function(user){
+            var userFQDN = user.FQDN;
+            user.parts.forEach(function(part){
+              var candidate = part.FQDN.match(userFQDN+".+");
+              if(candidate[0]) { part.FQDN = candidate[0]; part.save();}
+              else console.log("error processing part"+part.FQDN);
+            });
+
+            user.sequences.forEach(function(sequence){
+              var candidate = sequence.FQDN.match(userFQDN+".+");
+              if(candidate[0]) { sequence.FQDN = candidate[0]; sequence.save();}
+              else console.log("error processing sequence"+sequence.FQDN);              
+            });
+
+          });
+        });
+    });
+
 
     /**
      * Get user by id stored in session
