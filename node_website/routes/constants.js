@@ -14,7 +14,9 @@ The following user has requested a new Beta Account on TeselaGen:<br>\
 <br>\
 <b>Email:</b> <email><br>\
 <br>\
-<b>Organization</b>: <organization><br>\
+<b>Organization Name</b>: <organizationName><br>\
+<br>\
+<b>Organization Type</b>: <organizationType><br>\
 <br>\
 <b>Username:</b> <username><br>\
 </p>\
