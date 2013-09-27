@@ -10,8 +10,8 @@ function registerUser(registrationInfo) {
                 firstName: 	registrationInfo.registerFirstNameField,
                 lastName: 	registrationInfo.registerLastNameField,
                 email: 		registrationInfo.registerEmailField,
-                affiliationName: registrationInfo.affiliationName,
-                affiliationType: registrationInfo.affiliationType
+                affiliationName: registrationInfo.registerAffiliationName,
+                affiliationType: registrationInfo.registerAffiliationType
         }
 	})
 		.done(
