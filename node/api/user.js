@@ -92,19 +92,30 @@ module.exports = function(app) {
     Resources integrity check
     */
     app.get("/integrity/:code", function(req, res) {
+        var log = [];
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
         User.find().populate("parts sequences").exec(function(err,users){
+          var usersCount = users.length;
           users.forEach(function(user){
             var userFQDN = user.FQDN;
+            var partsCount = user.parts.length;
+            var sequencesCount = user.parts.length;
             user.parts.forEach(function(part){
-              if(part && part.FQDN) { console.log("ok"); }
-              else console.log("Integrity error in part "+part._id+" user "+user.username);
+              if(part && part.FQDN) { log.push("ok"); }
+              else log.push("Integrity error in part "+part._id+" user "+user.username);
+              partsCount--;
             });
 
             user.sequences.forEach(function(sequence){
-              if(sequence && sequence.FQDN) { console.log("ok"); }
-              else console.log("Integrity error in sequence "+sequence._id+" user "+user.username);          
+              if(sequence && sequence.FQDN) { log.push("ok"); }
+              else log.push("Integrity error in sequence "+sequence._id+" user "+user.username);  
+              sequencesCount--;        
             });
+
+            usersCount--;
+
+            if(usersCount === 0 && sequencesCount === 0 && partsCount === 0) res.json(log);
+
 
           });
         });
