@@ -27,10 +27,11 @@
       for(var i=0;i<jsonData.user.length;i++)
       {
         user = jsonData.user[i];
+        name = user.firstName + " " + user.lastName;
         data.addRow([
           new Date(user.dateCreated),
           i+1, 
-          user.firstName + " " * user.lastName,
+          name,
           user.groupName,
         ])
       };
