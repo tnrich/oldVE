@@ -97,12 +97,12 @@ module.exports = function(app) {
           users.forEach(function(user){
             var userFQDN = user.FQDN;
             user.parts.forEach(function(part){
-              if(part && part.FQDN) {}
+              if(part && part.FQDN) { console.log("ok"); }
               else console.log("Integrity error in part "+part._id+" user "+user.username);
             });
 
             user.sequences.forEach(function(sequence){
-              if(sequence && sequence.FQDN) {}
+              if(sequence && sequence.FQDN) { console.log("ok"); }
               else console.log("Integrity error in sequence "+sequence._id+" user "+user.username);          
             });
 
