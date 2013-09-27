@@ -61,7 +61,20 @@ module.exports = function(app) {
         });
     });
 
-
+    /*
+    Temporal user listing
+    */
+    app.get("/calculateDates/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().exec(function(err,users){
+          var usersCount = users.length;
+          users.forEach(function(user){
+            if(!user.dateCreated) { user.dateCreated = user._id.getTime.getTimestamp(); user.save(); }
+            usersCount--;
+            if(usersCount == 0) res.json({"op":"ok"});
+          });
+        });
+    });
 
     /*
     Temporal user listing
