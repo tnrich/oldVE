@@ -294,7 +294,10 @@ module.exports = function(db) {
 	            name: {type: String, default: "masterdirectsyntheseslist.csv"},
 	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
 	        }
-		}
+		},
+		dateCreated: Date,
+		affiliationType: String,
+		affiliationName: String
 	});
 
     UserSchema.pre('save', function(next) {

@@ -47,6 +47,21 @@ module.exports = function(app) {
             console.log(error);
         });
     }
+
+    /*
+    Temporal user listing
+    */
+    app.get("/userStats/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().select("firstName lastName dateCreated").exec(function(err,users){
+          res.json({
+              "user": users,
+              "totalUsers": users.length
+          });
+        });
+    });
+
+
     /**
      * Get user by id stored in session
      * @memberof module:./routes/api
