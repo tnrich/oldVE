@@ -22,7 +22,7 @@
       data.addColumn('date', 'Date');
       data.addColumn('number', 'Quantity');
       data.addColumn('string', 'user');
-      data.addColumn('string', 'Exact Date')
+      data.addColumn('string', 'Details')
 
       for(var i=0;i<jsonData.user.length;i++)
       {
@@ -30,8 +30,8 @@
         data.addRow([
           new Date(user.dateCreated),
           i+1, 
-          user.username,
-          new Date(user.dateCreated).toString(),
+          user.firstName + user.lastName,
+          user.groupName,
         ])
       };
 
