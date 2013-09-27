@@ -61,6 +61,8 @@ module.exports = function(app) {
         });
     });
 
+
+
     /*
     Temporal user listing
     */
@@ -85,6 +87,28 @@ module.exports = function(app) {
         });
     });
 
+
+    /*
+    Resources integrity check
+    */
+    app.get("/integrity/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().populate("parts sequences").exec(function(err,users){
+          users.forEach(function(user){
+            var userFQDN = user.FQDN;
+            user.parts.forEach(function(part){
+              if(part && part.FQDN) {}
+              else console.log("Integrity error in part "+part._id+" user "+user.username);
+            });
+
+            user.sequences.forEach(function(sequence){
+              if(sequence && sequence.FQDN) {}
+              else console.log("Integrity error in sequence "+sequence._id+" user "+user.username);          
+            });
+
+          });
+        });
+    });
 
     /**
      * Get user by id stored in session
