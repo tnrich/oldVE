@@ -6,7 +6,7 @@
     <script type="text/javascript">
     
     // Load the Visualization API and the piechart package.
-    google.load('visualization', '1', {'packages':['corechart']});
+    google.load('visualization', '1', {'packages':['corechart','annotatedtimeline']});
       
     // Set a callback to run when the Google Visualization API is loaded.
     google.setOnLoadCallback(drawChart);
@@ -20,22 +20,27 @@
 
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
-      data.addColumn('number', 'Quantity')  
+      data.addColumn('number', 'Quantity');
+      data.addColumn('string', 'user');
+      data.addColumn('string', 'Exact Date')
 
       for(var i=0;i<jsonData.user.length;i++)
       {
         user = jsonData.user[i];
-        data.addRow([new Date(user.dateCreated), i+1])
+        data.addRow([
+          new Date(user.dateCreated),
+          i+1, 
+          user.username,
+          new Date(user.dateCreated).toString(),
+        ])
       };
 
       // Instantiate and draw our chart, passing in some options.
         var options = {
-          title: 'Company Performance',
-          hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-          vAxis: {minValue: 0}
+          displayAnnotations: true
         };
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
         chart.draw(data, options);
       });
     }
