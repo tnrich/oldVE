@@ -99,7 +99,7 @@ module.exports = function(app) {
           users.forEach(function(user){
             var userFQDN = user.FQDN;
             var partsCount = user.parts.length;
-            var sequencesCount = user.parts.length;
+            var sequencesCount = user.sequences.length;
             user.parts.forEach(function(part){
               if(part && part.FQDN) { log.push("ok"); }
               else log.push("Integrity error in part "+part._id+" user "+user.username);
