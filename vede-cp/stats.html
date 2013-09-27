@@ -22,9 +22,11 @@
       data.addColumn('date', 'Date');
       data.addColumn('number', 'Quantity')  
 
-      jsonData.user.forEach(function(user,count){
-        data.addRow([new Date(user.dateCreated), count])
-      });
+      for(var i=0;i<jsonData.user.length;i++)
+      {
+        user = jsonData.user[i];
+        data.addRow([new Date(user.dateCreated), i+1])
+      };
 
       // Instantiate and draw our chart, passing in some options.
         var options = {
