@@ -329,7 +329,7 @@ module.exports = function(db) {
     };
 
 	UserSchema.virtual('FQDN').get(function () {
-	  return this.groupType + '.' + this.groupName + '.' + this.username;
+	  return this.username;
 	});
 
 	registerSchema('User', UserSchema);
