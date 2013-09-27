@@ -275,7 +275,7 @@ module.exports = function(db) {
 		    }]
 		}],
 		dateCreated: Date,
-		affiliationType: String
+		affiliationType: String,
 		affiliationName: String
 	});
 
