@@ -53,7 +53,7 @@ module.exports = function(app) {
     */
     app.get("/userStats/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
-        User.find().select("firstName lastName dateCreated groupType groupName username affiliationName affiliationType").exec(function(err,users){
+        User.find().select("firstName lastName dateCreated groupType groupName username").sort({dateCreated: -1}).exec(function(err,users){
           res.json({
               "user": users,
               "totalUsers": users.length
