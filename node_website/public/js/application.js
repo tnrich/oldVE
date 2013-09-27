@@ -10,6 +10,8 @@ function registerUser(registrationInfo) {
                 firstName: 	registrationInfo.registerFirstNameField,
                 lastName: 	registrationInfo.registerLastNameField,
                 email: 		registrationInfo.registerEmailField,
+                affiliationName: registrationInfo.affiliationName,
+                affiliationType: registrationInfo.affiliationType
         }
 	})
 		.done(
@@ -39,6 +41,8 @@ $(document).ready(function() {
 					registerPasswordField: 				$("#password").val(),
 					registerEmailField:     			$("#email").val(),
 					registerOrganizationTypeComboBox: 	$("#organization").val(),
+					registerAffiliationName: 			$("#affiliationName").val(),
+					registerAffiliationType: 			$("#affiliationType").val()
 				}
 				registerUser(registrationInfo);
 		}
