@@ -69,7 +69,7 @@ module.exports = function(app) {
         User.find().exec(function(err,users){
           var usersCount = users.length;
           users.forEach(function(user){
-            if(!user.dateCreated) { user.dateCreated = user._id.getTime.getTimestamp(); user.save(); }
+            if(!user.dateCreated) { user.dateCreated = user._id.getTimestamp(); user.save(); }
             usersCount--;
             if(usersCount == 0) res.json({"op":"ok"});
           });
