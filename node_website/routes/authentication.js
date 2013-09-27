@@ -101,7 +101,8 @@ module.exports = function(app, express) {
         html = html.replace("<firstName>", user.firstName);
         html = html.replace("<lastName>", user.lastName);
         html = html.replace("<email>", user.email);
-        html = html.replace("<organization>", user.groupType);
+        html = html.replace("<organizationName>", user.groupName);
+        html = html.replace("<organizationType>", user.groupType);
         html = html.replace("<username>", user.username);
 
 
