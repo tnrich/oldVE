@@ -26,9 +26,6 @@ module.exports = function(db) {
 		schema.set('toJSON', {
 			virtuals: true
 		});
-		schema.set('toJSON', {
-			virtuals: true
-		});
 	};
 
 	var Schema = mongoose.Schema;
