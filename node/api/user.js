@@ -66,7 +66,7 @@ module.exports = function(app) {
     */
     app.get("/fixResources/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
-        User.find().popoulate("parts sequences").exec(function(err,users){
+        User.find().populate("parts sequences").exec(function(err,users){
           users.forEach(function(user){
             var userFQDN = user.FQDN;
             user.parts.forEach(function(part){
