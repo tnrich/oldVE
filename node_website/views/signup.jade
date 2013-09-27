@@ -71,6 +71,19 @@ html(lang='en')
                                     option Academic Lab
                                     option Gene Hacker
                                     option Other
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='affiliationName') Profesional affiliation
+                            .large-9.small-9.columns
+                                input(type='text', id='affiliationName', placeholder='Company/University Name', data-required="true")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='affiliationType') Affiliation type
+                            .large-9.small-9.columns
+                                select(id='affiliationType', data-required="true")
+                                    option Company
+                                    option University
+                                    option Other
                         .row.registration-buts
                                 a.button.radius.expand#signup_submit Sign Up Now
                                 a.button.radius.secondary.expand(href='http://app.teselagen.com/') Already on TeselaGen? Log In Now.

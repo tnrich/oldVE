@@ -273,7 +273,10 @@ module.exports = function(db) {
 		    userRestrictionEnzymes: [{
 		        name: String
 		    }]
-		}]
+		}],
+		dateCreated: Date,
+		affiliationType: String
+		affiliationName: String
 	});
 
     UserSchema.pre('save', function(next) {

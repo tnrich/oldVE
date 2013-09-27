@@ -12,7 +12,8 @@ module.exports = function(mongoose) {
   	firstName: String,
   	lastName: String,
   	email: String,
-    hash: String
+    hash: String,
+    dateCreated: Date
   });
 
   schema
