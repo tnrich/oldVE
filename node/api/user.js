@@ -118,13 +118,13 @@ module.exports = function(app) {
             var partsCount = user.parts.length;
             var sequencesCount = user.sequences.length;
             user.parts.forEach(function(part){
-              if(part && part.FQDN) { log.parts.push("ok"); }
+              if(part && part.FQDN) { log.parts.push(part.FQDN); }
               else log.parts.push("Integrity error in part "+part._id+" user "+user.username);
               partsCount--;
             });
 
             user.sequences.forEach(function(sequence){
-              if(sequence && sequence.FQDN) { log.sequences.push("ok"); }
+              if(sequence && sequence.FQDN) { log.sequences.push(sequence.FQDN); }
               else log.sequences.push("Integrity error in sequence "+sequence._id+" user "+user.username);  
               sequencesCount--;        
             });
