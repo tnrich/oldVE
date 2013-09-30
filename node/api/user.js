@@ -64,6 +64,7 @@ module.exports = function(app) {
     /*
     Temporal user listing
     */
+    /*
     app.get("/calculateDates/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
         User.find().exec(function(err,users){
@@ -75,10 +76,12 @@ module.exports = function(app) {
           });
         });
     });
+    */
 
     /*
     Temporal user listing
     */
+    /*
     app.get("/fixResources/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
         User.find().populate("parts sequences").exec(function(err,users){
@@ -99,6 +102,7 @@ module.exports = function(app) {
           });
         });
     });
+    */
 
 
     /*
