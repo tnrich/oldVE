@@ -14,16 +14,17 @@ Ext.define('Vede.controller.AppController', {
         // Prevent backspace key and control + arrow keys from sending the user
         // back a page.
         Ext.EventManager.addListener(Ext.getBody(), 'keydown', function(e){
-            if(e.getTarget().type != 'text' && 
-                (e.getKey() == '8' || 
-                (e.isNavKeyPress() && e.ctrlKey)
-                )){
+            var type = e.getTarget().tagName.toLowerCase();
+            var reg = /input|select|textarea|text|password|file/i;
 
-                e.preventDefault();
+            if(e.getKey() == '8' || (e.isNavKeyPress() && e.ctrlKey)) {
+                if(!reg.test(type)) {
+                    e.preventDefault();
+                }
             }
         });
         Ext.EventManager.addListener(Ext.getBody(), 'mousedown', function(e){
-        	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, e);
+            Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, e);
         });
     }
 });

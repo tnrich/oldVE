@@ -101,8 +101,8 @@ Ext.define('Vede.controller.AuthWindowController', {
                 specialkey: function (field, e) {
                     if(e.getKey() == e.ENTER) {
                         that.onAuthLoginClick();
-                    } else if(e.getKey() === e.BACKSPACE) {
-                        // Custom backspace functionality because Ext is FUBAR.
+                    } /*else if(e.getKey() === e.BACKSPACE) {
+                        // Custom backspace functionality because Nick is stupid. //Ext is FUBAR.
                         var val = field.getValue();
 
                         if(val.length > 1) {
@@ -110,7 +110,7 @@ Ext.define('Vede.controller.AuthWindowController', {
                         } else {
                             field.setValue('');
                         }
-                    }
+                    }*/
                 }
             },
             "#auth-config-btn": {
