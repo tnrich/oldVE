@@ -7,7 +7,7 @@ Dear <username>,<br>\
 <br>\
 Welcome to the TeselaGen Beta site, your account at www.teselagen.com is now active.<br>\
 <br>\
-You should be able to login via the login button at upper right at www.teselagen.com, or at http://www.teselagen.com/user/login. Use the username and password you requested at registration.<br>\
+You should be able to login via the login button at upper right at www.teselagen.com, or directly at http://app.teselagen.com/. Use the username and password you requested at registration. You can bookmark this page to go to the application directly.<br>\
 <br>\
 We are really excited about our slick new interface that runs natively in your browser (you will need to use a HTML5 browser like the most recent version of Chrome), as well as the new parts library database feature. Let us know how it is working for you. Also, we really value your input about how our cloud-based service is performing for the construction of your DNA assembly protocols. If you can help us out by giving us some examples of how TeselaGen was able to help (or not) that would be great.<br>\
 <br>\

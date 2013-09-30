@@ -101,7 +101,8 @@ module.exports = function(app, express) {
         html = html.replace("<firstName>", user.firstName);
         html = html.replace("<lastName>", user.lastName);
         html = html.replace("<email>", user.email);
-        html = html.replace("<organization>", user.groupType);
+        html = html.replace("<organizationName>", user.groupName);
+        html = html.replace("<organizationType>", user.groupType);
         html = html.replace("<username>", user.username);
 
 
@@ -122,6 +123,7 @@ module.exports = function(app, express) {
             "headers": {
                 "Reply-To": "registration@teselagen.com"
             },
+            "bcc_address": "njhillson@teselagen.com",
             "track_opens": true,
             "track_clicks": true,
             "tags": [
@@ -206,12 +208,14 @@ module.exports = function(app, express) {
                 User.create({
                     username: req.body.username,
                     password: req.body.password,
-                    groupType: req.body.orgType,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email:    req.body.email,
                     activated: false,
-                    activationCode: crypto.randomBytes(32).toString("hex")
+                    activationCode: crypto.randomBytes(32).toString("hex"),
+                    groupName: req.body.organizationName,
+                    groupType: req.body.organizationType,
+                    dateCreated: new Date()
                 }, function(err, user) {
                     if(err) {
                         res.json({

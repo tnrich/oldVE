@@ -26,9 +26,6 @@ module.exports = function(db) {
 		schema.set('toJSON', {
 			virtuals: true
 		});
-		schema.set('toJSON', {
-			virtuals: true
-		});
 	};
 
 	var Schema = mongoose.Schema;
@@ -294,7 +291,8 @@ module.exports = function(db) {
 	            name: {type: String, default: "masterdirectsyntheseslist.csv"},
 	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
 	        }
-		}
+		},
+		dateCreated: Date
 	});
 
     UserSchema.pre('save', function(next) {
@@ -331,7 +329,7 @@ module.exports = function(db) {
     };
 
 	UserSchema.virtual('FQDN').get(function () {
-	  return this.groupType + '.' + this.groupName + '.' + this.username;
+	  return this.username;
 	});
 
 	registerSchema('User', UserSchema);

@@ -61,16 +61,21 @@ html(lang='en')
                                 input(type='email', id='email', placeholder='Email', data-required="true", data-type="email")
                         .row
                             .large-3.small-3.columns
-                                label.right.inline(for='organization') Organization
+                                label.right.inline(for='organizationType') Organization Type
                             .large-9.small-9.columns
-                                select(id='organization')
-                                    option -
-                                    option Red Biotech
-                                    option White Biotech
-                                    option Green Biotech
-                                    option Academic Lab
-                                    option Gene Hacker
-                                    option Other
+                                select(id='organizationType', data-required="true")
+                                    option(value="", selected="selected", disabled="disabled") Select organization type
+                                    option(value="com.red") Red Biotech
+                                    option(value="com.white") White Biotech
+                                    option(value="com.green") Green Biotech
+                                    option(value="edu.lab") Academic Lab
+                                    option(value="gene-hacker") Gene Hacker
+                                    option(value="other") Other
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='organizationName') Organization Name
+                            .large-9.small-9.columns
+                                input(type='text', id='organizationName', placeholder='Company/University Name', data-required="true")
                         .row.registration-buts
                                 a.button.radius.expand#signup_submit Sign Up Now
                                 a.button.radius.secondary.expand(href='http://app.teselagen.com/') Already on TeselaGen? Log In Now.

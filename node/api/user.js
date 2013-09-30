@@ -4,26 +4,136 @@ module.exports = function(app) {
     var UserManager = require("../manager/UserManager")();
     var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
+
+    var mandrill = require('mandrill-api/mandrill');
+    var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
+    
     var sendRegisteredMail = function(user)
     {
         var html = app.constants.activationResponseEmailText;
         html = html.replace("<username>", user.firstName);
 
-      var mailOptions = {
-        from: "Teselagen <teselagen.testing@gmail.com>",
-        to: user.email,
-        subject: "Welcome!",
-        html: html
-      }
+        var message = {
+          "html": html,
+          "subject": "TeselaGen Beta Access",
+          "from_email": "registration@teselagen.com",
+          "from_name": "TeselaGen",
+          "to": [{
+                  "email": user.email,
+                  "name": user.firstName
+              }],
+          "headers": {
+              "Reply-To": "registration@teselagen.com"
+          },
+          "track_opens": true,
+          "track_clicks": true,
+          "tags": [
+              "user-activation"
+          ],
+          "metadata": {
+              "website": "www.teselagen.com"
+          },
+          "recipient_metadata": [{
+              "rcpt": user.email
+          }]
+      };
 
-      app.mailer.sendMail(mailOptions, function(error, response){
-          if(error){
-              console.log(error);
-          }else{
-              console.log("Message sent: " + response.message);
-          }
-      });
+      var async = false;
+      var ip_pool = "Beta Registers";
+
+      mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
     }
+
+    /*
+    Temporal user listing
+    */
+    app.get("/userStats/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().select("firstName lastName dateCreated groupType groupName username").sort({dateCreated: 1}).exec(function(err,users){
+          res.json({
+              "user": users,
+              "totalUsers": users.length
+          });
+        });
+    });
+
+    /*
+    Temporal user listing
+    */
+    app.get("/calculateDates/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().exec(function(err,users){
+          var usersCount = users.length;
+          users.forEach(function(user){
+            if(!user.dateCreated) { user.dateCreated = user._id.getTimestamp(); user.save(); }
+            usersCount--;
+            if(usersCount == 0) res.json({"op":"ok"});
+          });
+        });
+    });
+
+    /*
+    Temporal user listing
+    */
+    app.get("/fixResources/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().populate("parts sequences").exec(function(err,users){
+          users.forEach(function(user){
+            var userFQDN = user.FQDN;
+            user.parts.forEach(function(part){
+              var candidate = part.FQDN.match(userFQDN+".+");
+              if(candidate[0]) { part.FQDN = candidate[0]; part.save();}
+              else console.log("error processing part"+part.FQDN);
+            });
+
+            user.sequences.forEach(function(sequence){
+              var candidate = sequence.FQDN.match(userFQDN+".+");
+              if(candidate[0]) { sequence.FQDN = candidate[0]; sequence.save();}
+              else console.log("error processing sequence"+sequence.FQDN);              
+            });
+
+          });
+        });
+    });
+
+
+    /*
+    Resources integrity check
+    */
+    app.get("/integrity/:code", function(req, res) {
+        var log = {}; log.sequences = []; log.parts = [];
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().populate("parts sequences").exec(function(err,users){
+          var usersCount = users.length;
+          users.forEach(function(user){
+            var userFQDN = user.FQDN;
+            var partsCount = user.parts.length;
+            var sequencesCount = user.sequences.length;
+            user.parts.forEach(function(part){
+              if(part && part.FQDN) { log.parts.push("ok"); }
+              else log.parts.push("Integrity error in part "+part._id+" user "+user.username);
+              partsCount--;
+            });
+
+            user.sequences.forEach(function(sequence){
+              if(sequence && sequence.FQDN) { log.sequences.push("ok"); }
+              else log.sequences.push("Integrity error in sequence "+sequence._id+" user "+user.username);  
+              sequencesCount--;        
+            });
+
+            usersCount--;
+
+            if(usersCount === 0 && sequencesCount === 0 && partsCount === 0) res.json(log);
+
+
+          });
+        });
+    });
+
     /**
      * Get user by id stored in session
      * @memberof module:./routes/api

@@ -273,7 +273,8 @@ module.exports = function(db) {
 		    userRestrictionEnzymes: [{
 		        name: String
 		    }]
-		}]
+		}],
+		dateCreated: Date
 	});
 
     UserSchema.pre('save', function(next) {

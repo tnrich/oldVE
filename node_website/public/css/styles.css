@@ -46,6 +46,28 @@ body {
     color: #006cab;
 }
 
+.top-bar.expanded .title-area {
+    background: #FFF;
+}
+
+.top-bar.expanded {
+    background: #FFF;
+}
+
+.top-bar .toggle-topbar.menu-icon a span {
+    -webkit-box-shadow: 0 10px 0 1px #000,0 16px 0 1px #000,0 22px 0 1px #000;
+    box-shadow: 0 10px 0 1px #000000,0 16px 0 1px #000,0 22px 0 1px #000000;
+}
+
+#footer_links .top-bar .toggle-topbar.menu-icon a span {
+    -webkit-box-shadow: 0 10px 0 1px #fff,0 16px 0 1px #fff,0 22px 0 1px #fff;
+    box-shadow: 0 10px 0 1px #fff,0 16px 0 1px #fff,0 22px 0 1px #fff;
+}
+
+#footer_links .top-bar.expanded {
+    background: rgb(40, 43, 48);
+}
+
 .name img {
     width: 40%;
     position: relative;
@@ -547,3 +569,38 @@ label.inline {
 .whitepaper-call-out p{
     font-size: 18px;
 }
+
+@media only screen and (max-width: 768px) {
+    #banner_back {
+        height: 1100px;
+    }
+
+    .bandiv {
+        margin: 20px 0px;
+    }
+
+    .showcase_text {
+        margin-top: 0px;
+    }
+
+    .showcase_block_back, .showcase_block {
+        min-height: 155px;
+    }
+
+    .showcase_block {
+        border-bottom: 1px solid black;
+    }
+
+    .page-header {
+        margin-left: 10px;
+    }
+
+
+
+}
+
+@media only screen and (max-width: 939px) {
+    .name img {
+        width: 20%;
+    }
+}    
