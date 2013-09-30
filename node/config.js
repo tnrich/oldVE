@@ -87,6 +87,12 @@ module.exports = function(app, express) {
         airbrake.protocol = "https"
         airbrake.handleExceptions();
 
+        airbrake.on('vars', function(type, vars) {
+          if (type === 'cgi-data') {
+            vars.SOURCE = "NodeJS";
+          }
+        });
+
         // Use Nodetime to monitor/profile the server.
         require('nodetime').profile({
             accountKey: '7a81c5694843fb2ead319abf624219460dad4f47', 
