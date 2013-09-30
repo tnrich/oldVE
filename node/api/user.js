@@ -53,7 +53,7 @@ module.exports = function(app) {
     */
     app.get("/userStats/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
-        User.find().select("firstName lastName dateCreated groupType groupName username affiliationName affiliationType").exec(function(err,users){
+        User.find().select("firstName lastName dateCreated groupType groupName username").sort({dateCreated: 1}).exec(function(err,users){
           res.json({
               "user": users,
               "totalUsers": users.length
@@ -61,6 +61,78 @@ module.exports = function(app) {
         });
     });
 
+    /*
+    Temporal user listing
+    */
+    app.get("/calculateDates/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().exec(function(err,users){
+          var usersCount = users.length;
+          users.forEach(function(user){
+            if(!user.dateCreated) { user.dateCreated = user._id.getTimestamp(); user.save(); }
+            usersCount--;
+            if(usersCount == 0) res.json({"op":"ok"});
+          });
+        });
+    });
+
+    /*
+    Temporal user listing
+    */
+    app.get("/fixResources/:code", function(req, res) {
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().populate("parts sequences").exec(function(err,users){
+          users.forEach(function(user){
+            var userFQDN = user.FQDN;
+            user.parts.forEach(function(part){
+              var candidate = part.FQDN.match(userFQDN+".+");
+              if(candidate[0]) { part.FQDN = candidate[0]; part.save();}
+              else console.log("error processing part"+part.FQDN);
+            });
+
+            user.sequences.forEach(function(sequence){
+              var candidate = sequence.FQDN.match(userFQDN+".+");
+              if(candidate[0]) { sequence.FQDN = candidate[0]; sequence.save();}
+              else console.log("error processing sequence"+sequence.FQDN);              
+            });
+
+          });
+        });
+    });
+
+
+    /*
+    Resources integrity check
+    */
+    app.get("/integrity/:code", function(req, res) {
+        var log = {}; log.sequences = []; log.parts = [];
+        if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
+        User.find().populate("parts sequences").exec(function(err,users){
+          var usersCount = users.length;
+          users.forEach(function(user){
+            var userFQDN = user.FQDN;
+            var partsCount = user.parts.length;
+            var sequencesCount = user.sequences.length;
+            user.parts.forEach(function(part){
+              if(part && part.FQDN) { log.parts.push("ok"); }
+              else log.parts.push("Integrity error in part "+part._id+" user "+user.username);
+              partsCount--;
+            });
+
+            user.sequences.forEach(function(sequence){
+              if(sequence && sequence.FQDN) { log.sequences.push("ok"); }
+              else log.sequences.push("Integrity error in sequence "+sequence._id+" user "+user.username);  
+              sequencesCount--;        
+            });
+
+            usersCount--;
+
+            if(usersCount === 0 && sequencesCount === 0 && partsCount === 0) res.json(log);
+
+
+          });
+        });
+    });
 
     /**
      * Get user by id stored in session
