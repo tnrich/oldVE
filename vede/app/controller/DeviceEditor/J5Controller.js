@@ -741,7 +741,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             } else {
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
-                    msg: responseData.responseText,
+                    msg: responseData,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
                 });
@@ -883,7 +883,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             } else {
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
-                    msg: responseData.responseText,
+                    msg: responseData,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
                 });
