@@ -25,6 +25,9 @@ module.exports = function(app, express) {
         authHost: "mongodb://localhost/" + app.dbname
     }; 
 
+    app.set("env","production");
+    app.dbname = "teselagen";
+
     if(app.get("env") === "production") {
         var Opts = {
             host: "54.215.198.196",

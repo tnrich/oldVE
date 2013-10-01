@@ -253,6 +253,7 @@ module.exports = function(db) {
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
+		userType:: {type: String, default: "guest"},
 		projects: [{
 			type: oIDRef,
 			ref: 'project'
@@ -326,6 +327,29 @@ module.exports = function(db) {
                 return next(null, isMatch);
             }
         });
+    };
+
+    UserSchema.methods.J5MethodAllowed = function(method,cb) {
+
+    	/*
+		
+		* NOT ALLOWED for guests
+
+		* SLIC/Gibson/CPEC, 
+		* Combinatorial SLIC/Gibson/CPEC,
+		Mock Assembly,
+		* Golden Gate,
+		* Combinatorial Golden Gate,
+		Combinatorial Mock Assembly
+    	*/
+
+        var protectedMethods = ["SLIC/Gibson/CPEC","Combinatorial SLIC/Gibson/CPEC","Golden Gate","Combinatorial Golden Golden"];
+        if(this.userType == "guest")
+        {
+        	if(protectedMethods.indexOf(method) !=- 1) return cb(false);
+        	else return cb(true);
+        }
+        return cb(true);
     };
 
 	UserSchema.virtual('FQDN').get(function () {

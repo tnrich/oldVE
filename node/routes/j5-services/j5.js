@@ -253,6 +253,11 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
 // Design Assembly RPC
 app.post('/executej5',restrict,function(req,res){
 
+  console.log(req.body.assemblyMethod);
+  req.user.J5MethodAllowed(req.body.assemblyMethod,function(allowed){
+    if(!allowed) return res.json({fault:"User not allowed"});
+  });
+
   // Variables definition
   var DeviceDesign = app.db.model("devicedesign");
 
