@@ -85,61 +85,71 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 //Design Downstream Automation
 app.post('/DesignDownstreamAutomation', restrict, function(req,res){
 
-  var data = JSON.parse(req.body.files);
-  var params = JSON.parse(req.body.params);
-  var reuseParams = req.body.reuseParams;
+  req.user.J5MethodAllowed("DesignDownstreamAutomation",function(allowed){
+    if(!allowed) return res.json({"fault":"Feature unavailable for free accounts"});
 
-  var downstreamAutomationParamsEncode = function(params){
-      var out = "Parameter Name,Value\n"
-      
-      for(var prop in params) {
-          out += prop + ',' + params[prop] + '\n';
+    var data = JSON.parse(req.body.files);
+    var params = JSON.parse(req.body.params);
+    var reuseParams = req.body.reuseParams;
+
+    var downstreamAutomationParamsEncode = function(params){
+        var out = "Parameter Name,Value\n"
+        
+        for(var prop in params) {
+            out += prop + ',' + params[prop] + '\n';
+        }
+
+        return new Buffer(out).toString('base64');    
+    }
+
+    data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
+    data["reuse_downstream_automation_parameters_file"] = reuseParams;
+    //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
+    data["automation_task"] = "DistributePcrReactions";
+    data["username"] = 'node';
+    data["api_key"] = 'teselarocks';
+
+    app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
+      if(error)
+      {
+        console.log(error);
+        res.send(error["faultString"], 500);
       }
+      else
+      {
+        res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
+      }
+    });
 
-      return new Buffer(out).toString('base64');    
-  }
-
-  data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
-  data["reuse_downstream_automation_parameters_file"] = reuseParams;
-  //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
-  data["automation_task"] = "DistributePcrReactions";
-  data["username"] = 'node';
-  data["api_key"] = 'teselarocks';
-
-  app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
-    if(error)
-    {
-      console.log(error);
-      res.send(error["faultString"], 500);
-    }
-    else
-    {
-      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
-    }
   });
 });
 
 // Condense AssemblyFiles
 app.post('/condenseAssemblyFiles',restrict, function(req,res){
 
-  var params = JSON.parse(req.body.data);
-  var data = {};
-  data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
-  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
-  data["username"] = 'node';
-  data["api_key"] = 'teselarocks';
+  req.user.J5MethodAllowed("condenseAssemblyFiles",function(allowed){
+    if(!allowed) return res.json({"fault":"Feature unavailable for free accounts"});
 
-  app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
+    var params = JSON.parse(req.body.data);
+    var data = {};
+    data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
+    data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
+    data["username"] = 'node';
+    data["api_key"] = 'teselarocks';
 
-    if(error)
-    {
-      console.log(error);
-      res.send(error["faultString"], 500);
-    }
-    else
-    {
-      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
-    }
+    app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
+
+      if(error)
+      {
+        console.log(error);
+        res.send(error["faultString"], 500);
+      }
+      else
+      {
+        res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
+      }
+    });
+
   });
 });
 

@@ -84,7 +84,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                
+                if(response.fault)
+                {
+                    return cb(false,response.fault);
+                }
                 var condenseAssembliesBtn = inspector.down("button[cls='downloadCondenseAssemblyResultsBtn']");
                 condenseAssembliesBtn.show();
 
@@ -124,7 +127,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-
+                if(response.fault)
+                {
+                    return cb(false,response.fault);
+                }
                 var downloadBtn = inspector.down('button[cls=downloadDownstreamAutomationBtn]');
                 downloadBtn.show();
 
@@ -163,9 +169,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 assemblyMethod: self.assemblyMethod
             },
             success: function (response) {
-                //console.log(response);
-                //response = JSON.parse(response.responseText);
-                console.log(response);
+                response = JSON.parse(response.responseText);
                 if(response.fault)
                 {
                     return cb(false,response.fault);

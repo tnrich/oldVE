@@ -348,7 +348,14 @@ module.exports = function(db) {
     	
     	*/
 
-        var protectedMethods = ["SLIC/Gibson/CPEC","CombinatorialSLICGibsonCPEC","GoldenGate","CombinatorialGoldenGate"];
+        var protectedMethods = [
+	        "SLIC/Gibson/CPEC",
+	        "CombinatorialSLICGibsonCPEC",
+	        "GoldenGate",
+	        "CombinatorialGoldenGate",
+	        "condenseAssemblyFiles",
+	        "DesignDownstreamAutomation"
+        ];
         if(!this.userType || this.userType == "guest" || this.userType == "")
         {
         	if(protectedMethods.indexOf(method) !=- 1) return cb(false);
