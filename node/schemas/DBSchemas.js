@@ -253,7 +253,7 @@ module.exports = function(db) {
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
-		userType:: {type: String, default: "guest"},
+		userType: {type: String, default: "guest"},
 		projects: [{
 			type: oIDRef,
 			ref: 'project'
@@ -331,20 +331,25 @@ module.exports = function(db) {
 
     UserSchema.methods.J5MethodAllowed = function(method,cb) {
 
+    	//console.log("Trying to execute method "+method);
+    	//console.log("User type "+this.userType);
     	/*
 		
-		* NOT ALLOWED for guests
+		*   NOT ALLOWED for guests
 
-		* SLIC/Gibson/CPEC, 
-		* Combinatorial SLIC/Gibson/CPEC,
-		Mock Assembly,
-		* Golden Gate,
-		* Combinatorial Golden Gate,
-		Combinatorial Mock Assembly
+			Mock
+			CombinatorialMock
+
+		*	SLIC/Gibson/CPEC
+		*	CombinatorialSLICGibsonCPEC
+
+		*	GoldenGate
+		*	CombinatorialGoldenGate
+    	
     	*/
 
-        var protectedMethods = ["SLIC/Gibson/CPEC","Combinatorial SLIC/Gibson/CPEC","Golden Gate","Combinatorial Golden Golden"];
-        if(this.userType == "guest")
+        var protectedMethods = ["SLIC/Gibson/CPEC","CombinatorialSLICGibsonCPEC","GoldenGate","CombinatorialGoldenGate"];
+        if(!this.userType || this.userType == "guest" || this.userType == "")
         {
         	if(protectedMethods.indexOf(method) !=- 1) return cb(false);
         	else return cb(true);

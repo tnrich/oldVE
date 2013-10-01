@@ -163,8 +163,13 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 assemblyMethod: self.assemblyMethod
             },
             success: function (response) {
-                response = JSON.parse(response.responseText);
-                
+                //console.log(response);
+                //response = JSON.parse(response.responseText);
+                console.log(response);
+                if(response.fault)
+                {
+                    return cb(false,response.fault);
+                }
                 self.currentResults = response;
                 Teselagen.manager.TasksMonitor.addJ5RunObserver(self.currentResults.j5run);
 

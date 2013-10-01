@@ -134,6 +134,7 @@ module.exports = function(app, express) {
     });
 
     // Init MEMCACHED
+    /*
     var memCacheHost = Opts.host+':11211';
     memCacheHost = "54.215.198.196:11211";
     app.cache = new app.memcached(memCacheHost);
@@ -160,7 +161,7 @@ module.exports = function(app, express) {
         
     },1000);
     }
-    
+    */
 
 
     // Init MONGODB - MONGOOSE (ODM)
