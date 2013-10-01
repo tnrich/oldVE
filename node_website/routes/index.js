@@ -65,8 +65,8 @@ app.get('/thanks', function(req,res) {
   res.render('thanks', {});
 });
 
-app.get('*', function(req, res){
-  res.render('notfound', {});
+app.get('/admin', function(req,res) {
+  res.render('loginAdmin', {});
 });
 
 };

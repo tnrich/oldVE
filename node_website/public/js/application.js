@@ -50,5 +50,27 @@ $(document).ready(function() {
     	$( '#login_form' ).parsley('validate');
 	});
 
+	$("a#login_admin").on("click", function() {
+		$.ajax({
+	        method: 'POST',
+			url: '/login',
+			data: {
+	                username: 	$("#username").val(),
+	                password: 	$("#password").val(),
+	        }
+		})
+			.done(
+				function(data) {
+					window.location.replace("/admin/dashboard");
+				}
+				)
+			.fail(
+				function() { 
+					console.log("Error");
+				}
+				)
+			.always();	
+	});
+
 });
 

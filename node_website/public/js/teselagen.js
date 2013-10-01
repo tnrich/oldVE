@@ -44,44 +44,46 @@ $(function(){
     $('#loginModal').modal('hide');
   });
 
-  $('#login-form').live("submit", function() {
-      var login = $('#login-form input#username').val();
-      var password = $('#login-form input#password').val();
-      var remember = $('#login-form input#remember').is(':checked');
+  if($('#login-form')[0]) {
+    $('#login-form').live("submit", function() {
+        var login = $('#login-form input#username').val();
+        var password = $('#login-form input#password').val();
+        var remember = $('#login-form input#remember').is(':checked');
 
-      $.ajax({
-        type: "POST",
-        url: '/login',
-        data: { login: login, password: password, remember: remember},
-        statusCode: {
-            401: function(res) {
-              $('#login-form .control-group.error span.help-inline').html('Bad credentials');
-              $('#login-form .control-group.success').hide();
-              $('#login-form .control-group.error').show();
-              $('#loginModal').effect("shake", { times:2 }, 60);
-            },
-            404: function() {
-              $('#login-form .control-group.error span.help-inline').html('Service not found');
-              $('#login-form .control-group.success').hide();
-              $('#login-form .control-group.error').show();
-            },
-            500: function() {
-              $('#login-form .control-group.error span.help-inline').html('Service unavailable');
-              $('#login-form .control-group.success').hide();
-              $('#login-form .control-group.error').show();
-            }
-        },
-        success: function(data) {
-          $('#login-form .control-group.success span.help-inline').html("Success! Redirecting.");
-          $('#login-form .control-group.error').hide();
-          $('#login-form .control-group.success').show();
-          if($.urlParam('callback')!=null) {$(window).attr("location",$.urlParam('callback'));}
-          else {$(window).attr("location","/dashboard");}
-        } 
+        $.ajax({
+          type: "POST",
+          url: '/login',
+          data: { login: login, password: password, remember: remember},
+          statusCode: {
+              401: function(res) {
+                $('#login-form .control-group.error span.help-inline').html('Bad credentials');
+                $('#login-form .control-group.success').hide();
+                $('#login-form .control-group.error').show();
+                $('#loginModal').effect("shake", { times:2 }, 60);
+              },
+              404: function() {
+                $('#login-form .control-group.error span.help-inline').html('Service not found');
+                $('#login-form .control-group.success').hide();
+                $('#login-form .control-group.error').show();
+              },
+              500: function() {
+                $('#login-form .control-group.error span.help-inline').html('Service unavailable');
+                $('#login-form .control-group.success').hide();
+                $('#login-form .control-group.error').show();
+              }
+          },
+          success: function(data) {
+            $('#login-form .control-group.success span.help-inline').html("Success! Redirecting.");
+            $('#login-form .control-group.error').hide();
+            $('#login-form .control-group.success').show();
+            if($.urlParam('callback')!=null) {$(window).attr("location",$.urlParam('callback'));}
+            else {$(window).attr("location","/dashboard");}
+          } 
+        });
+      
+        return false;
       });
-    
-      return false;
-    });
+    }
 
   $('#login-btn').bind('click', function() {
     
