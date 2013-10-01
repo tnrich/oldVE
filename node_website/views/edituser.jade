@@ -1,0 +1,66 @@
+extends admin
+
+block container
+
+    #contact
+        .row
+            .large-12.small-12.page-header Edit user
+            .large-12.small-12#contact-info
+                form(data-validate="parsley")#signup_form.custom
+                    .row
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='first_name') First Name
+                            .large-9.small-9.columns
+                                input(type='text', id='first_name', placeholder='First Name', data-required="true", value="#{user.firstName}")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='last_name') Last Name
+                            .large-9.small-9.columns
+                                input(type='text', id='last_name', placeholder='Last Name', data-required="true", value="#{user.lastName}")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='username') Username
+                            .large-9.small-9.columns
+                                input(type='text', id='username', placeholder='Username', data-required="true", data-type="alphanum", value="#{user.username}")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='password') Password
+                            .large-9.small-9.columns
+                                input(type="password", id='password', data-required="true", value="")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='email') Email
+                            .large-9.small-9.columns
+                                input(type='email', id='email', placeholder='Email', data-required="true", data-type="email", value="#{user.email}")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='organizationType') Organization Type
+                            .large-9.small-9.columns
+                                select(id='organizationType', data-required="true")
+                                    option(value="", selected = (user.groupType==="" ? true : false) ) Select organization type
+                                    option(value="com.red", selected = (user.groupType==="com.red" ? true : false) ) Red Biotech
+                                    option(value="com.white", selected = (user.groupType==="com.white" ? true : false) ) White Biotech
+                                    option(value="com.green", selected = (user.groupType==="com.green" ? true : false) ) Green Biotech
+                                    option(value="edu.lab", selected = (user.groupType==="edu.lab" ? true : false) ) Academic Lab
+                                    option(value="gene-hacker", selected = (user.groupType==="gene-hacker" ? true : false) ) Gene Hacker
+                                    option(value="other", selected = (user.groupType==="other" ? true : false) ) Other
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='organizationName') Organization Name
+                            .large-9.small-9.columns
+                                input(type='text', id='organizationName', placeholder='Company/University Name', data-required="true" value="#{user.groupName}")
+                        .row
+                            .large-3.small-3.columns
+                            .large-9.small-9.columns
+                                a.button.radius#signup_submit Update
+                                a.button.radius#signup_submit(style="margin-left:10px;", href="javascript:history.back()") Cancel
+                        .row
+                            .large-3.small-3.columns
+                            .large-9.small-9.columns
+                                a.button.radius#signup_submit.alert Delete user
+                        
+
+        #push
+
+    script(src='/js/jquery-1.10.2.min.js')

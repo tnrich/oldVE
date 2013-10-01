@@ -56,6 +56,14 @@ module.exports = function(app, express) {
         }
     };
 
+    var adminRestrict = function(req, res, next) {
+        if(req.isAuthenticated() && req.user.userType && req.user.userType === "root") {
+            return next();
+        } else {
+            res.redirect('/admin');
+        }
+    };
+
     app.post('/login', function(req, res, next) {
         app.passport.authenticate('local', function(err, user, info) {
             if(err) {
@@ -91,7 +99,7 @@ module.exports = function(app, express) {
 
     app.all("/logout", function(req, res) {
         req.logout();
-        res.send();
+        res.redirect('/admin');
     });
 
 
@@ -238,4 +246,5 @@ module.exports = function(app, express) {
 
     app.auth = {};
     app.auth.restrict = restrict;
+    app.auth.adminRestrict = adminRestrict;
 };
