@@ -23,13 +23,10 @@ module.exports = function(app, express) {
         host: "localhost",
         port: 27017,
         authHost: "mongodb://localhost/" + app.dbname
-    }; 
-
-    app.set("env","production");
-    app.dbname = "teselagen";
+    };
 
     if(app.get("env") === "production") {
-        var Opts = {
+        Opts = {
             host: "54.215.198.196",
             port: 27017,
             username: "prod",
@@ -37,7 +34,7 @@ module.exports = function(app, express) {
             authRequired : true,
             redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
         };
-        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
     }
 
     /* User should be added to production like
