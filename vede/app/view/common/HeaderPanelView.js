@@ -13,7 +13,17 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 	cls: 'navbar navbar-static-top',
 	margin: '0 0 10 0',
 	layout: 'fit',
-	items: [{
+	items: [
+		{
+			xtype: 'panel',
+			id: 'header-browser-warning',
+			html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.',
+            height: 40,
+            padding: 10,
+            width: 400,
+            hidden: true,
+		},
+		{
 		xtype: 'container',
 		id: 'headerPanel-navbar',
 		cls: 'navbar-inner',
