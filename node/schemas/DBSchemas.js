@@ -356,7 +356,7 @@ module.exports = function(db) {
 	        "condenseAssemblyFiles",
 	        "DesignDownstreamAutomation"
         ];
-        if(!this.userType || this.userType == "guest" || this.userType == "")
+        if(this.userType && this.userType == "guest")
         {
         	if(protectedMethods.indexOf(method) !=- 1) return cb(false);
         	else return cb(true);
