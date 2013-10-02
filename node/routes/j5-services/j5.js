@@ -85,61 +85,71 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 //Design Downstream Automation
 app.post('/DesignDownstreamAutomation', restrict, function(req,res){
 
-  var data = JSON.parse(req.body.files);
-  var params = JSON.parse(req.body.params);
-  var reuseParams = req.body.reuseParams;
+  req.user.J5MethodAllowed("DesignDownstreamAutomation",function(allowed){
+    if(!allowed) return res.json({"fault":"Feature unavailable for free accounts"});
 
-  var downstreamAutomationParamsEncode = function(params){
-      var out = "Parameter Name,Value\n"
-      
-      for(var prop in params) {
-          out += prop + ',' + params[prop] + '\n';
+    var data = JSON.parse(req.body.files);
+    var params = JSON.parse(req.body.params);
+    var reuseParams = req.body.reuseParams;
+
+    var downstreamAutomationParamsEncode = function(params){
+        var out = "Parameter Name,Value\n"
+        
+        for(var prop in params) {
+            out += prop + ',' + params[prop] + '\n';
+        }
+
+        return new Buffer(out).toString('base64');    
+    }
+
+    data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
+    data["reuse_downstream_automation_parameters_file"] = reuseParams;
+    //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
+    data["automation_task"] = "DistributePcrReactions";
+    data["username"] = 'node';
+    data["api_key"] = 'teselarocks';
+
+    app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
+      if(error)
+      {
+        console.log(error);
+        res.send(error["faultString"], 500);
       }
+      else
+      {
+        res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
+      }
+    });
 
-      return new Buffer(out).toString('base64');    
-  }
-
-  data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
-  data["reuse_downstream_automation_parameters_file"] = reuseParams;
-  //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
-  data["automation_task"] = "DistributePcrReactions";
-  data["username"] = 'node';
-  data["api_key"] = 'teselarocks';
-
-  app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
-    if(error)
-    {
-      console.log(error);
-      res.send(error["faultString"], 500);
-    }
-    else
-    {
-      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
-    }
   });
 });
 
 // Condense AssemblyFiles
 app.post('/condenseAssemblyFiles',restrict, function(req,res){
 
-  var params = JSON.parse(req.body.data);
-  var data = {};
-  data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
-  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
-  data["username"] = 'node';
-  data["api_key"] = 'teselarocks';
+  req.user.J5MethodAllowed("condenseAssemblyFiles",function(allowed){
+    if(!allowed) return res.json({"fault":"Feature unavailable for free accounts"});
 
-  app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
+    var params = JSON.parse(req.body.data);
+    var data = {};
+    data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
+    data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
+    data["username"] = 'node';
+    data["api_key"] = 'teselarocks';
 
-    if(error)
-    {
-      console.log(error);
-      res.send(error["faultString"], 500);
-    }
-    else
-    {
-      res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
-    }
+    app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
+
+      if(error)
+      {
+        console.log(error);
+        res.send(error["faultString"], 500);
+      }
+      else
+      {
+        res.json({"username":req.user.username,"endDate":Date.now(),"data":value});
+      }
+    });
+
   });
 });
 
@@ -253,151 +263,153 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
 // Design Assembly RPC
 app.post('/executej5',restrict,function(req,res){
 
-  // Variables definition
-  var DeviceDesign = app.db.model("devicedesign");
+  req.user.J5MethodAllowed(req.body.assemblyMethod,function(allowed){
+    if(!allowed) return res.json({"fault":"Feature unavailable for free accounts"});
 
-  //Find the DeviceDesign in the Database populating the parts
-  DeviceDesign.findById(req.body.deProjectId).populate('bins.cells.part_id.sequencefile_id parts').exec(function(err,deviceDesignModel){
-    // Call resolve sequences to populate sequences (Further releases of mongoose may support multilevel chain population) so this can be refactored
-    DeviceDesignPreProcessing(deviceDesignModel,function(devicedesign){
+    var DeviceDesign = app.db.model("devicedesign");
 
-      var User = app.db.model("User");
-      User.findById(req.user._id).select({ "masterSources.masterplasmidlist.fileContent": 1, "masterSources.masteroligolist.fileContent": 1,"masterSources.masterdirectsyntheseslist.fileContent": 1 }).exec(function(err,user){
+    //Find the DeviceDesign in the Database populating the parts
+    DeviceDesign.findById(req.body.deProjectId).populate('bins.cells.part_id.sequencefile_id parts').exec(function(err,deviceDesignModel){
+      // Call resolve sequences to populate sequences (Further releases of mongoose may support multilevel chain population) so this can be refactored
+      DeviceDesignPreProcessing(deviceDesignModel,function(devicedesign){
 
-      // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
-      var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user,testing);
+        var User = app.db.model("User");
+        User.findById(req.user._id).select({ "masterSources.masterplasmidlist.fileContent": 1, "masterSources.masteroligolist.fileContent": 1,"masterSources.masterdirectsyntheseslist.fileContent": 1 }).exec(function(err,user){
 
-      // Credentials for RPC communication
-      data["username"] = req.user.username;
-      data["api_key"] = 'teselarocks';
+        // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
+        var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user,testing);
 
-      var newj5Run = new j5Runs({
-        name: "newResult",
-        date: new Date(),
-        assemblyMethod: data.assembly_method,
-        assemblyType: data.ASSEMBLY_PRODUCT_TYPE,
-        status: "In progress",
-        user_id: req.user._id,
-        devicedesign_id : deviceDesignModel._id,
-        project_id : deviceDesignModel.project_id,
-        devicedesign_name: deviceDesignModel.name,
-        combinatorialAssembly: [],
-        j5Input :
-          {
-            j5Parameters: JSON.parse(req.body.parameters)
-          }
-      });
+        // Credentials for RPC communication
+        data["username"] = req.user.username;
+        data["api_key"] = 'teselarocks';
 
-      newj5Run.save(function(err){
-        deviceDesignModel.j5runs.push(newj5Run);
-        deviceDesignModel.save(function(err){
-          if(err) return res.json(500,{error: "Database error."});
-        });
-      });
-      // file_id , j5Input and j5Results are filled once the job is completed.
-
-      // In production mode use internal script
-      var testing = !(app.get("env") === "production");
-
-      if(app.get("env") === "production") {
-
-        //console.log("Executing experimental j5 through pipe");
-
-        var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-        if(testing) scriptPath = "/Users/rpavez/bin/j5.pl";
-        var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
-        console.log("J5 Process started with pid: "+newChild.pid);
-
-        newj5Run.process = {
-          pid: newChild.pid,
-          server: app.localIP
-        };
-
-        res.json({status:"In progress",j5run:newj5Run});
-
-        if(!testing) newChild.stdin.setEncoding = 'utf-8';
-        if(!testing) newChild.stdin.write(xml+"\n");
-
-        newChild.output = "";
-
-        newChild.stdout.on('data', function (stoutData) {
-          newChild.output += stoutData;
+        var newj5Run = new j5Runs({
+          name: "newResult",
+          date: new Date(),
+          assemblyMethod: data.assembly_method,
+          assemblyType: data.ASSEMBLY_PRODUCT_TYPE,
+          status: "In progress",
+          user_id: req.user._id,
+          devicedesign_id : deviceDesignModel._id,
+          project_id : deviceDesignModel.project_id,
+          devicedesign_name: deviceDesignModel.name,
+          combinatorialAssembly: [],
+          j5Input :
+            {
+              j5Parameters: JSON.parse(req.body.parameters)
+            }
         });
 
-        newChild.stderr.on('data', function (stoutData) {}); // For further development
+        newj5Run.save(function(err){
+          deviceDesignModel.j5runs.push(newj5Run);
+          deviceDesignModel.save(function(err){
+            if(err) return res.json(500,{error: "Database error."});
+          });
+        });
+        // file_id , j5Input and j5Results are filled once the job is completed.
 
-        newChild.on('exit', function (code,signal) {
-            console.log("Process finished with code ",code," and signal ",signal);
-            //quicklog(require('util').inspect(newChild.output,false,null));
-            require('xml2js').parseString(newChild.output, function (err, result) {
-                if(signal === "SIGTERM")
-                {
-                  newj5Run.status = "Canceled";
-                  newj5Run.endDate = Date.now();
-                  newj5Run.save();
-                }
-                else if(err)
-                {
-                  console.log(err);
-                  newj5Run.status = "Error";
-                  newj5Run.endDate = Date.now();
-                  newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output"}});
-                  newj5Run.save();
-                }
-                else if(result.methodResponse.fault)
-                {
-                  var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
-                  console.log(error);
-                  if(error.match('Can\'t copy file masterplasmidlist.csv to the upload directory'))
+        // In production mode use internal script
+        var testing = !(app.get("env") === "production");
+
+        if(app.get("env") === "production") {
+
+          //console.log("Executing experimental j5 through pipe");
+
+          var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
+          var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+          if(testing) scriptPath = "/Users/rpavez/bin/j5.pl";
+          var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
+          console.log("J5 Process started with pid: "+newChild.pid);
+
+          newj5Run.process = {
+            pid: newChild.pid,
+            server: app.localIP
+          };
+
+          res.json({status:"In progress",j5run:newj5Run});
+
+          if(!testing) newChild.stdin.setEncoding = 'utf-8';
+          if(!testing) newChild.stdin.write(xml+"\n");
+
+          newChild.output = "";
+
+          newChild.stdout.on('data', function (stoutData) {
+            newChild.output += stoutData;
+          });
+
+          newChild.stderr.on('data', function (stoutData) {}); // For further development
+
+          newChild.on('exit', function (code,signal) {
+              console.log("Process finished with code ",code," and signal ",signal);
+              //quicklog(require('util').inspect(newChild.output,false,null));
+              require('xml2js').parseString(newChild.output, function (err, result) {
+                  if(signal === "SIGTERM")
                   {
-                    error = "No previous master plasmids, please generate empty plasmid file";
+                    newj5Run.status = "Canceled";
+                    newj5Run.endDate = Date.now();
+                    newj5Run.save();
                   }
+                  else if(err)
+                  {
+                    console.log(err);
+                    newj5Run.status = "Error";
+                    newj5Run.endDate = Date.now();
+                    newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output"}});
+                    newj5Run.save();
+                  }
+                  else if(result.methodResponse.fault)
+                  {
+                    var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
+                    console.log(error);
+                    if(error.match('Can\'t copy file masterplasmidlist.csv to the upload directory'))
+                    {
+                      error = "No previous master plasmids, please generate empty plasmid file";
+                    }
 
-                  newj5Run.status = "Error";
-                  newj5Run.endDate = Date.now();
-                  newj5Run.error_list.push({"error":{faultString: error}});
-                  newj5Run.save();
+                    newj5Run.status = "Error";
+                    newj5Run.endDate = Date.now();
+                    newj5Run.error_list.push({"error":{faultString: error}});
+                    newj5Run.save();
 
-                }
-                else
-                { 
-                  var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
-                  var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
-                  onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
-                }
-            });
+                  }
+                  else
+                  { 
+                    var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
+                    var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
+                    onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
+                  }
+              });
 
-        });
-      }
-      else // Run as XML_RPC Depending on remote server (With timeout limit)
-      {
-        res.json({status:"In progress"});
-        app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-          if(error)
-          {
-            if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
-            
-            newj5Run.status = "Error";
-            newj5Run.endDate = Date.now();
-            newj5Run.error_list.push({"error":error});
-            newj5Run.save();
-          }
-          else
-          {
-            // Get and decode the zip file returned by j5 server
-            var encodedFileData = value['encoded_output_file'];
-            var fileName = value['output_filename'];
+          });
+        }
+        else // Run as XML_RPC Depending on remote server (With timeout limit)
+        {
+          res.json({status:"In progress"});
+          app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
+            if(error)
+            {
+              if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
+              
+              newj5Run.status = "Error";
+              newj5Run.endDate = Date.now();
+              newj5Run.error_list.push({"error":error});
+              newj5Run.save();
+            }
+            else
+            {
+              // Get and decode the zip file returned by j5 server
+              var encodedFileData = value['encoded_output_file'];
+              var fileName = value['output_filename'];
 
-            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
-          }
-        });
-      }
+              onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
+            }
+          });
+        }
 
+      });
+
+      });
     });
-
-    });
-
   });
 });
 

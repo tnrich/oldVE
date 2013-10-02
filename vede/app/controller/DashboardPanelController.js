@@ -52,6 +52,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("getStats", ''),
+            WithCredentials: true,
             // params: {
             //     data: data
             // },

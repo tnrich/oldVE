@@ -23,10 +23,10 @@ module.exports = function(app, express) {
         host: "localhost",
         port: 27017,
         authHost: "mongodb://localhost/" + app.dbname
-    }; 
+    };
 
     if(app.get("env") === "production") {
-        var Opts = {
+        Opts = {
             host: "54.215.198.196",
             port: 27017,
             username: "prod",
@@ -34,7 +34,7 @@ module.exports = function(app, express) {
             authRequired : true,
             redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
         };
-        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
     }
 
     /* User should be added to production like
@@ -87,6 +87,12 @@ module.exports = function(app, express) {
         airbrake.protocol = "https"
         airbrake.handleExceptions();
 
+        airbrake.on('vars', function(type, vars) {
+          if (type === 'cgi-data') {
+            vars.SOURCE = "NodeJS";
+          }
+        });
+
         // Use Nodetime to monitor/profile the server.
         require('nodetime').profile({
             accountKey: '7a81c5694843fb2ead319abf624219460dad4f47', 
@@ -125,6 +131,7 @@ module.exports = function(app, express) {
     });
 
     // Init MEMCACHED
+    /*
     var memCacheHost = Opts.host+':11211';
     memCacheHost = "54.215.198.196:11211";
     app.cache = new app.memcached(memCacheHost);
@@ -151,7 +158,7 @@ module.exports = function(app, express) {
         
     },1000);
     }
-    
+    */
 
 
     // Init MONGODB - MONGOOSE (ODM)

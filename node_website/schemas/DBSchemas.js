@@ -26,9 +26,6 @@ module.exports = function(db) {
 		schema.set('toJSON', {
 			virtuals: true
 		});
-		schema.set('toJSON', {
-			virtuals: true
-		});
 	};
 
 	var Schema = mongoose.Schema;
@@ -56,6 +53,10 @@ module.exports = function(db) {
 		assemblyMethod: String,
 		endDate: Date,
 		status: String,
+		process: {
+			server: String,
+			pid: Number
+		},
 		warnings: [],
 		error_list: [],
 		user_id: { type: oIDRef, ref: 'user' },
@@ -252,6 +253,7 @@ module.exports = function(db) {
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
+		userType: {type: String, default: "guest"},
 		projects: [{
 			type: oIDRef,
 			ref: 'project'
@@ -274,6 +276,23 @@ module.exports = function(db) {
 		        name: String
 		    }]
 		}],
+		masterSources: 
+		{
+	        masterplasmidlist: 
+	        { 
+	            name: {type: String, default: "masterplasmidlist.csv"},
+	            fileContent: {type: String, default: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KcGo1XzAwMDAwLCwsLA==" , select: false}
+	        },
+	        masteroligolist: 
+	        {
+	            name: {type: String, default: "masteroligolist.csv"},
+	            fileContent: {type: String, default: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlDQpqNV8wMDAwMCwsLCw=" , select: false}
+	        },
+	        masterdirectsyntheseslist: {
+	            name: {type: String, default: "masterdirectsyntheseslist.csv"},
+	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
+	        }
+		},
 		dateCreated: Date
 	});
 
@@ -289,8 +308,6 @@ module.exports = function(db) {
                 } else {
                     bcrypt.hash(user.password, salt, function(err, hash) {
                         if(err) {
-                        	console.log(user.password);
-                        	console.log(salt);
                             return next(err);
                         } else {
                             user.password = hash;
@@ -313,7 +330,7 @@ module.exports = function(db) {
     };
 
 	UserSchema.virtual('FQDN').get(function () {
-	  return this.groupType + '.' + this.groupName + '.' + this.username;
+	  return this.username;
 	});
 
 	registerSchema('User', UserSchema);
