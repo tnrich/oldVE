@@ -15,7 +15,7 @@ html(lang='en')
 		// fav and touch icons 
 		<link rel="shortcut icon" href="resources/images/favicon.ico">
 
-		link(rel='shortcut icon', href='img/favicon.ico')
+		link(rel='shortcut icon', href='/img/favicon.ico')
 		//- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
 		//- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
 		//- link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
@@ -27,14 +27,12 @@ html(lang='en')
 		link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,700italic', rel='stylesheet', type='text/css')
 		
 	body
-		nav.top-bar
+		nav.top-bar.hide-for-small
 			ul.title-area
 				li.name
 					a(href="/")
-						img(src='img/teselagen_toplogo.png')
-				li.toggle-topbar.menu-icon
-					a(href="#")
-						span
+						img(src='/img/teselagen_toplogo.png')
+				li.toggle-topbar
 			section.top-bar-section
 				ul.right
 					li#home_tab
@@ -52,44 +50,37 @@ html(lang='en')
 					li.signup_btn
 						a(href='/signup') Sign Up
 					li.login_btn
-						a(href='http://app.teselagen.com/') Login
+						a(href='/logout') Logout
 		
 		block container
 
 		#footer
-			.large-12.small-12#footer_links
-				nav.top-bar
-					ul.title-area
-						li.toggle-topbar.menu-icon
-							a(href="#")
-								span
-					section.top-bar-section
-						ul.right
-							li
-								a(href='/careers', target='blank') Careers
-							li
-								a(href='http://help.teselagen.com', target='_blank') Manual
-							li
-								a(href='/terms') Terms
-							li
-								a(href='/privacy', target='_blank') Privacy          
-							li
-								a.social-footer-link(href='https://www.facebook.com/Teselagen', target='_blank')
-									img(src='img/icons/img-footer-facebook.png')
-							li
-								a.social-footer-link(href='https://twitter.com/teselagen', target='_blank')
-									img(src='img/icons/img-footer-twitter.png')
-							li
-								a.social-footer-link(href='http://www.linkedin.com/company/2838822', target='_blank')
-									img(src='img/icons/img-footer-linkedin.png')
-							li
-								a.social-footer-link(href='https://www.youtube.com/channel/UC9gW_S5i13WT68BiB3hQAhA', target='_blank')
-									img(src='img/icons/img-footer-youtube.png')
+				.large-12.small-12#footer_links
+					nav.top-bar
+						section.top-bar-section
+							ul.right
+								li
+									a(href='/careers', target='blank') Careers
+								li
+									a(href='http://help.teselagen.com', target='_blank') Manual
+								li
+									a(href='/terms') Terms
+								li
+									a(href='/privacy', target='_blank') Privacy          
+								li
+									a.social-footer-link(href='https://www.facebook.com/Teselagen', target='_blank')
+										img(src='/img/icons/img-footer-facebook.png')
+								li
+									a.social-footer-link(href='https://twitter.com/teselagen', target='_blank')
+										img(src='/img/icons/img-footer-twitter.png')
+								li
+									a.social-footer-link(href='http://www.linkedin.com/company/2838822', target='_blank')
+										img(src='/img/icons/img-footer-linkedin.png')
 
 		block scripts
 			// le javascripts
 			script(src='/js/jquery-1.10.2.min.js')
-			script(src='/js/application.js')
+			script(src='/js/foundation.min.js')
 			script(type="text/javascript").
 				(function(d,s,i,r) {
 						if (d.getElementById(i)){return;}
@@ -121,6 +112,3 @@ html(lang='en')
 
 				// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
 				UserVoice.push(['autoprompt', {}]);
-			script(src='/js/foundation.min.js')
-			script(type="text/javascript").
-				$(document).foundation();

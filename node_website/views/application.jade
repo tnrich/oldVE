@@ -1,116 +1,37 @@
-!!! 5
-html(lang='en')
-  head
-    meta(charset='utf-8')
-    title TeselaGen Biotechnology
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    meta(name='description', content='Teselagen Biotechnology')
-    meta(name='author', content='')
-    
-    // Le styles
-    link(href='/css/bootstrap.css', rel='stylesheet')
-    link(href='/css/styles.css', rel='stylesheet')
-    link(href='/css/bootstrap-responsive.css', rel='stylesheet')
-    
-    // fav and touch icons 
-    link(rel='shortcut icon', href='ico/favicon.ico')
-    link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', href='/ico/apple-touch-icon-57-precomposed.png')
-    
-  body
-  
-    include includes/application-modals
-          
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='#',style="color:#fff") Teselagen
-          .nav-collapse
-            ul.nav
-              li
-                a(href="/")
-                  i.icon-home.icon-white
-                  span  Home
-              li
-                a(href="/about")
-                  i.icon-tag.icon-white
-                  span  About
-              li
-                a(href="/contact")
-                  i.icon-envelope.icon-white
-                  span  Contact
-            include includes/profile
+extends admin
 
-    #de.debar(style="display:none;")
-      .debar-inner
-        ul#denav.nav
-        a#add_de_in.btn.btn-primary.btn-large.debut +
+block container
 
-    #flash(style="display:none;")
-      .inner.alert.alert-success
-        a.close x
-        h4.alert-heading Account updated!
-
-    .container.tab-content
-      #dashboard.tab-pane
+    #contact
         .row
-            .span12
-                .span8
-                    .span7
-                        .hero-unit
-                          h1 Welcome back!
-                .span3
-                  include includes/dashboard_menu
+            .large-12.small-12.page-header Administration
 
-      #new-user.tab-pane
-        .row
-            .span12
-                include includes/create-user
+            .large-12.small-12#contact-info
+                .row
+                    .small-2.columns First Name
+                    .small-2.columns Last Name
+                    .small-3.columns Email
+                    .small-2.columns Username
+                    .small-2.columns 
+                each user in users
+                    .row
+                        .small-2.columns #{user.firstName}
+                        .small-2.columns #{user.lastName}
+                        .small-3.columns #{user.email}
+                        .small-2.columns #{user.username}
+                        .small-2.columns
+                            a(href="/admin/edituser?id=#{user.id}") Edit
+            .pagination-centered#pagination
+                ul.pagination
+                    li.arrow
+                        a(href='#{arrows.left.link}') «
+                    each page in pages
+                        - var klass = (page.current ? 'current' : '')
+                        li(class=klass)
+                            a(href="#{page.link}") #{page.pageNumber}
+                    li.arrow
+                        a(href='#{arrows.right.link}') »
+        #push
 
-      #manage-users.tab-pane
-        .row
-            .span12
-                include includes/manage-users
-
-      #manage-tokens.tab-pane
-        .row
-            .span12
-                include includes/manage-tokens
-
-      #edit-account.tab-pane
-        .row
-            .span12
-                include includes/edit-account
-
-      #change-password.tab-pane
-        .row
-            .span12
-                include includes/change-password
-      #deviceEditor.tab-pane(style="position: relative;top: 0px;")    
-        .container-fluid
-          .row-fluid
-            #deviceEditorInstances.tab-content
-    block scripts
-      // le javascripts
-      script(src='/js/jquery.js')
-      script(src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js")
-      script(src='/js/bootstrap-transition.js')
-      script(src='/js/bootstrap-alert.js')
-      script(src='/js/bootstrap-modal.js')
-      script(src='/js/bootstrap-dropdown.js')
-      script(src='/js/bootstrap-scrollspy.js')
-      script(src='/js/bootstrap-tab.js')
-      script(src='/js/bootstrap-tooltip.js')
-      script(src='/js/bootstrap-popover.js')
-      script(src='/js/bootstrap-button.js')
-      script(src='/js/bootstrap-collapse.js')
-      script(src='/js/bootstrap-carousel.js')
-      script(src='/js/bootstrap-typeahead.js')
-      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
-      script(src='/js/application.js')
+    script(src='/js/jquery-1.10.2.min.js')
+    script(src='/js/admin.js')

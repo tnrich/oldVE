@@ -685,9 +685,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 } else {
 
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, 0, "Canceled");
+
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
-                        msg: responseData.error,
+                        msg: responseData,
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR
                     });
@@ -739,7 +741,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             } else {
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
-                    msg: responseData.responseText,
+                    msg: responseData,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
                 });
@@ -881,7 +883,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             } else {
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
-                    msg: responseData.responseText,
+                    msg: responseData,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
                 });

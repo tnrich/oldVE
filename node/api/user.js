@@ -64,6 +64,7 @@ module.exports = function(app) {
     /*
     Temporal user listing
     */
+    /*
     app.get("/calculateDates/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
         User.find().exec(function(err,users){
@@ -75,10 +76,12 @@ module.exports = function(app) {
           });
         });
     });
+    */
 
     /*
     Temporal user listing
     */
+    /*
     app.get("/fixResources/:code", function(req, res) {
         if(req.params.code!="2ca2b06cb959ee4dacffeda0fdbda5f9") return res.json({"error":"invalid access code"});
         User.find().populate("parts sequences").exec(function(err,users){
@@ -99,6 +102,7 @@ module.exports = function(app) {
           });
         });
     });
+    */
 
 
     /*
@@ -114,13 +118,13 @@ module.exports = function(app) {
             var partsCount = user.parts.length;
             var sequencesCount = user.sequences.length;
             user.parts.forEach(function(part){
-              if(part && part.FQDN) { log.parts.push("ok"); }
+              if(part && part.FQDN) { log.parts.push(part.FQDN); }
               else log.parts.push("Integrity error in part "+part._id+" user "+user.username);
               partsCount--;
             });
 
             user.sequences.forEach(function(sequence){
-              if(sequence && sequence.FQDN) { log.sequences.push("ok"); }
+              if(sequence && sequence.FQDN) { log.sequences.push(sequence.FQDN); }
               else log.sequences.push("Integrity error in sequence "+sequence._id+" user "+user.username);  
               sequencesCount--;        
             });
