@@ -20,7 +20,18 @@ Ext.define('Vede.view.AuthWindow', {
         var me = this;
 
         Ext.applyIf(me, {
-            items: [{
+            items: [
+                {
+                xtype: 'panel',
+                id: 'browser-warning',
+                html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.',
+                height: 40,
+                padding: 10,
+                width: 800,
+                margin: 10,
+                hidden: true,
+                },
+                {
                 xtype: 'form',
                 id: 'auth-form',
                 height: 280,

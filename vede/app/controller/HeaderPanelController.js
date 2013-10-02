@@ -78,5 +78,9 @@ Ext.define('Vede.controller.HeaderPanelController', {
 
     onRender: function() {
         Ext.get("help_btn").on('click', this.onHelpBtnClick);
+
+        if(!Ext.isChrome) {
+            Ext.getCmp('header-browser-warning').show();
+        }
     }
 });

@@ -1452,3 +1452,33 @@ background: #F7F9FA;
   white-space: normal;
 }
 
+#browser-warning {
+  background: rgb(255, 199, 55);
+  border-radius: 3px;
+}
+
+#browser-warning-body {
+  background: transparent;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  border: 0 none;
+}
+
+#header-browser-warning {
+  background: rgb(255, 199, 55);
+  border-radius: 3px;
+  width: 400px !important;
+  position: absolute;
+  z-index: 100;
+  left: 15%;
+  top: 7%;
+}
+
+#header-browser-warning-body {
+  background: transparent;
+  color: white;
+  text-align: center;
+  border: 0 none;
+  width: 385px !important;
+}
