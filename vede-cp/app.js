@@ -95,7 +95,7 @@ Ext.application({
         Vede.application = this;
 
         Ext.Ajax.cors = true; // Allow CORS (Cross-Origin Resource Sharing)
-        Ext.Ajax.withCredentials = true; // Allow cross-domain cookie-based authentication
+        Ext.Ajax.withCredentials = false; // Allow cross-domain cookie-based authentication
         Ext.Ajax.timeout = 5000; // Ajax timeout
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
