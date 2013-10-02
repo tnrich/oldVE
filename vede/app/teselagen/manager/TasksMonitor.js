@@ -75,7 +75,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     params: {
                     },
                     method: 'GET',
-                    withCredentials: true,
                     success: function(response){
                         var parsedResponse = JSON.parse(response.responseText);
                         self.observeChanges(parsedResponse.j5runs);
