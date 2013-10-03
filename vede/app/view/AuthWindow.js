@@ -96,10 +96,10 @@ Ext.define('Vede.view.AuthWindow', {
                             anchor: '100%',
                             id: 'select-server-combo',
                             width: 300,
-                            value: 'http://api.teselagen.com/',
+                            value: 'http://app.teselagen.com/api/',
                             fieldLabel: 'Server to connect:',
                             name: 'server',
-                            store: ['http://api.teselagen.com/',
+                            store: ['http://app.teselagen.com/api/',
                                 'http://teselagen.local/api/',
                                 'http://dev.teselagen.com/api/'
                             ],
