@@ -152,7 +152,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
             this.HighlightLayer.refresh();
         }
     },
-    
+
     onKeydown: function(event) {
         this.callParent(arguments);
 

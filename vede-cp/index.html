@@ -4,15 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TeselaGen</title>
     <script type="text/javascript">
-        if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
+        //if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
             //<![CDATA[
-            var notifierJsScheme = (("https:" == document.location.protocol) ? "https://" : "http://");
-            document.write(unescape("%3Cscript src='" + notifierJsScheme + "airbrake.io/javascripts/notifier.js' type='text/javascript'%3E%3C/script%3E"));
+            document.write(unescape("%3Cscript src='resources/js/hoptoad.js' type='text/javascript'%3E%3C/script%3E"));
             //]]>
-        }
+        //}
     </script>
     <script type="text/javascript">
-        if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
+        //if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
             var env;
 
             if(document.URL.indexOf("app.teselagen") >= 0) {
@@ -26,7 +25,7 @@
             Hoptoad.setKey('40e870e0-c0a6-c307-8bef-37371fd86407');
             Hoptoad.setHost('exceptions.codebasehq.com');
             Hoptoad.setEnvironment(env);
-        }
+        //}
     </script>
 
     <!-- Styles -->
@@ -53,7 +52,7 @@
     <!-- <x-compile> -->
         <!-- <x-bootstrap> -->
             <link rel="stylesheet" href="bootstrap.css">
-            <script src="ext/ext-dev.js"></script>
+            <script src="ext/ext-debug.js"></script>
             <script src="bootstrap.js"></script>
         <!-- </x-bootstrap> -->
         <script src="app.js"></script>
