@@ -27,7 +27,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.commonRestrictionEnzymes;
         }
         
-        this.commonRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "common.xml");
+        this.commonRestrictionEnzymes = this.getEnzymes(Teselagen.manager.SessionManager.buildUrl("common.xml", ""));
         return this.commonRestrictionEnzymes;
     },
     
@@ -40,7 +40,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.rebaseRestrictionEnzymes;
         }
         
-        this.rebaseRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "rebase.xml");
+        this.rebaseRestrictionEnzymes = this.getEnzymes(Teselagen.manager.SessionManager.buildUrl("rebase.xml", ""));
         return this.rebaseRestrictionEnzymes;
     },
     
