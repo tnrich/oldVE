@@ -25002,6 +25002,41 @@ img {
   white-space: normal;
 }
 
+/* line 1455, ../../../../sass/src/view/AppViewport.scss */
+#browser-warning {
+  background: #ffc737;
+  border-radius: 3px;
+}
+
+/* line 1460, ../../../../sass/src/view/AppViewport.scss */
+#browser-warning-body {
+  background: transparent;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  border: 0 none;
+}
+
+/* line 1468, ../../../../sass/src/view/AppViewport.scss */
+#header-browser-warning {
+  background: #ffc737;
+  border-radius: 3px;
+  width: 400px !important;
+  position: absolute;
+  z-index: 100;
+  left: 15%;
+  top: 7%;
+}
+
+/* line 1478, ../../../../sass/src/view/AppViewport.scss */
+#header-browser-warning-body {
+  background: transparent;
+  color: white;
+  text-align: center;
+  border: 0 none;
+  width: 385px !important;
+}
+
 /*Restriction Enzymes Manager Window*/
 /* line 2, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-addAll {

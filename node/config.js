@@ -75,7 +75,7 @@ module.exports = function(app, express) {
         app.logger.info("USING MONGODB SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
-        //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
+        app.use(express.static(__dirname + '/public'));
     });
 
     app.configure('production', function() {      
@@ -126,7 +126,7 @@ module.exports = function(app, express) {
 
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
-        //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
+        app.use(express.static(__dirname + '/public'));
         app.use(airbrake.expressHandler());
     });
 
