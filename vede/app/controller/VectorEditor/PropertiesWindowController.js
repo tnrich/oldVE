@@ -107,8 +107,14 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
     onToggleFeatureEditOptions: function() {
         var editFeatureButton = Ext.ComponentQuery.query("button[cls='featuresEditButton']")[0];
         var removeFeatureButton = Ext.ComponentQuery.query("button[cls='featuresRemoveButton']")[0];
-        editFeatureButton.disable();
-        removeFeatureButton.disable();
+
+        if(editFeatureButton) {
+            editFeatureButton.disable();
+        }
+
+        if(removeFeatureButton) {
+            removeFeatureButton.disable();
+        }
     },
 
     onFeatureSearchFieldKeyup: function(textfield) {

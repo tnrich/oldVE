@@ -19,7 +19,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         FONT_FAMILY: "Ubuntu Mono",
         COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0",
         COMPLEMENTARY_VERTICAL_OFFSET: 16,
-        LETTER_SPACING: 3
+        LETTER_SPACING: "3px"
     },
 
     config: {
