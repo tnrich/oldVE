@@ -32,7 +32,7 @@ Ext.define("Vede.view.annotate.Caret", {
             var location = this.getSequenceAnnotator().bpMetricsByIndex(pPosition);
             var path = "M" + (location.x - 1) + " " + (location.y + 8) + 
                        "L" + (location.x - 1) + " " + (location.y + this.height + 2);
-                           
+
             if(!this.caretSVG) {
                 this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:path")
                                     .attr("class", "caretSVG")
@@ -41,13 +41,15 @@ Ext.define("Vede.view.annotate.Caret", {
                                     .attr("stroke-width", this.self.CARET_WIDTH)
                                     .style("pointer-events", "none");
 
-                this.caretSVG.append("svg:animate")
-                                    .attr("attributeName", "visibility")
-                                    .attr("from", "hidden")
-                                    .attr("to", "visible")
-                                    .attr("dur", this.self.TIMER_REFRESH_SPEED)
-                                    .attr("repeatCount", "indefinite")
-                                    .style("pointer-events", "none");
+                if(!Ext.isGecko) {
+                    this.caretSVG.append("svg:animate")
+                                        .attr("attributeName", "visibility")
+                                        .attr("from", "hidden")
+                                        .attr("to", "visible")
+                                        .attr("dur", this.self.TIMER_REFRESH_SPEED)
+                                        .attr("repeatCount", "indefinite")
+                                        .style("pointer-events", "none");
+                }
             } else {
                 this.caretSVG.attr("d", path);
             }
@@ -60,7 +62,7 @@ Ext.define("Vede.view.annotate.Caret", {
             var location = this.getSequenceAnnotator().bpMetricsByIndex(this.position);
             var path = "M" + (location.x - 1) + " " + (location.y + 8) + 
                        "L" + (location.x - 1) + " " + (location.y + pHeight + 2);
-                           
+
             if(!this.caretSVG) {
                 this.caretSVG = this.sequenceAnnotator.annotateSVG.append("svg:path")
                                     .attr("class", "caretSVG")
@@ -68,14 +70,16 @@ Ext.define("Vede.view.annotate.Caret", {
                                     .attr("d", path)
                                     .attr("stroke", this.self.CARET_COLOR)
                                     .attr("stroke-width", this.self.CARET_WIDTH);
-                
-                this.caretSVG.append("svg:animate")
-                                    .attr("attributeName", "visibility")
-                                    .attr("from", "hidden")
-                                    .attr("to", "visible")
-                                    .attr("dur", this.self.TIMER_REFRESH_SPEED)
-                                    .attr("repeatCount", "indefinite")
-                                    .style("pointer-events", "none");
+
+                if(!Ext.isGecko) {
+                    this.caretSVG.append("svg:animate")
+                                        .attr("attributeName", "visibility")
+                                        .attr("from", "hidden")
+                                        .attr("to", "visible")
+                                        .attr("dur", this.self.TIMER_REFRESH_SPEED)
+                                        .attr("repeatCount", "indefinite")
+                                        .style("pointer-events", "none");
+                }
             } else {
                 this.caretSVG.attr("d", path);
             }

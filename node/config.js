@@ -49,7 +49,7 @@ module.exports = function(app, express) {
     app.configure('development', function() {
 
         var MongoStore = app.mongostore(express);
-        
+
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade'); // Jade engine for templates (http://jade-lang.com/)
         app.set('view options', {
@@ -72,7 +72,7 @@ module.exports = function(app, express) {
         app.use(app.passport.initialize());
         app.use(app.passport.session());
 
-	    app.logger.info("USING MONGODB SESSION STORE");
+        app.logger.info("USING MONGODB SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
