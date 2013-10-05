@@ -30,9 +30,10 @@ module.exports = function(app, express){
         link: '/admin/dashboard?page='+(req.query.page+1)
       };
 
-      User.find().select("firstName lastName email username").sort({dateCreated: -1}).skip(req.query.results*req.query.page).limit(req.query.results).exec(function(err,dbusers){
+      //"firstName lastName email username userType"
+      User.find().select().sort({dateCreated: -1}).skip(req.query.results*req.query.page).limit(req.query.results).exec(function(err,dbusers){
         if(err) return res.json(err)
-        res.render('application',{users:dbusers,pages:dbpages,"arrows":arrows});
+        res.render('userlist',{users:dbusers,pages:dbpages,"arrows":arrows});
       });
 
     });
@@ -46,5 +47,23 @@ module.exports = function(app, express){
     });
   });
 
+
+  app.post('/admin/edituser', adminRestrict, function(req,res){
+    var User = app.db.model("User");
+    User.findById(req.body.id,function(err,user){
+      user.firstName = req.body.first_name;
+      user.lastName = req.body.last_name;
+      user.email = req.body.email;
+      user.groupName = req.body.organizationName;
+      user.groupType = req.body.organizationType;
+      //user.username = req.body.username;
+      user.userType = req.body.userType;
+      if(req.body.password!="") user.password = req.body.password;
+
+      user.save(function(err){
+        res.redirect('/admin/dashboard');
+      });
+    });
+  });
 
 };

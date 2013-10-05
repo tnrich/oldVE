@@ -6,41 +6,42 @@ block container
         .row
             .large-12.small-12.page-header Edit user
             .large-12.small-12#contact-info
-                form(data-validate="parsley")#signup_form.custom
+                form(name="edituser", action='/admin/edituser', method='post')#signup_form.custom
+                    input(type='hidden', name='id', value="#{user.id}")
                     .row
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='first_name') First Name
                             .large-9.small-9.columns
-                                input(type='text', id='first_name', placeholder='First Name', data-required="true", value="#{user.firstName}")
+                                input(type='text', name='first_name', placeholder='First Name', data-required="true", value="#{user.firstName}")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='last_name') Last Name
                             .large-9.small-9.columns
-                                input(type='text', id='last_name', placeholder='Last Name', data-required="true", value="#{user.lastName}")
+                                input(type='text', name='last_name', placeholder='Last Name', data-required="true", value="#{user.lastName}")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='username') Username
                             .large-9.small-9.columns
-                                input(type='text', id='username', placeholder='Username', data-required="true", data-type="alphanum", value="#{user.username}")
+                                input(type='text', name='username', placeholder='Username', data-required="true", data-type="alphanum", value="#{user.username}", disabled=true)
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='password') Password
                             .large-9.small-9.columns
-                                input(type="password", id='password', data-required="true", value="")
+                                input(type="password", name='password', data-required="true", value="", placeholder='Password will be replaced only if you write a new password in this field.',)
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='email') Email
                             .large-9.small-9.columns
-                                input(type='email', id='email', placeholder='Email', data-required="true", data-type="email", value="#{user.email}")
+                                input(type='email', name='email', placeholder='Email', data-required="true", data-type="email", value="#{user.email}")
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='organizationType') Organization Type
                             .large-9.small-9.columns
-                                select(id='organizationType', data-required="true")
+                                select(name='organizationType', data-required="true")
                                     option(value="", selected = (user.groupType==="" ? true : false) ) Select organization type
-                                    option(value="com.red", selected = (user.groupType==="com.red" ? true : false) ) Red Biotech
-                                    option(value="com.white", selected = (user.groupType==="com.white" ? true : false) ) White Biotech
+                                    option(value="com.red", selected = (user.groupType==="" ? true : false) ) Red Biotech
+                                    option(value="com.white", selected = (user.groupType==="com.red" ? true : false) ) White Biotech
                                     option(value="com.green", selected = (user.groupType==="com.green" ? true : false) ) Green Biotech
                                     option(value="edu.lab", selected = (user.groupType==="edu.lab" ? true : false) ) Academic Lab
                                     option(value="gene-hacker", selected = (user.groupType==="gene-hacker" ? true : false) ) Gene Hacker
@@ -49,16 +50,25 @@ block container
                             .large-3.small-3.columns
                                 label.right.inline(for='organizationName') Organization Name
                             .large-9.small-9.columns
-                                input(type='text', id='organizationName', placeholder='Company/University Name', data-required="true" value="#{user.groupName}")
+                                input(type='text', name='organizationName', placeholder='Company/University Name', data-required="true" value="#{user.groupName}")
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='organizationType') User Type
+                            .large-9.small-9.columns
+                                select(name='userType', data-required="true")
+                                    option(value="", selected = (user.userType==="" ? true : false) ) Select user type
+                                    option(value="root", selected = (user.userType==="root" ? true : false) ) Root Access
+                                    option(value="corportate", selected = (user.userType==="corporate" ? true : false) ) Corporate User
+                                    option(value="guest", selected = (user.userType==="guest" ? true : false) ) Guest User
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                a.button.radius#signup_submit Update
-                                a.button.radius#signup_submit(style="margin-left:10px;", href="javascript:history.back()") Cancel
+                                input.button.radius#edit_submit(type='submit') Update
+                                a.button.radius#edit_cancel(style="margin-left:10px;", href="javascript:history.back()") Cancel
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                a.button.radius#signup_submit.alert Delete user
+                                a.button.radius#edit_delete.alert.disabled Delete user
                         
 
         #push
