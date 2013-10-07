@@ -35,7 +35,7 @@ module.exports = function(app, express){
       };
 
       //"firstName lastName email username userType"
-      User.find().select().sort({name: -1}).skip(req.query.results*req.query.page).limit(req.query.results).exec(function(err,dbusers){
+      User.find().select().sort({lastName: 1}).skip(req.query.results*req.query.page).limit(req.query.results).exec(function(err,dbusers){
         if(err) return res.json(err)
         res.render('userlist',{users:dbusers,pages:dbpages,"arrows":arrows});
       });
