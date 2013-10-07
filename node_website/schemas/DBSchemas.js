@@ -253,7 +253,7 @@ module.exports = function(db) {
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
-		userType: {type: String, default: "guest"},
+		userType: String,
 		projects: [{
 			type: oIDRef,
 			ref: 'project'

@@ -33,7 +33,7 @@ require('./routes/user-admin.js')(app, express);
 require('./routes/index.js')(app, express);
 
 app.get('*', function(req, res){
-  res.render('notfound', {});
+  res.render('notfound', {status: 404, title: 'TeselaGen Biotechnology | 404 - Page Not Found'});
 });
 
 var nodePort = 3000;
