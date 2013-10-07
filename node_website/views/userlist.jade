@@ -8,8 +8,8 @@ block container
 
             .large-12.small-12#contact-info
                 .row
-                    .small-2.columns(style="font-weight:bold") First Name
                     .small-2.columns(style="font-weight:bold") Last Name
+                    .small-2.columns(style="font-weight:bold") First Name
                     .small-3.columns(style="font-weight:bold") Email
                     .small-2.columns(style="font-weight:bold") Username
                     .small-1.columns(style="font-weight:bold") Type
@@ -18,8 +18,8 @@ block container
             .large-12.small-12#contact-info
                 each user in users
                     .row
-                        .small-2.columns #{user.firstName}
                         .small-2.columns #{user.lastName}
+                        .small-2.columns #{user.firstName}
                         .small-3.columns #{user.email}
                         .small-2.columns #{user.username}
                         if typeof(user.userType) == 'undefined' || user.userType == '' || user.userType == '-'

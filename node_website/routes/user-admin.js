@@ -74,7 +74,7 @@ module.exports = function(app, express){
       if(req.body.password!="") user.password = req.body.password;
 
       user.save(function(err){
-        res.redirect('/admin/dashboard');
+        res.redirect('/admin/manage');
       });
     });
   });
