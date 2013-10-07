@@ -1,0 +1,55 @@
+extends admin
+
+block head
+    link(rel='stylesheet', href='http://yui.yahooapis.com/3.12.0/build/cssreset-context/cssreset-context.css', type='text/css')
+
+block container
+
+    .row
+        p Administration area
+    .row
+        #chart_div.yui3-cssreset(style='width:100%;height:600px')
+    #push
+
+    script(src='/js/jquery-1.10.2.min.js')
+    script(type='text/javascript', src='https://www.google.com/jsapi')
+    script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    script(type='text/javascript')
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1', {'packages':['corechart','annotatedtimeline']});
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+          $.ajax({
+              url: "http://app.teselagen.com/api/userStats/2ca2b06cb959ee4dacffeda0fdbda5f9",
+              dataType:"json",
+          }).
+          done(function( jsonData ) {
+              var data = new google.visualization.DataTable();
+              data.addColumn('date', 'Date');
+              data.addColumn('number', 'Quantity');
+              data.addColumn('string', 'user');
+              data.addColumn('string', 'Details')
+              for(var i=0;i<jsonData.user.length;i++)
+              {
+                  user = jsonData.user[i];
+                  name = user.firstName + " " + user.lastName;
+                  data.addRow([
+                  new Date(user.dateCreated),
+                  i+1,
+                  name,
+                  user.groupName,
+                  ])
+              };
+              // Instantiate and draw our chart, passing in some options.
+              var options = {
+                displayAnnotations: true,
+                 'width':'400px',
+                 'height':'600px',
+                 scaleType: 'maximized'
+              };
+              var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+              chart.draw(data, options);
+              $('#chart_div embed').css('height','650px')
+          });
+      }
