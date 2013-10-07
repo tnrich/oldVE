@@ -18,6 +18,8 @@ module.exports = function(app, express) {
 
     // Express Framework Configuration
 
+    app.set('env','production');
+    app.dbname = "teselagen";
 
     var Opts = {
         host: "localhost",
@@ -111,7 +113,7 @@ module.exports = function(app, express) {
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
             secret: 'j5',
-            store: new RedisStore({client: redis})
+            store: new RedisStore({client: redis,prefix:'vede://',ttl:1000})
         })); // Sessions managed using cookies
 
         redis.auth(Opts.redis_pass,function(err,ok){

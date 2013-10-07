@@ -25,6 +25,8 @@ html(lang='en')
 		script(type='text/javascript', src='//use.typekit.net/wnz0zph.js')
 		script(type='text/javascript') try{Typekit.load();}catch(e){}
 		link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,700italic', rel='stylesheet', type='text/css')
+
+		block head
 		
 	body
 		nav.top-bar.hide-for-small
@@ -36,19 +38,11 @@ html(lang='en')
 			section.top-bar-section
 				ul.right
 					li#home_tab
-						a.active_top_menu(href='/') Home
+						a(href='/admin/dashboard') Dashboard
 					li#about_tab
-						a(href='/about') About
+						a(href='/admin/manage') Manage users
 					li#faq_tab
-						a(href='/faq') FAQ
-					li#news_tab
-						a(href='/news') News
-					li#blog_tab
-						a(href='http://blog.teselagen.com/') Blog
-					li#contact_tab
-						a(href='/contact') Contact  
-					li.signup_btn
-						a(href='/signup') Sign Up
+						a(href='/admin/stats') Statistics
 					li.login_btn
 						a(href='/logout') Logout
 		

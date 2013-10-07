@@ -88,6 +88,7 @@ module.exports = function(app, express){
         });
 
         var redis = require("redis").createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
+        app.redis = redis;
         var RedisStore = require('connect-redis')(express)
 
         app.set('views', __dirname + '/views');

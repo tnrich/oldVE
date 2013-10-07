@@ -1,8 +1,12 @@
 module.exports = function(app, express){
 
   var adminRestrict = app.auth.adminRestrict;
-
+  
   app.get('/admin/dashboard', adminRestrict, function(req, res){
+    res.render('dashboard');
+  });
+
+  app.get('/admin/manage', adminRestrict, function(req, res){
 
     req.query.results = 20;
     if(!req.query.page) req.query.page = 0;
@@ -19,15 +23,15 @@ module.exports = function(app, express){
         dbpages.push({
           pageNumber: i,
           current: (req.query.page === i) ? true : false,
-          link: '/admin/dashboard?page='+i
+          link: '/admin/manage?page='+i
         })
       }
 
       arrows.left = {
-        link: '/admin/dashboard?page='+(req.query.page-1)
+        link: '/admin/manage?page='+(req.query.page-1)
       };
       arrows.right = {
-        link: '/admin/dashboard?page='+(req.query.page+1)
+        link: '/admin/manage?page='+(req.query.page+1)
       };
 
       //"firstName lastName email username userType"
@@ -38,6 +42,15 @@ module.exports = function(app, express){
 
     });
 
+  });
+
+  app.get('/admin/stats', adminRestrict, function(req, res){
+
+    app.redis.send_command('keys',['vede://*'],function(err,keys){    
+      var stats = [['label','value']];
+      stats.push(['users',keys.length]);
+      res.render('stats',{data:JSON.stringify(stats)});
+    });
   });
 
   app.get('/admin/edituser', adminRestrict, function(req,res){
