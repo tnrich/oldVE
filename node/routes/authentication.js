@@ -145,6 +145,8 @@ module.exports = function(app) {
 
             if(user.activated) 
             {
+                user.activationCode = crypto.randomBytes(32).toString("hex");
+                user.save();
                 sendForgotEmail(user,function(err){
                     if(err) return res.send({"success":false,msg:"Error sending email"});
                     res.send({"success":true,msg:"Email reset"});
