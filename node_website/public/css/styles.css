@@ -570,6 +570,10 @@ label.inline {
     font-size: 18px;
 }
 
+#user-table {
+    text-align: left;
+}
+
 @media only screen and (max-width: 768px) {
     #banner_back {
         height: 1100px;
