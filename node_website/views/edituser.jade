@@ -58,7 +58,7 @@ block container
                                 select(name='userType', data-required="true")
                                     option(value="", selected = (user.userType==="" ? true : false) ) Select user type
                                     option(value="root", selected = (user.userType==="root" ? true : false) ) Root Access
-                                    option(value="corportate", selected = (user.userType==="corporate" ? true : false) ) Corporate User
+                                    option(value="corporate", selected = (user.userType==="corporate" ? true : false) ) Corporate User
                                     option(value="guest", selected = (user.userType==="guest" ? true : false) ) Guest User
                         .row
                             .large-3.small-3.columns

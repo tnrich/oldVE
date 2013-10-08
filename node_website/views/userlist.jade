@@ -1,10 +1,9 @@
-
 extends admin
 
 block container
 
     #contact
-        .row
+        .row(style="max-width: 90%;")
             .large-12.small-12.page-header Administration
 
             table#user-table.large-12.small-12.large-centered.small-centered
@@ -16,7 +15,9 @@ block container
                         th(data-sort="string") Username
                         th(data-sort="string") Org Type
                         th(data-sort="string") Org Name
+                        th(data-sort="string") Activated
                         th(data-sort="string") Type
+                        th(data-sort="string") Date Created
                         th Edit
                 tbody
                     each user in users
@@ -33,10 +34,12 @@ block container
                                 th -
                             else
                                 th #{user.groupName}
+                            th #{user.activated}
                             if typeof(user.userType) == 'undefined' || user.userType == '' || user.userType == '-'
                                 th -
                             else
                                 th #{user.userType}
+                            th #{user.dateCreated}
                             th
                                 a(href="/admin/edituser?id=#{user.id}") Edit
             .pagination-centered#pagination
