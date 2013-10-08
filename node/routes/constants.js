@@ -26,6 +26,12 @@ Twitter: @TeselaGen<br>\
 email: mike.fero@teselagen.com<br>\
 phone: 650-387-5932<br>\
 </p>\
+';    
+
+	app.constants.forgotPassword = '<p>\
+Dear <username>,<br>\
+<br>\
+<a href="<password reset link>">Click here to reset you password</a>\
 ';
 
 }

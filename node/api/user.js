@@ -160,6 +160,7 @@ module.exports = function(app) {
                 return res.send("Error finding the user associated with this code.<br>Are you sure this is the correct URL?");
             } else if(user) {
                 user.activated = true;
+                user.activationCode = undefined;
                 sendRegisteredMail(user);
                 user.save(function(err) {
                     if(app.get("env") === "production") {

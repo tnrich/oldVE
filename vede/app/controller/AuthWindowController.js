@@ -61,6 +61,10 @@ Ext.define('Vede.controller.AuthWindowController', {
         Teselagen.manager.AuthenticationManager.Login();
     },
 
+    onForgotClick: function(){
+        Ext.create('Vede.view.ForgotWindow').show();
+    },
+
     //onRemember: function(el, newValue, oldValue, eOpts){
     //    if(newValue) 
     //    {
@@ -81,6 +85,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             // "#auth-register-btn": {
             //     click: this.onRegisterClick
             // },
+             "#auth-forgot-btn": {
+                 click: this.onForgotClick
+             },
             "#auth-logout-btn": {
                 click: this.onLogoutClick
             },

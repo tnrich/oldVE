@@ -31,24 +31,15 @@ html(lang='en')
             .large-6.small.6.large-centered.small-centered.page-logo.columns
                 img(src="/img/teselagen_toplogo.png")
             .large-6.small-6.large-centered.small-centered.columns
-                form#login_form.custom
+                form#forgot_form.custom(name="forgot", action='http://app.teselagen.com/api/forgot', method='post')
                     .row
                         .large-3.small-3.columns
-                            label.right.inline(for='username') Username
+                            label.inline(for='email', data-required) Email
                         .large-9.small-9.columns
-                            input(type="text", id='username', placeholder='Username', data-required)
+                            input(name='email')
                     .row
-                        .large-3.small-3.columns
-                            label.right.inline(for='password', data-required) Password
-                        .large-9.small-9.columns
-                            input(type="password", id='password')
-                    .row
-                        .large-3.small-3.columns.right.lost_pw_link 
-                            a(href="/forgot") Lost Password?
                         .large-12.small-12.registration-buts
-                            a.button.radius.expand#login_admin Log In
-                            a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
-                                .large-6.small-6.large-centered.small-centered.columns#footer_links
+                            button.button.radius.expand(type='submit') Submit
     .large-5.small-5.large-centered.small-centered.columns#footer2_links
           nav.top-bar
             section.top-bar-section#footer_2

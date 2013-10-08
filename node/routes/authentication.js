@@ -96,6 +96,66 @@ module.exports = function(app) {
         res.send();
     });
 
+    var sendForgotEmail = function(user,cb)
+    {
+        var html = app.constants.forgotPassword;
+        html = html.replace("<username>", user.firstName);
+        html = html.replace("<password reset link>", "http://teselagen.com/forgot/" + user.activationCode);
+
+
+        var message = {
+          "html": html,
+          "subject": "TeselaGen - Forgot password",
+          "from_email": "registration@teselagen.com",
+          "from_name": "TeselaGen",
+          "to": [{
+                  "email": user.email,
+                  "name": user.firstName
+              }],
+          "headers": {
+              "Reply-To": "registration@teselagen.com"
+          },
+          "track_opens": true,
+          "track_clicks": true,
+          "tags": [
+              "user-activation"
+          ],
+          "metadata": {
+              "website": "www.teselagen.com"
+          },
+          "recipient_metadata": [{
+              "rcpt": user.email
+          }]
+      };
+
+      var async = false;
+      var ip_pool = "Beta Registers";
+
+      mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            return cb(false)
+        }, function(e) {
+            return cb(true);
+        });
+    }
+
+    app.post("/forgot", function(req, res) {
+        var User = app.db.model("User");
+        User.findOne({email:req.body.email},function(err,user){
+            if(!user) return res.send({"false":false,msg:"Email not registered"});
+
+            if(user.activated) 
+            {
+                sendForgotEmail(user,function(err){
+                    if(err) return res.send({"success":false,msg:"Error sending email"});
+                    res.send({"success":true,msg:"Email reset"});
+                });
+            }
+            else
+            {
+                return res.send({"success":false,msg:"User not activated"});
+            }
+        });
+    });
 
     var sendRegisteredMail = function(user,activationCode)
     {

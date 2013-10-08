@@ -80,12 +80,21 @@ Ext.define('Vede.view.AuthWindow', {
                         name: 'register'
                     }, {
                         xtype: 'button',
+                        id: 'auth-forgot-btn',
+                        margin: '0 0 0 15',
+                        padding: 3,
+                        text: 'Forgot your password?',
+                        name: 'forgot'
+                    }, {
+                        xtype: 'button',
                         id: 'auth-config-btn',
                         margin: '0 0 0 15',
                         padding: 3,
                         text: 'Config',
                         name: 'Config'
-                    }, {
+                    }, 
+                    /*
+                    {
                         xtype: 'fieldset',
                         hidden: true,
                         id: 'auth-config',
@@ -116,6 +125,7 @@ Ext.define('Vede.view.AuthWindow', {
                                 }
                             }
                         }
+                        */
                         //{
                         //    xtype: 'fieldcontainer',
                         //    fieldLabel: 'Keep me signed in',
@@ -127,8 +137,8 @@ Ext.define('Vede.view.AuthWindow', {
                         //    }]
                         //}
 
-                        ]
-                    },
+                        //]
+                    //},
                     {
                         xtype: 'displayfield',
                         id: 'auth-response',
@@ -141,7 +151,7 @@ Ext.define('Vede.view.AuthWindow', {
                 }, {
                     xtype: 'panel',
                     flex: 1,
-                    html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Sep 25, 20:19 PST</small></div><div class="auth-footer" style="margin-top: 110px;"><ul style="list-style:none; display="inline-block"><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com">Home</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/about">About</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/faq">FAQ</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/contact">Contact</a></li><li style="float:left; margin-right: 5px;"><a href="http://help.teselagen.com/manual/">Manual</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/terms">Terms</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/privacy">Privacy</a></li>'
+                    html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Oct 8, 20:24 PST</small></div><div class="auth-footer" style="margin-top: 110px;"><ul style="list-style:none; display="inline-block"><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com">Home</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/about">About</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/faq">FAQ</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/contact">Contact</a></li><li style="float:left; margin-right: 5px;"><a href="http://help.teselagen.com/manual/">Manual</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/terms">Terms</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/privacy">Privacy</a></li>'
                 }]
             }]
         });

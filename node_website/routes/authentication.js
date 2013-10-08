@@ -102,6 +102,28 @@ module.exports = function(app, express) {
         res.redirect('/admin');
     });
 
+    app.get('/forgot/:token', function(req, res){
+        res.render('forgot',{token:req.params.token});
+    });
+
+    app.get('/forgot', function(req, res){
+        res.render('forgot_question');
+    });
+
+    app.post('/forgot', function(req, res){
+        var User = app.db.model("User");
+        if(!req.body.token || req.body.token === "") return res.render('forgot_success',{msg:"Invalid token"});
+        var token = req.body.token;
+        User.findOne({activationCode:token},function(err,user){
+          if(!user) return res.render('forgot_success',{msg:"Invalid token"});
+          user.password = req.body.password;
+          user.activationCode = undefined;
+          user.save(function(){
+            return res.render('forgot_success',{msg:"Password has been changed."});
+          });
+        });
+    });
+
 
     var sendActivationMail = function(user,activationCode)
     {

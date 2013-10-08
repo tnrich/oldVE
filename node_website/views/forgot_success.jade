@@ -30,25 +30,13 @@ html(lang='en')
         .row
             .large-6.small.6.large-centered.small-centered.page-logo.columns
                 img(src="/img/teselagen_toplogo.png")
+            .large-6.small-6.large-centered.small-centered.columns 
+                h4(style="text-align:center;") #{msg} 
             .large-6.small-6.large-centered.small-centered.columns
-                form#login_form.custom
+                form(data-validate="parsley")#login_form.custom
                     .row
-                        .large-3.small-3.columns
-                            label.right.inline(for='username') Username
-                        .large-9.small-9.columns
-                            input(type="text", id='username', placeholder='Username', data-required)
-                    .row
-                        .large-3.small-3.columns
-                            label.right.inline(for='password', data-required) Password
-                        .large-9.small-9.columns
-                            input(type="password", id='password')
-                    .row
-                        .large-3.small-3.columns.right.lost_pw_link 
-                            a(href="/forgot") Lost Password?
                         .large-12.small-12.registration-buts
-                            a.button.radius.expand#login_admin Log In
-                            a.button.radius.secondary.expand(href='/signup') New to TeselaGen? Sign Up
-                                .large-6.small-6.large-centered.small-centered.columns#footer_links
+                            a.button.radius.expand(href='http://app.teselagen.com/') Log In
     .large-5.small-5.large-centered.small-centered.columns#footer2_links
           nav.top-bar
             section.top-bar-section#footer_2
