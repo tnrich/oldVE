@@ -8,12 +8,12 @@ module.exports = function(app, express){
       var length = users.length;
       users.forEach(function(user)
         {
-        if(!user.userType) user.userType = "Standard";
-        if(user.userType === "") user.userType = "Standard";
-        if(user.userType === "guest") user.userType = "Guest";
-        if(user.userType === "root") user.userType = "Admin";
+        if(user.userType === undefined)                 user.userType = "Standard";
+        if(user.userType === "")           user.userType = "Standard";
+        if(user.userType === "guest")      user.userType = "Guest";
+        if(user.userType === "root")       user.userType = "Admin";
         if(user.userType === "corportate") user.userType = "Standard";
-        if(user.userType === "corporate") user.userType = "Standard";
+        if(user.userType === "corporate")  user.userType = "Standard";
         user.save(function(){
           length--;
           if(length === 0) res.send("All users processed");
