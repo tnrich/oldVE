@@ -85,15 +85,15 @@ Ext.define('Vede.view.AuthWindow', {
                         padding: 3,
                         text: 'Forgot your password?',
                         name: 'forgot'
-                    }, {
+                    },/* {
                         xtype: 'button',
                         id: 'auth-config-btn',
                         margin: '0 0 0 15',
                         padding: 3,
                         text: 'Config',
                         name: 'Config'
-                    }, 
-                    /*
+                    },
+
                     {
                         xtype: 'fieldset',
                         hidden: true,
