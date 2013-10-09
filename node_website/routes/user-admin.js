@@ -22,6 +22,13 @@ module.exports = function(app, express){
     });
   });
   
+  app.get('/checkuserTypes', function(req, res){
+    var User = app.db.model("User");
+    User.find({},{userType:1}).exec(function(err,users){
+      res.json(users);
+    });
+  });
+
   app.get('/admin/dashboard', adminRestrict, function(req, res){
     res.render('dashboard');
   });
