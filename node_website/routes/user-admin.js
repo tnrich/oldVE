@@ -2,6 +2,8 @@ module.exports = function(app, express){
 
   var adminRestrict = app.auth.adminRestrict;
 
+/*
+For maintainance and mapping purposes
   app.get('/resetUsers', function(req, res){
     var User = app.db.model("User");
     User.find().exec(function(err,users){
@@ -28,6 +30,7 @@ module.exports = function(app, express){
       res.json(users);
     });
   });
+*/
 
   app.get('/admin/dashboard', adminRestrict, function(req, res){
     res.render('dashboard');
