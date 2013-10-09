@@ -57,9 +57,9 @@ block container
                             .large-9.small-9.columns
                                 select(name='userType', data-required="true")
                                     option(value="", selected = (user.userType==="" ? true : false) ) Select user type
-                                    option(value="root", selected = (user.userType==="root" ? true : false) ) Root Access
-                                    option(value="corporate", selected = (user.userType==="corporate" ? true : false) ) Corporate User
-                                    option(value="guest", selected = (user.userType==="guest" ? true : false) ) Guest User
+                                    option(value="Admin", selected = (user.userType==="Admin" ? true : false) ) Admin Access
+                                    option(value="Standard", selected = (user.userType==="Standard" ? true : false) ) Standard User
+                                    option(value="Guest", selected = (user.userType==="Guest" ? true : false) ) Guest User
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns

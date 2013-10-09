@@ -1,6 +1,24 @@
 module.exports = function(app, express){
 
   var adminRestrict = app.auth.adminRestrict;
+
+  app.get('/resetUsers', adminRestrict, function(req, res){
+    var User = app.db.model("User");
+    User.find().exec(function(err,users){
+      var length = users.length;
+      users.forEach(function(user)
+        {
+        if(!user.userType) user.userType = "Standard";
+        if(user.userType === "guest") user.userType = "Guest";
+        if(user.userType === "root") user.userType = "Admin";
+        if(user.userType === "corporate") user.userType = "Standard";
+        user.save(function(){
+          length--;
+          if(length === 0) res.send("All users processed");
+        });
+      });
+    });
+  });
   
   app.get('/admin/dashboard', adminRestrict, function(req, res){
     res.render('dashboard');
