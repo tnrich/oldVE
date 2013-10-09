@@ -112,12 +112,13 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /**
      * Reformat name to be only alphanumeric with underscores "_" or hyphens "-".
+     * Replaces special characters with underscores.
      *(REFACTORED FROM DEVICEDESIGNMANAGER)
      * @param {String} pName
      * @returns {String} New name.
      */
     reformatName: function(pName) {
-        return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "");
+        return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "_");
     },
 
     /**

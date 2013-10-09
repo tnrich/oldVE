@@ -20,7 +20,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                "Teselagen.manager.RestrictionEnzymeGroupManager",
                "Teselagen.manager.RestrictionEnzymeManager",
                "Vede.view.ve.SafeEditWindow"],
-    
+
     AAManager: null,
     ORFManager: null,
     RestrictionEnzymeManager: null,
@@ -52,6 +52,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     safeEditing: true,
 
     activeTab: null,
+
+    invisibleText: null,
 
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
@@ -125,9 +127,11 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     getActiveTab: function() {
         return Ext.getCmp('mainAppPanel').getActiveTab();
     },
-    
+
     onTabChange: function(mainAppPanel, newTab, oldTab) {
         this.activeTab = newTab;
+
+        //this.invisibleText = Ext.getCmp("InvisibleTextarea");
 
         // Load the sequencemanager associated with the new tab, and select the
         // tab's saved selection.
@@ -137,7 +141,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
             this.caretIndex = 0;
         }
     },
-    
+
     onLaunch: function() {
         this.RestrictionEnzymeGroupManager = 
             Teselagen.manager.RestrictionEnzymeGroupManager;
@@ -167,6 +171,11 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     onKeydown: function(event) {
         var character = String.fromCharCode(event.getCharCode()).toLowerCase();
 
+        // Focus on an invisible textarea so we can paste from the clipboard.
+        /*if(event.ctrlKey) {
+            this.invisibleText.focus();
+        }*/
+
         if(event.ctrlKey && event.getKey() === event.LEFT) {
             // Ctrl + Left: Move caret to start of previous block of 10 bases.
             if(this.caretIndex % 10 === 0) {
@@ -190,13 +199,19 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                 this.SequenceManager.getSequence().toString().length - 1);
         } else if(event.ctrlKey && event.getKey() === event.X) {
             // Ctrl + X: Cut.
-            this.cutSelection();
+            //this.cutSelection();
+
+            // We can only write to the clipboard using a click event. Stupid Flash.
+            Ext.Msg.alert('Cut Shortcut', 'Please use the Edit->Cut menu item for cut functionality.');
+
         } else if(event.ctrlKey && event.getKey() === event.C) {
             // Ctrl + C: Copy.
-            this.copySelection();
+            //this.copySelection();
+
+            Ext.Msg.alert('Copy Shortcut', 'Please use the Edit->Copy menu item for copy functionality.');
         } else if(event.ctrlKey && event.getKey() === event.V) {
             // Ctrl + V: Paste.
-            this.pasteFromClipboard();
+            //this.pasteFromClipboard();
         } else if(event.ctrlKey && event.getKey() === event.Z) {
             // Ctrl + Z: Undo last action.
             this.application.fireEvent(this.MenuItemEvent.UNDO);
@@ -283,6 +298,17 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                     }
                 }
             }
+        }
+    },
+
+    onPaste: function(event) {
+        var e = event.browserEvent;
+        var text;
+
+        if(e.clipboardData && e.clipboardData.getData) {
+            text = e.clipboardData.getData(e.clipboardData.types[0]);
+
+            this.pasteFromClipboard(text);
         }
     },
 
@@ -385,8 +411,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         }
     },
 
-    pasteFromClipboard: function() {
-        if(this.application.ClipBoardData) {
+    pasteFromClipboard: function(text) {
+        if(this.application.ClipBoardData || text) {
             var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
 
             confirmationWindow.down("button[cls='pasteConfirmationOkButton']").on("click", function() {
@@ -399,7 +425,13 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                                         this.SelectionLayer.end);
                 }
 
-                pasteSequenceManager = this.application.ClipBoardData.clone();
+                if(text) {
+                    pasteSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
+                        sequence: Teselagen.bio.sequence.DNATools.createDNA(text)
+                    });
+                } else {
+                    pasteSequenceManager = this.application.ClipBoardData.clone();
+                }
 
                 if(confirmationWindow.down("radiogroup").getValue().pasteFormatField === "reverse") {
                     pasteSequenceManager.doReverseComplementSequence();

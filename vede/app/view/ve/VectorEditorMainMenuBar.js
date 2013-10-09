@@ -113,7 +113,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuseparator'
             },
             {
-            	xtype: 'menuitem',
+                xtype: 'menuitem',
                 identifier: 'propertiesMenuItem',
                 text: 'Properties'
             },
@@ -134,10 +134,29 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 identifier: 'cutMenuItem',
                 text: 'Cut'
+                /*listeners: {
+                    render: function(item) {
+                        this.clip = new ZeroClipboard(item.el.dom);
+                        this.clip.on('dataRequested', function(client) {
+                            clip.setText('TEST');
+                        });
+                    }
+                }*/
             }, {
                 xtype: 'menuitem',
                 identifier: 'copyMenuItem',
                 text: 'Copy'
+                /*listeners: {
+                    render: function(item) {
+                        this.clip = new ZeroClipboard(item.el.dom);
+                        this.clip.on('load', function() {
+                            console.log('loaded');
+                        });
+                        this.clip.on('dataRequested', function(client) {
+                            client.setText('TEST');
+                        });
+                    }
+                }*/
             }, {
                 xtype: 'menuitem',
                 identifier: 'pasteMenuItem',

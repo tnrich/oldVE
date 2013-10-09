@@ -64,7 +64,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         this.application.fireEvent(this.MenuItemEvent.CUT);
     },
 
-    onCopyMenuItemClick: function() {
+    onCopyMenuItemClick: function(item) {
         this.application.fireEvent(this.MenuItemEvent.COPY);
     },
 

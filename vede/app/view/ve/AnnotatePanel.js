@@ -16,13 +16,15 @@ Ext.define("Vede.view.ve.AnnotatePanel", {
     collapseDirection: "right",
     title: "Sequence",
     titleCollapse: true,
-    items: [{
-        xtype: "container",
-        overflowY: "scroll",
-        //overflowX: "scroll",
-        cls: "AnnotateContainer",
-        layout: {
-            type: "fit"
+    items: [
+        {
+            xtype: "container",
+            overflowY: "scroll",
+            //overflowX: "scroll",
+            cls: "AnnotateContainer",
+            layout: {
+                type: "fit"
+            }
         }
-    }]
+    ]
 });

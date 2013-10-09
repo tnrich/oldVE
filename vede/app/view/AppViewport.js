@@ -55,8 +55,18 @@ Ext.define('Vede.view.AppViewport', {
                                     Vede.application.fireEvent("PopulateStats");
                                 }
                             }
-                        }
-                    ],
+                        }/*, {
+                            xtype: "textarea",
+                            id: "InvisibleTextarea",
+                            floating: true,
+                            autoShow: true,
+                            listeners: {
+                                show: function(textarea) {
+                                    textarea.setX(-10000);
+                                }
+                            }
+                        }*/
+                    ]
                     /*
                     listeners: {
                         add: function( tabpanel, tab, index, eOpts )
