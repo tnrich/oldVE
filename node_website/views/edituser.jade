@@ -68,6 +68,9 @@ block container
                                     option(value="true", selected = (user.activated===true ? true : false) ) Activated
                                     option(value="false", selected = (user.activated===false ? true : false) ) Not activated
                         .row
+                            if(user.activated === false)
+                                a.button.radius#edit_cancel(style="margin-left:10px;", href="http://app.teselagen.com/api/users/activate/#{user.activationCode}", target="_blank") Activate and Notify
+                        .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
                                 input.button.radius#edit_submit(type='submit') Update
@@ -75,7 +78,7 @@ block container
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                a.button.radius#edit_delete.alert.disabled(type='submit', name="delete", value="delete") Delete user
+                                input.button.radius#edit_delete.alert(type='submit', name="delete", value="delete") Delete user
                         
 
         #push
