@@ -253,17 +253,17 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     DashNewSequence: function () {
         Teselagen.manager.ProjectManager.directVEEditingMode = true;
-  
-        Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.SequenceFile", {
+
+        var newSeq = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileFormat: "GENBANK",
             sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
             sequenceFileName: "untitled.gb",
             partSource: "Untitled sequence"
         });
-  
-        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, Teselagen.manager.ProjectManager.workingSequence);
+
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
     },
-  
+
 
     /**
      * Hide the vector viewer when the mouse leaves the current grid
