@@ -92,6 +92,9 @@ For maintainance and mapping purposes
 
 
   app.post('/admin/edituser', adminRestrict, function(req,res){
+
+    if(req.body.delete && req.body.delete === "delete") return res.send("Are you sure?");
+
     var User = app.db.model("User");
     User.findById(req.body.id,function(err,user){
       user.firstName = req.body.first_name;
@@ -99,7 +102,7 @@ For maintainance and mapping purposes
       user.email = req.body.email;
       user.groupName = req.body.organizationName;
       user.groupType = req.body.organizationType;
-      //user.username = req.body.username;
+      user.activated = (req.body.activated === "true") ? true : false;
       user.userType = req.body.userType;
       if(req.body.password!="") user.password = req.body.password;
 

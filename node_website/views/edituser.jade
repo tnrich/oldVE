@@ -45,7 +45,7 @@ block container
                                     option(value="commercial", selected = (user.groupType==="commercial" ? true : false) ) Commercial
                                     option(value="independent", selected = (user.groupType==="independent" ? true : false) ) Independent
                                     if(user.groupType!="academic"&&user.groupType!="government"&&user.groupType!="independent"&&user.groupType!="commercial")
-                                        option(value="#{user.groupType}", selected=true) ) #{user.groupType}
+                                        option(value="#{user.groupType}", selected=true) #{user.groupType}
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='organizationName') Organization Name
@@ -62,13 +62,20 @@ block container
                                     option(value="Guest", selected = (user.userType==="Guest" ? true : false) ) Guest User
                         .row
                             .large-3.small-3.columns
+                                label.right.inline(for='activated') Activated
+                            .large-9.small-9.columns
+                                select(name='activated', data-required="true")
+                                    option(value="true", selected = (user.activated===true ? true : false) ) Activated
+                                    option(value="false", selected = (user.activated===false ? true : false) ) Not activated
+                        .row
+                            .large-3.small-3.columns
                             .large-9.small-9.columns
                                 input.button.radius#edit_submit(type='submit') Update
                                 a.button.radius#edit_cancel(style="margin-left:10px;", href="javascript:history.back()") Cancel
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                a.button.radius#edit_delete.alert.disabled Delete user
+                                a.button.radius#edit_delete.alert.disabled(type='submit', name="delete", value="delete") Delete user
                         
 
         #push
