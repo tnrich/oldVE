@@ -1,6 +1,6 @@
 module.exports = function(app, express){
 
-  var adminRestrict = app.auth.adminRestrict;
+ var adminRestrict = app.auth.adminRestrict;
 
 /*
 For maintainance and mapping purposes
@@ -31,6 +31,43 @@ For maintainance and mapping purposes
     });
   });
 */
+
+  app.post('/admin/deluser',function(req,res){
+    var user_id = req.body.id;
+    var keepdata = (req.body.keepdata) ? true : false;
+
+    var User = app.db.model("User");
+
+    User.findById(user_id).populate("parts sequences projects").exec(function(err,user){
+
+      var username = user.username;
+      
+      user.parts.forEach(function(part){
+        part.remove(function(){ 
+          console.log("Removed part");
+        });
+      });
+
+      user.sequences.forEach(function(sequence){
+        sequence.remove(function(){ 
+          console.log("Removed sequence");
+        });
+      });
+
+      user.projects.forEach(function(projects){
+        projects.remove(function(){ 
+          console.log("Removed project");
+        });
+      });
+
+      user.remove(function(){
+        res.send(username+" removed <a href='/admin/manage'>Click here to continue</a>");
+      });
+
+
+    });
+
+  });
 
   app.get('/admin/dashboard', adminRestrict, function(req, res){
     res.render('dashboard');
@@ -93,9 +130,14 @@ For maintainance and mapping purposes
 
   app.post('/admin/edituser', adminRestrict, function(req,res){
 
-    if(req.body.delete && req.body.delete === "delete") return res.send("Are you sure?");
-
     var User = app.db.model("User");
+    
+    console.log(req.body.deleteUser);
+
+    if(req.body.deleteUser && req.body.deleteUser === "Delete") {
+      return res.render('user_delete',{user_id:req.body.id,username:req.body.last_name + " "+req.body.id});
+    }
+    
     User.findById(req.body.id,function(err,user){
       user.firstName = req.body.first_name;
       user.lastName = req.body.last_name;

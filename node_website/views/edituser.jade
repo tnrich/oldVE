@@ -70,12 +70,12 @@ block container
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                input.button.radius#edit_submit(type='submit') Update
+                                input.button.radius#edit_submit(type='submit', name="update", value="Update") Update
                                 a.button.radius#edit_cancel(style="margin-left:10px;", href="javascript:history.back()") Cancel
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                input.button.radius#edit_delete.alert(type='submit', name="delete", value="delete") Delete user
+                                input.button.radius#edit_delete.alert(type='submit', name="deleteUser", value="Delete") Delete user
                                 if(!user.activated)
                                     a.button.radius#edit_cancel(style="margin-left:10px;", href="http://app.teselagen.com/api/users/activate/#{user.activationCode}", target="_blank") Activate and Notify
                         
