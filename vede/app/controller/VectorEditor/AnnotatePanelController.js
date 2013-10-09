@@ -125,12 +125,16 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onRender: function(pCmp) {
+        pCmp.el.set({
+            contenteditable: "true"
+        });
         pCmp.el.on("mousedown", this.onMousedown, this);
         pCmp.el.on("mouseup", this.onMouseup, this);
         pCmp.el.on("mousemove", this.onMousemove, this);
         // Set the tabindex attribute in order to receive keyboard events on the div.
         pCmp.el.dom.setAttribute("tabindex", "0");
         pCmp.el.on("keydown", this.onKeydown, this);       
+        pCmp.el.on("paste", this.onPaste, this);       
     },
 
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
@@ -167,6 +171,10 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
                                      false,
                                      true);
         }
+    },
+
+    onPaste: function(event) {
+        this.callParent(arguments);
     },
 
     cutSelection: function() {

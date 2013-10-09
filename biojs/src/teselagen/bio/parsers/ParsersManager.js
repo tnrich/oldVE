@@ -133,7 +133,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
                 context.startCount = context.startCount+context.progressIncrement;
                 progressBar.css("width", context.startCount+'%');
-                
+
                 self.parseSequence(data, ext, function(gb) {
                     if(!gb) return cb(true,context); // If no gb then parsing failed.
                     if(!(gb instanceof Array)) gb = [gb];  // gb can be or not an array, we will enforce being an array
@@ -195,87 +195,94 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     saveSequence: function (sequence,name,ext,seqMgr,genbankObject,cb)
     {
-            var self = Teselagen.bio.parsers.ParsersManager;
-            var partSource = genbankObject.getLocus().locusName;
+        var FormatUtils = Teselagen.utils.FormatUtils;
+        var self = Teselagen.bio.parsers.ParsersManager;
+        var partSource = genbankObject.getLocus().locusName;
 
-            if(seqMgr) {
-                sequence.set('name', genbankObject.getLocus().locusName);
-            }
+        var legalName = true;
 
-            // Aggregate parse messages/warnings from the genbank
-            // and sequence manager objects to display in the
-            // import warnings window.
-            
-            if(genbankObject && seqMgr) {
-                var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+        if(!FormatUtils.isLegalName(partSource) || !FormatUtils.isLegalName(name)) {
+            legalName = false;
+        }
 
+        if(seqMgr) {
+            sequence.set('name', genbankObject.getLocus().locusName);
+        }
+
+        // Aggregate parse messages/warnings from the genbank
+        // and sequence manager objects to display in the
+        // import warnings window.
+        
+        if(genbankObject && seqMgr) {
+            var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+
+            self.batchImportMessages.add({
+                fileName: name + '.' + ext,
+                partSource: partSource,
+                messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
+            });
+        }
+
+        sequence.save({
+            success: function(){
+                seqMgr = null;
+                sequence.sequenceManager = null;
+
+                var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+                if(!duplicated) 
+                {
+                    Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
+                    return cb(false);
+                }
+                else
+                {
+                    var msg = toastr.warning("Error: Duplicated Sequence");
+                    
+                    var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
+                    var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
+
+                    var duplicateMessage = 'Exact sequence already exists in library with' + 
+                                           ' filename ' + duplicateFileName;
+
+                    var messageIndex = self.batchImportMessages.findBy(function(record) {
+                        var messages = record.get('messages');
+
+                        for(var i = 0; i < messages.length; i++) {
+                            if(messages[i] === duplicateMessage) {
+                                return false;
+                            }
+                        }
+
+                        return record.get('fileName') === (name + '.' + ext) &&
+                               record.get('partSource') === partSource;
+                    });
+
+                    if(messageIndex < 0) {
+                        self.batchImportMessages.add({
+                            fileName: name + '.' + ext,
+                            partSource: partSource,
+                            messages: [duplicateMessage]
+                        });
+                    } else {
+                        var record = self.batchImportMessages.getAt(messageIndex);
+                        record.set('partSource', partSource);
+                        record.set('messages', 
+                            record.get('messages').concat([duplicateMessage]));
+                    }
+
+                    return cb(false);
+               }
+            },
+            failure: function(){
                 self.batchImportMessages.add({
                     fileName: name + '.' + ext,
                     partSource: partSource,
-                    messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                    messages: "Failed to upload due to network error. Please try again."
                 });
+
+                return cb(true);
             }
-
-            sequence.save({
-                success: function(){
-                    seqMgr = null;
-                    sequence.sequenceManager = null;
-
-                    var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
-                    if(!duplicated) 
-                    {
-                        Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
-                        return cb(false);
-                    }
-                    else
-                    {
-                        var msg = toastr.warning("Error: Duplicated Sequence");
-                        
-                        var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
-                        var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
-
-                        var duplicateMessage = 'Exact sequence already exists in library with' + 
-                                               ' filename ' + duplicateFileName;
-
-                        var messageIndex = self.batchImportMessages.findBy(function(record) {
-                            var messages = record.get('messages');
-
-                            for(var i = 0; i < messages.length; i++) {
-                                if(messages[i] === duplicateMessage) {
-                                    return false;
-                                }
-                            }
-
-                            return record.get('fileName') === (name + '.' + ext) &&
-                                   record.get('partSource') === partSource;
-                        });
-
-                        if(messageIndex < 0) {
-                            self.batchImportMessages.add({
-                                fileName: name + '.' + ext,
-                                partSource: partSource,
-                                messages: [duplicateMessage]
-                            });
-                        } else {
-                            var record = self.batchImportMessages.getAt(messageIndex);
-                            record.set('partSource', partSource);
-                            record.set('messages', 
-                                record.get('messages').concat([duplicateMessage]));
-                        }
-
-                        return cb(false);
-                   }
-                },
-                failure: function(){
-                    self.batchImportMessages.add({
-                        fileName: name + '.' + ext,
-                        partSource: partSource,
-                        messages: "Failed to upload due to network error. Please try again."
-                    });
-
-                    return cb(true);
-                }
-            });
+        });
     },
 
     /**

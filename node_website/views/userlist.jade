@@ -3,31 +3,45 @@ extends admin
 block container
 
     #contact
-        .row
+        .row(style="max-width: 90%;")
             .large-12.small-12.page-header Administration
 
-            .large-12.small-12#contact-info
-                .row
-                    .small-2.columns(style="font-weight:bold") Last Name
-                    .small-2.columns(style="font-weight:bold") First Name
-                    .small-3.columns(style="font-weight:bold") Email
-                    .small-2.columns(style="font-weight:bold") Username
-                    .small-1.columns(style="font-weight:bold") Type
-                    .small-2.columns(style="font-weight:bold") 
-        .row
-            .large-12.small-12#contact-info
-                each user in users
-                    .row
-                        .small-2.columns #{user.lastName}
-                        .small-2.columns #{user.firstName}
-                        .small-3.columns #{user.email}
-                        .small-2.columns #{user.username}
-                        if typeof(user.userType) == 'undefined' || user.userType == '' || user.userType == '-'
-                            .small-1.columns -
-                        else
-                            .small-1.columns #{user.userType}
-                        .small-2.columns
-                            a(href="/admin/edituser?id=#{user.id}") Edit
+            table#user-table.large-12.small-12.large-centered.small-centered
+                thead
+                    tr
+                        th(data-sort="string") Last Name
+                        th(data-sort="string") First Name
+                        th(data-sort="string") Email
+                        th(data-sort="string") Username
+                        th(data-sort="string") Org Type
+                        th(data-sort="string") Org Name
+                        th(data-sort="string") Activated
+                        th(data-sort="string") Type
+                        th(data-sort="string") Date Created
+                        th Edit
+                tbody
+                    each user in users
+                        tr
+                            th #{user.lastName}
+                            th #{user.firstName}
+                            th #{user.email}
+                            th #{user.username}
+                            if typeof(user.groupType) == 'undefined' || user.groupType == '' || user.groupType == '-'
+                                th -
+                            else
+                                th #{user.groupType}
+                            if typeof(user.groupName) == 'undefined' || user.groupName == '' || user.groupName == '-'
+                                th -
+                            else
+                                th #{user.groupName}
+                            th #{user.activated}
+                            if typeof(user.userType) == 'undefined' || user.userType == '' || user.userType == '-'
+                                th -
+                            else
+                                th #{user.userType}
+                            th #{user.dateCreated}
+                            th
+                                a(href="/admin/edituser?id=#{user.id}") Edit
             .pagination-centered#pagination
                 ul.pagination
                     li.arrow
@@ -41,4 +55,7 @@ block container
         #push
 
     script(src='/js/jquery-1.10.2.min.js')
+    script(type='text/javascript', src='/js/stupidtable.min.js')
     script(src='/js/admin.js')
+    script.
+        $("#user-table").stupidtable();

@@ -253,7 +253,7 @@ module.exports = function(db) {
 		preferences: Mixed,
 		groupName: String,
 		groupType: String,
-		userType: String,
+		userType: {type: String, default: "Standard"},
 		projects: [{
 			type: oIDRef,
 			ref: 'project'
@@ -293,7 +293,8 @@ module.exports = function(db) {
 	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
 	        }
 		},
-		dateCreated: Date
+		dateCreated: Date,
+		lastAccess: Date
 	});
 
     UserSchema.pre('save', function(next) {
@@ -356,7 +357,7 @@ module.exports = function(db) {
 	        "condenseAssemblyFiles",
 	        "DesignDownstreamAutomation"
         ];
-        if(this.userType && this.userType == "guest")
+        if(this.userType && this.userType == "Guest")
         {
         	if(protectedMethods.indexOf(method) !=- 1) return cb(false);
         	else return cb(true);

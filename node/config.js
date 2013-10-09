@@ -18,7 +18,7 @@ module.exports = function(app, express) {
 
     // Express Framework Configuration
 
-    app.set('env','production');
+    //app.set('env','production');
     app.dbname = "teselagen";
 
     var Opts = {
@@ -171,7 +171,7 @@ module.exports = function(app, express) {
 
     app.db = app.mongoose.createConnection(Opts.authHost, function(err) {
         if (err) {
-            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(data); 
+            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(err); 
             //app.mongoose.connection.db.serverConfig.connection.autoReconnect = true;
         }
         else { 
