@@ -82,6 +82,7 @@ module.exports = function(app) {
                         });
                     } else {
                         req.user.lastAccess = new Date();
+                        req.user.save();
                         return res.json({
                             user: req.user,
                             msg: "Welcome, " + req.user.username + "!"
