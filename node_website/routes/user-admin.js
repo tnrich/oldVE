@@ -9,6 +9,7 @@ module.exports = function(app, express){
       users.forEach(function(user)
         {
         if(!user.userType) user.userType = "Standard";
+        if(user.userType === "") user.userType = "Standard";
         if(user.userType === "guest") user.userType = "Guest";
         if(user.userType === "root") user.userType = "Admin";
         if(user.userType === "corporate") user.userType = "Standard";
