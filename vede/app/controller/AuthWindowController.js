@@ -46,7 +46,6 @@ Ext.define('Vede.controller.AuthWindowController', {
 
         };
 
-        
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("logout", ""),

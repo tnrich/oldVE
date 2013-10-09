@@ -546,7 +546,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         dataIndex: 'dateModified',
                                         renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
                                     }
-                                    
+
                                     ],
 
                                     dockedItems: [{
