@@ -40,12 +40,12 @@ block container
                             .large-9.small-9.columns
                                 select(name='organizationType', data-required="true")
                                     option(value="", selected = (user.groupType==="" ? true : false) ) Select organization type
-                                    option(value="com.red", selected = (user.groupType==="" ? true : false) ) Red Biotech
-                                    option(value="com.white", selected = (user.groupType==="com.red" ? true : false) ) White Biotech
-                                    option(value="com.green", selected = (user.groupType==="com.green" ? true : false) ) Green Biotech
-                                    option(value="edu.lab", selected = (user.groupType==="edu.lab" ? true : false) ) Academic Lab
-                                    option(value="gene-hacker", selected = (user.groupType==="gene-hacker" ? true : false) ) Gene Hacker
-                                    option(value="other", selected = (user.groupType==="other" ? true : false) ) Other
+                                    option(value="academic", selected = (user.groupType==="academic" ? true : false) ) Academic
+                                    option(value="government", selected = (user.groupType==="government" ? true : false) ) Government
+                                    option(value="commercial", selected = (user.groupType==="commercial" ? true : false) ) Commercial
+                                    option(value="independent", selected = (user.groupType==="independent" ? true : false) ) Independent
+                                    if(user.groupType!="academic"&&user.groupType!="government"&&user.groupType!="independent"&&user.groupType!="commercial")
+                                        option(value="#{user.groupType}", selected=true) #{user.groupType}
                         .row
                             .large-3.small-3.columns
                                 label.right.inline(for='organizationName') Organization Name
@@ -57,18 +57,27 @@ block container
                             .large-9.small-9.columns
                                 select(name='userType', data-required="true")
                                     option(value="", selected = (user.userType==="" ? true : false) ) Select user type
-                                    option(value="root", selected = (user.userType==="root" ? true : false) ) Root Access
-                                    option(value="corporate", selected = (user.userType==="corporate" ? true : false) ) Corporate User
-                                    option(value="guest", selected = (user.userType==="guest" ? true : false) ) Guest User
+                                    option(value="Admin", selected = (user.userType==="Admin" ? true : false) ) Admin Access
+                                    option(value="Standard", selected = (user.userType==="Standard" ? true : false) ) Standard User
+                                    option(value="Guest", selected = (user.userType==="Guest" ? true : false) ) Guest User
+                        .row
+                            .large-3.small-3.columns
+                                label.right.inline(for='activated') Activated
+                            .large-9.small-9.columns
+                                select(name='activated', data-required="true")
+                                    option(value="true", selected = (user.activated===true ? true : false) ) Activated
+                                    option(value="false", selected = (user.activated===false ? true : false) ) Not activated
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                input.button.radius#edit_submit(type='submit') Update
+                                input.button.radius#edit_submit(type='submit', name="update", value="Update") Update
                                 a.button.radius#edit_cancel(style="margin-left:10px;", href="javascript:history.back()") Cancel
                         .row
                             .large-3.small-3.columns
                             .large-9.small-9.columns
-                                a.button.radius#edit_delete.alert.disabled Delete user
+                                input.button.radius#edit_delete.alert(type='submit', name="deleteUser", value="Delete") Delete user
+                                if(!user.activated)
+                                    a.button.radius#edit_cancel(style="margin-left:10px;", href="http://app.teselagen.com/api/users/activate/#{user.activationCode}", target="_blank") Activate and Notify
                         
 
         #push

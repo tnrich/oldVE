@@ -18,6 +18,7 @@ block container
                         th(data-sort="string") Activated
                         th(data-sort="string") Type
                         th(data-sort="string") Date Created
+                        th(data-sort="string") Last Access
                         th Edit
                 tbody
                     each user in users
@@ -40,6 +41,7 @@ block container
                             else
                                 th #{user.userType}
                             th #{user.dateCreated}
+                            th #{user.lastAccess}
                             th
                                 a(href="/admin/edituser?id=#{user.id}") Edit
             .pagination-centered#pagination

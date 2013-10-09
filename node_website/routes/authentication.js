@@ -57,7 +57,7 @@ module.exports = function(app, express) {
     };
 
     var adminRestrict = function(req, res, next) {
-        if(req.isAuthenticated() && req.user.userType && req.user.userType === "root") {
+        if(req.isAuthenticated() && req.user.userType && req.user.userType === "Admin") {
             return next();
         } else {
             res.redirect('/admin');

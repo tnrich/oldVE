@@ -81,6 +81,8 @@ module.exports = function(app) {
                             msg: err
                         });
                     } else {
+                        req.user.lastAccess = new Date();
+                        req.user.save();
                         return res.json({
                             user: req.user,
                             msg: "Welcome, " + req.user.username + "!"
@@ -145,6 +147,8 @@ module.exports = function(app) {
 
             if(user.activated) 
             {
+                user.activationCode = crypto.randomBytes(32).toString("hex");
+                user.save();
                 sendForgotEmail(user,function(err){
                     if(err) return res.send({"success":false,msg:"Error sending email"});
                     res.send({"success":true,msg:"Email reset"});

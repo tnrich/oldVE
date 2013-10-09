@@ -1,0 +1,30 @@
+extends admin
+
+block container
+
+    #contact
+        .row
+            .large-12.small-12.page-header Edit user
+            .large-12.small-12#contact-info
+                form(name="deluser", action='/admin/deluser', method='post')#signup_form.custom
+                    input(type='hidden', name='id', value="#{user_id}")
+                    .row
+                        .row
+                            p Deleting user #{username}
+                        .row
+                            .large-3.small-3.columns
+                            .large-9.small-9.columns
+                                label(for='keep data')
+                                    input(name='keepdata', value='true', type='checkbox')
+                                    span
+                                    |  Keep user data (Its recommended not to keep user data maintain FQDN integrity.)
+                        .row
+                            br
+                        .row
+                            .large-3.small-3.columns
+                            .large-9.small-9.columns
+                                input.button.radius.alert(type='submit', name="delete", value="Delete") Confirm
+                                a.button.radius#edit_cancel(style="margin-left:10px;", href="/admin/manage") Cancel
+        #push
+
+    script(src='/js/jquery-1.10.2.min.js')
