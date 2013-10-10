@@ -194,10 +194,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {String} errorMessage The error message to display if a non-identical
      * part exists in the design.
      */
-    onValidateDuplicatedPartNameEvent: function(pPart, name, cb, errorMessage){
+    onValidateDuplicatedPartNameEvent: function(pPart, name, partSource, cb, errorMessage){
         var me = this;
         var duplicated = false;
         var nonidentical = false;
+        var partSourceNonidentical = false;
         var identicalPart = null;
 
         if(!pPart.isMapped()) {
@@ -207,6 +208,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.activeProject.parts().each(function(part, partIndex){
             if(part.isMapped() && part.get("name") === name && part.get("id") !== pPart.get("id")) {
                 nonidentical = true;
+            } else if (part.isMapped() && part.get("partSource") === partSource && part.get("id") !== pPart.get("id")) {
+                console.log(part.getSequenceFile().raw.hash, pPart.getSequenceFile().raw.hash);
+                if(part.getSequenceFile().raw.hash == pPart.getSequenceFile().raw.hash) {
+                    var partSourceNonidentical = true;
+                }
             } else if(part.get("id") === pPart.get("id")) {
                 identicalPart = part;
             }
@@ -220,7 +226,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 buttons: Ext.MessageBox.OK,
                 icon:Ext.MessageBox.ERROR
             });
-        } else {
+        } else if (partSourceNonidentical) {
+            Ext.MessageBox.show({
+                title: "Error",
+                msg: errorMessage || "Another part with the same sequence source exists in the design. Please select the same part or a part with another name.",
+                buttons: Ext.MessageBox.OK,
+                icon:Ext.MessageBox.ERROR
+            });
+        }else {
             cb(identicalPart);
         }
     },

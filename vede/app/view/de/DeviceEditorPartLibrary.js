@@ -83,10 +83,11 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                 ],
             listeners: {
                 "itemclick": function(grid, part){
-                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
+                    Vede.application.fireEvent(Teselagen.event.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), part.get("partSource"), function(identicalPart) {
                         var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
                         var activeProject = inspectorController.activeProject;
 
+                        console.log(allParts);
                         var bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(activeProject, inspectorController.selectedBinIndex);
                         if(bin) {
                             // If the part already exists in the design,
