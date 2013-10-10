@@ -428,11 +428,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 gb = Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
                                                                fileFormat);
             }
-            if(!gb) {
-                // debugger;
-                Teselagen.utils.FormatUtils.fileToGenbank(fileContent,
-                                                               fileFormat);
-            }
 
             var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
 

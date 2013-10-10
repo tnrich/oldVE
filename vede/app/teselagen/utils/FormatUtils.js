@@ -58,6 +58,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
         "Teselagen.bio.sequence.dna.FeatureNote",
         "Teselagen.bio.sequence.DNATools",
 
+        "Teselagen.utils.NameUtils",
         "Teselagen.utils.SequenceUtils",
         "Teselagen.constants.Constants"
     ],
@@ -93,32 +94,6 @@ Ext.define("Teselagen.utils.FormatUtils", {
         ParsersManager  = Teselagen.bio.parsers.ParsersManager;
 
         //SequenceFileManager = Teselagen.manager.SequenceFileManager;
-    },
-
-    /**
-     * Determines if string is only alphanumeric with underscores "_" or hyphens "-".
-     * (REFACTORED FROM DEVICEDESIGNMANAGER)
-     * @param {String} pName
-     * @returns {Boolean}
-     */
-    isLegalName: function(pName) {
-        var str = pName.toString();
-        if (str.match(/[^a-zA-Z0-9_\-]/) !== null) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-
-    /**
-     * Reformat name to be only alphanumeric with underscores "_" or hyphens "-".
-     * Replaces special characters with underscores.
-     *(REFACTORED FROM DEVICEDESIGNMANAGER)
-     * @param {String} pName
-     * @returns {String} New name.
-     */
-    reformatName: function(pName) {
-        return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "_");
     },
 
     /**
@@ -158,11 +133,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
             name = pNamePrefix + pNameNum;
             pNameNum += 1;
         } else {
-            if (Teselagen.utils.FormatUtils.isLegalName(pInput)) {
+            if (Teselagen.utils.NameUtils.isLegalName(pInput)) {
                 name = pInput.toString();
             } else {
                 console.warn("Illegal name " + pInput + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                name = Teselagen.utils.FormatUtils.reformatName(pInput);
+                name = Teselagen.utils.NameUtils.reformatName(pInput);
             }
         }
         return { name: name, number: pNameNum};

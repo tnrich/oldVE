@@ -1,4 +1,3 @@
-
 /**
  * StringUtil Library
  * Code from http://sajjadhossain.com/2008/10/31/javascript-string-trimming-and-padding/

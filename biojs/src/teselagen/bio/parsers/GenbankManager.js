@@ -21,7 +21,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                "Teselagen.bio.parsers.GenbankFeaturesKeyword",
                "Teselagen.bio.parsers.GenbankLocusKeyword",
                "Teselagen.bio.parsers.GenbankKeyword",
-               "Teselagen.bio.parsers.GenbankOriginKeyword"],
+               "Teselagen.bio.parsers.GenbankOriginKeyword",
+               "Teselagen.utils.NameUtils"],
     singleton: true,
     /**
      * Static variables. Common Genbank Keyword names.
@@ -211,13 +212,17 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var result, locusName, seqLen, strand, naType, linear, div, date;
         var lineArr = line.split(/[\s]+/g);
 
-
         if (lineArr.length <= 1) {
             console.warn("Parsing GenBank File: WARNING! Locus line contains no values!");
             gb.addMessage("WARNING! Locus line contains no values: " + line);
         }
 
         locusName = lineArr[1];
+
+        if(!Teselagen.utils.NameUtils.isLegalName(locusName)) {
+            locusName = Teselagen.utils.NameUtils.reformatName(locusName);
+            gb.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
+        }
 
         // Sequence Length and bp
         //seqLen = lineArr[2];

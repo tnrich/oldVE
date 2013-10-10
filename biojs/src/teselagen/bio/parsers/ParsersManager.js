@@ -38,6 +38,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             "Teselagen.bio.parsers.JbeiseqParser",
             "Teselagen.bio.sequence.DNATools",
 
+        "Teselagen.utils.NameUtils",
+
         "Ext.Ajax",
             "Ext.data.Store",
             "Ext.data.XmlStore",
@@ -166,6 +168,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     },
 
     createAndProcessSequenceFromGenbank: function(currentGB,name,cb){
+        var NameUtils = Teselagen.utils.NameUtils;
+        var legalName = true;
+
+        if(!NameUtils.isLegalName(name)) {
+            legalName = false;
+            console.log(name);
+            name = NameUtils.reformatName(name);
+        }
+
         var self = this;
         var sequenceLibrary = Ext.getCmp("sequenceLibrary");
 
@@ -173,7 +184,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             sequenceLibrary.el.unmask();
         }
 
-        var sequence = Ext.create("Teselagen.models.SequenceFile",{
+        var sequence = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileContent: currentGB,
             sequenceFileFormat: "GENBANK",
             name: name,
@@ -183,6 +194,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         try {
             sequence.processSequence(function(err,seqMgr,gb){
+                if(!legalName) {
+                    seqMgr.addParseMessage('Invalid file name. Illegal characters replaced with \'_\'.');
+                }
+
                 return cb(false,sequence,seqMgr,gb);
             },null);
         }
@@ -193,28 +208,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         }
     },
 
-    saveSequence: function (sequence,name,ext,seqMgr,genbankObject,cb)
-    {
-        var FormatUtils = Teselagen.utils.FormatUtils;
+    saveSequence: function (sequence,name,ext,seqMgr,genbankObject,cb) {
         var self = Teselagen.bio.parsers.ParsersManager;
         var partSource = genbankObject.getLocus().locusName;
-
-        var legalName = true;
-
-        if(!FormatUtils.isLegalName(partSource) || !FormatUtils.isLegalName(name)) {
-            legalName = false;
-        }
-
-        if(seqMgr) {
-            sequence.set('name', genbankObject.getLocus().locusName);
-        }
 
         // Aggregate parse messages/warnings from the genbank
         // and sequence manager objects to display in the
         // import warnings window.
-        
         if(genbankObject && seqMgr) {
-            var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages())
+            var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages());
 
             self.batchImportMessages.add({
                 fileName: name + '.' + ext,
@@ -389,6 +391,13 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if(sequences.length === 1 && typeof(cb)!=="function")
         {
             var sequence = sequences[0];
+            var isLegalName = true;
+
+            if(!Teselagen.utils.NameUtils.isLegalName(sequence.name)) {
+                isLegalName = false;
+                sequence.name = Teselagen.utils.NameUtils.reformatName(sequence.name);
+            }
+
             var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
                 locusName: sequence.name,
                 sequenceLength: sequence.sequence.length,
@@ -404,9 +413,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             result.addKeyword(locus);
             result.addKeyword(origin);
 
-            return result;       
-        }
+            if(!isLegalName) {
+                result.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
+            }
 
+            return result;
+        }
 
         var performImportSequence = function(sequence){
             var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
@@ -426,7 +438,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
             return cb(result);
         };
-
 
             var generate = function(selectedSequences){
                 var returnSequences = [];

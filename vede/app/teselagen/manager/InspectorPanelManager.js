@@ -333,9 +333,9 @@ Ext.define("Teselagen.manager.InspectorPanelManager", {
 			if(!value || value===null) return false;
 			value = Ext.String.trim(value);
 			if(value === "") return false;
-			if(!Teselagen.utils.FormatUtils.isLegalName(value)) {
+			if(!Teselagen.utils.NameUtils.isLegalName(value)) {
                 console.warn("Illegal name " + value + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-				value = Teselagen.utils.FormatUtils.reformatName(value);
+				value = Teselagen.utils.NameUtils.reformatName(value);
 				value = Ext.String.trim(value);
 				if(value === "") return false;
 			}
@@ -355,9 +355,9 @@ Ext.define("Teselagen.manager.InspectorPanelManager", {
 			if(!value || value===null) return false;
 			value = Ext.String.trim(value);
 			if(value === "") return false;
-			if(!Teselagen.utils.FormatUtils.isLegalName(value)) {
+			if(!Teselagen.utils.NameUtils.isLegalName(value)) {
                 console.warn("Illegal name " + value + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-				value = Teselagen.utils.FormatUtils.reformatName(value);
+				value = Teselagen.utils.NameUtils.reformatName(value);
 				value = Ext.String.trim(value);
 				if(value === "") return false;
 			}
@@ -774,9 +774,9 @@ Ext.define("Teselagen.manager.InspectorPanelManager", {
 		if(!newValue || newValue===null) return false;
 		newValue = Ext.String.trim(newValue);
 		if(newValue === "") return false;
-		if(!Teselagen.utils.FormatUtils.isLegalName(newValue)) {
+		if(!Teselagen.utils.NameUtils.isLegalName(newValue)) {
             console.warn("Illegal name " + newValue + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-			newValue = Teselagen.utils.FormatUtils.reformatName(newValue);
+			newValue = Teselagen.utils.NameUtils.reformatName(newValue);
 			newValue = Ext.String.trim(newValue);
 			if(newValue === "") return false;
 		}

@@ -14,7 +14,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     requires: [
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Teselagen.utils.NameUtils"
     ],
 
     statics: {
@@ -1342,12 +1343,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     /**
      * Determines if string is only alphanumeric with underscores "_" or hyphens "-".
-     * Calls Teselagen.utils.FormatUtils.isLegalName()
+     * Calls Teselagen.utils.NameUtils.isLegalName()
      * @param {String} pName
      * @returns {Boolean}
      */
     isLegalName: function(pName) {
-        return Teselagen.utils.FormatUtils.isLegalName(pName);
+        return Teselagen.utils.NameUtils.isLegalName(pName);
         /*if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
             return false;
         } else {
@@ -1357,12 +1358,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     /**
      * Reformat name to be only alphanumeric with underscores "_" or hyphens "-".
-     * Calls Teselagen.utils.FormatUtils.reformatName().
+     * Calls Teselagen.utils.NameUtils.reformatName().
      * @param {String} pName
      * @returns {String} New name.
      */
     reformatName: function(pName) {
-        return Teselagen.utils.FormatUtils.reformatName(pName);
+        return Teselagen.utils.NameUtils.reformatName(pName);
         //return pName.replace(/[^a-zA-Z0-9_\-]/g, "");
     }
 

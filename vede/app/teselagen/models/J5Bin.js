@@ -12,7 +12,7 @@ Ext.define("Teselagen.models.J5Bin", {
         "Teselagen.models.Cell",
         "Teselagen.constants.Constants",
         "Teselagen.constants.SBOLIcons",
-        "Teselagen.utils.FormatUtils",
+        "Teselagen.utils.NameUtils",
         "Teselagen.utils.NullableInt"
     ],
 
@@ -52,11 +52,11 @@ Ext.define("Teselagen.models.J5Bin", {
                     record.self.highestDefaultNameIndex += 1;
                     name = record.self.defaultNamePrefix/*+ record.self.highestDefaultNameIndex*/;
                 } else {
-                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                    if (Teselagen.utils.NameUtils.isLegalName(v)) {
                         name = v.toString();
                     } else {
                         if(Vede.application.warnings) console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                        name = Teselagen.utils.FormatUtils.reformatName(v);
+                        name = Teselagen.utils.NameUtils.reformatName(v);
                     }
                 }
                 return name;

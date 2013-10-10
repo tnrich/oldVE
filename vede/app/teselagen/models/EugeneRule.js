@@ -49,11 +49,11 @@ Ext.define("Teselagen.models.EugeneRule", {
                     name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
                     record.self.highestDefaultNameIndex += 1;
                 } else {
-                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                    if (Teselagen.utils.NameUtils.isLegalName(v)) {
                         name =  v.toString();
                     } else {
                         console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                        name = Teselagen.utils.FormatUtils.reformatName(v);
+                        name = Teselagen.utils.NameUtils.reformatName(v);
                     }
                 }
                 return name;

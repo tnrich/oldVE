@@ -24,7 +24,8 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         "Teselagen.bio.parsers.GenbankFeatureQualifier",
         "Teselagen.bio.parsers.GenbankFeaturesKeyword",
         "Teselagen.bio.parsers.GenbankLocusKeyword",
-        "Teselagen.bio.parsers.GenbankOriginKeyword"
+        "Teselagen.bio.parsers.GenbankOriginKeyword",
+        "Teselagen.utils.NameUtils"
     ],
 
     singleton: true,
@@ -466,6 +467,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
      */
     jbeiseqJsonToGenbank: function(json) {
         var result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+        var NameUtils = Teselagen.utils.NameUtils;
 
         //===============
         // LOCUSKEYWORD
@@ -483,6 +485,11 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             date: date
         });
 
+        if(!NameUtils.isLegalName(locus.getLocusName())) {
+            locus.setLocusName(NameUtils.reformatName(locus.getLocusName()));
+            result.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
+        }
+
         result.addKeyword(locus);
 
         //===============
@@ -497,7 +504,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
 
             var locations   = [];
             var qualifiers  = [];
-            
+
             var type       = ft["seq:type"];
             var complement = ft["seq:complement"];
 
