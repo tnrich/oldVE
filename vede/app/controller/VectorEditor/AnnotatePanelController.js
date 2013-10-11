@@ -52,16 +52,16 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
         listenersObject[this.MenuItemEvent.GOTO_WINDOW_OPENED] = this.onGoToWindowOpened;
 
-        listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] = 
+        listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] =
             this.onShowComplementaryChanged;
-        listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] = 
+        listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] =
             this.onShowSpacesChanged;
-        listenersObject[this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED] = 
+        listenersObject[this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED] =
             this.onShowSequenceAAChanged;
-        listenersObject[this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED] = 
+        listenersObject[this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED] =
             this.onShowRevcomAAChanged;
 
-        listenersObject[this.SelectionLayerEvent.HANDLE_CLICKED] = 
+        listenersObject[this.SelectionLayerEvent.HANDLE_CLICKED] =
             this.onHandleClicked;
         listenersObject[this.SelectionLayerEvent.HANDLE_RELEASED] =
             this.onHandleReleased;
@@ -133,15 +133,23 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         pCmp.el.on("mousemove", this.onMousemove, this);
         // Set the tabindex attribute in order to receive keyboard events on the div.
         pCmp.el.dom.setAttribute("tabindex", "0");
-        pCmp.el.on("keydown", this.onKeydown, this);       
-        pCmp.el.on("paste", this.onPaste, this);       
+        pCmp.el.on("keydown", this.onKeydown, this);
+        pCmp.el.on("paste", this.onPaste, this);
     },
 
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
         // Calculate the BP's per row, rounded to the nearest 10.
-        var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
+        var newBpPerRow;
         var selectionStart;
         var selectionEnd;
+
+        // Since we can't do text-spacing in Firefox, we need a different
+        // formula for the number of basepairs per row.
+        if(Ext.isGecko) {
+            newBpPerRow = Math.floor(width / 80) * 10;
+        } else {
+            newBpPerRow = Math.floor((width - 60) / 100) * 10;
+        }
 
         if(newBpPerRow < this.self.MIN_BP_PER_ROW) {
             newBpPerRow = this.self.MIN_BP_PER_ROW;
@@ -193,7 +201,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         var numberField = goToWindow.down("numberfield");
 
         goToWindow.CaretEvent = this.CaretEvent;
-        
+
         numberField.on("keyup", function(field, event) {
             if(event.getKey() === event.ENTER) {
                 goToWindow.moveto();
@@ -296,9 +304,9 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
             this.changeCaretPosition(index, false, true);
 
-            if(this.SelectionLayer.selected && 
+            if(this.SelectionLayer.selected &&
                pEvt.target.id !== "selectionRectangle" &&
-               pEvt.button != 2) {           	
+               pEvt.button != 2) {
                 this.SelectionLayer.deselect();
                 this.application.fireEvent(
                     this.SelectionEvent.SELECTION_CANCELED);
@@ -332,7 +340,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
                     this.selectionDirection = 1;
                 }
 
-                this.changeCaretPosition(bpIndex, false, false); 
+                this.changeCaretPosition(bpIndex, false, false);
             } else if(this.endHandleResizing) {
                 this.endSelectionIndex = bpIndex;
 
@@ -344,17 +352,17 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
                 this.changeCaretPosition(this.startSelectionIndex, false, false);
             } else {
-                this.endSelectionIndex = bpIndex; 
+                this.endSelectionIndex = bpIndex;
 
                 this.changeCaretPosition(this.endSelectionIndex, false, false);
             }
-                
+
             if(this.SequenceAnnotationManager.annotator.isValidIndex(this.startSelectionIndex) &&
                this.SequenceAnnotationManager.annotator.isValidIndex(this.endSelectionIndex)) {
                 var start = this.startSelectionIndex;
                 var end = this.endSelectionIndex;
 
-                if(this.selectionDirection == 0 && 
+                if(this.selectionDirection == 0 &&
                    this.startSelectionIndex != this.endSelectionIndex) {
                     if(this.startSelectionIndex < this.endSelectionIndex) {
                         this.selectionDirection = 1;
@@ -378,13 +386,13 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onMouseup: function(pEvt, pOpts) {
-        if(!(this.mouseIsDown || this.startHandleResizing || 
+        if(!(this.mouseIsDown || this.startHandleResizing ||
              this.endHandleResizing)) {
             return;
         }
 
         this.mouseIsDown = false;
-        
+
         if(this.SelectionLayer.selected && this.SelectionLayer.selecting) {
             this.SelectionLayer.endSelecting();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
@@ -392,7 +400,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
                                        this.SelectionLayer.start,
                                        this.SelectionLayer.end);
 
-            // Depending on selection direction, move caret either to start or 
+            // Depending on selection direction, move caret either to start or
             // end of selection.
             if(this.startHandleResizing) {
                 this.changeCaretPosition(this.SelectionLayer.start, false, false);
@@ -416,7 +424,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
                                        this.SelectionLayer.start,
                                        this.SelectionLayer.end);
         } else if(pEvt.button == 2) {
-        	
+
         } else {
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
@@ -425,7 +433,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         this.startHandleResizing = false;
         this.endHandleResizing = false;
     },
-    
+
     select: function(start, end) {
         this.startSelectionIndex = start;
         this.endSelectionIndex = end;
@@ -437,7 +445,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     changeCaretPosition: function(index, silent, scrollToCaret) {
         if(index >= 0 && this.caretIndex !== index &&
            index <= this.SequenceManager.getSequence().toString().length) {
-            
+
             this.callParent(arguments);
             this.SequenceAnnotationManager.adjustCaret(index);
 
@@ -468,7 +476,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     onActiveEnzymesChanged: function() {
         this.callParent();
 
-        if(this.SequenceAnnotationManager.sequenceManager && 
+        if(this.SequenceAnnotationManager.sequenceManager &&
            this.SequenceAnnotationManager.showCutSites) {
             this.SequenceAnnotationManager.render();
         }

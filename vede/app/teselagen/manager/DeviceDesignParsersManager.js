@@ -791,7 +791,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
                 for(var oldName in existingSuffixes) {
                     var rule = ruleDuplNameMap[oldName];
-                    //debugger;
                     var newName = oldName+(parseInt(existingSuffixes[oldName])+1);
                     var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
                     conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
@@ -864,7 +863,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     },
 
     backgroundSequenceProcessing: function(parts){
-        // debugger;
         var processFlag = true;
         toastr.options.onclick = function(){
             processFlag = false;
@@ -873,7 +871,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var countPartProcessing = parts.length;
         parts.forEach(function(part,partKey){
             if(processFlag) {
-                debugger;
                 part.getSequenceFile({
                     callback: function(sequence){
                     sequence.processSequence(function(err,seqMgr,gb){
@@ -889,7 +886,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             sequence.set("name",gb.getLocus().locusName);
                         }
                         if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
-                        //if(err) debugger;
                     });
                 }});
             }
