@@ -83,6 +83,15 @@ input {
     left:10px;
 }
 
+.signup_btn a, .login_btn a{
+    color: #006cab !important;
+    font-weight: 600 !important;
+}
+
+.signup_btn a:hover, .login_btn a:hover{
+    color: #003F66 !important;
+}
+
 #land-top {
     margin-top: 80px;
 }
