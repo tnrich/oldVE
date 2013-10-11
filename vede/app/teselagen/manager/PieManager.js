@@ -372,7 +372,9 @@ Ext.define("Teselagen.manager.PieManager", {
     fitWidthToContent: function(scope, scrollToCenter) {
         var container = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='PieContainer']");
 
-        if(container && container.el) {
+        // Firefox fails at the getBBox() step.
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=612118
+        if(container && container.el && !Ext.isGecko) {
             var pc = container.el.dom;
             var frame = scope.pie.select(".pieFrame").node();
             var pcRect = pc.getBoundingClientRect();
@@ -386,7 +388,9 @@ Ext.define("Teselagen.manager.PieManager", {
                 pcRect = pc.getBoundingClientRect();
                 frameRect = frame.getBoundingClientRect();
 
-                var pieBox = scope.pie.node().getBBox();
+                var pieBox;
+
+                pieBox = scope.pie.node().getBBox();
 
                 if(pieBox.height === 0 || pieBox.width === 0) {
                     return;

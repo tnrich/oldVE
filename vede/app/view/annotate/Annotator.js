@@ -8,7 +8,7 @@ Ext.define("Vede.view.annotate.Annotator", {
                "Teselagen.renderer.annotate.FeatureRenderer",
                "Teselagen.renderer.annotate.ORFRenderer",
                "Teselagen.renderer.annotate.SequenceRenderer"],
-    
+
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
 
@@ -46,18 +46,18 @@ Ext.define("Vede.view.annotate.Annotator", {
         this.callParent([inData]);
         this.initConfig(inData);
         this.cls = "AnnotationSurface";
-        
+
         // Firefox doesn't support SVG's text-width, so we have to modify
         // CHAR_WIDTH if the user is using Firefox.
         if(Ext.isGecko) {
-            this.self.CHAR_WIDTH = 7.25;
+            this.self.CHAR_WIDTH = 6;
         }
 
         this.sequenceAnnotator = inData.sequenceAnnotator;
 
         this.createSequenceRenderer();
     },
-    
+
     init: function() {
         var containerId = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='AnnotateContainer']").el.dom.id;
 
@@ -66,7 +66,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.annotateSVG = d3.select("#" + containerId + ".AnnotateContainer")
                 .append("svg:svg")
                 .attr("class", "annotateSVG");
-            
+
             this.linesSVG = this.annotateSVG.append("svg:g")
                 .attr("class", "linesSVG");
 
@@ -90,7 +90,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.featuresSVG = this.annotateSVG.select(".featuresSVG");
         }
     },
-    
+
     sequenceChanged: function(){
     },
 
@@ -105,7 +105,7 @@ Ext.define("Vede.view.annotate.Annotator", {
 
         var x1 = 10;
         var y = 20;
-        
+
         if(this.sequenceAnnotator.getSequenceManager()) {
             this.renderSequence();
             this.drawSplitLines();
@@ -122,7 +122,7 @@ Ext.define("Vede.view.annotate.Annotator", {
                 this.loadCutSiteRenderers();
                 this.renderCutSites();
             }
-            
+
             if (this.sequenceAnnotator.getShowOrfs()){
                 this.loadOrfRenderers();
                 this.renderOrfs();
@@ -143,7 +143,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             || !retrievedFeatures){
             return;
         }
-        
+
         var that = this;
         for (var i = 0; i < retrievedFeatures.length; i++){
             var feature = retrievedFeatures[i];
@@ -237,7 +237,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         }else{
             var numberOfCharacters = pIndex - row.getIndex() * this.sequenceAnnotator.getBpPerRow();
 
-            
+
             if(this.sequenceAnnotator.showSpaceEvery10Bp){
                 numberOfCharacters += Math.floor(numberOfCharacters / 10);
             }
@@ -305,7 +305,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             for (var i = 0; i < this.featureRenderers.length; ++i){
                 var featureRenderer = this.featureRenderers[i];
                 featureRenderer.render();
-                
+
             }
         }
     },
@@ -378,7 +378,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         d3.selectAll(".sequenceSVG").remove(); 
         this.sequenceSVG = this.annotateSVG.append("svg:g")
             .attr("class", "sequenceSVG");
-        
+
         d3.selectAll(".bpLabelsSVG").remove(); 
         this.bpLabelsSVG = this.annotateSVG.append("svg:g")
                 .attr("class", "bpLabelsSVG");

@@ -11,9 +11,9 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         aaManager: null,
         restrictionEnzymeManager: null,
         highlights: null,
-    
+
         features: null,
-        
+
         contentHolder: null,
         annotator: null,
 
@@ -122,13 +122,13 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     bpAtPoint: function(x, y) {
         var numberOfRows = this.RowManager.rows.length;
         var bpIndex = -1;
-        
+
         for(var i = 0; i < numberOfRows; i++) {
             var row = this.RowManager.rows[i];
-            
+
             if((y >= row.metrics.y) && (y <= row.metrics.y + row.metrics.height)) {
                 bpIndex = i * this.bpPerRow;
-                
+
                 if(x < row.sequenceMetrics.x) {
                 } else if(x > row.sequenceMetrics.x + row.sequenceMetrics.width) {
                     bpIndex += row.rowData.sequence.length;
@@ -136,19 +136,19 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
                     var numberOfCharactersFromBeginning = Math.floor((x - 
                                         row.sequenceMetrics.x + 15 / 2) / 
                                         this.annotator.self.CHAR_WIDTH);
-                    
+
                     var numberOfSpaces = 0;
-                    
+
                     if(this.showSpaceEvery10Bp) {
                         numberOfSpaces = Math.floor(numberOfCharactersFromBeginning / 11);
                     }
-                    
+
                     var numberOfValidCharacters = numberOfCharactersFromBeginning - 
                                                   numberOfSpaces;
-                    
+
                     bpIndex += numberOfValidCharacters;
                 }
-                
+
                 break;
             }
         }

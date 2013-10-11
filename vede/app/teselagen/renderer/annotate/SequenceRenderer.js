@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.renderer.annotate.SequenceRenderer
- * Class which handles SVG generating and rendering of the DNA sequence, both 
+ * Class which handles SVG generating and rendering of the DNA sequence, both
  * forward and reverse, as well as miscellaneous features like the bp labels and
  * amino acid sequences.
  * @author Micah Lerner
@@ -98,7 +98,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             if(this.sequenceAnnotator.getShowCutSites() &&
                row.getRowData().getCutSitesAlignment()){
                 if(row.getRowData().getCutSitesAlignment().getCount() > 0){
-                    this.totalHeight += (Math.max.apply(null, 
+                    this.totalHeight += (Math.max.apply(null,
                         row.getRowData().getCutSitesAlignment().getValues()) + 1) * 30;
                 }
             }
@@ -167,7 +167,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             row.sequenceMetrics.y = sequenceY;
             row.sequenceMetrics.width = sequenceWidth;
             row.sequenceMetrics.height = sequenceHeight;
-            
+
             var newRow = Ext.create("Teselagen.models.sequence.Row", {
                 rowData: row.getRowData(),
                 metrics: newMetrics,
@@ -176,10 +176,10 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             });
             newRows.push(newRow);
 
-            this.renderBpLabel(row.getRowData().getStart() + 1, rowX + 10, 
+            this.renderBpLabel(row.getRowData().getStart() + 1, rowX + 10,
                                sequenceY + 20);
         }
-        
+
         this.sequenceAnnotator.getRowManager().setRows(newRows);
         this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
 
@@ -193,7 +193,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         this.sequenceAnnotationManager.sequenceSVG.selectAll(".bpLabelSVG")
                         .attr("xml:space", "preserve");
-                        
+
 
         this.sequenceAnnotationManager.aminoAcidsSVG.selectAll("text")
                         .attr("xml:space", "preserve")
@@ -218,7 +218,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var end = 10 - pShift;
             while(start < stringLength){
                 result += pString.substring(start, end);
-                
+
                 start = end;
 
                 end += 10;
@@ -236,7 +236,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var baseStart;
         var aaStart = [];
         var aaEnd = [];
-        
+
         // Which frame will be displaying at the first character of the row.
         var leadingFrame;
 
@@ -267,19 +267,19 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         // Calculate which aa index should first be displayed for each frame.
         baseStart = Math.floor(start / 3) * 2; // *2 to account for spaces in the aa sequence.
-        
+
         aaStart[0] = baseStart + frontOffsets[0] * 2;
         aaStart[1] = baseStart + frontOffsets[1] * 2;
         aaStart[2] = baseStart + frontOffsets[2] * 2;
 
-        // Calculate which aa index will be displayed last for each frame. 
-        aaEnd[leadingFrame] = aaStart[leadingFrame] + 
+        // Calculate which aa index will be displayed last for each frame.
+        aaEnd[leadingFrame] = aaStart[leadingFrame] +
                                             Math.ceil((end - start + 1) / 3) * 2;
 
-        aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + 
+        aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] +
                                             Math.ceil((end - start) / 3) * 2;
 
-        aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + 
+        aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] +
                                             Math.ceil((end - start - 1) / 3) * 2;
 
         var aminoAcids1 = this.aminoAcidsString1.substring(aaStart[0], aaEnd[0]);
@@ -319,7 +319,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
             .attr("class", "aminoAcidSVG")
-            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
+            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight - verticalOffset)
             .text(aminoAcids3);
 
@@ -330,7 +330,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var baseStart;
         var aaStart = [];
         var aaEnd = [];
-        
+
         // Which frame will be displaying at the first character of the row.
         var leadingFrame;
 
@@ -362,20 +362,20 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         // Calculate which aa index should first be displayed for each frame.
         baseStart = Math.floor(start / 3) * 2; // *2 to account for spaces in the aa sequence.
-        
+
         aaStart[0] = baseStart + frontOffsets[0] * 2;
         aaStart[1] = baseStart + frontOffsets[1] * 2;
         aaStart[2] = baseStart + frontOffsets[2] * 2;
 
-        // Calculate which aa index will be displayed last for each frame. 
+        // Calculate which aa index will be displayed last for each frame.
         if(row.getIndex() !== this.sequenceAnnotator.getRowManager().getRows().length - 1) {
-            aaEnd[leadingFrame] = aaStart[leadingFrame] + 
+            aaEnd[leadingFrame] = aaStart[leadingFrame] +
                                                 Math.ceil((end - start + 1) / 3) * 2;
 
-            aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + 
+            aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] +
                                                 Math.ceil((end - start) / 3) * 2;
 
-            aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + 
+            aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] +
                                                 Math.ceil((end - start - 1) / 3) * 2;
         // Calculate the end index for the last row.
         } else {
@@ -455,7 +455,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
             .attr("class", "revComAminoAcidSVG")
-            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
+            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight + verticalOffset)
             .text(aminoAcids3);
 
@@ -480,7 +480,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         this.sequenceAnnotationManager.sequenceSVG.append("svg:text")
             .attr("class", "complementarySequenceSVG")
             .attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight + 
+            .attr("y", this.totalHeight +
                   this.self.COMPLEMENTARY_VERTICAL_OFFSET)
             .text(sequenceString);
 
