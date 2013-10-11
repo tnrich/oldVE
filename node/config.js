@@ -19,7 +19,7 @@ module.exports = function(app, express) {
     // Express Framework Configuration
 
     //app.set('env','production');
-    app.dbname = "teselagen";
+    app.dbname = "teselagenDev";
 
     var Opts = {
         host: "localhost",

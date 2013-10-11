@@ -58,10 +58,7 @@ Ext.define("Vede.controller.PartLibraryController", {
         });
     },
 
-    onPartListSelected: function(grid,part,item) {
-        console.log("Part selected");
-        console.log(part.get('name'));
-        console.log("Validating...");        
+    onPartListSelected: function(grid,part,item) {      
         Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get('name'));
         this.callbackFn(grid,part,item,this.partLibraryWindow);
     },
