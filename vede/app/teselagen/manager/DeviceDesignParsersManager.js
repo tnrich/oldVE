@@ -873,7 +873,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var countPartProcessing = parts.length;
         parts.forEach(function(part,partKey){
             if(processFlag) {
-                debugger;
+                parts.forEach(function (otherPart) {
+                    if((part.getSequenceFile().get("partSource") === otherPart.getSequenceFile().get("partSource")) && (part.getSequenceFile().get("hash") != otherPart.getSequenceFile().get("hash"))) {
+                        console.log("EROOR");
+                        console.log(part.get("name"), otherPart.get("name"));
+                    }
+                });
                 part.getSequenceFile({
                     callback: function(sequence){
                     sequence.processSequence(function(err,seqMgr,gb){

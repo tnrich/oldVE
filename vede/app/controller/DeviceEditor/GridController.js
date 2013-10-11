@@ -200,6 +200,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var nonidentical = false;
         var partSourceNonidentical = false;
         var identicalPart = null;
+        var conflictPart;
 
         if(!pPart.isMapped()) {
             cb(null);
@@ -209,9 +210,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             if(part.isMapped() && part.get("name") === name && part.get("id") !== pPart.get("id")) {
                 nonidentical = true;
             } else if (part.isMapped() && part.get("partSource") === partSource && part.get("id") !== pPart.get("id")) {
-                console.log(part.getSequenceFile().raw.hash, pPart.getSequenceFile().raw.hash);
-                if(part.getSequenceFile().raw.hash == pPart.getSequenceFile().raw.hash) {
-                    var partSourceNonidentical = true;
+                console.log(part.getSequenceFile().raw.hash !== pPart.getSequenceFile().raw.hash);
+                if(part.getSequenceFile().raw.hash !== pPart.getSequenceFile().raw.hash) {
+                    partSourceNonidentical = true;
+                    conflictPart = part;
                 }
             } else if(part.get("id") === pPart.get("id")) {
                 identicalPart = part;
@@ -229,7 +231,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         } else if (partSourceNonidentical) {
             Ext.MessageBox.show({
                 title: "Error",
-                msg: errorMessage || "Another part with the same sequence source exists in the design. Please select the same part or a part with another name.",
+                msg: errorMessage || 'The part you have selected, "' + pPart.get('name') + '", may not be used in the current design because its source sequence "' + pPart.get('partSource') + '" has the same name but is not identical to the source sequence "' + conflictPart.get('partSource') + '" for another part "' + conflictPart.get('name') + '" in the current design.' ,
                 buttons: Ext.MessageBox.OK,
                 icon:Ext.MessageBox.ERROR
             });
