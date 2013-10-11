@@ -6,6 +6,13 @@ module.exports = function(app, express){
     res.render('dashboard');
   });
 
+  app.get('/admin/users',function(req,res){
+    var User = app.db.model("User");
+    User.find().exec(function(err,users){
+      var users 
+    });
+  });
+
   app.get('/admin/manage', adminRestrict, function(req, res){
 
     // req.query.results = 20;

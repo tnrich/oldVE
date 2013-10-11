@@ -57,7 +57,12 @@ block container
         #push
 
     script(src='/js/jquery-1.10.2.min.js')
-    script(type='text/javascript', src='/js/stupidtable.min.js')
+    script(type='text/javascript', src='https://datatables.net/release-datatables/media/js/jquery.dataTables.js')
     script(src='/js/admin.js')
     script.
-        $("#user-table").stupidtable();
+        $(document).ready(function() {
+            var oTable = $('#user-table').dataTable( {
+                "bProcessing": true,
+                "sAjaxSource": '/admin/users'
+            } );
+        } );
