@@ -2,11 +2,42 @@ extends layout
 
 block container
 
-	.row
-		.large-12.small-12.large-centered.small-centered.columns
-			#banner_head Revolutionizing biological systems design.
-		.large-12.small-12.large-centered.small-centered.columns
-			#banner_head_sub A DNA design and assembly platform providing the most advanced Bio CAD/CAM system available.
+	.row#land-top
+		.large-7.small-12.columns#land-side
+			.large-12.small-12.columns
+				#banner_head Revolutionizing biological systems design.
+			.large-12.small-12.columns
+				#banner_head_sub A DNA design and assembly platform providing the most advanced Bio CAD/CAM system available.
+		.large-5.small-12.columns#land-form
+			form(data-validate="parsley")#signup_form.custom
+				.row
+					.row
+						.large-6.small-12.columns
+							input(type='text', id='first_name', placeholder='First Name', data-required="true")
+						.large-6.small-12.columns
+							input(type='text', id='last_name', placeholder='Last Name', data-required="true")
+					.row
+						.large-6.small-12.columns
+							input(type='text', id='username', placeholder='Username', data-required="true", data-type="alphanum")
+						.large-6.small-12.columns
+							input(type="password", id='password', placeholder='Password', data-required="true")
+					.row
+						.large-12.small-12.columns
+							input(type='email', id='email', placeholder='Email', data-required="true", data-type="email")
+					.row
+						.large-12.small-12.columns
+							select(id='organizationType', data-required="true")
+								option(value="", selected="selected", disabled="disabled") Select organization type
+								option(value="academic") Academic
+								option(value="government") Government
+								option(value="commercial") Commercial
+								option(value="independent") Independent
+					.row
+						.large-12.small-12.columns
+							input(type='text', id='organizationName', placeholder='Company/University Name', data-required="true")
+					.row.registration-buts
+							a.button.radius.expand#signup_submit Sign Up for Beta
+
 	.row#banner
 		#banner_around
 			#banner_back
@@ -90,4 +121,3 @@ block container
 	#section-sponsors
 		.large-12.small-12
 			img(src="img/site_resources/sponsors.png")
-

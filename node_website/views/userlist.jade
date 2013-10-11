@@ -44,16 +44,6 @@ block container
                             th #{user.lastAccess}
                             th
                                 a(href="/admin/edituser?id=#{user.id}") Edit
-            //- .pagination-centered#pagination
-            //-     ul.pagination
-            //-         li.arrow
-            //-             a(href='#{arrows.left.link}') «
-            //-         each page in pages
-            //-             - var klass = (page.current ? 'current' : '')
-            //-             li(class=klass)
-            //-                 a(href="#{page.link}") #{page.pageNumber}
-            //-         li.arrow
-            //-             a(href='#{arrows.right.link}') »
         #push
 
     script(src='/js/jquery-1.10.2.min.js')
