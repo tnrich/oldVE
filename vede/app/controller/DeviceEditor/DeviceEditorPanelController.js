@@ -237,7 +237,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             method: "GET",
             success: function (response) {
                 //Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
-            	Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText);
+                Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText);
             }
         });
     },
