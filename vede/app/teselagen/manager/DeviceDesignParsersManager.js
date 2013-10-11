@@ -62,25 +62,35 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         Teselagen.manager.GridManager.selectedGridPart = null;
         Teselagen.manager.GridManager.selectedGridBin = null;
 
-        this.backgroundSequenceProcessing(partsArray);
+        var next = this.backgroundSequenceProcessing(partsArray);
+        if(next[0]) {
+            if(typeof(cb)==="function")
+            {
+                return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
+            }
+            else
+            {
+                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-        if(typeof(cb)==="function")
-        {
-            return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
-        }
-        else
-        {
+                var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
+
+                Ext.Msg.show({
+                    title: "Are you sure you want to load example?",
+                    msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
+                    buttons: Ext.Msg.OKCANCEL,
+                    cls: "messageBox",
+                    fn: loadDesign,
+                    icon: Ext.Msg.QUESTION
+                });
+            }
+        } else {
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-            var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
-
-            Ext.Msg.show({
-                title: "Are you sure you want to load example?",
-                msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
-                buttons: Ext.Msg.OKCANCEL,
-                cls: "messageBox",
-                fn: loadDesign,
-                icon: Ext.Msg.QUESTION
+             Ext.MessageBox.show({
+                title: "Error",
+                msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
+                buttons: Ext.MessageBox.OK,
+                icon:Ext.MessageBox.ERROR
             });
         }
 
@@ -869,35 +879,46 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         toastr.options.onclick = function(){
             processFlag = false;
         };
+        var error = false;
+        var conflict;
         toastr.info("Parsing sequences in background (click to cancel)");
         var countPartProcessing = parts.length;
         parts.forEach(function(part,partKey){
             if(processFlag) {
                 parts.forEach(function (otherPart) {
                     if((part.getSequenceFile().get("partSource") === otherPart.getSequenceFile().get("partSource")) && (part.getSequenceFile().get("hash") != otherPart.getSequenceFile().get("hash"))) {
-                        console.log("EROOR");
-                        console.log(part.get("name"), otherPart.get("name"));
+                        error = true;
+                        console.log(part);
+                        console.log(otherPart);
+                        conflict = part.getSequenceFile().get("partSource");
                     }
                 });
-                part.getSequenceFile({
-                    callback: function(sequence){
-                    sequence.processSequence(function(err,seqMgr,gb){
-                        if(err)
-                        {
-                            countPartProcessing--;
-                            console.log("Sequence not imported");
-                            console.log(sequence);
-                        }
-                        else
-                        {
-                            countPartProcessing--;
-                            sequence.set("name",gb.getLocus().locusName);
-                        }
-                        if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
-                        //if(err) debugger;
-                    });
-                }});
+                if(!error) {
+                    part.getSequenceFile({
+                        callback: function(sequence){
+                        sequence.processSequence(function(err,seqMgr,gb){
+                            if(err)
+                            {
+                                countPartProcessing--;
+                                console.log("Sequence not imported");
+                                console.log(sequence);
+                            }
+                            else
+                            {
+                                countPartProcessing--;
+                                sequence.set("name",gb.getLocus().locusName);
+                            }
+                            if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
+                            //if(err) debugger;
+                        });
+                    }});
+                }
             }
         });
+        if(error) {
+            return [false, conflict];
+        } else {
+            return true;
+        }
     }
 });
