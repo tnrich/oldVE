@@ -40,11 +40,11 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             toastr.options.onclick = null;
             toastr.info ("Sequence Saved");
 
-
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-
-            if(typeof (cb) === "function") { cb(); }
+            if(typeof (cb) === "function") {
+                cb();
+            }
         };
 
         self.sequence.set('size', this.sequenceFileManager.getSequence().getSymbolsLength());
@@ -55,8 +55,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     Ext.getCmp("mainAppPanel").getActiveTab().model = self.sequenceFileManager.clone();
                     Ext.getCmp("mainAppPanel").getActiveTab().modelId = self.sequence.id;
                     var response = JSON.parse(operation.response.responseText);
-                    
-                    
+
                     if(response.duplicated)
                     {
                         successFullSavedCallback(true);
@@ -87,7 +86,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
                     self.sequence.set("name",text);
                     self.sequence.getSequenceManager().setName(text);
-                    
+
                     saveToServer(function(err){
                     });
 

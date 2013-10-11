@@ -158,6 +158,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.models.j5Output.Warning": [],
   "Teselagen.utils.FormatUtils": [],
   "Teselagen.manager.DeviceDesignParsersManager": [],
+  "Teselagen.utils.NameUtils": [],
   "Ext.ux.DataView.Animated": [],
   "Vede.view.ve.VectorEditorStatusPanel": [],
   "Teselagen.event.SequenceManagerEvent": [],
@@ -592,6 +593,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.manager.DeviceDesignParsersManager": [
     "DeviceDesignParsersManager"
   ],
+  "Teselagen.utils.NameUtils": [],
   "Ext.ux.DataView.Animated": [],
   "Vede.view.ve.VectorEditorStatusPanel": [
     "widget.VectorEditorStatusPanel"

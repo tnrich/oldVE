@@ -22,7 +22,6 @@ Ext.define("Teselagen.models.SequenceFile", {
         },
         buildUrl: function(request) {
 
-
             // GET SEQUENCES
             if( request.action === "read" && !request.operation.id)
             {
@@ -30,7 +29,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                     //delete request.params;
                     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
-
 
             // GET SPECIFIC SEQUENCE
             if( request.operation.action === "read" && !request.operation.filters && request.params.id)
@@ -40,7 +38,6 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
-            
             // CREATE A NEW SEQUENCE
             if(request.action === "create" && !request.records[0].data.id)
             {
@@ -237,7 +234,6 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @returns {String} SequenceHash
      */
     setSequenceFileContent: function(pContent) {
-
         if (pContent === undefined || pContent === null) {
             pContent = "";
         }
@@ -253,13 +249,11 @@ Ext.define("Teselagen.models.SequenceFile", {
         return hash;
     },
 
-
     /**
      * If no Part Source is given, this function determines it based on SequenceFileContent.
      * @private
      */
     makePartSource: function(pFormat, pContent) {
-
         var constants = Teselagen.constants.Constants;
         var source = ""; //"UNKNOWN";
         var cnt;

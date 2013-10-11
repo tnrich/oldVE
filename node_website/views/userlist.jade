@@ -5,49 +5,51 @@ block container
     #contact
         .row(style="max-width: 90%;")
             .large-12.small-12.page-header Administration
+        .row(style="max-width: 80%;")
+            table#user-table(style="width:100%;").large-12.small-12
+        #push.toLocaleString()
 
-            table#user-table.large-12.small-12.large-centered.small-centered
-                thead
-                    tr
-                        th(data-sort="string") Last Name
-                        th(data-sort="string") First Name
-                        th(data-sort="string") Email
-                        th(data-sort="string") Username
-                        th(data-sort="string") Org Type
-                        th(data-sort="string") Org Name
-                        th(data-sort="string") Activated
-                        th(data-sort="string") Type
-                        th(data-sort="string") Date Created
-                        th(data-sort="string") Last Access
-                        th Edit
-                tbody
-                    each user in users
-                        tr
-                            th #{user.lastName}
-                            th #{user.firstName}
-                            th #{user.email}
-                            th #{user.username}
-                            if typeof(user.groupType) == 'undefined' || user.groupType == '' || user.groupType == '-'
-                                th -
-                            else
-                                th #{user.groupType}
-                            if typeof(user.groupName) == 'undefined' || user.groupName == '' || user.groupName == '-'
-                                th -
-                            else
-                                th #{user.groupName}
-                            th #{user.activated}
-                            if typeof(user.userType) == 'undefined' || user.userType == '' || user.userType == '-'
-                                th -
-                            else
-                                th #{user.userType}
-                            th #{user.dateCreated}
-                            th #{user.lastAccess}
-                            th
-                                a(href="/admin/edituser?id=#{user.id}") Edit
-        #push
-
-    script(src='/js/jquery-1.10.2.min.js')
-    script(type='text/javascript', src='/js/stupidtable.min.js')
-    script(src='/js/admin.js')
-    script.
-        $("#user-table").stupidtable();
+block scripts
+    script(src='/js/jquery-1.8.2.js')
+    script(src='/js/jquery.dataTables.min.js')
+    script(src='/js/jquery.timeago.js')
+    script
+        $(document).ready(function(){
+            $.fn.dataTableExt.sErrMode = 'ignore';
+            var oTable = $('#user-table').dataTable( {
+                "bProcessing": true,
+                "sAjaxSource": "/admin/users",
+                "aoColumns": [
+                    { "mData": "lastName" , sTitle: "Last Name"},
+                    { "mData": "firstName" , sTitle: "First Name"},
+                    { "mData": "email" , sTitle: "Email"},
+                    { "mData": "username" , sTitle: "Username"},
+                    { "mData": "groupType" , sTitle: "Org Type"},
+                    { "mData": "groupName" , sTitle: "Org Name", sWidth: "20%"},
+                    { "mData": "activated" , sTitle: "Activated"},
+                    { "mData": "dateCreated" , sTitle: "Date created", sWidth: "20%",
+                      mRender: function ( data, type, full ) {
+                        return new Date(data).toLocaleString();
+                      }
+                    },
+                    { "mData": "lastAccess", sDefaultContent: "-", sTitle: "Last Access",
+                      mRender: function ( data, type, full ) {
+                        if(data==="-") return "never";
+                        return jQuery.timeago(new Date(data));
+                      }
+                    },
+                    { "mData": "id",
+                      mRender: function ( data, type, full ) {
+                            var link = '<a href="/admin/edituser/?id='+data.toString()+'">Edit</a>';
+                            return link;
+                    }
+                    }
+                ],
+                "sAjaxDataProp": "users",
+                "bStateSave": true,
+                    fnRowCallback: function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+                        if(!aData.activated) $(nRow).css('background-color', 'rgba(255, 0, 0, 0.2)');
+                        else $(nRow).css('background-color', 'rgba(51, 255, 51, 0.2)');
+                    }
+            } );
+        });

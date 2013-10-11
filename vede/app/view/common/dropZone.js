@@ -64,10 +64,19 @@ Ext.define('Vede.view.common.dropZone', {
         var sequenceLibrary = Ext.getCmp("sequenceLibrary");
         sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
-        
+
         var self = this;
 
-        self.processFiles(evt.dataTransfer.items);
+        if(!Ext.isGecko) {
+            self.processFiles(evt.dataTransfer.items);
+        } else {
+            // Mozilla is incompetent.
+            Ext.Msg.alert("Drag and Drop Error", "Mozilla Firefox does not support drag-and-drop sequence importing.");
+
+            Ext.defer(function() {
+                sequenceLibrary.el.unmask();
+            }, 10);
+        }
     },
 
     handleDragOver: function(evt) {
@@ -78,13 +87,13 @@ Ext.define('Vede.view.common.dropZone', {
         // $(".batch-import-area").fadeIn("fast");
         evt.dataTransfer.dropEffect = 'copy';
     },
- 
+
     //Handle onDrop
-    processFiles: function(items) {     
+    processFiles: function(items) {
         var length = items.length;
 
         Teselagen.bio.parsers.ParsersManager.startCount = 0;
-        
+
         Teselagen.bio.parsers.ParsersManager.progressIncrement = 100/items.length;
         for (var i = 0; i < length; i++) {
             var entries = [];
@@ -98,7 +107,6 @@ Ext.define('Vede.view.common.dropZone', {
         Ext.defer(function() {
             sequenceLibrary.el.unmask();
         }, 10);
-
     },
 
     // Recursive directory read 
