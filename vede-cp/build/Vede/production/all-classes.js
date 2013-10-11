@@ -70641,6 +70641,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     self.processFiles(evt.dataTransfer.items);
   } else {
     Ext.Msg.alert("Drag and Drop Error", "Mozilla Firefox does not support drag-and-drop sequence importing.");
+    Ext.defer(function() {
+  sequenceLibrary.el.unmask();
+}, 10);
   }
 }, handleDragOver: function(evt) {
   evt.stopPropagation();
@@ -77247,10 +77250,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.GridManager.addColumnLeft();
 }, onAddColumnRight: function() {
   this.GridManager.addColumnRight();
-}, onValidateDuplicatedPartNameEvent: function(pPart, name, cb, errorMessage) {
+}, onValidateDuplicatedPartNameEvent: function(pPart, name, partSource, cb, errorMessage) {
   var me = this;
   var duplicated = false;
   var nonidentical = false;
+  var partSourceNonidentical = false;
   var identicalPart = null;
   if (!pPart.isMapped()) 
   {
@@ -77260,6 +77264,13 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (part.isMapped() && part.get("name") === name && part.get("id") !== pPart.get("id")) 
   {
     nonidentical = true;
+  } else if (part.isMapped() && part.get("partSource") === partSource && part.get("id") !== pPart.get("id")) 
+  {
+    console.log(part.getSequenceFile().raw.hash, pPart.getSequenceFile().raw.hash);
+    if (part.getSequenceFile().raw.hash == pPart.getSequenceFile().raw.hash) 
+    {
+      var partSourceNonidentical = true;
+    }
   } else if (part.get("id") === pPart.get("id")) 
   {
     identicalPart = part;
@@ -77268,6 +77279,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (nonidentical) 
   {
     Ext.MessageBox.show({title: "Error", msg: errorMessage || "Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.", buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
+  } else if (partSourceNonidentical) 
+  {
+    Ext.MessageBox.show({title: "Error", msg: errorMessage || "Another part with the same sequence source exists in the design. Please select the same part or a part with another name.", buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
   } else {
     cb(identicalPart);
   }
@@ -77415,9 +77429,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   val = val.charAt(0).toUpperCase() + val.slice(1);
   return val;
 }}, {xtype: 'gridcolumn', flex: 1, text: 'Source', width: 80, dataIndex: 'partSource'}], listeners: {"itemclick": function(grid, part) {
-  Vede.application.fireEvent(Teselagen.event.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), function(identicalPart) {
+  Vede.application.fireEvent(Teselagen.event.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get("name"), part.get("partSource"), function(identicalPart) {
   var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
   var activeProject = inspectorController.activeProject;
+  console.log(allParts);
   var bin = Teselagen.manager.DeviceDesignManager.getBinByIndex(activeProject, inspectorController.selectedBinIndex);
   if (bin) 
   {
@@ -81412,7 +81427,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.cls = "AnnotationSurface";
   if (Ext.isGecko) 
   {
-    this.self.CHAR_WIDTH = 7.25;
+    this.self.CHAR_WIDTH = 6;
   }
   this.sequenceAnnotator = inData.sequenceAnnotator;
   this.createSequenceRenderer();
