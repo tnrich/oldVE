@@ -28,19 +28,19 @@ block scripts
                     { "mData": "groupName" , sTitle: "Org Name", sWidth: "20%"},
                     { "mData": "activated" , sTitle: "Activated"},
                     { "mData": "dateCreated" , sTitle: "Date created", sWidth: "20%",
-                      fnRender: function ( o, val ) {
-                        return new Date(val).toLocaleString();
+                      mRender: function ( data, type, full ) {
+                        return new Date(data).toLocaleString();
                       }
                     },
-                    { "mData": "lastAccess", sDefaultContent: "", sTitle: "Last Access",
-                      fnRender: function ( o, val ) {
-                        if(val==="") return "never";
-                        return jQuery.timeago(new Date(val));
+                    { "mData": "lastAccess", sDefaultContent: "-", sTitle: "Last Access",
+                      mRender: function ( data, type, full ) {
+                        if(data==="-") return "never";
+                        return jQuery.timeago(new Date(data));
                       }
                     },
                     { "mData": "id",
-                      fnRender: function ( o, val ) {
-                            var link = '<a href="/admin/edituser/?id='+val.toString()+'">Edit</a>';
+                      mRender: function ( data, type, full ) {
+                            var link = '<a href="/admin/edituser/?id='+data.toString()+'">Edit</a>';
                             return link;
                     }
                     }
