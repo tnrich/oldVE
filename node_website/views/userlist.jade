@@ -5,64 +5,47 @@ block container
     #contact
         .row(style="max-width: 90%;")
             .large-12.small-12.page-header Administration
+        .row
+            table#user-table(style="width:100%;")
+        #push.toLocaleString()
 
-            table#user-table.large-12.small-12.large-centered.small-centered
-                thead
-                    tr
-                        th(data-sort="string") Last Name
-                        th(data-sort="string") First Name
-                        th(data-sort="string") Email
-                        th(data-sort="string") Username
-                        th(data-sort="string") Org Type
-                        th(data-sort="string") Org Name
-                        th(data-sort="string") Activated
-                        th(data-sort="string") Type
-                        th(data-sort="string") Date Created
-                        th(data-sort="string") Last Access
-                        th Edit
-                tbody
-                    each user in users
-                        tr
-                            th #{user.lastName}
-                            th #{user.firstName}
-                            th #{user.email}
-                            th #{user.username}
-                            if typeof(user.groupType) == 'undefined' || user.groupType == '' || user.groupType == '-'
-                                th -
-                            else
-                                th #{user.groupType}
-                            if typeof(user.groupName) == 'undefined' || user.groupName == '' || user.groupName == '-'
-                                th -
-                            else
-                                th #{user.groupName}
-                            th #{user.activated}
-                            if typeof(user.userType) == 'undefined' || user.userType == '' || user.userType == '-'
-                                th -
-                            else
-                                th #{user.userType}
-                            th #{user.dateCreated}
-                            th #{user.lastAccess}
-                            th
-                                a(href="/admin/edituser?id=#{user.id}") Edit
-            //- .pagination-centered#pagination
-            //-     ul.pagination
-            //-         li.arrow
-            //-             a(href='#{arrows.left.link}') «
-            //-         each page in pages
-            //-             - var klass = (page.current ? 'current' : '')
-            //-             li(class=klass)
-            //-                 a(href="#{page.link}") #{page.pageNumber}
-            //-         li.arrow
-            //-             a(href='#{arrows.right.link}') »
-        #push
-
-    script(src='/js/jquery-1.10.2.min.js')
-    script(type='text/javascript', src='https://datatables.net/release-datatables/media/js/jquery.dataTables.js')
-    script(src='/js/admin.js')
-    script.
-        $(document).ready(function() {
+block scripts
+    script(src='/js/jquery-1.8.2.js')
+    script(src='/js/jquery.dataTables.min.js')
+    script(src='/js/jquery.timeago.js')
+    script
+        $(document).ready(function(){
+            $.fn.dataTableExt.sErrMode = 'ignore';
             var oTable = $('#user-table').dataTable( {
                 "bProcessing": true,
-                "sAjaxSource": '/admin/users'
+                "sAjaxSource": "/admin/users",
+                "aoColumns": [
+                    { "mData": "lastName" , sTitle: "Last Name"},
+                    { "mData": "firstName" , sTitle: "First Name"},
+                    { "mData": "email" , sTitle: "Email"},
+                    { "mData": "username" , sTitle: "Username"},
+                    { "mData": "groupType" , sTitle: "Org Type"},
+                    { "mData": "groupName" , sTitle: "Org Name", sWidth: "20%"},
+                    { "mData": "activated" , sTitle: "Activated"},
+                    { "mData": "dateCreated" , sTitle: "Date created", sWidth: "20%",
+                      fnRender: function ( o, val ) {
+                        return new Date(val).toLocaleString();
+                      }
+                    },
+                    { "mData": "lastAccess", sDefaultContent: "", sTitle: "Last Access",
+                      fnRender: function ( o, val ) {
+                        if(val==="") return "never";
+                        return jQuery.timeago(new Date(val));
+                      }
+                    },
+                    { "mData": "id",
+                      fnRender: function ( o, val ) {
+                            var link = '<a href="/admin/edituser/?id='+val.toString()+'">Edit</a>';
+                            return link;
+                    }
+                    }
+                ],
+                "sAjaxDataProp": "users",
+                "bStateSave": true
             } );
-        } );
+        });

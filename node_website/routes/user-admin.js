@@ -8,8 +8,8 @@ module.exports = function(app, express){
 
   app.get('/admin/users',function(req,res){
     var User = app.db.model("User");
-    User.find().exec(function(err,users){
-      var users 
+    User.find({},{firstName:1,lastName:1,email:1,username:1,groupType:1,groupName:1,activated:1,userType:1,dateCreated:1,lastAccess:1}).exec(function(err,users){
+      res.json({users:users});
     });
   });
 
