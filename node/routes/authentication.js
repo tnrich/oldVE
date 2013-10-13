@@ -74,7 +74,6 @@ module.exports = function(app) {
                 });
             } else {
                 req.logIn(user, function(err) {
-                    res.json({user:user,args:arguments,err:err});
                     if(err) {
                         return res.json({
                             success: false,
