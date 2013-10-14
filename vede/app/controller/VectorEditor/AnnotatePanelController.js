@@ -28,7 +28,6 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     endSelectionIndex: null,
 
     init: function(){
-
         this.callParent();
 
         this.control({
@@ -70,6 +69,8 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         listenersObject[this.SelectionEvent.CLEAR_HIGHLIGHT] = this.onClearHighlight;
 
         this.application.on(listenersObject);
+
+        //Ext.getBody().on('paste', this.onPaste, this);
     },
 
     onTabChange: function(mainAppPanel, newTab, oldTab) {
