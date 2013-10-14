@@ -35,8 +35,9 @@ block scripts
                     },
                     { "mData": "lastAccess", sDefaultContent: "-", sTitle: "Last Access",
                       mRender: function ( data, type, full ) {
-                        if(data==="-") return "never";
-                        return jQuery.timeago(new Date(data));
+                        return new Date(data).toLocaleString();
+                        //if(data==="-") return "never";
+                        //return jQuery.timeago(new Date(data));
                       }
                     },
                     { "mData": "id",
