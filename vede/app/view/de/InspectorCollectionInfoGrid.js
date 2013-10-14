@@ -144,7 +144,11 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     sortable: false,
                     dataIndex: 'fro',
                     editor: {
-                        xtype: 'textfield'
+                        xtype: 'numberfield',
+                        allowDecimals: false,
+                        decimalPrecision: 1,
+                        emptyText: '',
+                        hideTrigger: true
                     },
                     renderer: function(value) {
                         if(value === 'None') {
