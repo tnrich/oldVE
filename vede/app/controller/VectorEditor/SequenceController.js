@@ -310,6 +310,8 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
 
             this.pasteFromClipboard(text);
         }
+
+        e.preventDefault();
     },
 
     safeEditPrompt: function(features, callback) {
