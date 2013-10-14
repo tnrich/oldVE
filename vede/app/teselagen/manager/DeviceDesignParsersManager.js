@@ -63,35 +63,37 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         Teselagen.manager.GridManager.selectedGridBin = null;
 
         var next = this.backgroundSequenceProcessing(partsArray);
-        if(next[0]) {
-            if(typeof(cb)==="function")
-            {
-                return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
-            }
-            else
-            {
-                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-                var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
-
-                Ext.Msg.show({
-                    title: "Are you sure you want to load example?",
-                    msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
-                    buttons: Ext.Msg.OKCANCEL,
-                    cls: "messageBox",
-                    fn: loadDesign,
-                    icon: Ext.Msg.QUESTION
-                });
-            }
-        } else {
+        console.log(next);
+    if(next[0]==true) {
+        if(typeof(cb)==="function")
+        {
+            return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
+        }
+        else
+        {
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-             Ext.MessageBox.show({
-                title: "Error",
-                msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
-                buttons: Ext.MessageBox.OK,
-                icon:Ext.MessageBox.ERROR
+            var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
+
+            Ext.Msg.show({
+                title: "Are you sure you want to load example?",
+                msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
+                buttons: Ext.Msg.OKCANCEL,
+                cls: "messageBox",
+                fn: loadDesign,
+                icon: Ext.Msg.QUESTION
             });
+        }
+    } else {
+        Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+
+         Ext.MessageBox.show({
+            title: "Error",
+            msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
+            buttons: Ext.MessageBox.OK,
+            icon:Ext.MessageBox.ERROR
+        });
         }
 
     },
@@ -875,6 +877,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     backgroundSequenceProcessing: function(parts){
         // debugger;
+        console.log(parts);
         var processFlag = true;
         toastr.options.onclick = function(){
             processFlag = false;
@@ -888,8 +891,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 parts.forEach(function (otherPart) {
                     if((part.getSequenceFile().get("partSource") === otherPart.getSequenceFile().get("partSource")) && (part.getSequenceFile().get("hash") != otherPart.getSequenceFile().get("hash"))) {
                         error = true;
-                        console.log(part);
-                        console.log(otherPart);
+                        console.log(part.getSequenceFile().get("partSource"));
+                        console.log(otherPart.getSequenceFile().get("partSource"));
                         conflict = part.getSequenceFile().get("partSource");
                     }
                 });
@@ -918,7 +921,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         if(error) {
             return [false, conflict];
         } else {
-            return true;
+            return [true, ""];
         }
     }
 });
