@@ -514,4 +514,5 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         });
     }
+
 });

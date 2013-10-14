@@ -42,7 +42,7 @@ module.exports = function(app, express){
   });
 
   app.get('/admin/edituser', adminRestrict, function(req,res){
-    var User = app.db.model("User");
+    var User = app.db.model("User");    
     User.findById(req.query.id,function(err,dbuser){
       res.render('edituser',{"user":dbuser});
     });
@@ -51,6 +51,11 @@ module.exports = function(app, express){
 
   app.post('/admin/edituser', adminRestrict, function(req,res){
     var User = app.db.model("User");
+
+    if(req.body.deleteUser && req.body.deleteUser === "Delete") {
+      return res.render('user_delete',{user_id:req.body.id,username:req.body.last_name + " "+req.body.id});
+    }
+    
     User.findById(req.body.id,function(err,user){
       user.firstName = req.body.first_name;
       user.lastName = req.body.last_name;
@@ -65,6 +70,43 @@ module.exports = function(app, express){
         res.redirect('/admin/manage');
       });
     });
+  });
+
+  app.post('/admin/deluser',function(req,res){
+    var user_id = req.body.id;
+    var keepdata = (req.body.keepdata) ? true : false;
+
+    var User = app.db.model("User");
+
+    User.findById(user_id).populate("parts sequences projects").exec(function(err,user){
+
+      var username = user.username;
+      
+      user.parts.forEach(function(part){
+        part.remove(function(){ 
+          console.log("Removed part");
+        });
+      });
+
+      user.sequences.forEach(function(sequence){
+        sequence.remove(function(){ 
+          console.log("Removed sequence");
+        });
+      });
+
+      user.projects.forEach(function(projects){
+        projects.remove(function(){ 
+          console.log("Removed project");
+        });
+      });
+
+      user.remove(function(){
+        res.send(username+" removed <a href='/admin/manage'>Click here to continue</a>");
+      });
+
+
+    });
+
   });
 
 };

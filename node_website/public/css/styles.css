@@ -103,15 +103,15 @@ input {
 /*Header*/
 #banner_head {
     font-family: "proxima-nova", sans-serif;
-    font-size: 52px;
+    font-size: 58px;
     font-weight:600;
     color: #414C57;
     padding: 10px;
     font-style: normal;
     /*display: none;*/
     text-shadow: 1px 1px 0px white;
-    text-align: center;
-    line-height: 56px;
+    text-align: left;
+    line-height: 62px;
 }
 
 #banner_head_sub {
@@ -119,12 +119,19 @@ input {
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
+    line-height: 24px;
     margin-top: 5px;
     color: #747B86;
     padding: 10px;
     /*text-shadow: 1px 1px 0px white;*/
-    text-align: center;
+    text-align: left;
     letter-spacing: 1px;
+    padding-right: 110px;
+}
+
+.signup-note {
+    font-size:12px;
+    text-align: center;
 }
 
 /*Banner*/
@@ -627,8 +634,21 @@ label.inline {
         margin-left: 10px;
     }
 
+    #banner_head {
+        font-size: 48px;
+    }
 
+    #banner_head, #banner_head_sub {
+        text-align: center;
+    }
 
+    #banner_head_sub {
+        padding-right: 10px;
+    }
+
+    #land-form #signup_form{
+        margin:30px;
+    }
 }
 
 @media only screen and (max-width: 939px) {
