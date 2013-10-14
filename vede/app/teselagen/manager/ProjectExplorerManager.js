@@ -195,6 +195,8 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 switch(selectedRecordType) {
                     case "openproj":
                         console.log("delete project");
+                        selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.id);
+                        self.deleteProject(selectedProject, expandPathCallback);
                         break;
                     case "opende":
                         console.log("delete design");
@@ -298,6 +300,26 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
              cls: "messageBox",
              buttons: Ext.Msg.OKCANCEL,
              fn: DeleteDeviceDesignBtn,
+             icon: Ext.Msg.QUESTION
+        });
+    },
+
+    deleteProject: function(selectedProject, cb){
+        var projectName = selectedProject.data.name;
+        function DeleteProjectBtn (btn) {
+            if (btn==="ok") {
+                Teselagen.manager.ProjectManager.deleteProject(selectedProject);
+                toastr.options.onclick = null;
+                toastr.info("Design '" + projectName +  "' Deleted");
+             }
+         }
+
+        Ext.Msg.show({
+             title:"Are you sure you want to delete this project?",
+             msg: "WARNING: This will remove project '" + projectName + "'. This action is not undoable!",
+             cls: "messageBox",
+             buttons: Ext.Msg.OKCANCEL,
+             fn: DeleteProjectBtn,
              icon: Ext.Msg.QUESTION
         });
     }

@@ -273,6 +273,37 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     /**
+     * deleteProject
+     * Delete Project Tab
+     * @param {Teselagen.models.Project} Receives a Project model (already loaded)
+     */
+    deleteProject: function (project, tab) {
+        var tabPanel = Ext.getCmp("mainAppPanel");
+        var project_id = project.data.project_id;
+
+        this.workingProject = null;
+        console.log(project);
+        this.projects.remove(project);
+        project.destroy();
+
+        Teselagen.manager.GridManager.setListenersEnabled(true);
+
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+            Ext.getCmp("projectTreePanel").expandPath("/root/");
+            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+        });
+
+        // Delete all tabs which have the design as a model. (Includes J5 Reports tabs.)
+        //tabPanel.items.each(function(tab) {
+        //    if(tab.model && tab.model.getId() === project.getId()) {
+        //        tabPanel.remove(tab);
+        //    }
+        //});
+
+        Vede.application.fireEvent("PopulateStats");
+    },
+
+    /**
      * openSequence
      * Opens a SequenceFile model in a new tab.
      * @param {model} Receives a j5Report model (already loaded)
