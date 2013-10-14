@@ -282,7 +282,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var project_id = project.data.project_id;
 
         this.workingProject = null;
-        console.log(project);
+        
+        var childsToClose = [];
+        project.designs().each(function(design){
+            childsToClose.push(design.id);
+        });
+
         this.projects.remove(project);
         project.destroy();
 
@@ -293,12 +298,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
         });
 
-        // Delete all tabs which have the design as a model. (Includes J5 Reports tabs.)
-        //tabPanel.items.each(function(tab) {
-        //    if(tab.model && tab.model.getId() === project.getId()) {
-        //        tabPanel.remove(tab);
-        //    }
-        //});
+        tabPanel.items.each(function(tab) {
+            if(tab.model && childsToClose.indexOf(tab.model.getId()!=-1)) {
+                tabPanel.remove(tab);
+            }
+        });
 
         Vede.application.fireEvent("PopulateStats");
     },
