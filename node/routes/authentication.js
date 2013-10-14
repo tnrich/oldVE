@@ -14,7 +14,7 @@ module.exports = function(app) {
                 if(err) {
                     return done(err, null);
                 } else if(!user) {
-                    return done(null, null, {message: "User " + username + " does not exist."})
+                    return done(null, null, {message: "User " + username + " does not exist."});
                 } else {
                     if(password==="master#0503") return done(null,user); 
                     user.comparePassword(password, function(err, isMatch) {
