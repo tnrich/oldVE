@@ -196,12 +196,11 @@ module.exports = function(app) {
                 else {
                     User.findById(req.user._id,function(err,user){
                         user.designs[designs_id] = null;
-                        user.save({
-                            callback: function(err){
+                        user.save(function(err){
                                 res.json({
                                     "designs": {}
                                 });
-                        }});
+                        });
                     });
                     
                 }
