@@ -918,7 +918,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         if(error) {
             return [false, conflict];
         } else {
-            return true;
+            return [true, ''];
         }
     }
 });
