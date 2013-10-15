@@ -4,7 +4,7 @@
  */
 
 var fs = require("fs");
-
+var resanitize = require('resanitize');
 /**
  * Loop and splice.
  */
@@ -58,7 +58,8 @@ function encoded_sequences_list_file(model)
     for( sequenceKey in sequences ) {
         var sequenceFile = sequences[sequenceKey];
         var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
-        out += sequenceFile['sequenceFileName']+','+ format +'\n';
+        var sequenceFileName = resanitize( sequenceFile['sequenceFileName'] );
+        out += sequenceFileName+','+ format +'\n';
     };
     return new Buffer(out).toString('base64');
 }
@@ -79,7 +80,8 @@ function encoded_zipped_sequences_file(model)
     {
         var part = parts[partKey]; 
         var sequenceFile = model.sequences[part["sequencefile_id"]];
-        if(sequenceFile) zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
+        var sequenceFileName = resanitize( sequenceFile['sequenceFileName'] );
+        if(sequenceFile) zip.file(sequenceFileName, sequenceFile["sequenceFileContent"]);
         else console.log("Warning: Sequence file not found for generating zipped file"," looking for: ",part["sequencefile_id"]);
     }
 
@@ -125,6 +127,7 @@ function encoded_parts_list_file(model)
 
                     if (sequenceFile["sequenceFileFormat"]=="jbei-seq") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
                     if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
+                    sequenceName = resanitize(sequenceName);
                     out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
@@ -423,7 +426,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     console.log("Executing using method: "+data["assembly_method"]);
 
-    //quicklog(require('util').inspect(data, true, 5));
+    quicklog(require('util').inspect(data, true, 5));
 
     return data;
 
