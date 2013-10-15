@@ -4,7 +4,9 @@
  */
 
 var fs = require("fs");
-var resanitize = require('resanitize');
+var resanitize = function(in) {
+    return in.replace(/(\r\n|\n|\r)/gm,"");
+}
 /**
  * Loop and splice.
  */
