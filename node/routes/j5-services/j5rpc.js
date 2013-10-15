@@ -5,7 +5,7 @@
 
 var fs = require("fs");
 var resanitize = function(inString) {
-    return inString.replace(/(\r\n|\n|\r)/gm,"");
+    return inString.replace(/(\r\n|\n|\r| |\\|-)/gm,"");
 };
 /**
  * Loop and splice.
