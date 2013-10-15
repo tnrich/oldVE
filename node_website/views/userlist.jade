@@ -33,10 +33,12 @@ block scripts
                         return new Date(data).toLocaleString();
                       }
                     },
-                    { "mData": "lastAccess", sDefaultContent: "-", sTitle: "Last Access",
+                    { "mData": "lastAccess", sDefaultContent: "", sTitle: "Last Access",
                       mRender: function ( data, type, full ) {
-                        if(data==="-") return "never";
-                        return jQuery.timeago(new Date(data));
+                        if(data==="") return "";
+                        return new Date(data).toLocaleString();
+                        //if(data==="-") return "never";
+                        //return jQuery.timeago(new Date(data));
                       }
                     },
                     { "mData": "id",
