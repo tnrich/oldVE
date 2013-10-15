@@ -254,6 +254,20 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
     devicedesign.parts = partsIndex;
     devicedesign.sequences = sequenceIndex;
 
+    var names = {};
+
+    for(var seqKey in devicedesign.sequences)
+    {
+      seq = devicedesign.sequences[seqKey];
+      sequenceFileName = seq.sequenceFileName.replace(/(\r\n|\n|\r| |\\|-)/gm,"");;
+      if(names[sequenceFileName]===undefined) { names[sequenceFileName] = 0 }
+      else
+      {
+        names[sequenceFileName]++; 
+        devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName + "_" + names[sequenceFileName];
+      }
+    }
+
     //console.log(Object.keys(devicedesign.sequences).length," sequences indexed");
 
     cb(devicedesign);
