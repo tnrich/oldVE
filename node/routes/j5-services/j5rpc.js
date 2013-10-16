@@ -112,7 +112,7 @@ function encoded_parts_list_file(model)
                 var sequenceFile = model.sequences[part["sequencefile_id"]];
                 if(sequenceFile)
                 {
-                    var sequenceName = cleanString(sequenceFile.sequenceFileName);
+                    var sequenceName = cleanString(sequenceFile.serialize.inData.name);
                     out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
