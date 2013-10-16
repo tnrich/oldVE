@@ -247,7 +247,7 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
     var sequenceIndex = {};
     var partsIndex = {};
     parts.forEach(function(part){
-      part.name = part.name.replace(/(\r\n|\n|\r|\\|\/|\.)/gm,"");
+      part.name = part.name.replace(/(\r\n|\n|\r|\\|\/|\.|-)/gm,"");
       sequenceIndex[part.sequencefile_id._id] = part.sequencefile_id;
       part.sequencefile_id = part.sequencefile_id._id;
       partsIndex[part._id] = part;
