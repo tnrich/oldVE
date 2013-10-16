@@ -212,7 +212,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
         var specifiedSequence = form.findField('specifiedSequence');
-        var newSequenceManager;
         var rawGenbank;
 
         var doneButton = this.selectedWindow.down("button[cls='changePartDefinitionDoneBtn']");
@@ -234,12 +233,13 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             partSource: "New Part"
         });
 
+        var newSequenceManager = Ext.create("Teselagen.manager.SequenceManager");
+
         sourceData.on("change", function(text) {
-            newSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
-                sequence: Teselagen.bio.sequence.DNATools.createDNA(text)
-            });
+            newSequenceManager.sequence = Teselagen.bio.sequence.DNATools.createDNA(text);
             rawGenbank = newSequenceManager.toGenbank().toString();
             newSequenceManager.toGenbank().setLocus(partSource.getValue());
+            newSequenceManager.name = (partSource.getValue());
             newSequenceFile.setSequenceFileContent(rawGenbank);
             newSequenceFile.setSequenceManager(newSequenceManager);
             startBP.setValue(1);
@@ -248,6 +248,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         });
 
         partSource.on("change", function(text) {
+            newSequenceManager.name = (partSource.getValue());
             newSequenceFile.setPartSource(text);
             newSequenceFile.setSequenceFileName(text);
         });
@@ -315,6 +316,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
             console.log("sequence saved");
 
+<<<<<<< HEAD
             var partDef = {
                     name: name.getValue(),
                     partSource: partSource,
