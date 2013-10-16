@@ -242,6 +242,7 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
   var Part = app.db.model("part");
   Part.populate( devicedesignInput.parts, { path: 'sequencefile_id' }, function(err,parts){
 
+
     // Generate temporal sequences index
     var sequenceIndex = {};
     var partsIndex = {};
@@ -253,11 +254,20 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
     var devicedesign = devicedesignInput.toObject();
     devicedesign.parts = partsIndex;
     devicedesign.sequences = sequenceIndex;
+
+
+    var names = {};
+
     for(var seqKey in devicedesign.sequences)
     {
       seq = devicedesign.sequences[seqKey];
-      sequenceFileName = seq.sequenceFileName.replace(/(\r\n|\n|\r| |\\|-)/gm,"");; 
-        devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName;
+      sequenceFileName = seq.sequenceFileName.replace(/(\r\n|\n|\r| |\\|-)/gm,"");;
+      if(names[sequenceFileName]===undefined) { names[sequenceFileName] = 0 }
+      else
+      {
+        names[sequenceFileName]++; 
+        devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName + "_" + names[sequenceFileName];
+      }
     }
 
     cb(devicedesign);
