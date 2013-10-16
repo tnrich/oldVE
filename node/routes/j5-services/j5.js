@@ -267,13 +267,13 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
       sequenceFileName = sequenceFileName.replace(/(\r\n|\n|\r|\\)/gm,"");
 
 
-      console.log(sequenceFileName);
+      var newSequenceFileName = sequenceFileName;
 
-      if(names[sequenceFileName]===undefined) { names[sequenceFileName] = 0 }
+      if(names[newSequenceFileName]===undefined) { names[newSequenceFileName] = 0 }
       else
       {
-        names[sequenceFileName]++; 
-        devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName + "_" + names[sequenceFileName];
+        names[newSequenceFileName]++; 
+        devicedesign.sequences[seqKey].sequenceFileName = newSequenceFileName + "_" + names[newSequenceFileName];
       }
     }
 
