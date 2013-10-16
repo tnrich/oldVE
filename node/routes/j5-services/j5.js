@@ -256,6 +256,27 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
 
     //console.log(Object.keys(devicedesign.sequences).length," sequences indexed");
 
+    var names = {};
+
+    for(var seqKey in devicedesign.sequences)
+    {
+      seq = devicedesign.sequences[seqKey];
+      sequenceFileName = seq.sequenceFileName;
+      sequenceFileName = sequenceFileName.replace(/\./g,'');
+      sequenceFileName = sequenceFileName.replace(/\s/g,"_");
+      sequenceFileName = sequenceFileName.replace(/(\r\n|\n|\r|\\)/gm,"");
+
+      devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName;
+      
+
+      if(names[sequenceFileName]===undefined) { names[sequenceFileName] = 0 }
+      else
+      {
+        names[sequenceFileName]++; 
+        devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName + "_" + names[sequenceFileName];
+      }
+    }
+
     cb(devicedesign);
   });
 };
