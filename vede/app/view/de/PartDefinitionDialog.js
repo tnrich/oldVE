@@ -92,6 +92,12 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                         },
                         {
                             xtype: 'button',
+                            text: 'Done',
+                            cls: 'createNewPartInDE',
+                            hidden: true
+                        },
+                        {
+                            xtype: 'button',
                             margin: '0 0 0 10',
                             text: 'Cancel',
                             cls: 'cancelPartDefinitionBtn'

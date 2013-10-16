@@ -23,7 +23,7 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		 * @return {SymbolList}              A symbol lits
 		 */
 		createDNA: function(pDNASequence){
-			var DNASequence = pDNASequence.toLowerCase();
+			var DNASequence = pDNASequence.value.toLowerCase();
             var characters = DNASequence.split("");
 			var symbols = [];
 

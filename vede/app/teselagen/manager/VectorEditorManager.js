@@ -22,7 +22,6 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     saveSequence : function(cb){
         var currentTabPanel = Ext.getCmp("mainAppPanel");
         currentTabPanel.setLoading(true);
-
         var rawGenbank = this.sequenceFileManager.toGenbank().toString();
         this.sequence.setSequenceFileContent(rawGenbank);
         this.sequence.setSequenceManager(this.sequenceFileManager);

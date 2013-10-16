@@ -50,6 +50,9 @@ Ext.define("Teselagen.event.DeviceEvent", {
     // Fired when a new part is created and needs to be defined.
     CREATE_PART_DEFINITION: "CreatePartDefinition",
 
+    //Fired when you need to create a new part inside of the design.
+    CREATE_PART_IN_DESIGN: "CreatePartInDesign",
+
     // Fired when a new part has been defined.
     PART_CREATED: "PartCreated",
 

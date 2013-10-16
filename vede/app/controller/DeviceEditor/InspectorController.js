@@ -174,12 +174,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onChangePartDefinitionBtnClick: function(){
         var self = this;
         if(this.selectedPart) {
+            console.log(this.selectedPart);
             this.selectedPart.getSequenceFile({
                 callback: function(){
                     Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION,
                             self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
                 }
             });
+        } else {
+            //There is an empty grid cell
+            Vede.application.fireEvent(this.DeviceEvent.CREATE_PART_IN_DESIGN);
         }
     },
 
@@ -317,16 +321,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 self.openPartLibraryBtn.setText("Open Part Library");
                                 self.openPartLibraryBtn.removeCls("selectPartFocus");
                                 self.changePartDefinitionBtn.enable();
+                                self.changePartDefinitionBtn.setText("Change Part Definition");
+                                self.changePartDefinitionBtn.removeCls("selectPartFocus");
                                 self.deletePartBtn.enable();
                                 self.deletePartBtn.removeCls("btnDisabled");
                                 self.deletePartBtn.removeCls("selectPartFocus");
                                 self.clearPartMenuItem.enable();
                                 self.partSourceNameField.setValue(sequenceFile.get("partSource"));
                             } else {
-                                self.changePartDefinitionBtn.disable();
+                                self.changePartDefinitionBtn.enable();
                                 self.openPartLibraryBtn.setText("Select Part From Library");
                                 self.openPartLibraryBtn.addCls("selectPartFocus");
-                                self.changePartDefinitionBtn.addCls("btnDisabled");
+                                self.changePartDefinitionBtn.removeCls("btnDisabled");
+                                self.changePartDefinitionBtn.setText("Create New Part");
+                                self.changePartDefinitionBtn.addCls("selectPartFocus");
                                 self.deletePartBtn.disable();
                                 self.clearPartMenuItem.disable();
                                 self.deletePartBtn.removeCls("selectPartFocus");
@@ -336,19 +344,23 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     }
                 });
             } else if (j5Part.get("name") !== ""){
-            	self.changePartDefinitionBtn.disable();
+            	self.changePartDefinitionBtn.enable();
                 self.openPartLibraryBtn.setText("Select Part From Library");
                 self.openPartLibraryBtn.addCls("selectPartFocus");
-                self.changePartDefinitionBtn.addCls("btnDisabled");
+                self.changePartDefinitionBtn.removeCls("btnDisabled");
+                self.changePartDefinitionBtn.setText("Create New Part");
+                self.changePartDefinitionBtn.addCls("selectPartFocus");
                 self.deletePartBtn.enable();
                 self.deletePartBtn.removeCls("btnDisabled");
                 self.deletePartBtn.addCls("selectPartFocus");
                 self.clearPartMenuItem.enable();
             } else {
-                self.changePartDefinitionBtn.disable();
+                self.changePartDefinitionBtn.enable();
                 self.openPartLibraryBtn.setText("Select Part From Library");
                 self.openPartLibraryBtn.addCls("selectPartFocus");
-                self.changePartDefinitionBtn.addCls("btnDisabled");
+                self.changePartDefinitionBtn.removeCls("btnDisabled");
+                self.changePartDefinitionBtn.setText("Create New Part");
+                self.changePartDefinitionBtn.addCls("selectPartFocus");
                 self.deletePartBtn.disable();
                 self.clearPartMenuItem.disable();
                 self.deletePartBtn.removeCls("selectPartFocus");
@@ -369,13 +381,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.partPropertiesForm.loadRecord(newPart);
             this.fasCombobox.setValue("None");
             
-            self.changePartDefinitionBtn.disable();
-            self.changePartDefinitionBtn.addCls("btnDisabled");
+            self.changePartDefinitionBtn.enable();
             self.deletePartBtn.disable();
             self.clearPartMenuItem.disable();
             self.deletePartBtn.addCls("btnDisabled");
             self.openPartLibraryBtn.setText("Select Part From Library");
             self.openPartLibraryBtn.addCls("selectPartFocus");
+            self.changePartDefinitionBtn.setText("Create New Part");
+            self.changePartDefinitionBtn.addCls("selectPartFocus");
             
             this.eugeneRulesGrid.store.clearData();            
             this.eugeneRulesGrid.view.refresh();
