@@ -316,7 +316,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
             console.log("sequence saved");
 
-<<<<<<< HEAD
             var partDef = {
                     name: name.getValue(),
                     partSource: partSource,
