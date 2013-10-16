@@ -172,7 +172,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onChangePartDefinitionBtnClick: function(){
-        debugger;
         var self = this;
         if(this.selectedPart) {
             console.log(this.selectedPart);
