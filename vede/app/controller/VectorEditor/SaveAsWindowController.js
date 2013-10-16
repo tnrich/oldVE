@@ -33,7 +33,9 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
         this.sequenceNameField.setValue(sequence.get('name'));
     },
     
-    onSaveAsWindowOKButtonClick: function() {  	
+    onSaveAsWindowOKButtonClick: function() {
+        this.sequenceGrid = Ext.getCmp('saveAsWindowSequencesGrid');
+      	
     	var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
     	var sequencesNames = [];
     	var name = Ext.String.trim(this.sequenceNameField.getValue());
@@ -65,7 +67,7 @@ Ext.define("Vede.controller.VectorEditor.SaveAsWindowController", {
                             Teselagen.manager.ProjectManager.openSequence(newSequenceFile);
                         });
 
-                        this.sequenceGrid.store.clearFilter();
+                        // this.sequenceGrid.store.clearFilter();
     		            Ext.getCmp('SaveAsWindow').close();
                     } else {
                 	    Ext.MessageBox.alert('', 'A sequence with the name "' + 
