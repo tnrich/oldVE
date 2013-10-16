@@ -38,7 +38,7 @@
     , "xmlbuilder":"0.4.2"
     , "memcached":"0.2.5"
     , "mandrill-api": "1.0.35"
-    , "resanitize":"0.3.0"
+    , "socket.io":"0.9.9"
   }
   , "devDependencies": {
     "chai":"1.5.0",

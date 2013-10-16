@@ -4,7 +4,6 @@
  */
 
 var fs = require("fs");
-var resanitize = require('resanitize');
 /**
  * Loop and splice.
  */
