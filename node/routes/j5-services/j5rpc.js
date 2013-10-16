@@ -4,9 +4,7 @@
  */
 
 var fs = require("fs");
-var cleanString = function(inString) {
-    return inString.replace(/(\r\n|\n|\r| |\\|-|\/|.)/gm,"");
-};
+
 /**
  * Loop and splice.
  */
@@ -60,7 +58,7 @@ function encoded_sequences_list_file(model)
     for( sequenceKey in sequences ) {
         var sequenceFile = sequences[sequenceKey];
         var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
-        var sequenceFileName = cleanString( sequenceFile['sequenceFileName'] );
+        var sequenceFileName =  sequenceFile['sequenceFileName'] ;
         out += sequenceFileName+','+ format +'\n';
     };
     return new Buffer(out).toString('base64');
@@ -83,7 +81,7 @@ function encoded_zipped_sequences_file(model)
         var seq = sequences[sequenceKey]; 
         var sequenceFile = seq.id;
         var sequenceFileName = seq.sequenceFileName;
-        
+
         if(sequenceFileName && seq.sequenceFileContent) zip.file(sequenceFileName, seq.sequenceFileContent);
     }
 
@@ -113,8 +111,8 @@ function encoded_parts_list_file(model)
                 var sequenceFile = model.sequences[part["sequencefile_id"]];
                 if(sequenceFile)
                 {
-                    var sequenceName = cleanString(sequenceFile.sequenceFileName);
-                    out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+                    var sequenceName = sequenceFile.sequenceFileName;
+                   out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
                 {
