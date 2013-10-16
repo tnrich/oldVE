@@ -262,8 +262,8 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
     {
       seq = devicedesign.sequences[seqKey];
       sequenceFileName = seq.sequenceFileName.replace(/(\r\n|\n|\r|\\)/gm,"");
-      sequenceFileName = sequenceFileName.replace(/\./g,'');
-      sequenceFileName = sequenceFileName.replace(/ /g,"_");
+      sequenceFileName = sequenceFileName.replace(/\./gm,'');
+      sequenceFileName = sequenceFileName.replace(/ /gm,"_");
       if(names[sequenceFileName]===undefined) { names[sequenceFileName] = 0 }
       else
       {
