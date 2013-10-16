@@ -97,12 +97,13 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
     onOpenVectorEditor: function(seq, part){
         var sequenceFileManager;
-
         if(seq.get("serialize")) {
             sequenceFileManager = seq.getSequenceManager();
         } else {
             sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
         }
+
+        console.log(sequenceFileManager);
 
         if(!sequenceFileManager) {
             return;
@@ -126,7 +127,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             newTab.options.circular = sequenceFileManager.getCircular();
 
             if(part) {
-                console.log(part.get("genbankStartBP"));
                 newTab.options.selection = {
                     start: part.get("genbankStartBP") - 1,
                     end: part.get("endBP")

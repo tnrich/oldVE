@@ -210,7 +210,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
         var specifiedSequence = form.findField('specifiedSequence');
-        var newSequenceManager;
         var rawGenbank;
 
         var doneButton = this.selectedWindow.down("button[cls='changePartDefinitionDoneBtn']");
@@ -232,12 +231,13 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             partSource: "New Part"
         });
 
+        var newSequenceManager = Ext.create("Teselagen.manager.SequenceManager");
+
         sourceData.on("change", function(text) {
-            newSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
-                sequence: Teselagen.bio.sequence.DNATools.createDNA(text)
-            });
+            newSequenceManager.sequence = Teselagen.bio.sequence.DNATools.createDNA(text);
             rawGenbank = newSequenceManager.toGenbank().toString();
             newSequenceManager.toGenbank().setLocus(partSource.getValue());
+            newSequenceManager.name = (partSource.getValue());
             newSequenceFile.setSequenceFileContent(rawGenbank);
             newSequenceFile.setSequenceManager(newSequenceManager);
             startBP.setValue(1);
@@ -246,6 +246,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         });
 
         partSource.on("change", function(text) {
+            newSequenceManager.name = (partSource.getValue());
             newSequenceFile.setPartSource(text);
             newSequenceFile.setSequenceFileName(text);
         });
@@ -305,6 +306,28 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         console.log("the following two objects need to be saved.");
         console.log(this.selectedPart);
         console.log(this.selectedSequence);
+        var self=this;
+        
+            // self.selectedSequence.save({
+            //     success: function (record, operation, success) {
+            //         // var response = JSON.parse(operation.response.responseText);
+            //         console.log(response);
+            //         if(response.duplicated)
+            //         {
+            //             if(typeof(cb)=="function") cb(true);
+            //             Ext.MessageBox.alert("Warning", "An identical sequence with the same name already exists in the sequence library, no changes to save!");
+            //         }
+            //         else 
+            //             {
+            //                 if(typeof(cb)=="function") cb(false);
+            //             }
+            //     },
+            //     failure: function() {
+            //         Ext.MessageBox.alert("Error", "Error saving sequence.");
+            //         currentTabPanel.setLoading(false);
+            //         if(typeof(cb)=="function") cb(false);
+            //     }
+            // });
     },
 
     onChangePartDefinitionDoneBtnClick: function(){

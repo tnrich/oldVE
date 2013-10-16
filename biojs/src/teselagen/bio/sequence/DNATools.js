@@ -23,23 +23,29 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		 * @return {SymbolList}              A symbol lits
 		 */
 		createDNA: function(pDNASequence){
-			var DNASequence = pDNASequence.value.toLowerCase();
-            var characters = DNASequence.split("");
-			var symbols = [];
+			if(pDNASequence) {
+					if(pDNASequence.value) {
+						var DNASequence = pDNASequence.value.toLowerCase();
+					}else {
+						var DNASequence = pDNASequence.toLowerCase();
+					}
+	            var characters = DNASequence.split("");
+				var symbols = [];
 
-			for (var i = 0; i < DNASequence.length; i++) {
-				var symbol = this.DNAAlphabet.symbolMap(characters[i]);
-				if (symbol == null) {
-					//Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
-				} else {
-					symbols.push(symbol);
-				}
-			};
+				for (var i = 0; i < DNASequence.length; i++) {
+					var symbol = this.DNAAlphabet.symbolMap(characters[i]);
+					if (symbol == null) {
+						//Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
+					} else {
+						symbols.push(symbol);
+					}
+				};
 
-			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
-				symbols: symbols,
-				alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
-			});
+				return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+					symbols: symbols,
+					alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
+				});
+			}
 		},
 
 		/**
