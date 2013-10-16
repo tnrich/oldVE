@@ -1137,8 +1137,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.partSourceNameField = this.inspector.down("displayfield[cls='partSourceField']");
             this.removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
 
-            this.changePartDefinitionBtn.disable();
-            this.changePartDefinitionBtn.addCls("btnDisabled");
             this.deletePartBtn.disable();
             this.deletePartBtn.addCls("btnDisabled");
             this.openPartLibraryBtn.disable();
