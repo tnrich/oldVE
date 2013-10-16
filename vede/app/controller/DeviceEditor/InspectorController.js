@@ -172,6 +172,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onChangePartDefinitionBtnClick: function(){
+        debugger;
         var self = this;
         if(this.selectedPart) {
             console.log(this.selectedPart);
@@ -183,7 +184,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             });
         } else {
             //There is an empty grid cell
-            Vede.application.fireEvent(this.DeviceEvent.CREATE_PART_IN_DESIGN);
+            var newPart = Ext.create('Teselagen.models.Part');
+            self.selectedCell.setPart(newPart);
+            Vede.application.fireEvent(this.DeviceEvent.CREATE_PART_IN_DESIGN,null,newPart);
         }
     },
 

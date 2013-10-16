@@ -202,6 +202,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     openCreatePartInDesign: function(veproject,selectedPart,selectedSequence){
+        
+
         this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
         var form = this.selectedWindow.down('form').getForm();
         var partName  = form.findField('partName');
@@ -250,7 +252,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             newSequenceFile.setSequenceFileName(text);
         });
 
-        this.selectedPart = newPart;
+        this.selectedPart = selectedPart;
 
         this.selectedSequence = newSequenceFile;
 
@@ -262,49 +264,78 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     onCreateNewPartInDEBtnClick: function() {
+        
+        var self = this;
+
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var form = this.selectedWindow.down('form').getForm();
         var name = form.findField('partName');
-        var partSource = form.findField('partSource');
-        var sourceData = form.findField('sourceData');
+        var partSource = form.findField('partSource').getValue();
+        var sourceData = form.findField('sourceData').getValue();
         var specifiedSequence = form.findField('specifiedSequence');
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
         var revComp = form.findField('revComp');
 
-        var now = new Date();
-        nowTime = Ext.Date.format(now, "g:i:s A  ");
-        nowDate = Ext.Date.format(now, "l, F d, Y");
+        var newSeq = Ext.create("Teselagen.models.SequenceFile", {
+            name: partSource,
+            sequenceFileFormat: "GENBANK",
+            sequenceFileContent: sourceData,
+            sequenceFileName: "untitled.gb",
+            partSource: partSource
+        });
 
-        var seqDef = {
-            name: partSource.getValue(),
-            dateCreated: nowDate,
-            dateModified: nowDate,
-            user_id: Teselagen.manager.ProjectManager.currentUser.internalId
-        }
+        self.selectedSequence = newSeq;
 
-        this.selectedSequence.set(seqDef);
+        var saveSequence = function(sequence,cb){
+            sequence.save({
+                success: function (msg,operation) {
+                    var response = JSON.parse(operation.response.responseText);
 
-        this.selectedPart.setSequenceFile(this.selectedSequence);
-
-        var partDef = {
-                name: name.getValue(),
-                partSource: partSource.getValue(),
-                genbankStartBP: startBP.getValue(),
-                endBP: stopBP.getValue(),
-                revComp: revComp.getValue(),
-                dateCreated: nowDate,
-                dateModified: nowDate,
-                devicedesign_id: currentTab.modelId,
-                user_id: Teselagen.manager.ProjectManager.currentUser.internalId
+                    if(response.duplicated)
+                    {
+                        if(typeof(cb)=="function") cb(true);
+                        Ext.MessageBox.alert("Warning", "An identical sequence with the same name already exists in the sequence library, no changes to save!");
+                    }
+                    else 
+                        {
+                            if(typeof(cb)=="function") cb(false);
+                        }
+                },
+                failure: function() {
+                    if(typeof(cb)=="function") cb(false);
+                }
+            });
         };
-        this.selectedPart.set(partDef);
 
-        //save part
-        //save sequence
-        console.log("the following two objects need to be saved.");
-        console.log(this.selectedPart);
-        console.log(this.selectedSequence);
+        saveSequence(self.selectedSequence,function(err){
+            if(err) {
+                return null;
+            }
+
+            console.log("sequence saved");
+
+            var partDef = {
+                    name: name.getValue(),
+                    partSource: partSource,
+                    genbankStartBP: startBP.getValue(),
+                    endBP: stopBP.getValue(),
+                    revComp: revComp.getValue(),
+            };
+            self.selectedPart.set(partDef);
+            self.selectedPart.setSequenceFile(self.selectedSequence);
+
+            self.selectedPart.save({
+                callback: function(){
+                    toastr.options.onclick = null;
+                    toastr.info("Part Definition Changed");
+                    Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
+                    Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
+                    self.selectedWindow.close();
+                }
+            });
+        });
+        
     },
 
     onChangePartDefinitionDoneBtnClick: function(){
