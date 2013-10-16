@@ -83,7 +83,7 @@ function encoded_zipped_sequences_file(model)
         var seq = sequences[sequenceKey]; 
         var sequenceFile = seq.id;
         var sequenceFileName = cleanString( seq['sequenceFileName'] );
-        if(sequenceFileName && seq.sequenceFileContent) zip.file(sequenceFileName, seq.sequenceFileContent);
+        zip.file(sequenceFileName, seq.sequenceFileContent);
     }
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
