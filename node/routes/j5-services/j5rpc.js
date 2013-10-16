@@ -4,7 +4,7 @@
  */
 
 var fs = require("fs");
-
+var resanitize = require('resanitize');
 /**
  * Loop and splice.
  */
@@ -58,7 +58,7 @@ function encoded_sequences_list_file(model)
     for( sequenceKey in sequences ) {
         var sequenceFile = sequences[sequenceKey];
         var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
-        var sequenceFileName =  sequenceFile['sequenceFileName'] ;
+        var sequenceFileName = resanitize( sequenceFile['sequenceFileName'] );
         out += sequenceFileName+','+ format +'\n';
     };
     return new Buffer(out).toString('base64');
@@ -72,17 +72,17 @@ function encoded_sequences_list_file(model)
 function encoded_zipped_sequences_file(model)
 {
 
-    var sequences = model["sequences"];
+    var parts = model["parts"];
 
     var zip = new require('node-zip')();
 
-    for( sequenceKey in sequences )
+    for( partKey in parts )
     {
-        var seq = sequences[sequenceKey]; 
-        var sequenceFile = seq.id;
-        var sequenceFileName = seq.sequenceFileName;
-
-        if(sequenceFileName && seq.sequenceFileContent) zip.file(sequenceFileName, seq.sequenceFileContent);
+        var part = parts[partKey]; 
+        var sequenceFile = model.sequences[part["sequencefile_id"]];
+        var sequenceFileName = resanitize( sequenceFile['sequenceFileName'] );
+        if(sequenceFile) zip.file(sequenceFileName, sequenceFile["sequenceFileContent"]);
+        else console.log("Warning: Sequence file not found for generating zipped file"," looking for: ",part["sequencefile_id"]);
     }
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
@@ -111,8 +111,24 @@ function encoded_parts_list_file(model)
                 var sequenceFile = model.sequences[part["sequencefile_id"]];
                 if(sequenceFile)
                 {
-                    var sequenceName = sequenceFile.sequenceFileName;
-                   out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+                    var sequenceName = "";
+                    if (sequenceFile["sequenceFileFormat"]=="Genbank")
+                        {
+                            sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
+                            if(sequenceName) sequenceName = sequenceName[1];
+                            else 
+                            {
+                                sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+([[a-zA-Z0-9~@#\^\$&\*\(\)-_\+=\[\]\{\}\|\\,\.\?]*|\-]+)/);
+                                if(!sequenceName) console.log(JSON.stringify(sequenceFile['sequenceFileContent']));
+                                else sequenceName = sequenceName[1];
+                            }
+                                //sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                        }
+
+                    if (sequenceFile["sequenceFileFormat"]=="jbei-seq") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+                    if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
+                    sequenceName = resanitize(sequenceName);
+                    out += part['name']+','+ sequenceName +','+part["revComp"].toString().toUpperCase()+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
                 }
                 else
                 {

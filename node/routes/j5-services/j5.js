@@ -242,12 +242,10 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
   var Part = app.db.model("part");
   Part.populate( devicedesignInput.parts, { path: 'sequencefile_id' }, function(err,parts){
 
-
     // Generate temporal sequences index
     var sequenceIndex = {};
     var partsIndex = {};
     parts.forEach(function(part){
-      part.name = part.name.replace(/(\r\n|\n|\r|\\|\/|\.|-)/gm,"");
       sequenceIndex[part.sequencefile_id._id] = part.sequencefile_id;
       part.sequencefile_id = part.sequencefile_id._id;
       partsIndex[part._id] = part;
@@ -256,27 +254,7 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
     devicedesign.parts = partsIndex;
     devicedesign.sequences = sequenceIndex;
 
-
-    var names = {};
-
-    for(var seqKey in devicedesign.sequences)
-    {
-      seq = devicedesign.sequences[seqKey];
-      sequenceFileName = seq.sequenceFileName;
-      sequenceFileName = sequenceFileName.replace(/\./g,'');
-      sequenceFileName = sequenceFileName.replace(/\s/g,"_");
-      sequenceFileName = sequenceFileName.replace(/(\r\n|\n|\r|\\)/gm,"");
-
-      devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName;
-      
-
-      if(names[sequenceFileName]===undefined) { names[sequenceFileName] = 0 }
-      else
-      {
-        names[sequenceFileName]++; 
-        devicedesign.sequences[seqKey].sequenceFileName = sequenceFileName + "_" + names[sequenceFileName];
-      }
-    }
+    //console.log(Object.keys(devicedesign.sequences).length," sequences indexed");
 
     cb(devicedesign);
   });
