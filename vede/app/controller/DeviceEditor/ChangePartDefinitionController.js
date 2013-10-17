@@ -251,15 +251,15 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         });
 
 
-        var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
-                name: name,
-                type: 'misc_feature',
-                start: startBP,
-                end: stopBP
-        });
+        // var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+        //         name: name,
+        //         type: 'misc_feature',
+        //         start: startBP,
+        //         end: stopBP
+        // });
 
-        newSequenceManager.addFeature(newFeature,true);
-        newSequenceFile.setSequenceManager(newSequenceManager);
+        // newSequenceManager.addFeature(newFeature,true);
+        // newSequenceFile.setSequenceManager(newSequenceManager);
 
         this.selectedPart = selectedPart;
 
@@ -294,9 +294,20 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             partSource: partSource
         });
 
-        self.selectedSequence = newSeq;
+        var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: name,
+                type: 'misc_feature',
+                start: startBP,
+                end: stopBP,
+                strand: 'positive',
+                featureNotes: ''
+        });
 
-        console.log(self.selectedSequence.getSequenceManager());
+        newSeq.processSequence(function(err,seqMgr,gb){
+            seqMgr.addFeature(newFeature, true);
+        });
+
+        self.selectedSequence = newSeq;
 
         var saveSequence = function(sequence,cb){
             sequence.save({
