@@ -295,16 +295,12 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         });
 
         var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
-                name: name,
+                name: name.getValue(),
                 type: 'misc_feature',
-                start: startBP,
-                end: stopBP,
+                start: startBP.getValue(),
+                end: stopBP.getValue(),
                 strand: 'positive',
                 featureNotes: ''
-        });
-
-        newSeq.processSequence(function(err,seqMgr,gb){
-            seqMgr.addFeature(newFeature, true);
         });
 
         self.selectedSequence = newSeq;
@@ -330,35 +326,38 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             });
         };
 
-        saveSequence(self.selectedSequence,function(err){
-            if(err) {
-                return null;
-            }
-
-            console.log("sequence saved");
-
-            var partDef = {
-                    name: name.getValue(),
-                    partSource: partSource,
-                    genbankStartBP: startBP.getValue(),
-                    endBP: stopBP.getValue(),
-                    revComp: revComp.getValue(),
-            };
-            self.selectedPart.set(partDef);
-            self.selectedPart.setSequenceFile(self.selectedSequence);
-
-            self.selectedPart.save({
-                callback: function(){
-                    var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                    currentTab.model.parts().add(self.selectedPart);
-
-                    toastr.options.onclick = null;
-                    toastr.info("Part Definition Changed");
-                    Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
-                    Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
-                    self.selectedWindow.close();
+        self.selectedSequence.processSequence(function(err,seqMgr,gb){
+            seqMgr.addFeature(newFeature, true);
+            self.selectedSequence.setSequenceManager(seqMgr);
+            saveSequence(self.selectedSequence,function(err){
+                if(err) {
+                    return null;
                 }
+
+                var partDef = {
+                        name: name.getValue(),
+                        partSource: partSource,
+                        genbankStartBP: startBP.getValue(),
+                        endBP: stopBP.getValue(),
+                        revComp: revComp.getValue(),
+                };
+                self.selectedPart.set(partDef);
+                self.selectedPart.setSequenceFile(self.selectedSequence);
+
+                self.selectedPart.save({
+                    callback: function(){
+                        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                        currentTab.model.parts().add(self.selectedPart);
+
+                        toastr.options.onclick = null;
+                        toastr.info("Part Definition Changed");
+                        Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
+                        Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
+                        self.selectedWindow.close();
+                    }
+                });
             });
+
         });
         
     },
