@@ -349,6 +349,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
             self.selectedPart.save({
                 callback: function(){
+                    var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                    currentTab.model.parts().add(self.selectedPart);
+
                     toastr.options.onclick = null;
                     toastr.info("Part Definition Changed");
                     Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
