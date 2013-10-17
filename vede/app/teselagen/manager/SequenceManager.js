@@ -380,7 +380,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * Adds Feature to sequence manager.
      * @param {Teselagen.bio.sequence.dna.Feature} feature Feature to add
-     * @param {Boolean} quiet When true not SequenceManagerEvent will be dispatched
+     * @param {Boolean} quiet When true no SequenceManagerEvent will be dispatched
      */
     addFeature: function(pFeature, quiet) {
 
