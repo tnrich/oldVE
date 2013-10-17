@@ -176,8 +176,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedVEProject = null,
         this.populateFields();
 
-        console.log(this.selectedPart);
-        console.log(this.selectedSequence);
     },
 
     openCreatePart: function(veproject,selectedPart,selectedSequence){
@@ -250,8 +248,18 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         partSource.on("change", function(text) {
             newSequenceManager.name = (partSource.getValue());
             newSequenceFile.setPartSource(text);
-            newSequenceFile.setSequenceFileName(text);
         });
+
+
+        var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: name,
+                type: 'misc_feature',
+                start: startBP,
+                end: stopBP
+        });
+
+        newSequenceManager.addFeature(newFeature,true);
+        newSequenceFile.setSequenceManager(newSequenceManager);
 
         this.selectedPart = selectedPart;
 
@@ -281,12 +289,14 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var newSeq = Ext.create("Teselagen.models.SequenceFile", {
             name: partSource,
             sequenceFileFormat: "GENBANK",
-            sequenceFileContent: sourceData,
-            sequenceFileName: "untitled.gb",
+            sequenceFileContent: this.selectedSequence.data.sequenceFileContent,
+            sequenceFileName: partSource + ".gb",
             partSource: partSource
         });
 
         self.selectedSequence = newSeq;
+
+        console.log(self.selectedSequence.getSequenceManager());
 
         var saveSequence = function(sequence,cb){
             sequence.save({
