@@ -16,7 +16,7 @@ module.exports = function(app) {
      */
     app.post('/sendFeedback', function(req, res) {
 
-        variables = "{type:Feedback}";
+        variables = "{type:Feedback,user:"+req.user.username+"}";
         
         if (req.body.feedback) {
             app.mailer.sendMail({
