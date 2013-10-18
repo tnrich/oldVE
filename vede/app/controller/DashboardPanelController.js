@@ -259,7 +259,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
             sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
             sequenceFileName: "untitled.gb",
             partSource: "Untitled sequence",
-            serialize: JSON.parse('{"features": [], "inData": {"name": "ssrA_tag_enhance", "circular": true, "manualUpdateStarted": false, "needsRecalculateComplementSequence": false }, "sequence": {"alphabet": "dna", "symbols": ""} }')
+            serialize: JSON.parse('{"features": [], "inData": {"name": "no_name", "circular": true, "manualUpdateStarted": false, "needsRecalculateComplementSequence": false }, "sequence": {"alphabet": "dna", "symbols": ""} }')
         });
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
