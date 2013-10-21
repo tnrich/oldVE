@@ -27,13 +27,15 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             anchor: '100%',
                             fieldLabel: 'Part Name:',
                             margin: '10 10 0 0',
-                            name: 'partName'
+                            name: 'partName',
+                            allowBlank: 'false',
                         },
                         {
                             xtype: 'textfield',
                             anchor: '100%',
                             fieldLabel: 'Part Source',
                             margin: '10 10 0 0',
+                            allowBlank: 'false',
                             name: 'partSource',
                             readOnly: true
                         },
@@ -43,6 +45,7 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             fieldLabel: 'Source Data',
                             labelAlign: 'top',
                             margin: '10 10 0 0',
+                            allowBlank: 'false',
                             name: 'sourceData',
                             readOnly: true
                         },
