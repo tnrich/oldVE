@@ -66,8 +66,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.selectedPart = null;
 
         this.partPropertiesForm.loadRecord(newPart);
-        toastr.options.onclick = null;
-        toastr.info("Part Cleared");
+        // toastr.options.onclick = null;
+        // toastr.info("Part Cleared");
         this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
     },
 
@@ -415,8 +415,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     	this.partPropertiesForm.getForm().reset();
         this.fasForm.getForm().reset();
 
-        this.changePartDefinitionBtn.disable();
-        this.changePartDefinitionBtn.addCls("btnDisabled");
+        this.changePartDefinitionBtn.removeCls("btnDisabled");
+        this.changePartDefinitionBtn.setText("Create New Part");
+        this.changePartDefinitionBtn.addCls("selectPartFocus");
         this.deletePartBtn.disable();
         this.clearPartMenuItem.disable();
         this.deletePartBtn.addCls("btnDisabled");

@@ -18,8 +18,14 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     onOpenPartInVEBtnClick: function() {
-        this.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
-                                   this.selectedSequence, this.selectedPart);
+
+        var ready = this.onValidateFields();
+        console.log(ready);
+
+        if(ready) {
+            this.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE,
+                                       this.selectedSequence, this.selectedPart);
+        }
     },
 
     onSequenceSelectionChanged: function(pieController,start,end){
@@ -167,7 +173,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     open: function(selectedPart,selectedBinIndex,selectedSequence){
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
-        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        currentTab.el.mask();
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog', {renderTo: currentTabEl}).show();
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex = selectedBinIndex;
@@ -177,8 +184,10 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     openCreatePart: function(veproject,selectedPart,selectedSequence){
-
-        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+        currentTab.el.mask();
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog', {renderTo: currentTabEl}).show();
         var form = this.selectedWindow.down('form').getForm();
         this.selectedPart = selectedPart;
         this.selectedVEProject = veproject;
@@ -198,8 +207,10 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     openCreatePartInDesign: function(veproject,selectedPart,selectedSequence){
-
-        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+        currentTab.el.mask();
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog', {renderTo: currentTabEl}).show();
         var form = this.selectedWindow.down('form').getForm();
         var partName  = form.findField('partName');
         var partSource = form.findField('partSource');
@@ -258,10 +269,35 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedWindow.setTitle('Create Part');
     },
 
+    onValidateFields: function() {
+        var form = this.selectedWindow.down('form').getForm();
+        var name = form.findField('partName').getValue();
+        var partSource = form.findField('partSource').getValue();
+        var sourceData = form.findField('sourceData').getValue();
+
+        if(!name || !partSource || !sourceData) {
+            if(name=='') {
+                Ext.MessageBox.alert("Warning", "The 'Part Name' field is required to create a part.");
+                return false;
+            } else if(!partSource) {
+                Ext.MessageBox.alert("Warning", "The 'Part Source' field is required to create a part.");
+                return false;
+            } else if (!sourceData) {
+                Ext.MessageBox.alert("Warning", "The 'Raw Sequence' field is required to create a part.");
+                return false;
+            }
+        } else {
+            return true;
+        }
+    },
+
     onCreateNewPartInDEBtnClick: function() {
         var self = this;
 
-        var ready=true;
+        var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
+        var activeProject = inspectorController.activeProject;
+        var yIndex = activeProject.bins().getAt(inspectorController.selectedBinIndex).cells().indexOf(inspectorController.selectedCell);
+
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var form = this.selectedWindow.down('form').getForm();
         var name = form.findField('partName').getValue();
@@ -272,18 +308,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var stopBP = form.findField('stopBP');
         var revComp = form.findField('revComp');
 
-        if(!name || !partSource || !sourceData) {
-            if(name=='') {
-                Ext.MessageBox.alert("Warning", "The 'Part Name' field is required to create a part.");
-                ready=false;
-            } else if(!partSource) {
-                Ext.MessageBox.alert("Warning", "The 'Part Source' field is required to create a part.");
-                ready=false;
-            } else if (!sourceData) {
-                Ext.MessageBox.alert("Warning", "The 'Raw Sequence' field is required to create a part.");
-                ready=false;
-            }
-        }
+        var ready = this.onValidateFields();
+        console.log(ready);
 
         var newSeq = Ext.create("Teselagen.models.SequenceFile", {
             name: partSource,
@@ -353,6 +379,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             toastr.info("Part Definition Changed");
                             Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                             Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
+                            Vede.application.fireEvent(self.DeviceEvent.SELECT_CELL, inspectorController.selectedCell, inspectorController.selectedBinIndex, yIndex);
+
                             self.selectedWindow.close();
                         }
                     });
@@ -410,7 +438,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                                 toastr.info("Part Definition Changed");
                                 Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                                 Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
-
                             } else {
                                 Ext.Msg.alert("Duplicate Part Definition", "A part with that name and definition already exists in the part library.");
                                 record.reject();
@@ -434,8 +461,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     onCancelPartDefinitionBtnClick: function() {
-        console.log(this.selectedPart);
-        this.selectedWindow.close();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.el.unmask();
+        this.selectedWindow.close(this.selectedPart);
     },
 
     init: function () {

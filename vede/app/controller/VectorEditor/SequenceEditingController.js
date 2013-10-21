@@ -96,6 +96,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onOpenVectorEditor: function(seq, part){
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var sequenceFileManager;
         if(seq.get("serialize")) {
             sequenceFileManager = seq.getSequenceManager();
