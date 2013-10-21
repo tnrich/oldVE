@@ -41,6 +41,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         if(combobox.getValue() === "Whole sequence")
         {
             startBP.setValue(1);
+            console.log(this.selectedSequence);
             stopBP.setValue(this.selectedSequence.getLength());
             startBP.disable();
             stopBP.disable();
@@ -218,6 +219,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
         var specifiedSequence = form.findField('specifiedSequence');
+        // specifiedSequence.name = "DESpecifiedSequence";
         var rawGenbank;
 
         var doneButton = this.selectedWindow.down("button[cls='changePartDefinitionDoneBtn']");
@@ -294,6 +296,11 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     onCreateNewPartInDEBtnClick: function() {
         var self = this;
 
+        var ready = this.onValidateFields();
+
+        
+        if(ready) {
+
         var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
         var activeProject = inspectorController.activeProject;
         var yIndex = activeProject.bins().getAt(inspectorController.selectedBinIndex).cells().indexOf(inspectorController.selectedCell);
@@ -307,9 +314,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var startBP = form.findField('startBP');
         var stopBP = form.findField('stopBP');
         var revComp = form.findField('revComp');
-
-        var ready = this.onValidateFields();
-        console.log(ready);
 
         var newSeq = Ext.create("Teselagen.models.SequenceFile", {
             name: partSource,
@@ -351,7 +355,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             });
         };
 
-        if(ready) {
             self.selectedSequence.processSequence(function(err,seqMgr,gb){
                 seqMgr.addFeature(newFeature, true);
                 self.selectedSequence.setSequenceManager(seqMgr);
@@ -381,7 +384,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
                             Vede.application.fireEvent(self.DeviceEvent.SELECT_CELL, inspectorController.selectedCell, inspectorController.selectedBinIndex, yIndex);
 
-                            self.selectedWindow.close();
+                            self.selectedWindow.destroy();
+                            currentTab.el.unmask();
                         }
                     });
                 });

@@ -123,7 +123,6 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
             var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
             var currentTabEl = (currentTab.getEl());
             currentTabEl.unmask(); 
-
             if(selectedPart) {
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
             }
