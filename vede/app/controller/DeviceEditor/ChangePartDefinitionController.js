@@ -298,7 +298,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         var ready = this.onValidateFields();
 
-        
+
         if(ready) {
 
         var inspectorController = Vede.application.getController("DeviceEditor.InspectorController");
@@ -328,7 +328,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                 type: 'misc_feature',
                 start: startBP.getValue(),
                 end: stopBP.getValue(),
-                strand: 'positive',
+                strand: '1',
                 featureNotes: ''
         });
 
@@ -356,7 +356,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         };
 
             self.selectedSequence.processSequence(function(err,seqMgr,gb){
-                seqMgr.addFeature(newFeature, true);
+                seqMgr.addFeature(newFeature,true);
                 self.selectedSequence.setSequenceManager(seqMgr);
                 saveSequence(self.selectedSequence,function(err){
                     if(err) {
