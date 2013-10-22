@@ -69,6 +69,13 @@ block container
                                     option(value="false", selected = (user.activated===false ? true : false) ) Not activated
                         .row
                             .large-3.small-3.columns
+                                label.right.inline(for='debugAccess') Debug
+                            .large-9.small-9.columns
+                                select(name='debugAccess', data-required="true")
+                                    option(value="true", selected = (user.debugAccess===true ? true : false) ) True
+                                    option(value="false", selected = (user.debugAccess===false ? true : false) ) False
+                        .row
+                            .large-3.small-3.columns
                             .large-9.small-9.columns
                                 input.button.radius#edit_submit(type='submit', name="update", value="Update") Update
                                 a.button.radius#edit_cancel(style="margin-left:10px;", href="javascript:history.back()") Cancel

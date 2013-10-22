@@ -70,6 +70,12 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
         self.authResponse = JSON.parse(response.responseText);
         if(!self.authResponse.error) {
+
+            if(self.authResponse.user.debugAccess)
+            {
+                if(!window.location.pathname.match("beta")) window.location = "/api/beta";
+            }   
+
             self.username = self.authResponse.user.username;
             Teselagen.manager.SessionManager.setBaseUser(self.username || self.authResponse.user.username);
             self.updateSplashScreenMessage(self.authResponse.msg);

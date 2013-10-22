@@ -294,7 +294,8 @@ module.exports = function(db) {
 	        }
 		},
 		dateCreated: Date,
-		lastAccess: Date
+		lastAccess: Date,
+		debugAccess: {type: Boolean, default: false}
 	});
 
     UserSchema.pre('save', function(next) {
