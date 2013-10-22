@@ -357,6 +357,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             self.selectedSequence.processSequence(function(err,seqMgr,gb){
                 seqMgr.addFeature(newFeature,true);
                 seqMgr.name = partSource;
+                var rawGenbank = seqMgr.toGenbank().toString();
+                self.selectedSequence.setSequenceFileContent(rawGenbank);
                 self.selectedSequence.setSequenceManager(seqMgr);
                 saveSequence(self.selectedSequence,function(err){
                     if(err) {
