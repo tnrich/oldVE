@@ -15,116 +15,115 @@ var bcrypt = require('bcrypt');
 
 module.exports = function(db) {
 
-	var mongoose = require("mongoose");
+    var mongoose = require("mongoose");
     var crypto = require("crypto");
 
-	var registerSchema = function(name, schema) {
-		db.model(name, schema);
-		schema.virtual('id').get(function() {
-			return this._id.toString();
-		});
-		schema.set('toJSON', {
-			virtuals: true
-		});
-	};
+    var registerSchema = function(name, schema) {
+        db.model(name, schema);
+        schema.virtual('id').get(function() {
+            return this._id.toString();
+        });
+        schema.set('toJSON', {
+            virtuals: true
+        });
+    };
 
-	var Schema = mongoose.Schema;
-	var oIDRef = mongoose.Schema.Types.ObjectId;
-	var Mixed = mongoose.Schema.Types.Mixed;
+    var Schema = mongoose.Schema;
+    var oIDRef = mongoose.Schema.Types.ObjectId;
+    var Mixed = mongoose.Schema.Types.Mixed;
 
-	var j5RunSchema = new Schema({
-		devicedesign_id: {
-			type: oIDRef,
-			ref: 'devicedesign'
-		},
-		name: String,
-		file_id: oIDRef,
-		date: Date,
-		j5Results: {
-			assemblies: [],
-			combinatorialAssembly: { type: Mixed, default: {"Info":"No data"} },
-			j5parameters: { type: Mixed, default: {"Info":"No data"} },
-			processedData: Mixed
-		},
-		j5Input: {
-			j5Parameters: { type: Mixed, default: {"Info":"No data"} },
-		},
-		assemblyType: String,
-		assemblyMethod: String,
-		endDate: Date,
-		status: String,
-		process: {
-			server: String,
-			pid: Number
-		},
-		warnings: [],
-		error_list: [],
-		user_id: { type: oIDRef, ref: 'user' },
-		project_id: { type: oIDRef, ref: 'project' },
-		devicedesign_id: { type: oIDRef, ref: 'devicedesign' },
-		devicedesign_name: String,
-		data: Mixed
-	});
-	registerSchema('j5run', j5RunSchema);
+    var j5RunSchema = new Schema({
+        devicedesign_id: {
+            type: oIDRef,
+            ref: 'devicedesign'
+        },
+        name: String,
+        file_id: oIDRef,
+        date: Date,
+        j5Results: {
+            assemblies: [],
+            combinatorialAssembly: { type: Mixed, default: {"Info":"No data"} },
+            j5parameters: { type: Mixed, default: {"Info":"No data"} },
+            processedData: Mixed
+        },
+        j5Input: {
+            j5Parameters: { type: Mixed, default: {"Info":"No data"} },
+        },
+        assemblyType: String,
+        assemblyMethod: String,
+        endDate: Date,
+        status: String,
+        process: {
+            server: String,
+            pid: Number
+        },
+        warnings: [],
+        error_list: [],
+        user_id: { type: oIDRef, ref: 'user' },
+        project_id: { type: oIDRef, ref: 'project' },
+        devicedesign_name: String,
+        data: Mixed
+    });
+    registerSchema('j5run', j5RunSchema);
 
-	var SequenceSchema = new Schema({
-		FQDN: String,
-		user_id: {
-			type: oIDRef,
-			ref: 'user'
-		},
-		name: String,
-		description: String,
-		dateCreated: String,
-		dateModified: String,
-		ve_metadata: Mixed,
-		sequenceFileContent: String,
-		sequenceFileFormat: String,
-		hash: String,
+    var SequenceSchema = new Schema({
+        FQDN: String,
+        user_id: {
+            type: oIDRef,
+            ref: 'user'
+        },
+        name: String,
+        description: String,
+        dateCreated: Date,
+        dateModified: Date,
+        ve_metadata: Mixed,
+        sequenceFileContent: String,
+        sequenceFileFormat: String,
+        hash: String,
         size: Number,
-		partSource: String,
-		sequenceFileName: String,
-		firstTimeImported: Boolean,
-		serialize: Mixed
-	});
+        partSource: String,
+        sequenceFileName: String,
+        firstTimeImported: Boolean,
+        serialize: Mixed
+    });
 
-	//SequenceSchema.virtual('user_id').get(function() {
-	//  return req.user._id;
-	//});
+    //SequenceSchema.virtual('user_id').get(function() {
+    //  return req.user._id;
+    //});
 
-	SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true })
+    SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true });
 
-	registerSchema('sequence', SequenceSchema);
+    registerSchema('sequence', SequenceSchema);
 
-	var PartSchema = new Schema({
-		FQDN: {type : String},
+    var PartSchema = new Schema({
+        FQDN: {type : String},
         definitionHash: {type: String},
-		user_id : { type: oIDRef, ref: 'user' },
-		name: String,
-		dateCreated: String,
-		dateModified: String,
-		ve_metadata       :  Mixed,
-		id                :  String,
-		veproject_id      :  String,
-		j5bin_id          :  String,
-		eugenerule_id     :  String,
-		sequencefile_id   : { type: oIDRef, ref: 'sequence' },
-		directionForward  :  String,
-		revComp           :  String,
-		genbankStartBP    :  String,
-		endBP             :  String,
+        user_id : { type: oIDRef, ref: 'user' },
+        name: String,
+        dateCreated: Date,
+        dateModified: Date,
+        ve_metadata       :  Mixed,
+        id                :  String,
+        veproject_id      :  String,
+        j5bin_id          :  String,
+        eugenerule_id     :  String,
+        sequencefile_id   : { type: oIDRef, ref: 'sequence' },
+        directionForward  :  String,
+        revComp           :  String,
+        genbankStartBP    :  String,
+        endBP             :  String,
         features          :  String,
-		iconID            :  String,
+        iconID            :  String,
         partSource        :  String,
-        size 			  :  Number
-	});
+        size               :  Number
+    });
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});
 
-	PartSchema.pre('save', function(next) {
-		this.id = this._id;
-		next();
-	});
+    PartSchema.pre('save', function(next) {
+        this.id = this._id;
+        next();
+    });
 
     PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
         db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
@@ -140,163 +139,163 @@ module.exports = function(db) {
         });
     };
 
-	db.model('part', PartSchema);
+    db.model('part', PartSchema);
 
-	var DeviceDesignSchema = new Schema({
-		project_id: {
-			type: oIDRef,
-			ref: 'project'
-		},
-		user_id: {
-			type: oIDRef,
-			ref: 'user'
-		},
-		name: String,
-		dateCreated: String,
-		dateModified: String,
-		de_metadata: Mixed,
-		directionForward: String,
-		combinatorial: String,
-		isCircular: String,
-		bins: [{
-			directionForward: String,
-			dsf: String,
-			fro: String,
-			extra5PrimeBps: String,
-			extra3PrimeBps: String,
+    var DeviceDesignSchema = new Schema({
+        project_id: {
+            type: oIDRef,
+            ref: 'project'
+        },
+        user_id: {
+            type: oIDRef,
+            ref: 'user'
+        },
+        name: String,
+        dateCreated: String,
+        dateModified: String,
+        de_metadata: Mixed,
+        directionForward: String,
+        combinatorial: String,
+        isCircular: String,
+        bins: [{
+            directionForward: String,
+            dsf: String,
+            fro: String,
+            extra5PrimeBps: String,
+            extra3PrimeBps: String,
             devicedesign_id: String,
-			binName: String,
-			iconID: String,
-			cells: [
-				{
-					index: String,
-					fas: String,
-					part_id :
-						{
-							type: oIDRef,
-							ref: 'part'
-						}
-				}
-			]
-		}],
-		parts: [{
-			type: oIDRef,
-			ref: 'part'
-		}],
-		rules: [
-			{
-				compositionalOperator: String,
-				name: String,
-				negationOperator: Boolean,
-				operand1_id: String,
-				operand2Number: String,
-				operand2_id: String,
-				operand2isNumber: Boolean,
-				originalRuleLine: String,
-			}
-		],
-		j5runs: [{
-			type: oIDRef,
-			ref: 'j5run'
-		}],
-		sequences: Mixed
-	});
+            binName: String,
+            iconID: String,
+            cells: [
+                {
+                    index: String,
+                    fas: String,
+                    part_id :
+                        {
+                            type: oIDRef,
+                            ref: 'part'
+                        }
+                }
+            ]
+        }],
+        parts: [{
+            type: oIDRef,
+            ref: 'part'
+        }],
+        rules: [
+            {
+                compositionalOperator: String,
+                name: String,
+                negationOperator: Boolean,
+                operand1_id: String,
+                operand2Number: String,
+                operand2_id: String,
+                operand2isNumber: Boolean,
+                originalRuleLine: String,
+            }
+        ],
+        j5runs: [{
+            type: oIDRef,
+            ref: 'j5run'
+        }],
+        sequences: Mixed
+    });
 
-	DeviceDesignSchema.pre('remove',function (next) {
-	  
-	  // Remove from Projects
-	  console.log("Trying to remove "+this._id);
-	  db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
-	  	console.log(numberAffected+" projects updated");
-	  });
+    DeviceDesignSchema.pre('remove',function (next) {
+      
+      // Remove from Projects
+      console.log("Trying to remove "+this._id);
+      db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
+          console.log(numberAffected+" projects updated");
+      });
 
-	  // Remove from Users
-	  // Currently user.designs is not being used
-	  //db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
-	  //	console.log(numberAffected+" users updated");
-	  //});
+      // Remove from Users
+      // Currently user.designs is not being used
+      //db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
+      //    console.log(numberAffected+" users updated");
+      //});
 
-	  
-	  // Remove from j5reports and associated j5reports
-	  db.model('j5run').remove({devicedesign_id: this}).exec(function(err, numberAffected){
-	  	console.log(numberAffected+" j5runs removed");
-	  });
+      
+      // Remove from j5reports and associated j5reports
+      db.model('j5run').remove({devicedesign_id: this}).exec(function(err, numberAffected){
+          console.log(numberAffected+" j5runs removed");
+      });
 
-	  next();
-	});
+      next();
+    });
 
-	registerSchema('devicedesign', DeviceDesignSchema);
+    registerSchema('devicedesign', DeviceDesignSchema);
 
-	var ProjectSchema = new Schema({
-		user_id: {
-			type: oIDRef,
-			ref: 'User'
-		},
-		dateCreated: String,
-		dateModified: String,
-		name: String,
-		designs: [{
-			type: oIDRef,
-			ref: 'devicedesign'
-		}]
-	});
-	registerSchema('project', ProjectSchema);
+    var ProjectSchema = new Schema({
+        user_id: {
+            type: oIDRef,
+            ref: 'User'
+        },
+        dateCreated: String,
+        dateModified: String,
+        name: String,
+        designs: [{
+            type: oIDRef,
+            ref: 'devicedesign'
+        }]
+    });
+    registerSchema('project', ProjectSchema);
 
-	var UserSchema = new Schema({
-		username: String,
+    var UserSchema = new Schema({
+        username: String,
         password: String,
-		firstName: String,
-		lastName: String,
-		email: String,
+        firstName: String,
+        lastName: String,
+        email: String,
         activated: {type: Boolean, default: false},
         activationCode: String,
-		preferences: Mixed,
-		groupName: String,
-		groupType: String,
-		userType: {type: String, default: "Standard"},
-		projects: [{
-			type: oIDRef,
-			ref: 'project'
-		}],
-		sequences: [{
-			type: oIDRef,
-			ref: 'sequence'
-		}],
-		parts: [{
-			type: oIDRef,
-			ref: 'part'
-		}],
-		designs: [{
-			type: oIDRef,
-			ref: 'devicedesign'
-		}],
-		userRestrictionEnzymeGroups: [{
-		    name: String,
-		    userRestrictionEnzymes: [{
-		        name: String
-		    }]
-		}],
-		masterSources: 
-		{
-	        masterplasmidlist: 
-	        { 
-	            name: {type: String, default: "masterplasmidlist.csv"},
-	            fileContent: {type: String, default: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KcGo1XzAwMDAwLCwsLA==" , select: false}
-	        },
-	        masteroligolist: 
-	        {
-	            name: {type: String, default: "masteroligolist.csv"},
-	            fileContent: {type: String, default: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlDQpqNV8wMDAwMCwsLCw=" , select: false}
-	        },
-	        masterdirectsyntheseslist: {
-	            name: {type: String, default: "masterdirectsyntheseslist.csv"},
-	            fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
-	        }
-		},
-		dateCreated: Date,
-		lastAccess: Date,
-		debugAccess: {type: Boolean, default: false}
-	});
+        preferences: Mixed,
+        groupName: String,
+        groupType: String,
+        userType: {type: String, default: "Standard"},
+        projects: [{
+            type: oIDRef,
+            ref: 'project'
+        }],
+        sequences: [{
+            type: oIDRef,
+            ref: 'sequence'
+        }],
+        parts: [{
+            type: oIDRef,
+            ref: 'part'
+        }],
+        designs: [{
+            type: oIDRef,
+            ref: 'devicedesign'
+        }],
+        userRestrictionEnzymeGroups: [{
+            name: String,
+            userRestrictionEnzymes: [{
+                name: String
+            }]
+        }],
+        masterSources: 
+        {
+            masterplasmidlist: 
+            { 
+                name: {type: String, default: "masterplasmidlist.csv"},
+                fileContent: {type: String, default: "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KcGo1XzAwMDAwLCwsLA==" , select: false}
+            },
+            masteroligolist: 
+            {
+                name: {type: String, default: "masteroligolist.csv"},
+                fileContent: {type: String, default: "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlDQpqNV8wMDAwMCwsLCw=" , select: false}
+            },
+            masterdirectsyntheseslist: {
+                name: {type: String, default: "masterdirectsyntheseslist.csv"},
+                fileContent: {type: String, default: "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQ0KZHNqNV8wMDAwMCwsLCw=" , select: false}
+            }
+        },
+        dateCreated: Date,
+        lastAccess: Date,
+        debugAccess: {type: Boolean, default: false}
+    });
 
     UserSchema.pre('save', function(next) {
         var user = this;
@@ -332,43 +331,42 @@ module.exports = function(db) {
     };
 
     UserSchema.methods.J5MethodAllowed = function(method,cb) {
+        //console.log("Trying to execute method "+method);
+        //console.log("User type "+this.userType);
+        /*
+        
+        *   NOT ALLOWED for guests
 
-    	//console.log("Trying to execute method "+method);
-    	//console.log("User type "+this.userType);
-    	/*
-		
-		*   NOT ALLOWED for guests
+            Mock
+            CombinatorialMock
 
-			Mock
-			CombinatorialMock
+        *    SLIC/Gibson/CPEC
+        *    CombinatorialSLICGibsonCPEC
 
-		*	SLIC/Gibson/CPEC
-		*	CombinatorialSLICGibsonCPEC
-
-		*	GoldenGate
-		*	CombinatorialGoldenGate
-    	
-    	*/
+        *    GoldenGate
+        *    CombinatorialGoldenGate
+        
+        */
 
         var protectedMethods = [
-	        "SLIC/Gibson/CPEC",
-	        "CombinatorialSLICGibsonCPEC",
-	        "GoldenGate",
-	        "CombinatorialGoldenGate",
-	        "condenseAssemblyFiles",
-	        "DesignDownstreamAutomation"
+            "SLIC/Gibson/CPEC",
+            "CombinatorialSLICGibsonCPEC",
+            "GoldenGate",
+            "CombinatorialGoldenGate",
+            "condenseAssemblyFiles",
+            "DesignDownstreamAutomation"
         ];
         if(this.userType && this.userType == "Guest")
         {
-        	if(protectedMethods.indexOf(method) !=- 1) return cb(false);
-        	else return cb(true);
+            if(protectedMethods.indexOf(method) !=- 1) return cb(false);
+            else return cb(true);
         }
         return cb(true);
     };
 
-	UserSchema.virtual('FQDN').get(function () {
-	  return this.username;
-	});
+    UserSchema.virtual('FQDN').get(function () {
+      return this.username;
+    });
 
-	registerSchema('User', UserSchema);
+    registerSchema('User', UserSchema);
 };
