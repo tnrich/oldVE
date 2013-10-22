@@ -119,14 +119,12 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
         me.callParent(arguments);
     },
     listeners: {
-        close: function(selectedPart) {
+        close: function(win) {
             var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
             var currentTabEl = (currentTab.getEl());
-            currentTabEl.unmask(); 
-            // if(selectedPart) {
-            //     Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
-            // }
+            currentTabEl.unmask();
 
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLOSE_PART_CREATE_WINDOW);
         }
     }
 

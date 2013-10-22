@@ -118,11 +118,11 @@ module.exports = function(app) {
             }
             if(sortOptions[0] && sortOptions[0].property==="dateModified")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="dateCreated")
             {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
+                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
             }
             if(sortOptions[0] && sortOptions[0].property==="size")
             {

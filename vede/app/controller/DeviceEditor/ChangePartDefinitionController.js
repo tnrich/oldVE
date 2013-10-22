@@ -468,7 +468,13 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.el.unmask();
         this.selectedWindow.close();
-        if(!this.selectedPart.raw) {
+        if(!this.selectedPart.data.partSource) {
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
+        }
+    },
+
+    onCreatePartWindowClose: function() {
+        if(!this.selectedPart.data.partSource) {
             Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
         }
     },
@@ -493,12 +499,16 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             },
             "combobox[name='specifiedSequence']": {
                 change: this.onSpecifiedSequenceChange
+            },
+            "window[name='Create Part']": {
+                close: this.onCreatePartWindowClose
             }
         });
         
         this.application.on(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, this.open, this);
         this.application.on(this.DeviceEvent.CREATE_PART_DEFINITION, this.openCreatePart, this);
         this.application.on(this.DeviceEvent.CREATE_PART_IN_DESIGN, this.openCreatePartInDesign, this);
+        this.application.on(this.DeviceEvent.CLOSE_PART_CREATE_WINDOW, this.onCreatePartWindowClose, this);
 
         this.application.on(this.SelectionEvent.SELECTION_CHANGED, this.onSequenceSelectionChanged, this);
     }
