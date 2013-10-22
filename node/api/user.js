@@ -48,6 +48,12 @@ module.exports = function(app) {
         });
     }
 
+
+    app.get('/beta', restrict, function (req, res) {
+      if(req.user.debugAccess || true) res.sendfile( require('path').resolve(__dirname,'../resources/unminified/unminified.html'));
+      else res.json({error:'Not allowed'});
+    });
+
     /*
     Temporal user listing
     */

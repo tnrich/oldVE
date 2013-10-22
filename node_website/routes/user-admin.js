@@ -8,7 +8,7 @@ module.exports = function(app, express){
 
   app.get('/admin/users',function(req,res){
     var User = app.db.model("User");
-    User.find({},{firstName:1,lastName:1,email:1,username:1,userType:1,groupType:1,groupName:1,activated:1,userType:1,dateCreated:1,lastAccess:1}).exec(function(err,users){
+    User.find({},{firstName:1,lastName:1,email:1,username:1,userType:1,groupType:1,groupName:1,activated:1,userType:1,dateCreated:1,lastAccess:1,debugAccess:true}).exec(function(err,users){
       res.json({users:users});
     });
   });
@@ -62,6 +62,7 @@ module.exports = function(app, express){
       user.email = req.body.email;
       user.groupName = req.body.organizationName;
       user.groupType = req.body.organizationType;
+      user.debugAccess = req.body.debugAccess;
       //user.username = req.body.username;
       user.userType = req.body.userType;
       if(req.body.password!="") user.password = req.body.password;

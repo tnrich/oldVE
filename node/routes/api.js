@@ -29,7 +29,6 @@ module.exports = function(app) {
         });
     });
 
-
     require('../routes/constants')(app);
 
     require('./authentication.js')(app);
