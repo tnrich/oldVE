@@ -98,7 +98,8 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
                     Vede.application.fireEvent(Teselagen.event.DeviceEvent.OPEN_PART_LIBRARY);
                 } else {
                     var seq = d.getPart().getSequenceFile();
-
+                    console.log(seq);
+                    
                     if(seq != null) {
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, seq, d.getPart());
                     } else {
