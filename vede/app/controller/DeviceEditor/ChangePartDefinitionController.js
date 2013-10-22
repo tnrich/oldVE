@@ -467,7 +467,10 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     onCancelPartDefinitionBtnClick: function() {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.el.unmask();
-        this.selectedWindow.close(this.selectedPart);
+        this.selectedWindow.close();
+        if(!this.selectedPart.raw) {
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
+        }
     },
 
     init: function () {
