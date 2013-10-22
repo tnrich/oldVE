@@ -14,7 +14,7 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method POST /sendFeedback
      */
-    app.post('/sendFeedback', function(req, res) {
+    app.post('/sendFeedback', restrict, function(req, res) {
 
         variables = "{type:Feedback,user:"+req.user.username+"}";
         
