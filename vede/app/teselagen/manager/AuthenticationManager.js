@@ -73,7 +73,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
             if(self.authResponse.user.debugAccess)
             {
-                if(!window.location.pathname.match("beta")&&!window.location.pathname.match("dev.teselagen.com")) window.location = "/api/beta";
+                if(!window.location.pathname.match("beta")&&!window.location.origin.match("dev.teselagen.com")) window.location = "/api/beta";
             }   
 
             self.username = self.authResponse.user.username;
