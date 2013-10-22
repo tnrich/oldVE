@@ -104,8 +104,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
         }
 
-        console.log(sequenceFileManager);
-
         if(!sequenceFileManager) {
             return;
         }

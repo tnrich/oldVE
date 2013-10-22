@@ -162,7 +162,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 sequences.on('load', function(s){ 
                     s.remoteFilter = false; 
                 }, this, { single: true });
-                
+
                 sequences.filter("name", Ext.String.escapeRegex(searchString));
             } else {
                 sequences.loadPage(1);
@@ -282,7 +282,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var project_id = project.data.project_id;
 
         this.workingProject = null;
-        
+
         var childsToClose = [];
         project.designs().each(function(design){
             childsToClose.push(design.id);
@@ -325,7 +325,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     var sequenceNode = rootNode.findChild('id',sequence.data.id,true);
                     if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);                    
                 //});
-                
+
  //           }).delay(500);
         });
     },
@@ -397,7 +397,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
                     text = Ext.String.trim(text);
-                	if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
+                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
 
                     Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
                     $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
@@ -410,7 +410,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         sequenceFileName: "untitled.gb",
                         partSource: "Untitled sequence",
                         name: text
-                    });                    
+                    });
+
+                    // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
+                    var seqMan = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(newSequenceFile);
+                    newSequenceFile.setSequenceManager(seqMan);
+
                     newSequenceFile.save({
                         callback: function () {
                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {

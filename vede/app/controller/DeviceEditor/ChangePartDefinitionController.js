@@ -41,7 +41,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         if(combobox.getValue() === "Whole sequence")
         {
             startBP.setValue(1);
-            console.log(this.selectedSequence);
             stopBP.setValue(this.selectedSequence.getLength());
             startBP.disable();
             stopBP.disable();

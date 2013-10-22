@@ -199,7 +199,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         type: "long"
     },
     {
-        name: 'serialize', 
+        name: 'serialize',
         type: "auto",
         convert: function(v, record) {
             this.sequenceChanged = true;
