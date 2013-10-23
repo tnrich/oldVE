@@ -308,6 +308,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         if(e.clipboardData && e.clipboardData.getData) {
             text = e.clipboardData.getData(e.clipboardData.types[0]);
 
+            this.application.ClipBoardData = null;
             this.pasteFromClipboard(text);
         }
 
@@ -414,7 +415,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     },
 
     pasteFromClipboard: function(text) {
-        if(this.application.ClipBoardData || text) {
+        if(this.application.ClipBoardData || (text && typeof text === 'string')) {
             var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
 
             confirmationWindow.down("button[cls='pasteConfirmationOkButton']").on("click", function() {
@@ -427,7 +428,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                                         this.SelectionLayer.end);
                 }
 
-                if(text) {
+                if(text && typeof text === 'string') {
                     pasteSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
                         sequence: Teselagen.bio.sequence.DNATools.createDNA(text)
                     });
