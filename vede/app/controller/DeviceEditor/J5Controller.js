@@ -88,9 +88,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     loadPresetsSelector: function(selectedPreset) {
-        console.log("Loading presets");
-        debugger;
-
         var self = this;
 
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
