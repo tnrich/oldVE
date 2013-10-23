@@ -218,15 +218,41 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         var buttons = this.activeTab.query('component[cls="orfsBtn"]');
         var checkitems = this.activeTab.query('menucheckitem[identifier="orfsMenuItem"]');
 
-        for(var i = 0; i < buttons.length; i++) {
-            buttons[i].toggle(checked, true);
+        var frame = menucheckitem.frameNumber;
+
+        if(frame === 'all') {
+            for(var i = 0; i < buttons.length; i++) {
+                buttons[i].toggle(checked, true);
+            }
+
+            for(i = 0; i < checkitems.length; i++) {
+                checkitems[i].setChecked(checked, true);
+            }
+            this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
+                                       [checked, checked, checked]);
+        } else {
+            var isFrame1Visible = checkitems[1].checked;
+            var isFrame2Visible = checkitems[2].checked;
+            var isFrame3Visible = checkitems[3].checked;
+
+            if(!isFrame1Visible || !isFrame2Visible || !isFrame3Visible) {
+                for(var i = 0; i < buttons.length; i++) {
+                    buttons[i].toggle(false, true);
+                }
+
+                checkitems[0].setChecked(false, true);
+            } else {
+                for(var i = 0; i < buttons.length; i++) {
+                    buttons[i].toggle(true, true);
+                }
+
+                checkitems[0].setChecked(true, true);
+            }
+
+            this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
+                                       [isFrame1Visible, isFrame2Visible, isFrame3Visible]);
         }
 
-        for(i = 0; i < checkitems.length; i++) {
-            checkitems[i].setChecked(checked, true);
-        }
-        this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
-                                   checked);
     },
 
     onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {

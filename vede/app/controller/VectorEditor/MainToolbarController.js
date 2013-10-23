@@ -119,7 +119,7 @@ Ext.define('Vede.controller.VectorEditor.MainToolbarController', {
         }
 
         this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
-                                   pressed);
+                                   [pressed, pressed, pressed]);
     },
 
     onREButtonClick: function() {

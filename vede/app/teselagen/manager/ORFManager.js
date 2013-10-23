@@ -33,7 +33,37 @@ Ext.define("Teselagen.manager.ORFManager", {
     setOrfs: function(pOrfs) {
         this.orfs = pOrfs;
     },
-    
+
+    /**
+     * Gets ORFs from sequence in the given frame(s).
+     * @return {Teselagen.bio.orf.ORF[]} Array of ORFs in given frame(s).
+     */
+    getOrfsByFrame: function(frame) {
+        var orfs = this.getOrfs();
+        var filteredOrfs = [];
+        var orf;
+
+        if(typeof frame === 'object') {
+            for(var i = 0; i < orfs.length; i++) {
+                orf = orfs[i];
+
+                if(frame.indexOf(orf.getFrame()) > -1) {
+                    filteredOrfs.push(orf);
+                }
+            }
+        } else {
+            for(var i = 0; i < orfs.length; i++) {
+                orf = orfs[i];
+
+                if(orf.getFrame() === frame) {
+                    filteredOrfs.push(orf);
+                }
+            }
+        }
+
+        return filteredOrfs;
+    },
+
     /**
      * Gets ORFs from sequence. Recalculate them if the sequence has changed.
      * @return {Teselagen.bio.orf.ORF[]} Array of ORFs in DNA sequence.
@@ -137,19 +167,22 @@ Ext.define("Teselagen.manager.ORFManager", {
             } else if(orf.getEnd() <= maxLength) {
                 normalOrfs.push(orf);
             } else if(orf.getEnd() > maxLength && orf.getStart() < maxLength) {
-                orf.setOneEnd(orf.getEnd() - maxLength);
                 var startCodons = orf.getStartCodons();
 
-                Ext.each(startCodons, function(startCodon) {
+                orf.setOneEnd(orf.getEnd() - maxLength);
+
+                orf.setStartCodons(orf.getStartCodons().map(function(startCodon) {
                     if(startCodon >= maxLength) {
                         startCodon -= maxLength;
                     }
-                });
+
+                    return startCodon;
+                }));
 
                 recalcOrfs.push(orf);
             }
         });
-        
+
 //        var normalOrf = null;
 //        var circularOrf = null;
 

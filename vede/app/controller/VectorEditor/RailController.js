@@ -14,7 +14,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
-    
+
     railManager: null,
 
     mouseIsDown: false,
@@ -75,7 +75,7 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
         rail.on("mousemove", function() {
             self.onMousemove(self);
         });
-        
+
         rail.on("contextmenu", function() {
             self.onRightMouseDown(self);
         });
@@ -234,7 +234,15 @@ Ext.define('Vede.controller.VectorEditor.RailController', {
     },
 
     onShowOrfsChanged: function(show) {
-        this.railManager.setShowOrfs(show);
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
+
+        this.railManager.setOrfs(this.ORFManager.getOrfsByFrame(frameArray));
+        this.railManager.setShowOrfs(frameArray.length > 0);
 
         if(this.railManager.sequenceManager) {
             this.railManager.render();
