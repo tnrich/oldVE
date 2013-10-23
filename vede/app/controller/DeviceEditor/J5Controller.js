@@ -87,6 +87,50 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
     },
 
+    loadPresetsSelector: function(combinatorial) {
+        console.log("Loading presets");
+        var self = this;
+
+        function bindSelector(){
+            var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
+            var combobox = inspector.down('component[cls="presetSelector"]');
+
+            combobox.bindStore(self.presetsStore);
+            if(self.presetsStore.first()) combobox.setValue(self.presetsStore.first());
+        };
+
+        Ext.Ajax.request({
+            method: 'GET',
+            url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+            success: function(response){
+                var data = JSON.parse(response.responseText);
+
+                self.presetsStore = Ext.create('Ext.data.Store', {
+                    fields: ['presetName','parameters'],
+                    data : data 
+                });
+
+                bindSelector();
+
+            }
+        });
+
+
+    },
+
+    presetSelectorChange: function(selector,newPreset){
+        var self = this;
+        var selectedPreset = this.presetsStore.findRecord('presetName',newPreset);
+        var selectedParameters = selectedPreset.get('parameters');
+
+        for(var key in selectedParameters)
+        {
+            var params = selectedParameters[key];
+            self.j5Parameters.set(key, params);
+        }
+        self.populateJ5ParametersDialog();
+    },
+
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
         var self = this;
 
@@ -97,6 +141,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     self.loadAssemblyMethodSelector(combinatorial);
                 });
             }
+            self.loadPresetsSelector();
         } 
 
         if(this.j5Running) {
@@ -804,6 +849,37 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         }, this);
     },
+
+    saveAsPresetBtn: function(){
+        var parameters = {};
+        this.j5Parameters.fields.eachKey(function (key) {
+            if(key !== "id" && key !== "j5run_id") {
+                parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
+            }
+        }, this);
+
+        Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn,text){
+            if(btn !== "ok") return null;
+
+            Ext.Ajax.request({
+                method: 'POST',
+                url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                params: {
+                    presetName: text,
+                    j5parameters: JSON.stringify(parameters)
+                },
+                success: function(response){
+                    Ext.MessageBox.alert('Success', 'Preset saved', function(){
+                    });                    
+                }
+            });
+
+
+        }, this);
+
+
+    },
+
     onDownloadj5Btn: function (button, e, options) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
@@ -925,6 +1001,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='resetj5ServerParamsBtn']": {
                 click: this.resetServerj5Params
             },
+            "button[cls='saveAsPresetBtn']": {
+                click: this.saveAsPresetBtn
+            },
             "button[cls='j5ParamsCancelBtn']": {
                 click: this.onj5ParamsCancelBtnClick
             },
@@ -1011,6 +1090,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             },
             "button[cls='stopj5runBtn']": {
                 click: this.abortJ5Run
+            },
+            "component[cls='presetSelector']": {
+                change: this.presetSelectorChange
             }
         });
 
@@ -1036,6 +1118,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.nonCombinatorialStore = new Ext.data.ArrayStore({
             fields: ['assemblyMethod'],
             data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
+        });
+
+        this.presetsStore = new Ext.data.ArrayStore({
+            fields: ['presetName'],
+            data : [['Preset 0'], ['Preset 1'], ['Preset 2']]
         });
     }
 });

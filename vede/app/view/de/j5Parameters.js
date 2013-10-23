@@ -417,6 +417,16 @@ Ext.define('Vede.view.de.j5Parameters', {
                     text: '<b>Reset to Server Values</b>'
                 }, {
                     xtype: 'button',
+                    cls: 'saveAsPresetBtn',
+                    x: 270,
+                    y: 5,
+                    margin: 5,
+                    maxHeight: 23,
+                    minHeight: 23,
+                    padding: '',
+                    text: '<b>Save as preset</b>'
+                }, {
+                    xtype: 'button',
                     cls: 'j5ParamsCancelBtn',
                     x: 640,
                     y: 5,

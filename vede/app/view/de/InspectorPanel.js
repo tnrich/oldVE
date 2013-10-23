@@ -386,6 +386,19 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     displayField: 'assemblyMethod',
                                     valueField: 'assemblyMethod'
                                 },
+                                {
+                                    xtype: 'combobox',
+                                    cls: 'presetSelector',
+                                    fieldLabel: '<b>Parameters preset:</b>',
+                                    labelCls: 'assembly-label',
+                                    editable: false,
+                                    labelSeparator: ' ',
+                                    labelWidth: 110,
+                                    width:350,
+                                    queryMode: 'local',
+                                    displayField: 'presetName',
+                                    valueField: 'presetName'
+                                },
                                 {   
                                     xtype: 'container',
                                     html: '<b>Master Plasmids List</b>',
