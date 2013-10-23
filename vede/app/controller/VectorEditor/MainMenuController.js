@@ -389,9 +389,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onDownloadGenbankMenuItemClick: function (item, e, options) {
-        console.log("Download genbank called");
-
-
         var saveFile = function (name, gb) {
                 var flag;
                 var text = gb.toString();
