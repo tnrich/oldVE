@@ -500,6 +500,9 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
     onSelectAll: function() {
         if(this.SequenceManager) {
             this.select(0, this.SequenceManager.getSequence().toString().length);
+
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       this, this.SelectionLayer.start, this.SelectionLayer.end);
         }
     },
 
@@ -528,7 +531,7 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
             } else {
                 selectionEnd = this.SelectionLayer.end - this.SelectionLayer.start;
             }
-            
+
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
 
