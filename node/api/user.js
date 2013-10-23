@@ -215,4 +215,45 @@ module.exports = function(app) {
             }
         });
     });
+
+    app.post('/presets' ,restrict, function(req,res){
+
+        var Preset = app.db.model('preset');
+
+        User.findById(req.user._id).populate({
+          path: 'presets',
+        }).exec(function(err, user) {
+          var newPreset = new Preset({
+            presetName: req.body.presetName,
+            j5parameters: JSON.parse(req.body.j5parameters)
+          });
+          newPreset.save(function(){
+            req.user.presets.push(newPreset);
+            req.user.save(function(){
+              res.json({});
+            });
+          });
+        });
+    });
+
+    app.put('/presets' ,restrict, function(req,res){
+
+        var Preset = app.db.model('preset');
+
+        Preset.findById(req.body.id,function(err,preset){
+          preset.j5parameters = JSON.parse(req.body.j5parameters);
+          preset.save(function(){
+            res.json({});
+          });
+        });
+    });
+
+    app.get('/presets' ,restrict, function(req,res){
+        User.findById(req.user._id).populate({
+          path: 'presets',
+        }).exec(function(err, user) {
+          res.json(user.presets);
+        });
+    });
+
 };

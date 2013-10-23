@@ -241,6 +241,12 @@ module.exports = function(db) {
     });
     registerSchema('project', ProjectSchema);
 
+    var PresetSchema = new Schema({
+        presetName: String,
+        j5parameters: Mixed
+    });
+    registerSchema('preset', PresetSchema);
+
     var UserSchema = new Schema({
         username: String,
         password: String,
@@ -294,7 +300,11 @@ module.exports = function(db) {
         },
         dateCreated: Date,
         lastAccess: Date,
-        debugAccess: {type: Boolean, default: false}
+        debugAccess: {type: Boolean, default: false},
+        presets: [{
+            type: oIDRef,
+            ref: 'preset'
+        }]
     });
 
     UserSchema.pre('save', function(next) {
