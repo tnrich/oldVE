@@ -424,7 +424,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     maxHeight: 23,
                     minHeight: 23,
                     padding: '',
-                    text: '<b>Save as preset</b>'
+                    text: '<b>Save preset</b>'
                 }, {
                     xtype: 'button',
                     cls: 'j5ParamsCancelBtn',

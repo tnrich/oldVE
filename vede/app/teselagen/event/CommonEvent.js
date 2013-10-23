@@ -24,4 +24,6 @@ Ext.define("Teselagen.event.CommonEvent", {
     LOAD_ASSEMBLY_METHODS: "LoadAssemblyMethods",
 
     ACTION_MESSAGE: "ActionMessage",
+    
+    LOAD_PRESETS: "LoadPresets"
 });

@@ -216,24 +216,44 @@ module.exports = function(app) {
         });
     });
 
-    app.post('/presets',function(req,res){
-      console.log("Presets received!!! :)");
-      res.json();
+    app.post('/presets' ,restrict, function(req,res){
+
+        var Preset = app.db.model('preset');
+
+        User.findById(req.user._id).populate({
+          path: 'presets',
+        }).exec(function(err, user) {
+          var newPreset = new Preset({
+            presetName: req.body.presetName,
+            j5parameters: JSON.parse(req.body.j5parameters)
+          });
+          newPreset.save(function(){
+            req.user.presets.push(newPreset);
+            req.user.save(function(){
+              res.json({});
+            });
+          });
+        });
     });
 
-    app.get('/presets',function(req,res){
-      var presets = [
-        {
-          presetName: "Preset 0",
-          parameters: {"masterOligoNumberOfDigitsValue":5,"masterPlasmidNumberOfDigitsValue":5,"gibsonOverlapBPsValue":26,"gibsonOverlapMinTmValue":60,"gibsonOverlapMaxTmValue":70,"maxOligoLengthBPsValue":110,"minFragmentSizeGibsonBPsValue":250,"goldenGateOverhangBPsValue":4,"goldenGateRecognitionSeqValue":"GGTCTC","goldenGateTerminiExtraSeqValue":"CACACCAGGTCTCA","maxIdentitiesGoldenGateOverhangsCompatibleValue":2,"oligoSynthesisCostPerBPUSDValue":0.1,"oligoPagePurificationCostPerPieceUSDValue":40,"oligoMaxLengthNoPagePurificationRequiredBPsValue":60,"minPCRProductBPsValue":100,"directSynthesisCostPerBPUSDValue":0.39,"directSynthesisMinCostPerPieceUSDValue":159,"primerGCClampValue":2,"primerMinSizeValue":18,"primerMaxSizeValue":36,"primerMinTmValue":60,"primerMaxTmValue":70,"primerMaxDiffTmValue":5,"primerMaxSelfAnyThValue":47,"primerMaxSelfEndThValue":47,"primerPairMaxComplAnyThValue":47,"primerPairMaxComplEndThValue":47,"primerTmSantaluciaValue":true,"primerSaltCorrectionsValue":true,"primerDnaConcValue":250,"mispriming3PrimeBoundaryBPToWarnIfHitValue":4,"misprimingMinTmValue":45,"misprimingSaltConcValue":0.05,"misprimingOligoConcValue":2.5e-7,"outputSequenceFormatValue":"Genbank","homologyMinLengthBPS":26,"homologyMaxFractionMisMatches":0.05,"suppressPurePrimersValue":true}
-        },
-        {
-          presetName: "Preset 1",
-          parameters: {"masterOligoNumberOfDigitsValue":5,"masterPlasmidNumberOfDigitsValue":5,"gibsonOverlapBPsValue":26,"gibsonOverlapMinTmValue":60,"gibsonOverlapMaxTmValue":70,"maxOligoLengthBPsValue":110,"minFragmentSizeGibsonBPsValue":250,"goldenGateOverhangBPsValue":4,"goldenGateRecognitionSeqValue":"GGTCTC","goldenGateTerminiExtraSeqValue":"CACACCAGGTCTCA","maxIdentitiesGoldenGateOverhangsCompatibleValue":2,"oligoSynthesisCostPerBPUSDValue":0.1,"oligoPagePurificationCostPerPieceUSDValue":40,"oligoMaxLengthNoPagePurificationRequiredBPsValue":60,"minPCRProductBPsValue":100,"directSynthesisCostPerBPUSDValue":0.39,"directSynthesisMinCostPerPieceUSDValue":159,"primerGCClampValue":2,"primerMinSizeValue":18,"primerMaxSizeValue":36,"primerMinTmValue":60,"primerMaxTmValue":70,"primerMaxDiffTmValue":5,"primerMaxSelfAnyThValue":47,"primerMaxSelfEndThValue":47,"primerPairMaxComplAnyThValue":47,"primerPairMaxComplEndThValue":47,"primerTmSantaluciaValue":true,"primerSaltCorrectionsValue":true,"primerDnaConcValue":250,"mispriming3PrimeBoundaryBPToWarnIfHitValue":4,"misprimingMinTmValue":45,"misprimingSaltConcValue":0.05,"misprimingOligoConcValue":2.5e-7,"outputSequenceFormatValue":"Genbank","homologyMinLengthBPS":26,"homologyMaxFractionMisMatches":0.05,"suppressPurePrimersValue":true}
-        }
-      ];
+    app.put('/presets' ,restrict, function(req,res){
 
-      return res.json(presets);
+        var Preset = app.db.model('preset');
+
+        Preset.findById(req.body.id,function(err,preset){
+          preset.j5parameters = JSON.parse(req.body.j5parameters);
+          preset.save(function(){
+            res.json({});
+          });
+        });
+    });
+
+    app.get('/presets' ,restrict, function(req,res){
+        User.findById(req.user._id).populate({
+          path: 'presets',
+        }).exec(function(err, user) {
+          res.json(user.presets);
+        });
     });
 
 };
