@@ -230,6 +230,10 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         partSource.setReadOnly(false);
         sourceData.setReadOnly(false);
         sourceData.setFieldLabel('Raw Sequence');
+
+        if(selectedPart.get("name")) {
+            partName.setValue(selectedPart.get("name"));
+        }
         
         var newPart = Ext.create("Teselagen.models.Part");
         
