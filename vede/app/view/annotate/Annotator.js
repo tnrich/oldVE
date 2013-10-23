@@ -308,7 +308,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             for (var i = 0; i < this.featureRenderers.length; ++i){
                 var featureRenderer = this.featureRenderers[i];
                 featureRenderer.render();
-
             }
         }
     },

@@ -489,12 +489,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
                     assemblies.sort("name", "ASC");
-                    
+
 
                     var j5parameters = Ext.create("Teselagen.models.J5Parameters");
                     j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);
                     var J5parametersValues = j5parameters.getParametersAsStore();
-                    
+
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5AssemblyType").setValue(assemblyMethod);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStatus").setValue(status);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStart").setValue(startDate);
