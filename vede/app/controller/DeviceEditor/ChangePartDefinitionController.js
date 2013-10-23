@@ -325,7 +325,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: name,
                 type: 'misc_feature',
-                start: startBP.getValue(),
+                start: (startBP.getValue()-1),
                 end: stopBP.getValue(),
                 strand: '1',
                 featureNotes: ''

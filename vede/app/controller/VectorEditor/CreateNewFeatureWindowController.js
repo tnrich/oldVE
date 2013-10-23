@@ -75,6 +75,8 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     				featureNotes.push(newFeatureNote);
     			}
     		}
+
+            console.log(strand);
     		
     		var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",{
 	    		name: name,
