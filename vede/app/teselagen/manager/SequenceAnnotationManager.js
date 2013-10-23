@@ -25,6 +25,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         showSpaceEvery10Bp: true,
         showAminoAcids: false,
         showAminoAcidsRevCom: false,
+        orfFrames: [],
 
         bpPerRow: 60,
         sequenceFontSize: 11,

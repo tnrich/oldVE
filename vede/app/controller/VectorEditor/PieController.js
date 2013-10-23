@@ -268,7 +268,15 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     onShowOrfsChanged: function(show) {
-        this.pieManager.setShowOrfs(show);
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
+
+        this.pieManager.setOrfs(this.ORFManager.getOrfsByFrame(frameArray));
+        this.pieManager.setShowOrfs(frameArray.length > 0);
 
         if(this.pieManager.sequenceManager) {
             this.pieManager.render();

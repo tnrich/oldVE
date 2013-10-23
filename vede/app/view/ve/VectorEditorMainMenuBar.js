@@ -266,9 +266,33 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 identifier: 'cutSitesMenuItem',
                 text: 'Cut Sites'
             }, {
-                xtype: 'menucheckitem',
-                identifier: 'orfsMenuItem',
-                text: 'ORF'
+                xtype: 'menuitem',
+                text: 'ORFs',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'All Frames',
+                        frameNumber: 'all'
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'Frame 1',
+                        frameNumber: 1
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'Frame 2',
+                        frameNumber: 2
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'Frame 3',
+                        frameNumber: 3
+                    }]
+                }
             }, {
                 xtype: 'menuseparator'
             }, {

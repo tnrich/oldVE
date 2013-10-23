@@ -196,7 +196,10 @@ Ext.define("Vede.view.annotate.Annotator", {
      */
     loadOrfRenderers: function() {
         this.removeOrfRenderers();
-        var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
+
+        var frames = this.sequenceAnnotator.getOrfFrames();
+        var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfsByFrame(frames);
+
         if(!this.sequenceAnnotator.getShowOrfs() || !retrievedOrfs) {
             return;
         }

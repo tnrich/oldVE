@@ -283,7 +283,15 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onShowOrfsChanged: function(show) {
-        this.SequenceAnnotationManager.setShowOrfs(show);
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
+
+        this.SequenceAnnotationManager.setOrfFrames(frameArray);
+        this.SequenceAnnotationManager.setShowOrfs(frameArray.length > 0);
 
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
