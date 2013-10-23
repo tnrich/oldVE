@@ -327,7 +327,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                 type: 'misc_feature',
                 start: (startBP.getValue()-1),
                 end: stopBP.getValue(),
-                strand: '1',
+                strand: 1,
                 featureNotes: ''
         });
 
