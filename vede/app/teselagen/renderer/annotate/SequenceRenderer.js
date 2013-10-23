@@ -15,6 +15,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                "Teselagen.utils.SystemUtils"],
 
     statics: {
+        EMPTY_AA_HEIGHT: 0,
         FONT_SIZE: 12,
         FONT_FAMILY: "Ubuntu Mono",
         COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0",
@@ -118,7 +119,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             if(this.sequenceAnnotator.getShowAminoAcids()) {
                 this.renderAA(row);
-                sequenceY += 60;
+                sequenceY += 20 * this.sequenceAnnotator.getAminoAcidFrames().length;
             }
 
             if(this.sequenceAnnotator.getShowComplementarySequence()){
@@ -304,9 +305,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight - verticalOffset)
                 .text(aminoAcids1);
-        }
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
         if(frames.indexOf(1) !== -1) {
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
@@ -314,9 +317,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight - verticalOffset)
                 .text(aminoAcids2);
-        }
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
         if(frames.indexOf(2) !== -1) {
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
@@ -324,9 +329,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight - verticalOffset)
                 .text(aminoAcids3);
-        }
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
     },
 
     renderAARevCom: function(row) {
@@ -447,9 +454,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight + verticalOffset)
                 .text(aminoAcids1);
-        }
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
         if(frames.indexOf(1) !== -1) {
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
@@ -457,9 +466,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight + verticalOffset)
                 .text(aminoAcids2);
-        }
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
         if(frames.indexOf(2) !== -1) {
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
@@ -467,9 +478,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight + verticalOffset)
                 .text(aminoAcids3);
-        }
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
     },
 
     renderComplementarySequence: function(row) {

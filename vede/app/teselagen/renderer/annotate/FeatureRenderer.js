@@ -29,7 +29,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
         SINGLE_BP_FEATURE_ADDITIONAL_HEIGHT: 3,
         SINGLE_BP_FEATURE_ADDITIONAL_WIDTH: 2,
-        SINGLE_BP_FEATURE_ADDITIONAL_X: 2,
+        SINGLE_BP_FEATURE_ADDITIONAL_X: 2
     },
 
     constructor: function(inData){
@@ -61,7 +61,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         if (!featureRows){
             return;
         }
-        
+
         for (var i = 0; i < featureRows.length; i++){
             var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
 
@@ -76,7 +76,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             //downShift calculates the adjustedYPosition
             var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
             if(this.sequenceAnnotationManager.showComplementarySequence) {
-                downShift += 4 + 
+                downShift += 4 +
                     this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
             }
 
@@ -106,8 +106,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             }
 
             if(startBP < 0 || endBP < 0) {
-                console.warn("Invalid feature: name " + feature.getName() + 
-                             ", starting at " + featureStart + ", ending at " + 
+                console.warn("Invalid feature: name " + feature.getName() +
+                             ", starting at " + featureStart + ", ending at " +
                              featureEnd + ", ignoring.");
                 return;
             }
@@ -124,8 +124,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
 
                 if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
-                    //Add AminoAcidsTextRenderer
-                    featureYCommon += 3 * 20;
+                    featureYCommon += 20 * this.sequenceAnnotationManager.getAminoAcidRevComFrames().length;
                 }
 
                 var featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
@@ -141,19 +140,19 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     this.drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                     this.drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 } else if(this.feature.getStrand() === -1){
-                    this.drawFeatureBackwardRect(g, (featureX1 - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT), 
+                    this.drawFeatureBackwardRect(g, (featureX1 - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT),
                                             featureYCommon, featureRowWidth1, featureRowHeightCommon);
                     this.drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 }
             } else {
                 var bpStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                 var bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-                
+
                 var featureX = bpStartMetrics.x + this.self.ADDITIONAL_ROW_START_X;
                 var featureY = bpStartMetrics.y  + downShift;
 
                 if (this.sequenceAnnotationManager.showAminoAcidsRevCom){
-                    featureY += (3 * 20);
+                    featureY += 20 * this.sequenceAnnotationManager.getAminoAcidRevComFrames().length;
                 }
 
                 var featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + this.self.ADDITIONAL_ROW_WIDTH;
@@ -181,20 +180,20 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                             this.drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                         }
                     } else{
-                        this.drawFeatureBackwardRect(g, (featureX - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT), 
+                        this.drawFeatureBackwardRect(g, (featureX - this.self.BACKWARD_RECT_ADDITIONAL_ROW_LEFT),
                                                 featureY, featureRowWidth, featureRowHeight);
                     }
                 }
 
             }
-            
+
             for (var j = 0; j < this.feature.getLocations().length; j++){
 
                 var location = this.feature.getLocations()[j];
                 if (location.getStart() > location.getEnd()){
                     if (location.getStart() > row.getRowData().getEnd() && location.getEnd() <= row.getRowData().getStart()){
                         continue;
-                    } 
+                    }
 
                     if(location.getEnd() >= row.getRowData().getStart() && location.getEnd() <= row.getRowData().getEnd()){
                         endBp = location.getEnd() - 1;
@@ -227,14 +226,14 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
                     bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                     bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-                    
+
                     featureX1 = bpStartMetrics1.x + this.self.ADDITIONAL_ROW_START_X;
                     featureX2 = bpStartMetrics2.x + this.self.ADDITIONAL_ROW_START_X;
-                    
+
                     featureYCommon = bpStartMetrics1.y + downShift;
 
                     if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
-                        featureYCommon += (3*20);
+                        featureYCommon += 20 * this.sequenceAnnotationManager.getAminoAcidRevComFrames().length;
                     }
 
                     featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16
@@ -257,9 +256,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
                     featureX = bpStartMetrics.x + this.self.ADDITIONAL_ROW_START_X;
                     featureY = bpStartMetrics.y + downShift;
-                    
+
                     if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
-                        featureY += (3* 20);
+                        featureY += 20 * this.sequenceAnnotationManager.getAminoAcidRevComFrames().length;
                     }
 
                     featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + this.self.ADDITIONAL_ROW_WIDTH;
@@ -319,10 +318,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pY += this.self.ALL_ADDITIONAL_Y;
 
         pGraphics.append("svg:path")
-            .attr("d", " M " + (pX) + " " + (pY) + 
-                       " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) + 
+            .attr("d", " M " + (pX) + " " + (pY) +
+                       " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) +
                        " L " + (pX + pWidth) + " " + (pY + pHeight) +
-                       " L " + (pX + pWidth) + " " + (pY) + 
+                       " L " + (pX + pWidth) + " " + (pY) +
                        " L " + (pX) + " " + (pY));
     },
 
@@ -330,10 +329,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pY += this.self.ALL_ADDITIONAL_Y;
 
         pGraphics.append("svg:path")
-            .attr("d", " M " + (pX) + " " + (pY) + 
+            .attr("d", " M " + (pX) + " " + (pY) +
                        " L " + (pX) + " " + (pY + pHeight) +
-                       " L " + (pX + pWidth) + " " + (pY + pHeight) + 
-                       " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) + 
+                       " L " + (pX + pWidth) + " " + (pY + pHeight) +
+                       " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) +
                        " L " + (pX) + " " + (pY));
     },
 
@@ -341,20 +340,20 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pY += this.self.ALL_ADDITIONAL_Y;
 
         if(pWidth ){
-            
+
             pGraphics.append("svg:path")
-                .attr("d", " M " + (pX) + " " + (pY) + 
+                .attr("d", " M " + (pX) + " " + (pY) +
                            " L " + (pX + pWidth - 8) + " " + (pY) +
-                           " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + 
+                           " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
                            " L " + (pX + pWidth - 8) + " " + (pY + pHeight) +
                            " L " + (pX) + " " + (pY + pHeight) +
                            " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
         } else{
 
             pGraphics.append("svg:path")
-                .attr("d", " M " + (pX) + " " + (pY) + 
+                .attr("d", " M " + (pX) + " " + (pY) +
                            " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
-                           " L " + (pX) + " " + (pY + pHeight) + 
+                           " L " + (pX) + " " + (pY + pHeight) +
                            " L " + (pX) + " " + (pY));
         }
     /*
@@ -374,9 +373,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pHeight += this.self.SINGLE_BP_FEATURE_ADDITIONAL_HEIGHT;
 
         pGraphics.append("svg:path")
-                 .attr("d", " M " + (pX) + " " + (pY) + 
+                 .attr("d", " M " + (pX) + " " + (pY) +
                             " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
-                            " L " + (pX) + " " + (pY + pHeight) + 
+                            " L " + (pX) + " " + (pY + pHeight) +
                             " L " + (pX) + " " + (pY));
     },
 
@@ -385,20 +384,20 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pY += this.self.ALL_ADDITIONAL_Y;
 
         if(pWidth){
-            
+
             pGraphics.append("svg:path")
-                .attr("d", " M " + (pX + 8) + " " + (pY) + 
+                .attr("d", " M " + (pX + 8) + " " + (pY) +
                            " L " + (pX + pWidth) + " " + (pY) +
-                           " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) + 
-                           " L " + (pX + 8) + " " + (pY + pHeight) + 
-                           " L " + (pX) + " " + (pY + pHeight / 2) + 
+                           " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) +
+                           " L " + (pX + 8) + " " + (pY + pHeight) +
+                           " L " + (pX) + " " + (pY + pHeight / 2) +
                            " L " + (pX + 8) + " " + (pY));
         } else{
 
             pGraphics.append("svg:path")
-                .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + 
+                .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) +
                            " L " + (pX + pWidth) + " " + (pY) +
-                           " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                           " L " + (pX + pWidth) + " " + (pY + pHeight) +
                            " L " + (pX) + " " + (pY + pHeight / 2));
         }
     },
@@ -410,9 +409,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pHeight += this.self.SINGLE_BP_FEATURE_ADDITIONAL_HEIGHT;
 
         pGraphics.append("svg:path")
-                 .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + 
+                 .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) +
                        " L " + (pX + pWidth) + " " + (pY) +
-                       " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                       " L " + (pX + pWidth) + " " + (pY + pHeight) +
                        " L " + (pX) + " " + (pY + pHeight / 2));
     },
 
@@ -424,7 +423,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             .attr("y", pY + 10)
             .attr("stroke", this.featureColor)
             .attr("stroke-width", 10)
-            
+
             .attr("height", pHeight);
             */
     },
@@ -464,31 +463,31 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
 
     addClickListener: function(feature){
-    	var sequenceManager = this.sequenceAnnotationManager.getSequenceManager();
-    	this.featureGroupSVG.on("mousedown", function(){
+        var sequenceManager = this.sequenceAnnotationManager.getSequenceManager();
+        this.featureGroupSVG.on("mousedown", function(){
             Vede.application.fireEvent("AnnotatePanelAnnotationClicked", feature.getStart(), feature.getEnd());
         });
-    	this.featureGroupSVG.on("contextmenu", function(data,index) {
-			Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.ANNOTATION_CONTEXT_MENU, feature);
-			d3.event.preventDefault();
+        this.featureGroupSVG.on("contextmenu", function(data,index) {
+            Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.ANNOTATION_CONTEXT_MENU, feature);
+            d3.event.preventDefault();
             var contextMenu = Ext.create('Ext.menu.Menu',{
-            	  items: [{
-            	    text: 'Edit Sequence Feature',
-            	    handler: function() {
-                    	var editSequenceFeatureWindow = Ext.create(
+                items: [{
+                    text: 'Edit Sequence Feature',
+                    handler: function() {
+                        var editSequenceFeatureWindow = Ext.create(
                         "Vede.view.ve.EditSequenceFeatureWindow");
-                    	
+
                         editSequenceFeatureWindow.show();
                         editSequenceFeatureWindow.center();
-            	    }
-            	  },{
-              	    text: 'Delete Sequence Feature',
-              	    handler: function() {
-              	    	sequenceManager.removeFeature(feature,false);
-              	    }
-              	  }]
-            });                  
-            contextMenu.show(); 
+                    }},{
+                        text: 'Delete Sequence Feature',
+                        handler: function() {
+                            sequenceManager.removeFeature(feature,false);
+                        }
+                    }
+                ]
+            });
+            contextMenu.show();
             contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
         });
     }
