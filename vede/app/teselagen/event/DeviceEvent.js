@@ -57,6 +57,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
     PART_CREATED: "PartCreated",
 
     VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName",
+
+    CLOSE_PART_CREATE_WINDOW: "ClosePartCreateWindow",
     
     CUT_PART: "CutPart",
     COPY_PART: "CopyPart",

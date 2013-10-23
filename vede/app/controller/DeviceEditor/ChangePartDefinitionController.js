@@ -357,6 +357,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             self.selectedSequence.processSequence(function(err,seqMgr,gb){
                 seqMgr.addFeature(newFeature,true);
                 seqMgr.name = partSource;
+                var rawGenbank = seqMgr.toGenbank().toString();
+                self.selectedSequence.setSequenceFileContent(rawGenbank);
                 self.selectedSequence.setSequenceManager(seqMgr);
                 saveSequence(self.selectedSequence,function(err){
                     if(err) {
@@ -467,7 +469,16 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     onCancelPartDefinitionBtnClick: function() {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.el.unmask();
-        this.selectedWindow.close(this.selectedPart);
+        this.selectedWindow.close();
+        if(!this.selectedPart.data.partSource) {
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
+        }
+    },
+
+    onCreatePartWindowClose: function() {
+        if(!this.selectedPart.data.partSource) {
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLEAR_PART);
+        }
     },
 
     init: function () {
@@ -490,12 +501,16 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             },
             "combobox[name='specifiedSequence']": {
                 change: this.onSpecifiedSequenceChange
+            },
+            "window[name='Create Part']": {
+                close: this.onCreatePartWindowClose
             }
         });
         
         this.application.on(this.DeviceEvent.OPEN_CHANGE_PART_DEFINITION, this.open, this);
         this.application.on(this.DeviceEvent.CREATE_PART_DEFINITION, this.openCreatePart, this);
         this.application.on(this.DeviceEvent.CREATE_PART_IN_DESIGN, this.openCreatePartInDesign, this);
+        this.application.on(this.DeviceEvent.CLOSE_PART_CREATE_WINDOW, this.onCreatePartWindowClose, this);
 
         this.application.on(this.SelectionEvent.SELECTION_CHANGED, this.onSequenceSelectionChanged, this);
     }

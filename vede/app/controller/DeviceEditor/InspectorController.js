@@ -174,7 +174,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onChangePartDefinitionBtnClick: function(){
         var self = this;
         if(this.selectedPart) {
-            console.log(this.selectedPart);
             this.selectedPart.getSequenceFile({
                 callback: function(){
                     Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION,
@@ -320,6 +319,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         {
                             if(sequenceFile.get("partSource")!=="") {
                                 self.changePartDefinitionBtn.removeCls("btnDisabled");
+                                self.changePartDefinitionBtn.enable();
                                 self.openPartLibraryBtn.setText("Open Part Library");
                                 self.openPartLibraryBtn.removeCls("selectPartFocus");
                                 self.changePartDefinitionBtn.enable();
@@ -389,6 +389,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             self.deletePartBtn.addCls("btnDisabled");
             self.openPartLibraryBtn.setText("Select Part From Library");
             self.openPartLibraryBtn.addCls("selectPartFocus");
+            self.changePartDefinitionBtn.removeCls("btnDisabled");
             self.changePartDefinitionBtn.setText("Create New Part");
             self.changePartDefinitionBtn.addCls("selectPartFocus");
             
@@ -1142,6 +1143,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.deletePartBtn.disable();
             this.deletePartBtn.addCls("btnDisabled");
+            this.changePartDefinitionBtn.disable();
+            this.changePartDefinitionBtn.addCls("btnDisabled");
             this.openPartLibraryBtn.disable();
             this.openPartLibraryBtn.setText("Select Part From Library");
             this.openPartLibraryBtn.removeCls("selectPartFocus");
