@@ -252,7 +252,6 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
             this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
                                        [isFrame1Visible, isFrame2Visible, isFrame3Visible]);
         }
-
     },
 
     onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
@@ -274,23 +273,59 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     },
 
     onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(this.activeTab.query("component[identifier*='showSequenceAAMenuItem']"), function(item) {
-            item.setChecked(checked);
-        });
+        var checkitems = this.activeTab.query("component[identifier*='showSequenceAAMenuItem']");
+        var frame = menucheckitem.frameNumber;
 
-        this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED,
-                                   checked);
+        if(frame === 'all') {
+            for(i = 0; i < checkitems.length; i++) {
+                checkitems[i].setChecked(checked, true);
+            }
+
+            this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED,
+                                       [checked, checked, checked]);
+        } else {
+            var isFrame1Visible = checkitems[1].checked;
+            var isFrame2Visible = checkitems[2].checked;
+            var isFrame3Visible = checkitems[3].checked;
+
+            if(!isFrame1Visible || !isFrame2Visible || !isFrame3Visible) {
+                checkitems[0].setChecked(false, true);
+            } else {
+                checkitems[0].setChecked(true, true);
+            }
+
+            this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED,
+                                       [isFrame1Visible, isFrame2Visible, isFrame3Visible]);
+        }
     },
 
     onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
-        Ext.each(this.activeTab.query("component[identifier*='showRevcomAAMenuItem']"), function(item) {
-            item.setChecked(checked);
-        });
+        var checkitems = this.activeTab.query("component[identifier*='showRevcomAAMenuItem']");
+        var frame = menucheckitem.frameNumber;
 
-        this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED,
-                                   checked);
+        if(frame === 'all') {
+            for(i = 0; i < checkitems.length; i++) {
+                checkitems[i].setChecked(checked, true);
+            }
+
+            this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED,
+                                       [checked, checked, checked]);
+        } else {
+            var isFrame1Visible = checkitems[1].checked;
+            var isFrame2Visible = checkitems[2].checked;
+            var isFrame3Visible = checkitems[3].checked;
+
+            if(!isFrame1Visible || !isFrame2Visible || !isFrame3Visible) {
+                checkitems[0].setChecked(false, true);
+            } else {
+                checkitems[0].setChecked(true, true);
+            }
+
+            this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED,
+                                       [isFrame1Visible, isFrame2Visible, isFrame3Visible]);
+        }
     },
-    
+
     onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
         Ext.each(this.activeTab.query("component[identifier*='featureLabelsMenuItem']"), function(item) {
             item.setChecked(checked);
@@ -323,7 +358,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
         this.application.fireEvent(this.MenuItemEvent.SIMULATE_DIGESTION_WINDOW_OPENED, simulateDigestionWindow);
-    },    
+    },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
         var restrictionEnzymesManagerWindow = Ext.create(
@@ -386,28 +421,28 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onHelpBtnClick: function(button, e, options) {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },
-    
+
     onNewBlankVectorEditorMenuItemClick: function() {
     	var project = Teselagen.manager.ProjectManager.workingProject;
     	var sequencesNames = [];
         Teselagen.manager.ProjectManager.sequences.load().each(function (sequence) {
             sequencesNames.push(sequence.data.name);
         });
-        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);  	
+        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
     },
-    
+
     onSequenceManagerChanged: function(sequenceManager) {
     	this.sequenceManager = sequenceManager;
     },
-    
+
     onPrintSequenceViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printSequenceView();
     },
-    
+
     onPrintCircularViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printCircularView();
     },
-    
+
     onPrintLinearViewMenuItemClick: function() {
     	Teselagen.manager.PrintManager.printLinearView();
     },
@@ -417,11 +452,11 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
         preferencesWindow.show();
 
     },
-    
+
     init: function() {
-        // For some reason, menu items' 'cls' attributes are set to null when 
+        // For some reason, menu items' 'cls' attributes are set to null when
         // the parent menu is opened and then closed. For this reason, we can't
-        // query them by class, so we must query them by a different field. I 
+        // query them by class, so we must query them by a different field. I
         // added the field 'identifier' to make this easier.
         this.control({
             "#mainAppPanel": {
@@ -547,7 +582,7 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
                             this.validateSafeEditingMenuItem, this);
 
         this.application.on(this.VisibilityEvent.VIEW_MODE_CHANGED, this.onViewModeChanged, this);
-        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
+        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED,
                 this.onSequenceManagerChanged,this);
 
         Vede.application.on('restrictionEnzymesManagerLinkClick', this.onRestrictionEnzymesManagerMenuItemClick, this);
