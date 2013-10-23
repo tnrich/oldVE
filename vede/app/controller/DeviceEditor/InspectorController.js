@@ -174,12 +174,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onChangePartDefinitionBtnClick: function(){
         var self = this;
         if(this.selectedPart) {
-            this.selectedPart.getSequenceFile({
-                callback: function(){
-                    Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION,
-                            self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
-                }
-            });
+            if(this.selectedPart.getSequenceFile()) {
+                this.selectedPart.getSequenceFile({
+                    callback: function(){
+                        Vede.application.fireEvent(self.DeviceEvent.OPEN_CHANGE_PART_DEFINITION,
+                                self.selectedPart, self.selectedBinIndex, self.selectedPart.getSequenceFile());
+                    }
+                });
+            } else {
+                //There is a named empty grid cell
+                Vede.application.fireEvent(this.DeviceEvent.CREATE_PART_IN_DESIGN,null,this.selectedPart);
+            }
         } else {
             //There is an empty grid cell
             var newPart = Ext.create('Teselagen.models.Part');
@@ -521,7 +526,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             // twice when entering a name, pressing enter, and then clicking 
             // away from the part name field.
             if(this.selectedPart.get("name") !== newName) {
-                Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, function() {
+                Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, this.selectedPart, newName, this.selectedPart.get("partSource"), function() {
                     // If the selected part is not in the device already, add it.
                     if(self.activeProject.parts().indexOf(self.selectedPart) < 0) {
                         self.activeProject.parts().add(self.selectedPart);
