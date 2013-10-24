@@ -76,9 +76,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     loadAssemblyMethodSelector: function(combinatorial) {
         var store;
         var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
-        var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
 
-        if(combobox) {
+        if(inspector) {
+            var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
             if(combinatorial) {
                 combobox.bindStore(this.combinatorialStore);
                 combobox.setValue(this.combinatorialStore.first());
