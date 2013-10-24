@@ -4,6 +4,9 @@
  */
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.tab.Panel',
+    requires: [
+        'Teselagen.event.CommonEvent'
+    ],
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     padding: '10 0',
@@ -766,7 +769,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
 
                                 ],
                                 listeners: {
-                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                    itemcontextmenu: function(el, record, item, index, e, eOpts){
                                         e.preventDefault();
                                         var contextMenu = Ext.create('Ext.menu.Menu',{
                                               items: [
@@ -775,13 +778,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 handler: function() {
                                                     Teselagen.manager.ProjectExplorerManager.renamePart(record);
                                                 }
-                                              },
-                                              {
+                                              }, {
                                                 text: 'Open',
                                                 handler: function(){
                                                     Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record.getSequenceFile());
                                                 }
-                                              },{
+                                              }, {
+                                                text: 'Delete',
+                                                handler: function() {
+                                                    Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_PART, record);
+                                                }
+                                              }, {
                                                 text: 'Download Source Sequence',
                                                 handler: function() {
                                                     var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());

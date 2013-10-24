@@ -3,9 +3,9 @@
  * @class Vede.controller.DashboardPanelController
  */
 Ext.define("Vede.controller.DashboardPanelController", {
-	extend: "Ext.app.Controller",
+    extend: "Ext.app.Controller",
 
-	requires: ["Teselagen.event.ProjectEvent",
+    requires: ["Teselagen.event.ProjectEvent",
                "Teselagen.manager.ProjectManager",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.bio.parsers.ParsersManager",
@@ -265,6 +265,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
     },
 
+    onDeletePart: function(part) {
+
+    },
 
     /**
      * Hide the vector viewer when the mouse leaves the current grid
@@ -281,7 +284,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onVectorViewerMouseLeave: function(event, target) {
-        var target = event.getRelatedTarget();
+        target = event.getRelatedTarget();
 
         // Check if we are mousing into an item on the grid. If not, hide the
         // vector viewer.
@@ -294,14 +297,15 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
 
-  	init: function () {
+    init: function () {
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatistics);
-        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatistics);
-        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatistics);
+        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
+        this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
 
-	     	this.control({
+        this.control({
             "#mainAppPanel": {
                 beforetabchange: this.onBeforeTabChange,
                 tabchange: this.onMainAppPanelTabChange
@@ -319,6 +323,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemmouseenter: this.onPartGridItemMouseEnter,
                 itemmouseleave: this.onPartGridItemMouseLeave
             }
-		});
-	}
+        });
+    }
 });
