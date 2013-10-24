@@ -266,7 +266,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onDeletePart: function(part) {
+        var affectedDesigns = Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part);
 
+        Ext.create("Vede.view.common.DeletePartConfirmationWindow").show();
     },
 
     /**

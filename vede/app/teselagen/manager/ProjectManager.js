@@ -323,11 +323,37 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 //Ext.getCmp("projectTreePanel").expandPath('/root/',null,null,function(item,item2){
                     var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
                     var sequenceNode = rootNode.findChild('id',sequence.data.id,true);
-                    if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);                    
+                    if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);
                 //});
 
  //           }).delay(500);
         });
+    },
+
+    /**
+     * Returns a list of all designs which contain the given part.
+     * @param {Teselagen.models.Part} part The part to return designs for.
+     */
+    getDesignsInvolvingPart: function(part) {
+        var allProjects = this.currentUser.projects().getRange();
+        var designsInProject;
+        var design;
+        var affectedDesigns = [];
+
+        for(var i = 0; i < allProjects.length; i++) {
+            designsInProject = allProjects[i].designs().getRange();
+
+            for(var j = 0; j < designsInProject.length; j++) {
+                design = designsInProject[j];
+
+                if(design.parts().indexOf(part) !== -1) {
+                    affectedDesigns.push(design);
+                    break;
+                }
+            }
+        }
+
+        return affectedDesigns;
     },
 
     /**
