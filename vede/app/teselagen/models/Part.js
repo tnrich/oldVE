@@ -83,7 +83,7 @@ Ext.define("Teselagen.models.Part", {
         name: "directionForward",
         type: "boolean",
         defaultValue: true
-    }, 
+    },
     {
         name: "name",
         sortType: function (s) {
@@ -106,12 +106,24 @@ Ext.define("Teselagen.models.Part", {
     {
         name: "genbankStartBP",
         type: "int",
-        defaultValue: 0
+        defaultValue: 0,
+        convert: function(value, record) {
+            record.data.genbankStartBP = value;
+            record.calculateSize(true);
+
+            return value;
+        }
     },
     {
         name: "endBP",
         type: "int",
-        defaultValue: 0
+        defaultValue: 0,
+        convert: function(value, record) {
+            record.data.endBP = value;
+            record.calculateSize(true);
+
+            return value;
+        }
     },
     {
         name: "size",
@@ -268,21 +280,19 @@ Ext.define("Teselagen.models.Part", {
         return this.get("endBP");
     },
 
-    calculateSize: function(){
+    calculateSize: function(ignoreNoSequenceFile){
         var record = this;
         var size = 0;
 
         var sequenceFile = record.getSequenceFile();
-        if(!sequenceFile)
+        if(!sequenceFile && !ignoreNoSequenceFile)
         {
             console.warn("Trying to calculate size of Part with no sequenceFile");
             return false;
         }
-                
+
         if(record.get("genbankStartBP")>record.get("endBP")) {
-            //debugger;
             var tSize = record.getSequenceFile().getLength();
-            if(tSize === 0 || tSize === "") console.warn("Associating Part with sequence with length zero.");
             size = (tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
         } else if (record.get("genbankStartBP")==record.get("endBP")) {
             size = 1;
@@ -291,7 +301,7 @@ Ext.define("Teselagen.models.Part", {
         }
         if(size === 0) console.warn("Part with sequence with length zero.");
 
-        record.set('size',  size);
+        record.set('size', size);
     },
 
     /**

@@ -78,12 +78,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down('InspectorPanel');
         var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
 
-        if(combinatorial) {
-            combobox.bindStore(this.combinatorialStore);
-            combobox.setValue(this.combinatorialStore.first());
-        } else {
-            combobox.bindStore(this.nonCombinatorialStore);
-            combobox.setValue(this.nonCombinatorialStore.first());
+        if(combobox) {
+            if(combinatorial) {
+                combobox.bindStore(this.combinatorialStore);
+                combobox.setValue(this.combinatorialStore.first());
+            } else {
+                combobox.bindStore(this.nonCombinatorialStore);
+                combobox.setValue(this.nonCombinatorialStore.first());
+            }
         }
     },
 
@@ -142,7 +144,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             return null;
         }
 
-        
         var selectedParameters = selectedPreset.get('j5parameters');
 
         for(var key in selectedParameters)
@@ -158,13 +159,13 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             var combobox = Ext.getCmp("mainAppPanel").getActiveTab().down('component[cls="assemblyMethodSelector"]');
-            if(!combobox.getValue()) {
+            if(combobox && !combobox.getValue()) {
                 Vede.application.fireEvent(this.DeviceEvent.CHECK_J5_READY, function(combinatorial,j5ready) {
                     self.loadAssemblyMethodSelector(combinatorial);
                 });
             }
             self.loadPresetsSelector();
-        } 
+        }
 
         if(this.j5Running) {
             this.disableAllJ5RunButtons(true);
