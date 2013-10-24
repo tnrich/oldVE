@@ -284,24 +284,25 @@ Ext.define("Teselagen.models.Part", {
         var record = this;
         var size = 0;
 
-        var sequenceFile = record.getSequenceFile();
-        if(!sequenceFile && !ignoreNoSequenceFile)
-        {
-            console.warn("Trying to calculate size of Part with no sequenceFile");
-            return false;
-        }
+        record.getSequenceFile(function(sequenceFile) {
+            if(!sequenceFile && !ignoreNoSequenceFile)
+            {
+                console.warn("Trying to calculate size of Part with no sequenceFile");
+                return false;
+            }
 
-        if(record.get("genbankStartBP")>record.get("endBP")) {
-            var tSize = record.getSequenceFile().getLength();
-            size = (tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
-        } else if (record.get("genbankStartBP")==record.get("endBP")) {
-            size = 1;
-        } else {
-            size = (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
-        }
-        if(size === 0) console.warn("Part with sequence with length zero.");
+            if(record.get("genbankStartBP")>record.get("endBP")) {
+                var tSize = record.getSequenceFile().getLength();
+                size = Math.abs(tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
+            } else if (record.get("genbankStartBP")==record.get("endBP")) {
+                size = 1;
+            } else {
+                size = (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
+            }
+            if(size === 0) console.warn("Part with sequence with length zero.");
 
-        record.set('size', size);
+            record.set('size', size);
+        });
     },
 
     /**
@@ -339,7 +340,6 @@ Ext.define("Teselagen.models.Part", {
      * @returns {Teselagen.models.SequenceFile} The sequencefile model.
      */
     getSequenceFile: function(callbackFn) {
-        //debugger;
         if(this.hasSequenceFile || this.get("sequencefile_id")) {
 
             var sequences = Teselagen.manager.ProjectManager.sequences;
