@@ -241,6 +241,7 @@ module.exports = function(app) {
         var Preset = app.db.model('preset');
 
         Preset.findById(req.body.id,function(err,preset){
+          if(err || !preset) return res.json({success:false});
           preset.j5parameters = JSON.parse(req.body.j5parameters);
           preset.save(function(){
             res.json({});

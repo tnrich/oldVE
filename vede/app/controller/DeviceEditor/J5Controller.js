@@ -66,7 +66,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 inspector.setActiveTab(2);
 
                 var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
-                if(!combobox.getValue()) {
+                if(combobox && !combobox.getValue()) {
                     self.loadAssemblyMethodSelector(combinatorial);
                 }
             }
@@ -91,10 +91,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var self = this;
 
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        if(selectedPreset) currentTab.selectedPreset = selectedPreset;
 
         function bindSelector(presetsStore){
             var inspector = currentTab.down('InspectorPanel');
             var combobox = inspector.down('component[cls="presetSelector"]');
+            if(!combobox) return false;
             combobox.suspendEvents();
             combobox.bindStore(presetsStore);
             if(presetsStore.first()) combobox.setValue(presetsStore.first());
@@ -129,22 +131,26 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var self = this;
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
 
+        var selectedPreset = currentTab.presetsStore.findRecord('presetName',newPreset);
+        currentTab.selectedPreset = selectedPreset;
+
         if(newPreset=="Default")
         {
             this.j5Parameters.setDefaultValues();
+            currentTab.selectedPreset = selectedPreset;
+            if(self.j5ParamsWindow) self.populateJ5ParametersDialog();
             return null;
         }
 
-        var selectedPreset = currentTab.presetsStore.findRecord('presetName',newPreset);
+        
         var selectedParameters = selectedPreset.get('j5parameters');
-        currentTab.selectedPreset = selectedPreset;
 
         for(var key in selectedParameters)
         {
             var params = selectedParameters[key];
             self.j5Parameters.set(key, params);
         }
-        //self.populateJ5ParametersDialog();
+        if(self.j5ParamsWindow) self.populateJ5ParametersDialog();
     },
 
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
@@ -850,12 +856,26 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     populateJ5ParametersDialog: function () {
+        if(this.j5ParamsWindow.isHidden()) return null;
         this.j5Parameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
                 Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
                 this.j5Parameters.get(key));
             }
         }, this);
+
+        currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        combobox = Ext.ComponentQuery.query("component[cls='inWindowPresetSelector']")[0];
+
+        if(currentTab.presetsStore)
+        {
+            combobox.bindStore(currentTab.presetsStore);
+        }
+        if(currentTab.selectedPreset)
+        {
+            combobox.setValue(currentTab.selectedPreset);
+
+        }
     },
 
     saveJ5Parameters: function (cb) {
@@ -918,6 +938,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             });
         };
 
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         if(currentTab.selectedPreset)
         {
             var selectedPreset = currentTab.selectedPreset;
@@ -1154,6 +1175,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 click: this.abortJ5Run
             },
             "component[cls='presetSelector']": {
+                change: this.presetSelectorChange
+            },
+            "component[cls='inWindowPresetSelector']": {
                 change: this.presetSelectorChange
             }
         });

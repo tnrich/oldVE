@@ -395,30 +395,30 @@ Ext.define('Vede.view.de.j5Parameters', {
                 layout: {
                     type: 'absolute'
                 },
-                items: [{
-                    xtype: 'button',
-                    cls: 'resetj5DefaultParamsBtn',
+                items: [
+                {
+                    xtype: 'combobox',
+                    cls: 'inWindowPresetSelector',
+                    fieldLabel: '<b>Parameters preset:</b>',
+                    labelCls: 'assembly-label',
+                    editable: false,
+                    labelSeparator: ' ',
+                    labelWidth: 110,
+                    width:350,
+                    queryMode: 'local',
+                    displayField: 'presetName',
+                    valueField: 'presetName',
                     x: 0,
                     y: 5,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
                     padding: '',
-                    text: '<b>Reset To Defaults</b>'
-                }, {
-                    xtype: 'button',
-                    cls: 'resetj5ServerParamsBtn',
-                    x: 120,
-                    y: 5,
-                    margin: 5,
-                    maxHeight: 23,
-                    minHeight: 23,
-                    padding: '',
-                    text: '<b>Reset to Server Values</b>'
-                }, {
+                },
+                {
                     xtype: 'button',
                     cls: 'saveAsPresetBtn',
-                    x: 270,
+                    x: 360,
                     y: 5,
                     margin: 5,
                     maxHeight: 23,
