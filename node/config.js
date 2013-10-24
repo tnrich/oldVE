@@ -80,7 +80,7 @@ module.exports = function(app, express) {
         app.use(express.static(__dirname + '/public'));
     });
 
-    app.configure('production', function() {      
+    app.configure('production', function() {
         process.env.NODE_ENV = 'production';
 
         // User Airbrake to log errors.
