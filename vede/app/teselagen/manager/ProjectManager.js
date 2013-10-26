@@ -334,26 +334,24 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * Returns a list of all designs which contain the given part.
      * @param {Teselagen.models.Part} part The part to return designs for.
      */
-    getDesignsInvolvingPart: function(part) {
-        var allProjects = this.currentUser.projects().getRange();
-        var designsInProject;
-        var design;
-        var affectedDesigns = [];
+    getDesignsInvolvingPart: function(part, callback) {
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("getDesignsInvolvingPart", ""),
+            method: "GET",
+            withCredentials: true,
+            params: {
+                part: JSON.stringify(part.data)
+            },
+            success: function(response) {
+                return callback(JSON.parse(response.responseText).designs);
+            },
+            failure: function(response) {
+                console.log("Error getting designs involving part.");
+                console.log(response);
 
-        for(var i = 0; i < allProjects.length; i++) {
-            designsInProject = allProjects[i].designs().getRange();
-
-            for(var j = 0; j < designsInProject.length; j++) {
-                design = designsInProject[j];
-
-                if(design.parts().indexOf(part) !== -1) {
-                    affectedDesigns.push(design);
-                    break;
-                }
+                return callback(false);
             }
-        }
-
-        return affectedDesigns;
+        });
     },
 
     /**

@@ -1,52 +1,66 @@
+/**
+ * Confirmation window when deleting a part.
+ * @class Vede.view.common.DeletePartConfirmationWindow
+ */
 Ext.define('Vede.view.common.DeletePartConfirmationWindow', {
     extend: 'Ext.window.Window',
-
-    alias: 'widget.deletepartconfirmationwindow',
-    cls: 'DeletePartConfirmationWindow',
-    width: 800,
-    height: 400,
-    title: 'Designs Affected By Part Deletion',
-    layout: 'fit',
+    title: 'Affected Designs',
+    callback: function() {},
     modal: true,
-
+    resizable: false,
+    width: 400,
     items: [{
-        xtype: 'gridpanel',
-        autoScroll: true,
-        forceFit: true,
-        layout: 'fit',
-        columnLines: true,
-        rowLines: true,
-        viewConfig: {
-            listeners: {
-                refresh: function(dataview) {
-                    var columns = dataview.panel.columns;
-                    for(var i = 0; i < columns.length; i++) {
-                        columns[i].autoSize();
-                    }
-                }
-            }
+        xtype: 'displayfield',
+        hideLabel: true,
+        value: 'This part will be deleted from the following designs:'
+    }, {
+        xtype: 'container',
+        layout: {
+            type: 'vbox'
         },
-        columns: [{
-            xtype: 'gridcolumn',
-            text: 'File Name',
-            dataIndex: 'fileName',
-        }, {
-            xtype: 'gridcolumn',
-            text: 'Sequence Name',
-            dataIndex: 'partSource'
-        }, {
-            xtype: 'gridcolumn',
-            text: 'Messages',
-            autoScroll: true,
-            dataIndex: 'messages',
-            renderer: function(val, meta) {
-                meta.style = 'text-overflow: clip';
-                if(val.length) {
-                    return val.join('<br>');
-                } else {
-                    return 'No errors.';
+        items: [{
+            xtype: 'gridpanel',
+            width: 400,
+            flex: 1,
+            columnLines: true,
+            hideHeaders: true,
+            rowLines: true,
+            sortableColumns: false,
+            columns: [{
+                xtype: 'gridcolumn',
+                dataIndex: 'name',
+                renderer: function(id, metaData, partModel) {
+                    // ExtJS puts parts into a store and makes them into a
+                    // weird 'implicitModel'. This retrieves the original feature.
+                    var part = partModel.data.field1;
+                    return part.name;
                 }
-            }
+            }]
+        }, {
+            xtype: 'container',
+            layout: {
+                type: 'hbox'
+            },
+            flex: 1,
+            items: [{
+                xtype: 'button',
+                text: 'Ok',
+                margin: 2,
+                padding: 2,
+                handler: function() {
+                    this.up('window').callback();
+                    this.up('window').close();
+                }
+            }, {
+                xtype: 'button',
+                text: 'Cancel',
+                margin: 2,
+                padding: 2,
+                handler: function() {
+                    this.up('window').close();
+                }
+            }]
         }]
     }]
 });
+

@@ -2,7 +2,7 @@
  * @class Teselagen.models.Part
  * Class describing a Part.
  * @author Diana Wong
- * @author Douglas Densmore (original author) ?
+ * @author Douglas Densmore (original author) << Really?
  */
 Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
@@ -21,31 +21,37 @@ Ext.define("Teselagen.models.Part", {
             totalProperty: "total"
         },
         writer: {
-            type: "json",
+            type: "json"
         },
         buildUrl: function(request) {
+            var url;
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
             {
                 var project_id = Teselagen.manager.ProjectManager.workingProject.data.id;
-                var url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
+                url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
             }
 
             if(request.action === "read" && request.params && request.params.id )
             {
-                var url = "parts/"+request.params.id;
+                url = "parts/"+request.params.id;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
             {
-                var url = "parts";
+                url = "parts";
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
+            if(request.action === "destroy" && request.records.length === 1) {
+                url = "parts/" + request.records[0].get('id');
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
-        },
+        }
     },
 
     statics: {

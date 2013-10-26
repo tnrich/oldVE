@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
@@ -22,7 +24,7 @@ module.exports = function(app) {
         for (var prop in req.body) {
             if(prop!="user_id") newPart[prop] = req.body[prop];
         }
-            
+
             newPart.FQDN = req.user.FQDN + '.' + req.body.name;
             Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
@@ -138,24 +140,24 @@ module.exports = function(app) {
 
         User.findById(req.user._id).populate({
                 path: 'parts',
-                match: {name: {$regex: filter}} 
+                match: {name: {$regex: filter}}
             }).exec(function(err, user) {
             totalCount = user.parts.length;
 
             User.findById(req.user._id).populate({
-                path: 'parts', 
-                match: {name: {$regex: filter}, 
+                path: 'parts',
+                match: {name: {$regex: filter},
                 sequencefile_id: {$ne: null}},
                 options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
             })
-                .exec(function(err, user) {
-                    res.json({
-                        success: true,
-                        parts: user.parts,
-                        results: user.parts.length,
-                        total: totalCount
-                    });
+            .exec(function(err, user) {
+                res.json({
+                    success: true,
+                    parts: user.parts,
+                    results: user.parts.length,
+                    total: totalCount
                 });
+            });
         });
     });
 
@@ -187,14 +189,29 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method DELETE 'parts'
      */
-    app.delete('/parts', restrict, function(pReq, pRes) {
+    app.delete('/parts/:part_id', restrict, function(req, res) {
+        var partId = req.params.part_id;
         var Part = app.db.model("part");
-        Part.remove(function(pErr, pDocs) {
-            if (pErr) {
-                errorHandler(pErr, pReq, pRes);
-            } else {
-                pRes.json({});
+        var Design = app.db.model("devicedesign");
+
+        Part.findByIdAndRemove(partId, function(pErr, pDocs) {
+            if(pErr) {
+                return errorHandler(pErr, req, res);
             }
+
+            Design.update({
+                parts: mongoose.Types.ObjectId(partId)
+            }, {
+                $pull: {
+                    parts: mongoose.Types.ObjectId(partId)
+                }
+            }).exec(function(err, designs) {
+                if (err) {
+                    return errorHandler(err, req, res);
+                } else {
+                    return res.json({});
+                }
+            });
         });
     });
 };
