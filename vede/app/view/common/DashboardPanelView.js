@@ -1,4 +1,38 @@
 /**
+ * Patches a bug in the EXT gridpanel.
+ * see: http://www.sencha.com/forum/showthread.php?268135-Grid-error-on-delete-selected-row
+ */
+Ext.define('Ext.view.override.Table', {
+    override: 'Ext.view.Table',
+
+    doStripeRows: function(startRow, endRow) {
+        var me = this,
+            rows,
+            rowsLn,
+            i,
+            row;
+
+
+        if (me.rendered && me.stripeRows) {
+            rows = me.getNodes(startRow, endRow);
+
+            for (i = 0, rowsLn = rows.length; i < rowsLn; i++) {
+                row = rows[i];
+
+                if (row) { // self updating; check for row existence
+                    row.className = row.className.replace(me.rowClsRe, ' ');
+                    startRow++;
+
+                    if (startRow % 2 === 0) {
+                        row.className += (' ' + me.altRowCls);
+                    }
+                }
+            }
+        }
+    }
+});
+
+/**
  * Dashboard panel view
  * @class Vede.view.common.DashboardPanelView
  */
@@ -156,7 +190,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 }
                             }
                         ]
-                    }, 
+                    },
                     {
                         xtype: 'container',
                         id: 'dashboardStats',
@@ -178,7 +212,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         });
                                     }
                         },
-                        items: [ 
+                        items: [
                             {
                                 xtype: 'container',
                                 cls: 'dashboardStats-container',
@@ -293,7 +327,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         border: 0,
                                                         flex: 1,
                                                         text: null
-                                                    },                         
+                                                    },
                                                     {
                                                         xtype: 'textfield',
                                                         readOnly: true,
@@ -432,7 +466,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             }
                                         ]
                                     }
-                                ]  
+                                ]
                             }
                         ]
                     }
@@ -455,7 +489,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             align: 'stretch'
                         },
                         items : [
-                            
+
                             {
                                 xtype: 'textfield',
                                 anchor: '100%',
@@ -486,15 +520,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     style: 'overflow-y: auto'
                                 },
                                 id: 'sequenceLibrary',
-                                autoScroll: true,
                                 columns: [
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Name',
                                         width: 220,
                                         dataIndex: 'name',
-                                        sortable: true,
-                                    }, 
+                                        sortable: true
+                                    },
                                     {
                                         text     : 'Type',
                                         width    : 75,

@@ -308,6 +308,36 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     /**
+     * Deletes the given part and removes it from any open designs.
+     * @param {Teselagen.models.Part} part The part to delete.
+     */
+    deletePart: function(part) {
+        var design;
+        var cell;
+        var ownerBins;
+        var tabs = Ext.getCmp("mainAppPanel").items.getRange();
+
+        for(var i = 0; i < tabs.length; i++) {
+            design = tabs[i].model;
+
+            if(tabs[i].initialCls === 'DeviceEditorTab' && design.parts().indexOf(part) !== -1) {
+                design.parts().remove(part);
+                ownerBins = Teselagen.manager.DeviceDesignManager.getParentBins(design, part);
+
+                for(var j = 0; j < ownerBins.length; j++) {
+                    cell = ownerBins[j].cells().getAt(ownerBins[j].cells().findBy(function(cell) {
+                        return cell.get('part_id') === part.get('id');
+                    }));
+
+                    cell.setPart(null);
+                }
+            }
+        }
+
+        part.destroy();
+    },
+
+    /**
      * openSequence
      * Opens a SequenceFile model in a new tab.
      * @param {model} Receives a j5Report model (already loaded)

@@ -269,29 +269,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part, function(affectedDesigns) {
             var confirmationWindow = Ext.create("Vede.view.common.DeletePartConfirmationWindow");
             var callback = function() {
-                var design;
-
-                /*for(var i = 0; i < affectedDesigns.length; i++) {
-                    design = affectedDesigns[i];
-
-                    Teselagen.models.DeviceDesign.load(design._id, {
-                        filters: [{
-                            property: 'project_id',
-                            value: design.project_id
-                        }],
-                        callback: function(design, operation, success) {
-                            if(!success) {
-                                console.log('Error loading design.');
-                                return;
-                            } else {
-                                design.parts().remove(design.parts().getById(part.get('id')));
-                                design.save();
-                            }
-                        }
-                    });
-                }*/
-
-                part.destroy();
+                Teselagen.manager.ProjectManager.deletePart(part);
             };
 
             if(affectedDesigns !== false) {
