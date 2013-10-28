@@ -1000,8 +1000,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             partsStore = binsStore.getAt(i).cells();
 
             for(var j = 0; j < partsStore.getCount(); j++) {
-                if(partsStore.getAt(j) && partsStore.getAt(j).get("part_id") && pPart.id) { 
-                    if(partsStore.getAt(j).get("part_id") === pPart.id) {
+                if(partsStore.getAt(j) && partsStore.getAt(j).get("part_id") && pPart.get("id")) { 
+                    if(partsStore.getAt(j).get("part_id") === pPart.get("id")) {
                         binIndices.push(i);
                     }
                 }

@@ -269,35 +269,19 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part, function(affectedDesigns) {
             var confirmationWindow = Ext.create("Vede.view.common.DeletePartConfirmationWindow");
             var callback = function() {
-                var design;
-
-                /*for(var i = 0; i < affectedDesigns.length; i++) {
-                    design = affectedDesigns[i];
-
-                    Teselagen.models.DeviceDesign.load(design._id, {
-                        filters: [{
-                            property: 'project_id',
-                            value: design.project_id
-                        }],
-                        callback: function(design, operation, success) {
-                            if(!success) {
-                                console.log('Error loading design.');
-                                return;
-                            } else {
-                                design.parts().remove(design.parts().getById(part.get('id')));
-                                design.save();
-                            }
-                        }
-                    });
-                }*/
-
-                part.destroy();
+                Teselagen.manager.ProjectManager.deletePart(part);
             };
 
             if(affectedDesigns !== false) {
                 confirmationWindow.show();
                 confirmationWindow.callback = callback;
-                confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+
+                if(affectedDesigns.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this part will not affect any designs. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
             } else {
                 Ext.Msg.alert('Network Error', 'We could not determine which designs are associated with that part.');
             }
