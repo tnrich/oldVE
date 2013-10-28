@@ -275,7 +275,13 @@ Ext.define("Vede.controller.DashboardPanelController", {
             if(affectedDesigns !== false) {
                 confirmationWindow.show();
                 confirmationWindow.callback = callback;
-                confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+
+                if(affectedDesigns.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this part will not affect any designs. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
             } else {
                 Ext.Msg.alert('Network Error', 'We could not determine which designs are associated with that part.');
             }
