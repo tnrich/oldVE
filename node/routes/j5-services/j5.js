@@ -298,7 +298,7 @@ app.post('/executej5',restrict,function(req,res){
         User.findById(req.user._id).select({ "masterSources.masterplasmidlist.fileContent": 1, "masterSources.masteroligolist.fileContent": 1,"masterSources.masterdirectsyntheseslist.fileContent": 1 }).exec(function(err,user){
 
         // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
-        var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user,testing);
+        var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user);
 
         // Credentials for RPC communication
         data["username"] = req.user.username;
@@ -330,7 +330,7 @@ app.post('/executej5',restrict,function(req,res){
         // file_id , j5Input and j5Results are filled once the job is completed.
 
         // In production mode use internal script
-        var testing = !(app.get("env") === "production");
+        //var testing = !(app.get("env") === "production");
 
         if(app.get("env") === "production") {
 
@@ -406,6 +406,7 @@ app.post('/executej5',restrict,function(req,res){
         else // Run as XML_RPC Depending on remote server (With timeout limit)
         {
           res.json({status:"In progress"});
+          console.log("Executing XML RPC");
           app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
             if(error)
             {

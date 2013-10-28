@@ -37,8 +37,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     oligosListText: null,
     directSynthesesListText: null,
 
-    j5Running: false,
-
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
@@ -165,10 +163,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 });
             }
             self.loadPresetsSelector();
-        }
-
-        if(this.j5Running) {
-            this.disableAllJ5RunButtons(true);
         }
     },
 
@@ -625,28 +619,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.onRunJ5BtnClick();
     },
 
-    onJ5RunStatusChanged: function(runId, runStatus) {
-        var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
-        buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
-        var button;
-        var cancelBtn = Ext.ComponentQuery.query("button[cls='cancelj5Btn']")[0];
-        cancelBtn.hide();
-
-        for(var i = 0; i < buttonsToEnable.length; i++) {
-            button = buttonsToEnable[i];
-            button.show();
-            button.enable();
-            button.setLoading(false);
-
-            if(button.cls === "runj5Btn") {
-                button.setText("Submit Run to j5");
-                $(".loader-mini").hide();
-            }
-        }
-
-        this.j5Running = false;
-    },
-
     onRunJ5BtnClick: function () {
         $(".toast-success").hide();
         
@@ -726,11 +698,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm = Teselagen.manager.J5CommunicationManager;
         inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod, design.get("isCircular"));
 
-        this.j5Running = true;
-
-
-        this.disableAllJ5RunButtons();
-
         Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function () {
             if (!Teselagen.manager.TasksMonitor.disabled) {
                 Teselagen.manager.TasksMonitor.start();
@@ -739,22 +706,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 if(success) {
                     toastr.options.onclick = null;
                     toastr.info("j5 Run Submitted");
-
-                    var runBtn = Ext.ComponentQuery.query("button[cls='runj5Btn']")[0];
-                    var cancelBtn = Ext.ComponentQuery.query("button[cls='cancelj5Btn']")[0];
-                    if(cancelBtn) {
-                        runBtn.hide();
-                        cancelBtn.show();
-                        cancelBtn.on("click",function(){
-                            Teselagen.manager.J5CommunicationManager.cancelj5Run(null,null,null);
-                        });
-                    }
-
-
                 } else {
-
-                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, 0, "Canceled");
-
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
                         msg: responseData,
@@ -768,26 +720,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
-    },
-
-    disableAllJ5RunButtons: function(skipAppendLoader) {
-        var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
-        buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
-        var button;
-
-        if(!skipAppendLoader) {
-            $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
-            $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".cancelj5Btn span span span");
-        }
-
-        for(var i = 0; i < buttonsToDisable.length; i++) {
-            button = buttonsToDisable[i];
-            button.disable();
-
-            if(button.cls === "runj5Btn") {
-                button.setText("J5 Running...");
-            }
-        }
     },
 
     onDistributePCRBtn: function () {
@@ -1185,7 +1117,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         
         this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
-        this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.onJ5RunStatusChanged, this);
         this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
         this.application.on(this.CommonEvent.LOAD_PRESETS, this.loadPresetsSelector, this);
 
