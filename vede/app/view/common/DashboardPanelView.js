@@ -648,23 +648,29 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     }],
 
                                 listeners: {
-                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                    itemcontextmenu: function(el, record, item, index, e, eOpts ){
                                         e.preventDefault();
                                         var contextMenu = Ext.create('Ext.menu.Menu',{
-                                              items: [{
+                                            items: [{
                                                 text: 'Open',
                                                 handler: function(){
                                                     Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record);
                                                 }
-                                              },{
+                                            }, {
                                                 text: 'Download',
                                                 handler: function() {
                                                     var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
                                                     VEManager.saveSequenceToFile();
                                                 }
-                                              }]
+                                            }, {
+                                                text: 'Delete',
+                                                handler: function() {
+                                                    Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_SEQUENCE, record);
+                                                }
+                                            }]
                                         }).show();
-                                        contextMenu.setPagePosition(e.getX(),e.getY()-5)
+
+                                        contextMenu.setPagePosition(e.getX(), e.getY() - 5);
                                     }
                                 }
                             }

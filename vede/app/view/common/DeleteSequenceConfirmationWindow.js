@@ -1,10 +1,10 @@
 /**
- * Confirmation window when deleting a part.
- * @class Vede.view.common.DeletePartConfirmationWindow
+ * Confirmation window when deleting a sequence.
+ * @class Vede.view.common.DeleteSequenceConfirmationWindow
  */
-Ext.define('Vede.view.common.DeletePartConfirmationWindow', {
+Ext.define('Vede.view.common.DeleteSequenceConfirmationWindow', {
     extend: 'Ext.window.Window',
-    title: 'Affected Designs',
+    title: 'Affected Parts and Designs',
     callback: function() {},
     modal: true,
     resizable: false,
@@ -12,7 +12,7 @@ Ext.define('Vede.view.common.DeletePartConfirmationWindow', {
     items: [{
         xtype: 'displayfield',
         hideLabel: true,
-        value: 'This part will be deleted from the following designs:'
+        value: 'Deleting this sequence will also remove the following parts:'
     }, {
         xtype: 'container',
         layout: {
@@ -29,9 +29,9 @@ Ext.define('Vede.view.common.DeletePartConfirmationWindow', {
             columns: [{
                 xtype: 'gridcolumn',
                 dataIndex: 'name',
-                renderer: function(id, metaData, designModel) {
-                    var design = designModel.data.field1;
-                    return design.name;
+                renderer: function(id, metaData, partModel) {
+                    var part = partModel.data.field1;
+                    return part.name;
                 }
             }]
         }, {
@@ -61,4 +61,5 @@ Ext.define('Vede.view.common.DeletePartConfirmationWindow', {
         }]
     }]
 });
+
 

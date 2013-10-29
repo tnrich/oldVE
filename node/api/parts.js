@@ -168,10 +168,9 @@ module.exports = function(app) {
      * @method GET 'parts/:part_id'
      */
     app.get('/parts/:part_id', restrict,  function(req, res) {
-
         User.findById(req.user._id).populate('parts').exec(function(err, user) {
             User.findById(req.user._id).populate({
-                path: 'parts', 
+                path: 'parts',
                 match: {_id: req.params.part_id}
             })
             .exec(function(err, user) {
@@ -197,21 +196,9 @@ module.exports = function(app) {
         Part.findByIdAndRemove(partId, function(pErr, pDocs) {
             if(pErr) {
                 return errorHandler(pErr, req, res);
+            } else {
+                return res.json({});
             }
-
-            Design.update({
-                parts: mongoose.Types.ObjectId(partId)
-            }, {
-                $pull: {
-                    parts: mongoose.Types.ObjectId(partId)
-                }
-            }).exec(function(err, designs) {
-                if (err) {
-                    return errorHandler(err, req, res);
-                } else {
-                    return res.json({});
-                }
-            });
         });
     });
 };

@@ -308,6 +308,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     /**
+     * Deletes the given sequence and any parts associated with it.
+     * @param {Teselagen.models.Sequence} sequence The sequence to delete.
+     */
+    deleteSequence: function(sequence, affectedParts) {
+        sequence.destroy();
+    },
+
+    /**
      * Deletes the given part and removes it from any open designs.
      * @param {Teselagen.models.Part} part The part to delete.
      */
@@ -335,6 +343,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         }
 
         part.destroy();
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
     },
 
     /**
@@ -366,7 +375,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      */
     getDesignsInvolvingPart: function(part, callback) {
         Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUrl("getDesignsInvolvingPart", ""),
+            url: Teselagen.manager.SessionManager.buildUrl("getDesignsWithPart", ""),
             method: "GET",
             withCredentials: true,
             params: {
@@ -377,6 +386,30 @@ Ext.define("Teselagen.manager.ProjectManager", {
             },
             failure: function(response) {
                 console.log("Error getting designs involving part.");
+                console.log(response);
+
+                return callback(false);
+            }
+        });
+    },
+
+    /**
+     * Returns a list of all parts deriving from the given sequence, as well as designs they are in.
+     * @param {Teselagen.models.Sequence} sequence The sequence.
+     */
+    getPartsAndDesignsBySequence: function(sequence, callback) {
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("getPartsAndDesignsBySequence", ""),
+            method: "GET",
+            withCredentials: true,
+            params: {
+                sequence: JSON.stringify(sequence.data)
+            },
+            success: function(response) {
+                return callback(JSON.parse(response.responseText).parts);
+            },
+            failure: function(response) {
+                console.log("Error getting parts involving sequence.");
                 console.log(response);
 
                 return callback(false);

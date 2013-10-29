@@ -1,3 +1,4 @@
+var async = require('async');
 var mongoose = require('mongoose');
 
 module.exports = function(app) {
@@ -130,10 +131,9 @@ module.exports = function(app) {
      * GET all designs that contain a given part.
      * @memberof module:./routes/api
      */
-    app.get('/getDesignsInvolvingPart', restrict, function(req, res) {
+    app.get('/getDesignsWithPart', restrict, function(req, res) {
         var reqPart = JSON.parse(req.query.part);
         var Design = app.db.model("devicedesign");
-        var Part = app.db.model("part");
 
         Design.find({
             parts: mongoose.Types.ObjectId(reqPart.id)
@@ -154,6 +154,49 @@ module.exports = function(app) {
         });
     });
 
+    /**
+     * GET all parts that have a given sequence as a source.
+     * @memberof module:./routes/api
+     */
+    app.get('/getPartsAndDesignsBySequence', restrict, function(req, res) {
+        var reqSequence = JSON.parse(req.query.sequence);
+        var Part = app.db.model("part");
+        var Design = app.db.model("devicedesign");
+
+        Part.find({
+            sequencefile_id: mongoose.Types.ObjectId(reqSequence.id)
+        }).exec(function(err, parts) {
+            if(err) {
+                console.log('Error getting parts by sequence.');
+                console.log(err);
+
+                return res.json({
+                    type: 'error',
+                    msg: err
+                });
+            } else {
+                async.forEach(parts, function(part, done) {
+                    Design.find({
+                        parts: mongoose.Types.ObjectId(part.id)
+                    }).exec(function(err, designs) {
+                        part.designs = designs;
+                        done();
+                    });
+                }, function(err) {
+                    if(err) {
+                        return res.json({
+                            type: 'error',
+                            msg: err
+                        });
+                    } else {
+                        return res.json({
+                            parts: parts
+                        });
+                    }
+                });
+            }
+        });
+    });
 
     /**
      * Monitor server Tasks
@@ -171,10 +214,9 @@ module.exports = function(app) {
                     j5runs: j5runs
                 });
             });
-    });   
+    });
 
     app.get('/getStats', restrict, function(req, res) {
-
         var User = app.db.model("User");
         User.findById(req.user._id)
         .populate('projects')

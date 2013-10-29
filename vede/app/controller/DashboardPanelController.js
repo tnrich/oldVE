@@ -265,6 +265,29 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
     },
 
+    onDeleteSequence: function(sequence) {
+        Teselagen.manager.ProjectManager.getPartsAndDesignsBySequence(sequence, function(parts) {
+            var confirmationWindow = Ext.create("Vede.view.common.DeleteSequenceConfirmationWindow");
+            var callback = function() {
+                Teselagen.manager.ProjectManager.deleteSequence(sequence, parts);
+            };
+
+            if(parts !== false) {
+                confirmationWindow.show();
+                confirmationWindow.callback = callback;
+
+                if(parts.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(parts);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this sequence will not affect any parts. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
+            } else {
+                Ext.Msg.alert('Network Error', 'We could not determine which parts are associated with that sequence.');
+            }
+        });
+    },
+
     onDeletePart: function(part) {
         Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part, function(affectedDesigns) {
             var confirmationWindow = Ext.create("Vede.view.common.DeletePartConfirmationWindow");
@@ -323,6 +346,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
         this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
         this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
+        this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
 
         this.control({
             "#mainAppPanel": {

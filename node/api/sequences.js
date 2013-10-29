@@ -164,15 +164,32 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences/:sequence_id', restrict, function(req, res) {
-            var Sequence = app.db.model("sequence");
-            Sequence.findById(req.params.sequence_id).exec(function(err, sequence) {
-                if (err) console.log("There was a problem with GET sequence");
-                res.json({
-                    "sequences": sequence
-                });
+        var Sequence = app.db.model("sequence");
+        Sequence.findById(req.params.sequence_id).exec(function(err, sequence) {
+            if (err) console.log("There was a problem with GET sequence");
+            res.json({
+                "sequences": sequence
             });
-        }
-    );
+        });
+    });
 
+    /**
+     * DELETE Sequence
+     * @memberof module:./routes/api
+     * @method DELETE 'sequences'
+     */
+    app.delete('/sequences/:sequence_id', restrict, function(req, res) {
+        var seqId = req.params.sequence_id;
+        var Sequence = app.db.model("sequence");
+        var Part = app.db.model("part");
+        var Design = app.db.model("devicedesign");
 
+        Sequence.findByIdAndRemove(seqId, function(err, docs) {
+            if(err) {
+                return errorHandler(err, req, res);
+            } else {
+                return res.json({});
+            }
+        });
+    });
 };

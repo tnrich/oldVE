@@ -93,6 +93,12 @@ module.exports = function(db) {
 
     SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true });
 
+    SequenceSchema.pre('remove', function(next) {
+        db.model('part').remove({
+            sequencefile_id: this.id
+        }).exec();
+    });
+
     registerSchema('sequence', SequenceSchema);
 
     var PartSchema = new Schema({
@@ -115,7 +121,7 @@ module.exports = function(db) {
         features          :  String,
         iconID            :  String,
         partSource        :  String,
-        size               :  Number
+        size              :  Number
     });
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});
@@ -123,6 +129,19 @@ module.exports = function(db) {
     PartSchema.pre('save', function(next) {
         this.id = this._id;
         next();
+    });
+
+    // Remove part id from designs.
+    PartSchema.pre('remove', function(next) {
+        db.model('devicedesign').update({
+            parts: mongoose.Types.ObjectId(this.id)
+        }, {
+            $pull: {
+                parts: mongoose.Types.ObjectId(this.id)
+            }
+        }).exec(function(err, designs) {
+            next();
+        });
     });
 
     PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
