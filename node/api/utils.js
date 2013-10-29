@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
@@ -17,7 +19,7 @@ module.exports = function(app) {
     app.post('/sendFeedback', restrict, function(req, res) {
 
         variables = "{type:Feedback,user:"+req.user.username+"}";
-        
+
         if (req.body.feedback) {
             app.mailer.sendMail({
                 from: "Teselagen <root@localhost>",
@@ -54,7 +56,7 @@ module.exports = function(app) {
      * @method POST /partLibrary
      */
     app.get('/partLibrary', restrict, function(req, res) {
-        
+
         Part.find({
             name: {
                 $ne: ""
@@ -69,7 +71,7 @@ module.exports = function(app) {
     });
 
     /**
-     * GET Result of Check for diplicated part names
+     * GET Result of Check for duplicated part names
      * @memberof module:./routes/api
      * @method POST /partLibrary
      */
@@ -122,7 +124,34 @@ module.exports = function(app) {
                 //});
             });
         });
+    });
 
+    /**
+     * GET all designs that contain a given part.
+     * @memberof module:./routes/api
+     */
+    app.get('/getDesignsInvolvingPart', restrict, function(req, res) {
+        var reqPart = JSON.parse(req.query.part);
+        var Design = app.db.model("devicedesign");
+        var Part = app.db.model("part");
+
+        Design.find({
+            parts: mongoose.Types.ObjectId(reqPart.id)
+        }).exec(function(err, designs) {
+            if(err) {
+                console.log('Error getting designs by part.');
+                console.log(err);
+
+                return res.json({
+                    type: 'error',
+                    msg: err
+                });
+            } else {
+                return res.json({
+                    designs: designs
+                });
+            }
+        });
     });
 
 
