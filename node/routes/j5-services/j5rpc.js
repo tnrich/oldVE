@@ -264,7 +264,7 @@ function encoded_eugene_rules_list_file(model)
 /**
  * Encode j5 inputs
  */
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user,testing) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);
