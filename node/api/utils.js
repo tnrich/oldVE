@@ -1,3 +1,4 @@
+var async = require('async');
 var mongoose = require('mongoose');
 
 module.exports = function(app) {
@@ -93,35 +94,34 @@ module.exports = function(app) {
                 var identical = false;
                 var part;
                 var parts = user.parts;
-                    counter = parts.length;
-                    for(var i = 0; i < parts.length; i++) {
-                        part = parts[i];
+                counter = parts.length;
+                for(var i = 0; i < parts.length; i++) {
+                    part = parts[i];
 
-                        if (part.FQDN === FQDN_candidate) {
-                            duplicatedName = true;
-                        }
-
-                        if (part.definitionHash === hash_candidate) {
-                            identical = true;
-                        }
+                    if (part.FQDN === FQDN_candidate) {
+                        duplicatedName = true;
                     }
 
-                    if (duplicatedName && !identical) {
-                        return res.json({
-                            'msg': 'Duplicated part name.',
-                            'type': 'warning'
-                        });
-                    } else if (duplicatedName && identical) {
-                        return res.json({
-                            'msg': 'The part already exist.',
-                            'type': 'error'
-                        });
-                    } else {
-                        return res.json({
-                            'type': 'success'
-                        });
+                    if (part.definitionHash === hash_candidate) {
+                        identical = true;
                     }
-                //});
+                }
+
+                if (duplicatedName && !identical) {
+                    return res.json({
+                        'msg': 'Duplicated part name.',
+                        'type': 'warning'
+                    });
+                } else if (duplicatedName && identical) {
+                    return res.json({
+                        'msg': 'The part already exist.',
+                        'type': 'error'
+                    });
+                } else {
+                    return res.json({
+                        'type': 'success'
+                    });
+                }
             });
         });
     });
@@ -130,10 +130,9 @@ module.exports = function(app) {
      * GET all designs that contain a given part.
      * @memberof module:./routes/api
      */
-    app.get('/getDesignsInvolvingPart', restrict, function(req, res) {
+    app.get('/getDesignsWithPart', restrict, function(req, res) {
         var reqPart = JSON.parse(req.query.part);
         var Design = app.db.model("devicedesign");
-        var Part = app.db.model("part");
 
         Design.find({
             parts: mongoose.Types.ObjectId(reqPart.id)
@@ -154,6 +153,49 @@ module.exports = function(app) {
         });
     });
 
+    /**
+     * GET all parts that have a given sequence as a source.
+     * @memberof module:./routes/api
+     */
+    app.get('/getPartsAndDesignsBySequence', restrict, function(req, res) {
+        var sequenceId = JSON.parse(req.query.sequenceId);
+        var Part = app.db.model("part");
+        var Design = app.db.model("devicedesign");
+
+        Part.find({
+            sequencefile_id: mongoose.Types.ObjectId(sequenceId)
+        }).lean().exec(function(err, parts) {
+            if(err) {
+                console.log('Error getting parts by sequence.');
+                console.log(err);
+
+                return res.json({
+                    type: 'error',
+                    msg: err
+                });
+            } else {
+                async.map(parts, function(part, done) {
+                    Design.find({
+                        parts: mongoose.Types.ObjectId(part.id)
+                    }).exec(function(err, designs) {
+                        part.designs = designs;
+                        done(null, part);
+                    });
+                }, function(err, partsWithDesigns) {
+                    if(err) {
+                        return res.json({
+                            type: 'error',
+                            msg: err
+                        });
+                    } else {
+                        return res.json({
+                            parts: partsWithDesigns
+                        });
+                    }
+                });
+            }
+        });
+    });
 
     /**
      * Monitor server Tasks
@@ -171,10 +213,9 @@ module.exports = function(app) {
                     j5runs: j5runs
                 });
             });
-    });   
+    });
 
     app.get('/getStats', restrict, function(req, res) {
-
         var User = app.db.model("User");
         User.findById(req.user._id)
         .populate('projects')

@@ -11,6 +11,7 @@
  * @module ./schemas/DBSchemas
  */
 
+var async = require('async');
 var bcrypt = require('bcrypt');
 
 module.exports = function(db) {
@@ -93,6 +94,25 @@ module.exports = function(db) {
 
     SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true });
 
+    SequenceSchema.pre('remove', function(next) {
+        db.model('part').find({
+            sequencefile_id: this.id
+        }, function(err, parts) {
+            if(err) {
+                console.log('Error removing parts.');
+                console.log(err);
+                next();
+            } else {
+                async.forEach(parts, function(part, done) {
+                    part.remove();
+                    done();
+                }, function(err) {
+                    next();
+                });
+            }
+        });
+    });
+
     registerSchema('sequence', SequenceSchema);
 
     var PartSchema = new Schema({
@@ -115,7 +135,7 @@ module.exports = function(db) {
         features          :  String,
         iconID            :  String,
         partSource        :  String,
-        size               :  Number
+        size              :  Number
     });
 
     PartSchema.index({"FQDN": 1, "definitionHash": 1}, {unique: true, dropDups: true});
@@ -123,6 +143,19 @@ module.exports = function(db) {
     PartSchema.pre('save', function(next) {
         this.id = this._id;
         next();
+    });
+
+    // Remove part id from designs.
+    PartSchema.pre('remove', function(next) {
+        db.model('devicedesign').update({
+            parts: mongoose.Types.ObjectId(this.id)
+        }, {
+            $pull: {
+                parts: mongoose.Types.ObjectId(this.id)
+            }
+        }).exec(function(err, designs) {
+            next();
+        });
     });
 
     PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
