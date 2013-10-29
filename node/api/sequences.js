@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 
 module.exports = function(app) {
 
@@ -184,10 +185,14 @@ module.exports = function(app) {
         var Part = app.db.model("part");
         var Design = app.db.model("devicedesign");
 
-        Sequence.findByIdAndRemove(seqId, function(err, docs) {
+        Sequence.findOne({
+            _id: new mongoose.Types.ObjectId(seqId)
+        }, function(err, seq) {
             if(err) {
                 return errorHandler(err, req, res);
             } else {
+                console.log('removing seq ' + seq.name);
+                seq.remove();
                 return res.json({});
             }
         });

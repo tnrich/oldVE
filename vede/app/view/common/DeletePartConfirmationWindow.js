@@ -28,6 +28,7 @@ Ext.define('Vede.view.common.DeletePartConfirmationWindow', {
             sortableColumns: false,
             columns: [{
                 xtype: 'gridcolumn',
+                width: 400,
                 dataIndex: 'name',
                 renderer: function(id, metaData, designModel) {
                     var design = designModel.data.field1;

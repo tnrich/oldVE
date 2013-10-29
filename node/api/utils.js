@@ -94,35 +94,34 @@ module.exports = function(app) {
                 var identical = false;
                 var part;
                 var parts = user.parts;
-                    counter = parts.length;
-                    for(var i = 0; i < parts.length; i++) {
-                        part = parts[i];
+                counter = parts.length;
+                for(var i = 0; i < parts.length; i++) {
+                    part = parts[i];
 
-                        if (part.FQDN === FQDN_candidate) {
-                            duplicatedName = true;
-                        }
-
-                        if (part.definitionHash === hash_candidate) {
-                            identical = true;
-                        }
+                    if (part.FQDN === FQDN_candidate) {
+                        duplicatedName = true;
                     }
 
-                    if (duplicatedName && !identical) {
-                        return res.json({
-                            'msg': 'Duplicated part name.',
-                            'type': 'warning'
-                        });
-                    } else if (duplicatedName && identical) {
-                        return res.json({
-                            'msg': 'The part already exist.',
-                            'type': 'error'
-                        });
-                    } else {
-                        return res.json({
-                            'type': 'success'
-                        });
+                    if (part.definitionHash === hash_candidate) {
+                        identical = true;
                     }
-                //});
+                }
+
+                if (duplicatedName && !identical) {
+                    return res.json({
+                        'msg': 'Duplicated part name.',
+                        'type': 'warning'
+                    });
+                } else if (duplicatedName && identical) {
+                    return res.json({
+                        'msg': 'The part already exist.',
+                        'type': 'error'
+                    });
+                } else {
+                    return res.json({
+                        'type': 'success'
+                    });
+                }
             });
         });
     });
@@ -159,13 +158,13 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      */
     app.get('/getPartsAndDesignsBySequence', restrict, function(req, res) {
-        var reqSequence = JSON.parse(req.query.sequence);
+        var sequenceId = JSON.parse(req.query.sequenceId);
         var Part = app.db.model("part");
         var Design = app.db.model("devicedesign");
 
         Part.find({
-            sequencefile_id: mongoose.Types.ObjectId(reqSequence.id)
-        }).exec(function(err, parts) {
+            sequencefile_id: mongoose.Types.ObjectId(sequenceId)
+        }).lean().exec(function(err, parts) {
             if(err) {
                 console.log('Error getting parts by sequence.');
                 console.log(err);
@@ -175,14 +174,14 @@ module.exports = function(app) {
                     msg: err
                 });
             } else {
-                async.forEach(parts, function(part, done) {
+                async.map(parts, function(part, done) {
                     Design.find({
                         parts: mongoose.Types.ObjectId(part.id)
                     }).exec(function(err, designs) {
                         part.designs = designs;
-                        done();
+                        done(null, part);
                     });
-                }, function(err) {
+                }, function(err, partsWithDesigns) {
                     if(err) {
                         return res.json({
                             type: 'error',
@@ -190,7 +189,7 @@ module.exports = function(app) {
                         });
                     } else {
                         return res.json({
-                            parts: parts
+                            parts: partsWithDesigns
                         });
                     }
                 });

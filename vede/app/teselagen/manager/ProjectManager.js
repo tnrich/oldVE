@@ -308,10 +308,31 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     /**
-     * Deletes the given sequence and any parts associated with it.
+     * Deletes the given sequence and updates designs associated with the affected parts.
      * @param {Teselagen.models.Sequence} sequence The sequence to delete.
+     * @param {Object[]} affectedParts The parts that will be removed in object form.
      */
     deleteSequence: function(sequence, affectedParts) {
+        var design;
+        var part;
+        var tabs = Ext.getCmp("mainAppPanel").items.getRange();
+
+        if(affectedParts.length > 0) {
+            for(var i = 0; i < tabs.length; i++) {
+                design = tabs[i].model;
+
+                if(tabs[i].initialCls === 'DeviceEditorTab') {
+                    for(var j = 0; j < affectedParts.length; j++) {
+                        part = design.parts().getById(affectedParts[j].id);
+
+                        if(part) {
+                            Teselagen.manager.DeviceDesignManager.removePartFromDesign(design, part);
+                        }
+                    }
+                }
+            }
+        }
+
         sequence.destroy();
     },
 
@@ -321,24 +342,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
      */
     deletePart: function(part) {
         var design;
-        var cell;
-        var ownerBins;
         var tabs = Ext.getCmp("mainAppPanel").items.getRange();
 
         for(var i = 0; i < tabs.length; i++) {
             design = tabs[i].model;
 
             if(tabs[i].initialCls === 'DeviceEditorTab' && design.parts().indexOf(part) !== -1) {
-                design.parts().remove(part);
-                ownerBins = Teselagen.manager.DeviceDesignManager.getParentBins(design, part);
-
-                for(var j = 0; j < ownerBins.length; j++) {
-                    cell = ownerBins[j].cells().getAt(ownerBins[j].cells().findBy(function(cell) {
-                        return cell.get('part_id') === part.get('id');
-                    }));
-
-                    cell.setPart(null);
-                }
+                Teselagen.manager.DeviceDesignManager.removePartFromDesign(design, part);
             }
         }
 
@@ -403,7 +413,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             method: "GET",
             withCredentials: true,
             params: {
-                sequence: JSON.stringify(sequence.data)
+                sequenceId: JSON.stringify(sequence.get("id"))
             },
             success: function(response) {
                 return callback(JSON.parse(response.responseText).parts);

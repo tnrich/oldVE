@@ -11,6 +11,7 @@
  * @module ./schemas/DBSchemas
  */
 
+var async = require('async');
 var bcrypt = require('bcrypt');
 
 module.exports = function(db) {
@@ -94,9 +95,22 @@ module.exports = function(db) {
     SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true });
 
     SequenceSchema.pre('remove', function(next) {
-        db.model('part').remove({
+        db.model('part').find({
             sequencefile_id: this.id
-        }).exec();
+        }, function(err, parts) {
+            if(err) {
+                console.log('Error removing parts.');
+                console.log(err);
+                next();
+            } else {
+                async.forEach(parts, function(part, done) {
+                    part.remove();
+                    done();
+                }, function(err) {
+                    next();
+                });
+            }
+        });
     });
 
     registerSchema('sequence', SequenceSchema);
