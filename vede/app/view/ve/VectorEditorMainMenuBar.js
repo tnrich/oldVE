@@ -266,9 +266,33 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 identifier: 'cutSitesMenuItem',
                 text: 'Cut Sites'
             }, {
-                xtype: 'menucheckitem',
-                identifier: 'orfsMenuItem',
-                text: 'ORF'
+                xtype: 'menuitem',
+                text: 'ORFs',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'All Frames',
+                        frameNumber: 'all'
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'Frame 1',
+                        frameNumber: 1
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'Frame 2',
+                        frameNumber: 2
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'orfsMenuItem',
+                        text: 'Frame 3',
+                        frameNumber: 3
+                    }]
+                }
             }, {
                 xtype: 'menuseparator'
             }, {
@@ -282,13 +306,61 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Spaces',
                 checked: true
             }, {
-                xtype: 'menucheckitem',
-                identifier: 'showSequenceAAMenuItem',
-                text: 'Sequence AA'
+                xtype: 'menuitem',
+                text: 'Sequence AA',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menucheckitem',
+                        identifier: 'showSequenceAAMenuItem',
+                        text: 'All Frames',
+                        frameNumber: 'all'
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'showSequenceAAMenuItem',
+                        text: 'Frame 1',
+                        frameNumber: 1
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'showSequenceAAMenuItem',
+                        text: 'Frame 2',
+                        frameNumber: 2
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'showSequenceAAMenuItem',
+                        text: 'Frame 3',
+                        frameNumber: 3
+                    }]
+                }
             }, {
-                xtype: 'menucheckitem',
-                identifier: 'showRevcomAAMenuItem',
-                text: 'Revcom AA'
+                xtype: 'menuitem',
+                text: 'Revcom AA',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menucheckitem',
+                        identifier: 'showRevcomAAMenuItem',
+                        text: 'All Frames',
+                        frameNumber: 'all'
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'showRevcomAAMenuItem',
+                        text: 'Frame 1',
+                        frameNumber: 1
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'showRevcomAAMenuItem',
+                        text: 'Frame 2',
+                        frameNumber: 2
+                    }, {
+                        xtype: 'menucheckitem',
+                        identifier: 'showRevcomAAMenuItem',
+                        text: 'Frame 3',
+                        frameNumber: 3
+                    }]
+                }
             }, {
                 xtype: 'menuseparator'
             }, {

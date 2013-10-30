@@ -262,6 +262,78 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
     },
 
+    analizeDesign: function(design,cb){
+
+        function isValidObjectID(str) {
+          if(!str) return false;
+          var len = str.length;
+          if (len == 12 || len == 24) {
+            return /^[0-9a-fA-F]+$/.test(str);
+          } else {
+            return false;
+          }
+        }
+
+        console.log("Analizing design...");
+
+        var warnings = [];
+        // Check data integrity
+        design.bins().each(function(bin){
+            bin.cells().each(function(cell){
+                if(cell.data.part_id)
+                {
+                    var part = cell.getPart();
+                    if(part && !isValidObjectID(part.data.sequencefile_id)) warnings.push("Part "+part.data.name+" with not mapped sequence");
+                    var sequence = part.getSequenceFile();
+                    if(sequence && !(sequence.data.sequenceFileContent!="")) warnings.push("Sequence "+sequence.data.name+" with empty sequence");
+
+                }            
+            });
+        });
+
+        // Check for duplicated LOCUS NAME
+        sequences = {};
+        design.parts().each(function(part){
+            var sequence = part.getSequenceFile();
+            if(sequence)
+            {
+                var sequenceKey = sequences[sequence.data.serialize.inData.name];
+                if(sequenceKey && sequenceKey.data.id!=sequence.data.id)
+                {
+                    warnings.push("Warning, Locus name conflict between "+sequenceKey.data.name+" and "+sequence.data.name);
+                }
+                else
+                {
+                    sequences[sequence.data.serialize.inData.name] = sequence;
+                }
+            }
+        });
+
+        setTimeout(function(){
+            if(warnings.length===0) console.log("Everything is ok");
+            else {
+                console.log(warnings);
+                var warningsWindow = Ext.create('Vede.view.de.WarningsWindow').show();
+            
+                errorStore = Ext.create("Ext.data.Store", {
+                    fields: [
+                        {name: 'messages', type: 'auto'}
+                    ]
+                });
+
+                errorStore.add({
+                    fileName: '',
+                    partSource: '',
+                    messages: 'test'
+                });
+
+                warningsWindow.down('gridpanel').reconfigure(errorStore);
+
+            }
+            cb();
+        },2000);
+    },
+
     /**
      * Saves the device design
      */
@@ -342,59 +414,61 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             });
         };
 
-        var countParts = 0;
-        design.bins().each(function (bin) {
-            bin.cells().each(function(cell) {
-                if(cell.getPart()) {
-                    countParts++;
-                }
+        self.analizeDesign(design,function(){
+            var countParts = 0;
+            design.bins().each(function (bin) {
+                bin.cells().each(function(cell) {
+                    if(cell.getPart()) {
+                        countParts++;
+                    }
+                });
             });
-        });
-        
-        if(countParts === 0) {
-        	saveDesign();
-        } else {
-	        design.bins().each(function (bin) {
-	            bin.cells().each(function (cell) {
-	                var part = cell.getPart();
-                    var sequenceFile;
-                    var sequenceManager;
-	
-	                if(part) {
-	                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-	
-	                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                            sequenceFile = part.getSequenceFile();
-                            if(sequenceFile) {
-                                sequenceManager = sequenceFile.getSequenceManager();
+            
+            if(countParts === 0) {
+            	saveDesign();
+            } else {
+    	        design.bins().each(function (bin) {
+    	            bin.cells().each(function (cell) {
+    	                var part = cell.getPart();
+                        var sequenceFile;
+                        var sequenceManager;
+    	
+    	                if(part) {
+    	                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+    	
+    	                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                                sequenceFile = part.getSequenceFile();
+                                if(sequenceFile) {
+                                    sequenceManager = sequenceFile.getSequenceManager();
 
-                                if(sequenceManager) {
-                                    part.set("features", sequenceManager.featuresByRangeText(
-                                        part.get("genbankStartBP"), part.get("endBP")).toString());
+                                    if(sequenceManager) {
+                                        part.set("features", sequenceManager.featuresByRangeText(
+                                            part.get("genbankStartBP"), part.get("endBP")).toString());
+                                    }
+
+                                    part.set("partSource", sequenceFile.get("name"));
                                 }
 
-                                part.set("partSource", sequenceFile.get("name"));
-                            }
-
-	                        part.save({
-	                            callback: function (part) {
-	                                saveAssociatedSequence(part, function () {
-	                                	if(countParts === 1) { saveDesign();}
-	                                	countParts--;
-	                                });
-	                            }
-	                        });
-	                    } else {
-                            
-	                        saveAssociatedSequence(part,function(){
-	                        	if(countParts === 1) { saveDesign(); }
-	                        	countParts--;
-	                        });
-	                    }
-	                }
-	            });
-	        });
-        }
+    	                        part.save({
+    	                            callback: function (part) {
+    	                                saveAssociatedSequence(part, function () {
+    	                                	if(countParts === 1) { saveDesign();}
+    	                                	countParts--;
+    	                                });
+    	                            }
+    	                        });
+    	                    } else {
+                                
+    	                        saveAssociatedSequence(part,function(){
+    	                        	if(countParts === 1) { saveDesign(); }
+    	                        	countParts--;
+    	                        });
+    	                    }
+    	                }
+    	            });
+    	        });
+            }
+        });
     },
 
     onDeviceEditorSaveBtnClick: function () {
@@ -489,12 +563,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
                     var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
                     assemblies.sort("name", "ASC");
-                    
+
 
                     var j5parameters = Ext.create("Teselagen.models.J5Parameters");
                     j5parameters.loadValues(self.activeJ5Run.getJ5Input().getJ5Parameters().raw);
                     var J5parametersValues = j5parameters.getParametersAsStore();
-                    
+
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5AssemblyType").setValue(assemblyMethod);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStatus").setValue(status);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").getForm().findField("j5RunStart").setValue(startDate);

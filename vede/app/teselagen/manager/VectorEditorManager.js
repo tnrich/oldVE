@@ -133,9 +133,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     },
 
     saveSequenceToFile: function(){
-
         var self = this;
-        
         var performSavingOperation = function(data,filename){
             var saveFile = function(name,gb) {
                 var flag;
@@ -150,7 +148,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         this.promptFormat(function(btn,dialog){
 
-                var mgr = self.sequence.getSequenceManager();
+                var mgr = self.sequenceFileManager;
 
                 gb  = mgr.toGenbank().toString();
                 var locusName = mgr.getName();

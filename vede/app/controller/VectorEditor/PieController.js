@@ -10,7 +10,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                "Teselagen.renderer.pie.WireframeSelectionLayer",
                "Teselagen.event.CaretEvent",
                "Teselagen.event.ContextMenuEvent",
-               "Teselagen.event.VisibilityEvent"],    
+               "Teselagen.event.VisibilityEvent"],
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360,
         PIE_CENTER: {x: 100, y: 100},
@@ -46,7 +46,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     onBeforeTabChange: function(mainAppPanel, newTab, oldTab) {
-        // Save the selection to the old tab so we can reselect it when we 
+        // Save the selection to the old tab so we can reselect it when we
         // switch back to it later.
         if(oldTab && oldTab.initialCls === "VectorEditorPanel") {
             if(this.SelectionLayer.selected) {
@@ -99,7 +99,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             self.onMousemove(self);
         });
         pie.on("contextmenu",function() {
-        	return d3.event.preventDefault();
+            return d3.event.preventDefault();
         });
         // When pie is resized, scale the graphics in the pie.
         this.pieContainer.on("resize", function() {
@@ -123,7 +123,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         this.pieManager.setShowFeatureLabels(newTab.options.featureLabels);
         this.pieManager.setShowCutSiteLabels(newTab.options.cutSiteLabels);
     },
-    
+
     onLaunch: function() {
         var pie;
         var self = this;
@@ -205,9 +205,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     /**
-     * Catches events from the vector panel annotation sprites' onclick listeners. 
-     * When a mouseup event is detected, we check to see if 
-     * this.clickedAnnotationStart and end have been defined to see if an 
+     * Catches events from the vector panel annotation sprites' onclick listeners.
+     * When a mouseup event is detected, we check to see if
+     * this.clickedAnnotationStart and end have been defined to see if an
      * annotation has been clicked. If it has we can easily select it.
      */
     onVectorPanelAnnotationClicked: function(start, end) {
@@ -268,7 +268,15 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     },
 
     onShowOrfsChanged: function(show) {
-        this.pieManager.setShowOrfs(show);
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
+
+        this.pieManager.setOrfs(this.ORFManager.getOrfsByFrame(frameArray));
+        this.pieManager.setShowOrfs(frameArray.length > 0);
 
         if(this.pieManager.sequenceManager) {
             this.pieManager.render();
@@ -306,24 +314,24 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
     /**
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
-    onMousedown: function(self) {   	    
-    	if(d3.event.button == 2) {
-        	d3.event.preventDefault();
-    		this.onRightMouseDown(self);
-    	} else {
-    		Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
-    		self.startSelectionAngle = self.getClickAngle();
-	        self.mouseIsDown = true;
-	        
-	
-	        if(self.pieManager.sequenceManager) {
-	            self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
-	
-	            self.changeCaretPosition(self.startSelectionIndex);
-	        }
-	
-	        self.selectionDirection = 0;
-    	}
+    onMousedown: function(self) {
+        if(d3.event.button == 2) {
+            d3.event.preventDefault();
+            this.onRightMouseDown(self);
+        } else {
+            Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_NONRIGHT_MOUSE_DOWN);
+            self.startSelectionAngle = self.getClickAngle();
+            self.mouseIsDown = true;
+
+
+            if(self.pieManager.sequenceManager) {
+                self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
+
+                self.changeCaretPosition(self.startSelectionIndex);
+            }
+
+            self.selectionDirection = 0;
+        }
     },
 
     /**
@@ -331,16 +339,16 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * sticky select (when the ctrl key is not held) as the mouse moves during a
      * click-and-drag.
      */
-    onMousemove: function(self) { 	
-    	if(d3.event.button == 2) {
-    		d3.event.preventDefault();
-    		return;
-    	}
-    	
-    	var endSelectionAngle = self.getClickAngle();
+    onMousemove: function(self) {
+        if(d3.event.button == 2) {
+            d3.event.preventDefault();
+            return;
+        }
+
+        var endSelectionAngle = self.getClickAngle();
         var start;
         var end;
-        
+
         if(self.mouseIsDown && Math.abs(self.startSelectionAngle -
                     endSelectionAngle) > self.self.SELECTION_THRESHOLD &&
                     self.SequenceManager.getSequence().toString().length > 0 &&
@@ -352,7 +360,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             if(self.selectionDirection == 0) {
                 if(self.startSelectionAngle < Math.PI) {
                     self.selectionDirection = -1;
-                    if(endSelectionAngle >= self.startSelectionAngle && 
+                    if(endSelectionAngle >= self.startSelectionAngle &&
                        endSelectionAngle <= (self.startSelectionAngle + Math.PI)) {
                         self.selectionDirection = 1;
                     }
@@ -378,9 +386,9 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
                 self.select(start, end);
 
-                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, 
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
                                            self,
-                                           self.SelectionLayer.start, 
+                                           self.SelectionLayer.start,
                                            self.SelectionLayer.end);
             } else {
                 self.stickySelect(start, end);
@@ -399,7 +407,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         if(self.mouseIsDown) {
             self.mouseIsDown = false;
 
-            if(self.WireframeSelectionLayer.selected && 
+            if(self.WireframeSelectionLayer.selected &&
                 self.WireframeSelectionLayer.selecting) {
 
                 // If self is at the end of a click-and-drag, fire a selection event.
@@ -412,7 +420,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                     self.changeCaretPosition(self.SelectionLayer.start);
                 }
 
-            } else if(self.clickedAnnotationStart !== null && 
+            } else if(self.clickedAnnotationStart !== null &&
                       self.clickedAnnotationEnd !== null){
                 // If we've clicked a sprite, select it.
                 self.select(self.clickedAnnotationStart,
@@ -430,22 +438,22 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
             }
         } else if(d3.event.button == 2) {
-        	d3.event.preventDefault();
-        	if(self.clickedAnnotationStart !== null && 
+            d3.event.preventDefault();
+            if(self.clickedAnnotationStart !== null &&
                 self.clickedAnnotationEnd !== null){
-    			
-    			self.select(self.clickedAnnotationStart,
+
+                self.select(self.clickedAnnotationStart,
                             self.clickedAnnotationEnd);
 
-    			self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
                                            self,
                                            self.SelectionLayer.start,
                                            self.SelectionLayer.end);
 
-    			self.clickedAnnotationStart = null;
-    			self.clickedAnnotationEnd = null;
-            }      		
-		}
+                self.clickedAnnotationStart = null;
+                self.clickedAnnotationEnd = null;
+            }
+        }
     },
 
     onZoomInMenuItemClick: function() {
@@ -498,7 +506,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
      * @param {Number} angle The angle to return the index of.
      */
     bpAtAngle: function(angle) {
-        return Math.floor(angle * 
+        return Math.floor(angle *
             this.pieManager.sequenceManager.getSequence().seqString().length/ (2 * Math.PI));
     },
 
@@ -549,51 +557,51 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             } else { // Selection crosses over the beginning of sequence.
                 var minStart1 = -1;
                 var maxEnd1 = -1;
-                
+
                 var minStart2 = -1;
                 var maxEnd2 = -1;
-                
+
                 Ext.each(annotations, function(annotation) {
                     if(annotation.getStart() > start) {
-                        if(minStart1 == -1) { 
-                            minStart1 = annotation.getStart(); 
+                        if(minStart1 == -1) {
+                            minStart1 = annotation.getStart();
                         }
-                        
-                        if(annotation.getStart() < minStart1) { 
-                            minStart1 = annotation.getStart(); 
+
+                        if(annotation.getStart() < minStart1) {
+                            minStart1 = annotation.getStart();
                         }
                     } else {
-                        if(minStart2 == -1) { 
-                            minStart2 = annotation.getStart(); 
+                        if(minStart2 == -1) {
+                            minStart2 = annotation.getStart();
                         }
-                        
-                        if(annotation.getStart() < minStart2) { 
-                            minStart2 = annotation.getStart(); 
+
+                        if(annotation.getStart() < minStart2) {
+                            minStart2 = annotation.getStart();
                         }
                     }
-                    
+
                     if(annotation.getEnd() > end) {
-                        if(maxEnd1 == -1) { 
-                            maxEnd1 = annotation.getEnd(); 
+                        if(maxEnd1 == -1) {
+                            maxEnd1 = annotation.getEnd();
                         }
-                        
-                        if(annotation.getEnd() > maxEnd1) { 
-                            maxEnd1 = annotation.getEnd(); 
+
+                        if(annotation.getEnd() > maxEnd1) {
+                            maxEnd1 = annotation.getEnd();
                         }
                     } else {
-                        if(maxEnd2 == -1) { 
-                            maxEnd2 = annotation.getEnd(); 
+                        if(maxEnd2 == -1) {
+                            maxEnd2 = annotation.getEnd();
                         }
-                        
-                        if(annotation.getEnd() > maxEnd2) { 
-                            maxEnd2 = annotation.getEnd(); 
+
+                        if(annotation.getEnd() > maxEnd2) {
+                            maxEnd2 = annotation.getEnd();
                         }
                     }
                 });
-                
+
                 var selStart = minStart1;
                 var selEnd;
-                
+
                 if(minStart1 == -1 && minStart2 != -1) {
                     selStart = minStart2;
                 } else if(minStart1 != -1 && minStart2 == -1) {
@@ -601,7 +609,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 } else if(minStart1 != -1 && minStart2 != -1) {
                     selStart = minStart1;
                 }
-                
+
                 if(maxEnd1 == -1 && maxEnd2 != -1) {
                     selEnd = maxEnd2;
                 } else if(maxEnd1 != -1 && maxEnd2 == -1) {
@@ -609,7 +617,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
                 } else if(maxEnd1 != -1 && maxEnd2 != -1) {
                     selEnd = maxEnd2;
                 }
-                
+
                 if(selEnd == -1 || selStart == -1) {
                     this.SelectionLayer.deselect();
                     this.application.fireEvent(
@@ -629,39 +637,39 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
     },
-    
+
     onRightMouseDown: function(self) {
-    	d3.event.preventDefault();
-    	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
-        
-    	var svg = this.pieParent;
+        d3.event.preventDefault();
+        Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_RIGHT_CLICKED);
+
+        var svg = this.pieParent;
         var transformValues;
         var scrolled = this.pieContainer.el.getScroll();
 
         transformValues = svg.attr("transform").match(/[-.\d]+/g);
-        
-        // actualRadius will be accurate only if transformValues[0] == transformValues[3], 
+
+        // actualRadius will be accurate only if transformValues[0] == transformValues[3],
         // (i.e., the pie is scaled equally in the x and y directions)
         var actualRadius = this.pieManager.railRadius * transformValues[0];
-        
+
         var relX = d3.event.layerX - transformValues[4] -
             this.pieManager.center.x * transformValues[0] + scrolled.left;
 
         var relY = d3.event.layerY - transformValues[5] -
             this.pieManager.center.y * transformValues[3] + scrolled.top;
-         
+
         var relDist = Math.sqrt(relX*relX+relY*relY);
-        
+
         var angle = Math.atan(relY / relX) + Math.PI / 2;
         if(relX < 0) {
             angle += Math.PI;
         }
-        
+
         var startAngle = this.SelectionLayer.startAngle;
         var endAngle = this.SelectionLayer.endAngle;
-        
+
         if(angle>=startAngle && angle<=endAngle && relDist<=actualRadius) {
-        	Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
+            Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.PIE_SELECTION_LAYER_RIGHT_CLICKED);
         }
     },
 

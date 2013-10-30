@@ -1,3 +1,6 @@
+var async = require('async');
+var mongoose = require('mongoose');
+
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
@@ -14,10 +17,10 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method POST /sendFeedback
      */
-    app.post('/sendFeedback', function(req, res) {
+    app.post('/sendFeedback', restrict, function(req, res) {
 
-        variables = "{type:Feedback}";
-        
+        variables = "{type:Feedback,user:"+req.user.username+"}";
+
         if (req.body.feedback) {
             app.mailer.sendMail({
                 from: "Teselagen <root@localhost>",
@@ -54,7 +57,7 @@ module.exports = function(app) {
      * @method POST /partLibrary
      */
     app.get('/partLibrary', restrict, function(req, res) {
-        
+
         Part.find({
             name: {
                 $ne: ""
@@ -69,7 +72,7 @@ module.exports = function(app) {
     });
 
     /**
-     * GET Result of Check for diplicated part names
+     * GET Result of Check for duplicated part names
      * @memberof module:./routes/api
      * @method POST /partLibrary
      */
@@ -91,40 +94,108 @@ module.exports = function(app) {
                 var identical = false;
                 var part;
                 var parts = user.parts;
-                    counter = parts.length;
-                    for(var i = 0; i < parts.length; i++) {
-                        part = parts[i];
+                counter = parts.length;
+                for(var i = 0; i < parts.length; i++) {
+                    part = parts[i];
 
-                        if (part.FQDN === FQDN_candidate) {
-                            duplicatedName = true;
-                        }
-
-                        if (part.definitionHash === hash_candidate) {
-                            identical = true;
-                        }
+                    if (part.FQDN === FQDN_candidate) {
+                        duplicatedName = true;
                     }
 
-                    if (duplicatedName && !identical) {
+                    if (part.definitionHash === hash_candidate) {
+                        identical = true;
+                    }
+                }
+
+                if (duplicatedName && !identical) {
+                    return res.json({
+                        'msg': 'Duplicated part name.',
+                        'type': 'warning'
+                    });
+                } else if (duplicatedName && identical) {
+                    return res.json({
+                        'msg': 'The part already exist.',
+                        'type': 'error'
+                    });
+                } else {
+                    return res.json({
+                        'type': 'success'
+                    });
+                }
+            });
+        });
+    });
+
+    /**
+     * GET all designs that contain a given part.
+     * @memberof module:./routes/api
+     */
+    app.get('/getDesignsWithPart', restrict, function(req, res) {
+        var reqPart = JSON.parse(req.query.part);
+        var Design = app.db.model("devicedesign");
+
+        Design.find({
+            parts: mongoose.Types.ObjectId(reqPart.id)
+        }).exec(function(err, designs) {
+            if(err) {
+                console.log('Error getting designs by part.');
+                console.log(err);
+
+                return res.json({
+                    type: 'error',
+                    msg: err
+                });
+            } else {
+                return res.json({
+                    designs: designs
+                });
+            }
+        });
+    });
+
+    /**
+     * GET all parts that have a given sequence as a source.
+     * @memberof module:./routes/api
+     */
+    app.get('/getPartsAndDesignsBySequence', restrict, function(req, res) {
+        var sequenceId = JSON.parse(req.query.sequenceId);
+        var Part = app.db.model("part");
+        var Design = app.db.model("devicedesign");
+
+        Part.find({
+            sequencefile_id: mongoose.Types.ObjectId(sequenceId)
+        }).lean().exec(function(err, parts) {
+            if(err) {
+                console.log('Error getting parts by sequence.');
+                console.log(err);
+
+                return res.json({
+                    type: 'error',
+                    msg: err
+                });
+            } else {
+                async.map(parts, function(part, done) {
+                    Design.find({
+                        parts: mongoose.Types.ObjectId(part.id)
+                    }).exec(function(err, designs) {
+                        part.designs = designs;
+                        done(null, part);
+                    });
+                }, function(err, partsWithDesigns) {
+                    if(err) {
                         return res.json({
-                            'msg': 'Duplicated part name.',
-                            'type': 'warning'
-                        });
-                    } else if (duplicatedName && identical) {
-                        return res.json({
-                            'msg': 'The part already exist.',
-                            'type': 'error'
+                            type: 'error',
+                            msg: err
                         });
                     } else {
                         return res.json({
-                            'type': 'success'
+                            parts: partsWithDesigns
                         });
                     }
-                //});
-            });
+                });
+            }
         });
-
     });
-
 
     /**
      * Monitor server Tasks
@@ -142,10 +213,9 @@ module.exports = function(app) {
                     j5runs: j5runs
                 });
             });
-    });   
+    });
 
     app.get('/getStats', restrict, function(req, res) {
-
         var User = app.db.model("User");
         User.findById(req.user._id)
         .populate('projects')

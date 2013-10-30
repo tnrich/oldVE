@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TeselaGen</title>
+    <script type="text/javascript">
+        if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
+            //<![CDATA[
+            var notifierJsScheme = (("https:" == document.location.protocol) ? "https://" : "http://");
+            document.write(unescape("%3Cscript src='" + notifierJsScheme + "airbrake.io/javascripts/notifier.js' type='text/javascript'%3E%3C/script%3E"));
+            //]]>
+        }
+    </script>
+    <script type="text/javascript">
+        if(document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) {
+            var env;
+
+            if(document.URL.indexOf("app.teselagen") >= 0) {
+                env = "production";
+            } else if(document.URL.indexOf("dev.teselagen") >= 0) {
+                env = "development";
+            } else {
+                env = "unknown";
+            }
+
+            Hoptoad.setKey('40e870e0-c0a6-c307-8bef-37371fd86407');
+            Hoptoad.setHost('exceptions.codebasehq.com');
+            Hoptoad.setEnvironment(env);
+        }
+    </script>
+
+    <!-- Styles -->
+    <!-- Enabling the Bootstrap CSS styles causes some ExtJS components to display incorrectly. -->
+    <link href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/styles/icons.css" rel="stylesheet">
+    <link href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/styles/splash.css" rel="stylesheet">
+    <link href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/styles/introjs.css" rel="stylesheet">
+    <link href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/styles/loader.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/css/toastr.css">
+    <link rel="stylesheet" href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/styles/ui-progress-bar.css">
+    <link rel="shortcut icon" href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/images/favicon.ico">
+
+    <!-- ExtJS, APP, RAPHAEL, D3 -->
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/async.min.js"></script>
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/intro.js"></script>
+
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/toastr.js"></script>
+
+<link rel="stylesheet" href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/Vede-all.css"/>
+<script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/all-classes.un-min.js"></script>
+
+    <!-- Include Print CSS -->
+	<link rel="stylesheet" href="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/css/print.css" type="text/css" media="print" />
+
+    <!--Additional Resources-->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Maven+Pro:500,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu+Mono">
+
+    <!--File API-->
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/BlobBuilder.min.js"></script>
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/FileSaver.js"></script>
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/js/base64.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript" src="http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/javascript/tour-flow.js"></script>
+
+    <script>
+        // Include the UserVoice JavaScript SDK (only needed once on a page)
+        UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/NpuEOadKyACgLs6eRCCMw.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+
+        //
+        // UserVoice Javascript SDK developer documentation:
+        // https://www.uservoice.com/o/javascript-sdk
+        //
+
+        // Set colors
+        UserVoice.push(['set', {
+            accent_color: '#808283',
+            trigger_color: 'white',
+            trigger_background_color: '#448dd6'
+        }]);
+
+        // Identify the user and pass traits
+        // To enable, replace sample data with actual user traits and uncomment the line
+        UserVoice.push(['identify', {
+            //email:            'john.doe@example.com', // User’s email address
+            //name:             'John Doe', // User’s real name
+            //created_at: 1364406966, // Unix timestamp for the date the user signed up
+            //id:                 123, // Optional: Unique id of the user (if set, this should not change)
+            //type:             'Owner', // Optional: segment your users by type
+            //account: {
+            //    id:                     123, // Optional: associate multiple users with a single account
+            //    name:                 'Acme, Co.', // Account name
+            //    created_at:     1364406966, // Unix timestamp for the date the account was created
+            //    monthly_rate: 9.99, // Decimal; monthly rate of the account
+            //    ltv:                    1495.00, // Decimal; lifetime value of the account
+            //    plan:                 'Enhanced' // Plan name for the account
+            //}
+        }]);
+
+        // Add default trigger to the bottom-right corner of the window:
+        UserVoice.push(['addTrigger', { mode: 'contact', trigger_position: 'bottom-left' }]);
+
+        // Or, use your own custom trigger:
+        //UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
+
+        // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+        UserVoice.push(['autoprompt', {}]);
+    </script>
+</body>
+</html>

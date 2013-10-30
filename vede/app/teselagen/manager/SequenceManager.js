@@ -380,7 +380,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * Adds Feature to sequence manager.
      * @param {Teselagen.bio.sequence.dna.Feature} feature Feature to add
-     * @param {Boolean} quiet When true not SequenceManagerEvent will be dispatched
+     * @param {Boolean} quiet When true no SequenceManagerEvent will be dispatched
      */
     addFeature: function(pFeature, quiet) {
 
@@ -1504,12 +1504,28 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     serialize: function(){
         var data = {};
+
+        var reverseComplement;
+        var sequence;
+
+        if(!this.getSequence()) {
+            sequence = {
+                alphabet: 'dna',
+                symbols: ''
+            };
+
+            reverseComplement = sequence;
+        } else {
+            sequence = this.getSequence().serialize();
+            reverseComplement = this.getReverseComplementSequence();
+        }
+
         data.features = [];
         data.inData = {
             name: this.getName(),
             circular: this.getCircular(),
             //complementSequence: this.getComplementSequence(),
-            reverseComplementSequence: this.getReverseComplementSequence(),
+            reverseComplementSequence: reverseComplement,
             manualUpdateStarted: this.getManualUpdateStarted(),
             needsRecalculateComplementSequence: this.getNeedsRecalculateComplementSequence(),
             //needsRecalculateReverseComplementSequence: this.getNeedsRecalculateReverseComplementSequence()
@@ -1518,7 +1534,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
             data.features.push(feature.serialize());
         });
 
-        data.sequence = this.getSequence().serialize();
+        data.sequence = sequence;
+
         return data;
     },
 

@@ -196,7 +196,10 @@ Ext.define("Vede.view.annotate.Annotator", {
      */
     loadOrfRenderers: function() {
         this.removeOrfRenderers();
-        var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
+
+        var frames = this.sequenceAnnotator.getOrfFrames();
+        var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfsByFrame(frames);
+
         if(!this.sequenceAnnotator.getShowOrfs() || !retrievedOrfs) {
             return;
         }
@@ -305,7 +308,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             for (var i = 0; i < this.featureRenderers.length; ++i){
                 var featureRenderer = this.featureRenderers[i];
                 featureRenderer.render();
-
             }
         }
     },

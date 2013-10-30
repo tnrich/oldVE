@@ -15,6 +15,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                "Teselagen.utils.SystemUtils"],
 
     statics: {
+        EMPTY_AA_HEIGHT: 0,
         FONT_SIZE: 12,
         FONT_FAMILY: "Ubuntu Mono",
         COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0",
@@ -79,13 +80,9 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         for (var i = 0; i < rows.length; i++){
             var row = rows[i];
-
             var rowX = 0;
             var rowY = this.totalHeight;
-
             var sequenceString = "";
-            //sequenceString += this.renderIndexString(row.getRowData().getStart() + 1) + " ";
-
 
             if(this.sequenceAnnotator.getShowSpaceEvery10Bp()){
                 sequenceString += this.splitWithSpaces(row.getRowData().getSequence(), 0, false);
@@ -120,9 +117,9 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var sequenceWidth = sequenceStringLength * this.sequenceAnnotationManager.self.CHAR_WIDTH;
             var sequenceHeight = this.totalHeight - sequenceY;
 
-            if(this.sequenceAnnotator.getShowAminoAcids()){
+            if(this.sequenceAnnotator.getShowAminoAcids()) {
                 this.renderAA(row);
-                sequenceY += 60;
+                sequenceY += 20 * this.sequenceAnnotator.getAminoAcidFrames().length;
             }
 
             if(this.sequenceAnnotator.getShowComplementarySequence()){
@@ -130,7 +127,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 sequenceHeight = this.totalHeight - sequenceY;
             }
 
-            if(this.sequenceAnnotator.showAminoAcidsRevCom){
+            if(this.sequenceAnnotator.getShowAminoAcidsRevCom()){
                 this.renderAARevCom(row);
             }
 
@@ -236,6 +233,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var baseStart;
         var aaStart = [];
         var aaEnd = [];
+        var frames = this.sequenceAnnotator.getAminoAcidFrames();
 
         // Which frame will be displaying at the first character of the row.
         var leadingFrame;
@@ -301,35 +299,48 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             verticalOffset = row.getRowData().getOrfAlignment().getCount() * 8;
         }
 
-        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("class", "aminoAcidSVG")
-            .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight - verticalOffset)
-            .text(aminoAcids1);
+        if(frames.indexOf(0) !== -1) {
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("class", "aminoAcidSVG")
+                .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight - verticalOffset)
+                .text(aminoAcids1);
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
-        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("class", "aminoAcidSVG")
-            .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight - verticalOffset)
-            .text(aminoAcids2);
+        if(frames.indexOf(1) !== -1) {
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("class", "aminoAcidSVG")
+                .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight - verticalOffset)
+                .text(aminoAcids2);
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
-        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("class", "aminoAcidSVG")
-            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight - verticalOffset)
-            .text(aminoAcids3);
+        if(frames.indexOf(2) !== -1) {
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("class", "aminoAcidSVG")
+                .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight - verticalOffset)
+                .text(aminoAcids3);
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
     },
 
     renderAARevCom: function(row) {
         var baseStart;
         var aaStart = [];
         var aaEnd = [];
+        var frames = this.sequenceAnnotator.getAminoAcidRevComFrames();
 
         // Which frame will be displaying at the first character of the row.
         var leadingFrame;
@@ -437,29 +448,41 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         var verticalOffset = 15;
 
-        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("class", "revComAminoAcidSVG")
-            .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight + verticalOffset)
-            .text(aminoAcids1);
+        if(frames.indexOf(0) !== -1) {
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("class", "revComAminoAcidSVG")
+                .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight + verticalOffset)
+                .text(aminoAcids1);
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
-        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("class", "revComAminoAcidSVG")
-            .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight + verticalOffset)
-            .text(aminoAcids2);
+        if(frames.indexOf(1) !== -1) {
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("class", "revComAminoAcidSVG")
+                .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight + verticalOffset)
+                .text(aminoAcids2);
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
 
-        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("class", "revComAminoAcidSVG")
-            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-            .attr("y", this.totalHeight + verticalOffset)
-            .text(aminoAcids3);
+        if(frames.indexOf(2) !== -1) {
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("class", "revComAminoAcidSVG")
+                .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight + verticalOffset)
+                .text(aminoAcids3);
 
-        this.totalHeight += 20;
+            this.totalHeight += 20;
+        } else {
+            this.totalHeight += this.self.EMPTY_AA_HEIGHT;
+        }
     },
 
     renderComplementarySequence: function(row) {

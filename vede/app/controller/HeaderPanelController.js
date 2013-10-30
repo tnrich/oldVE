@@ -9,6 +9,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
     header: null,
 
     helpWindow : null,
+    tasksWindow: null,
     
     onHelpBtnClick: function(button, e, options) {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
@@ -57,14 +58,26 @@ Ext.define('Vede.controller.HeaderPanelController', {
         });
     },
 
+    onTasksBtnClick: function(){
+        if(this.tasksWindow) this.tasksWindow.show();
+        else 
+        {
+            this.tasksWindow = Ext.create('Vede.view.common.TasksMonitorWindow').show();
+            this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
+        }
+    },
+
     init: function() {
 
      	this.control({
             "#headerPanel": {
                 afterrender: this.onRender
             },
-     		"#help_btn": {
-     			click: this.onHelpBtnClick
+            "#help_btn": {
+                click: this.onHelpBtnClick
+            },
+     		"#tasks_btn": {
+     			click: this.onTasksBtnClick
      		},
             "#reportFeedbackBtn": {
                 click: this.onReportFeedbackBtnClick
@@ -73,11 +86,14 @@ Ext.define('Vede.controller.HeaderPanelController', {
                 click: this.onReportErrorBtnClick
             }
      	});
+
+        console.log("Header controller loaded");
     },
 
 
     onRender: function() {
         Ext.get("help_btn").on('click', this.onHelpBtnClick);
+        Ext.get("tasks_btn").on('click', this.onTasksBtnClick);
 
         if(!Ext.isChrome) {
             Ext.getCmp('header-browser-warning').show();

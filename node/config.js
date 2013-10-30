@@ -18,7 +18,7 @@ module.exports = function(app, express) {
 
     // Express Framework Configuration
 
-    app.set('env','production');
+    // app.set('env','production');
     app.dbname = "teselagen";
 
     var Opts = {
@@ -80,7 +80,7 @@ module.exports = function(app, express) {
         app.use(express.static(__dirname + '/public'));
     });
 
-    app.configure('production', function() {      
+    app.configure('production', function() {
         process.env.NODE_ENV = 'production';
 
         // User Airbrake to log errors.
@@ -97,7 +97,7 @@ module.exports = function(app, express) {
 
         // Use Nodetime to monitor/profile the server.
         require('nodetime').profile({
-            accountKey: '7a81c5694843fb2ead319abf624219460dad4f47', 
+            accountKey: '7a81c5694843fb2ead319abf624219460dad4f47',
             appName: 'Teselagen App'
         });
 

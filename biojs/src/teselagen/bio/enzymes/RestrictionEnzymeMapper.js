@@ -46,6 +46,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
             reLength = restrictionEnzyme.getDsForward();
         }
 
+        if(!symbolList) return null;
         var sequence = symbolList.seqString();
         var seqLength = sequence.length;
 

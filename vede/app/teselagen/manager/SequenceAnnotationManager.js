@@ -1,5 +1,4 @@
 Ext.define("Teselagen.manager.SequenceAnnotationManager", {
-
     requires: ["Teselagen.manager.RowManager",
                "Teselagen.renderer.annotate.LineRenderer",
                "Vede.view.annotate.Annotator",
@@ -25,6 +24,9 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         showSpaceEvery10Bp: true,
         showAminoAcids: false,
         showAminoAcidsRevCom: false,
+        aminoAcidFrames: [],
+        aminoAcidRevComFrames: [],
+        orfFrames: [],
 
         bpPerRow: 60,
         sequenceFontSize: 11,

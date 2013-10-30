@@ -283,7 +283,15 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     },
 
     onShowOrfsChanged: function(show) {
-        this.SequenceAnnotationManager.setShowOrfs(show);
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
+
+        this.SequenceAnnotationManager.setOrfFrames(frameArray);
+        this.SequenceAnnotationManager.setShowOrfs(frameArray.length > 0);
 
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
@@ -518,8 +526,16 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     onShowSequenceAAChanged: function(show) {
         var start = this.SelectionLayer.start;
         var end = this.SelectionLayer.end;
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
 
-        this.SequenceAnnotationManager.setShowAminoAcids(show);
+        this.SequenceAnnotationManager.setAminoAcidFrames(frameArray);
+        this.SequenceAnnotationManager.setShowAminoAcids(frameArray.length > 0);
+
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
 
@@ -531,8 +547,16 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
     onShowRevcomAAChanged: function(show) {
         var start = this.SelectionLayer.start;
         var end = this.SelectionLayer.end;
+        var frameArray = [];
+        for(var i = 0; i < show.length; i++) {
+            if(show[i]) {
+                frameArray.push(i);
+            }
+        }
 
-        this.SequenceAnnotationManager.setShowAminoAcidsRevCom(show);
+        this.SequenceAnnotationManager.setAminoAcidRevComFrames(frameArray);
+        this.SequenceAnnotationManager.setShowAminoAcidsRevCom(frameArray.length > 0);
+
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
 

@@ -101,7 +101,7 @@ input {
 }
 
 /*Header*/
-#banner_head {
+#banner_head h1{
     font-family: "proxima-nova", sans-serif;
     font-size: 58px;
     font-weight:600;
@@ -112,6 +112,7 @@ input {
     text-shadow: 1px 1px 0px white;
     text-align: left;
     line-height: 62px;
+    margin: 0;
 }
 
 #banner_head_sub {
@@ -402,7 +403,7 @@ background: none;
     background: #ffffff;
     }
 
-.page-header {
+.page-header h1{
     font-size: 28px;
     font-family: 'proxima-nova' sans-serif;
     font-weight: 300;

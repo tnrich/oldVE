@@ -4,10 +4,10 @@
  */
 Ext.define('Vede.view.de.PartDefinitionDialog', {
     extend: 'Ext.window.Window',
+    closeAction: "close",
 
     height: 400,
     width: 590,
-    modal: true,
     title: 'Specify Part Definition',
 
     initComponent: function() {
@@ -27,13 +27,15 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             anchor: '100%',
                             fieldLabel: 'Part Name:',
                             margin: '10 10 0 0',
-                            name: 'partName'
+                            name: 'partName',
+                            allowBlank: 'false',
                         },
                         {
                             xtype: 'textfield',
                             anchor: '100%',
                             fieldLabel: 'Part Source',
                             margin: '10 10 0 0',
+                            allowBlank: 'false',
                             name: 'partSource',
                             readOnly: true
                         },
@@ -43,6 +45,7 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             fieldLabel: 'Source Data',
                             labelAlign: 'top',
                             margin: '10 10 0 0',
+                            allowBlank: 'false',
                             name: 'sourceData',
                             readOnly: true
                         },
@@ -114,6 +117,15 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
         });
 
         me.callParent(arguments);
+    },
+    listeners: {
+        close: function(win) {
+            var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+            var currentTabEl = (currentTab.getEl());
+            currentTabEl.unmask();
+
+            Vede.application.fireEvent(Teselagen.event.DeviceEvent.CLOSE_PART_CREATE_WINDOW);
+        }
     }
 
 });

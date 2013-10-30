@@ -28,6 +28,7 @@ block scripts
                     { "mData": "groupType" , sTitle: "Org Type"},
                     { "mData": "groupName" , sTitle: "Org Name", sWidth: "20%"},
                     { "mData": "activated" , sTitle: "Activated"},
+                    { "mData": "debugAccess" , sDefaultContent: false, sTitle: "Debug"},
                     { "mData": "dateCreated" , sTitle: "Date created", sWidth: "20%",
                       mRender: function ( data, type, full ) {
                         return new Date(data).toLocaleString();

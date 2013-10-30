@@ -3,9 +3,9 @@
  * @class Vede.controller.DashboardPanelController
  */
 Ext.define("Vede.controller.DashboardPanelController", {
-	extend: "Ext.app.Controller",
+    extend: "Ext.app.Controller",
 
-	requires: ["Teselagen.event.ProjectEvent",
+    requires: ["Teselagen.event.ProjectEvent",
                "Teselagen.manager.ProjectManager",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.bio.parsers.ParsersManager",
@@ -258,12 +258,58 @@ Ext.define("Vede.controller.DashboardPanelController", {
             sequenceFileFormat: "GENBANK",
             sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
             sequenceFileName: "untitled.gb",
-            partSource: "Untitled sequence"
+            partSource: "Untitled sequence",
+            serialize: JSON.parse('{"features": [], "inData": {"name": "no_name", "circular": true, "manualUpdateStarted": false, "needsRecalculateComplementSequence": false }, "sequence": {"alphabet": "dna", "symbols": ""} }')
         });
 
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
     },
 
+    onDeleteSequence: function(sequence) {
+        Teselagen.manager.ProjectManager.getPartsAndDesignsBySequence(sequence, function(parts) {
+            var confirmationWindow = Ext.create("Vede.view.common.DeleteSequenceConfirmationWindow");
+            var callback = function() {
+                Teselagen.manager.ProjectManager.deleteSequence(sequence, parts);
+            };
+
+            if(parts !== false) {
+                confirmationWindow.show();
+                confirmationWindow.callback = callback;
+
+                if(parts.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(parts);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this sequence will not affect any parts. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
+            } else {
+                Ext.Msg.alert('Network Error', 'We could not determine which parts are associated with that sequence.');
+            }
+        });
+    },
+
+    onDeletePart: function(part) {
+        Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part, function(affectedDesigns) {
+            var confirmationWindow = Ext.create("Vede.view.common.DeletePartConfirmationWindow");
+            var callback = function() {
+                Teselagen.manager.ProjectManager.deletePart(part);
+            };
+
+            if(affectedDesigns !== false) {
+                confirmationWindow.show();
+                confirmationWindow.callback = callback;
+
+                if(affectedDesigns.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this part will not affect any designs. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
+            } else {
+                Ext.Msg.alert('Network Error', 'We could not determine which designs are associated with that part.');
+            }
+        });
+    },
 
     /**
      * Hide the vector viewer when the mouse leaves the current grid
@@ -280,7 +326,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onVectorViewerMouseLeave: function(event, target) {
-        var target = event.getRelatedTarget();
+        target = event.getRelatedTarget();
 
         // Check if we are mousing into an item on the grid. If not, hide the
         // vector viewer.
@@ -293,16 +339,18 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
 
-  	init: function () {
+    init: function () {
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatistics);
-        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatistics);
-        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatistics);
+        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
+        this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
+        this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
 
-	     	this.control({
+        this.control({
             "#mainAppPanel": {
-                beforetabchange: this.onBeforeTabChange,
+                Beforetabchange: this.onBeforeTabChange,
                 tabchange: this.onMainAppPanelTabChange
             },
             "#designGrid_Panel": {
@@ -318,6 +366,6 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemmouseenter: this.onPartGridItemMouseEnter,
                 itemmouseleave: this.onPartGridItemMouseLeave
             }
-		});
-	}
+        });
+    }
 });

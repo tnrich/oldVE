@@ -96,14 +96,13 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onOpenVectorEditor: function(seq, part){
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var sequenceFileManager;
         if(seq.get("serialize")) {
             sequenceFileManager = seq.getSequenceManager();
         } else {
             sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
         }
-
-        console.log(sequenceFileManager);
 
         if(!sequenceFileManager) {
             return;
