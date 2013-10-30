@@ -103,9 +103,14 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         var self = this;
         var changes = false;
         var anyRunningTask = false;
+        Teselagen.manager.ProjectManager.currentTasks.removeAll();
+
         for(var j5runKey in data)
         {
-            var j5run = data[j5runKey]
+            var j5run = data[j5runKey];
+            j5run.date = new Date(j5run.date);
+            Teselagen.manager.ProjectManager.currentTasks.add(j5run);
+
             if ( j5run.status === "In progress" ) { anyRunningTask = true; }
             if ( self.mon[j5run._id] )
             {
@@ -114,7 +119,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 {
                     // Change
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
-                    var startDate = new Date(j5run.date);
+                    var startDate = jrun.date;
                     var endDate = Date.now();
                     var elapsed = endDate - startDate;
                     elapsed = Math.round(elapsed/1000);
