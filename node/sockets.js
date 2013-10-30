@@ -1,12 +1,13 @@
 module.exports = function(app) {	
-	
+	app.sockets = {};
 	app.io.on('connection', function(socket){
 		console.log("New connection");
 
-		socket.on('sampleEvent', function(data){
-			console.log("sample event");
-			console.log(data);
+		socket.on('set nickname', function (name) {
+			app.sockets[name] = socket;
+			app.cache.get('rpavez',function(err,user){
+				app.sockets['rpavez'].emit('update',user);
+			});
 		});
-
 	});
 };
