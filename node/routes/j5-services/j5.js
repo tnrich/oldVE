@@ -375,7 +375,7 @@ app.post('/executej5',restrict,function(req,res){
                     console.log(err);
                     newj5Run.status = "Error";
                     newj5Run.endDate = Date.now();
-                    newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output: " + err}});
+                    newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output: " + err + '. Output: ' + newChild.output}});
                     newj5Run.save();
                   }
                   else if(result.methodResponse.fault)
