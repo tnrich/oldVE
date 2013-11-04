@@ -12,7 +12,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app)
 
-app.io = require('socket.io').listen(server, { log: false });
+app.io = require('socket.io').listen(server, { log: false, transports: ['websocket'] });
 app.io.set( 'origins', '*:*' );
 
 app.io.sockets.on('connection', function(client)  {
