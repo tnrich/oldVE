@@ -36,7 +36,6 @@ module.exports = function(app) {
                         if(err.code===11000)
                         {
                             // Duplicated Part
-                            console.log(err);
                             Part.findOne({"FQDN":newPart.FQDN, "definitionHash": newPart.definitionHash}).exec(function(err,part){
                                 if(!part) {
                                     console.log("Duplicated part not found!",newPart.FQDN);

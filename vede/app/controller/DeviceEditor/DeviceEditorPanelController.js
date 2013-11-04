@@ -74,9 +74,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 Ext.MessageBox.alert("Error","Problem while loading Eugene Rules");
             }
         });
-        
     },
-    
 
     /**
      * When opening a Device Editor project, store it in the "model" attribute of the active Device Editor panel.
@@ -88,76 +86,76 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onDeviceEditorRenameBtnClick: function () {
         var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
-    	var project = Teselagen.manager.ProjectManager.projects.getById(deproject.get("project_id"));
+        var project = Teselagen.manager.ProjectManager.projects.getById(deproject.get("project_id"));
         var projectNames = [];
         project.designs().load().each(function (design) {
             if(design!==deproject) projectNames.push(design.data.name);
         });
         
         var onPromptClosed = function (answer, text) {
-        	if(answer ==="ok") {
-	        	text = Ext.String.trim(text);
-	        	if(text === "") { return Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this); }
-	        	
-	            for (var j=0; j<projectNames.length; j++) {
-	                if (projectNames[j]===text) {
-	                    Ext.MessageBox.show({
-	                        title: "Name",
-	                        msg: "A design with this name already exists in this project. <p> Please enter another name:",
-	                        buttons: Ext.MessageBox.OKCANCEL,
-	                        fn: onPromptClosed,
-	                        prompt: true,
-	                        cls: "sequencePrompt-box",
-	                        scope: this,
-	                        style: {
-	                            "text-align": "center"
-	                        },
-	                        scope: this,
-	                        layout: {
-	                            align: "center"
-	                        },
-	                        items: [
-	                            {
-	                                xtype: "textfield",
-	                                layout: {
-	                                    align: "center"
-	                                },
-	                                width: 50
-	                            }
-	                        ]
-	                    });
-	                    return Ext.MessageBox;
-	                    
-	                }
-	            }
-	    		deproject.set("name", text);
-	            deproject.save({
-	                callback: function () {
-	                    Ext.getCmp("mainAppPanel").getActiveTab().setTitle(text);
-	                    toastr.options.onclick = null;
-	                    toastr.info("Design renamed");
-	                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-	                        Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
-	                    });
-	                }
-	            });
-        	} else {
-        		return false;
-        	}
+            if(answer ==="ok") {
+                text = Ext.String.trim(text);
+                if(text === "") { return Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this); }
+                
+                for (var j=0; j<projectNames.length; j++) {
+                    if (projectNames[j]===text) {
+                        Ext.MessageBox.show({
+                            title: "Name",
+                            msg: "A design with this name already exists in this project. <p> Please enter another name:",
+                            buttons: Ext.MessageBox.OKCANCEL,
+                            fn: onPromptClosed,
+                            prompt: true,
+                            cls: "sequencePrompt-box",
+                            scope: this,
+                            style: {
+                                "text-align": "center"
+                            },
+                            scope: this,
+                            layout: {
+                                align: "center"
+                            },
+                            items: [
+                                {
+                                    xtype: "textfield",
+                                    layout: {
+                                        align: "center"
+                                    },
+                                    width: 50
+                                }
+                            ]
+                        });
+                        return Ext.MessageBox;
+                        
+                    }
+                }
+                deproject.set("name", text);
+                deproject.save({
+                    callback: function () {
+                        Ext.getCmp("mainAppPanel").getActiveTab().setTitle(text);
+                        toastr.options.onclick = null;
+                        toastr.info("Design renamed");
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
+                        });
+                    }
+                });
+            } else {
+                return false;
+            }
         };
 
         Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this, false, deproject.get("name"));
     },
 
     onDeviceEditorClearBtnClick: function () {
-    	var gridManager = Teselagen.manager.GridManager;
-		
+        var gridManager = Teselagen.manager.GridManager;
+        
         function ClearDeviceDesignBtn (btn) {
             if (btn==="ok") {
 
-        		gridManager.setListenersEnabled(false);
-        		
-            	var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+                gridManager.setListenersEnabled(false);
+                
+                var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
                 existingDesign.bins().removeAll(true);
                 existingDesign.rules().removeAll(true);
                 existingDesign.parts().removeAll(true);
@@ -340,12 +338,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     saveDEProject: function (cb) {
         var self = this;
         var gridManager = Teselagen.manager.GridManager;
-        
+
         gridManager.setListenersEnabled(false);
-        
+
         Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
         var design = Ext.getCmp("mainAppPanel").getActiveTab().model; 
-        
+
         var saveAssociatedSequence = function (part, cb) {
             // Do not save sequence for an unmapped part.
             if(part.isMapped())
@@ -385,7 +383,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 }});
             }
             else { cb(); }
-            
         };
 
         var saveDesign = function () {
@@ -401,7 +398,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
             design.save({
                 callback: function () {
-
                     Vede.application.fireEvent(self.GridEvent.RESUME_PART_ALERTS);
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
@@ -423,20 +419,20 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     }
                 });
             });
-            
+
             if(countParts === 0) {
-            	saveDesign();
+                saveDesign();
             } else {
-    	        design.bins().each(function (bin) {
-    	            bin.cells().each(function (cell) {
-    	                var part = cell.getPart();
+                design.bins().each(function (bin) {
+                    bin.cells().each(function (cell) {
+                        var part = cell.getPart();
                         var sequenceFile;
                         var sequenceManager;
-    	
-    	                if(part) {
-    	                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-    	
-    	                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+        
+                        if(part) {
+                            if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+        
+                            if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                                 sequenceFile = part.getSequenceFile();
                                 if(sequenceFile) {
                                     sequenceManager = sequenceFile.getSequenceManager();
@@ -448,25 +444,22 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                                     part.set("partSource", sequenceFile.get("name"));
                                 }
+                                saveAssociatedSequence(part, function() {
+                                    if(countParts === 1) {
+                                        saveDesign();
+                                    }
 
-    	                        part.save({
-    	                            callback: function (part) {
-    	                                saveAssociatedSequence(part, function () {
-    	                                	if(countParts === 1) { saveDesign();}
-    	                                	countParts--;
-    	                                });
-    	                            }
-    	                        });
-    	                    } else {
-                                
-    	                        saveAssociatedSequence(part,function(){
-    	                        	if(countParts === 1) { saveDesign(); }
-    	                        	countParts--;
-    	                        });
-    	                    }
-    	                }
-    	            });
-    	        });
+                                    countParts--;
+                               });
+                            } else {
+                                saveAssociatedSequence(part,function(){
+                                    if(countParts === 1) { saveDesign(); }
+                                    countParts--;
+                                });
+                            }
+                        }
+                    });
+                });
             }
         });
     },
@@ -712,11 +705,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     },
     
     onUndoMenuItemClick: function() {
-    	Teselagen.manager.GridCommandPatternManager.undo();
+        Teselagen.manager.GridCommandPatternManager.undo();
     },
     
     onRedoMenuItemClick: function() {
-    	Teselagen.manager.GridCommandPatternManager.redo();
+        Teselagen.manager.GridCommandPatternManager.redo();
     },
     
     /**
