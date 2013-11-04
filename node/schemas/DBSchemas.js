@@ -165,7 +165,7 @@ module.exports = function(db) {
                              part.revComp];
 
             if(file) {
-                hashArray.concat([file.FQDN, file.hash]);
+                hashArray = hashArray.concat([file.FQDN, file.hash]);
             }
 
             return cb(crypto.createHash('md5').update(hashArray.join("")).digest("hex"));

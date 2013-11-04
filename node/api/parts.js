@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var async = require('async');
 
 module.exports = function(app) {
 
@@ -36,7 +37,6 @@ module.exports = function(app) {
                         if(err.code===11000)
                         {
                             // Duplicated Part
-                            console.log(err);
                             Part.findOne({"FQDN":newPart.FQDN, "definitionHash": newPart.definitionHash}).exec(function(err,part){
                                 if(!part) {
                                     console.log("Duplicated part not found!",newPart.FQDN);
@@ -71,6 +71,27 @@ module.exports = function(app) {
                 user.parts.push(savedSequence);
                 user.save();
             });
+        });
+    });
+
+    app.get('/updateAllPartHashes', restrict, function(req, res) {
+        Part.find().exec(function(err, parts) {
+            if(err) {
+                return res.send(err);
+            } else {
+                async.forEach(parts, function(part, done) {
+                    Part.generateDefinitionHash(null, part, function(hash) {
+                        part.definitionHash = hash;
+                        part.save(done);
+                    });
+                }, function(err) {
+                    if(err) {
+                        return res.send(err);
+                    } else {
+                        return res.send('Success!');
+                    }
+                });
+            }
         });
     });
 
