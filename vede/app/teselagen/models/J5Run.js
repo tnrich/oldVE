@@ -83,7 +83,8 @@ Ext.define("Teselagen.models.J5Run", {
         {name: "warnings",        type: "String",     defaultValue: ""},
 
         // IDs
-        {name: "devicedesign_id",  type: "long"}
+        {name: "devicedesign_id",  type: "long"},
+        {name: "devicedesign_name",  type: "String"}
     ],
 
     getItemTitle: function(){
