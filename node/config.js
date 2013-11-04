@@ -132,67 +132,35 @@ module.exports = function(app, express) {
         app.use(airbrake.expressHandler());
     });
 
-    // Init MEMCACHE
+    // Init MEMCACHED
+    /*
+    var memCacheHost = Opts.host+':11211';
+    memCacheHost = "54.215.198.196:11211";
+    app.cache = new app.memcached(memCacheHost);
+
+    app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
+    app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
 
     if(app.get("env") === "production") {
-        app.logger.log("MEMCACHE CONNECTED");
-        var memCacheHost = Opts.host+':11211';
-        memCacheHost = "54.215.198.196:11211";
-        app.cache = new app.memcached(memCacheHost);
-
-        app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
-        app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
-
-        setTimeout(function(){        
-            console.log("writing to memcache");
-            app.cache.set('test', 'hello', 0, function (err, result) {
-                if(err) {
-                    app.logger.error("MEMCACHE: CONNECTION PROBLEMS");
-                    console.log(arguments);
-                }
-                else {
-                    console.log("reading to memcache");
-                    app.cache.get('test', function (err, data) {
-                      if(err) console.log("Error reading data from memcache");
-                      console.log(data);
-                    });
-                }
-            });
-            
-        },1000);
+    setTimeout(function(){        
+        console.log("writing to memcache");
+        app.cache.set('test', 'hello', 0, function (err, result) {
+            if(err) {
+                app.logger.error("MEMCACHE: CONNECTION PROBLEMS");
+                console.log(arguments);
+            }
+            else {
+                console.log("reading to memcache");
+                app.cache.get('test', function (err, data) {
+                  if(err) console.log("Error reading data from memcache");
+                  console.log(data);
+                });
+            }
+        });
+        
+    },1000);
     }
-    else
-    {
-        app.logger.log('info',"MEMCACHE SIMULATED");
-        app.cacheData = {};
-        app.cache.set = function(key,value){
-            app.cacheData[key] = value;
-        };
-        app.cache.get = function(key,cb){
-            return cb(false,app.cacheData[key]);
-        };
-
-        app.cache.cacheJob = function(userKey,job){
-            job = job.toObject();
-            delete job.j5Input;
-            delete job.j5Results;
-            app.cache.get(userKey,function(err,user){
-                if(!user)
-                {
-                    user = {};
-                    user.jobs = {};
-                    user.jobs[job._id] = job; 
-                }
-                else
-                {
-                    user.jobs[job._id] = job;
-                }
-                app.cache.set(userKey,user);
-            });
-        };
-
-    }
-    
+    */
 
 
     // Init MONGODB - MONGOOSE (ODM)
