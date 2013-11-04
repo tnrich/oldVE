@@ -201,6 +201,13 @@ var clearUserFolder = function(user){
   });
 };
 
+function reportChange(j5run){
+  app.cache.cacheJob('rpavez',j5run);
+  app.cache.get('rpavez',function(err,user){
+    app.sockets['rpavez'].emit('update',user);
+  });
+};
+
 function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 {
 
@@ -228,6 +235,8 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
       newj5Run.warnings = warnings;
 
       newj5Run.save();
+      reportChange(newj5Run);
+
       updateMasterSources(parsedResults.masterSources,user);
       clearUserFolder(user);
     });    
@@ -281,6 +290,12 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
   });
 };
 
+app.get('/memjobs',function(req,res){
+  app.cache.get('rpavez',function(err,user){
+    return res.json({user:user});
+  });
+});
+
 // Design Assembly RPC
 app.post('/executej5',restrict,function(req,res){
 
@@ -320,6 +335,8 @@ app.post('/executej5',restrict,function(req,res){
               j5Parameters: JSON.parse(req.body.parameters)
             }
         });
+
+        reportChange(newj5Run);
 
         newj5Run.save(function(err){
           deviceDesignModel.j5runs.push(newj5Run);
@@ -416,6 +433,7 @@ app.post('/executej5',restrict,function(req,res){
               newj5Run.endDate = Date.now();
               newj5Run.error_list.push({"error":error});
               newj5Run.save();
+              reportChange(newj5Run);
             }
             else
             {
