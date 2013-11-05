@@ -363,6 +363,7 @@ app.post('/executej5',restrict,function(req,res){
           newChild.on('exit', function (code,signal) {
               console.log("Process finished with code ",code," and signal ",signal);
               //quicklog(require('util').inspect(newChild.output,false,null));
+              newChild.output = newChild.output.substr(newChild.output.indexOf('<'));
               require('xml2js').parseString(newChild.output, function (err, result) {
                   if(signal === "SIGTERM")
                   {
@@ -375,7 +376,7 @@ app.post('/executej5',restrict,function(req,res){
                     console.log(err);
                     newj5Run.status = "Error";
                     newj5Run.endDate = Date.now();
-                    newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output"}});
+                    newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output: " + err}});
                     newj5Run.save();
                   }
                   else if(result.methodResponse.fault)

@@ -35,7 +35,7 @@ module.exports = function(app) {
                 newPart.save(function(err){
                     if(err)
                     {
-                        if(err.code===11000)
+                        if(err.code===11000 || err.code === 11001)
                         {
                             // Duplicated Part
                             Part.findOne({"FQDN":newPart.FQDN, "definitionHash": newPart.definitionHash}).exec(function(err,part){
