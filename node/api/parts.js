@@ -7,6 +7,7 @@ module.exports = function(app) {
 
     var Part = app.db.model("part");
     var User = app.db.model("User");
+    var Design = app.db.model("devicedesign");
 
 
     /*
@@ -82,7 +83,58 @@ module.exports = function(app) {
                 async.forEach(parts, function(part, done) {
                     Part.generateDefinitionHash(null, part, function(hash) {
                         part.definitionHash = hash;
-                        part.save(done);
+                        part.save(function(err) {
+                            if(err) {
+                                if(err.code === 11000 || err.code === 11001) {
+                                    Part.findOne({
+                                        FQDN: part.FQDN,
+                                        definitionHash: part.definitionHash
+                                    }).exec(function(err, duplicatePart) {
+                                        if(err) {
+                                            return done(err);
+                                        } else {
+                                            var oldPartId = mongoose.Types.ObjectId(part.id);
+                                            var duplicatePartId = mongoose.Types.ObjectId(duplicatePart.id);
+                                            Design.find({
+                                                parts: oldPartId
+                                            }).exec(function(err, designs) {
+                                                var design;
+
+                                                if(err) {
+                                                    return done(err);
+                                                } else {
+                                                    async.forEach(designs, function(design, innerCallback) {
+                                                        design.parts[design.parts.indexOf(oldPartId)] = duplicatePartId;
+
+                                                        for(var j = 0; j < design.bins.length; j++) {
+                                                            for(var k = 0; k < design.bins[j].cells.length; k++) {
+                                                                var cell = design.bins[j].cells[k];
+
+                                                                if(cell.part_id === oldPartId) {
+                                                                    cell.part_id === duplicatePartId;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        design.save(innerCallback);
+                                                    }, function(err) {
+                                                        if(err) {
+                                                            return done(err);
+                                                        } else {
+                                                            part.remove(done);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    return done(err);
+                                }
+                            } else {
+                                return done();
+                            }
+                        });
                     });
                 }, function(err) {
                     if(err) {
