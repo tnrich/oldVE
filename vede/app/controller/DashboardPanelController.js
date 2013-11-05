@@ -24,15 +24,15 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onMainAppPanelTabChange: function(mainAppPanel, newTab, oldTab) {
-        if(newTab.initialCls === "DashboardPanelTab" && 
-           newTab.getActiveTab().initialCls === "sequenceLibraryPanel") {
+        if(newTab.initialCls === "DashboardPanelTab") {
+            if(newTab.getActiveTab().initialCls === "sequenceLibraryPanel") {
+                var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
+                Teselagen.manager.ProjectManager.openSequenceLibrary(null, 
+                                                            searchField.getValue());
+            }
 
-            var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
-            Teselagen.manager.ProjectManager.openSequenceLibrary(null, 
-                                                        searchField.getValue());
+            this.populateStatistics();
         }
-
-        this.populateStatistics();
     },
 
     onLastDEProjectsItemClick: function (item,record) {
