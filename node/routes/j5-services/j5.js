@@ -204,6 +204,7 @@ var clearUserFolder = function(user){
 function reportChange(j5run){
   app.cache.cacheJob('rpavez',j5run);
   app.cache.get('rpavez',function(err,user){
+    console.log(user);
     app.sockets['rpavez'].emit('update',user);
   });
 };
@@ -219,14 +220,14 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
     newj5Run.save();
   };
 
-  //console.log("Attemping to write output");
+  console.log("Attemping to save j5 result");
   //console.log(gridfs);
   gridfs.saveFile(fileData,function(err,objectId){
     if(err) return handleErrors(err,newj5Run);
     //console.log("Output saved");
-    //console.log("Processing output");
+    console.log("Processing output");
     processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
-      //console.log("Output processed");
+      console.log("Output processed");
       newj5Run.j5Parameters = { j5Parameters : JSON.parse(j5parameters) };
       newj5Run.file_id = objectId.toString();
       newj5Run.j5Results = parsedResults;
