@@ -202,6 +202,7 @@ var clearUserFolder = function(user){
 };
 
 function reportChange(j5run){
+  console.log("Reporting");
   app.cache.cacheJob('rpavez',j5run);
   app.cache.get('rpavez',function(err,user){
     console.log(user);
@@ -221,14 +222,9 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
     newj5Run.save();
   };
 
-  console.log("Attemping to save j5 result");
-  //console.log(gridfs);
   gridfs.saveFile(fileData,function(err,objectId){
     if(err) return handleErrors(err,newj5Run);
-    //console.log("Output saved");
-    console.log("Processing output");
     processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
-      console.log("Output processed");
       newj5Run.j5Parameters = { j5Parameters : JSON.parse(j5parameters) };
       newj5Run.file_id = objectId.toString();
       newj5Run.j5Results = parsedResults;
@@ -237,6 +233,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
       newj5Run.warnings = warnings;
 
       newj5Run.save();
+      reportChange(newj5Run);
       updateMasterSources(parsedResults.masterSources,user);
       clearUserFolder(user);
     });    
@@ -290,6 +287,12 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
   });
 };
 
+app.get('/memjobs',function(req,res){
+  app.cache.get('rpavez',function(err,user){
+    return res.json({user:user});
+  });
+});
+
 // Design Assembly RPC
 app.post('/executej5',restrict,function(req,res){
 
@@ -329,6 +332,8 @@ app.post('/executej5',restrict,function(req,res){
               j5Parameters: JSON.parse(req.body.parameters)
             }
         });
+
+        reportChange(newj5Run);
 
         newj5Run.save(function(err){
           deviceDesignModel.j5runs.push(newj5Run);
@@ -426,6 +431,7 @@ app.post('/executej5',restrict,function(req,res){
               newj5Run.endDate = Date.now();
               newj5Run.error_list.push({"error":error});
               newj5Run.save();
+              reportChange(newj5Run);
             }
             else
             {
