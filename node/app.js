@@ -10,6 +10,7 @@
 
 var express = require('express');
 var app = express();
+
 var server = require('http').createServer(app)
 
 app.io = require('socket.io').listen(server, { log: false, transports: ['websocket'] });
@@ -36,7 +37,6 @@ app.nodemailer = require("nodemailer");
 app._ = require("underscore");
 app.winston = require('winston');
 app.memcached = require('memcached');
-app.socketio = require('socket.io');
 
 require('./api/rest.js')(app);
 
@@ -47,13 +47,10 @@ require('./config.js')(app, express);
 require('./routes/api.js')(app);
 
 // Services
-require('./sockets.js')(app);
-
-// Services
 require('./routes/j5-services/j5.js')(app);
 
 // Listen Local Port on environment port or default 3000
 var nodePort = app.program.port || 3000;
-server.listen(nodePort, function() {
+app.listen(nodePort, function() {
     app.logger.log("info","OPTIONS: Nodejs server is running in %s mode on port %s",app.get("env"),nodePort);
 });
