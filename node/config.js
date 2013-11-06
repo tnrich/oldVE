@@ -186,8 +186,10 @@ module.exports = function(app, express) {
 
     // Init MEMCACHE
 
-    if(app.get("env") === "production") {
-        app.logger.log("MEMCACHE CONNECTED");
+    var cacheType = 'memory';
+
+    if(cacheType=="memcache") {
+        app.logger.log("MEMCACHE CACHE");
         var memCacheHost = Opts.host+':11211';
         memCacheHost = "54.215.198.196:11211";
         app.cache = new app.memcached(memCacheHost);
@@ -215,7 +217,7 @@ module.exports = function(app, express) {
     }
     else
     {
-        app.logger.log('info',"MEMCACHE SIMULATED");
+        app.logger.log('info',"MEMORY CACHE");
         app.cacheData = {};
         app.cache.set = function(key,value){
             app.cacheData[key] = value;
