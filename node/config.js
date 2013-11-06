@@ -86,6 +86,8 @@ module.exports = function(app, express) {
     app.configure('production', function() {
         process.env.NODE_ENV = 'production';
 
+        if(false) {
+
         // User Airbrake to log errors.
         var airbrake = require('airbrake').createClient("40e870e0-c0a6-c307-8bef-37371fd86407");
         airbrake.serviceHost = "exceptions.codebasehq.com"
@@ -103,6 +105,8 @@ module.exports = function(app, express) {
             accountKey: '7a81c5694843fb2ead319abf624219460dad4f47',
             appName: 'Teselagen App'
         });
+
+        }
 
         var redis = app.redis.createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
         app.redisClient = redis;
