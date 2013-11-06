@@ -203,11 +203,10 @@ var clearUserFolder = function(user){
 
 function reportChange(j5run){
   console.log("Reporting");
+  
   app.cache.cacheJob('rpavez',j5run);
-  app.cache.get('rpavez',function(err,user){
-    console.log(user);
-    app.sockets['rpavez'].emit('update',user);
-  });
+
+  app.io.pub.publish("j5jobs",'rpavez');
 };
 
 

@@ -24,16 +24,19 @@ module.exports = function(app, express) {
     var Opts = {
         host: "localhost",
         port: 27017,
-        authHost: "mongodb://localhost/" + app.dbname
+        authHost: "mongodb://localhost/" + app.dbname,
+        redis_host: '54.215.198.196',
+        redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
     };
 
-    if(app.get("env") === "production") {
+    if(app.get("env") === "production"||true) {
         Opts = {
             host: "54.215.198.196",
             port: 27017,
             username: "prod",
             password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
             authRequired : true,
+            redis_host: '54.215.198.196',
             redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
         };
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
@@ -101,7 +104,8 @@ module.exports = function(app, express) {
             appName: 'Teselagen App'
         });
 
-        var redis = require("redis").createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
+        var redis = app.redis.createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
+        app.redisClient = redis;
         var RedisStore = require('connect-redis')(express)
 
         app.set('views', __dirname + '/views');
@@ -131,6 +135,54 @@ module.exports = function(app, express) {
         app.use(express.static(__dirname + '/public'));
         app.use(airbrake.expressHandler());
     });
+
+    // INIT SOCKET IO
+
+    var io = app.io;
+
+    io.enable('browser client minification');
+    io.enable('browser client etag');
+    io.enable('browser client gzip');
+    io.set( 'origins', '*:*' );
+    io.set('log level', 1);
+
+    io.set('transports', [
+        'websocket'
+      , 'flashsocket'
+      , 'htmlfile'
+      , 'xhr-polling'
+      , 'jsonp-polling'
+    ]);
+
+    //if(app.get("env") === "production"||true) {
+
+        console.log("Staring Socket io with Redis Store");
+        
+        var RedisStore = require('socket.io/lib/stores/redis');
+
+        var pub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass }) 
+          , sub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass })
+          , client =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass });
+
+        pub.auth(   Opts.redis_pass, function (err) { if (err) throw err; });
+        sub.auth(   Opts.redis_pass, function (err) { if (err) throw err; });
+        client.auth( Opts.redis_pass, function (err) { if (err) throw err; });
+
+        pub.on("error", function(err){ console.log("Error: ",err); });
+        sub.on("error", function(err){ console.log("Error: ",err); });
+        client.on("error", function(err){ console.log("Error: ",err); });
+
+        io.set('store', new RedisStore({
+              redis    : app.redis
+            , redisPub : pub
+            , redisSub : sub
+            , redisClient : client
+        }));
+
+        app.io.pub = pub;
+        app.io.sub = sub;
+        app.io.client = client;
+    //};
 
     // Init MEMCACHE
 

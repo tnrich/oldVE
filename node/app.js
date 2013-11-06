@@ -12,12 +12,9 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app)
 
-app.io = require('socket.io').listen(server, { log: false });
-app.io.set( 'origins', '*:*' );
-
-app.io.sockets.on('connection', function(client)  {
-	console.log("Connected");
-});
+app.socket = require('socket.io');
+app.io = app.socket.listen(server, { log: false });
+app.redis = require("redis");
 
 /* Dependencies loading */
 app.async = require('async');
@@ -48,6 +45,11 @@ require('./routes/api.js')(app);
 
 // Services
 require('./sockets.js')(app);
+
+app.get('/socketTests',function(req,res){
+	var webpage = app.fs.readFileSync(__dirname + "/socketTests.html", "utf8");
+	res.send(webpage);
+});
 
 // Services
 require('./routes/j5-services/j5.js')(app);

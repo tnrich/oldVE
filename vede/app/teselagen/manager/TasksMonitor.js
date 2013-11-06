@@ -9,26 +9,27 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     singleton: true,
     requires: ["Ext.data.Store",
-               "Teselagen.event.CommonEvent"],
+               "Teselagen.event.CommonEvent",
+               "Teselagen.models.J5Run"],
 
     debugFlag : false,
     socket: null,
 
     constructor: function(){
-        if(this.debugFlag) console.log("Tasks Monitor created!");
+       //if(this.debugFlag) console.log("Tasks Monitor created!");
     },
 
     bootMonitoring: function(){
-        this.start();
+        this.monitorServerTasks();
     },    
 
     startMonitoring: function() {
-        this.monitorServerTasks();
+        //this.monitorServerTasks();
     },
 
     start: function(){
-        this.startMonitoring();
-        console.log("Tasks Monitor has been enabled.");
+       //this.startMonitoring();
+        //console.log("Tasks Monitor has been enabled.");
     },
 
     stop: function(boot){
@@ -47,12 +48,19 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             socket.emit('set nickname', "rpavez");   
 
             socket.on('update',function(data){
+                console.log("NEW UPDATE!");
+
                 if(!data)
                 {
-                    console.log("NO DATA!");
+                    Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
+                        model: 'Teselagen.models.J5Run'
+                    });
                     return null;
                 }
-                if(Teselagen.manager.ProjectManager.currentTasks) Teselagen.manager.ProjectManager.currentTasks.removeAll();
+
+                if(Teselagen.manager.ProjectManager.currentTasks) {
+                    Teselagen.manager.ProjectManager.currentTasks.removeAll();
+                }
                 else
                 {
                     Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
@@ -68,6 +76,10 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 }
             });
 
+        });
+
+        socket.on('disconnect', function (socket) {
+            console.log('Disconnected');
         });
 
         self.socket = socket; 

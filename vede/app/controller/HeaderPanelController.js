@@ -63,6 +63,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
         else 
         {
             this.tasksWindow = Ext.create('Vede.view.common.TasksMonitorWindow').show();
+            console.log(Teselagen.manager.ProjectManager.currentTasks);
             this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
         }
     },

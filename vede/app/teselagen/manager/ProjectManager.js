@@ -63,6 +63,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.sequences.loadPage(1);
         self.parts.loadPage(1);
 
+        /*
         self.currentTasks = Ext.create("Ext.data.Store", {
             fields: [
                 {name: 'devicedesign_name', type: 'auto'},
@@ -70,6 +71,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 {name: 'date', type: 'auto'}
             ]
         });
+        */
 
         var projectsStore = self.currentUser.projects().load(
             function (projects, operation, success) {
