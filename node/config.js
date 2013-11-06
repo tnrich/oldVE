@@ -14,11 +14,9 @@ module.exports = function(app, express) {
 
     // LOAD ENVIRONMENT VARIABLES
     require('./environments').readEnvironments(app);
-    //require('./environments').configEnvironments(app, express);
 
     // Express Framework Configuration
 
-    // app.set('env','production');
     app.dbname = "teselagen";
 
     var Opts = {
@@ -41,10 +39,6 @@ module.exports = function(app, express) {
         };
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
     }
-
-    /* User should be added to production like
-        db.addUser('prod', 'o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=')
-    */
 
     /*
     For quick activation
@@ -72,7 +66,7 @@ module.exports = function(app, express) {
                     auto_reconnect: true
                 }
             )
-        })); // Sessions managed using cookies
+        }));
 
         app.use(app.passport.initialize());
         app.use(app.passport.session());
@@ -80,7 +74,7 @@ module.exports = function(app, express) {
         app.logger.info("USING MONGODB SESSION STORE");
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
-        app.use(express.static(__dirname + '/public'));
+        app.use(express.static(require('path').resolve(__dirname,"../","vede-cp")));
     });
 
     app.configure('production', function() {
@@ -136,8 +130,8 @@ module.exports = function(app, express) {
 
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
-        app.use(express.static(__dirname + '/public'));
-        //app.use(airbrake.expressHandler());
+        app.use(express.static(require('path').resolve(__dirname,"../","vede-cp")));
+        app.use(airbrake.expressHandler());
     });
 
     // INIT SOCKET IO
@@ -157,36 +151,31 @@ module.exports = function(app, express) {
       , 'xhr-polling'
       , 'jsonp-polling'
     ]);
+    
+    var RedisStore = require('socket.io/lib/stores/redis');
 
-    //if(app.get("env") === "production"||true) {
+    var pub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass }) 
+      , sub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass })
+      , client =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass });
 
-        console.log("Staring Socket io with Redis Store");
-        
-        var RedisStore = require('socket.io/lib/stores/redis');
+    pub.auth(   Opts.redis_pass, function (err) { if (err) throw err; });
+    sub.auth(   Opts.redis_pass, function (err) { if (err) throw err; });
+    client.auth( Opts.redis_pass, function (err) { if (err) throw err; });
 
-        var pub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass }) 
-          , sub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass })
-          , client =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass });
+    pub.on("error", function(err){ console.log("Error: ",err); });
+    sub.on("error", function(err){ console.log("Error: ",err); });
+    client.on("error", function(err){ console.log("Error: ",err); });
 
-        pub.auth(   Opts.redis_pass, function (err) { if (err) throw err; });
-        sub.auth(   Opts.redis_pass, function (err) { if (err) throw err; });
-        client.auth( Opts.redis_pass, function (err) { if (err) throw err; });
+    io.set('store', new RedisStore({
+          redis    : app.redis
+        , redisPub : pub
+        , redisSub : sub
+        , redisClient : client
+    }));
 
-        pub.on("error", function(err){ console.log("Error: ",err); });
-        sub.on("error", function(err){ console.log("Error: ",err); });
-        client.on("error", function(err){ console.log("Error: ",err); });
-
-        io.set('store', new RedisStore({
-              redis    : app.redis
-            , redisPub : pub
-            , redisSub : sub
-            , redisClient : client
-        }));
-
-        app.io.pub = pub;
-        app.io.sub = sub;
-        app.io.client = client;
-    //};
+    app.io.pub = pub;
+    app.io.sub = sub;
+    app.io.client = client;
 
     // Init MEMCACHE
 

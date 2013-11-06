@@ -8,13 +8,19 @@ module.exports = function(app) {
     * Route to check server health and update
     */
     app.all('/', function(req,res) {
-        res.send(200);
+        var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp") + '/index.html' , "utf8");
+        res.send(webpage);
+    });
+
+    app.all('/rebase.xml', function(req,res) {
+        var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../","public") + '/rebase.xml' , "utf8");
+        res.send(webpage);
     });
 
     /*
     * Route to check current version of code
     */
-    app.all('/v', function(req,res) {
+    app.all('/api/v', function(req,res) {
         require('fs').stat("app.js",function(err, stats){
 
             var updated = "Server updated: "

@@ -33,6 +33,11 @@ var configLogging = function(app,express) {
         }
     };
 
-    app.use( express.logger({stream:winstonStream,  format: ':remote-addr - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time' }) );// Logger
+    var logger = express.logger({stream:winstonStream,  format: ':remote-addr - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time' });
+
+    app.use( function(req,res,next){
+        if(req.headers["upgrade"]!=="websocket" && req.headers["x-requested-with"]==="XMLHttpRequest") logger(req,res,next);
+        else next();
+    });
 };
 exports.configLogging = configLogging;

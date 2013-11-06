@@ -46,11 +46,6 @@ require('./routes/api.js')(app);
 // Services
 require('./sockets.js')(app);
 
-app.get('/socketTests',function(req,res){
-	var webpage = app.fs.readFileSync(__dirname + "/socketTests.html", "utf8");
-	res.send(webpage);
-});
-
 // Services
 require('./routes/j5-services/j5.js')(app);
 
