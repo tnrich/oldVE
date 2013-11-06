@@ -351,7 +351,6 @@ app.post('/executej5',restrict,function(req,res){
 
           var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
           var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-          if(testing) scriptPath = "/Users/rpavez/bin/j5.pl";
           var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
           console.log("J5 Process started with pid: "+newChild.pid);
 
