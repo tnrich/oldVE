@@ -361,8 +361,8 @@ app.post('/executej5',restrict,function(req,res){
 
           res.json({status:"In progress",j5run:newj5Run});
 
-          if(!testing) newChild.stdin.setEncoding = 'utf-8';
-          if(!testing) newChild.stdin.write(xml+"\n");
+          newChild.stdin.setEncoding = 'utf-8';
+          newChild.stdin.write(xml+"\n");
 
           newChild.output = "";
 
