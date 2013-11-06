@@ -201,12 +201,12 @@ var clearUserFolder = function(user){
   });
 };
 
-function reportChange(j5run){
+function reportChange(j5run,user){
   console.log("Reporting");
   
-  app.cache.cacheJob('rpavez',j5run);
+  app.cache.cacheJob(user.username,j5run);
 
-  app.io.pub.publish("j5jobs",'rpavez');
+  app.io.pub.publish("j5jobs",user.username);
 };
 
 
@@ -232,7 +232,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
       newj5Run.warnings = warnings;
 
       newj5Run.save();
-      reportChange(newj5Run);
+      reportChange(newj5Run,user);
       updateMasterSources(parsedResults.masterSources,user);
       clearUserFolder(user);
     });    
@@ -332,7 +332,7 @@ app.post('/executej5',restrict,function(req,res){
             }
         });
 
-        reportChange(newj5Run);
+        reportChange(newj5Run,user);
 
         newj5Run.save(function(err){
           deviceDesignModel.j5runs.push(newj5Run);
@@ -429,7 +429,7 @@ app.post('/executej5',restrict,function(req,res){
               newj5Run.endDate = Date.now();
               newj5Run.error_list.push({"error":error});
               newj5Run.save();
-              reportChange(newj5Run);
+              reportChange(newj5Run,user);
             }
             else
             {

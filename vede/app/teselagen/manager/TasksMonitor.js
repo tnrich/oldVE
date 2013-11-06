@@ -10,7 +10,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     singleton: true,
     requires: ["Ext.data.Store",
                "Teselagen.event.CommonEvent",
-               "Teselagen.models.J5Run"],
+               "Teselagen.models.J5Run",
+               "Teselagen.manager.SessionManager"],
 
     debugFlag : false,
     socket: null,
@@ -40,7 +41,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     monitorServerTasks: function(){
         var self = this;
         if(self.socket) return null;
-        socket = io.connect('http://localhost:3000');
+        socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
         socket.on('connect',function() {
             
