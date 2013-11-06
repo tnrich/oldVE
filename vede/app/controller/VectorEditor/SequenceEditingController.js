@@ -134,6 +134,8 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
             if(!self.VEManager) {
                 self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager", seq, sequenceFileManager);
+            } else {
+                self.VEManager.sequence = seq;
             }
 
             tabPanel.add(newTab).show();
