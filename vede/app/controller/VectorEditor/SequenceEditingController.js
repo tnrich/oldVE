@@ -186,6 +186,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
         if(newTab && newTab.initialCls === "VectorEditorPanel") {
             this.onSequenceManagerChanged(newTab.model);
+            this.VEManager.sequence = newTab.sequenceFile;
         }
     },
 
