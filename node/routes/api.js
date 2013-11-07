@@ -3,10 +3,19 @@
  * @module ./routes/api
  */
 module.exports = function(app) {
+
     require('./authentication.js')(app);
+    require('../routes/constants')(app);
 
     var restrict = app.auth.restrict;
     var sequences = require('../api/sequences')(app);
+    var devicedesigns = require('../api/devicedesigns.js')(app);
+    var user = require('../api/user.js')(app);
+    var projects = require('../api/projects.js')(app);
+    var parts = require('../api/parts.js')(app);
+    var j5runs = require('../api/j5runs.js')(app);
+    var utils = require('../api/utils.js')(app);
+    var explorer = require('../api/explorer.js')(app);
 
     app.get('/sequences', restrict, sequences.get);
     app.get('/sequences/:sequence_id', restrict, sequences.get);
@@ -14,68 +23,52 @@ module.exports = function(app) {
     app.put('/sequences/:sequence_id', restrict, sequences.put);
     app.del('/sequences/:sequence_id', restrict, sequences.del);
 
-    /*
-    app.get('/devicedesigns', restrict, devicedesigns.get);
-    app.get('/devicedesigns/:devicedesign_id', restrict, devicedesigns.get);
-    app.post('/devicedesigns/:devicedesign_id', restrict, devicedesigns.post);
-    app.put('/devicedesigns/:devicedesign_id', restrict, devicedesigns.put);
-    app.del('/devicedesigns/:devicedesign_id', restrict, devicedesigns.del);
+    app.post('/users/:username/projects/:project_id/devicedesigns', restrict, devicedesigns.create_device_design);
+    app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, devicedesigns.update_device_design);
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/eugenerules', restrict, devicedesigns.get_eugene_rules);
+    app.get('/users/:username/projects/:project_id/devicedesigns', restrict, devicedesigns.get_design_by_project_id);
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, devicedesigns.get_device_design_by_id);
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/parts', restrict, devicedesigns.get_device_design_parts);
+    app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, devicedesigns.delete_device_design)
 
-    app.get('/j5runs', restrict, j5runs.get);
-    app.get('/j5runs/:j5run_id', restrict, j5runs.get);
-    app.post('/j5runs/:j5run_id', restrict, j5runs.post);
-    app.put('/j5runs/:j5run_id', restrict, j5runs.put);
-    app.del('/j5runs/:j5run_id', restrict, j5runs.del);
+    app.get('/beta', restrict, user.beta);
+    app.get("/userStats/:code", user.stats);
+    app.get("/integrity/:code", user.integrityCheck);
+    app.get("/users/:username", restrict, user.get_user);
+    app.get("/users/activate/:activationCode", user.activate);
+    app.get("/users", restrict, user.get_users);
+    app.put("/users/:username", restrict, user.put_user);
+    app.post('/presets' ,restrict, user.post_presets);
+    app.put('/presets' ,restrict, user.put_presets);
+    app.get('/presets' ,restrict, user.get_presets);
 
-    app.get('/parts', restrict, parts.get);
-    app.get('/parts/:part_id', restrict, parts.get);
-    app.post('/parts/:part_id', restrict, parts.post);
-    app.put('/parts/:part_id', restrict, parts.put);
-    app.del('/parts/:part_id', restrict, parts.del);
+    app.get('/fqdn', restrict, parts.fqdn);
+    app.post('/parts', restrict, parts.post_parts);
+    app.get('/updateAllPartHashes', restrict, parts.updateAllPartsHashes);
+    app.put('/parts', restrict, parts.put_parts);
+    app.get('/parts', restrict, parts.get_parts);
+    app.get('/parts/:part_id', restrict, parts.get_part_by_id);
+    app.delete('/parts/:part_id', restrict, parts.delete_parts);
 
-    app.get('/projects', restrict, projects.get);
-    app.get('/projects/:project_id', restrict, projects.get);
-    app.post('/projects/:project_id', restrict, projects.post);
-    app.put('/projects/:project_id', restrict, projects.put);
-    app.del('/projects/:project_id', restrict, projects.del);
-    */
+    app.get('/users/:username/devicedesigns/:devicedesign_id/j5runs', restrict, j5runs.get_j5_runs);
 
-    /*
-    * Route to check server health and update
-    */
-    app.all('/', function(req,res) {
-        var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp") + '/index.html' , "utf8");
-        res.send(webpage);
-    });
+    app.post('/error',utils.post_error);
+    app.post('/sendFeedback', restrict, utils.post_send_feedback);
+    app.get('/partLibrary', restrict, utils.get_partLibrary);
+    app.get('/checkDuplicatedPartName', restrict, utils.checkDuplicatedPartName);
+    app.get('/getDesignsWithPart', restrict, utils.get_DesignsWithPart);
+    app.get('/getPartsAndDesignsBySequence', restrict, utils.get_PartsAndDesignsBySequence);
+    app.get('/monitorTasks', restrict, utils.get_monitorTasks);
+    app.get('/getStats', restrict, utils.get_getStats);
 
-    app.all('/rebase.xml', function(req,res) {
-        var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../","resources") + '/rebase.xml' , "utf8");
-        res.send(webpage);
-    });
+    app.get('/partLibrary', restrict, explorer.get_partLibrary);
+    app.get('/users/:username/projectExplorer/getData', restrict, explorer.get_explorer_data);
+    app.get('/users/:username/projectExplorer/renameProject', restrict, explorer.get_rename_project);
 
-    /*
-    * Route to check current version of code
-    */
-    app.all('/api/v', function(req,res) {
-        require('fs').stat("app.js",function(err, stats){
 
-            var updated = "Server updated: "
-            if(!err&&stats&&stats.mtime) updated += stats.mtime;
-            else updated += "Error";
+    app.all('/', utils.index_website);
+    app.all('/rebase.xml', utils.get_rebase_xml);
+    app.all('/api/v', utils.get_api_version);
 
-            require('child_process').exec("git log -1", function puts(error, stdout, stderr) { 
-                var git = stdout;
-                return res.send(updated+"<br>"+git,200);
-            });
-        });
-    });
-
-    require('../routes/constants')(app);
-    require('../api/user.js')(app);
-    require('../api/projects.js')(app);
-    require('../api/devicedesigns.js')(app);
-    require('../api/parts.js')(app);
-    require('../api/j5runs.js')(app);
-    require('../api/utils.js')(app);
-    require('../api/explorer.js')(app);
+    
 };
