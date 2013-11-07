@@ -11,13 +11,13 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     requires: ["Ext.data.Store",
                "Teselagen.event.CommonEvent",
                "Teselagen.models.J5Run",
-               "Teselagen.manager.SessionManager"],
+               "Teselagen.manager.SessionManager",
+               "Teselagen.utils.SystemUtils"],
 
     debugFlag : false,
     socket: null,
 
     constructor: function(){
-       //if(this.debugFlag) console.log("Tasks Monitor created!");
     },
 
     bootMonitoring: function(){
@@ -25,12 +25,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     },    
 
     startMonitoring: function() {
-        //this.monitorServerTasks();
     },
 
     start: function(){
-       //this.startMonitoring();
-        //console.log("Tasks Monitor has been enabled.");
     },
 
     stop: function(boot){
@@ -40,52 +37,59 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     monitorServerTasks: function(){
         var self = this;
-        /*
         if(self.socket) return null;
-        socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
-        socket.on('connect',function() {
-            
-            console.log('Client has connected to the server!');    
-            socket.emit('set nickname', "rpavez");   
+        Teselagen.utils.SystemUtils.loadJs( Teselagen.manager.SessionManager.buildUrl("socket.io/socket.io.js") ,function(){
 
-            socket.on('update',function(data){
-                console.log("NEW UPDATE!");
+            if(typeof io === 'undefined') {
+                console.log("Socket IO not loaded!");
+                return false;
+            }
 
-                if(!data)
-                {
-                    Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
-                        model: 'Teselagen.models.J5Run'
-                    });
-                    return null;
-                }
+            socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
-                if(Teselagen.manager.ProjectManager.currentTasks) {
-                    Teselagen.manager.ProjectManager.currentTasks.removeAll();
-                }
-                else
-                {
-                    Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
-                        model: 'Teselagen.models.J5Run'
-                    });
-                }
+            socket.on('connect',function() {
+                
+                console.log('SOCKET.IO : Connected');    
+                socket.emit('set nickname', "rpavez");   
 
-                for(var j5runKey in data.jobs)
-                {
-                    j5run = data.jobs[j5runKey];
-                    j5run.date = new Date(j5run.date);
-                    Teselagen.manager.ProjectManager.currentTasks.add(j5run);
-                }
+                socket.on('update',function(data){
+
+                    if(!data)
+                    {
+                        Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
+                            model: 'Teselagen.models.J5Run'
+                        });
+                        return null;
+                    }
+
+                    if(Teselagen.manager.ProjectManager.currentTasks) {
+                        Teselagen.manager.ProjectManager.currentTasks.removeAll();
+                    }
+                    else
+                    {
+                        Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
+                            model: 'Teselagen.models.J5Run'
+                        });
+                    }
+
+                    for(var j5runKey in data.jobs)
+                    {
+                        j5run = data.jobs[j5runKey];
+                        j5run.date = new Date(j5run.date);
+                        Teselagen.manager.ProjectManager.currentTasks.add(j5run);
+                    }
+                });
+
             });
 
-        });
+            socket.on('disconnect', function (socket) {
+                console.log('Disconnected');
+            });
 
-        socket.on('disconnect', function (socket) {
-            console.log('Disconnected');
-        });
+            self.socket = socket; 
 
-        self.socket = socket; 
-        */
+        });
     },
 
     /*

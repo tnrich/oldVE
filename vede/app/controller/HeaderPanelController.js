@@ -87,8 +87,6 @@ Ext.define('Vede.controller.HeaderPanelController', {
                 click: this.onReportErrorBtnClick
             }
      	});
-
-        console.log("Header controller loaded");
     },
 
 
