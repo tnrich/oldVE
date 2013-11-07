@@ -235,7 +235,6 @@ module.exports = function(db) {
     });
 
     DeviceDesignSchema.pre('remove',function (next) {
-      
       // Remove from Projects
       console.log("Trying to remove "+this._id);
       db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
@@ -248,7 +247,7 @@ module.exports = function(db) {
       //    console.log(numberAffected+" users updated");
       //});
 
-      
+
       // Remove from j5reports and associated j5reports
       db.model('j5run').remove({devicedesign_id: this}).exec(function(err, numberAffected){
           console.log(numberAffected+" j5runs removed");
@@ -273,14 +272,6 @@ module.exports = function(db) {
         }]
     });
     registerSchema('project', ProjectSchema);
-
-    ProjectSchema.pre('save',function (next) {
-        db.model("User").findByIdAndUpdate(this.user_id, {
-            $push: {
-                projects: this
-            }
-        }, next);
-    });
 
     var PresetSchema = new Schema({
         presetName: String,

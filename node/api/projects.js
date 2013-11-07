@@ -15,8 +15,14 @@ module.exports = function(app) {
             dateModified: req.body.dateModified
         }, function(err, project) {
             if (!err) {
-                res.json({
-                    "projects": project
+                app.db.model("User").findByIdAndUpdate(project.user_id, {
+                    $push: {
+                        projects: project
+                    }
+                }, function() {
+                    res.json({
+                        "projects": project
+                    });
                 });
             }
             else {

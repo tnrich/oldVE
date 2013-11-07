@@ -32,7 +32,7 @@ module.exports = function(app, express) {
         redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
     };
 
-    if(app.get("env") === "production"||true) {
+    if(app.get("env") === "production") {
         Opts = {
             host: "54.215.198.196",
             port: 27017,
@@ -51,7 +51,6 @@ module.exports = function(app, express) {
     */
 
     app.configure('development', function() {
-
         var MongoStore = app.mongostore(express);
 
         app.set('views', __dirname + '/views');

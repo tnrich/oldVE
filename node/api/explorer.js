@@ -34,25 +34,38 @@ module.exports = function(app) {
         User.findById(req.user._id)
         .populate({ path: 'projects', select: 'name designs id' })
         .exec(function(err, user) {
+            if(err) {
+                console.log('Error getting user projects.');
+                console.log(err);
+            }
+
             Project.populate( user.projects, { path: 'designs', select: 'name parts id' },function(err, populatedProjects) {
-                
-            var projectDesignsPopulateCallbacks = [];
+                if(err) {
+                    console.log('Error populating projects.');
+                    console.log(err);
+                }
 
-            populatedProjects.forEach(function(populatedProject){
-                projectDesignsPopulateCallbacks.push(function(callback){
-                    DeviceDesign.populate( populatedProject.designs, { path: 'parts', match: {sequencefile_id: {'$ne': null}}, select: 'name id'}, function(err, populatedDeviceDesigns){
-                        populatedProject.designs = populatedDeviceDesigns;
-                        callback(null, null);
-                    });                    
+                var projectDesignsPopulateCallbacks = [];
+
+                populatedProjects.forEach(function(populatedProject){
+                    projectDesignsPopulateCallbacks.push(function(callback){
+                        DeviceDesign.populate( populatedProject.designs, { path: 'parts', match: {sequencefile_id: {'$ne': null}}, select: 'name id'}, function(err, populatedDeviceDesigns){
+                            if(err) {
+                                console.log('Error here.');
+                                console.log(err);
+                            }
+                            populatedProject.designs = populatedDeviceDesigns;
+                            callback(null, null);
+                        });
+                    });
                 });
-            });
 
-            async.parallel(projectDesignsPopulateCallbacks,
-            function(){
-                res.json(populatedProjects);
-            });
+                async.parallel(projectDesignsPopulateCallbacks,
+                function(){
+                    res.json(populatedProjects);
+                });
 
-        	});
+            });
         });
     });
 
