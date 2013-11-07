@@ -47,18 +47,17 @@ Ext.define('Vede.view.common.dropZone', {
     },
 
     handleFileSelect: function(evt) {
-
         evt.stopPropagation();
         evt.preventDefault();
 
         setTimeout(function(){
-        $(".batch-import-area").fadeOut("fast");
-        $("#headerProgressBox").fadeIn();
-        $("#headerProgressCancelBtn").on("click", function() {
-            Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
-            console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
-            return false;
-        });
+            $(".batch-import-area").fadeOut("fast");
+            $("#headerProgressBox").fadeIn();
+            $("#headerProgressCancelBtn").on("click", function() {
+                Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
+                console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
+                return false;
+            });
         },25);
 
         var sequenceLibrary = Ext.getCmp("sequenceLibrary");
@@ -100,7 +99,6 @@ Ext.define('Vede.view.common.dropZone', {
             entries[0] = items[i].webkitGetAsEntry();
             this.readDirectory(entries,this);
         }
-
 
         var sequenceLibrary = Ext.getCmp("sequenceLibrary");
 

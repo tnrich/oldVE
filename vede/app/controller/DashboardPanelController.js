@@ -335,6 +335,42 @@ Ext.define("Vede.controller.DashboardPanelController", {
         }
     },
 
+    onSequenceLibraryImportChange: function(field, value) {
+        var items = field.extractFileInput().files;
+        var file;
+        var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+
+        setTimeout(function(){
+            $(".batch-import-area").fadeOut("fast");
+            $("#headerProgressBox").fadeIn();
+            $("#headerProgressCancelBtn").on("click", function() {
+                Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
+                console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
+                return false;
+            });
+        },25);
+
+        sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        Teselagen.bio.parsers.ParsersManager.startCount = 0;
+        Teselagen.bio.parsers.ParsersManager.progressIncrement = 100/items.length;
+
+        for (var i = 0; i < items.length; i++) {
+            file = items[i];
+
+            Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
+            Teselagen.bio.parsers.ParsersManager.processQueue(function(errorStore) {
+                var warningsWindow = Ext.create('Vede.view.common.ImportWarningsWindow').show();
+                warningsWindow.down('gridpanel').reconfigure(errorStore);
+            });
+        }
+
+        Ext.defer(function() {
+            sequenceLibrary.el.unmask();
+        }, 10);
+    },
+
     onLaunch: function () {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
@@ -365,6 +401,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemclick: this.onPartGridItemClick,
                 itemmouseenter: this.onPartGridItemMouseEnter,
                 itemmouseleave: this.onPartGridItemMouseLeave
+            },
+            "filefield[cls='sequenceLibraryImportButton']": {
+                change: this.onSequenceLibraryImportChange
             }
         });
     }
