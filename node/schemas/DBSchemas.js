@@ -274,12 +274,12 @@ module.exports = function(db) {
     });
     registerSchema('project', ProjectSchema);
 
-    ProjectSchema.post('save',function (project) {
-        db.model("User").findByIdAndUpdate(project.user_id, {
+    ProjectSchema.pre('save',function (next) {
+        db.model("User").findByIdAndUpdate(this.user_id, {
             $push: {
-                projects: project
+                projects: this
             }
-        });
+        }, next);
     });
 
     var PresetSchema = new Schema({

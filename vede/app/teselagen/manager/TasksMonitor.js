@@ -40,6 +40,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     monitorServerTasks: function(){
         var self = this;
+        /*
         if(self.socket) return null;
         socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
@@ -84,6 +85,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         });
 
         self.socket = socket; 
+        */
     },
 
     /*
