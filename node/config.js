@@ -4,20 +4,25 @@
  */
 
 module.exports = function(app, express) {
+    app.program
+    .version('0.0.1')
+    .option('-p, --prod', 'Run Production environment')
+    .option('-r, --port <n>', 'Node port default is 3000', parseInt)
+    .parse(process.argv);
 
-    var config = this;
+    app.set("env", "development");
+    app.dbname = "teselagen";
+
+    if (app.program.prod) {
+        app.set("env", "production");
+    }
 
     var server = require('http').Server(app);
-   
+
     // LOGGING
     require('./logging').configLogging(app, express);
 
-    // LOAD ENVIRONMENT VARIABLES
-    require('./environments').readEnvironments(app);
-
     // Express Framework Configuration
-
-    app.dbname = "teselagen";
 
     var Opts = {
         host: "localhost",
@@ -106,11 +111,6 @@ module.exports = function(app, express) {
         app.redisClient = redis;
         var RedisStore = require('connect-redis')(express)
 
-        app.set('views', __dirname + '/views');
-        app.set('view engine', 'jade'); // Jade engine for templates (http://jade-lang.com/)
-        app.set('view options', {
-            layout: false
-        }); // This opt allow extends
         app.use(express.bodyParser()); // Use express response body parser (recommended)
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
@@ -123,7 +123,7 @@ module.exports = function(app, express) {
             else app.logger.error("REDIS: CONNECTION PROBLEMS",err);
         });
 
-        redis.on('error'       , function(err){app.logger.error("REDIS: CONNECTION PROBLEMS",err);});
+        redis.on('error', function(err){app.logger.error("REDIS: CONNECTION PROBLEMS",err);});
 
         app.use(app.passport.initialize());
         app.use(app.passport.session());
@@ -151,7 +151,7 @@ module.exports = function(app, express) {
       , 'xhr-polling'
       , 'jsonp-polling'
     ]);
-    
+
     var RedisStore = require('socket.io/lib/stores/redis');
 
     var pub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass }) 
@@ -205,7 +205,6 @@ module.exports = function(app, express) {
                     });
                 }
             });
-            
         },1000);
     }
     else
@@ -289,84 +288,13 @@ module.exports = function(app, express) {
         }
     });
 
-
-    // MYSQL CONNECTION
-    if (app.program.mysql) {
-        // Init MYSQL
-        var connection = app.mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'tesela#rocks',
-            database: 'teselagen',
-            insecureAuth: true
-        });
-
-        function handleDisconnect(connection) {
-            connection.on('error', function(err) {
-                if (!err.fatal) {
-                    return;
-                }
-
-                if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-                    throw err;
-                }
-
-                console.log('Re-connecting lost connection: ' + err.stack);
-
-                connection = app.mysql.createConnection(connection.config);
-                handleDisconnect(connection);
-                connection.connect();
-            });
-        }
-
-        handleDisconnect(connection);
-
-        // We will only connect to mysql and check for credetentials on production environment
-        connection.connect();
-        console.log('OPTIONS: MYSQL started');
-        app.mysql.connection = connection;
-
-        function keepAlive() {
-            connection.query('SELECT 1');
-            console.log("Fired Keep-Alive");
-            return;
-        }
-        setInterval(keepAlive, 60000);
-        if (app.program.debug) {
-            console.log("Retrieving a valid sessionId");
-            var query = 'select * from j5sessions order by id desc limit 1;';
-            connection.query(query, function(err, rows, fields) {
-                if (err) throw err;
-                app.testing.sessionId = rows[0].session_id;
-                console.log("Using sessionId: " + app.testing.sessionId);
-            });
-        }
-    } else {
-        app.logger.info('OPTIONS: MYSQL OMITTED');
-    }
-    app.mysql = connection;
-
     // Error handler
     app.errorHandler = express.errorHandler();
 
-    
+
     // Resolver server external address
     require('child_process').exec('curl http://169.254.169.254/latest/meta-data/public-hostname', function (error, stdout, stderr) { 
         var decoder = new (require('string_decoder').StringDecoder)('utf-8');
         app.localIP = decoder.write(stdout);
     });
-
-    /*
-     * Load Manager classes
-     * Managers interact with models
-     */
-
-    app.ApiManager = require("./manager/ApiManager")();
-    app.DeviceDesignManager = require("./manager/DeviceDesignManager")();
-    app.J5RunManager = require("./manager/J5RunManager")();
-    app.PartManager = require("./manager/PartManager")();
-    app.ProjectManager = require("./manager/ProjectManager")();
-    app.SequenceManager = require("./manager/SequenceManager")();
-    app.UserManager = require("./manager/UserManager")();
-
 };

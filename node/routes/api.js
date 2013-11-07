@@ -13,7 +13,7 @@ module.exports = function(app) {
     });
 
     app.all('/rebase.xml', function(req,res) {
-        var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../","public") + '/rebase.xml' , "utf8");
+        var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../","resources") + '/rebase.xml' , "utf8");
         res.send(webpage);
     });
 

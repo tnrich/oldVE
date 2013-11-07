@@ -274,6 +274,14 @@ module.exports = function(db) {
     });
     registerSchema('project', ProjectSchema);
 
+    ProjectSchema.post('save',function (project) {
+        db.model("User").findByIdAndUpdate(project.user_id, {
+            $push: {
+                projects: project
+            }
+        });
+    });
+
     var PresetSchema = new Schema({
         presetName: String,
         j5parameters: Mixed

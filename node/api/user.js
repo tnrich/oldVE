@@ -1,8 +1,6 @@
 module.exports = function(app) {
 
     var User = app.db.model("User");
-    var UserManager = require("../manager/UserManager")();
-    var userManager = new UserManager(app.db);
     var restrict = app.auth.restrict;
 
     var mandrill = require('mandrill-api/mandrill');
@@ -206,13 +204,9 @@ module.exports = function(app) {
         req.user.preferences = req.body.preferences;
         req.user.userRestrictionEnzymeGroups = req.body.userRestrictionEnzymeGroups;
 
-        userManager.update(req.user, function(err, pUser) {
-            if (err) {
-                app.errorHandler(err, req, res);
-            } else {
-                req.session.user = pUser;
-                res.json({});
-            }
+        res.json({
+            error: true,
+            msg: 'Not allowed.'
         });
     });
 

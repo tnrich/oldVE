@@ -100,7 +100,6 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences', restrict, function(req, res) {
-        
         var filter = "";
         var totalCount = 0;
         var sortOpts = {};
