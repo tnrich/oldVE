@@ -65,37 +65,36 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var next = this.backgroundSequenceProcessing(partsArray);
 
         console.log(next);
-    if(next[0]==true) {
-        if(typeof(cb)==="function")
-        {
-            return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
-        }
-        else
-        {
+        if(next[0]==true) {
+            if(typeof(cb)==="function")
+            {
+                return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
+            }
+            else
+            {
+                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+
+                var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
+
+                Ext.Msg.show({
+                    title: "Are you sure you want to load example?",
+                    msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
+                    buttons: Ext.Msg.OKCANCEL,
+                    cls: "messageBox",
+                    fn: loadDesign,
+                    icon: Ext.Msg.QUESTION
+                });
+            }
+        } else {
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-            var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
-
-            Ext.Msg.show({
-                title: "Are you sure you want to load example?",
-                msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
-                buttons: Ext.Msg.OKCANCEL,
-                cls: "messageBox",
-                fn: loadDesign,
-                icon: Ext.Msg.QUESTION
+             Ext.MessageBox.show({
+                title: "Error",
+                msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
+                buttons: Ext.MessageBox.OK,
+                icon:Ext.MessageBox.ERROR
             });
         }
-    } else {
-        Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-
-         Ext.MessageBox.show({
-            title: "Error",
-            msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
-            buttons: Ext.MessageBox.OK,
-            icon:Ext.MessageBox.ERROR
-        });
-        }
-
     },
 
     /**

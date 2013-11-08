@@ -29,7 +29,7 @@ module.exports = function(app) {
     app.get('/users/:username/projects/:project_id/devicedesigns', restrict, devicedesigns.get_design_by_project_id);
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, devicedesigns.get_device_design_by_id);
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/parts', restrict, devicedesigns.get_device_design_parts);
-    app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, devicedesigns.delete_device_design)
+    app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, devicedesigns.delete_device_design);
 
     app.get('/beta', restrict, user.beta);
     app.get("/userStats/:code", user.stats);
@@ -44,7 +44,7 @@ module.exports = function(app) {
 
     app.get('/fqdn', restrict, parts.fqdn);
     app.post('/parts', restrict, parts.post_parts);
-    app.get('/updateAllPartHashes', restrict, parts.updateAllPartsHashes);
+    app.get('/updateAllPartHashes', restrict, parts.updateAllPartHashes);
     app.put('/parts', restrict, parts.put_parts);
     app.get('/parts', restrict, parts.get_parts);
     app.get('/parts/:part_id', restrict, parts.get_part_by_id);
