@@ -81,11 +81,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             self.updateSplashScreenMessage(self.authResponse.msg);
             if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
             Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
-                Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
+                Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);              
             });
-            Teselagen.manager.TasksMonitor.bootMonitoring();
-            Teselagen.manager.TasksMonitor.startMonitoring();
-
+            
             var user = self.authResponse.user;
 
             // Identify user and pass traits in error logging.

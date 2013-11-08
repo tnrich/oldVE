@@ -7,6 +7,7 @@ Ext.define('Vede.view.common.TasksMonitorWindow', {
     layout: 'fit',
     modal: false,
     closeAction: 'hide',
+    height: 400,
 
     items: [{
         xtype: 'gridpanel',

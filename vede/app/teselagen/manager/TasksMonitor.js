@@ -12,7 +12,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                "Teselagen.event.CommonEvent",
                "Teselagen.models.J5Run",
                "Teselagen.manager.SessionManager",
-               "Teselagen.utils.SystemUtils"],
+               "Teselagen.utils.SystemUtils",
+               "Teselagen.manager.ProjectManager"],
 
     debugFlag : false,
     socket: null,
