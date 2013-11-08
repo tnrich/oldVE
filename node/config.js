@@ -68,8 +68,10 @@ module.exports = function(app, express) {
         //    req.headers.host = 'teselagen.local';
         //    app.routingProxy.proxyRequest(req, res, {host: 'teselagen.local', port: 80});
         //});
+        
+        app.use(express.json());
+        app.use(express.urlencoded());
 
-        app.use(express.bodyParser()); // Use express response body parser (recommended)
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
             secret: 'j5',
@@ -119,7 +121,9 @@ module.exports = function(app, express) {
         app.redisClient = redis;
         var RedisStore = require('connect-redis')(express)
 
-        app.use(express.bodyParser()); // Use express response body parser (recommended)
+        app.use(express.json());
+        app.use(express.urlencoded());
+
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
             secret: 'j5',
@@ -152,13 +156,20 @@ module.exports = function(app, express) {
     io.set( 'origins', '*:*' );
     io.set('log level', 1);
 
-    io.set('transports', [
-        'websocket'
-      , 'flashsocket'
-      , 'htmlfile'
-      , 'xhr-polling'
-      , 'jsonp-polling'
-    ]);
+    if(app.get("env")==="development")
+    {
+        io.set("transports", ["xhr-polling"]);
+    }
+    else
+    {
+        io.set('transports', [
+            'websocket'
+          , 'flashsocket'
+          , 'htmlfile'
+          , 'xhr-polling'
+          , 'jsonp-polling'
+        ]);
+    }
 
     var RedisStore = require('socket.io/lib/stores/redis');
 
