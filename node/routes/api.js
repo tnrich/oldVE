@@ -70,5 +70,14 @@ module.exports = function(app) {
     app.all('/rebase.xml', utils.get_rebase_xml);
     app.all('/api/v', utils.get_api_version);
 
+    /*
+    app.all('/*',  function (req, res) {
+        console.log("Getting here");
+        return app.proxy.proxyRequest(req, res, {
+            host: 'teselagen.local',
+            port: 80
+        });
+    });
+    */
     
 };

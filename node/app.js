@@ -34,6 +34,7 @@ app._ = require("underscore");
 app.winston = require('winston');
 app.memcached = require('memcached');
 app.socketio = require('socket.io');
+//app.httpProxy = require('http-proxy');
 
 require('./api/rest.js')(app);
 

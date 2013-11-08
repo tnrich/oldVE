@@ -17,11 +17,16 @@ module.exports = function(app, express) {
         app.set("env", "production");
     }
 
+    var useAirbrake = app.program.useairbrake;
+
     var server = require('http').Server(app);
 
     // LOGGING
     require('./logging').configLogging(app, express);
 
+    // PROXY
+    //app.routingProxy = new app.httpProxy.RoutingProxy();
+     
     // Express Framework Configuration
 
     var Opts = {
@@ -58,6 +63,12 @@ module.exports = function(app, express) {
         app.set('view options', {
             layout: false
         }); // This opt allow extends
+
+        //app.use(function(req, res, next){
+        //    req.headers.host = 'teselagen.local';
+        //    app.routingProxy.proxyRequest(req, res, {host: 'teselagen.local', port: 80});
+        //});
+
         app.use(express.bodyParser()); // Use express response body parser (recommended)
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
@@ -84,27 +95,25 @@ module.exports = function(app, express) {
     app.configure('production', function() {
         process.env.NODE_ENV = 'production';
 
-        if(false) {
+        if(useAirbrake) {
+            // User Airbrake to log errors.
+            var airbrake = require('airbrake').createClient("40e870e0-c0a6-c307-8bef-37371fd86407");
+            airbrake.serviceHost = "exceptions.codebasehq.com"
+            airbrake.protocol = "https"
+            airbrake.handleExceptions();
 
-        // User Airbrake to log errors.
-        var airbrake = require('airbrake').createClient("40e870e0-c0a6-c307-8bef-37371fd86407");
-        airbrake.serviceHost = "exceptions.codebasehq.com"
-        airbrake.protocol = "https"
-        airbrake.handleExceptions();
-
-        airbrake.on('vars', function(type, vars) {
-          if (type === 'cgi-data') {
-            vars.SOURCE = "NodeJS";
-          }
+            airbrake.on('vars', function(type, vars) {
+              if (type === 'cgi-data') {
+                vars.SOURCE = "NodeJS";
+              }
         });
+        }
 
         // Use Nodetime to monitor/profile the server.
         require('nodetime').profile({
             accountKey: '7a81c5694843fb2ead319abf624219460dad4f47',
             appName: 'Teselagen App'
         });
-
-        }
 
         var redis = app.redis.createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
         app.redisClient = redis;
@@ -130,7 +139,7 @@ module.exports = function(app, express) {
         app.use(express.methodOverride()); // This config put express top methods on top of the API config
         app.use(app.router); // Use express routing system
         app.use(express.static(require('path').resolve(__dirname,"../","vede-cp")));
-        app.use(airbrake.expressHandler());
+        if(useAirbrake) app.use(airbrake.expressHandler());
     });
 
     // INIT SOCKET IO
