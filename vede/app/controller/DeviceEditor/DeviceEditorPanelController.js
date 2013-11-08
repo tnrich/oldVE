@@ -539,7 +539,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     var field;
                     j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
 
-                    self.activeJ5Run = j5runs.getById(data.id);
+                    self.activeJ5Run = j5runs.getById(data._id);
 
                     for(var i=0; i<Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem").length; i++) {
                         Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
