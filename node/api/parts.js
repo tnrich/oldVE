@@ -50,16 +50,11 @@ module.exports = function(app) {
             });
     };
 
-
-
     return {
-
-
         /*
          * When a part is created a Fully quilified domain name (FQDN) should be generated.
          * <company/institution>.<group>.<subgroup>.<user>..<design>.<part>
          */
-
         fqdn:  function(req, res) {
             return res.json(req.user)
         },
@@ -79,7 +74,7 @@ module.exports = function(app) {
             });
         },
 
-        updateAllPartsHashes: function(req, res) {
+        updateAllPartHashes: function(req, res) {
             Part.find({
                 user_id: mongoose.Types.ObjectId("522f9f52299669d80300030b")
             }).exec(function(err, parts) {
@@ -87,6 +82,18 @@ module.exports = function(app) {
                     return res.send(err);
                 } else {
                     async.forEach(parts, function(part, done) {
+                        Part.generateDefinitionHash(null, part, function(hash) {
+                            part.definitionHash = hash;
+                            part.save(done);
+                        });
+                    }, function(err) {
+                        if(err) {
+                            return res.send(err);
+                        } else {
+                            return res.send('yay');
+                        }
+                    });
+                    /*async.forEach(parts, function(part, done) {
                         Part.generateDefinitionHash(null, part, function(hash) {
                             part.definitionHash = hash;
                             part.save(function(err) {
@@ -148,7 +155,7 @@ module.exports = function(app) {
                         } else {
                             return res.send('Success!');
                         }
-                    });
+                    });*/
                 }
             });
         },
