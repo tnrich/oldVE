@@ -29,12 +29,17 @@ module.exports = function(app) {
         });
 
         client.on("set nickname", function(name){
+            console.log("SOCKET REGISTERED");
         	app.sockets[name] = client;
 
 			app.cache.get(name,function(err,user){
 				app.sockets[name].emit('update',user);
 			});
 
+        });
+
+        client.on("hello", function(name){
+            hello.emit('message',"hello");
         });
 
         /*

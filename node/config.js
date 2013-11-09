@@ -158,10 +158,13 @@ module.exports = function(app, express) {
 
     if(app.get("env")==="development")
     {
+        console.log("SOCKET : XHR POLLING");
         io.set("transports", ["xhr-polling"]);
     }
     else
     {
+        console.log("SOCKET : SOCKET");
+        
         io.set('transports', [
             'websocket'
           , 'flashsocket'
