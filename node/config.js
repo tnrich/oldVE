@@ -167,10 +167,10 @@ module.exports = function(app, express) {
         
         io.set('transports', [
             'websocket'
-          , 'flashsocket'
-          , 'htmlfile'
-          , 'xhr-polling'
-          , 'jsonp-polling'
+          //, 'flashsocket'
+          //, 'htmlfile'
+          //, 'xhr-polling'
+          //, 'jsonp-polling'
         ]);
     }
 
