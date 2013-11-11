@@ -9,22 +9,8 @@ var configLogging = function(app,express) {
             new(app.winston.transports.Console)({
                 json: false,
                 colorize: true
-            }),
-            //new app.winston.transports.File({
-                //filename: '/tmp/node_debug.log', json: true
-            //})
-    ],
-        /*
-        exceptionHandlers: [
-            new(app.winston.transports.Console)({
-                json: false,
-                colorize: true
-            }),
-            new app.winston.transports.File({
-                filename: '../log/exceptions.log', json: true
-            })],
-        exitOnError: false
-        */
+            })
+        ]
     });
 
     var winstonStream = {
@@ -33,6 +19,11 @@ var configLogging = function(app,express) {
         }
     };
 
-    app.use( express.logger({stream:winstonStream,  format: ':remote-addr - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time' }) );// Logger
+    var logger = express.logger({stream:winstonStream,  format: ':remote-addr - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time' });
+
+    app.use( function(req,res,next){
+        if(req.headers["upgrade"]!=="websocket" && req.headers["x-requested-with"]==="XMLHttpRequest") logger(req,res,next);
+        else next();
+    });
 };
 exports.configLogging = configLogging;

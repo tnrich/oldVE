@@ -9,90 +9,95 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     singleton: true,
     requires: ["Ext.data.Store",
-               "Teselagen.event.CommonEvent"],
+               "Teselagen.event.CommonEvent",
+               "Teselagen.models.J5Run",
+               "Teselagen.manager.SessionManager",
+               "Teselagen.utils.SystemUtils",
+               "Teselagen.manager.ProjectManager"],
 
     debugFlag : false,
-    disabled : false,
-    runFlag : true,
-
-    mon: {}, // Object to observe
-    delay: 3000,
+    socket: null,
 
     constructor: function(){
-        if(this.debugFlag) console.log("Tasks Monitor created!");
     },
 
     bootMonitoring: function(){
-        var self = this;
-        this.monitorServerTasks(function(data){
-            var monitor = false;
-            for(var j5run in data)
-            {
-                if (data[j5run].status === "In progress") monitor = true;
-            }
-            if(monitor) self.start();
-            else self.stop(true);
-        });
+        this.monitorServerTasks();
     },    
 
     startMonitoring: function() {
-        //var self = this;
-        //var task = new Ext.util.DelayedTask(function(){
-        //    self.monitorServerTasks();
-        //    if(self.runFlag) task.delay(self.delay);
-        //});
-        //
-        //task.delay(this.delay);
-        this.monitorServerTasks();
     },
 
     start: function(){
-        this.runFlag = true;
-        this.startMonitoring();
-        console.log("Tasks Monitor has been enabled.");
     },
 
     stop: function(boot){
-        this.runFlag = false;
-        if(!boot) console.log("Tasks Monitor has been disabled.");
     },
 
+    addJ5RunObserver: function(){},
 
-    monitorServerTasks: function(cb){
+    monitorServerTasks: function(){
         var self = this;
+        if(self.socket) return null;
 
-        (function poll(){
-           //$.ajax({ url: "server", success: function(data){
-           //    //Update your dashboard gauge
-           //    salesGauge.setValue(data.value);
+        Teselagen.utils.SystemUtils.loadJs( Teselagen.manager.SessionManager.buildUrl("socket.io/socket.io.js") ,function(){
 
-           //}, dataType: "json", complete: poll, timeout: 30000 });
+            if(typeof io === 'undefined') {
+                console.log("Socket IO not loaded!");
+                return false;
+            }
 
-            setTimeout(function(){
+            socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
-                Ext.Ajax.request({
-                    url: Teselagen.manager.SessionManager.buildUrl('monitorTasks', ''),
-                    params: {
-                    },
-                    method: 'GET',
-                    withCredentials: true,
-                    success: function(response){
-                        var parsedResponse = JSON.parse(response.responseText);
-                        self.observeChanges(parsedResponse.j5runs);
-                        if(typeof(cb)=="function") cb(parsedResponse.j5runs);
-                        if(self.runFlag) poll();
-                    },
-                    failure: function(){
-                        self.stop();
+            socket.on('message',function(msg) {
+                console.log(msg);
+            });
+
+            socket.on('connect',function() {
+                
+                console.log('SOCKET.IO : Connected');    
+                socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );   
+
+                socket.on('update',function(data){
+
+                    if(!data)
+                    {
+                        Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
+                            model: 'Teselagen.models.J5Run'
+                        });
+                        return null;
+                    }
+
+                    if(Teselagen.manager.ProjectManager.currentTasks) {
+                        Teselagen.manager.ProjectManager.currentTasks.removeAll();
+                    }
+                    else
+                    {
+                        Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
+                            model: 'Teselagen.models.J5Run'
+                        });
+                    }
+
+                    for(var j5runKey in data.jobs)
+                    {
+                        j5run = data.jobs[j5runKey];
+                        j5run.date = new Date(j5run.date);
+                        Teselagen.manager.ProjectManager.currentTasks.add(j5run);
                     }
                 });
 
-            },self.delay);
+            });
 
+            socket.on('disconnect', function (socket) {
+                console.log('Disconnected');
+            });
 
-        })();
+            self.socket = socket; 
+
+        });
     },
 
+    /*
     addJ5RunObserver: function(j5run){
         if(j5run && j5run.id) this.mon[j5run.id] = j5run.status;
     },
@@ -168,5 +173,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     return numseconds + " seconds";
     }
     }
+    */
 
 });

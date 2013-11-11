@@ -37,7 +37,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @member Teselagen.manager.ProjectManager
      * Loads a user, sets currentUser, load projects and fire renderProjectTree (ProjectExplorer)
      */
-    loadUser: function () {
+    loadUser: function (cb) {
         // Set the username into headerUserField and set the welcomeUser name (This should be refactored on a cleaner way)
         Ext.get("headerUserIcon").down(".headerUserField").dom.innerHTML = Teselagen.manager.AuthenticationManager.username+"<b class=\"caret\"></b>";
         if(Ext.getCmp("welcomeUserIcon")) { Ext.getCmp("welcomeUserIcon").setText(Teselagen.manager.AuthenticationManager.username); }
@@ -63,6 +63,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.sequences.loadPage(1);
         self.parts.loadPage(1);
 
+        /*
         self.currentTasks = Ext.create("Ext.data.Store", {
             fields: [
                 {name: 'devicedesign_name', type: 'auto'},
@@ -70,6 +71,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 {name: 'date', type: 'auto'}
             ]
         });
+        */
 
         var projectsStore = self.currentUser.projects().load(
             function (projects, operation, success) {
@@ -79,6 +81,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         );
 
+        if( typeof(cb) == "function" ) cb();
     },
 
     /**

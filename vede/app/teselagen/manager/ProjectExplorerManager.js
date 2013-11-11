@@ -13,13 +13,16 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
     loadData: function(cb,cb2,scope){
         var self = scope;
+        setTimeout(function(){
         Ext.Ajax.request({
+            withCredentials: true,
             url: Teselagen.manager.SessionManager.buildUserResUrl("/projectExplorer/getData", ""),
             success: function(response){
                 self.projectsData = JSON.parse(response.responseText);
                 return cb(self,cb2);
             }
         });
+    },5000);
     },
 
     reRenderProjectExplorer: function(scope,cb){

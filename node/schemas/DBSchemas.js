@@ -159,7 +159,7 @@ module.exports = function(db) {
     });
 
     PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
-        db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
+        db.model('sequence').findById(part.sequencefile_id, function(err, file) {
             var hashArray = [part.genbankStartBP,
                              part.endBP,
                              part.revComp];
@@ -235,7 +235,6 @@ module.exports = function(db) {
     });
 
     DeviceDesignSchema.pre('remove',function (next) {
-      
       // Remove from Projects
       console.log("Trying to remove "+this._id);
       db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
@@ -248,7 +247,7 @@ module.exports = function(db) {
       //    console.log(numberAffected+" users updated");
       //});
 
-      
+
       // Remove from j5reports and associated j5reports
       db.model('j5run').remove({devicedesign_id: this}).exec(function(err, numberAffected){
           console.log(numberAffected+" j5runs removed");

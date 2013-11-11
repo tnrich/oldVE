@@ -635,14 +635,24 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     ]
                                                 },
                                                 {
-                                                    xtype: 'button',
+                                                    xtype: 'filefield',
+                                                    buttonOnly: true,
+                                                    buttonText: 'Import Sequence(s)',
                                                     cls: 'sequenceLibraryImportButton',
-                                                    icon: 'resources/images/ux/paging/publish.png',
-                                                    iconCls: 'sequenceLibraryImportButtonIcon',
-                                                    overCls: 'sequenceLibraryImportButton-over',
-                                                    text: 'Import Sequence(s)',
-                                                    tooltip: 'You can drop your sequence files or folders into the table above.',
-                                                    margin: '0 0 0 10'
+                                                    buttonConfig: {
+                                                        icon: 'resources/images/ux/paging/publish.png',
+                                                        iconCls: 'sequenceLibraryImportButtonIcon',
+                                                        overCls: 'sequenceLibraryImportButton-over',
+                                                        tooltip: 'You can drop your sequence files or folders into the table above.',
+                                                        margin: '0 0 0 10'
+                                                    },
+                                                    listeners: {
+                                                        afterRender: function(field) {
+                                                            field.fileInputEl.set({
+                                                                multiple: 'multiple'
+                                                            });
+                                                        }
+                                                    }
                                                 }
                                             ]
                                     }],
