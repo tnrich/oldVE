@@ -21,7 +21,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     auto_migrate_XML4_to4_1: function(xmlDoc){
 
         var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
-
         for (var i=0; i < bins.length; i++) {
             if (!bins[i].nodeName) { continue; }
             var bin = bins[i];
@@ -64,7 +63,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         var next = this.backgroundSequenceProcessing(partsArray);
 
-        console.log(next);
         if(next[0]==true) {
             if(typeof(cb)==="function")
             {
@@ -187,6 +185,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 if(part.sequence["de:fileName"]) {partName = part.sequence["de:fileName"].replace(".gb","");}
                 if(newPart.get("partSource")===""&&!newPart.get("partSource")) {newPart.set("partSource",partName);}
                 // Sequence processing
+
                 var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                     name: partName,
                     sequenceFileContent: part.sequence["de:content"],
@@ -477,34 +476,55 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         });
 
                         getSequenceByID(hash, function (sequence) {
-                            // Sequence processing
-                            var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                                sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
-                                sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                                sequenceFileName: me.getTagText(sequence, "fileName"),
-                                name: me.getTagText(sequence, "fileName")
-                            });
 
-                            newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-                            //newSequence.set("name",newPart.get("name"));
+                            var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
 
-                            newPart.setSequenceFile(newSequence);
+                            if(ext) {
+                                var processSequence = Teselagen.bio.parsers.ParsersManager.parseSequence(sequence.getElementsByTagNameNS("*", "content")[0].textContent, ext[1], function(gb) {
+                                    Teselagen.bio.parsers.ParsersManager.createAndProcessSequenceFromGenbank(gb, name, function(err, sequence, sequenceManager, gb) {
+                                        if(err) {
+                                            return err;
+                                        }
+
+                                        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                            sequenceFileContent: gb.toString(),
+                                            sequenceFileFormat: "GENBANK",
+                                            sequenceFileName: sequence.fileName,
+                                            name: sequence.name
+                                        });
+
+                                        newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+
+                                        newPart.setSequenceFile(newSequence);
+                                    
+                                        var newCell = Ext.create("Teselagen.models.Cell", {
+                                            index: j,
+                                            fas: fas || "None"
+                                        });
+
+                                        newCell.setPart(newPart);
+                                        newCell.setJ5Bin(newBin);
+
+                                        newBin.cells().add(newCell);
+
+                                        tempPartsArray.push(newPart);
+                                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                                    });
+                                });
+                            } else {
+                                var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                    sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
+                                    sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
+                                    sequenceFileName: me.getTagText(sequence, "fileName"),
+                                    name: me.getTagText(sequence, "fileName")
+                                });
+
+                                newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                                //newSequence.set("name",newPart.get("name"));
+
+                                newPart.setSequenceFile(newSequence);
+                            }
                         });
-
-                        //binFases.push(newPart.get("fas"));
-
-                        var newCell = Ext.create("Teselagen.models.Cell", {
-                            index: j,
-                            fas: fas || "None"
-                        });
-
-                        newCell.setPart(newPart);
-                        newCell.setJ5Bin(newBin);
-
-                        newBin.cells().add(newCell);
-
-                        tempPartsArray.push(newPart);
-                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
                     }
                 }
             }
