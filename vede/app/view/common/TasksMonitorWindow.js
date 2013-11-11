@@ -46,8 +46,9 @@ Ext.define('Vede.view.common.TasksMonitorWindow', {
         }        
         ],
         listeners: {
-            itemclick: function(row,item){
+            itemclick: function(grid,item){
                 Vede.application.fireEvent("jumpToJ5Run",item.raw);
+                grid.up("window").close();
         }
     }
     }]
