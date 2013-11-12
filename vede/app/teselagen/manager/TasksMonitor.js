@@ -40,7 +40,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         var self = this;
         if(self.socket) return null;
 
-        Teselagen.utils.SystemUtils.loadJs( Teselagen.manager.SessionManager.buildUrl("socket.io/socket.io.js") ,function(){
+        Teselagen.utils.SystemUtils.loadJs( Teselagen.manager.SessionManager.baseURL.replace(".com/",".com:3000/") + "socket.io/socket.io.js") ,function(){
 
             if(typeof io === 'undefined') {
                 console.log("Socket IO not loaded!");
