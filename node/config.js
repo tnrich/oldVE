@@ -2,6 +2,7 @@
  * Application configuration
  * @module ./config
  */
+
 module.exports = function(app, express) {
     app.program
     .version('0.0.1')
