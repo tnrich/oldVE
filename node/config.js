@@ -26,7 +26,7 @@ module.exports = function(app, express) {
 
     // PROXY
     //app.routingProxy = new app.httpProxy.RoutingProxy();
-     
+
     // Express Framework Configuration
 
     var Opts = {
