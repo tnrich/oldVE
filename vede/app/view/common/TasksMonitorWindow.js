@@ -5,8 +5,9 @@ Ext.define('Vede.view.common.TasksMonitorWindow', {
     width: 800,
     title: 'Task Monitor',
     layout: 'fit',
-    modal: false,
+    modal: true,
     closeAction: 'hide',
+    resizable: false,
     height: 400,
 
     items: [{

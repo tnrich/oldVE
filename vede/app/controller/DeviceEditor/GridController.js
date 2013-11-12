@@ -300,7 +300,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     	var selectedCell = gridManager.selectedGridPart.datum();
         var self = this;
     	if(gridManager.clipboardPart && selectedCell) {
-    		Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), function(identicalPart) {
+    		Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), gridManager.clipboardPart.get("partSource"), function(identicalPart) {
         		var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
         		var yIndex = parseInt(gridManager.selectedGridPart.attr("deGridRowIndex"));
         		var oldPart = selectedCell.getPart();

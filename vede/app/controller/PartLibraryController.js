@@ -59,7 +59,7 @@ Ext.define("Vede.controller.PartLibraryController", {
     },
 
     onPartListSelected: function(grid,part,item) {      
-        Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get('name'));
+        Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get('name'), part.get('partSource'));
         this.callbackFn(grid,part,item,this.partLibraryWindow);
     },
 
