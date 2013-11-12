@@ -95,6 +95,8 @@ module.exports = function(db) {
     SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true });
 
     SequenceSchema.pre('remove', function(next) {
+        var sequence = this;
+
         db.model('part').find({
             sequencefile_id: this.id
         }, function(err, parts) {
@@ -107,7 +109,20 @@ module.exports = function(db) {
                     part.remove();
                     done();
                 }, function(err) {
-                    next();
+                    db.model('User').update({
+                        _id: sequence.user_id
+                    }, {
+                        $pull: {
+                            sequences: sequence._id
+                        }
+                    }, function(err) {
+                        if(err) {
+                            console.log('Error removing sequence from user.');
+                            console.log(err);
+                        }
+
+                        next();
+                    });
                 });
             }
         });
