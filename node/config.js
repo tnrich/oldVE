@@ -10,7 +10,7 @@ module.exports = function(app, express) {
     .option('-r, --port <n>', 'Node port default is 3000', parseInt)
     .parse(process.argv);
 
-    app.set("env", "development");
+    app.set("env", "development"); // Default ENV
     app.dbname = "teselagen";
 
     if (app.program.prod) {
