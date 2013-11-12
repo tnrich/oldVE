@@ -11,7 +11,7 @@ module.exports = function(app, express) {
     .parse(process.argv);
 
     app.set("env", "development"); // Default ENV
-    app.dbname = "teselagen";
+    app.dbname = "teselagen"; // Default DB (No change)
 
     if (app.program.prod) {
         app.set("env", "production");
