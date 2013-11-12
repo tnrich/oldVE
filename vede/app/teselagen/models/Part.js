@@ -114,7 +114,7 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0,
         convert: function(value, record) {
-            record.data.genbankStartBP = value;
+            record.data.genbankStartBP = Number(value);
             record.calculateSize(true);
 
             return value;
@@ -125,7 +125,7 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0,
         convert: function(value, record) {
-            record.data.endBP = value;
+            record.data.endBP = Number(value);
             record.calculateSize(true);
 
             return value;
@@ -297,15 +297,21 @@ Ext.define("Teselagen.models.Part", {
                 return false;
             }
 
-            if(record.get("genbankStartBP")>record.get("endBP")) {
+            var startBP = record.get("genbankStartBP");
+            var endBP = record.get("endBP");
+
+            if(startBP>endBP) {
                 var tSize = record.getSequenceFile().getLength();
-                size = Math.abs(tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
-            } else if (record.get("genbankStartBP")==record.get("endBP")) {
+                size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+            } else if (startBP==endBP) {
                 size = 1;
             } else {
-                size = (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
+                size = (Math.abs(startBP - endBP) + 1);
             }
-            if(size === 0) console.warn("Part with sequence with length zero.");
+
+            if(size === 0) {
+                console.warn("Part with sequence with length zero.");
+            }
 
             record.set('size', size);
         });
@@ -352,19 +358,26 @@ Ext.define("Teselagen.models.Part", {
             var sequence = sequences.getById(this.get("sequencefile_id"));
 
             if(sequence) {
-                if(typeof(callbackFn) === "object") return callbackFn.callback(sequence);
-                else return sequence;
+                if(typeof(callbackFn) === "object") {
+                    return callbackFn.callback(sequence);
+                } else if(typeof callbackFn === "function") {
+                    return callbackFn(sequence);
+                } else {
+                    return sequence;
+                }
             }
 
             if(typeof(callbackFn) === "object"){
                 return this.getSequenceFileModel({
                     callback: callbackFn.callback
                 });
+            } else if(typeof callbackFn === "function") {
+                return callbackFn(this.getSequenceFileModel());
             } else {
                 return this.getSequenceFileModel();
             }
         } else {
-            return null
+            return null;
         }
 
     },
