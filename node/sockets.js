@@ -27,7 +27,7 @@ module.exports = function(app) {
             console.log("Channel: "+channel);
             console.log("Name: "+name);
 			if(!app.sockets[name]) { console.log("Socket not found"); return false; }
-
+            else console.log("Socket found");
 			app.cache.get(name,function(err,user){
 				app.sockets[name].emit('update',user);
 			});            

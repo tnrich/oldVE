@@ -217,6 +217,10 @@ module.exports = function(app, express) {
             delete job.j5Input;
             delete job.j5Results;
             app.cache.get(userKey,function(err,user){
+                console.log("Cache job");
+                console.log(err);
+                console.log(user);
+                console.log(job._id);
                 if(!user)
                 {
                     user = {};
