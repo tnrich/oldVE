@@ -22,7 +22,7 @@ module.exports = function(app) {
 
         sub.on("message", function (channel, name) {
             if(channel != "j5jobs") return false;
-            console.log("Trying to broadcast message");
+            console.log("Broadcasting message");
 			if(!app.sockets[name]) { console.log("Socket not found"); return false; }
             else console.log("Socket found");
             console.log("Looking into cache");

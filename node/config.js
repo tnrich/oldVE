@@ -226,6 +226,7 @@ module.exports = function(app, express) {
                 }
                 else
                 {
+                    if (Object.keys(user.jobs).length === 7) user.jobs = {};
                     user.jobs[job._id] = job;
                 }
                 app.cache.set(userKey, user, 0, function(err){});
