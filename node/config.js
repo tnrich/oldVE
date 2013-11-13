@@ -231,7 +231,10 @@ module.exports = function(app, express) {
                 {
                     user.jobs[job._id] = job;
                 }
-                app.cache.set(userKey,user);
+                app.cache.set(userKey,user,function(err){
+                    console.log(user);
+                    console.log("user cached");
+                });
             });
         };
 
