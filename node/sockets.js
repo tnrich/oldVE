@@ -28,7 +28,9 @@ module.exports = function(app) {
             console.log("Name: "+name);
 			if(!app.sockets[name]) { console.log("Socket not found"); return false; }
             else console.log("Socket found");
+            console.log("Looking into cache");
 			app.cache.get(name,function(err,user){
+                console.log(user);
 				app.sockets[name].emit('update',user);
 			});            
         });
