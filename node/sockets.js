@@ -25,9 +25,15 @@ module.exports = function(app) {
             console.log("Broadcasting message");
 			if(!app.sockets[name]) { console.log("Socket not found"); return false; }
             else console.log("Socket found");
-            console.log("Looking into cache");
+            //console.log("Looking into cache");
 			app.cache.get(name,function(err,user){
-                console.log("Number of jobs: "+Object.keys(user.jobs).length);
+                //console.log("Number of jobs: "+Object.keys(user.jobs).length);
+                console.log("---");                
+                for(var job in user.jobs)
+                {
+                    console.log(user.jobs[job].status);
+                }
+                console.log("---");
 				app.sockets[name].emit('update',user);
 			});            
         });
