@@ -27,7 +27,7 @@ module.exports = function(app) {
             else console.log("Socket found");
             console.log("Looking into cache");
 			app.cache.get(name,function(err,user){
-                console.log("Number of jobs: "+user.jobs.length);
+                console.log("Number of jobs: "+Object.keys(user.jobs).length);
 				app.sockets[name].emit('update',user);
 			});            
         });

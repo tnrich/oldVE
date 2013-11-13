@@ -228,7 +228,7 @@ module.exports = function(app, express) {
                 {
                     user.jobs[job._id] = job;
                 }
-                app.cache.set(userKey, user, 0);
+                app.cache.set(userKey, user, 0, function(err){});
             });
         };
 
