@@ -21,6 +21,8 @@ module.exports = function(app) {
 		*/
 
         sub.on("message", function (channel, name) {
+            if(channel != "j5jobs") return false;
+
             console.log("Trying to broadcast message");
             console.log("Channel: "+channel);
             console.log("Name: "+name);
