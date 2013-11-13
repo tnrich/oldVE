@@ -22,15 +22,12 @@ module.exports = function(app) {
 
         sub.on("message", function (channel, name) {
             if(channel != "j5jobs") return false;
-
             console.log("Trying to broadcast message");
-            console.log("Channel: "+channel);
-            console.log("Name: "+name);
 			if(!app.sockets[name]) { console.log("Socket not found"); return false; }
             else console.log("Socket found");
             console.log("Looking into cache");
 			app.cache.get(name,function(err,user){
-                console.log(user);
+                console.log("Number of jobs: "+user.jobs.length);
 				app.sockets[name].emit('update',user);
 			});            
         });
