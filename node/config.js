@@ -201,7 +201,7 @@ module.exports = function(app, express) {
 
     // Init MEMCACHE
 
-    var cacheType = 'memory';
+    var cacheType = 'memcache';
 
     if(cacheType=="memcache") {
         app.logger.log("MEMCACHE CACHE");
@@ -211,6 +211,25 @@ module.exports = function(app, express) {
 
         app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
         app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
+
+        app.cache.cacheJob = function(userKey,job){
+            job = job.toObject();
+            delete job.j5Input;
+            delete job.j5Results;
+            app.cache.get(userKey,function(err,user){
+                if(!user)
+                {
+                    user = {};
+                    user.jobs = {};
+                    user.jobs[job._id] = job; 
+                }
+                else
+                {
+                    user.jobs[job._id] = job;
+                }
+                app.cache.set(userKey,user);
+            });
+        };
 
         setTimeout(function(){        
             console.log("writing to memcache");

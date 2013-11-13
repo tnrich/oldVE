@@ -21,6 +21,7 @@ module.exports = function(app) {
 		*/
 
         sub.on("message", function (channel, name) {
+            console.log("Trying to broadcast message");
 			if(!app.sockets[name]) return false;
 
 			app.cache.get(name,function(err,user){
