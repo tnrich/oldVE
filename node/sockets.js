@@ -21,8 +21,10 @@ module.exports = function(app) {
 		*/
 
         sub.on("message", function (channel, name) {
-            console.log("Trying to broadcast message");
-			if(!app.sockets[name]) return false;
+            console.log("Trying to broadcast message")
+            console.log("Channel: ",channel);
+            console.log("Name: ",name);
+			if(!app.sockets[name]) [ console.log("Socket not found"); return false; }
 
 			app.cache.get(name,function(err,user){
 				app.sockets[name].emit('update',user);
