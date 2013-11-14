@@ -39,13 +39,13 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             xtype: 'gridcolumn',
             text: 'TaskName',
             autoScroll: true,
-            dataIndex: 'task_name'
+            dataIndex: 'taskName'
         },
         {
             xtype: 'gridcolumn',
             text: 'Task Type',
             autoScroll: true,
-            dataIndex: 'task_type'
+            dataIndex: 'taskType'
         },
         {
             xtype: 'gridcolumn',
@@ -57,14 +57,30 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             xtype: 'gridcolumn',
             text: 'Date Initialized',
             autoScroll: true,
-            dataIndex: 'date'
+            dataIndex: 'dateStarted'
         },
         {
-            xtype: 'gridcolumn',
-            text: 'Options',
-            autoScroll: true,
-            dataIndex: 'options'
-        }        
+            xtype:'actioncolumn',
+            items: [{
+                icon: 'extjs/examples/shared/icons/fam/cog_edit.png',
+                tooltip: 'Vdit',
+                text: 'View',
+                handler: function(grid, rowIndex, colIndex) {
+                    var rec = grid.getStore().getAt(rowIndex);
+                    alert("Edit " + rec.get('firstname'));
+                    debugger;
+                }
+            },{
+                icon: 'extjs/examples/restful/images/delete.png',
+                text: 'Cancel',
+                tooltip: 'Cancel',
+                handler: function(grid, rowIndex, colIndex) {
+                    var rec = grid.getStore().getAt(rowIndex);
+                    alert("Terminate " + rec.get('firstname'));
+                    debugger;
+                }
+            }]
+        }      
         ],
         listeners: {
             itemclick: function(grid,item){

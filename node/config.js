@@ -212,22 +212,31 @@ module.exports = function(app, express) {
         app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
         app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
 
-        app.cache.cacheJob = function(userKey,job,cb){
+        app.cache
+
+        app.cache.cachej5Run = function(userKey,job,cb){
             job = job.toObject();
-            delete job.j5Input;
-            delete job.j5Results;
+            task = {
+                id : job._id,
+                taskName : job.devicedesign_name,
+                taskType : "j5run",
+                status   : job.status,
+                dateStarted : job.date,
+                taskRefID   : job._id,
+                assemblyType : job.assemblyMethod
+            };
+
             app.cache.get(userKey,function(err,user){
-                console.log(job._id);
-                if(!user)
+                if(!user || !user.tasks)
                 {
                     user = {};
-                    user.jobs = {};
-                    user.jobs[job._id] = job; 
+                    user.tasks = {};
+                    user.tasks[task.id] = task; 
                 }
                 else
                 {
-                    if (Object.keys(user.jobs).length === 7) user.jobs = {};
-                    user.jobs[job._id] = job;
+                    if (Object.keys(user.tasks).length === 7) user.tasks = {};
+                    user.tasks[task.id] = task;
                 }
                 app.cache.set(userKey, user, 0, function(err){
                     cb()

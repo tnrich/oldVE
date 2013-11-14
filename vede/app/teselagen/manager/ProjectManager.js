@@ -77,7 +77,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
             function (projects, operation, success) {
                 if(!success) { Ext.Error.raise("Error loading projects"); }
                 self.projects = projectsStore;
-                Teselagen.manager.ProjectExplorerManager.load();
             }
         );
 

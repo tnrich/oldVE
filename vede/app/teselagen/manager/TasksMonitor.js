@@ -13,7 +13,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                "Teselagen.models.J5Run",
                "Teselagen.manager.SessionManager",
                "Teselagen.utils.SystemUtils",
-               "Teselagen.manager.ProjectManager"],
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.models.Task"],
 
     debugFlag : false,
     socket: null,
@@ -62,7 +63,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
-                            model: 'Teselagen.models.J5Run'
+                            model: 'Teselagen.models.Taskgit'
                         });
                         return null;
                     }
@@ -73,15 +74,15 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     else
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
-                            model: 'Teselagen.models.J5Run'
+                            model: 'Teselagen.models.Task'
                         });
                     }
 
-                    for(var j5runKey in data.jobs)
+                    for(var taskKey in data.tasks)
                     {
-                        j5run = data.jobs[j5runKey];
-                        j5run.date = new Date(j5run.date);
-                        Teselagen.manager.ProjectManager.currentTasks.add(j5run);
+                        task = data.tasks[taskKey];
+                        task.dateStarted = new Date(task.dateStarted);
+                        Teselagen.manager.ProjectManager.currentTasks.add(task);
                     }
                 });
 
