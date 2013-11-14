@@ -57,7 +57,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             socket.on('connect',function() {
                 
                 console.log('SOCKET.IO : Connected');    
-                socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );   
+                socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('update',function(data){
                     if(!data)

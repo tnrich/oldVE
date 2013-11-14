@@ -76,17 +76,18 @@ Ext.define('Vede.view.common.TaskMonitorView', {
                 tooltip: 'Cancel',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
-                    alert("Terminate " + rec.get('firstname'));
-                    debugger;
+                    var id = rec.data.taskRefID;
+                    socket.emit('cancelj5run', id );
+                    Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 }
             }]
         }      
         ],
-        listeners: {
-            itemclick: function(grid,item){
-                Vede.application.fireEvent("jumpToJ5Run",item.raw);
-                grid.up("window").close();
-        }
-    }
+        //listeners: {
+        //    itemclick: function(grid,item){
+        //        Vede.application.fireEvent("jumpToJ5Run",item.raw);
+        //        grid.up("window").close();
+        //}
+        //}
     }]
 });

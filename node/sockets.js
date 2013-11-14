@@ -33,6 +33,11 @@ module.exports = function(app) {
             hello.emit('message',"hello");
         });
 
+        client.on("cancelj5run", function(j5runid){
+            console.log("Attempt to cancel j5run")
+            console.log(j5runid);;
+        });
+
         client.on('disconnect', function() {});
          
     });
