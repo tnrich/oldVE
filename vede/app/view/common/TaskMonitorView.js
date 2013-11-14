@@ -77,7 +77,8 @@ Ext.define('Vede.view.common.TaskMonitorView', {
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     var id = rec.data.taskRefID;
-                    socket.emit('cancelj5run', id );
+                    socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, id );
+                    rec.set('status',"Canceled");
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 }
             }]

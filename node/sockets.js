@@ -33,9 +33,21 @@ module.exports = function(app) {
             hello.emit('message',"hello");
         });
 
-        client.on("cancelj5run", function(j5runid){
+        client.on("cancelj5run", function(username, j5runid){
+            console.log(arguments);
             console.log("Attempt to cancel j5run")
-            console.log(j5runid);;
+            var j5Runs = app.db.model("j5run");
+            j5Runs.findById(j5runid).exec(function(err,j5run){
+                if(err || !j5run) { console.log("j5Run not found"); return false;}
+                j5run.status = "Canceled"; j5run.save();
+                if(!j5run.process || !j5run.process.pid) { console.log("j5Run doesn't have attached process"); return false;}
+                var pid = j5run.process.pid;
+                require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
+                    console.log(arguments);
+                });
+            });
+
+            app.cache.removeTask( username , j5runid, function(){});
         });
 
         client.on('disconnect', function() {});
