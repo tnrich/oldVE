@@ -25037,6 +25037,99 @@ img {
   width: 385px !important;
 }
 
+/* line 1486, ../../../../sass/src/view/AppViewport.scss */
+.task-icon {
+  width: 24px;
+  margin: 0px 20px;
+}
+
+/* line 1491, ../../../../sass/src/view/AppViewport.scss */
+.pace-activity {
+  display: block;
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  border: solid 2px transparent;
+  border-top-color: #29d;
+  border-left-color: #29d;
+  border-radius: 10px;
+  -webkit-animation: pace-spinner 400ms linear infinite;
+  -moz-animation: pace-spinner 400ms linear infinite;
+  -ms-animation: pace-spinner 400ms linear infinite;
+  -o-animation: pace-spinner 400ms linear infinite;
+  animation: pace-spinner 400ms linear infinite;
+}
+
+@-webkit-keyframes pace-spinner {
+  /* line 1508, ../../../../sass/src/view/AppViewport.scss */
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  /* line 1509, ../../../../sass/src/view/AppViewport.scss */
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes pace-spinner {
+  /* line 1512, ../../../../sass/src/view/AppViewport.scss */
+  0% {
+    -moz-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  /* line 1513, ../../../../sass/src/view/AppViewport.scss */
+  100% {
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes pace-spinner {
+  /* line 1516, ../../../../sass/src/view/AppViewport.scss */
+  0% {
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  /* line 1517, ../../../../sass/src/view/AppViewport.scss */
+  100% {
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-ms-keyframes pace-spinner {
+  /* line 1520, ../../../../sass/src/view/AppViewport.scss */
+  0% {
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  /* line 1521, ../../../../sass/src/view/AppViewport.scss */
+  100% {
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pace-spinner {
+  /* line 1524, ../../../../sass/src/view/AppViewport.scss */
+  0% {
+    transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  /* line 1525, ../../../../sass/src/view/AppViewport.scss */
+  100% {
+    transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 /*Restriction Enzymes Manager Window*/
 /* line 2, ../../../../sass/src/view/ve/RestrictionEnzymesManagerWindow.scss */
 .enzymeSelector-btn-addAll {
