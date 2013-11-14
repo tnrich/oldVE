@@ -212,7 +212,7 @@ module.exports = function(app, express) {
         app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
         app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
 
-        app.cache.cacheJob = function(userKey,job){
+        app.cache.cacheJob = function(userKey,job,cb){
             job = job.toObject();
             delete job.j5Input;
             delete job.j5Results;
@@ -229,7 +229,9 @@ module.exports = function(app, express) {
                     if (Object.keys(user.jobs).length === 7) user.jobs = {};
                     user.jobs[job._id] = job;
                 }
-                app.cache.set(userKey, user, 0, function(err){});
+                app.cache.set(userKey, user, 0, function(err){
+                    cb()
+                });
             });
         };
 

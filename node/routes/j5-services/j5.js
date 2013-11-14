@@ -204,9 +204,10 @@ var clearUserFolder = function(user){
 function reportChange(j5run,user){
   console.log("Reporting");
   if(!user.username) throw new Error('Invalid user');
-  app.cache.cacheJob(user.username,j5run);
-  app.io.pub.publish("j5jobs",user.username);
-  console.log("Reporting :"+j5run.status);
+  app.cache.cacheJob(user.username,j5run,function(){
+    console.log("Reporting :"+j5run.status);
+    app.io.pub.publish("j5jobs",user.username);
+  });
 };
 
 
