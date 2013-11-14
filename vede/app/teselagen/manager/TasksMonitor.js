@@ -63,7 +63,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
-                            model: 'Teselagen.models.Taskgit'
+                            model: 'Teselagen.models.Task'
                         });
                         return null;
                     }

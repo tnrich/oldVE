@@ -212,8 +212,6 @@ module.exports = function(app, express) {
         app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
         app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
 
-        app.cache
-
         app.cache.cachej5Run = function(userKey,job,cb){
             job = job.toObject();
             task = {
@@ -241,6 +239,18 @@ module.exports = function(app, express) {
                 app.cache.set(userKey, user, 0, function(err){
                     cb()
                 });
+            });
+        };
+
+        app.cache.removeTask = function(userKey,taskKey,cb){
+            app.cache.get(userKey,function(err,user){ 
+                if(user && user.tasks)
+                {
+                    delete user.tasks[taskKey];
+                    app.cache.set(userKey, user, 0, function(err){
+                        cb()
+                    });                        
+                }
             });
         };
 
@@ -289,6 +299,10 @@ module.exports = function(app, express) {
                 }
                 app.cache.set(userKey,user);
             });
+        };
+
+        app.cache.removeTask = function(){
+            console.log("Warning: non implemented");
         };
 
     }
