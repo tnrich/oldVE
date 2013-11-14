@@ -59,10 +59,10 @@ Ext.define('Vede.controller.HeaderPanelController', {
     },
 
     onTasksBtnClick: function(){
-        if(this.tasksWindow) this.tasksWindow.show();
+        if(this.tasksWindow) this.tasksWindow.toggleCollapse();
         else 
         {
-            this.tasksWindow = Ext.create('Vede.view.common.TasksMonitorWindow').show();
+            this.tasksWindow = Ext.getCmp('taskMonitor').expand();
             console.log(Teselagen.manager.ProjectManager.currentTasks);
             this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
         }

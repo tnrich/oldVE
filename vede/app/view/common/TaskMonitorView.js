@@ -1,14 +1,18 @@
-Ext.define('Vede.view.common.TasksMonitorWindow', {
-    extend: 'Ext.window.Window',
-    alias: 'widget.tasksmonitorwindow',
+Ext.define('Vede.view.common.TaskMonitorView', {
+    extend: 'Ext.panel.Panel',
+    id: 'taskMonitor',
+    alias: 'widget.TaskMonitorView',
     cls: 'tasksmonitorwindow',
     width: '100%',
     title: 'Task Monitor',
     layout: 'fit',
-    modal: false,
     closeAction: 'hide',
     resizable: false,
+    collapsed: true,
     draggable: false,
+    collapseMode: 'mini',
+    collapsible: true,
+    header: true,
     region: 'south',
     height: 200,
     y: '80%',
@@ -33,9 +37,15 @@ Ext.define('Vede.view.common.TasksMonitorWindow', {
         columns: [
         {
             xtype: 'gridcolumn',
-            text: 'Design name',
+            text: 'TaskName',
             autoScroll: true,
-            dataIndex: 'devicedesign_name'
+            dataIndex: 'task_name'
+        },
+        {
+            xtype: 'gridcolumn',
+            text: 'Task Type',
+            autoScroll: true,
+            dataIndex: 'task_type'
         },
         {
             xtype: 'gridcolumn',
@@ -45,9 +55,15 @@ Ext.define('Vede.view.common.TasksMonitorWindow', {
         },
         {
             xtype: 'gridcolumn',
-            text: 'Date',
+            text: 'Date Initialized',
             autoScroll: true,
             dataIndex: 'date'
+        },
+        {
+            xtype: 'gridcolumn',
+            text: 'Options',
+            autoScroll: true,
+            dataIndex: 'options'
         }        
         ],
         listeners: {
