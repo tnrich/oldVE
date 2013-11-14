@@ -1484,14 +1484,17 @@ background: #F7F9FA;
 }
 
 .task-icon {
-  width: 24px;
+  width: 18px;
+  height: 18px;
   margin: 0px 20px;
 }
 
 .pace-activity {
-  display: block;
-  position: fixed;
+  display: inline-block;
+  margin-right: 10px;
   width: 14px;
+  position: relative;
+  top: 2px;
   height: 14px;
   border: solid 2px transparent;
   border-top-color: #29d;
