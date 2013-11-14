@@ -34,6 +34,8 @@ Ext.define('Vede.controller.AuthWindowController', {
 
         var onLoggedOut = function(){
 
+            if(io  && io.server) io.server.close();
+
             Teselagen.manager.ProjectManager.currentUser = null;
             Ext.getCmp("mainAppPanel").items.items.map(function(tab){
                 if(tab.xtype!="DashboardPanelView") return tab;
