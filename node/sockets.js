@@ -50,9 +50,16 @@ module.exports = function(app) {
             app.cache.removeTask( username , j5runid, function(){});
         });
 
+        client.on("cancelbuilddna", function(username, builddnaid){
+            console.log("Attempt to cancel builddna")
+
+            app.cache.removeTask( username , builddnaid, function(){});
+        });
+
         client.on("buildDNA", function(url,password){
+            console.log("Trying to build DNA");
             name = "rpavez";
-            app.cache.cacheDNAbuild(name,function(){
+            app.cache.cacheDNABuild(name,function(){
                 app.cache.get(name,function(err,user){
                     app.sockets[name].emit('update',user);
                 });

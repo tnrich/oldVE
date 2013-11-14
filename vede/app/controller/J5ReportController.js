@@ -269,7 +269,7 @@ Ext.define("Vede.controller.J5ReportController", {
             var passwordField =  buildDNAWindows.down('textfield[name="password"]').value;
             buildDNAWindows.close();
 
-           if( Teselagen.manager.TasksMonitor.socket ) Teselagen.manager.TasksMonitor.socket.emit('buildDna',printDNA_URL,passwordField);
+           if( Teselagen.manager.TasksMonitor.socket ) Teselagen.manager.TasksMonitor.socket.emit('buildDNA',printDNA_URL,passwordField);
         
         });
 
