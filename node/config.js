@@ -212,6 +212,34 @@ module.exports = function(app, express) {
         app.cache.on('failure', function( details ){ sys.error( "Server " + details.server + "went down due to: " + details.messages.join( '' ) ) });
         app.cache.on('reconnecting', function( details ){ sys.debug( "Total downtime caused by server " + details.server + " :" + details.totalDownTime + "ms")});
 
+        app.cache.cacheDNABuild = function(userKey,cb){
+            task = {
+                id : new app.mongoose.mongo.ObjectID(),
+                taskName : "TECAN Compiler",
+                taskType : "builddna",
+                status   : "Running",
+                dateStarted : new Date(),
+                taskRefID   : null
+            };
+
+            app.cache.get(userKey,function(err,user){
+                if(!user || !user.tasks)
+                {
+                    user = {};
+                    user.tasks = {};
+                    user.tasks[task.id] = task; 
+                }
+                else
+                {
+                    if (Object.keys(user.tasks).length === 7) user.tasks = {};
+                    user.tasks[task.id] = task;
+                }
+                app.cache.set(userKey, user, 0, function(err){
+                    cb()
+                });
+            });
+        };
+
         app.cache.cachej5Run = function(userKey,job,cb){
             job = job.toObject();
             task = {

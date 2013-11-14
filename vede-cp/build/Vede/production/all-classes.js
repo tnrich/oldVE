@@ -36,6 +36,7 @@ if (!Ext.grid.feature) Ext.grid.feature = {};
 if (!Ext.grid.header) Ext.grid.header = {};
 if (!Ext.grid.locking) Ext.grid.locking = {};
 if (!Ext.grid.plugin) Ext.grid.plugin = {};
+if (!Ext.grid.plugin.override) Ext.grid.plugin.override = {};
 if (!Ext.grid.property) Ext.grid.property = {};
 if (!Ext.layout) Ext.layout = {};
 if (!Ext.layout.boxOverflow) Ext.layout.boxOverflow = {};
@@ -94,6 +95,7 @@ if (!Ext.ux.grid.menu) Ext.ux.grid.menu = {};
 if (!Ext.ux.layout) Ext.ux.layout = {};
 if (!Ext.ux.statusbar) Ext.ux.statusbar = {};
 if (!Ext.view) Ext.view = {};
+if (!Ext.view.override) Ext.view.override = {};
 if (!Ext.window) Ext.window = {};
 var Teselagen = Teselagen || {};
 if (!Teselagen.bio) Teselagen.bio = {};
@@ -53209,794 +53211,769 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
 (Ext.cmd.derive('Ext.grid.Panel', Ext.panel.Table, {alternateClassName: ['Ext.list.ListView', 'Ext.ListView', 'Ext.grid.GridPanel'], viewType: 'gridview', lockable: false, rowLines: true}, 0, ["grid", "gridpanel"], ["panel", "component", "tablepanel", "container", "grid", "box", "gridpanel"], {"panel": true, "component": true, "tablepanel": true, "container": true, "grid": true, "box": true, "gridpanel": true}, ["widget.grid", "widget.gridpanel"], 0, [Ext.grid, 'Panel', Ext.list, 'ListView', Ext, 'ListView', Ext.grid, 'GridPanel'], 0));
 ;
 
-Ext.define('Ext.grid.plugin.BufferedRendererTableView', {override: 'Ext.view.Table', onAdd: function(store, records, index) {
-  var me = this, bufferedRenderer = me.bufferedRenderer, rows = me.all;
-  if (me.rendered && bufferedRenderer && (rows.getCount() + records.length) > bufferedRenderer.viewSize) 
+(Ext.cmd.derive('Ext.layout.container.Card', Ext.layout.container.Fit, {alternateClassName: 'Ext.layout.CardLayout', type: 'card', hideInactive: true, deferredRender: false, getRenderTree: function() {
+  var me = this, activeItem = me.getActiveItem();
+  if (activeItem) 
   {
-    if (index < rows.startIndex + bufferedRenderer.viewSize && (index + records.length) > rows.startIndex) 
+    if (activeItem.hasListeners.beforeactivate && activeItem.fireEvent('beforeactivate', activeItem) === false) 
     {
-      me.refreshView();
-    } else {
-      bufferedRenderer.stretchView(me, bufferedRenderer.getScrollHeight());
+      activeItem = me.activeItem = me.owner.activeItem = null;
+    } else if (activeItem.hasListeners.activate) 
+    {
+      activeItem.on({boxready: function() {
+  activeItem.fireEvent('activate', activeItem);
+}, single: true});
     }
+    if (me.deferredRender) 
+    {
+      if (activeItem) 
+      {
+        return me.getItemsRenderTree([activeItem]);
+      }
+    } else {
+      return me.callParent(arguments);
+    }
+  }
+}, renderChildren: function() {
+  var me = this, active = me.getActiveItem();
+  if (!me.deferredRender) 
+  {
+    me.callParent();
+  } else if (active) 
+  {
+    me.renderItems([active], me.getRenderTarget());
+  }
+}, isValidParent: function(item, target, position) {
+  var itemEl = item.el ? item.el.dom : Ext.getDom(item);
+  return (itemEl && itemEl.parentNode === (target.dom || target)) || false;
+}, getActiveItem: function() {
+  var me = this, result = me.parseActiveItem(me.activeItem || (me.owner && me.owner.activeItem));
+  if (result && me.owner.items.indexOf(result) != -1) 
+  {
+    me.activeItem = result;
   } else {
-    me.callParent([store, records, index]);
+    me.activeItem = null;
   }
-}, onRemove: function(store, records, indices) {
-  var me = this, bufferedRenderer = me.bufferedRenderer;
-  me.callParent([store, records, indices]);
-  if (me.rendered && bufferedRenderer) 
+  return me.activeItem;
+}, parseActiveItem: function(item) {
+  if (item && item.isComponent) 
   {
-    if (me.dataSource.getCount() > bufferedRenderer.viewSize) 
+    return item;
+  } else if (typeof item == 'number' || item === undefined) 
+  {
+    return this.getLayoutItems()[item || 0];
+  } else {
+    return this.owner.getComponent(item);
+  }
+}, configureItem: function(item) {
+  if (item === this.getActiveItem()) 
+  {
+    item.hidden = false;
+  } else {
+    item.hidden = true;
+  }
+  this.callParent(arguments);
+}, onRemove: function(component) {
+  var me = this;
+  if (component === me.activeItem) 
+  {
+    me.activeItem = null;
+  }
+}, getAnimation: function(newCard, owner) {
+  var newAnim = (newCard || {}).cardSwitchAnimation;
+  if (newAnim === false) 
+  {
+    return false;
+  }
+  return newAnim || owner.cardSwitchAnimation;
+}, getNext: function() {
+  var wrap = arguments[0], items = this.getLayoutItems(), index = Ext.Array.indexOf(items, this.activeItem);
+  return items[index + 1] || (wrap ? items[0] : false);
+}, next: function() {
+  var anim = arguments[0], wrap = arguments[1];
+  return this.setActiveItem(this.getNext(wrap), anim);
+}, getPrev: function() {
+  var wrap = arguments[0], items = this.getLayoutItems(), index = Ext.Array.indexOf(items, this.activeItem);
+  return items[index - 1] || (wrap ? items[items.length - 1] : false);
+}, prev: function() {
+  var anim = arguments[0], wrap = arguments[1];
+  return this.setActiveItem(this.getPrev(wrap), anim);
+}, setActiveItem: function(newCard) {
+  var me = this, owner = me.owner, oldCard = me.activeItem, rendered = owner.rendered, newIndex;
+  newCard = me.parseActiveItem(newCard);
+  newIndex = owner.items.indexOf(newCard);
+  if (newIndex == -1) 
+  {
+    newIndex = owner.items.items.length;
+    Ext.suspendLayouts();
+    newCard = owner.add(newCard);
+    Ext.resumeLayouts();
+  }
+  if (newCard && oldCard != newCard) 
+  {
+    if (newCard.fireEvent('beforeactivate', newCard, oldCard) === false) 
     {
-      me.refreshView();
-    } else {
-      bufferedRenderer.stretchView(me, bufferedRenderer.getScrollHeight());
+      return false;
     }
+    if (oldCard && oldCard.fireEvent('beforedeactivate', oldCard, newCard) === false) 
+    {
+      return false;
+    }
+    if (rendered) 
+    {
+      Ext.suspendLayouts();
+      if (!newCard.rendered) 
+      {
+        me.renderItem(newCard, me.getRenderTarget(), owner.items.length);
+      }
+      if (oldCard) 
+      {
+        if (me.hideInactive) 
+        {
+          oldCard.hide();
+          oldCard.hiddenByLayout = true;
+        }
+        oldCard.fireEvent('deactivate', oldCard, newCard);
+      }
+      if (newCard.hidden) 
+      {
+        newCard.show();
+      }
+      if (!newCard.hidden) 
+      {
+        me.activeItem = newCard;
+      }
+      Ext.resumeLayouts(true);
+    } else {
+      me.activeItem = newCard;
+    }
+    newCard.fireEvent('activate', newCard, oldCard);
+    return me.activeItem;
   }
-}, onDataRefresh: function() {
-  var me = this;
-  if (me.bufferedRenderer) 
-  {
-    me.all.clear();
-    me.bufferedRenderer.onStoreClear();
-  }
-  me.callParent();
-}});
+  return false;
+}}, 0, 0, 0, 0, ["layout.card"], 0, [Ext.layout.container, 'Card', Ext.layout, 'CardLayout'], 0));
+;
 
-(Ext.cmd.derive('Ext.grid.RowEditorButtons', Ext.container.Container, {frame: true, shrinkWrap: true, position: 'bottom', constructor: function(config) {
-  var me = this, rowEditor = config.rowEditor, cssPrefix = Ext.baseCSSPrefix, plugin = rowEditor.editingPlugin;
-  config = Ext.apply({baseCls: cssPrefix + 'grid-row-editor-buttons', defaults: {xtype: 'button', ui: rowEditor.buttonUI, scope: plugin, flex: 1, minWidth: Ext.panel.Panel.prototype.minButtonWidth}, items: [{cls: cssPrefix + 'row-editor-update-button', itemId: 'update', handler: plugin.completeEdit, text: rowEditor.saveBtnText, disabled: rowEditor.updateButtonDisabled}, {cls: cssPrefix + 'row-editor-cancel-button', handler: plugin.cancelEdit, text: rowEditor.cancelBtnText}]}, config);
-  me.callParent([config]);
-  me.addClsWithUI(me.position);
-}, setButtonPosition: function(position) {
+(Ext.cmd.derive('Ext.tab.Tab', Ext.button.Button, {isTab: true, baseCls: Ext.baseCSSPrefix + 'tab', closeElOverCls: Ext.baseCSSPrefix + 'tab-close-btn-over', activeCls: 'active', closableCls: 'closable', closable: true, closeText: 'Close Tab', active: false, childEls: ['closeEl'], scale: false, position: 'top', initComponent: function() {
   var me = this;
-  me.removeClsWithUI(me.position);
-  me.position = position;
-  me.addClsWithUI(position);
+  me.addEvents('activate', 'deactivate', 'beforeclose', 'close');
+  me.callParent(arguments);
+  if (me.card) 
+  {
+    me.setCard(me.card);
+  }
+  me.overCls = ['over', me.position + '-over'];
+}, getTemplateArgs: function() {
+  var me = this, result = me.callParent();
+  result.closable = me.closable;
+  result.closeText = me.closeText;
+  return result;
 }, getFramingInfoCls: function() {
   return this.baseCls + '-' + this.ui + '-' + this.position;
-}, getFrameInfo: function() {
-  var frameInfo = this.callParent();
-  frameInfo.top = true;
-  return frameInfo;
-}}, 1, ["roweditorbuttons"], ["component", "container", "box", "roweditorbuttons"], {"component": true, "container": true, "box": true, "roweditorbuttons": true}, ["widget.roweditorbuttons"], 0, [Ext.grid, 'RowEditorButtons'], 0));
+}, beforeRender: function() {
+  var me = this, tabBar = me.up('tabbar'), tabPanel = me.up('tabpanel');
+  me.callParent();
+  me.addClsWithUI(me.position);
+  if (me.active) 
+  {
+    me.addClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
+  }
+  me.syncClosableUI();
+  if (!me.minWidth) 
+  {
+    me.minWidth = (tabBar) ? tabBar.minTabWidth : me.minWidth;
+    if (!me.minWidth && tabPanel) 
+    {
+      me.minWidth = tabPanel.minTabWidth;
+    }
+    if (me.minWidth && me.iconCls) 
+    {
+      me.minWidth += 25;
+    }
+  }
+  if (!me.maxWidth) 
+  {
+    me.maxWidth = (tabBar) ? tabBar.maxTabWidth : me.maxWidth;
+    if (!me.maxWidth && tabPanel) 
+    {
+      me.maxWidth = tabPanel.maxTabWidth;
+    }
+  }
+}, onRender: function() {
+  var me = this;
+  me.setElOrientation();
+  me.callParent(arguments);
+  if (me.closable) 
+  {
+    me.closeEl.addClsOnOver(me.closeElOverCls);
+  }
+  me.keyNav = new Ext.util.KeyNav(me.el, {enter: me.onEnterKey, del: me.onDeleteKey, scope: me});
+}, setElOrientation: function() {
+  var position = this.position;
+  if (position === 'left' || position === 'right') 
+  {
+    this.el.setVertical(position === 'right' ? 90 : 270);
+  }
+}, enable: function(silent) {
+  var me = this;
+  me.callParent(arguments);
+  me.removeClsWithUI(me.position + '-disabled');
+  return me;
+}, disable: function(silent) {
+  var me = this;
+  me.callParent(arguments);
+  me.addClsWithUI(me.position + '-disabled');
+  return me;
+}, onDestroy: function() {
+  var me = this;
+  Ext.destroy(me.keyNav);
+  delete me.keyNav;
+  me.callParent(arguments);
+}, setClosable: function(closable) {
+  var me = this;
+  closable = (!arguments.length || !!closable);
+  if (me.closable != closable) 
+  {
+    me.closable = closable;
+    if (me.card) 
+    {
+      me.card.closable = closable;
+    }
+    me.syncClosableUI();
+    if (me.rendered) 
+    {
+      me.syncClosableElements();
+      me.updateLayout();
+    }
+  }
+}, syncClosableElements: function() {
+  var me = this, closeEl = me.closeEl;
+  if (me.closable) 
+  {
+    if (!closeEl) 
+    {
+      closeEl = me.closeEl = me.btnWrap.insertSibling({tag: 'a', cls: me.baseCls + '-close-btn', href: '#', title: me.closeText}, 'after');
+    }
+    closeEl.addClsOnOver(me.closeElOverCls);
+  } else if (closeEl) 
+  {
+    closeEl.remove();
+    delete me.closeEl;
+  }
+}, syncClosableUI: function() {
+  var me = this, classes = [me.closableCls, me.closableCls + '-' + me.position];
+  if (me.closable) 
+  {
+    me.addClsWithUI(classes);
+  } else {
+    me.removeClsWithUI(classes);
+  }
+}, setCard: function(card) {
+  var me = this;
+  me.card = card;
+  me.setText(me.title || card.title);
+  me.setIconCls(me.iconCls || card.iconCls);
+  me.setIcon(me.icon || card.icon);
+  me.setGlyph(me.glyph || card.glyph);
+}, onCloseClick: function() {
+  var me = this;
+  if (me.fireEvent('beforeclose', me) !== false) 
+  {
+    if (me.tabBar) 
+    {
+      if (me.tabBar.closeTab(me) === false) 
+      {
+        return;
+      }
+    } else {
+      me.fireClose();
+    }
+  }
+}, fireClose: function() {
+  this.fireEvent('close', this);
+}, onEnterKey: function(e) {
+  var me = this;
+  if (me.tabBar) 
+  {
+    me.tabBar.onClick(e, me.el);
+  }
+}, onDeleteKey: function(e) {
+  if (this.closable) 
+  {
+    this.onCloseClick();
+  }
+}, activate: function(supressEvent) {
+  var me = this;
+  me.active = true;
+  me.addClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
+  if (supressEvent !== true) 
+  {
+    me.fireEvent('activate', me);
+  }
+}, deactivate: function(supressEvent) {
+  var me = this;
+  me.active = false;
+  me.removeClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
+  if (supressEvent !== true) 
+  {
+    me.fireEvent('deactivate', me);
+  }
+}}, 0, ["tab"], ["button", "component", "tab", "box"], {"button": true, "component": true, "tab": true, "box": true}, ["widget.tab"], 0, [Ext.tab, 'Tab'], 0));
 ;
 
-(Ext.cmd.derive('Ext.grid.RowEditor', Ext.form.Panel, {saveBtnText: 'Update', cancelBtnText: 'Cancel', errorsText: 'Errors', dirtyText: 'You need to commit or cancel your changes', lastScrollLeft: 0, lastScrollTop: 0, border: false, buttonUI: 'default', hideMode: 'offsets', initComponent: function() {
-  var me = this, grid = me.editingPlugin.grid, Container = Ext.container.Container;
-  me.cls = Ext.baseCSSPrefix + 'grid-editor ' + Ext.baseCSSPrefix + 'grid-row-editor';
-  me.layout = {type: 'hbox', align: 'middle'};
-  me.lockable = grid.lockable;
-  if (me.lockable) 
+(Ext.cmd.derive('Ext.util.Point', Ext.util.Region, {statics: {fromEvent: function(e) {
+  e = e.browserEvent || e;
+  e = (e.changedTouches && e.changedTouches.length > 0) ? e.changedTouches[0] : e;
+  return new this(e.pageX, e.pageY);
+}}, constructor: function(x, y) {
+  this.callParent([y, x, y, x]);
+}, toString: function() {
+  return "Point[" + this.x + "," + this.y + "]";
+}, equals: function(p) {
+  return (this.x == p.x && this.y == p.y);
+}, isWithin: function(p, threshold) {
+  if (!Ext.isObject(threshold)) 
   {
-    me.items = [me.lockedColumnContainer = new Container({id: grid.id + '-locked-editor-cells', layout: {type: 'hbox', align: 'middle'}, margin: '0 1 0 0'}), me.normalColumnContainer = new Container({flex: 1, id: grid.id + '-normal-editor-cells', layout: {type: 'hbox', align: 'middle'}})];
-  } else {
-    me.lockedColumnContainer = me.normalColumnContainer = me;
+    threshold = {x: threshold, y: threshold};
   }
+  return (this.x <= p.x + threshold.x && this.x >= p.x - threshold.x && this.y <= p.y + threshold.y && this.y >= p.y - threshold.y);
+}, isContainedBy: function(region) {
+  if (!(region instanceof Ext.util.Region)) 
+  {
+    region = Ext.get(region.el || region).getRegion();
+  }
+  return region.contains(this);
+}, roundedEquals: function(p) {
+  return (Math.round(this.x) == Math.round(p.x) && Math.round(this.y) == Math.round(p.y));
+}}, 3, 0, 0, 0, 0, 0, [Ext.util, 'Point'], function() {
+  this.prototype.translate = Ext.util.Region.prototype.translateBy;
+}));
+;
+
+(Ext.cmd.derive('Ext.layout.component.Body', Ext.layout.component.Auto, {type: 'body', beginLayout: function(ownerContext) {
+  this.callParent(arguments);
+  ownerContext.bodyContext = ownerContext.getEl('body');
+}, beginLayoutCycle: function(ownerContext, firstCycle) {
+  var me = this, lastWidthModel = me.lastWidthModel, lastHeightModel = me.lastHeightModel, body = me.owner.body;
   me.callParent(arguments);
-  if (me.fields) 
+  if (lastWidthModel && lastWidthModel.fixed && ownerContext.widthModel.shrinkWrap) 
   {
-    me.addFieldsForColumn(me.fields, true);
-    me.insertColumnEditor(me.fields);
-    delete me.fields;
+    body.setWidth(null);
   }
-  me.mon(me.hierarchyEventSource, {scope: me, show: me.repositionIfVisible});
-  me.getForm().trackResetOnLoad = true;
-}, onGridResize: function() {
-  var me = this, clientWidth = me.getClientWidth(), grid = me.editingPlugin.grid, gridBody = grid.body, btns = me.getFloatingButtons();
-  me.setLocalX(gridBody.getOffsetsTo(grid)[0] + gridBody.getBorderWidth('l') - grid.el.getBorderWidth('l'));
-  me.setWidth(clientWidth);
-  btns.setLocalX((clientWidth - btns.getWidth()) / 2);
-}, onFieldRender: function(field) {
-  var me = this, column = field.column;
-  if (column.isVisible()) 
+  if (lastHeightModel && lastHeightModel.fixed && ownerContext.heightModel.shrinkWrap) 
   {
-    me.syncFieldWidth(column);
-  } else if (!column.rendered) 
-  {
-    me.view.headerCt.on({afterlayout: Ext.Function.bind(me.syncFieldWidth, me, [column]), single: true});
+    body.setHeight(null);
   }
-}, syncFieldWidth: function(column) {
-  var field = column.getEditor(), width;
-  field._marginWidth = (field._marginWidth || field.el.getMargin('lr'));
-  width = column.getWidth() - field._marginWidth;
-  field.setWidth(width);
-  if (field.xtype === 'displayfield') 
+}, calculateOwnerHeightFromContentHeight: function(ownerContext, contentHeight) {
+  var height = this.callParent(arguments);
+  if (ownerContext.targetContext != ownerContext) 
   {
-    field.inputWidth = width;
+    height += ownerContext.getPaddingInfo().height;
   }
-}, onFieldChange: function() {
-  var me = this, form = me.getForm(), valid = form.isValid();
-  if (me.errorSummary && me.isVisible()) 
+  return height;
+}, calculateOwnerWidthFromContentWidth: function(ownerContext, contentWidth) {
+  var width = this.callParent(arguments);
+  if (ownerContext.targetContext != ownerContext) 
   {
-    me[valid ? 'hideToolTip' : 'showToolTip']();
+    width += ownerContext.getPaddingInfo().width;
   }
-  me.updateButton(valid);
-  me.isValid = valid;
-}, updateButton: function(valid) {
-  var buttons = this.floatingButtons;
-  if (buttons) 
+  return width;
+}, measureContentWidth: function(ownerContext) {
+  return ownerContext.bodyContext.setWidth(ownerContext.bodyContext.el.dom.offsetWidth, false);
+}, measureContentHeight: function(ownerContext) {
+  return ownerContext.bodyContext.setHeight(ownerContext.bodyContext.el.dom.offsetHeight, false);
+}, publishInnerHeight: function(ownerContext, height) {
+  var innerHeight = height - ownerContext.getFrameInfo().height, targetContext = ownerContext.targetContext;
+  if (targetContext != ownerContext) 
   {
-    buttons.child('#update').setDisabled(!valid);
-  } else {
-    this.updateButtonDisabled = !valid;
+    innerHeight -= ownerContext.getPaddingInfo().height;
+  }
+  return ownerContext.bodyContext.setHeight(innerHeight, !ownerContext.heightModel.natural);
+}, publishInnerWidth: function(ownerContext, width) {
+  var innerWidth = width - ownerContext.getFrameInfo().width, targetContext = ownerContext.targetContext;
+  if (targetContext != ownerContext) 
+  {
+    innerWidth -= ownerContext.getPaddingInfo().width;
+  }
+  ownerContext.bodyContext.setWidth(innerWidth, !ownerContext.widthModel.natural);
+}}, 0, 0, 0, 0, ["layout.body"], 0, [Ext.layout.component, 'Body'], 0));
+;
+
+(Ext.cmd.derive('Ext.tab.Bar', Ext.panel.Header, {baseCls: Ext.baseCSSPrefix + 'tab-bar', isTabBar: true, defaultType: 'tab', plain: false, childEls: ['body', 'strip'], renderTpl: ['<div id="{id}-body" class="{baseCls}-body {bodyCls} {bodyTargetCls}{childElCls}<tpl if="ui"> {baseCls}-body-{ui}<tpl for="uiCls"> {parent.baseCls}-body-{parent.ui}-{.}</tpl></tpl>"<tpl if="bodyStyle"> style="{bodyStyle}"</tpl>>', '{%this.renderContainer(out,values)%}', '</div>', '<div id="{id}-strip" class="{baseCls}-strip {baseCls}-strip-{dock}{childElCls}', '<tpl if="ui"> {baseCls}-strip-{ui}', '<tpl for="uiCls"> {parent.baseCls}-strip-{parent.ui}-{.}</tpl>', '</tpl>">', '</div>'], _reverseDockNames: {left: 'right', right: 'left'}, initComponent: function() {
+  var me = this;
+  if (me.plain) 
+  {
+    me.addCls(me.baseCls + '-plain');
+  }
+  me.addClsWithUI(me.orientation);
+  me.addEvents('change');
+  me.callParent(arguments);
+  Ext.merge(me.layout, me.initialConfig.layout);
+  me.layout.align = (me.orientation == 'vertical') ? 'left' : 'top';
+  me.layout.overflowHandler = new Ext.layout.container.boxOverflow.Scroller(me.layout);
+  me.remove(me.titleCmp);
+  delete me.titleCmp;
+  Ext.apply(me.renderData, {bodyCls: me.bodyCls, dock: me.dock});
+}, onRender: function() {
+  var me = this;
+  me.callParent();
+  if (me.orientation === 'vertical' && (Ext.isIE8 || Ext.isIE9) && Ext.isStrict) 
+  {
+    me.el.on({mousemove: me.onMouseMove, scope: me});
   }
 }, afterRender: function() {
-  var me = this, plugin = me.editingPlugin, grid = plugin.grid, view = grid.lockable ? grid.normalGrid.view : grid.view, field;
-  me.callParent(arguments);
-  me.scrollingView = view;
-  me.scrollingViewEl = view.el;
-  view.mon(me.scrollingViewEl, 'scroll', me.onViewScroll, me);
-  me.mon(me.el, {click: Ext.emptyFn, stopPropagation: true});
-  me.mon(grid, {resize: me.onGridResize, scope: me});
-  me.el.swallowEvent(['keypress', 'keydown']);
-  me.fieldScroller = me.normalColumnContainer.layout.innerCt;
-  me.fieldScroller.dom.style.overflow = 'hidden';
-  me.fieldScroller.on({scroll: me.onFieldContainerScroll, scope: me});
-  me.keyNav = new Ext.util.KeyNav(me.el, {enter: plugin.completeEdit, esc: plugin.onEscKey, scope: plugin});
-  me.mon(plugin.view, {beforerefresh: me.onBeforeViewRefresh, refresh: me.onViewRefresh, itemremove: me.onViewItemRemove, scope: me});
-  me.preventReposition = true;
-  Ext.Array.each(me.query('[isFormField]'), function(field) {
-  if (field.column.isVisible()) 
-  {
-    me.onColumnShow(field.column);
-  }
-}, me);
-  delete me.preventReposition;
-}, onBeforeViewRefresh: function(view) {
-  var me = this, viewDom = view.el.dom;
-  if (me.el.dom.parentNode === viewDom) 
-  {
-    viewDom.removeChild(me.el.dom);
-  }
-}, onViewRefresh: function(view) {
-  var me = this, context = me.context, row;
-  if (context && (row = view.getNode(context.record, true))) 
-  {
-    context.row = row;
-    me.reposition();
-    if (me.tooltip && me.tooltip.isVisible()) 
-    {
-      me.tooltip.setTarget(context.row);
-    }
-  } else {
-    me.editingPlugin.cancelEdit();
-  }
-}, onViewItemRemove: function(record, index) {
-  var context = this.context;
-  if (context && record === context.record) 
-  {
-    this.editingPlugin.cancelEdit();
-  }
-}, onViewScroll: function() {
-  var me = this, viewEl = me.editingPlugin.view.el, scrollingViewEl = me.scrollingViewEl, scrollTop = scrollingViewEl.dom.scrollTop, scrollLeft = scrollingViewEl.getScrollLeft(), scrollLeftChanged = scrollLeft !== me.lastScrollLeft, scrollTopChanged = scrollTop !== me.lastScrollTop, row;
-  me.lastScrollTop = scrollTop;
-  me.lastScrollLeft = scrollLeft;
-  if (me.isVisible()) 
-  {
-    row = Ext.getDom(me.context.row.id);
-    if (row && viewEl.contains(row)) 
-    {
-      if (scrollTopChanged) 
-      {
-        me.context.row = row;
-        me.reposition(null, true);
-        if ((me.tooltip && me.tooltip.isVisible()) || me.hiddenTip) 
-        {
-          me.repositionTip();
-        }
-        me.syncEditorClip();
-      }
-    } else {
-      me.setLocalY(-400);
-    }
-  }
-  if (me.rendered && scrollLeftChanged) 
-  {
-    me.syncFieldsHorizontalScroll();
-  }
-}, syncFieldsHorizontalScroll: function() {
-  this.fieldScroller.setScrollLeft(this.lastScrollLeft);
-}, onFieldContainerScroll: function() {
-  this.scrollingViewEl.setScrollLeft(this.fieldScroller.getScrollLeft());
-}, onColumnResize: function(column, width) {
-  var me = this;
-  if (me.rendered) 
-  {
-    me.onGridResize();
-    me.onViewScroll();
-    if (!column.isGroupHeader) 
-    {
-      me.syncFieldWidth(column);
-      me.repositionIfVisible();
-    }
-  }
-}, onColumnHide: function(column) {
-  if (!column.isGroupHeader) 
-  {
-    column.getEditor().hide();
-    this.repositionIfVisible();
-  }
-}, onColumnShow: function(column) {
-  var me = this;
-  if (me.rendered && !column.isGroupHeader) 
-  {
-    column.getEditor().show();
-    me.syncFieldWidth(column);
-    if (!me.preventReposition) 
-    {
-      this.repositionIfVisible();
-    }
-  }
-}, onColumnMove: function(column, fromIdx, toIdx) {
-  var me = this, i, incr = 1, len, field, fieldIdx, fieldContainer = column.isLocked() ? me.lockedColumnContainer : me.normalColumnContainer;
-  if (column.isGroupHeader) 
-  {
-    Ext.suspendLayouts();
-    column = column.getGridColumns();
-    if (toIdx > fromIdx) 
-    {
-      toIdx--;
-      incr = 0;
-    }
-    this.addFieldsForColumn(column);
-    for (i = 0 , len = column.length; i < len; i++ , fromIdx += incr , toIdx += incr) 
-      {
-        field = column[i].getEditor();
-        fieldIdx = fieldContainer.items.indexOf(field);
-        if (fieldIdx === -1) 
-        {
-          fieldContainer.insert(toIdx, field);
-        } else if (fieldIdx != toIdx) 
-        {
-          fieldContainer.move(fromIdx, toIdx);
-        }
-      }
-    Ext.resumeLayouts(true);
-  } else {
-    if (toIdx > fromIdx) 
-    {
-      toIdx--;
-    }
-    this.addFieldsForColumn(column);
-    field = column.getEditor();
-    fieldIdx = fieldContainer.items.indexOf(field);
-    if (fieldIdx === -1) 
-    {
-      fieldContainer.insert(toIdx, field);
-    } else if (fieldIdx != toIdx) 
-    {
-      fieldContainer.move(fromIdx, toIdx);
-    }
-  }
-}, onColumnAdd: function(column) {
-  if (column.isGroupHeader) 
-  {
-    column = column.getGridColumns();
-  }
-  this.addFieldsForColumn(column);
-  this.insertColumnEditor(column);
-  this.preventReposition = false;
-}, insertColumnEditor: function(column) {
-  var me = this, fieldContainer, len, i;
-  if (Ext.isArray(column)) 
-  {
-    for (i = 0 , len = column.length; i < len; i++) 
-      {
-        me.insertColumnEditor(column[i]);
-      }
-    return;
-  }
-  if (!column.getEditor) 
-  {
-    return;
-  }
-  fieldContainer = column.isLocked() ? me.lockedColumnContainer : me.normalColumnContainer;
-  fieldContainer.insert(column.getVisibleIndex(), column.getEditor());
-}, onColumnRemove: function(ct, column) {
-  column = column.isGroupHeader ? column.getGridColumns() : column;
-  this.removeColumnEditor(column);
-}, removeColumnEditor: function(column) {
-  var me = this, field, len, i;
-  if (Ext.isArray(column)) 
-  {
-    for (i = 0 , len = column.length; i < len; i++) 
-      {
-        me.removeColumnEditor(column[i]);
-      }
-    return;
-  }
-  if (column.hasEditor()) 
-  {
-    field = column.getEditor();
-    if (field && field.ownerCt) 
-    {
-      field.ownerCt.remove(field, false);
-    }
-  }
-}, onColumnReplace: function(map, fieldId, column, oldColumn) {
-  this.onColumnRemove(oldColumn.ownerCt, oldColumn);
-}, getFloatingButtons: function() {
-  var me = this, btns = me.floatingButtons;
-  if (!btns) 
-  {
-    me.floatingButtons = btns = new Ext.grid.RowEditorButtons({rowEditor: me});
-  }
-  return btns;
-}, repositionIfVisible: function(c) {
-  var me = this, view = me.view;
-  if (c && (c == me || !c.el.isAncestor(view.el))) 
-  {
-    return;
-  }
-  if (me.isVisible() && view.isVisible(true)) 
-  {
-    me.reposition();
-  }
-}, getRefOwner: function() {
-  return this.editingPlugin.grid;
-}, getRefItems: function() {
-  var me = this, result;
-  if (me.lockable) 
-  {
-    result = me.lockedColumnContainer.getRefItems();
-    result.push.apply(result, me.normalColumnContainer.getRefItems());
-  } else {
-    result = me.callParent();
-  }
-  result.push.apply(result, me.getFloatingButtons().getRefItems());
-  return result;
-}, reposition: function(animateConfig, fromScrollHandler) {
-  var me = this, context = me.context, row = context && Ext.get(context.row), yOffset = 0, rowTop, localY, deltaY, afterPosition;
-  if (row && Ext.isElement(row.dom)) 
-  {
-    deltaY = me.syncButtonPosition(me.getScrollDelta());
-    if (!me.editingPlugin.grid.rowLines) 
-    {
-      yOffset = -parseInt(row.first().getStyle('border-bottom-width'));
-    }
-    rowTop = me.calculateLocalRowTop(row);
-    localY = me.calculateEditorTop(rowTop) + yOffset;
-    if (!fromScrollHandler) 
-    {
-      afterPosition = function() {
-  if (deltaY) 
-  {
-    me.scrollingViewEl.scrollBy(0, deltaY, true);
-  }
-  me.focusContextCell();
-};
-    }
-    me.syncEditorClip();
-    if (animateConfig) 
-    {
-      me.animate(Ext.applyIf({to: {top: localY}, duration: animateConfig.duration || 125, callback: afterPosition}, animateConfig));
-    } else {
-      me.setLocalY(localY);
-      if (afterPosition) 
-      {
-        afterPosition();
-      }
-    }
-  }
-}, getScrollDelta: function() {
-  var me = this, scrollingViewDom = me.scrollingViewEl.dom, context = me.context, body = me.body, deltaY = 0;
-  if (context) 
-  {
-    deltaY = Ext.fly(context.row).getOffsetsTo(scrollingViewDom)[1] - body.getBorderPadding().beforeY;
-    if (deltaY > 0) 
-    {
-      deltaY = Math.max(deltaY + me.getHeight() + me.floatingButtons.getHeight() - scrollingViewDom.clientHeight - body.getBorderWidth('b'), 0);
-    }
-  }
-  return deltaY;
-}, calculateLocalRowTop: function(row) {
-  var grid = this.editingPlugin.grid;
-  return Ext.fly(row).getOffsetsTo(grid)[1] - grid.el.getBorderWidth('t') + this.lastScrollTop;
-}, calculateEditorTop: function(rowTop) {
-  return rowTop - this.body.getBorderPadding().beforeY - this.lastScrollTop;
-}, getClientWidth: function() {
-  var me = this, grid = me.editingPlugin.grid, result;
-  if (me.lockable) 
-  {
-    result = grid.lockedGrid.getWidth() + grid.normalGrid.view.el.dom.clientWidth - 1;
-  } else {
-    result = grid.view.el.dom.clientWidth;
-  }
-  return result;
-}, getEditor: function(fieldInfo) {
-  var me = this;
-  if (Ext.isNumber(fieldInfo)) 
-  {
-    return me.query('[isFormField]')[fieldInfo];
-  } else if (fieldInfo.isHeader && !fieldInfo.isGroupHeader) 
-  {
-    return fieldInfo.getEditor();
-  }
-}, addFieldsForColumn: function(column, initial) {
-  var me = this, i, length, field;
-  if (Ext.isArray(column)) 
-  {
-    for (i = 0 , length = column.length; i < length; i++) 
-      {
-        me.addFieldsForColumn(column[i], initial);
-      }
-    return;
-  }
-  if (column.getEditor) 
-  {
-    field = column.getEditor(null, {xtype: 'displayfield', getModelData: function() {
-  return null;
-}});
-    if (column.align === 'right') 
-    {
-      field.fieldStyle = 'text-align:right';
-    }
-    if (column.xtype === 'actioncolumn') 
-    {
-      field.fieldCls += ' ' + Ext.baseCSSPrefix + 'form-action-col-field';
-    }
-    if (me.isVisible() && me.context) 
-    {
-      if (field.is('displayfield')) 
-      {
-        me.renderColumnData(field, me.context.record, column);
-      } else {
-        field.suspendEvents();
-        field.setValue(me.context.record.get(column.dataIndex));
-        field.resumeEvents();
-      }
-    }
-    if (column.hidden) 
-    {
-      me.onColumnHide(column);
-    } else if (column.rendered && !initial) 
-    {
-      me.onColumnShow(column);
-    }
-  }
-}, loadRecord: function(record) {
-  var me = this, form = me.getForm(), fields = form.getFields(), items = fields.items, length = items.length, i, displayFields, isValid;
-  for (i = 0; i < length; i++) 
-    {
-      items[i].suspendEvents();
-    }
-  form.loadRecord(record);
-  for (i = 0; i < length; i++) 
-    {
-      items[i].resumeEvents();
-    }
-  isValid = form.isValid();
-  if (me.errorSummary) 
-  {
-    if (isValid) 
-    {
-      me.hideToolTip();
-    } else {
-      me.showToolTip();
-    }
-  }
-  me.updateButton(isValid);
-  displayFields = me.query('>displayfield');
-  length = displayFields.length;
-  for (i = 0; i < length; i++) 
-    {
-      me.renderColumnData(displayFields[i], record);
-    }
-}, renderColumnData: function(field, record, activeColumn) {
-  var me = this, grid = me.editingPlugin.grid, headerCt = grid.headerCt, view = me.scrollingView, store = view.dataSource, column = activeColumn || field.column, value = record.get(column.dataIndex), renderer = column.editRenderer || column.renderer, metaData, rowIdx, colIdx;
-  if (renderer) 
-  {
-    metaData = {tdCls: '', style: ''};
-    rowIdx = store.indexOf(record);
-    colIdx = headerCt.getHeaderIndex(column);
-    value = renderer.call(column.scope || headerCt.ownerCt, value, metaData, record, rowIdx, colIdx, store, view);
-  }
-  field.setRawValue(value);
-  field.resetOriginalValue();
-}, beforeEdit: function() {
-  var me = this, scrollDelta;
-  if (me.isVisible() && me.errorSummary && !me.autoCancel && me.isDirty()) 
-  {
-    scrollDelta = me.getScrollDelta();
-    if (scrollDelta) 
-    {
-      me.scrollingViewEl.scrollBy(0, scrollDelta, true);
-    }
-    me.showToolTip();
-    return false;
-  }
-}, startEdit: function(record, columnHeader) {
-  var me = this, editingPlugin = me.editingPlugin, grid = editingPlugin.grid, context = me.context = editingPlugin.context;
-  if (!me.rendered) 
-  {
-    me.width = me.getClientWidth();
-    me.render(grid.el, grid.el.dom.firstChild);
-    me.getFloatingButtons().render(me.el);
-    me.onViewScroll();
-  } else {
-    me.syncFieldsHorizontalScroll();
-  }
-  if (me.isVisible()) 
-  {
-    me.reposition(true);
-  } else {
-    me.show();
-  }
-  me.onGridResize();
-  context.grid.getSelectionModel().select(record);
-  me.loadRecord(record);
-}, syncButtonPosition: function(scrollDelta) {
-  var me = this, floatingButtons = me.getFloatingButtons(), scrollingViewElDom = me.scrollingViewEl.dom, overflow = this.getScrollDelta() - (scrollingViewElDom.scrollHeight - scrollingViewElDom.scrollTop - scrollingViewElDom.clientHeight);
-  if (overflow > 0) 
-  {
-    if (!me._buttonsOnTop) 
-    {
-      floatingButtons.setButtonPosition('top');
-      me._buttonsOnTop = true;
-    }
-    scrollDelta = 0;
-  } else if (me._buttonsOnTop) 
-  {
-    floatingButtons.setButtonPosition('bottom');
-    me._buttonsOnTop = false;
-  }
-  return scrollDelta;
-}, syncEditorClip: function() {
-  var me = this, overflow = me.getScrollDelta(), btnHeight;
-  if (overflow) 
-  {
-    me.isOverflowing = true;
-    btnHeight = me.floatingButtons.getHeight();
-    if (overflow > 0) 
-    {
-      me.clipBottom(Math.max(me.getHeight() - overflow + btnHeight, -btnHeight));
-    } else if (overflow < 0) 
-    {
-      overflow = Math.abs(overflow);
-      me.clipTop(Math.max(overflow, 0));
-    }
-  } else if (me.isOverflowing) 
-  {
-    me.clearClip();
-    me.isOverflowing = false;
-  }
-}, focusContextCell: function() {
-  var field = this.getEditor(this.context.column);
-  if (field && field.focus) 
-  {
-    field.focus();
-  }
-}, cancelEdit: function() {
-  var me = this, form = me.getForm(), fields = form.getFields(), items = fields.items, length = items.length, i;
-  me.hide();
-  form.clearInvalid();
-  for (i = 0; i < length; i++) 
-    {
-      items[i].suspendEvents();
-    }
-  form.reset();
-  for (i = 0; i < length; i++) 
-    {
-      items[i].resumeEvents();
-    }
-}, completeEdit: function() {
-  var me = this, form = me.getForm();
-  if (!form.isValid()) 
-  {
-    return false;
-  }
-  form.updateRecord(me.context.record);
-  me.hide();
-  return true;
-}, onShow: function() {
-  var me = this;
-  me.callParent(arguments);
-  me.reposition();
-}, onHide: function() {
-  var me = this;
-  me.callParent(arguments);
-  if (me.tooltip) 
-  {
-    me.hideToolTip();
-  }
-  if (me.context) 
-  {
-    me.context.view.focusRow(me.context.record);
-    me.context = null;
-  }
-}, isDirty: function() {
-  var me = this, form = me.getForm();
-  return form.isDirty();
-}, getToolTip: function() {
-  return this.tooltip || (this.tooltip = new Ext.tip.ToolTip({cls: Ext.baseCSSPrefix + 'grid-row-editor-errors', title: this.errorsText, autoHide: false, closable: true, closeAction: 'disable', anchor: 'left', anchorToTarget: false}));
-}, hideToolTip: function() {
-  var me = this, tip = me.getToolTip();
-  if (tip.rendered) 
-  {
-    tip.disable();
-  }
-  me.hiddenTip = false;
-}, showToolTip: function() {
-  var me = this, tip = me.getToolTip();
-  tip.showAt([0, 0]);
-  tip.update(me.getErrors());
-  me.repositionTip();
-  tip.enable();
-}, repositionTip: function() {
-  var me = this, tip = me.getToolTip(), context = me.context, row = Ext.get(context.row), viewEl = me.scrollingViewEl, viewHeight = viewEl.dom.clientHeight, viewTop = me.lastScrollTop, viewBottom = viewTop + viewHeight, rowHeight = row.getHeight(), rowTop = row.getOffsetsTo(me.context.view.body)[1], rowBottom = rowTop + rowHeight;
-  if (rowBottom > viewTop && rowTop < viewBottom) 
-  {
-    tip.showAt(tip.getAlignToXY(viewEl, 'tl-tr', [15, row.getOffsetsTo(viewEl)[1]]));
-    me.hiddenTip = false;
-  } else {
-    tip.hide();
-    me.hiddenTip = true;
-  }
-}, getErrors: function() {
-  var me = this, errors = [], fields = me.query('>[isFormField]'), length = fields.length, i;
-  for (i = 0; i < length; i++) 
-    {
-      errors = errors.concat(Ext.Array.map(fields[i].getErrors(), me.createErrorListItem));
-    }
-  if (!errors.length && !me.autoCancel && me.isDirty()) 
-  {
-    errors[0] = me.createErrorListItem(me.dirtyText);
-  }
-  return '<ul class="' + Ext.plainListCls + '">' + errors.join('') + '</ul>';
-}, createErrorListItem: function(e) {
-  return '<li class="' + Ext.baseCSSPrefix + 'grid-row-editor-errors-item">' + e + '</li>';
-}, beforeDestroy: function() {
-  Ext.destroy(this.floatingButtons, this.tooltip);
+  var layout = this.layout;
   this.callParent();
-}, clipBottom: function(value) {
-  this.el.setStyle('clip', 'rect(-1000px auto ' + value + 'px auto)');
-}, clipTop: function(value) {
-  this.el.setStyle('clip', 'rect(' + value + 'px auto 1000px auto)');
-}, clearClip: function(el) {
-  this.el.setStyle('clip', Ext.isIE8m || Ext.isIEQuirks ? 'rect(-1000px auto 1000px auto)' : 'auto');
-}}, 0, ["roweditor"], ["panel", "form", "component", "container", "roweditor", "box"], {"panel": true, "form": true, "component": true, "container": true, "roweditor": true, "box": true}, ["widget.roweditor"], 0, [Ext.grid, 'RowEditor'], 0));
+  if (Ext.isIE9 && Ext.isStrict && this.orientation === 'vertical') 
+  {
+    layout.innerCt.on('scroll', function() {
+  layout.innerCt.dom.scrollLeft = 0;
+});
+  }
+}, afterLayout: function() {
+  this.adjustTabPositions();
+  this.callParent(arguments);
+}, adjustTabPositions: function() {
+  var items = this.items.items, i = items.length, tab;
+  if (!Ext.isIE9m) 
+  {
+    if (this.dock === 'right') 
+    {
+      while (i--) 
+        {
+          tab = items[i];
+          if (tab.isVisible()) 
+          {
+            tab.el.setStyle('left', tab.lastBox.width + 'px');
+          }
+        }
+    } else if (this.dock === 'left') 
+    {
+      while (i--) 
+        {
+          tab = items[i];
+          if (tab.isVisible()) 
+          {
+            tab.el.setStyle('left', -tab.lastBox.height + 'px');
+          }
+        }
+    }
+  }
+}, getLayout: function() {
+  var me = this;
+  me.layout.type = (me.orientation === 'horizontal') ? 'hbox' : 'vbox';
+  return me.callParent(arguments);
+}, onAdd: function(tab) {
+  tab.position = this.dock;
+  this.callParent(arguments);
+}, onRemove: function(tab) {
+  var me = this;
+  if (tab === me.previousTab) 
+  {
+    me.previousTab = null;
+  }
+  me.callParent(arguments);
+}, afterComponentLayout: function(width) {
+  var me = this, needsScroll = me.needsScroll;
+  me.callParent(arguments);
+  if (needsScroll) 
+  {
+    me.layout.overflowHandler.scrollToItem(me.activeTab);
+  }
+  delete me.needsScroll;
+}, onClick: function(e, target) {
+  var me = this, tabPanel = me.tabPanel, tabEl, tab, isCloseClick, tabInfo;
+  if (e.getTarget('.' + Ext.baseCSSPrefix + 'box-scroller')) 
+  {
+    return;
+  }
+  if (me.orientation === 'vertical' && (Ext.isIE8 || Ext.isIE9) && Ext.isStrict) 
+  {
+    tabInfo = me.getTabInfoFromPoint(e.getXY());
+    tab = tabInfo.tab;
+    isCloseClick = tabInfo.close;
+  } else {
+    tabEl = e.getTarget('.' + Ext.tab.Tab.prototype.baseCls);
+    tab = tabEl && Ext.getCmp(tabEl.id);
+    isCloseClick = tab && tab.closeEl && (target === tab.closeEl.dom);
+  }
+  if (isCloseClick) 
+  {
+    e.preventDefault();
+  }
+  if (tab && tab.isDisabled && !tab.isDisabled()) 
+  {
+    if (tab.closable && isCloseClick) 
+    {
+      tab.onCloseClick();
+    } else {
+      if (tabPanel) 
+      {
+        tabPanel.setActiveTab(tab.card);
+      } else {
+        me.setActiveTab(tab);
+      }
+      tab.focus();
+    }
+  }
+}, onMouseMove: function(e) {
+  var me = this, overTab = me._overTab, tabInfo, tab;
+  if (e.getTarget('.' + Ext.baseCSSPrefix + 'box-scroller')) 
+  {
+    return;
+  }
+  tabInfo = me.getTabInfoFromPoint(e.getXY());
+  tab = tabInfo.tab;
+  if (tab !== overTab) 
+  {
+    if (overTab && overTab.rendered) 
+    {
+      overTab.onMouseLeave(e);
+      me._overTab = null;
+    }
+    if (tab) 
+    {
+      tab.onMouseEnter(e);
+      me._overTab = tab;
+      if (!tab.disabled) 
+      {
+        me.el.setStyle('cursor', 'pointer');
+      }
+    } else {
+      me.el.setStyle('cursor', 'default');
+    }
+  }
+}, onMouseLeave: function(e) {
+  var overTab = this._overTab;
+  if (overTab && overTab.rendered) 
+  {
+    overTab.onMouseLeave(e);
+  }
+}, getTabInfoFromPoint: function(xy) {
+  var me = this, tabs = me.items.items, length = tabs.length, innerCt = me.layout.innerCt, innerCtXY = innerCt.getXY(), point = new Ext.util.Point(xy[0], xy[1]), i = 0, lastBox, tabRegion, closeEl, close, closeXY, closeX, closeY, closeWidth, closeHeight, tabX, tabY, tabWidth, tabHeight, closeRegion, isTabReversed, direction, tab;
+  for (; i < length; i++) 
+    {
+      lastBox = tabs[i].lastBox;
+      tabX = innerCtXY[0] + lastBox.x;
+      tabY = innerCtXY[1] - innerCt.dom.scrollTop + lastBox.y;
+      tabWidth = lastBox.width;
+      tabHeight = lastBox.height;
+      tabRegion = new Ext.util.Region(tabY, tabX + tabWidth, tabY + tabHeight, tabX);
+      if (tabRegion.contains(point)) 
+      {
+        tab = tabs[i];
+        closeEl = tab.closeEl;
+        if (closeEl) 
+        {
+          closeXY = closeEl.getXY();
+          closeWidth = closeEl.getWidth();
+          closeHeight = closeEl.getHeight();
+          if (me._isTabReversed === undefined) 
+          {
+            me._isTabReversed = isTabReversed = (tab.btnWrap.dom.currentStyle.filter.indexOf('rotation=2') !== -1);
+          }
+          direction = isTabReversed ? this._reverseDockNames[me.dock] : me.dock;
+          if (direction === 'right') 
+          {
+            closeX = tabX + tabWidth - ((closeXY[1] - tabY) + closeEl.getHeight());
+            closeY = tabY + (closeXY[0] - tabX);
+          } else {
+            closeX = tabX + (closeXY[1] - tabY);
+            closeY = tabY + tabX + tabHeight - closeXY[0] - closeEl.getWidth();
+          }
+          closeRegion = new Ext.util.Region(closeY, closeX + closeWidth, closeY + closeHeight, closeX);
+          close = closeRegion.contains(point);
+        }
+        break;
+      }
+    }
+  return {tab: tab, close: close};
+}, closeTab: function(toClose) {
+  var me = this, card = toClose.card, tabPanel = me.tabPanel, toActivate;
+  if (card && card.fireEvent('beforeclose', card) === false) 
+  {
+    return false;
+  }
+  toActivate = me.findNextActivatable(toClose);
+  Ext.suspendLayouts();
+  if (tabPanel && card) 
+  {
+    delete toClose.ownerCt;
+    card.fireEvent('close', card);
+    tabPanel.remove(card);
+    if (!tabPanel.getComponent(card)) 
+    {
+      toClose.fireClose();
+      me.remove(toClose);
+    } else {
+      toClose.ownerCt = me;
+      Ext.resumeLayouts(true);
+      return false;
+    }
+  }
+  if (toActivate) 
+  {
+    if (tabPanel) 
+    {
+      tabPanel.setActiveTab(toActivate.card);
+    } else {
+      me.setActiveTab(toActivate);
+    }
+    toActivate.focus();
+  }
+  Ext.resumeLayouts(true);
+}, findNextActivatable: function(toClose) {
+  var me = this;
+  if (toClose.active && me.items.getCount() > 1) 
+  {
+    return (me.previousTab && me.previousTab !== toClose && !me.previousTab.disabled) ? me.previousTab : (toClose.next('tab[disabled=false]') || toClose.prev('tab[disabled=false]'));
+  }
+}, setActiveTab: function(tab, initial) {
+  var me = this;
+  if (!tab.disabled && tab !== me.activeTab) 
+  {
+    if (me.activeTab) 
+    {
+      if (me.activeTab.isDestroyed) 
+      {
+        me.previousTab = null;
+      } else {
+        me.previousTab = me.activeTab;
+        me.activeTab.deactivate();
+      }
+    }
+    tab.activate();
+    me.activeTab = tab;
+    me.needsScroll = true;
+    if (!initial) 
+    {
+      me.fireEvent('change', me, tab, tab.card);
+      me.updateLayout();
+    }
+  }
+}}, 0, ["tabbar"], ["component", "tabbar", "container", "box", "header"], {"component": true, "tabbar": true, "container": true, "box": true, "header": true}, ["widget.tabbar"], 0, [Ext.tab, 'Bar'], 0));
 ;
 
-(Ext.cmd.derive('Ext.view.DropZone', Ext.dd.DropZone, {indicatorHtml: '<div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-left"></div><div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-right"></div>', indicatorCls: Ext.baseCSSPrefix + 'grid-drop-indicator', constructor: function(config) {
-  var me = this;
-  Ext.apply(me, config);
-  if (!me.ddGroup) 
+(Ext.cmd.derive('Ext.tab.Panel', Ext.panel.Panel, {alternateClassName: ['Ext.TabPanel'], tabPosition: 'top', removePanelHeader: true, plain: false, itemCls: Ext.baseCSSPrefix + 'tabpanel-child', minTabWidth: undefined, maxTabWidth: undefined, deferredRender: true, initComponent: function() {
+  var me = this, dockedItems = [].concat(me.dockedItems || []), activeTab = me.activeTab || (me.activeTab = 0), tabPosition = me.tabPosition;
+  me.layout = new Ext.layout.container.Card(Ext.apply({owner: me, deferredRender: me.deferredRender, itemCls: me.itemCls, activeItem: activeTab}, me.layout));
+  me.tabBar = new Ext.tab.Bar(Ext.apply({ui: me.ui, dock: me.tabPosition, orientation: (tabPosition == 'top' || tabPosition == 'bottom') ? 'horizontal' : 'vertical', plain: me.plain, cardLayout: me.layout, tabPanel: me}, me.tabBar));
+  dockedItems.push(me.tabBar);
+  me.dockedItems = dockedItems;
+  me.addEvents('beforetabchange', 'tabchange');
+  me.callParent(arguments);
+  activeTab = me.activeTab = me.getComponent(activeTab);
+  if (activeTab) 
   {
-    me.ddGroup = 'view-dd-zone-' + me.view.id;
+    me.tabBar.setActiveTab(activeTab.tab, true);
   }
-  me.callParent([me.view.el]);
-}, fireViewEvent: function() {
-  var me = this, result;
-  me.lock();
-  result = me.view.fireEvent.apply(me.view, arguments);
-  me.unlock();
-  return result;
-}, getTargetFromEvent: function(e) {
-  var node = e.getTarget(this.view.getItemSelector()), mouseY, nodeList, testNode, i, len, box;
-  if (!node) 
+}, setActiveTab: function(card) {
+  var me = this, previous;
+  card = me.getComponent(card);
+  if (card) 
   {
-    mouseY = e.getPageY();
-    for (i = 0 , nodeList = this.view.getNodes() , len = nodeList.length; i < len; i++) 
+    previous = me.getActiveTab();
+    if (previous !== card && me.fireEvent('beforetabchange', me, card, previous) === false) 
+    {
+      return false;
+    }
+    if (!card.isComponent) 
+    {
+      Ext.suspendLayouts();
+      card = me.add(card);
+      Ext.resumeLayouts();
+    }
+    me.activeTab = card;
+    Ext.suspendLayouts();
+    me.layout.setActiveItem(card);
+    card = me.activeTab = me.layout.getActiveItem();
+    if (card && card !== previous) 
+    {
+      me.tabBar.setActiveTab(card.tab);
+      Ext.resumeLayouts(true);
+      if (previous !== card) 
       {
-        testNode = nodeList[i];
-        box = Ext.fly(testNode).getBox();
-        if (mouseY <= box.bottom) 
-        {
-          return testNode;
-        }
+        me.fireEvent('tabchange', me, card, previous);
       }
+    } else {
+      Ext.resumeLayouts(true);
+    }
+    return card;
   }
-  return node;
-}, getIndicator: function() {
-  var me = this;
-  if (!me.indicator) 
+}, getActiveTab: function() {
+  var me = this, result = me.getComponent(me.activeTab);
+  if (result && me.items.indexOf(result) != -1) 
   {
-    me.indicator = new Ext.Component({html: me.indicatorHtml, cls: me.indicatorCls, ownerCt: me.view, floating: true, shadow: false});
-  }
-  return me.indicator;
-}, getPosition: function(e, node) {
-  var y = e.getXY()[1], region = Ext.fly(node).getRegion(), pos;
-  if ((region.bottom - y) >= (region.bottom - region.top) / 2) 
-  {
-    pos = "before";
+    me.activeTab = result;
   } else {
-    pos = "after";
+    me.activeTab = null;
   }
-  return pos;
-}, containsRecordAtOffset: function(records, record, offset) {
-  if (!record) 
+  return me.activeTab;
+}, getTabBar: function() {
+  return this.tabBar;
+}, onAdd: function(item, index) {
+  var me = this, cfg = item.tabConfig || {}, defaultConfig = {xtype: 'tab', ui: me.tabBar.ui, card: item, disabled: item.disabled, closable: item.closable, hidden: item.hidden && !item.hiddenByLayout, tooltip: item.tooltip, tabBar: me.tabBar, position: me.tabPosition, closeText: item.closeText};
+  cfg = Ext.applyIf(cfg, defaultConfig);
+  item.tab = me.tabBar.insert(index, cfg);
+  item.on({scope: me, enable: me.onItemEnable, disable: me.onItemDisable, beforeshow: me.onItemBeforeShow, iconchange: me.onItemIconChange, iconclschange: me.onItemIconClsChange, titlechange: me.onItemTitleChange});
+  if (item.isPanel) 
   {
+    if (me.removePanelHeader) 
+    {
+      if (item.rendered) 
+      {
+        if (item.header) 
+        {
+          item.header.hide();
+        }
+      } else {
+        item.header = false;
+      }
+    }
+    if (item.isPanel && me.border) 
+    {
+      item.setBorder(false);
+    }
+  }
+}, onItemEnable: function(item) {
+  item.tab.enable();
+}, onItemDisable: function(item) {
+  item.tab.disable();
+}, onItemBeforeShow: function(item) {
+  if (item !== this.activeTab) 
+  {
+    this.setActiveTab(item);
     return false;
   }
-  var view = this.view, recordIndex = view.indexOf(record), nodeBefore = view.getNode(recordIndex + offset, true), recordBefore = nodeBefore ? view.getRecord(nodeBefore) : null;
-  return recordBefore && Ext.Array.contains(records, recordBefore);
-}, positionIndicator: function(node, data, e) {
-  var me = this, view = me.view, pos = me.getPosition(e, node), overRecord = view.getRecord(node), draggingRecords = data.records, indicatorY;
-  if (!Ext.Array.contains(draggingRecords, overRecord) && (pos == 'before' && !me.containsRecordAtOffset(draggingRecords, overRecord, -1) || pos == 'after' && !me.containsRecordAtOffset(draggingRecords, overRecord, 1))) 
+}, onItemIconChange: function(item, newIcon) {
+  item.tab.setIcon(newIcon);
+}, onItemIconClsChange: function(item, newIconCls) {
+  item.tab.setIconCls(newIconCls);
+}, onItemTitleChange: function(item, newTitle) {
+  item.tab.setText(newTitle);
+}, doRemove: function(item, autoDestroy) {
+  var me = this, toActivate;
+  if (me.destroying || me.items.getCount() == 1) 
   {
-    me.valid = true;
-    if (me.overRecord != overRecord || me.currentPosition != pos) 
-    {
-      indicatorY = Ext.fly(node).getY() - view.el.getY() - 1;
-      if (pos == 'after') 
-      {
-        indicatorY += Ext.fly(node).getHeight();
-      }
-      me.getIndicator().setWidth(Ext.fly(view.el).getWidth()).showAt(0, indicatorY);
-      me.overRecord = overRecord;
-      me.currentPosition = pos;
-    }
-  } else {
-    me.invalidateDrop();
-  }
-}, invalidateDrop: function() {
-  if (this.valid) 
+    me.activeTab = null;
+  } else if ((toActivate = me.tabBar.items.indexOf(me.tabBar.findNextActivatable(item.tab))) !== -1) 
   {
-    this.valid = false;
-    this.getIndicator().hide();
+    me.setActiveTab(toActivate);
   }
-}, onNodeOver: function(node, dragZone, e, data) {
+  this.callParent(arguments);
+  delete item.tab.card;
+  delete item.tab;
+}, onRemove: function(item, destroying) {
   var me = this;
-  if (!Ext.Array.contains(data.records, me.view.getRecord(node))) 
+  item.un({scope: me, enable: me.onItemEnable, disable: me.onItemDisable, beforeshow: me.onItemBeforeShow});
+  if (!me.destroying && item.tab.ownerCt === me.tabBar) 
   {
-    me.positionIndicator(node, data, e);
+    me.tabBar.remove(item.tab);
   }
-  return me.valid ? me.dropAllowed : me.dropNotAllowed;
-}, notifyOut: function(node, dragZone, e, data) {
-  var me = this;
-  me.callParent(arguments);
-  me.overRecord = me.currentPosition = null;
-  me.valid = false;
-  if (me.indicator) 
-  {
-    me.indicator.hide();
-  }
-}, onContainerOver: function(dd, e, data) {
-  var me = this, view = me.view, count = view.dataSource.getCount();
-  if (count) 
-  {
-    me.positionIndicator(view.all.last(), data, e);
-  } else {
-    me.overRecord = me.currentPosition = null;
-    me.getIndicator().setWidth(Ext.fly(view.el).getWidth()).showAt(0, 0);
-    me.valid = true;
-  }
-  return me.dropAllowed;
-}, onContainerDrop: function(dd, e, data) {
-  return this.onNodeDrop(dd, null, e, data);
-}, onNodeDrop: function(targetNode, dragZone, e, data) {
-  var me = this, dropHandled = false, dropHandlers = {wait: false, processDrop: function() {
-  me.invalidateDrop();
-  me.handleNodeDrop(data, me.overRecord, me.currentPosition);
-  dropHandled = true;
-  me.fireViewEvent('drop', targetNode, data, me.overRecord, me.currentPosition);
-}, cancelDrop: function() {
-  me.invalidateDrop();
-  dropHandled = true;
-}}, performOperation = false;
-  if (me.valid) 
-  {
-    performOperation = me.fireViewEvent('beforedrop', targetNode, data, me.overRecord, me.currentPosition, dropHandlers);
-    if (dropHandlers.wait) 
-    {
-      return;
-    }
-    if (performOperation !== false) 
-    {
-      if (!dropHandled) 
-      {
-        dropHandlers.processDrop();
-      }
-    }
-  }
-  return performOperation;
-}, destroy: function() {
-  Ext.destroy(this.indicator);
-  delete this.indicator;
-  this.callParent();
-}}, 1, 0, 0, 0, 0, 0, [Ext.view, 'DropZone'], 0));
+}}, 0, ["tabpanel"], ["tabpanel", "panel", "component", "container", "box"], {"tabpanel": true, "panel": true, "component": true, "container": true, "box": true}, ["widget.tabpanel"], 0, [Ext.tab, 'Panel', Ext, 'TabPanel'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.CommonEvent', Ext.Base, {singleton: true, BEFORE_UPDATE: "BeforeUpdate", AFTER_UPDATE: "AfterUpdate", EDIT_FEATURE: "EditFeature", REMOVE_FEATURE: "RemoveFeature", CREATE_FEATURE: "CreateFeature", DELETE_PART: "DeletePart", DELETE_SEQUENCE: "DeleteSequence", RUN_J5: "RunJ5", J5_RUN_STATUS_CHANGED: "J5RunStatusChanged", JUMPTOJ5RUN: "jumpToJ5Run", RESET_J5BTN: "resetJ5ActiveRun", LOAD_ASSEMBLY_METHODS: "LoadAssemblyMethods", ACTION_MESSAGE: "ActionMessage", LOAD_PRESETS: "LoadPresets"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'CommonEvent'], 0));
 ;
 
 (Ext.cmd.derive('Ext.grid.plugin.HeaderResizer', Ext.AbstractPlugin, {disabled: false, config: {dynamic: false}, colHeaderCls: Ext.baseCSSPrefix + 'column-header', minColWidth: 40, maxColWidth: 1000, wResizeCursor: 'col-resize', eResizeCursor: 'col-resize', init: function(headerCt) {
@@ -55377,17 +55354,2443 @@ Ext.define('Ext.grid.plugin.BufferedRendererTableView', {override: 'Ext.view.Tab
 }}, 0, ["gridcolumn"], ["component", "gridcolumn", "container", "box", "headercontainer"], {"component": true, "gridcolumn": true, "container": true, "box": true, "headercontainer": true}, ["widget.gridcolumn"], 0, [Ext.grid.column, 'Column', Ext.grid, 'Column'], 0));
 ;
 
-(Ext.cmd.derive('Ext.grid.column.Boolean', Ext.grid.column.Column, {alternateClassName: 'Ext.grid.BooleanColumn', trueText: 'true', falseText: 'false', undefinedText: '&#160;', defaultRenderer: function(value) {
-  if (value === undefined) 
+(Ext.cmd.derive('Teselagen.bio.util.XmlToJson', Ext.Base, {singleton: true, VERSION: "1.0.6", DOMNodeTypes: {ELEMENT_NODE: 1, TEXT_NODE: 3, CDATA_SECTION_NODE: 4, DOCUMENT_NODE: 9}, getNodeLocalName: function(node) {
+  var nodeLocalName = node.localName;
+  if (nodeLocalName == null) 
+  nodeLocalName = node.baseName;
+  if (nodeLocalName == null || nodeLocalName == "") 
+  nodeLocalName = node.nodeName;
+  return nodeLocalName;
+}, getNodePrefix: function(node) {
+  return node.prefix;
+}, parseDOMChildren: function(node) {
+  if (node.nodeType == this.DOMNodeTypes.DOCUMENT_NODE) 
   {
-    return this.undefinedText;
-  }
-  if (!value || value === 'false') 
+    var result = new Object();
+    var child = node.firstChild;
+    var childName = this.getNodeLocalName(child);
+    result[childName] = this.parseDOMChildren(child);
+    return result;
+  } else if (node.nodeType == this.DOMNodeTypes.ELEMENT_NODE) 
   {
-    return this.falseText;
+    var result = new Object();
+    result.__cnt = 0;
+    var nodeChildren = node.childNodes;
+    for (var cidx = 0; cidx < nodeChildren.length; cidx++) 
+      {
+        var child = nodeChildren.item(cidx);
+        var childName = this.getNodeLocalName(child);
+        result.__cnt++;
+        if (result[childName] == null) 
+        {
+          result[childName] = this.parseDOMChildren(child);
+          result[childName + "_asArray"] = new Array(1);
+          result[childName + "_asArray"][0] = result[childName];
+        } else {
+          if (result[childName] != null) 
+          {
+            if (!(result[childName] instanceof Array)) 
+            {
+              var tmpObj = result[childName];
+              result[childName] = new Array();
+              result[childName][0] = tmpObj;
+              result[childName + "_asArray"] = result[childName];
+            }
+          }
+          var aridx = 0;
+          while (result[childName][aridx] != null) 
+            aridx++;
+          (result[childName])[aridx] = this.parseDOMChildren(child);
+        }
+      }
+    for (var aidx = 0; aidx < node.attributes.length; aidx++) 
+      {
+        var attr = node.attributes.item(aidx);
+        result.__cnt++;
+        result["_" + attr.name] = attr.value;
+      }
+    var nodePrefix = this.getNodePrefix(node);
+    if (nodePrefix != null && nodePrefix != "") 
+    {
+      result.__cnt++;
+      result.__prefix = nodePrefix;
+    }
+    if (result.__cnt == 1 && result["#text"] != null) 
+    {
+      result = result["#text"];
+    }
+    if (result["#text"] != null) 
+    {
+      result.__text = result["#text"];
+      delete result["#text"];
+      delete result["#text_asArray"];
+    }
+    if (result["#cdata-section"] != null) 
+    {
+      result.__cdata = result["#cdata-section"];
+      delete result["#cdata-section"];
+      delete result["#cdata-section_asArray"];
+    }
+    if (result.__text != null || result.__cdata != null) 
+    {
+      result.toString = function() {
+  return (this.__text != null ? this.__text : '') + (this.__cdata != null ? this.__cdata : '');
+};
+    }
+    return result;
+  } else if (node.nodeType == this.DOMNodeTypes.TEXT_NODE || node.nodeType == this.DOMNodeTypes.CDATA_SECTION_NODE) 
+  {
+    return node.nodeValue;
   }
-  return this.trueText;
-}}, 0, ["booleancolumn"], ["booleancolumn", "component", "gridcolumn", "container", "box", "headercontainer"], {"booleancolumn": true, "component": true, "gridcolumn": true, "container": true, "box": true, "headercontainer": true}, ["widget.booleancolumn"], 0, [Ext.grid.column, 'Boolean', Ext.grid, 'BooleanColumn'], 0));
+}, startTag: function(jsonObj, element, attrList, closed) {
+  var resultStr = "<" + (jsonObj.__prefix != null ? (jsonObj.__prefix + ":") : "") + element;
+  if (attrList != null) 
+  {
+    for (var aidx = 0; aidx < attrList.length; aidx++) 
+      {
+        var attrName = attrList[aidx];
+        var attrVal = jsonObj[attrName];
+        resultStr += " " + attrName.substr(1) + "='" + attrVal + "'";
+      }
+  }
+  if (!closed) 
+  resultStr += ">"; else resultStr += "/>";
+  return resultStr;
+}, endTag: function(jsonObj, elementName) {
+  return "</" + (jsonObj.__prefix != null ? (jsonObj.__prefix + ":") : "") + elementName + ">";
+}, endsWith: function(str, suffix) {
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}, parseJSONTextObject: function(jsonTxtObj) {
+  var result = "";
+  if (jsonTxtObj.__text != null) 
+  {
+    result += jsonTxtObj.__text;
+  } else {
+    result += jsonTxtObj;
+  }
+  return result;
+}, parseJSONObject: function(jsonObj) {
+  var result = "";
+  var elementsCnt = 0;
+  for (var it in jsonObj) 
+    {
+      if (this.endsWith(it.toString(), ("_asArray")) || it.toString().indexOf("_") == 0 || (jsonObj[it] instanceof Function)) 
+      continue;
+      elementsCnt++;
+    }
+  for (var it in jsonObj) 
+    {
+      if (this.endsWith(it.toString(), ("_asArray")) || it.toString().indexOf("_") == 0 || (jsonObj[it] instanceof Function)) 
+      continue;
+      var subObj = jsonObj[it];
+      var attrList = [];
+      for (var ait in subObj) 
+        {
+          if (ait.toString().indexOf("__") == -1 && ait.toString().indexOf("_") == 0) 
+          {
+            attrList.push(ait);
+          }
+        }
+      if (subObj != null && subObj instanceof Object && elementsCnt > 0) 
+      {
+        if (subObj instanceof Array) 
+        {
+          var arrayOfObjects = true;
+          if (subObj.length > 0) 
+          {
+            arrayOfObjects = subObj[0] instanceof Object;
+          } else {
+            result += this.startTag(subObj, it, attrList, true);
+          }
+          for (var arIdx = 0; arIdx < subObj.length; arIdx++) 
+            {
+              if (arrayOfObjects) 
+              result += this.parseJSONObject(subObj[arIdx]); else {
+                result += this.startTag(subObj, it, attrList, false);
+                result += this.parseJSONTextObject(subObj[arIdx]);
+                result += this.endTag(subObj, it);
+              }
+            }
+        } else {
+          result += this.startTag(subObj, it, attrList, false);
+          result += this.parseJSONObject(subObj);
+          if (subObj.__cdata != null) 
+          {
+            result += "<![CDATA[" + subObj.__cdata + "]]>";
+          }
+          if (subObj.__text != null) 
+          {
+            result += subObj.__text;
+          }
+          result += this.endTag(subObj, it);
+        }
+      } else {
+        result += this.startTag(subObj, it, attrList, false);
+        if (subObj.__cdata != null) 
+        {
+          result += "<![CDATA[" + subObj.__cdata + "]]>";
+        }
+        if (subObj.__text != null || !(subObj instanceof Object)) 
+        {
+          result += this.parseJSONTextObject(subObj);
+        }
+        result += this.endTag(subObj, it);
+      }
+    }
+  return result;
+}, parseXmlString: function(xmlDocStr) {
+  var xmlDoc;
+  if (window.DOMParser) 
+  {
+    var parser = new DOMParser();
+    xmlDoc = parser.parseFromString(xmlDocStr, "text/xml");
+  } else {
+    if (xmlDocStr.indexOf("<?") == 0) 
+    {
+      xmlDocStr = xmlDocStr.substr(xmlDocStr.indexOf("?>") + 2);
+    }
+    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+    xmlDoc.async = "false";
+    xmlDoc.loadXML(xmlDocStr);
+  }
+  return xmlDoc;
+}, xml2json: function(xmlDoc) {
+  return this.parseDOMChildren(xmlDoc);
+}, xml_str2json: function(xmlDocStr) {
+  var xmlDoc = this.parseXmlString(xmlDocStr);
+  return this.xml2json(xmlDoc);
+}, json2xml_str: function(jsonObj) {
+  return this.parseJSONObject(jsonObj);
+}, json2xml: function(jsonObj) {
+  var xmlDocStr = this.json2xml_str(jsonObj);
+  return this.parseXmlString(xmlDocStr);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'XmlToJson'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.util.StringUtil', Ext.Base, {singleton: true, alternateClassName: "Teselagen.StringUtil", trim: function(line) {
+  return line.replace(/^\s+|\s+$/g, "");
+}, ltrim: function(line) {
+  return line.replace(/^\s+/, "");
+}, rtrim: function(line) {
+  return line.replace(/\s+$/, "");
+}, lpad: function(line, padString, length) {
+  var str = line;
+  while (str.length < length) 
+    str = padString + str;
+  return str;
+}, rpad: function(line, padString, length) {
+  var str = line;
+  while (str.length < length) 
+    str = str + padString;
+  return str;
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'StringUtil', Teselagen, 'StringUtil'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.util.Sha256', Ext.Base, {singleton: true, statics: {hexcase: 0, b64pad: "", sha256_K: [1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993, -1841331548, -1424204075, -670586216, 310598401, 607225278, 1426881987, 1925078388, -2132889090, -1680079193, -1046744716, -459576895, -272742522, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, -1740746414, -1473132947, -1341970488, -1084653625, -958395405, -710438585, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, -2117940946, -1838011259, -1564481375, -1474664885, -1035236496, -949202525, -778901479, -694614492, -200395387, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, -2067236844, -1933114872, -1866530822, -1538233109, -1090935817, -965641998]}, hex_sha256: function(s) {
+  return this.rstr2hex(this.rstr_sha256(this.str2rstr_utf8(s)));
+}, b64_sha256: function(s) {
+  return this.rstr2b64(this.rstr_sha256(this.str2rstr_utf8(s)));
+}, any_sha256: function(s, e) {
+  return this.rstr2any(this.rstr_sha256(this.str2rstr_utf8(s)), e);
+}, hex_hmac_sha256: function(k, d) {
+  return this.rstr2hex(this.rstr_hmac_sha256(this.str2rstr_utf8(k), this.str2rstr_utf8(d)));
+}, b64_hmac_sha256: function(k, d) {
+  return this.rstr2b64(this.rstr_hmac_sha256(this.str2rstr_utf8(k), this.str2rstr_utf8(d)));
+}, any_hmac_sha256: function(k, d, e) {
+  return this.rstr2any(this.rstr_hmac_sha256(this.str2rstr_utf8(k), this.str2rstr_utf8(d)), e);
+}, sha256_vm_test: function() {
+  return this.hex_sha256("abc").toLowerCase() == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
+}, rstr_sha256: function(s) {
+  return this.binb2rstr(this.binb_sha256(this.rstr2binb(s), s.length * 8));
+}, rstr_hmac_sha256: function(key, data) {
+  var bkey = this.rstr2binb(key);
+  if (bkey.length > 16) 
+  {
+    bkey = this.binb_sha256(bkey, key.length * 8);
+  }
+  var ipad = Array(16);
+  var opad = Array(16);
+  for (var i = 0; i < 16; i++) 
+    {
+      ipad[i] = bkey[i] ^ 909522486;
+      opad[i] = bkey[i] ^ 1549556828;
+    }
+  var hash = this.binb_sha256(ipad.concat(this.rstr2binb(data)), 512 + data.length * 8);
+  return this.binb2rstr(this.binb_sha256(opad.concat(hash), 512 + 256));
+}, rstr2hex: function(input) {
+  try {
+    this.hexcase;
+  }  catch (e) {
+  this.hexcase = 0;
+}
+  var hex_tab = this.hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
+  var output = "";
+  var x;
+  for (var i = 0; i < input.length; i++) 
+    {
+      x = input.charCodeAt(i);
+      output += hex_tab.charAt((x >>> 4) & 15) + hex_tab.charAt(x & 15);
+    }
+  return output;
+}, rstr2b64: function(input) {
+  try {
+    this.b64pad;
+  }  catch (e) {
+  this.b64pad = '';
+}
+  var tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  var output = "";
+  var len = input.length;
+  for (var i = 0; i < len; i += 3) 
+    {
+      var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
+      for (var j = 0; j < 4; j++) 
+        {
+          var add;
+          if (i * 8 + j * 6 > input.length * 8) 
+          {
+            add = this.b64pad;
+          } else {
+            add = tab.charAt((triplet >>> 6 * (3 - j)) & 63);
+          }
+          if (add !== undefined) 
+          {
+            output += add;
+          }
+        }
+    }
+  return output;
+}, rstr2any: function(input, encoding) {
+  var divisor = encoding.length;
+  var remainders = [];
+  var i, q, x, quotient;
+  var dividend = Array(Math.ceil(input.length / 2));
+  for (i = 0; i < dividend.length; i++) 
+    {
+      dividend[i] = (input.charCodeAt(i * 2) << 8) | input.charCodeAt(i * 2 + 1);
+    }
+  while (dividend.length > 0) 
+    {
+      quotient = [];
+      x = 0;
+      for (i = 0; i < dividend.length; i++) 
+        {
+          x = (x << 16) + dividend[i];
+          q = Math.floor(x / divisor);
+          x -= q * divisor;
+          if (quotient.length > 0 || q > 0) 
+          {
+            quotient[quotient.length] = q;
+          }
+        }
+      remainders[remainders.length] = x;
+      dividend = quotient;
+    }
+  var output = "";
+  for (i = remainders.length - 1; i >= 0; i--) 
+    {
+      output += encoding.charAt(remainders[i]);
+    }
+  var full_length = Math.ceil(input.length * 8 / (Math.log(encoding.length) / Math.log(2)));
+  for (i = output.length; i < full_length; i++) 
+    {
+      output = encoding[0] + output;
+    }
+  return output;
+}, str2rstr_utf8: function(input) {
+  var output = "";
+  var i = -1;
+  var x, y;
+  while (++i < input.length) 
+    {
+      x = input.charCodeAt(i);
+      y = i + 1 < input.length ? input.charCodeAt(i + 1) : 0;
+      if (55296 <= x && x <= 56319 && 56320 <= y && y <= 57343) 
+      {
+        x = 65536 + ((x & 1023) << 10) + (y & 1023);
+        i++;
+      }
+      if (x <= 127) 
+      {
+        output += String.fromCharCode(x);
+      } else if (x <= 2047) 
+      {
+        output += String.fromCharCode(192 | ((x >>> 6) & 31), 128 | (x & 63));
+      } else if (x <= 65535) 
+      {
+        output += String.fromCharCode(224 | ((x >>> 12) & 15), 128 | ((x >>> 6) & 63), 128 | (x & 63));
+      } else if (x <= 2097151) 
+      {
+        output += String.fromCharCode(240 | ((x >>> 18) & 7), 128 | ((x >>> 12) & 63), 128 | ((x >>> 6) & 63), 128 | (x & 63));
+      }
+    }
+  return output;
+}, str2rstr_utf16le: function(input) {
+  var output = "";
+  for (var i = 0; i < input.length; i++) 
+    {
+      output += String.fromCharCode(input.charCodeAt(i) & 255, (input.charCodeAt(i) >>> 8) & 255);
+    }
+  return output;
+}, str2rstr_utf16be: function(input) {
+  var output = "";
+  for (var i = 0; i < input.length; i++) 
+    {
+      output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 255, input.charCodeAt(i) & 255);
+    }
+  return output;
+}, rstr2binb: function(input) {
+  var output = Array(input.length >> 2);
+  for (var i = 0; i < output.length; i++) 
+    {
+      output[i] = 0;
+    }
+  for (var i = 0; i < input.length * 8; i += 8) 
+    {
+      output[i >> 5] |= (input.charCodeAt(i / 8) & 255) << (24 - i % 32);
+    }
+  return output;
+}, binb2rstr: function(input) {
+  var output = "";
+  for (var i = 0; i < input.length * 32; i += 8) 
+    {
+      output += String.fromCharCode((input[i >> 5] >>> (24 - i % 32)) & 255);
+    }
+  return output;
+}, sha256_S: function(X, n) {
+  return (X >>> n) | (X << (32 - n));
+}, sha256_R: function(X, n) {
+  return (X >>> n);
+}, sha256_Ch: function(x, y, z) {
+  return ((x & y) ^ ((~x) & z));
+}, sha256_Maj: function(x, y, z) {
+  return ((x & y) ^ (x & z) ^ (y & z));
+}, sha256_Sigma0256: function(x) {
+  return (this.sha256_S(x, 2) ^ this.sha256_S(x, 13) ^ this.sha256_S(x, 22));
+}, sha256_Sigma1256: function(x) {
+  return (this.sha256_S(x, 6) ^ this.sha256_S(x, 11) ^ this.sha256_S(x, 25));
+}, sha256_Gamma0256: function(x) {
+  return (this.sha256_S(x, 7) ^ this.sha256_S(x, 18) ^ this.sha256_R(x, 3));
+}, sha256_Gamma1256: function(x) {
+  return (this.sha256_S(x, 17) ^ this.sha256_S(x, 19) ^ this.sha256_R(x, 10));
+}, sha256_Sigma0512: function(x) {
+  return (this.sha256_S(x, 28) ^ this.sha256_S(x, 34) ^ this.sha256_S(x, 39));
+}, sha256_Sigma1512: function(x) {
+  return (this.sha256_S(x, 14) ^ this.sha256_S(x, 18) ^ this.sha256_S(x, 41));
+}, sha256_Gamma0512: function(x) {
+  return (this.sha256_S(x, 1) ^ this.sha256_S(x, 8) ^ this.sha256_R(x, 7));
+}, sha256_Gamma1512: function(x) {
+  return (this.sha256_S(x, 19) ^ this.sha256_S(x, 61) ^ this.sha256_R(x, 6));
+}, binb_sha256: function(m, l) {
+  var HASH = [1779033703, -1150833019, 1013904242, -1521486534, 1359893119, -1694144372, 528734635, 1541459225];
+  var W = new Array(64);
+  var a, b, c, d, e, f, g, h;
+  var i, j, T1, T2;
+  m[l >> 5] |= 128 << (24 - l % 32);
+  m[((l + 64 >> 9) << 4) + 15] = l;
+  for (i = 0; i < m.length; i += 16) 
+    {
+      a = HASH[0];
+      b = HASH[1];
+      c = HASH[2];
+      d = HASH[3];
+      e = HASH[4];
+      f = HASH[5];
+      g = HASH[6];
+      h = HASH[7];
+      for (j = 0; j < 64; j++) 
+        {
+          if (j < 16) 
+          {
+            W[j] = m[j + i];
+          } else {
+            W[j] = this.safe_add(this.safe_add(this.safe_add(this.sha256_Gamma1256(W[j - 2]), W[j - 7]), this.sha256_Gamma0256(W[j - 15])), W[j - 16]);
+          }
+          T1 = this.safe_add(this.safe_add(this.safe_add(this.safe_add(h, this.sha256_Sigma1256(e)), this.sha256_Ch(e, f, g)), this.self.sha256_K[j]), W[j]);
+          T2 = this.safe_add(this.sha256_Sigma0256(a), this.sha256_Maj(a, b, c));
+          h = g;
+          g = f;
+          f = e;
+          e = this.safe_add(d, T1);
+          d = c;
+          c = b;
+          b = a;
+          a = this.safe_add(T1, T2);
+        }
+      HASH[0] = this.safe_add(a, HASH[0]);
+      HASH[1] = this.safe_add(b, HASH[1]);
+      HASH[2] = this.safe_add(c, HASH[2]);
+      HASH[3] = this.safe_add(d, HASH[3]);
+      HASH[4] = this.safe_add(e, HASH[4]);
+      HASH[5] = this.safe_add(f, HASH[5]);
+      HASH[6] = this.safe_add(g, HASH[6]);
+      HASH[7] = this.safe_add(h, HASH[7]);
+    }
+  return HASH;
+}, safe_add: function(x, y) {
+  var lsw = (x & 65535) + (y & 65535);
+  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  return (msw << 16) | (lsw & 65535);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'Sha256'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.Keyword', Ext.Base, {config: {keyword: null, value: null}, constructor: function(inData) {
+  if (inData) 
+  {
+    this.keyword = inData.keyword || null;
+    this.value = inData.value || null;
+  }
+  return this;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'Keyword'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankLocusKeyword', Teselagen.bio.parsers.Keyword, {config: {locusName: "", sequenceLength: 0, strandType: "", naType: "DNA", linear: false, circular: true, divisionCode: "", date: ""}, constructor: function(inData) {
+  this.keyword = "LOCUS";
+  if (inData !== undefined) 
+  {
+    this.locusName = inData.locusName || "";
+    this.sequenceLength = inData.sequenceLength || 0;
+    this.strandType = inData.strandType || "";
+    this.naType = inData.naType || "DNA";
+    this.linear = inData.linear || false;
+    this.circular = inData.circular || !inData.linear;
+    this.divisionCode = inData.divisionCode || "";
+    this.date = inData.date || "";
+  }
+  return this;
+}, toString: function() {
+  var tmp;
+  var line = Teselagen.StringUtil.rpad("LOCUS", " ", 12);
+  line += Teselagen.StringUtil.rpad(this.locusName, " ", 16);
+  line += " ";
+  line += Teselagen.StringUtil.lpad(String(this.sequenceLength), " ", 11);
+  line += " bp ";
+  if (this.strandType !== "") 
+  {
+    tmp = this.strandType + "-";
+  } else {
+    tmp = "";
+  }
+  line += Teselagen.StringUtil.lpad(tmp, " ", 3);
+  line += Teselagen.StringUtil.rpad(this.naType, " ", 6);
+  line += "  ";
+  if (this.linear === true) 
+  {
+    line += "linear  ";
+  } else {
+    line += "circular";
+  }
+  line += " ";
+  if (this.divisionCode !== undefined) 
+  {
+    line += Teselagen.StringUtil.rpad(this.divisionCode, " ", 3);
+  } else {
+    Teselagen.StringUtil.rpad(line, " ", 3);
+  }
+  line += " ";
+  line += this.date;
+  return line;
+}, toJSON: function() {
+  var json = {keyword: this.keyword, locusName: this.locusName, sequenceLength: this.sequenceLength, strandType: this.strandType, naType: this.naType, linear: this.linear, divisionCode: this.divisionCode, date: this.date};
+  return json;
+}, fromJSON: function(json) {
+  this.setKeyword(json["keyword"]);
+  this.setLocusName(json["locusName"]);
+  this.setSequenceLength(json["sequenceLength"]);
+  this.setStrandType(json["strandType"]);
+  this.setNaType(json["naType"]);
+  this.setLinear(json["linear"]);
+  this.setDivisionCode(json["divisionCode"]);
+  this.setDate(json["date"]);
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankLocusKeyword'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankKeyword', Teselagen.bio.parsers.Keyword, {config: {value: null, subKeywords: null}, constructor: function(inData) {
+  if (inData !== undefined) 
+  {
+    this.keyword = inData.keyword || null;
+    this.value = inData.value || null;
+    this.subKeywords = inData.subKeywords || [];
+  }
+  return this;
+}, addSubKeyword: function(subkey) {
+  if (this.subKeywords === undefined) 
+  {
+    this.subKeywords = [];
+  }
+  this.subKeywords.push(subkey);
+}, appendValue: function(pVal) {
+  if (this.value) 
+  {
+    this.value += pVal;
+  } else {
+    this.value = pVal;
+  }
+}, getLastSubKeyword: function() {
+  if (this.subKeywords.length > 0) 
+  {
+    return this.subKeywords[this.subKeywords.length - 1];
+  } else {
+    return null;
+  }
+}, toString: function() {
+  var subKeywords = this.getSubKeywords();
+  var width = 80 - 12;
+  var line = Teselagen.StringUtil.rpad(this.keyword, " ", 12);
+  line += this.value;
+  if (this.subKeywords.length > 0) 
+  {
+    line += "\n";
+    for (var i = 0; i < this.subKeywords.length; i++) 
+      {
+        line += this.subKeywords[i].toString();
+        if (i < this.subKeywords.length - 1) 
+        {
+          line += "\n";
+        }
+      }
+  }
+  return line;
+}, toJSON: function() {
+  var json = {keyword: this.keyword, value: this.value};
+  if (this.subKeywords === undefined) 
+  {
+    return json;
+  }
+  var subKey = [];
+  for (var i = 0; i < this.subKeywords.length; i++) 
+    {
+      subKey.push(this.subKeywords[i].toJSON());
+    }
+  if (subKey.length > 0) 
+  {
+    json["subKeywords"] = subKey;
+  }
+  return json;
+}, fromJSON: function(json) {
+  this.keyword = json["keyword"];
+  this.value = json["value"];
+  this.subKeywords = [];
+  var sub = json["subKeywords"];
+  if (sub === undefined) 
+  {
+    return this;
+  }
+  for (var i = 0; i < sub.length; i++) 
+    {
+      var tmp = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword");
+      tmp.fromJSON(sub[i]);
+      this.subKeywords.push(tmp);
+    }
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankKeyword'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeatureQualifier', Ext.Base, {config: {name: "", value: "", quoted: true}, constructor: function(inData) {
+  if (inData !== undefined) 
+  {
+    this.name = inData.name || "";
+    this.value = inData.value || "";
+    this.quoted = inData.quoted || true;
+  }
+  if (typeof (this.value) === "string") 
+  {
+    this.quoted = true;
+  } else {
+    this.quoted = false;
+  }
+  return this;
+}, appendValue: function(append) {
+  if (this.value) 
+  {
+    this.value += append;
+  } else {
+    this.value = append;
+  }
+}, toString: function() {
+  var line;
+  var name = this.getName();
+  var value = this.getValue();
+  var quoted = this.getQuoted();
+  if (quoted) 
+  {
+    line = Teselagen.StringUtil.lpad("/", " ", 22) + this.name + "=\"" + this.value + "\"";
+  } else {
+    line = Teselagen.StringUtil.lpad("/", " ", 22) + this.name + "=" + this.value;
+  }
+  return line;
+}, toJSON: function() {
+  var json = {name: this.name, value: this.value};
+  return json;
+}, fromJSON: function(json) {
+  this.name = json["name"];
+  this.value = json["value"];
+  if (typeof (this.value) === "string") 
+  {
+    this.quoted = true;
+  } else {
+    this.quoted = false;
+  }
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeatureQualifier'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeatureElement', Ext.Base, {config: {keyword: null, strand: 1, complement: false, join: false, featureQualifier: [], featureLocation: [], index: 0}, constructor: function(inData) {
+  if (inData !== undefined) 
+  {
+    this.keyword = inData.keyword || null;
+    this.strand = inData.strand || 1;
+    this.complement = inData.complement || false;
+    this.join = inData.join || false;
+    this.featureQualifier = inData.featureQualifier || [];
+    this.featureLocation = inData.featureLocation || [];
+    this.index = inData.index || 0;
+  }
+  return this;
+}, getLastFeatureQualifier: function() {
+  if (this.featureQualifier.length > 0) 
+  {
+    return this.featureQualifier[this.featureQualifier.length - 1];
+  } else {
+    return null;
+  }
+}, addFeatureQualifier: function(pQual) {
+  if (this.featureQualifier === undefined) 
+  {
+    this.featureQualifier = [];
+  }
+  this.featureQualifier.push(pQual);
+}, addFeatureLocation: function(pLoc) {
+  if (this.featureLocation === undefined) 
+  {
+    this.featureLocation = [];
+  }
+  this.featureLocation.push(pLoc);
+  if (this.featureLocation.length > 1) 
+  {
+    this.join = true;
+  }
+}, findLabel: function() {
+  var name = "no_name";
+  for (var i = 0; i < this.getFeatureQualifier().length; i++) 
+    {
+      var tmpName = this.getFeatureQualifier()[i].getName();
+      if (tmpName === "label" || tmpName === "name" || tmpName === "ApEinfo_label" || tmpName === "note" || tmpName === "gene" || tmpName === "organism") 
+      {
+        name = this.getFeatureQualifier()[i].getValue();
+      }
+    }
+  return name;
+}, toString: function() {
+  var line = "     " + Teselagen.StringUtil.rpad(this.keyword, " ", 16);
+  var loc = "";
+  var qual = "";
+  for (var i = 0; i < this.featureLocation.length; i++) 
+    {
+      loc += this.featureLocation[i].toString();
+      if (i < this.featureLocation.length - 1) 
+      {
+        loc += ",";
+      } else {
+      }
+    }
+  if (this.join === true) 
+  {
+    loc = "join(" + loc + ")";
+  }
+  if (this.complement === true) 
+  {
+    loc = "complement(" + loc + ")";
+  }
+  for (i = 0; i < this.featureQualifier.length; i++) 
+    {
+      qual += this.featureQualifier[i].toString();
+      if (i < this.featureQualifier.length - 1) 
+      {
+        qual += "\n";
+      }
+    }
+  line = line + loc + "\n" + qual;
+  return line;
+}, toJSON: function() {
+  var i;
+  var json = {keyword: this.keyword, strand: this.strand, complement: this.complement, join: this.join};
+  json["location"] = [];
+  for (i = 0; i < this.featureLocation.length; i++) 
+    {
+      json["location"].push(this.featureLocation[i].toJSON());
+    }
+  json["qualifier"] = [];
+  for (i = 0; i < this.featureQualifier.length; i++) 
+    {
+      json["qualifier"].push(this.featureQualifier[i].toJSON());
+    }
+  return json;
+}, fromJSON: function(json) {
+  var i, tmp;
+  this.keyword = json["keyword"];
+  this.strand = json["strand"];
+  this.complement = json["complement"];
+  this.join = json["join"];
+  this.featureLocation = [];
+  var loc = json["location"];
+  if (loc !== undefined) 
+  {
+    for (i = 0; i < loc.length; i++) 
+      {
+        tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation");
+        tmp.fromJSON(loc[i]);
+        this.featureLocation.push(tmp);
+      }
+  }
+  this.featureQualifier = [];
+  var qual = json["qualifier"];
+  if (qual !== undefined) 
+  {
+    for (i = 0; i < qual.length; i++) 
+      {
+        tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier");
+        tmp.fromJSON(qual[i]);
+        this.featureQualifier.push(tmp);
+      }
+  }
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeatureElement'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeaturesKeyword', Teselagen.bio.parsers.Keyword, {config: {featuresElements: []}, constructor: function() {
+  this.keyword = "FEATURES";
+  this.featuresElements = [];
+  return this;
+}, addElement: function(pElement) {
+  this.featuresElements.push(pElement);
+}, getLastElement: function() {
+  if (this.featuresElements.length > 0) 
+  {
+    return this.featuresElements[this.featuresElements.length - 1];
+  } else {
+    return null;
+  }
+}, toString: function() {
+  var line = "FEATURES             Location/Qualifiers\n";
+  for (var i = 0; i < this.featuresElements.length; i++) 
+    {
+      line += this.featuresElements[i].toString();
+      if (i < this.featuresElements.length - 1) 
+      {
+        line += "\n";
+      }
+    }
+  return line;
+}, toJSON: function() {
+  var json = {keyword: this.keyword};
+  if (this.value !== null) 
+  {
+    json["value"] = this.value;
+  }
+  json["featuresElements"] = [];
+  for (var i = 0; i < this.featuresElements.length; i++) 
+    {
+      json["featuresElements"].push(this.featuresElements[i].toJSON());
+    }
+  return json;
+}, fromJSON: function(json) {
+  this.keyword = json["keyword"];
+  this.featuresElements = [];
+  var elms = json["featuresElements"];
+  if (elms === undefined) 
+  {
+    return this;
+  }
+  for (var i = 0; i < elms.length; i++) 
+    {
+      var elm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement");
+      elm.fromJSON(elms[i]);
+      this.featuresElements.push(elm);
+    }
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeaturesKeyword'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankOriginKeyword', Teselagen.bio.parsers.Keyword, {config: {sequence: ""}, constructor: function(inData) {
+  this.keyword = "ORIGIN";
+  if (inData !== undefined) 
+  {
+    this.sequence = inData.sequence || "";
+  }
+  return this;
+}, appendSequence: function(line) {
+  this.sequence += line;
+}, toString: function() {
+  if (this.sequence === undefined || this.sequence === "") 
+  {
+    return "NO ORIGIN";
+  }
+  var line = "";
+  line += Teselagen.StringUtil.rpad("ORIGIN", " ", 12);
+  if (this.value !== null) 
+  {
+    line += this.value + "\n";
+  } else {
+    line += "\n";
+  }
+  for (var i = 0; i < this.sequence.length; i = i + 60) 
+    {
+      var ind = i + 1;
+      var ind2 = Teselagen.StringUtil.lpad(("" + ind), " ", 9);
+      line += ind2;
+      for (var j = i; j < i + 60; j = j + 10) 
+        {
+          line += " " + this.sequence.substring(j, j + 10);
+        }
+      line += "\n";
+    }
+  return line;
+}, toJSON: function() {
+  json = {keyword: this.keyword, sequence: this.sequence};
+  return json;
+}, fromJSON: function(json) {
+  this.keyword = json["keyword"];
+  this.sequence = json["sequence"];
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankOriginKeyword'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.Genbank', Ext.Base, {config: {keywordsTag: [], keywords: [], messages: []}, constructor: function() {
+  this.keywords = [];
+  this.keywordsTag = [];
+  return this;
+}, findKeyword: function(key) {
+  var entry = null;
+  for (var i = 0; i < this.keywords.length; i++) 
+    {
+      if (this.keywords[i].keyword === key) 
+      {
+        entry = this.keywords[i];
+      }
+    }
+  return entry;
+}, addMessage: function(message) {
+  this.messages.push(message);
+}, getLocus: function() {
+  return this.findKeyword("LOCUS");
+}, setLocus: function(pLocus) {
+  this.keywords.push(pLocus);
+}, getOrigin: function() {
+  return this.findKeyword("ORIGIN");
+}, setOrigin: function(pOrigin) {
+  this.keywords.push(pOrigin);
+}, getFeatures: function() {
+  return this.findKeyword("FEATURES");
+}, setFeatures: function(pFeatures) {
+  this.keywords.push(pFeatures);
+}, addKeyword: function(pAddKeyword) {
+  this.keywords.push(pAddKeyword);
+}, getLastKeyword: function() {
+  return this.keywords[this.keywords.length - 1];
+}, addKeywordTag: function(pAddKeywordsTag) {
+  this.keywordsTag.push(pAddKeywordsTag);
+}, toString: function() {
+  var gbStr = "";
+  var entry;
+  for (var i = 0; i < this.getKeywords().length; i++) 
+    {
+      entry = this.getKeywords()[i];
+      gbStr += this.getKeywords()[i].toString() + "\n";
+    }
+  gbStr += "//";
+  return gbStr;
+}, toJSON: function() {
+  var json = {};
+  for (var i = 0; i < this.getKeywords().length; i++) 
+    {
+      var key = this.getKeywords()[i].getKeyword();
+      json[key] = this.getKeywords()[i].toJSON();
+    }
+  return json;
+}, fromJSON: function(json) {
+  var keyword;
+  for (var key in json) 
+    {
+      var obj = json[key];
+      switch (key) {
+        case "LOCUS":
+          keyword = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword");
+          keyword.fromJSON(obj);
+          this.addKeyword(keyword);
+          this.addKeywordTag(key);
+          break;
+        case "FEATURES":
+          keyword = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
+          keyword.fromJSON(obj);
+          this.addKeyword(keyword);
+          this.addKeywordTag(key);
+          break;
+        case "ORIGIN":
+          keyword = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword");
+          keyword.fromJSON(obj);
+          this.addKeyword(keyword);
+          this.addKeywordTag(key);
+          break;
+        default:
+          keyword = Ext.create("Teselagen.bio.parsers.GenbankKeyword");
+          keyword.fromJSON(obj);
+          this.addKeyword(keyword);
+          this.addKeywordTag(key);
+      }
+    }
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'Genbank'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.SbolParser', Ext.Base, {singleton: true, namespace: null, constructor: function() {
+  XmlToJson = Teselagen.bio.util.XmlToJson;
+  namespace = "";
+}, convertGenbankToSBOL: function(data, cb) {
+  var messageBox = Ext.MessageBox.wait("Converting to SBOL XML/RDF...", "Waiting for the server");
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genbanktosbol", ''), params: {filename: 'example.xml', data: Base64.encode(data)}, success: function(response) {
+  response = JSON.parse(response.responseText);
+  messageBox.close();
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  cb(response.data, true);
+}, failure: function(response, opts) {
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  messageBox.close();
+  Ext.MessageBox.alert('Failed', 'Conversion failed');
+}});
+}, parse: function(data, cb) {
+  console.log("Parsing using j5");
+  var self = this;
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  var performOperation = function(preserveSBOL) {
+  var messageBox = Ext.MessageBox.wait("Converting XML...", "Waiting for the server");
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("sbol", ''), params: {filename: 'example.xml', data: Base64.encode(data), preserveSBOL: preserveSBOL}, success: function(response) {
+  response = JSON.parse(response.responseText);
+  messageBox.close();
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+  if (sequenceLibrary && sequenceLibrary.el) 
+  sequenceLibrary.el.unmask();
+  cb(response.data, true);
+}, failure: function(response, opts) {
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+  if (sequenceLibrary && sequenceLibrary.el) 
+  sequenceLibrary.el.unmask();
+  messageBox.close();
+  Ext.MessageBox.alert('Failed', 'Conversion failed');
+}});
+};
+  Ext.Msg.show({title: 'Alert', msg: "Do you want to preserve SBOL information during import process?", width: 300, buttons: Ext.Msg.YESNOCANCEL, buttonText: ['', 'Yes', 'No', 'Cancel'], fn: function(buttonId) {
+  if (buttonId === 'yes') 
+  {
+    performOperation(true);
+  } else if (buttonId === 'no') 
+  {
+    performOperation(false);
+  }
+}, icon: Ext.MessageBox.ALERT});
+}, jbeiseqJsonToXml: function(json) {
+}, sbolXmlToJson: function(xmlStr, pRootNamespace) {
+  var result = {};
+  var i, j;
+  var json = XmlToJson.xml_str2json(xmlStr);
+  json = this.checkRawSbolJson(json);
+  var name = pRootNamespace || "RDF";
+  if (json[name] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid SBOL-XML file. No root or record tag" + name});
+  }
+  var prefix = json[name]["__prefix"];
+  var namespace;
+  if (prefix === "") 
+  {
+    namespace = name;
+  } else {
+    namespace = prefix + ":" + name;
+  }
+  console.warn("sbolXmlToJson: Namespace used is: '" + namespace + "'. No error at this time.");
+  var xmlns = json[name]["_xmlns"];
+  var xrdf = json[name]["_xmlns:rdf"];
+  var xrdfs = json[name]["_xmlns:rdfs"];
+  var so = json[name]["_xmlns:so"];
+  var top = [];
+  var topName = "";
+  if (json[name]["Collection"] !== undefined) 
+  {
+    topName = "Collection";
+    console.warn("sbolXmlToJson: Collection Detected");
+    if (json[name]["Collection"] === "HASH") 
+    {
+      console.warn("sbolXmlToJson: Found 'HASH'. Not handling.");
+    }
+    if (json[name]["Collection_asArray"] !== undefined) 
+    {
+      for (i = 0; i < json[name]["Collection_asArray"].length; i++) 
+        {
+          top.push(this.parseRawCollection(json[name]["Collection_asArray"][i], prefix));
+        }
+    }
+  } else if (json[name]["DnaComponent"] !== undefined) 
+  {
+    topName = "DnaComponent";
+    console.warn("sbolXmlToJson: DnaComponent Detected.");
+    if (json[name]["DnaComponent_asArray"] !== undefined) 
+    {
+      top = [];
+      for (i = 0; i < json[name]["DnaComponent_asArray"].length; i++) 
+        {
+          top.push(this.parseRawDnaComponent(json[name]["DnaComponent_asArray"][i], prefix));
+        }
+    }
+  } else if (json[name]["DnaSequence"] !== undefined) 
+  {
+    topName = "DnaSequence";
+    console.warn("sbolXmlToJson: DnaSequence Detected.");
+    if (json[name]["DnaSequence_asArray"] !== undefined) 
+    {
+      top = [];
+      for (i = 0; i < json[name]["DnaSequence_asArray"].length; i++) 
+        {
+          top.push(this.parseRawDnaSequence(json[name]["DnaSequence_asArray"][i], prefix));
+        }
+    }
+  } else {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid SBOL-XML file. Top level is not either a Collection, a DnaComponent, or a DnaSequence. Exiting... \n"});
+  }
+  result[namespace] = {};
+  result[namespace]["_xmlns"] = xmlns;
+  result[namespace]["_xmlns:" + prefix] = xrdf;
+  result[namespace]["_xmlns:" + prefix + "s"] = xrdfs;
+  result[namespace]["_xmlns_so"] = so;
+  result[namespace][topName] = top;
+  return result;
+}, checkRawSbolJson: function(json) {
+  if (json["RDF"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid SBOL-XML file. No root or record tag 'RDF'"});
+  }
+  if (json["RDF"]["Collection"] !== undefined) 
+  {
+  }
+  return json;
+}, sbolJsonToJbeiJson: function(json, prefix) {
+  var name = json["rdf:RDF"]["DnaComponent"][0]["displayId"];
+  var seq = json["rdf:RDF"]["DnaComponent"][0]["dnaSequence"]["DnaSequence"]["nucleotides"];
+  var seqHash = Teselagen.bio.util.Sha256.hex_sha256(seq);
+  var circ = true;
+  var feats = json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"];
+  for (var i = 0; i < feats.length; i++) 
+    {
+      var ft = feats[0];
+    }
+  var features = [];
+  var jbei = {"seq:seq": {"seq:name": name, "seq:circular": circ, "seq:sequence": seq, "seq:features": features, "seq:seqHash": seqHash, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
+  return jbei;
+}, jbeiJsonToSbolJson: function(json, prefix) {
+}, parseRawCollection: function(coll, prefix) {
+  var result = {};
+  var uri = coll["_" + prefix + ":about"];
+  var displayId = coll["displayId"];
+  var name = coll["name"];
+  var description = coll["description"];
+  var components;
+  if (coll["components"] !== undefined) 
+  {
+    components = this.parseRawDnaComponent(coll["components"]["DnaComponent"]);
+  }
+  result["_" + prefix + ":about"] = uri;
+  result["displayId"] = displayId;
+  result["name"] = name;
+  result["description"] = description;
+  result["components"] = components;
+  return result;
+}, parseRawDnaComponent: function(comp, prefix) {
+  var result = {};
+  var circ = false;
+  var uri = comp["_" + prefix + ":about"];
+  var displayId = comp["displayId"];
+  var primaryId = comp["name"];
+  var description = comp["description"];
+  result["_" + prefix + ":about"] = uri;
+  result["displayId"] = displayId;
+  result["name"] = primaryId;
+  result["description"] = description;
+  var type = comp["_" + prefix + ":type"];
+  if (type !== undefined) 
+  {
+    result[prefix + ":type"] = {};
+    result[prefix + ":type"]["_" + prefix + ":resource"] = type["_" + prefix + ":resource"];
+  }
+  if (comp["dnaSequence"] !== undefined) 
+  {
+    result["dnaSequence"] = this.parseRawDnaSequence(comp["dnaSequence"], prefix);
+  }
+  if (comp["annotation_asArray"] !== undefined) 
+  {
+    result["annotation"] = {"SequenceAnnotation": []};
+    for (var i = 0; i < comp["annotation_asArray"].length; i++) 
+      {
+        result["annotation"]["SequenceAnnotation"].push(this.parseRawSequenceAnnotation(comp["annotation_asArray"][i], prefix));
+      }
+  }
+  return result;
+}, parseRawDnaSequence: function(seq, prefix) {
+  var result;
+  var about = seq["DnaSequence"]["_" + prefix + ":about"];
+  var nucleotides = seq["DnaSequence"]["nucleotides"];
+  result = {"DnaSequence": {}};
+  result["DnaSequence"]["_" + prefix + ":about"] = about;
+  result["DnaSequence"]["nucleotides"] = nucleotides;
+  return result;
+}, parseRawSequenceAnnotation: function(annotation, prefix) {
+  var result = {};
+  var uri = annotation["SequenceAnnotation"]["_" + prefix + ":about"];
+  var annot = annotation["SequenceAnnotation"];
+  var bioStart = parseInt(annot["bioStart"]);
+  var bioEnd = parseInt(annot["bioEnd"]);
+  var strand = annot["strand"] || "+";
+  var subComp = this.parseRawDnaComponent(annot["subComponent"]["DnaComponent"], prefix);
+  var precedes;
+  if (annot["precedes"] !== undefined) 
+  {
+    precedes = [];
+    preSeqAn = annot["precedes"]["SequenceAnnotation"];
+    for (var j = 0; j < preSeqAn.length; j++) 
+      {
+        precedes.push(this.parseRawSequenceAnnotation(preSeqAn[j], prefix));
+      }
+  }
+  result["_" + prefix + ":about"] = uri;
+  result["bioStart"] = bioStart;
+  result["bioEnd"] = bioEnd;
+  result["strand"] = strand;
+  result["subComponent"] = subComp;
+  result["precedes"] = precedes;
+  return result;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'SbolParser'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeatureLocation', Ext.Base, {config: {start: 0, preStart: "", end: 0, preEnd: "", to: ".."}, constructor: function(inData) {
+  if (inData) 
+  {
+    if (inData.start !== undefined) 
+    {
+      this.start = parseInt((inData.start).toString().replace(/\<|\>/, ""));
+      tmp = (inData.start).toString().match(/\</g);
+      if (tmp) 
+      {
+        this.preStart = tmp[0] || "";
+      }
+    }
+    if (inData.end !== undefined) 
+    {
+      this.end = parseInt((inData.end).toString().replace(/\<|\>/, ""));
+      tmp = (inData.end).toString().match(/\>/g);
+      if (tmp) 
+      {
+        this.preEnd = tmp[0] || "";
+      }
+    } else {
+      this.end = this.start;
+      this.to = "..";
+    }
+    if (inData.preStart) 
+    {
+      this.preStart = inData.preStart || "";
+    }
+    if (inData.preEnd) 
+    {
+      this.preEnd = inData.preEnd || "";
+    }
+    if (inData.to) 
+    {
+      this.to = inData.to;
+    }
+  }
+  return this;
+}, toString: function() {
+  var line = [this.preStart, this.start];
+  if (this.to) 
+  {
+    line.push(this.to);
+  }
+  if (this.end) 
+  {
+    line.push(this.preEnd);
+    line.push(this.end);
+  }
+  return line.join("");
+}, toJSON: function() {
+  var json = {start: this.start, to: this.to, end: this.end};
+  if (this.preStart !== "") 
+  {
+    json.preStart = this.preStart;
+  }
+  if (this.preEnd !== "") 
+  {
+    json.preEnd = this.preEnd;
+  }
+  return json;
+}, fromJSON: function(json) {
+  this.start = json["start"];
+  this.to = json["to"];
+  this.end = json["end"];
+  if (json.preStart !== "") 
+  {
+    this.preStart = json.preStart;
+  }
+  if (json.preEnd !== "") 
+  {
+    this.preEnd = json.preEnd;
+  }
+  return this;
+}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeatureLocation'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.utils.NameUtils', Ext.Base, {singleton: true, isLegalName: function(pName) {
+  var str = pName.toString();
+  if (str.match(/[^a-zA-Z0-9_\-]/) !== null) 
+  {
+    return false;
+  } else {
+    return true;
+  }
+}, reformatName: function(pName) {
+  return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "_");
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'NameUtils'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.JbeiseqParser', Ext.Base, {singleton: true, namespace: null, constructor: function() {
+  XmlToJson = Teselagen.bio.util.XmlToJson;
+  Sha256 = Teselagen.bio.util.Sha256;
+  namespace = "";
+}, jbeiseqXmlsToXmlArray: function(xml) {
+  var xmlArray = [];
+  var newxml = xml;
+  newxml = newxml.replace(/\<\/seq\:seq\>/gi, "</seq:seq>BREAKRECORD");
+  var xmlArr = newxml.split("BREAKRECORD");
+  for (var i = 0; i < xmlArr.length; i++) 
+    {
+      if (xmlArr[i].match(/\<seq\:seq/g)) 
+      {
+        xmlArray.push(xmlArr[i].replace(/^[\n]*/g, ""));
+      }
+    }
+  return xmlArray;
+}, validateJbeiseqJson: function(json) {
+  var i, j;
+  var messages = [];
+  if (json["seq:seq"] === undefined) 
+  {
+    messages.push("Invalid JbeiSeqXML file. No root or record tag 'seq'");
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"});
+  }
+  var date = Teselagen.bio.parsers.ParsersManager.todayDate();
+  if (json["seq:seq"]["seq:name"] === undefined) 
+  {
+    messages.push("jbeiseqXmlToJson: No sequence name detected");
+  }
+  if (json["seq:seq"]["seq:circular"] === undefined) 
+  {
+    messages.push("jbeiseqXmlToJson: No linear status detected; default to linear");
+  }
+  if (json["seq:seq"]["seq:sequence"] === undefined) 
+  {
+    messages.push("jbeiseqXmlToJson: No sequence detected");
+  }
+  if (json["seq:seq"]["seq:seqHash"] === undefined) 
+  {
+  }
+  var features = [];
+  var jFeats;
+  if (json["seq:seq"]["seq:features"] === undefined) 
+  {
+    messages.push("Invalid JbeiSeqXML file. No Features detected");
+  } else {
+    jFeats = json["seq:seq"]["seq:features"];
+  }
+  for (i = 0; i < jFeats.length; i++) 
+    {
+      var locations = [];
+      var ft = jFeats[i]["seq:feature"];
+      var attributes = ft["seq:attribute"];
+      var attribute;
+      var attributesText = "";
+      if (attributes.length > 0) 
+      {
+        attributesText = "'" + attributes[0]._name + "': " + "'" + attributes[0].__text + "'";
+      }
+      if (ft["seq:type"] === undefined) 
+      {
+      }
+      if (ft["seq:complement"] === undefined) 
+      {
+      }
+      for (j = 0; j < ft["seq:location"].length; j++) 
+        {
+          if (ft["seq:location"][j]["seq:genbankStart"] === undefined) 
+          {
+            if (attributes.length > 0) 
+            {
+              messages.push("Feature with attribute " + attributesText + " has an undefined location.");
+            }
+          }
+        }
+      if (ft["seq:label"] === undefined) 
+      {
+        if (attributes.length > 0) 
+        {
+          messages.push("Feature with attribute " + attributesText + " has no defined label.");
+        } else {
+          messages.push("Feature " + (i + 1) + " has no attributes.");
+        }
+      }
+    }
+  return messages;
+}, jbeiseqXmlToJson: function(xmlStr) {
+  var result = {};
+  var i, j, k;
+  var json = XmlToJson.xml_str2json(xmlStr);
+  if (json["seq"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"});
+  } else if (json["seq"] === undefined) 
+  {
+    return result;
+  }
+  var schema = json["seq"]["_xsi:schemaLocation"];
+  var xmlns = json["seq"]["_xmlns:seq"];
+  var xsi = json["seq"]["_xmlns:xsi"];
+  var date = Teselagen.bio.parsers.ParsersManager.todayDate();
+  var name;
+  if (json["seq"]["name"] !== undefined) 
+  {
+    name = json["seq"]["name"]["__text"];
+  } else {
+    name = "no_name";
+    console.warn("jbeiseqXmlToJson: No sequence name detected");
+  }
+  var circ;
+  if (json["seq"]["circular"] !== undefined) 
+  {
+    circ = (json["seq"]["circular"]["__text"].toLowerCase() === "true");
+  } else {
+    circ = false;
+    console.warn("jbeiseqXmlToJson: No linear status detected; default to linear");
+  }
+  var linear = !circ;
+  var seq;
+  if (json["seq"]["sequence"] !== undefined) 
+  {
+    seq = json["seq"]["sequence"]["__text"] || "no_sequence";
+  } else {
+    seq = "";
+    console.warn("jbeiseqXmlToJson: No sequence detected");
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No sequence detected"});
+  }
+  var seqHash;
+  if (json["seq"]["seqHash"] !== undefined) 
+  {
+    seqHash = json["seq"]["seqHash"]["__text"];
+  } else {
+    seqHash = "";
+  }
+  var features = [];
+  var jFeats;
+  if (json["seq"]["features"]["feature_asArray"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No Features detected"});
+  } else {
+    jFeats = json["seq"]["features"]["feature_asArray"];
+  }
+  if (jFeats) 
+  {
+    for (i = 0; i < jFeats.length; i++) 
+      {
+        var locations = [];
+        var attributes = [];
+        var ft = jFeats[i];
+        var type = "unsure";
+        if (ft["type"] !== undefined) 
+        {
+          type = ft["type"]["__text"];
+        }
+        var complement = false;
+        if (ft["complement"] !== undefined) 
+        {
+          complement = (ft["complement"]["__text"].toLowerCase() === "true");
+        }
+        for (j = 0; j < ft["location_asArray"].length; j++) 
+          {
+            var start;
+            if (ft["location_asArray"][j]["genbankStart"] === undefined) 
+            {
+              start = ft["location_asArray"][j]["genbank_start"]["__text"];
+            } else {
+              start = ft["location_asArray"][j]["genbankStart"]["__text"];
+            }
+            var end;
+            if (ft["location_asArray"][j]["end"] === undefined) 
+            {
+              end = start;
+            } else {
+              end = ft["location_asArray"][j]["end"]["__text"];
+            }
+            var to = "..";
+            var loc = {"seq:genbankStart": parseInt(start), "seq:end": parseInt(end)};
+            locations.push(loc);
+          }
+        var label = "name_unknown";
+        if (ft["label"] !== undefined) 
+        {
+          label = ft["label"]["__text"];
+        }
+        if (ft["attribute_asArray"]) 
+        {
+          for (j = 0; j < ft["attribute_asArray"].length; j++) 
+            {
+              var attr = {"_name": ft["attribute_asArray"][j]["_name"], "_quoted": true, "__text": ft["attribute_asArray"][j]["__text"]};
+              attributes.push(attr);
+            }
+        }
+        var strand = 1;
+        if (complement === true) 
+        {
+          strand = -1;
+        }
+        var feat = {"seq:feature": {"seq:label": label, "seq:complement": complement, "seq:type": type, "seq:location": locations, "seq:attribute": attributes}};
+        features.push(feat);
+      }
+  }
+  result = {"seq:seq": {"seq:name": name, "seq:circular": circ, "seq:sequence": seq, "seq:features": features, "seq:seqHash": seqHash, "_xmlns:seq": xmlns, "_xmlns:xsi": xsi, "_xsi:schemaLocation": schema}};
+  return result;
+}, jbeiseqJsonToXml: function(json) {
+  if (json === null) 
+  {
+    return null;
+  }
+  try {
+    messages = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
+  }  catch (e) {
+  console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
+  return null;
+}
+  var xml = [];
+  xml.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+  xml.push("<seq:seq\n");
+  xml.push("  xmlns:seq=\"http://jbei.org/sequence\"\n");
+  xml.push("  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+  xml.push("  xsi:schemaLocation=\"http://jbei.org/sequence seq.xsd\"\n");
+  xml.push(">\n");
+  xml.push("<seq:name>" + json["seq:seq"]["seq:name"] + "</seq:name>\n");
+  xml.push("<seq:circular>" + json["seq:seq"]["seq:circular"] + "</seq:circular>\n");
+  xml.push("<seq:sequence>" + json["seq:seq"]["seq:sequence"] + "</seq:sequence>\n");
+  xml.push("<seq:features>\n");
+  var feat = json["seq:seq"]["seq:features"];
+  var sequence = json["seq:seq"]["seq:sequence"];
+  for (var i = 0; i < feat.length; i++) 
+    {
+      var ft = feat[i]["seq:feature"];
+      xml.push("    <seq:feature>\n");
+      xml.push("        <seq:label>" + ft["seq:label"] + "</seq:label>\n");
+      xml.push("        <seq:complement>" + ft["seq:complement"] + "</seq:complement>\n");
+      xml.push("        <seq:type>" + ft["seq:type"] + "</seq:type>\n");
+      for (var j = 0; j < ft["seq:location"].length; j++) 
+        {
+          var start = ft["seq:location"][j]["seq:genbankStart"];
+          var end = ft["seq:location"][j]["seq:end"];
+          xml.push("        <seq:location>\n");
+          xml.push("            <seq:genbankStart>" + start + "</seq:genbankStart>\n");
+          xml.push("            <seq:end>" + end + "</seq:end>\n");
+          xml.push("        </seq:location>\n");
+        }
+      for (var k = 0; k < ft["seq:attribute"].length; k++) 
+        {
+          var att = ft["seq:attribute"][k];
+          var key = att["_name"];
+          var quoted = att["_quoted"];
+          var value = att["__text"];
+          xml.push("        <seq:attribute name=\"" + key + "\" quoted=\"" + quoted + "\">" + value + "</seq:attribute>\n");
+        }
+      xml.push("        <seq:seqHash>" + json["seq:seq"]["seq:seqHash"] + "</seq:seqHash>\n");
+      xml.push("    </seq:feature>\n");
+    }
+  xml.push("</seq:features>\n");
+  xml.push("</seq:seq>\n");
+  return xml.join("");
+}, jbeiseqJsonToGenbank: function(json) {
+  var result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+  var NameUtils = Teselagen.utils.NameUtils;
+  var date = Teselagen.bio.parsers.ParsersManager.todayDate();
+  var name = json["seq:seq"]["seq:name"];
+  var circ = (json["seq:seq"]["seq:circular"] === "true" || json["seq:seq"]["seq:circular"] === true);
+  var seq = json["seq:seq"]["seq:sequence"];
+  var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: name, linear: !circ, sequenceLength: seq.length, naType: na, date: date});
+  if (!NameUtils.isLegalName(locus.getLocusName())) 
+  {
+    locus.setLocusName(NameUtils.reformatName(locus.getLocusName()));
+    result.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
+  }
+  result.addKeyword(locus);
+  var features = [];
+  var feats = json["seq:seq"]["seq:features"];
+  for (var i = 0; i < feats.length; i++) 
+    {
+      var ft = feats[i]["seq:feature"];
+      var locations = [];
+      var qualifiers = [];
+      var type = ft["seq:type"];
+      var complement = ft["seq:complement"];
+      for (var j = 0; j < ft["seq:location"].length; j++) 
+        {
+          var start = ft["seq:location"][j]["seq:genbankStart"];
+          var end = ft["seq:location"][j]["seq:end"];
+          var to = "..";
+          var loc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {start: start, end: end, to: to});
+          locations.push(loc);
+        }
+      var label = ft["seq:label"];
+      var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {name: "label", value: label, quoted: true});
+      qualifiers.push(qual);
+      for (var j = 0; j < ft["seq:attribute"].length; j++) 
+        {
+          var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {name: ft["seq:attribute"][j]["_name"], value: ft["seq:attribute"][j]["__text"], quoted: ft["seq:attribute"][j]["_quoted"]});
+          qualifiers.push(qual);
+        }
+      var strand;
+      if (complement === true) 
+      {
+        strand = -1;
+      } else {
+        strand = 1;
+      }
+      var join;
+      if (locations.length > 1) 
+      {
+        join = true;
+      } else {
+        join = false;
+      }
+      var na;
+      if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) 
+      {
+        na = "DNA";
+      } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) 
+      {
+        na = "RNA";
+      } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) 
+      {
+        na = "PRO";
+      } else {
+        na = "NAN";
+      }
+      var feat = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {keyword: type, strand: strand, complement: complement, join: join, featureLocation: locations, featureQualifier: qualifiers});
+      features.push(feat);
+    }
+  var featureKW = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
+  featureKW.setFeaturesElements(features);
+  result.addKeyword(featureKW);
+  var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: seq});
+  result.addKeyword(origin);
+  return result;
+}, jbeiseqXmlToGenbank: function(xmlStr) {
+  var json = this.jbeiseqXmlToJson(xmlStr);
+  var result = this.jbeiseqJsonToGenbank(json);
+  return result;
+}, genbankToJbeiseqJson: function(pGenbank) {
+  if (Ext.getClassName(pGenbank) !== "Teselagen.bio.parsers.Genbank") 
+  {
+    return null;
+  }
+  var json = {};
+  var feat = pGenbank.getFeatures() ? pGenbank.getFeatures().getFeaturesElements() : "";
+  var sequence = "";
+  if (pGenbank.getOrigin()) 
+  sequence = pGenbank.getOrigin().getSequence();
+  var newFeatures = [];
+  for (var i = 0; i < feat.length; i++) 
+    {
+      var start, end, key, value, quoted;
+      var j, k;
+      var nameAttr = {};
+      var ft = feat[i];
+      var newFt = [];
+      var seqHash = "";
+      var seqHashStr = "";
+      for (j = 0; j < ft.getFeatureLocation().length; j++) 
+        {
+          start = ft.getFeatureLocation()[j].getStart();
+          end = ft.getFeatureLocation()[j].getEnd();
+          if (end < start) 
+          {
+            seqHashStr += sequence.substring(start, sequence.length) + sequence.substring(0, end);
+          } else {
+            seqHashStr += sequence.substring(start, end);
+          }
+        }
+      if (feat[i].getStrand() === -1 || feat[i].getComplement()) 
+      {
+        seqHashStr = DNATools.reverseComplement(DNATools.createDNA(seqHashStr)).seqString();
+      }
+      seqHash = Teselagen.bio.util.Sha256.hex_sha256(seqHashStr);
+      var newLoc = [];
+      for (j = 0; j < ft.getFeatureLocation().length; j++) 
+        {
+          start = ft.getFeatureLocation()[j].getStart();
+          end = ft.getFeatureLocation()[j].getEnd();
+          newLoc.push({"seq:genbankStart": start, "seq:end": end});
+        }
+      var newAttr = [];
+      var hasName = false;
+      var usingLabel = false;
+      var usingGene = false;
+      for (k = 0; k < ft.getFeatureQualifier().length; k++) 
+        {
+          key = ft.getFeatureQualifier()[k].getName();
+          value = ft.getFeatureQualifier()[k].getValue();
+          quoted = ft.getFeatureQualifier()[k].getQuoted();
+          if (this.isALabel(key)) 
+          {
+            if (key === "label") 
+            {
+              if (hasName) 
+              {
+                newAttr.push(nameAttr);
+              }
+              nameAttr = {"_name": key, "_quoted": quoted, "__text": value};
+              usingLabel = true;
+            } else if (key === "gene") 
+            {
+              if (!usingLabel) 
+              {
+                if (hasName) 
+                {
+                  newAttr.push(nameAttr);
+                }
+                nameAttr = {"_name": key, "_quoted": quoted, "__text": value};
+                usingGene = true;
+              } else {
+                newAttr.push({"_name": key, "_quoted": quoted, "__text": value});
+              }
+            } else if (!usingLabel && !usingGene) 
+            {
+              if (hasName) 
+              {
+                newAttr.push(nameAttr);
+              }
+              nameAttr = {"_name": key, "_quoted": quoted, "__text": value};
+            } else {
+              newAttr.push({"_name": key, "_quoted": quoted, "__text": value});
+            }
+            hasName = true;
+          } else {
+            newAttr.push({"_name": key, "_quoted": quoted, "__text": value});
+          }
+        }
+      newFt = {"seq:label": nameAttr.__text, "seq:complement": ft.getComplement(), "seq:type": ft.getKeyword(), "seq:index": ft.getIndex(), "seq:location": newLoc, "seq:attribute": newAttr, "seq:seqHash": seqHash};
+      newFeatures.push({"seq:feature": newFt});
+    }
+  json = {"seq:seq": {"seq:name": pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : "", "seq:circular": pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : "", "seq:sequence": pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "", "seq:features": newFeatures, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
+  return json;
+}, genbankToJbeiseqXml: function(pGenbank) {
+  if (pGenbank === null) 
+  {
+    return null;
+  }
+  var json = this.genbankToJbeiseqJson(pGenbank);
+  var xml = this.jbeiseqJsonToXml(json);
+  return xml;
+}, isALabel: function(name) {
+  if (name === "label" || name === "name" || name === "ApEinfo_label" || name === "note" || name === "gene" || name === "organism" || name === "locus_tag") 
+  {
+    return true;
+  } else {
+    return false;
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'JbeiseqParser'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.symbols.NucleotideSymbol', Ext.Base, {constructor: function(inData) {
+  var name;
+  var value;
+  var ambiguousMatches;
+  if (inData) 
+  {
+    name = inData.name;
+    value = inData.value;
+    ambiguousMatches = inData.ambiguousMatches;
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getName = function() {
+  return name;
+};
+  this.setName = function(pName) {
+  name = pName;
+};
+  this.getValue = function() {
+  return value;
+};
+  this.setValue = function(pValue) {
+  value = pValue;
+};
+  this.getAmbiguousMatches = function() {
+  return ambiguousMatches;
+};
+  this.setAmbiguousMatches = function(pAmbiguousMatches) {
+  ambiguousMatches = pAmbiguousMatches;
+};
+  return this;
+}, serialize: function() {
+  return this.getValue();
+}, deSerialize: function(data, alphabet) {
+  var symbol;
+  if (!alphabet) 
+  {
+    this.setName(data.name);
+    this.setValue(data.value);
+    this.setAmbiguousMatches(data.ambiguousMatches);
+  } else {
+    symbol = alphabet[data];
+    this.setName(symbol.getName());
+    this.setValue(symbol.getValue());
+    this.setAmbiguousMatches(symbol.getAmbiguousMatches());
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'NucleotideSymbol'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.symbols.GapSymbol', Ext.Base, {constructor: function(inData) {
+  var name;
+  var value;
+  if (inData) 
+  {
+    name = inData.name;
+    value = inData.value;
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getName = function() {
+  return name;
+};
+  this.setName = function(pName) {
+  name = pName;
+};
+  this.getValue = function() {
+  return value;
+};
+  this.setValue = function(pValue) {
+  value = pValue;
+};
+  return this;
+}, serialize: function() {
+  return this.getValue();
+}, deSerialize: function(data, alphabet) {
+  var symbol = alphabet.getGap();
+  if (!alphabet) 
+  {
+    this.setName(data.name);
+    this.setValue(data.value);
+  } else {
+    this.setName(symbol.getName());
+    this.setValue(symbol.getValue());
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'GapSymbol'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.BioException', Ext.Base, {message: null, statics: {raise: function(pInput) {
+  var passedMessage = "";
+  if (Ext.isObject(pInput)) 
+  {
+    passedMessage = pInput.message || "You have an error.";
+  } else {
+    passedMessage = pInput;
+  }
+  Ext.Error.raise({msg: passedMessage});
+}}, constructor: function(inData) {
+  var that = this;
+  that.message = inData.message || "Default Message";
+  this.callParent([inData]);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio, 'BioException'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.AbstractAlphabet', Ext.Base, {symbolsMap: [], gap: Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {name: "Gap", value: "-"}), constructor: function(inData) {
+  var key = this.gap.getValue();
+  this.symbolsMap[key] = this.gap;
+  this.getSymbols = function() {
+  var symbols = [];
+  for (var index in this.symbolsMap) 
+    {
+      symbols.push(this.symbolsMap[index]);
+    }
+  return symbols;
+};
+  this.symbolByValue = function(pValue) {
+  return this.symbolsMap[pValue];
+};
+  this.addSymbol = function(pSymbol) {
+  console.log(Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols") !== -1);
+  if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols") !== -1) 
+  {
+    var key = pSymbol.getValue();
+    this.symbolsMap[key] = pSymbol;
+  } else {
+    throw Ext.create("Teselagen.bio.BioException", {message: "You tried adding a non-symbol to symbolsMap"});
+  }
+};
+  this.getGap = function() {
+  return this.gap;
+};
+  return this;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'AbstractAlphabet'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.DNAAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, alternateClassName: "Teselagen.DNAAlphabet", a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a", ambiguousMatches: []}), g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []}), t: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Thymine", value: "t", ambiguousMatches: []}), m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;'}", value: "m", ambiguousMatches: []}), r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;'}", value: "r", ambiguousMatches: []}), w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;'}", value: "w", ambiguousMatches: []}), s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;'}", value: "s", ambiguousMatches: []}), y: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 't;'}", value: "y", ambiguousMatches: []}), k: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'g' or 't;'}", value: "k", ambiguousMatches: []}), v: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'g'}", value: "v", ambiguousMatches: []}), h: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 't'}", value: "h", ambiguousMatches: []}), d: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;' or 't'}", value: "d", ambiguousMatches: []}), b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 't'}", value: "b", ambiguousMatches: []}), n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;' or 'g' or 'c'}", value: "n", ambiguousMatches: []}), symbolsMap: [], constructor: function() {
+  var that = this;
+  that.m.setAmbiguousMatches([that.a, that.c]);
+  that.r.setAmbiguousMatches([that.a, that.g]);
+  that.w.setAmbiguousMatches([that.a, that.t]);
+  that.s.setAmbiguousMatches([that.c, that.g]);
+  that.y.setAmbiguousMatches([that.c, that.t]);
+  that.k.setAmbiguousMatches([that.g, that.t]);
+  that.v.setAmbiguousMatches([that.a, that.c, that.g]);
+  that.h.setAmbiguousMatches([that.a, that.c, that.t]);
+  that.d.setAmbiguousMatches([that.a, that.g, that.t]);
+  that.b.setAmbiguousMatches([that.c, that.g, that.t]);
+  that.n.setAmbiguousMatches([that.a, that.c, that.g, that.t]);
+  that.callParent([]);
+  this.symbolsMap = {"a": this.a, "g": this.g, "c": this.c, "t": this.t, "m": this.m, "r": this.r, "w": this.w, "s": this.s, "y": this.y, "k": this.k, "v": this.v, "h": this.h, "d": this.d, "b": this.b, "n": this.n};
+}, symbolMap: function(pCharacter) {
+  var safeChar = pCharacter.toLowerCase();
+  return this.symbolsMap[pCharacter];
+}, getA: function() {
+  return this.a;
+}, getG: function() {
+  return this.g;
+}, getC: function() {
+  return this.c;
+}, getT: function() {
+  return this.t;
+}, getM: function() {
+  return this.m;
+}, getR: function() {
+  return this.r;
+}, getW: function() {
+  return this.w;
+}, getS: function() {
+  return this.s;
+}, getY: function() {
+  return this.y;
+}, getK: function() {
+  return this.k;
+}, getV: function() {
+  return this.v;
+}, getH: function() {
+  return this.h;
+}, getD: function() {
+  return this.d;
+}, getB: function() {
+  return this.b;
+}, getN: function() {
+  return this.n;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'DNAAlphabet', Teselagen, 'DNAAlphabet'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.symbols.AminoAcidSymbol', Ext.Base, {constructor: function(inData) {
+  var name;
+  var value;
+  var threeLettersName;
+  if (inData) 
+  {
+    name = inData.name;
+    value = inData.value;
+    threeLettersName = inData.threeLettersName;
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getName = function() {
+  return name;
+};
+  this.setName = function(pName) {
+  name = pName;
+};
+  this.getThreeLettersName = function() {
+  return threeLettersName;
+};
+  this.setThreeLettersName = function(pThreeLettersName) {
+  threeLettersName = pThreeLettersName;
+};
+  this.getValue = function() {
+  return value;
+};
+  this.setValue = function(pValue) {
+  value = pValue;
+};
+  return this;
+}, serialize: function() {
+  return this.getValue();
+}, deSerialize: function(data, alphabet) {
+  var symbol;
+  if (!alphabet) 
+  {
+    this.setName(data.name);
+    this.setValue(data.value);
+    this.setAmbiguousMatches(data.ambiguousMatches);
+  } else {
+    symbol = alphabet[data];
+    this.setName(symbol.getName());
+    this.setValue(symbol.getValue());
+    this.setAmbiguousMatches(symbol.getAmbiguousMatches());
+  }
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'AminoAcidSymbol'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.ProteinAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, a: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Alanine', threeLettersName: 'Ala', value: 'A'}), r: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Arginine', threeLettersName: 'Arg', value: 'R'}), n: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Asparagine', threeLettersName: 'Asn', value: 'N'}), d: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Aspartic acid', threeLettersName: 'Asp', value: 'D'}), c: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Cysteine', threeLettersName: 'Cys', value: 'C'}), e: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Glutamic acid', threeLettersName: 'Glu', value: 'E'}), q: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Glutamine', threeLettersName: 'Gln', value: 'Q'}), g: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Glycine', threeLettersName: 'Gly', value: 'G'}), h: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Histidine', threeLettersName: 'His', value: 'H'}), i: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Isoleucine ', threeLettersName: 'Ile', value: 'I'}), l: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Leucine', threeLettersName: 'Leu', value: 'L'}), k: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Lysine', threeLettersName: 'Lys', value: 'K'}), m: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Methionine', threeLettersName: 'Met', value: 'M'}), f: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Phenylalanine', threeLettersName: 'Phe', value: 'F'}), p: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Proline', threeLettersName: 'Pro', value: 'P'}), s: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Serine', threeLettersName: 'Ser', value: 'S'}), t: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Threonine', threeLettersName: 'Thr', value: 'T'}), w: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Tryptophan', threeLettersName: 'Try', value: 'W'}), y: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Tyrosine', threeLettersName: 'Tyr', value: 'Y'}), v: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Valine ', threeLettersName: 'Val', value: 'V'}), getA: function() {
+  return this.a;
+}, getR: function() {
+  return this.r;
+}, getN: function() {
+  return this.n;
+}, getD: function() {
+  return this.d;
+}, getC: function() {
+  return this.c;
+}, getE: function() {
+  return this.e;
+}, getQ: function() {
+  return this.q;
+}, getG: function() {
+  return this.g;
+}, getH: function() {
+  return this.h;
+}, getI: function() {
+  return this.i;
+}, getL: function() {
+  return this.l;
+}, getK: function() {
+  return this.k;
+}, getM: function() {
+  return this.m;
+}, getF: function() {
+  return this.f;
+}, getP: function() {
+  return this.p;
+}, getS: function() {
+  return this.s;
+}, getT: function() {
+  return this.t;
+}, getW: function() {
+  return this.w;
+}, getY: function() {
+  return this.y;
+}, getV: function() {
+  return this.v;
+}, getAlanine: function() {
+  return this.a;
+}, getArginine: function() {
+  return this.r;
+}, getAsparagine: function() {
+  return this.n;
+}, getAspartic: function() {
+  return this.d;
+}, getCysteine: function() {
+  return this.c;
+}, getGlutamic: function() {
+  return this.e;
+}, getGlutamine: function() {
+  return this.q;
+}, getGlycine: function() {
+  return this.g;
+}, getHistidine: function() {
+  return this.h;
+}, getIsoleucine: function() {
+  return this.i;
+}, getLeucine: function() {
+  return this.l;
+}, getLysine: function() {
+  return this.k;
+}, getMethionine: function() {
+  return this.m;
+}, getPhenylalanine: function() {
+  return this.f;
+}, getProline: function() {
+  return this.p;
+}, getSerine: function() {
+  return this.s;
+}, getThreonine: function() {
+  return this.t;
+}, getTryptophan: function() {
+  return this.w;
+}, getTyrosine: function() {
+  return this.y;
+}, getValine: function() {
+  return this.v;
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'ProteinAlphabet'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.RNAAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a", ambiguousMatches: []}), g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []}), u: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}), m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;'}", value: "m", ambiguousMatches: []}), r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;'}", value: "r", ambiguousMatches: []}), w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u;'}", value: "w", ambiguousMatches: []}), s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;'}", value: "s", ambiguousMatches: []}), y: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'u}", value: "y", ambiguousMatches: []}), k: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'g' or 'u;'}", value: "k", ambiguousMatches: []}), v: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'g'}", value: "v", ambiguousMatches: []}), h: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'u'}", value: "h", ambiguousMatches: []}), d: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;' or 'u'}", value: "d", ambiguousMatches: []}), b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 'u'}", value: "b", ambiguousMatches: []}), n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u;' or 'g' or 'c'}", value: "n", ambiguousMatches: []}), symbolsMap: [], constructor: function() {
+  var that = this;
+  that.m.setAmbiguousMatches([that.a, that.c]);
+  that.r.setAmbiguousMatches([that.a, that.g]);
+  that.w.setAmbiguousMatches([that.a, that.u]);
+  that.s.setAmbiguousMatches([that.c, that.g]);
+  that.y.setAmbiguousMatches([that.c, that.u]);
+  that.k.setAmbiguousMatches([that.g, that.u]);
+  that.v.setAmbiguousMatches([that.a, that.c, that.g]);
+  that.h.setAmbiguousMatches([that.a, that.c, that.u]);
+  that.d.setAmbiguousMatches([that.a, that.g, that.u]);
+  that.b.setAmbiguousMatches([that.c, that.g, that.u]);
+  that.n.setAmbiguousMatches([that.a, that.c, that.g, that.u]);
+  that.callParent([]);
+  this.symbolsMap = {"a": this.getA(), "g": this.getG(), "c": this.getC(), "u": this.getU(), "m": this.getM(), "r": this.getR(), "w": this.getW(), "s": this.getS(), "y": this.getY(), "k": this.getK(), "v": this.getV(), "h": this.getH(), "d": this.getD(), "b": this.getB(), "n": this.getN()};
+}, getA: function() {
+  return this.a;
+}, getG: function() {
+  return this.g;
+}, getC: function() {
+  return this.c;
+}, getU: function() {
+  return this.u;
+}, getM: function() {
+  return this.m;
+}, getR: function() {
+  return this.r;
+}, getW: function() {
+  return this.w;
+}, getS: function() {
+  return this.s;
+}, getY: function() {
+  return this.y;
+}, getK: function() {
+  return this.k;
+}, getV: function() {
+  return this.v;
+}, getH: function() {
+  return this.h;
+}, getD: function() {
+  return this.d;
+}, getB: function() {
+  return this.b;
+}, getN: function() {
+  return this.n;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'RNAAlphabet'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.symbols.IllegalSymbolException', Ext.Base, {message: null, statics: {raise: function(pInput) {
+  var passedMessage = "";
+  if (Ext.isObject(pInput)) 
+  {
+    passedMessage = pInput.message || "You have an error.";
+  } else {
+    passedMessage = pInput;
+  }
+  Ext.Error.raise({msg: passedMessage});
+}}, constructor: function(inData) {
+  var that = this;
+  that.message = inData.message || "Default Message";
+  this.callParent([inData]);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'IllegalSymbolException'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.common.SymbolList', Ext.Base, {constructor: function(inData) {
+  var symbols;
+  var alphabet;
+  if (inData) 
+  {
+    symbols = inData.symbols || null;
+    alphabet = inData.alphabet || null;
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getAlphabet = function() {
+  return alphabet;
+};
+  this.setAlphabet = function(pAlphabet) {
+  alphabet = pAlphabet;
+};
+  this.getSymbols = function() {
+  return symbols;
+};
+  this.setSymbols = function(pSymbols) {
+  symbols = pSymbols;
+  this.sequenceChanged = true;
+};
+  this.getSymbolsLength = function() {
+  return symbols.length;
+};
+  this.symbolAt = function(pPosition) {
+  return symbols[pPosition];
+};
+  this.hasGap = function() {
+  var hasGapBoolean = symbols.some(function(element) {
+  return (element instanceof Teselagen.bio.sequence.symbols.GapSymbol);
+});
+  return hasGapBoolean;
+};
+  this.subList = function(pStart, pEnd) {
+  var subSymbols = symbols.slice(pStart, pEnd);
+  return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: subSymbols, alphabet: alphabet});
+};
+  this.seqString = function() {
+  var string = [];
+  var element;
+  if (this.sequenceString && !this.sequenceChanged) 
+  {
+    return this.sequenceString;
+  } else {
+    for (var i = 0; i < symbols.length; i++) 
+      {
+        element = symbols[i];
+        if (element.getValue()) 
+        {
+          string.push(element.getValue());
+        }
+      }
+    this.sequenceChanged = false;
+  }
+  this.sequenceString = string.join("");
+  return this.sequenceString;
+};
+  this.clear = function() {
+  symbols = [];
+  this.sequenceChanged = true;
+};
+  this.addSymbols = function(pSymbols) {
+  if (Array.isArray(pSymbols)) 
+  {
+    pSymbols.forEach(function(element) {
+  symbols.push(element);
+});
+    this.sequenceChanged = true;
+  }
+};
+  this.addSymbolList = function(pSymbols) {
+  if (pSymbols && pSymbols.getSymbolsLength() > 0) 
+  {
+    for (var i = 0; i < pSymbols.getSymbolsLength(); i++) 
+      {
+        symbols.push(pSymbols.getSymbols()[i]);
+      }
+    this.sequenceChanged = true;
+  }
+};
+  this.deleteSymbols = function(pStart, pLength) {
+  symbols.splice(pStart, pLength);
+  this.sequenceChanged = true;
+};
+  this.insertSymbols = function(pPosition, pNewSymbols) {
+  var beforeInsert = symbols.slice(0, pPosition);
+  var afterInsert = symbols.slice(pPosition);
+  symbols = beforeInsert.concat(pNewSymbols).concat(afterInsert);
+  this.sequenceChanged = true;
+};
+  this.toString = function() {
+  return this.seqString();
+};
+}, serialize: function() {
+  var data = {};
+  var symbols = this.getSymbols();
+  var alphabet = this.getAlphabet();
+  if (alphabet === "Teselagen.bio.sequence.alphabets.DNAAlphabet" || alphabet === Teselagen.bio.sequence.alphabets.DNAAlphabet) 
+  {
+    data.alphabet = "dna";
+  } else if (alphabet === "Teselagen.bio.sequence.alphabets.RNAAlphabet" || alphabet === Teselagen.bio.sequence.alphabets.RNAAlphabet) 
+  {
+    data.alphabet = "rna";
+  } else if (alphabet === "Teselagen.bio.sequence.alphabets.ProteinAlphabet" || alphabet === Teselagen.bio.sequence.alphabets.ProteinAlphabet) 
+  {
+    data.alphabet = "protein";
+  } else {
+    console.warn("Unknown alphabet in sequence.");
+    data.alphabet = "unknown";
+  }
+  symbolsArray = [];
+  for (var i = 0; i < symbols.length; i++) 
+    {
+      symbolsArray.push(symbols[i].serialize(alphabet));
+    }
+  data.symbols = symbolsArray.join("");
+  return data;
+}, deSerialize: function(data) {
+  var symbols = [];
+  var symbol;
+  if (data.alphabet === "protein") 
+  {
+    this.setAlphabet(Teselagen.bio.sequence.alphabets.ProteinAlphabet);
+    for (var i = 0; i < data.symbols.length; i++) 
+      {
+        symbol = Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {});
+        symbols.push(symbol.deSerialize(data.symbols[i]));
+      }
+  } else {
+    if (data.alphabet === "dna") 
+    {
+      this.setAlphabet(Teselagen.bio.sequence.alphabets.DNAAlphabet);
+    } else if (data.alphabet === "rna") 
+    {
+      this.setAlphabet(Teselagen.bio.sequence.alphabets.RNAAlphabet);
+    } else {
+      this.setAlphabet(Teselagen.bio.sequence.alphabets.AbstractAlphabet);
+    }
+    for (var i = 0; i < data.symbols.length; i++) 
+      {
+        symbol = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {});
+        symbol.deSerialize(data.symbols.charAt(i), this.getAlphabet());
+        symbols.push(symbol);
+      }
+  }
+  this.setSymbols(symbols);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.common, 'SymbolList'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.common.Sequence', Teselagen.bio.sequence.common.SymbolList, {constructor: function(inData) {
+  var name;
+  if (inData) 
+  {
+    name = inData.name || "";
+    this.callParent([{symbols: inData.symbolList.getSymbols(), alphabet: inData.symbolList.getAlphabet()}]);
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getName = function() {
+  return name;
+};
+  this.setName = function(pName) {
+  name = pName;
+};
+  return this;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.common, 'Sequence'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.dna.DNASequence', Teselagen.bio.sequence.common.Sequence, {constructor: function(inData) {
+  if (inData) 
+  {
+    var symbolList = inData.symbolList || null;
+    var name = inData.name || "";
+    var circular = inData.circular || false;
+    var accession = inData.accession || "";
+    var version = inData.version || 1;
+    var seqVersion = inData.seqVersion || 0;
+    this.callParent([inData]);
+  } else {
+    Teselagen.bio.BioException.raise("Arguments needed");
+  }
+  this.getAccession = function() {
+  return accession;
+};
+  this.setAccession = function(pAccession) {
+  accession = pAccession;
+};
+  this.getVersion = function() {
+  return version;
+};
+  this.setVersion = function(pVersion) {
+  version = pVersion;
+};
+  this.getSeqVersion = function() {
+  return seqVersion;
+};
+  this.setSeqVersion = function(pSeqVersion) {
+  seqVersion = pSeqVersion;
+};
+  this.getCircular = function() {
+  return circular;
+};
+  this.setCircular = function(pCircular) {
+  circular = pCircular;
+};
+  return this;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.dna, 'DNASequence'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.sequence.DNATools', Ext.Base, {singleton: true, constructor: function() {
+  this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+}, createDNA: function(pDNASequence) {
+  if (pDNASequence) 
+  {
+    if (pDNASequence.value) 
+    {
+      var DNASequence = pDNASequence.value.toLowerCase();
+    } else {
+      var DNASequence = pDNASequence.toLowerCase();
+    }
+    var characters = DNASequence.split("");
+    var symbols = [];
+    for (var i = 0; i < DNASequence.length; i++) 
+      {
+        var symbol = this.DNAAlphabet.symbolMap(characters[i]);
+        if (symbol == null) 
+        {
+        } else {
+          symbols.push(symbol);
+        }
+      }
+    ;
+    return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: symbols, alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
+  } else {
+    return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: [], alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
+  }
+}, createDNASequence: function(pName, pDNASequence) {
+  return Ext.create("Teselagen.bio.sequence.dna.DNASequence", {symbolList: this.createDNA(pDNASequence), name: pName});
+}, complementSymbol: function(pSymbol) {
+  switch (pSymbol.getValue()) {
+    case this.DNAAlphabet.a.getValue():
+      return this.DNAAlphabet.t;
+    case this.DNAAlphabet.t.getValue():
+      return this.DNAAlphabet.a;
+    case this.DNAAlphabet.g.getValue():
+      return this.DNAAlphabet.c;
+    case this.DNAAlphabet.c.getValue():
+      return this.DNAAlphabet.g;
+    case this.DNAAlphabet.y.getValue():
+      return this.DNAAlphabet.r;
+    case this.DNAAlphabet.r.getValue():
+      return this.DNAAlphabet.y;
+    case this.DNAAlphabet.s.getValue():
+      return this.DNAAlphabet.s;
+    case this.DNAAlphabet.w.getValue():
+      return this.DNAAlphabet.w;
+    case this.DNAAlphabet.k.getValue():
+      return this.DNAAlphabet.m;
+    case this.DNAAlphabet.m.getValue():
+      return this.DNAAlphabet.k;
+    case this.DNAAlphabet.b.getValue():
+      return this.DNAAlphabet.v;
+    case this.DNAAlphabet.v.getValue():
+      return this.DNAAlphabet.b;
+    case this.DNAAlphabet.d.getValue():
+      return this.DNAAlphabet.h;
+    case this.DNAAlphabet.h.getValue():
+      return this.DNAAlphabet.d;
+    case this.DNAAlphabet.n.getValue():
+      return this.DNAAlphabet.n;
+    case this.DNAAlphabet.getGap().getValue():
+      return this.DNAAlphabet.getGap();
+    default:
+      Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
+  }
+}, complement: function(pSymbolList) {
+  var symbols = pSymbolList.getSymbols();
+  var complementSymbols = [];
+  if (symbols.length > 0) 
+  {
+    for (var i = 0; i < symbols.length; i++) 
+      {
+        complementSymbols.push(this.complementSymbol(symbols[i]));
+      }
+    ;
+  }
+  ;
+  return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: complementSymbols, alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
+}, reverseComplement: function(pSymbolList) {
+  var symbols = pSymbolList.getSymbols();
+  var reverseComplementSymbols = [];
+  for (var i = symbols.length - 1; i >= 0; --i) 
+    {
+      reverseComplementSymbols.push(this.complementSymbol(symbols[i]));
+    }
+  return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: reverseComplementSymbols, alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence, 'DNATools'], 0));
 ;
 
 (Ext.cmd.derive('Ext.grid.column.CheckColumn', Ext.grid.column.Column, {alternateClassName: 'Ext.ux.CheckColumn', align: 'center', stopSelection: true, tdCls: Ext.baseCSSPrefix + 'grid-cell-checkcolumn', innerCls: Ext.baseCSSPrefix + 'grid-cell-inner-checkcolumn', clickTargetName: 'el', constructor: function() {
@@ -55446,6 +57849,1472 @@ Ext.define('Ext.grid.plugin.BufferedRendererTableView', {override: 'Ext.view.Tab
   }
   return '<img class="' + cls.join(' ') + '" src="' + Ext.BLANK_IMAGE_URL + '"/>';
 }}, 1, ["checkcolumn"], ["checkcolumn", "component", "gridcolumn", "container", "box", "headercontainer"], {"checkcolumn": true, "component": true, "gridcolumn": true, "container": true, "box": true, "headercontainer": true}, ["widget.checkcolumn"], 0, [Ext.grid.column, 'CheckColumn', Ext.ux, 'CheckColumn'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.bio.parsers.ParsersManager', Ext.Base, {singleton: true, batchImportQueue: [], batchImportMessages: null, processingBusy: false, startCount: 0, progressIncrement: 0, processQueue: function(callback) {
+  var processArray = function(process, context, callback) {
+  setTimeout(function() {
+  context.args = arguments.callee;
+  context.cb = callback;
+  process(Teselagen.bio.parsers.ParsersManager.batchImportQueue.shift(), context, function(err, self) {
+  if (Teselagen.bio.parsers.ParsersManager.batchImportQueue.length > 0) 
+  {
+    setTimeout(self.args, 200);
+  } else {
+    context.cb();
+  }
+});
+}, 200);
+};
+  this.batchImportMessages = Ext.create("Ext.data.Store", {fields: [{name: 'fileName', type: 'string'}, {name: 'partSource', type: 'string'}, {name: 'messages', type: 'auto'}]});
+  var self = this;
+  if (!self.processingBusy) 
+  {
+    self.processingBusy = true;
+    processArray(this.parseAndImportFile, self, function() {
+  var progressBar = $("#headerProgress");
+  $("#headerProgressText").html("Done!");
+  $("#headerProgressBox").hide();
+  progressBar.css("width", "0%");
+  var msg = toastr.success("Successfully Imported Sequences.");
+  self.processingBusy = false;
+  callback(self.batchImportMessages);
+});
+  }
+}, parseAndImportFile: function(file, context, cb) {
+  if (!file) 
+  return cb(true);
+  var self = Teselagen.bio.parsers.ParsersManager;
+  var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
+  if (match && match[1]) 
+  {
+    var ext = match[1];
+  } else return cb(true, context);
+  var reader = new FileReader();
+  reader.onload = (function(theFile) {
+  return function(e) {
+  var data = e.target.result;
+  var name = theFile.name.match(/(.*)\.[^.]+$/)[1];
+  var progressBar = $("#headerProgress");
+  $("#headerProgressText").html("Importing " + name);
+  context.startCount = context.startCount + context.progressIncrement;
+  progressBar.css("width", context.startCount + '%');
+  self.parseSequence(data, ext, function(gb) {
+  if (!gb) 
+  return cb(true, context);
+  if (!(gb instanceof Array)) 
+  gb = [gb];
+  var counter = gb.length;
+  if (counter === 0) 
+  cb(false, context);
+  gb.forEach(function(currentGB) {
+  self.createAndProcessSequenceFromGenbank(currentGB, name, function(err, sequence, seqMgr, gb) {
+  if (err) 
+  {
+    console.warn("Sequence: " + sequence.get('name') + ' failed to import');
+    cb(true);
+  }
+  self.saveSequence(sequence, name, ext, seqMgr, gb, function(err) {
+  counter--;
+  if (counter === 0) 
+  return cb(err, context);
+});
+});
+});
+});
+};
+})(file);
+  reader.readAsText(file);
+}, createAndProcessSequenceFromGenbank: function(currentGB, name, cb) {
+  var NameUtils = Teselagen.utils.NameUtils;
+  var legalName = true;
+  if (!NameUtils.isLegalName(name)) 
+  {
+    legalName = false;
+    name = NameUtils.reformatName(name);
+  }
+  var self = this;
+  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+  if (sequenceLibrary.el) 
+  {
+    sequenceLibrary.el.unmask();
+  }
+  var sequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: currentGB, sequenceFileFormat: "GENBANK", name: name, sequenceFileName: name, firstTimeImported: true});
+  try {
+    sequence.processSequence(function(err, seqMgr, gb) {
+  if (!legalName) 
+  {
+    seqMgr.addParseMessage('Invalid file name. Illegal characters replaced with \'_\'.');
+  }
+  return cb(false, sequence, seqMgr, gb);
+}, null);
+  }  catch (err) {
+  console.warn(err.toString());
+  return cb(true, sequence, null, null);
+}
+}, saveSequence: function(sequence, name, ext, seqMgr, genbankObject, cb) {
+  var self = Teselagen.bio.parsers.ParsersManager;
+  var partSource = genbankObject.getLocus().locusName;
+  if (genbankObject && seqMgr) 
+  {
+    var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages());
+    self.batchImportMessages.add({fileName: name + '.' + ext, partSource: partSource, messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())});
+  }
+  sequence.save({success: function() {
+  seqMgr = null;
+  sequence.sequenceManager = null;
+  var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
+  if (!duplicated) 
+  {
+    Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
+    return cb(false);
+  } else {
+    var msg = toastr.warning("Error: Duplicated Sequence");
+    var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
+    var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
+    var duplicateMessage = 'Exact sequence already exists in library with' + ' filename ' + duplicateFileName;
+    var messageIndex = self.batchImportMessages.findBy(function(record) {
+  var messages = record.get('messages');
+  for (var i = 0; i < messages.length; i++) 
+    {
+      if (messages[i] === duplicateMessage) 
+      {
+        return false;
+      }
+    }
+  return record.get('fileName') === (name + '.' + ext) && record.get('partSource') === partSource;
+});
+    if (messageIndex < 0) 
+    {
+      self.batchImportMessages.add({fileName: name + '.' + ext, partSource: partSource, messages: [duplicateMessage]});
+    } else {
+      var record = self.batchImportMessages.getAt(messageIndex);
+      record.set('partSource', partSource);
+      record.set('messages', record.get('messages').concat([duplicateMessage]));
+    }
+    return cb(false);
+  }
+}, failure: function() {
+  self.batchImportMessages.add({fileName: name + '.' + ext, partSource: partSource, messages: "Failed to upload due to network error. Please try again."});
+  return cb(true);
+}});
+}, constructor: function() {
+  XmlToJson = Teselagen.bio.util.XmlToJson;
+  DNATools = Teselagen.bio.sequence.DNATools;
+  SbolParser = Teselagen.bio.parsers.SbolParser;
+  Sha256 = Teselagen.bio.util.Sha256;
+}, detectXMLFormat: function(data, cb) {
+  var parser = new DOMParser();
+  var xmlDoc = parser.parseFromString(data, "text/xml");
+  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
+  if (diff.length > 0) 
+  {
+    return cb(data, false);
+  } else {
+    Teselagen.bio.parsers.SbolParser.parse(data, cb);
+  }
+}, parseSequence: function(result, pExt, cb) {
+  var self = this;
+  var asyncParseFlag = false;
+  switch (pExt) {
+    case "fasta":
+      asyncParseFlag = true;
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result, function(gbs) {
+  return cb(gbs);
+});
+      break;
+    case "fas":
+      asyncParseFlag = true;
+      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result, function(gbs) {
+  return cb(gbs);
+});
+      break;
+    case "json":
+      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
+      break;
+    case "gb":
+      fileContent = result;
+      break;
+    case "xml":
+      asyncParseFlag = true;
+      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
+  var gb;
+  if (isSBOL) 
+  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+  return cb(gb);
+});
+      break;
+    case "rdf":
+      asyncParseFlag = true;
+      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
+  var gb;
+  if (isSBOL) 
+  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
+  return cb(gb);
+});
+      break;
+  }
+  if (!asyncParseFlag) 
+  {
+    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
+    return cb(gb);
+    ;
+  }
+}, fastaToGenbank: function(pFasta, cb) {
+  var result;
+  var headers = pFasta.match(/>(.+)/g);
+  var sequences = [];
+  headers.forEach(function(header) {
+  var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  sequences.push({name: header.replace(">", ""), sequence: pFasta.match(escapedHeader + '\n(.+)')[1]});
+});
+  if (sequences.length === 1 && typeof (cb) !== "function") 
+  {
+    var sequence = sequences[0];
+    var isLegalName = true;
+    if (!Teselagen.utils.NameUtils.isLegalName(sequence.name)) 
+    {
+      isLegalName = false;
+      sequence.name = Teselagen.utils.NameUtils.reformatName(sequence.name);
+    }
+    var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: sequence.name, sequenceLength: sequence.sequence.length, date: Teselagen.bio.parsers.ParsersManager.todayDate()});
+    var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: sequence.sequence});
+    result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+    result.addKeyword(locus);
+    result.addKeyword(origin);
+    if (!isLegalName) 
+    {
+      result.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
+    }
+    return result;
+  }
+  var performImportSequence = function(sequence) {
+  var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: sequence.name, sequenceLength: sequence.sequence.length, date: Teselagen.bio.parsers.ParsersManager.todayDate()});
+  var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: sequence.sequence});
+  result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+  result.addKeyword(locus);
+  result.addKeyword(origin);
+  return cb(result);
+};
+  var generate = function(selectedSequences) {
+  var returnSequences = [];
+  selectedSequences.forEach(function(seq) {
+  var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: seq.get('name'), sequenceLength: seq.get('sequence').length, date: Teselagen.bio.parsers.ParsersManager.todayDate()});
+  var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: seq.get('sequence')});
+  result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+  result.addKeyword(locus);
+  result.addKeyword(origin);
+  returnSequences.push(result);
+});
+  if (typeof (cb === "function")) 
+  return cb(returnSequences); else if (returnSequences.length === 1) 
+  return returnSequences[0]; else return returnSequences;
+};
+  var tempStore = new Ext.data.JsonStore({fields: [{name: 'name', type: 'string'}, {name: 'sequence', type: 'string'}], data: sequences});
+  if (sequences.length > 1) 
+  {
+    var win = Ext.create("Ext.window.Window", {title: "Select sequence to import", shrinkWrap: true, closable: false, width: 600, height: 300, items: [{xtype: 'grid', store: tempStore, forceFit: true, columns: [{header: 'name', dataIndex: 'name'}, {header: 'sequence', dataIndex: 'sequence'}], selModel: {selType: 'checkboxmodel', injectCheckbox: 'first', showHeaderCheckbox: true, checkOnly: true, mode: 'MULTI', headerWidth: 33}, columnLines: true, columnWidth: 50, listeners: {afterrender: function() {
+  this.getSelectionModel().selectAll();
+  var grid = arguments[0].up("[xtype='window']").down('grid');
+  grid.reconfigure(tempStore);
+  win.setHeight(grid.getHeight() + 80);
+}}}, {xtype: 'button', text: 'Import', handler: function() {
+  var grid = arguments[0].up("[xtype='window']").down('grid');
+  var selected = grid.getSelectionModel().getSelection();
+  win.close();
+  generate(selected);
+}}]});
+    win.show();
+  } else if (sequences.length === 1) 
+  {
+    var selectionArr = [];
+    selectionArr.push(tempStore.getAt(0));
+    generate(selectionArr);
+  } else {
+    console.warn("no sequences found in fas file.");
+    return cb(null);
+  }
+}, genbankToFasta: function(pGenbank) {
+  var name = pGenbank.getLocus().getLocusName();
+  var sequence = pGenbank.getOrigin().getSequence();
+  var result = ">" + name + "\n" + sequence;
+  return result;
+}, jbeiseqXmlsToXmlArray: function(xml) {
+  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlsToXmlArray(xml);
+}, validateJbeiseqJson: function(json) {
+  return Teselagen.bio.parsers.JbeiseqParser.validateJbeiseqJson(json);
+}, jbeiseqXmlToJson: function(xmlStr) {
+  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToJson(xmlStr);
+}, jbeiseqJsonToXml: function(json) {
+  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToXml(json);
+}, jbeiseqJsonToGenbank: function(json) {
+  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToGenbank(json);
+}, jbeiseqXmlToGenbank: function(xmlStr) {
+  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToGenbank(xmlStr);
+}, genbankToJbeiseqJson: function(pGenbank) {
+  return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqJson(pGenbank);
+}, genbankToJbeiseqXml: function(pGenbank) {
+  return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqXml(pGenbank);
+}, sbolXmlToJson: function(xmlStr) {
+  return Teselagen.bio.parsers.SbolParser.sbolXmlToJson(xmlStr);
+}, sbolJsonToJbeiJson: function(sbol) {
+  return Teselagen.bio.parsers.SbolParser.sbolJsonToJbeiJson(sbol);
+}, jbeiJsonToSbolJson: function(jbei) {
+  return Teselagen.bio.parsers.SbolParser.jbeiJsonToSbolJson(jbei);
+}, loadFile: function(url) {
+  var str;
+  Ext.Ajax.request({url: url, async: false, disableCaching: true, success: function(response) {
+  str = response.responseText;
+}, failure: function(response, opts) {
+  console.warn('Could not load: ' + url + '\nServer-side failure with status code ' + response.status);
+  throw Ext.create("Teselagen.bio.BioException", {message: 'Could not load: ' + url + '\nServer-side failure with status code ' + response.status});
+}});
+  return str;
+}, todayDate: function() {
+  var date = (new Date()).toDateString().split(" ");
+  var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
+  return dateStr;
+}, isALabel: function(name) {
+  return Teselagen.bio.parsers.JbeiseqParser.isALabel(name);
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'ParsersManager'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.common.ImportWarningsWindow', Ext.window.Window, {cls: 'ImportWarningsWindow', width: 800, height: 400, title: 'Batch Import Summary', layout: 'fit', modal: true, items: [{xtype: 'gridpanel', autoScroll: true, forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
+  var columns = dataview.panel.columns;
+  for (var i = 0; i < columns.length; i++) 
+    {
+      columns[i].autoSize();
+    }
+}}}, columns: [{xtype: 'gridcolumn', text: 'File Name', dataIndex: 'fileName'}, {xtype: 'gridcolumn', text: 'Sequence Name', dataIndex: 'partSource'}, {xtype: 'gridcolumn', text: 'Messages', autoScroll: true, dataIndex: 'messages', renderer: function(val, meta) {
+  meta.style = 'text-overflow: clip';
+  if (val.length) 
+  {
+    return val.join('<br>');
+  } else {
+    return 'No errors.';
+  }
+}}]}]}, 0, ["importwarningswindow"], ["panel", "importwarningswindow", "window", "component", "container", "box"], {"panel": true, "importwarningswindow": true, "window": true, "component": true, "container": true, "box": true}, ["widget.importwarningswindow"], 0, [Vede.view.common, 'ImportWarningsWindow'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.common.dropZone', Ext.Component, {initComponent: function() {
+  var me = this;
+  me.callParent();
+}, onDestroy: function() {
+  this.callParent();
+}, autoEl: {tag: 'div', id: 'dropZone', cls: 'batch-import-area', hidden: true, html: '<h2> + Drop files here</h2><div id="dropZone-close"></div>'}, listeners: {afterrender: function(cmp) {
+  var dropZone = cmp.getEl().dom;
+  var sequenceLibrary = Ext.getCmp("sequenceLibraryArea").getEl().dom;
+  var handleFileSelect = cmp.handleFileSelect.bind(cmp);
+  var progressCancelBtn = $("#headerProgressCancelBtn");
+  sequenceLibrary.addEventListener('dragenter', cmp.handleDragEnter, false, cmp);
+  dropZone.addEventListener('dragleave', cmp.handleDragLeave, false, cmp);
+  dropZone.addEventListener('dragover', cmp.handleDragOver, false, cmp);
+  dropZone.addEventListener('drop', handleFileSelect, false, cmp);
+}}, handleDragEnter: function(evt, cmp) {
+  $(".batch-import-area").fadeIn("fast");
+}, handleDragLeave: function(evt, cmp) {
+  $(".batch-import-area").stop().fadeOut("fast");
+}, handleFileSelect: function(evt) {
+  evt.stopPropagation();
+  evt.preventDefault();
+  setTimeout(function() {
+  $(".batch-import-area").fadeOut("fast");
+  $("#headerProgressBox").fadeIn();
+  $("#headerProgressCancelBtn").on("click", function() {
+  Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
+  console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
+  return false;
+});
+}, 25);
+  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+  sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
+  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+  var self = this;
+  if (!Ext.isGecko) 
+  {
+    self.processFiles(evt.dataTransfer.items);
+  } else {
+    Ext.Msg.alert("Drag and Drop Error", "Mozilla Firefox does not support drag-and-drop sequence importing.");
+    Ext.defer(function() {
+  sequenceLibrary.el.unmask();
+}, 10);
+  }
+}, handleDragOver: function(evt) {
+  evt.stopPropagation();
+  evt.preventDefault();
+  evt.dataTransfer.dropEffect = 'copy';
+}, processFiles: function(items) {
+  var length = items.length;
+  Teselagen.bio.parsers.ParsersManager.startCount = 0;
+  Teselagen.bio.parsers.ParsersManager.progressIncrement = 100 / items.length;
+  for (var i = 0; i < length; i++) 
+    {
+      var entries = [];
+      entries[0] = items[i].webkitGetAsEntry();
+      this.readDirectory(entries, this);
+    }
+  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+  Ext.defer(function() {
+  sequenceLibrary.el.unmask();
+}, 10);
+}, readDirectory: function(entries, scope) {
+  var self = scope;
+  for (i = 0; i < entries.length; i++) 
+    {
+      if (entries[i].isDirectory) 
+      {
+        var directoryReader = entries[i].createReader();
+        self.getAllEntries(directoryReader, self.readDirectory);
+      } else {
+        entries[i].file(self.readFile, self.errorHandler);
+      }
+    }
+}, getAllEntries: function(directoryReader, callback) {
+  var self = this;
+  var entries = [];
+  var toArray = function(list) {
+  return Array.prototype.slice.call(list || [], 0);
+};
+  var readEntries = function() {
+  directoryReader.readEntries(function(results) {
+  if (!results.length) 
+  {
+    entries.sort();
+    callback(entries, self);
+  } else {
+    entries = entries.concat(toArray(results));
+    readEntries();
+  }
+}, self.errorHandler);
+};
+  readEntries();
+}, readFile: function(file) {
+  Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
+  Teselagen.bio.parsers.ParsersManager.processQueue(function(errorStore) {
+  var warningsWindow = Ext.create('Vede.view.common.ImportWarningsWindow').show();
+  warningsWindow.down('gridpanel').reconfigure(errorStore);
+});
+}, errorHandler: function(e) {
+  console.log('FileSystem API error code: ' + e.code);
+}}, 0, ["dropZone"], ["component", "dropZone", "box"], {"component": true, "dropZone": true, "box": true}, ["widget.dropZone"], 0, [Vede.view.common, 'dropZone'], 0));
+;
+
+Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows: function(startRow, endRow) {
+  var me = this, rows, rowsLn, i, row;
+  if (me.rendered && me.stripeRows) 
+  {
+    rows = me.getNodes(startRow, endRow);
+    for (i = 0 , rowsLn = rows.length; i < rowsLn; i++) 
+      {
+        row = rows[i];
+        if (row) 
+        {
+          row.className = row.className.replace(me.rowClsRe, ' ');
+          startRow++;
+          if (startRow % 2 === 0) 
+          {
+            row.className += (' ' + me.altRowCls);
+          }
+        }
+      }
+  }
+}});
+(Ext.cmd.derive('Vede.view.common.DashboardPanelView', Ext.tab.Panel, {id: 'DashboardPanel', padding: '10 0', layout: {type: 'card'}, frameHeader: false, border: 0, title: 'Dashboard', items: [{xtype: 'panel', title: 'Dashboard', border: 0, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', flex: 0.3, id: 'welcome_splash', border: 0}, {xtype: 'container', id: 'dashboardButtons', margin: '0 100 0 100', minHeight: 125, minWidth: 800, flex: 0.4, border: 0, style: {borderColor: '#E0E3E6', borderStyle: 'solid'}, layout: {type: 'hbox'}, items: [{xtype: 'button', height: 100, cls: 'dashBtn', flex: 1, id: 'projectStartBtn', text: 'New Project', scale: 'medium', overCls: 'projectStartBtn-over', iconCls: 'newProject-icon', iconAlign: 'top', listeners: {click: function() {
+  Teselagen.manager.ProjectManager.createNewProject();
+}, afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'Click here to Start a Project', "data-step": 1});
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, flex: 1, id: 'createSequence', text: 'Create Sequence', scale: 'medium', iconCls: 'newSequence-icon', iconAlign: 'top', overCls: 'createSequence-over', listeners: {click: function() {
+  Vede.application.fireEvent("createSequence");
+}, afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'You can start with a blank sequence by clicking here.', "data-step": 2});
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'http://help.teselagen.com/manual/', listeners: {afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'Make sure you check out the manuals for a thorough documentation.', "data-step": 4});
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'seeTutsBtn', scale: 'medium', flex: 1, overCls: 'tutorial-over', iconAlign: 'top', iconCls: 'tutorial-icon', text: 'Tutorials', href: 'http://classroom.tv/teselagen', listeners: {afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'See some tutorials to help you get started.', "data-step": 5});
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'tourBtn', scale: 'medium', flex: 1, overCls: 'tourBtn-over', iconAlign: 'top', iconCls: 'tour-icon', iconAlign: 'top', text: 'Take a Tour', listeners: {click: function() {
+  introJs().start();
+}}}]}, {xtype: 'container', id: 'dashboardStats', margin: '10 100 50 100', flex: 1, minHeight: 320, minWidth: 800, border: 0, layout: {type: 'hbox', align: 'stretch'}, listeners: {afterrender: function(cmp) {
+  cmp.getEl().set({"data-intro": 'Here are some awesome stats to keep you up to date.', "data-position": 'top', "data-step": 3});
+}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Sequence Library', cls: 'sequenceLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'sequenceLibraryContainer', id: 'sequenceLibraryArea', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', anchor: '100%', height: 30, cls: 'sequenceLibrarySearchField', width: '98%', emptyText: 'Search Sequence Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
+  var grid = Ext.getCmp('sequenceLibrary');
+  grid.store.clearFilter(true);
+  grid.store.filter("name", Ext.String.escapeRegex(newValue));
+}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
+  if (val) 
+  {
+    val = val.sequence.alphabet.toUpperCase();
+    return val;
+  } else {
+    return "";
+  }
+}, sortable: false}, {xtype: 'gridcolumn', text: 'Size (bp)', width: 80, dataIndex: 'size', sortable: true}, {text: 'Features', width: 200, flex: 1, dataIndex: 'serialize', renderer: function(val) {
+  if (val) 
+  {
+    var features = [];
+    for (var i = 0; i < val.features.length; i++) 
+      {
+        features.push(val.features[i].inData.name);
+      }
+    return features;
+  } else {
+    return "";
+  }
+}, sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'sequenceLibraryOptionsContainer', margin: '0 0 0 10', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
+}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '40', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
+}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '60', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
+}}}]}, {xtype: 'filefield', buttonOnly: true, buttonText: 'Import Sequence(s)', cls: 'sequenceLibraryImportButton', buttonConfig: {icon: 'resources/images/ux/paging/publish.png', iconCls: 'sequenceLibraryImportButtonIcon', overCls: 'sequenceLibraryImportButton-over', tooltip: 'You can drop your sequence files or folders into the table above.', margin: '0 0 0 10'}, listeners: {afterRender: function(field) {
+  field.fileInputEl.set({multiple: 'multiple'});
+}}}]}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
+  e.preventDefault();
+  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Open', handler: function() {
+  Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null, record);
+}}, {text: 'Download', handler: function() {
+  var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
+  VEManager.saveSequenceToFile();
+}}, {text: 'Delete', handler: function() {
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_SEQUENCE, record);
+}}]}).show();
+  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
+}}}]}, {xtype: "dropZone", name: "dropZone"}]}, {xtype: 'panel', title: 'Part Library', cls: 'partLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'partLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'partLibrarySearch', cls: 'partLibrarySearchField', width: '98%', emptyText: 'Search Part Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
+  Teselagen.manager.ProjectManager.parts.clearFilter(true);
+  var grid = Ext.getCmp('partLibrary');
+  grid.store.filter("name", Ext.String.escapeRegex(newValue));
+}}}, {xtype: 'gridpanel', border: 0, name: 'PartLibraryGrid', loadMask: true, autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, cls: 'partLibraryGrid', height: '100%', autoScroll: true, id: 'partLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {xtype: 'gridcolumn', text: 'Start BP', width: 80, dataIndex: 'genbankStartBP', sortable: false}, {xtype: 'gridcolumn', text: 'Stop BP', width: 80, dataIndex: 'endBP', sortable: false}, {xtype: 'gridcolumn', text: 'Size (bp)', width: 80, dataIndex: 'size', sortable: true}, {xtype: 'gridcolumn', text: 'Reverse Complement', dataIndex: 'revComp', width: 120, renderer: function(val) {
+  val = String(val);
+  val = val.charAt(0).toUpperCase() + val.slice(1);
+  return val;
+}, sortable: false}, {xtype: 'gridcolumn', text: 'Source Sequence', width: 160, dataIndex: 'partSource', sortable: true}, {xtype: 'gridcolumn', flex: 1, text: 'Features in Range', width: 150, dataIndex: 'features', sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
+  e.preventDefault();
+  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Rename', handler: function() {
+  Teselagen.manager.ProjectExplorerManager.renamePart(record);
+}}, {text: 'Open', handler: function() {
+  Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null, record.getSequenceFile());
+}}, {text: 'Delete', handler: function() {
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_PART, record);
+}}, {text: 'Download Source Sequence', handler: function() {
+  var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
+  VEManager.saveSequenceToFile();
+}}]}).show();
+  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
+}}, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'partLibraryOptionsContainer', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
+}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '40', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
+}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '60', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
+}}}]}]}]}]}]}]}, 0, ["DashboardPanelView"], ["tabpanel", "panel", "DashboardPanelView", "component", "container", "box"], {"tabpanel": true, "panel": true, "DashboardPanelView": true, "component": true, "container": true, "box": true}, ["widget.DashboardPanelView"], 0, [Vede.view.common, 'DashboardPanelView'], 0));
+;
+
+Ext.define('Ext.grid.plugin.BufferedRendererTableView', {override: 'Ext.view.Table', onAdd: function(store, records, index) {
+  var me = this, bufferedRenderer = me.bufferedRenderer, rows = me.all;
+  if (me.rendered && bufferedRenderer && (rows.getCount() + records.length) > bufferedRenderer.viewSize) 
+  {
+    if (index < rows.startIndex + bufferedRenderer.viewSize && (index + records.length) > rows.startIndex) 
+    {
+      me.refreshView();
+    } else {
+      bufferedRenderer.stretchView(me, bufferedRenderer.getScrollHeight());
+    }
+  } else {
+    me.callParent([store, records, index]);
+  }
+}, onRemove: function(store, records, indices) {
+  var me = this, bufferedRenderer = me.bufferedRenderer;
+  me.callParent([store, records, indices]);
+  if (me.rendered && bufferedRenderer) 
+  {
+    if (me.dataSource.getCount() > bufferedRenderer.viewSize) 
+    {
+      me.refreshView();
+    } else {
+      bufferedRenderer.stretchView(me, bufferedRenderer.getScrollHeight());
+    }
+  }
+}, onDataRefresh: function() {
+  var me = this;
+  if (me.bufferedRenderer) 
+  {
+    me.all.clear();
+    me.bufferedRenderer.onStoreClear();
+  }
+  me.callParent();
+}});
+
+(Ext.cmd.derive('Ext.grid.RowEditorButtons', Ext.container.Container, {frame: true, shrinkWrap: true, position: 'bottom', constructor: function(config) {
+  var me = this, rowEditor = config.rowEditor, cssPrefix = Ext.baseCSSPrefix, plugin = rowEditor.editingPlugin;
+  config = Ext.apply({baseCls: cssPrefix + 'grid-row-editor-buttons', defaults: {xtype: 'button', ui: rowEditor.buttonUI, scope: plugin, flex: 1, minWidth: Ext.panel.Panel.prototype.minButtonWidth}, items: [{cls: cssPrefix + 'row-editor-update-button', itemId: 'update', handler: plugin.completeEdit, text: rowEditor.saveBtnText, disabled: rowEditor.updateButtonDisabled}, {cls: cssPrefix + 'row-editor-cancel-button', handler: plugin.cancelEdit, text: rowEditor.cancelBtnText}]}, config);
+  me.callParent([config]);
+  me.addClsWithUI(me.position);
+}, setButtonPosition: function(position) {
+  var me = this;
+  me.removeClsWithUI(me.position);
+  me.position = position;
+  me.addClsWithUI(position);
+}, getFramingInfoCls: function() {
+  return this.baseCls + '-' + this.ui + '-' + this.position;
+}, getFrameInfo: function() {
+  var frameInfo = this.callParent();
+  frameInfo.top = true;
+  return frameInfo;
+}}, 1, ["roweditorbuttons"], ["component", "container", "box", "roweditorbuttons"], {"component": true, "container": true, "box": true, "roweditorbuttons": true}, ["widget.roweditorbuttons"], 0, [Ext.grid, 'RowEditorButtons'], 0));
+;
+
+(Ext.cmd.derive('Ext.grid.RowEditor', Ext.form.Panel, {saveBtnText: 'Update', cancelBtnText: 'Cancel', errorsText: 'Errors', dirtyText: 'You need to commit or cancel your changes', lastScrollLeft: 0, lastScrollTop: 0, border: false, buttonUI: 'default', hideMode: 'offsets', initComponent: function() {
+  var me = this, grid = me.editingPlugin.grid, Container = Ext.container.Container;
+  me.cls = Ext.baseCSSPrefix + 'grid-editor ' + Ext.baseCSSPrefix + 'grid-row-editor';
+  me.layout = {type: 'hbox', align: 'middle'};
+  me.lockable = grid.lockable;
+  if (me.lockable) 
+  {
+    me.items = [me.lockedColumnContainer = new Container({id: grid.id + '-locked-editor-cells', layout: {type: 'hbox', align: 'middle'}, margin: '0 1 0 0'}), me.normalColumnContainer = new Container({flex: 1, id: grid.id + '-normal-editor-cells', layout: {type: 'hbox', align: 'middle'}})];
+  } else {
+    me.lockedColumnContainer = me.normalColumnContainer = me;
+  }
+  me.callParent(arguments);
+  if (me.fields) 
+  {
+    me.addFieldsForColumn(me.fields, true);
+    me.insertColumnEditor(me.fields);
+    delete me.fields;
+  }
+  me.mon(me.hierarchyEventSource, {scope: me, show: me.repositionIfVisible});
+  me.getForm().trackResetOnLoad = true;
+}, onGridResize: function() {
+  var me = this, clientWidth = me.getClientWidth(), grid = me.editingPlugin.grid, gridBody = grid.body, btns = me.getFloatingButtons();
+  me.setLocalX(gridBody.getOffsetsTo(grid)[0] + gridBody.getBorderWidth('l') - grid.el.getBorderWidth('l'));
+  me.setWidth(clientWidth);
+  btns.setLocalX((clientWidth - btns.getWidth()) / 2);
+}, onFieldRender: function(field) {
+  var me = this, column = field.column;
+  if (column.isVisible()) 
+  {
+    me.syncFieldWidth(column);
+  } else if (!column.rendered) 
+  {
+    me.view.headerCt.on({afterlayout: Ext.Function.bind(me.syncFieldWidth, me, [column]), single: true});
+  }
+}, syncFieldWidth: function(column) {
+  var field = column.getEditor(), width;
+  field._marginWidth = (field._marginWidth || field.el.getMargin('lr'));
+  width = column.getWidth() - field._marginWidth;
+  field.setWidth(width);
+  if (field.xtype === 'displayfield') 
+  {
+    field.inputWidth = width;
+  }
+}, onFieldChange: function() {
+  var me = this, form = me.getForm(), valid = form.isValid();
+  if (me.errorSummary && me.isVisible()) 
+  {
+    me[valid ? 'hideToolTip' : 'showToolTip']();
+  }
+  me.updateButton(valid);
+  me.isValid = valid;
+}, updateButton: function(valid) {
+  var buttons = this.floatingButtons;
+  if (buttons) 
+  {
+    buttons.child('#update').setDisabled(!valid);
+  } else {
+    this.updateButtonDisabled = !valid;
+  }
+}, afterRender: function() {
+  var me = this, plugin = me.editingPlugin, grid = plugin.grid, view = grid.lockable ? grid.normalGrid.view : grid.view, field;
+  me.callParent(arguments);
+  me.scrollingView = view;
+  me.scrollingViewEl = view.el;
+  view.mon(me.scrollingViewEl, 'scroll', me.onViewScroll, me);
+  me.mon(me.el, {click: Ext.emptyFn, stopPropagation: true});
+  me.mon(grid, {resize: me.onGridResize, scope: me});
+  me.el.swallowEvent(['keypress', 'keydown']);
+  me.fieldScroller = me.normalColumnContainer.layout.innerCt;
+  me.fieldScroller.dom.style.overflow = 'hidden';
+  me.fieldScroller.on({scroll: me.onFieldContainerScroll, scope: me});
+  me.keyNav = new Ext.util.KeyNav(me.el, {enter: plugin.completeEdit, esc: plugin.onEscKey, scope: plugin});
+  me.mon(plugin.view, {beforerefresh: me.onBeforeViewRefresh, refresh: me.onViewRefresh, itemremove: me.onViewItemRemove, scope: me});
+  me.preventReposition = true;
+  Ext.Array.each(me.query('[isFormField]'), function(field) {
+  if (field.column.isVisible()) 
+  {
+    me.onColumnShow(field.column);
+  }
+}, me);
+  delete me.preventReposition;
+}, onBeforeViewRefresh: function(view) {
+  var me = this, viewDom = view.el.dom;
+  if (me.el.dom.parentNode === viewDom) 
+  {
+    viewDom.removeChild(me.el.dom);
+  }
+}, onViewRefresh: function(view) {
+  var me = this, context = me.context, row;
+  if (context && (row = view.getNode(context.record, true))) 
+  {
+    context.row = row;
+    me.reposition();
+    if (me.tooltip && me.tooltip.isVisible()) 
+    {
+      me.tooltip.setTarget(context.row);
+    }
+  } else {
+    me.editingPlugin.cancelEdit();
+  }
+}, onViewItemRemove: function(record, index) {
+  var context = this.context;
+  if (context && record === context.record) 
+  {
+    this.editingPlugin.cancelEdit();
+  }
+}, onViewScroll: function() {
+  var me = this, viewEl = me.editingPlugin.view.el, scrollingViewEl = me.scrollingViewEl, scrollTop = scrollingViewEl.dom.scrollTop, scrollLeft = scrollingViewEl.getScrollLeft(), scrollLeftChanged = scrollLeft !== me.lastScrollLeft, scrollTopChanged = scrollTop !== me.lastScrollTop, row;
+  me.lastScrollTop = scrollTop;
+  me.lastScrollLeft = scrollLeft;
+  if (me.isVisible()) 
+  {
+    row = Ext.getDom(me.context.row.id);
+    if (row && viewEl.contains(row)) 
+    {
+      if (scrollTopChanged) 
+      {
+        me.context.row = row;
+        me.reposition(null, true);
+        if ((me.tooltip && me.tooltip.isVisible()) || me.hiddenTip) 
+        {
+          me.repositionTip();
+        }
+        me.syncEditorClip();
+      }
+    } else {
+      me.setLocalY(-400);
+    }
+  }
+  if (me.rendered && scrollLeftChanged) 
+  {
+    me.syncFieldsHorizontalScroll();
+  }
+}, syncFieldsHorizontalScroll: function() {
+  this.fieldScroller.setScrollLeft(this.lastScrollLeft);
+}, onFieldContainerScroll: function() {
+  this.scrollingViewEl.setScrollLeft(this.fieldScroller.getScrollLeft());
+}, onColumnResize: function(column, width) {
+  var me = this;
+  if (me.rendered) 
+  {
+    me.onGridResize();
+    me.onViewScroll();
+    if (!column.isGroupHeader) 
+    {
+      me.syncFieldWidth(column);
+      me.repositionIfVisible();
+    }
+  }
+}, onColumnHide: function(column) {
+  if (!column.isGroupHeader) 
+  {
+    column.getEditor().hide();
+    this.repositionIfVisible();
+  }
+}, onColumnShow: function(column) {
+  var me = this;
+  if (me.rendered && !column.isGroupHeader) 
+  {
+    column.getEditor().show();
+    me.syncFieldWidth(column);
+    if (!me.preventReposition) 
+    {
+      this.repositionIfVisible();
+    }
+  }
+}, onColumnMove: function(column, fromIdx, toIdx) {
+  var me = this, i, incr = 1, len, field, fieldIdx, fieldContainer = column.isLocked() ? me.lockedColumnContainer : me.normalColumnContainer;
+  if (column.isGroupHeader) 
+  {
+    Ext.suspendLayouts();
+    column = column.getGridColumns();
+    if (toIdx > fromIdx) 
+    {
+      toIdx--;
+      incr = 0;
+    }
+    this.addFieldsForColumn(column);
+    for (i = 0 , len = column.length; i < len; i++ , fromIdx += incr , toIdx += incr) 
+      {
+        field = column[i].getEditor();
+        fieldIdx = fieldContainer.items.indexOf(field);
+        if (fieldIdx === -1) 
+        {
+          fieldContainer.insert(toIdx, field);
+        } else if (fieldIdx != toIdx) 
+        {
+          fieldContainer.move(fromIdx, toIdx);
+        }
+      }
+    Ext.resumeLayouts(true);
+  } else {
+    if (toIdx > fromIdx) 
+    {
+      toIdx--;
+    }
+    this.addFieldsForColumn(column);
+    field = column.getEditor();
+    fieldIdx = fieldContainer.items.indexOf(field);
+    if (fieldIdx === -1) 
+    {
+      fieldContainer.insert(toIdx, field);
+    } else if (fieldIdx != toIdx) 
+    {
+      fieldContainer.move(fromIdx, toIdx);
+    }
+  }
+}, onColumnAdd: function(column) {
+  if (column.isGroupHeader) 
+  {
+    column = column.getGridColumns();
+  }
+  this.addFieldsForColumn(column);
+  this.insertColumnEditor(column);
+  this.preventReposition = false;
+}, insertColumnEditor: function(column) {
+  var me = this, fieldContainer, len, i;
+  if (Ext.isArray(column)) 
+  {
+    for (i = 0 , len = column.length; i < len; i++) 
+      {
+        me.insertColumnEditor(column[i]);
+      }
+    return;
+  }
+  if (!column.getEditor) 
+  {
+    return;
+  }
+  fieldContainer = column.isLocked() ? me.lockedColumnContainer : me.normalColumnContainer;
+  fieldContainer.insert(column.getVisibleIndex(), column.getEditor());
+}, onColumnRemove: function(ct, column) {
+  column = column.isGroupHeader ? column.getGridColumns() : column;
+  this.removeColumnEditor(column);
+}, removeColumnEditor: function(column) {
+  var me = this, field, len, i;
+  if (Ext.isArray(column)) 
+  {
+    for (i = 0 , len = column.length; i < len; i++) 
+      {
+        me.removeColumnEditor(column[i]);
+      }
+    return;
+  }
+  if (column.hasEditor()) 
+  {
+    field = column.getEditor();
+    if (field && field.ownerCt) 
+    {
+      field.ownerCt.remove(field, false);
+    }
+  }
+}, onColumnReplace: function(map, fieldId, column, oldColumn) {
+  this.onColumnRemove(oldColumn.ownerCt, oldColumn);
+}, getFloatingButtons: function() {
+  var me = this, btns = me.floatingButtons;
+  if (!btns) 
+  {
+    me.floatingButtons = btns = new Ext.grid.RowEditorButtons({rowEditor: me});
+  }
+  return btns;
+}, repositionIfVisible: function(c) {
+  var me = this, view = me.view;
+  if (c && (c == me || !c.el.isAncestor(view.el))) 
+  {
+    return;
+  }
+  if (me.isVisible() && view.isVisible(true)) 
+  {
+    me.reposition();
+  }
+}, getRefOwner: function() {
+  return this.editingPlugin.grid;
+}, getRefItems: function() {
+  var me = this, result;
+  if (me.lockable) 
+  {
+    result = me.lockedColumnContainer.getRefItems();
+    result.push.apply(result, me.normalColumnContainer.getRefItems());
+  } else {
+    result = me.callParent();
+  }
+  result.push.apply(result, me.getFloatingButtons().getRefItems());
+  return result;
+}, reposition: function(animateConfig, fromScrollHandler) {
+  var me = this, context = me.context, row = context && Ext.get(context.row), yOffset = 0, rowTop, localY, deltaY, afterPosition;
+  if (row && Ext.isElement(row.dom)) 
+  {
+    deltaY = me.syncButtonPosition(me.getScrollDelta());
+    if (!me.editingPlugin.grid.rowLines) 
+    {
+      yOffset = -parseInt(row.first().getStyle('border-bottom-width'));
+    }
+    rowTop = me.calculateLocalRowTop(row);
+    localY = me.calculateEditorTop(rowTop) + yOffset;
+    if (!fromScrollHandler) 
+    {
+      afterPosition = function() {
+  if (deltaY) 
+  {
+    me.scrollingViewEl.scrollBy(0, deltaY, true);
+  }
+  me.focusContextCell();
+};
+    }
+    me.syncEditorClip();
+    if (animateConfig) 
+    {
+      me.animate(Ext.applyIf({to: {top: localY}, duration: animateConfig.duration || 125, callback: afterPosition}, animateConfig));
+    } else {
+      me.setLocalY(localY);
+      if (afterPosition) 
+      {
+        afterPosition();
+      }
+    }
+  }
+}, getScrollDelta: function() {
+  var me = this, scrollingViewDom = me.scrollingViewEl.dom, context = me.context, body = me.body, deltaY = 0;
+  if (context) 
+  {
+    deltaY = Ext.fly(context.row).getOffsetsTo(scrollingViewDom)[1] - body.getBorderPadding().beforeY;
+    if (deltaY > 0) 
+    {
+      deltaY = Math.max(deltaY + me.getHeight() + me.floatingButtons.getHeight() - scrollingViewDom.clientHeight - body.getBorderWidth('b'), 0);
+    }
+  }
+  return deltaY;
+}, calculateLocalRowTop: function(row) {
+  var grid = this.editingPlugin.grid;
+  return Ext.fly(row).getOffsetsTo(grid)[1] - grid.el.getBorderWidth('t') + this.lastScrollTop;
+}, calculateEditorTop: function(rowTop) {
+  return rowTop - this.body.getBorderPadding().beforeY - this.lastScrollTop;
+}, getClientWidth: function() {
+  var me = this, grid = me.editingPlugin.grid, result;
+  if (me.lockable) 
+  {
+    result = grid.lockedGrid.getWidth() + grid.normalGrid.view.el.dom.clientWidth - 1;
+  } else {
+    result = grid.view.el.dom.clientWidth;
+  }
+  return result;
+}, getEditor: function(fieldInfo) {
+  var me = this;
+  if (Ext.isNumber(fieldInfo)) 
+  {
+    return me.query('[isFormField]')[fieldInfo];
+  } else if (fieldInfo.isHeader && !fieldInfo.isGroupHeader) 
+  {
+    return fieldInfo.getEditor();
+  }
+}, addFieldsForColumn: function(column, initial) {
+  var me = this, i, length, field;
+  if (Ext.isArray(column)) 
+  {
+    for (i = 0 , length = column.length; i < length; i++) 
+      {
+        me.addFieldsForColumn(column[i], initial);
+      }
+    return;
+  }
+  if (column.getEditor) 
+  {
+    field = column.getEditor(null, {xtype: 'displayfield', getModelData: function() {
+  return null;
+}});
+    if (column.align === 'right') 
+    {
+      field.fieldStyle = 'text-align:right';
+    }
+    if (column.xtype === 'actioncolumn') 
+    {
+      field.fieldCls += ' ' + Ext.baseCSSPrefix + 'form-action-col-field';
+    }
+    if (me.isVisible() && me.context) 
+    {
+      if (field.is('displayfield')) 
+      {
+        me.renderColumnData(field, me.context.record, column);
+      } else {
+        field.suspendEvents();
+        field.setValue(me.context.record.get(column.dataIndex));
+        field.resumeEvents();
+      }
+    }
+    if (column.hidden) 
+    {
+      me.onColumnHide(column);
+    } else if (column.rendered && !initial) 
+    {
+      me.onColumnShow(column);
+    }
+  }
+}, loadRecord: function(record) {
+  var me = this, form = me.getForm(), fields = form.getFields(), items = fields.items, length = items.length, i, displayFields, isValid;
+  for (i = 0; i < length; i++) 
+    {
+      items[i].suspendEvents();
+    }
+  form.loadRecord(record);
+  for (i = 0; i < length; i++) 
+    {
+      items[i].resumeEvents();
+    }
+  isValid = form.isValid();
+  if (me.errorSummary) 
+  {
+    if (isValid) 
+    {
+      me.hideToolTip();
+    } else {
+      me.showToolTip();
+    }
+  }
+  me.updateButton(isValid);
+  displayFields = me.query('>displayfield');
+  length = displayFields.length;
+  for (i = 0; i < length; i++) 
+    {
+      me.renderColumnData(displayFields[i], record);
+    }
+}, renderColumnData: function(field, record, activeColumn) {
+  var me = this, grid = me.editingPlugin.grid, headerCt = grid.headerCt, view = me.scrollingView, store = view.dataSource, column = activeColumn || field.column, value = record.get(column.dataIndex), renderer = column.editRenderer || column.renderer, metaData, rowIdx, colIdx;
+  if (renderer) 
+  {
+    metaData = {tdCls: '', style: ''};
+    rowIdx = store.indexOf(record);
+    colIdx = headerCt.getHeaderIndex(column);
+    value = renderer.call(column.scope || headerCt.ownerCt, value, metaData, record, rowIdx, colIdx, store, view);
+  }
+  field.setRawValue(value);
+  field.resetOriginalValue();
+}, beforeEdit: function() {
+  var me = this, scrollDelta;
+  if (me.isVisible() && me.errorSummary && !me.autoCancel && me.isDirty()) 
+  {
+    scrollDelta = me.getScrollDelta();
+    if (scrollDelta) 
+    {
+      me.scrollingViewEl.scrollBy(0, scrollDelta, true);
+    }
+    me.showToolTip();
+    return false;
+  }
+}, startEdit: function(record, columnHeader) {
+  var me = this, editingPlugin = me.editingPlugin, grid = editingPlugin.grid, context = me.context = editingPlugin.context;
+  if (!me.rendered) 
+  {
+    me.width = me.getClientWidth();
+    me.render(grid.el, grid.el.dom.firstChild);
+    me.getFloatingButtons().render(me.el);
+    me.onViewScroll();
+  } else {
+    me.syncFieldsHorizontalScroll();
+  }
+  if (me.isVisible()) 
+  {
+    me.reposition(true);
+  } else {
+    me.show();
+  }
+  me.onGridResize();
+  context.grid.getSelectionModel().select(record);
+  me.loadRecord(record);
+}, syncButtonPosition: function(scrollDelta) {
+  var me = this, floatingButtons = me.getFloatingButtons(), scrollingViewElDom = me.scrollingViewEl.dom, overflow = this.getScrollDelta() - (scrollingViewElDom.scrollHeight - scrollingViewElDom.scrollTop - scrollingViewElDom.clientHeight);
+  if (overflow > 0) 
+  {
+    if (!me._buttonsOnTop) 
+    {
+      floatingButtons.setButtonPosition('top');
+      me._buttonsOnTop = true;
+    }
+    scrollDelta = 0;
+  } else if (me._buttonsOnTop) 
+  {
+    floatingButtons.setButtonPosition('bottom');
+    me._buttonsOnTop = false;
+  }
+  return scrollDelta;
+}, syncEditorClip: function() {
+  var me = this, overflow = me.getScrollDelta(), btnHeight;
+  if (overflow) 
+  {
+    me.isOverflowing = true;
+    btnHeight = me.floatingButtons.getHeight();
+    if (overflow > 0) 
+    {
+      me.clipBottom(Math.max(me.getHeight() - overflow + btnHeight, -btnHeight));
+    } else if (overflow < 0) 
+    {
+      overflow = Math.abs(overflow);
+      me.clipTop(Math.max(overflow, 0));
+    }
+  } else if (me.isOverflowing) 
+  {
+    me.clearClip();
+    me.isOverflowing = false;
+  }
+}, focusContextCell: function() {
+  var field = this.getEditor(this.context.column);
+  if (field && field.focus) 
+  {
+    field.focus();
+  }
+}, cancelEdit: function() {
+  var me = this, form = me.getForm(), fields = form.getFields(), items = fields.items, length = items.length, i;
+  me.hide();
+  form.clearInvalid();
+  for (i = 0; i < length; i++) 
+    {
+      items[i].suspendEvents();
+    }
+  form.reset();
+  for (i = 0; i < length; i++) 
+    {
+      items[i].resumeEvents();
+    }
+}, completeEdit: function() {
+  var me = this, form = me.getForm();
+  if (!form.isValid()) 
+  {
+    return false;
+  }
+  form.updateRecord(me.context.record);
+  me.hide();
+  return true;
+}, onShow: function() {
+  var me = this;
+  me.callParent(arguments);
+  me.reposition();
+}, onHide: function() {
+  var me = this;
+  me.callParent(arguments);
+  if (me.tooltip) 
+  {
+    me.hideToolTip();
+  }
+  if (me.context) 
+  {
+    me.context.view.focusRow(me.context.record);
+    me.context = null;
+  }
+}, isDirty: function() {
+  var me = this, form = me.getForm();
+  return form.isDirty();
+}, getToolTip: function() {
+  return this.tooltip || (this.tooltip = new Ext.tip.ToolTip({cls: Ext.baseCSSPrefix + 'grid-row-editor-errors', title: this.errorsText, autoHide: false, closable: true, closeAction: 'disable', anchor: 'left', anchorToTarget: false}));
+}, hideToolTip: function() {
+  var me = this, tip = me.getToolTip();
+  if (tip.rendered) 
+  {
+    tip.disable();
+  }
+  me.hiddenTip = false;
+}, showToolTip: function() {
+  var me = this, tip = me.getToolTip();
+  tip.showAt([0, 0]);
+  tip.update(me.getErrors());
+  me.repositionTip();
+  tip.enable();
+}, repositionTip: function() {
+  var me = this, tip = me.getToolTip(), context = me.context, row = Ext.get(context.row), viewEl = me.scrollingViewEl, viewHeight = viewEl.dom.clientHeight, viewTop = me.lastScrollTop, viewBottom = viewTop + viewHeight, rowHeight = row.getHeight(), rowTop = row.getOffsetsTo(me.context.view.body)[1], rowBottom = rowTop + rowHeight;
+  if (rowBottom > viewTop && rowTop < viewBottom) 
+  {
+    tip.showAt(tip.getAlignToXY(viewEl, 'tl-tr', [15, row.getOffsetsTo(viewEl)[1]]));
+    me.hiddenTip = false;
+  } else {
+    tip.hide();
+    me.hiddenTip = true;
+  }
+}, getErrors: function() {
+  var me = this, errors = [], fields = me.query('>[isFormField]'), length = fields.length, i;
+  for (i = 0; i < length; i++) 
+    {
+      errors = errors.concat(Ext.Array.map(fields[i].getErrors(), me.createErrorListItem));
+    }
+  if (!errors.length && !me.autoCancel && me.isDirty()) 
+  {
+    errors[0] = me.createErrorListItem(me.dirtyText);
+  }
+  return '<ul class="' + Ext.plainListCls + '">' + errors.join('') + '</ul>';
+}, createErrorListItem: function(e) {
+  return '<li class="' + Ext.baseCSSPrefix + 'grid-row-editor-errors-item">' + e + '</li>';
+}, beforeDestroy: function() {
+  Ext.destroy(this.floatingButtons, this.tooltip);
+  this.callParent();
+}, clipBottom: function(value) {
+  this.el.setStyle('clip', 'rect(-1000px auto ' + value + 'px auto)');
+}, clipTop: function(value) {
+  this.el.setStyle('clip', 'rect(' + value + 'px auto 1000px auto)');
+}, clearClip: function(el) {
+  this.el.setStyle('clip', Ext.isIE8m || Ext.isIEQuirks ? 'rect(-1000px auto 1000px auto)' : 'auto');
+}}, 0, ["roweditor"], ["panel", "form", "component", "container", "roweditor", "box"], {"panel": true, "form": true, "component": true, "container": true, "roweditor": true, "box": true}, ["widget.roweditor"], 0, [Ext.grid, 'RowEditor'], 0));
+;
+
+(Ext.cmd.derive('Ext.view.DropZone', Ext.dd.DropZone, {indicatorHtml: '<div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-left"></div><div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-right"></div>', indicatorCls: Ext.baseCSSPrefix + 'grid-drop-indicator', constructor: function(config) {
+  var me = this;
+  Ext.apply(me, config);
+  if (!me.ddGroup) 
+  {
+    me.ddGroup = 'view-dd-zone-' + me.view.id;
+  }
+  me.callParent([me.view.el]);
+}, fireViewEvent: function() {
+  var me = this, result;
+  me.lock();
+  result = me.view.fireEvent.apply(me.view, arguments);
+  me.unlock();
+  return result;
+}, getTargetFromEvent: function(e) {
+  var node = e.getTarget(this.view.getItemSelector()), mouseY, nodeList, testNode, i, len, box;
+  if (!node) 
+  {
+    mouseY = e.getPageY();
+    for (i = 0 , nodeList = this.view.getNodes() , len = nodeList.length; i < len; i++) 
+      {
+        testNode = nodeList[i];
+        box = Ext.fly(testNode).getBox();
+        if (mouseY <= box.bottom) 
+        {
+          return testNode;
+        }
+      }
+  }
+  return node;
+}, getIndicator: function() {
+  var me = this;
+  if (!me.indicator) 
+  {
+    me.indicator = new Ext.Component({html: me.indicatorHtml, cls: me.indicatorCls, ownerCt: me.view, floating: true, shadow: false});
+  }
+  return me.indicator;
+}, getPosition: function(e, node) {
+  var y = e.getXY()[1], region = Ext.fly(node).getRegion(), pos;
+  if ((region.bottom - y) >= (region.bottom - region.top) / 2) 
+  {
+    pos = "before";
+  } else {
+    pos = "after";
+  }
+  return pos;
+}, containsRecordAtOffset: function(records, record, offset) {
+  if (!record) 
+  {
+    return false;
+  }
+  var view = this.view, recordIndex = view.indexOf(record), nodeBefore = view.getNode(recordIndex + offset, true), recordBefore = nodeBefore ? view.getRecord(nodeBefore) : null;
+  return recordBefore && Ext.Array.contains(records, recordBefore);
+}, positionIndicator: function(node, data, e) {
+  var me = this, view = me.view, pos = me.getPosition(e, node), overRecord = view.getRecord(node), draggingRecords = data.records, indicatorY;
+  if (!Ext.Array.contains(draggingRecords, overRecord) && (pos == 'before' && !me.containsRecordAtOffset(draggingRecords, overRecord, -1) || pos == 'after' && !me.containsRecordAtOffset(draggingRecords, overRecord, 1))) 
+  {
+    me.valid = true;
+    if (me.overRecord != overRecord || me.currentPosition != pos) 
+    {
+      indicatorY = Ext.fly(node).getY() - view.el.getY() - 1;
+      if (pos == 'after') 
+      {
+        indicatorY += Ext.fly(node).getHeight();
+      }
+      me.getIndicator().setWidth(Ext.fly(view.el).getWidth()).showAt(0, indicatorY);
+      me.overRecord = overRecord;
+      me.currentPosition = pos;
+    }
+  } else {
+    me.invalidateDrop();
+  }
+}, invalidateDrop: function() {
+  if (this.valid) 
+  {
+    this.valid = false;
+    this.getIndicator().hide();
+  }
+}, onNodeOver: function(node, dragZone, e, data) {
+  var me = this;
+  if (!Ext.Array.contains(data.records, me.view.getRecord(node))) 
+  {
+    me.positionIndicator(node, data, e);
+  }
+  return me.valid ? me.dropAllowed : me.dropNotAllowed;
+}, notifyOut: function(node, dragZone, e, data) {
+  var me = this;
+  me.callParent(arguments);
+  me.overRecord = me.currentPosition = null;
+  me.valid = false;
+  if (me.indicator) 
+  {
+    me.indicator.hide();
+  }
+}, onContainerOver: function(dd, e, data) {
+  var me = this, view = me.view, count = view.dataSource.getCount();
+  if (count) 
+  {
+    me.positionIndicator(view.all.last(), data, e);
+  } else {
+    me.overRecord = me.currentPosition = null;
+    me.getIndicator().setWidth(Ext.fly(view.el).getWidth()).showAt(0, 0);
+    me.valid = true;
+  }
+  return me.dropAllowed;
+}, onContainerDrop: function(dd, e, data) {
+  return this.onNodeDrop(dd, null, e, data);
+}, onNodeDrop: function(targetNode, dragZone, e, data) {
+  var me = this, dropHandled = false, dropHandlers = {wait: false, processDrop: function() {
+  me.invalidateDrop();
+  me.handleNodeDrop(data, me.overRecord, me.currentPosition);
+  dropHandled = true;
+  me.fireViewEvent('drop', targetNode, data, me.overRecord, me.currentPosition);
+}, cancelDrop: function() {
+  me.invalidateDrop();
+  dropHandled = true;
+}}, performOperation = false;
+  if (me.valid) 
+  {
+    performOperation = me.fireViewEvent('beforedrop', targetNode, data, me.overRecord, me.currentPosition, dropHandlers);
+    if (dropHandlers.wait) 
+    {
+      return;
+    }
+    if (performOperation !== false) 
+    {
+      if (!dropHandled) 
+      {
+        dropHandlers.processDrop();
+      }
+    }
+  }
+  return performOperation;
+}, destroy: function() {
+  Ext.destroy(this.indicator);
+  delete this.indicator;
+  this.callParent();
+}}, 1, 0, 0, 0, 0, 0, [Ext.view, 'DropZone'], 0));
+;
+
+(Ext.cmd.derive('Ext.grid.column.Action', Ext.grid.column.Column, {alternateClassName: 'Ext.grid.ActionColumn', actionIdRe: new RegExp(Ext.baseCSSPrefix + 'action-col-(\\d+)'), altText: '', menuText: '<i>Actions</i>', sortable: false, innerCls: Ext.baseCSSPrefix + 'grid-cell-inner-action-col', constructor: function(config) {
+  var me = this, cfg = Ext.apply({}, config), items = cfg.items || me.items || [me], hasGetClass, i, len;
+  me.origRenderer = cfg.renderer || me.renderer;
+  me.origScope = cfg.scope || me.scope;
+  me.renderer = me.scope = cfg.renderer = cfg.scope = null;
+  cfg.items = null;
+  me.callParent([cfg]);
+  me.items = items;
+  for (i = 0 , len = items.length; i < len; ++i) 
+    {
+      if (items[i].getClass) 
+      {
+        hasGetClass = true;
+        break;
+      }
+    }
+  if (me.origRenderer || hasGetClass) 
+  {
+    me.hasCustomRenderer = true;
+  }
+}, defaultRenderer: function(v, meta, record, rowIdx, colIdx, store, view) {
+  var me = this, prefix = Ext.baseCSSPrefix, scope = me.origScope || me, items = me.items, len = items.length, i = 0, item, ret, disabled, tooltip;
+  ret = Ext.isFunction(me.origRenderer) ? me.origRenderer.apply(scope, arguments) || '' : '';
+  meta.tdCls += ' ' + Ext.baseCSSPrefix + 'action-col-cell';
+  for (; i < len; i++) 
+    {
+      item = items[i];
+      disabled = item.disabled || (item.isDisabled ? item.isDisabled.call(item.scope || scope, view, rowIdx, colIdx, item, record) : false);
+      tooltip = disabled ? null : (item.tooltip || (item.getTip ? item.getTip.apply(item.scope || scope, arguments) : null));
+      if (!item.hasActionConfiguration) 
+      {
+        item.stopSelection = me.stopSelection;
+        item.disable = Ext.Function.bind(me.disableAction, me, [i], 0);
+        item.enable = Ext.Function.bind(me.enableAction, me, [i], 0);
+        item.hasActionConfiguration = true;
+      }
+      ret += '<img role="button" alt="' + (item.altText || me.altText) + '" src="' + (item.icon || Ext.BLANK_IMAGE_URL) + '" class="' + prefix + 'action-col-icon ' + prefix + 'action-col-' + String(i) + ' ' + (disabled ? prefix + 'item-disabled' : ' ') + ' ' + (Ext.isFunction(item.getClass) ? item.getClass.apply(item.scope || scope, arguments) : (item.iconCls || me.iconCls || '')) + '"' + (tooltip ? ' data-qtip="' + tooltip + '"' : '') + ' />';
+    }
+  return ret;
+}, enableAction: function(index, silent) {
+  var me = this;
+  if (!index) 
+  {
+    index = 0;
+  } else if (!Ext.isNumber(index)) 
+  {
+    index = Ext.Array.indexOf(me.items, index);
+  }
+  me.items[index].disabled = false;
+  me.up('tablepanel').el.select('.' + Ext.baseCSSPrefix + 'action-col-' + index).removeCls(me.disabledCls);
+  if (!silent) 
+  {
+    me.fireEvent('enable', me);
+  }
+}, disableAction: function(index, silent) {
+  var me = this;
+  if (!index) 
+  {
+    index = 0;
+  } else if (!Ext.isNumber(index)) 
+  {
+    index = Ext.Array.indexOf(me.items, index);
+  }
+  me.items[index].disabled = true;
+  me.up('tablepanel').el.select('.' + Ext.baseCSSPrefix + 'action-col-' + index).addCls(me.disabledCls);
+  if (!silent) 
+  {
+    me.fireEvent('disable', me);
+  }
+}, destroy: function() {
+  delete this.items;
+  delete this.renderer;
+  return this.callParent(arguments);
+}, processEvent: function(type, view, cell, recordIndex, cellIndex, e, record, row) {
+  var me = this, target = e.getTarget(), match, item, fn, key = type == 'keydown' && e.getKey(), disabled;
+  if (key && !Ext.fly(target).findParent(view.getCellSelector())) 
+  {
+    target = Ext.fly(cell).down('.' + Ext.baseCSSPrefix + 'action-col-icon', true);
+  }
+  if (target && (match = target.className.match(me.actionIdRe))) 
+  {
+    item = me.items[parseInt(match[1], 10)];
+    disabled = item.disabled || (item.isDisabled ? item.isDisabled.call(item.scope || me.origScope || me, view, recordIndex, cellIndex, item, record) : false);
+    if (item && !disabled) 
+    {
+      if (type == 'click' || (key == e.ENTER || key == e.SPACE)) 
+      {
+        fn = item.handler || me.handler;
+        if (fn) 
+        {
+          fn.call(item.scope || me.origScope || me, view, recordIndex, cellIndex, item, e, record, row);
+        }
+      } else if (type == 'mousedown' && item.stopSelection !== false) 
+      {
+        return false;
+      }
+    }
+  }
+  return me.callParent(arguments);
+}, cascade: function(fn, scope) {
+  fn.call(scope || this, this);
+}, getRefItems: function() {
+  return [];
+}}, 1, ["actioncolumn"], ["component", "gridcolumn", "container", "actioncolumn", "box", "headercontainer"], {"component": true, "gridcolumn": true, "container": true, "actioncolumn": true, "box": true, "headercontainer": true}, ["widget.actioncolumn"], 0, [Ext.grid.column, 'Action', Ext.grid, 'ActionColumn'], 0));
+;
+
+(Ext.cmd.derive('Ext.grid.column.Boolean', Ext.grid.column.Column, {alternateClassName: 'Ext.grid.BooleanColumn', trueText: 'true', falseText: 'false', undefinedText: '&#160;', defaultRenderer: function(value) {
+  if (value === undefined) 
+  {
+    return this.undefinedText;
+  }
+  if (!value || value === 'false') 
+  {
+    return this.falseText;
+  }
+  return this.trueText;
+}}, 0, ["booleancolumn"], ["booleancolumn", "component", "gridcolumn", "container", "box", "headercontainer"], {"booleancolumn": true, "component": true, "gridcolumn": true, "container": true, "box": true, "headercontainer": true}, ["widget.booleancolumn"], 0, [Ext.grid.column, 'Boolean', Ext.grid, 'BooleanColumn'], 0));
 ;
 
 (Ext.cmd.derive('Ext.grid.column.Date', Ext.grid.column.Column, {alternateClassName: 'Ext.grid.DateColumn', initComponent: function() {
@@ -57648,55 +61517,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, ["plugin.rowediting"], 0, [Ext.grid.plugin, 'RowEditing'], 0));
 ;
 
-(Ext.cmd.derive('Ext.layout.component.Body', Ext.layout.component.Auto, {type: 'body', beginLayout: function(ownerContext) {
-  this.callParent(arguments);
-  ownerContext.bodyContext = ownerContext.getEl('body');
-}, beginLayoutCycle: function(ownerContext, firstCycle) {
-  var me = this, lastWidthModel = me.lastWidthModel, lastHeightModel = me.lastHeightModel, body = me.owner.body;
-  me.callParent(arguments);
-  if (lastWidthModel && lastWidthModel.fixed && ownerContext.widthModel.shrinkWrap) 
-  {
-    body.setWidth(null);
-  }
-  if (lastHeightModel && lastHeightModel.fixed && ownerContext.heightModel.shrinkWrap) 
-  {
-    body.setHeight(null);
-  }
-}, calculateOwnerHeightFromContentHeight: function(ownerContext, contentHeight) {
-  var height = this.callParent(arguments);
-  if (ownerContext.targetContext != ownerContext) 
-  {
-    height += ownerContext.getPaddingInfo().height;
-  }
-  return height;
-}, calculateOwnerWidthFromContentWidth: function(ownerContext, contentWidth) {
-  var width = this.callParent(arguments);
-  if (ownerContext.targetContext != ownerContext) 
-  {
-    width += ownerContext.getPaddingInfo().width;
-  }
-  return width;
-}, measureContentWidth: function(ownerContext) {
-  return ownerContext.bodyContext.setWidth(ownerContext.bodyContext.el.dom.offsetWidth, false);
-}, measureContentHeight: function(ownerContext) {
-  return ownerContext.bodyContext.setHeight(ownerContext.bodyContext.el.dom.offsetHeight, false);
-}, publishInnerHeight: function(ownerContext, height) {
-  var innerHeight = height - ownerContext.getFrameInfo().height, targetContext = ownerContext.targetContext;
-  if (targetContext != ownerContext) 
-  {
-    innerHeight -= ownerContext.getPaddingInfo().height;
-  }
-  return ownerContext.bodyContext.setHeight(innerHeight, !ownerContext.heightModel.natural);
-}, publishInnerWidth: function(ownerContext, width) {
-  var innerWidth = width - ownerContext.getFrameInfo().width, targetContext = ownerContext.targetContext;
-  if (targetContext != ownerContext) 
-  {
-    innerWidth -= ownerContext.getPaddingInfo().width;
-  }
-  ownerContext.bodyContext.setWidth(innerWidth, !ownerContext.widthModel.natural);
-}}, 0, 0, 0, 0, ["layout.body"], 0, [Ext.layout.component, 'Body'], 0));
-;
-
 (Ext.cmd.derive('Ext.layout.component.FieldSet', Ext.layout.component.Body, {type: 'fieldset', defaultCollapsedWidth: 100, beforeLayoutCycle: function(ownerContext) {
   if (ownerContext.target.collapsed) 
   {
@@ -58436,149 +62256,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.apply(props.horz, methods);
   Ext.apply(props.vert, methods);
 }));
-;
-
-(Ext.cmd.derive('Ext.layout.container.Card', Ext.layout.container.Fit, {alternateClassName: 'Ext.layout.CardLayout', type: 'card', hideInactive: true, deferredRender: false, getRenderTree: function() {
-  var me = this, activeItem = me.getActiveItem();
-  if (activeItem) 
-  {
-    if (activeItem.hasListeners.beforeactivate && activeItem.fireEvent('beforeactivate', activeItem) === false) 
-    {
-      activeItem = me.activeItem = me.owner.activeItem = null;
-    } else if (activeItem.hasListeners.activate) 
-    {
-      activeItem.on({boxready: function() {
-  activeItem.fireEvent('activate', activeItem);
-}, single: true});
-    }
-    if (me.deferredRender) 
-    {
-      if (activeItem) 
-      {
-        return me.getItemsRenderTree([activeItem]);
-      }
-    } else {
-      return me.callParent(arguments);
-    }
-  }
-}, renderChildren: function() {
-  var me = this, active = me.getActiveItem();
-  if (!me.deferredRender) 
-  {
-    me.callParent();
-  } else if (active) 
-  {
-    me.renderItems([active], me.getRenderTarget());
-  }
-}, isValidParent: function(item, target, position) {
-  var itemEl = item.el ? item.el.dom : Ext.getDom(item);
-  return (itemEl && itemEl.parentNode === (target.dom || target)) || false;
-}, getActiveItem: function() {
-  var me = this, result = me.parseActiveItem(me.activeItem || (me.owner && me.owner.activeItem));
-  if (result && me.owner.items.indexOf(result) != -1) 
-  {
-    me.activeItem = result;
-  } else {
-    me.activeItem = null;
-  }
-  return me.activeItem;
-}, parseActiveItem: function(item) {
-  if (item && item.isComponent) 
-  {
-    return item;
-  } else if (typeof item == 'number' || item === undefined) 
-  {
-    return this.getLayoutItems()[item || 0];
-  } else {
-    return this.owner.getComponent(item);
-  }
-}, configureItem: function(item) {
-  if (item === this.getActiveItem()) 
-  {
-    item.hidden = false;
-  } else {
-    item.hidden = true;
-  }
-  this.callParent(arguments);
-}, onRemove: function(component) {
-  var me = this;
-  if (component === me.activeItem) 
-  {
-    me.activeItem = null;
-  }
-}, getAnimation: function(newCard, owner) {
-  var newAnim = (newCard || {}).cardSwitchAnimation;
-  if (newAnim === false) 
-  {
-    return false;
-  }
-  return newAnim || owner.cardSwitchAnimation;
-}, getNext: function() {
-  var wrap = arguments[0], items = this.getLayoutItems(), index = Ext.Array.indexOf(items, this.activeItem);
-  return items[index + 1] || (wrap ? items[0] : false);
-}, next: function() {
-  var anim = arguments[0], wrap = arguments[1];
-  return this.setActiveItem(this.getNext(wrap), anim);
-}, getPrev: function() {
-  var wrap = arguments[0], items = this.getLayoutItems(), index = Ext.Array.indexOf(items, this.activeItem);
-  return items[index - 1] || (wrap ? items[items.length - 1] : false);
-}, prev: function() {
-  var anim = arguments[0], wrap = arguments[1];
-  return this.setActiveItem(this.getPrev(wrap), anim);
-}, setActiveItem: function(newCard) {
-  var me = this, owner = me.owner, oldCard = me.activeItem, rendered = owner.rendered, newIndex;
-  newCard = me.parseActiveItem(newCard);
-  newIndex = owner.items.indexOf(newCard);
-  if (newIndex == -1) 
-  {
-    newIndex = owner.items.items.length;
-    Ext.suspendLayouts();
-    newCard = owner.add(newCard);
-    Ext.resumeLayouts();
-  }
-  if (newCard && oldCard != newCard) 
-  {
-    if (newCard.fireEvent('beforeactivate', newCard, oldCard) === false) 
-    {
-      return false;
-    }
-    if (oldCard && oldCard.fireEvent('beforedeactivate', oldCard, newCard) === false) 
-    {
-      return false;
-    }
-    if (rendered) 
-    {
-      Ext.suspendLayouts();
-      if (!newCard.rendered) 
-      {
-        me.renderItem(newCard, me.getRenderTarget(), owner.items.length);
-      }
-      if (oldCard) 
-      {
-        if (me.hideInactive) 
-        {
-          oldCard.hide();
-          oldCard.hiddenByLayout = true;
-        }
-        oldCard.fireEvent('deactivate', oldCard, newCard);
-      }
-      if (newCard.hidden) 
-      {
-        newCard.show();
-      }
-      if (!newCard.hidden) 
-      {
-        me.activeItem = newCard;
-      }
-      Ext.resumeLayouts(true);
-    } else {
-      me.activeItem = newCard;
-    }
-    newCard.fireEvent('activate', newCard, oldCard);
-    return me.activeItem;
-  }
-  return false;
-}}, 0, 0, 0, 0, ["layout.card"], 0, [Ext.layout.container, 'Card', Ext.layout, 'CardLayout'], 0));
 ;
 
 (Ext.cmd.derive('Ext.menu.Item', Ext.Component, {alternateClassName: 'Ext.menu.TextItem', activeCls: Ext.baseCSSPrefix + 'menu-item-active', ariaRole: 'menuitem', canActivate: true, clickHideDelay: 0, destroyMenu: true, disabledCls: Ext.baseCSSPrefix + 'menu-item-disabled', hideOnClick: true, isMenuItem: true, menuAlign: 'tl-tr?', menuExpandDelay: 200, menuHideDelay: 200, tooltipType: 'qtip', arrowCls: Ext.baseCSSPrefix + 'menu-item-arrow', childEls: ['itemEl', 'iconEl', 'textEl', 'arrowEl'], renderTpl: ['<tpl if="plain">', '{text}', '<tpl else>', '<a id="{id}-itemEl"', ' class="' + Ext.baseCSSPrefix + 'menu-item-link{childElCls}"', ' href="{href}"', '<tpl if="hrefTarget"> target="{hrefTarget}"</tpl>', ' hidefocus="true"', ' unselectable="on"', '<tpl if="tabIndex">', ' tabIndex="{tabIndex}"', '</tpl>', '>', '<div role="img" id="{id}-iconEl" class="' + Ext.baseCSSPrefix + 'menu-item-icon {iconCls}', '{childElCls} {glyphCls}" style="<tpl if="icon">background-image:url({icon});</tpl>', '<tpl if="glyph && glyphFontFamily">font-family:{glyphFontFamily};</tpl>">', '<tpl if="glyph">&#{glyph};</tpl>', '</div>', '<span id="{id}-textEl" class="' + Ext.baseCSSPrefix + 'menu-item-text" unselectable="on">{text}</span>', '<img id="{id}-arrowEl" src="{blank}" class="{arrowCls}', '{childElCls}"/>', '</a>', '</tpl>'], maskOnDisable: false, activate: function() {
@@ -60537,457 +64214,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, ["selection.treemodel"], 0, [Ext.selection, 'TreeModel'], 0));
 ;
 
-(Ext.cmd.derive('Ext.tab.Tab', Ext.button.Button, {isTab: true, baseCls: Ext.baseCSSPrefix + 'tab', closeElOverCls: Ext.baseCSSPrefix + 'tab-close-btn-over', activeCls: 'active', closableCls: 'closable', closable: true, closeText: 'Close Tab', active: false, childEls: ['closeEl'], scale: false, position: 'top', initComponent: function() {
-  var me = this;
-  me.addEvents('activate', 'deactivate', 'beforeclose', 'close');
-  me.callParent(arguments);
-  if (me.card) 
-  {
-    me.setCard(me.card);
-  }
-  me.overCls = ['over', me.position + '-over'];
-}, getTemplateArgs: function() {
-  var me = this, result = me.callParent();
-  result.closable = me.closable;
-  result.closeText = me.closeText;
-  return result;
-}, getFramingInfoCls: function() {
-  return this.baseCls + '-' + this.ui + '-' + this.position;
-}, beforeRender: function() {
-  var me = this, tabBar = me.up('tabbar'), tabPanel = me.up('tabpanel');
-  me.callParent();
-  me.addClsWithUI(me.position);
-  if (me.active) 
-  {
-    me.addClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
-  }
-  me.syncClosableUI();
-  if (!me.minWidth) 
-  {
-    me.minWidth = (tabBar) ? tabBar.minTabWidth : me.minWidth;
-    if (!me.minWidth && tabPanel) 
-    {
-      me.minWidth = tabPanel.minTabWidth;
-    }
-    if (me.minWidth && me.iconCls) 
-    {
-      me.minWidth += 25;
-    }
-  }
-  if (!me.maxWidth) 
-  {
-    me.maxWidth = (tabBar) ? tabBar.maxTabWidth : me.maxWidth;
-    if (!me.maxWidth && tabPanel) 
-    {
-      me.maxWidth = tabPanel.maxTabWidth;
-    }
-  }
-}, onRender: function() {
-  var me = this;
-  me.setElOrientation();
-  me.callParent(arguments);
-  if (me.closable) 
-  {
-    me.closeEl.addClsOnOver(me.closeElOverCls);
-  }
-  me.keyNav = new Ext.util.KeyNav(me.el, {enter: me.onEnterKey, del: me.onDeleteKey, scope: me});
-}, setElOrientation: function() {
-  var position = this.position;
-  if (position === 'left' || position === 'right') 
-  {
-    this.el.setVertical(position === 'right' ? 90 : 270);
-  }
-}, enable: function(silent) {
-  var me = this;
-  me.callParent(arguments);
-  me.removeClsWithUI(me.position + '-disabled');
-  return me;
-}, disable: function(silent) {
-  var me = this;
-  me.callParent(arguments);
-  me.addClsWithUI(me.position + '-disabled');
-  return me;
-}, onDestroy: function() {
-  var me = this;
-  Ext.destroy(me.keyNav);
-  delete me.keyNav;
-  me.callParent(arguments);
-}, setClosable: function(closable) {
-  var me = this;
-  closable = (!arguments.length || !!closable);
-  if (me.closable != closable) 
-  {
-    me.closable = closable;
-    if (me.card) 
-    {
-      me.card.closable = closable;
-    }
-    me.syncClosableUI();
-    if (me.rendered) 
-    {
-      me.syncClosableElements();
-      me.updateLayout();
-    }
-  }
-}, syncClosableElements: function() {
-  var me = this, closeEl = me.closeEl;
-  if (me.closable) 
-  {
-    if (!closeEl) 
-    {
-      closeEl = me.closeEl = me.btnWrap.insertSibling({tag: 'a', cls: me.baseCls + '-close-btn', href: '#', title: me.closeText}, 'after');
-    }
-    closeEl.addClsOnOver(me.closeElOverCls);
-  } else if (closeEl) 
-  {
-    closeEl.remove();
-    delete me.closeEl;
-  }
-}, syncClosableUI: function() {
-  var me = this, classes = [me.closableCls, me.closableCls + '-' + me.position];
-  if (me.closable) 
-  {
-    me.addClsWithUI(classes);
-  } else {
-    me.removeClsWithUI(classes);
-  }
-}, setCard: function(card) {
-  var me = this;
-  me.card = card;
-  me.setText(me.title || card.title);
-  me.setIconCls(me.iconCls || card.iconCls);
-  me.setIcon(me.icon || card.icon);
-  me.setGlyph(me.glyph || card.glyph);
-}, onCloseClick: function() {
-  var me = this;
-  if (me.fireEvent('beforeclose', me) !== false) 
-  {
-    if (me.tabBar) 
-    {
-      if (me.tabBar.closeTab(me) === false) 
-      {
-        return;
-      }
-    } else {
-      me.fireClose();
-    }
-  }
-}, fireClose: function() {
-  this.fireEvent('close', this);
-}, onEnterKey: function(e) {
-  var me = this;
-  if (me.tabBar) 
-  {
-    me.tabBar.onClick(e, me.el);
-  }
-}, onDeleteKey: function(e) {
-  if (this.closable) 
-  {
-    this.onCloseClick();
-  }
-}, activate: function(supressEvent) {
-  var me = this;
-  me.active = true;
-  me.addClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
-  if (supressEvent !== true) 
-  {
-    me.fireEvent('activate', me);
-  }
-}, deactivate: function(supressEvent) {
-  var me = this;
-  me.active = false;
-  me.removeClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
-  if (supressEvent !== true) 
-  {
-    me.fireEvent('deactivate', me);
-  }
-}}, 0, ["tab"], ["button", "component", "tab", "box"], {"button": true, "component": true, "tab": true, "box": true}, ["widget.tab"], 0, [Ext.tab, 'Tab'], 0));
-;
-
-(Ext.cmd.derive('Ext.util.Point', Ext.util.Region, {statics: {fromEvent: function(e) {
-  e = e.browserEvent || e;
-  e = (e.changedTouches && e.changedTouches.length > 0) ? e.changedTouches[0] : e;
-  return new this(e.pageX, e.pageY);
-}}, constructor: function(x, y) {
-  this.callParent([y, x, y, x]);
-}, toString: function() {
-  return "Point[" + this.x + "," + this.y + "]";
-}, equals: function(p) {
-  return (this.x == p.x && this.y == p.y);
-}, isWithin: function(p, threshold) {
-  if (!Ext.isObject(threshold)) 
-  {
-    threshold = {x: threshold, y: threshold};
-  }
-  return (this.x <= p.x + threshold.x && this.x >= p.x - threshold.x && this.y <= p.y + threshold.y && this.y >= p.y - threshold.y);
-}, isContainedBy: function(region) {
-  if (!(region instanceof Ext.util.Region)) 
-  {
-    region = Ext.get(region.el || region).getRegion();
-  }
-  return region.contains(this);
-}, roundedEquals: function(p) {
-  return (Math.round(this.x) == Math.round(p.x) && Math.round(this.y) == Math.round(p.y));
-}}, 3, 0, 0, 0, 0, 0, [Ext.util, 'Point'], function() {
-  this.prototype.translate = Ext.util.Region.prototype.translateBy;
-}));
-;
-
-(Ext.cmd.derive('Ext.tab.Bar', Ext.panel.Header, {baseCls: Ext.baseCSSPrefix + 'tab-bar', isTabBar: true, defaultType: 'tab', plain: false, childEls: ['body', 'strip'], renderTpl: ['<div id="{id}-body" class="{baseCls}-body {bodyCls} {bodyTargetCls}{childElCls}<tpl if="ui"> {baseCls}-body-{ui}<tpl for="uiCls"> {parent.baseCls}-body-{parent.ui}-{.}</tpl></tpl>"<tpl if="bodyStyle"> style="{bodyStyle}"</tpl>>', '{%this.renderContainer(out,values)%}', '</div>', '<div id="{id}-strip" class="{baseCls}-strip {baseCls}-strip-{dock}{childElCls}', '<tpl if="ui"> {baseCls}-strip-{ui}', '<tpl for="uiCls"> {parent.baseCls}-strip-{parent.ui}-{.}</tpl>', '</tpl>">', '</div>'], _reverseDockNames: {left: 'right', right: 'left'}, initComponent: function() {
-  var me = this;
-  if (me.plain) 
-  {
-    me.addCls(me.baseCls + '-plain');
-  }
-  me.addClsWithUI(me.orientation);
-  me.addEvents('change');
-  me.callParent(arguments);
-  Ext.merge(me.layout, me.initialConfig.layout);
-  me.layout.align = (me.orientation == 'vertical') ? 'left' : 'top';
-  me.layout.overflowHandler = new Ext.layout.container.boxOverflow.Scroller(me.layout);
-  me.remove(me.titleCmp);
-  delete me.titleCmp;
-  Ext.apply(me.renderData, {bodyCls: me.bodyCls, dock: me.dock});
-}, onRender: function() {
-  var me = this;
-  me.callParent();
-  if (me.orientation === 'vertical' && (Ext.isIE8 || Ext.isIE9) && Ext.isStrict) 
-  {
-    me.el.on({mousemove: me.onMouseMove, scope: me});
-  }
-}, afterRender: function() {
-  var layout = this.layout;
-  this.callParent();
-  if (Ext.isIE9 && Ext.isStrict && this.orientation === 'vertical') 
-  {
-    layout.innerCt.on('scroll', function() {
-  layout.innerCt.dom.scrollLeft = 0;
-});
-  }
-}, afterLayout: function() {
-  this.adjustTabPositions();
-  this.callParent(arguments);
-}, adjustTabPositions: function() {
-  var items = this.items.items, i = items.length, tab;
-  if (!Ext.isIE9m) 
-  {
-    if (this.dock === 'right') 
-    {
-      while (i--) 
-        {
-          tab = items[i];
-          if (tab.isVisible()) 
-          {
-            tab.el.setStyle('left', tab.lastBox.width + 'px');
-          }
-        }
-    } else if (this.dock === 'left') 
-    {
-      while (i--) 
-        {
-          tab = items[i];
-          if (tab.isVisible()) 
-          {
-            tab.el.setStyle('left', -tab.lastBox.height + 'px');
-          }
-        }
-    }
-  }
-}, getLayout: function() {
-  var me = this;
-  me.layout.type = (me.orientation === 'horizontal') ? 'hbox' : 'vbox';
-  return me.callParent(arguments);
-}, onAdd: function(tab) {
-  tab.position = this.dock;
-  this.callParent(arguments);
-}, onRemove: function(tab) {
-  var me = this;
-  if (tab === me.previousTab) 
-  {
-    me.previousTab = null;
-  }
-  me.callParent(arguments);
-}, afterComponentLayout: function(width) {
-  var me = this, needsScroll = me.needsScroll;
-  me.callParent(arguments);
-  if (needsScroll) 
-  {
-    me.layout.overflowHandler.scrollToItem(me.activeTab);
-  }
-  delete me.needsScroll;
-}, onClick: function(e, target) {
-  var me = this, tabPanel = me.tabPanel, tabEl, tab, isCloseClick, tabInfo;
-  if (e.getTarget('.' + Ext.baseCSSPrefix + 'box-scroller')) 
-  {
-    return;
-  }
-  if (me.orientation === 'vertical' && (Ext.isIE8 || Ext.isIE9) && Ext.isStrict) 
-  {
-    tabInfo = me.getTabInfoFromPoint(e.getXY());
-    tab = tabInfo.tab;
-    isCloseClick = tabInfo.close;
-  } else {
-    tabEl = e.getTarget('.' + Ext.tab.Tab.prototype.baseCls);
-    tab = tabEl && Ext.getCmp(tabEl.id);
-    isCloseClick = tab && tab.closeEl && (target === tab.closeEl.dom);
-  }
-  if (isCloseClick) 
-  {
-    e.preventDefault();
-  }
-  if (tab && tab.isDisabled && !tab.isDisabled()) 
-  {
-    if (tab.closable && isCloseClick) 
-    {
-      tab.onCloseClick();
-    } else {
-      if (tabPanel) 
-      {
-        tabPanel.setActiveTab(tab.card);
-      } else {
-        me.setActiveTab(tab);
-      }
-      tab.focus();
-    }
-  }
-}, onMouseMove: function(e) {
-  var me = this, overTab = me._overTab, tabInfo, tab;
-  if (e.getTarget('.' + Ext.baseCSSPrefix + 'box-scroller')) 
-  {
-    return;
-  }
-  tabInfo = me.getTabInfoFromPoint(e.getXY());
-  tab = tabInfo.tab;
-  if (tab !== overTab) 
-  {
-    if (overTab && overTab.rendered) 
-    {
-      overTab.onMouseLeave(e);
-      me._overTab = null;
-    }
-    if (tab) 
-    {
-      tab.onMouseEnter(e);
-      me._overTab = tab;
-      if (!tab.disabled) 
-      {
-        me.el.setStyle('cursor', 'pointer');
-      }
-    } else {
-      me.el.setStyle('cursor', 'default');
-    }
-  }
-}, onMouseLeave: function(e) {
-  var overTab = this._overTab;
-  if (overTab && overTab.rendered) 
-  {
-    overTab.onMouseLeave(e);
-  }
-}, getTabInfoFromPoint: function(xy) {
-  var me = this, tabs = me.items.items, length = tabs.length, innerCt = me.layout.innerCt, innerCtXY = innerCt.getXY(), point = new Ext.util.Point(xy[0], xy[1]), i = 0, lastBox, tabRegion, closeEl, close, closeXY, closeX, closeY, closeWidth, closeHeight, tabX, tabY, tabWidth, tabHeight, closeRegion, isTabReversed, direction, tab;
-  for (; i < length; i++) 
-    {
-      lastBox = tabs[i].lastBox;
-      tabX = innerCtXY[0] + lastBox.x;
-      tabY = innerCtXY[1] - innerCt.dom.scrollTop + lastBox.y;
-      tabWidth = lastBox.width;
-      tabHeight = lastBox.height;
-      tabRegion = new Ext.util.Region(tabY, tabX + tabWidth, tabY + tabHeight, tabX);
-      if (tabRegion.contains(point)) 
-      {
-        tab = tabs[i];
-        closeEl = tab.closeEl;
-        if (closeEl) 
-        {
-          closeXY = closeEl.getXY();
-          closeWidth = closeEl.getWidth();
-          closeHeight = closeEl.getHeight();
-          if (me._isTabReversed === undefined) 
-          {
-            me._isTabReversed = isTabReversed = (tab.btnWrap.dom.currentStyle.filter.indexOf('rotation=2') !== -1);
-          }
-          direction = isTabReversed ? this._reverseDockNames[me.dock] : me.dock;
-          if (direction === 'right') 
-          {
-            closeX = tabX + tabWidth - ((closeXY[1] - tabY) + closeEl.getHeight());
-            closeY = tabY + (closeXY[0] - tabX);
-          } else {
-            closeX = tabX + (closeXY[1] - tabY);
-            closeY = tabY + tabX + tabHeight - closeXY[0] - closeEl.getWidth();
-          }
-          closeRegion = new Ext.util.Region(closeY, closeX + closeWidth, closeY + closeHeight, closeX);
-          close = closeRegion.contains(point);
-        }
-        break;
-      }
-    }
-  return {tab: tab, close: close};
-}, closeTab: function(toClose) {
-  var me = this, card = toClose.card, tabPanel = me.tabPanel, toActivate;
-  if (card && card.fireEvent('beforeclose', card) === false) 
-  {
-    return false;
-  }
-  toActivate = me.findNextActivatable(toClose);
-  Ext.suspendLayouts();
-  if (tabPanel && card) 
-  {
-    delete toClose.ownerCt;
-    card.fireEvent('close', card);
-    tabPanel.remove(card);
-    if (!tabPanel.getComponent(card)) 
-    {
-      toClose.fireClose();
-      me.remove(toClose);
-    } else {
-      toClose.ownerCt = me;
-      Ext.resumeLayouts(true);
-      return false;
-    }
-  }
-  if (toActivate) 
-  {
-    if (tabPanel) 
-    {
-      tabPanel.setActiveTab(toActivate.card);
-    } else {
-      me.setActiveTab(toActivate);
-    }
-    toActivate.focus();
-  }
-  Ext.resumeLayouts(true);
-}, findNextActivatable: function(toClose) {
-  var me = this;
-  if (toClose.active && me.items.getCount() > 1) 
-  {
-    return (me.previousTab && me.previousTab !== toClose && !me.previousTab.disabled) ? me.previousTab : (toClose.next('tab[disabled=false]') || toClose.prev('tab[disabled=false]'));
-  }
-}, setActiveTab: function(tab, initial) {
-  var me = this;
-  if (!tab.disabled && tab !== me.activeTab) 
-  {
-    if (me.activeTab) 
-    {
-      if (me.activeTab.isDestroyed) 
-      {
-        me.previousTab = null;
-      } else {
-        me.previousTab = me.activeTab;
-        me.activeTab.deactivate();
-      }
-    }
-    tab.activate();
-    me.activeTab = tab;
-    me.needsScroll = true;
-    if (!initial) 
-    {
-      me.fireEvent('change', me, tab, tab.card);
-      me.updateLayout();
-    }
-  }
-}}, 0, ["tabbar"], ["component", "tabbar", "container", "box", "header"], {"component": true, "tabbar": true, "container": true, "box": true, "header": true}, ["widget.tabbar"], 0, [Ext.tab, 'Bar'], 0));
-;
-
 (Ext.cmd.derive('Ext.tree.Column', Ext.grid.column.Column, {tdCls: Ext.baseCSSPrefix + 'grid-cell-treecolumn', autoLock: true, lockable: false, draggable: false, hideable: false, iconCls: Ext.baseCSSPrefix + 'tree-icon', checkboxCls: Ext.baseCSSPrefix + 'tree-checkbox', elbowCls: Ext.baseCSSPrefix + 'tree-elbow', expanderCls: Ext.baseCSSPrefix + 'tree-expander', textCls: Ext.baseCSSPrefix + 'tree-node-text', innerCls: Ext.baseCSSPrefix + 'grid-cell-inner-treecolumn', isTreeColumn: true, cellTpl: ['<tpl for="lines">', '<img src="{parent.blankUrl}" class="{parent.childCls} {parent.elbowCls}-img ', '{parent.elbowCls}-<tpl if=".">line<tpl else>empty</tpl>"/>', '</tpl>', '<img src="{blankUrl}" class="{childCls} {elbowCls}-img {elbowCls}', '<tpl if="isLast">-end</tpl><tpl if="expandable">-plus {expanderCls}</tpl>"/>', '<tpl if="checked !== null">', '<input type="button" role="checkbox" <tpl if="checked">aria-checked="true" </tpl>', 'class="{childCls} {checkboxCls}<tpl if="checked"> {checkboxCls}-checked</tpl>"/>', '</tpl>', '<img src="{blankUrl}" class="{childCls} {baseIconCls} ', '{baseIconCls}-<tpl if="leaf">leaf<tpl else>parent</tpl> {iconCls}"', '<tpl if="icon">style="background-image:url({icon})"</tpl>/>', '<tpl if="href">', '<a href="{href}" target="{hrefTarget}" class="{textCls} {childCls}">{value}</a>', '<tpl else>', '<span class="{textCls} {childCls}">{value}</span>', '</tpl>'], initComponent: function() {
   var me = this;
   me.origRenderer = me.renderer;
@@ -61183,125 +64409,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     me.toggleUiHeader(hdSelectStatus);
   }
 }}, 1, 0, 0, 0, ["selection.checkboxmodel"], 0, [Ext.selection, 'CheckboxModel'], 0));
-;
-
-(Ext.cmd.derive('Ext.tab.Panel', Ext.panel.Panel, {alternateClassName: ['Ext.TabPanel'], tabPosition: 'top', removePanelHeader: true, plain: false, itemCls: Ext.baseCSSPrefix + 'tabpanel-child', minTabWidth: undefined, maxTabWidth: undefined, deferredRender: true, initComponent: function() {
-  var me = this, dockedItems = [].concat(me.dockedItems || []), activeTab = me.activeTab || (me.activeTab = 0), tabPosition = me.tabPosition;
-  me.layout = new Ext.layout.container.Card(Ext.apply({owner: me, deferredRender: me.deferredRender, itemCls: me.itemCls, activeItem: activeTab}, me.layout));
-  me.tabBar = new Ext.tab.Bar(Ext.apply({ui: me.ui, dock: me.tabPosition, orientation: (tabPosition == 'top' || tabPosition == 'bottom') ? 'horizontal' : 'vertical', plain: me.plain, cardLayout: me.layout, tabPanel: me}, me.tabBar));
-  dockedItems.push(me.tabBar);
-  me.dockedItems = dockedItems;
-  me.addEvents('beforetabchange', 'tabchange');
-  me.callParent(arguments);
-  activeTab = me.activeTab = me.getComponent(activeTab);
-  if (activeTab) 
-  {
-    me.tabBar.setActiveTab(activeTab.tab, true);
-  }
-}, setActiveTab: function(card) {
-  var me = this, previous;
-  card = me.getComponent(card);
-  if (card) 
-  {
-    previous = me.getActiveTab();
-    if (previous !== card && me.fireEvent('beforetabchange', me, card, previous) === false) 
-    {
-      return false;
-    }
-    if (!card.isComponent) 
-    {
-      Ext.suspendLayouts();
-      card = me.add(card);
-      Ext.resumeLayouts();
-    }
-    me.activeTab = card;
-    Ext.suspendLayouts();
-    me.layout.setActiveItem(card);
-    card = me.activeTab = me.layout.getActiveItem();
-    if (card && card !== previous) 
-    {
-      me.tabBar.setActiveTab(card.tab);
-      Ext.resumeLayouts(true);
-      if (previous !== card) 
-      {
-        me.fireEvent('tabchange', me, card, previous);
-      }
-    } else {
-      Ext.resumeLayouts(true);
-    }
-    return card;
-  }
-}, getActiveTab: function() {
-  var me = this, result = me.getComponent(me.activeTab);
-  if (result && me.items.indexOf(result) != -1) 
-  {
-    me.activeTab = result;
-  } else {
-    me.activeTab = null;
-  }
-  return me.activeTab;
-}, getTabBar: function() {
-  return this.tabBar;
-}, onAdd: function(item, index) {
-  var me = this, cfg = item.tabConfig || {}, defaultConfig = {xtype: 'tab', ui: me.tabBar.ui, card: item, disabled: item.disabled, closable: item.closable, hidden: item.hidden && !item.hiddenByLayout, tooltip: item.tooltip, tabBar: me.tabBar, position: me.tabPosition, closeText: item.closeText};
-  cfg = Ext.applyIf(cfg, defaultConfig);
-  item.tab = me.tabBar.insert(index, cfg);
-  item.on({scope: me, enable: me.onItemEnable, disable: me.onItemDisable, beforeshow: me.onItemBeforeShow, iconchange: me.onItemIconChange, iconclschange: me.onItemIconClsChange, titlechange: me.onItemTitleChange});
-  if (item.isPanel) 
-  {
-    if (me.removePanelHeader) 
-    {
-      if (item.rendered) 
-      {
-        if (item.header) 
-        {
-          item.header.hide();
-        }
-      } else {
-        item.header = false;
-      }
-    }
-    if (item.isPanel && me.border) 
-    {
-      item.setBorder(false);
-    }
-  }
-}, onItemEnable: function(item) {
-  item.tab.enable();
-}, onItemDisable: function(item) {
-  item.tab.disable();
-}, onItemBeforeShow: function(item) {
-  if (item !== this.activeTab) 
-  {
-    this.setActiveTab(item);
-    return false;
-  }
-}, onItemIconChange: function(item, newIcon) {
-  item.tab.setIcon(newIcon);
-}, onItemIconClsChange: function(item, newIconCls) {
-  item.tab.setIconCls(newIconCls);
-}, onItemTitleChange: function(item, newTitle) {
-  item.tab.setText(newTitle);
-}, doRemove: function(item, autoDestroy) {
-  var me = this, toActivate;
-  if (me.destroying || me.items.getCount() == 1) 
-  {
-    me.activeTab = null;
-  } else if ((toActivate = me.tabBar.items.indexOf(me.tabBar.findNextActivatable(item.tab))) !== -1) 
-  {
-    me.setActiveTab(toActivate);
-  }
-  this.callParent(arguments);
-  delete item.tab.card;
-  delete item.tab;
-}, onRemove: function(item, destroying) {
-  var me = this;
-  item.un({scope: me, enable: me.onItemEnable, disable: me.onItemDisable, beforeshow: me.onItemBeforeShow});
-  if (!me.destroying && item.tab.ownerCt === me.tabBar) 
-  {
-    me.tabBar.remove(item.tab);
-  }
-}}, 0, ["tabpanel"], ["tabpanel", "panel", "component", "container", "box"], {"tabpanel": true, "panel": true, "component": true, "container": true, "box": true}, ["widget.tabpanel"], 0, [Ext.tab, 'Panel', Ext, 'TabPanel'], 0));
 ;
 
 (Ext.cmd.derive('Ext.tree.Panel', Ext.panel.Table, {alternateClassName: ['Ext.tree.TreePanel', 'Ext.TreePanel'], viewType: 'treeview', selType: 'treemodel', treeCls: Ext.baseCSSPrefix + 'tree-panel', deferRowRender: false, rowLines: false, lines: true, useArrows: false, singleExpand: false, ddConfig: {enableDrag: true, enableDrop: true}, rootVisible: true, displayField: 'text', root: null, normalCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible', 'scroll'], lockedCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible'], isTree: true, arrowCls: Ext.baseCSSPrefix + 'tree-arrows', linesCls: Ext.baseCSSPrefix + 'tree-lines', noLinesCls: Ext.baseCSSPrefix + 'tree-no-lines', autoWidthCls: Ext.baseCSSPrefix + 'autowidth-table', constructor: function(config) {
@@ -61939,22 +65046,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, ["multiselectfield", "multiselect"], ["component", "multiselectfield", "container", "multiselect", "fieldcontainer", "box"], {"component": true, "multiselectfield": true, "container": true, "multiselect": true, "fieldcontainer": true, "box": true}, ["widget.multiselect", "widget.multiselectfield"], [['bindable', Ext.util.Bindable], ['field', Ext.form.field.Field]], [Ext.ux.form, 'MultiSelect', Ext.ux, 'Multiselect'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.bio.BioException', Ext.Base, {message: null, statics: {raise: function(pInput) {
-  var passedMessage = "";
-  if (Ext.isObject(pInput)) 
-  {
-    passedMessage = pInput.message || "You have an error.";
-  } else {
-    passedMessage = pInput;
-  }
-  Ext.Error.raise({msg: passedMessage});
-}}, constructor: function(inData) {
-  var that = this;
-  that.message = inData.message || "Default Message";
-  this.callParent([inData]);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio, 'BioException'], 0));
-;
-
 (Ext.cmd.derive('Teselagen.bio.sequence.common.Location', Ext.Base, {constructor: function(inData) {
   var start;
   var end;
@@ -62514,6 +65605,39 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.enzymes, 'RestrictionEnzyme'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.constants.Constants', Ext.Base, {singleton: true, ENV_DEV: "dev", ENV_PROD: "prod", ENV_TEST: "test", VERSION: "1.0", API_URL: "http://teselagen.local/api/", FORMATS_LIST: ["GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML", "jbei-seq"], GENBANK: "Genbank", FASTA: "FASTA", JBEISEQ: "jbei-seq", JBEISEQJSON: "JBEISEQJSON", SBOLXML: "SBOLXML", INIT: "INIT", GENBANK_SUFFIX: ".gb", FASTA_SUFFIX: ".fas", JEBISEQ_SUFFIX: ".xml", SBOL_SUFFIX: ".sbol", SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP: {Genbank: "gb", FASTA: "fasta", "jbei-seq": "xml", SBOLXML: "xml", JBEISEQJSON: "json"}, NOTMORETHAN: "NOTMORETHAN", NOTWITH: "NOTWITH", AFTER: "AFTER", BEFORE: "BEFORE", WITH: "WITH", THEN: "THEN", NEXTTO: "NEXTTO", MORETHAN: "MORETHAN", COMPOP_LIST: ["AFTER", "BEFORE", "THEN", "NEXTTO", "MORETHAN"], FAS_LIST: ["None", "DIGEST", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS_LIST_NO_DIGEST: ["None", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS: Object.freeze({NONE: "None", DIGEST: "DIGEST", DIRECT: "Direct Synthesis", PCR: "PCR", PRIMER_REV: "Embed_in_primer_reverse", PRIMER_FWD: "Embed_in_primer_forward", ANNEALED: "Annealed Oligos"}), ASSEMBLYTYPE_LIST: ["MOCK", "SLIC", "GOLDENGATE"], NONMOCKTYPE_LIST: ["SLIC/Gibonson/CPEC/SLiCE", "GOLDENGATE"], MOCK: "MOCK", SLIC: "SLIC", GOLDENGATE: "GOLDENGATE", SYNTHESISTYPE_LIST: ["DIRECT", "OLIGO", "ANNEALED OLIGOS"], RUN_STATUS_LIST: ["SUCCESS", "FAILED", "IN PROGRESS"], RECT_SHAPE_DEFAULT_SIZE: 56, RECT_SHAPE_MIN_SIZE: this.RECT_SHAPE_DEFAULT_SIZE / 2, CIRCULAR: "circular", LINEAR: "linear", FEATURE_TYPES: [{label: "-10_signal", data: "-10_signal"}, {label: "-35_signal", data: "-35_signal"}, {label: "3'UTR", data: "3'UTR"}, {label: "5'UTR", data: "5'UTR"}, {label: "allele", data: "allele"}, {label: "attenuator", data: "attenuator"}, {label: "C_region", data: "C_region"}, {label: "CAAT_signal", data: "CAAT_signal"}, {label: "CDS", data: "CDS"}, {label: "conflict", data: "conflict"}, {label: "D_segment", data: "D_segment"}, {label: "D-loop", data: "D-loop"}, {label: "enhancer", data: "enhancer"}, {label: "exon", data: "exon"}, {label: "GC_signal", data: "GC_signal"}, {label: "gene", data: "gene"}, {label: "iDNA", data: "iDNA"}, {label: "intron", data: "intron"}, {label: "J_region", data: "J_region"}, {label: "LTR", data: "LTR"}, {label: "mat_peptide", data: "mat_peptide"}, {label: "misc_binding", data: "misc_binding"}, {label: "misc_difference", data: "misc_difference"}, {label: "misc_feature", data: "misc_feature"}, {label: "misc_recomb", data: "misc_recomb"}, {label: "misc_RNA", data: "misc_RNA"}, {label: "misc_signal", data: "misc_signal"}, {label: "misc_structure", data: "misc_structure"}, {label: "modified_base", data: "modified_base"}, {label: "mRNA", data: "mRNA"}, {label: "mutation", data: "mutation"}, {label: "N_region", data: "N_region"}, {label: "old_sequence", data: "old_sequence"}, {label: "polyA_signal", data: "polyA_signal"}, {label: "polyA_site", data: "polyA_site"}, {label: "precursor_RNA", data: "precursor_RNA"}, {label: "prim_transcript", data: "prim_transcript"}, {label: "primer", data: "primer"}, {label: "primer_bind", data: "primer_bind"}, {label: "promoter", data: "promoter"}, {label: "protein_bind", data: "protein_bind"}, {label: "RBS", data: "RBS"}, {label: "rep_origin", data: "rep_origin"}, {label: "repeat_region", data: "repeat_region"}, {label: "repeat_unit", data: "repeat_unit"}, {label: "rRNA", data: "rRNA"}, {label: "S_region", data: "S_region"}, {label: "satellite", data: "satellite"}, {label: "scRNA", data: "scRNA"}, {label: "sig_peptide", data: "sig_peptide"}, {label: "snRNA", data: "snRNA"}, {label: "source", data: "source"}, {label: "stem_loop", data: "stem_loop"}, {label: "STS", data: "STS"}, {label: "TATA_signal", data: "TATA_signal"}, {label: "terminator", data: "terminator"}, {label: "transit_peptide", data: "transit_peptide"}, {label: "transposon", data: "transposon"}, {label: "tRNA", data: "tRNA"}, {label: "unsure", data: "unsure"}, {label: "V_region ", data: "V_region "}, {label: "variation", data: "variation"}], DEFAULT_VE_VIEW_OPTIONS: {features: true, cutSites: false, orfs: false, circular: true, mapCaret: true, complementary: true, spaces: true, sequenceAA: false, revComAA: false, featureLabels: true, cutSiteLabels: true, selection: {start: 0, end: 0}}}, 0, 0, 0, 0, 0, 0, [Teselagen.constants, 'Constants'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.SessionManager', Ext.Base, {singleton: true, config: {baseURL: null, baseUser: null, data: null, env: null}, constants: null, maskApp: function() {
+  splashscreen = Ext.getBody().mask();
+  splashscreen.addCls('splashscreen');
+  Ext.DomHelper.insertFirst(Ext.query('.splashscreen')[0], {id: 'x-splash-message'});
+  Ext.DomHelper.insertFirst(Ext.query('.splashscreen')[0], {cls: 'x-splash-icon'});
+}, unmaskApp: function() {
+  if (splashscreen) 
+  {
+    splashscreen.fadeOut({duration: 1000, remove: true});
+    splashscreen.next().fadeOut({duration: 1000, remove: true, listeners: {afteranimate: function() {
+  splashscreen = null;
+}}});
+  }
+}, constructor: function() {
+  this.constants = Teselagen.constants.Constants;
+  this.setBaseURL(location.href.substring(0, location.href.indexOf("/", 7) + 1));
+  this.setEnv(this.constants.ENV_DEV);
+}, buildUrl: function(pAction, pDefault) {
+  var url = this.getBaseURL() + pAction;
+  return url;
+}, buildUserResUrl: function(pAction, pDefault) {
+  var url = this.getBaseURL() + "users/" + this.getBaseUser() + pAction;
+  if (pDefault && this.getEnv() === this.constants.ENV_TEST) 
+  {
+    url = pDefault;
+  }
+  return url;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SessionManager'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.bio.enzymes.RestrictionEnzymeManager', Ext.Base, {singleton: true, config: {BASE_URL: "/biojs/src/teselagen/bio/enzymes/assets/", commonRestrictionEnzymes: null, rebaseRestrictionEnzymes: null, enzymeHashMap: null}, getCommonRestrictionEnzymes: function() {
   if (this.commonRestrictionEnzymes !== null) 
   {
@@ -62537,7 +65661,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return null;
 }, getEnzymes: function(url) {
   var xhReq = new XMLHttpRequest();
-  xhReq.open("GET", url, false);
+  xhReq.open("GET", Teselagen.manager.SessionManager.buildUrl("rebase.xml"), false);
   xhReq.send(null);
   var xml = xhReq.responseText;
   if (xhReq.status !== 200) 
@@ -62693,522 +65817,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   return {"start": start, "end": end, "length": end - start + 1, "strand": strand, "frame": this.getFrame() + 1};
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.orf, 'ORF'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.symbols.NucleotideSymbol', Ext.Base, {constructor: function(inData) {
-  var name;
-  var value;
-  var ambiguousMatches;
-  if (inData) 
-  {
-    name = inData.name;
-    value = inData.value;
-    ambiguousMatches = inData.ambiguousMatches;
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getName = function() {
-  return name;
-};
-  this.setName = function(pName) {
-  name = pName;
-};
-  this.getValue = function() {
-  return value;
-};
-  this.setValue = function(pValue) {
-  value = pValue;
-};
-  this.getAmbiguousMatches = function() {
-  return ambiguousMatches;
-};
-  this.setAmbiguousMatches = function(pAmbiguousMatches) {
-  ambiguousMatches = pAmbiguousMatches;
-};
-  return this;
-}, serialize: function() {
-  return this.getValue();
-}, deSerialize: function(data, alphabet) {
-  var symbol;
-  if (!alphabet) 
-  {
-    this.setName(data.name);
-    this.setValue(data.value);
-    this.setAmbiguousMatches(data.ambiguousMatches);
-  } else {
-    symbol = alphabet[data];
-    this.setName(symbol.getName());
-    this.setValue(symbol.getValue());
-    this.setAmbiguousMatches(symbol.getAmbiguousMatches());
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'NucleotideSymbol'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.symbols.GapSymbol', Ext.Base, {constructor: function(inData) {
-  var name;
-  var value;
-  if (inData) 
-  {
-    name = inData.name;
-    value = inData.value;
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getName = function() {
-  return name;
-};
-  this.setName = function(pName) {
-  name = pName;
-};
-  this.getValue = function() {
-  return value;
-};
-  this.setValue = function(pValue) {
-  value = pValue;
-};
-  return this;
-}, serialize: function() {
-  return this.getValue();
-}, deSerialize: function(data, alphabet) {
-  var symbol = alphabet.getGap();
-  if (!alphabet) 
-  {
-    this.setName(data.name);
-    this.setValue(data.value);
-  } else {
-    this.setName(symbol.getName());
-    this.setValue(symbol.getValue());
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'GapSymbol'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.AbstractAlphabet', Ext.Base, {symbolsMap: [], gap: Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {name: "Gap", value: "-"}), constructor: function(inData) {
-  var key = this.gap.getValue();
-  this.symbolsMap[key] = this.gap;
-  this.getSymbols = function() {
-  var symbols = [];
-  for (var index in this.symbolsMap) 
-    {
-      symbols.push(this.symbolsMap[index]);
-    }
-  return symbols;
-};
-  this.symbolByValue = function(pValue) {
-  return this.symbolsMap[pValue];
-};
-  this.addSymbol = function(pSymbol) {
-  console.log(Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols") !== -1);
-  if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols") !== -1) 
-  {
-    var key = pSymbol.getValue();
-    this.symbolsMap[key] = pSymbol;
-  } else {
-    throw Ext.create("Teselagen.bio.BioException", {message: "You tried adding a non-symbol to symbolsMap"});
-  }
-};
-  this.getGap = function() {
-  return this.gap;
-};
-  return this;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'AbstractAlphabet'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.DNAAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, alternateClassName: "Teselagen.DNAAlphabet", a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a", ambiguousMatches: []}), g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []}), t: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Thymine", value: "t", ambiguousMatches: []}), m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;'}", value: "m", ambiguousMatches: []}), r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;'}", value: "r", ambiguousMatches: []}), w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;'}", value: "w", ambiguousMatches: []}), s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;'}", value: "s", ambiguousMatches: []}), y: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 't;'}", value: "y", ambiguousMatches: []}), k: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'g' or 't;'}", value: "k", ambiguousMatches: []}), v: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'g'}", value: "v", ambiguousMatches: []}), h: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 't'}", value: "h", ambiguousMatches: []}), d: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;' or 't'}", value: "d", ambiguousMatches: []}), b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 't'}", value: "b", ambiguousMatches: []}), n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 't;' or 'g' or 'c'}", value: "n", ambiguousMatches: []}), symbolsMap: [], constructor: function() {
-  var that = this;
-  that.m.setAmbiguousMatches([that.a, that.c]);
-  that.r.setAmbiguousMatches([that.a, that.g]);
-  that.w.setAmbiguousMatches([that.a, that.t]);
-  that.s.setAmbiguousMatches([that.c, that.g]);
-  that.y.setAmbiguousMatches([that.c, that.t]);
-  that.k.setAmbiguousMatches([that.g, that.t]);
-  that.v.setAmbiguousMatches([that.a, that.c, that.g]);
-  that.h.setAmbiguousMatches([that.a, that.c, that.t]);
-  that.d.setAmbiguousMatches([that.a, that.g, that.t]);
-  that.b.setAmbiguousMatches([that.c, that.g, that.t]);
-  that.n.setAmbiguousMatches([that.a, that.c, that.g, that.t]);
-  that.callParent([]);
-  this.symbolsMap = {"a": this.a, "g": this.g, "c": this.c, "t": this.t, "m": this.m, "r": this.r, "w": this.w, "s": this.s, "y": this.y, "k": this.k, "v": this.v, "h": this.h, "d": this.d, "b": this.b, "n": this.n};
-}, symbolMap: function(pCharacter) {
-  var safeChar = pCharacter.toLowerCase();
-  return this.symbolsMap[pCharacter];
-}, getA: function() {
-  return this.a;
-}, getG: function() {
-  return this.g;
-}, getC: function() {
-  return this.c;
-}, getT: function() {
-  return this.t;
-}, getM: function() {
-  return this.m;
-}, getR: function() {
-  return this.r;
-}, getW: function() {
-  return this.w;
-}, getS: function() {
-  return this.s;
-}, getY: function() {
-  return this.y;
-}, getK: function() {
-  return this.k;
-}, getV: function() {
-  return this.v;
-}, getH: function() {
-  return this.h;
-}, getD: function() {
-  return this.d;
-}, getB: function() {
-  return this.b;
-}, getN: function() {
-  return this.n;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'DNAAlphabet', Teselagen, 'DNAAlphabet'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.symbols.AminoAcidSymbol', Ext.Base, {constructor: function(inData) {
-  var name;
-  var value;
-  var threeLettersName;
-  if (inData) 
-  {
-    name = inData.name;
-    value = inData.value;
-    threeLettersName = inData.threeLettersName;
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getName = function() {
-  return name;
-};
-  this.setName = function(pName) {
-  name = pName;
-};
-  this.getThreeLettersName = function() {
-  return threeLettersName;
-};
-  this.setThreeLettersName = function(pThreeLettersName) {
-  threeLettersName = pThreeLettersName;
-};
-  this.getValue = function() {
-  return value;
-};
-  this.setValue = function(pValue) {
-  value = pValue;
-};
-  return this;
-}, serialize: function() {
-  return this.getValue();
-}, deSerialize: function(data, alphabet) {
-  var symbol;
-  if (!alphabet) 
-  {
-    this.setName(data.name);
-    this.setValue(data.value);
-    this.setAmbiguousMatches(data.ambiguousMatches);
-  } else {
-    symbol = alphabet[data];
-    this.setName(symbol.getName());
-    this.setValue(symbol.getValue());
-    this.setAmbiguousMatches(symbol.getAmbiguousMatches());
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'AminoAcidSymbol'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.ProteinAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, a: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Alanine', threeLettersName: 'Ala', value: 'A'}), r: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Arginine', threeLettersName: 'Arg', value: 'R'}), n: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Asparagine', threeLettersName: 'Asn', value: 'N'}), d: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Aspartic acid', threeLettersName: 'Asp', value: 'D'}), c: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Cysteine', threeLettersName: 'Cys', value: 'C'}), e: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Glutamic acid', threeLettersName: 'Glu', value: 'E'}), q: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Glutamine', threeLettersName: 'Gln', value: 'Q'}), g: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Glycine', threeLettersName: 'Gly', value: 'G'}), h: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Histidine', threeLettersName: 'His', value: 'H'}), i: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Isoleucine ', threeLettersName: 'Ile', value: 'I'}), l: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Leucine', threeLettersName: 'Leu', value: 'L'}), k: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Lysine', threeLettersName: 'Lys', value: 'K'}), m: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Methionine', threeLettersName: 'Met', value: 'M'}), f: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Phenylalanine', threeLettersName: 'Phe', value: 'F'}), p: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Proline', threeLettersName: 'Pro', value: 'P'}), s: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Serine', threeLettersName: 'Ser', value: 'S'}), t: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Threonine', threeLettersName: 'Thr', value: 'T'}), w: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Tryptophan', threeLettersName: 'Try', value: 'W'}), y: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Tyrosine', threeLettersName: 'Tyr', value: 'Y'}), v: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name: 'Valine ', threeLettersName: 'Val', value: 'V'}), getA: function() {
-  return this.a;
-}, getR: function() {
-  return this.r;
-}, getN: function() {
-  return this.n;
-}, getD: function() {
-  return this.d;
-}, getC: function() {
-  return this.c;
-}, getE: function() {
-  return this.e;
-}, getQ: function() {
-  return this.q;
-}, getG: function() {
-  return this.g;
-}, getH: function() {
-  return this.h;
-}, getI: function() {
-  return this.i;
-}, getL: function() {
-  return this.l;
-}, getK: function() {
-  return this.k;
-}, getM: function() {
-  return this.m;
-}, getF: function() {
-  return this.f;
-}, getP: function() {
-  return this.p;
-}, getS: function() {
-  return this.s;
-}, getT: function() {
-  return this.t;
-}, getW: function() {
-  return this.w;
-}, getY: function() {
-  return this.y;
-}, getV: function() {
-  return this.v;
-}, getAlanine: function() {
-  return this.a;
-}, getArginine: function() {
-  return this.r;
-}, getAsparagine: function() {
-  return this.n;
-}, getAspartic: function() {
-  return this.d;
-}, getCysteine: function() {
-  return this.c;
-}, getGlutamic: function() {
-  return this.e;
-}, getGlutamine: function() {
-  return this.q;
-}, getGlycine: function() {
-  return this.g;
-}, getHistidine: function() {
-  return this.h;
-}, getIsoleucine: function() {
-  return this.i;
-}, getLeucine: function() {
-  return this.l;
-}, getLysine: function() {
-  return this.k;
-}, getMethionine: function() {
-  return this.m;
-}, getPhenylalanine: function() {
-  return this.f;
-}, getProline: function() {
-  return this.p;
-}, getSerine: function() {
-  return this.s;
-}, getThreonine: function() {
-  return this.t;
-}, getTryptophan: function() {
-  return this.w;
-}, getTyrosine: function() {
-  return this.y;
-}, getValine: function() {
-  return this.v;
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'ProteinAlphabet'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.alphabets.RNAAlphabet', Teselagen.bio.sequence.alphabets.AbstractAlphabet, {singleton: true, a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a", ambiguousMatches: []}), g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []}), u: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}), m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;'}", value: "m", ambiguousMatches: []}), r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;'}", value: "r", ambiguousMatches: []}), w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u;'}", value: "w", ambiguousMatches: []}), s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;'}", value: "s", ambiguousMatches: []}), y: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'u}", value: "y", ambiguousMatches: []}), k: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'g' or 'u;'}", value: "k", ambiguousMatches: []}), v: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'g'}", value: "v", ambiguousMatches: []}), h: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c;' or 'u'}", value: "h", ambiguousMatches: []}), d: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g;' or 'u'}", value: "d", ambiguousMatches: []}), b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 'u'}", value: "b", ambiguousMatches: []}), n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u;' or 'g' or 'c'}", value: "n", ambiguousMatches: []}), symbolsMap: [], constructor: function() {
-  var that = this;
-  that.m.setAmbiguousMatches([that.a, that.c]);
-  that.r.setAmbiguousMatches([that.a, that.g]);
-  that.w.setAmbiguousMatches([that.a, that.u]);
-  that.s.setAmbiguousMatches([that.c, that.g]);
-  that.y.setAmbiguousMatches([that.c, that.u]);
-  that.k.setAmbiguousMatches([that.g, that.u]);
-  that.v.setAmbiguousMatches([that.a, that.c, that.g]);
-  that.h.setAmbiguousMatches([that.a, that.c, that.u]);
-  that.d.setAmbiguousMatches([that.a, that.g, that.u]);
-  that.b.setAmbiguousMatches([that.c, that.g, that.u]);
-  that.n.setAmbiguousMatches([that.a, that.c, that.g, that.u]);
-  that.callParent([]);
-  this.symbolsMap = {"a": this.getA(), "g": this.getG(), "c": this.getC(), "u": this.getU(), "m": this.getM(), "r": this.getR(), "w": this.getW(), "s": this.getS(), "y": this.getY(), "k": this.getK(), "v": this.getV(), "h": this.getH(), "d": this.getD(), "b": this.getB(), "n": this.getN()};
-}, getA: function() {
-  return this.a;
-}, getG: function() {
-  return this.g;
-}, getC: function() {
-  return this.c;
-}, getU: function() {
-  return this.u;
-}, getM: function() {
-  return this.m;
-}, getR: function() {
-  return this.r;
-}, getW: function() {
-  return this.w;
-}, getS: function() {
-  return this.s;
-}, getY: function() {
-  return this.y;
-}, getK: function() {
-  return this.k;
-}, getV: function() {
-  return this.v;
-}, getH: function() {
-  return this.h;
-}, getD: function() {
-  return this.d;
-}, getB: function() {
-  return this.b;
-}, getN: function() {
-  return this.n;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.alphabets, 'RNAAlphabet'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.symbols.IllegalSymbolException', Ext.Base, {message: null, statics: {raise: function(pInput) {
-  var passedMessage = "";
-  if (Ext.isObject(pInput)) 
-  {
-    passedMessage = pInput.message || "You have an error.";
-  } else {
-    passedMessage = pInput;
-  }
-  Ext.Error.raise({msg: passedMessage});
-}}, constructor: function(inData) {
-  var that = this;
-  that.message = inData.message || "Default Message";
-  this.callParent([inData]);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.symbols, 'IllegalSymbolException'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.common.SymbolList', Ext.Base, {constructor: function(inData) {
-  var symbols;
-  var alphabet;
-  if (inData) 
-  {
-    symbols = inData.symbols || null;
-    alphabet = inData.alphabet || null;
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getAlphabet = function() {
-  return alphabet;
-};
-  this.setAlphabet = function(pAlphabet) {
-  alphabet = pAlphabet;
-};
-  this.getSymbols = function() {
-  return symbols;
-};
-  this.setSymbols = function(pSymbols) {
-  symbols = pSymbols;
-  this.sequenceChanged = true;
-};
-  this.getSymbolsLength = function() {
-  return symbols.length;
-};
-  this.symbolAt = function(pPosition) {
-  return symbols[pPosition];
-};
-  this.hasGap = function() {
-  var hasGapBoolean = symbols.some(function(element) {
-  return (element instanceof Teselagen.bio.sequence.symbols.GapSymbol);
-});
-  return hasGapBoolean;
-};
-  this.subList = function(pStart, pEnd) {
-  var subSymbols = symbols.slice(pStart, pEnd);
-  return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: subSymbols, alphabet: alphabet});
-};
-  this.seqString = function() {
-  var string = [];
-  var element;
-  if (this.sequenceString && !this.sequenceChanged) 
-  {
-    return this.sequenceString;
-  } else {
-    for (var i = 0; i < symbols.length; i++) 
-      {
-        element = symbols[i];
-        if (element.getValue()) 
-        {
-          string.push(element.getValue());
-        }
-      }
-    this.sequenceChanged = false;
-  }
-  this.sequenceString = string.join("");
-  return this.sequenceString;
-};
-  this.clear = function() {
-  symbols = [];
-  this.sequenceChanged = true;
-};
-  this.addSymbols = function(pSymbols) {
-  if (Array.isArray(pSymbols)) 
-  {
-    pSymbols.forEach(function(element) {
-  symbols.push(element);
-});
-    this.sequenceChanged = true;
-  }
-};
-  this.addSymbolList = function(pSymbols) {
-  if (pSymbols && pSymbols.getSymbolsLength() > 0) 
-  {
-    for (var i = 0; i < pSymbols.getSymbolsLength(); i++) 
-      {
-        symbols.push(pSymbols.getSymbols()[i]);
-      }
-    this.sequenceChanged = true;
-  }
-};
-  this.deleteSymbols = function(pStart, pLength) {
-  symbols.splice(pStart, pLength);
-  this.sequenceChanged = true;
-};
-  this.insertSymbols = function(pPosition, pNewSymbols) {
-  var beforeInsert = symbols.slice(0, pPosition);
-  var afterInsert = symbols.slice(pPosition);
-  symbols = beforeInsert.concat(pNewSymbols).concat(afterInsert);
-  this.sequenceChanged = true;
-};
-  this.toString = function() {
-  return this.seqString();
-};
-}, serialize: function() {
-  var data = {};
-  var symbols = this.getSymbols();
-  var alphabet = this.getAlphabet();
-  if (alphabet === "Teselagen.bio.sequence.alphabets.DNAAlphabet" || alphabet === Teselagen.bio.sequence.alphabets.DNAAlphabet) 
-  {
-    data.alphabet = "dna";
-  } else if (alphabet === "Teselagen.bio.sequence.alphabets.RNAAlphabet" || alphabet === Teselagen.bio.sequence.alphabets.RNAAlphabet) 
-  {
-    data.alphabet = "rna";
-  } else if (alphabet === "Teselagen.bio.sequence.alphabets.ProteinAlphabet" || alphabet === Teselagen.bio.sequence.alphabets.ProteinAlphabet) 
-  {
-    data.alphabet = "protein";
-  } else {
-    console.warn("Unknown alphabet in sequence.");
-    data.alphabet = "unknown";
-  }
-  symbolsArray = [];
-  for (var i = 0; i < symbols.length; i++) 
-    {
-      symbolsArray.push(symbols[i].serialize(alphabet));
-    }
-  data.symbols = symbolsArray.join("");
-  return data;
-}, deSerialize: function(data) {
-  var symbols = [];
-  var symbol;
-  if (data.alphabet === "protein") 
-  {
-    this.setAlphabet(Teselagen.bio.sequence.alphabets.ProteinAlphabet);
-    for (var i = 0; i < data.symbols.length; i++) 
-      {
-        symbol = Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {});
-        symbols.push(symbol.deSerialize(data.symbols[i]));
-      }
-  } else {
-    if (data.alphabet === "dna") 
-    {
-      this.setAlphabet(Teselagen.bio.sequence.alphabets.DNAAlphabet);
-    } else if (data.alphabet === "rna") 
-    {
-      this.setAlphabet(Teselagen.bio.sequence.alphabets.RNAAlphabet);
-    } else {
-      this.setAlphabet(Teselagen.bio.sequence.alphabets.AbstractAlphabet);
-    }
-    for (var i = 0; i < data.symbols.length; i++) 
-      {
-        symbol = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {});
-        symbol.deSerialize(data.symbols.charAt(i), this.getAlphabet());
-        symbols.push(symbol);
-      }
-  }
-  this.setSymbols(symbols);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.common, 'SymbolList'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.bio.sequence.TranslationUtils', Ext.Base, {alternateClassName: "Teselagen.TranslationUtils", singleton: true, dnaToRNATranslationTable: null, rnaToDNATranslationTable: null, aminoAcidsTranslationTable: null, constructor: function() {
@@ -63536,624 +66144,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     return 0;
   }
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.orf, 'ORFFinder'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.util.StringUtil', Ext.Base, {singleton: true, alternateClassName: "Teselagen.StringUtil", trim: function(line) {
-  return line.replace(/^\s+|\s+$/g, "");
-}, ltrim: function(line) {
-  return line.replace(/^\s+/, "");
-}, rtrim: function(line) {
-  return line.replace(/\s+$/, "");
-}, lpad: function(line, padString, length) {
-  var str = line;
-  while (str.length < length) 
-    str = padString + str;
-  return str;
-}, rpad: function(line, padString, length) {
-  var str = line;
-  while (str.length < length) 
-    str = str + padString;
-  return str;
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'StringUtil', Teselagen, 'StringUtil'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.Keyword', Ext.Base, {config: {keyword: null, value: null}, constructor: function(inData) {
-  if (inData) 
-  {
-    this.keyword = inData.keyword || null;
-    this.value = inData.value || null;
-  }
-  return this;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'Keyword'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankLocusKeyword', Teselagen.bio.parsers.Keyword, {config: {locusName: "", sequenceLength: 0, strandType: "", naType: "DNA", linear: false, circular: true, divisionCode: "", date: ""}, constructor: function(inData) {
-  this.keyword = "LOCUS";
-  if (inData !== undefined) 
-  {
-    this.locusName = inData.locusName || "";
-    this.sequenceLength = inData.sequenceLength || 0;
-    this.strandType = inData.strandType || "";
-    this.naType = inData.naType || "DNA";
-    this.linear = inData.linear || false;
-    this.circular = inData.circular || !inData.linear;
-    this.divisionCode = inData.divisionCode || "";
-    this.date = inData.date || "";
-  }
-  return this;
-}, toString: function() {
-  var tmp;
-  var line = Teselagen.StringUtil.rpad("LOCUS", " ", 12);
-  line += Teselagen.StringUtil.rpad(this.locusName, " ", 16);
-  line += " ";
-  line += Teselagen.StringUtil.lpad(String(this.sequenceLength), " ", 11);
-  line += " bp ";
-  if (this.strandType !== "") 
-  {
-    tmp = this.strandType + "-";
-  } else {
-    tmp = "";
-  }
-  line += Teselagen.StringUtil.lpad(tmp, " ", 3);
-  line += Teselagen.StringUtil.rpad(this.naType, " ", 6);
-  line += "  ";
-  if (this.linear === true) 
-  {
-    line += "linear  ";
-  } else {
-    line += "circular";
-  }
-  line += " ";
-  if (this.divisionCode !== undefined) 
-  {
-    line += Teselagen.StringUtil.rpad(this.divisionCode, " ", 3);
-  } else {
-    Teselagen.StringUtil.rpad(line, " ", 3);
-  }
-  line += " ";
-  line += this.date;
-  return line;
-}, toJSON: function() {
-  var json = {keyword: this.keyword, locusName: this.locusName, sequenceLength: this.sequenceLength, strandType: this.strandType, naType: this.naType, linear: this.linear, divisionCode: this.divisionCode, date: this.date};
-  return json;
-}, fromJSON: function(json) {
-  this.setKeyword(json["keyword"]);
-  this.setLocusName(json["locusName"]);
-  this.setSequenceLength(json["sequenceLength"]);
-  this.setStrandType(json["strandType"]);
-  this.setNaType(json["naType"]);
-  this.setLinear(json["linear"]);
-  this.setDivisionCode(json["divisionCode"]);
-  this.setDate(json["date"]);
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankLocusKeyword'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankKeyword', Teselagen.bio.parsers.Keyword, {config: {value: null, subKeywords: null}, constructor: function(inData) {
-  if (inData !== undefined) 
-  {
-    this.keyword = inData.keyword || null;
-    this.value = inData.value || null;
-    this.subKeywords = inData.subKeywords || [];
-  }
-  return this;
-}, addSubKeyword: function(subkey) {
-  if (this.subKeywords === undefined) 
-  {
-    this.subKeywords = [];
-  }
-  this.subKeywords.push(subkey);
-}, appendValue: function(pVal) {
-  if (this.value) 
-  {
-    this.value += pVal;
-  } else {
-    this.value = pVal;
-  }
-}, getLastSubKeyword: function() {
-  if (this.subKeywords.length > 0) 
-  {
-    return this.subKeywords[this.subKeywords.length - 1];
-  } else {
-    return null;
-  }
-}, toString: function() {
-  var subKeywords = this.getSubKeywords();
-  var width = 80 - 12;
-  var line = Teselagen.StringUtil.rpad(this.keyword, " ", 12);
-  line += this.value;
-  if (this.subKeywords.length > 0) 
-  {
-    line += "\n";
-    for (var i = 0; i < this.subKeywords.length; i++) 
-      {
-        line += this.subKeywords[i].toString();
-        if (i < this.subKeywords.length - 1) 
-        {
-          line += "\n";
-        }
-      }
-  }
-  return line;
-}, toJSON: function() {
-  var json = {keyword: this.keyword, value: this.value};
-  if (this.subKeywords === undefined) 
-  {
-    return json;
-  }
-  var subKey = [];
-  for (var i = 0; i < this.subKeywords.length; i++) 
-    {
-      subKey.push(this.subKeywords[i].toJSON());
-    }
-  if (subKey.length > 0) 
-  {
-    json["subKeywords"] = subKey;
-  }
-  return json;
-}, fromJSON: function(json) {
-  this.keyword = json["keyword"];
-  this.value = json["value"];
-  this.subKeywords = [];
-  var sub = json["subKeywords"];
-  if (sub === undefined) 
-  {
-    return this;
-  }
-  for (var i = 0; i < sub.length; i++) 
-    {
-      var tmp = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword");
-      tmp.fromJSON(sub[i]);
-      this.subKeywords.push(tmp);
-    }
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankKeyword'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeatureQualifier', Ext.Base, {config: {name: "", value: "", quoted: true}, constructor: function(inData) {
-  if (inData !== undefined) 
-  {
-    this.name = inData.name || "";
-    this.value = inData.value || "";
-    this.quoted = inData.quoted || true;
-  }
-  if (typeof (this.value) === "string") 
-  {
-    this.quoted = true;
-  } else {
-    this.quoted = false;
-  }
-  return this;
-}, appendValue: function(append) {
-  if (this.value) 
-  {
-    this.value += append;
-  } else {
-    this.value = append;
-  }
-}, toString: function() {
-  var line;
-  var name = this.getName();
-  var value = this.getValue();
-  var quoted = this.getQuoted();
-  if (quoted) 
-  {
-    line = Teselagen.StringUtil.lpad("/", " ", 22) + this.name + "=\"" + this.value + "\"";
-  } else {
-    line = Teselagen.StringUtil.lpad("/", " ", 22) + this.name + "=" + this.value;
-  }
-  return line;
-}, toJSON: function() {
-  var json = {name: this.name, value: this.value};
-  return json;
-}, fromJSON: function(json) {
-  this.name = json["name"];
-  this.value = json["value"];
-  if (typeof (this.value) === "string") 
-  {
-    this.quoted = true;
-  } else {
-    this.quoted = false;
-  }
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeatureQualifier'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeatureElement', Ext.Base, {config: {keyword: null, strand: 1, complement: false, join: false, featureQualifier: [], featureLocation: [], index: 0}, constructor: function(inData) {
-  if (inData !== undefined) 
-  {
-    this.keyword = inData.keyword || null;
-    this.strand = inData.strand || 1;
-    this.complement = inData.complement || false;
-    this.join = inData.join || false;
-    this.featureQualifier = inData.featureQualifier || [];
-    this.featureLocation = inData.featureLocation || [];
-    this.index = inData.index || 0;
-  }
-  return this;
-}, getLastFeatureQualifier: function() {
-  if (this.featureQualifier.length > 0) 
-  {
-    return this.featureQualifier[this.featureQualifier.length - 1];
-  } else {
-    return null;
-  }
-}, addFeatureQualifier: function(pQual) {
-  if (this.featureQualifier === undefined) 
-  {
-    this.featureQualifier = [];
-  }
-  this.featureQualifier.push(pQual);
-}, addFeatureLocation: function(pLoc) {
-  if (this.featureLocation === undefined) 
-  {
-    this.featureLocation = [];
-  }
-  this.featureLocation.push(pLoc);
-  if (this.featureLocation.length > 1) 
-  {
-    this.join = true;
-  }
-}, findLabel: function() {
-  var name = "no_name";
-  for (var i = 0; i < this.getFeatureQualifier().length; i++) 
-    {
-      var tmpName = this.getFeatureQualifier()[i].getName();
-      if (tmpName === "label" || tmpName === "name" || tmpName === "ApEinfo_label" || tmpName === "note" || tmpName === "gene" || tmpName === "organism") 
-      {
-        name = this.getFeatureQualifier()[i].getValue();
-      }
-    }
-  return name;
-}, toString: function() {
-  var line = "     " + Teselagen.StringUtil.rpad(this.keyword, " ", 16);
-  var loc = "";
-  var qual = "";
-  for (var i = 0; i < this.featureLocation.length; i++) 
-    {
-      loc += this.featureLocation[i].toString();
-      if (i < this.featureLocation.length - 1) 
-      {
-        loc += ",";
-      } else {
-      }
-    }
-  if (this.join === true) 
-  {
-    loc = "join(" + loc + ")";
-  }
-  if (this.complement === true) 
-  {
-    loc = "complement(" + loc + ")";
-  }
-  for (i = 0; i < this.featureQualifier.length; i++) 
-    {
-      qual += this.featureQualifier[i].toString();
-      if (i < this.featureQualifier.length - 1) 
-      {
-        qual += "\n";
-      }
-    }
-  line = line + loc + "\n" + qual;
-  return line;
-}, toJSON: function() {
-  var i;
-  var json = {keyword: this.keyword, strand: this.strand, complement: this.complement, join: this.join};
-  json["location"] = [];
-  for (i = 0; i < this.featureLocation.length; i++) 
-    {
-      json["location"].push(this.featureLocation[i].toJSON());
-    }
-  json["qualifier"] = [];
-  for (i = 0; i < this.featureQualifier.length; i++) 
-    {
-      json["qualifier"].push(this.featureQualifier[i].toJSON());
-    }
-  return json;
-}, fromJSON: function(json) {
-  var i, tmp;
-  this.keyword = json["keyword"];
-  this.strand = json["strand"];
-  this.complement = json["complement"];
-  this.join = json["join"];
-  this.featureLocation = [];
-  var loc = json["location"];
-  if (loc !== undefined) 
-  {
-    for (i = 0; i < loc.length; i++) 
-      {
-        tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation");
-        tmp.fromJSON(loc[i]);
-        this.featureLocation.push(tmp);
-      }
-  }
-  this.featureQualifier = [];
-  var qual = json["qualifier"];
-  if (qual !== undefined) 
-  {
-    for (i = 0; i < qual.length; i++) 
-      {
-        tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier");
-        tmp.fromJSON(qual[i]);
-        this.featureQualifier.push(tmp);
-      }
-  }
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeatureElement'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeaturesKeyword', Teselagen.bio.parsers.Keyword, {config: {featuresElements: []}, constructor: function() {
-  this.keyword = "FEATURES";
-  this.featuresElements = [];
-  return this;
-}, addElement: function(pElement) {
-  this.featuresElements.push(pElement);
-}, getLastElement: function() {
-  if (this.featuresElements.length > 0) 
-  {
-    return this.featuresElements[this.featuresElements.length - 1];
-  } else {
-    return null;
-  }
-}, toString: function() {
-  var line = "FEATURES             Location/Qualifiers\n";
-  for (var i = 0; i < this.featuresElements.length; i++) 
-    {
-      line += this.featuresElements[i].toString();
-      if (i < this.featuresElements.length - 1) 
-      {
-        line += "\n";
-      }
-    }
-  return line;
-}, toJSON: function() {
-  var json = {keyword: this.keyword};
-  if (this.value !== null) 
-  {
-    json["value"] = this.value;
-  }
-  json["featuresElements"] = [];
-  for (var i = 0; i < this.featuresElements.length; i++) 
-    {
-      json["featuresElements"].push(this.featuresElements[i].toJSON());
-    }
-  return json;
-}, fromJSON: function(json) {
-  this.keyword = json["keyword"];
-  this.featuresElements = [];
-  var elms = json["featuresElements"];
-  if (elms === undefined) 
-  {
-    return this;
-  }
-  for (var i = 0; i < elms.length; i++) 
-    {
-      var elm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement");
-      elm.fromJSON(elms[i]);
-      this.featuresElements.push(elm);
-    }
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeaturesKeyword'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankOriginKeyword', Teselagen.bio.parsers.Keyword, {config: {sequence: ""}, constructor: function(inData) {
-  this.keyword = "ORIGIN";
-  if (inData !== undefined) 
-  {
-    this.sequence = inData.sequence || "";
-  }
-  return this;
-}, appendSequence: function(line) {
-  this.sequence += line;
-}, toString: function() {
-  if (this.sequence === undefined || this.sequence === "") 
-  {
-    return "NO ORIGIN";
-  }
-  var line = "";
-  line += Teselagen.StringUtil.rpad("ORIGIN", " ", 12);
-  if (this.value !== null) 
-  {
-    line += this.value + "\n";
-  } else {
-    line += "\n";
-  }
-  for (var i = 0; i < this.sequence.length; i = i + 60) 
-    {
-      var ind = i + 1;
-      var ind2 = Teselagen.StringUtil.lpad(("" + ind), " ", 9);
-      line += ind2;
-      for (var j = i; j < i + 60; j = j + 10) 
-        {
-          line += " " + this.sequence.substring(j, j + 10);
-        }
-      line += "\n";
-    }
-  return line;
-}, toJSON: function() {
-  json = {keyword: this.keyword, sequence: this.sequence};
-  return json;
-}, fromJSON: function(json) {
-  this.keyword = json["keyword"];
-  this.sequence = json["sequence"];
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankOriginKeyword'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.Genbank', Ext.Base, {config: {keywordsTag: [], keywords: [], messages: []}, constructor: function() {
-  this.keywords = [];
-  this.keywordsTag = [];
-  return this;
-}, findKeyword: function(key) {
-  var entry = null;
-  for (var i = 0; i < this.keywords.length; i++) 
-    {
-      if (this.keywords[i].keyword === key) 
-      {
-        entry = this.keywords[i];
-      }
-    }
-  return entry;
-}, addMessage: function(message) {
-  this.messages.push(message);
-}, getLocus: function() {
-  return this.findKeyword("LOCUS");
-}, setLocus: function(pLocus) {
-  this.keywords.push(pLocus);
-}, getOrigin: function() {
-  return this.findKeyword("ORIGIN");
-}, setOrigin: function(pOrigin) {
-  this.keywords.push(pOrigin);
-}, getFeatures: function() {
-  return this.findKeyword("FEATURES");
-}, setFeatures: function(pFeatures) {
-  this.keywords.push(pFeatures);
-}, addKeyword: function(pAddKeyword) {
-  this.keywords.push(pAddKeyword);
-}, getLastKeyword: function() {
-  return this.keywords[this.keywords.length - 1];
-}, addKeywordTag: function(pAddKeywordsTag) {
-  this.keywordsTag.push(pAddKeywordsTag);
-}, toString: function() {
-  var gbStr = "";
-  var entry;
-  for (var i = 0; i < this.getKeywords().length; i++) 
-    {
-      entry = this.getKeywords()[i];
-      gbStr += this.getKeywords()[i].toString() + "\n";
-    }
-  gbStr += "//";
-  return gbStr;
-}, toJSON: function() {
-  var json = {};
-  for (var i = 0; i < this.getKeywords().length; i++) 
-    {
-      var key = this.getKeywords()[i].getKeyword();
-      json[key] = this.getKeywords()[i].toJSON();
-    }
-  return json;
-}, fromJSON: function(json) {
-  var keyword;
-  for (var key in json) 
-    {
-      var obj = json[key];
-      switch (key) {
-        case "LOCUS":
-          keyword = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword");
-          keyword.fromJSON(obj);
-          this.addKeyword(keyword);
-          this.addKeywordTag(key);
-          break;
-        case "FEATURES":
-          keyword = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
-          keyword.fromJSON(obj);
-          this.addKeyword(keyword);
-          this.addKeywordTag(key);
-          break;
-        case "ORIGIN":
-          keyword = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword");
-          keyword.fromJSON(obj);
-          this.addKeyword(keyword);
-          this.addKeywordTag(key);
-          break;
-        default:
-          keyword = Ext.create("Teselagen.bio.parsers.GenbankKeyword");
-          keyword.fromJSON(obj);
-          this.addKeyword(keyword);
-          this.addKeywordTag(key);
-      }
-    }
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'Genbank'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.GenbankFeatureLocation', Ext.Base, {config: {start: 0, preStart: "", end: 0, preEnd: "", to: ".."}, constructor: function(inData) {
-  if (inData) 
-  {
-    if (inData.start !== undefined) 
-    {
-      this.start = parseInt((inData.start).toString().replace(/\<|\>/, ""));
-      tmp = (inData.start).toString().match(/\</g);
-      if (tmp) 
-      {
-        this.preStart = tmp[0] || "";
-      }
-    }
-    if (inData.end !== undefined) 
-    {
-      this.end = parseInt((inData.end).toString().replace(/\<|\>/, ""));
-      tmp = (inData.end).toString().match(/\>/g);
-      if (tmp) 
-      {
-        this.preEnd = tmp[0] || "";
-      }
-    } else {
-      this.end = this.start;
-      this.to = "..";
-    }
-    if (inData.preStart) 
-    {
-      this.preStart = inData.preStart || "";
-    }
-    if (inData.preEnd) 
-    {
-      this.preEnd = inData.preEnd || "";
-    }
-    if (inData.to) 
-    {
-      this.to = inData.to;
-    }
-  }
-  return this;
-}, toString: function() {
-  var line = [this.preStart, this.start];
-  if (this.to) 
-  {
-    line.push(this.to);
-  }
-  if (this.end) 
-  {
-    line.push(this.preEnd);
-    line.push(this.end);
-  }
-  return line.join("");
-}, toJSON: function() {
-  var json = {start: this.start, to: this.to, end: this.end};
-  if (this.preStart !== "") 
-  {
-    json.preStart = this.preStart;
-  }
-  if (this.preEnd !== "") 
-  {
-    json.preEnd = this.preEnd;
-  }
-  return json;
-}, fromJSON: function(json) {
-  this.start = json["start"];
-  this.to = json["to"];
-  this.end = json["end"];
-  if (json.preStart !== "") 
-  {
-    this.preStart = json.preStart;
-  }
-  if (json.preEnd !== "") 
-  {
-    this.preEnd = json.preEnd;
-  }
-  return this;
-}}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankFeatureLocation'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.utils.NameUtils', Ext.Base, {singleton: true, isLegalName: function(pName) {
-  var str = pName.toString();
-  if (str.match(/[^a-zA-Z0-9_\-]/) !== null) 
-  {
-    return false;
-  } else {
-    return true;
-  }
-}, reformatName: function(pName) {
-  return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "_");
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'NameUtils'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.bio.parsers.GenbankManager', Ext.Base, {singleton: true, statics: {LOCUS_TAG: "LOCUS", DEFINITION_TAG: "DEFINITION", ACCESSION_TAG: "ACCESSION", VERSION_TAG: "VERSION", KEYWORDS_TAG: "KEYWORDS", SOURCE_TAG: "SOURCE", ORGANISM_TAG: "ORGANISM", REFERENCE_TAG: "REFERENCE", AUTHORS_TAG: "AUTHORS", CONSORTIUM_TAG: "CONSRTM", TITLE_TAG: "TITLE", JOURNAL_TAG: "JOURNAL", PUBMED_TAG: "PUBMED", REMARK_TAG: "REMARK", COMMENT_TAG: "COMMENT", FEATURES_TAG: "FEATURES", BASE_COUNT_TAG: "BASE COUNT", ORIGIN_TAG: "ORIGIN", END_SEQUENCE_TAG: "//", LASTTYPE: false}, lastLineWasLocation: false, loadFileInput: function(fileInput) {
@@ -64583,1619 +66573,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 3, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'GenbankSubKeyword'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.bio.util.XmlToJson', Ext.Base, {singleton: true, VERSION: "1.0.6", DOMNodeTypes: {ELEMENT_NODE: 1, TEXT_NODE: 3, CDATA_SECTION_NODE: 4, DOCUMENT_NODE: 9}, getNodeLocalName: function(node) {
-  var nodeLocalName = node.localName;
-  if (nodeLocalName == null) 
-  nodeLocalName = node.baseName;
-  if (nodeLocalName == null || nodeLocalName == "") 
-  nodeLocalName = node.nodeName;
-  return nodeLocalName;
-}, getNodePrefix: function(node) {
-  return node.prefix;
-}, parseDOMChildren: function(node) {
-  if (node.nodeType == this.DOMNodeTypes.DOCUMENT_NODE) 
-  {
-    var result = new Object();
-    var child = node.firstChild;
-    var childName = this.getNodeLocalName(child);
-    result[childName] = this.parseDOMChildren(child);
-    return result;
-  } else if (node.nodeType == this.DOMNodeTypes.ELEMENT_NODE) 
-  {
-    var result = new Object();
-    result.__cnt = 0;
-    var nodeChildren = node.childNodes;
-    for (var cidx = 0; cidx < nodeChildren.length; cidx++) 
-      {
-        var child = nodeChildren.item(cidx);
-        var childName = this.getNodeLocalName(child);
-        result.__cnt++;
-        if (result[childName] == null) 
-        {
-          result[childName] = this.parseDOMChildren(child);
-          result[childName + "_asArray"] = new Array(1);
-          result[childName + "_asArray"][0] = result[childName];
-        } else {
-          if (result[childName] != null) 
-          {
-            if (!(result[childName] instanceof Array)) 
-            {
-              var tmpObj = result[childName];
-              result[childName] = new Array();
-              result[childName][0] = tmpObj;
-              result[childName + "_asArray"] = result[childName];
-            }
-          }
-          var aridx = 0;
-          while (result[childName][aridx] != null) 
-            aridx++;
-          (result[childName])[aridx] = this.parseDOMChildren(child);
-        }
-      }
-    for (var aidx = 0; aidx < node.attributes.length; aidx++) 
-      {
-        var attr = node.attributes.item(aidx);
-        result.__cnt++;
-        result["_" + attr.name] = attr.value;
-      }
-    var nodePrefix = this.getNodePrefix(node);
-    if (nodePrefix != null && nodePrefix != "") 
-    {
-      result.__cnt++;
-      result.__prefix = nodePrefix;
-    }
-    if (result.__cnt == 1 && result["#text"] != null) 
-    {
-      result = result["#text"];
-    }
-    if (result["#text"] != null) 
-    {
-      result.__text = result["#text"];
-      delete result["#text"];
-      delete result["#text_asArray"];
-    }
-    if (result["#cdata-section"] != null) 
-    {
-      result.__cdata = result["#cdata-section"];
-      delete result["#cdata-section"];
-      delete result["#cdata-section_asArray"];
-    }
-    if (result.__text != null || result.__cdata != null) 
-    {
-      result.toString = function() {
-  return (this.__text != null ? this.__text : '') + (this.__cdata != null ? this.__cdata : '');
-};
-    }
-    return result;
-  } else if (node.nodeType == this.DOMNodeTypes.TEXT_NODE || node.nodeType == this.DOMNodeTypes.CDATA_SECTION_NODE) 
-  {
-    return node.nodeValue;
-  }
-}, startTag: function(jsonObj, element, attrList, closed) {
-  var resultStr = "<" + (jsonObj.__prefix != null ? (jsonObj.__prefix + ":") : "") + element;
-  if (attrList != null) 
-  {
-    for (var aidx = 0; aidx < attrList.length; aidx++) 
-      {
-        var attrName = attrList[aidx];
-        var attrVal = jsonObj[attrName];
-        resultStr += " " + attrName.substr(1) + "='" + attrVal + "'";
-      }
-  }
-  if (!closed) 
-  resultStr += ">"; else resultStr += "/>";
-  return resultStr;
-}, endTag: function(jsonObj, elementName) {
-  return "</" + (jsonObj.__prefix != null ? (jsonObj.__prefix + ":") : "") + elementName + ">";
-}, endsWith: function(str, suffix) {
-  return str.indexOf(suffix, str.length - suffix.length) !== -1;
-}, parseJSONTextObject: function(jsonTxtObj) {
-  var result = "";
-  if (jsonTxtObj.__text != null) 
-  {
-    result += jsonTxtObj.__text;
-  } else {
-    result += jsonTxtObj;
-  }
-  return result;
-}, parseJSONObject: function(jsonObj) {
-  var result = "";
-  var elementsCnt = 0;
-  for (var it in jsonObj) 
-    {
-      if (this.endsWith(it.toString(), ("_asArray")) || it.toString().indexOf("_") == 0 || (jsonObj[it] instanceof Function)) 
-      continue;
-      elementsCnt++;
-    }
-  for (var it in jsonObj) 
-    {
-      if (this.endsWith(it.toString(), ("_asArray")) || it.toString().indexOf("_") == 0 || (jsonObj[it] instanceof Function)) 
-      continue;
-      var subObj = jsonObj[it];
-      var attrList = [];
-      for (var ait in subObj) 
-        {
-          if (ait.toString().indexOf("__") == -1 && ait.toString().indexOf("_") == 0) 
-          {
-            attrList.push(ait);
-          }
-        }
-      if (subObj != null && subObj instanceof Object && elementsCnt > 0) 
-      {
-        if (subObj instanceof Array) 
-        {
-          var arrayOfObjects = true;
-          if (subObj.length > 0) 
-          {
-            arrayOfObjects = subObj[0] instanceof Object;
-          } else {
-            result += this.startTag(subObj, it, attrList, true);
-          }
-          for (var arIdx = 0; arIdx < subObj.length; arIdx++) 
-            {
-              if (arrayOfObjects) 
-              result += this.parseJSONObject(subObj[arIdx]); else {
-                result += this.startTag(subObj, it, attrList, false);
-                result += this.parseJSONTextObject(subObj[arIdx]);
-                result += this.endTag(subObj, it);
-              }
-            }
-        } else {
-          result += this.startTag(subObj, it, attrList, false);
-          result += this.parseJSONObject(subObj);
-          if (subObj.__cdata != null) 
-          {
-            result += "<![CDATA[" + subObj.__cdata + "]]>";
-          }
-          if (subObj.__text != null) 
-          {
-            result += subObj.__text;
-          }
-          result += this.endTag(subObj, it);
-        }
-      } else {
-        result += this.startTag(subObj, it, attrList, false);
-        if (subObj.__cdata != null) 
-        {
-          result += "<![CDATA[" + subObj.__cdata + "]]>";
-        }
-        if (subObj.__text != null || !(subObj instanceof Object)) 
-        {
-          result += this.parseJSONTextObject(subObj);
-        }
-        result += this.endTag(subObj, it);
-      }
-    }
-  return result;
-}, parseXmlString: function(xmlDocStr) {
-  var xmlDoc;
-  if (window.DOMParser) 
-  {
-    var parser = new DOMParser();
-    xmlDoc = parser.parseFromString(xmlDocStr, "text/xml");
-  } else {
-    if (xmlDocStr.indexOf("<?") == 0) 
-    {
-      xmlDocStr = xmlDocStr.substr(xmlDocStr.indexOf("?>") + 2);
-    }
-    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-    xmlDoc.async = "false";
-    xmlDoc.loadXML(xmlDocStr);
-  }
-  return xmlDoc;
-}, xml2json: function(xmlDoc) {
-  return this.parseDOMChildren(xmlDoc);
-}, xml_str2json: function(xmlDocStr) {
-  var xmlDoc = this.parseXmlString(xmlDocStr);
-  return this.xml2json(xmlDoc);
-}, json2xml_str: function(jsonObj) {
-  return this.parseJSONObject(jsonObj);
-}, json2xml: function(jsonObj) {
-  var xmlDocStr = this.json2xml_str(jsonObj);
-  return this.parseXmlString(xmlDocStr);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'XmlToJson'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.util.Sha256', Ext.Base, {singleton: true, statics: {hexcase: 0, b64pad: "", sha256_K: [1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993, -1841331548, -1424204075, -670586216, 310598401, 607225278, 1426881987, 1925078388, -2132889090, -1680079193, -1046744716, -459576895, -272742522, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, -1740746414, -1473132947, -1341970488, -1084653625, -958395405, -710438585, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, -2117940946, -1838011259, -1564481375, -1474664885, -1035236496, -949202525, -778901479, -694614492, -200395387, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, -2067236844, -1933114872, -1866530822, -1538233109, -1090935817, -965641998]}, hex_sha256: function(s) {
-  return this.rstr2hex(this.rstr_sha256(this.str2rstr_utf8(s)));
-}, b64_sha256: function(s) {
-  return this.rstr2b64(this.rstr_sha256(this.str2rstr_utf8(s)));
-}, any_sha256: function(s, e) {
-  return this.rstr2any(this.rstr_sha256(this.str2rstr_utf8(s)), e);
-}, hex_hmac_sha256: function(k, d) {
-  return this.rstr2hex(this.rstr_hmac_sha256(this.str2rstr_utf8(k), this.str2rstr_utf8(d)));
-}, b64_hmac_sha256: function(k, d) {
-  return this.rstr2b64(this.rstr_hmac_sha256(this.str2rstr_utf8(k), this.str2rstr_utf8(d)));
-}, any_hmac_sha256: function(k, d, e) {
-  return this.rstr2any(this.rstr_hmac_sha256(this.str2rstr_utf8(k), this.str2rstr_utf8(d)), e);
-}, sha256_vm_test: function() {
-  return this.hex_sha256("abc").toLowerCase() == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
-}, rstr_sha256: function(s) {
-  return this.binb2rstr(this.binb_sha256(this.rstr2binb(s), s.length * 8));
-}, rstr_hmac_sha256: function(key, data) {
-  var bkey = this.rstr2binb(key);
-  if (bkey.length > 16) 
-  {
-    bkey = this.binb_sha256(bkey, key.length * 8);
-  }
-  var ipad = Array(16);
-  var opad = Array(16);
-  for (var i = 0; i < 16; i++) 
-    {
-      ipad[i] = bkey[i] ^ 909522486;
-      opad[i] = bkey[i] ^ 1549556828;
-    }
-  var hash = this.binb_sha256(ipad.concat(this.rstr2binb(data)), 512 + data.length * 8);
-  return this.binb2rstr(this.binb_sha256(opad.concat(hash), 512 + 256));
-}, rstr2hex: function(input) {
-  try {
-    this.hexcase;
-  }  catch (e) {
-  this.hexcase = 0;
-}
-  var hex_tab = this.hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
-  var output = "";
-  var x;
-  for (var i = 0; i < input.length; i++) 
-    {
-      x = input.charCodeAt(i);
-      output += hex_tab.charAt((x >>> 4) & 15) + hex_tab.charAt(x & 15);
-    }
-  return output;
-}, rstr2b64: function(input) {
-  try {
-    this.b64pad;
-  }  catch (e) {
-  this.b64pad = '';
-}
-  var tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-  var output = "";
-  var len = input.length;
-  for (var i = 0; i < len; i += 3) 
-    {
-      var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
-      for (var j = 0; j < 4; j++) 
-        {
-          var add;
-          if (i * 8 + j * 6 > input.length * 8) 
-          {
-            add = this.b64pad;
-          } else {
-            add = tab.charAt((triplet >>> 6 * (3 - j)) & 63);
-          }
-          if (add !== undefined) 
-          {
-            output += add;
-          }
-        }
-    }
-  return output;
-}, rstr2any: function(input, encoding) {
-  var divisor = encoding.length;
-  var remainders = [];
-  var i, q, x, quotient;
-  var dividend = Array(Math.ceil(input.length / 2));
-  for (i = 0; i < dividend.length; i++) 
-    {
-      dividend[i] = (input.charCodeAt(i * 2) << 8) | input.charCodeAt(i * 2 + 1);
-    }
-  while (dividend.length > 0) 
-    {
-      quotient = [];
-      x = 0;
-      for (i = 0; i < dividend.length; i++) 
-        {
-          x = (x << 16) + dividend[i];
-          q = Math.floor(x / divisor);
-          x -= q * divisor;
-          if (quotient.length > 0 || q > 0) 
-          {
-            quotient[quotient.length] = q;
-          }
-        }
-      remainders[remainders.length] = x;
-      dividend = quotient;
-    }
-  var output = "";
-  for (i = remainders.length - 1; i >= 0; i--) 
-    {
-      output += encoding.charAt(remainders[i]);
-    }
-  var full_length = Math.ceil(input.length * 8 / (Math.log(encoding.length) / Math.log(2)));
-  for (i = output.length; i < full_length; i++) 
-    {
-      output = encoding[0] + output;
-    }
-  return output;
-}, str2rstr_utf8: function(input) {
-  var output = "";
-  var i = -1;
-  var x, y;
-  while (++i < input.length) 
-    {
-      x = input.charCodeAt(i);
-      y = i + 1 < input.length ? input.charCodeAt(i + 1) : 0;
-      if (55296 <= x && x <= 56319 && 56320 <= y && y <= 57343) 
-      {
-        x = 65536 + ((x & 1023) << 10) + (y & 1023);
-        i++;
-      }
-      if (x <= 127) 
-      {
-        output += String.fromCharCode(x);
-      } else if (x <= 2047) 
-      {
-        output += String.fromCharCode(192 | ((x >>> 6) & 31), 128 | (x & 63));
-      } else if (x <= 65535) 
-      {
-        output += String.fromCharCode(224 | ((x >>> 12) & 15), 128 | ((x >>> 6) & 63), 128 | (x & 63));
-      } else if (x <= 2097151) 
-      {
-        output += String.fromCharCode(240 | ((x >>> 18) & 7), 128 | ((x >>> 12) & 63), 128 | ((x >>> 6) & 63), 128 | (x & 63));
-      }
-    }
-  return output;
-}, str2rstr_utf16le: function(input) {
-  var output = "";
-  for (var i = 0; i < input.length; i++) 
-    {
-      output += String.fromCharCode(input.charCodeAt(i) & 255, (input.charCodeAt(i) >>> 8) & 255);
-    }
-  return output;
-}, str2rstr_utf16be: function(input) {
-  var output = "";
-  for (var i = 0; i < input.length; i++) 
-    {
-      output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 255, input.charCodeAt(i) & 255);
-    }
-  return output;
-}, rstr2binb: function(input) {
-  var output = Array(input.length >> 2);
-  for (var i = 0; i < output.length; i++) 
-    {
-      output[i] = 0;
-    }
-  for (var i = 0; i < input.length * 8; i += 8) 
-    {
-      output[i >> 5] |= (input.charCodeAt(i / 8) & 255) << (24 - i % 32);
-    }
-  return output;
-}, binb2rstr: function(input) {
-  var output = "";
-  for (var i = 0; i < input.length * 32; i += 8) 
-    {
-      output += String.fromCharCode((input[i >> 5] >>> (24 - i % 32)) & 255);
-    }
-  return output;
-}, sha256_S: function(X, n) {
-  return (X >>> n) | (X << (32 - n));
-}, sha256_R: function(X, n) {
-  return (X >>> n);
-}, sha256_Ch: function(x, y, z) {
-  return ((x & y) ^ ((~x) & z));
-}, sha256_Maj: function(x, y, z) {
-  return ((x & y) ^ (x & z) ^ (y & z));
-}, sha256_Sigma0256: function(x) {
-  return (this.sha256_S(x, 2) ^ this.sha256_S(x, 13) ^ this.sha256_S(x, 22));
-}, sha256_Sigma1256: function(x) {
-  return (this.sha256_S(x, 6) ^ this.sha256_S(x, 11) ^ this.sha256_S(x, 25));
-}, sha256_Gamma0256: function(x) {
-  return (this.sha256_S(x, 7) ^ this.sha256_S(x, 18) ^ this.sha256_R(x, 3));
-}, sha256_Gamma1256: function(x) {
-  return (this.sha256_S(x, 17) ^ this.sha256_S(x, 19) ^ this.sha256_R(x, 10));
-}, sha256_Sigma0512: function(x) {
-  return (this.sha256_S(x, 28) ^ this.sha256_S(x, 34) ^ this.sha256_S(x, 39));
-}, sha256_Sigma1512: function(x) {
-  return (this.sha256_S(x, 14) ^ this.sha256_S(x, 18) ^ this.sha256_S(x, 41));
-}, sha256_Gamma0512: function(x) {
-  return (this.sha256_S(x, 1) ^ this.sha256_S(x, 8) ^ this.sha256_R(x, 7));
-}, sha256_Gamma1512: function(x) {
-  return (this.sha256_S(x, 19) ^ this.sha256_S(x, 61) ^ this.sha256_R(x, 6));
-}, binb_sha256: function(m, l) {
-  var HASH = [1779033703, -1150833019, 1013904242, -1521486534, 1359893119, -1694144372, 528734635, 1541459225];
-  var W = new Array(64);
-  var a, b, c, d, e, f, g, h;
-  var i, j, T1, T2;
-  m[l >> 5] |= 128 << (24 - l % 32);
-  m[((l + 64 >> 9) << 4) + 15] = l;
-  for (i = 0; i < m.length; i += 16) 
-    {
-      a = HASH[0];
-      b = HASH[1];
-      c = HASH[2];
-      d = HASH[3];
-      e = HASH[4];
-      f = HASH[5];
-      g = HASH[6];
-      h = HASH[7];
-      for (j = 0; j < 64; j++) 
-        {
-          if (j < 16) 
-          {
-            W[j] = m[j + i];
-          } else {
-            W[j] = this.safe_add(this.safe_add(this.safe_add(this.sha256_Gamma1256(W[j - 2]), W[j - 7]), this.sha256_Gamma0256(W[j - 15])), W[j - 16]);
-          }
-          T1 = this.safe_add(this.safe_add(this.safe_add(this.safe_add(h, this.sha256_Sigma1256(e)), this.sha256_Ch(e, f, g)), this.self.sha256_K[j]), W[j]);
-          T2 = this.safe_add(this.sha256_Sigma0256(a), this.sha256_Maj(a, b, c));
-          h = g;
-          g = f;
-          f = e;
-          e = this.safe_add(d, T1);
-          d = c;
-          c = b;
-          b = a;
-          a = this.safe_add(T1, T2);
-        }
-      HASH[0] = this.safe_add(a, HASH[0]);
-      HASH[1] = this.safe_add(b, HASH[1]);
-      HASH[2] = this.safe_add(c, HASH[2]);
-      HASH[3] = this.safe_add(d, HASH[3]);
-      HASH[4] = this.safe_add(e, HASH[4]);
-      HASH[5] = this.safe_add(f, HASH[5]);
-      HASH[6] = this.safe_add(g, HASH[6]);
-      HASH[7] = this.safe_add(h, HASH[7]);
-    }
-  return HASH;
-}, safe_add: function(x, y) {
-  var lsw = (x & 65535) + (y & 65535);
-  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-  return (msw << 16) | (lsw & 65535);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.bio.util, 'Sha256'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.JbeiseqParser', Ext.Base, {singleton: true, namespace: null, constructor: function() {
-  XmlToJson = Teselagen.bio.util.XmlToJson;
-  Sha256 = Teselagen.bio.util.Sha256;
-  namespace = "";
-}, jbeiseqXmlsToXmlArray: function(xml) {
-  var xmlArray = [];
-  var newxml = xml;
-  newxml = newxml.replace(/\<\/seq\:seq\>/gi, "</seq:seq>BREAKRECORD");
-  var xmlArr = newxml.split("BREAKRECORD");
-  for (var i = 0; i < xmlArr.length; i++) 
-    {
-      if (xmlArr[i].match(/\<seq\:seq/g)) 
-      {
-        xmlArray.push(xmlArr[i].replace(/^[\n]*/g, ""));
-      }
-    }
-  return xmlArray;
-}, validateJbeiseqJson: function(json) {
-  var i, j;
-  var messages = [];
-  if (json["seq:seq"] === undefined) 
-  {
-    messages.push("Invalid JbeiSeqXML file. No root or record tag 'seq'");
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"});
-  }
-  var date = Teselagen.bio.parsers.ParsersManager.todayDate();
-  if (json["seq:seq"]["seq:name"] === undefined) 
-  {
-    messages.push("jbeiseqXmlToJson: No sequence name detected");
-  }
-  if (json["seq:seq"]["seq:circular"] === undefined) 
-  {
-    messages.push("jbeiseqXmlToJson: No linear status detected; default to linear");
-  }
-  if (json["seq:seq"]["seq:sequence"] === undefined) 
-  {
-    messages.push("jbeiseqXmlToJson: No sequence detected");
-  }
-  if (json["seq:seq"]["seq:seqHash"] === undefined) 
-  {
-  }
-  var features = [];
-  var jFeats;
-  if (json["seq:seq"]["seq:features"] === undefined) 
-  {
-    messages.push("Invalid JbeiSeqXML file. No Features detected");
-  } else {
-    jFeats = json["seq:seq"]["seq:features"];
-  }
-  for (i = 0; i < jFeats.length; i++) 
-    {
-      var locations = [];
-      var ft = jFeats[i]["seq:feature"];
-      var attributes = ft["seq:attribute"];
-      var attribute;
-      var attributesText = "";
-      if (attributes.length > 0) 
-      {
-        attributesText = "'" + attributes[0]._name + "': " + "'" + attributes[0].__text + "'";
-      }
-      if (ft["seq:type"] === undefined) 
-      {
-      }
-      if (ft["seq:complement"] === undefined) 
-      {
-      }
-      for (j = 0; j < ft["seq:location"].length; j++) 
-        {
-          if (ft["seq:location"][j]["seq:genbankStart"] === undefined) 
-          {
-            if (attributes.length > 0) 
-            {
-              messages.push("Feature with attribute " + attributesText + " has an undefined location.");
-            }
-          }
-        }
-      if (ft["seq:label"] === undefined) 
-      {
-        if (attributes.length > 0) 
-        {
-          messages.push("Feature with attribute " + attributesText + " has no defined label.");
-        } else {
-          messages.push("Feature " + (i + 1) + " has no attributes.");
-        }
-      }
-    }
-  return messages;
-}, jbeiseqXmlToJson: function(xmlStr) {
-  var result = {};
-  var i, j, k;
-  var json = XmlToJson.xml_str2json(xmlStr);
-  if (json["seq"] === undefined) 
-  {
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"});
-  } else if (json["seq"] === undefined) 
-  {
-    return result;
-  }
-  var schema = json["seq"]["_xsi:schemaLocation"];
-  var xmlns = json["seq"]["_xmlns:seq"];
-  var xsi = json["seq"]["_xmlns:xsi"];
-  var date = Teselagen.bio.parsers.ParsersManager.todayDate();
-  var name;
-  if (json["seq"]["name"] !== undefined) 
-  {
-    name = json["seq"]["name"]["__text"];
-  } else {
-    name = "no_name";
-    console.warn("jbeiseqXmlToJson: No sequence name detected");
-  }
-  var circ;
-  if (json["seq"]["circular"] !== undefined) 
-  {
-    circ = (json["seq"]["circular"]["__text"].toLowerCase() === "true");
-  } else {
-    circ = false;
-    console.warn("jbeiseqXmlToJson: No linear status detected; default to linear");
-  }
-  var linear = !circ;
-  var seq;
-  if (json["seq"]["sequence"] !== undefined) 
-  {
-    seq = json["seq"]["sequence"]["__text"] || "no_sequence";
-  } else {
-    seq = "";
-    console.warn("jbeiseqXmlToJson: No sequence detected");
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No sequence detected"});
-  }
-  var seqHash;
-  if (json["seq"]["seqHash"] !== undefined) 
-  {
-    seqHash = json["seq"]["seqHash"]["__text"];
-  } else {
-    seqHash = "";
-  }
-  var features = [];
-  var jFeats;
-  if (json["seq"]["features"]["feature_asArray"] === undefined) 
-  {
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid JbeiSeqXML file. No Features detected"});
-  } else {
-    jFeats = json["seq"]["features"]["feature_asArray"];
-  }
-  for (i = 0; i < jFeats.length; i++) 
-    {
-      var locations = [];
-      var attributes = [];
-      var ft = jFeats[i];
-      var type = "unsure";
-      if (ft["type"] !== undefined) 
-      {
-        type = ft["type"]["__text"];
-      }
-      var complement = false;
-      if (ft["complement"] !== undefined) 
-      {
-        complement = (ft["complement"]["__text"].toLowerCase() === "true");
-      }
-      for (j = 0; j < ft["location_asArray"].length; j++) 
-        {
-          var start;
-          if (ft["location_asArray"][j]["genbankStart"] === undefined) 
-          {
-            start = ft["location_asArray"][j]["genbank_start"]["__text"];
-          } else {
-            start = ft["location_asArray"][j]["genbankStart"]["__text"];
-          }
-          var end;
-          if (ft["location_asArray"][j]["end"] === undefined) 
-          {
-            end = start;
-          } else {
-            end = ft["location_asArray"][j]["end"]["__text"];
-          }
-          var to = "..";
-          var loc = {"seq:genbankStart": parseInt(start), "seq:end": parseInt(end)};
-          locations.push(loc);
-        }
-      var label = "name_unknown";
-      if (ft["label"] !== undefined) 
-      {
-        label = ft["label"]["__text"];
-      }
-      for (j = 0; j < ft["attribute_asArray"].length; j++) 
-        {
-          var attr = {"_name": ft["attribute_asArray"][j]["_name"], "_quoted": true, "__text": ft["attribute_asArray"][j]["__text"]};
-          attributes.push(attr);
-        }
-      var strand = 1;
-      if (complement === true) 
-      {
-        strand = -1;
-      }
-      var feat = {"seq:feature": {"seq:label": label, "seq:complement": complement, "seq:type": type, "seq:location": locations, "seq:attribute": attributes}};
-      features.push(feat);
-    }
-  result = {"seq:seq": {"seq:name": name, "seq:circular": circ, "seq:sequence": seq, "seq:features": features, "seq:seqHash": seqHash, "_xmlns:seq": xmlns, "_xmlns:xsi": xsi, "_xsi:schemaLocation": schema}};
-  return result;
-}, jbeiseqJsonToXml: function(json) {
-  if (json === null) 
-  {
-    return null;
-  }
-  try {
-    messages = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
-  }  catch (e) {
-  console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
-  return null;
-}
-  var xml = [];
-  xml.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-  xml.push("<seq:seq\n");
-  xml.push("  xmlns:seq=\"http://jbei.org/sequence\"\n");
-  xml.push("  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-  xml.push("  xsi:schemaLocation=\"http://jbei.org/sequence seq.xsd\"\n");
-  xml.push(">\n");
-  xml.push("<seq:name>" + json["seq:seq"]["seq:name"] + "</seq:name>\n");
-  xml.push("<seq:circular>" + json["seq:seq"]["seq:circular"] + "</seq:circular>\n");
-  xml.push("<seq:sequence>" + json["seq:seq"]["seq:sequence"] + "</seq:sequence>\n");
-  xml.push("<seq:features>\n");
-  var feat = json["seq:seq"]["seq:features"];
-  var sequence = json["seq:seq"]["seq:sequence"];
-  for (var i = 0; i < feat.length; i++) 
-    {
-      var ft = feat[i]["seq:feature"];
-      xml.push("    <seq:feature>\n");
-      xml.push("        <seq:label>" + ft["seq:label"] + "</seq:label>\n");
-      xml.push("        <seq:complement>" + ft["seq:complement"] + "</seq:complement>\n");
-      xml.push("        <seq:type>" + ft["seq:type"] + "</seq:type>\n");
-      for (var j = 0; j < ft["seq:location"].length; j++) 
-        {
-          var start = ft["seq:location"][j]["seq:genbankStart"];
-          var end = ft["seq:location"][j]["seq:end"];
-          xml.push("        <seq:location>\n");
-          xml.push("            <seq:genbankStart>" + start + "</seq:genbankStart>\n");
-          xml.push("            <seq:end>" + end + "</seq:end>\n");
-          xml.push("        </seq:location>\n");
-        }
-      for (var k = 0; k < ft["seq:attribute"].length; k++) 
-        {
-          var att = ft["seq:attribute"][k];
-          var key = att["_name"];
-          var quoted = att["_quoted"];
-          var value = att["__text"];
-          xml.push("        <seq:attribute name=\"" + key + "\" quoted=\"" + quoted + "\">" + value + "</seq:attribute>\n");
-        }
-      xml.push("        <seq:seqHash>" + json["seq:seq"]["seq:seqHash"] + "</seq:seqHash>\n");
-      xml.push("    </seq:feature>\n");
-    }
-  xml.push("</seq:features>\n");
-  xml.push("</seq:seq>\n");
-  return xml.join("");
-}, jbeiseqJsonToGenbank: function(json) {
-  var result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-  var NameUtils = Teselagen.utils.NameUtils;
-  var date = Teselagen.bio.parsers.ParsersManager.todayDate();
-  var name = json["seq:seq"]["seq:name"];
-  var circ = (json["seq:seq"]["seq:circular"] === "true" || json["seq:seq"]["seq:circular"] === true);
-  var seq = json["seq:seq"]["seq:sequence"];
-  var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: name, linear: !circ, sequenceLength: seq.length, naType: na, date: date});
-  if (!NameUtils.isLegalName(locus.getLocusName())) 
-  {
-    locus.setLocusName(NameUtils.reformatName(locus.getLocusName()));
-    result.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
-  }
-  result.addKeyword(locus);
-  var features = [];
-  var feats = json["seq:seq"]["seq:features"];
-  for (var i = 0; i < feats.length; i++) 
-    {
-      var ft = feats[i]["seq:feature"];
-      var locations = [];
-      var qualifiers = [];
-      var type = ft["seq:type"];
-      var complement = ft["seq:complement"];
-      for (var j = 0; j < ft["seq:location"].length; j++) 
-        {
-          var start = ft["seq:location"][j]["seq:genbankStart"];
-          var end = ft["seq:location"][j]["seq:end"];
-          var to = "..";
-          var loc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {start: start, end: end, to: to});
-          locations.push(loc);
-        }
-      var label = ft["seq:label"];
-      var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {name: "label", value: label, quoted: true});
-      qualifiers.push(qual);
-      for (var j = 0; j < ft["seq:attribute"].length; j++) 
-        {
-          var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {name: ft["seq:attribute"][j]["_name"], value: ft["seq:attribute"][j]["__text"], quoted: ft["seq:attribute"][j]["_quoted"]});
-          qualifiers.push(qual);
-        }
-      var strand;
-      if (complement === true) 
-      {
-        strand = -1;
-      } else {
-        strand = 1;
-      }
-      var join;
-      if (locations.length > 1) 
-      {
-        join = true;
-      } else {
-        join = false;
-      }
-      var na;
-      if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) 
-      {
-        na = "DNA";
-      } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) 
-      {
-        na = "RNA";
-      } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) 
-      {
-        na = "PRO";
-      } else {
-        na = "NAN";
-      }
-      var feat = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {keyword: type, strand: strand, complement: complement, join: join, featureLocation: locations, featureQualifier: qualifiers});
-      features.push(feat);
-    }
-  var featureKW = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
-  featureKW.setFeaturesElements(features);
-  result.addKeyword(featureKW);
-  var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: seq});
-  result.addKeyword(origin);
-  return result;
-}, jbeiseqXmlToGenbank: function(xmlStr) {
-  var json = this.jbeiseqXmlToJson(xmlStr);
-  var result = this.jbeiseqJsonToGenbank(json);
-  return result;
-}, genbankToJbeiseqJson: function(pGenbank) {
-  if (Ext.getClassName(pGenbank) !== "Teselagen.bio.parsers.Genbank") 
-  {
-    return null;
-  }
-  var json = {};
-  var feat = pGenbank.getFeatures() ? pGenbank.getFeatures().getFeaturesElements() : "";
-  var sequence = "";
-  if (pGenbank.getOrigin()) 
-  sequence = pGenbank.getOrigin().getSequence();
-  var newFeatures = [];
-  for (var i = 0; i < feat.length; i++) 
-    {
-      var start, end, key, value, quoted;
-      var j, k;
-      var nameAttr = {};
-      var ft = feat[i];
-      var newFt = [];
-      var seqHash = "";
-      var seqHashStr = "";
-      for (j = 0; j < ft.getFeatureLocation().length; j++) 
-        {
-          start = ft.getFeatureLocation()[j].getStart();
-          end = ft.getFeatureLocation()[j].getEnd();
-          if (end < start) 
-          {
-            seqHashStr += sequence.substring(start, sequence.length) + sequence.substring(0, end);
-          } else {
-            seqHashStr += sequence.substring(start, end);
-          }
-        }
-      if (feat[i].getStrand() === -1 || feat[i].getComplement()) 
-      {
-        seqHashStr = DNATools.reverseComplement(DNATools.createDNA(seqHashStr)).seqString();
-      }
-      seqHash = Teselagen.bio.util.Sha256.hex_sha256(seqHashStr);
-      var newLoc = [];
-      for (j = 0; j < ft.getFeatureLocation().length; j++) 
-        {
-          start = ft.getFeatureLocation()[j].getStart();
-          end = ft.getFeatureLocation()[j].getEnd();
-          newLoc.push({"seq:genbankStart": start, "seq:end": end});
-        }
-      var newAttr = [];
-      var hasName = false;
-      var usingLabel = false;
-      var usingGene = false;
-      for (k = 0; k < ft.getFeatureQualifier().length; k++) 
-        {
-          key = ft.getFeatureQualifier()[k].getName();
-          value = ft.getFeatureQualifier()[k].getValue();
-          quoted = ft.getFeatureQualifier()[k].getQuoted();
-          if (this.isALabel(key)) 
-          {
-            if (key === "label") 
-            {
-              if (hasName) 
-              {
-                newAttr.push(nameAttr);
-              }
-              nameAttr = {"_name": key, "_quoted": quoted, "__text": value};
-              usingLabel = true;
-            } else if (key === "gene") 
-            {
-              if (!usingLabel) 
-              {
-                if (hasName) 
-                {
-                  newAttr.push(nameAttr);
-                }
-                nameAttr = {"_name": key, "_quoted": quoted, "__text": value};
-                usingGene = true;
-              } else {
-                newAttr.push({"_name": key, "_quoted": quoted, "__text": value});
-              }
-            } else if (!usingLabel && !usingGene) 
-            {
-              if (hasName) 
-              {
-                newAttr.push(nameAttr);
-              }
-              nameAttr = {"_name": key, "_quoted": quoted, "__text": value};
-            } else {
-              newAttr.push({"_name": key, "_quoted": quoted, "__text": value});
-            }
-            hasName = true;
-          } else {
-            newAttr.push({"_name": key, "_quoted": quoted, "__text": value});
-          }
-        }
-      newFt = {"seq:label": nameAttr.__text, "seq:complement": ft.getComplement(), "seq:type": ft.getKeyword(), "seq:index": ft.getIndex(), "seq:location": newLoc, "seq:attribute": newAttr, "seq:seqHash": seqHash};
-      newFeatures.push({"seq:feature": newFt});
-    }
-  json = {"seq:seq": {"seq:name": pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : "", "seq:circular": pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : "", "seq:sequence": pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "", "seq:features": newFeatures, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
-  return json;
-}, genbankToJbeiseqXml: function(pGenbank) {
-  if (pGenbank === null) 
-  {
-    return null;
-  }
-  var json = this.genbankToJbeiseqJson(pGenbank);
-  var xml = this.jbeiseqJsonToXml(json);
-  return xml;
-}, isALabel: function(name) {
-  if (name === "label" || name === "name" || name === "ApEinfo_label" || name === "note" || name === "gene" || name === "organism" || name === "locus_tag") 
-  {
-    return true;
-  } else {
-    return false;
-  }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'JbeiseqParser'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.SbolParser', Ext.Base, {singleton: true, namespace: null, constructor: function() {
-  XmlToJson = Teselagen.bio.util.XmlToJson;
-  namespace = "";
-}, convertGenbankToSBOL: function(data, cb) {
-  var messageBox = Ext.MessageBox.wait("Converting to SBOL XML/RDF...", "Waiting for the server");
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genbanktosbol", ''), params: {filename: 'example.xml', data: Base64.encode(data)}, success: function(response) {
-  response = JSON.parse(response.responseText);
-  messageBox.close();
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  cb(response.data, true);
-}, failure: function(response, opts) {
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  messageBox.close();
-  Ext.MessageBox.alert('Failed', 'Conversion failed');
-}});
-}, parse: function(data, cb) {
-  console.log("Parsing using j5");
-  var self = this;
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  var performOperation = function(preserveSBOL) {
-  var messageBox = Ext.MessageBox.wait("Converting XML...", "Waiting for the server");
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("sbol", ''), params: {filename: 'example.xml', data: Base64.encode(data), preserveSBOL: preserveSBOL}, success: function(response) {
-  response = JSON.parse(response.responseText);
-  messageBox.close();
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-  if (sequenceLibrary && sequenceLibrary.el) 
-  sequenceLibrary.el.unmask();
-  cb(response.data, true);
-}, failure: function(response, opts) {
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-  if (sequenceLibrary && sequenceLibrary.el) 
-  sequenceLibrary.el.unmask();
-  messageBox.close();
-  Ext.MessageBox.alert('Failed', 'Conversion failed');
-}});
-};
-  Ext.Msg.show({title: 'Alert', msg: "Do you want to preserve SBOL information during import process?", width: 300, buttons: Ext.Msg.YESNOCANCEL, buttonText: ['', 'Yes', 'No', 'Cancel'], fn: function(buttonId) {
-  if (buttonId === 'yes') 
-  {
-    performOperation(true);
-  } else if (buttonId === 'no') 
-  {
-    performOperation(false);
-  }
-}, icon: Ext.MessageBox.ALERT});
-}, jbeiseqJsonToXml: function(json) {
-}, sbolXmlToJson: function(xmlStr, pRootNamespace) {
-  var result = {};
-  var i, j;
-  var json = XmlToJson.xml_str2json(xmlStr);
-  json = this.checkRawSbolJson(json);
-  var name = pRootNamespace || "RDF";
-  if (json[name] === undefined) 
-  {
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid SBOL-XML file. No root or record tag" + name});
-  }
-  var prefix = json[name]["__prefix"];
-  var namespace;
-  if (prefix === "") 
-  {
-    namespace = name;
-  } else {
-    namespace = prefix + ":" + name;
-  }
-  console.warn("sbolXmlToJson: Namespace used is: '" + namespace + "'. No error at this time.");
-  var xmlns = json[name]["_xmlns"];
-  var xrdf = json[name]["_xmlns:rdf"];
-  var xrdfs = json[name]["_xmlns:rdfs"];
-  var so = json[name]["_xmlns:so"];
-  var top = [];
-  var topName = "";
-  if (json[name]["Collection"] !== undefined) 
-  {
-    topName = "Collection";
-    console.warn("sbolXmlToJson: Collection Detected");
-    if (json[name]["Collection"] === "HASH") 
-    {
-      console.warn("sbolXmlToJson: Found 'HASH'. Not handling.");
-    }
-    if (json[name]["Collection_asArray"] !== undefined) 
-    {
-      for (i = 0; i < json[name]["Collection_asArray"].length; i++) 
-        {
-          top.push(this.parseRawCollection(json[name]["Collection_asArray"][i], prefix));
-        }
-    }
-  } else if (json[name]["DnaComponent"] !== undefined) 
-  {
-    topName = "DnaComponent";
-    console.warn("sbolXmlToJson: DnaComponent Detected.");
-    if (json[name]["DnaComponent_asArray"] !== undefined) 
-    {
-      top = [];
-      for (i = 0; i < json[name]["DnaComponent_asArray"].length; i++) 
-        {
-          top.push(this.parseRawDnaComponent(json[name]["DnaComponent_asArray"][i], prefix));
-        }
-    }
-  } else if (json[name]["DnaSequence"] !== undefined) 
-  {
-    topName = "DnaSequence";
-    console.warn("sbolXmlToJson: DnaSequence Detected.");
-    if (json[name]["DnaSequence_asArray"] !== undefined) 
-    {
-      top = [];
-      for (i = 0; i < json[name]["DnaSequence_asArray"].length; i++) 
-        {
-          top.push(this.parseRawDnaSequence(json[name]["DnaSequence_asArray"][i], prefix));
-        }
-    }
-  } else {
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid SBOL-XML file. Top level is not either a Collection, a DnaComponent, or a DnaSequence. Exiting... \n"});
-  }
-  result[namespace] = {};
-  result[namespace]["_xmlns"] = xmlns;
-  result[namespace]["_xmlns:" + prefix] = xrdf;
-  result[namespace]["_xmlns:" + prefix + "s"] = xrdfs;
-  result[namespace]["_xmlns_so"] = so;
-  result[namespace][topName] = top;
-  return result;
-}, checkRawSbolJson: function(json) {
-  if (json["RDF"] === undefined) 
-  {
-    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid SBOL-XML file. No root or record tag 'RDF'"});
-  }
-  if (json["RDF"]["Collection"] !== undefined) 
-  {
-  }
-  return json;
-}, sbolJsonToJbeiJson: function(json, prefix) {
-  var name = json["rdf:RDF"]["DnaComponent"][0]["displayId"];
-  var seq = json["rdf:RDF"]["DnaComponent"][0]["dnaSequence"]["DnaSequence"]["nucleotides"];
-  var seqHash = Teselagen.bio.util.Sha256.hex_sha256(seq);
-  var circ = true;
-  var feats = json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"];
-  for (var i = 0; i < feats.length; i++) 
-    {
-      var ft = feats[0];
-    }
-  var features = [];
-  var jbei = {"seq:seq": {"seq:name": name, "seq:circular": circ, "seq:sequence": seq, "seq:features": features, "seq:seqHash": seqHash, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
-  return jbei;
-}, jbeiJsonToSbolJson: function(json, prefix) {
-}, parseRawCollection: function(coll, prefix) {
-  var result = {};
-  var uri = coll["_" + prefix + ":about"];
-  var displayId = coll["displayId"];
-  var name = coll["name"];
-  var description = coll["description"];
-  var components;
-  if (coll["components"] !== undefined) 
-  {
-    components = this.parseRawDnaComponent(coll["components"]["DnaComponent"]);
-  }
-  result["_" + prefix + ":about"] = uri;
-  result["displayId"] = displayId;
-  result["name"] = name;
-  result["description"] = description;
-  result["components"] = components;
-  return result;
-}, parseRawDnaComponent: function(comp, prefix) {
-  var result = {};
-  var circ = false;
-  var uri = comp["_" + prefix + ":about"];
-  var displayId = comp["displayId"];
-  var primaryId = comp["name"];
-  var description = comp["description"];
-  result["_" + prefix + ":about"] = uri;
-  result["displayId"] = displayId;
-  result["name"] = primaryId;
-  result["description"] = description;
-  var type = comp["_" + prefix + ":type"];
-  if (type !== undefined) 
-  {
-    result[prefix + ":type"] = {};
-    result[prefix + ":type"]["_" + prefix + ":resource"] = type["_" + prefix + ":resource"];
-  }
-  if (comp["dnaSequence"] !== undefined) 
-  {
-    result["dnaSequence"] = this.parseRawDnaSequence(comp["dnaSequence"], prefix);
-  }
-  if (comp["annotation_asArray"] !== undefined) 
-  {
-    result["annotation"] = {"SequenceAnnotation": []};
-    for (var i = 0; i < comp["annotation_asArray"].length; i++) 
-      {
-        result["annotation"]["SequenceAnnotation"].push(this.parseRawSequenceAnnotation(comp["annotation_asArray"][i], prefix));
-      }
-  }
-  return result;
-}, parseRawDnaSequence: function(seq, prefix) {
-  var result;
-  var about = seq["DnaSequence"]["_" + prefix + ":about"];
-  var nucleotides = seq["DnaSequence"]["nucleotides"];
-  result = {"DnaSequence": {}};
-  result["DnaSequence"]["_" + prefix + ":about"] = about;
-  result["DnaSequence"]["nucleotides"] = nucleotides;
-  return result;
-}, parseRawSequenceAnnotation: function(annotation, prefix) {
-  var result = {};
-  var uri = annotation["SequenceAnnotation"]["_" + prefix + ":about"];
-  var annot = annotation["SequenceAnnotation"];
-  var bioStart = parseInt(annot["bioStart"]);
-  var bioEnd = parseInt(annot["bioEnd"]);
-  var strand = annot["strand"] || "+";
-  var subComp = this.parseRawDnaComponent(annot["subComponent"]["DnaComponent"], prefix);
-  var precedes;
-  if (annot["precedes"] !== undefined) 
-  {
-    precedes = [];
-    preSeqAn = annot["precedes"]["SequenceAnnotation"];
-    for (var j = 0; j < preSeqAn.length; j++) 
-      {
-        precedes.push(this.parseRawSequenceAnnotation(preSeqAn[j], prefix));
-      }
-  }
-  result["_" + prefix + ":about"] = uri;
-  result["bioStart"] = bioStart;
-  result["bioEnd"] = bioEnd;
-  result["strand"] = strand;
-  result["subComponent"] = subComp;
-  result["precedes"] = precedes;
-  return result;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'SbolParser'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.common.Sequence', Teselagen.bio.sequence.common.SymbolList, {constructor: function(inData) {
-  var name;
-  if (inData) 
-  {
-    name = inData.name || "";
-    this.callParent([{symbols: inData.symbolList.getSymbols(), alphabet: inData.symbolList.getAlphabet()}]);
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getName = function() {
-  return name;
-};
-  this.setName = function(pName) {
-  name = pName;
-};
-  return this;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.common, 'Sequence'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.dna.DNASequence', Teselagen.bio.sequence.common.Sequence, {constructor: function(inData) {
-  if (inData) 
-  {
-    var symbolList = inData.symbolList || null;
-    var name = inData.name || "";
-    var circular = inData.circular || false;
-    var accession = inData.accession || "";
-    var version = inData.version || 1;
-    var seqVersion = inData.seqVersion || 0;
-    this.callParent([inData]);
-  } else {
-    Teselagen.bio.BioException.raise("Arguments needed");
-  }
-  this.getAccession = function() {
-  return accession;
-};
-  this.setAccession = function(pAccession) {
-  accession = pAccession;
-};
-  this.getVersion = function() {
-  return version;
-};
-  this.setVersion = function(pVersion) {
-  version = pVersion;
-};
-  this.getSeqVersion = function() {
-  return seqVersion;
-};
-  this.setSeqVersion = function(pSeqVersion) {
-  seqVersion = pSeqVersion;
-};
-  this.getCircular = function() {
-  return circular;
-};
-  this.setCircular = function(pCircular) {
-  circular = pCircular;
-};
-  return this;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence.dna, 'DNASequence'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.sequence.DNATools', Ext.Base, {singleton: true, constructor: function() {
-  this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
-}, createDNA: function(pDNASequence) {
-  if (pDNASequence) 
-  {
-    if (pDNASequence.value) 
-    {
-      var DNASequence = pDNASequence.value.toLowerCase();
-    } else {
-      var DNASequence = pDNASequence.toLowerCase();
-    }
-    var characters = DNASequence.split("");
-    var symbols = [];
-    for (var i = 0; i < DNASequence.length; i++) 
-      {
-        var symbol = this.DNAAlphabet.symbolMap(characters[i]);
-        if (symbol == null) 
-        {
-        } else {
-          symbols.push(symbol);
-        }
-      }
-    ;
-    return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: symbols, alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
-  } else {
-    return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: [], alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
-  }
-}, createDNASequence: function(pName, pDNASequence) {
-  return Ext.create("Teselagen.bio.sequence.dna.DNASequence", {symbolList: this.createDNA(pDNASequence), name: pName});
-}, complementSymbol: function(pSymbol) {
-  switch (pSymbol.getValue()) {
-    case this.DNAAlphabet.a.getValue():
-      return this.DNAAlphabet.t;
-    case this.DNAAlphabet.t.getValue():
-      return this.DNAAlphabet.a;
-    case this.DNAAlphabet.g.getValue():
-      return this.DNAAlphabet.c;
-    case this.DNAAlphabet.c.getValue():
-      return this.DNAAlphabet.g;
-    case this.DNAAlphabet.y.getValue():
-      return this.DNAAlphabet.r;
-    case this.DNAAlphabet.r.getValue():
-      return this.DNAAlphabet.y;
-    case this.DNAAlphabet.s.getValue():
-      return this.DNAAlphabet.s;
-    case this.DNAAlphabet.w.getValue():
-      return this.DNAAlphabet.w;
-    case this.DNAAlphabet.k.getValue():
-      return this.DNAAlphabet.m;
-    case this.DNAAlphabet.m.getValue():
-      return this.DNAAlphabet.k;
-    case this.DNAAlphabet.b.getValue():
-      return this.DNAAlphabet.v;
-    case this.DNAAlphabet.v.getValue():
-      return this.DNAAlphabet.b;
-    case this.DNAAlphabet.d.getValue():
-      return this.DNAAlphabet.h;
-    case this.DNAAlphabet.h.getValue():
-      return this.DNAAlphabet.d;
-    case this.DNAAlphabet.n.getValue():
-      return this.DNAAlphabet.n;
-    case this.DNAAlphabet.getGap().getValue():
-      return this.DNAAlphabet.getGap();
-    default:
-      Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
-  }
-}, complement: function(pSymbolList) {
-  var symbols = pSymbolList.getSymbols();
-  var complementSymbols = [];
-  if (symbols.length > 0) 
-  {
-    for (var i = 0; i < symbols.length; i++) 
-      {
-        complementSymbols.push(this.complementSymbol(symbols[i]));
-      }
-    ;
-  }
-  ;
-  return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: complementSymbols, alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
-}, reverseComplement: function(pSymbolList) {
-  var symbols = pSymbolList.getSymbols();
-  var reverseComplementSymbols = [];
-  for (var i = symbols.length - 1; i >= 0; --i) 
-    {
-      reverseComplementSymbols.push(this.complementSymbol(symbols[i]));
-    }
-  return Ext.create("Teselagen.bio.sequence.common.SymbolList", {symbols: reverseComplementSymbols, alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.sequence, 'DNATools'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.bio.parsers.ParsersManager', Ext.Base, {singleton: true, batchImportQueue: [], batchImportMessages: null, processingBusy: false, startCount: 0, progressIncrement: 0, processQueue: function(callback) {
-  var processArray = function(process, context, callback) {
-  setTimeout(function() {
-  context.args = arguments.callee;
-  context.cb = callback;
-  process(Teselagen.bio.parsers.ParsersManager.batchImportQueue.shift(), context, function(err, self) {
-  if (Teselagen.bio.parsers.ParsersManager.batchImportQueue.length > 0) 
-  {
-    setTimeout(self.args, 200);
-  } else {
-    context.cb();
-  }
-});
-}, 200);
-};
-  this.batchImportMessages = Ext.create("Ext.data.Store", {fields: [{name: 'fileName', type: 'string'}, {name: 'partSource', type: 'string'}, {name: 'messages', type: 'auto'}]});
-  var self = this;
-  if (!self.processingBusy) 
-  {
-    self.processingBusy = true;
-    processArray(this.parseAndImportFile, self, function() {
-  var progressBar = $("#headerProgress");
-  $("#headerProgressText").html("Done!");
-  $("#headerProgressBox").hide();
-  progressBar.css("width", "0%");
-  var msg = toastr.success("Successfully Imported Sequences.");
-  self.processingBusy = false;
-  callback(self.batchImportMessages);
-});
-  }
-}, parseAndImportFile: function(file, context, cb) {
-  if (!file) 
-  return cb(true);
-  var self = Teselagen.bio.parsers.ParsersManager;
-  var match = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
-  if (match && match[1]) 
-  {
-    var ext = match[1];
-  } else return cb(true, context);
-  var reader = new FileReader();
-  reader.onload = (function(theFile) {
-  return function(e) {
-  var data = e.target.result;
-  var name = theFile.name.match(/(.*)\.[^.]+$/)[1];
-  var progressBar = $("#headerProgress");
-  $("#headerProgressText").html("Importing " + name);
-  context.startCount = context.startCount + context.progressIncrement;
-  progressBar.css("width", context.startCount + '%');
-  self.parseSequence(data, ext, function(gb) {
-  if (!gb) 
-  return cb(true, context);
-  if (!(gb instanceof Array)) 
-  gb = [gb];
-  var counter = gb.length;
-  if (counter === 0) 
-  cb(false, context);
-  gb.forEach(function(currentGB) {
-  self.createAndProcessSequenceFromGenbank(currentGB, name, function(err, sequence, seqMgr, gb) {
-  if (err) 
-  {
-    console.warn("Sequence: " + sequence.get('name') + ' failed to import');
-    cb(true);
-  }
-  self.saveSequence(sequence, name, ext, seqMgr, gb, function(err) {
-  counter--;
-  if (counter === 0) 
-  return cb(err, context);
-});
-});
-});
-});
-};
-})(file);
-  reader.readAsText(file);
-}, createAndProcessSequenceFromGenbank: function(currentGB, name, cb) {
-  var NameUtils = Teselagen.utils.NameUtils;
-  var legalName = true;
-  if (!NameUtils.isLegalName(name)) 
-  {
-    legalName = false;
-    console.log(name);
-    name = NameUtils.reformatName(name);
-  }
-  var self = this;
-  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-  if (sequenceLibrary.el) 
-  {
-    sequenceLibrary.el.unmask();
-  }
-  var sequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: currentGB, sequenceFileFormat: "GENBANK", name: name, sequenceFileName: name, firstTimeImported: true});
-  try {
-    sequence.processSequence(function(err, seqMgr, gb) {
-  if (!legalName) 
-  {
-    seqMgr.addParseMessage('Invalid file name. Illegal characters replaced with \'_\'.');
-  }
-  return cb(false, sequence, seqMgr, gb);
-}, null);
-  }  catch (err) {
-  console.warn(err.toString());
-  return cb(true, sequence, null, null);
-}
-}, saveSequence: function(sequence, name, ext, seqMgr, genbankObject, cb) {
-  var self = Teselagen.bio.parsers.ParsersManager;
-  var partSource = genbankObject.getLocus().locusName;
-  if (genbankObject && seqMgr) 
-  {
-    var messages = genbankObject.getMessages().concat(seqMgr.getParseMessages());
-    self.batchImportMessages.add({fileName: name + '.' + ext, partSource: partSource, messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())});
-  }
-  sequence.save({success: function() {
-  seqMgr = null;
-  sequence.sequenceManager = null;
-  var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
-  if (!duplicated) 
-  {
-    Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
-    return cb(false);
-  } else {
-    var msg = toastr.warning("Error: Duplicated Sequence");
-    var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
-    var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
-    var duplicateMessage = 'Exact sequence already exists in library with' + ' filename ' + duplicateFileName;
-    var messageIndex = self.batchImportMessages.findBy(function(record) {
-  var messages = record.get('messages');
-  for (var i = 0; i < messages.length; i++) 
-    {
-      if (messages[i] === duplicateMessage) 
-      {
-        return false;
-      }
-    }
-  return record.get('fileName') === (name + '.' + ext) && record.get('partSource') === partSource;
-});
-    if (messageIndex < 0) 
-    {
-      self.batchImportMessages.add({fileName: name + '.' + ext, partSource: partSource, messages: [duplicateMessage]});
-    } else {
-      var record = self.batchImportMessages.getAt(messageIndex);
-      record.set('partSource', partSource);
-      record.set('messages', record.get('messages').concat([duplicateMessage]));
-    }
-    return cb(false);
-  }
-}, failure: function() {
-  self.batchImportMessages.add({fileName: name + '.' + ext, partSource: partSource, messages: "Failed to upload due to network error. Please try again."});
-  return cb(true);
-}});
-}, constructor: function() {
-  XmlToJson = Teselagen.bio.util.XmlToJson;
-  DNATools = Teselagen.bio.sequence.DNATools;
-  SbolParser = Teselagen.bio.parsers.SbolParser;
-  Sha256 = Teselagen.bio.util.Sha256;
-}, detectXMLFormat: function(data, cb) {
-  var parser = new DOMParser();
-  var xmlDoc = parser.parseFromString(data, "text/xml");
-  var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
-  if (diff.length > 0) 
-  {
-    return cb(data, false);
-  } else {
-    Teselagen.bio.parsers.SbolParser.parse(data, cb);
-  }
-}, parseSequence: function(result, pExt, cb) {
-  var self = this;
-  var asyncParseFlag = false;
-  console.log(pExt);
-  switch (pExt) {
-    case "fasta":
-      asyncParseFlag = true;
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result, function(gbs) {
-  return cb(gbs);
-});
-      break;
-    case "fas":
-      asyncParseFlag = true;
-      fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result, function(gbs) {
-  return cb(gbs);
-});
-      break;
-    case "json":
-      fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(result).toString();
-      break;
-    case "gb":
-      fileContent = result;
-      break;
-    case "xml":
-      asyncParseFlag = true;
-      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
-  var gb;
-  if (isSBOL) 
-  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
-  return cb(gb);
-});
-      break;
-    case "rdf":
-      asyncParseFlag = true;
-      fileContent = self.detectXMLFormat(result, function(pGB, isSBOL) {
-  var gb;
-  if (isSBOL) 
-  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb"); else gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
-  return cb(gb);
-});
-      break;
-  }
-  if (!asyncParseFlag) 
-  {
-    var gb = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
-    return cb(gb);
-    ;
-  }
-}, fastaToGenbank: function(pFasta, cb) {
-  var result;
-  var headers = pFasta.match(/>(.+)/g);
-  var sequences = [];
-  headers.forEach(function(header) {
-  var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-  sequences.push({name: header.replace(">", ""), sequence: pFasta.match(escapedHeader + '\n(.+)')[1]});
-});
-  if (sequences.length === 1 && typeof (cb) !== "function") 
-  {
-    var sequence = sequences[0];
-    var isLegalName = true;
-    if (!Teselagen.utils.NameUtils.isLegalName(sequence.name)) 
-    {
-      isLegalName = false;
-      sequence.name = Teselagen.utils.NameUtils.reformatName(sequence.name);
-    }
-    var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: sequence.name, sequenceLength: sequence.sequence.length, date: Teselagen.bio.parsers.ParsersManager.todayDate()});
-    var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: sequence.sequence});
-    result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-    result.addKeyword(locus);
-    result.addKeyword(origin);
-    if (!isLegalName) 
-    {
-      result.addMessage('Invalid locus name. Illegal characters replaced with \'_\'.');
-    }
-    return result;
-  }
-  var performImportSequence = function(sequence) {
-  var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: sequence.name, sequenceLength: sequence.sequence.length, date: Teselagen.bio.parsers.ParsersManager.todayDate()});
-  var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: sequence.sequence});
-  result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-  result.addKeyword(locus);
-  result.addKeyword(origin);
-  return cb(result);
-};
-  var generate = function(selectedSequences) {
-  var returnSequences = [];
-  selectedSequences.forEach(function(seq) {
-  var locus = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {locusName: seq.get('name'), sequenceLength: seq.get('sequence').length, date: Teselagen.bio.parsers.ParsersManager.todayDate()});
-  var origin = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {sequence: seq.get('sequence')});
-  result = Ext.create("Teselagen.bio.parsers.Genbank", {});
-  result.addKeyword(locus);
-  result.addKeyword(origin);
-  returnSequences.push(result);
-});
-  if (typeof (cb === "function")) 
-  return cb(returnSequences); else if (returnSequences.length === 1) 
-  return returnSequences[0]; else return returnSequences;
-};
-  var tempStore = new Ext.data.JsonStore({fields: [{name: 'name', type: 'string'}, {name: 'sequence', type: 'string'}], data: sequences});
-  if (sequences.length > 1) 
-  {
-    var win = Ext.create("Ext.window.Window", {title: "Select sequence to import", shrinkWrap: true, closable: false, width: 600, height: 300, items: [{xtype: 'grid', store: tempStore, forceFit: true, columns: [{header: 'name', dataIndex: 'name'}, {header: 'sequence', dataIndex: 'sequence'}], selModel: {selType: 'checkboxmodel', injectCheckbox: 'first', showHeaderCheckbox: true, checkOnly: true, mode: 'MULTI', headerWidth: 33}, columnLines: true, columnWidth: 50, listeners: {afterrender: function() {
-  this.getSelectionModel().selectAll();
-  var grid = arguments[0].up("[xtype='window']").down('grid');
-  grid.reconfigure(tempStore);
-  win.setHeight(grid.getHeight() + 80);
-}}}, {xtype: 'button', text: 'Import', handler: function() {
-  var grid = arguments[0].up("[xtype='window']").down('grid');
-  var selected = grid.getSelectionModel().getSelection();
-  win.close();
-  generate(selected);
-}}]});
-    win.show();
-  } else if (sequences.length === 1) 
-  {
-    var selectionArr = [];
-    selectionArr.push(tempStore.getAt(0));
-    generate(selectionArr);
-  } else {
-    console.warn("no sequences found in fas file.");
-    return cb(null);
-  }
-}, genbankToFasta: function(pGenbank) {
-  var name = pGenbank.getLocus().getLocusName();
-  var sequence = pGenbank.getOrigin().getSequence();
-  var result = ">" + name + "\n" + sequence;
-  return result;
-}, jbeiseqXmlsToXmlArray: function(xml) {
-  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlsToXmlArray(xml);
-}, validateJbeiseqJson: function(json) {
-  return Teselagen.bio.parsers.JbeiseqParser.validateJbeiseqJson(json);
-}, jbeiseqXmlToJson: function(xmlStr) {
-  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToJson(xmlStr);
-}, jbeiseqJsonToXml: function(json) {
-  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToXml(json);
-}, jbeiseqJsonToGenbank: function(json) {
-  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqJsonToGenbank(json);
-}, jbeiseqXmlToGenbank: function(xmlStr) {
-  return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToGenbank(xmlStr);
-}, genbankToJbeiseqJson: function(pGenbank) {
-  return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqJson(pGenbank);
-}, genbankToJbeiseqXml: function(pGenbank) {
-  return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqXml(pGenbank);
-}, sbolXmlToJson: function(xmlStr) {
-  return Teselagen.bio.parsers.SbolParser.sbolXmlToJson(xmlStr);
-}, sbolJsonToJbeiJson: function(sbol) {
-  return Teselagen.bio.parsers.SbolParser.sbolJsonToJbeiJson(sbol);
-}, jbeiJsonToSbolJson: function(jbei) {
-  return Teselagen.bio.parsers.SbolParser.jbeiJsonToSbolJson(jbei);
-}, loadFile: function(url) {
-  var str;
-  Ext.Ajax.request({url: url, async: false, disableCaching: true, success: function(response) {
-  str = response.responseText;
-}, failure: function(response, opts) {
-  console.warn('Could not load: ' + url + '\nServer-side failure with status code ' + response.status);
-  throw Ext.create("Teselagen.bio.BioException", {message: 'Could not load: ' + url + '\nServer-side failure with status code ' + response.status});
-}});
-  return str;
-}, todayDate: function() {
-  var date = (new Date()).toDateString().split(" ");
-  var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
-  return dateStr;
-}, isALabel: function(name) {
-  return Teselagen.bio.parsers.JbeiseqParser.isALabel(name);
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.parsers, 'ParsersManager'], 0));
-;
-
 (Ext.cmd.derive('Teselagen.bio.sequence.dna.DigestionFragment', Ext.Base, {constructor: function(inData) {
   if (inData) 
   {
@@ -66613,157 +66990,438 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'AuthWindow'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.CommonEvent', Ext.Base, {singleton: true, BEFORE_UPDATE: "BeforeUpdate", AFTER_UPDATE: "AfterUpdate", EDIT_FEATURE: "EditFeature", REMOVE_FEATURE: "RemoveFeature", CREATE_FEATURE: "CreateFeature", RUN_J5: "RunJ5", J5_RUN_STATUS_CHANGED: "J5RunStatusChanged", JUMPTOJ5RUN: "jumpToJ5Run", RESET_J5BTN: "resetJ5ActiveRun", LOAD_ASSEMBLY_METHODS: "LoadAssemblyMethods", ACTION_MESSAGE: "ActionMessage", LOAD_PRESETS: "LoadPresets"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'CommonEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.manager.TasksMonitor', Ext.Base, {singleton: true, debugFlag: false, disabled: false, runFlag: true, mon: {}, delay: 3000, constructor: function() {
-  if (this.debugFlag) 
-  console.log("Tasks Monitor created!");
-}, bootMonitoring: function() {
-  var self = this;
-  this.monitorServerTasks(function(data) {
-  var monitor = false;
-  for (var j5run in data) 
-    {
-      if (data[j5run].status === "In progress") 
-      monitor = true;
-    }
-  if (monitor) 
-  self.start(); else self.stop(true);
-});
-}, startMonitoring: function() {
-  this.monitorServerTasks();
-}, start: function() {
-  this.runFlag = true;
-  this.startMonitoring();
-  console.log("Tasks Monitor has been enabled.");
-}, stop: function(boot) {
-  this.runFlag = false;
-  if (!boot) 
-  console.log("Tasks Monitor has been disabled.");
-}, monitorServerTasks: function(cb) {
-  var self = this;
-  (function poll() {
-  setTimeout(function() {
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl('monitorTasks', ''), params: {}, method: 'GET', withCredentials: true, success: function(response) {
-  var parsedResponse = JSON.parse(response.responseText);
-  self.observeChanges(parsedResponse.j5runs);
-  if (typeof (cb) == "function") 
-  cb(parsedResponse.j5runs);
-  if (self.runFlag) 
-  poll();
-}, failure: function() {
-  self.stop();
-}});
-}, self.delay);
-})();
-}, addJ5RunObserver: function(j5run) {
-  if (j5run && j5run.id) 
-  this.mon[j5run.id] = j5run.status;
-}, observeChanges: function(data) {
-  if (this.debugFlag) 
-  console.log("-----------------------");
-  if (this.debugFlag) 
-  console.log("Observing");
-  var self = this;
-  var changes = false;
-  var anyRunningTask = false;
-  for (var j5runKey in data) 
-    {
-      var j5run = data[j5runKey];
-      if (j5run.status === "In progress") 
-      {
-        anyRunningTask = true;
-      }
-      if (self.mon[j5run._id]) 
-      {
-        if (self.mon[j5run._id] !== j5run.status) 
-        {
-          if (this.debugFlag) 
-          console.log(j5run._id, " changed to ", j5run.status);
-          var startDate = new Date(j5run.date);
-          var endDate = Date.now();
-          var elapsed = endDate - startDate;
-          elapsed = Math.round(elapsed / 1000);
-          elapsed = self.elapsedDate(elapsed);
-          Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, j5run._id, j5run.status);
-          toastr.options.timeOut = 0;
-          jumpRun = j5run;
-          toastr.options.onclick = function() {
-  Vede.application.fireEvent("jumpToJ5Run", jumpRun);
-};
-          toastr.success("j5 Run for " + j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", {sticky: true, theme: 'j5-completed', data: j5run});
-          toastr.options.timeOut = 5000;
-          self.mon[j5run._id] = j5run.status;
-          changes = true;
-        } else {
-          if (this.debugFlag) 
-          console.log(j5run._id, " remain the same");
-        }
-      } else {
-        self.mon[j5run._id] = j5run.status;
-      }
-    }
-  ;
-  if (!changes && !anyRunningTask) 
-  self.stop(true);
-}, elapsedDate: function(seconds) {
-  var numdays = Math.floor((seconds % 31536000) / 86400);
-  var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-  var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-  var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-  if (numdays > 0) 
+(Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", HMLB: "HOMOLOGY_MIN_LENGTH_BPS", HMFM: "HOMOLOGY_MAX_FRACTION_MISMATCHES", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, HMLB_Default: 26, HMFM_Default: 0.05, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default, convert: function(value, record) {
+  if (Ext.isBoolean(value)) 
   {
-    return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-  } else if (numhours > 0) 
+    return value;
+  } else if (Ext.isString(value)) 
   {
-    return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-  } else if (numminutes > 0) 
-  {
-    return numminutes + " minutes " + numseconds + " seconds";
+    return (/^(true|1)$/i).test(value);
   } else {
-    return numseconds + " seconds";
+    return false;
   }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'TasksMonitor'], 0));
+}}, {name: "homologyMinLengthBPS", type: "int", defaultValue: this.self.HMLB_Default}, {name: "homologyMaxFractionMisMatches", type: "Float", defaultValue: this.self.HMFM_Default}], validation: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
+}, loadValues: function(values) {
+  if (values.MASTEROLIGONUMBEROFDIGITS) 
+  this.set("masterOligoNumberOfDigitsValue", values.MASTEROLIGONUMBEROFDIGITS);
+  if (values.MASTERPLASMIDNUMBEROFDIGITS) 
+  this.set("masterPlasmidNumberOfDigitsValue", values.MASTERPLASMIDNUMBEROFDIGITS);
+  if (values.GIBSONOVERLAPBPS) 
+  this.set("gibsonOverlapBPsValue", values.GIBSONOVERLAPBPS);
+  if (values.GIBSONOVERLAPMINTM) 
+  this.set("gibsonOverlapMinTmValue", values.GIBSONOVERLAPMINTM);
+  if (values.GIBSONOVERLAPMAXTM) 
+  this.set("gibsonOverlapMaxTmValue", values.GIBSONOVERLAPMAXTM);
+  if (values.MAXIMUMOLIGOLENGTHBPS) 
+  this.set("maxOligoLengthBPsValue", values.MAXIMUMOLIGOLENGTHBPS);
+  if (values.MINIMUMFRAGMENTSIZEGIBSONBPS) 
+  this.set("minFragmentSizeGibsonBPsValue", values.MINIMUMFRAGMENTSIZEGIBSONBPS);
+  if (values.GOLDENGATEOVERHANGBPS) 
+  this.set("goldenGateOverhangBPsValue", values.GOLDENGATEOVERHANGBPS);
+  if (values.GOLDENGATERECOGNITIONSEQ) 
+  this.set("goldenGateRecognitionSeqValue", values.GOLDENGATERECOGNITIONSEQ);
+  if (values.GOLDENGATETERMINIEXTRASEQ) 
+  this.set("goldenGateTerminiExtraSeqValue", values.GOLDENGATETERMINIEXTRASEQ);
+  if (values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE) 
+  this.set("maxIdentitiesGoldenGateOverhangsCompatible", values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE);
+  if (values.OLIGOSYNTHESISCOSTPERBPUSD) 
+  this.set("oligoSynthesisCostPerBPUSDValue", values.OLIGOSYNTHESISCOSTPERBPUSD);
+  if (values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD) 
+  this.set("oligoPagePurificationCostPerPieceUSDValue", values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD);
+  if (values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS) 
+  this.set("oligoMaxLengthNoPagePurificationRequiredBP", values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBP);
+  if (values.MINIMUMPCRPRODUCTBPS) 
+  this.set("minPCRProductBPsValue", values.MINIMUMPCRPRODUCTBPS);
+  if (values.DIRECTSYNTHESISCOSTPERBPUSD) 
+  this.set("directSynthesisCostPerBPUSDValue", values.DIRECTSYNTHESISCOSTPERBPUSD);
+  if (values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD) 
+  this.set("directSynthesisMinCostPerPieceUSDValue", values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD);
+  if (values.PRIMER_GC_CLAMP) 
+  this.set("primerGCClampValue", values.PRIMER_GC_CLAMP);
+  if (values.PRIMER_MIN_SIZE) 
+  this.set("primerMinSizeValue", values.PRIMER_MIN_SIZE);
+  if (values.PRIMER_MAX_SIZE) 
+  this.set("primerMaxSizeValue", values.PRIMER_MAX_SIZE);
+  if (values.PRIMER_MIN_TM) 
+  this.set("primerMinTmValue", values.PRIMER_MIN_TM);
+  if (values.PRIMER_MAX_TM) 
+  this.set("primerMaxTmValue", values.PRIMER_MAX_TM);
+  if (values.PRIMER_MAX_DIFF_TM) 
+  this.set("primerMaxDiffTmValue", values.PRIMER_MAX_DIFF_TM);
+  if (values.PRIMER_MAX_SELF_ANY_TH) 
+  this.set("primerMaxSelfAnyThValue", values.PRIMER_MAX_SELF_ANY_TH);
+  if (values.PRIMER_MAX_SELF_END_TH) 
+  this.set("primerMaxSelfEndThValue", values.PRIMER_MAX_SELF_END_TH);
+  if (values.PRIMER_PAIR_MAX_COMPL_ANY_TH) 
+  this.set("primerPairMaxComplAnyThValue", values.PRIMER_PAIR_MAX_COMPL_ANY_TH);
+  if (values.PRIMER_PAIR_MAX_COMPL_END_TH) 
+  this.set("primerPairMaxComplEndThValue", values.PRIMER_PAIR_MAX_COMPL_END_TH);
+  if (values.PRIMER_TM_SANTALUCIA) 
+  this.set("primerTmSantaluciaValue", values.PRIMER_TM_SANTALUCIA);
+  if (values.PRIMER_SALT_CORRECTIONS) 
+  this.set("primerSaltCorrectionsValue", values.PRIMER_SALT_CORRECTIONS);
+  if (values.PRIMER_DNA_CONC) 
+  this.set("primerDnaConcValue", values.PRIMER_DNA_CONC);
+  if (values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT) 
+  this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT);
+  if (values.MISPRIMING_MIN_TM) 
+  this.set("misprimingMinTmValue", values.MISPRIMING_MIN_TM);
+  if (values.MISPRIMING_SALT_CONC) 
+  this.set("misprimingSaltConcValue", values.MISPRIMING_SALT_CONC);
+  if (values.MISPRIMING_OLIGO_CONC) 
+  this.set("misprimingOligoConcValue", values.MISPRIMING_OLIGO_CONC);
+  if (values.OUTPUT_SEQUENCE_FORMAT) 
+  this.set("outputSequenceFormatValue", values.OUTPUT_SEQUENCE_FORMAT);
+  if (values.SUPPRESS_PURE_PRIMERS) 
+  this.set("SPP_Default", values.SUPPRESS_PURE_PRIMERS);
+  if (values.HOMOLOGY_MIN_LENGTH_BPS) 
+  this.set("homologyMinLengthBPS", values.HOMOLOGY_MIN_LENGTH_BPS);
+  if (values.HOMOLOGY_MAX_FRACTION_MISMATCHES) 
+  this.set("homologyMaxFractionMisMatches", values.HOMOLOGY_MAX_FRACTION_MISMATCHES);
+}, setDefaultValues: function() {
+  this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
+  this.set("masterPlasmidNumberOfDigitsValue", this.self.MPNOD_Default);
+  this.set("gibsonOverlapBPsValue", this.self.GOB_Default);
+  this.set("gibsonOverlapMinTmValue", this.self.GOMT_Default);
+  this.set("gibsonOverlapMaxTmValue", this.self.GOMAXT_Default);
+  this.set("maxOligoLengthBPsValue", this.self.MOLB_Default);
+  this.set("minFragmentSizeGibsonBPsValue", this.self.MFSGB_Default);
+  this.set("goldenGateOverhangBPsValue", this.self.GGOHB_Default);
+  this.set("goldenGateRecognitionSeqValue", this.self.GGRS_Default);
+  this.set("goldenGateTerminiExtraSeqValue", this.self.GGTES_Default);
+  this.set("maxIdentitiesGoldenGateOverhangsCompatibleValue", this.self.MIGGOC_Default);
+  this.set("oligoSynthesisCostPerBPUSDValue", this.self.OSCPB_Default);
+  this.set("oligoPagePurificationCostPerPieceUSDValue", this.self.OPPCPP_Default);
+  this.set("oligoMaxLengthNoPagePurificationRequiredBPsValue", this.self.OMLPPRB_Default);
+  this.set("minPCRProductBPsValue", this.self.MPPB_Default);
+  this.set("directSynthesisCostPerBPUSDValue", this.self.DSCPB_Default);
+  this.set("directSynthesisMinCostPerPieceUSDValue", this.self.DSMCPP_Default);
+  this.set("primerGCClampValue", this.self.PGC_Default);
+  this.set("primerMinSizeValue", this.self.PMS_Default);
+  this.set("primerMaxSizeValue", this.self.PMAXS_Default);
+  this.set("primerMinTmValue", this.self.PMT_Default);
+  this.set("primerMaxTmValue", this.self.PMAXT_Default);
+  this.set("primerMaxDiffTmValue", this.self.PMDT_Default);
+  this.set("primerMaxSelfAnyThValue", this.self.PMSAT_Default);
+  this.set("primerMaxSelfEndThValue", this.self.PMSET_Default);
+  this.set("primerPairMaxComplAnyThValue", this.self.PPMCAT_Default);
+  this.set("primerPairMaxComplEndThValue", this.self.PPMCET_Default);
+  this.set("primerTmSantaluciaValue", this.self.PTS_Default);
+  this.set("primerSaltCorrectionsValue", this.self.PSC_Default);
+  this.set("primerDnaConcValue", this.self.PDC_Default);
+  this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", this.self.M3BBTWIH_Default);
+  this.set("misprimingMinTmValue", this.self.MMT_Default);
+  this.set("misprimingSaltConcValue", this.self.MSC_Default);
+  this.set("misprimingOligoConcValue", this.self.MOC_Default);
+  this.set("outputSequenceFormatValue", this.self.OSF_Default);
+  this.set("suppressPurePrimersValue", this.self.SPP_Default);
+  this.set("homologyMinLengthBPS", this.self.HMLB_Default);
+  this.set("homologyMaxFractionMisMatches", this.self.HMFM_Default);
+}, createJ5ParametersString: function(isCollectionCircular) {
+  var returnString = "Parameter Name,Value,Default Value,Description\n" + this.self.MONOD + "," + this.get("masterOligoNumberOfDigitsValue") + "," + this.self.MONOD_Default + "," + this.self.MONOD_DESC + "\n" + this.self.MPNOD + "," + this.get("masterPlasmidNumberOfDigitsValue") + "," + this.self.MPNOD_Default + "," + this.self.MPNOD_DESC + "\n" + this.self.GOB + "," + this.get("gibsonOverlapBPsValue") + "," + this.self.GOB_Default + "," + this.self.GOB_DESC + "\n" + this.self.GOMT + "," + this.get("gibsonOverlapMinTmValue") + "," + this.self.GOMT_Default + "," + this.self.GOMT_DESC + "\n" + this.self.GOMAXT + "," + this.get("gibsonOverlapMaxTmValue") + "," + this.self.GOMAXT_Default + "," + this.self.GOMAXT_DESC + "\n" + this.self.MOLB + "," + this.get("maxOligoLengthBPsValue") + "," + this.self.MOLB_Default + "," + this.self.MOLB_DESC + "\n" + this.self.MFSGB + "," + this.get("minFragmentSizeGibsonBPsValue") + "," + this.self.MFSGB_Default + "," + this.self.MFSGB_DESC + "\n" + this.self.GGOHB + "," + this.get("goldenGateOverhangBPsValue") + "," + this.self.GGOHB_Default + "," + this.self.GGOHB_DESC + "\n" + this.self.GGRS + "," + this.get("goldenGateRecognitionSeqValue") + "," + this.self.GGRS_Default + "," + this.self.GGRS_DESC + "\n" + this.self.GGTES + "," + this.get("goldenGateTerminiExtraSeqValue") + "," + this.self.GGTES_Default + "," + this.self.GGTES_DESC + "\n" + this.self.MIGGOC + "," + this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue") + "," + this.self.MIGGOC_Default + "," + this.self.MIGGOC_DESC + "\n" + this.self.OSCPB + "," + this.get("oligoSynthesisCostPerBPUSDValue") + "," + this.self.OSCPB_Default + "," + this.self.OSCPB_DESC + "\n" + this.self.OPPCPP + "," + this.get("oligoPagePurificationCostPerPieceUSDValue") + "," + this.self.OPPCPP_Default + "," + this.self.OPPCPP_DESC + "\n" + this.self.OMLPPRB + "," + this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue") + "," + this.self.OMLPPRB_Default + "," + this.self.OMLPPRB_DESC + "\n" + this.self.MPPB + "," + this.get("minPCRProductBPsValue") + "," + this.self.MPPB_Default + "," + this.self.MPPB_DESC + "\n" + this.self.DSCPB + "," + this.get("directSynthesisCostPerBPUSDValue") + "," + this.self.DSCPB_Default + "," + this.self.DSCPB_DESC + "\n" + this.self.DSMCPP + "," + this.get("directSynthesisMinCostPerPieceUSDValue") + "," + this.self.DSMCPP_Default + "," + this.self.DSMCPP_DESC + "\n" + this.self.PGC + "," + this.get("primerGCClampValue") + "," + this.self.PGC_Default + "," + this.self.PGC_DESC + "\n" + this.self.PMS + "," + this.get("primerMinSizeValue") + "," + this.self.PMS_Default + "," + this.self.PMS_DESC + "\n" + this.self.PMAXS + "," + this.get("primerMaxSizeValue") + "," + this.self.PMAXS_Default + "," + this.self.PMAXS_DESC + "\n" + this.self.PMT + "," + this.get("primerMinTmValue") + "," + this.self.PMT_Default + "," + this.self.PMT_DESC + "\n" + this.self.PMAXT + "," + this.get("primerMaxTmValue") + "," + this.self.PMAXT_Default + "," + this.self.PMAXT_DESC + "\n" + this.self.PMDT + "," + this.get("primerMaxDiffTmValue") + "," + this.self.PMDT_Default + "," + this.self.PMDT_DESC + "\n" + this.self.PMSAT + "," + this.get("primerMaxSelfAnyThValue") + "," + this.self.PMSAT_Default + "," + this.self.PMSAT_DESC + "\n" + this.self.PMSET + "," + this.get("primerMaxSelfEndThValue") + "," + this.self.PMSET_Default + "," + this.self.PMSET_DESC + "\n" + this.self.PPMCAT + "," + this.get("primerPairMaxComplAnyThValue") + "," + this.self.PPMCAT_Default + "," + this.self.PPMCAT_DESC + "\n" + this.self.PPMCET + "," + this.get("primerPairMaxComplEndThValue") + "," + this.self.PPMCET_Default + "," + this.self.PPMCET_DESC + "\n" + this.self.PTS + "," + (this.get("primerTmSantaluciaValue")) + "," + (this.self.PTS_Default ? "1" : "0") + "," + this.self.PTS_DESC + "\n" + this.self.PSC + "," + (this.get("primerSaltCorrectionsValue")) + "," + (this.self.PSC_Default) + "," + this.self.PSC_DESC + "\n" + this.self.PDC + "," + this.get("primerDnaConcValue") + "," + this.self.PDC_Default + "," + this.self.PDC_DESC + "\n" + this.self.M3BBTWIH + "," + this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue") + "," + this.self.M3BBTWIH_Default + "," + this.self.M3BBTWIH_DESC + "\n" + this.self.MMT + "," + this.get("misprimingMinTmValue") + "," + this.self.MMT_Default + "," + this.self.MMT_DESC + "\n" + this.self.MSC + "," + this.get("misprimingSaltConcValue") + "," + this.self.MSC_Default + "," + this.self.MSC_DESC + "\n" + this.self.MOC + "," + this.get("misprimingOligoConcValue") + "," + this.self.MOC_Default + "," + this.self.MOC_DESC + "\n" + this.self.OSF + "," + this.get("outputSequenceFormatValue") + "," + this.self.OSF_Default + "," + this.self.OSF_DESC + "\n" + this.self.APT + "," + isCollectionCircular + "," + Teselagen.constants.Constants.self.CIRCULAR + "," + this.self.APT_DESC + "\n" + this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
+  this.self.HMLB + "," + this.get("homologyMinLengthBPS") + "," + this.self.HMLB_Default + "\n";
+  this.self.HMFM + "," + this.get("homologyMaxFractionMisMatches") + "," + this.self.HMFM_Default + "\n";
+  return returnString;
+}, getArrayParameters: function() {
+  var arr = [];
+  arr.push({value: this.get("masterOligoNumberOfDigitsValue"), name: "masterOligoNumberOfDigitsValue"});
+  arr.push({value: this.get("masterPlasmidNumberOfDigitsValue"), name: "masterPlasmidNumberOfDigitsValue"});
+  arr.push({value: this.get("gibsonOverlapBPsValue"), name: "gibsonOverlapBPsValue"});
+  arr.push({value: this.get("gibsonOverlapMinTmValue"), name: "gibsonOverlapMinTmValue"});
+  arr.push({value: this.get("gibsonOverlapMaxTmValue"), name: "gibsonOverlapMaxTmValue"});
+  arr.push({value: this.get("maxOligoLengthBPsValue"), name: "maxOligoLengthBPsValue"});
+  arr.push({value: this.get("minFragmentSizeGibsonBPsValue"), name: "minFragmentSizeGibsonBPsValue"});
+  arr.push({value: this.get("goldenGateOverhangBPsValue"), name: "goldenGateOverhangBPsValue"});
+  arr.push({value: this.get("goldenGateRecognitionSeqValue"), name: "goldenGateRecognitionSeqValue"});
+  arr.push({value: this.get("goldenGateTerminiExtraSeqValue"), name: "goldenGateTerminiExtraSeqValue"});
+  arr.push({value: this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue"), name: "maxIdentitiesGoldenGateOverhangsCompatibleValue"});
+  arr.push({value: this.get("oligoSynthesisCostPerBPUSDValue"), name: "oligoSynthesisCostPerBPUSDValue"});
+  arr.push({value: this.get("oligoPagePurificationCostPerPieceUSDValue"), name: "oligoPagePurificationCostPerPieceUSDValue"});
+  arr.push({value: this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue"), name: "oligoMaxLengthNoPagePurificationRequiredBPsValue"});
+  arr.push({value: this.get("minPCRProductBPsValue"), name: "minPCRProductBPsValue"});
+  arr.push({value: this.get("directSynthesisCostPerBPUSDValue"), name: "directSynthesisCostPerBPUSDValue"});
+  arr.push({value: this.get("directSynthesisMinCostPerPieceUSDValue"), name: "directSynthesisMinCostPerPieceUSDValue"});
+  arr.push({value: this.get("primerGCClampValue"), name: "primerGCClampValue"});
+  arr.push({value: this.get("primerMinSizeValue"), name: "primerMinSizeValue"});
+  arr.push({value: this.get("primerMaxSizeValue"), name: "primerMaxSizeValue"});
+  arr.push({value: this.get("primerMinTmValue"), name: "primerMinTmValue"});
+  arr.push({value: this.get("primerMaxTmValue"), name: "primerMaxTmValue"});
+  arr.push({value: this.get("primerMaxDiffTmValue"), name: "primerMaxDiffTmValue"});
+  arr.push({value: this.get("primerMaxSelfAnyThValue"), name: "primerMaxSelfAnyThValue"});
+  arr.push({value: this.get("primerMaxSelfEndThValue"), name: "primerMaxSelfEndThValue"});
+  arr.push({value: this.get("primerPairMaxComplAnyThValue"), name: "primerPairMaxComplAnyThValue"});
+  arr.push({value: this.get("primerPairMaxComplEndThValue"), name: "primerPairMaxComplEndThValue"});
+  arr.push({value: this.get("primerTmSantaluciaValue"), name: "primerTmSantaluciaValue"});
+  arr.push({value: this.get("primerSaltCorrectionsValue"), name: "primerSaltCorrectionsValue"});
+  arr.push({value: this.get("primerDnaConcValue"), name: "primerDnaConcValue"});
+  arr.push({value: this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue"), name: "mispriming3PrimeBoundaryBPToWarnIfHitValue"});
+  arr.push({value: this.get("misprimingMinTmValue"), name: "misprimingMinTmValue"});
+  arr.push({value: this.get("misprimingSaltConcValue"), name: "misprimingSaltConcValue"});
+  arr.push({value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue"});
+  arr.push({value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue"});
+  arr.push({value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue"});
+  arr.push({value: this.get("homologyMinLengthBPS"), name: "homologyMinLengthBPS"});
+  arr.push({value: this.get("homologyMaxFractionMisMatches"), name: "homologyMaxFractionMisMatches"});
+  return arr;
+}, getParametersAsStore: function() {
+  var self = this;
+  var store = new Ext.data.JsonStore({proxy: {type: 'memory', data: self.getArrayParameters(), reader: {type: 'json', root: 'files'}}, fields: ['name', 'value']});
+  store.load();
+  return store;
+}, getParametersAsArray: function(isCollectionCircular) {
+  var obj = {};
+  obj[this.self.MONOD] = this.get("masterOligoNumberOfDigitsValue");
+  obj[this.self.MPNOD] = this.get("masterPlasmidNumberOfDigitsValue");
+  obj[this.self.GOB] = this.get("gibsonOverlapBPsValue");
+  obj[this.self.GOMT] = this.get("gibsonOverlapMinTmValue");
+  obj[this.self.GOMAXT] = this.get("gibsonOverlapMaxTmValue");
+  obj[this.self.MOLB] = this.get("maxOligoLengthBPsValue");
+  obj[this.self.MFSGB] = this.get("minFragmentSizeGibsonBPsValue");
+  obj[this.self.GGOHB] = this.get("goldenGateOverhangBPsValue");
+  obj[this.self.GGRS] = this.get("goldenGateRecognitionSeqValue");
+  obj[this.self.GGTES] = this.get("goldenGateTerminiExtraSeqValue");
+  obj[this.self.MIGGOC] = this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue");
+  obj[this.self.OSCPB] = this.get("oligoSynthesisCostPerBPUSDValue");
+  obj[this.self.OPPCPP] = this.get("oligoPagePurificationCostPerPieceUSDValue");
+  obj[this.self.OMLPPRB] = this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue");
+  obj[this.self.MPPB] = this.get("minPCRProductBPsValue");
+  obj[this.self.DSCPB] = this.get("directSynthesisCostPerBPUSDValue");
+  obj[this.self.DSMCPP] = this.get("directSynthesisMinCostPerPieceUSDValue");
+  obj[this.self.PGC] = this.get("primerGCClampValue");
+  obj[this.self.PMS] = this.get("primerMinSizeValue");
+  obj[this.self.PMAXS] = this.get("primerMaxSizeValue");
+  obj[this.self.PMT] = this.get("primerMinTmValue");
+  obj[this.self.PMAXT] = this.get("primerMaxTmValue");
+  obj[this.self.PMDT] = this.get("primerMaxDiffTmValue");
+  obj[this.self.PMSAT] = this.get("primerMaxSelfAnyThValue");
+  obj[this.self.PMSET] = this.get("primerMaxSelfEndThValue");
+  obj[this.self.PPMCAT] = this.get("primerPairMaxComplAnyThValue");
+  obj[this.self.PPMCET] = this.get("primerPairMaxComplEndThValue");
+  obj[this.self.PTS] = this.get("primerTmSantaluciaValue");
+  obj[this.self.PSC] = this.get("primerSaltCorrectionsValue");
+  obj[this.self.PDC] = this.get("primerDnaConcValue");
+  obj[this.self.M3BBTWIH] = this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue");
+  obj[this.self.MMT] = this.get("misprimingMinTmValue");
+  obj[this.self.MSC] = this.get("misprimingSaltConcValue");
+  obj[this.self.MOC] = this.get("misprimingOligoConcValue");
+  obj[this.self.OSF] = this.get("outputSequenceFormatValue");
+  obj[this.self.SPP] = this.get("suppressPurePrimersValue");
+  obj[this.self.APT] = isCollectionCircular ? "circular" : "linear";
+  obj[this.self.HMLB] = this.get("homologyMinLengthBPS");
+  obj[this.self.HMFM] = this.get("homologyMaxFractionMisMatches");
+  return obj;
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Parameters'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.constants.Constants', Ext.Base, {singleton: true, ENV_DEV: "dev", ENV_PROD: "prod", ENV_TEST: "test", VERSION: "1.0", API_URL: "http://teselagen.local/api/", FORMATS_LIST: ["GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML", "jbei-seq"], GENBANK: "Genbank", FASTA: "FASTA", JBEISEQ: "jbei-seq", JBEISEQJSON: "JBEISEQJSON", SBOLXML: "SBOLXML", INIT: "INIT", GENBANK_SUFFIX: ".gb", FASTA_SUFFIX: ".fas", JEBISEQ_SUFFIX: ".xml", SBOL_SUFFIX: ".sbol", SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP: {Genbank: "gb", FASTA: "fasta", "jbei-seq": "xml", SBOLXML: "xml", JBEISEQJSON: "json"}, NOTMORETHAN: "NOTMORETHAN", NOTWITH: "NOTWITH", AFTER: "AFTER", BEFORE: "BEFORE", WITH: "WITH", THEN: "THEN", NEXTTO: "NEXTTO", MORETHAN: "MORETHAN", COMPOP_LIST: ["AFTER", "BEFORE", "THEN", "NEXTTO", "MORETHAN"], FAS_LIST: ["None", "DIGEST", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS_LIST_NO_DIGEST: ["None", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS: Object.freeze({NONE: "None", DIGEST: "DIGEST", DIRECT: "Direct Synthesis", PCR: "PCR", PRIMER_REV: "Embed_in_primer_reverse", PRIMER_FWD: "Embed_in_primer_forward", ANNEALED: "Annealed Oligos"}), ASSEMBLYTYPE_LIST: ["MOCK", "SLIC", "GOLDENGATE"], NONMOCKTYPE_LIST: ["SLIC/Gibonson/CPEC/SLiCE", "GOLDENGATE"], MOCK: "MOCK", SLIC: "SLIC", GOLDENGATE: "GOLDENGATE", SYNTHESISTYPE_LIST: ["DIRECT", "OLIGO", "ANNEALED OLIGOS"], RUN_STATUS_LIST: ["SUCCESS", "FAILED", "IN PROGRESS"], RECT_SHAPE_DEFAULT_SIZE: 56, RECT_SHAPE_MIN_SIZE: this.RECT_SHAPE_DEFAULT_SIZE / 2, CIRCULAR: "circular", LINEAR: "linear", FEATURE_TYPES: [{label: "-10_signal", data: "-10_signal"}, {label: "-35_signal", data: "-35_signal"}, {label: "3'UTR", data: "3'UTR"}, {label: "5'UTR", data: "5'UTR"}, {label: "allele", data: "allele"}, {label: "attenuator", data: "attenuator"}, {label: "C_region", data: "C_region"}, {label: "CAAT_signal", data: "CAAT_signal"}, {label: "CDS", data: "CDS"}, {label: "conflict", data: "conflict"}, {label: "D_segment", data: "D_segment"}, {label: "D-loop", data: "D-loop"}, {label: "enhancer", data: "enhancer"}, {label: "exon", data: "exon"}, {label: "GC_signal", data: "GC_signal"}, {label: "gene", data: "gene"}, {label: "iDNA", data: "iDNA"}, {label: "intron", data: "intron"}, {label: "J_region", data: "J_region"}, {label: "LTR", data: "LTR"}, {label: "mat_peptide", data: "mat_peptide"}, {label: "misc_binding", data: "misc_binding"}, {label: "misc_difference", data: "misc_difference"}, {label: "misc_feature", data: "misc_feature"}, {label: "misc_recomb", data: "misc_recomb"}, {label: "misc_RNA", data: "misc_RNA"}, {label: "misc_signal", data: "misc_signal"}, {label: "misc_structure", data: "misc_structure"}, {label: "modified_base", data: "modified_base"}, {label: "mRNA", data: "mRNA"}, {label: "mutation", data: "mutation"}, {label: "N_region", data: "N_region"}, {label: "old_sequence", data: "old_sequence"}, {label: "polyA_signal", data: "polyA_signal"}, {label: "polyA_site", data: "polyA_site"}, {label: "precursor_RNA", data: "precursor_RNA"}, {label: "prim_transcript", data: "prim_transcript"}, {label: "primer", data: "primer"}, {label: "primer_bind", data: "primer_bind"}, {label: "promoter", data: "promoter"}, {label: "protein_bind", data: "protein_bind"}, {label: "RBS", data: "RBS"}, {label: "rep_origin", data: "rep_origin"}, {label: "repeat_region", data: "repeat_region"}, {label: "repeat_unit", data: "repeat_unit"}, {label: "rRNA", data: "rRNA"}, {label: "S_region", data: "S_region"}, {label: "satellite", data: "satellite"}, {label: "scRNA", data: "scRNA"}, {label: "sig_peptide", data: "sig_peptide"}, {label: "snRNA", data: "snRNA"}, {label: "source", data: "source"}, {label: "stem_loop", data: "stem_loop"}, {label: "STS", data: "STS"}, {label: "TATA_signal", data: "TATA_signal"}, {label: "terminator", data: "terminator"}, {label: "transit_peptide", data: "transit_peptide"}, {label: "transposon", data: "transposon"}, {label: "tRNA", data: "tRNA"}, {label: "unsure", data: "unsure"}, {label: "V_region ", data: "V_region "}, {label: "variation", data: "variation"}], DEFAULT_VE_VIEW_OPTIONS: {features: true, cutSites: false, orfs: false, circular: true, mapCaret: true, complementary: true, spaces: true, sequenceAA: false, revComAA: false, featureLabels: true, cutSiteLabels: true, selection: {start: 0, end: 0}}}, 0, 0, 0, 0, 0, 0, [Teselagen.constants, 'Constants'], 0));
+(Ext.cmd.derive('Teselagen.models.DownstreamAutomationParameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MDTAZ: "MAXDELTATEMPERATUREADJACENTZONES", MDTROZA: "MAXDELTATEMPERATUREREACTIONOPTIMUMZONEACCEPTABLE", MMCSPZ: "MAXMCSTEPSPERZONE", MWVMP: "MAXWELLVOLUMEMULTIWELLPLATE", MCTF: "MCTEMPERATUREFINAL", MCTI: "MCTEMPERATUREINITIAL", MPV: "MINPIPETTINGVOLUME", NCMP: "NCOLUMNSMULTIWELLPLATE", NRMP: "NROWSMULTIWELLPLATE", TDT: "TRIALDELTATEMPERATURE", WPTZ: "WELLSPERTHERMOCYCLERZONE", ZPTB: "ZONESPERTHERMOCYCLERBLOCK", MDTAZ_DESC: "The maximum difference in temperature (in C) between adjacent zones on the thermocycler block", MDTROZA_DESC: "\"The maximum acceptable difference in temperature (in C) between the optimal annealing temperature of a PCR reaction, and the annealing temperature of the thermocycler block zone it is sitting in\"", MMCSPZ_DESC: "The maximum number of Monte-Carlo steps attempted per thermocycler block zone", MWVMP_DESC: "The maximum liquid volume (in uL) that a well in the multi-well plate can hold", MCTF_DESC: "The final temperature at the end of the Monte-Carlo simulated annealing run (in arbitrary reduced units)", MCTI_DESC: "The initial temperature in the beginning of the Monte-Carlo simulated annealing run (in arbitrary reduced units)", MPV_DESC: "The minimum pipetting volume (e.g. for a robotics platform) (in uL)", NCMP_DESC: "The number of columns in the multi-well plate", NRMP_DESC: "The number of rows in the multi-well plate", TDT_DESC: "The Monte-Carlo step trial change in temperature for a thermocycler block zone", WPTZ_DESC: "The number of wells per thermocycler block zone", ZPTB_DESC: "The number of zones per thermocycler block", MDTAZ_DEFAULT: 5, MDTROZA_DEFAULT: 5, MMCSPZ_DEFAULT: 1000, MWVMP_DEFAULT: 100, MCTF_DEFAULT: 1.0E-4, MCTI_DEFAULT: 0.1, MPV_DEFAULT: 5, NCMP_DEFAULT: 12, NRMP_DEFAULT: 8, TDT_DEFAULT: 0.1, WPTZ_DEFAULT: 16, ZPTB_DEFAULT: 6}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "maxDeltaTemperatureAdjacentZonesValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MDTAZ_DEFAULT;
+}}, {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MDTROZA_DEFAULT;
+}}, {name: "maxMcStepsPerZoneValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MMCSPZ_DEFAULT;
+}}, {name: "maxWellVolumeMultiwellPlateValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MWVMP_DEFAULT;
+}}, {name: "mcTemperatureFinalValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MCTF_DEFAULT;
+}}, {name: "mcTemperatureInitialValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MCTI_DEFAULT;
+}}, {name: "minPipettingVolumeValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.MPV_DEFAULT;
+}}, {name: "nColumnsMultiwellPlateValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.NCMP_DEFAULT;
+}}, {name: "nRowsMultiwellPlateValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.NRMP_DEFAULT;
+}}, {name: "trialDeltaTemperatureValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.TDT_DEFAULT;
+}}, {name: "wellsPerThermocyclerZoneValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.WPTZ_DEFAULT;
+}}, {name: "zonesPerThermocyclerBlockValue", convert: function(v, record) {
+  return parseFloat(v) || record.self.ZPTB_DEFAULT;
+}}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
+}, createParameterString: function() {
+  var returnString = "Parameter Name,Value,Default Value,Description\n" + this.self.MDTAZ + "," + this.get("maxDeltaTemperatureAdjacentZonesValue").toString() + "," + this.self.MDTAZ_DEFAULT + "," + this.self.MDTAZ_DESC + "\n" + this.self.MDTROZA + "," + this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue").toString() + "," + this.self.MDTROZA_DEFAULT + "," + this.self.MDTROZA_DESC + "\n" + this.self.MMCSPZ + "," + this.get("maxMcStepsPerZoneValue").toString() + "," + this.self.MMCSPZ_DEFAULT + "," + this.self.MMCSPZ_DESC + "\n" + this.self.MWVMP + "," + this.get("maxWellVolumeMultiwellPlateValue").toString() + "," + this.self.MWVMP_DEFAULT + "," + this.self.MWVMP_DESC + "\n" + this.self.MCTF + "," + this.get("mcTemperatureFinalValue").toString() + "," + this.self.MCTF_DEFAULT + "," + this.self.MCTF_DESC + "\n" + this.self.MCTI + "," + this.get("mcTemperatureInitialValue").toString() + "," + this.self.MCTI_DEFAULT + "," + this.self.MCTI_DESC + "\n" + this.self.MPV + "," + this.get("minPipettingVolumeValue").toString() + "," + this.self.MPV_DEFAULT + "," + this.self.MPV_DESC + "\n" + this.self.NCMP + "," + this.get("nColumnsMultiwellPlateValue").toString() + "," + this.self.NCMP_DEFAULT + "," + this.self.NCMP_DESC + "\n" + this.self.NRMP + "," + this.get("nRowsMultiwellPlateValue").toString() + "," + this.self.NRMP_DEFAULT + "," + this.self.NRMP_DESC + "\n" + this.self.TDT + "," + this.get("trialDeltaTemperatureValue").toString() + "," + this.self.TDT_DEFAULT + "," + this.self.TDT_DESC + "\n" + this.self.WPTZ + "," + this.get("wellsPerThermocyclerZoneValue").toString() + "," + this.self.WPTZ_DEFAULT + "," + this.self.WPTZ_DESC + "\n" + this.self.ZPTB + "," + this.get("zonesPerThermocyclerBlockValue").toString() + "," + this.self.ZPTB_DEFAULT + "," + this.self.ZPTB_DESC + "\n";
+  return returnString;
+}, setDefaultValues: function() {
+  this.set("maxDeltaTemperatureAdjacentZonesValue", this.self.MDTAZ_DEFAULT);
+  this.set("maxDeltaTemperatureReactionOptimumZoneAcceptableValue", this.self.MDTROZA_DEFAULT);
+  this.set("maxMcStepsPerZoneValue", this.self.MMCSPZ_DEFAULT);
+  this.set("maxWellVolumeMultiwellPlateValue", this.self.MWVMP_DEFAULT);
+  this.set("mcTemperatureFinalValue", this.self.MCTF_DEFAULT);
+  this.set("mcTemperatureInitialValue", this.self.MCTI_DEFAULT);
+  this.set("minPipettingVolumeValue", this.self.MPV_DEFAULT);
+  this.set("nColumnsMultiwellPlateValue", this.self.NCMP_DEFAULT);
+  this.set("nRowsMultiwellPlateValue", this.self.NRMP_DEFAULT);
+  this.set("trialDeltaTemperatureValue", this.self.TDT_DEFAULT);
+  this.set("wellsPerThermocyclerZoneValue", this.self.WPTZ_DEFAULT);
+  this.set("zonesPerThermocyclerBlockValue", this.self.ZPTB_DEFAULT);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DownstreamAutomationParameters'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.SessionManager', Ext.Base, {singleton: true, config: {baseURL: null, baseUser: null, data: null, env: null}, constants: null, maskApp: function() {
-  splashscreen = Ext.getBody().mask();
-  splashscreen.addCls('splashscreen');
-  Ext.DomHelper.insertFirst(Ext.query('.splashscreen')[0], {id: 'x-splash-message'});
-  Ext.DomHelper.insertFirst(Ext.query('.splashscreen')[0], {cls: 'x-splash-icon'});
-}, unmaskApp: function() {
-  if (splashscreen) 
+(Ext.cmd.derive('Teselagen.models.J5Input', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "j5parameters_id", type: "long"}, {name: "automationparameters_id", type: "long"}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Parameters", getterName: "getJ5Parameters", setterName: "setJ5Parameters", associationKey: "j5Parameters", foreignKey: "j5parameters_id"}, {type: "hasOne", model: "Teselagen.models.DownstreamAutomationParameters", getterName: "getDownstreamAutomationParameters", setterName: "setDownstreamAutomationParameters", associationKey: "downstreamAutomationParameters", foreignKey: "automationparameters_id"}, {type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Input'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.Warning', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "message", type: "string"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Warning'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.CombinationPart', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "id", type: "string", defaultValue: ""}, {name: "parts", type: "string", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'CombinationPart'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.TargetBin', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "id", type: "string", defaultValue: ""}, {name: "name", type: "string", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'TargetBin'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.NonDegPart', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "id", type: "string", defaultValue: ""}, {name: "name", type: "string", defaultValue: ""}, {name: "source", type: "string", defaultValue: ""}, {name: "revComp", type: "string", defaultValue: ""}, {name: "startBP", type: "string", defaultValue: ""}, {name: "stopBP", type: "string", defaultValue: ""}, {name: "size", type: "string", defaultValue: ""}, {name: "sequence", type: "string", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'NonDegPart'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.CombinatorialAssembly', Ext.data.Model, {proxy: {type: "memory"}, fields: [{name: "cite", type: "String"}, {name: "date", type: "String"}, {name: "note", type: "String"}, {name: "assemblyParameters", type: "String"}], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Warning", name: "warnings"}, {type: "hasMany", model: "Teselagen.models.j5Output.CombinationPart", name: "combinationParts"}, {type: "hasMany", model: "Teselagen.models.j5Output.TargetBin", name: "targetBins"}, {type: "hasMany", model: "Teselagen.models.j5Output.NonDegPart", name: "nonDegParts"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'CombinatorialAssembly'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.CombinatorialNonMockAssembly', Teselagen.models.j5Output.CombinatorialAssembly, {proxy: {type: "memory"}, statics: {}, fields: [{name: "type", type: "String", defaultValue: ""}, {name: "date", type: "String", defaultValue: ""}, {name: "annealedOligoSynthesis", type: "String", defaultValue: ""}, {name: "assemblyPieces", type: "String", defaultValue: ""}, {name: "assembly_id", type: "long"}], validations: [{field: "type", type: "inclusion", list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST}], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "directSynthesis", foreignKey: "directSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "oligoSynthesis", foreignKey: "oligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "annealedOligoSynthesis", foreignKey: "annealedOligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.PCRReaction", name: "pcrReaction", foreignKey: "pcrReaction_id"}, {type: "belongsTo", model: "Teselagen.models.J5Results", getterName: "getJ5Results", setterName: "setJ5Results", associationKey: "j5Results", foreignKey: "j5results_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'CombinatorialNonMockAssembly'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.SuggestedAssembly', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "suggestedAssembly_id", type: "long"}, {name: "contig", type: "int", defaultValue: 0}, {name: "assemblyPieces", convert: function(v, record) {
+  return [];
+}}], validations: [{field: "forward", type: "inclusion", list: ["forward", "reverse"]}], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}], addAssemblyPiece: function(pPiece) {
+  return this.get("assemblyPieces").push(pPiece);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'SuggestedAssembly'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.Assembly', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "type", type: "String", defaultValue: ""}, {name: "date", type: "String", defaultValue: ""}, {name: "assembly_id", type: "long"}], validations: [{field: "type", type: "inclusion", list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST}], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Warning", name: "warnings", foreignKey: "warnings_id"}, {type: "belongsTo", model: "Teselagen.models.j5Output.AssembledSequenceFile", getterName: "getAssembledSequenceFile", setterName: "setAssembledSequenceFile", associationKey: "assembledSequenceFile", foreignKey: "assembledSequenceFile_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Assembly'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.Incompatibility', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "incompatibilty_id", type: "long"}, {name: "assemblyPiece", type: "int", defaultValue: 0}, {name: "leftEnd", type: "string", defaultValue: "NONE"}, {name: "rightEnd", type: "string", defaultValue: "NONE"}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Incompatibility'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.Synthesis', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "synthesis_id", type: "long"}, {name: "type", type: "string", defaultValue: ""}, {name: "idNumber", type: "int", defaultValue: ""}, {name: "name", type: "string", defaultValue: ""}, {name: "firstTargetPart", type: "int", defaultValue: ""}, {name: "lastTargetPart", type: "int", defaultValue: ""}, {name: "cost", type: "long", defaultValue: ""}, {name: "length", type: "int", defaultValue: ""}, {name: "sequence", type: "string", defaultValue: ""}, {name: "Tm", type: "long", defaultValue: ""}, {name: "Tm3prime", type: "long", defaultValue: ""}, {name: "topOligo", type: "int", defaultValue: 0}, {name: "bottomOligo", type: "int", defaultValue: 0}], validations: [{field: "type", type: "inclusion", list: Teselagen.constants.Constants.SYNTHESISTYPE_LIST}], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}], addAssemblyPiece: function(pPiece) {
+  return this.get("assemblyPieces").push(pPiece);
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Synthesis'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.PCRReaction', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "pcr_id", type: "long"}, {name: "combinatorial", type: "Boolean", defaultValue: false}, {name: "idNumber", type: "int", defaultValue: ""}, {name: "primaryTemplate", type: "string", defaultValue: ""}, {name: "alternateTemplate", type: "string", defaultValue: ""}, {name: "forwardOligoIDNumber", type: "int", defaultValue: ""}, {name: "forwardOligoName", type: "string", defaultValue: ""}, {name: "reverseOligoIDNumber", type: "int", defaultValue: ""}, {name: "reverseOligoName", type: "string", defaultValue: ""}, {name: "firstTargetPart", type: "int", defaultValue: ""}, {name: "lastTargetPart", type: "int", defaultValue: ""}, {name: "note", type: "string", defaultValue: ""}, {name: "meanOligoTm", type: "long", defaultValue: ""}, {name: "deltaOligoTm", type: "long", defaultValue: ""}, {name: "meanOligoTm3prime", type: "long", defaultValue: ""}, {name: "deltaOligoTm3prime", type: "long", defaultValue: ""}, {name: "length", type: "int", defaultValue: ""}, {name: "sequence", type: "string", defaultValue: ""}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'PCRReaction'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.NonMockAssembly', Teselagen.models.j5Output.Assembly, {proxy: {type: "memory"}, statics: {}, fields: [{name: "directSynthesis", type: "String", defaultValue: ""}, {name: "annealedOligoSynthesis", type: "String", defaultValue: ""}, {name: "assembly_id", type: "long"}], validations: [], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Incompatibility", name: "comp", foreignKey: "incompatibilities_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.SuggestedAssembly", name: "suggestedAssembly", foreignKey: "suggestedAssembly_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "directSynthesis", foreignKey: "directSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "oligoSynthesis", foreignKey: "oligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "annealedOligoSynthesis", foreignKey: "annealedOligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.PCRReaction", name: "pcrReaction", foreignKey: "pcrReaction_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'NonMockAssembly'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.AssembledSequenceFile', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "fileType", convert: function(v) {
+  var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
+  var constants = Teselagen.constants.Constants;
+  if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) 
   {
-    splashscreen.fadeOut({duration: 1000, remove: true});
-    splashscreen.next().fadeOut({duration: 1000, remove: true, listeners: {afteranimate: function() {
-  splashscreen = null;
-}}});
+    return format;
+  } else {
+    return constants.GENBANK;
   }
-}, constructor: function() {
-  this.constants = Teselagen.constants.Constants;
-  this.setBaseURL("http://app.teselagen.com/api/");
-  this.setEnv(this.constants.ENV_DEV);
-}, buildUrl: function(pAction, pDefault) {
-  var url = this.getBaseURL() + pAction;
-  return url;
-}, buildUserResUrl: function(pAction, pDefault) {
-  var url = this.getBaseURL() + "users/" + this.getBaseUser() + pAction;
-  if (pDefault && this.getEnv() === this.constants.ENV_TEST) 
-  {
-    url = pDefault;
-  }
-  return url;
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'SessionManager'], 0));
+}}, {name: "name", type: "String", defaultValue: ""}, {name: "fileContent", type: "String", defaultValue: ""}, {name: "sizeBP", type: "String", defaultValue: ""}, {name: "parts", type: "String", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'AssembledSequenceFile'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.models.Preferences', Ext.data.Model, {fields: [{name: "user_id", type: "long"}, {name: "testPreference", type: "String"}], associations: [{type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'Preferences'], 0));
+(Ext.cmd.derive('Teselagen.models.j5Output.Warnings', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "warning_id", type: "long"}, {name: "type", type: "string", defaultValue: ""}, {name: "message", type: "string", defaultValue: ""}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.Assembly", getterName: "getAssembly", setterName: "setAssembly", associationKey: "assembly", foreignKey: "assembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Warnings'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.j5Output.Error', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "faultString", type: "string"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Error'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.J5Results', Ext.data.Model, {proxy: {type: "memory"}, associations: [{type: "hasMany", model: "Teselagen.models.j5Output.AssembledSequenceFile", name: "assemblies"}, {type: "hasOne", model: "Teselagen.models.j5Output.CombinatorialAssembly", associationKey: "combinatorialAssembly", getterName: "getCombinatorialAssembly", setterName: "setCombinatorialAssembly"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Results'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.J5Run', Ext.data.Model, {proxy: {type: "rest", url: "/vede/test/data/json/j5Runs.json", reader: {type: "json", root: "j5runs"}, buildUrl: function(request) {
+  var restParams = "";
+  var idParam = "";
+  var filter = "";
+  if (request.operation.filters) 
+  {
+    if (request.operation.filters[0]) 
+    filter = request.operation.filters[0].property;
+  }
+  if (filter === "devicedesign_id") 
+  {
+    var project_id = request.operation.filters[0].value;
+    restParams += "/" + project_id;
+    delete request.params.filter;
+    if (request.operation.id) 
+    {
+      idParam = "/" + request.operation.id;
+      delete request.params.id;
+    }
+    return Teselagen.manager.SessionManager.buildUserResUrl("/devicedesigns" + restParams + '/j5runs', this.url);
+  }
+  return '/no_path';
+}}, statics: {}, fields: [{name: "id", type: "long"}, {name: "file_id", type: "long"}, {name: "comment", type: "String", defaultValue: ""}, {name: "date", type: "Date", defaultValue: "", convert: function(v, record) {
+  var date = new Date(v);
+  return date;
+}}, {name: "endDate", type: "Date", defaultValue: "", convert: function(v, record) {
+  var date = new Date(v);
+  return date;
+}}, {name: "assemblyType", type: "String", defaultValue: ""}, {name: "assemblyMethod", type: "String", defaultValue: ""}, {name: "status", type: "String", defaultValue: ""}, {name: "warnings", type: "String", defaultValue: ""}, {name: "devicedesign_id", type: "long"}], getItemTitle: function() {
+  return Ext.Date.format(this.get('date'), 'F j, Y, g:i a') + " | " + this.get('assemblyMethod');
+}, associations: [{type: "hasOne", model: "Teselagen.models.J5Input", getterName: "getJ5Input", setterName: "setJ5Input", associationKey: "j5Input"}, {type: "hasOne", model: "Teselagen.models.J5Results", getterName: "getJ5Results", setterName: "setJ5Results", associationKey: "j5Results"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Run'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.utils.SystemUtils', Ext.Base, {singleton: true, loadJs: function(url, cb) {
+  var script = document.createElement('script');
+  script.setAttribute('src', url);
+  script.setAttribute('type', 'text/javascript');
+  var loaded = false;
+  var loadFunction = function() {
+  if (loaded) 
+  return;
+  loaded = true;
+  cb & cb();
+};
+  script.onload = loadFunction;
+  script.onreadystatechange = loadFunction;
+  document.getElementsByTagName("head")[0].appendChild(script);
+}, getSystemMonospaceFontFamily: function() {
+  var resultFont = "Courier New";
+  if (this.isWindowsOS()) 
+  {
+    resultFont = "Lucida Console";
+  } else if (this.isLinuxOS()) 
+  {
+    resultFont = "Monospace";
+  } else if (this.isMacOS()) 
+  {
+    resultFont = "Monaco";
+  }
+  return resultFont;
+}, isWindowsOS: function() {
+  return navigator.platform.indexOf("Win") != -1;
+}, isLinuxOS: function() {
+  return navigator.platform.indexOf("Linux") != -1;
+}, isMacOS: function() {
+  return navigator.platform.indexOf("Mac") != -1;
+}, goToUrl: function(url) {
+  window.open(url);
+}, applicationVersion: function(majorVersion) {
+  var versionDate = new Date();
+  var version = majorVersion + "." + String(versionDate.getFullYear()).substr(2, 2) + "." + String(versionDate.getMonth() + 1) + "." + String(versionDate.getDate());
+  return version;
+}, getBaseURL: function() {
+  var url = location.href;
+  var baseURL = url.substring(0, url.indexOf('/', 14));
+  if (baseURL.indexOf('http://localhost') != -1) 
+  {
+    var url = location.href;
+    var pathname = location.pathname;
+    var index1 = url.indexOf(pathname);
+    var index2 = url.indexOf("/", index1 + 1);
+    var baseLocalUrl = url.substr(0, index2);
+    return baseLocalUrl + "/";
+  } else {
+    return baseURL + "/";
+  }
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'SystemUtils'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", CHECK_J5_READY: "CheckJ5Ready", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", SELECT_CELL: "SelectCell", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", FILL_BLANK_CELLS: "FillBlankCells", RERENDER_COLLECTION_INFO: "RerenderCollectionInfo", RERENDER_DE_CANVAS: "RerenderDECanvas", RELOAD_DESIGN: "ReloadDesign", SAVE_DESIGN: "SaveDesign", LOAD_EUGENE_RULES: "LoadEugeneRules", OPEN_PART_LIBRARY: "OpenPartLibrary", OPEN_CHANGE_PART_DEFINITION: "OpenChangePartDefinition", CREATE_PART_DEFINITION: "CreatePartDefinition", CREATE_PART_IN_DESIGN: "CreatePartInDesign", PART_CREATED: "PartCreated", VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName", CLOSE_PART_CREATE_WINDOW: "ClosePartCreateWindow", CUT_PART: "CutPart", COPY_PART: "CopyPart", PASTE_PART: "PastePart"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.event.ProjectEvent', Ext.Base, {singleton: true, OPEN_PROJECT: "openProject", SAVE_PROJECT: "saveProject", CLOSE_PROJECT: "closeProject", LOAD_PROJECT_TREE: "loadProjectTree", CREATE_SEQUENCE: "createSequence", IMPORT_FILE_TO_SEQUENCE: "ImportFileToSequence", OPEN_SEQUENCE_IN_VE: "OpenSequenceInVectorEditor"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'ProjectEvent'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.event.SequenceManagerEvent', Ext.Base, {singleton: true, SEQUENCE_MANAGER_CHANGED: "SequenceManagerChanged", SEQUENCE_CHANGING: "SequenceChanging", SEQUENCE_CHANGED: "SequenceChanged", KIND_FEATURE_ADD: "FeatureAddSequenceProviderEvent", KIND_FEATURE_REMOVE: "FeatureRemoveSequenceProviderEvent", KIND_FEATURES_ADD: "FeaturesAddSequenceProviderEvent", KIND_FEATURES_REMOVE: "FeaturesRemoveSequenceProviderEvent", KIND_SEQUENCE_INSERT: "SequenceInsertSequenceProviderEvent", KIND_SEQUENCE_REMOVE: "SequenceRemoveSequenceProviderEvent", KIND_MANUAL_UPDATE: "ManualUpdate", KIND_SET_MEMENTO: "SetMemento", KIND_INITIALIZED: "SequenceInitialized"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SequenceManagerEvent'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.models.Preferences', Ext.data.Model, {fields: [{name: "user_id", type: "long"}, {name: "testPreference", type: "String"}], associations: [{type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'Preferences'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.utils.SequenceUtils', Ext.Base, {singleton: true, DNAAlphabet: null, RNAAlphabet: null, constructor: function() {
@@ -68046,38 +68704,45 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 ;
 
 (Ext.cmd.derive('Teselagen.models.SequenceFile', Ext.data.Model, {proxy: {type: "rest", url: "/vede/test/data/json/sequenceFiles.json", reader: {type: "json", root: "sequences", totalProperty: "total"}, writer: {type: "json"}, buildUrl: function(request) {
+  var url;
   if (request.action === "read" && !request.operation.id) 
   {
-    var url = "sequences";
+    url = "sequences";
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   if (request.operation.action === "read" && !request.operation.filters && request.params.id) 
   {
-    var url = "sequences/" + request.params.id;
+    url = "sequences/" + request.params.id;
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   if (request.action === "create" && !request.records[0].data.id) 
   {
-    var url = "sequences";
+    url = "sequences";
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   if (request.operation.action === "create" && !request.operation.filters && !request.params.id) 
   {
-    var url = "sequences";
+    url = "sequences";
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   if (request.operation.action === "read" && !request.operation.filters && !request.params.id) 
   {
-    var url = "sequences";
+    url = "sequences";
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   if (request.action === "update" && request.records[0].data.id) 
   {
-    var url = "sequences/" + request.records[0].data.id;
+    url = "sequences/" + request.records[0].data.id;
+    delete request.params;
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.action === "destroy" && request.records.length === 1) 
+  {
+    url = "sequences/" + request.records[0].data.id;
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
@@ -68295,21 +68960,27 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 ;
 
 (Ext.cmd.derive('Teselagen.models.Part', Ext.data.Model, {proxy: {type: "rest", reader: {type: "json", root: "parts", totalProperty: "total"}, writer: {type: "json"}, buildUrl: function(request) {
+  var url;
   if (request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id") 
   {
     var project_id = Teselagen.manager.ProjectManager.workingProject.data.id;
-    var url = "/projects" + '/' + project_id + '/' + 'devicedesigns' + '/' + request.operation.filters[0].value + "/parts";
+    url = "/projects" + '/' + project_id + '/' + 'devicedesigns' + '/' + request.operation.filters[0].value + "/parts";
     delete request.params;
     return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
   }
   if (request.action === "read" && request.params && request.params.id) 
   {
-    var url = "parts/" + request.params.id;
+    url = "parts/" + request.params.id;
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   if (request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id") 
   {
-    var url = "parts";
+    url = "parts";
+    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+  }
+  if (request.action === "destroy" && request.records.length === 1) 
+  {
+    url = "parts/" + request.records[0].get('id');
     return Teselagen.manager.SessionManager.buildUrl(url, this.url);
   }
   return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
@@ -68324,11 +68995,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   return name;
 }}, {name: "partSource", type: "string", defaultValue: ""}, {name: "revComp", type: "boolean", defaultValue: false}, {name: "genbankStartBP", type: "int", defaultValue: 0, convert: function(value, record) {
-  record.data.genbankStartBP = value;
+  record.data.genbankStartBP = Number(value);
   record.calculateSize(true);
   return value;
 }}, {name: "endBP", type: "int", defaultValue: 0, convert: function(value, record) {
-  record.data.endBP = value;
+  record.data.endBP = Number(value);
   record.calculateSize(true);
   return value;
 }}, {name: "size", type: "int", defaultValue: 0}, {name: "iconID", type: "string", defaultValue: ""}, {name: "features", type: "string", defaultValue: ""}, {name: "dateCreated", type: "string"}, {name: "dateModified", type: "string"}, {name: "user_id", type: "long"}], validations: [{field: "name", type: "presence"}, {field: "partSource", type: "presence"}, {field: "revComp", type: "presence"}, {field: "genbankStartBP", type: "presence"}, {field: "endBP", type: "presence"}, {field: "iconID", type: "presence"}], associations: [{type: "hasOne", model: "Teselagen.models.SequenceFile", foreignKey: "sequencefile_id", getterName: "getSequenceFileModel", setterName: "setSequenceFileModel"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], constructor: function() {
@@ -68380,18 +69051,22 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     console.warn("Trying to calculate size of Part with no sequenceFile");
     return false;
   }
-  if (record.get("genbankStartBP") > record.get("endBP")) 
+  var startBP = record.get("genbankStartBP");
+  var endBP = record.get("endBP");
+  if (startBP > endBP) 
   {
     var tSize = record.getSequenceFile().getLength();
-    size = Math.abs(tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
-  } else if (record.get("genbankStartBP") == record.get("endBP")) 
+    size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+  } else if (startBP == endBP) 
   {
     size = 1;
   } else {
-    size = (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
+    size = (Math.abs(startBP - endBP) + 1);
   }
   if (size === 0) 
-  console.warn("Part with sequence with length zero.");
+  {
+    console.warn("Part with sequence with length zero.");
+  }
   record.set('size', size);
 });
 }, setSequenceFile: function(pSequenceFile) {
@@ -68424,11 +69099,21 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     if (sequence) 
     {
       if (typeof (callbackFn) === "object") 
-      return callbackFn.callback(sequence); else return sequence;
+      {
+        return callbackFn.callback(sequence);
+      } else if (typeof callbackFn === "function") 
+      {
+        return callbackFn(sequence);
+      } else {
+        return sequence;
+      }
     }
     if (typeof (callbackFn) === "object") 
     {
       return this.getSequenceFileModel({callback: callbackFn.callback});
+    } else if (typeof callbackFn === "function") 
+    {
+      return callbackFn(this.getSequenceFileModel());
     } else {
       return this.getSequenceFileModel();
     }
@@ -69091,12 +69776,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.store.UserStore', Ext.data.Store, {model: "Teselagen.models.User"}, 0, 0, 0, 0, 0, 0, [Teselagen.store, 'UserStore'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", CHECK_J5_READY: "CheckJ5Ready", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", SELECT_CELL: "SelectCell", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", FILL_BLANK_CELLS: "FillBlankCells", RERENDER_COLLECTION_INFO: "RerenderCollectionInfo", RERENDER_DE_CANVAS: "RerenderDECanvas", RELOAD_DESIGN: "ReloadDesign", SAVE_DESIGN: "SaveDesign", LOAD_EUGENE_RULES: "LoadEugeneRules", OPEN_PART_LIBRARY: "OpenPartLibrary", OPEN_CHANGE_PART_DEFINITION: "OpenChangePartDefinition", CREATE_PART_DEFINITION: "CreatePartDefinition", CREATE_PART_IN_DESIGN: "CreatePartInDesign", PART_CREATED: "PartCreated", VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName", CLOSE_PART_CREATE_WINDOW: "ClosePartCreateWindow", CUT_PART: "CutPart", COPY_PART: "CopyPart", PASTE_PART: "PastePart"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.event.ProjectEvent', Ext.Base, {singleton: true, OPEN_PROJECT: "openProject", SAVE_PROJECT: "saveProject", CLOSE_PROJECT: "closeProject", LOAD_PROJECT_TREE: "loadProjectTree", CREATE_SEQUENCE: "createSequence", IMPORT_FILE_TO_SEQUENCE: "ImportFileToSequence", OPEN_SEQUENCE_IN_VE: "OpenSequenceInVectorEditor"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'ProjectEvent'], 0));
-;
-
 (Ext.cmd.derive('Teselagen.manager.DeviceDesignManager', Ext.Base, {singleton: true, statics: {}, constants: null, constructor: function() {
   this.constants = Teselagen.constants.Constants;
 }, createDeviceDesign: function(pNumBins) {
@@ -69202,6 +69881,19 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       }
     }
   return prefix + (highestRuleNameNumber + 1);
+}, removePartFromDesign: function(pDevice, pPart) {
+  var ownerBins = this.getParentBins(pDevice, pPart);
+  var cell;
+  for (var j = 0; j < ownerBins.length; j++) 
+    {
+      ownerBins[j].cells().each(function(cell) {
+  if (cell.get('part_id') === pPart.get('id')) 
+  {
+    cell.setPart(null);
+  }
+});
+    }
+  pDevice.parts().remove(pPart);
 }, removeRulesAndPartsAssocWithCell: function(pDevice, pCell) {
   var part = pCell.getPart();
   var removedPart;
@@ -69612,9 +70304,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       partsStore = binsStore.getAt(i).cells();
       for (var j = 0; j < partsStore.getCount(); j++) 
         {
-          if (partsStore.getAt(j) && partsStore.getAt(j).get("part_id") && pPart.id) 
+          if (partsStore.getAt(j) && partsStore.getAt(j).get("part_id") && pPart.get("id")) 
           {
-            if (partsStore.getAt(j).get("part_id") === pPart.id) 
+            if (partsStore.getAt(j).get("part_id") === pPart.get("id")) 
             {
               binIndices.push(i);
             }
@@ -69911,10 +70603,12 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.loadData(this.reRenderProjectExplorer, cb, this);
 }, loadData: function(cb, cb2, scope) {
   var self = scope;
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUserResUrl("/projectExplorer/getData", ""), success: function(response) {
+  setTimeout(function() {
+  Ext.Ajax.request({withCredentials: true, url: Teselagen.manager.SessionManager.buildUserResUrl("/projectExplorer/getData", ""), success: function(response) {
   self.projectsData = JSON.parse(response.responseText);
   return cb(self, cb2);
 }});
+}, 5000);
 }, reRenderProjectExplorer: function(scope, cb) {
   var projects = scope.projectsData;
   var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
@@ -70108,7 +70802,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.manager, 'ProjectExplorerManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.ProjectManager', Ext.Base, {singleton: true, currentUser: null, projects: null, parts: null, sequences: null, workingProject: null, workingSequence: null, workingSequenceFileManager: null, loadUser: function() {
+(Ext.cmd.derive('Teselagen.manager.ProjectManager', Ext.Base, {singleton: true, currentUser: null, projects: null, parts: null, sequences: null, workingProject: null, workingSequence: null, workingSequenceFileManager: null, loadUser: function(cb) {
   Ext.get("headerUserIcon").down(".headerUserField").dom.innerHTML = Teselagen.manager.AuthenticationManager.username + "<b class=\"caret\"></b>";
   if (Ext.getCmp("welcomeUserIcon")) 
   {
@@ -70134,8 +70828,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     Ext.Error.raise("Error loading projects");
   }
   self.projects = projectsStore;
-  Teselagen.manager.ProjectExplorerManager.load();
 });
+  if (typeof (cb) == "function") 
+  cb();
 }, checkDuplicatedTabs: function(model, tabName, cb, cb2) {
   var tabPanel = Ext.getCmp("mainAppPanel");
   var duplicated = false;
@@ -70314,6 +71009,42 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 });
   Vede.application.fireEvent("PopulateStats");
+}, deleteSequence: function(sequence, affectedParts) {
+  var design;
+  var part;
+  var tabs = Ext.getCmp("mainAppPanel").items.getRange();
+  if (affectedParts.length > 0) 
+  {
+    for (var i = 0; i < tabs.length; i++) 
+      {
+        design = tabs[i].model;
+        if (tabs[i].initialCls === 'DeviceEditorTab') 
+        {
+          for (var j = 0; j < affectedParts.length; j++) 
+            {
+              part = design.parts().getById(affectedParts[j].id);
+              if (part) 
+              {
+                Teselagen.manager.DeviceDesignManager.removePartFromDesign(design, part);
+              }
+            }
+        }
+      }
+  }
+  sequence.destroy();
+}, deletePart: function(part) {
+  var design;
+  var tabs = Ext.getCmp("mainAppPanel").items.getRange();
+  for (var i = 0; i < tabs.length; i++) 
+    {
+      design = tabs[i].model;
+      if (tabs[i].initialCls === 'DeviceEditorTab' && design.parts().indexOf(part) !== -1) 
+      {
+        Teselagen.manager.DeviceDesignManager.removePartFromDesign(design, part);
+      }
+    }
+  part.destroy();
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
 }, openSequence: function(sequence) {
   console.log("Opening Sequence");
   this.workingSequence = sequence;
@@ -70325,6 +71056,22 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   if (sequenceNode) 
   Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);
 });
+}, getDesignsInvolvingPart: function(part, callback) {
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("getDesignsWithPart", ""), method: "GET", withCredentials: true, params: {part: JSON.stringify(part.data)}, success: function(response) {
+  return callback(JSON.parse(response.responseText).designs);
+}, failure: function(response) {
+  console.log("Error getting designs involving part.");
+  console.log(response);
+  return callback(false);
+}});
+}, getPartsAndDesignsBySequence: function(sequence, callback) {
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("getPartsAndDesignsBySequence", ""), method: "GET", withCredentials: true, params: {sequenceId: JSON.stringify(sequence.get("id"))}, success: function(response) {
+  return callback(JSON.parse(response.responseText).parts);
+}, failure: function(response) {
+  console.log("Error getting parts involving sequence.");
+  console.log(response);
+  return callback(false);
+}});
 }, openPart: function(part) {
   var self = this;
   part.getSequenceFile({callback: function(record, operation, success) {
@@ -70468,6 +71215,61 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, ["ProjectManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'ProjectManager'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.models.Task', Ext.data.Model, {proxy: {type: 'memory'}, fields: [{name: "id", type: "long"}, {name: "taskName", type: "String"}, {name: "taskType", type: "String"}, {name: "status", type: "String"}, {name: "assemblyType", type: "String"}, {name: "dateStarted", type: "Date"}, {name: "taskRefID", type: "long"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'Task'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.manager.TasksMonitor', Ext.Base, {singleton: true, debugFlag: false, socket: null, constructor: function() {
+}, bootMonitoring: function() {
+  this.monitorServerTasks();
+}, startMonitoring: function() {
+}, start: function() {
+}, stop: function(boot) {
+}, addJ5RunObserver: function() {
+}, monitorServerTasks: function() {
+  var self = this;
+  if (self.socket) 
+  return null;
+  Teselagen.utils.SystemUtils.loadJs(Teselagen.manager.SessionManager.buildUrl("socket.io/socket.io.js"), function() {
+  if (typeof io === 'undefined') 
+  {
+    console.log("Socket IO not loaded!");
+    return false;
+  }
+  socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/", ":3000"));
+  socket.on('message', function(msg) {
+  console.log(msg);
+});
+  socket.on('connect', function() {
+  console.log('SOCKET.IO : Connected');
+  socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username'));
+  socket.on('update', function(data) {
+  if (!data) 
+  {
+    Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {model: 'Teselagen.models.Task'});
+    return null;
+  }
+  if (Teselagen.manager.ProjectManager.currentTasks) 
+  {
+    Teselagen.manager.ProjectManager.currentTasks.removeAll();
+  } else {
+    Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {model: 'Teselagen.models.Task'});
+  }
+  for (var taskKey in data.tasks) 
+    {
+      task = data.tasks[taskKey];
+      task.dateStarted = new Date(task.dateStarted);
+      Teselagen.manager.ProjectManager.currentTasks.add(task);
+    }
+});
+});
+  socket.on('disconnect', function(socket) {
+  console.log('Disconnected');
+});
+  self.socket = socket;
+});
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'TasksMonitor'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.manager.UserManager', Ext.Base, {singleton: true, config: {user: null}, loadUser: function(pNext) {
   var me = this;
   Teselagen.models.User.load(null, {callback: function(pUser, pOp) {
@@ -70501,48 +71303,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 }});
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'UserManager'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.utils.SystemUtils', Ext.Base, {singleton: true, getSystemMonospaceFontFamily: function() {
-  var resultFont = "Courier New";
-  if (this.isWindowsOS()) 
-  {
-    resultFont = "Lucida Console";
-  } else if (this.isLinuxOS()) 
-  {
-    resultFont = "Monospace";
-  } else if (this.isMacOS()) 
-  {
-    resultFont = "Monaco";
-  }
-  return resultFont;
-}, isWindowsOS: function() {
-  return navigator.platform.indexOf("Win") != -1;
-}, isLinuxOS: function() {
-  return navigator.platform.indexOf("Linux") != -1;
-}, isMacOS: function() {
-  return navigator.platform.indexOf("Mac") != -1;
-}, goToUrl: function(url) {
-  window.open(url);
-}, applicationVersion: function(majorVersion) {
-  var versionDate = new Date();
-  var version = majorVersion + "." + String(versionDate.getFullYear()).substr(2, 2) + "." + String(versionDate.getMonth() + 1) + "." + String(versionDate.getDate());
-  return version;
-}, getBaseURL: function() {
-  var url = location.href;
-  var baseURL = url.substring(0, url.indexOf('/', 14));
-  if (baseURL.indexOf('http://localhost') != -1) 
-  {
-    var url = location.href;
-    var pathname = location.pathname;
-    var index1 = url.indexOf(pathname);
-    var index2 = url.indexOf("/", index1 + 1);
-    var baseLocalUrl = url.substr(0, index2);
-    return baseLocalUrl + "/";
-  } else {
-    return baseURL + "/";
-  }
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'SystemUtils'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.manager.AuthenticationManager', Ext.Base, {singleton: true, username: null, updateSplashScreenMessage: function(message, stop) {
@@ -70586,11 +71346,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   self.authResponse = JSON.parse(response.responseText);
   if (!self.authResponse.error) 
   {
-    if (self.authResponse.user.debugAccess) 
-    {
-      if (!window.location.pathname.match("beta") && !window.location.origin.match("dev.teselagen.com") && !window.location.origin.match("teselagen.local")) 
-      window.location = "/api/beta";
-    }
     self.username = self.authResponse.user.username;
     Teselagen.manager.SessionManager.setBaseUser(self.username || self.authResponse.user.username);
     self.updateSplashScreenMessage(self.authResponse.msg);
@@ -70601,8 +71356,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user, function() {
   Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
 });
-    Teselagen.manager.TasksMonitor.bootMonitoring();
-    Teselagen.manager.TasksMonitor.startMonitoring();
     var user = self.authResponse.user;
     if (typeof Hoptoad !== "undefined") 
     {
@@ -70653,210 +71406,25 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 
 (Ext.cmd.derive('Vede.view.common.HeaderPanelView', Ext.panel.Panel, {emitNavAction: function(e, target) {
   return this.fireEvent('navaction', this, e, target);
-}, region: 'north', id: 'headerPanel', cls: 'navbar navbar-static-top', margin: '0 0 10 0', layout: 'fit', items: [{xtype: 'panel', id: 'header-browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 400, hidden: true}, {xtype: 'container', id: 'headerPanel-navbar', cls: 'navbar-inner', html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div><div id="headerProgressCancel"><a href="" id="headerProgressCancelBtn">Cancel</a></div></div></li><li id="headerUserIcon"><a class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>', items: [{xtype: 'image', id: 'headerIcon', src: 'http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/images/teselagen_toplogo.png'}]}]}, 0, ["HeaderPanelView"], ["panel", "HeaderPanelView", "component", "container", "box"], {"panel": true, "HeaderPanelView": true, "component": true, "container": true, "box": true}, ["widget.HeaderPanelView"], 0, [Vede.view.common, 'HeaderPanelView'], 0));
+}, region: 'north', id: 'headerPanel', cls: 'navbar navbar-static-top', margin: '0 0 10 0', layout: 'fit', items: [{xtype: 'panel', id: 'header-browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 400, hidden: true}, {xtype: 'container', id: 'headerPanel-navbar', cls: 'navbar-inner', html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div><div id="headerProgressCancel"><a href="" id="headerProgressCancelBtn">Cancel</a></div></div></li><li id="headerUserIcon"><a class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="tasks_btn">Tasks</a></li><li><a id="help_btn">Help</a></li></ul></ul>', items: [{xtype: 'image', id: 'headerIcon', src: 'http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/images/teselagen_toplogo.png'}]}]}, 0, ["HeaderPanelView"], ["panel", "HeaderPanelView", "component", "container", "box"], {"panel": true, "HeaderPanelView": true, "component": true, "container": true, "box": true}, ["widget.HeaderPanelView"], 0, [Vede.view.common, 'HeaderPanelView'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.common.ImportWarningsWindow', Ext.window.Window, {cls: 'ImportWarningsWindow', width: 800, height: 400, title: 'Batch Import Summary', layout: 'fit', modal: true, items: [{xtype: 'gridpanel', autoScroll: true, forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
+(Ext.cmd.derive('Vede.view.common.TaskMonitorView', Ext.panel.Panel, {id: 'taskMonitor', cls: 'tasksmonitorwindow', width: '100%', title: 'Task Monitor', layout: 'fit', closeAction: 'hide', resizable: false, collapsed: true, draggable: false, collapseMode: 'mini', collapsible: true, header: true, region: 'south', height: 200, y: '80%', items: [{xtype: 'gridpanel', autoScroll: true, forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
   var columns = dataview.panel.columns;
   for (var i = 0; i < columns.length; i++) 
     {
       columns[i].autoSize();
     }
-}}}, columns: [{xtype: 'gridcolumn', text: 'File Name', dataIndex: 'fileName'}, {xtype: 'gridcolumn', text: 'Sequence Name', dataIndex: 'partSource'}, {xtype: 'gridcolumn', text: 'Messages', autoScroll: true, dataIndex: 'messages', renderer: function(val, meta) {
-  meta.style = 'text-overflow: clip';
-  if (val.length) 
-  {
-    return val.join('<br>');
-  } else {
-    return 'No errors.';
-  }
-}}]}]}, 0, ["importwarningswindow"], ["panel", "importwarningswindow", "window", "component", "container", "box"], {"panel": true, "importwarningswindow": true, "window": true, "component": true, "container": true, "box": true}, ["widget.importwarningswindow"], 0, [Vede.view.common, 'ImportWarningsWindow'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.common.dropZone', Ext.Component, {initComponent: function() {
-  var me = this;
-  me.callParent();
-}, onDestroy: function() {
-  this.callParent();
-}, autoEl: {tag: 'div', id: 'dropZone', cls: 'batch-import-area', hidden: true, html: '<h2> + Drop files here</h2><div id="dropZone-close"></div>'}, listeners: {afterrender: function(cmp) {
-  var dropZone = cmp.getEl().dom;
-  var sequenceLibrary = Ext.getCmp("sequenceLibraryArea").getEl().dom;
-  var handleFileSelect = cmp.handleFileSelect.bind(cmp);
-  var progressCancelBtn = $("#headerProgressCancelBtn");
-  sequenceLibrary.addEventListener('dragenter', cmp.handleDragEnter, false, cmp);
-  dropZone.addEventListener('dragleave', cmp.handleDragLeave, false, cmp);
-  dropZone.addEventListener('dragover', cmp.handleDragOver, false, cmp);
-  dropZone.addEventListener('drop', handleFileSelect, false, cmp);
-}}, handleDragEnter: function(evt, cmp) {
-  $(".batch-import-area").fadeIn("fast");
-}, handleDragLeave: function(evt, cmp) {
-  $(".batch-import-area").stop().fadeOut("fast");
-}, handleFileSelect: function(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-  setTimeout(function() {
-  $(".batch-import-area").fadeOut("fast");
-  $("#headerProgressBox").fadeIn();
-  $("#headerProgressCancelBtn").on("click", function() {
-  Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
-  console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
-  return false;
-});
-}, 25);
-  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-  sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
-  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
-  var self = this;
-  if (!Ext.isGecko) 
-  {
-    self.processFiles(evt.dataTransfer.items);
-  } else {
-    Ext.Msg.alert("Drag and Drop Error", "Mozilla Firefox does not support drag-and-drop sequence importing.");
-    Ext.defer(function() {
-  sequenceLibrary.el.unmask();
-}, 10);
-  }
-}, handleDragOver: function(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'copy';
-}, processFiles: function(items) {
-  var length = items.length;
-  Teselagen.bio.parsers.ParsersManager.startCount = 0;
-  Teselagen.bio.parsers.ParsersManager.progressIncrement = 100 / items.length;
-  for (var i = 0; i < length; i++) 
-    {
-      var entries = [];
-      entries[0] = items[i].webkitGetAsEntry();
-      this.readDirectory(entries, this);
-    }
-  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
-  Ext.defer(function() {
-  sequenceLibrary.el.unmask();
-}, 10);
-}, readDirectory: function(entries, scope) {
-  var self = scope;
-  for (i = 0; i < entries.length; i++) 
-    {
-      if (entries[i].isDirectory) 
-      {
-        var directoryReader = entries[i].createReader();
-        self.getAllEntries(directoryReader, self.readDirectory);
-      } else {
-        entries[i].file(self.readFile, self.errorHandler);
-      }
-    }
-}, getAllEntries: function(directoryReader, callback) {
-  var self = this;
-  var entries = [];
-  var toArray = function(list) {
-  return Array.prototype.slice.call(list || [], 0);
-};
-  var readEntries = function() {
-  directoryReader.readEntries(function(results) {
-  if (!results.length) 
-  {
-    entries.sort();
-    callback(entries, self);
-  } else {
-    entries = entries.concat(toArray(results));
-    readEntries();
-  }
-}, self.errorHandler);
-};
-  readEntries();
-}, readFile: function(file) {
-  Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
-  Teselagen.bio.parsers.ParsersManager.processQueue(function(errorStore) {
-  var warningsWindow = Ext.create('Vede.view.common.ImportWarningsWindow').show();
-  warningsWindow.down('gridpanel').reconfigure(errorStore);
-});
-}, errorHandler: function(e) {
-  console.log('FileSystem API error code: ' + e.code);
-}}, 0, ["dropZone"], ["component", "dropZone", "box"], {"component": true, "dropZone": true, "box": true}, ["widget.dropZone"], 0, [Vede.view.common, 'dropZone'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.common.DashboardPanelView', Ext.tab.Panel, {id: 'DashboardPanel', padding: '10 0', layout: {type: 'card'}, frameHeader: false, border: 0, title: 'Dashboard', items: [{xtype: 'panel', title: 'Dashboard', border: 0, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', flex: 0.3, id: 'welcome_splash', border: 0}, {xtype: 'container', id: 'dashboardButtons', margin: '0 100 0 100', minHeight: 125, minWidth: 800, flex: 0.4, border: 0, style: {borderColor: '#E0E3E6', borderStyle: 'solid'}, layout: {type: 'hbox'}, items: [{xtype: 'button', height: 100, cls: 'dashBtn', flex: 1, id: 'projectStartBtn', text: 'New Project', scale: 'medium', overCls: 'projectStartBtn-over', iconCls: 'newProject-icon', iconAlign: 'top', listeners: {click: function() {
-  Teselagen.manager.ProjectManager.createNewProject();
-}, afterrender: function(cmp) {
-  cmp.getEl().set({"data-intro": 'Click here to Start a Project', "data-step": 1});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, flex: 1, id: 'createSequence', text: 'Create Sequence', scale: 'medium', iconCls: 'newSequence-icon', iconAlign: 'top', overCls: 'createSequence-over', listeners: {click: function() {
-  Vede.application.fireEvent("createSequence");
-}, afterrender: function(cmp) {
-  cmp.getEl().set({"data-intro": 'You can start with a blank sequence by clicking here.', "data-step": 2});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'http://help.teselagen.com/manual/', listeners: {afterrender: function(cmp) {
-  cmp.getEl().set({"data-intro": 'Make sure you check out the manuals for a thorough documentation.', "data-step": 4});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'seeTutsBtn', scale: 'medium', flex: 1, overCls: 'tutorial-over', iconAlign: 'top', iconCls: 'tutorial-icon', text: 'Tutorials', href: 'http://classroom.tv/teselagen', listeners: {afterrender: function(cmp) {
-  cmp.getEl().set({"data-intro": 'See some tutorials to help you get started.', "data-step": 5});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'tourBtn', scale: 'medium', flex: 1, overCls: 'tourBtn-over', iconAlign: 'top', iconCls: 'tour-icon', iconAlign: 'top', text: 'Take a Tour', listeners: {click: function() {
-  introJs().start();
-}}}]}, {xtype: 'container', id: 'dashboardStats', margin: '10 100 50 100', flex: 1, minHeight: 320, minWidth: 800, border: 0, layout: {type: 'hbox', align: 'stretch'}, listeners: {afterrender: function(cmp) {
-  cmp.getEl().set({"data-intro": 'Here are some awesome stats to keep you up to date.', "data-position": 'top', "data-step": 3});
-}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Sequence Library', cls: 'sequenceLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'sequenceLibraryContainer', id: 'sequenceLibraryArea', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', anchor: '100%', height: 30, cls: 'sequenceLibrarySearchField', width: '98%', emptyText: 'Search Sequence Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
-  var grid = Ext.getCmp('sequenceLibrary');
-  grid.store.clearFilter(true);
-  grid.store.filter("name", Ext.String.escapeRegex(newValue));
-}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', autoScroll: true, columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
-  if (val) 
-  {
-    val = val.sequence.alphabet.toUpperCase();
-    return val;
-  } else {
-    return "";
-  }
-}, sortable: false}, {xtype: 'gridcolumn', text: 'Size (bp)', width: 80, dataIndex: 'size', sortable: true}, {text: 'Features', width: 200, flex: 1, dataIndex: 'serialize', renderer: function(val) {
-  if (val) 
-  {
-    var features = [];
-    for (var i = 0; i < val.features.length; i++) 
-      {
-        features.push(val.features[i].inData.name);
-      }
-    return features;
-  } else {
-    return "";
-  }
-}, sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'sequenceLibraryOptionsContainer', margin: '0 0 0 10', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
-  Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
-}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '40', margin: '0 0 0 5', listeners: {click: function(btn, e) {
-  Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
-}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '60', margin: '0 0 0 5', listeners: {click: function(btn, e) {
-  Teselagen.manager.ProjectManager.openSequenceLibrary(btn.text);
-}}}]}, {xtype: 'button', cls: 'sequenceLibraryImportButton', icon: 'resources/images/ux/paging/publish.png', iconCls: 'sequenceLibraryImportButtonIcon', overCls: 'sequenceLibraryImportButton-over', text: 'Import Sequence(s)', tooltip: 'You can drop your sequence files or folders into the table above.', margin: '0 0 0 10'}]}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
-  e.preventDefault();
-  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Open', handler: function() {
-  Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null, record);
-}}, {text: 'Download', handler: function() {
-  var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
-  VEManager.saveSequenceToFile();
-}}]}).show();
-  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
-}}}]}, {xtype: "dropZone", name: "dropZone"}]}, {xtype: 'panel', title: 'Part Library', cls: 'partLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'partLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'partLibrarySearch', cls: 'partLibrarySearchField', width: '98%', emptyText: 'Search Part Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
-  Teselagen.manager.ProjectManager.parts.clearFilter(true);
-  var grid = Ext.getCmp('partLibrary');
-  grid.store.filter("name", Ext.String.escapeRegex(newValue));
-}}}, {xtype: 'gridpanel', border: 0, name: 'PartLibraryGrid', loadMask: true, autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, cls: 'partLibraryGrid', height: '100%', autoScroll: true, id: 'partLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {xtype: 'gridcolumn', text: 'Start BP', width: 80, dataIndex: 'genbankStartBP', sortable: false}, {xtype: 'gridcolumn', text: 'Stop BP', width: 80, dataIndex: 'endBP', sortable: false}, {xtype: 'gridcolumn', text: 'Size (bp)', width: 80, dataIndex: 'size', sortable: true}, {xtype: 'gridcolumn', text: 'Reverse Complement', dataIndex: 'revComp', width: 120, renderer: function(val) {
-  val = String(val);
-  val = val.charAt(0).toUpperCase() + val.slice(1);
-  return val;
-}, sortable: false}, {xtype: 'gridcolumn', text: 'Source Sequence', width: 160, dataIndex: 'partSource', sortable: true}, {xtype: 'gridcolumn', flex: 1, text: 'Features in Range', width: 150, dataIndex: 'features', sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
-  e.preventDefault();
-  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Rename', handler: function() {
-  Teselagen.manager.ProjectExplorerManager.renamePart(record);
-}}, {text: 'Open', handler: function() {
-  Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null, record.getSequenceFile());
-}}, {text: 'Download Source Sequence', handler: function() {
-  var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
-  VEManager.saveSequenceToFile();
-}}]}).show();
-  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
-}}, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'partLibraryOptionsContainer', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
-  Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
-}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '40', margin: '0 0 0 5', listeners: {click: function(btn, e) {
-  Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
-}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '60', margin: '0 0 0 5', listeners: {click: function(btn, e) {
-  Teselagen.manager.ProjectManager.openPartLibrary(btn.text);
-}}}]}]}]}]}]}]}, 0, ["DashboardPanelView"], ["tabpanel", "panel", "DashboardPanelView", "component", "container", "box"], {"tabpanel": true, "panel": true, "DashboardPanelView": true, "component": true, "container": true, "box": true}, ["widget.DashboardPanelView"], 0, [Vede.view.common, 'DashboardPanelView'], 0));
+}}}, columns: [{xtype: 'gridcolumn', text: 'TaskName', autoScroll: true, dataIndex: 'taskName'}, {xtype: 'gridcolumn', text: 'Task Type', autoScroll: true, dataIndex: 'taskType'}, {xtype: 'gridcolumn', text: 'Status', autoScroll: true, dataIndex: 'status'}, {xtype: 'gridcolumn', text: 'Date Initialized', autoScroll: true, dataIndex: 'dateStarted'}, {xtype: 'actioncolumn', align: 'center', items: [{icon: 'resources/images/ux/task/blocked.png', iconCls: 'task-icon', hidden: true, tooltip: 'Cancel Task', handler: function(grid, rowIndex, colIndex) {
+  var rec = grid.getStore().getAt(rowIndex);
+  var id = rec.data.taskRefID;
+  socket.emit('cancelj5run', id);
+  Teselagen.manager.ProjectManager.currentTasks.remove(rec);
+}}, {icon: 'resources/images/ux/task/new-tab.png', hidden: true, iconCls: 'task-icon', tooltip: 'View Result', handler: function(grid, rowIndex, colIndex) {
+  var rec = grid.getStore().getAt(rowIndex);
+  alert("Edit " + rec.get('firstname'));
+  debugger;
+}}]}]}]}, 0, ["TaskMonitorView"], ["TaskMonitorView", "panel", "component", "container", "box"], {"TaskMonitorView": true, "panel": true, "component": true, "container": true, "box": true}, ["widget.TaskMonitorView"], 0, [Vede.view.common, 'TaskMonitorView'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.AnnotatePanel', Ext.panel.Panel, {cls: "AnnotatePanel", width: "645px", layout: {type: "fit"}, collapsible: true, animCollapse: false, collapseDirection: "right", title: "Sequence", titleCollapse: true, items: [{xtype: "container", overflowY: "scroll", cls: "AnnotateContainer", layout: {type: "fit"}}]}, 0, ["AnnotatePanel"], ["panel", "component", "container", "AnnotatePanel", "box"], {"panel": true, "component": true, "container": true, "AnnotatePanel": true, "box": true}, ["widget.AnnotatePanel"], 0, [Vede.view.ve, 'AnnotatePanel'], 0));
@@ -70936,7 +71504,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var me = this;
   Ext.applyIf(me, {items: [{xtype: 'HeaderPanelView'}, {xtype: 'ProjectPanelView'}, {xtype: 'tabpanel', id: 'mainAppPanel', region: 'center', border: 0, activeTab: 0, items: [{xtype: 'DashboardPanelView', title: null, cls: 'DashboardPanelTab', iconCls: 'home-dash-icon', iconAlign: 'top', listeners: {tabchange: function() {
   Vede.application.fireEvent("PopulateStats");
-}}}]}]});
+}}}]}, {xtype: 'TaskMonitorView'}]});
   me.callParent(arguments);
 }}, 0, 0, ["viewport", "component", "container", "box"], {"viewport": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'AppViewport'], 0));
 ;
@@ -70986,6 +71554,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.getCmp('AuthWindow').destroy();
 }, onLogoutClick: function(button, e, options) {
   var onLoggedOut = function() {
+  if (Teselagen.manager.TasksMonitor && Teselagen.manager.TasksMonitor.socket) 
+  {
+    Teselagen.manager.TasksMonitor.socket.disconnect();
+    Teselagen.manager.TasksMonitor.socket = null;
+  }
   Teselagen.manager.ProjectManager.currentUser = null;
   Ext.getCmp("mainAppPanel").items.items.map(function(tab) {
   if (tab.xtype != "DashboardPanelView") 
@@ -71895,12 +72468,15 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     Ext.getCmp("partLibrarySearch").setValue("");
   }
 }, onMainAppPanelTabChange: function(mainAppPanel, newTab, oldTab) {
-  if (newTab.initialCls === "DashboardPanelTab" && newTab.getActiveTab().initialCls === "sequenceLibraryPanel") 
+  if (newTab.initialCls === "DashboardPanelTab") 
   {
-    var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
-    Teselagen.manager.ProjectManager.openSequenceLibrary(null, searchField.getValue());
+    if (newTab.getActiveTab().initialCls === "sequenceLibraryPanel") 
+    {
+      var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
+      Teselagen.manager.ProjectManager.openSequenceLibrary(null, searchField.getValue());
+    }
+    this.populateStatistics();
   }
-  this.populateStatistics();
 }, onLastDEProjectsItemClick: function(item, record) {
   Teselagen.manager.ProjectManager.openDeviceDesign(record);
 }, populateStatistics: function() {
@@ -72056,6 +72632,48 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Teselagen.manager.ProjectManager.directVEEditingMode = true;
   var newSeq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence", serialize: JSON.parse('{"features": [], "inData": {"name": "no_name", "circular": true, "manualUpdateStarted": false, "needsRecalculateComplementSequence": false }, "sequence": {"alphabet": "dna", "symbols": ""} }')});
   Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
+}, onDeleteSequence: function(sequence) {
+  Teselagen.manager.ProjectManager.getPartsAndDesignsBySequence(sequence, function(parts) {
+  var confirmationWindow = Ext.create("Vede.view.common.DeleteSequenceConfirmationWindow");
+  var callback = function() {
+  Teselagen.manager.ProjectManager.deleteSequence(sequence, parts);
+};
+  if (parts !== false) 
+  {
+    confirmationWindow.show();
+    confirmationWindow.callback = callback;
+    if (parts.length > 0) 
+    {
+      confirmationWindow.down('gridpanel').reconfigure(parts);
+    } else {
+      confirmationWindow.down('displayfield').setValue('Deleting this sequence will not affect any parts. However, you cannot undo this action.');
+      confirmationWindow.down('gridpanel').hide();
+    }
+  } else {
+    Ext.Msg.alert('Network Error', 'We could not determine which parts are associated with that sequence.');
+  }
+});
+}, onDeletePart: function(part) {
+  Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part, function(affectedDesigns) {
+  var confirmationWindow = Ext.create("Vede.view.common.DeletePartConfirmationWindow");
+  var callback = function() {
+  Teselagen.manager.ProjectManager.deletePart(part);
+};
+  if (affectedDesigns !== false) 
+  {
+    confirmationWindow.show();
+    confirmationWindow.callback = callback;
+    if (affectedDesigns.length > 0) 
+    {
+      confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+    } else {
+      confirmationWindow.down('displayfield').setValue('Deleting this part will not affect any designs. However, you cannot undo this action.');
+      confirmationWindow.down('gridpanel').hide();
+    }
+  } else {
+    Ext.Msg.alert('Network Error', 'We could not determine which designs are associated with that part.');
+  }
+});
 }, onPartGridItemMouseLeave: function(grid, part, el, index, event) {
   if (this.VectorViewer) 
   {
@@ -72066,11 +72684,40 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     }
   }
 }, onVectorViewerMouseLeave: function(event, target) {
-  var target = event.getRelatedTarget();
+  target = event.getRelatedTarget();
   if (!target || target.className.toString().indexOf("grid") === -1) 
   {
     this.VectorViewer.hide();
   }
+}, onSequenceLibraryImportChange: function(field, value) {
+  var items = field.extractFileInput().files;
+  var file;
+  var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+  setTimeout(function() {
+  $(".batch-import-area").fadeOut("fast");
+  $("#headerProgressBox").fadeIn();
+  $("#headerProgressCancelBtn").on("click", function() {
+  Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
+  console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
+  return false;
+});
+}, 25);
+  sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
+  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+  Teselagen.bio.parsers.ParsersManager.startCount = 0;
+  Teselagen.bio.parsers.ParsersManager.progressIncrement = 100 / items.length;
+  for (var i = 0; i < items.length; i++) 
+    {
+      file = items[i];
+      Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
+      Teselagen.bio.parsers.ParsersManager.processQueue(function(errorStore) {
+  var warningsWindow = Ext.create('Vede.view.common.ImportWarningsWindow').show();
+  warningsWindow.down('gridpanel').reconfigure(errorStore);
+});
+    }
+  Ext.defer(function() {
+  sequenceLibrary.el.unmask();
+}, 10);
 }, onLaunch: function() {
   Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
 }, init: function() {
@@ -72078,11 +72725,13 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatistics);
   this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
   this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
-  this.control({"#mainAppPanel": {beforetabchange: this.onBeforeTabChange, tabchange: this.onMainAppPanelTabChange}, "#designGrid_Panel": {itemclick: this.onLastDEProjectsItemClick}, "gridpanel[name='SequenceLibraryGrid']": {itemclick: this.onSequenceGridItemClick, itemmouseenter: this.onSequenceGridItemMouseEnter, itemmouseleave: this.onSequenceGridItemMouseLeave}, "gridpanel[name='PartLibraryGrid']": {itemclick: this.onPartGridItemClick, itemmouseenter: this.onPartGridItemMouseEnter, itemmouseleave: this.onPartGridItemMouseLeave}});
+  this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
+  this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
+  this.control({"#mainAppPanel": {Beforetabchange: this.onBeforeTabChange, tabchange: this.onMainAppPanelTabChange}, "#designGrid_Panel": {itemclick: this.onLastDEProjectsItemClick}, "gridpanel[name='SequenceLibraryGrid']": {itemclick: this.onSequenceGridItemClick, itemmouseenter: this.onSequenceGridItemMouseEnter, itemmouseleave: this.onSequenceGridItemMouseLeave}, "gridpanel[name='PartLibraryGrid']": {itemclick: this.onPartGridItemClick, itemmouseenter: this.onPartGridItemMouseEnter, itemmouseleave: this.onPartGridItemMouseLeave}, "filefield[cls='sequenceLibraryImportButton']": {change: this.onSequenceLibraryImportChange}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'DashboardPanelController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.HeaderPanelController', Ext.app.Controller, {ProjectManagerWindow: null, header: null, helpWindow: null, onHelpBtnClick: function(button, e, options) {
+(Ext.cmd.derive('Vede.controller.HeaderPanelController', Ext.app.Controller, {ProjectManagerWindow: null, header: null, helpWindow: null, tasksWindow: null, onHelpBtnClick: function(button, e, options) {
   if (!this.helpWindow || !this.helpWindow.body) 
   this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
 }, closeProjectManagerWindow: function() {
@@ -72104,10 +72753,18 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   self.helpWindow.close();
 });
 }});
+}, onTasksBtnClick: function() {
+  if (this.tasksWindow) 
+  this.tasksWindow.toggleCollapse(); else {
+    this.tasksWindow = Ext.getCmp('taskMonitor').expand();
+    console.log(Teselagen.manager.ProjectManager.currentTasks);
+    this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
+  }
 }, init: function() {
-  this.control({"#headerPanel": {afterrender: this.onRender}, "#help_btn": {click: this.onHelpBtnClick}, "#reportFeedbackBtn": {click: this.onReportFeedbackBtnClick}, "#reportErrorBtn": {click: this.onReportErrorBtnClick}});
+  this.control({"#headerPanel": {afterrender: this.onRender}, "#help_btn": {click: this.onHelpBtnClick}, "#tasks_btn": {click: this.onTasksBtnClick}, "#reportFeedbackBtn": {click: this.onReportFeedbackBtnClick}, "#reportErrorBtn": {click: this.onReportErrorBtnClick}});
 }, onRender: function() {
   Ext.get("help_btn").on('click', this.onHelpBtnClick);
+  Ext.get("tasks_btn").on('click', this.onTasksBtnClick);
   if (!Ext.isChrome) 
   {
     Ext.getCmp('header-browser-warning').show();
@@ -72154,7 +72811,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   loadingMsgBox.close();
 }});
 }, onPartListSelected: function(grid, part, item) {
-  Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get('name'));
+  Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, part, part.get('name'), part.get('partSource'));
   this.callbackFn(grid, part, item, this.partLibraryWindow);
 }, init: function() {
   this.DeviceEvent = Teselagen.event.DeviceEvent;
@@ -72162,372 +72819,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.partLibraryStore = Teselagen.manager.ProjectManager.parts;
   this.callParent();
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'PartLibraryController'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", HMLB: "HOMOLOGY_MIN_LENGTH_BPS", HMFM: "HOMOLOGY_MAX_FRACTION_MISMATCHES", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, HMLB_Default: 26, HMFM_Default: 0.05, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default, convert: function(value, record) {
-  if (Ext.isBoolean(value)) 
-  {
-    return value;
-  } else if (Ext.isString(value)) 
-  {
-    return (/^(true|1)$/i).test(value);
-  } else {
-    return false;
-  }
-}}, {name: "homologyMinLengthBPS", type: "int", defaultValue: this.self.HMLB_Default}, {name: "homologyMaxFractionMisMatches", type: "Float", defaultValue: this.self.HMFM_Default}], validation: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
-}, loadValues: function(values) {
-  if (values.MASTEROLIGONUMBEROFDIGITS) 
-  this.set("masterOligoNumberOfDigitsValue", values.MASTEROLIGONUMBEROFDIGITS);
-  if (values.MASTERPLASMIDNUMBEROFDIGITS) 
-  this.set("masterPlasmidNumberOfDigitsValue", values.MASTERPLASMIDNUMBEROFDIGITS);
-  if (values.GIBSONOVERLAPBPS) 
-  this.set("gibsonOverlapBPsValue", values.GIBSONOVERLAPBPS);
-  if (values.GIBSONOVERLAPMINTM) 
-  this.set("gibsonOverlapMinTmValue", values.GIBSONOVERLAPMINTM);
-  if (values.GIBSONOVERLAPMAXTM) 
-  this.set("gibsonOverlapMaxTmValue", values.GIBSONOVERLAPMAXTM);
-  if (values.MAXIMUMOLIGOLENGTHBPS) 
-  this.set("maxOligoLengthBPsValue", values.MAXIMUMOLIGOLENGTHBPS);
-  if (values.MINIMUMFRAGMENTSIZEGIBSONBPS) 
-  this.set("minFragmentSizeGibsonBPsValue", values.MINIMUMFRAGMENTSIZEGIBSONBPS);
-  if (values.GOLDENGATEOVERHANGBPS) 
-  this.set("goldenGateOverhangBPsValue", values.GOLDENGATEOVERHANGBPS);
-  if (values.GOLDENGATERECOGNITIONSEQ) 
-  this.set("goldenGateRecognitionSeqValue", values.GOLDENGATERECOGNITIONSEQ);
-  if (values.GOLDENGATETERMINIEXTRASEQ) 
-  this.set("goldenGateTerminiExtraSeqValue", values.GOLDENGATETERMINIEXTRASEQ);
-  if (values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE) 
-  this.set("maxIdentitiesGoldenGateOverhangsCompatible", values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE);
-  if (values.OLIGOSYNTHESISCOSTPERBPUSD) 
-  this.set("oligoSynthesisCostPerBPUSDValue", values.OLIGOSYNTHESISCOSTPERBPUSD);
-  if (values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD) 
-  this.set("oligoPagePurificationCostPerPieceUSDValue", values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD);
-  if (values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS) 
-  this.set("oligoMaxLengthNoPagePurificationRequiredBP", values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBP);
-  if (values.MINIMUMPCRPRODUCTBPS) 
-  this.set("minPCRProductBPsValue", values.MINIMUMPCRPRODUCTBPS);
-  if (values.DIRECTSYNTHESISCOSTPERBPUSD) 
-  this.set("directSynthesisCostPerBPUSDValue", values.DIRECTSYNTHESISCOSTPERBPUSD);
-  if (values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD) 
-  this.set("directSynthesisMinCostPerPieceUSDValue", values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD);
-  if (values.PRIMER_GC_CLAMP) 
-  this.set("primerGCClampValue", values.PRIMER_GC_CLAMP);
-  if (values.PRIMER_MIN_SIZE) 
-  this.set("primerMinSizeValue", values.PRIMER_MIN_SIZE);
-  if (values.PRIMER_MAX_SIZE) 
-  this.set("primerMaxSizeValue", values.PRIMER_MAX_SIZE);
-  if (values.PRIMER_MIN_TM) 
-  this.set("primerMinTmValue", values.PRIMER_MIN_TM);
-  if (values.PRIMER_MAX_TM) 
-  this.set("primerMaxTmValue", values.PRIMER_MAX_TM);
-  if (values.PRIMER_MAX_DIFF_TM) 
-  this.set("primerMaxDiffTmValue", values.PRIMER_MAX_DIFF_TM);
-  if (values.PRIMER_MAX_SELF_ANY_TH) 
-  this.set("primerMaxSelfAnyThValue", values.PRIMER_MAX_SELF_ANY_TH);
-  if (values.PRIMER_MAX_SELF_END_TH) 
-  this.set("primerMaxSelfEndThValue", values.PRIMER_MAX_SELF_END_TH);
-  if (values.PRIMER_PAIR_MAX_COMPL_ANY_TH) 
-  this.set("primerPairMaxComplAnyThValue", values.PRIMER_PAIR_MAX_COMPL_ANY_TH);
-  if (values.PRIMER_PAIR_MAX_COMPL_END_TH) 
-  this.set("primerPairMaxComplEndThValue", values.PRIMER_PAIR_MAX_COMPL_END_TH);
-  if (values.PRIMER_TM_SANTALUCIA) 
-  this.set("primerTmSantaluciaValue", values.PRIMER_TM_SANTALUCIA);
-  if (values.PRIMER_SALT_CORRECTIONS) 
-  this.set("primerSaltCorrectionsValue", values.PRIMER_SALT_CORRECTIONS);
-  if (values.PRIMER_DNA_CONC) 
-  this.set("primerDnaConcValue", values.PRIMER_DNA_CONC);
-  if (values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT) 
-  this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT);
-  if (values.MISPRIMING_MIN_TM) 
-  this.set("misprimingMinTmValue", values.MISPRIMING_MIN_TM);
-  if (values.MISPRIMING_SALT_CONC) 
-  this.set("misprimingSaltConcValue", values.MISPRIMING_SALT_CONC);
-  if (values.MISPRIMING_OLIGO_CONC) 
-  this.set("misprimingOligoConcValue", values.MISPRIMING_OLIGO_CONC);
-  if (values.OUTPUT_SEQUENCE_FORMAT) 
-  this.set("outputSequenceFormatValue", values.OUTPUT_SEQUENCE_FORMAT);
-  if (values.SUPPRESS_PURE_PRIMERS) 
-  this.set("SPP_Default", values.SUPPRESS_PURE_PRIMERS);
-  if (values.HOMOLOGY_MIN_LENGTH_BPS) 
-  this.set("homologyMinLengthBPS", values.HOMOLOGY_MIN_LENGTH_BPS);
-  if (values.HOMOLOGY_MAX_FRACTION_MISMATCHES) 
-  this.set("homologyMaxFractionMisMatches", values.HOMOLOGY_MAX_FRACTION_MISMATCHES);
-}, setDefaultValues: function() {
-  this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
-  this.set("masterPlasmidNumberOfDigitsValue", this.self.MPNOD_Default);
-  this.set("gibsonOverlapBPsValue", this.self.GOB_Default);
-  this.set("gibsonOverlapMinTmValue", this.self.GOMT_Default);
-  this.set("gibsonOverlapMaxTmValue", this.self.GOMAXT_Default);
-  this.set("maxOligoLengthBPsValue", this.self.MOLB_Default);
-  this.set("minFragmentSizeGibsonBPsValue", this.self.MFSGB_Default);
-  this.set("goldenGateOverhangBPsValue", this.self.GGOHB_Default);
-  this.set("goldenGateRecognitionSeqValue", this.self.GGRS_Default);
-  this.set("goldenGateTerminiExtraSeqValue", this.self.GGTES_Default);
-  this.set("maxIdentitiesGoldenGateOverhangsCompatibleValue", this.self.MIGGOC_Default);
-  this.set("oligoSynthesisCostPerBPUSDValue", this.self.OSCPB_Default);
-  this.set("oligoPagePurificationCostPerPieceUSDValue", this.self.OPPCPP_Default);
-  this.set("oligoMaxLengthNoPagePurificationRequiredBPsValue", this.self.OMLPPRB_Default);
-  this.set("minPCRProductBPsValue", this.self.MPPB_Default);
-  this.set("directSynthesisCostPerBPUSDValue", this.self.DSCPB_Default);
-  this.set("directSynthesisMinCostPerPieceUSDValue", this.self.DSMCPP_Default);
-  this.set("primerGCClampValue", this.self.PGC_Default);
-  this.set("primerMinSizeValue", this.self.PMS_Default);
-  this.set("primerMaxSizeValue", this.self.PMAXS_Default);
-  this.set("primerMinTmValue", this.self.PMT_Default);
-  this.set("primerMaxTmValue", this.self.PMAXT_Default);
-  this.set("primerMaxDiffTmValue", this.self.PMDT_Default);
-  this.set("primerMaxSelfAnyThValue", this.self.PMSAT_Default);
-  this.set("primerMaxSelfEndThValue", this.self.PMSET_Default);
-  this.set("primerPairMaxComplAnyThValue", this.self.PPMCAT_Default);
-  this.set("primerPairMaxComplEndThValue", this.self.PPMCET_Default);
-  this.set("primerTmSantaluciaValue", this.self.PTS_Default);
-  this.set("primerSaltCorrectionsValue", this.self.PSC_Default);
-  this.set("primerDnaConcValue", this.self.PDC_Default);
-  this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", this.self.M3BBTWIH_Default);
-  this.set("misprimingMinTmValue", this.self.MMT_Default);
-  this.set("misprimingSaltConcValue", this.self.MSC_Default);
-  this.set("misprimingOligoConcValue", this.self.MOC_Default);
-  this.set("outputSequenceFormatValue", this.self.OSF_Default);
-  this.set("suppressPurePrimersValue", this.self.SPP_Default);
-  this.set("homologyMinLengthBPS", this.self.HMLB_Default);
-  this.set("homologyMaxFractionMisMatches", this.self.HMFM_Default);
-}, createJ5ParametersString: function(isCollectionCircular) {
-  var returnString = "Parameter Name,Value,Default Value,Description\n" + this.self.MONOD + "," + this.get("masterOligoNumberOfDigitsValue") + "," + this.self.MONOD_Default + "," + this.self.MONOD_DESC + "\n" + this.self.MPNOD + "," + this.get("masterPlasmidNumberOfDigitsValue") + "," + this.self.MPNOD_Default + "," + this.self.MPNOD_DESC + "\n" + this.self.GOB + "," + this.get("gibsonOverlapBPsValue") + "," + this.self.GOB_Default + "," + this.self.GOB_DESC + "\n" + this.self.GOMT + "," + this.get("gibsonOverlapMinTmValue") + "," + this.self.GOMT_Default + "," + this.self.GOMT_DESC + "\n" + this.self.GOMAXT + "," + this.get("gibsonOverlapMaxTmValue") + "," + this.self.GOMAXT_Default + "," + this.self.GOMAXT_DESC + "\n" + this.self.MOLB + "," + this.get("maxOligoLengthBPsValue") + "," + this.self.MOLB_Default + "," + this.self.MOLB_DESC + "\n" + this.self.MFSGB + "," + this.get("minFragmentSizeGibsonBPsValue") + "," + this.self.MFSGB_Default + "," + this.self.MFSGB_DESC + "\n" + this.self.GGOHB + "," + this.get("goldenGateOverhangBPsValue") + "," + this.self.GGOHB_Default + "," + this.self.GGOHB_DESC + "\n" + this.self.GGRS + "," + this.get("goldenGateRecognitionSeqValue") + "," + this.self.GGRS_Default + "," + this.self.GGRS_DESC + "\n" + this.self.GGTES + "," + this.get("goldenGateTerminiExtraSeqValue") + "," + this.self.GGTES_Default + "," + this.self.GGTES_DESC + "\n" + this.self.MIGGOC + "," + this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue") + "," + this.self.MIGGOC_Default + "," + this.self.MIGGOC_DESC + "\n" + this.self.OSCPB + "," + this.get("oligoSynthesisCostPerBPUSDValue") + "," + this.self.OSCPB_Default + "," + this.self.OSCPB_DESC + "\n" + this.self.OPPCPP + "," + this.get("oligoPagePurificationCostPerPieceUSDValue") + "," + this.self.OPPCPP_Default + "," + this.self.OPPCPP_DESC + "\n" + this.self.OMLPPRB + "," + this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue") + "," + this.self.OMLPPRB_Default + "," + this.self.OMLPPRB_DESC + "\n" + this.self.MPPB + "," + this.get("minPCRProductBPsValue") + "," + this.self.MPPB_Default + "," + this.self.MPPB_DESC + "\n" + this.self.DSCPB + "," + this.get("directSynthesisCostPerBPUSDValue") + "," + this.self.DSCPB_Default + "," + this.self.DSCPB_DESC + "\n" + this.self.DSMCPP + "," + this.get("directSynthesisMinCostPerPieceUSDValue") + "," + this.self.DSMCPP_Default + "," + this.self.DSMCPP_DESC + "\n" + this.self.PGC + "," + this.get("primerGCClampValue") + "," + this.self.PGC_Default + "," + this.self.PGC_DESC + "\n" + this.self.PMS + "," + this.get("primerMinSizeValue") + "," + this.self.PMS_Default + "," + this.self.PMS_DESC + "\n" + this.self.PMAXS + "," + this.get("primerMaxSizeValue") + "," + this.self.PMAXS_Default + "," + this.self.PMAXS_DESC + "\n" + this.self.PMT + "," + this.get("primerMinTmValue") + "," + this.self.PMT_Default + "," + this.self.PMT_DESC + "\n" + this.self.PMAXT + "," + this.get("primerMaxTmValue") + "," + this.self.PMAXT_Default + "," + this.self.PMAXT_DESC + "\n" + this.self.PMDT + "," + this.get("primerMaxDiffTmValue") + "," + this.self.PMDT_Default + "," + this.self.PMDT_DESC + "\n" + this.self.PMSAT + "," + this.get("primerMaxSelfAnyThValue") + "," + this.self.PMSAT_Default + "," + this.self.PMSAT_DESC + "\n" + this.self.PMSET + "," + this.get("primerMaxSelfEndThValue") + "," + this.self.PMSET_Default + "," + this.self.PMSET_DESC + "\n" + this.self.PPMCAT + "," + this.get("primerPairMaxComplAnyThValue") + "," + this.self.PPMCAT_Default + "," + this.self.PPMCAT_DESC + "\n" + this.self.PPMCET + "," + this.get("primerPairMaxComplEndThValue") + "," + this.self.PPMCET_Default + "," + this.self.PPMCET_DESC + "\n" + this.self.PTS + "," + (this.get("primerTmSantaluciaValue")) + "," + (this.self.PTS_Default ? "1" : "0") + "," + this.self.PTS_DESC + "\n" + this.self.PSC + "," + (this.get("primerSaltCorrectionsValue")) + "," + (this.self.PSC_Default) + "," + this.self.PSC_DESC + "\n" + this.self.PDC + "," + this.get("primerDnaConcValue") + "," + this.self.PDC_Default + "," + this.self.PDC_DESC + "\n" + this.self.M3BBTWIH + "," + this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue") + "," + this.self.M3BBTWIH_Default + "," + this.self.M3BBTWIH_DESC + "\n" + this.self.MMT + "," + this.get("misprimingMinTmValue") + "," + this.self.MMT_Default + "," + this.self.MMT_DESC + "\n" + this.self.MSC + "," + this.get("misprimingSaltConcValue") + "," + this.self.MSC_Default + "," + this.self.MSC_DESC + "\n" + this.self.MOC + "," + this.get("misprimingOligoConcValue") + "," + this.self.MOC_Default + "," + this.self.MOC_DESC + "\n" + this.self.OSF + "," + this.get("outputSequenceFormatValue") + "," + this.self.OSF_Default + "," + this.self.OSF_DESC + "\n" + this.self.APT + "," + isCollectionCircular + "," + Teselagen.constants.Constants.self.CIRCULAR + "," + this.self.APT_DESC + "\n" + this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
-  this.self.HMLB + "," + this.get("homologyMinLengthBPS") + "," + this.self.HMLB_Default + "\n";
-  this.self.HMFM + "," + this.get("homologyMaxFractionMisMatches") + "," + this.self.HMFM_Default + "\n";
-  return returnString;
-}, getArrayParameters: function() {
-  var arr = [];
-  arr.push({value: this.get("masterOligoNumberOfDigitsValue"), name: "masterOligoNumberOfDigitsValue"});
-  arr.push({value: this.get("masterPlasmidNumberOfDigitsValue"), name: "masterPlasmidNumberOfDigitsValue"});
-  arr.push({value: this.get("gibsonOverlapBPsValue"), name: "gibsonOverlapBPsValue"});
-  arr.push({value: this.get("gibsonOverlapMinTmValue"), name: "gibsonOverlapMinTmValue"});
-  arr.push({value: this.get("gibsonOverlapMaxTmValue"), name: "gibsonOverlapMaxTmValue"});
-  arr.push({value: this.get("maxOligoLengthBPsValue"), name: "maxOligoLengthBPsValue"});
-  arr.push({value: this.get("minFragmentSizeGibsonBPsValue"), name: "minFragmentSizeGibsonBPsValue"});
-  arr.push({value: this.get("goldenGateOverhangBPsValue"), name: "goldenGateOverhangBPsValue"});
-  arr.push({value: this.get("goldenGateRecognitionSeqValue"), name: "goldenGateRecognitionSeqValue"});
-  arr.push({value: this.get("goldenGateTerminiExtraSeqValue"), name: "goldenGateTerminiExtraSeqValue"});
-  arr.push({value: this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue"), name: "maxIdentitiesGoldenGateOverhangsCompatibleValue"});
-  arr.push({value: this.get("oligoSynthesisCostPerBPUSDValue"), name: "oligoSynthesisCostPerBPUSDValue"});
-  arr.push({value: this.get("oligoPagePurificationCostPerPieceUSDValue"), name: "oligoPagePurificationCostPerPieceUSDValue"});
-  arr.push({value: this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue"), name: "oligoMaxLengthNoPagePurificationRequiredBPsValue"});
-  arr.push({value: this.get("minPCRProductBPsValue"), name: "minPCRProductBPsValue"});
-  arr.push({value: this.get("directSynthesisCostPerBPUSDValue"), name: "directSynthesisCostPerBPUSDValue"});
-  arr.push({value: this.get("directSynthesisMinCostPerPieceUSDValue"), name: "directSynthesisMinCostPerPieceUSDValue"});
-  arr.push({value: this.get("primerGCClampValue"), name: "primerGCClampValue"});
-  arr.push({value: this.get("primerMinSizeValue"), name: "primerMinSizeValue"});
-  arr.push({value: this.get("primerMaxSizeValue"), name: "primerMaxSizeValue"});
-  arr.push({value: this.get("primerMinTmValue"), name: "primerMinTmValue"});
-  arr.push({value: this.get("primerMaxTmValue"), name: "primerMaxTmValue"});
-  arr.push({value: this.get("primerMaxDiffTmValue"), name: "primerMaxDiffTmValue"});
-  arr.push({value: this.get("primerMaxSelfAnyThValue"), name: "primerMaxSelfAnyThValue"});
-  arr.push({value: this.get("primerMaxSelfEndThValue"), name: "primerMaxSelfEndThValue"});
-  arr.push({value: this.get("primerPairMaxComplAnyThValue"), name: "primerPairMaxComplAnyThValue"});
-  arr.push({value: this.get("primerPairMaxComplEndThValue"), name: "primerPairMaxComplEndThValue"});
-  arr.push({value: this.get("primerTmSantaluciaValue"), name: "primerTmSantaluciaValue"});
-  arr.push({value: this.get("primerSaltCorrectionsValue"), name: "primerSaltCorrectionsValue"});
-  arr.push({value: this.get("primerDnaConcValue"), name: "primerDnaConcValue"});
-  arr.push({value: this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue"), name: "mispriming3PrimeBoundaryBPToWarnIfHitValue"});
-  arr.push({value: this.get("misprimingMinTmValue"), name: "misprimingMinTmValue"});
-  arr.push({value: this.get("misprimingSaltConcValue"), name: "misprimingSaltConcValue"});
-  arr.push({value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue"});
-  arr.push({value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue"});
-  arr.push({value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue"});
-  arr.push({value: this.get("homologyMinLengthBPS"), name: "homologyMinLengthBPS"});
-  arr.push({value: this.get("homologyMaxFractionMisMatches"), name: "homologyMaxFractionMisMatches"});
-  return arr;
-}, getParametersAsStore: function() {
-  var self = this;
-  var store = new Ext.data.JsonStore({proxy: {type: 'memory', data: self.getArrayParameters(), reader: {type: 'json', root: 'files'}}, fields: ['name', 'value']});
-  store.load();
-  return store;
-}, getParametersAsArray: function(isCollectionCircular) {
-  var obj = {};
-  obj[this.self.MONOD] = this.get("masterOligoNumberOfDigitsValue");
-  obj[this.self.MPNOD] = this.get("masterPlasmidNumberOfDigitsValue");
-  obj[this.self.GOB] = this.get("gibsonOverlapBPsValue");
-  obj[this.self.GOMT] = this.get("gibsonOverlapMinTmValue");
-  obj[this.self.GOMAXT] = this.get("gibsonOverlapMaxTmValue");
-  obj[this.self.MOLB] = this.get("maxOligoLengthBPsValue");
-  obj[this.self.MFSGB] = this.get("minFragmentSizeGibsonBPsValue");
-  obj[this.self.GGOHB] = this.get("goldenGateOverhangBPsValue");
-  obj[this.self.GGRS] = this.get("goldenGateRecognitionSeqValue");
-  obj[this.self.GGTES] = this.get("goldenGateTerminiExtraSeqValue");
-  obj[this.self.MIGGOC] = this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue");
-  obj[this.self.OSCPB] = this.get("oligoSynthesisCostPerBPUSDValue");
-  obj[this.self.OPPCPP] = this.get("oligoPagePurificationCostPerPieceUSDValue");
-  obj[this.self.OMLPPRB] = this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue");
-  obj[this.self.MPPB] = this.get("minPCRProductBPsValue");
-  obj[this.self.DSCPB] = this.get("directSynthesisCostPerBPUSDValue");
-  obj[this.self.DSMCPP] = this.get("directSynthesisMinCostPerPieceUSDValue");
-  obj[this.self.PGC] = this.get("primerGCClampValue");
-  obj[this.self.PMS] = this.get("primerMinSizeValue");
-  obj[this.self.PMAXS] = this.get("primerMaxSizeValue");
-  obj[this.self.PMT] = this.get("primerMinTmValue");
-  obj[this.self.PMAXT] = this.get("primerMaxTmValue");
-  obj[this.self.PMDT] = this.get("primerMaxDiffTmValue");
-  obj[this.self.PMSAT] = this.get("primerMaxSelfAnyThValue");
-  obj[this.self.PMSET] = this.get("primerMaxSelfEndThValue");
-  obj[this.self.PPMCAT] = this.get("primerPairMaxComplAnyThValue");
-  obj[this.self.PPMCET] = this.get("primerPairMaxComplEndThValue");
-  obj[this.self.PTS] = this.get("primerTmSantaluciaValue");
-  obj[this.self.PSC] = this.get("primerSaltCorrectionsValue");
-  obj[this.self.PDC] = this.get("primerDnaConcValue");
-  obj[this.self.M3BBTWIH] = this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue");
-  obj[this.self.MMT] = this.get("misprimingMinTmValue");
-  obj[this.self.MSC] = this.get("misprimingSaltConcValue");
-  obj[this.self.MOC] = this.get("misprimingOligoConcValue");
-  obj[this.self.OSF] = this.get("outputSequenceFormatValue");
-  obj[this.self.SPP] = this.get("suppressPurePrimersValue");
-  obj[this.self.APT] = isCollectionCircular ? "circular" : "linear";
-  obj[this.self.HMLB] = this.get("homologyMinLengthBPS");
-  obj[this.self.HMFM] = this.get("homologyMaxFractionMisMatches");
-  return obj;
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Parameters'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.DownstreamAutomationParameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MDTAZ: "MAXDELTATEMPERATUREADJACENTZONES", MDTROZA: "MAXDELTATEMPERATUREREACTIONOPTIMUMZONEACCEPTABLE", MMCSPZ: "MAXMCSTEPSPERZONE", MWVMP: "MAXWELLVOLUMEMULTIWELLPLATE", MCTF: "MCTEMPERATUREFINAL", MCTI: "MCTEMPERATUREINITIAL", MPV: "MINPIPETTINGVOLUME", NCMP: "NCOLUMNSMULTIWELLPLATE", NRMP: "NROWSMULTIWELLPLATE", TDT: "TRIALDELTATEMPERATURE", WPTZ: "WELLSPERTHERMOCYCLERZONE", ZPTB: "ZONESPERTHERMOCYCLERBLOCK", MDTAZ_DESC: "The maximum difference in temperature (in C) between adjacent zones on the thermocycler block", MDTROZA_DESC: "\"The maximum acceptable difference in temperature (in C) between the optimal annealing temperature of a PCR reaction, and the annealing temperature of the thermocycler block zone it is sitting in\"", MMCSPZ_DESC: "The maximum number of Monte-Carlo steps attempted per thermocycler block zone", MWVMP_DESC: "The maximum liquid volume (in uL) that a well in the multi-well plate can hold", MCTF_DESC: "The final temperature at the end of the Monte-Carlo simulated annealing run (in arbitrary reduced units)", MCTI_DESC: "The initial temperature in the beginning of the Monte-Carlo simulated annealing run (in arbitrary reduced units)", MPV_DESC: "The minimum pipetting volume (e.g. for a robotics platform) (in uL)", NCMP_DESC: "The number of columns in the multi-well plate", NRMP_DESC: "The number of rows in the multi-well plate", TDT_DESC: "The Monte-Carlo step trial change in temperature for a thermocycler block zone", WPTZ_DESC: "The number of wells per thermocycler block zone", ZPTB_DESC: "The number of zones per thermocycler block", MDTAZ_DEFAULT: 5, MDTROZA_DEFAULT: 5, MMCSPZ_DEFAULT: 1000, MWVMP_DEFAULT: 100, MCTF_DEFAULT: 1.0E-4, MCTI_DEFAULT: 0.1, MPV_DEFAULT: 5, NCMP_DEFAULT: 12, NRMP_DEFAULT: 8, TDT_DEFAULT: 0.1, WPTZ_DEFAULT: 16, ZPTB_DEFAULT: 6}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "maxDeltaTemperatureAdjacentZonesValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MDTAZ_DEFAULT;
-}}, {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MDTROZA_DEFAULT;
-}}, {name: "maxMcStepsPerZoneValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MMCSPZ_DEFAULT;
-}}, {name: "maxWellVolumeMultiwellPlateValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MWVMP_DEFAULT;
-}}, {name: "mcTemperatureFinalValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MCTF_DEFAULT;
-}}, {name: "mcTemperatureInitialValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MCTI_DEFAULT;
-}}, {name: "minPipettingVolumeValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.MPV_DEFAULT;
-}}, {name: "nColumnsMultiwellPlateValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.NCMP_DEFAULT;
-}}, {name: "nRowsMultiwellPlateValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.NRMP_DEFAULT;
-}}, {name: "trialDeltaTemperatureValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.TDT_DEFAULT;
-}}, {name: "wellsPerThermocyclerZoneValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.WPTZ_DEFAULT;
-}}, {name: "zonesPerThermocyclerBlockValue", convert: function(v, record) {
-  return parseFloat(v) || record.self.ZPTB_DEFAULT;
-}}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}], init: function() {
-}, createParameterString: function() {
-  var returnString = "Parameter Name,Value,Default Value,Description\n" + this.self.MDTAZ + "," + this.get("maxDeltaTemperatureAdjacentZonesValue").toString() + "," + this.self.MDTAZ_DEFAULT + "," + this.self.MDTAZ_DESC + "\n" + this.self.MDTROZA + "," + this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue").toString() + "," + this.self.MDTROZA_DEFAULT + "," + this.self.MDTROZA_DESC + "\n" + this.self.MMCSPZ + "," + this.get("maxMcStepsPerZoneValue").toString() + "," + this.self.MMCSPZ_DEFAULT + "," + this.self.MMCSPZ_DESC + "\n" + this.self.MWVMP + "," + this.get("maxWellVolumeMultiwellPlateValue").toString() + "," + this.self.MWVMP_DEFAULT + "," + this.self.MWVMP_DESC + "\n" + this.self.MCTF + "," + this.get("mcTemperatureFinalValue").toString() + "," + this.self.MCTF_DEFAULT + "," + this.self.MCTF_DESC + "\n" + this.self.MCTI + "," + this.get("mcTemperatureInitialValue").toString() + "," + this.self.MCTI_DEFAULT + "," + this.self.MCTI_DESC + "\n" + this.self.MPV + "," + this.get("minPipettingVolumeValue").toString() + "," + this.self.MPV_DEFAULT + "," + this.self.MPV_DESC + "\n" + this.self.NCMP + "," + this.get("nColumnsMultiwellPlateValue").toString() + "," + this.self.NCMP_DEFAULT + "," + this.self.NCMP_DESC + "\n" + this.self.NRMP + "," + this.get("nRowsMultiwellPlateValue").toString() + "," + this.self.NRMP_DEFAULT + "," + this.self.NRMP_DESC + "\n" + this.self.TDT + "," + this.get("trialDeltaTemperatureValue").toString() + "," + this.self.TDT_DEFAULT + "," + this.self.TDT_DESC + "\n" + this.self.WPTZ + "," + this.get("wellsPerThermocyclerZoneValue").toString() + "," + this.self.WPTZ_DEFAULT + "," + this.self.WPTZ_DESC + "\n" + this.self.ZPTB + "," + this.get("zonesPerThermocyclerBlockValue").toString() + "," + this.self.ZPTB_DEFAULT + "," + this.self.ZPTB_DESC + "\n";
-  return returnString;
-}, setDefaultValues: function() {
-  this.set("maxDeltaTemperatureAdjacentZonesValue", this.self.MDTAZ_DEFAULT);
-  this.set("maxDeltaTemperatureReactionOptimumZoneAcceptableValue", this.self.MDTROZA_DEFAULT);
-  this.set("maxMcStepsPerZoneValue", this.self.MMCSPZ_DEFAULT);
-  this.set("maxWellVolumeMultiwellPlateValue", this.self.MWVMP_DEFAULT);
-  this.set("mcTemperatureFinalValue", this.self.MCTF_DEFAULT);
-  this.set("mcTemperatureInitialValue", this.self.MCTI_DEFAULT);
-  this.set("minPipettingVolumeValue", this.self.MPV_DEFAULT);
-  this.set("nColumnsMultiwellPlateValue", this.self.NCMP_DEFAULT);
-  this.set("nRowsMultiwellPlateValue", this.self.NRMP_DEFAULT);
-  this.set("trialDeltaTemperatureValue", this.self.TDT_DEFAULT);
-  this.set("wellsPerThermocyclerZoneValue", this.self.WPTZ_DEFAULT);
-  this.set("zonesPerThermocyclerBlockValue", this.self.ZPTB_DEFAULT);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DownstreamAutomationParameters'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.J5Input', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "j5parameters_id", type: "long"}, {name: "automationparameters_id", type: "long"}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Parameters", getterName: "getJ5Parameters", setterName: "setJ5Parameters", associationKey: "j5Parameters", foreignKey: "j5parameters_id"}, {type: "hasOne", model: "Teselagen.models.DownstreamAutomationParameters", getterName: "getDownstreamAutomationParameters", setterName: "setDownstreamAutomationParameters", associationKey: "downstreamAutomationParameters", foreignKey: "automationparameters_id"}, {type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", associationKey: "j5run", foreignKey: "j5run_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Input'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.Warning', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "message", type: "string"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Warning'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.CombinationPart', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "id", type: "string", defaultValue: ""}, {name: "parts", type: "string", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'CombinationPart'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.TargetBin', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "id", type: "string", defaultValue: ""}, {name: "name", type: "string", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'TargetBin'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.NonDegPart', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "id", type: "string", defaultValue: ""}, {name: "name", type: "string", defaultValue: ""}, {name: "source", type: "string", defaultValue: ""}, {name: "revComp", type: "string", defaultValue: ""}, {name: "startBP", type: "string", defaultValue: ""}, {name: "stopBP", type: "string", defaultValue: ""}, {name: "size", type: "string", defaultValue: ""}, {name: "sequence", type: "string", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'NonDegPart'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.CombinatorialAssembly', Ext.data.Model, {proxy: {type: "memory"}, fields: [{name: "cite", type: "String"}, {name: "date", type: "String"}, {name: "note", type: "String"}, {name: "assemblyParameters", type: "String"}], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Warning", name: "warnings"}, {type: "hasMany", model: "Teselagen.models.j5Output.CombinationPart", name: "combinationParts"}, {type: "hasMany", model: "Teselagen.models.j5Output.TargetBin", name: "targetBins"}, {type: "hasMany", model: "Teselagen.models.j5Output.NonDegPart", name: "nonDegParts"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'CombinatorialAssembly'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.CombinatorialNonMockAssembly', Teselagen.models.j5Output.CombinatorialAssembly, {proxy: {type: "memory"}, statics: {}, fields: [{name: "type", type: "String", defaultValue: ""}, {name: "date", type: "String", defaultValue: ""}, {name: "annealedOligoSynthesis", type: "String", defaultValue: ""}, {name: "assemblyPieces", type: "String", defaultValue: ""}, {name: "assembly_id", type: "long"}], validations: [{field: "type", type: "inclusion", list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST}], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "directSynthesis", foreignKey: "directSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "oligoSynthesis", foreignKey: "oligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "annealedOligoSynthesis", foreignKey: "annealedOligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.PCRReaction", name: "pcrReaction", foreignKey: "pcrReaction_id"}, {type: "belongsTo", model: "Teselagen.models.J5Results", getterName: "getJ5Results", setterName: "setJ5Results", associationKey: "j5Results", foreignKey: "j5results_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'CombinatorialNonMockAssembly'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.SuggestedAssembly', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "suggestedAssembly_id", type: "long"}, {name: "contig", type: "int", defaultValue: 0}, {name: "assemblyPieces", convert: function(v, record) {
-  return [];
-}}], validations: [{field: "forward", type: "inclusion", list: ["forward", "reverse"]}], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}], addAssemblyPiece: function(pPiece) {
-  return this.get("assemblyPieces").push(pPiece);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'SuggestedAssembly'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.Assembly', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "type", type: "String", defaultValue: ""}, {name: "date", type: "String", defaultValue: ""}, {name: "assembly_id", type: "long"}], validations: [{field: "type", type: "inclusion", list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST}], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Warning", name: "warnings", foreignKey: "warnings_id"}, {type: "belongsTo", model: "Teselagen.models.j5Output.AssembledSequenceFile", getterName: "getAssembledSequenceFile", setterName: "setAssembledSequenceFile", associationKey: "assembledSequenceFile", foreignKey: "assembledSequenceFile_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Assembly'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.Incompatibility', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "incompatibilty_id", type: "long"}, {name: "assemblyPiece", type: "int", defaultValue: 0}, {name: "leftEnd", type: "string", defaultValue: "NONE"}, {name: "rightEnd", type: "string", defaultValue: "NONE"}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Incompatibility'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.Synthesis', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "synthesis_id", type: "long"}, {name: "type", type: "string", defaultValue: ""}, {name: "idNumber", type: "int", defaultValue: ""}, {name: "name", type: "string", defaultValue: ""}, {name: "firstTargetPart", type: "int", defaultValue: ""}, {name: "lastTargetPart", type: "int", defaultValue: ""}, {name: "cost", type: "long", defaultValue: ""}, {name: "length", type: "int", defaultValue: ""}, {name: "sequence", type: "string", defaultValue: ""}, {name: "Tm", type: "long", defaultValue: ""}, {name: "Tm3prime", type: "long", defaultValue: ""}, {name: "topOligo", type: "int", defaultValue: 0}, {name: "bottomOligo", type: "int", defaultValue: 0}], validations: [{field: "type", type: "inclusion", list: Teselagen.constants.Constants.SYNTHESISTYPE_LIST}], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}], addAssemblyPiece: function(pPiece) {
-  return this.get("assemblyPieces").push(pPiece);
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Synthesis'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.PCRReaction', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "pcr_id", type: "long"}, {name: "combinatorial", type: "Boolean", defaultValue: false}, {name: "idNumber", type: "int", defaultValue: ""}, {name: "primaryTemplate", type: "string", defaultValue: ""}, {name: "alternateTemplate", type: "string", defaultValue: ""}, {name: "forwardOligoIDNumber", type: "int", defaultValue: ""}, {name: "forwardOligoName", type: "string", defaultValue: ""}, {name: "reverseOligoIDNumber", type: "int", defaultValue: ""}, {name: "reverseOligoName", type: "string", defaultValue: ""}, {name: "firstTargetPart", type: "int", defaultValue: ""}, {name: "lastTargetPart", type: "int", defaultValue: ""}, {name: "note", type: "string", defaultValue: ""}, {name: "meanOligoTm", type: "long", defaultValue: ""}, {name: "deltaOligoTm", type: "long", defaultValue: ""}, {name: "meanOligoTm3prime", type: "long", defaultValue: ""}, {name: "deltaOligoTm3prime", type: "long", defaultValue: ""}, {name: "length", type: "int", defaultValue: ""}, {name: "sequence", type: "string", defaultValue: ""}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.NonMockAssembly", getterName: "getNonMockAssembly", setterName: "setNonMockAssembly", associationKey: "nonMockAssembly", foreignKey: "nonMockAssembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'PCRReaction'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.NonMockAssembly', Teselagen.models.j5Output.Assembly, {proxy: {type: "memory"}, statics: {}, fields: [{name: "directSynthesis", type: "String", defaultValue: ""}, {name: "annealedOligoSynthesis", type: "String", defaultValue: ""}, {name: "assembly_id", type: "long"}], validations: [], associations: [{type: "hasMany", model: "Teselagen.models.j5Output.Incompatibility", name: "comp", foreignKey: "incompatibilities_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.SuggestedAssembly", name: "suggestedAssembly", foreignKey: "suggestedAssembly_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "directSynthesis", foreignKey: "directSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "oligoSynthesis", foreignKey: "oligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.Synthesis", name: "annealedOligoSynthesis", foreignKey: "annealedOligoSynthesis_id"}, {type: "hasMany", model: "Teselagen.models.j5Output.PCRReaction", name: "pcrReaction", foreignKey: "pcrReaction_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'NonMockAssembly'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.AssembledSequenceFile', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "fileType", convert: function(v) {
-  var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
-  var constants = Teselagen.constants.Constants;
-  if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) 
-  {
-    return format;
-  } else {
-    return constants.GENBANK;
-  }
-}}, {name: "name", type: "String", defaultValue: ""}, {name: "fileContent", type: "String", defaultValue: ""}, {name: "sizeBP", type: "String", defaultValue: ""}, {name: "parts", type: "String", defaultValue: ""}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'AssembledSequenceFile'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.Warnings', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "warning_id", type: "long"}, {name: "type", type: "string", defaultValue: ""}, {name: "message", type: "string", defaultValue: ""}], validations: [], associations: [{type: "belongsTo", model: "Teselagen.models.j5Output.Assembly", getterName: "getAssembly", setterName: "setAssembly", associationKey: "assembly", foreignKey: "assembly_id"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Warnings'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.j5Output.Error', Ext.data.Model, {proxy: {type: "memory"}, statics: {}, fields: [{name: "faultString", type: "string"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models.j5Output, 'Error'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.J5Results', Ext.data.Model, {proxy: {type: "memory"}, associations: [{type: "hasMany", model: "Teselagen.models.j5Output.AssembledSequenceFile", name: "assemblies"}, {type: "hasOne", model: "Teselagen.models.j5Output.CombinatorialAssembly", associationKey: "combinatorialAssembly", getterName: "getCombinatorialAssembly", setterName: "setCombinatorialAssembly"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Results'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.models.J5Run', Ext.data.Model, {proxy: {type: "rest", url: "/vede/test/data/json/j5Runs.json", reader: {type: "json", root: "j5runs"}, buildUrl: function(request) {
-  var restParams = "";
-  var idParam = "";
-  var filter = "";
-  if (request.operation.filters) 
-  {
-    if (request.operation.filters[0]) 
-    filter = request.operation.filters[0].property;
-  }
-  if (filter === "devicedesign_id") 
-  {
-    var project_id = request.operation.filters[0].value;
-    restParams += "/" + project_id;
-    delete request.params.filter;
-    if (request.operation.id) 
-    {
-      idParam = "/" + request.operation.id;
-      delete request.params.id;
-    }
-    return Teselagen.manager.SessionManager.buildUserResUrl("/devicedesigns" + restParams + '/j5runs', this.url);
-  }
-  return '/no_path';
-}}, statics: {}, fields: [{name: "id", type: "long"}, {name: "file_id", type: "long"}, {name: "comment", type: "String", defaultValue: ""}, {name: "date", type: "Date", defaultValue: "", convert: function(v, record) {
-  var date = new Date(v);
-  return date;
-}}, {name: "endDate", type: "Date", defaultValue: "", convert: function(v, record) {
-  var date = new Date(v);
-  return date;
-}}, {name: "assemblyType", type: "String", defaultValue: ""}, {name: "assemblyMethod", type: "String", defaultValue: ""}, {name: "status", type: "String", defaultValue: ""}, {name: "warnings", type: "String", defaultValue: ""}, {name: "devicedesign_id", type: "long"}], getItemTitle: function() {
-  return Ext.Date.format(this.get('date'), 'F j, Y, g:i a') + " | " + this.get('assemblyMethod');
-}, associations: [{type: "hasOne", model: "Teselagen.models.J5Input", getterName: "getJ5Input", setterName: "setJ5Input", associationKey: "j5Input"}, {type: "hasOne", model: "Teselagen.models.J5Results", getterName: "getJ5Results", setterName: "setJ5Results", associationKey: "j5Results"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'J5Run'], 0));
 ;
 
 function requestMessageProcessor(request, success) {
@@ -74503,6 +74794,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (!self.VEManager) 
   {
     self.VEManager = Ext.create("Teselagen.manager.VectorEditorManager", seq, sequenceFileManager);
+  } else {
+    self.VEManager.sequence = seq;
   }
   tabPanel.add(newTab).show();
   Teselagen.manager.ProjectManager.workingSequence = seq;
@@ -74536,6 +74829,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (newTab && newTab.initialCls === "VectorEditorPanel") 
   {
     this.onSequenceManagerChanged(newTab.model);
+    this.VEManager.sequence = newTab.sequenceFile;
   }
 }, init: function() {
   this.DeviceEvent = Teselagen.event.DeviceEvent;
@@ -74630,7 +74924,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Teselagen.manager.GridManager.selectedGridPart = null;
   Teselagen.manager.GridManager.selectedGridBin = null;
   var next = this.backgroundSequenceProcessing(partsArray);
-  console.log(next);
   if (next[0] == true) 
   {
     if (typeof (cb) === "function") 
@@ -74906,16 +75199,32 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
               var revComp = (this.getTagText(part, "revComp") === "true");
               newPart = Ext.create("Teselagen.models.Part", {name: name, genbankStartBP: startBP, endBP: endBP, revComp: revComp});
               getSequenceByID(hash, function(sequence) {
-  var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent, sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent, sequenceFileName: me.getTagText(sequence, "fileName"), name: me.getTagText(sequence, "fileName")});
+  var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
+  if (ext) 
+  {
+    var processSequence = Teselagen.bio.parsers.ParsersManager.parseSequence(sequence.getElementsByTagNameNS("*", "content")[0].textContent, ext[1], function(gb) {
+  Teselagen.bio.parsers.ParsersManager.createAndProcessSequenceFromGenbank(gb, name, function(err, sequence, sequenceManager, gb) {
+  if (err) 
+  {
+    return err;
+  }
+  var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: gb.toString(), sequenceFileFormat: "GENBANK", sequenceFileName: sequence.fileName, name: sequence.name});
   newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
   newPart.setSequenceFile(newSequence);
+  var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: fas || "None"});
+  newCell.setPart(newPart);
+  newCell.setJ5Bin(newBin);
+  newBin.cells().add(newCell);
+  tempPartsArray.push(newPart);
+  fullPartsAssocArray[part.getAttribute("id")] = newPart;
 });
-              var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: fas || "None"});
-              newCell.setPart(newPart);
-              newCell.setJ5Bin(newBin);
-              newBin.cells().add(newCell);
-              tempPartsArray.push(newPart);
-              fullPartsAssocArray[part.getAttribute("id")] = newPart;
+});
+  } else {
+    var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent, sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent, sequenceFileName: me.getTagText(sequence, "fileName"), name: me.getTagText(sequence, "fileName")});
+    newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
+    newPart.setSequenceFile(newSequence);
+  }
+});
             }
           }
         }
@@ -75349,6 +75658,58 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, update: function(progress, msg) {
   msgBox.updateProgress(progress / 100, progress + "% completed", msg);
 }};
+}, analizeDesign: function(design, cb) {
+  function isValidObjectID(str) {
+    if (!str) 
+    return false;
+    var len = str.length;
+    if (len == 12 || len == 24) 
+    {
+      return /^[0-9a-fA-F]+$/.test(str);
+    } else {
+      return false;
+    }
+  }
+  console.log("Analizing design...");
+  var warnings = [];
+  design.bins().each(function(bin) {
+  bin.cells().each(function(cell) {
+  if (cell.data.part_id) 
+  {
+    var part = cell.getPart();
+    if (part && !isValidObjectID(part.data.sequencefile_id)) 
+    warnings.push("Part " + part.data.name + " with not mapped sequence");
+    var sequence = part.getSequenceFile();
+    if (sequence && !(sequence.data.sequenceFileContent != "")) 
+    warnings.push("Sequence " + sequence.data.name + " with empty sequence");
+  }
+});
+});
+  sequences = {};
+  design.parts().each(function(part) {
+  var sequence = part.getSequenceFile();
+  if (sequence) 
+  {
+    var sequenceKey = sequences[sequence.data.serialize.inData.name];
+    if (sequenceKey && sequenceKey.data.id != sequence.data.id) 
+    {
+      warnings.push("Warning, Locus name conflict between " + sequenceKey.data.name + " and " + sequence.data.name);
+    } else {
+      sequences[sequence.data.serialize.inData.name] = sequence;
+    }
+  }
+});
+  setTimeout(function() {
+  if (warnings.length === 0) 
+  console.log("Everything is ok"); else {
+    console.log(warnings);
+    var warningsWindow = Ext.create('Vede.view.de.WarningsWindow').show();
+    errorStore = Ext.create("Ext.data.Store", {fields: [{name: 'messages', type: 'auto'}]});
+    errorStore.add({fileName: '', partSource: '', messages: 'test'});
+    warningsWindow.down('gridpanel').reconfigure(errorStore);
+  }
+  cb();
+}, 2000);
 }, saveDEProject: function(cb) {
   var self = this;
   var gridManager = Teselagen.manager.GridManager;
@@ -75411,6 +75772,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }});
 };
+  self.analizeDesign(design, function() {
   var countParts = 0;
   design.bins().each(function(bin) {
   bin.cells().each(function(cell) {
@@ -75447,15 +75809,13 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
         }
         part.set("partSource", sequenceFile.get("name"));
       }
-      part.save({callback: function(part) {
-  saveAssociatedSequence(part, function() {
+      saveAssociatedSequence(part, function() {
   if (countParts === 1) 
   {
     saveDesign();
   }
   countParts--;
 });
-}});
     } else {
       saveAssociatedSequence(part, function() {
   if (countParts === 1) 
@@ -75469,6 +75829,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
 });
   }
+});
 }, onDeviceEditorSaveBtnClick: function() {
   var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
   activeTab.el.mask("Loading", "loader rspin");
@@ -75511,7 +75872,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   j5runs.load({callback: function() {
   var field;
   j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
-  self.activeJ5Run = j5runs.getById(data.id);
+  self.activeJ5Run = j5runs.getById(data._id);
   for (var i = 0; i < Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem").length; i++) 
     {
       Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
@@ -77426,7 +77787,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var self = this;
   if (gridManager.clipboardPart && selectedCell) 
   {
-    Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), function(identicalPart) {
+    Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), gridManager.clipboardPart.get("partSource"), function(identicalPart) {
   var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
   var yIndex = parseInt(gridManager.selectedGridPart.attr("deGridRowIndex"));
   var oldPart = selectedCell.getPart();
@@ -78620,7 +78981,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5Parameters'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.DeviceEditor.J5Controller', Ext.app.Controller, {DeviceDesignManager: null, J5ControlsUtils: null, j5Window: null, j5ParamsWindow: null, automationParamsWindow: null, inspector: null, previousJ5ParameterData: null, j5Parameters: null, j5ParameterFields: [], automationParameters: null, automationParameterFields: [], plasmidsListText: null, oligosListText: null, directSynthesesListText: null, j5Running: false, onOpenJ5: function() {
+(Ext.cmd.derive('Vede.controller.DeviceEditor.J5Controller', Ext.app.Controller, {DeviceDesignManager: null, J5ControlsUtils: null, j5Window: null, j5ParamsWindow: null, automationParamsWindow: null, inspector: null, previousJ5ParameterData: null, j5Parameters: null, j5ParameterFields: [], automationParameters: null, automationParameterFields: [], plasmidsListText: null, oligosListText: null, directSynthesesListText: null, onOpenJ5: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var currentTabEl = (currentTab.getEl());
   var inspector = currentTab.down('InspectorPanel');
@@ -78715,10 +79076,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
     }
     self.loadPresetsSelector();
-  }
-  if (this.j5Running) 
-  {
-    this.disableAllJ5RunButtons(true);
   }
 }, onTabChange: function(j5AdvancedTab, newTab, oldTab) {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -79005,25 +79362,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }};
 }, onRunJ5Event: function() {
   this.onRunJ5BtnClick();
-}, onJ5RunStatusChanged: function(runId, runStatus) {
-  var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
-  buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
-  var button;
-  var cancelBtn = Ext.ComponentQuery.query("button[cls='cancelj5Btn']")[0];
-  cancelBtn.hide();
-  for (var i = 0; i < buttonsToEnable.length; i++) 
-    {
-      button = buttonsToEnable[i];
-      button.show();
-      button.enable();
-      button.setLoading(false);
-      if (button.cls === "runj5Btn") 
-      {
-        button.setText("Submit Run to j5");
-        $(".loader-mini").hide();
-      }
-    }
-  this.j5Running = false;
 }, onRunJ5BtnClick: function() {
   $(".toast-success").hide();
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -79095,8 +79433,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
   inspector.j5comm = Teselagen.manager.J5CommunicationManager;
   inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod, design.get("isCircular"));
-  this.j5Running = true;
-  this.disableAllJ5RunButtons();
   Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function() {
   if (!Teselagen.manager.TasksMonitor.disabled) 
   {
@@ -79107,18 +79443,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     toastr.options.onclick = null;
     toastr.info("j5 Run Submitted");
-    var runBtn = Ext.ComponentQuery.query("button[cls='runj5Btn']")[0];
-    var cancelBtn = Ext.ComponentQuery.query("button[cls='cancelj5Btn']")[0];
-    if (cancelBtn) 
-    {
-      runBtn.hide();
-      cancelBtn.show();
-      cancelBtn.on("click", function() {
-  Teselagen.manager.J5CommunicationManager.cancelj5Run(null, null, null);
-});
-    }
   } else {
-    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, 0, "Canceled");
     var messagebox = Ext.MessageBox.show({title: "Execution Error", msg: responseData, buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
     Ext.Function.defer(function() {
   messagebox.zIndexManager.bringToFront(messagebox);
@@ -79126,24 +79451,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 });
 });
-}, disableAllJ5RunButtons: function(skipAppendLoader) {
-  var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
-  buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
-  var button;
-  if (!skipAppendLoader) 
-  {
-    $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
-    $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".cancelj5Btn span span span");
-  }
-  for (var i = 0; i < buttonsToDisable.length; i++) 
-    {
-      button = buttonsToDisable[i];
-      button.disable();
-      if (button.cls === "runj5Btn") 
-      {
-        button.setText("J5 Running...");
-      }
-    }
 }, onDistributePCRBtn: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
@@ -79308,7 +79615,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.DeviceEvent = Teselagen.event.DeviceEvent;
   this.control({"#mainAppPanel": {tabchange: this.onMainAppPanelTabChange}, "panel[cls='j5InfoTab-Sub-Advanced']": {tabchange: this.onTabChangeSub}, "panel[cls='j5InfoTab-Sub']": {tabchange: this.onTabChange}, "button[cls='editj5ParamsBtn']": {click: this.onEditJ5ParamsBtnClick}, "button[cls='resetj5DefaultParamsBtn']": {click: this.resetDefaultj5Params}, "button[cls='resetj5ServerParamsBtn']": {click: this.resetServerj5Params}, "button[cls='saveAsPresetBtn']": {click: this.saveAsPresetBtn}, "button[cls='j5ParamsCancelBtn']": {click: this.onj5ParamsCancelBtnClick}, "button[cls='j5ParamsOKBtn']": {click: this.onj5ParamsOKBtnClick}, "radio[cls='useServerPlasmidsRadioBtn']": {change: this.onUseServerPlasmidsRadioBtnChange}, "radio[cls='useEmptyPlasmidsRadioBtn']": {change: this.onUseEmptyPlasmidsRadioBtnChange}, "component[cls='plasmidsListFileSelector']": {change: this.onPlasmidsListFileSelectorChange}, "radio[cls='useServerOligosRadioBtn']": {change: this.onUseServerOligosRadioBtnChange}, "radio[cls='useEmptyOligosRadioBtn']": {change: this.onUseEmptyOligosRadioBtnChange}, "component[cls='oligosListFileSelector']": {change: this.onOligosListFileSelectorChange}, "radio[cls='useServerSynthesesRadioBtn']": {change: this.onUseServerSynthesesRadioBtnChange}, "radio[cls='useEmptySynthesesRadioBtn']": {change: this.onUseEmptySynthesesRadioBtnChange}, "component[cls='directSynthesesFileSelector']": {change: this.onDirectSynthesesFileSelectorChange}, "button[cls='customizeAutomationParamsBtn']": {click: this.onCustomizeAutomationParamsBtnClick}, "button[cls='runj5Btn']": {click: this.onRunJ5BtnClick}, "button[cls='loadAssemblyBtn']": {click: this.onLoadAssemblyBtnClick}, "button[cls='automationParamsCancelBtn']": {click: this.onAutomationParamsCancelClick}, "button[cls='automationParamsOKBtn']": {click: this.onAutomationParamsOKClick}, "button[cls='automationParamsResetBtn']": {click: this.onResetAutomationParamsBtnClick}, "button[cls='downloadj5Btn']": {click: this.onDownloadj5Btn}, "button[cls='downloadDownstreamAutomationBtn']": {click: this.onDownloadDownstreamAutomationBtn}, "component[cls='sourcePlateListSelector']": {change: this.onSourcePlateListFileSelectorChange}, "component[cls='zippedPlateFilesSelector']": {change: this.onZippedPlateFilesSelectorChange}, "component[cls='assemblyFileSelector']": {change: this.onAssemblyFileSelectorChange}, "button[cls='distributePCRBtn']": {click: this.onDistributePCRBtn}, "gridpanel[title=Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='condenseAssembliesBtn']": {click: this.onCondenseAssembliesBtnClick}, "component[cls='condenseAssemblyFilesSelector']": {change: this.onCondenseAssemblyFilesSelectorChange}, "component[cls='zippedAssemblyFilesSelector']": {change: this.onZippedAssemblyFilesSelectorChange}, "button[cls='downloadCondenseAssemblyResultsBtn']": {click: this.onDownloadCondenseAssemblyResultsBtnClick}, "button[cls='stopj5runBtn']": {click: this.abortJ5Run}, "component[cls='presetSelector']": {change: this.presetSelectorChange}, "component[cls='inWindowPresetSelector']": {change: this.presetSelectorChange}});
   this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
-  this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.onJ5RunStatusChanged, this);
   this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
   this.application.on(this.CommonEvent.LOAD_PRESETS, this.loadPresetsSelector, this);
   this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
@@ -86803,26 +87109,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }});
 }, buildBtnClick: function() {
   var buildDNAWindows = Ext.create('Vede.view.j5Report.buildDNAPanel').show();
-  var showStreaming = function() {
-  return Ext.create('Ext.window.Window', {height: 474, width: 410, title: 'Build DNA', items: [{xtype: 'panel', height: 340, title: '', html: '<object type="application/x-shockwave-flash" data="http://www.justin.tv/widgets/live_embed_player.swf?channel=teselagen" id="live_embed_player_flash" height="300" width="400" bgcolor="#000000"><param name="allowFullScreen" value="true"/><param name="allowScriptAccess" value="always" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.justin.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.justin.tv&channel=teselagen&auto_play=true&start_volume=25" /></object><a href="http://www.justin.tv/teselagen#r=-rid-&amp;s=em" class="trk" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline; text-align:center">Watch live video from teselagen on www.justin.tv</a>'}, {xtype: 'panel', name: 'feedback', height: 62, margin: '10 0 0 0', title: '', html: '<h3 style="margin-left: 20px;">Connecting..</h3>'}]}).show();
-};
   buildDNAWindows.down('button').on('click', function() {
   var printDNA_URL = buildDNAWindows.down('combobox[name="server"]').value;
   var passwordField = buildDNAWindows.down('textfield[name="password"]').value;
   buildDNAWindows.close();
-  var streamingWindow = showStreaming();
-  streamingWindow.on('close', function() {
-  Teselagen.manager.PrinterMonitor.stopMonitoring();
-});
-  Ext.Ajax.request({url: printDNA_URL, params: {password: passwordField}, method: 'GET', success: function(response) {
-  var task = new Ext.util.DelayedTask(function() {
-  streamingWindow.down('panel[name="feedback"]').update('<h3 style="margin-left: 20px;">Connected. Build in progress.</h3>');
-});
-  task.delay(1000);
-  Teselagen.manager.PrinterMonitor.startMonitoring(function(update) {
-  streamingWindow.down('panel[name="feedback"]').update('<h3 style="margin-left: 20px;">' + update + '</h3>');
-});
-}});
+  if (Teselagen.manager.TasksMonitor.socket) 
+  Teselagen.manager.TasksMonitor.socket.emit('buildDna', printDNA_URL, passwordField);
 });
 }, onTabChange: function(tabPanel, newTab, oldTab) {
   if (newTab.initialCls == "j5ReportTab") 
@@ -86882,6 +87174,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else {
     startBP.enable();
     stopBP.enable();
+    startBP.setReadOnly(false);
+    stopBP.setReadOnly(false);
     if (this.selectedStartBP !== null && this.selectedStopBP !== null) 
     {
       startBP.setValue(this.selectedStartBP);
@@ -87217,10 +87511,13 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   var self = this;
   var task = new Ext.util.DelayedTask(function() {
   Teselagen.manager.SessionManager.unmaskApp();
-  Teselagen.manager.ProjectManager.loadUser();
+  Teselagen.manager.ProjectManager.loadUser(function() {
+  Teselagen.manager.TasksMonitor.bootMonitoring();
+});
 });
   this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function() {
-  task.delay(1500);
+  Teselagen.manager.ProjectExplorerManager.load();
+  task.delay(500);
 });
 }});
 
@@ -87279,6 +87576,18 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 }}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'RegisterWindow'], 0));
 ;
 
+(Ext.cmd.derive('Vede.view.common.DeletePartConfirmationWindow', Ext.window.Window, {title: 'Affected Designs', callback: function() {
+}, modal: true, resizable: false, width: 400, items: [{xtype: 'displayfield', hideLabel: true, value: 'This part will be deleted from the following designs:'}, {xtype: 'container', layout: {type: 'vbox'}, items: [{xtype: 'gridpanel', width: 400, flex: 1, columnLines: true, hideHeaders: true, rowLines: true, sortableColumns: false, columns: [{xtype: 'gridcolumn', width: 400, dataIndex: 'name', renderer: function(id, metaData, designModel) {
+  var design = designModel.data.field1;
+  return design.name;
+}}]}, {xtype: 'container', layout: {type: 'hbox'}, flex: 1, items: [{xtype: 'button', text: 'Ok', margin: 2, padding: 2, handler: function() {
+  this.up('window').callback();
+  this.up('window').close();
+}}, {xtype: 'button', text: 'Cancel', margin: 2, padding: 2, handler: function() {
+  this.up('window').close();
+}}]}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.common, 'DeletePartConfirmationWindow'], 0));
+;
+
 (Ext.cmd.derive('Vede.view.de.EugeneRuleDialog', Ext.window.Window, {statics: {FORM_WIDTH: 285}, title: 'Add Eugene Rule', cls: 'addEugeneRuleDialog', closable: false, draggable: true, modal: true, resizable: false, maxWidth: 400, initComponent: function() {
   var me = this;
   Ext.applyIf(me, {items: [{xtype: 'form', cls: 'newEugeneRuleForm', layout: {type: 'vbox'}, items: [{xtype: 'textfield', name: 'name', fieldLabel: 'Name', width: this.self.FORM_WIDTH}, {xtype: 'displayfield', cls: 'operand1Field', fieldLabel: 'Operand 1', width: this.self.FORM_WIDTH}, {xtype: 'checkbox', cls: 'negationOperatorField', fieldLabel: 'NOT?', width: this.self.FORM_WIDTH}, {xtype: 'combobox', name: 'compositionalOperator', cls: 'compositionalOperatorCombobox', fieldLabel: 'Operator', store: Teselagen.constants.Constants.COMPOP_LIST, width: this.self.FORM_WIDTH}, {xtype: 'combobox', cls: 'operand2PartField', fieldLabel: 'Operand 2', store: [], queryMode: 'local', width: this.self.FORM_WIDTH}, {xtype: 'numberfield', cls: 'operand2NumberField', fieldLabel: 'Operand 2', hidden: true, value: 0, step: 1, minValue: 0, allowDecimals: false, width: this.self.FORM_WIDTH}]}], buttons: [{text: 'Done', cls: 'submitNewEugeneRuleBtn'}, {text: 'Cancel', cls: 'cancelNewEugeneRuleBtn'}]});
@@ -87290,6 +87599,15 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 (Ext.cmd.derive('Vede.view.de.EugeneRulesImportDialog', Ext.window.Window, {height: 558, width: 593, title: 'Import Eugene Rules', autoScroll: true, items: [{xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'conflict', title: 'Conflicting rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', cls: 'gridcolumn-wrap-text', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true, renderer: function(val) {
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'new', title: 'New rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'ignored', title: 'Ignored statements', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'repeated', title: 'Repeated rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'button', margin: '10 0 0 10', text: 'Ok'}, {xtype: 'button', margin: '10 0 0 10', text: 'Cancel'}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'EugeneRulesImportDialog'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.de.WarningsWindow', Ext.window.Window, {cls: 'warningsWindow', width: 800, height: 400, title: 'Warnings', layout: 'fit', modal: true, items: [{xtype: 'gridpanel', autoScroll: true, forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
+  var columns = dataview.panel.columns;
+  for (var i = 0; i < columns.length; i++) 
+    {
+      columns[i].autoSize();
+    }
+}}}, columns: [{xtype: 'gridcolumn', text: 'Messages', autoScroll: true, dataIndex: 'messages'}]}]}, 0, ["warningsWindow"], ["panel", "window", "component", "container", "box", "warningsWindow"], {"panel": true, "window": true, "component": true, "container": true, "box": true, "warningsWindow": true}, ["widget.warningsWindow"], 0, [Vede.view.de, 'WarningsWindow'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.j5AutomationParameters', Ext.window.Window, {height: 490, padding: 5, width: 490, title: 'Downstream Automation Parameters', id: 'j5AutomationParameters', resizable: false, draggable: false, modal: true, initComponent: function() {
