@@ -45,13 +45,18 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             xtype: 'gridcolumn',
             text: 'Task Type',
             autoScroll: true,
-            dataIndex: 'taskType'
+            dataIndex: 'taskType',
         },
         {
             xtype: 'gridcolumn',
             text: 'Status',
             autoScroll: true,
-            dataIndex: 'status'
+            dataIndex: 'status',
+            // renderer: functon(value) {
+            //     if(value==="In progress") {
+            //         return '<div class="pace-activity"></div>'
+            //     }
+            // }
         },
         {
             xtype: 'gridcolumn',
@@ -61,24 +66,27 @@ Ext.define('Vede.view.common.TaskMonitorView', {
         },
         {
             xtype:'actioncolumn',
+            align: 'center',
             items: [{
-                icon: 'extjs/examples/shared/icons/fam/cog_edit.png',
-                tooltip: 'Vdit',
-                text: 'View',
-                handler: function(grid, rowIndex, colIndex) {
-                    var rec = grid.getStore().getAt(rowIndex);
-                    alert("Edit " + rec.get('firstname'));
-                    debugger;
-                }
-            },{
-                icon: 'extjs/examples/restful/images/delete.png',
-                text: 'Cancel',
-                tooltip: 'Cancel',
+                icon: 'resources/images/ux/task/blocked.png',
+                iconCls: 'task-icon',
+                hidden: true,
+                tooltip: 'Cancel Task',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     var id = rec.data.taskRefID;
                     socket.emit('cancelj5run', id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
+                }
+            },{
+                icon: 'resources/images/ux/task/new-tab.png',
+                hidden: true,
+                iconCls: 'task-icon',
+                tooltip: 'View Result',
+                handler: function(grid, rowIndex, colIndex) {
+                    var rec = grid.getStore().getAt(rowIndex);
+                    alert("Edit " + rec.get('firstname'));
+                    debugger;
                 }
             }]
         }      
