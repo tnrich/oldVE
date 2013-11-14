@@ -52,11 +52,11 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             text: 'Status',
             autoScroll: true,
             dataIndex: 'status',
-            // renderer: functon(value) {
-            //     if(value==="In progress") {
-            //         return '<div class="pace-activity"></div>'
-            //     }
-            // }
+            renderer: function(value) {
+                if(value==="In progress") {
+                    return '<div class="pace-activity"></div>Running...'
+                }
+            }
         },
         {
             xtype: 'gridcolumn',
