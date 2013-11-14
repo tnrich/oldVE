@@ -59,9 +59,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );   
 
                 socket.on('update',function(data){
-                    console.log("New update!");
-                    console.log(data);
-
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
