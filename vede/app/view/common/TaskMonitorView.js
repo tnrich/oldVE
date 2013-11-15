@@ -55,6 +55,12 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             renderer: function(value) {
                 if(value==="In progress") {
                     return '<div class="pace-activity"></div>Running...'
+                } else if(value==="Completed") {
+                    return '<div class="status-note status-note-completed" style="margin-right:10px"></div>Completed.'
+                } else if(Value==="Completed with warnings") {
+                    return '<div class="status-note status-note-warning" style="margin-right:10px"></div>Completed with warnings.'
+                } else if(value==="Error") {
+                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Completed'
                 }
             }
         },
