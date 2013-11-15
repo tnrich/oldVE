@@ -64,25 +64,20 @@ module.exports = function(app) {
                     app.sockets[name].emit('update',user);
                 });
             })
-            /*
-            var http = require('http');
-
-            var options = {
+            
+            app.http.request(
+            {
               host: url,
               port: 80,
               path: '/start',
               method: 'GET'
-            };
-
-            http.request(options, function(res) {
+            }, function(res) {
               console.log('STATUS: ' + res.statusCode);
               console.log('HEADERS: ' + JSON.stringify(res.headers));
               res.setEncoding('utf8');
-              res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
-              });
+              res.on('error', function () {});
             }).end();
-            */            
+             
         });
 
         client.on('disconnect', function() {});
