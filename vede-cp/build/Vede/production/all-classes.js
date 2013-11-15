@@ -71415,10 +71415,17 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     {
       columns[i].autoSize();
     }
-}}}, columns: [{xtype: 'gridcolumn', text: 'TaskName', autoScroll: true, dataIndex: 'taskName'}, {xtype: 'gridcolumn', text: 'Task Type', autoScroll: true, dataIndex: 'taskType'}, {xtype: 'gridcolumn', text: 'Status', autoScroll: true, dataIndex: 'status'}, {xtype: 'gridcolumn', text: 'Date Initialized', autoScroll: true, dataIndex: 'dateStarted'}, {xtype: 'actioncolumn', align: 'center', items: [{icon: 'resources/images/ux/task/blocked.png', iconCls: 'task-icon', hidden: true, tooltip: 'Cancel Task', handler: function(grid, rowIndex, colIndex) {
+}}}, columns: [{xtype: 'gridcolumn', text: 'TaskName', autoScroll: true, dataIndex: 'taskName'}, {xtype: 'gridcolumn', text: 'Task Type', autoScroll: true, dataIndex: 'taskType'}, {xtype: 'gridcolumn', text: 'Status', autoScroll: true, dataIndex: 'status', renderer: function(value) {
+  if (value === "In progress") 
+  {
+    return '<div class="pace-activity"></div>Running...';
+  }
+}}, {xtype: 'gridcolumn', text: 'Date Initialized', autoScroll: true, dataIndex: 'dateStarted'}, {xtype: 'actioncolumn', align: 'center', items: [{icon: 'resources/images/ux/task/blocked.png', iconCls: 'task-icon', hidden: true, tooltip: 'Cancel Task', handler: function(grid, rowIndex, colIndex) {
   var rec = grid.getStore().getAt(rowIndex);
-  var id = rec.data.taskRefID;
-  socket.emit('cancelj5run', id);
+  if (rec.data.taskType === "j5run") 
+  socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id);
+  if (rec.data.taskType === "builddna") 
+  socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id);
   Teselagen.manager.ProjectManager.currentTasks.remove(rec);
 }}, {icon: 'resources/images/ux/task/new-tab.png', hidden: true, iconCls: 'task-icon', tooltip: 'View Result', handler: function(grid, rowIndex, colIndex) {
   var rec = grid.getStore().getAt(rowIndex);
@@ -87114,7 +87121,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var passwordField = buildDNAWindows.down('textfield[name="password"]').value;
   buildDNAWindows.close();
   if (Teselagen.manager.TasksMonitor.socket) 
-  Teselagen.manager.TasksMonitor.socket.emit('buildDna', printDNA_URL, passwordField);
+  Teselagen.manager.TasksMonitor.socket.emit('buildDNA', printDNA_URL, passwordField);
 });
 }, onTabChange: function(tabPanel, newTab, oldTab) {
   if (newTab.initialCls == "j5ReportTab") 

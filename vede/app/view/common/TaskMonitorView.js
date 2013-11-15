@@ -80,8 +80,8 @@ Ext.define('Vede.view.common.TaskMonitorView', {
                 tooltip: 'Cancel Task',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
-                    var id = rec.data.taskRefID;
-                    socket.emit('cancelj5run', id );
+                    if(rec.data.taskType === "j5run") socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
+                    if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 }
             },{

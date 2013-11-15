@@ -25039,15 +25039,18 @@ img {
 
 /* line 1486, ../../../../sass/src/view/AppViewport.scss */
 .task-icon {
-  width: 24px;
+  width: 18px;
+  height: 18px;
   margin: 0px 20px;
 }
 
-/* line 1491, ../../../../sass/src/view/AppViewport.scss */
+/* line 1492, ../../../../sass/src/view/AppViewport.scss */
 .pace-activity {
-  display: block;
-  position: fixed;
+  display: inline-block;
+  margin-right: 10px;
   width: 14px;
+  position: relative;
+  top: 2px;
   height: 14px;
   border: solid 2px transparent;
   border-top-color: #29d;
@@ -25061,13 +25064,13 @@ img {
 }
 
 @-webkit-keyframes pace-spinner {
-  /* line 1508, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1511, ../../../../sass/src/view/AppViewport.scss */
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
 
-  /* line 1509, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1512, ../../../../sass/src/view/AppViewport.scss */
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -25075,13 +25078,13 @@ img {
 }
 
 @-moz-keyframes pace-spinner {
-  /* line 1512, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1515, ../../../../sass/src/view/AppViewport.scss */
   0% {
     -moz-transform: rotate(0deg);
     transform: rotate(0deg);
   }
 
-  /* line 1513, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1516, ../../../../sass/src/view/AppViewport.scss */
   100% {
     -moz-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -25089,13 +25092,13 @@ img {
 }
 
 @-o-keyframes pace-spinner {
-  /* line 1516, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1519, ../../../../sass/src/view/AppViewport.scss */
   0% {
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
 
-  /* line 1517, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1520, ../../../../sass/src/view/AppViewport.scss */
   100% {
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -25103,13 +25106,13 @@ img {
 }
 
 @-ms-keyframes pace-spinner {
-  /* line 1520, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1523, ../../../../sass/src/view/AppViewport.scss */
   0% {
     -ms-transform: rotate(0deg);
     transform: rotate(0deg);
   }
 
-  /* line 1521, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1524, ../../../../sass/src/view/AppViewport.scss */
   100% {
     -ms-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -25117,13 +25120,13 @@ img {
 }
 
 @keyframes pace-spinner {
-  /* line 1524, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1527, ../../../../sass/src/view/AppViewport.scss */
   0% {
     transform: rotate(0deg);
     transform: rotate(0deg);
   }
 
-  /* line 1525, ../../../../sass/src/view/AppViewport.scss */
+  /* line 1528, ../../../../sass/src/view/AppViewport.scss */
   100% {
     transform: rotate(360deg);
     transform: rotate(360deg);

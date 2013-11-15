@@ -50,32 +50,34 @@ module.exports = function(app) {
             app.cache.removeTask( username , j5runid, function(){});
         });
 
+        client.on("cancelbuilddna", function(username, builddnaid){
+            console.log("Attempt to cancel builddna")
+
+            app.cache.removeTask( username , builddnaid, function(){});
+        });
+
         client.on("buildDNA", function(url,password){
+            console.log("Trying to build DNA");
             name = "rpavez";
-            app.cache.cacheDNAbuild(name,function(){
+            app.cache.cacheDNABuild(name,function(){
                 app.cache.get(name,function(err,user){
                     app.sockets[name].emit('update',user);
                 });
             })
-            /*
-            var http = require('http');
-
-            var options = {
+            
+            app.http.request(
+            {
               host: url,
               port: 80,
               path: '/start',
               method: 'GET'
-            };
-
-            http.request(options, function(res) {
+            }, function(res) {
               console.log('STATUS: ' + res.statusCode);
               console.log('HEADERS: ' + JSON.stringify(res.headers));
               res.setEncoding('utf8');
-              res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
-              });
+              res.on('error', function () {});
             }).end();
-            */            
+             
         });
 
         client.on('disconnect', function() {});
