@@ -92,7 +92,9 @@
                 }
             }],
             renderer: function(value, metaData, record, row, col, store, gridView) {
-                console.log(record);
+                if(record.data.status!=="In progress") {
+                    console.log(row);
+                }
             }
         }      
         ],
