@@ -542,8 +542,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
             }
 
-            console.log("delayedLinkedPartsLookup is:" + delayedLinkedPartsLookup);
-
             for(var k = 0; k < delayedLinkedPartsLookup.length; k++) {
                 var delayed = delayedLinkedPartsLookup[k];
                 var originalPart = fullPartsAssocArray[delayed.part.getAttribute("id")];
@@ -917,7 +915,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     backgroundSequenceProcessing: function(parts){
         // debugger;
-        console.log(parts);
         var processFlag = true;
         toastr.options.onclick = function(){
             processFlag = false;
