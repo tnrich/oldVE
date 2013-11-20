@@ -136,6 +136,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                             currentTabEl.unmask();
                             inspectorController.renderCollectionInfo();
                             toastr.options.onclick = null;
+                            
                             toastr.info("Part Added"); 
 
                         } else {

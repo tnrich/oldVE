@@ -67,6 +67,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.partPropertiesForm.loadRecord(newPart);
         // toastr.options.onclick = null;
+
+
+
+
         // toastr.info("Part Cleared");
         this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
     },
@@ -732,6 +736,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     selectedRule.destroy();
                     this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,this.selectedPart);
                     toastr.options.onclick = null;
+
+
+
+
                     toastr.info("Eugene Rule Removed");
 
                     Teselagen.manager.GridCommandPatternManager.addCommand({
@@ -821,6 +829,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         
         toastr.options.onclick = null;
+        
         toastr.info("Eugene Rule Added");
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         

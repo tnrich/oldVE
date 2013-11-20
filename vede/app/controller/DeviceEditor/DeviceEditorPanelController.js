@@ -133,6 +133,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     callback: function () {
                         Ext.getCmp("mainAppPanel").getActiveTab().setTitle(text);
                         toastr.options.onclick = null;
+                        
                         toastr.info("Design renamed");
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
@@ -183,6 +184,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin, 0);
 
                 toastr.options.onclick = null;
+                
                 toastr.info("Design Cleared");
 
             }
@@ -206,6 +208,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
                 toastr.options.onclick = null;
+                
                 toastr.info("Design Deleted");
              }
          }
@@ -402,6 +405,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
                         toastr.options.onclick = null;
+                        
                         toastr.info("Design Saved");
                     });
                     gridManager.setListenersEnabled(true);
@@ -512,6 +516,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onJ5buttonClick: function () {
         Vede.application.fireEvent(this.CommonEvent.RUN_J5);
         toastr.options.onclick = null;
+        
+
         toastr.info("Design Saved");
     },
 

@@ -387,6 +387,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                             currentTab.model.parts().add(self.selectedPart);
 
                             toastr.options.onclick = null;
+                            
                             toastr.info("Part Definition Changed");
                             Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                             Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
@@ -447,6 +448,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
                         callback: function(record, operation, success){
                             if(success) {
                                 toastr.options.onclick = null;
+                                
                                 toastr.info("Part Definition Changed");
                                 Vede.application.fireEvent(self.DeviceEvent.RELOAD_DESIGN);
                                 Vede.application.fireEvent(self.DeviceEvent.RERENDER_COLLECTION_INFO);
