@@ -77,6 +77,7 @@
                 icon: 'resources/images/ux/task/blocked.png',
                 iconCls: 'task-icon',
                 tooltip: 'Cancel Task',
+                enabled: false,
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     if(rec.data.taskType === "j5run") socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
