@@ -516,7 +516,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                     sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
                                     sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
                                     sequenceFileName: me.getTagText(sequence, "fileName"),
-                                    name: me.getTagText(sequence, "fileName");
+                                    name: me.getTagText(sequence, "fileName")
                                 });
 
                                 newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
