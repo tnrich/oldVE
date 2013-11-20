@@ -90,10 +90,10 @@
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                 }
-            },
+            }],
             renderer: function(record) {
                 console.log(record);
-            }]
+            }
         }      
         ],
         //listeners: {
