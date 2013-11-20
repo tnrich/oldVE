@@ -84,6 +84,17 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                         task = data.tasks[taskKey];
                         task.dateStarted = new Date(task.dateStarted);
                         Teselagen.manager.ProjectManager.currentTasks.add(task);
+                        
+                        if(task.status!=="In progress") {
+                            var startDate = taskDateStarted.date;
+                            var endDate = Date.now();
+                            var elapsed = endDate - startDate;
+                            elapsed = Math.round(elapsed/1000);
+                            elapsed = self.elapsedDate(elapsed);
+                            toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
+                            toastr.success("j5 Run for " +task.taskName + " " + task.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: task});
+                            toastr.options.timeOut = 5000;
+                        }
                     }
                 });
 
