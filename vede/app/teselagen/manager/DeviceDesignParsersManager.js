@@ -516,18 +516,33 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                     sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
                                     sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
                                     sequenceFileName: me.getTagText(sequence, "fileName"),
-                                    name: me.getTagText(sequence, "fileName")
+                                    name: me.getTagText(sequence, "fileName");
                                 });
 
                                 newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
                                 //newSequence.set("name",newPart.get("name"));
 
                                 newPart.setSequenceFile(newSequence);
+
+                                var newCell = Ext.create("Teselagen.models.Cell", {
+                                    index: j,
+                                    fas: fas || "None"
+                                });
+
+                                newCell.setPart(newPart);
+                                newCell.setJ5Bin(newBin);
+
+                                newBin.cells().add(newCell);
+
+                                tempPartsArray.push(newPart);
+                                fullPartsAssocArray[part.getAttribute("id")] = newPart;
                             }
                         });
                     }
                 }
             }
+
+            console.log("delayedLinkedPartsLookup is:" + delayedLinkedPartsLookup);
 
             for(var k = 0; k < delayedLinkedPartsLookup.length; k++) {
                 var delayed = delayedLinkedPartsLookup[k];
@@ -577,8 +592,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             });
 
             newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-            if( operand2isNumber ) {newEugeneRule.setOperand2(operand2);}
-            else {newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);}
+            
+            console.log(operand2isNumber);
+            if( operand2isNumber ) {
+                newEugeneRule.setOperand2(operand2);
+            } else {
+                newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+            }
+
             rulesArray.push(newEugeneRule);
         }
 
