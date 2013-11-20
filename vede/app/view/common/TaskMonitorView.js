@@ -76,7 +76,6 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             items: [{
                 icon: 'resources/images/ux/task/blocked.png',
                 iconCls: 'task-icon',
-                hidden: true,
                 tooltip: 'Cancel Task',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
@@ -86,7 +85,6 @@ Ext.define('Vede.view.common.TaskMonitorView', {
                 }
             },{
                 icon: 'resources/images/ux/task/new-tab.png',
-                hidden: true,
                 iconCls: 'task-icon',
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
