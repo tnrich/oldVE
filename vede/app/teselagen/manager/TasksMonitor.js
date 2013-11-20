@@ -86,7 +86,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                         Teselagen.manager.ProjectManager.currentTasks.add(task);
                         
                         if(task.status!=="In progress") {
-                            var startDate = taskDateStarted.date;
+                            var startDate = task.DateStarted;
                             var endDate = Date.now();
                             var elapsed = endDate - startDate;
                             elapsed = Math.round(elapsed/1000);
