@@ -89,8 +89,6 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
-                    alert("Edit " + rec.get('firstname'));
-                    debugger;
                 }
             }]
         }      
