@@ -67,7 +67,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             Teselagen.manager.DeviceDesignParsersManager.parseXML(pEvt.target.result,pFile.name);
         } else {
             Ext.MessageBox.alert('Error', 'Invalid file format');
-        }git
+        }
         }
         catch(exception)
         {
