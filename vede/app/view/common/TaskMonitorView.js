@@ -82,6 +82,9 @@
                     if(rec.data.taskType === "j5run") socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
+                },
+                renderer: function(record) {
+                    console.log(record);
                 }
             },{
                 icon: 'resources/images/ux/task/new-tab.png',

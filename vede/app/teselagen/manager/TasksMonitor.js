@@ -91,9 +91,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                             var elapsed = endDate - startDate;
                             elapsed = Math.round(elapsed/1000);
                             elapsed = self.elapsedDate(elapsed);
-                            toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
-                            toastr.success("j5 Run for " +task.taskName + " " + task.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: task});
-                            toastr.options.timeOut = 5000;
+                            // toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
+                            // toastr.success("j5 Run for " +task.taskName + " " + task.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: task});
+                            // toastr.options.timeOut = 5000;
                         }
                     }
                 });
