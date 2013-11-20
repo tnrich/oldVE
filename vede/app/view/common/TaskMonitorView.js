@@ -93,7 +93,7 @@
             }],
             renderer: function(value, metaData, record, row, col, store, gridView) {
                 if(record.data.status!=="In progress") {
-                    console.log(row);
+                    console.log(gridView);
                 }
             }
         }      
