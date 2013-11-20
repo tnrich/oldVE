@@ -91,7 +91,7 @@
                     var rec = grid.getStore().getAt(rowIndex);
                 }
             }],
-            renderer: function(record) {
+            renderer: function(value, metaData, record, row, col, store, gridView) {
                 console.log(record);
             }
         }      
