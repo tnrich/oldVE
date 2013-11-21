@@ -69,8 +69,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     },
 
     condenseAssemblyFiles: function(data,cb){
-
         toastr.options.onclick = null;
+        
         toastr.info("Condensing Assembly Files...");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -93,6 +93,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
 
                 toastr.options.onclick = null;
+                
                 toastr.success("Assembly Files Ready to Download");
                 self.condenseAssemblyFilesResults = response;
                 return cb(true);
@@ -107,6 +108,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     distributePCRRequest: function(data,cb){
         toastr.options.onclick = null;
+        
         toastr.info("Distributing PCR Reactions...");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -136,6 +138,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
 
                 toastr.options.onclick = null;
+                
                 toastr.success("PCR Distribution Complete");
 
                 self.designDownstreamAutomationResults = response;

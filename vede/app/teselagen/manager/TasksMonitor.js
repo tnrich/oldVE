@@ -60,6 +60,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('update',function(data){
+                    console.log(data);
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
@@ -83,6 +84,17 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                         task = data.tasks[taskKey];
                         task.dateStarted = new Date(task.dateStarted);
                         Teselagen.manager.ProjectManager.currentTasks.add(task);
+                        
+                        if(task.status!=="In progress") {
+                            var startDate = task.DateStarted;
+                            var endDate = Date.now();
+                            var elapsed = endDate - startDate;
+                            elapsed = Math.round(elapsed/1000);
+                            elapsed = self.elapsedDate(elapsed);
+                            // toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
+                            // toastr.success("j5 Run for " +task.taskName + " " + task.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: task});
+                            // toastr.options.timeOut = 5000;
+                        }
                     }
                 });
 
@@ -96,6 +108,23 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
         });
     },
+
+    elapsedDate: function (seconds)
+    {
+        var numdays = Math.floor((seconds % 31536000) / 86400); 
+        var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+        var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+        var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+        if (numdays>0) {
+            return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+        }else if (numhours>0) {
+            return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+        }else if (numminutes>0) {
+            return numminutes + " minutes " + numseconds + " seconds";
+        } else {
+        return numseconds + " seconds";
+        }
+    }
 
     /*
     addJ5RunObserver: function(j5run){

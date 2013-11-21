@@ -293,6 +293,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             if (btn==="ok") {
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(selectedDesign);
                 toastr.options.onclick = null;
+                
                 toastr.info("Design '" + designName +  "' Deleted");
              }
          }
@@ -313,6 +314,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             if (btn==="ok") {
                 Teselagen.manager.ProjectManager.deleteProject(selectedProject);
                 toastr.options.onclick = null;
+                
                 toastr.info("Design '" + projectName +  "' Deleted");
              }
          }

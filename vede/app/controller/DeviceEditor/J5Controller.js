@@ -24,6 +24,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5ParamsWindow: null,
     automationParamsWindow: null,
     inspector: null,
+    tasksWindow: null,
 
     previousJ5ParameterData: null,
 
@@ -705,7 +706,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     toastr.options.onclick = null;
+                    
                     toastr.info("j5 Run Submitted");
+                    if(this.tasksWindow) this.tasksWindow.toggleCollapse();
+                    else 
+                    {
+                        this.tasksWindow = Ext.getCmp('taskMonitor').expand();
+                        console.log(Teselagen.manager.ProjectManager.currentTasks);
+                        this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
+                    }
                 } else {
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
