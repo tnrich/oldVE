@@ -7,6 +7,7 @@ module.exports = function(app, express) {
     app.program
     .version('0.0.1')
     .option('-p, --prod', 'Run Production environment')
+    .option('-d, --remote', 'Force use remote DB')
     .option('-r, --port <n>', 'Node port default is 3000', parseInt)
     .parse(process.argv);
 
@@ -50,6 +51,21 @@ module.exports = function(app, express) {
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
     }
 
+    if(app.program.remote) {
+        console.log("Using remote");
+        app.logger.log("USING REMOTE DB");
+        Opts = {
+            host: "54.215.198.196",
+            port: 27017,
+            username: "prod",
+            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
+            authRequired : true,
+            redis_host: '54.215.198.196',
+            redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
+        };
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;        
+    }
+
     /*
     For quick activation
     db.users.update({"username" : "rpavez"},{$set:{"activated":true}})
@@ -75,14 +91,7 @@ module.exports = function(app, express) {
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
             secret: 'j5',
-            store: new MongoStore(
-                {
-                    db: app.dbname,
-                    host: 'localhost',
-                    collection: 'sessions',
-                    auto_reconnect: true
-                }
-            )
+            store: new express.session.MemoryStore()
         }));
 
         app.use(app.passport.initialize());
