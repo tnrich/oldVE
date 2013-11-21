@@ -75,9 +75,7 @@ module.exports = function(app) {
         },
 
         updateAllPartHashes: function(req, res) {
-            Part.find({
-                user_id: mongoose.Types.ObjectId("522f9f52299669d80300030b")
-            }).exec(function(err, parts) {
+            Part.find().exec(function(err, parts) {
                 if(err) {
                     return res.send(err);
                 } else {
