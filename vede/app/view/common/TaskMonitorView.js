@@ -82,15 +82,14 @@
                     if(rec.data.taskType === "j5run") socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
+                },
+                renderer: function(value, metaData, record, row, col, store, gridView) {
+                    if(record.data.status!=="In progress") {
+                        cm = grid.getColumnModel();
+                        cm.setHidden(0,true);           
+                    }
                 }
-            },{
-                
             }],
-            renderer: function(value, metaData, record, row, col, store, gridView) {
-                if(record.data.status!=="In progress") {
-                    console.log(gridView);
-                }
-            }
         },
         {
             xtype:'actioncolumn',
