@@ -502,8 +502,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
-                                        Ext.Ajax.abort(grid.store.proxy.activeRequest);
-                                        delete grid.store.proxy.activeRequest;
+                                        if(grid.store.proxy.activeRequest) 
+                                        {
+                                            Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                            delete grid.store.proxy.activeRequest;
+                                        }
                                         grid.store.clearFilter(true);
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
@@ -728,8 +731,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     change: function(field, newValue, oldValue, eOpts) {                                        
                                         Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
-                                        Ext.Ajax.abort(grid.store.proxy.activeRequest);
-                                        delete grid.store.proxy.activeRequest;
+                                        if(grid.store.proxy.activeRequest) 
+                                        {
+                                            Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                            delete grid.store.proxy.activeRequest;
+                                        }
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
