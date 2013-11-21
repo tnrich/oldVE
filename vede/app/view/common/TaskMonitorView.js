@@ -85,7 +85,7 @@
                 }
             }],
             listeners: {
-                'beforerender': function(grid) {
+                beforerender: function(grid) {
                     console.log(grid.getRowModel());
                     // if(record.data.status!=="In progress") {
                     //     cm = grid.getColumnModel();
