@@ -79,7 +79,7 @@ module.exports = function(app) {
                 if(err) {
                     return res.send(err);
                 } else {
-                    async.forEach(parts, function(part, done) {
+                    /*async.forEach(parts, function(part, done) {
                         Part.generateDefinitionHash(null, part, function(hash) {
                             part.definitionHash = hash;
                             part.save(done);
@@ -90,8 +90,8 @@ module.exports = function(app) {
                         } else {
                             return res.send('yay');
                         }
-                    });
-                    /*async.forEach(parts, function(part, done) {
+                    });*/
+                    async.forEach(parts, function(part, done) {
                         Part.generateDefinitionHash(null, part, function(hash) {
                             part.definitionHash = hash;
                             part.save(function(err) {
@@ -153,7 +153,7 @@ module.exports = function(app) {
                         } else {
                             return res.send('Success!');
                         }
-                    });*/
+                    });
                 }
             });
         },
