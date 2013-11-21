@@ -502,6 +502,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
+                                        Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                        delete grid.store.proxy.activeRequest;
                                         grid.store.clearFilter(true);
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
@@ -723,9 +725,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 emptyCls: 'empty-search-field',
                                 margin: 13,
                                 listeners: {
-                                    change: function(field, newValue, oldValue, eOpts) {
+                                    change: function(field, newValue, oldValue, eOpts) {                                        
                                         Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
+                                        Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                        delete grid.store.proxy.activeRequest;
                                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }

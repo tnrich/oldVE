@@ -29,7 +29,8 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                     Teselagen.manager.ProjectManager.parts.clearFilter(true);
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
-                    //grid.down('pagingtoolbar').doRefresh();
+                    Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                    delete grid.store.proxy.activeRequest;
                     grid.store.filter("name", Ext.String.escapeRegex(newValue));
                 }
             }
