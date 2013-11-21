@@ -83,17 +83,7 @@
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 }
-            }],
-            listeners: {
-                beforerender: function(grid, rowIndex) {
-                    var rec = grid.getStore().getAt(rowIndex);
-                    console.log(rec);
-                    // if(record.data.status!=="In progress") {
-                    //     cm = grid.getColumnModel();
-                    //     cm.setHidden(0,true);
-                    // }
-                }
-            }
+            }]
         },
         {
             xtype:'actioncolumn',
