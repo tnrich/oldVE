@@ -86,10 +86,11 @@
             }],
             listeners: {
                 'beforerender': function(grid) {
-                    if(record.data.status!=="In progress") {
-                        cm = grid.getColumnModel();
-                        cm.setHidden(0,true);
-                    }
+                    console.log(grid.getRowModel());
+                    // if(record.data.status!=="In progress") {
+                    //     cm = grid.getColumnModel();
+                    //     cm.setHidden(0,true);
+                    // }
                 }
             }
         },
