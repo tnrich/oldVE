@@ -148,11 +148,11 @@ Ext.define("Teselagen.models.Part", {
     },
     {
         name: "dateCreated",
-        type: "string",
+        type: "string"
     },
     {
         name: "dateModified",
-        type: "string",
+        type: "string"
     },
     {
         name: "user_id",
