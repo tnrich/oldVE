@@ -84,15 +84,15 @@
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 }
             }],
-            listeners: {
-                beforerender: function(grid) {
-                    console.log(grid.getRowModel());
-                    // if(record.data.status!=="In progress") {
-                    //     cm = grid.getColumnModel();
-                    //     cm.setHidden(0,true);
-                    // }
-                }
-            }
+            // listeners: {
+            //     beforerender: function(grid) {
+            //         console.log(grid.getRowModel());
+            //         // if(record.data.status!=="In progress") {
+            //         //     cm = grid.getColumnModel();
+            //         //     cm.setHidden(0,true);
+            //         // }
+            //     }
+            // }
         },
         {
             xtype:'actioncolumn',
