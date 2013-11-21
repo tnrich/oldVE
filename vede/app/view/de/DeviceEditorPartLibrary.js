@@ -30,13 +30,15 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
                     if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
-                    else
-                    {
-                        grid.timeoutId = setTimeout(function(){
-                            grid.store.clearFilter(true);
-                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
-                        }, 200);
-                    }
+                    grid.timeoutId = setTimeout(function(){
+                        if(grid.store.proxy.activeRequest) 
+                        {
+                            Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                            delete grid.store.proxy.activeRequest;
+                        }
+                        grid.store.clearFilter(true);
+                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                    }, 200);
                 }
             }
         },

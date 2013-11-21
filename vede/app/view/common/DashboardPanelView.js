@@ -504,6 +504,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         var grid = Ext.getCmp('sequenceLibrary');
                                         if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
                                         grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
                                             grid.store.clearFilter(true);
                                             grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                         }, 200);
@@ -731,6 +736,11 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         var grid = Ext.getCmp('partLibrary');
                                         if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
                                         grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
                                             grid.store.clearFilter(true);
                                             grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                         }, 200);
