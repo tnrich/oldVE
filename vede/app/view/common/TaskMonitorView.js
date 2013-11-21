@@ -77,7 +77,6 @@
                 icon: 'resources/images/ux/task/blocked.png',
                 iconCls: 'task-icon',
                 tooltip: 'Cancel Task',
-                enabled: false,
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     if(rec.data.taskType === "j5run") socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
@@ -85,19 +84,25 @@
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 }
             },{
+                
+            }],
+            renderer: function(value, metaData, record, row, col, store, gridView) {
+                if(record.data.status!=="In progress") {
+                    console.log(gridView);
+                }
+            }
+        },
+        {
+            xtype:'actioncolumn',
+            align: 'center',
+            items: [{
                 icon: 'resources/images/ux/task/new-tab.png',
                 iconCls: 'task-icon',
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                 }
-            }],
-            renderer: function(value, metaData, record, row, col, store, gridView) {
-                if(record.data.status!=="In progress") {
-                    console.log(col);
-                    console.log(value);
-                }
-            }
+            }]
         }      
         ],
         //listeners: {
