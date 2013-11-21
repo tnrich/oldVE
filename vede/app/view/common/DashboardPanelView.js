@@ -503,13 +503,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
                                         if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
-                                        else
-                                        {
-                                            grid.timeoutId = setTimeout(function(){
-                                                grid.store.clearFilter(true);
-                                                grid.store.filter("name", Ext.String.escapeRegex(newValue));
-                                            }, 200);
-                                        }
+                                        grid.timeoutId = setTimeout(function(){
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                        }, 200);
                                     }
                                 }
                             },
@@ -733,13 +730,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
                                         if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
-                                        else
-                                        {
-                                            grid.timeoutId = setTimeout(function(){
-                                                grid.store.clearFilter(true);
-                                                grid.store.filter("name", Ext.String.escapeRegex(newValue));
-                                            }, 200);
-                                        }
+                                        grid.timeoutId = setTimeout(function(){
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                        }, 200);
                                     }
                                 }
                             },
