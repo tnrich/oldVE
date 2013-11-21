@@ -29,12 +29,14 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                     Teselagen.manager.ProjectManager.parts.clearFilter(true);
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
-                    if(grid.store.proxy.activeRequest) 
+                    if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                    else
                     {
-                        Ext.Ajax.abort(grid.store.proxy.activeRequest);
-                        delete grid.store.proxy.activeRequest;
+                        grid.timeoutId = setTimeout(function(){
+                            grid.store.clearFilter(true);
+                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                        }, 200);
                     }
-                    grid.store.filter("name", Ext.String.escapeRegex(newValue));
                 }
             }
         },

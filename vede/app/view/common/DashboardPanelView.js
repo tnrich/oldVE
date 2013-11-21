@@ -502,13 +502,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
-                                        if(grid.store.proxy.activeRequest) 
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        else
                                         {
-                                            Ext.Ajax.abort(grid.store.proxy.activeRequest);
-                                            delete grid.store.proxy.activeRequest;
+                                            grid.timeoutId = setTimeout(function(){
+                                                grid.store.clearFilter(true);
+                                                grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            }, 200);
                                         }
-                                        grid.store.clearFilter(true);
-                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
                             },
@@ -731,12 +732,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     change: function(field, newValue, oldValue, eOpts) {                                        
                                         Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
-                                        if(grid.store.proxy.activeRequest) 
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        else
                                         {
-                                            Ext.Ajax.abort(grid.store.proxy.activeRequest);
-                                            delete grid.store.proxy.activeRequest;
+                                            grid.timeoutId = setTimeout(function(){
+                                                grid.store.clearFilter(true);
+                                                grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            }, 200);
                                         }
-                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
                                     }
                                 }
                             },
