@@ -38,6 +38,7 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                         }
                         grid.store.clearFilter(true);
                         grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                        if(!grid.store.proxy.activeRequest) grid.store.load();
                     }, 200);
                 }
             }

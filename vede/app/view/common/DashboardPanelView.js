@@ -511,6 +511,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             }
                                             grid.store.clearFilter(true);
                                             grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
                                         }, 200);
                                     }
                                 }
@@ -743,6 +744,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             }
                                             grid.store.clearFilter(true);
                                             grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
                                         }, 200);
                                     }
                                 }
