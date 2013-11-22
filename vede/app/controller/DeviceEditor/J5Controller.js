@@ -887,7 +887,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         };
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        if(currentTab.selectedPreset)
+        if(currentTab.selectedPreset && currentTab.selectedPreset.get('presetName') != "Default")
         {
             var selectedPreset = currentTab.selectedPreset;
 
