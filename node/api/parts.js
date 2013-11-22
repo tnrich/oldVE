@@ -75,13 +75,11 @@ module.exports = function(app) {
         },
 
         updateAllPartHashes: function(req, res) {
-            Part.find({
-                user_id: mongoose.Types.ObjectId("522f9f52299669d80300030b")
-            }).exec(function(err, parts) {
+            Part.find().exec(function(err, parts) {
                 if(err) {
                     return res.send(err);
                 } else {
-                    async.forEach(parts, function(part, done) {
+                    /*async.forEach(parts, function(part, done) {
                         Part.generateDefinitionHash(null, part, function(hash) {
                             part.definitionHash = hash;
                             part.save(done);
@@ -92,8 +90,8 @@ module.exports = function(app) {
                         } else {
                             return res.send('yay');
                         }
-                    });
-                    /*async.forEach(parts, function(part, done) {
+                    });*/
+                    async.forEach(parts, function(part, done) {
                         Part.generateDefinitionHash(null, part, function(hash) {
                             part.definitionHash = hash;
                             part.save(function(err) {
@@ -155,7 +153,7 @@ module.exports = function(app) {
                         } else {
                             return res.send('Success!');
                         }
-                    });*/
+                    });
                 }
             });
         },

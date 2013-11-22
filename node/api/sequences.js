@@ -1,3 +1,4 @@
+var async = require('async');
 var mongoose = require('mongoose');
 
 module.exports = function(app) {
@@ -11,11 +12,18 @@ module.exports = function(app) {
 
     var saveSequence = function(newSequence,req,res,cb){
         var nameChanged = false;
+        var hashChanged = false;
 
-        // Set the nameChanged flag. If true, we need to update the partSource 
+        // Set the nameChanged flag. If true, we need to update the partSource
         // field on parts associated with this sequence.
         if(req.body.name !== newSequence.name) {
             nameChanged = true;
+        }
+
+        // If the hash has changed, we need to update the hash on parts
+        // associated with this sequence.
+        if(req.body.hash !== newSequence.hash) {
+            hashChanged = true;
         }
 
         for (var prop in req.body) {
@@ -39,25 +47,44 @@ module.exports = function(app) {
                     return res.json(500,{"error":err});
                 }
             }
-            else 
-                {
-                    if(nameChanged) {
-                        // Update associated parts' partSource fields.
-                        Part.update({
-                            "sequencefile_id": newSequence._id
-                        }, {
-                            "partSource": newSequence.name
-                        }, {
-                            multi: true
-                        }, function() {
+            else
+            {
+                if(nameChanged || hashChanged) {
+                    // Update associated parts' partSource fields.
+                    Part.find({
+                        "sequencefile_id": newSequence._id
+                    }, function(err, parts) {
+                        async.forEach(parts, function(part, next) {
+                            if(nameChanged && hashChanged) {
+                                partSource = newSequence.name;
+                                Part.generateDefinitionHash(req.user, part, function(hash) {
+                                    newPart.definitionHash = hash;
+                                    newPart.save(next);
+                                });
+                            } else if(nameChanged) {
+                                partSource = newSequence.name;
+                                next();
+                            } else if(hashChanged) {
+                                Part.generateDefinitionHash(req.user, part, function(hash) {
+                                    part.definitionHash = hash;
+                                    part.save(next);
+                                });
+                            }
+                        }, function(err) {
+                            if(err) {
+                                console.log('Error generating new hash for part.');
+                                console.log(err);
+                            }
+
                             if (typeof(cb) == 'function') cb(newSequence);
                             return res.json({'sequences': newSequence,"duplicated":false,"err":err});
                         });
-                    } else {
-                        if (typeof(cb) == 'function') cb(newSequence);
-                        return res.json({'sequences': newSequence,"duplicated":false,"err":err});
-                    }
+                    });
+                } else {
+                    if (typeof(cb) == 'function') cb(newSequence);
+                    return res.json({'sequences': newSequence,"duplicated":false,"err":err});
                 }
+            }
         });
     };
 

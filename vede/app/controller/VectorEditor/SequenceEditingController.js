@@ -19,6 +19,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     VEManager: null,
 
     onPartCreated: function (sequence, part) {
+        if(sequence.getId()) {
+            part.setSequenceFile(sequence);
+        }
+
         processPrompt = function(btn,text){
             part.set('name',text);
             executeRequest();
