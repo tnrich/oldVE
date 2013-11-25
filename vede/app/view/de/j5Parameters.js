@@ -368,6 +368,14 @@ Ext.define('Vede.view.de.j5Parameters', {
                         labelWidth: 200,
                         checked: true
                     }, {
+                        xtype: 'checkboxfield',
+                        cls: 'suppressPrimerAnnotations',
+                        padding: 3,
+                        fieldLabel: 'Suppress Primer Annotations (disabled)',
+                        labelSeparator: ' ',
+                        labelWidth: 200,
+                        checked: false
+                    }, {
                         xtype: 'numberfield',
                         cls: 'homologyMinLengthBPS',
                         padding: 3,

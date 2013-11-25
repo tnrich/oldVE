@@ -64,6 +64,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         OSF:        "OUTPUT_SEQUENCE_FORMAT",
         APT:        "ASSEMBLY_PRODUCT_TYPE",
         SPP:        "SUPPRESS_PURE_PRIMERS",
+        SPA:        "SUPPRESS_PRIMER_ANNOTATIONS",
         HMLB:        "HOMOLOGY_MIN_LENGTH_BPS",
         HMFM:        "HOMOLOGY_MAX_FRACTION_MISMATCHES",
         
@@ -105,6 +106,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         OSF_DESC:       "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"",
         APT_DESC:       "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"",
         SPP_DESC:       "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"",
+        SPA_DESC:       "\"Suppress primer annotations. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"",
         
         //parameter default values
         MONOD_Default:          5,
@@ -150,6 +152,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         OSF_Default:            "Genbank",//Teselagen.constants.Constants.self.GENBANK,
 
         SPP_Default:            true,
+        SPA_Default:            false,
 
         HMLB_Default:           26,
         HMFM_Default:           0.05,
@@ -210,6 +213,17 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "outputSequenceFormatValue",                        type: "String",     defaultValue: this.self.OSF_Default},
 
         {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default,
+         convert: function(value, record) {
+             if(Ext.isBoolean(value)) {
+                 return value;
+             } else if(Ext.isString(value)) {
+                 return (/^(true|1)$/i).test(value);
+             } else {
+                 return false;
+             }
+         }
+        },
+        {name: "suppressPrimerAnnotationsValue",                   type: "Boolean",    defaultValue: this.self.SPA_Default,
          convert: function(value, record) {
              if(Ext.isBoolean(value)) {
                  return value;
@@ -332,6 +346,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         if(values.MISPRIMING_OLIGO_CONC                                ) this.set("misprimingOligoConcValue" , values.MISPRIMING_OLIGO_CONC                  );
         if(values.OUTPUT_SEQUENCE_FORMAT                               ) this.set("outputSequenceFormatValue" , values.OUTPUT_SEQUENCE_FORMAT                 );
         if(values.SUPPRESS_PURE_PRIMERS                                ) this.set("SPP_Default" , values.SUPPRESS_PURE_PRIMERS                               );
+        if(values.SUPPRESS_PRIMER_ANNOTATIONS                          ) this.set("SPA_Default" , values.SUPPRESS_PRIMER_ANNOTATIONS                              );
 
         if(values.HOMOLOGY_MIN_LENGTH_BPS                              ) this.set("homologyMinLengthBPS" , values.HOMOLOGY_MIN_LENGTH_BPS                               );
         if(values.HOMOLOGY_MAX_FRACTION_MISMATCHES                     ) this.set("homologyMaxFractionMisMatches" , values.HOMOLOGY_MAX_FRACTION_MISMATCHES                               );
@@ -381,6 +396,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         this.set("outputSequenceFormatValue", this.self.OSF_Default);
         
         this.set("suppressPurePrimersValue", this.self.SPP_Default);
+        this.set("suppressPrimerAnnotationsValue", this.self.SPA_Default);
 
         this.set("homologyMinLengthBPS", this.self.HMLB_Default);
         this.set("homologyMaxFractionMisMatches", this.self.HMFM_Default);
@@ -435,6 +451,7 @@ Ext.define("Teselagen.models.J5Parameters", {
 
             //+ this.self.SPP + "," + (this.get("suppressPurePrimersValue") ? "TRUE" : "FALSE") + "," + (this.self.SPP_Default ? "TRUE" : "FALSE") + "," + J5Parameters.SPP_DESC + "\n";
             this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
+            this.self.SPA + "," + this.get("suppressPrimerAnnotationsValue") + "," + this.self.SPA_Default + "," + this.self.SPA_DESC + "\n";
 
             this.self.HMLB + "," + this.get("homologyMinLengthBPS") + "," + this.self.HMLB_Default+"\n";
             this.self.HMFM + "," + this.get("homologyMaxFractionMisMatches") + "," + this.self.HMFM_Default +"\n";
@@ -481,6 +498,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         arr.push( { value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue" } );
         arr.push( { value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue" } );
         arr.push( { value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue" } );
+        arr.push( { value: this.get("suppressPrimerAnnotationsValue"), name: "suppressPrimerAnnotationsValue" } );
 
         arr.push( { value: this.get("homologyMinLengthBPS"), name: "homologyMinLengthBPS" } );
         arr.push( { value: this.get("homologyMaxFractionMisMatches"), name: "homologyMaxFractionMisMatches" } );
@@ -549,6 +567,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         obj[this.self.MOC]      =   this.get("misprimingOligoConcValue");
         obj[this.self.OSF]      =   this.get("outputSequenceFormatValue");
         obj[this.self.SPP]      =   this.get("suppressPurePrimersValue");
+        obj[this.self.SPA]      =   this.get("suppressPrimerAnnotationsValue");
         obj[this.self.APT]      =   isCollectionCircular ? "circular" : "linear";
 
         obj[this.self.HMLB]      =   this.get("homologyMinLengthBPS");
