@@ -23,24 +23,28 @@ module.exports = function (app) {
 	var util = require('util');
 
 	app.get('/genedesign/codon_optimize',function(req,res){
-		//var dnaSeq = req.body.dnaSeq;
 
-        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-        
-        var params = ["-i","/home/teselagen/geneDesign/testagene.fasta","-org","yeast","-a most_different_sequence,high"];
+		fs.writeFile("/home/teselagen/geneDesign/testagene.fasta", req.params.dna, function(err) {
 
-        var newChild = spawn('/usr/local/bin/GD_Juggle_Codons.pl', ['-t',scriptPath]);
-        console.log("codon optimizer" + " started with pid: "+newChild.pid);
+	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+	        
+	        var params = ["-i","/home/teselagen/geneDesign/testagene.fasta","-org","yeast","-a most_different_sequence,high"];
+
+	        var newChild = spawn('/usr/local/bin/GD_Juggle_Codons.pl', ['-t',scriptPath]);
+	        console.log("codon optimizer" + " started with pid: "+newChild.pid);
 
 
-        newChild.on('exit', function (code,signal) {
-            console.log("Process finished with code ",code," and signal ",signal);
+	        newChild.on('exit', function (code,signal) {
+	            console.log("Process finished with code ",code," and signal ",signal);
 
-			fs.readFile('/home/teselagen/geneDesign/testagene_CJ.fasta', 'utf8', function (err, data) {
-			  if (err) throw err;
-			  res.json({response:data});
+				fs.readFile('/home/teselagen/geneDesign/testagene_CJ.fasta', 'utf8', function (err, data) {
+				  if (err) throw err;
+				  res.json({response:data});
+				});
 			});
+
 		});
+
     });
 
 };
