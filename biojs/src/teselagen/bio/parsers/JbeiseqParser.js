@@ -264,105 +264,109 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             jFeats  = json["seq"]["features"]["feature_asArray"];
         }
 
-        for (i=0; i < jFeats.length; i++) {
+        if(jFeats) {
+            for (i=0; i < jFeats.length; i++) {
 
-            var locations   = [];
-            var attributes  = []; //qualifiers  = [];
-            
-            var ft = jFeats[i];
+                var locations   = [];
+                var attributes  = []; //qualifiers  = [];
+                
+                var ft = jFeats[i];
 
-            var type = "unsure"; //using seq.xsd
-            if (ft["type"] !== undefined) {
-                type = ft["type"]["__text"];
-            }
-
-            var complement = false;
-            if (ft["complement"] !== undefined) {
-                complement = (ft["complement"]["__text"].toLowerCase() === "true");
-            }
-
-            //===============
-            // LOCATIONS
-            // asArray will detect if there are locations; ie length=0 means no locations
-
-            for (j=0; j < ft["location_asArray"].length; j++) {
-                //console.log(ft["location_asArray"][j]);
-            	
-                var start;
-                // The following code checks for a variation of format found in test files.
-                if (ft["location_asArray"][j]["genbankStart"] === undefined) {
-                	start = ft["location_asArray"][j]["genbank_start"]["__text"];
-                } else {
-                	start = ft["location_asArray"][j]["genbankStart"]["__text"];
+                var type = "unsure"; //using seq.xsd
+                if (ft["type"] !== undefined) {
+                    type = ft["type"]["__text"];
                 }
-                var end;
-                if (ft["location_asArray"][j]["end"] === undefined) {
-                    end   = start;
-                } else {
-                    end   = ft["location_asArray"][j]["end"]["__text"];
+
+                var complement = false;
+                if (ft["complement"] !== undefined) {
+                    complement = (ft["complement"]["__text"].toLowerCase() === "true");
                 }
-                var to    = "..";
 
-                var loc = {
-                    "seq:genbankStart" : parseInt(start),
-                    "seq:end" : parseInt(end)
-                };
-                locations.push(loc);
-            }
-            //===============
-            // ATTRIBUTES
+                //===============
+                // LOCATIONS
+                // asArray will detect if there are locations; ie length=0 means no locations
 
-            var label = "name_unknown";
-            if (ft["label"] !== undefined ) {
-                label = ft["label"]["__text"];
-            }
+                for (j=0; j < ft["location_asArray"].length; j++) {
+                    //console.log(ft["location_asArray"][j]);
+                	
+                    var start;
+                    // The following code checks for a variation of format found in test files.
+                    if (ft["location_asArray"][j]["genbankStart"] === undefined) {
+                    	start = ft["location_asArray"][j]["genbank_start"]["__text"];
+                    } else {
+                    	start = ft["location_asArray"][j]["genbankStart"]["__text"];
+                    }
+                    var end;
+                    if (ft["location_asArray"][j]["end"] === undefined) {
+                        end   = start;
+                    } else {
+                        end   = ft["location_asArray"][j]["end"]["__text"];
+                    }
+                    var to    = "..";
 
-            /*var attr = {
-                "seq:attribute" : {
-                    "_name" : "label",
-                    "_quoted" : true,
-                    "__text" : label //USE __text
+                    var loc = {
+                        "seq:genbankStart" : parseInt(start),
+                        "seq:end" : parseInt(end)
+                    };
+                    locations.push(loc);
                 }
-            }*/
-            //attributes.push(qual);
+                //===============
+                // ATTRIBUTES
 
-            //console.log(ft["attribute_asArray"]);
-            for (j=0; j < ft["attribute_asArray"].length; j++) {
+                var label = "name_unknown";
+                if (ft["label"] !== undefined ) {
+                    label = ft["label"]["__text"];
+                }
+
                 /*var attr = {
                     "seq:attribute" : {
-                        "_name" : ft["attribute_asArray"][j]["_name"],
+                        "_name" : "label",
                         "_quoted" : true,
-                        "__text" : ft["attribute_asArray"][j]["__text"], //USE __text
+                        "__text" : label //USE __text
                     }
                 }*/
-                var attr = {
-                    //"seq:attribute" : {
-                        "_name" : ft["attribute_asArray"][j]["_name"],
-                        "_quoted" : true,
-                        "__text" : ft["attribute_asArray"][j]["__text"] //USE __text
-                    //}
+                //attributes.push(qual);
+
+                //console.log(ft["attribute_asArray"]);
+                if(ft["attribute_asArray"]) {
+                    for (j=0; j < ft["attribute_asArray"].length; j++) {
+                        /*var attr = {
+                            "seq:attribute" : {
+                                "_name" : ft["attribute_asArray"][j]["_name"],
+                                "_quoted" : true,
+                                "__text" : ft["attribute_asArray"][j]["__text"], //USE __text
+                            }
+                        }*/
+                        var attr = {
+                            //"seq:attribute" : {
+                                "_name" : ft["attribute_asArray"][j]["_name"],
+                                "_quoted" : true,
+                                "__text" : ft["attribute_asArray"][j]["__text"] //USE __text
+                            //}
+                        };
+
+                        attributes.push(attr);
+                    }
+                }
+
+                // POST CALCULATIONS
+                var strand = 1;
+                if (complement === true) {
+                    strand = -1;
+                }
+
+                var feat = {
+                    "seq:feature" : {
+                        "seq:label" : label,
+                        "seq:complement" : complement,
+                        "seq:type" : type,
+                        "seq:location": locations,
+                        "seq:attribute" : attributes //this should not be saved as a subset
+                    }
                 };
 
-                attributes.push(attr);
+                features.push(feat);
             }
-
-            // POST CALCULATIONS
-            var strand = 1;
-            if (complement === true) {
-                strand = -1;
-            }
-
-            var feat = {
-                "seq:feature" : {
-                    "seq:label" : label,
-                    "seq:complement" : complement,
-                    "seq:type" : type,
-                    "seq:location": locations,
-                    "seq:attribute" : attributes //this should not be saved as a subset
-                }
-            };
-
-            features.push(feat);
         }
         // Setting final JSON object
         result = {

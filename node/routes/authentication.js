@@ -54,7 +54,7 @@ module.exports = function(app) {
             res.send({
                 error: true,
                 msg: "Wrong credentials."
-            }, 200);
+            }, 401);
         }
     };
 

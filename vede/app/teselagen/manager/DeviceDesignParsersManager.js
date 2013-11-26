@@ -21,7 +21,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     auto_migrate_XML4_to4_1: function(xmlDoc){
 
         var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
-
         for (var i=0; i < bins.length; i++) {
             if (!bins[i].nodeName) { continue; }
             var bin = bins[i];
@@ -64,38 +63,36 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         var next = this.backgroundSequenceProcessing(partsArray);
 
-        console.log(next);
-    if(next[0]==true) {
-        if(typeof(cb)==="function")
-        {
-            return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
-        }
-        else
-        {
+        if(next[0]==true) {
+            if(typeof(cb)==="function")
+            {
+                return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBinsAndParts(binsArray, partsArray));
+            }
+            else
+            {
+                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+
+                var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
+
+                Ext.Msg.show({
+                    title: "Are you sure you want to load example?",
+                    msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
+                    buttons: Ext.Msg.OKCANCEL,
+                    cls: "messageBox",
+                    fn: loadDesign,
+                    icon: Ext.Msg.QUESTION
+                });
+            }
+        } else {
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-            var loadDesign = this.loadDesign.bind(this, binsArray, partsArray, eugeneRules);
-
-            Ext.Msg.show({
-                title: "Are you sure you want to load example?",
-                msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
-                buttons: Ext.Msg.OKCANCEL,
-                cls: "messageBox",
-                fn: loadDesign,
-                icon: Ext.Msg.QUESTION
+             Ext.MessageBox.show({
+                title: "Error",
+                msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
+                buttons: Ext.MessageBox.OK,
+                icon:Ext.MessageBox.ERROR
             });
         }
-    } else {
-        Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-
-         Ext.MessageBox.show({
-            title: "Error",
-            msg: 'Multiple parts in this design have associated source sequences named "' + next[1] + '" which are not identical. Please check the parts and their sequences and try again.',
-            buttons: Ext.MessageBox.OK,
-            icon:Ext.MessageBox.ERROR
-        });
-        }
-
     },
 
     /**
@@ -188,6 +185,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 if(part.sequence["de:fileName"]) {partName = part.sequence["de:fileName"].replace(".gb","");}
                 if(newPart.get("partSource")===""&&!newPart.get("partSource")) {newPart.set("partSource",partName);}
                 // Sequence processing
+
                 var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                     name: partName,
                     sequenceFileContent: part.sequence["de:content"],
@@ -478,34 +476,68 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         });
 
                         getSequenceByID(hash, function (sequence) {
-                            // Sequence processing
-                            var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                                sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
-                                sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                                sequenceFileName: me.getTagText(sequence, "fileName"),
-                                name: me.getTagText(sequence, "fileName")
-                            });
 
-                            newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-                            //newSequence.set("name",newPart.get("name"));
+                            var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
 
-                            newPart.setSequenceFile(newSequence);
+                            if(ext) {
+                                var processSequence = Teselagen.bio.parsers.ParsersManager.parseSequence(sequence.getElementsByTagNameNS("*", "content")[0].textContent, ext[1], function(gb) {
+                                    Teselagen.bio.parsers.ParsersManager.createAndProcessSequenceFromGenbank(gb, name, function(err, sequence, sequenceManager, gb) {
+                                        if(err) {
+                                            return err;
+                                        }
+
+                                        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                            sequenceFileContent: gb.toString(),
+                                            sequenceFileFormat: "GENBANK",
+                                            sequenceFileName: sequence.fileName,
+                                            name: sequence.name
+                                        });
+
+                                        newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+
+                                        newPart.setSequenceFile(newSequence);
+                                    
+                                        var newCell = Ext.create("Teselagen.models.Cell", {
+                                            index: j,
+                                            fas: fas || "None"
+                                        });
+
+                                        newCell.setPart(newPart);
+                                        newCell.setJ5Bin(newBin);
+
+                                        newBin.cells().add(newCell);
+
+                                        tempPartsArray.push(newPart);
+                                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                                    });
+                                });
+                            } else {
+                                var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                    sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
+                                    sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
+                                    sequenceFileName: me.getTagText(sequence, "fileName"),
+                                    name: me.getTagText(sequence, "fileName")
+                                });
+
+                                newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                                //newSequence.set("name",newPart.get("name"));
+
+                                newPart.setSequenceFile(newSequence);
+
+                                var newCell = Ext.create("Teselagen.models.Cell", {
+                                    index: j,
+                                    fas: fas || "None"
+                                });
+
+                                newCell.setPart(newPart);
+                                newCell.setJ5Bin(newBin);
+
+                                newBin.cells().add(newCell);
+
+                                tempPartsArray.push(newPart);
+                                fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                            }
                         });
-
-                        //binFases.push(newPart.get("fas"));
-
-                        var newCell = Ext.create("Teselagen.models.Cell", {
-                            index: j,
-                            fas: fas || "None"
-                        });
-
-                        newCell.setPart(newPart);
-                        newCell.setJ5Bin(newBin);
-
-                        newBin.cells().add(newCell);
-
-                        tempPartsArray.push(newPart);
-                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
                     }
                 }
             }
@@ -558,8 +590,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             });
 
             newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-            if( operand2isNumber ) {newEugeneRule.setOperand2(operand2);}
-            else {newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);}
+            
+            console.log(operand2isNumber);
+            if( operand2isNumber ) {
+                newEugeneRule.setOperand2(operand2);
+            } else {
+                newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+            }
+
             rulesArray.push(newEugeneRule);
         }
 
@@ -877,7 +915,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     backgroundSequenceProcessing: function(parts){
         // debugger;
-        console.log(parts);
         var processFlag = true;
         toastr.options.onclick = function(){
             processFlag = false;

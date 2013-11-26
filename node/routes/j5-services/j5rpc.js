@@ -157,7 +157,7 @@ function encoded_j5_parameters_file(params)
 
 
     for(var prop in params) {
-        out += prop + ',' + params[prop] + '\n';
+        out += prop + ',' + params[prop].toString().toUpperCase() + '\n';
     }
     //quicklog(out);
     return new Buffer(out).toString('base64');
@@ -264,7 +264,7 @@ function encoded_eugene_rules_list_file(model)
 /**
  * Encode j5 inputs
  */
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user,testing) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);

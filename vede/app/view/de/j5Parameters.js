@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 690,
+    height: 720,
     maxHeight: 830,
     width: 845,
     maxWidth: 845,
@@ -367,6 +367,14 @@ Ext.define('Vede.view.de.j5Parameters', {
                         labelSeparator: ' ',
                         labelWidth: 200,
                         checked: true
+                    }, {
+                        xtype: 'checkboxfield',
+                        cls: 'suppressPrimerAnnotationsValue',
+                        padding: 3,
+                        fieldLabel: 'Suppress Primer Annotations (disabled)',
+                        labelSeparator: ' ',
+                        labelWidth: 200,
+                        checked: false
                     }, {
                         xtype: 'numberfield',
                         cls: 'homologyMinLengthBPS',

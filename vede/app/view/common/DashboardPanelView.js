@@ -1,9 +1,46 @@
 /**
+ * Patches a bug in the EXT gridpanel.
+ * see: http://www.sencha.com/forum/showthread.php?268135-Grid-error-on-delete-selected-row
+ */
+Ext.define('Ext.view.override.Table', {
+    override: 'Ext.view.Table',
+
+    doStripeRows: function(startRow, endRow) {
+        var me = this,
+            rows,
+            rowsLn,
+            i,
+            row;
+
+
+        if (me.rendered && me.stripeRows) {
+            rows = me.getNodes(startRow, endRow);
+
+            for (i = 0, rowsLn = rows.length; i < rowsLn; i++) {
+                row = rows[i];
+
+                if (row) { // self updating; check for row existence
+                    row.className = row.className.replace(me.rowClsRe, ' ');
+                    startRow++;
+
+                    if (startRow % 2 === 0) {
+                        row.className += (' ' + me.altRowCls);
+                    }
+                }
+            }
+        }
+    }
+});
+
+/**
  * Dashboard panel view
  * @class Vede.view.common.DashboardPanelView
  */
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.tab.Panel',
+    requires: [
+        'Teselagen.event.CommonEvent'
+    ],
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     padding: '10 0',
@@ -153,7 +190,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 }
                             }
                         ]
-                    }, 
+                    },
                     {
                         xtype: 'container',
                         id: 'dashboardStats',
@@ -175,7 +212,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         });
                                     }
                         },
-                        items: [ 
+                        items: [
                             {
                                 xtype: 'container',
                                 cls: 'dashboardStats-container',
@@ -290,7 +327,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         border: 0,
                                                         flex: 1,
                                                         text: null
-                                                    },                         
+                                                    },
                                                     {
                                                         xtype: 'textfield',
                                                         readOnly: true,
@@ -429,7 +466,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             }
                                         ]
                                     }
-                                ]  
+                                ]
                             }
                         ]
                     }
@@ -452,7 +489,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             align: 'stretch'
                         },
                         items : [
-                            
+
                             {
                                 xtype: 'textfield',
                                 anchor: '100%',
@@ -465,8 +502,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
-                                        grid.store.clearFilter(true);
-                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
+                                        }, 200);
                                     }
                                 }
                             },
@@ -483,15 +529,14 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     style: 'overflow-y: auto'
                                 },
                                 id: 'sequenceLibrary',
-                                autoScroll: true,
                                 columns: [
                                     {
                                         xtype: 'gridcolumn',
                                         text: 'Name',
                                         width: 220,
                                         dataIndex: 'name',
-                                        sortable: true,
-                                    }, 
+                                        sortable: true
+                                    },
                                     {
                                         text     : 'Type',
                                         width    : 75,
@@ -599,36 +644,52 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     ]
                                                 },
                                                 {
-                                                    xtype: 'button',
+                                                    xtype: 'filefield',
+                                                    buttonOnly: true,
+                                                    buttonText: 'Import Sequence(s)',
                                                     cls: 'sequenceLibraryImportButton',
-                                                    icon: 'resources/images/ux/paging/publish.png',
-                                                    iconCls: 'sequenceLibraryImportButtonIcon',
-                                                    overCls: 'sequenceLibraryImportButton-over',
-                                                    text: 'Import Sequence(s)',
-                                                    tooltip: 'You can drop your sequence files or folders into the table above.',
-                                                    margin: '0 0 0 10'
+                                                    buttonConfig: {
+                                                        icon: 'resources/images/ux/paging/publish.png',
+                                                        iconCls: 'sequenceLibraryImportButtonIcon',
+                                                        overCls: 'sequenceLibraryImportButton-over',
+                                                        tooltip: 'You can drop your sequence files or folders into the table above.',
+                                                        margin: '0 0 0 10'
+                                                    },
+                                                    listeners: {
+                                                        afterRender: function(field) {
+                                                            field.fileInputEl.set({
+                                                                multiple: 'multiple'
+                                                            });
+                                                        }
+                                                    }
                                                 }
                                             ]
                                     }],
 
                                 listeners: {
-                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                    itemcontextmenu: function(el, record, item, index, e, eOpts ){
                                         e.preventDefault();
                                         var contextMenu = Ext.create('Ext.menu.Menu',{
-                                              items: [{
+                                            items: [{
                                                 text: 'Open',
                                                 handler: function(){
                                                     Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record);
                                                 }
-                                              },{
+                                            }, {
                                                 text: 'Download',
                                                 handler: function() {
                                                     var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record, record.getSequenceManager());
                                                     VEManager.saveSequenceToFile();
                                                 }
-                                              }]
+                                            }, {
+                                                text: 'Delete',
+                                                handler: function() {
+                                                    Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_SEQUENCE, record);
+                                                }
+                                            }]
                                         }).show();
-                                        contextMenu.setPagePosition(e.getX(),e.getY()-5)
+
+                                        contextMenu.setPagePosition(e.getX(), e.getY() - 5);
                                     }
                                 }
                             }
@@ -671,10 +732,20 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 emptyCls: 'empty-search-field',
                                 margin: 13,
                                 listeners: {
-                                    change: function(field, newValue, oldValue, eOpts) {
+                                    change: function(field, newValue, oldValue, eOpts) {                                        
                                         Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
-                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
+                                        }, 200);
                                     }
                                 }
                             },
@@ -766,7 +837,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
 
                                 ],
                                 listeners: {
-                                    itemcontextmenu: function( el, record, item, index, e, eOpts ){
+                                    itemcontextmenu: function(el, record, item, index, e, eOpts){
                                         e.preventDefault();
                                         var contextMenu = Ext.create('Ext.menu.Menu',{
                                               items: [
@@ -775,13 +846,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 handler: function() {
                                                     Teselagen.manager.ProjectExplorerManager.renamePart(record);
                                                 }
-                                              },
-                                              {
+                                              }, {
                                                 text: 'Open',
                                                 handler: function(){
                                                     Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record.getSequenceFile());
                                                 }
-                                              },{
+                                              }, {
+                                                text: 'Delete',
+                                                handler: function() {
+                                                    Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_PART, record);
+                                                }
+                                              }, {
                                                 text: 'Download Source Sequence',
                                                 handler: function() {
                                                     var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());

@@ -7,7 +7,7 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
-    requires: ["Ext.Ajax", "Ext.data.Store", "Teselagen.bio.enzymes.RestrictionEnzyme"],
+    requires: ["Ext.Ajax", "Ext.data.Store", "Teselagen.bio.enzymes.RestrictionEnzyme","Teselagen.manager.SessionManager"],
     
     singleton: true,
 
@@ -66,7 +66,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
      */
     getEnzymes: function(url) {
         var xhReq = new XMLHttpRequest();
-        xhReq.open("GET", url, false);
+        xhReq.open("GET", Teselagen.manager.SessionManager.buildUrl("rebase.xml"), false);
         xhReq.send(null);
         var xml = xhReq.responseText;
         

@@ -34,6 +34,11 @@ Ext.define('Vede.controller.AuthWindowController', {
 
         var onLoggedOut = function(){
 
+            if(Teselagen.manager.TasksMonitor && Teselagen.manager.TasksMonitor.socket)
+            {
+                Teselagen.manager.TasksMonitor.socket.disconnect()
+                Teselagen.manager.TasksMonitor.socket = null;
+            }
             Teselagen.manager.ProjectManager.currentUser = null;
             Ext.getCmp("mainAppPanel").items.items.map(function(tab){
                 if(tab.xtype!="DashboardPanelView") return tab;
@@ -64,6 +69,17 @@ Ext.define('Vede.controller.AuthWindowController', {
         Ext.create('Vede.view.ForgotWindow').show();
     },
 
+    onRequestError: function(connection, response, options, eOpts) {
+        // If the Auth Window is not currently open, open it.
+        if(response.status === 401 && !Ext.getCmp("AuthWindow")) {
+            Ext.Msg.alert("Please Log In Again", "You have been logged out due to inactivity. Please re-enter your credentials.", function() {
+                Ext.create("Vede.view.AuthWindow").show();
+            });
+
+            return false;
+        }
+    },
+
     //onRemember: function(el, newValue, oldValue, eOpts){
     //    if(newValue) 
     //    {
@@ -74,6 +90,9 @@ Ext.define('Vede.controller.AuthWindowController', {
 
     init: function () {
         var that = this;
+
+        Ext.Ajax.on('requestexception', this.onRequestError, this);
+
         this.control({
             "#headerPanel": {
                 afterrender: this.onRender
@@ -130,7 +149,4 @@ Ext.define('Vede.controller.AuthWindowController', {
 
         Ext.get("auth-logout-btn").on('click', this.onLogoutClick);
     }
-
-
-
 });

@@ -173,7 +173,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         if(!NameUtils.isLegalName(name)) {
             legalName = false;
-            console.log(name);
             name = NameUtils.reformatName(name);
         }
 
@@ -316,7 +315,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var self = this;
         var asyncParseFlag = false;
 
-        console.log(pExt);
         switch (pExt) {
             case "fasta":
                 asyncParseFlag = true;

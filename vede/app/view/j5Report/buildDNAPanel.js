@@ -17,10 +17,10 @@ Ext.define('Vede.view.j5Report.buildDNAPanel', {
                             anchor: '100%',
                             fieldLabel: 'Select lab',
                             name: 'server',
-                            value: 'http://lab001.teselagen.com:8090/printdna',
+                            value: '127.0.0.1',
 							store: [
-								['http://lab001.teselagen.com:8090/printdna','Lab001 (San Francisco, CA)'],
-								['http://localhost:8090/printdna','Lab000 (Local)']
+								['127.0.0.1','Lab001 (San Francisco, CA)'],
+								['127.0.0.1','Lab000 (Local)']
 							]
                         },
                         {

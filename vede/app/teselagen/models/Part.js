@@ -2,7 +2,7 @@
  * @class Teselagen.models.Part
  * Class describing a Part.
  * @author Diana Wong
- * @author Douglas Densmore (original author) ?
+ * @author Douglas Densmore (original author) << Really?
  */
 Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
@@ -21,31 +21,37 @@ Ext.define("Teselagen.models.Part", {
             totalProperty: "total"
         },
         writer: {
-            type: "json",
+            type: "json"
         },
         buildUrl: function(request) {
+            var url;
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
             {
                 var project_id = Teselagen.manager.ProjectManager.workingProject.data.id;
-                var url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
+                url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
             }
 
             if(request.action === "read" && request.params && request.params.id )
             {
-                var url = "parts/"+request.params.id;
+                url = "parts/"+request.params.id;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
             {
-                var url = "parts";
+                url = "parts";
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
+            if(request.action === "destroy" && request.records.length === 1) {
+                url = "parts/" + request.records[0].get('id');
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
-        },
+        }
     },
 
     statics: {
@@ -108,7 +114,7 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0,
         convert: function(value, record) {
-            record.data.genbankStartBP = value;
+            record.data.genbankStartBP = Number(value);
             record.calculateSize(true);
 
             return value;
@@ -119,7 +125,7 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0,
         convert: function(value, record) {
-            record.data.endBP = value;
+            record.data.endBP = Number(value);
             record.calculateSize(true);
 
             return value;
@@ -142,11 +148,11 @@ Ext.define("Teselagen.models.Part", {
     },
     {
         name: "dateCreated",
-        type: "string",
+        type: "string"
     },
     {
         name: "dateModified",
-        type: "string",
+        type: "string"
     },
     {
         name: "user_id",
@@ -291,15 +297,21 @@ Ext.define("Teselagen.models.Part", {
                 return false;
             }
 
-            if(record.get("genbankStartBP")>record.get("endBP")) {
+            var startBP = record.get("genbankStartBP");
+            var endBP = record.get("endBP");
+
+            if(startBP>endBP) {
                 var tSize = record.getSequenceFile().getLength();
-                size = Math.abs(tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
-            } else if (record.get("genbankStartBP")==record.get("endBP")) {
+                size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+            } else if (startBP==endBP) {
                 size = 1;
             } else {
-                size = (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
+                size = (Math.abs(startBP - endBP) + 1);
             }
-            if(size === 0) console.warn("Part with sequence with length zero.");
+
+            if(size === 0) {
+                console.warn("Part with sequence with length zero.");
+            }
 
             record.set('size', size);
         });
@@ -346,19 +358,26 @@ Ext.define("Teselagen.models.Part", {
             var sequence = sequences.getById(this.get("sequencefile_id"));
 
             if(sequence) {
-                if(typeof(callbackFn) === "object") return callbackFn.callback(sequence);
-                else return sequence;
+                if(typeof(callbackFn) === "object") {
+                    return callbackFn.callback(sequence);
+                } else if(typeof callbackFn === "function") {
+                    return callbackFn(sequence);
+                } else {
+                    return sequence;
+                }
             }
 
             if(typeof(callbackFn) === "object"){
                 return this.getSequenceFileModel({
                     callback: callbackFn.callback
                 });
+            } else if(typeof callbackFn === "function") {
+                return callbackFn(this.getSequenceFileModel());
             } else {
                 return this.getSequenceFileModel();
             }
         } else {
-            return null
+            return null;
         }
 
     },

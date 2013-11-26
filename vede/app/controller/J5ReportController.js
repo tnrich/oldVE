@@ -263,71 +263,13 @@ Ext.define("Vede.controller.J5ReportController", {
         var buildDNAWindows = Ext.create('Vede.view.j5Report.buildDNAPanel').show();
        
 
-        var showStreaming = function(){
-            return Ext.create('Ext.window.Window', {
-                height: 474,
-                width: 410,
-                title: 'Build DNA',
-                items: [
-                    {
-                        xtype: 'panel',
-                        height: 340,
-                        title: '',
-                        html: '<object type="application/x-shockwave-flash" data="http://www.justin.tv/widgets/live_embed_player.swf?channel=teselagen" id="live_embed_player_flash" height="300" width="400" bgcolor="#000000"><param name="allowFullScreen" value="true"/><param name="allowScriptAccess" value="always" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.justin.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.justin.tv&channel=teselagen&auto_play=true&start_volume=25" /></object><a href="http://www.justin.tv/teselagen#r=-rid-&amp;s=em" class="trk" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline; text-align:center">Watch live video from teselagen on www.justin.tv</a>'
-                    },
-                    {
-                        xtype: 'panel',
-                        name: 'feedback',
-                        height: 62,
-                        margin: '10 0 0 0',
-                        title: '',
-                        html: '<h3 style="margin-left: 20px;">Connecting..</h3>'
-                    }
-                ]
-
-            }).show();
-        };
-
-
         buildDNAWindows.down('button').on('click',function(){
 
             var printDNA_URL = buildDNAWindows.down('combobox[name="server"]').value;
             var passwordField =  buildDNAWindows.down('textfield[name="password"]').value;
             buildDNAWindows.close();
 
-
-            //var messageBox = Ext.MessageBox.wait(
-            //    "Connecting to remote server...",
-            //    "Printing DNA"
-            //);
-
-            //var printDNA_URL = 'http://98.207.155.255:8090/printdna';
-
-            var streamingWindow = showStreaming();
-
-            streamingWindow.on('close',function(){
-                Teselagen.manager.PrinterMonitor.stopMonitoring();
-            });
-
-            Ext.Ajax.request({
-                url: printDNA_URL,
-                params: {
-                    password: passwordField
-                },
-                method: 'GET',
-                success: function(response){
-                    
-                    //messageBox.updateProgress(100,"Build in progress...","Connected to remote server");
-                    var task = new Ext.util.DelayedTask(function() {
-                        //messageBox.close();
-                        streamingWindow.down('panel[name="feedback"]').update('<h3 style="margin-left: 20px;">Connected. Build in progress.</h3>');
-                    });
-                    task.delay(1000);
-                    Teselagen.manager.PrinterMonitor.startMonitoring(function(update){
-                        streamingWindow.down('panel[name="feedback"]').update('<h3 style="margin-left: 20px;">'+update+'</h3>');                        
-                    });
-                }
-            });
+           if( Teselagen.manager.TasksMonitor.socket ) Teselagen.manager.TasksMonitor.socket.emit('buildDNA',printDNA_URL,passwordField);
         
         });
 

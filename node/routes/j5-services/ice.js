@@ -33,7 +33,7 @@ module.exports = function (app) {
       });
     } else {
       if(!app.program.debug) {
-        res.send('Wrong credentials');
+        res.status(401).send('Wrong credentials');
       } else {
         console.log("Logged as Guest user");
         authenticate("Guest", "", function (err, user) {

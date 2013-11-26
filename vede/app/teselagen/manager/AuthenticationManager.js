@@ -43,7 +43,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             params: {},
             success: self.continueLogin,
             failure: function(response) {
-                if(response.status !== 200) { 
+                // Don't display 401 'wrong credentials' messages, as these are redundant when logging in.
+                if(response.status !== 200 && response.status !== 401) {
                     var msg = "";
                     try
                     {
@@ -56,8 +57,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                     return;
                 }
 
-                response = JSON.parse(response.responseText);
-                if(response) Ext.getCmp('auth-response').setValue(response.msg);
+                var responseBody = JSON.parse(response.responseText);
+
+                if(responseBody && response.status !== 401) Ext.getCmp('auth-response').setValue(responseBody.msg);
                 if (cb) {return cb(false, response.statusText); }
             }
         });
@@ -71,20 +73,18 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         self.authResponse = JSON.parse(response.responseText);
         if(!self.authResponse.error) {
 
-            if(self.authResponse.user.debugAccess)
-            {
-                if(!window.location.pathname.match("beta")&&!window.location.origin.match("dev.teselagen.com")&&!window.location.origin.match("teselagen.local")) window.location = "/api/beta";
-            }   
+            //if(self.authResponse.user.debugAccess)
+            //{
+            //    if(!window.location.pathname.match("beta")&&!window.location.origin.match("dev.teselagen.com")&&!window.location.origin.match("teselagen.local")) window.location = "/api/beta";
+            //}   
 
             self.username = self.authResponse.user.username;
             Teselagen.manager.SessionManager.setBaseUser(self.username || self.authResponse.user.username);
             self.updateSplashScreenMessage(self.authResponse.msg);
             if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
             Teselagen.manager.UserManager.setUserFromJson(self.authResponse.user,function(){
-                Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);                    
+                Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
             });
-            Teselagen.manager.TasksMonitor.bootMonitoring();
-            Teselagen.manager.TasksMonitor.startMonitoring();
 
             var user = self.authResponse.user;
 

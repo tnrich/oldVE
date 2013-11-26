@@ -201,6 +201,14 @@ var clearUserFolder = function(user){
   });
 };
 
+function reportChange(j5run,user){
+  if(!user.username) throw new Error('Invalid user');
+  app.cache.cachej5Run(user.username,j5run,function(){
+    app.io.pub.publish("j5jobs",user.username);
+  });
+};
+
+
 function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 {
 
@@ -212,14 +220,9 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
     newj5Run.save();
   };
 
-  //console.log("Attemping to write output");
-  //console.log(gridfs);
   gridfs.saveFile(fileData,function(err,objectId){
     if(err) return handleErrors(err,newj5Run);
-    //console.log("Output saved");
-    //console.log("Processing output");
     processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
-      //console.log("Output processed");
       newj5Run.j5Parameters = { j5Parameters : JSON.parse(j5parameters) };
       newj5Run.file_id = objectId.toString();
       newj5Run.j5Results = parsedResults;
@@ -228,6 +231,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
       newj5Run.warnings = warnings;
 
       newj5Run.save();
+      reportChange(newj5Run,user);
       updateMasterSources(parsedResults.masterSources,user);
       clearUserFolder(user);
     });    
@@ -281,6 +285,12 @@ var DeviceDesignPreProcessing = function(devicedesignInput,cb){
   });
 };
 
+app.get('/memjobs',function(req,res){
+  app.cache.get('rpavez',function(err,user){
+    return res.json({user:user});
+  });
+});
+
 // Design Assembly RPC
 app.post('/executej5',restrict,function(req,res){
 
@@ -298,7 +308,7 @@ app.post('/executej5',restrict,function(req,res){
         User.findById(req.user._id).select({ "masterSources.masterplasmidlist.fileContent": 1, "masterSources.masteroligolist.fileContent": 1,"masterSources.masterdirectsyntheseslist.fileContent": 1 }).exec(function(err,user){
 
         // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
-        var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user,testing);
+        var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod,user);
 
         // Credentials for RPC communication
         data["username"] = req.user.username;
@@ -321,6 +331,8 @@ app.post('/executej5',restrict,function(req,res){
             }
         });
 
+        reportChange(newj5Run,req.user);
+
         newj5Run.save(function(err){
           deviceDesignModel.j5runs.push(newj5Run);
           deviceDesignModel.save(function(err){
@@ -330,7 +342,7 @@ app.post('/executej5',restrict,function(req,res){
         // file_id , j5Input and j5Results are filled once the job is completed.
 
         // In production mode use internal script
-        var testing = !(app.get("env") === "production");
+        //var testing = !(app.get("env") === "production");
 
         if(app.get("env") === "production") {
 
@@ -338,7 +350,6 @@ app.post('/executej5',restrict,function(req,res){
 
           var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
           var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-          if(testing) scriptPath = "/Users/rpavez/bin/j5.pl";
           var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
           console.log("J5 Process started with pid: "+newChild.pid);
 
@@ -349,8 +360,8 @@ app.post('/executej5',restrict,function(req,res){
 
           res.json({status:"In progress",j5run:newj5Run});
 
-          if(!testing) newChild.stdin.setEncoding = 'utf-8';
-          if(!testing) newChild.stdin.write(xml+"\n");
+          newChild.stdin.setEncoding = 'utf-8';
+          newChild.stdin.write(xml+"\n");
 
           newChild.output = "";
 
@@ -407,6 +418,7 @@ app.post('/executej5',restrict,function(req,res){
         else // Run as XML_RPC Depending on remote server (With timeout limit)
         {
           res.json({status:"In progress"});
+          console.log("Executing XML RPC");
           app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
             if(error)
             {
@@ -416,6 +428,7 @@ app.post('/executej5',restrict,function(req,res){
               newj5Run.endDate = Date.now();
               newj5Run.error_list.push({"error":error});
               newj5Run.save();
+              reportChange(newj5Run,user);
             }
             else
             {

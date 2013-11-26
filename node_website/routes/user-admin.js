@@ -62,6 +62,7 @@ module.exports = function(app, express){
       user.email = req.body.email;
       user.groupName = req.body.organizationName;
       user.groupType = req.body.organizationType;
+      user.activated = req.body.activated;
       user.debugAccess = req.body.debugAccess;
       //user.username = req.body.username;
       user.userType = req.body.userType;
