@@ -261,7 +261,8 @@ module.exports = function(app, express) {
                 status   : job.status,
                 dateStarted : job.date,
                 taskRefID   : job._id,
-                assemblyType : job.assemblyMethod
+                assemblyType : job.assemblyMethod,
+                run: job
             };
 
             app.cache.get(userKey,function(err,user){
