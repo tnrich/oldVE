@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 690,
+    height: 720,
     maxHeight: 830,
     width: 845,
     maxWidth: 845,
