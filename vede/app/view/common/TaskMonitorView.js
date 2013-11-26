@@ -20,6 +20,7 @@
     items: [{
         xtype: 'gridpanel',
         autoScroll: true,
+        id: 'tasksGrid',
         forceFit: true,
         layout: 'fit',
         columnLines: true,
@@ -75,14 +76,19 @@
             align: 'center',
             items: [{
                 icon: 'resources/images/ux/task/blocked.png',
-                iconCls: 'task-icon',
+                iconCls: 'task-icon task-cancel x-hidden',
                 tooltip: 'Cancel Task',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     if(rec.data.taskType === "j5run") socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
-                }
+                },
+                getClass: function(v, meta, rec) {          
+                      if(rec.data.status != "In progress") {                                                                      
+                          return 'x-hide-display';
+                      }
+                  }
             }]
         },
         {
@@ -90,7 +96,7 @@
             align: 'center',
             items: [{
                 icon: 'resources/images/ux/task/new-tab.png',
-                iconCls: 'task-icon',
+                iconCls: 'task-icon task-link',
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
