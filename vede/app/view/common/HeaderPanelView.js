@@ -21,7 +21,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
             height: 40,
             padding: 10,
             width: 400,
-            hidden: true,
+            hidden: true
 		},
 		{
 		xtype: 'container',
