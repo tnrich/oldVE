@@ -24,7 +24,7 @@ module.exports = function (app) {
 
 	app.get('/genedesign/codon_optimize',function(req,res){
 
-		fs.writeFile("/home/teselagen/geneDesign/testagene.fasta", req.query.dna, function(err) {
+		fs.writeFile("/home/teselagen/geneDesign/testagene.fasta", '>\n'+req.query.dna, function(err) {
 
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
