@@ -39,6 +39,7 @@ require('./routes/api.js')(app);
 
 // Services
 require('./routes/j5-services/j5.js')(app);
+require('./routes/genedesign.js')(app);
 
 // Listen Local Port on environment port or default 3000
 var nodePort = app.program.port || 3000;
