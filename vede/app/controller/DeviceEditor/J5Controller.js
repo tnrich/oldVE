@@ -829,6 +829,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             counter--;
             if(counter === 0 && typeof(cb) === "function") cb();
         }, this);
+
+        if(this.j5ParamsWindow) 
+        {
+            var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.down("InspectorPanel").down('component[cls="presetSelector"]').setValue( this.j5ParamsWindow.down('component[cls="inWindowPresetSelector"]').getValue() );
+        }
     },
 
     saveAsPresetBtn: function(){
@@ -881,7 +887,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         };
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        if(currentTab.selectedPreset)
+        if(currentTab.selectedPreset && currentTab.selectedPreset.get('presetName') != "Default")
         {
             var selectedPreset = currentTab.selectedPreset;
 

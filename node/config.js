@@ -63,7 +63,7 @@ module.exports = function(app, express) {
             redis_host: '54.215.198.196',
             redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
         };
-        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;        
+        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
     }
 
     /*
@@ -84,12 +84,15 @@ module.exports = function(app, express) {
         //    req.headers.host = 'teselagen.local';
         //    app.routingProxy.proxyRequest(req, res, {host: 'teselagen.local', port: 80});
         //});
-        
+
         app.use(express.json());
         app.use(express.urlencoded());
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
-        app.use(express.session({ 
+        app.use(express.session({
+            cookie: {
+                maxAge: 1000 * 60 * 60
+            },
             secret: 'j5',
             store: new express.session.MemoryStore()
         }));
@@ -134,9 +137,9 @@ module.exports = function(app, express) {
         app.use(express.urlencoded());
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
-        app.use(express.session({ 
+        app.use(express.session({
             secret: 'j5',
-            store: new RedisStore({client: redis,prefix:'vede://',ttl:1000})
+            store: new RedisStore({client: redis, prefix:'vede://', ttl:3600})
         })); // Sessions managed using cookies
 
         redis.auth(Opts.redis_pass,function(err,ok){
@@ -173,7 +176,7 @@ module.exports = function(app, express) {
     else
     {
         console.log("SOCKET : SOCKET");
-        
+
         io.set('transports', [
             'websocket'
           //, 'flashsocket'
@@ -185,7 +188,7 @@ module.exports = function(app, express) {
 
     var RedisStore = require('socket.io/lib/stores/redis');
 
-    var pub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass }) 
+    var pub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass })
       , sub   =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass })
       , client =  app.redis.createClient(6379,Opts.redis_host,{ auth_pass : Opts.redis_pass });
 
@@ -236,7 +239,7 @@ module.exports = function(app, express) {
                 {
                     user = {};
                     user.tasks = {};
-                    user.tasks[task.id] = task; 
+                    user.tasks[task.id] = task;
                 }
                 else
                 {
@@ -258,7 +261,8 @@ module.exports = function(app, express) {
                 status   : job.status,
                 dateStarted : job.date,
                 taskRefID   : job._id,
-                assemblyType : job.assemblyMethod
+                assemblyType : job.assemblyMethod,
+                run: job
             };
 
             app.cache.get(userKey,function(err,user){
@@ -266,7 +270,7 @@ module.exports = function(app, express) {
                 {
                     user = {};
                     user.tasks = {};
-                    user.tasks[task.id] = task; 
+                    user.tasks[task.id] = task;
                 }
                 else
                 {
@@ -280,18 +284,18 @@ module.exports = function(app, express) {
         };
 
         app.cache.removeTask = function(userKey,taskKey,cb){
-            app.cache.get(userKey,function(err,user){ 
+            app.cache.get(userKey,function(err,user){
                 if(user && user.tasks)
                 {
                     delete user.tasks[taskKey];
                     app.cache.set(userKey, user, 0, function(err){
                         cb()
-                    });                        
+                    });
                 }
             });
         };
 
-        setTimeout(function(){        
+        setTimeout(function(){
             console.log("writing to memcache");
             app.cache.set('test', 'hello', 0, function (err, result) {
                 if(err) {
@@ -328,7 +332,7 @@ module.exports = function(app, express) {
                 {
                     user = {};
                     user.jobs = {};
-                    user.jobs[job._id] = job; 
+                    user.jobs[job._id] = job;
                 }
                 else
                 {
@@ -343,7 +347,7 @@ module.exports = function(app, express) {
         };
 
     }
-    
+
 
 
     // Init MONGODB - MONGOOSE (ODM)
@@ -354,16 +358,16 @@ module.exports = function(app, express) {
 
     app.db = app.mongoose.createConnection(Opts.authHost, function(err) {
         if (err) {
-            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(err); 
+            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(err);
             //app.mongoose.connection.db.serverConfig.connection.autoReconnect = true;
         }
-        else { 
+        else {
             app.logger.log("info","MONGOOSE: Online", app.dbname);
         }
     });
     require('./schemas/DBSchemas.js')(app.db);
-    
-    
+
+
 
     // Init XML-RPC
     /*
@@ -398,7 +402,7 @@ module.exports = function(app, express) {
 
 
     // Resolver server external address
-    require('child_process').exec('curl http://169.254.169.254/latest/meta-data/public-hostname', function (error, stdout, stderr) { 
+    require('child_process').exec('curl http://169.254.169.254/latest/meta-data/public-hostname', function (error, stdout, stderr) {
         var decoder = new (require('string_decoder').StringDecoder)('utf-8');
         app.localIP = decoder.write(stdout);
     });

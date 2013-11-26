@@ -157,7 +157,7 @@ function encoded_j5_parameters_file(params)
 
 
     for(var prop in params) {
-        out += prop + ',' + params[prop] + '\n';
+        out += prop + ',' + params[prop].toString().toUpperCase() + '\n';
     }
     //quicklog(out);
     return new Buffer(out).toString('base64');

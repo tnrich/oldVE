@@ -29,8 +29,17 @@ Ext.define('Vede.view.de.DeviceEditorPartLibrary', {
                     Teselagen.manager.ProjectManager.parts.clearFilter(true);
                     var win = this.up("window");
                     var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
-                    //grid.down('pagingtoolbar').doRefresh();
-                    grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                    if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                    grid.timeoutId = setTimeout(function(){
+                        if(grid.store.proxy.activeRequest) 
+                        {
+                            Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                            delete grid.store.proxy.activeRequest;
+                        }
+                        grid.store.clearFilter(true);
+                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                        if(!grid.store.proxy.activeRequest) grid.store.load();
+                    }, 200);
                 }
             }
         },

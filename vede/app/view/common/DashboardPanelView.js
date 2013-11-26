@@ -502,8 +502,17 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 listeners: {
                                     change: function(field, newValue, oldValue, eOpts) {
                                         var grid = Ext.getCmp('sequenceLibrary');
-                                        grid.store.clearFilter(true);
-                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
+                                        }, 200);
                                     }
                                 }
                             },
@@ -723,10 +732,20 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 emptyCls: 'empty-search-field',
                                 margin: 13,
                                 listeners: {
-                                    change: function(field, newValue, oldValue, eOpts) {
+                                    change: function(field, newValue, oldValue, eOpts) {                                        
                                         Teselagen.manager.ProjectManager.parts.clearFilter(true);
                                         var grid = Ext.getCmp('partLibrary');
-                                        grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
+                                        }, 200);
                                     }
                                 }
                             },
