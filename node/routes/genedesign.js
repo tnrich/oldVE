@@ -38,7 +38,7 @@ module.exports = function (app) {
 
 			fs.readFile('/home/teselagen/geneDesign/testagene.fasta', 'utf8', function (err, data) {
 			  if (err) throw err;
-			  console.log(data);
+			  res.json({response:data});
 			});
 		});
     });
