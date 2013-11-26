@@ -37,10 +37,12 @@ module.exports = function (app) {
 	        newChild.on('exit', function (code,signal) {
 	            console.log("Process finished with code ",code," and signal ",signal);
 
-				fs.readFile('/home/teselagen/geneDesign/testagene_CJ.fasta', 'utf8', function (err, data) {
-				  if (err) throw err;
-				  res.json({response:data});
-				});
+	            setTimeout(function(){
+					fs.readFile('/home/teselagen/geneDesign/testagene_CJ.fasta', 'utf8', function (err, data) {
+					  if (err) throw err;
+					  res.json({response:data});
+					});
+				},1000);
 			});
 
 		});
