@@ -101,14 +101,14 @@
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                 }
-            }]
+            }],
+            listeners: {
+                 itemclick: function(grid,item){
+                    console.log(item);
+                    // Vede.application.fireEvent("jumpToJ5Run",item.raw);
+                }       
+            }
         }      
         ],
-        //listeners: {
-        //    itemclick: function(grid,item){
-        //        Vede.application.fireEvent("jumpToJ5Run",item.raw);
-        //        grid.up("window").close();
-        //}
-        //}
     }]
 });
