@@ -28,9 +28,7 @@ module.exports = function (app) {
 
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
-	        var params = ["-i","/home/teselagen/geneDesign/testagene.fasta","-org","yeast","-a most_different_sequence,high"];
-
-	        var newChild = spawn('/usr/local/bin/GD_Juggle_Codons.pl', ['-t',scriptPath]);
+	        var newChild = spawn('/bin/sh', ['/home/teselagen/geneDesign/runCodon.sh']);
 	        console.log("codon optimizer" + " started with pid: "+newChild.pid);
 
 
