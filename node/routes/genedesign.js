@@ -28,7 +28,7 @@ module.exports = function (app) {
 
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
-	        var newChild = spawn('/bin/sh', ['/home/teselagen/geneDesign/runCodon.sh']);
+	        var newChild = spawn('/home/teselagen/geneDesign/runCodon.sh', []);
 	        console.log("codon optimizer" + " started with pid: "+newChild.pid);
 
 
