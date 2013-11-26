@@ -36,7 +36,7 @@ module.exports = function (app) {
         newChild.on('exit', function (code,signal) {
             console.log("Process finished with code ",code," and signal ",signal);
 
-			fs.readFile('/home/teselagen/geneDesign/testagene.fasta', function (err, data) {
+			fs.readFile('/home/teselagen/geneDesign/testagene.fasta', 'utf8', function (err, data) {
 			  if (err) throw err;
 			  console.log(data);
 			});
