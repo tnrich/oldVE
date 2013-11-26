@@ -99,12 +99,14 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
         openDesign: function(design_id,project_id,cb){
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        
+
         project.designs().load({
             id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+            callback: function(loadedDesign, operation, success) {
+                if(success) {
+                    Teselagen.manager.ProjectManager.workingProject = project;
+                    Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+                }
                 if(typeof (cb) === "function") {cb(); }
             }
         });

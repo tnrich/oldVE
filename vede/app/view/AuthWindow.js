@@ -6,6 +6,7 @@ Ext.define('Vede.view.AuthWindow', {
     extend: 'Ext.window.Window',
     id: 'AuthWindow',
     floating: true,
+    modal: true,
     frame: false,
     style: 'z-index:8000',
     layout: {
