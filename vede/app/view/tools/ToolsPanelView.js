@@ -92,6 +92,8 @@
 
 		            	var fileDom = this.up().down('filefield').extractFileInput();
 
+		            	if(!fileDom.files[0]) Ext.Msg.alert('Error', 'Select input file');
+
 						if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
 						{
 							return Ext.Msg.alert('Error', 'Only FAS files allowed');
@@ -133,7 +135,7 @@
 								            xtype: 'textfield',
 								            value: response.response
 								        }]
-									});
+									}).show();
 				                },
 				                failure: function(response, opts) {
 				                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
