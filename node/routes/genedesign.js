@@ -133,7 +133,7 @@ Arguments:
 
 				  res.json({
 				  	response:data,
-				  	parsedResponse: sequences,
+				  	parsedResponse: JSON.stringify(sequences),
 				  	parameters: {
 				  		input: dnaSeq,
 				  		algorithm: algorithm,
