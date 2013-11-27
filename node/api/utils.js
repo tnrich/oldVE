@@ -26,7 +26,7 @@ module.exports = function(app) {
                 from: "Teselagen <root@localhost>",
                 to: "tickets@teselagen.uservoice.com",
                 subject: "Feedback",
-                text: req.body.feedback + variables
+                text: req.body.feedback + "<br>" + variables
             }, function(error, response) {
                 if (error) {
                     console.log(error);
@@ -39,7 +39,7 @@ module.exports = function(app) {
                 from: "Teselagen <root@localhost>",
                 to: "tickets@teselagen.uservoice.com",
                 subject: "Error",
-                text: req.body.error + '\n' + req.body.error_feedback + variables
+                text: req.body.error + "<br>" + req.body.error_feedback + variables
             }, function(error, response) {
                 if (error) {
                     console.log(error);
