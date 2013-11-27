@@ -126,7 +126,7 @@ Arguments:
 				fs.readFile('/home/teselagen/geneDesign/tempSeq_CJ.fasta', 'utf8', function (err, data) {
 				  if (err) throw err;
 
-				  var sequences = data.split(' ').filter(function(seq){if(seq.match(/[C|G|T|A]/)&&seq!="RSCU") return seq;})	
+				  var sequences = data.split(' ').map(function(seq){if(seq.match(/[C|G|T|A]/)&&seq!="RSCU") return seq;})	
 
 				  res.json({
 				  	response:data,
