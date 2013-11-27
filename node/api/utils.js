@@ -9,7 +9,6 @@ module.exports = function(app) {
     var J5Runs = app.db.model("j5run");
 
     return {
-
         post_error: function(req, res) {
             throw new Error("OH NOOO");
         },
@@ -266,7 +265,5 @@ module.exports = function(app) {
             var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp") + '/index.html' , "utf8");
             res.send(webpage);
         }
-
-
     };
 };
