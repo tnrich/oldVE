@@ -92,7 +92,7 @@
 
 		            	var fileDom = this.up().down('filefield').extractFileInput();
 
-		            	if(!fileDom.files[0]) Ext.Msg.alert('Error', 'Select input file');
+		            	if(!fileDom.files[0]) return Ext.Msg.alert('Error', 'Select input file');
 
 						if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
 						{
