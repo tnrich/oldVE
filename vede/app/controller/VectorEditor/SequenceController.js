@@ -206,9 +206,9 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
 
         } else if(event.ctrlKey && event.getKey() === event.C) {
             // Ctrl + C: Copy.
-            //this.copySelection();
+            this.copySelection();
 
-            Ext.Msg.alert('Copy Shortcut', 'Please use the Edit->Copy menu item for copy functionality.');
+            //Ext.Msg.alert('Copy Shortcut', 'Please use the Edit->Copy menu item for copy functionality.');
         } else if(event.ctrlKey && event.getKey() === event.V) {
             // Ctrl + V: Paste.
             //this.pasteFromClipboard();
@@ -411,6 +411,15 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
         if(this.SelectionLayer.selected) {
             this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
+
+            var copySequenceWindow = Ext.create("Vede.view.ve.CopySequenceWindow").show();
+            var copyTextArea = copySequenceWindow.down("textarea");
+
+            copyTextArea.setValue(this.application.ClipBoardData.getSequence().toString());
+
+            Ext.defer(function() {
+                copyTextArea.selectText();
+            }, 10);
         }
     },
 
