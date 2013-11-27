@@ -95,6 +95,7 @@ Arguments:
 
 
 		if(app.get("env") !== "production") {
+			/*
 			return res.json(
 				{
 				  "response": ">insequence balanced codon juggled with yeast RSCU values\nATGACCGACCAGGCTACTCCAAACTTGCCTTCTCGTGATTTCGACTCTACCGCTGCTTTC\nTACGAAAGATTAGGTTTCGGTATTGTTTTCAGAGATGCTTTGGCTGACGTCTTGATCGTC\nCACGACGCTCGTGACTTCGTCGCTCTAGCCGATGGTCAACAAGTTGGTAGACAAGCCCAT\nGCTGGTAGACGTAGATTGTTCTTGAACAGATCTTCCTTCGTCTGGAAGGCCGTTCACTTG\nGACCGTTGGGCTGCTTTGCCAGGTTGGTTGGGTTTTATTTCCCACCCATTGGCCTTGATC\nTGTTACGCTGGTGGTTCTAGACCAGCCTCTCAATCTAGAATCCCAGTCGAACATAGACAA\nGTTAGAATCCGTGACTCTGAAGAAGGTACCCCAGGTAGAGGTTGGGCTTACTTCACCTAC\nCCTGCACCATTGACCCCATTAGACACCCCAAGAAAGGTCTACACCAACCCATTGGCTAAG\nTCCTGTATTTCATGTGAAAAGGGTTGGATCTACCGTAAGAACAGATACAACGACCCAGAA\nGCTGGTTTGTGTTCTGGTAAGGCTATGACCAAGATTCCATAA\n",
@@ -117,11 +118,13 @@ Arguments:
 				  }
 				}
 			);
+			*/
+			return res.json({msg: "In dev mode"});
 		}
 
-		var organism = req.query.organism || "yeast";
-		var algorithm = req.query.algorithm || "balanced";
-		var dnaSeq = req.query.dna || "";
+		var organism = (req.query.organism)? req.query.organism : "yeast";
+		var algorithm = (req.query.algorithm)? req.query.algorithm : "balanced";
+		var dnaSeq = (req.query.dna)? req.query.dna : "";
 
 		fs.writeFile("/home/teselagen/geneDesign/tempSeq.fasta", '>insequence\n'+dnaSeq, function(err) {
 
