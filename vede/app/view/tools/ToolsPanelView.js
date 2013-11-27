@@ -63,6 +63,19 @@
 			store: new Ext.data.ArrayStore({
 				fields: ['organismName'],
 				data: [
+					['Drosophila_melanogaster'],
+					['Mycoplasma_genitalium'],
+					['Bacillus_subtilis'],
+					['Escherichia_coli'],
+					['oryza_sativa'],
+					['Caenorhabditis_elegans'],
+					['Flat'],
+					['Saccharomyces_cerevisiae'],
+					['Cglut'],
+					['Homo_sapiens'],
+					['Standard'],
+					['Deinococcus_radiodurans'],
+					['Mycoplasma_genitalium'],
 					['yeast']
 				]
 			})
