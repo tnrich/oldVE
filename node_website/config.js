@@ -14,6 +14,8 @@ module.exports = function(app, express){
 
   require('./logging').configLogging(app, express);
 
+  app.configure('development', function () { app.locals.pretty = true; });
+  app.configure('production', function () { app.locals.pretty = true; });
 
    var Opts = {
         host: "127.0.0.1",
