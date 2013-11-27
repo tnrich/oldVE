@@ -30,7 +30,7 @@ module.exports = function (app) {
 
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
-			var deploySh = spawn('/usr/local/bin/GD_Juggle_Codons.pl -i testagene.fasta -org yeast -a most_different_sequence,high', [], {
+			var deploySh = spawn('/usr/local/bin/GD_Juggle_Codons.pl', ['-i','testagene.fasta','-org','yeast','-a','most_different_sequence,high'], {
 				cwd: '/home/teselagen/geneDesign',
 				env: (process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
 			});
