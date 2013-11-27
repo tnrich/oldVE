@@ -123,7 +123,7 @@ Arguments:
 	        deploySh.on('exit', function (code,signal) {
 	            console.log("Process finished with code ",code," and signal ",signal);
 
-	            setTimeout(function(){
+	            //setTimeout(function(){
 					fs.readFile('/home/teselagen/geneDesign/tempSeq_CJ.fasta', 'utf8', function (err, data) {
 					  if (err) throw err;
 					  res.json({
@@ -134,7 +134,7 @@ Arguments:
 					  		organism: organism
 					  	}});
 					});
-				},1000);
+				//},1000);
 			});
 
 		});
