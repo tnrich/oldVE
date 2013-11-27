@@ -97,8 +97,8 @@
 							return Ext.Msg.alert('Error', 'Only FAS files allowed');
 						}
 
-				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].getValue();
-				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].getValue();
+				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
+				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
 
 				        var fr = new FileReader();
 				        
@@ -128,7 +128,12 @@
 				                    response = JSON.parse(response.responseText);
 				                    messageBox.close();
 				                    console.log(response);
-				                    Ext.MessageBox.alert('Success',response.response);
+									Ext.create('Ext.window.Window',{
+								        items: [{
+								            xtype: 'textfield',
+								            value: response.response
+								        }]
+									});
 				                },
 				                failure: function(response, opts) {
 				                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
