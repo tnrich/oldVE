@@ -128,7 +128,7 @@ Arguments:
 
 				  var sequences = data.toString().split('\n').filter(
 				  	function(seq){
-				  		if(seq.match(/[C|G|T|A]/)&&seq!="RSCU") return seq;
+				  		if(seq.match(/[C|G|T|A]/)&&seq.indexOf(">insequence")==-1) return seq;
 				  });
 
 				  res.json({
