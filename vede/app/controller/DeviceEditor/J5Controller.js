@@ -708,13 +708,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     toastr.options.onclick = null;
                     
                     toastr.info("j5 Run Submitted");
-                    if(this.tasksWindow) this.tasksWindow.toggleCollapse();
-                    else 
-                    {
-                        this.tasksWindow = Ext.getCmp('taskMonitor').expand();
-                        console.log(Teselagen.manager.ProjectManager.currentTasks);
-                        this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
-                    }
+                    this.tasksWindow = Ext.getCmp('taskMonitor').expand();
+                    this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
                 } else {
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
