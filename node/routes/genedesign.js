@@ -19,8 +19,10 @@ module.exports = function (app) {
 
 
 	var fs = require("fs");
-	var spawn = require('child_process').spawn
+	var spawn = require('child_process').spawn;
 	var util = require('util');
+	var spawn = require('child_process').spawn;
+	var _ = require('underscore');
 
 	app.get('/genedesign/codon_optimize',function(req,res){
 
@@ -28,11 +30,26 @@ module.exports = function (app) {
 
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
-	        var newChild = spawn('/home/teselagen/geneDesign/runCodon.sh', []);
-	        console.log("codon optimizer" + " started with pid: "+newChild.pid);
+			var deploySh = spawn('/home/teselagen/geneDesign/runCodon.sh', [], {
+				cwd: '/home/teselagen/geneDesign',
+				env: (process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
+			});
 
+			deploySh.stdout.on('data', function (data) {
+				console.log('stdout: ' + data);
+			});
 
-	        newChild.on('exit', function (code,signal) {
+			deploySh.stderr.on('data', function (data) {
+			 	console.log('stderr: ' + data);
+			});
+
+			deploySh.on('error', function() { 
+				console.log(arguments); 
+			});
+
+	        console.log("codon optimizer" + " started with pid: "+deploySh.pid);
+	        
+	        deploySh.on('exit', function (code,signal) {
 	            console.log("Process finished with code ",code," and signal ",signal);
 
 	            setTimeout(function(){
