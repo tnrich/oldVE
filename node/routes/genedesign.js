@@ -123,18 +123,19 @@ Arguments:
 	        deploySh.on('exit', function (code,signal) {
 	            console.log("Process finished with code ",code," and signal ",signal);
 
-	            //setTimeout(function(){
-					fs.readFile('/home/teselagen/geneDesign/tempSeq_CJ.fasta', 'utf8', function (err, data) {
-					  if (err) throw err;
-					  res.json({
-					  	response:data,
-					  	input: dnaSeq,
-					  	parameters: {
-					  		algorithm: algorithm,
-					  		organism: organism
-					  	}});
-					});
-				//},1000);
+	            var sequences = data.split(' ').map(function(seq){if(seq.match(/[C|G|T|A]/)&&seq!="RSCU") return seq;})
+
+				fs.readFile('/home/teselagen/geneDesign/tempSeq_CJ.fasta', 'utf8', function (err, data) {
+				  if (err) throw err;
+				  res.json({
+				  	response:data,
+				  	parsedResponse: sequences,
+				  	parameters: {
+				  		input: dnaSeq,
+				  		algorithm: algorithm,
+				  		organism: organism
+				  	}});
+				});
 			});
 
 		});
