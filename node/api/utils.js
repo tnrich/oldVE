@@ -26,9 +26,9 @@ module.exports = function(app) {
             if (req.body.feedback) {
                 app.mailer.sendMail({
                     from: "Teselagen <root@localhost>",
-                    to: "newticket+7ltwtp2jebrcwkne@email.codebasehq.com",
+                    to: "tickets@teselagen.uservoice.com",
                     subject: "Feedback",
-                    text: req.body.feedback + variables
+                    text: req.body.feedback + '<br>' + variables
                 }, function(error, response) {
                     if (error) {
                         console.log(error);
@@ -39,9 +39,9 @@ module.exports = function(app) {
             } else if (req.body.error) {
                 app.mailer.sendMail({
                     from: "Teselagen <root@localhost>",
-                    to: "newticket+7ltwtp2jebrcwkne@email.codebasehq.com",
+                    to: "tickets@teselagen.uservoice.com",
                     subject: "Error",
-                    text: req.body.error + '\n' + req.body.error_feedback + variables
+                    text: req.body.error + '<br>' + req.body.error_feedback + variables
                 }, function(error, response) {
                     if (error) {
                         console.log(error);
