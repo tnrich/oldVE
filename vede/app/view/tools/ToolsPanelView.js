@@ -132,7 +132,7 @@
 				                    console.log(response);
 									Ext.create('Ext.window.Window',{
 								        items: [{
-								            xtype: 'textfield',
+								            xtype: 'textarea',
 								            value: response.response,
 								            width: 200,
 								            height:100
