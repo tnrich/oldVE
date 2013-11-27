@@ -133,11 +133,11 @@ Arguments:
 			});
 
 			deploySh.stdout.on('data', function (data) {
-				console.log('stdout: ' + data);
+				//console.log('stdout: ' + data);
 			});
 
 			deploySh.stderr.on('data', function (data) {
-			 	console.log('stderr: ' + data);
+			 	//console.log('stderr: ' + data);
 			});
 
 			deploySh.on('error', function() { 

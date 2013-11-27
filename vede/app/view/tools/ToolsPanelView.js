@@ -8,22 +8,65 @@
     items: [
 		{
 			xtype: 'filefield',
-			margin: '10 0 0 25',
+			margin: '10 0 5 100',
 			validateOnChange: false,
 			padding: 0,
 			height: 23,
+			width: 250,
 			allowBlank: false,
 			hideLabel: false,
 			labelWidth: 10,
 			preventMark: false,
 			buttonOnly: false,
 			buttonText: '<b>Choose File</b>',
+			fieldLabel: '<b style="margin-left:-100px">Input file:</b>',
 			buttonConfig: {
 				stlye: {
 					paddingTop: '0px !important'
 				}
 			}
 		},
+        {
+            xtype: 'combobox',
+            cls: 'algorithmSelector',
+            fieldLabel: '<b>Algorithm:</b>',
+            labelCls: 'algorithm-label',
+            editable: false,
+            labelSeparator: ' ',
+            labelWidth: 110,
+            width:350,
+            queryMode: 'local',
+            valueField: 'algorithmValue',
+            value: 'balanced',
+            displayField: 'algorithmName',
+			store: new Ext.data.ArrayStore({
+				fields: ['algorithmName'],
+				data: [
+					['balanced'],['high'],['most_different_sequence'],['least_different_RSCU'],['random'],
+
+				]
+			})
+        },
+        {
+            xtype: 'combobox',
+            cls: 'organismSelector',
+            fieldLabel: '<b>Organism:</b>',
+            labelCls: 'organism-label',
+            editable: false,
+            labelSeparator: ' ',
+            labelWidth: 110,
+            width:350,
+            queryMode: 'local',
+            valueField: 'organismValue',
+            value: 'yeast',
+            displayField: 'organismName',
+			store: new Ext.data.ArrayStore({
+				fields: ['organismName'],
+				data: [
+					['yeast']
+				]
+			})
+        },
         {
             xtype: 'button',
             text : 'Juggle Codon',
@@ -33,7 +76,17 @@
             listeners: {
 		        click: {
 		            fn: function(field){
-				        var fileDom = this.up().down('filefield').extractFileInput();
+
+		            	var fileDom = this.up().down('filefield').extractFileInput();
+
+						if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
+						{
+							return Ext.Msg.alert('Error', 'Only FAS files allowed');
+						}
+
+				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].getValue();
+				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].getValue();
+
 				        var fr = new FileReader();
 				        
 				        var that = this;
@@ -54,7 +107,9 @@
 				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),
 				                method: 'GET',
 				                params: {
-				                    dna: seq
+				                    dna: seq,
+				                    algorithm: algorithm,
+				                    organism: organism
 				                },
 				                success: function (response) {
 				                    response = JSON.parse(response.responseText);

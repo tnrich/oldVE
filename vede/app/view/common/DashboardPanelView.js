@@ -521,7 +521,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 items: [
                                     {
                                         xtype: 'button',
-                                        text: 'Tools',
+                                        text: 'Codon Optimizer',
                                         listeners: {
                                             click: function(){
                                                 Ext.create('Vede.view.tools.ToolsPanelView').show();
@@ -529,7 +529,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         },
                                         width: 100
                                     }
-                                ]
+                                ],
+                                margin: '0 10 10 10'
                             },
                             {
                                 xtype: 'gridpanel',
