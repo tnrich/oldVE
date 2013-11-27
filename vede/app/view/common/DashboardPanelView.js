@@ -517,6 +517,21 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 }
                             },
                             {
+                                xtype: 'container',
+                                items: [
+                                    {
+                                        xtype: 'button',
+                                        text: 'Tools',
+                                        listeners: {
+                                            click: function(){
+                                                Ext.create('Vede.view.tools.ToolsPanelView').show();
+                                            }
+                                        },
+                                        width: 100
+                                    }
+                                ]
+                            },
+                            {
                                 xtype: 'gridpanel',
                                 border: 0,
                                 name: 'SequenceLibraryGrid',
