@@ -137,18 +137,19 @@ Arguments:
 				env: (process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
 			});
 
-			var errors = '';
+			var error = '';
+			var out = '';
 
 			deploySh.stdout.on('data', function (data) {
 				//console.log('stdout: ' + data);
 			});
 
 			deploySh.stderr.on('data', function (data) {
-			 	errors += data;
+			 	out += data;
 			});
 
 			deploySh.on('error', function(data) { 
-				errors += data;
+				error += data;
 			});
 
 	        console.log("codon optimizer" + " started with pid: "+deploySh.pid);
@@ -156,11 +157,12 @@ Arguments:
 	        deploySh.on('exit', function (code,signal) {
 	            console.log("Process finished with code ",code," and signal ",signal);
 
-	            if(errors!='')
+	            if(error!='')
 	            {
 	            	return res.json({
 	            		success: false,
-	            		error: errors
+	            		error: errors,
+	            		out: out
 	            	});
 	            }
 
@@ -175,6 +177,7 @@ Arguments:
 				  res.json({
 				  	success: true,
 				  	response:data,
+				  	out: out,
 				  	parsedResponse: sequences,
 				  	parameters: {
 				  		input: dnaSeq,
