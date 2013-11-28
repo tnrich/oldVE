@@ -122,7 +122,7 @@ Arguments:
 			return res.json({msg: "In dev mode"});
 		}
 
-		var organism = (req.query.organism)? req.body.organism : "yeast";
+		var organism = (req.body.organism)? req.body.organism : "yeast";
 		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
 		var dnaSeq = (req.body.dna)? req.body.dna : "";
 
