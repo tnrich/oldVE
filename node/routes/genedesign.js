@@ -91,7 +91,7 @@ Arguments:
       -h,   --help : Display this message
 */
 
-	app.get('/genedesign/codon_optimize',function(req,res){
+	app.post('/genedesign/codon_optimize',function(req,res){
 
 
 		if(app.get("env") !== "production") {
@@ -122,9 +122,9 @@ Arguments:
 			return res.json({msg: "In dev mode"});
 		}
 
-		var organism = (req.query.organism)? req.query.organism : "yeast";
-		var algorithm = (req.query.algorithm)? req.query.algorithm : "balanced";
-		var dnaSeq = (req.query.dna)? req.query.dna : "";
+		var organism = (req.query.organism)? req.body.organism : "yeast";
+		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
+		var dnaSeq = (req.body.dna)? req.body.dna : "";
 
 		dnaSeq = dnaSeq.replace('<line-break>','\n');
 
