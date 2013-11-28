@@ -119,16 +119,16 @@
 
 				            Ext.Ajax.request({
 				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),
-				                method: 'GET',
+				                method: 'POST',
 				                params: {
 				                    dna: seq,
 				                    algorithm: algorithm,
 				                    organism: organism
 				                },
 				                success: function (response) {
-				                    response = JSON.parse(response.responseText);
+				                    responseObject = JSON.parse(response.responseText);
 				                    messageBox.close();
-				                    console.log(response);
+				                    console.log(responseObject);
 									Ext.create('Ext.window.Window',{
 								        items: [{
 								            xtype: 'textarea',
