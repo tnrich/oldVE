@@ -130,6 +130,8 @@ Arguments:
 
 		fs.writeFile("/home/teselagen/geneDesign/tempSeq.fasta", dnaSeq, function(err) {
 
+			console.log("Error writing sequence to temp file ",err);
+
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
 			var deploySh = spawn('/usr/local/bin/GD_Juggle_Codons.pl', ['-i','tempSeq.fasta','-org',organism,'-a',algorithm], {
