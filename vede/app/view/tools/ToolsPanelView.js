@@ -132,9 +132,9 @@
 									Ext.create('Ext.window.Window',{
 								        items: [{
 								            xtype: 'textarea',
-								            value: response.response,
-								            width: 200,
-								            height:100
+								            value: response.responseText,
+								            width: 500,
+								            height:200
 								        }]
 									}).show();
 				                },
