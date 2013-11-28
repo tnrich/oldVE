@@ -115,8 +115,7 @@
 				            );
 
 				            pFasta = fr.result;
-				            var headers = pFasta.match(/>(.+)/g);
-				            var seq = pFasta.match(headers[0]+'\n(.+)')[1]
+				            var seq = pFasta.replace('\n',"<line-break>");
 
 				            Ext.Ajax.request({
 				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),

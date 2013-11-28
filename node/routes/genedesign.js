@@ -126,7 +126,9 @@ Arguments:
 		var algorithm = (req.query.algorithm)? req.query.algorithm : "balanced";
 		var dnaSeq = (req.query.dna)? req.query.dna : "";
 
-		fs.writeFile("/home/teselagen/geneDesign/tempSeq.fasta", '>insequence\n'+dnaSeq, function(err) {
+		dnaSeq = dnaSeq.replace('<line-break>','\n');
+
+		fs.writeFile("/home/teselagen/geneDesign/tempSeq.fasta", dnaSeq, function(err) {
 
 	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
 	        
@@ -135,22 +137,32 @@ Arguments:
 				env: (process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
 			});
 
+			var errors = '';
+
 			deploySh.stdout.on('data', function (data) {
 				//console.log('stdout: ' + data);
 			});
 
 			deploySh.stderr.on('data', function (data) {
-			 	//console.log('stderr: ' + data);
+			 	errors += data;
 			});
 
-			deploySh.on('error', function() { 
-				console.log(arguments); 
+			deploySh.on('error', function(data) { 
+				errors += data;
 			});
 
 	        console.log("codon optimizer" + " started with pid: "+deploySh.pid);
 	        
 	        deploySh.on('exit', function (code,signal) {
 	            console.log("Process finished with code ",code," and signal ",signal);
+
+	            if(errors!='')
+	            {
+	            	return res.json({
+	            		success: false,
+	            		error: errors
+	            	});
+	            }
 
 				fs.readFile('/home/teselagen/geneDesign/tempSeq_CJ.fasta', 'utf8', function (err, data) {
 				  if (err) throw err;
@@ -161,6 +173,7 @@ Arguments:
 				  });
 
 				  res.json({
+				  	success: true,
 				  	response:data,
 				  	parsedResponse: sequences,
 				  	parameters: {
