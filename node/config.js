@@ -139,7 +139,11 @@ module.exports = function(app, express) {
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({
             secret: 'j5',
-            store: new RedisStore({client: redis, prefix:'vede://', ttl:3600})
+            store: new RedisStore({
+                client: redis,
+                prefix: 'vede://',
+                ttl: 3600
+            })
         })); // Sessions managed using cookies
 
         redis.auth(Opts.redis_pass,function(err,ok){
@@ -295,6 +299,8 @@ module.exports = function(app, express) {
             });
         };
 
+        /*
+        MEM CACHE TESTS
         setTimeout(function(){
             console.log("writing to memcache");
             app.cache.set('test', 'hello', 0, function (err, result) {
@@ -311,6 +317,7 @@ module.exports = function(app, express) {
                 }
             });
         },1000);
+        */
     }
     else
     {
