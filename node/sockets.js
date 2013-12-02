@@ -13,7 +13,7 @@ module.exports = function(app) {
         sub.subscribe("j5jobs");
 
         sub.on("message", function (channel, name) {
-            if(channel != "j5jobs") return false;
+            if(channel != ("j5jobs" || "j5jobcompleted") return false;
 			if(!app.sockets[name]) { return false; }
 			app.cache.get(name,function(err,user){
 				app.sockets[name].emit('update',user);
