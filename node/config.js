@@ -299,6 +299,8 @@ module.exports = function(app, express) {
             });
         };
 
+        /*
+        MEM CACHE TESTS
         setTimeout(function(){
             console.log("writing to memcache");
             app.cache.set('test', 'hello', 0, function (err, result) {
@@ -315,6 +317,7 @@ module.exports = function(app, express) {
                 }
             });
         },1000);
+        */
     }
     else
     {

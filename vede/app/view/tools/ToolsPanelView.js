@@ -63,6 +63,19 @@
 			store: new Ext.data.ArrayStore({
 				fields: ['organismName'],
 				data: [
+					['Drosophila_melanogaster'],
+					['Mycoplasma_genitalium'],
+					['Bacillus_subtilis'],
+					['Escherichia_coli'],
+					['oryza_sativa'],
+					['Caenorhabditis_elegans'],
+					['Flat'],
+					['Saccharomyces_cerevisiae'],
+					['Cglut'],
+					['Homo_sapiens'],
+					['Standard'],
+					['Deinococcus_radiodurans'],
+					['Mycoplasma_genitalium'],
 					['yeast']
 				]
 			})
@@ -79,13 +92,15 @@
 
 		            	var fileDom = this.up().down('filefield').extractFileInput();
 
+		            	if(!fileDom.files[0]) return Ext.Msg.alert('Error', 'Select input file');
+
 						if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
 						{
 							return Ext.Msg.alert('Error', 'Only FAS files allowed');
 						}
 
-				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].getValue();
-				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].getValue();
+				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
+				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
 
 				        var fr = new FileReader();
 				        
@@ -100,22 +115,28 @@
 				            );
 
 				            pFasta = fr.result;
-				            var headers = pFasta.match(/>(.+)/g);
-				            var seq = pFasta.match(headers[0]+'\n(.+)')[1]
+				            var seq = pFasta.replace('\n',"<line-break>");
 
 				            Ext.Ajax.request({
 				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),
-				                method: 'GET',
+				                method: 'POST',
 				                params: {
 				                    dna: seq,
 				                    algorithm: algorithm,
 				                    organism: organism
 				                },
 				                success: function (response) {
-				                    response = JSON.parse(response.responseText);
+				                    responseObject = JSON.parse(response.responseText);
 				                    messageBox.close();
-				                    console.log(response);
-				                    Ext.MessageBox.alert('Success',response.response);
+				                    console.log(responseObject);
+									Ext.create('Ext.window.Window',{
+								        items: [{
+								            xtype: 'textarea',
+								            value: response.responseText,
+								            width: 500,
+								            height:200
+								        }]
+									}).show();
 				                },
 				                failure: function(response, opts) {
 				                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
