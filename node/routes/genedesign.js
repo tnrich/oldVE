@@ -172,4 +172,64 @@ Arguments:
 
     });
 
+/*
+Name:
+      Reverse_translate.pl
+*/
+
+	app.get('/genedesign/reverse_translate',function(req,res){
+
+		var organism = req.query.organism || "yeast";
+		var algorithm = req.query.algorithm || "balanced";
+		var dnaSeq = req.query.dna || "";
+
+		fs.writeFile("/home/teselagen/geneDesign/tempSeq.fasta", '>insequence\n'+dnaSeq, function(err) {
+
+	        var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
+	        
+			var deploySh = spawn('/usr/local/bin/GD_Juggle_Codons.pl', ['-i','tempSeq.fasta','-org',organism,'-a',algorithm], {
+				cwd: '/home/teselagen/geneDesign',
+				env: (process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
+			});
+
+			deploySh.stdout.on('data', function (data) {
+				//console.log('stdout: ' + data);
+			});
+
+			deploySh.stderr.on('data', function (data) {
+			 	//console.log('stderr: ' + data);
+			});
+
+			deploySh.on('error', function() { 
+				console.log(arguments); 
+			});
+
+	        console.log("codon optimizer" + " started with pid: "+deploySh.pid);
+	        
+	        deploySh.on('exit', function (code,signal) {
+	            console.log("Process finished with code ",code," and signal ",signal);
+
+				fs.readFile('/home/teselagen/geneDesign/tempSeq_CJ.fasta', 'utf8', function (err, data) {
+				  if (err) throw err;
+
+				  var sequences = data.toString().split('\n').filter(
+				  	function(seq){
+				  		if(seq.match(/[C|G|T|A]/)&&seq.indexOf(">insequence")==-1) return seq;
+				  });
+
+				  res.json({
+				  	response:data,
+				  	parsedResponse: sequences,
+				  	parameters: {
+				  		input: dnaSeq,
+				  		algorithm: algorithm,
+				  		organism: organism
+				  	}});
+				});
+			});
+
+		});
+
+    });
+
 };
