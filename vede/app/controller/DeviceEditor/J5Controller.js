@@ -6,15 +6,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
     requires: ["Ext.window.MessageBox",
-               "Teselagen.bio.parsers.GenbankManager", 
-               "Teselagen.constants.Constants", 
+               "Teselagen.bio.parsers.GenbankManager",
+               "Teselagen.constants.Constants",
                "Teselagen.event.CommonEvent",
                "Teselagen.event.DeviceEvent",
-               "Teselagen.manager.DeviceDesignManager", 
-               "Teselagen.manager.J5CommunicationManager", 
-               "Teselagen.manager.ProjectManager", 
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.manager.J5CommunicationManager",
+               "Teselagen.manager.ProjectManager",
                "Teselagen.manager.TasksMonitor",
-               "Teselagen.utils.J5ControlsUtils", 
+               "Teselagen.utils.J5ControlsUtils",
                "Vede.view.de.j5Parameters"],
 
     DeviceDesignManager: null,
@@ -118,14 +118,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 currentTab.presetsStore = Ext.create('Ext.data.Store', {
                     fields: ['presetName','j5parameters'],
-                    data : data 
+                    data : data
                 });
                 bindSelector(currentTab.presetsStore);
 
             }
         });
-
-
     },
 
     presetSelectorChange: function(selector,newPreset){
@@ -214,19 +212,19 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 distributePCRBtn.hide();
                 condenseAssembliesBtn.show();
                 editAutomationParamsBtn.disable();
-            }else if(newTab.initialCls == "downstreamAutomation-box") {                    
+            }else if(newTab.initialCls == "downstreamAutomation-box") {
                 runj5Btn.hide();
                 distributePCRBtn.show();
                 condenseAssembliesBtn.hide();
                 editAutomationParamsBtn.enable();
             }
-        
+
     },
 
     onEditJ5ParamsBtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
-        
+
         this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
 
         this.previousJ5ParameterData = this.j5Parameters.getData();
@@ -319,7 +317,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                         Ext.Function.defer(function () {
                             messagebox.zIndexManager.bringToFront(messagebox);
-                        }, 100);       
+                        }, 100);
                     }
                 }
             }
@@ -622,7 +620,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onRunJ5BtnClick: function () {
         $(".toast-success").hide();
-        
+
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
@@ -706,7 +704,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     toastr.options.onclick = null;
-                    
+
                     toastr.info("j5 Run Submitted");
                     this.tasksWindow = Ext.getCmp('taskMonitor').expand();
                     this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
@@ -825,14 +823,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             if(counter === 0 && typeof(cb) === "function") cb();
         }, this);
 
-        if(this.j5ParamsWindow) 
+        if(this.j5ParamsWindow)
         {
             var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
             currentTab.down("InspectorPanel").down('component[cls="presetSelector"]').setValue( this.j5ParamsWindow.down('component[cls="inWindowPresetSelector"]').getValue() );
         }
     },
 
-    saveAsPresetBtn: function(){
+    saveAsPresetBtn: function() {
         var self = this;
         var parameters = {};
         this.j5Parameters.fields.eachKey(function (key) {
@@ -857,7 +855,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     success: function(response){
                         Ext.MessageBox.alert('Success', 'Preset saved', function(){
                             Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,text);
-                        });                    
+                        });
                     }
                 });
 
@@ -876,7 +874,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 success: function(response){
                     Ext.MessageBox.alert('Success', 'Preset updated', function(){
                         Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
-                    });                    
+                    });
                 }
             });
         };
@@ -890,20 +888,78 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 title: 'Update preset?',
                 msg: selectedPreset.get('presetName'),
                 buttons: Ext.MessageBox.YESNO,
-                buttonText:{ 
-                    yes: "Update", 
+                buttonText:{
+                    yes: "Update",
                     no: "Create new"
                 },
                 fn: function(btn){
                     if(btn==="yes") editPreset(selectedPreset);
                     else createPreset();
                 }
-            });            
+            });
         }
         else createPreset();
+    },
 
+    onOverwritePresetBtnClick: function() {
+        var self = this;
+        var updateWindow = Ext.create('Ext.window.Window', {
+            title: 'Update Preset',
+            height: 120,
+            width: 280,
+            layout: 'vbox',
+            items: [{
+                xtype: 'displayfield',
+                value: 'Select the preset you would like to overwrite:'
+            }, {
+                xtype: 'combobox',
+                store: Ext.getCmp("mainAppPanel").getActiveTab().presetsStore,
+                displayField: 'presetName',
+                value: Ext.getCmp("mainAppPanel").getActiveTab().presetsStore.first()
+            }, {
+                xtype: 'container',
+                layout: 'hbox',
+                items: [{
+                    xtype: 'button',
+                    text: 'OK',
+                    listeners: {
+                        click: function() {
+                            var combobox = this.up('window').down('combobox');
+                            var selectedPreset = combobox.store.getAt(combobox.store.find(combobox.displayField, combobox.getValue()));
+                            var parameters = {};
 
+                            self.j5Parameters.fields.eachKey(function (key) {
+                                if(key !== "id" && key !== "j5run_id") {
+                                    parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
+                                }
+                            });
 
+                            this.up('window').close();
+
+                            Ext.Ajax.request({
+                                method: 'PUT',
+                                url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                                params: {
+                                    id: selectedPreset.data.id,
+                                    j5parameters: JSON.stringify(parameters)
+                                },
+                                success: function(response){
+                                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
+                                }
+                            });
+                        }
+                    }
+                }, {
+                    xtype: 'button',
+                    text: 'Cancel',
+                    listeners: {
+                        click: function() {
+                            this.up('window').close();
+                        }
+                    }
+                }]
+            }]
+        }).show();
     },
 
     onDownloadj5Btn: function (button, e, options) {
@@ -1030,6 +1086,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='saveAsPresetBtn']": {
                 click: this.saveAsPresetBtn
             },
+            "button[cls='overwritePresetBtn']": {
+                click: this.onOverwritePresetBtnClick
+            },
             "button[cls='j5ParamsCancelBtn']": {
                 click: this.onj5ParamsCancelBtnClick
             },
@@ -1125,7 +1184,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         });
 
-        
+
         this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
         this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
         this.application.on(this.CommonEvent.LOAD_PRESETS, this.loadPresetsSelector, this);
