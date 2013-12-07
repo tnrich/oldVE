@@ -393,10 +393,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         function getSequenceByID(targetHash, cb) {
             var found = false;
             var sequences = xmlDoc.getElementsByTagNameNS("*", "sequenceFile");
+            console.log(sequences);
             for (var i=0; i < sequences.length; i++) {
                 var sequence = sequences[i];
                 if (!sequence.nodeName || typeof sequence !== "object") { continue; }
-                if (String(sequence.getAttribute("hash")) === String(targetHash) && !found ) { cb(sequence); }
+                if (String(sequence.getAttribute("hash")) === String(targetHash) && !found ) {
+                    cb(sequence); 
+                } else if (String(sequence.getAttribute("hash")) === String(targetHash) && !found) {
+
+                }
             }
         }
 
@@ -462,7 +467,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         newBin.cells().add(newCell);
                     } else {
                         var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
-                        var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+                        if(part.getElementsByTagNameNS("*", "sequenceFileHash")[0]) {
+                            var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+                        } else {
+                            var hash = part.getElementsByTagNameNS("*", "sequenceFileID")[0].textContent;
+                        }
                         var name = this.getTagText(part, "name");
                         var startBP = this.getTagText(part, "startBP");
                         var endBP = this.getTagText(part, "stopBP");
@@ -476,7 +485,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         });
 
                         getSequenceByID(hash, function (sequence) {
-
+                            console.log(sequence);
                             var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
 
                             if(ext) {
@@ -580,7 +589,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 operand2 = parseInt( operand2Node.textContent );
                 operand2isNumber = true;
             }
-            else {operand2 = operand2Node.textContent;}
+            else {
+                operand2 = operand2Node.textContent;
+                if(parseInt(operand2)) {
+                    operand2 = parseInt(operand2);
+                    operand2isNumber = true;
+                }
+            }
+
+            console.log(operand2);
 
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                 name: rule.getElementsByTagNameNS("*", "name")[0].textContent,
