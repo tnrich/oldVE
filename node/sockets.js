@@ -23,6 +23,7 @@ module.exports = function(app) {
             }
             else if(channel=="j5completed")
             {
+                console.log(name);
                 if(!app.sockets[name]) { return false; }
                 app.cache.get(name,function(err,user){
                     app.sockets[name].emit('j5completed',user);
