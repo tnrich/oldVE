@@ -62,7 +62,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.on('j5completed',function(data){
                     console.log(data);
                     var startDate = data.date;
-                    var endDate = date.endDate;
+                    var endDate = data.endDate;
                     var elapsed = endDate - startDate;
                     console.log(startDate, endDate, elapsed);
                     elapsed = Math.round(elapsed/1000);
