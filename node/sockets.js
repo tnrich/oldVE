@@ -14,12 +14,15 @@ module.exports = function(app) {
         sub.subscribe("j5completed");
 
         sub.on("message", function (channel, data) {
-            if(channel == "j5jobs") 
+            console.log("SOCKET PIPE");
+            console.log(channel);
+            console.log(data);
+            if(channel=="j5jobs") 
             {
-                name = data;
+                var name = data;
     			if(!app.sockets[name]) { return false; }
     			app.cache.get(name,function(err,user){
-    				app.sockets[name].emit('update',user);
+    				if(user) app.sockets[name].emit('update',user);
     			});      
             }
             else if(channel=="j5completed")
