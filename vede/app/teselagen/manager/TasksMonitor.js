@@ -60,7 +60,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('j5completed',function(data){
-                    var startDate = task.DateStarted;
+                    console.log(data);
+                    var startDate = data.date;
                     var endDate = Date.now();
                     var elapsed = endDate - startDate;
                     elapsed = Math.round(elapsed/1000);

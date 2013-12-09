@@ -100,6 +100,7 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
+                    console.log(rec);
                 }
             }],
             listeners: {
