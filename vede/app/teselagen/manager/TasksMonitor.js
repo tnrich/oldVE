@@ -60,26 +60,23 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('j5completed',function(data){
+                    var startDate = task.DateStarted;
+                    var endDate = Date.now();
+                    var elapsed = endDate - startDate;
+                    elapsed = Math.round(elapsed/1000);
+                    elapsed = self.elapsedDate(elapsed);
                     console.log("j5 run completed message");
                     console.log(data);
+                    var jumpRun = data.j5run;
+                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
+                    toastr.success("j5 Run for " +jumpRun.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: jumpRun});
+                    toastr.options.timeOut = 5000;
                 });
 
                 var lastCompletedTask;
 
                 socket.on('update',function(data){
                     console.log(data);
-
-                    if (lastCompletedTask) {
-                        var startDate = task.DateStarted;
-                            var endDate = Date.now();
-                            var elapsed = endDate - startDate;
-                            elapsed = Math.round(elapsed/1000);
-                            elapsed = self.elapsedDate(elapsed);
-                            toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",jumpRun);}
-                            toastr.success("j5 Run for " +task.taskName + " " + task.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: task});
-                            toastr.options.timeOut = 5000;
-                    }
-                    
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
@@ -103,12 +100,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                         task = data.tasks[taskKey];
                         task.dateStarted = new Date(task.dateStarted);
                         Teselagen.manager.ProjectManager.currentTasks.add(task);
-                
-                        if(task.status === "Completed") {
-                            lastCompletedTask = task;
-                        }
-
-
                     }
                 });
 
