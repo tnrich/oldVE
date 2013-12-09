@@ -14,6 +14,7 @@ module.exports = function(app) {
         sub.subscribe("j5completed");
 
         sub.on("message", function (channel, data) {
+            console.log("----");
             console.log("SOCKET PIPE");
             console.log(channel);
             console.log(data);
@@ -27,8 +28,8 @@ module.exports = function(app) {
             }
             else if(channel=="j5completed")
             {
-                name = data.username;
-                j5run = data.j5run;
+                var name = data.username;
+                var j5run = data.j5run;
                 if(!app.sockets[name]) { return false; }
                 app.sockets[name].emit('j5completed',j5run);                  
             }
