@@ -7,6 +7,17 @@ Ext.define("Teselagen.models.Task", {
 
     fields: [
         {  name: "id",               type: "long"   } ,
+        {  name: "devicedesign_id",  type: "long",
+            convert: function(v, record) {
+                var id = record.run.devicedesign_id;
+            }
+        },
+        {  name: "project_id",       type: "long",
+            convert: function(v, record) {
+                var id = record.run.project_id;
+            }
+        },
+        {  name: "id",               type: "long"   } ,
         {  name: "taskName",         type: "String" } ,
         {  name: "taskType",         type: "String" } ,
         {  name: "status",           type: "String" } ,

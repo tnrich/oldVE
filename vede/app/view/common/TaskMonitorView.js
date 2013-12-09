@@ -100,7 +100,6 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
-                    Teselagen.manager.ProjectManager.currentTasks;
                     console.log(rec);
                 }
             }]
