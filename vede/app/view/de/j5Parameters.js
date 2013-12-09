@@ -422,8 +422,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     maxHeight: 23,
                     minHeight: 23,
                     padding: '',
-                },
-                {
+                }, {
                     xtype: 'button',
                     cls: 'saveAsPresetBtn',
                     x: 360,
@@ -432,7 +431,17 @@ Ext.define('Vede.view.de.j5Parameters', {
                     maxHeight: 23,
                     minHeight: 23,
                     padding: '',
-                    text: '<b>Save preset</b>'
+                    text: '<b>New Preset</b>'
+                }, {
+                    xtype: 'button',
+                    cls: 'overwritePresetBtn',
+                    x: 440,
+                    y: 5,
+                    margin: 5,
+                    maxHeight: 23,
+                    minHeight: 23,
+                    padding: '',
+                    text: '<b>Overwrite Preset</b>'
                 }, {
                     xtype: 'button',
                     cls: 'j5ParamsCancelBtn',

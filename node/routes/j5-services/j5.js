@@ -202,13 +202,15 @@ var clearUserFolder = function(user){
   });
 };
 
+
 function reportChange(j5run,user, completed){
   if(!user.username) throw new Error('Invalid user');
+
+  
+
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
-    if(completed==true) {
-      app.io.pub.publish("j5jobcompleted", user.username);
-    }
+    if(completed==true) {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
   });
 };
 
@@ -236,7 +238,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
 
       var completed = true;
       newj5Run.save();
-      reportChange(newj5Run,user, completed);
+      reportChange(newj5Run,user,completed);
       updateMasterSources(parsedResults.masterSources,user);
       clearUserFolder(user);
     });    

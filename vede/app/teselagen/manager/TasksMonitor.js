@@ -59,6 +59,11 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 console.log('SOCKET.IO : Connected');    
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
+                socket.on('j5completed',function(data){
+                    console.log("j5 run completed message");
+                    console.log(data);
+                });
+
                 var lastCompletedTask;
 
                 socket.on('update',function(data){

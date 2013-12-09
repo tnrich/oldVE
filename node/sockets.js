@@ -11,13 +11,25 @@ module.exports = function(app) {
         console.log("New connection");
 
         sub.subscribe("j5jobs");
+        sub.subscribe("j5completed");
 
-        sub.on("message", function (channel, name) {
-            // if(channel != "j5jobs") return false;
-			if(!app.sockets[name]) { return false; }
-			app.cache.get(name,function(err,user){
-				app.sockets[name].emit('update',user);
-			});            
+        sub.on("message", function (channel, data) {
+            if(channel=="j5jobs") 
+            {
+                var name = data;
+    			if(!app.sockets[name]) { return false; }
+    			app.cache.get(name,function(err,user){
+    				if(user) app.sockets[name].emit('update',user);
+    			});      
+            }
+            else if(channel=="j5completed")
+            {
+                var data = JSON.parse(data);
+                var name = data.user;
+                var j5run = data.j5run;
+                if(!app.sockets[name]) { return false; }
+                app.sockets[name].emit('j5completed',j5run);                  
+            }
         });
 
         client.on("set nickname", function(name){
