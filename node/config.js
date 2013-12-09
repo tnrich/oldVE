@@ -270,12 +270,20 @@ module.exports = function(app, express) {
             };
 
             app.cache.get(userKey,function(err,user){
-                var lastCompletedTask;
-                for(var taskKey in user.tasks)
+                if(!user || !user.tasks)
                 {
-                    if(user.tasks[taskKey].status === "Completed")
-
+                    user = {};
+                    user.tasks = {};
+                    user.tasks[task.id] = task;
                 }
+                else
+                {
+                    if (Object.keys(user.tasks).length === 7) user.tasks = {};
+                    user.tasks[task.id] = task;
+                }
+                app.cache.set(userKey, user, 0, function(err){
+                    cb()
+                });
             });
         };
 
