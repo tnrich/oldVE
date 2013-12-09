@@ -28,6 +28,7 @@ module.exports = function(app) {
             }
             else if(channel=="j5completed")
             {
+                var data = JSON.parse(data);
                 var name = data.username;
                 var j5run = data.j5run;
                 if(!app.sockets[name]) { return false; }

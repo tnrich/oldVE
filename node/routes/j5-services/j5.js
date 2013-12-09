@@ -210,7 +210,7 @@ function reportChange(j5run,user, completed){
 
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
-    if(completed==true) {app.io.pub.publish("j5completed", {user:user.username,j5run:j5run});}
+    if(completed==true) {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
   });
 };
 
