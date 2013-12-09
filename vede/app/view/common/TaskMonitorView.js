@@ -100,15 +100,10 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
+                    Teselagen.manager.ProjectManager.currentTasks;
                     console.log(rec);
                 }
-            }],
-            listeners: {
-                 itemclick: function(grid,item){
-                    console.log(item);
-                    // Vede.application.fireEvent("jumpToJ5Run",item.raw);
-                }       
-            }
+            }]
         }      
         ],
     }]

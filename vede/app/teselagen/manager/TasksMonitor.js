@@ -62,8 +62,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.on('j5completed',function(data){
                     console.log(data);
                     var startDate = data.date;
-                    var endDate = Date.now();
+                    var endDate = date.endDate;
                     var elapsed = endDate - startDate;
+                    console.log(startDate, endDate, elapsed);
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                     console.log("j5 run completed message");
