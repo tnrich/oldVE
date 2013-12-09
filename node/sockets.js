@@ -13,9 +13,10 @@ module.exports = function(app) {
         sub.subscribe("j5jobs");
         sub.subscribe("j5completed");
 
-        sub.on("message", function (channel, name) {
+        sub.on("message", function (channel, data) {
             if(channel == "j5jobs") 
             {
+                name = data;
     			if(!app.sockets[name]) { return false; }
     			app.cache.get(name,function(err,user){
     				app.sockets[name].emit('update',user);
@@ -23,11 +24,10 @@ module.exports = function(app) {
             }
             else if(channel=="j5completed")
             {
-                console.log(name);
+                name = data.username;
+                j5run = data.j5run;
                 if(!app.sockets[name]) { return false; }
-                app.cache.get(name,function(err,user){
-                    app.sockets[name].emit('j5completed',user);
-                });                   
+                app.sockets[name].emit('j5completed',j5run);                  
             }
         });
 
