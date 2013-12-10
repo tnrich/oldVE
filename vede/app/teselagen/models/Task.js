@@ -7,6 +7,9 @@ Ext.define("Teselagen.models.Task", {
 
     fields: [
         {  name: "id",               type: "long"   } ,
+        {  name: "devicedesign_id",  type: "long"   } ,
+        {  name: "project_id",       type: "long"   } ,
+        {  name: "id",               type: "long"   } ,
         {  name: "taskName",         type: "String" } ,
         {  name: "taskType",         type: "String" } ,
         {  name: "status",           type: "String" } ,
@@ -14,5 +17,4 @@ Ext.define("Teselagen.models.Task", {
         {  name: "dateStarted",      type: "Date"   } ,
         {  name: "taskRefID",        type: "long"   } 
     ]
-
 });
