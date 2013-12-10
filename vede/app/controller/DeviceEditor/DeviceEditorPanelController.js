@@ -528,6 +528,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onJumpToJ5Run: function(data) {
         var design_id = data.devicedesign_id;
         var project_id = data.project_id;
+        console.log(design_id);
+        console.log(project_id);
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
 
         var self = this;
