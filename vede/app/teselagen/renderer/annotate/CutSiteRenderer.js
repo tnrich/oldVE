@@ -216,6 +216,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                     Math.min(row.rowData.end, seqLen) - row.rowData.start;
             }
 
+            if(cutSite.getStrand() !== 1) {
+                var temp = dsForwardPosition;
+
+                dsForwardPosition = dsReversePosition;
+                dsReversePosition = temp;
+            }
+
             if(dsForwardPosition != -1) {
                 var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
 
@@ -228,7 +235,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
 
                 var ds2X = dsReverseMetrics.x - 2;
-                var ds2Y = cutSiteY + cutSiteHeight + 3;
+                var ds2Y = cutSiteY + cutSiteHeight + 6;
                 this.drawDsReversePosition(ds2X, ds2Y);
             }
 
