@@ -101,9 +101,9 @@
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     var data = {
-                        devicedesign_id: rec.devicedesign_id,
-                        project_id: rec.project_id,
-                        _id: rec.id
+                        devicedesign_id: rec.data.devicedesign_id,
+                        project_id: rec.data.project_id,
+                        _id: rec.data.id
                     };
                     Vede.application.fireEvent("jumpToJ5Run",data);
                 }
