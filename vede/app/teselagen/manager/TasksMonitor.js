@@ -99,6 +99,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     {
                         task = data.tasks[taskKey];
                         task.dateStarted = new Date(task.dateStarted);
+                        task.devicedesign_id = task.run.devicedesign_id;
+                        task.project_id = task.run.project_id;
                         Teselagen.manager.ProjectManager.currentTasks.add(task);
                     }
                 });
