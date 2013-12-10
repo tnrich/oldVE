@@ -100,7 +100,12 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
-                    console.log(rec);
+                    var data {
+                        devicedesign_id: rec.devicedesign_id,
+                        project_id: rec.project_id,
+                        _id: rec.id
+                    };
+                    Vede.application.fireEvent("jumpToJ5Run",data);
                 }
             }]
         }      
