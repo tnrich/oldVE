@@ -38,6 +38,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     oligosListText: null,
     directSynthesesListText: null,
 
+    j5Running: false,
+
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
@@ -162,6 +164,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 });
             }
             self.loadPresetsSelector();
+        }
+
+        if(this.j5Running) {
+            this.disableAllJ5RunButtons(true);
         }
     },
 
@@ -697,6 +703,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm = Teselagen.manager.J5CommunicationManager;
         inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod, design.get("isCircular"));
 
+        this.j5Running = true;
+
+        this.disableAllJ5RunButtons();
+
         Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function () {
             if (!Teselagen.manager.TasksMonitor.disabled) {
                 Teselagen.manager.TasksMonitor.start();
@@ -722,6 +732,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
+    },
+
+    disableAllJ5RunButtons: function(skipAppendLoader) {
+        var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+        var button;
+
+        if(!skipAppendLoader) {
+            $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+        }
+
+        for(var i = 0; i < buttonsToDisable.length; i++) {
+            button = buttonsToDisable[i];
+            button.disable();
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Running J5...");
+            }
+        }
     },
 
     onDistributePCRBtn: function () {

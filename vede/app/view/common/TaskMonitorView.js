@@ -61,7 +61,7 @@
                 } else if(value==="Completed with warnings") {
                     return '<div class="status-note status-note-warning" style="margin-right:10px"></div>Completed with warnings.'
                 } else if(value==="Error") {
-                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Completed'
+                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Failed.'
                 }
             }
         },
