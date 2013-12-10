@@ -22,6 +22,7 @@ Ext.define("Teselagen.models.Task", {
             getterName: "getJ5IRun",
             setterName: "setJ5Run",
             associationKey: "j5Run"
-        },
+        }
+    ]
 
 });
