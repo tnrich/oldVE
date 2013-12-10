@@ -133,6 +133,15 @@ Ext.define("Vede.controller.J5ReportController", {
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
+        } else if (status=="Canceled") {
+            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            this.tabPanel.down('button[cls="downloadResults"]').disable();
+            this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
+            this.tabPanel.down('button[cls="buildBtn"]').disable();
+            this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").addClass("status-note-failed");
         }
 
         var warnings = this.activeJ5Run.raw.warnings;
