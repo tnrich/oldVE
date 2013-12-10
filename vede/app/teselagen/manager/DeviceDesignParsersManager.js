@@ -393,14 +393,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         function getSequenceByID(targetHash, cb) {
             var found = false;
             var sequences = xmlDoc.getElementsByTagNameNS("*", "sequenceFile");
-            console.log(sequences);
             for (var i=0; i < sequences.length; i++) {
                 var sequence = sequences[i];
                 if (!sequence.nodeName || typeof sequence !== "object") { continue; }
                 if (String(sequence.getAttribute("hash")) === String(targetHash) && !found ) {
                     cb(sequence); 
-                } else if (String(sequence.getAttribute("hash")) === String(targetHash) && !found) {
-
+                } else if (String(sequence.getAttribute("id")) === String(targetHash) && !found) {
+                    cb(sequence); 
                 }
             }
         }
