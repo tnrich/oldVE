@@ -75,6 +75,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     var btn = tab.query("button[cls='runj5Btn']")[0];
                     btn.enable();
                     btn.setText("Run J5");
+                    $(btn.el.dom).find(".loader-mini").remove();
                 });
 
                 var lastCompletedTask;
