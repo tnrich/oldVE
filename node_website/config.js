@@ -8,7 +8,14 @@ module.exports = function(app, express){
 
   var config = this;
 
-  var server = require('http').Server(app);
+  var options = {
+    key: fs.readFileSync('/home/git/keys/agent2-key.pem'),
+    cert: fs.readFileSync('/home/git/keys/agent2-cert.pem')
+  };
+
+  var server = require('https').createServer(options,app);
+
+  //var server = require('http').Server(app);
 
   require('./environments').readEnvironments(app);
 
