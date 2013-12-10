@@ -77,9 +77,9 @@ Ext.define('Vede.controller.HeaderPanelController', {
             "#help_btn": {
                 click: this.onHelpBtnClick
             },
-     		"#tasks_btn": {
-     			click: this.onTasksBtnClick
-     		},
+     		// "#tasks_btn": {
+     		// 	click: this.onTasksBtnClick
+     		// },
             "#reportFeedbackBtn": {
                 click: this.onReportFeedbackBtnClick
             },
@@ -92,7 +92,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
 
     onRender: function() {
         Ext.get("help_btn").on('click', this.onHelpBtnClick);
-        Ext.get("tasks_btn").on('click', this.onTasksBtnClick);
+        // Ext.get("tasks_btn").on('click', this.onTasksBtnClick);
 
         if(!Ext.isChrome) {
             Ext.getCmp('header-browser-warning').show();
