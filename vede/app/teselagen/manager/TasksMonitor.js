@@ -107,8 +107,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                         Teselagen.manager.ProjectManager.currentTasks.add(task);
                     }
 
-                    //Reverse from last in first out
-                    Teselagen.manager.ProjectManager.currentTasks.data.items.reverse();
                 });
 
             });
