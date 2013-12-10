@@ -9,12 +9,15 @@ Ext.define("Teselagen.models.Task", {
         {  name: "id",               type: "long"   } ,
         {  name: "devicedesign_id",  type: "long",
             convert: function(v, record) {
+                console.log(record);
                 var id = record.run.devicedesign_id;
+                return id;
             }
         },
         {  name: "project_id",       type: "long",
             convert: function(v, record) {
                 var id = record.run.project_id;
+                return id;
             }
         },
         {  name: "id",               type: "long"   } ,
