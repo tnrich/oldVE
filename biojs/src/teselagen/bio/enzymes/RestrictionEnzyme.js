@@ -29,7 +29,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
         var dsReverse = inData.dsReverse;
         var usForward = inData.usForward;
         var usReverse = inData.usReverse;
-        
+
         /**
          * Checks if enzyme is palindromic.
          * @returns {Boolean} True if enzyme has palindromic regex.
@@ -37,7 +37,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
         this.isPalindromic = function() {
             return forwardRegex === reverseRegex;
         }
-        
+
         /**
          * Converts the object to a string of the form "Restriction Enzyme [name]"
          * @method toString
@@ -46,7 +46,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
         this.toString = function() {
             return "RestrictionEnzyme: " + name;
         }
-        
+
         /**
          * Get name.
          * @method getName
@@ -59,7 +59,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
         /**
          * Set name.
          * @method setName
-         * @param {String} pName 
+         * @param {String} pName
          */
         this.setName = function(pName) {
             name = pName;

@@ -15,7 +15,8 @@ module.exports = function(app, express) {
     app.dbname = "teselagen"; // Default DB (No change)
 
     if (app.program.prod) {
-        app.set("env", "production");
+        app.set('env', 'production');
+        require('newrelic');
     }
 
     var useAirbrake = app.program.useairbrake;
