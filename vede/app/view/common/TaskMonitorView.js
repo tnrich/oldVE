@@ -100,7 +100,7 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
-                    var data {
+                    var data = {
                         devicedesign_id: rec.devicedesign_id,
                         project_id: rec.project_id,
                         _id: rec.id
