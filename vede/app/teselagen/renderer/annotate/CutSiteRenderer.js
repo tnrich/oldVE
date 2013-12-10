@@ -148,7 +148,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             }
 
             if(dsReversePosition < 0) {
-                dsReversePosition -= seqLen;
+                dsReversePosition += seqLen;
             }
 
             if(dsForwardPosition <= row.rowData.getStart() ||
@@ -219,7 +219,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             if(dsForwardPosition != -1) {
                 var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
 
-                var ds1X = dsForwardMetrics.x - 5;
+                var ds1X = dsForwardMetrics.x - 2;
                 var ds1Y = cutSiteY + cutSiteHeight;
                 this.drawDsForwardPosition(ds1X, ds1Y);
             }
@@ -227,7 +227,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             if(dsReversePosition != -1) {
                 var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
 
-                var ds2X = dsReverseMetrics.x;
+                var ds2X = dsReverseMetrics.x - 2;
                 var ds2Y = cutSiteY + cutSiteHeight + 3;
                 this.drawDsReversePosition(ds2X, ds2Y);
             }
