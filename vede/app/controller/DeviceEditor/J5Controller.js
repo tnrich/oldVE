@@ -1090,6 +1090,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm.downloadCondenseAssemblyResults(button);
     },
 
+    onj5StatusChange: function(status) {
+        if(status==false) {
+            this.j5Running = false;
+        }
+    },
+
     init: function () {
         this.CommonEvent = Teselagen.event.CommonEvent;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
@@ -1218,6 +1224,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
         this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
         this.application.on(this.CommonEvent.LOAD_PRESETS, this.loadPresetsSelector, this);
+        this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.onj5StatusChange, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
