@@ -123,7 +123,11 @@ module.exports = function(app, express) {
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({ 
             secret: 'j5',
-            store: new RedisStore({client: redis,prefix:'vede://',ttl:1000})
+            store: new RedisStore({
+                client: redis,
+                prefix: 'vede://',
+                ttl: 3600
+            })
         })); // Sessions managed using cookies
 
         redis.auth(Opts.redis_pass,function(err,ok){

@@ -1,9 +1,13 @@
+var mongoose = require('mongoose');
+var async = require('async');
+
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
     var Part = app.db.model("part");
     var User = app.db.model("User");
+    var Design = app.db.model("devicedesign");
 
 
     /*
@@ -22,7 +26,7 @@ module.exports = function(app) {
         for (var prop in req.body) {
             if(prop!="user_id") newPart[prop] = req.body[prop];
         }
-            
+
             newPart.FQDN = req.user.FQDN + '.' + req.body.name;
             Part.generateDefinitionHash(req.user, newPart, function(hash){
                 newPart.definitionHash = hash;
@@ -31,10 +35,9 @@ module.exports = function(app) {
                 newPart.save(function(err){
                     if(err)
                     {
-                        if(err.code===11000)
+                        if(err.code===11000 || err.code === 11001)
                         {
                             // Duplicated Part
-                            console.log(err);
                             Part.findOne({"FQDN":newPart.FQDN, "definitionHash": newPart.definitionHash}).exec(function(err,part){
                                 if(!part) {
                                     console.log("Duplicated part not found!",newPart.FQDN);
@@ -69,6 +72,80 @@ module.exports = function(app) {
                 user.parts.push(savedSequence);
                 user.save();
             });
+        });
+    });
+
+    app.get('/updateAllPartHashes', restrict, function(req, res) {
+        Part.find({
+            user_id: mongoose.Types.ObjectId("522f9f52299669d80300030b")
+        }).exec(function(err, parts) {
+            if(err) {
+                return res.send(err);
+            } else {
+                async.forEach(parts, function(part, done) {
+                    Part.generateDefinitionHash(null, part, function(hash) {
+                        part.definitionHash = hash;
+                        part.save(function(err) {
+                            if(err) {
+                                if(err.code === 11000 || err.code === 11001) {
+                                    Part.findOne({
+                                        FQDN: part.FQDN,
+                                        definitionHash: part.definitionHash
+                                    }).exec(function(err, duplicatePart) {
+                                        if(err) {
+                                            return done(err);
+                                        } else {
+                                            var oldPartId = mongoose.Types.ObjectId(part.id);
+                                            var duplicatePartId = mongoose.Types.ObjectId(duplicatePart.id);
+                                            Design.find({
+                                                parts: oldPartId
+                                            }).exec(function(err, designs) {
+                                                var design;
+
+                                                if(err) {
+                                                    return done(err);
+                                                } else {
+                                                    async.forEach(designs, function(design, innerCallback) {
+                                                        design.parts[design.parts.indexOf(oldPartId)] = duplicatePartId;
+
+                                                        for(var j = 0; j < design.bins.length; j++) {
+                                                            for(var k = 0; k < design.bins[j].cells.length; k++) {
+                                                                var cell = design.bins[j].cells[k];
+
+                                                                if(cell.part_id === oldPartId) {
+                                                                    cell.part_id === duplicatePartId;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        design.save(innerCallback);
+                                                    }, function(err) {
+                                                        if(err) {
+                                                            return done(err);
+                                                        } else {
+                                                            part.remove(done);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    return done(err);
+                                }
+                            } else {
+                                return done();
+                            }
+                        });
+                    });
+                }, function(err) {
+                    if(err) {
+                        return res.send(err);
+                    } else {
+                        return res.send('Success!');
+                    }
+                });
+            }
         });
     });
 
@@ -138,24 +215,24 @@ module.exports = function(app) {
 
         User.findById(req.user._id).populate({
                 path: 'parts',
-                match: {name: {$regex: filter}} 
+                match: {name: {$regex: filter}}
             }).exec(function(err, user) {
             totalCount = user.parts.length;
 
             User.findById(req.user._id).populate({
-                path: 'parts', 
-                match: {name: {$regex: filter}, 
+                path: 'parts',
+                match: {name: {$regex: filter},
                 sequencefile_id: {$ne: null}},
                 options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
             })
-                .exec(function(err, user) {
-                    res.json({
-                        success: true,
-                        parts: user.parts,
-                        results: user.parts.length,
-                        total: totalCount
-                    });
+            .exec(function(err, user) {
+                res.json({
+                    success: true,
+                    parts: user.parts,
+                    results: user.parts.length,
+                    total: totalCount
                 });
+            });
         });
     });
 
@@ -166,10 +243,9 @@ module.exports = function(app) {
      * @method GET 'parts/:part_id'
      */
     app.get('/parts/:part_id', restrict,  function(req, res) {
-
         User.findById(req.user._id).populate('parts').exec(function(err, user) {
             User.findById(req.user._id).populate({
-                path: 'parts', 
+                path: 'parts',
                 match: {_id: req.params.part_id}
             })
             .exec(function(err, user) {
@@ -187,13 +263,16 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method DELETE 'parts'
      */
-    app.delete('/parts', restrict, function(pReq, pRes) {
+    app.delete('/parts/:part_id', restrict, function(req, res) {
+        var partId = req.params.part_id;
         var Part = app.db.model("part");
-        Part.remove(function(pErr, pDocs) {
-            if (pErr) {
-                errorHandler(pErr, pReq, pRes);
+        var Design = app.db.model("devicedesign");
+
+        Part.findByIdAndRemove(partId, function(pErr, pDocs) {
+            if(pErr) {
+                return errorHandler(pErr, req, res);
             } else {
-                pRes.json({});
+                return res.json({});
             }
         });
     });

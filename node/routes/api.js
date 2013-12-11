@@ -21,7 +21,7 @@ module.exports = function(app) {
             if(!err&&stats&&stats.mtime) updated += stats.mtime;
             else updated += "Error";
 
-            
+
             require('child_process').exec("git log -1", function puts(error, stdout, stderr) { 
                 var git = stdout;
                 return res.send(updated+"<br>"+git,200);

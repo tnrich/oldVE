@@ -135,7 +135,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output"]});
+            cb({warnings:["Error processing j5 output: " + err]});
         }
 }
 
@@ -399,7 +399,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output"]});
+            cb({warnings:["Error processing j5 output: " + err]});
         }   
 }
 
@@ -606,7 +606,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output"]});
+            cb({warnings:["Error processing j5 output: " + err]});
         }   
 }
 
@@ -740,7 +740,7 @@ function processCombinatorial_MOCK(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output"]});
+            cb({warnings:["Error processing j5 output: " + err]});
         }
 }
 
@@ -948,7 +948,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output"]});
+            cb({warnings:["Error processing j5 output: " + err]});
         }
 }
 
@@ -956,7 +956,7 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
     try {
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -1139,7 +1139,7 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output"]});
+            cb({warnings:["Error processing j5 output: " + err]});
         }
 }
 
