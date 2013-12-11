@@ -484,7 +484,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         });
 
                         getSequenceByID(hash, function (sequence) {
-                            console.log(sequence);
                             var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
 
                             if(ext) {
