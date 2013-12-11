@@ -77,6 +77,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     btn.setText("Run J5");
                     $(btn.el.dom).find(".loader-mini").remove();
                     Vede.controller.DeviceEditor.J5Controller.j5running = false;
+                    Vede.controller.J5Controller.loadj5Results();
                 });
 
                 socket.on('update',function(data){
