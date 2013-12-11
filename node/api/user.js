@@ -153,13 +153,11 @@ module.exports = function(app) {
        * @method PUT "/users/:username"
        */
       put_user: function(req, res) {
-          req.user.username = req.body.username;
           req.user.preferences = req.body.preferences;
           req.user.userRestrictionEnzymeGroups = req.body.userRestrictionEnzymeGroups;
 
-          res.json({
-              error: true,
-              msg: 'Not allowed.'
+          req.user.save(function() {
+              res.json({});
           });
       },
 
@@ -168,7 +166,7 @@ module.exports = function(app) {
           var Preset = app.db.model('preset');
 
           User.findById(req.user._id).populate({
-            path: 'presets',
+            path: 'presets'
           }).exec(function(err, user) {
             var newPreset = new Preset({
               presetName: req.body.presetName,
