@@ -426,4 +426,6 @@ module.exports = function(db) {
     });
 
     registerSchema('User', UserSchema);
+
+    UserSchema.index({"username": 1}, {unique: true, dropDups: true});
 };
