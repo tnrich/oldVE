@@ -484,7 +484,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         });
 
                         getSequenceByID(hash, function (sequence) {
-                            console.log(sequence);
                             var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
 
                             if(ext) {
@@ -591,8 +590,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             else {
                 operand2 = operand2Node.textContent;
                 if(parseInt(operand2)) {
-                    operand2 = parseInt(operand2);
-                    operand2isNumber = true;
+                    if(parseInt(operand2) == operand2Node) {
+                        operand2isNumber = false;
+                    } else {
+                        operand2 = parseInt(operand2);
+                        operand2isNumber = true;
+                    }
                 }
             }
 

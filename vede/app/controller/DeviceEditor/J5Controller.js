@@ -168,6 +168,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         if(this.j5Running) {
             this.disableAllJ5RunButtons(true);
+        } else {
+            this.enableALLJ5RunButtons();
         }
     },
 
@@ -717,6 +719,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                     toastr.info("j5 Run Submitted");
                     this.tasksWindow = Ext.getCmp('taskMonitor').expand();
+                    //Reverse from last in first out
                     this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
                 } else {
                     var messagebox = Ext.MessageBox.show({
@@ -748,7 +751,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             button.disable();
 
             if(button.cls === "runj5Btn") {
-                button.setText("Running J5...");
+                button.setText("Running j5...");
+            }
+        }
+    },
+
+    enableALLJ5RunButtons: function() {
+        var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+        var button;
+
+        for(var i = 0; i < buttonsToEnable.length; i++) {
+            button = buttonsToEnable[i];
+            button.enable();
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Submit Run to j5");
+                if(button.el) {
+                    $(button.el.dom).find(".loader-mini").remove();
+                }
             }
         }
     },
@@ -1089,6 +1110,13 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm.downloadCondenseAssemblyResults(button);
     },
 
+    onj5StatusChange: function(status) {
+        if(status==false) {
+            this.j5Running = false;
+            this.enableALLJ5RunButtons();
+        }
+    },
+
     init: function () {
         this.CommonEvent = Teselagen.event.CommonEvent;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
@@ -1217,6 +1245,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
         this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
         this.application.on(this.CommonEvent.LOAD_PRESETS, this.loadPresetsSelector, this);
+        this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.onj5StatusChange, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;

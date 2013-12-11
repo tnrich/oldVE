@@ -286,29 +286,31 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                 // LOCATIONS
                 // asArray will detect if there are locations; ie length=0 means no locations
 
-                for (j=0; j < ft["location_asArray"].length; j++) {
-                    //console.log(ft["location_asArray"][j]);
-                	
-                    var start;
-                    // The following code checks for a variation of format found in test files.
-                    if (ft["location_asArray"][j]["genbankStart"] === undefined) {
-                    	start = ft["location_asArray"][j]["genbank_start"]["__text"];
-                    } else {
-                    	start = ft["location_asArray"][j]["genbankStart"]["__text"];
-                    }
-                    var end;
-                    if (ft["location_asArray"][j]["end"] === undefined) {
-                        end   = start;
-                    } else {
-                        end   = ft["location_asArray"][j]["end"]["__text"];
-                    }
-                    var to    = "..";
+                if(ft["location_asArray"]) {
+                    for (j=0; j < ft["location_asArray"].length; j++) {
+                        //console.log(ft["location_asArray"][j]);
+                    	
+                        var start;
+                        // The following code checks for a variation of format found in test files.
+                        if (ft["location_asArray"][j]["genbankStart"] === undefined) {
+                        	start = ft["location_asArray"][j]["genbank_start"]["__text"];
+                        } else {
+                        	start = ft["location_asArray"][j]["genbankStart"]["__text"];
+                        }
+                        var end;
+                        if (ft["location_asArray"][j]["end"] === undefined) {
+                            end   = start;
+                        } else {
+                            end   = ft["location_asArray"][j]["end"]["__text"];
+                        }
+                        var to    = "..";
 
-                    var loc = {
-                        "seq:genbankStart" : parseInt(start),
-                        "seq:end" : parseInt(end)
-                    };
-                    locations.push(loc);
+                        var loc = {
+                            "seq:genbankStart" : parseInt(start),
+                            "seq:end" : parseInt(end)
+                        };
+                        locations.push(loc);
+                    }
                 }
                 //===============
                 // ATTRIBUTES

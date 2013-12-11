@@ -203,11 +203,6 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     disabled: true
                 }]
             }
-        }, {
-            xtype: 'button',
-            text: 'J5 Optimize',
-            cls: 'j5button',
-            menuAlign: 'tr-br?'
         }]
     }]
 }
