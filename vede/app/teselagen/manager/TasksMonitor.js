@@ -80,6 +80,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                         $(btn.el.dom).find(".loader-mini").remove();
                         Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
                     }
+                    
                     if(j5tab) {
                         Vede.application.fireEvent(Teselagen.event.CommonEvent.RESET_J5BTN, data);
                         Vede.application.fireEvent("jumpToJ5Run",data, false);
