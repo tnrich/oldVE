@@ -80,7 +80,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 });
 
                 socket.on('update',function(data){
-                    console.log(data);
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
@@ -111,6 +110,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 });
 
                 socket.on('canceled', function(data) {
+                    console.log(data);
+                    console.log("here");
                     var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
                     var btn = tab.query("button[cls='runj5Btn']")[0];
                     btn.enable();
