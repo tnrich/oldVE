@@ -53,6 +53,7 @@
             text: 'Status',
             autoScroll: true,
             dataIndex: 'status',
+            width: 300,
             renderer: function(value) {
                 if(value==="In progress") {
                     return '<div class="pace-activity"></div>Running...'
