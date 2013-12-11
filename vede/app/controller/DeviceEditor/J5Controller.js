@@ -168,6 +168,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         if(this.j5Running) {
             this.disableAllJ5RunButtons(true);
+        } else {
+            this.enableALLJ5RunButtons();
         }
     },
 
@@ -749,7 +751,23 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             button.disable();
 
             if(button.cls === "runj5Btn") {
-                button.setText("Running J5...");
+                button.setText("Running j5...");
+            }
+        }
+    },
+
+    enableALLJ5RunButtons: function() {
+        var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+        buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+        var button;
+
+        for(var i = 0; i < buttonsToEnable.length; i++) {
+            button = buttonsToEnable[i];
+            button.enable();
+
+            if(button.cls === "runj5Btn") {
+                button.setText("Submit Run to j5");
+                $(button.el.dom).find(".loader-mini").remove();
             }
         }
     },
@@ -1093,6 +1111,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onj5StatusChange: function(status) {
         if(status==false) {
             this.j5Running = false;
+            this.enableALLJ5RunButtons();
         }
     },
 
