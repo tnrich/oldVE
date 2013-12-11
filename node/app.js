@@ -41,7 +41,7 @@ require('./routes/api.js')(app);
 require('./routes/j5-services/j5.js')(app);
 
 // Listen Local Port on environment port or default 3000
-var nodePort = app.program.port || 3000;
-app.listen(nodePort, function() {
-    app.logger.log("info","OPTIONS: Nodejs server is running in %s mode on port %s",app.get("env"),nodePort);
-});
+//var nodePort = app.program.port || 3000;
+//app.listen(nodePort, function() {
+//    app.logger.log("info","OPTIONS: Nodejs server is running in %s mode on port %s",app.get("env"),nodePort);
+//});

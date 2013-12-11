@@ -7,8 +7,18 @@ module.exports = function(app, express) {
 
     var config = this;
 
-    var server = require('http').Server(app);
-   
+    //var server = require('http').Server(app);
+ 
+    var options = {
+        key: app.fs.readFileSync('/home/teselagen/keys/app.teselagen.com.key', 'utf8'),
+        cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+    };
+
+    //console.log(options);
+
+    var httpsServer = require('https').createServer(options,app).listen(3443);
+    var httpServer = require('http').Server(app).listen(3000);
+
     // LOGGING
     require('./logging').configLogging(app, express);
 
