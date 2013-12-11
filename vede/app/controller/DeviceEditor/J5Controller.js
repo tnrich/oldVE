@@ -767,7 +767,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
             if(button.cls === "runj5Btn") {
                 button.setText("Submit Run to j5");
-                console.log(button);
                 if(button.el) {
                     $(button.el.dom).find(".loader-mini").remove();
                 }
