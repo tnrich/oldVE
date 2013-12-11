@@ -206,8 +206,6 @@ var clearUserFolder = function(user){
 function reportChange(j5run,user, completed){
   if(!user.username) throw new Error('Invalid user');
 
-  
-
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
     if(completed==true) {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
@@ -462,6 +460,7 @@ app.post('/cancelj5run',function(req,res){
     var pid = j5run.process.pid;
     require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
         res.json(arguments);
+        app.io.pub.publish("canceled". JSON.stringify({user:req.user.username,j5run:j5run}));
     });
   });
 });

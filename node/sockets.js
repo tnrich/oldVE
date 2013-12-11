@@ -12,6 +12,7 @@ module.exports = function(app) {
 
         sub.subscribe("j5jobs");
         sub.subscribe("j5completed");
+        sub.subscribe("canceled");
 
         sub.on("message", function (channel, data) {
             if(channel=="j5jobs") 
@@ -29,6 +30,14 @@ module.exports = function(app) {
                 var j5run = data.j5run;
                 if(!app.sockets[name]) { return false; }
                 app.sockets[name].emit('j5completed',j5run);                  
+            }
+            else if(channel=="canceled") 
+            {
+                var data = JSON.parse(data);
+                var name = data.user;
+                var j5run = data.j5run;
+                if(!app.sockets[name]) { return false; }
+                app.sockets[name].emit('canceled', j5run);   
             }
         });
 
@@ -56,6 +65,7 @@ module.exports = function(app) {
                 var pid = j5run.process.pid;
                 require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
                     console.log(arguments);
+                    app.io.pub.publish("canceled". JSON.stringify({user:username,j5run:j5run}));
                 });
             });
 
