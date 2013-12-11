@@ -24,7 +24,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     bootMonitoring: function(){
         this.monitorServerTasks();
-    },    
+    },
 
     startMonitoring: function() {
     },
@@ -55,8 +55,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             });
 
             socket.on('connect',function() {
-                
-                console.log('SOCKET.IO : Connected');    
+
+                console.log('SOCKET.IO : Connected');
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('j5completed',function(data){
@@ -80,7 +80,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 });
 
                 socket.on('update',function(data){
-                    console.log(data);
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
@@ -116,14 +115,14 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 console.log('Disconnected');
             });
 
-            self.socket = socket; 
+            self.socket = socket;
 
         });
     },
 
     elapsedDate: function (seconds)
     {
-        var numdays = Math.floor((seconds % 31536000) / 86400); 
+        var numdays = Math.floor((seconds % 31536000) / 86400);
         var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
         var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
         var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
@@ -161,7 +160,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             if ( self.mon[j5run._id] )
             {
                 // Continue observed
-                if( self.mon[j5run._id] !== j5run.status ) 
+                if( self.mon[j5run._id] !== j5run.status )
                 {
                     // Change
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
@@ -200,7 +199,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     elapsedDate: function (seconds)
     {
-    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numdays = Math.floor((seconds % 31536000) / 86400);
     var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
     var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
     var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
