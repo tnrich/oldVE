@@ -31,7 +31,7 @@ module.exports = function(app, express) {
     var httpsServer = require('https').createServer(options,app).listen(3443);
     var httpServer = require('http').createServer(app).listen(3000);
 
-    app.io = app.socket.listen(server, { log: false });
+    app.io = app.socket.listen(httpServer, { log: false });
 
     // LOGGING
     require('./logging').configLogging(app, express);
