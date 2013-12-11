@@ -718,7 +718,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     toastr.info("j5 Run Submitted");
                     this.tasksWindow = Ext.getCmp('taskMonitor').expand();
                     //Reverse from last in first out
-                    Teselagen.manager.ProjectManager.currentTasks.data.items.reverse();
                     this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
                 } else {
                     var messagebox = Ext.MessageBox.show({
