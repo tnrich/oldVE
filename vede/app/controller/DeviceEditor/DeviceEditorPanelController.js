@@ -525,7 +525,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
     },
 
-    onJumpToJ5Run: function(data) {
+    onJumpToJ5Run: function(data,jump) {
         var design_id = data.devicedesign_id;
         var project_id = data.project_id;
         console.log(design_id);
@@ -692,16 +692,18 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 }
             });
         };
-        project.designs().load({
-            id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                console.log(loadedDesign);
-                console.log(design_id);
-                var design = loadedDesign[0];
-                Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
-            }
-        });
+        if(jump==true) {
+            project.designs().load({
+                id: design_id,
+                callback: function (loadedDesign) {
+                    Teselagen.manager.ProjectManager.workingProject = project;
+                    console.log(loadedDesign);
+                    console.log(design_id);
+                    var design = loadedDesign[0];
+                    Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
+                }
+            });
+        }
 
     },
 

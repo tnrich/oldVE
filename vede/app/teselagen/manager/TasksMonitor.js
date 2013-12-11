@@ -68,16 +68,23 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                     console.log("j5 run completed message");
-                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",data);}
+                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",data, true);}
                     toastr.success("j5 Run for " +data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: data});
                     toastr.options.timeOut = 5000;
                     var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
-                    var j5tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
-                    var btn = tab.query("button[cls='runj5Btn']")[0];
-                    btn.enable();
-                    btn.setText("Submit Run to j5");
-                    $(btn.el.dom).find(".loader-mini").remove();
-                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                    if(tab)
+                        var btn = tab.query("button[cls='runj5Btn']")[0];
+                        btn.enable();
+                        btn.setText("Submit Run to j5");
+                        $(btn.el.dom).find(".loader-mini").remove();
+                        Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                    }
+
+                    var j5tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + " j5 Report']")[0];
+                    if(j5tab) {
+                        Vede.application.fireEvent(Teselagen.event.CommonEvent.RESET_J5BTN, data);
+                        Vede.application.fireEvent("jumpToJ5Run",data, false);
+                    }
                 });
 
                 socket.on('update',function(data){
