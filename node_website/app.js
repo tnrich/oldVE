@@ -19,6 +19,7 @@ app.nodemailer = require("nodemailer");
 app.winston = require('winston');
 app.program = require('commander');
 app.mandrill = require('mandrill-api/mandrill');
+app.fs = require('fs');
 
 var config = require('./config.js')(app, express);
 
@@ -36,8 +37,8 @@ app.get('*', function(req, res){
   res.render('notfound', {status: 404, title: 'TeselaGen Biotechnology | 404 - Page Not Found'});
 });
 
-var nodePort = 3000;
+//var nodePort = 3000;
 
-app.listen(nodePort, function() {
-    app.logger.log("info","OPTIONS: Nodejs server is running in %s mode on port %s",app.get("env"),nodePort);
-});
+//app.listen(nodePort, function() {
+//    app.logger.log("info","OPTIONS: Nodejs server is running in %s mode on port %s",app.get("env"),nodePort);
+//});

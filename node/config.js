@@ -21,7 +21,19 @@ module.exports = function(app, express) {
 
     var useAirbrake = app.program.useairbrake;
 
-    var server = require('http').Server(app);
+    //console.log(options);
+
+    var httpServer = require('http').createServer(app).listen(3000);
+  
+    if(app.get("env") === "production") {
+        var options = {
+            key: app.fs.readFileSync('/home/teselagen/keys/app.teselagen.com.key', 'utf8'),
+            cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+        };
+        var httpsServer = require('https').createServer(options,app).listen(3443);
+    }
+
+    app.io = app.socket.listen(httpServer, { log: false });
 
     // LOGGING
     require('./logging').configLogging(app, express);

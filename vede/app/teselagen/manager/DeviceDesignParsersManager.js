@@ -590,7 +590,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             else {
                 operand2 = operand2Node.textContent;
                 if(parseInt(operand2)) {
-                    if(parseInt(operand2) == operand2Node) {
+                    if(parseInt(operand2) == operand2Node.textContent) {
                         operand2isNumber = false;
                     } else {
                         operand2 = parseInt(operand2);

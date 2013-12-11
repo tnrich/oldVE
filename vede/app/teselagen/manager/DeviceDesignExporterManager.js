@@ -319,7 +319,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                     if(typeof(rule[prop]) !== "object")
                     {
                         var propNode = eugeneRule.appendChild(doc.createElement(prop));
-                        if(rule[prop]) { propNode.textContent = rule[prop]; }
+                        if(prop in rule) { propNode.textContent = rule[prop]; }
                     }
                 }
             });
