@@ -9,13 +9,14 @@ module.exports = function(app, express){
   var config = this;
 
   var options = {
-    key: fs.readFileSync('/home/git/keys/agent2-key.pem'),
-    cert: fs.readFileSync('/home/git/keys/agent2-cert.pem')
+    key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
+    cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
   };
 
-  var server = require('https').createServer(options,app);
+  //console.log(options);
 
-  //var server = require('http').Server(app);
+  var httpsServer = require('https').createServer(options,app).listen(3443);
+  var httpServer = require('http').Server(app).listen(3000);
 
   require('./environments').readEnvironments(app);
 
@@ -46,6 +47,16 @@ module.exports = function(app, express){
     }
 
   if (!app.settings.env) {app.settings.env="development";}
+
+/*
+app.use(function(req,res,next) {
+  if (!/https/.test(req.protocol)){
+     res.redirect("https://" + req.headers.host + req.url);
+  } else {
+     return next();
+  } 
+});
+*/
 
   //env specific config
       app.configure('development', function(){
