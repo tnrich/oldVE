@@ -82,7 +82,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     }
 
                     if(j5tab) {
-                        Vede.application.fireEvent(Teselagen.event.CommonEvent.RESET_J5BTN, data);
                         Vede.application.fireEvent("jumpToJ5Run",data, false);
                     }
                 });
