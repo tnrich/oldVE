@@ -53,7 +53,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         design.bins().each(function(bin,binKey) {
         	var jsonBin = {};
             jsonBin = {};
-            jsonBin.id = bin.internalId;
+            jsonBin.id = Teselagen.utils.DeXmlUtils.generateUUID();
             jsonBin["de:binName"] = bin.get("binName");
             jsonBin["de:iconID" ] = bin.get("iconID");
             jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
