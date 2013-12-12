@@ -269,12 +269,14 @@ Ext.define("Vede.controller.J5ReportController", {
         console.log('Loading j5 runs.');
         var self = this;
 
-        this.activeProject.j5runs().load({
-            callback: function (runs) {
-                self.j5runs = runs.reverse();
-                self.renderMenu();
-            }
-        });
+        if(this.activeProject) {
+            this.activeProject.j5runs().load({
+                callback: function (runs) {
+                    self.j5runs = runs.reverse();
+                    self.renderMenu();
+                }
+            });
+        }
     },
 
     buildBtnClick: function(){
