@@ -35,7 +35,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     },
 
     addJ5RunObserver: function(j5Run) {
-        console.log('observer added');
         Vede.application.fireEvent(Teselagen.event.CommonEvent.LOAD_J5_RUNS);
     },
 
