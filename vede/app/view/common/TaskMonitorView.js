@@ -85,8 +85,8 @@
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 },
-                getClass: function(v, meta, rec) {          
-                      if(rec.data.status != "In progress") {                                                                      
+                getClass: function(v, meta, rec) {
+                      if(rec.data.status != "In progress") {
                           return 'x-hide-display';
                       }
                   }
@@ -106,10 +106,9 @@
                         project_id: rec.data.project_id,
                         _id: rec.data.id
                     };
-                    Vede.application.fireEvent("jumpToJ5Run",data);
+                    Vede.application.fireEvent("jumpToJ5Run", data);
                 }
             }]
-        }      
-        ],
+        }]
     }]
 });
