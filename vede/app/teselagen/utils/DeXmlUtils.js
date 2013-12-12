@@ -19,13 +19,16 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
 
 
     generateUUID: function() {
-        var d = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = (d + Math.random()*16)%16 | 0;
-            d = Math.floor(d/16);
-            return (c=='x' ? r : (r&0x7|0x8)).toString(16);
-        });
-        return uuid;
+      var uuid = "", i, random;
+      for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+     
+        if (i == 8 || i == 12 || i == 16 || i == 20) {
+          uuid += "-"
+        }
+        uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+      }
+      return uuid;
     },
 
     formatXml: function(xml) {
