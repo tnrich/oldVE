@@ -434,7 +434,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     text: '<b>Save Preset</b>'
                 }, {
                     xtype: 'button',
-                    cls: 'deletePreset',
+                    cls: 'deletePresetBtn',
                     x: 440,
                     y: 5,
                     margin: 5,
@@ -444,8 +444,8 @@ Ext.define('Vede.view.de.j5Parameters', {
                     text: '<b>Delete Preset</b>'
                 }, {
                     xtype: 'button',
-                    cls: 'newPreset',
-                    x: 520,
+                    cls: 'newPresetBtn',
+                    x: 540,
                     y: 5,
                     margin: 5,
                     maxHeight: 23,

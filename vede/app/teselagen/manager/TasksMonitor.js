@@ -128,6 +128,20 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
                 });
 
+                socket.on('j5error', function(data) {
+                    console.log("j5 error");
+                    /*
+                    console.log(data);
+                    console.log("here");
+                    var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
+                    var btn = tab.query("button[cls='runj5Btn']")[0];
+                    btn.enable();
+                    btn.setText("Submit Run to j5");
+                    $(btn.el.dom).find(".loader-mini").remove();
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                    */
+                });
+
             });
 
             socket.on('disconnect', function (socket) {

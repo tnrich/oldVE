@@ -203,12 +203,13 @@ var clearUserFolder = function(user){
 };
 
 
-function reportChange(j5run,user, completed){
+function reportChange(j5run,user, completed, error){
   if(!user.username) throw new Error('Invalid user');
 
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
-    if(completed==true) {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
+    if(error==true) {app.io.pub.publish("j5error", JSON.stringify({user:user.username,j5run:j5run}));}
+    else if(completed==true) {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
   });
 };
 
@@ -386,6 +387,7 @@ app.post('/executej5',restrict,function(req,res){
                     newj5Run.status = "Canceled";
                     newj5Run.endDate = Date.now();
                     newj5Run.save();
+                    reportChange(newj5Run,req.user,true,true);
                   }
                   else if(err)
                   {
@@ -394,6 +396,7 @@ app.post('/executej5',restrict,function(req,res){
                     newj5Run.endDate = Date.now();
                     newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output: " + err}});
                     newj5Run.save();
+                    reportChange(newj5Run,req.user,true,true);
                   }
                   else if(result.methodResponse.fault)
                   {
@@ -408,6 +411,7 @@ app.post('/executej5',restrict,function(req,res){
                     newj5Run.endDate = Date.now();
                     newj5Run.error_list.push({"error":{faultString: error}});
                     newj5Run.save();
+                    reportChange(newj5Run,req.user,true,true);
 
                   }
                   else
@@ -433,7 +437,7 @@ app.post('/executej5',restrict,function(req,res){
               newj5Run.endDate = Date.now();
               newj5Run.error_list.push({"error":error});
               newj5Run.save();
-              reportChange(newj5Run,user);
+              reportChange(newj5Run,user,true,true);
             }
             else
             {
