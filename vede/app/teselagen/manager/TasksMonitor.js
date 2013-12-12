@@ -68,8 +68,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     console.log(startDate, endDate, elapsed);
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
-                    console.log("j5 run completed message");
-                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",data, true);}
+                    toastr.options.onclick = function() { Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);};
                     toastr.success("j5 Run for " +data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: data});
                     toastr.options.timeOut = 5000;
                     var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
@@ -83,7 +82,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     }
 
                     if(j5tab) {
-                        Vede.application.fireEvent("jumpToJ5Run",data, false);
+                        Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, false);
                     }
                 });
 

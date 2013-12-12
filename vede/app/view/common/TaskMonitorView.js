@@ -1,4 +1,5 @@
-    Ext.define('Vede.view.common.TaskMonitorView', {
+Ext.define('Vede.view.common.TaskMonitorView', {
+    requires: ['Teselagen.event.CommonEvent'],
     extend: 'Ext.panel.Panel',
     id: 'taskMonitor',
     alias: 'widget.TaskMonitorView',
@@ -106,7 +107,7 @@
                         project_id: rec.data.project_id,
                         _id: rec.data.id
                     };
-                    Vede.application.fireEvent("jumpToJ5Run", data);
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);
                 }
             }]
         }]
