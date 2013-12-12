@@ -266,6 +266,7 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     loadj5Results: function () {
+        console.log('Loading j5 runs.');
         var self = this;
 
         this.activeProject.j5runs().load({
@@ -332,6 +333,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
         this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
         this.application.on(this.CommonEvent.LOAD_J5_RUNS, this.loadj5Results, this);
+        this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.loadj5Results, this);
 
         this.control({
             'panel[cls="j5ReportsPanel"] > menu > menuitem': {
