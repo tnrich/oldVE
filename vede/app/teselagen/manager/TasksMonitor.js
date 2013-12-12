@@ -6,7 +6,6 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.TasksMonitor", {
-
     singleton: true,
     requires: ["Ext.data.Store",
                "Teselagen.event.CommonEvent",
@@ -36,7 +35,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     },
 
     addJ5RunObserver: function(j5Run) {
-        this.application.fireEvent(this.CommonEvent.LOAD_J5_RUNS);
+        Vede.application.fireEvent(Teselagen.event.CommonEvent.LOAD_J5_RUNS);
     },
 
     monitorServerTasks: function(){
