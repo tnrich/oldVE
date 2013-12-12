@@ -194,6 +194,16 @@ module.exports = function(app) {
           });
       },
 
+      del_presets: function(req,res){
+
+          var Preset = app.db.model('preset');
+
+          Preset.findByIdAndRemove(req.body.id,function(err){
+            if(err) return res.json({success:false});
+            res.json({});
+          });
+      },
+
       get_presets: function(req,res){
           User.findById(req.user._id).populate({
             path: 'presets',

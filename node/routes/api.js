@@ -58,6 +58,7 @@ module.exports = function(app) {
     app.put("/users/:username", restrict, user.put_user);
     app.post('/presets' ,restrict, user.post_presets);
     app.put('/presets' ,restrict, user.put_presets);
+    app.delete('/presets' ,restrict, user.del_presets);
     app.get('/presets' ,restrict, user.get_presets);
 
     app.get('/fqdn', restrict, parts.fqdn);
