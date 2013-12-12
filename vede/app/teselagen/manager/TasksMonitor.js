@@ -35,7 +35,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     stop: function(boot){
     },
 
-    addJ5RunObserver: function(){},
+    addJ5RunObserver: function(j5Run) {
+        this.application.fireEvent(this.CommonEvent.LOAD_J5_RUNS);
+    },
 
     monitorServerTasks: function(){
         var self = this;

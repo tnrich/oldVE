@@ -331,7 +331,7 @@ Ext.define("Vede.controller.J5ReportController", {
         this.CommonEvent = Teselagen.event.CommonEvent;
 
         this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
-        this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.loadj5Results, this);
+        this.application.on(this.CommonEvent.LOAD_J5_RUNS, this.loadj5Results, this);
 
         this.control({
             'panel[cls="j5ReportsPanel"] > menu > menuitem': {
