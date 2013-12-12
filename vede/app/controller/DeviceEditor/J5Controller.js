@@ -960,6 +960,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         //{
         //    console.log("Preset already selected"); return false;
         //}
+        console.log("Trying to create new preset");
 
         var parameters = {};
         this.j5Parameters.fields.eachKey(function (key) {
