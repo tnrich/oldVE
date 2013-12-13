@@ -200,8 +200,20 @@ module.exports = function(app) {
 
           Preset.findByIdAndRemove(req.body.id,function(err){
             if(err) return res.json({success:false});
-            res.json({});
+
+            User.findById(req.user._id).populate({
+              path: 'presets'
+            }).exec(function(err, user) {
+                user.presets.forEach(function(preset,presetKey){
+                  if(preset._id == req.body.id) delete user.presets[presetKey];
+                });
+                req.user.save(function(){
+                  res.json({});
+                });
+            });
+
           });
+
       },
 
       get_presets: function(req,res){
