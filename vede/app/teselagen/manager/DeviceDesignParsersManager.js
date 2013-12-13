@@ -592,26 +592,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 operand2isNumber = true;
             }
             else {
-                if(operand2isNumber) {
-                    if(operand2isNumber=="false") {
-                        operand2 = operand2Node.textContent;
-                        operand2isNumber = false;
-                    } else {
-                        operand2 = parseInt(operand2Node.textContent);
-                        operand2isNumber = true;
-                    }
+                if(negationOperator == "true" && conditional=="MORE THAN") {
+                    operand2 = parseInt(operand2Node.textContent);
+                    operand2isNumber = true;
                 } else {
                     operand2 = operand2Node.textContent;
-                    if(conditional=="THEN") {
-                        operand2 = operand2Node.textContent;
-                        operand2isNumber = false;
-                    } else if(parseInt(operand2) == operand2Node.textContent) {
-                        operand2 = operand2Node.textContent;
-                        operand2isNumber = false;
-                    } else {
-                        operand2 = parseInt(operand2Node.textContent);
-                        operand2isNumber = true;
-                    }
+                    operand2isNumber = false;
                 }
             }
 
