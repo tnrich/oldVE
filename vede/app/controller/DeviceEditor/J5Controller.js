@@ -341,8 +341,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onj5ParamsOKBtnClick: function () {
-        this.saveJ5Parameters();
-        this.j5ParamsWindow.close();
+        var self = this;
+        this.savePresetBtnClick(function(){
+            self.saveJ5Parameters();
+            self.j5ParamsWindow.close();
+        });
     },
 
     onCondenseAssemblyFilesSelectorChange: function (me, value) {
@@ -912,7 +915,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
     },
 
-    savePresetBtnClick: function() {
+    savePresetBtnClick: function(cb) {
         var self = this;
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var selectedPreset = currentTab.selectedPreset;
@@ -940,6 +943,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             success: function(response){
                 Ext.MessageBox.alert('Success', 'Preset updated', function(){
                     Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
+                    if(typeof(cb)=="function") cb();
                 });
             }
         });
