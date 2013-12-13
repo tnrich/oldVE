@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 720,
+    height: 760,
     maxHeight: 830,
     width: 845,
     maxWidth: 845,
@@ -21,13 +21,74 @@ Ext.define('Vede.view.de.j5Parameters', {
         var me = this;
 
         Ext.applyIf(me, {
-            items: [{
+            items: [
+                {
+                xtype: 'container',
+                cls: 'j5Parameters_Buttons',
+                height: '40px',
+                layout: {
+                    align: 'stretch',
+                    type:'hbox'
+                },
+                items: [
+                    {
+                        xtype: 'combobox',
+                        cls: 'inWindowPresetSelector',
+                        fieldLabel: '<b>Parameters Preset:</b>',
+                        labelCls: 'assembly-label',
+                        editable: false,
+                        labelSeparator: ' ',
+                        labelWidth: 110,
+                        width:550,
+                        queryMode: 'local',
+                        displayField: 'presetName',
+                        valueField: 'presetName',
+                        x: 0,
+                        y: 5,
+                        margin: 5,
+                        maxHeight: 23,
+                        minHeight: 23,
+                        padding: '',
+                    }, {
+                        xtype: 'button',
+                        cls: 'savePresetBtn',
+                        x: 360,
+                        y: 5,
+                        margin: 5,
+                        maxHeight: 23,
+                        minHeight: 23,
+                        padding: '',
+                        text: '<b>Save Preset</b>'
+                    }, {
+                        xtype: 'button',
+                        cls: 'deletePresetBtn',
+                        x: 440,
+                        y: 5,
+                        margin: 5,
+                        maxHeight: 23,
+                        minHeight: 23,
+                        padding: '',
+                        text: '<b>Delete Preset</b>'
+                    }, {
+                        xtype: 'button',
+                        cls: 'newPresetBtn',
+                        x: 530,
+                        y: 5,
+                        margin: 5,
+                        maxHeight: 23,
+                        minHeight: 23,
+                        padding: '',
+                        text: '<b>New Preset</b>'
+                    }]
+                },
+                {
                 xtype: 'container',
                 layout: {
                     align: 'stretch',
                     type: 'hbox'
                 },
-                items: [{
+                items: [
+                    {
                     xtype: 'container',
                     flex: 1,
                     items: [{
@@ -406,54 +467,6 @@ Ext.define('Vede.view.de.j5Parameters', {
                 },
                 items: [
                 {
-                    xtype: 'combobox',
-                    cls: 'inWindowPresetSelector',
-                    fieldLabel: '<b>Parameters preset:</b>',
-                    labelCls: 'assembly-label',
-                    editable: false,
-                    labelSeparator: ' ',
-                    labelWidth: 110,
-                    width:350,
-                    queryMode: 'local',
-                    displayField: 'presetName',
-                    valueField: 'presetName',
-                    x: 0,
-                    y: 5,
-                    margin: 5,
-                    maxHeight: 23,
-                    minHeight: 23,
-                    padding: '',
-                }, {
-                    xtype: 'button',
-                    cls: 'savePresetBtn',
-                    x: 360,
-                    y: 5,
-                    margin: 5,
-                    maxHeight: 23,
-                    minHeight: 23,
-                    padding: '',
-                    text: '<b>Save Preset</b>'
-                }, {
-                    xtype: 'button',
-                    cls: 'deletePresetBtn',
-                    x: 440,
-                    y: 5,
-                    margin: 5,
-                    maxHeight: 23,
-                    minHeight: 23,
-                    padding: '',
-                    text: '<b>Delete Preset</b>'
-                }, {
-                    xtype: 'button',
-                    cls: 'newPresetBtn',
-                    x: 530,
-                    y: 5,
-                    margin: 5,
-                    maxHeight: 23,
-                    minHeight: 23,
-                    padding: '',
-                    text: '<b>New Preset</b>'
-                }, {
                     xtype: 'button',
                     cls: 'j5ParamsCancelBtn',
                     x: 640,
