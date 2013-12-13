@@ -228,7 +228,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 if(sequence["de:format"]) { propNode.textContent = sequence["de:format"]; }
 
                 var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
-                if(sequence["de:content"]) { propNode.textContent = "<![CDATA[" + sequence["de:content"] +"]]>"; }
+                if(sequence["de:content"]) { propNode.textContent = sequence["de:content"]; }
 
                 var propNode = sequenceFile.appendChild(doc.createElement("de:fileName"));
                 if(sequence["de:fileName"]) { propNode.textContent = sequence["de:fileName"]; }                
@@ -347,7 +347,12 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
 
             fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">','<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.2</de:version>');
+            
             fileContent = Teselagen.utils.DeXmlUtils.formatXml(fileContent);
+
+            fileContent = fileContent.replace(/<de:content>/g,'<de:content><![CDATA[');
+            fileContent = fileContent.replace(/<\/de:content>/g,']]></<de:content>');
+
             self.saveToFile(fileName,fileContent);
         });
     }
