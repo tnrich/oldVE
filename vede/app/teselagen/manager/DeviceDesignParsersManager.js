@@ -579,6 +579,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             if(rule.getElementsByTagNameNS("*", "operand2isNumber")[0]) {
                 var operand2isNumber = rule.getElementsByTagNameNS("*", "operand2isNumber")[0].textContent;
             }
+            if(rule.getElementsByTagNameNS("*", "compositionalOperator")[0]) {
+                var conditional = rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent;
+            }
             var operand2Node = rule.getElementsByTagNameNS("*", "operand2ID")[0];
             var operand2;
             if(!operand2Node)
@@ -599,7 +602,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     }
                 } else {
                     operand2 = operand2Node.textContent;
-                    if(parseInt(operand2) == operand2Node.textContent) {
+                    if(conditional=="THEN") {
+                        operand2 = operand2Node.textContent;
+                        operand2isNumber = false;
+                    } else if(parseInt(operand2) == operand2Node.textContent) {
                         operand2 = operand2Node.textContent;
                         operand2isNumber = false;
                     } else {

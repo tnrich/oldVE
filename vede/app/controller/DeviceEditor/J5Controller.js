@@ -140,6 +140,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             this.j5Parameters.setDefaultValues();
             currentTab.selectedPreset = selectedPreset;
             if(self.j5ParamsWindow) self.populateJ5ParametersDialog();
+            self.disablePresetOptions();
             return null;
         }
 
@@ -151,6 +152,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             self.j5Parameters.set(key, params);
         }
         if(self.j5ParamsWindow) self.populateJ5ParametersDialog();
+
+        self.disablePresetOptions();
     },
 
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
@@ -880,6 +883,35 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
     },
 
+    disablePresetOptions: function(){
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var selectedPreset = currentTab.selectedPreset;
+
+        var savePreset = Ext.ComponentQuery.query("component[cls='savePresetBtn']")[0];
+        var deletePreset = Ext.ComponentQuery.query("component[cls='deletePresetBtn']")[0];
+        var newPreset = Ext.ComponentQuery.query("component[cls='newPresetBtn']")[0];
+
+        if(selectedPreset && selectedPreset.get('presetName') !== "Default")
+        {
+            if(savePreset) savePreset.enable();
+            if(deletePreset) deletePreset.enable();
+            if(newPreset) newPreset.enable();
+        }
+        else if(selectedPreset && selectedPreset.get('presetName') === "Default")
+        {
+            if(savePreset) savePreset.disable();
+            if(deletePreset) deletePreset.disable();
+            if(newPreset) newPreset.enable();            
+        }
+        else
+        {
+            if(savePreset) savePreset.disable();
+            if(deletePreset) deletePreset.disable();
+            if(newPreset) newPreset.enable();
+        }
+    },
+
     savePresetBtnClick: function() {
         var self = this;
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -940,7 +972,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                             id: selectedPreset.data.id
                         },
                         success: function(response){
-                            Ext.MessageBox.alert('Success', 'Preset saved', function(){
+                            Ext.MessageBox.alert('Success', 'Preset deleted', function(){
                                 Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,"");
                             });
                         }
@@ -969,9 +1001,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         }, this);
 
-        Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn,text){
-            if(btn !== "ok") return null;
-
+        function performCreation(text) {
             Ext.Ajax.request({
                 method: 'POST',
                 url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
@@ -985,9 +1015,17 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     });
                 }
             });
+        }
 
+        var promptName = function() {
+            Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn,text){
+                if(btn !== "ok") return null;
+                if(text=="") promptName();
+                else performCreation(text);
+            }, this);
+        }
 
-        }, this);
+        promptName();        
 
     },
 

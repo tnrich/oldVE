@@ -7,7 +7,7 @@
 Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
     alias: "DeviceDesignExporterManager",
     singleton: true,
-    requires: ["Teselagen.manager.DeviceDesignManager"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.utils.DeXmlUtils"],
     mixins: {
         observable: "Ext.util.Observable"
     },
@@ -53,6 +53,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         design.bins().each(function(bin,binKey) {
         	var jsonBin = {};
             jsonBin = {};
+            jsonBin.id = Teselagen.utils.DeXmlUtils.generateUUID();
             jsonBin["de:binName"] = bin.get("binName");
             jsonBin["de:iconID" ] = bin.get("iconID");
             jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
@@ -227,7 +228,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 if(sequence["de:format"]) { propNode.textContent = sequence["de:format"]; }
 
                 var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
-                if(sequence["de:content"]) { propNode.textContent = "<![CDATA[" + sequence["de:content"] +"]]>"; }
+                if(sequence["de:content"]) { propNode.textContent = sequence["de:content"]; }
 
                 var propNode = sequenceFile.appendChild(doc.createElement("de:fileName"));
                 if(sequence["de:fileName"]) { propNode.textContent = sequence["de:fileName"]; }                
@@ -278,10 +279,11 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
             json["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].forEach(function(bin){
                 var j5Bin = j5Bins.appendChild(doc.createElement("de:j5Bin"));
+                j5Bin.setAttribute("id", bin.id);
 
                 for(var prop in bin)
                 {
-                    if(typeof(bin[prop]) !== "object" && prop!="de:iconID" && prop!="de:fro" && prop!="de:dsf")
+                    if(typeof(bin[prop]) !== "object" && prop!="de:iconID" && prop!="de:fro" && prop!="de:dsf" && prop!="id")
                     {
                         if(bin[prop])
                         {
@@ -319,7 +321,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                     if(typeof(rule[prop]) !== "object")
                     {
                         var propNode = eugeneRule.appendChild(doc.createElement(prop));
-                        if(rule[prop]) { propNode.textContent = rule[prop]; }
+                        if(prop in rule) { propNode.textContent = rule[prop]; }
                     }
                 }
             });
@@ -345,6 +347,12 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
 
             fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">','<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.2</de:version>');
+            
+            fileContent = Teselagen.utils.DeXmlUtils.formatXml(fileContent);
+
+            fileContent = fileContent.replace(/<de:content>/g,'<de:content><![CDATA[');
+            fileContent = fileContent.replace(/<\/de:content>/g,']]></de:content>');
+
             self.saveToFile(fileName,fileContent);
         });
     }

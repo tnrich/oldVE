@@ -65,10 +65,10 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     onJ5RunSelect: function( item, e, eOpts ){
-         this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
-            this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
-            this.detailPanel.show();
-            this.detailPanelFill.hide();
+        this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
+        this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
+        this.detailPanel.show();
+        this.detailPanelFill.hide();
 
         for(var i=0; i<this.tabPanel.query("menuitem").length; i++) {
             this.tabPanel.query("menuitem")[i].removeCls("j5-menuitem-active");
@@ -269,12 +269,26 @@ Ext.define("Vede.controller.J5ReportController", {
         console.log('Loading j5 runs.');
         var self = this;
 
-        this.activeProject.j5runs().load({
-            callback: function (runs) {
-                self.j5runs = runs.reverse();
-                self.renderMenu();
+        if(this.activeProject) {
+            this.activeProject.j5runs().load({
+                callback: function (runs) {
+                    self.j5runs = runs.reverse();
+                    self.renderMenu();
+                }
+            });
+        }
+    },
+
+    selectJ5RunById: function(id) {
+        var runItems = this.tabPanel.query('menuitem');
+
+        for(var i = 0; i < runItems.length; i++) {
+            if(runItems[i].id === id) {
+                this.onJ5RunSelect(runItems[i]);
+
+                break;
             }
-        });
+        }
     },
 
     buildBtnClick: function(){
@@ -333,6 +347,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
         this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
         this.application.on(this.CommonEvent.LOAD_J5_RUNS, this.loadj5Results, this);
+        //this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.setActiveRun, this);
         this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.loadj5Results, this);
 
         this.control({

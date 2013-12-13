@@ -11,6 +11,7 @@ Ext.define('Vede.view.de.j5Parameters', {
     maxWidth: 845,
     title: 'j5 Parameters',
     cls: 'j5Parameters_Window',
+    alias: 'j5ParametersWindow',
     autoScroll: true,
     modal: true,
     maximizable: false,
@@ -445,7 +446,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                 }, {
                     xtype: 'button',
                     cls: 'newPresetBtn',
-                    x: 540,
+                    x: 530,
                     y: 5,
                     margin: 5,
                     maxHeight: 23,
