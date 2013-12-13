@@ -576,8 +576,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var rule = eugeneRules[i];
             if (typeof(rule) !== "object") { continue; }
             var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
-            if(rule.getElementsByTagNameNS("*", "operand2isNumber")[0]) {
-                var operand2isNumber = rule.getElementsByTagNameNS("*", "operand2isNumber")[0].textContent;
+            if(rule.getElementsByTagNameNS("*", "negationOperator")[0]) {
+                var negationOperator = rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent;
             }
             if(rule.getElementsByTagNameNS("*", "compositionalOperator")[0]) {
                 var conditional = rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent;
