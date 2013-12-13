@@ -74,7 +74,7 @@ module.exports = function(app) {
                 var pid = j5run.process.pid;
                 require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
                     console.log(arguments);
-                    app.io.pub.publish("canceled". JSON.stringify({user:username,j5run:j5run}));
+                    app.io.pub.publish("canceled", JSON.stringify({user:username,j5run:j5run}));
                 });
             });
 
