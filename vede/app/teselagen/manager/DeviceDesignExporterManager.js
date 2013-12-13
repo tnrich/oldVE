@@ -351,7 +351,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             fileContent = Teselagen.utils.DeXmlUtils.formatXml(fileContent);
 
             fileContent = fileContent.replace(/<de:content>/g,'<de:content><![CDATA[');
-            fileContent = fileContent.replace(/<\/de:content>/g,']]></<de:content>');
+            fileContent = fileContent.replace(/<\/de:content>/g,']]></de:content>');
 
             self.saveToFile(fileName,fileContent);
         });
