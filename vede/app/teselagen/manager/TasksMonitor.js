@@ -48,7 +48,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 console.log("Socket IO not loaded!");
                 return false;
             }
-            
+
             console.log("Socket created");
 
             socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
@@ -131,7 +131,16 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
                 socket.on('j5error', function(data) {
                     console.log("j5 error");
-                    /*
+                    var startDate = new Date(data.date);
+                    var endDate = new Date(data.endDate);
+                    var elapsed = endDate - startDate;
+                    console.log(startDate, endDate, elapsed);
+                    elapsed = Math.round(elapsed/1000);
+                    elapsed = self.elapsedDate(elapsed);
+                    toastr.options.onclick = function() { Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);};
+                    toastr.error("j5 Run for " +data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: data});
+                    toastr.options.timeOut = 5000;
+
                     console.log(data);
                     console.log("here");
                     var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
@@ -140,7 +149,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     btn.setText("Submit Run to j5");
                     $(btn.el.dom).find(".loader-mini").remove();
                     Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
-                    */
+                    
                 });
 
             });
