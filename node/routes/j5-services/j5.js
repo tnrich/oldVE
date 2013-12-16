@@ -209,7 +209,7 @@ function reportChange(j5run,user, completed, error){
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
     if(error==true) {app.io.pub.publish("j5error", JSON.stringify({user:user.username,j5run:j5run}));}
-    else if(completed==true) {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
+    else if(completed==true && !j5run.status=="Canceled") {app.io.pub.publish("j5completed", JSON.stringify({user:user.username,j5run:j5run}));}
   });
 };
 
