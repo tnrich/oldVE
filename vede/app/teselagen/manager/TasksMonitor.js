@@ -48,12 +48,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 console.log("Socket IO not loaded!");
                 return false;
             }
-
-            if(socket) {
-                console.log("Socket already coonected!");
-                return false;
-            }
-
+            
             console.log("Socket created");
 
             socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
