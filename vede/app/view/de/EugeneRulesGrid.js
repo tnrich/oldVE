@@ -50,7 +50,7 @@ Ext.define('Vede.view.de.EugeneRulesGrid', {
             }),
             columnLines: true,
             rowLines: true,
-            minHeight: 120,
+            minHeight: 12   0,
             columns: [
                 {
                     xtype: 'gridcolumn',

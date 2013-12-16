@@ -112,8 +112,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').enable();
             this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
-            $("#" + field + " .status-note").removeCls("status-note-warning");
-            $("#" + field + " .status-note").removeCls("status-note-failed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
@@ -121,8 +121,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').enable();
             this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
-            $("#" + field + " .status-note").removeCls("status-note-completed");
-            $("#" + field + " .status-note").removeCls("status-note-failed")
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-failed")
             $("#" + field + " .status-note").addClass("status-note-warning");;
         } else if (status=="Error") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
@@ -130,8 +130,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').disable();
             this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
-            $("#" + field + " .status-note").removeCls("status-note-completed");
-            $("#" + field + " .status-note").removeCls("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
         } else if (status=="Canceled") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
@@ -139,8 +139,8 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').disable();
             this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
-            $("#" + field + " .status-note").removeCls("status-note-completed");
-            $("#" + field + " .status-note").removeCls("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
         } else if (status=="In progress") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
@@ -148,9 +148,9 @@ Ext.define("Vede.controller.J5ReportController", {
             this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').disable();
             this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
-            $("#" + field + " .status-note").removeCls("status-note-completed");
-            $("#" + field + " .status-note").removeCls("status-note-warning");
-            $("#" + field + " .status-note").removeCls("status-note-failed");
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").removeClass("status-note-failed");
         }
 
         var warnings = this.activeJ5Run.raw.warnings;

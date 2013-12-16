@@ -55,6 +55,8 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             autoScroll: true,
             dataIndex: 'status',
             width: 300,
+            minWidth: 300,
+            flex: 1,
             renderer: function(value) {
                 if(value==="In progress") {
                     return '<div class="pace-activity"></div>Running...'
