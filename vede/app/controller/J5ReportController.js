@@ -95,10 +95,8 @@ Ext.define("Vede.controller.J5ReportController", {
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
 
         var j5parameters = Ext.create("Teselagen.models.J5Parameters");
-        j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);//console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+        j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);
         var J5parametersValues = j5parameters.getParametersAsStore();
-        //console.log(j5parameters);
-        //console.log(this.activeJ5Run);
 
         this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
         this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
@@ -266,7 +264,6 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     loadj5Results: function () {
-        console.log('Loading j5 runs.');
         var self = this;
 
         if(this.activeProject) {
