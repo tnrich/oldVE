@@ -121,6 +121,15 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
 
     onSequenceLinearMenuItemCheckChange: function(checkitem, checked) {
         this.sequenceManager.setCircular(!checked);
+
+        if (checked) {
+            viewMode = "linear";
+        }
+        else {
+            viewMode = "circular";
+        }
+
+        this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
     },
 
     onReverseComplementMenuItemClick: function() {
