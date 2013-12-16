@@ -274,6 +274,10 @@ Ext.define("Vede.controller.J5ReportController", {
                 callback: function (runs) {
                     self.j5runs = runs.reverse();
                     self.renderMenu();
+
+                    if(self.activeJ5Run) {
+                        this.onJ5RunSelect(self.activeJ5Run);
+                    }
                 }
             });
         }
