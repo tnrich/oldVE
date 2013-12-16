@@ -126,8 +126,8 @@ Ext.define("Vede.controller.J5ReportController", {
             $("#" + field + " .status-note").addClass("status-note-warning");;
         } else if (status=="Error") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-            this.tabPanel.down('button[cls="downloadResults"]').enable();
-            this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
+            this.tabPanel.down('button[cls="downloadResults"]').disable();
+            this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
             this.tabPanel.down('button[cls="buildBtn"]').disable();
             this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
             $("#" + field + " .status-note").removeClass("status-note-completed");
