@@ -49,6 +49,11 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 return false;
             }
 
+            if(typeof socket !== 'undefined') {
+                console.log("Socket already coonected!");
+                return false;
+            }
+
             socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
             socket.on('message',function(msg) {
