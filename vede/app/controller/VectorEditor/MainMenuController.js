@@ -384,19 +384,16 @@ Ext.define('Vede.controller.VectorEditor.MainMenuController', {
     onViewModeChanged: function(viewMode) {
         var circularMenuItems = this.activeTab.query("component[identifier*='circularViewMenuItem']");
         var linearMenuItems = this.activeTab.query("component[identifier*='linearViewMenuItem']");
-        var sequenceLinearMenuItem = this.activeTab.query("component[identifier*='sequenceLinearMenuItem']");
 
         if(viewMode == "linear") {
             for(var i = 0; i < circularMenuItems.length; i++) {
                 circularMenuItems[i].setChecked(false, true);
                 linearMenuItems[i].setChecked(true, true);
-                sequenceLinearMenuItem[i].setChecked(true,true);
             }
         } else {
             for(var i = 0; i < circularMenuItems.length; i++) {
                 circularMenuItems[i].setChecked(true, false);
                 linearMenuItems[i].setChecked(false, true);
-                sequenceLinearMenuItem[i].setChecked(false,true);
             }
         }
     },
