@@ -276,7 +276,7 @@ Ext.define("Vede.controller.J5ReportController", {
                     self.renderMenu();
 
                     if(self.activeJ5Run) {
-                        self.onJ5RunSelect(self.activeJ5Run);
+                        self.selectJ5RunById(self.activeJ5Run.getId());
                     }
                 }
             });
