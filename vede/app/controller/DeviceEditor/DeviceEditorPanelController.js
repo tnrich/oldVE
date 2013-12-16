@@ -484,6 +484,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         this.saveDEProject(arg);
     },
 
+    onDeviceEditorSaveAsBtnClick: function() {
+        Ext.create('Vede.view.de.SaveAsWindow').show();
+    },
 
     onAddRowAboveClick: function () {
         this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
@@ -753,6 +756,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
                 click: this.onDeviceEditorSaveEvent
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Save Design As']": {
+                click: this.onDeviceEditorSaveAsBtnClick
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {
                 click: this.onDeviceEditorClearBtnClick
