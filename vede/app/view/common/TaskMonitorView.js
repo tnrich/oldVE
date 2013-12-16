@@ -64,6 +64,8 @@ Ext.define('Vede.view.common.TaskMonitorView', {
                     return '<div class="status-note status-note-warning" style="margin-right:10px"></div>Completed with warnings.'
                 } else if(value==="Error") {
                     return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Failed.'
+                } else if(value==="Canceled") {
+                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Canceled.'
                 }
             }
         },
