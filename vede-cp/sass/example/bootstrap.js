@@ -161,6 +161,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.manager.DeviceDesignExporterManager": [],
   "Ext.ux.layout.Center": [],
   "Teselagen.models.j5Output.CombinatorialAssembly": [],
+  "Vede.view.tools.ToolsPanelView": [],
   "Teselagen.models.j5Output.Warning": [],
   "Teselagen.utils.FormatUtils": [],
   "Teselagen.manager.DeviceDesignParsersManager": [],
@@ -222,6 +223,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.grid.TransformGrid": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Vede.controller.DeviceEditor.ChangePartDefinitionController": [],
+  "Vede.view.ve.CopySequenceWindow": [],
   "Vede.view.de_legacy.DeviceEditor": [],
   "Teselagen.manager.InspectorPanelManager": [],
   "Vede.controller.ProjectExplorerController": [],
@@ -375,12 +377,13 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.bio.sequence.common.StrandedAnnotation": [],
   "Ext.ux.RowExpander": [],
   "Teselagen.models.j5Output.CombinationPart": [],
+  "Vede.view.de.SaveAsWindow": [],
   "Teselagen.renderer.sequence.CutSiteRenderer": [],
   "Vede.controller.VectorEditor.RailController": [],
   "Teselagen.models.j5Output.PCRReaction": [],
   "Teselagen.models.DownstreamAutomationParameters": [],
-  "Teselagen.utils.DeXmlUtils": [],
   "Vede.view.annotate.Caret": [],
+  "Teselagen.utils.DeXmlUtils": [],
   "Vede.controller.VectorEditor.EditSequenceFeatureWindowController": [],
   "Vede.view.de.DeviceEditor": [],
   "Vede.view.ve.GoToWindow": [],
@@ -453,7 +456,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.sequence.symbols.AminoAcidSymbol": [],
   "Teselagen.models.j5Output.SuggestedAssembly": [],
   "Teselagen.models.SBOLvIconInfo": [],
-  "Vede.view.de.j5Parameters": [],
+  "Vede.view.de.j5Parameters": [
+    "j5ParametersWindow"
+  ],
   "Teselagen.models.DeviceEditorProject": [],
   "Teselagen.models.Cell": [],
   "Teselagen.bio.parsers.ParsersManager": [],
@@ -603,6 +608,9 @@ Ext.ClassManager.addNameAliasMappings({
     "layout.ux.center"
   ],
   "Teselagen.models.j5Output.CombinatorialAssembly": [],
+  "Vede.view.tools.ToolsPanelView": [
+    "widget.ToolsPanelView"
+  ],
   "Teselagen.models.j5Output.Warning": [],
   "Teselagen.utils.FormatUtils": [],
   "Teselagen.manager.DeviceDesignParsersManager": [
@@ -692,6 +700,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.grid.TransformGrid": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Vede.controller.DeviceEditor.ChangePartDefinitionController": [],
+  "Vede.view.ve.CopySequenceWindow": [],
   "Vede.view.de_legacy.DeviceEditor": [
     "widget.DeviceEditorLegacyPanel"
   ],
@@ -876,12 +885,13 @@ Ext.ClassManager.addNameAliasMappings({
     "plugin.rowexpander"
   ],
   "Teselagen.models.j5Output.CombinationPart": [],
+  "Vede.view.de.SaveAsWindow": [],
   "Teselagen.renderer.sequence.CutSiteRenderer": [],
   "Vede.controller.VectorEditor.RailController": [],
   "Teselagen.models.j5Output.PCRReaction": [],
   "Teselagen.models.DownstreamAutomationParameters": [],
-  "Teselagen.utils.DeXmlUtils": [],
   "Vede.view.annotate.Caret": [],
+  "Teselagen.utils.DeXmlUtils": [],
   "Vede.controller.VectorEditor.EditSequenceFeatureWindowController": [],
   "Vede.view.de.DeviceEditor": [
     "widget.DeviceEditorPanel"

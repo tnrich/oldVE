@@ -140,6 +140,7 @@ if (!Vede.view.j5) Vede.view.j5 = {};
 if (!Vede.view.j5Report) Vede.view.j5Report = {};
 if (!Vede.view.pie) Vede.view.pie = {};
 if (!Vede.view.rail) Vede.view.rail = {};
+if (!Vede.view.tools) Vede.view.tools = {};
 if (!Vede.view.ve) Vede.view.ve = {};
 /* 
  * Helper code for compiler optimization
@@ -19618,7 +19619,7 @@ Ext.enableFx = true;
   iTag.setAttribute("src", window.location.protocol + '//www.adobe.com/images/shared/download_buttons/get_flash_player.gif');
   iTag.setAttribute("alt", "Get Adobe Flash player");
   aTag = document.createElement("a");
-  aTag.setAttribute("href", "https://www.adobe.com/go/getflashplayer");
+  aTag.setAttribute("href", "http://www.adobe.com/go/getflashplayer");
   aTag.appendChild(iTag);
   pTag = document.createElement("p");
   pTag.innerHTML = "To view this page ensure that Adobe Flash Player version 11.1.0 or greater is installed.";
@@ -33973,7 +33974,7 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
   config = config || {};
   var exportTypes = {'image/png': 'Image', 'image/jpeg': 'Image', 'image/svg+xml': 'Svg'}, prefix = exportTypes[config.type] || 'Svg', exporter = Ext.draw.engine[prefix + 'Exporter'];
   return exporter.generate(surface, config);
-}}, availableAttrs: {blur: 0, "clip-rect": "0 0 1e9 1e9", cursor: "default", cx: 0, cy: 0, 'dominant-baseline': 'auto', fill: "none", "fill-opacity": 1, font: '10px "Arial"', "font-family": '"Arial"', "font-size": "10", "font-style": "normal", "font-weight": 400, gradient: "", height: 0, hidden: false, href: "https://sencha.com/", opacity: 1, path: "M0,0", radius: 0, rx: 0, ry: 0, scale: "1 1", src: "", stroke: "none", "stroke-dasharray": "", "stroke-linecap": "butt", "stroke-linejoin": "butt", "stroke-miterlimit": 0, "stroke-opacity": 1, "stroke-width": 1, target: "_blank", text: "", "text-anchor": "middle", title: "Ext Draw", width: 0, x: 0, y: 0, zIndex: 0}, container: undefined, height: 352, width: 512, x: 0, y: 0, orderSpritesByZIndex: true, constructor: function(config) {
+}}, availableAttrs: {blur: 0, "clip-rect": "0 0 1e9 1e9", cursor: "default", cx: 0, cy: 0, 'dominant-baseline': 'auto', fill: "none", "fill-opacity": 1, font: '10px "Arial"', "font-family": '"Arial"', "font-size": "10", "font-style": "normal", "font-weight": 400, gradient: "", height: 0, hidden: false, href: "http://sencha.com/", opacity: 1, path: "M0,0", radius: 0, rx: 0, ry: 0, scale: "1 1", src: "", stroke: "none", "stroke-dasharray": "", "stroke-linecap": "butt", "stroke-linejoin": "butt", "stroke-miterlimit": 0, "stroke-opacity": 1, "stroke-width": 1, target: "_blank", text: "", "text-anchor": "middle", title: "Ext Draw", width: 0, x: 0, y: 0, zIndex: 0}, container: undefined, height: 352, width: 512, x: 0, y: 0, orderSpritesByZIndex: true, constructor: function(config) {
   var me = this;
   config = config || {};
   Ext.apply(me, config);
@@ -42164,7 +42165,7 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
 }}, 0, ["text"], ["draw", "text", "component", "box"], {"draw": true, "text": true, "component": true, "box": true}, ["widget.text"], 0, [Ext.draw, 'Text'], 0));
 ;
 
-(Ext.cmd.derive('Ext.draw.engine.ImageExporter', Ext.Base, {singleton: true, defaultUrl: 'https://svg.sencha.io', supportedTypes: ['image/png', 'image/jpeg'], widthParam: 'width', heightParam: 'height', typeParam: 'type', svgParam: 'svg', formCls: Ext.baseCSSPrefix + 'hide-display', generate: function(surface, config) {
+(Ext.cmd.derive('Ext.draw.engine.ImageExporter', Ext.Base, {singleton: true, defaultUrl: 'http://svg.sencha.io', supportedTypes: ['image/png', 'image/jpeg'], widthParam: 'width', heightParam: 'height', typeParam: 'type', svgParam: 'svg', formCls: Ext.baseCSSPrefix + 'hide-display', generate: function(surface, config) {
   config = config || {};
   var me = this, type = config.type, form;
   if (Ext.Array.indexOf(me.supportedTypes, type) === -1) 
@@ -42682,10 +42683,10 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
   return '<image ' + props + ' />';
 }}, svgHeader = function() {
   var svg = '<?xml version="1.0" standalone="yes"?>';
-  svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "https://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+  svg += '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
   return svg;
 }, svgContent = function() {
-  var svg = '<svg width="' + width + 'px" height="' + height + 'px" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" version="1.1">', defs = '', item, itemsLen, items, gradient, getSvgString, colorstops, stop, coll, keys, colls, k, kLen, key, collI, i, j, stopsLen, sortedItems, za, zb;
+  var svg = '<svg width="' + width + 'px" height="' + height + 'px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">', defs = '', item, itemsLen, items, gradient, getSvgString, colorstops, stop, coll, keys, colls, k, kLen, key, collI, i, j, stopsLen, sortedItems, za, zb;
   items = surface.items.items;
   itemsLen = items.length;
   getSvgString = function(node) {
@@ -53973,7 +53974,7 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
 }}, 0, ["tabpanel"], ["tabpanel", "panel", "component", "container", "box"], {"tabpanel": true, "panel": true, "component": true, "container": true, "box": true}, ["widget.tabpanel"], 0, [Ext.tab, 'Panel', Ext, 'TabPanel'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.CommonEvent', Ext.Base, {singleton: true, BEFORE_UPDATE: "BeforeUpdate", AFTER_UPDATE: "AfterUpdate", EDIT_FEATURE: "EditFeature", REMOVE_FEATURE: "RemoveFeature", CREATE_FEATURE: "CreateFeature", DELETE_PART: "DeletePart", DELETE_SEQUENCE: "DeleteSequence", RUN_J5: "RunJ5", J5_RUN_STATUS_CHANGED: "J5RunStatusChanged", JUMPTOJ5RUN: "jumpToJ5Run", RESET_J5BTN: "resetJ5ActiveRun", LOAD_ASSEMBLY_METHODS: "LoadAssemblyMethods", ACTION_MESSAGE: "ActionMessage", LOAD_PRESETS: "LoadPresets"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'CommonEvent'], 0));
+(Ext.cmd.derive('Teselagen.event.CommonEvent', Ext.Base, {singleton: true, BEFORE_UPDATE: "BeforeUpdate", AFTER_UPDATE: "AfterUpdate", EDIT_FEATURE: "EditFeature", REMOVE_FEATURE: "RemoveFeature", CREATE_FEATURE: "CreateFeature", DELETE_PART: "DeletePart", DELETE_SEQUENCE: "DeleteSequence", RUN_J5: "RunJ5", J5_RUN_STATUS_CHANGED: "J5RunStatusChanged", LOAD_J5_RUNS: "LoadJ5Runs", JUMPTOJ5RUN: "jumpToJ5Run", RESET_J5BTN: "resetJ5ActiveRun", LOAD_ASSEMBLY_METHODS: "LoadAssemblyMethods", ACTION_MESSAGE: "ActionMessage", LOAD_PRESETS: "LoadPresets"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'CommonEvent'], 0));
 ;
 
 (Ext.cmd.derive('Ext.grid.plugin.HeaderResizer', Ext.AbstractPlugin, {disabled: false, config: {dynamic: false}, colHeaderCls: Ext.baseCSSPrefix + 'column-header', minColWidth: 40, maxColWidth: 1000, wResizeCursor: 'col-resize', eResizeCursor: 'col-resize', init: function(headerCt) {
@@ -56485,7 +56486,7 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
       var ft = feats[0];
     }
   var features = [];
-  var jbei = {"seq:seq": {"seq:name": name, "seq:circular": circ, "seq:sequence": seq, "seq:features": features, "seq:seqHash": seqHash, "_xmlns:seq": "https://jbei.org/sequence", "_xmlns:xsi": "https://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "https://jbei.org/sequence seq.xsd"}};
+  var jbei = {"seq:seq": {"seq:name": name, "seq:circular": circ, "seq:sequence": seq, "seq:features": features, "seq:seqHash": seqHash, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
   return jbei;
 }, jbeiJsonToSbolJson: function(json, prefix) {
 }, parseRawCollection: function(coll, prefix) {
@@ -56821,26 +56822,29 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
         {
           complement = (ft["complement"]["__text"].toLowerCase() === "true");
         }
-        for (j = 0; j < ft["location_asArray"].length; j++) 
-          {
-            var start;
-            if (ft["location_asArray"][j]["genbankStart"] === undefined) 
+        if (ft["location_asArray"]) 
+        {
+          for (j = 0; j < ft["location_asArray"].length; j++) 
             {
-              start = ft["location_asArray"][j]["genbank_start"]["__text"];
-            } else {
-              start = ft["location_asArray"][j]["genbankStart"]["__text"];
+              var start;
+              if (ft["location_asArray"][j]["genbankStart"] === undefined) 
+              {
+                start = ft["location_asArray"][j]["genbank_start"]["__text"];
+              } else {
+                start = ft["location_asArray"][j]["genbankStart"]["__text"];
+              }
+              var end;
+              if (ft["location_asArray"][j]["end"] === undefined) 
+              {
+                end = start;
+              } else {
+                end = ft["location_asArray"][j]["end"]["__text"];
+              }
+              var to = "..";
+              var loc = {"seq:genbankStart": parseInt(start), "seq:end": parseInt(end)};
+              locations.push(loc);
             }
-            var end;
-            if (ft["location_asArray"][j]["end"] === undefined) 
-            {
-              end = start;
-            } else {
-              end = ft["location_asArray"][j]["end"]["__text"];
-            }
-            var to = "..";
-            var loc = {"seq:genbankStart": parseInt(start), "seq:end": parseInt(end)};
-            locations.push(loc);
-          }
+        }
         var label = "name_unknown";
         if (ft["label"] !== undefined) 
         {
@@ -56879,9 +56883,9 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
   var xml = [];
   xml.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
   xml.push("<seq:seq\n");
-  xml.push("  xmlns:seq=\"https://jbei.org/sequence\"\n");
-  xml.push("  xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\"\n");
-  xml.push("  xsi:schemaLocation=\"https://jbei.org/sequence seq.xsd\"\n");
+  xml.push("  xmlns:seq=\"http://jbei.org/sequence\"\n");
+  xml.push("  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+  xml.push("  xsi:schemaLocation=\"http://jbei.org/sequence seq.xsd\"\n");
   xml.push(">\n");
   xml.push("<seq:name>" + json["seq:seq"]["seq:name"] + "</seq:name>\n");
   xml.push("<seq:circular>" + json["seq:seq"]["seq:circular"] + "</seq:circular>\n");
@@ -57091,7 +57095,7 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
       newFt = {"seq:label": nameAttr.__text, "seq:complement": ft.getComplement(), "seq:type": ft.getKeyword(), "seq:index": ft.getIndex(), "seq:location": newLoc, "seq:attribute": newAttr, "seq:seqHash": seqHash};
       newFeatures.push({"seq:feature": newFt});
     }
-  json = {"seq:seq": {"seq:name": pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : "", "seq:circular": pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : "", "seq:sequence": pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "", "seq:features": newFeatures, "_xmlns:seq": "https://jbei.org/sequence", "_xmlns:xsi": "https://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "https://jbei.org/sequence seq.xsd"}};
+  json = {"seq:seq": {"seq:name": pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : "", "seq:circular": pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : "", "seq:sequence": pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "", "seq:features": newFeatures, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
   return json;
 }, genbankToJbeiseqXml: function(pGenbank) {
   if (pGenbank === null) 
@@ -58327,9 +58331,9 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   Vede.application.fireEvent("createSequence");
 }, afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'You can start with a blank sequence by clicking here.', "data-step": 2});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'https://help.teselagen.com/manual/', listeners: {afterrender: function(cmp) {
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'http://help.teselagen.com/manual/', listeners: {afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'Make sure you check out the manuals for a thorough documentation.', "data-step": 4});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'seeTutsBtn', scale: 'medium', flex: 1, overCls: 'tutorial-over', iconAlign: 'top', iconCls: 'tutorial-icon', text: 'Tutorials', href: 'https://classroom.tv/teselagen', listeners: {afterrender: function(cmp) {
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'seeTutsBtn', scale: 'medium', flex: 1, overCls: 'tutorial-over', iconAlign: 'top', iconCls: 'tutorial-icon', text: 'Tutorials', href: 'http://classroom.tv/teselagen', listeners: {afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'See some tutorials to help you get started.', "data-step": 5});
 }}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'tourBtn', scale: 'medium', flex: 1, overCls: 'tourBtn-over', iconAlign: 'top', iconCls: 'tour-icon', iconAlign: 'top', text: 'Take a Tour', listeners: {click: function() {
   introJs().start();
@@ -58337,9 +58341,23 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   cmp.getEl().set({"data-intro": 'Here are some awesome stats to keep you up to date.', "data-position": 'top', "data-step": 3});
 }}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Sequence Library', cls: 'sequenceLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'sequenceLibraryContainer', id: 'sequenceLibraryArea', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', anchor: '100%', height: 30, cls: 'sequenceLibrarySearchField', width: '98%', emptyText: 'Search Sequence Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
   var grid = Ext.getCmp('sequenceLibrary');
+  if (grid.timeoutId) 
+  {
+    clearTimeout(grid.timeoutId);
+    delete grid.timeoutId;
+  }
+  grid.timeoutId = setTimeout(function() {
+  if (grid.store.proxy.activeRequest) 
+  {
+    Ext.Ajax.abort(grid.store.proxy.activeRequest);
+    delete grid.store.proxy.activeRequest;
+  }
   grid.store.clearFilter(true);
   grid.store.filter("name", Ext.String.escapeRegex(newValue));
-}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
+  if (!grid.store.proxy.activeRequest) 
+  grid.store.load();
+}, 200);
+}}}, {xtype: 'container', items: [], margin: '0 10 10 10'}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
   if (val) 
   {
     val = val.sequence.alphabet.toUpperCase();
@@ -58381,7 +58399,22 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
 }}}]}, {xtype: "dropZone", name: "dropZone"}]}, {xtype: 'panel', title: 'Part Library', cls: 'partLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'partLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'partLibrarySearch', cls: 'partLibrarySearchField', width: '98%', emptyText: 'Search Part Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
   Teselagen.manager.ProjectManager.parts.clearFilter(true);
   var grid = Ext.getCmp('partLibrary');
+  if (grid.timeoutId) 
+  {
+    clearTimeout(grid.timeoutId);
+    delete grid.timeoutId;
+  }
+  grid.timeoutId = setTimeout(function() {
+  if (grid.store.proxy.activeRequest) 
+  {
+    Ext.Ajax.abort(grid.store.proxy.activeRequest);
+    delete grid.store.proxy.activeRequest;
+  }
+  grid.store.clearFilter(true);
   grid.store.filter("name", Ext.String.escapeRegex(newValue));
+  if (!grid.store.proxy.activeRequest) 
+  grid.store.load();
+}, 200);
 }}}, {xtype: 'gridpanel', border: 0, name: 'PartLibraryGrid', loadMask: true, autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, cls: 'partLibraryGrid', height: '100%', autoScroll: true, id: 'partLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {xtype: 'gridcolumn', text: 'Start BP', width: 80, dataIndex: 'genbankStartBP', sortable: false}, {xtype: 'gridcolumn', text: 'Stop BP', width: 80, dataIndex: 'endBP', sortable: false}, {xtype: 'gridcolumn', text: 'Size (bp)', width: 80, dataIndex: 'size', sortable: true}, {xtype: 'gridcolumn', text: 'Reverse Complement', dataIndex: 'revComp', width: 120, renderer: function(val) {
   val = String(val);
   val = val.charAt(0).toUpperCase() + val.slice(1);
@@ -65605,7 +65638,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.bio.enzymes, 'RestrictionEnzyme'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.constants.Constants', Ext.Base, {singleton: true, ENV_DEV: "dev", ENV_PROD: "prod", ENV_TEST: "test", VERSION: "1.0", API_URL: "https://teselagen.local/api/", FORMATS_LIST: ["GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML", "jbei-seq"], GENBANK: "Genbank", FASTA: "FASTA", JBEISEQ: "jbei-seq", JBEISEQJSON: "JBEISEQJSON", SBOLXML: "SBOLXML", INIT: "INIT", GENBANK_SUFFIX: ".gb", FASTA_SUFFIX: ".fas", JEBISEQ_SUFFIX: ".xml", SBOL_SUFFIX: ".sbol", SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP: {Genbank: "gb", FASTA: "fasta", "jbei-seq": "xml", SBOLXML: "xml", JBEISEQJSON: "json"}, NOTMORETHAN: "NOTMORETHAN", NOTWITH: "NOTWITH", AFTER: "AFTER", BEFORE: "BEFORE", WITH: "WITH", THEN: "THEN", NEXTTO: "NEXTTO", MORETHAN: "MORETHAN", COMPOP_LIST: ["AFTER", "BEFORE", "THEN", "NEXTTO", "MORETHAN"], FAS_LIST: ["None", "DIGEST", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS_LIST_NO_DIGEST: ["None", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS: Object.freeze({NONE: "None", DIGEST: "DIGEST", DIRECT: "Direct Synthesis", PCR: "PCR", PRIMER_REV: "Embed_in_primer_reverse", PRIMER_FWD: "Embed_in_primer_forward", ANNEALED: "Annealed Oligos"}), ASSEMBLYTYPE_LIST: ["MOCK", "SLIC", "GOLDENGATE"], NONMOCKTYPE_LIST: ["SLIC/Gibonson/CPEC/SLiCE", "GOLDENGATE"], MOCK: "MOCK", SLIC: "SLIC", GOLDENGATE: "GOLDENGATE", SYNTHESISTYPE_LIST: ["DIRECT", "OLIGO", "ANNEALED OLIGOS"], RUN_STATUS_LIST: ["SUCCESS", "FAILED", "IN PROGRESS"], RECT_SHAPE_DEFAULT_SIZE: 56, RECT_SHAPE_MIN_SIZE: this.RECT_SHAPE_DEFAULT_SIZE / 2, CIRCULAR: "circular", LINEAR: "linear", FEATURE_TYPES: [{label: "-10_signal", data: "-10_signal"}, {label: "-35_signal", data: "-35_signal"}, {label: "3'UTR", data: "3'UTR"}, {label: "5'UTR", data: "5'UTR"}, {label: "allele", data: "allele"}, {label: "attenuator", data: "attenuator"}, {label: "C_region", data: "C_region"}, {label: "CAAT_signal", data: "CAAT_signal"}, {label: "CDS", data: "CDS"}, {label: "conflict", data: "conflict"}, {label: "D_segment", data: "D_segment"}, {label: "D-loop", data: "D-loop"}, {label: "enhancer", data: "enhancer"}, {label: "exon", data: "exon"}, {label: "GC_signal", data: "GC_signal"}, {label: "gene", data: "gene"}, {label: "iDNA", data: "iDNA"}, {label: "intron", data: "intron"}, {label: "J_region", data: "J_region"}, {label: "LTR", data: "LTR"}, {label: "mat_peptide", data: "mat_peptide"}, {label: "misc_binding", data: "misc_binding"}, {label: "misc_difference", data: "misc_difference"}, {label: "misc_feature", data: "misc_feature"}, {label: "misc_recomb", data: "misc_recomb"}, {label: "misc_RNA", data: "misc_RNA"}, {label: "misc_signal", data: "misc_signal"}, {label: "misc_structure", data: "misc_structure"}, {label: "modified_base", data: "modified_base"}, {label: "mRNA", data: "mRNA"}, {label: "mutation", data: "mutation"}, {label: "N_region", data: "N_region"}, {label: "old_sequence", data: "old_sequence"}, {label: "polyA_signal", data: "polyA_signal"}, {label: "polyA_site", data: "polyA_site"}, {label: "precursor_RNA", data: "precursor_RNA"}, {label: "prim_transcript", data: "prim_transcript"}, {label: "primer", data: "primer"}, {label: "primer_bind", data: "primer_bind"}, {label: "promoter", data: "promoter"}, {label: "protein_bind", data: "protein_bind"}, {label: "RBS", data: "RBS"}, {label: "rep_origin", data: "rep_origin"}, {label: "repeat_region", data: "repeat_region"}, {label: "repeat_unit", data: "repeat_unit"}, {label: "rRNA", data: "rRNA"}, {label: "S_region", data: "S_region"}, {label: "satellite", data: "satellite"}, {label: "scRNA", data: "scRNA"}, {label: "sig_peptide", data: "sig_peptide"}, {label: "snRNA", data: "snRNA"}, {label: "source", data: "source"}, {label: "stem_loop", data: "stem_loop"}, {label: "STS", data: "STS"}, {label: "TATA_signal", data: "TATA_signal"}, {label: "terminator", data: "terminator"}, {label: "transit_peptide", data: "transit_peptide"}, {label: "transposon", data: "transposon"}, {label: "tRNA", data: "tRNA"}, {label: "unsure", data: "unsure"}, {label: "V_region ", data: "V_region "}, {label: "variation", data: "variation"}], DEFAULT_VE_VIEW_OPTIONS: {features: true, cutSites: false, orfs: false, circular: true, mapCaret: true, complementary: true, spaces: true, sequenceAA: false, revComAA: false, featureLabels: true, cutSiteLabels: true, selection: {start: 0, end: 0}}}, 0, 0, 0, 0, 0, 0, [Teselagen.constants, 'Constants'], 0));
+(Ext.cmd.derive('Teselagen.constants.Constants', Ext.Base, {singleton: true, ENV_DEV: "dev", ENV_PROD: "prod", ENV_TEST: "test", VERSION: "1.0", API_URL: "http://teselagen.local/api/", FORMATS_LIST: ["GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML", "jbei-seq"], GENBANK: "Genbank", FASTA: "FASTA", JBEISEQ: "jbei-seq", JBEISEQJSON: "JBEISEQJSON", SBOLXML: "SBOLXML", INIT: "INIT", GENBANK_SUFFIX: ".gb", FASTA_SUFFIX: ".fas", JEBISEQ_SUFFIX: ".xml", SBOL_SUFFIX: ".sbol", SEQUENCE_FILE_FORMAT_TO_FILE_EXTENSION_MAP: {Genbank: "gb", FASTA: "fasta", "jbei-seq": "xml", SBOLXML: "xml", JBEISEQJSON: "json"}, NOTMORETHAN: "NOTMORETHAN", NOTWITH: "NOTWITH", AFTER: "AFTER", BEFORE: "BEFORE", WITH: "WITH", THEN: "THEN", NEXTTO: "NEXTTO", MORETHAN: "MORETHAN", COMPOP_LIST: ["AFTER", "BEFORE", "THEN", "NEXTTO", "MORETHAN"], FAS_LIST: ["None", "DIGEST", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS_LIST_NO_DIGEST: ["None", "Direct Synthesis", "PCR", "Embed_in_primer_reverse", "Embed_in_primer_forward", "Annealed Oligos"], FAS: Object.freeze({NONE: "None", DIGEST: "DIGEST", DIRECT: "Direct Synthesis", PCR: "PCR", PRIMER_REV: "Embed_in_primer_reverse", PRIMER_FWD: "Embed_in_primer_forward", ANNEALED: "Annealed Oligos"}), ASSEMBLYTYPE_LIST: ["MOCK", "SLIC", "GOLDENGATE"], NONMOCKTYPE_LIST: ["SLIC/Gibonson/CPEC/SLiCE", "GOLDENGATE"], MOCK: "MOCK", SLIC: "SLIC", GOLDENGATE: "GOLDENGATE", SYNTHESISTYPE_LIST: ["DIRECT", "OLIGO", "ANNEALED OLIGOS"], RUN_STATUS_LIST: ["SUCCESS", "FAILED", "IN PROGRESS"], RECT_SHAPE_DEFAULT_SIZE: 56, RECT_SHAPE_MIN_SIZE: this.RECT_SHAPE_DEFAULT_SIZE / 2, CIRCULAR: "circular", LINEAR: "linear", FEATURE_TYPES: [{label: "-10_signal", data: "-10_signal"}, {label: "-35_signal", data: "-35_signal"}, {label: "3'UTR", data: "3'UTR"}, {label: "5'UTR", data: "5'UTR"}, {label: "allele", data: "allele"}, {label: "attenuator", data: "attenuator"}, {label: "C_region", data: "C_region"}, {label: "CAAT_signal", data: "CAAT_signal"}, {label: "CDS", data: "CDS"}, {label: "conflict", data: "conflict"}, {label: "D_segment", data: "D_segment"}, {label: "D-loop", data: "D-loop"}, {label: "enhancer", data: "enhancer"}, {label: "exon", data: "exon"}, {label: "GC_signal", data: "GC_signal"}, {label: "gene", data: "gene"}, {label: "iDNA", data: "iDNA"}, {label: "intron", data: "intron"}, {label: "J_region", data: "J_region"}, {label: "LTR", data: "LTR"}, {label: "mat_peptide", data: "mat_peptide"}, {label: "misc_binding", data: "misc_binding"}, {label: "misc_difference", data: "misc_difference"}, {label: "misc_feature", data: "misc_feature"}, {label: "misc_recomb", data: "misc_recomb"}, {label: "misc_RNA", data: "misc_RNA"}, {label: "misc_signal", data: "misc_signal"}, {label: "misc_structure", data: "misc_structure"}, {label: "modified_base", data: "modified_base"}, {label: "mRNA", data: "mRNA"}, {label: "mutation", data: "mutation"}, {label: "N_region", data: "N_region"}, {label: "old_sequence", data: "old_sequence"}, {label: "polyA_signal", data: "polyA_signal"}, {label: "polyA_site", data: "polyA_site"}, {label: "precursor_RNA", data: "precursor_RNA"}, {label: "prim_transcript", data: "prim_transcript"}, {label: "primer", data: "primer"}, {label: "primer_bind", data: "primer_bind"}, {label: "promoter", data: "promoter"}, {label: "protein_bind", data: "protein_bind"}, {label: "RBS", data: "RBS"}, {label: "rep_origin", data: "rep_origin"}, {label: "repeat_region", data: "repeat_region"}, {label: "repeat_unit", data: "repeat_unit"}, {label: "rRNA", data: "rRNA"}, {label: "S_region", data: "S_region"}, {label: "satellite", data: "satellite"}, {label: "scRNA", data: "scRNA"}, {label: "sig_peptide", data: "sig_peptide"}, {label: "snRNA", data: "snRNA"}, {label: "source", data: "source"}, {label: "stem_loop", data: "stem_loop"}, {label: "STS", data: "STS"}, {label: "TATA_signal", data: "TATA_signal"}, {label: "terminator", data: "terminator"}, {label: "transit_peptide", data: "transit_peptide"}, {label: "transposon", data: "transposon"}, {label: "tRNA", data: "tRNA"}, {label: "unsure", data: "unsure"}, {label: "V_region ", data: "V_region "}, {label: "variation", data: "variation"}], DEFAULT_VE_VIEW_OPTIONS: {features: true, cutSites: false, orfs: false, circular: true, mapCaret: true, complementary: true, spaces: true, sequenceAA: false, revComAA: false, featureLabels: true, cutSiteLabels: true, selection: {start: 0, end: 0}}}, 0, 0, 0, 0, 0, 0, [Teselagen.constants, 'Constants'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.manager.SessionManager', Ext.Base, {singleton: true, config: {baseURL: null, baseUser: null, data: null, env: null}, constants: null, maskApp: function() {
@@ -65623,7 +65656,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 }, constructor: function() {
   this.constants = Teselagen.constants.Constants;
-  this.setBaseURL(location.href.substring(0, location.href.indexOf("/", 7) + 1));
+  this.setBaseURL(location.href.substring(0, location.href.indexOf("/", 8) + 1));
   this.setEnv(this.constants.ENV_DEV);
 }, buildUrl: function(pAction, pDefault) {
   var url = this.getBaseURL() + pAction;
@@ -65728,13 +65761,17 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var matchIndex = sequence.search(forwardRegExpPattern);
   var startIndex = 0;
   var subSequence = sequence;
+  var start;
+  var end;
   while (matchIndex != -1) 
     {
       if (matchIndex + startIndex + reLength - 1 >= sequence.length) 
       {
         break;
       }
-      restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {start: matchIndex + startIndex, end: matchIndex + reLength + startIndex, strand: Teselagen.bio.sequence.common.StrandType.FORWARD, restrictionEnzyme: restrictionEnzyme});
+      start = matchIndex + startIndex;
+      end = matchIndex + reLength + startIndex;
+      restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {start: start, end: end, strand: Teselagen.bio.sequence.common.StrandType.FORWARD, restrictionEnzyme: restrictionEnzyme});
       restrictionCutSites.push(restrictionCutSite);
       startIndex = startIndex + matchIndex + 1;
       subSequence = sequence.substring(startIndex, sequence.length);
@@ -65751,8 +65788,13 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
         {
           break;
         }
-        restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {start: matchIndex - 1 + startIndex, end: matchIndex - 1 + reLength + startIndex, strand: Teselagen.bio.sequence.common.StrandType.BACKWARD, restrictionEnzyme: restrictionEnzyme});
-        restrictionCutSites.push(restrictionCutSite);
+        start = matchIndex + startIndex - (restrictionEnzyme.getDsForward() - restrictionEnzyme.getSite().length);
+        end = start + reLength;
+        if (start >= 0) 
+        {
+          restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {start: start, end: end, strand: Teselagen.bio.sequence.common.StrandType.BACKWARD, restrictionEnzyme: restrictionEnzyme});
+          restrictionCutSites.push(restrictionCutSite);
+        }
         startIndex = startIndex + matchIndex + 1;
         subSequence = sequence.substring(startIndex, sequence.length);
         matchIndex = subSequence.search(reverseRegExpPattern);
@@ -66983,14 +67025,24 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}}]}, 0, ["ProjectPanelView"], ["panel", "component", "container", "ProjectPanelView", "box"], {"panel": true, "component": true, "container": true, "ProjectPanelView": true, "box": true}, ["widget.ProjectPanelView"], 0, [Vede.view.common, 'ProjectPanelView'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.AuthWindow', Ext.window.Window, {id: 'AuthWindow', floating: true, frame: false, style: 'z-index:8000', layout: {type: 'vbox', align: 'center'}, bodyBorder: false, closable: false, title: 'Authentication', initComponent: function() {
+(Ext.cmd.derive('Vede.view.AuthWindow', Ext.window.Window, {id: 'AuthWindow', floating: true, modal: true, frame: false, style: 'z-index:8000', layout: {type: 'vbox', align: 'center'}, bodyBorder: false, closable: false, title: 'Authentication', initComponent: function() {
   var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'panel', id: 'browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 800, margin: 10, hidden: true}, {xtype: 'form', id: 'auth-form', height: 280, width: 800, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', height: 275, width: 400, items: [{xtype: 'fieldset', margin: '60 10 10 10', items: [{xtype: 'textfield', anchor: '100%', fieldLabel: 'Username', name: 'username', id: 'auth-username-field', width: 300}, {xtype: 'textfield', inputType: 'password', anchor: '100%', fieldLabel: 'Password', name: 'password', id: 'auth-password-field', width: 300}]}, {xtype: 'button', id: 'auth-login-btn', margin: '0 0 0 15', text: 'Login', padding: 3, name: 'login'}, {xtype: 'button', id: 'auth-register-btn', margin: '0 0 0 15', href: "https://beta.teselagen.com/signup", padding: 3, text: 'Register', name: 'register'}, {xtype: 'button', id: 'auth-forgot-btn', margin: '0 0 0 15', padding: 3, text: 'Forgot your password?', name: 'forgot'}, {xtype: 'displayfield', id: 'auth-response', border: 0, width: 350, margin: '0 0 0 20'}]}, {xtype: 'panel', flex: 1, html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="https://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Oct 8, 20:24 PST</small></div><div class="auth-footer" style="margin-top: 110px;"><ul style="list-style:none; display="inline-block"><li style="float:left; margin-right: 5px;"><a href="https://teselagen.com">Home</a></li><li style="float:left; margin-right: 5px;"><a href="https://teselagen.com/about">About</a></li><li style="float:left; margin-right: 5px;"><a href="https://teselagen.com/faq">FAQ</a></li><li style="float:left; margin-right: 5px;"><a href="https://teselagen.com/contact">Contact</a></li><li style="float:left; margin-right: 5px;"><a href="https://help.teselagen.com/manual/">Manual</a></li><li style="float:left; margin-right: 5px;"><a href="https://teselagen.com/terms">Terms</a></li><li style="float:left; margin-right: 5px;"><a href="https://teselagen.com/privacy">Privacy</a></li>'}]}]});
+  Ext.applyIf(me, {items: [{xtype: 'panel', id: 'browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 800, margin: 10, hidden: true}, {xtype: 'form', id: 'auth-form', height: 280, width: 800, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', height: 275, width: 400, items: [{xtype: 'fieldset', margin: '60 10 10 10', items: [{xtype: 'textfield', anchor: '100%', fieldLabel: 'Username', name: 'username', id: 'auth-username-field', width: 300}, {xtype: 'textfield', inputType: 'password', anchor: '100%', fieldLabel: 'Password', name: 'password', id: 'auth-password-field', width: 300}]}, {xtype: 'button', id: 'auth-login-btn', margin: '0 0 0 15', text: 'Login', padding: 3, name: 'login'}, {xtype: 'button', id: 'auth-register-btn', margin: '0 0 0 15', href: "http://beta.teselagen.com/signup", padding: 3, text: 'Register', name: 'register'}, {xtype: 'button', id: 'auth-forgot-btn', margin: '0 0 0 15', padding: 3, text: 'Forgot your password?', name: 'forgot'}, {xtype: 'displayfield', id: 'auth-response', border: 0, width: 350, margin: '0 0 0 20'}]}, {xtype: 'panel', flex: 1, html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Oct 8, 20:24 PST</small></div><div class="auth-footer" style="margin-top: 110px;"><ul style="list-style:none; display="inline-block"><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com">Home</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/about">About</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/faq">FAQ</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/contact">Contact</a></li><li style="float:left; margin-right: 5px;"><a href="http://help.teselagen.com/manual/">Manual</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/terms">Terms</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/privacy">Privacy</a></li>'}]}]});
   me.callParent(arguments);
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'AuthWindow'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", HMLB: "HOMOLOGY_MIN_LENGTH_BPS", HMFM: "HOMOLOGY_MAX_FRACTION_MISMATCHES", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, HMLB_Default: 26, HMFM_Default: 0.05, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default, convert: function(value, record) {
+(Ext.cmd.derive('Teselagen.models.J5Parameters', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, statics: {MONOD: "MASTEROLIGONUMBEROFDIGITS", MPNOD: "MASTERPLASMIDNUMBEROFDIGITS", GOB: "GIBSONOVERLAPBPS", GOMT: "GIBSONOVERLAPMINTM", GOMAXT: "GIBSONOVERLAPMAXTM", MOLB: "MAXIMUMOLIGOLENGTHBPS", MFSGB: "MINIMUMFRAGMENTSIZEGIBSONBPS", GGOHB: "GOLDENGATEOVERHANGBPS", GGRS: "GOLDENGATERECOGNITIONSEQ", GGTES: "GOLDENGATETERMINIEXTRASEQ", MIGGOC: "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE", OSCPB: "OLIGOSYNTHESISCOSTPERBPUSD", OPPCPP: "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD", OMLPPRB: "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS", MPPB: "MINIMUMPCRPRODUCTBPS", DSCPB: "DIRECTSYNTHESISCOSTPERBPUSD", DSMCPP: "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD", PGC: "PRIMER_GC_CLAMP", PMS: "PRIMER_MIN_SIZE", PMAXS: "PRIMER_MAX_SIZE", PMT: "PRIMER_MIN_TM", PMAXT: "PRIMER_MAX_TM", PMDT: "PRIMER_MAX_DIFF_TM", PMSAT: "PRIMER_MAX_SELF_ANY_TH", PMSET: "PRIMER_MAX_SELF_END_TH", PPMCAT: "PRIMER_PAIR_MAX_COMPL_ANY_TH", PPMCET: "PRIMER_PAIR_MAX_COMPL_END_TH", PTS: "PRIMER_TM_SANTALUCIA", PSC: "PRIMER_SALT_CORRECTIONS", PDC: "PRIMER_DNA_CONC", M3BBTWIH: "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT", MMT: "MISPRIMING_MIN_TM", MSC: "MISPRIMING_SALT_CONC", MOC: "MISPRIMING_OLIGO_CONC", OSF: "OUTPUT_SEQUENCE_FORMAT", APT: "ASSEMBLY_PRODUCT_TYPE", SPP: "SUPPRESS_PURE_PRIMERS", SPA: "SUPPRESS_PRIMER_ANNOTATIONS", HMLB: "HOMOLOGY_MIN_LENGTH_BPS", HMFM: "HOMOLOGY_MAX_FRACTION_MISMATCHES", MONOD_DESC: "The default number of digits used to number an oligo, e.g. j5_00001_primer_description uses 5 digits", MPNOD_DESC: "The default number of digits used to number a plasmid, e.g. pj5_00001 uses 5 digits", GOB_DESC: "The minimum number of bps for SLIC/Gibson/CPEC overlaps (should be an even number), this is also the starting design length for the annealing portion of primers", GOMT_DESC: "The minimum desired Tm for SLIC/Gibson/CPEC overlaps", GOMAXT_DESC: "The maximum desired Tm for SLIC/Gibson/CPEC overlaps", MOLB_DESC: "The maximum oligo length to be ordered", MFSGB_DESC: "The minimum fragment size for SLIC/Gibson assembly", GGOHB_DESC: "The number of bps of the overhang resulting from the Golden-gate type IIs endonuclease digestion", GGRS_DESC: "The Golden-gate type IIs endonuclease recognition site sequence", GGTES_DESC: "The extra 5' sequence required at each end of a Golden-gate assembly piece, e.g. NNNNNNNGGCTCTN for BsaI (Eco31I)", MIGGOC_DESC: "The maximum number of tolerable non-gapped aligned identities between compatible overhang sequences for Golden-gate assembly", OSCPB_DESC: "The oligo synthesis cost per bp ($US)", OPPCPP_DESC: "The PAGE-purification cost per oligo ($US)", OMLPPRB_DESC: "The maximum oligo length that does not require PAGE-purification", MPPB_DESC: "The minimum PCR product size", DSCPB_DESC: "The cost per bp to do direct synthesis ($US)", DSMCPP_DESC: "The minimum cost of synthesis per piece ($US)", PGC_DESC: "Primer3 parameter: length of the desired GC clamp (Primer3 default is 0)", PMS_DESC: "Primer3 parameter: the minimum length of a primer (Primer3 default is 18)", PMAXS_DESC: "Primer3 parameter: the maximum length of a primer (Primer3 default is 27, maximum is 36)", PMT_DESC: "Primer3 parameter: the minimum primer Tm (Primer3 default is 57)", PMAXT_DESC: "Primer3 parameter: the maximum primer Tm (Primer3 default is 63)", PMDT_DESC: "Primer3 parameter: the maximum primer pair difference in Tm (Primer3 default is 100)", PMSAT_DESC: "Primer3 parameter: the maximum primer self complementarity (Primer3 default is 47)", PMSET_DESC: "Primer3 parameter: the maximum primer self end complementarity (Primer3 default is 47)", PPMCAT_DESC: "Primer3 parameter: the maximum primer pair complementarity (Primer3 default is 47)", PPMCET_DESC: "Primer3 parameter: the maximum primer pair end complementarity (Primer3 default is 47)", PTS_DESC: "Primer3 parameter: use the Santalucia formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PSC_DESC: "Primer3 parameter: use the salt correction formula for calculating Tms (1 = TRUE, 0 = FALSE) (Primer3 default is 0 (FALSE))", PDC_DESC: "Primer3 parameter: DNA concentration to use when calculating Tms in micromolar (IDT uses 250, Primer3 default is 50)", M3BBTWIH_DESC: "Only warn of mispriming if the BLAST hit between the primer and the template contains the 3' end of the primer (within this number of bp)", MMT_DESC: "The minimum approximate Tm to consider a significant mispriming event", MSC_DESC: "The salt concentration used when estimating the mispriming Tm in Molar", MOC_DESC: "The oligo concentration used when estimating the mispriming Tm in Molar", OSF_DESC: "\"The output sequence file format. Options are: \"\"Genbank\"\", \"\"FASTA\"\", \"\"jbei-seq\"\", or \"\"SBOLXML\"\"\"", APT_DESC: "\"Determines whether the assembled DNA product will be circular or linear. Options are: \"\"circular\"\" or \"\"linear\"\"\"", SPP_DESC: "\"Suppress the output of pure primers. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", SPA_DESC: "\"Suppress primer annotations. Options are: \"\"TRUE\"\" or \"\"FALSE\"\"\"", MONOD_Default: 5, MPNOD_Default: 5, GOB_Default: 26, GOMT_Default: 60, GOMAXT_Default: 70, MOLB_Default: 110, MFSGB_Default: 250, GGOHB_Default: 4, GGRS_Default: "GGTCTC", GGTES_Default: "CACACCAGGTCTCA", MIGGOC_Default: 2, OSCPB_Default: 0.1, OPPCPP_Default: 40, OMLPPRB_Default: 60, MPPB_Default: 100, DSCPB_Default: 0.39, DSMCPP_Default: 159, PGC_Default: 2, PMS_Default: 18, PMAXS_Default: 36, PMT_Default: 60, PMAXT_Default: 70, PMDT_Default: 5, PMSAT_Default: 47, PMSET_Default: 47, PPMCAT_Default: 47, PPMCET_Default: 47, PTS_Default: true, PSC_Default: true, PDC_Default: 250, M3BBTWIH_Default: 4, MMT_Default: 45, MSC_Default: 0.05, MOC_Default: 2.5E-7, OSF_Default: "Genbank", SPP_Default: true, SPA_Default: false, HMLB_Default: 26, HMFM_Default: 0.05, booleanOptions: [false, true]}, fields: [{name: "id", type: "long"}, {name: "j5run_id", type: "long"}, {name: "masterOligoNumberOfDigitsValue", type: "int", defaultValue: this.self.MONOD_Default}, {name: "masterPlasmidNumberOfDigitsValue", type: "int", defaultValue: this.self.MPNOD_Default}, {name: "gibsonOverlapBPsValue", type: "int", defaultValue: this.self.GOB_Default}, {name: "gibsonOverlapMinTmValue", type: "Float", defaultValue: this.self.GOMT_Default}, {name: "gibsonOverlapMaxTmValue", type: "Float", defaultValue: this.self.MOLB_Default}, {name: "maxOligoLengthBPsValue", type: "int", defaultValue: this.self.MFSGB_Default}, {name: "minFragmentSizeGibsonBPsValue", type: "int", defaultValue: this.self.GGOHB_Default}, {name: "goldenGateOverhangBPsValue", type: "int", defaultValue: this.self.GGRS_Default}, {name: "goldenGateRecognitionSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "goldenGateTerminiExtraSeqValue", type: "String", defaultValue: this.self.GGTES_Default}, {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue", type: "int", defaultValue: this.self.MIGGOC_Default}, {name: "oligoSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.OSCPB_Default}, {name: "oligoPagePurificationCostPerPieceUSDValue", type: "Float", defaultValue: this.self.OPPCPP_Default}, {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int", defaultValue: this.self.OMLPPRB_Default}, {name: "minPCRProductBPsValue", type: "int", defaultValue: this.self.MPPB_Default}, {name: "directSynthesisCostPerBPUSDValue", type: "Float", defaultValue: this.self.DSCPB_Default}, {name: "directSynthesisMinCostPerPieceUSDValue", type: "Float", defaultValue: this.self.DSMCPP_Default}, {name: "primerGCClampValue", type: "int", defaultValue: this.self.PGC_Default}, {name: "primerMinSizeValue", type: "int", defaultValue: this.self.PMS_Default}, {name: "primerMaxSizeValue", type: "int", defaultValue: this.self.PMAXS_Default}, {name: "primerMinTmValue", type: "Float", defaultValue: this.self.PMT_Default}, {name: "primerMaxTmValue", type: "Float", defaultValue: this.self.PMAXT_Default}, {name: "primerMaxDiffTmValue", type: "Float", defaultValue: this.self.PMDT_Default}, {name: "primerMaxSelfAnyThValue", type: "int", defaultValue: this.self.PMSAT_Default}, {name: "primerMaxSelfEndThValue", type: "int", defaultValue: this.self.PMSET_Default}, {name: "primerPairMaxComplAnyThValue", type: "int", defaultValue: this.self.PPMCAT_Default}, {name: "primerPairMaxComplEndThValue", type: "int", defaultValue: this.self.PPMCET_Default}, {name: "primerTmSantaluciaValue", type: "Boolean", defaultValue: this.self.PTS_Default}, {name: "primerSaltCorrectionsValue", type: "Boolean", defaultValue: this.self.PSC_Default}, {name: "primerDnaConcValue", type: "int", defaultValue: this.self.PDC_Default}, {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue", type: "int", defaultValue: this.self.M3BBTWIH_Default}, {name: "misprimingMinTmValue", type: "Float", defaultValue: this.self.MMT_Default}, {name: "misprimingSaltConcValue", type: "Float", defaultValue: this.self.MSC_Default}, {name: "misprimingOligoConcValue", type: "Float", defaultValue: this.self.MOC_Default}, {name: "outputSequenceFormatValue", type: "String", defaultValue: this.self.OSF_Default}, {name: "suppressPurePrimersValue", type: "Boolean", defaultValue: this.self.SPP_Default, convert: function(value, record) {
+  if (Ext.isBoolean(value)) 
+  {
+    return value;
+  } else if (Ext.isString(value)) 
+  {
+    return (/^(true|1)$/i).test(value);
+  } else {
+    return false;
+  }
+}}, {name: "suppressPrimerAnnotationsValue", type: "Boolean", defaultValue: this.self.SPA_Default, convert: function(value, record) {
   if (Ext.isBoolean(value)) 
   {
     return value;
@@ -67074,6 +67126,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.set("outputSequenceFormatValue", values.OUTPUT_SEQUENCE_FORMAT);
   if (values.SUPPRESS_PURE_PRIMERS) 
   this.set("SPP_Default", values.SUPPRESS_PURE_PRIMERS);
+  if (values.SUPPRESS_PRIMER_ANNOTATIONS) 
+  this.set("SPA_Default", values.SUPPRESS_PRIMER_ANNOTATIONS);
   if (values.HOMOLOGY_MIN_LENGTH_BPS) 
   this.set("homologyMinLengthBPS", values.HOMOLOGY_MIN_LENGTH_BPS);
   if (values.HOMOLOGY_MAX_FRACTION_MISMATCHES) 
@@ -67115,10 +67169,12 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.set("misprimingOligoConcValue", this.self.MOC_Default);
   this.set("outputSequenceFormatValue", this.self.OSF_Default);
   this.set("suppressPurePrimersValue", this.self.SPP_Default);
+  this.set("suppressPrimerAnnotationsValue", this.self.SPA_Default);
   this.set("homologyMinLengthBPS", this.self.HMLB_Default);
   this.set("homologyMaxFractionMisMatches", this.self.HMFM_Default);
 }, createJ5ParametersString: function(isCollectionCircular) {
   var returnString = "Parameter Name,Value,Default Value,Description\n" + this.self.MONOD + "," + this.get("masterOligoNumberOfDigitsValue") + "," + this.self.MONOD_Default + "," + this.self.MONOD_DESC + "\n" + this.self.MPNOD + "," + this.get("masterPlasmidNumberOfDigitsValue") + "," + this.self.MPNOD_Default + "," + this.self.MPNOD_DESC + "\n" + this.self.GOB + "," + this.get("gibsonOverlapBPsValue") + "," + this.self.GOB_Default + "," + this.self.GOB_DESC + "\n" + this.self.GOMT + "," + this.get("gibsonOverlapMinTmValue") + "," + this.self.GOMT_Default + "," + this.self.GOMT_DESC + "\n" + this.self.GOMAXT + "," + this.get("gibsonOverlapMaxTmValue") + "," + this.self.GOMAXT_Default + "," + this.self.GOMAXT_DESC + "\n" + this.self.MOLB + "," + this.get("maxOligoLengthBPsValue") + "," + this.self.MOLB_Default + "," + this.self.MOLB_DESC + "\n" + this.self.MFSGB + "," + this.get("minFragmentSizeGibsonBPsValue") + "," + this.self.MFSGB_Default + "," + this.self.MFSGB_DESC + "\n" + this.self.GGOHB + "," + this.get("goldenGateOverhangBPsValue") + "," + this.self.GGOHB_Default + "," + this.self.GGOHB_DESC + "\n" + this.self.GGRS + "," + this.get("goldenGateRecognitionSeqValue") + "," + this.self.GGRS_Default + "," + this.self.GGRS_DESC + "\n" + this.self.GGTES + "," + this.get("goldenGateTerminiExtraSeqValue") + "," + this.self.GGTES_Default + "," + this.self.GGTES_DESC + "\n" + this.self.MIGGOC + "," + this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue") + "," + this.self.MIGGOC_Default + "," + this.self.MIGGOC_DESC + "\n" + this.self.OSCPB + "," + this.get("oligoSynthesisCostPerBPUSDValue") + "," + this.self.OSCPB_Default + "," + this.self.OSCPB_DESC + "\n" + this.self.OPPCPP + "," + this.get("oligoPagePurificationCostPerPieceUSDValue") + "," + this.self.OPPCPP_Default + "," + this.self.OPPCPP_DESC + "\n" + this.self.OMLPPRB + "," + this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue") + "," + this.self.OMLPPRB_Default + "," + this.self.OMLPPRB_DESC + "\n" + this.self.MPPB + "," + this.get("minPCRProductBPsValue") + "," + this.self.MPPB_Default + "," + this.self.MPPB_DESC + "\n" + this.self.DSCPB + "," + this.get("directSynthesisCostPerBPUSDValue") + "," + this.self.DSCPB_Default + "," + this.self.DSCPB_DESC + "\n" + this.self.DSMCPP + "," + this.get("directSynthesisMinCostPerPieceUSDValue") + "," + this.self.DSMCPP_Default + "," + this.self.DSMCPP_DESC + "\n" + this.self.PGC + "," + this.get("primerGCClampValue") + "," + this.self.PGC_Default + "," + this.self.PGC_DESC + "\n" + this.self.PMS + "," + this.get("primerMinSizeValue") + "," + this.self.PMS_Default + "," + this.self.PMS_DESC + "\n" + this.self.PMAXS + "," + this.get("primerMaxSizeValue") + "," + this.self.PMAXS_Default + "," + this.self.PMAXS_DESC + "\n" + this.self.PMT + "," + this.get("primerMinTmValue") + "," + this.self.PMT_Default + "," + this.self.PMT_DESC + "\n" + this.self.PMAXT + "," + this.get("primerMaxTmValue") + "," + this.self.PMAXT_Default + "," + this.self.PMAXT_DESC + "\n" + this.self.PMDT + "," + this.get("primerMaxDiffTmValue") + "," + this.self.PMDT_Default + "," + this.self.PMDT_DESC + "\n" + this.self.PMSAT + "," + this.get("primerMaxSelfAnyThValue") + "," + this.self.PMSAT_Default + "," + this.self.PMSAT_DESC + "\n" + this.self.PMSET + "," + this.get("primerMaxSelfEndThValue") + "," + this.self.PMSET_Default + "," + this.self.PMSET_DESC + "\n" + this.self.PPMCAT + "," + this.get("primerPairMaxComplAnyThValue") + "," + this.self.PPMCAT_Default + "," + this.self.PPMCAT_DESC + "\n" + this.self.PPMCET + "," + this.get("primerPairMaxComplEndThValue") + "," + this.self.PPMCET_Default + "," + this.self.PPMCET_DESC + "\n" + this.self.PTS + "," + (this.get("primerTmSantaluciaValue")) + "," + (this.self.PTS_Default ? "1" : "0") + "," + this.self.PTS_DESC + "\n" + this.self.PSC + "," + (this.get("primerSaltCorrectionsValue")) + "," + (this.self.PSC_Default) + "," + this.self.PSC_DESC + "\n" + this.self.PDC + "," + this.get("primerDnaConcValue") + "," + this.self.PDC_Default + "," + this.self.PDC_DESC + "\n" + this.self.M3BBTWIH + "," + this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue") + "," + this.self.M3BBTWIH_Default + "," + this.self.M3BBTWIH_DESC + "\n" + this.self.MMT + "," + this.get("misprimingMinTmValue") + "," + this.self.MMT_Default + "," + this.self.MMT_DESC + "\n" + this.self.MSC + "," + this.get("misprimingSaltConcValue") + "," + this.self.MSC_Default + "," + this.self.MSC_DESC + "\n" + this.self.MOC + "," + this.get("misprimingOligoConcValue") + "," + this.self.MOC_Default + "," + this.self.MOC_DESC + "\n" + this.self.OSF + "," + this.get("outputSequenceFormatValue") + "," + this.self.OSF_Default + "," + this.self.OSF_DESC + "\n" + this.self.APT + "," + isCollectionCircular + "," + Teselagen.constants.Constants.self.CIRCULAR + "," + this.self.APT_DESC + "\n" + this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
+  this.self.SPA + "," + this.get("suppressPrimerAnnotationsValue") + "," + this.self.SPA_Default + "," + this.self.SPA_DESC + "\n";
   this.self.HMLB + "," + this.get("homologyMinLengthBPS") + "," + this.self.HMLB_Default + "\n";
   this.self.HMFM + "," + this.get("homologyMaxFractionMisMatches") + "," + this.self.HMFM_Default + "\n";
   return returnString;
@@ -67160,6 +67216,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   arr.push({value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue"});
   arr.push({value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue"});
   arr.push({value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue"});
+  arr.push({value: this.get("suppressPrimerAnnotationsValue"), name: "suppressPrimerAnnotationsValue"});
   arr.push({value: this.get("homologyMinLengthBPS"), name: "homologyMinLengthBPS"});
   arr.push({value: this.get("homologyMaxFractionMisMatches"), name: "homologyMaxFractionMisMatches"});
   return arr;
@@ -67206,6 +67263,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   obj[this.self.MOC] = this.get("misprimingOligoConcValue");
   obj[this.self.OSF] = this.get("outputSequenceFormatValue");
   obj[this.self.SPP] = this.get("suppressPurePrimersValue");
+  obj[this.self.SPA] = this.get("suppressPrimerAnnotationsValue");
   obj[this.self.APT] = isCollectionCircular ? "circular" : "linear";
   obj[this.self.HMLB] = this.get("homologyMinLengthBPS");
   obj[this.self.HMFM] = this.get("homologyMaxFractionMisMatches");
@@ -67398,7 +67456,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }, getBaseURL: function() {
   var url = location.href;
   var baseURL = url.substring(0, url.indexOf('/', 14));
-  if (baseURL.indexOf('https://localhost') != -1) 
+  if (baseURL.indexOf('http://localhost') != -1) 
   {
     var url = location.href;
     var pathname = location.pathname;
@@ -67751,7 +67809,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       var newFeature = {"seq:label": feat.getName(), "seq:complement": complement, "seq:type": feat.getType(), "seq:location": newLoc, "seq:attribute": newAttr, "seq:seqHash": seqHash};
       newFeatures.push({"seq:feature": newFeature});
     }
-  result = {"seq:seq": {"seq:name": newName, "seq:circular": newCirc, "seq:sequence": newSequence, "seq:features": newFeatures, "_xmlns:seq": "https://jbei.org/sequence", "_xmlns:xsi": "https://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "https://jbei.org/sequence seq.xsd"}};
+  result = {"seq:seq": {"seq:name": newName, "seq:circular": newCirc, "seq:sequence": newSequence, "seq:features": newFeatures, "_xmlns:seq": "http://jbei.org/sequence", "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"}};
   return result;
 }, jbeiseqXmlToSequenceManager: function(jbeiSeqXml) {
   var json = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(jbeiSeqXml);
@@ -70480,7 +70538,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     var oldCompOperator = e.originalValue;
     Vede.application.fireEvent('changeCompOperator', record, column, ruleName, oldOperand2, operand1Id, oldCompOperator, newCompOperator);
   }
-}}}), columnLines: true, rowLines: true, minHeight: 130, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
+}}}), columnLines: true, rowLines: true, minHeight: 120, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
   return rule.getOperand1().get("name");
 }}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'NOT', falseText: null, editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', editable: false, store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', flex: 1, dataIndex: 'operand2_id', cls: "operand2_field", listeners: {dblclick: function(event, target, options) {
   var column = this;
@@ -70579,7 +70637,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.view.de.DeviceEditorPartPanel', Ext.panel.Panel, {dock: 'top', cls: 'DeviceEditorPartPanel', collapseDirection: 'top', collapsed: false, hideCollapseTool: true, titleCollapse: true, dockedItems: [{xtype: 'toolbar', dock: 'top', height: 45, cls: 'DeviceEditorPartsBar', enableOverflow: true, layout: {align: 'left', pack: 'center', type: 'hbox'}, items: [{xtype: 'button', cls: 'ori_Btn', data: {iconKey: 'ORIGIN-OF-REPLICATION'}, icon: 'resources/images/icons/device/small/origin-of-replication.png', scale: 'large', tooltip: 'Origin of Replication'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'cds_Btn', data: {iconKey: 'CDS'}, icon: 'resources/images/icons/device/small/cds.png', scale: 'large', tooltip: 'CDS'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'five_prime_ov_Btn', data: {iconKey: 'FIVE-PRIME-OVERHANG'}, icon: 'resources/images/icons/device/small/five-prime-overhang.png', scale: 'large', tooltip: '5\' Overhang'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'three_prime_ov_Btn', data: {iconKey: 'THREE-PRIME-OVERHANG'}, icon: 'resources/images/icons/device/small/three-prime-overhang.png', scale: 'large', tooltip: '3\' Overhang'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'promoter_Btn', data: {iconKey: 'PROMOTER'}, icon: 'resources/images/icons/device/small/promoter.png', scale: 'large', tooltip: 'Promoter'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'primer_binding_site_Btn', data: {iconKey: 'PRIMER-BINDING-SITE'}, icon: 'resources/images/icons/device/small/primer-binding-site.png', scale: 'large', tooltip: 'Primer Binding Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'five_prime_restriction_site_Btn', data: {iconKey: 'FIVE-PRIME-STICKY-RESTRICTION-SITE'}, icon: 'resources/images/icons/device/small/five-prime-sticky-restriction-site.png', scale: 'large', tooltip: '5\' Sticky Restriction Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'three_prime_restriction_site_Btn', data: {iconKey: 'THREE-PRIME-RESTRICTION-SITE'}, icon: 'resources/images/icons/device/small/three-prime-sticky-restriction-site.png', scale: 'large', tooltip: '3\' Sticky Restriction Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'restriction_enz_recog_site_Btn', data: {iconKey: 'RESTRICTION-ENZYME-RECOGNITION-SITE'}, icon: 'resources/images/icons/device/small/restriction-enzyme-recognition-site.png', scale: 'large', tooltip: 'Restriction Enzyme Recognition Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'blunt_restriction_site_Btn', data: {iconKey: 'BLUNT-RESTRICTION-SITE'}, icon: 'resources/images/icons/device/small/blunt-restriction-site.png', scale: 'large', tooltip: 'Blunt Restriction Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'protease_site_Btn', data: {iconKey: 'PROTEASE-SITE'}, icon: 'resources/images/icons/device/small/protease-site.png', scale: 'large', tooltip: 'Protease Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'protein_stability_element_Btn', data: {iconKey: 'PROTEIN-STABILITY-ELEMENT'}, icon: 'resources/images/icons/device/small/protein-stability-element.png', scale: 'large', tooltip: 'Protein Stability Element'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'assembly_junction_Btn', data: {iconKey: 'ASSEMBLY-SCAR'}, icon: 'resources/images/icons/device/small/assembly-scar.png', scale: 'large', tooltip: 'Assembly Junction'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'insulator_Btn', data: {iconKey: 'INSULATOR'}, icon: 'resources/images/icons/device/small/insulator.png', scale: 'large', tooltip: 'Insulator'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'operator_Btn', data: {iconKey: 'OPERATOR'}, icon: 'resources/images/icons/device/small/operator.png', scale: 'large', tooltip: 'Operator'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'ribonuclease_site_Btn', data: {iconKey: 'RIBONUCLEASE-SITE'}, icon: 'resources/images/icons/device/small/ribonuclease-site.png', scale: 'large', tooltip: 'Ribonuclease Site'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'rna_stability_element_Btn', data: {iconKey: 'RNA-STABILITY-ELEMENT'}, icon: 'resources/images/icons/device/small/rna-stability-element.png', scale: 'large', tooltip: 'RNA Stability Element'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'terminator_Btn', data: {iconKey: 'TERMINATOR'}, icon: 'resources/images/icons/device/small/terminator.png', scale: 'large', tooltip: 'Terminator'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'signature_Btn', data: {iconKey: 'SIGNATURE'}, icon: 'resources/images/icons/device/small/signature.png', params: 'Signature', scale: 'large', tooltip: 'Signature'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'five_prime_utr_Btn', data: {iconKey: 'FIVE-PRIME-UTR'}, icon: 'resources/images/icons/device/small/ribosome-entry-site.png', params: 'five_prime_utr', scale: 'large', tooltip: 'Five Prime UTR'}, {xtype: 'tbseparator', cls: 'parttoolbarseparator', height: 40}, {xtype: 'button', cls: 'generic', data: {iconKey: 'USER-DEFINED'}, icon: 'resources/images/icons/device/small/generic.png', params: 'generic', scale: 'large', tooltip: 'Generic DNA'}]}]}, 0, ["DeviceEditorPartPanel"], ["panel", "DeviceEditorPartPanel", "component", "container", "box"], {"panel": true, "DeviceEditorPartPanel": true, "component": true, "container": true, "box": true}, ["widget.DeviceEditorPartPanel"], 0, [Vede.view.de, 'DeviceEditorPartPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.DeviceEditorMenuPanel', Ext.panel.Panel, {dock: 'top', hidden: false, cls: 'DeviceEditorMenuPanel', width: 150, layout: {type: 'fit'}, dockedItems: [{xtype: 'toolbar', dock: 'top', items: [{xtype: 'button', text: 'File', cls: 'fileMenu', menu: {xtype: 'menu', items: [{xtype: 'menuitem', text: 'Save Design'}, {xtype: 'menuitem', text: 'Clear Design'}, {xtype: 'menuitem', text: 'Delete Design'}, {xtype: 'menuitem', text: 'Rename Design'}, {xtype: 'filefield', buttonOnly: true, cls: 'importEugeneRulesBtn', buttonConfig: {text: 'Import Eugene Rules', tooltip: 'Import EugeneRules', border: false, style: {left: "-2px"}}}]}}, {xtype: 'button', text: 'Edit', cls: 'editMenu', menu: {xtype: 'menu', items: [{xtype: 'menuitem', text: 'Undo', cls: 'deUndoMenuItem'}, {xtype: 'menuitem', text: 'Redo', cls: 'deRedoMenuItem'}, {xtype: 'menuitem', text: 'Clear Part', cls: 'clearPartMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Remove Column', cls: 'removeColumnMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Remove Row', cls: 'removeRowMenuItem', disabled: true}, {text: 'Cut Part', cls: 'cutPartMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Copy Part', cls: 'copyPartMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Paste Part', cls: 'pastePartMenuItem', disabled: true}]}}, {xtype: 'button', text: 'Examples', cls: 'examplesMenu', menu: {xtype: 'menu', minWidth: 300, width: 300, items: [{xtype: 'menuitem', text: 'SLIC/Gibson/CPEC'}, {xtype: 'menuitem', text: 'Combinatorial SLIC/Gibson/CPEC'}, {xtype: 'menuitem', text: 'Golden Gate'}, {xtype: 'menuitem', text: 'Combinatorial Golden Gate'}]}}, {xtype: 'filefield', buttonOnly: true, buttonConfig: {text: 'Import', scale: 'small', tooltip: 'Import File'}, cls: 'DEimportBtn'}, {xtype: 'button', text: 'Export', cls: 'exportMenu', menu: {xtype: 'menu', minWidth: 140, width: 140, items: [{xtype: 'menuitem', cls: 'exportJSON', text: 'JSON file'}, {xtype: 'menuitem', cls: 'exportXML', text: 'XML file'}]}}, {xtype: 'button', text: 'Insert', cls: 'insertMenu', menu: {xtype: 'menu', minWidth: 140, width: 140, items: [{xtype: 'menuitem', cls: 'row-above', text: 'Row Above', disabled: true}, {xtype: 'menuitem', cls: 'row-below', text: 'Row Below', disabled: true}, {xtype: 'menuitem', cls: 'column-left', text: 'Column Left', disabled: true}, {xtype: 'menuitem', cls: 'column-right', text: 'Column Right', disabled: true}]}}, {xtype: 'button', text: 'J5 Optimize', cls: 'j5button', menuAlign: 'tr-br?'}]}]}, 0, ["DeviceEditorMenuPanel"], ["panel", "component", "container", "box", "DeviceEditorMenuPanel"], {"panel": true, "component": true, "container": true, "box": true, "DeviceEditorMenuPanel": true}, ["widget.DeviceEditorMenuPanel"], 0, [Vede.view.de, 'DeviceEditorMenuPanel'], 0));
+(Ext.cmd.derive('Vede.view.de.DeviceEditorMenuPanel', Ext.panel.Panel, {dock: 'top', hidden: false, cls: 'DeviceEditorMenuPanel', width: 150, layout: {type: 'fit'}, dockedItems: [{xtype: 'toolbar', dock: 'top', items: [{xtype: 'button', text: 'File', cls: 'fileMenu', menu: {xtype: 'menu', items: [{xtype: 'menuitem', text: 'Save Design'}, {xtype: 'menuitem', text: 'Save Design As'}, {xtype: 'menuitem', text: 'Clear Design'}, {xtype: 'menuitem', text: 'Delete Design'}, {xtype: 'menuitem', text: 'Rename Design'}, {xtype: 'filefield', buttonOnly: true, cls: 'importEugeneRulesBtn', buttonConfig: {text: 'Import Eugene Rules', tooltip: 'Import EugeneRules', border: false, style: {left: "-2px"}}}]}}, {xtype: 'button', text: 'Edit', cls: 'editMenu', menu: {xtype: 'menu', items: [{xtype: 'menuitem', text: 'Undo', cls: 'deUndoMenuItem'}, {xtype: 'menuitem', text: 'Redo', cls: 'deRedoMenuItem'}, {xtype: 'menuitem', text: 'Clear Part', cls: 'clearPartMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Remove Column', cls: 'removeColumnMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Remove Row', cls: 'removeRowMenuItem', disabled: true}, {text: 'Cut Part', cls: 'cutPartMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Copy Part', cls: 'copyPartMenuItem', disabled: true}, {xtype: 'menuitem', text: 'Paste Part', cls: 'pastePartMenuItem', disabled: true}]}}, {xtype: 'button', text: 'Examples', cls: 'examplesMenu', menu: {xtype: 'menu', minWidth: 300, width: 300, items: [{xtype: 'menuitem', text: 'SLIC/Gibson/CPEC'}, {xtype: 'menuitem', text: 'Combinatorial SLIC/Gibson/CPEC'}, {xtype: 'menuitem', text: 'Golden Gate'}, {xtype: 'menuitem', text: 'Combinatorial Golden Gate'}]}}, {xtype: 'filefield', buttonOnly: true, buttonConfig: {text: 'Import', scale: 'small', tooltip: 'Import File'}, cls: 'DEimportBtn'}, {xtype: 'button', text: 'Export', cls: 'exportMenu', menu: {xtype: 'menu', minWidth: 140, width: 140, items: [{xtype: 'menuitem', cls: 'exportJSON', text: 'JSON file'}, {xtype: 'menuitem', cls: 'exportXML', text: 'XML file'}]}}, {xtype: 'button', text: 'Insert', cls: 'insertMenu', menu: {xtype: 'menu', minWidth: 140, width: 140, items: [{xtype: 'menuitem', cls: 'row-above', text: 'Row Above', disabled: true}, {xtype: 'menuitem', cls: 'row-below', text: 'Row Below', disabled: true}, {xtype: 'menuitem', cls: 'column-left', text: 'Column Left', disabled: true}, {xtype: 'menuitem', cls: 'column-right', text: 'Column Right', disabled: true}]}}]}]}, 0, ["DeviceEditorMenuPanel"], ["panel", "component", "container", "box", "DeviceEditorMenuPanel"], {"panel": true, "component": true, "container": true, "box": true, "DeviceEditorMenuPanel": true}, ["widget.DeviceEditorMenuPanel"], 0, [Vede.view.de, 'DeviceEditorMenuPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.de.DeviceEditorToolPanel', Ext.panel.Panel, {dock: 'top', hidden: false, cls: 'DeviceEditorToolPanel', width: 150, layout: {type: 'fit'}, dockedItems: [{xtype: 'toolbar', dock: 'top', items: [{xtype: 'button', cls: 'add_column_Btn', icon: 'resources/images/icons/device/add_column.png', scale: 'large', tooltip: 'Add Column'}, {xtype: 'tbseparator'}, {xtype: 'button', cls: 'add_row_Btn', icon: 'resources/images/icons/device/add_row.png', scale: 'large', tooltip: 'Add Row'}, {xtype: 'tbseparator'}, {xtype: 'button', cls: 'j5_init_Btn', icon: 'resources/images/icons/device/j5_icon.png', scale: 'large', tooltip: 'j5'}]}]}, 0, ["DeviceEditorToolPanel"], ["panel", "component", "container", "box", "DeviceEditorToolPanel"], {"panel": true, "component": true, "container": true, "box": true, "DeviceEditorToolPanel": true}, ["widget.DeviceEditorToolPanel"], 0, [Vede.view.de, 'DeviceEditorToolPanel'], 0));
@@ -70631,9 +70689,12 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 }, openDesign: function(design_id, project_id, cb) {
   var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-  project.designs().load({id: design_id, callback: function(loadedDesign) {
-  Teselagen.manager.ProjectManager.workingProject = project;
-  Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+  project.designs().load({id: design_id, callback: function(loadedDesign, operation, success) {
+  if (success) 
+  {
+    Teselagen.manager.ProjectManager.workingProject = project;
+    Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+  }
   if (typeof (cb) === "function") 
   {
     cb();
@@ -71215,7 +71276,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, ["ProjectManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'ProjectManager'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.models.Task', Ext.data.Model, {proxy: {type: 'memory'}, fields: [{name: "id", type: "long"}, {name: "taskName", type: "String"}, {name: "taskType", type: "String"}, {name: "status", type: "String"}, {name: "assemblyType", type: "String"}, {name: "dateStarted", type: "Date"}, {name: "taskRefID", type: "long"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'Task'], 0));
+(Ext.cmd.derive('Teselagen.models.Task', Ext.data.Model, {proxy: {type: 'memory'}, fields: [{name: "id", type: "long"}, {name: "devicedesign_id", type: "long"}, {name: "project_id", type: "long"}, {name: "id", type: "long"}, {name: "taskName", type: "String"}, {name: "taskType", type: "String"}, {name: "status", type: "String"}, {name: "assemblyType", type: "String"}, {name: "dateStarted", type: "Date"}, {name: "taskRefID", type: "long"}]}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'Task'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.manager.TasksMonitor', Ext.Base, {singleton: true, debugFlag: false, socket: null, constructor: function() {
@@ -71224,7 +71285,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }, startMonitoring: function() {
 }, start: function() {
 }, stop: function(boot) {
-}, addJ5RunObserver: function() {
+}, addJ5RunObserver: function(j5Run) {
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.LOAD_J5_RUNS);
 }, monitorServerTasks: function() {
   var self = this;
   if (self.socket) 
@@ -71235,6 +71297,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     console.log("Socket IO not loaded!");
     return false;
   }
+  console.log("Socket created");
   socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/", ":3000"));
   socket.on('message', function(msg) {
   console.log(msg);
@@ -71242,6 +71305,34 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   socket.on('connect', function() {
   console.log('SOCKET.IO : Connected');
   socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username'));
+  socket.on('j5completed', function(data) {
+  console.log(data);
+  var startDate = new Date(data.date);
+  var endDate = new Date(data.endDate);
+  var elapsed = endDate - startDate;
+  console.log(startDate, endDate, elapsed);
+  elapsed = Math.round(elapsed / 1000);
+  elapsed = self.elapsedDate(elapsed);
+  toastr.options.onclick = function() {
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);
+};
+  toastr.success("j5 Run for " + data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", {sticky: true, theme: 'j5-completed', data: data});
+  toastr.options.timeOut = 5000;
+  var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
+  var j5tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + " j5 Report']")[0];
+  if (tab) 
+  {
+    var btn = tab.query("button[cls='runj5Btn']")[0];
+    btn.enable();
+    btn.setText("Submit Run to j5");
+    $(btn.el.dom).find(".loader-mini").remove();
+    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+  }
+  if (j5tab) 
+  {
+    Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, false);
+  }
+});
   socket.on('update', function(data) {
   if (!data) 
   {
@@ -71258,8 +71349,42 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     {
       task = data.tasks[taskKey];
       task.dateStarted = new Date(task.dateStarted);
-      Teselagen.manager.ProjectManager.currentTasks.add(task);
+      task.devicedesign_id = task.run.devicedesign_id;
+      task.project_id = task.run.project_id;
+      Teselagen.manager.ProjectManager.currentTasks.insert(0, task);
     }
+});
+  socket.on('canceled', function(data) {
+  console.log(data);
+  console.log("here");
+  var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
+  var btn = tab.query("button[cls='runj5Btn']")[0];
+  btn.enable();
+  btn.setText("Submit Run to j5");
+  $(btn.el.dom).find(".loader-mini").remove();
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+});
+  socket.on('j5error', function(data) {
+  console.log("j5 error");
+  var startDate = new Date(data.date);
+  var endDate = new Date(data.endDate);
+  var elapsed = endDate - startDate;
+  console.log(startDate, endDate, elapsed);
+  elapsed = Math.round(elapsed / 1000);
+  elapsed = self.elapsedDate(elapsed);
+  toastr.options.onclick = function() {
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);
+};
+  toastr.error("j5 Run for " + data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", {sticky: true, theme: 'j5-completed', data: data});
+  toastr.options.timeOut = 5000;
+  console.log(data);
+  console.log("here");
+  var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
+  var btn = tab.query("button[cls='runj5Btn']")[0];
+  btn.enable();
+  btn.setText("Submit Run to j5");
+  $(btn.el.dom).find(".loader-mini").remove();
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
 });
 });
   socket.on('disconnect', function(socket) {
@@ -71267,6 +71392,23 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 });
   self.socket = socket;
 });
+}, elapsedDate: function(seconds) {
+  var numdays = Math.floor((seconds % 31536000) / 86400);
+  var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+  var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+  var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+  if (numdays > 0) 
+  {
+    return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+  } else if (numhours > 0) 
+  {
+    return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+  } else if (numminutes > 0) 
+  {
+    return numminutes + " minutes " + numseconds + " seconds";
+  } else {
+    return numseconds + " seconds";
+  }
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'TasksMonitor'], 0));
 ;
 
@@ -71321,7 +71463,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   if (Vede.application.paramsHost) 
   Teselagen.manager.SessionManager.baseURL = Vede.application.paramsHost;
   Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("users"), method: 'GET', params: {}, success: self.continueLogin, failure: function(response) {
-  if (response.status !== 200) 
+  if (response.status !== 200 && response.status !== 401) 
   {
     var msg = "";
     try {
@@ -71332,9 +71474,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     Ext.getCmp('auth-response').setValue(msg);
     return;
   }
-  response = JSON.parse(response.responseText);
-  if (response) 
-  Ext.getCmp('auth-response').setValue(response.msg);
+  var responseBody = JSON.parse(response.responseText);
+  if (responseBody && response.status !== 401) 
+  Ext.getCmp('auth-response').setValue(responseBody.msg);
   if (cb) 
   {
     return cb(false, response.statusText);
@@ -71406,31 +71548,48 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 
 (Ext.cmd.derive('Vede.view.common.HeaderPanelView', Ext.panel.Panel, {emitNavAction: function(e, target) {
   return this.fireEvent('navaction', this, e, target);
-}, region: 'north', id: 'headerPanel', cls: 'navbar navbar-static-top', margin: '0 0 10 0', layout: 'fit', items: [{xtype: 'panel', id: 'header-browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 400, hidden: true}, {xtype: 'container', id: 'headerPanel-navbar', cls: 'navbar-inner', html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div><div id="headerProgressCancel"><a href="" id="headerProgressCancelBtn">Cancel</a></div></div></li><li id="headerUserIcon"><a class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="tasks_btn">Tasks</a></li><li><a id="help_btn">Help</a></li></ul></ul>', items: [{xtype: 'image', id: 'headerIcon', src: 'https://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/images/teselagen_toplogo.png'}]}]}, 0, ["HeaderPanelView"], ["panel", "HeaderPanelView", "component", "container", "box"], {"panel": true, "HeaderPanelView": true, "component": true, "container": true, "box": true}, ["widget.HeaderPanelView"], 0, [Vede.view.common, 'HeaderPanelView'], 0));
+}, region: 'north', id: 'headerPanel', cls: 'navbar navbar-static-top', margin: '0 0 10 0', layout: 'fit', items: [{xtype: 'panel', id: 'header-browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 400, hidden: true}, {xtype: 'container', id: 'headerPanel-navbar', cls: 'navbar-inner', html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div><div id="headerProgressCancel"><a href="" id="headerProgressCancelBtn">Cancel</a></div></div></li><li id="headerUserIcon"><a class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>', items: [{xtype: 'image', id: 'headerIcon', src: 'http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/images/teselagen_toplogo.png'}]}]}, 0, ["HeaderPanelView"], ["panel", "HeaderPanelView", "component", "container", "box"], {"panel": true, "HeaderPanelView": true, "component": true, "container": true, "box": true}, ["widget.HeaderPanelView"], 0, [Vede.view.common, 'HeaderPanelView'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.common.TaskMonitorView', Ext.panel.Panel, {id: 'taskMonitor', cls: 'tasksmonitorwindow', width: '100%', title: 'Task Monitor', layout: 'fit', closeAction: 'hide', resizable: false, collapsed: true, draggable: false, collapseMode: 'mini', collapsible: true, header: true, region: 'south', height: 200, y: '80%', items: [{xtype: 'gridpanel', autoScroll: true, forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
+(Ext.cmd.derive('Vede.view.common.TaskMonitorView', Ext.panel.Panel, {id: 'taskMonitor', cls: 'tasksmonitorwindow', width: '100%', title: 'Task Monitor', layout: 'fit', closeAction: 'hide', resizable: false, collapsed: true, draggable: false, collapseMode: 'mini', collapsible: true, header: true, region: 'south', height: 200, y: '80%', items: [{xtype: 'gridpanel', autoScroll: true, id: 'tasksGrid', forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
   var columns = dataview.panel.columns;
   for (var i = 0; i < columns.length; i++) 
     {
       columns[i].autoSize();
     }
-}}}, columns: [{xtype: 'gridcolumn', text: 'TaskName', autoScroll: true, dataIndex: 'taskName'}, {xtype: 'gridcolumn', text: 'Task Type', autoScroll: true, dataIndex: 'taskType'}, {xtype: 'gridcolumn', text: 'Status', autoScroll: true, dataIndex: 'status', renderer: function(value) {
+}}}, columns: [{xtype: 'gridcolumn', text: 'TaskName', autoScroll: true, dataIndex: 'taskName'}, {xtype: 'gridcolumn', text: 'Task Type', autoScroll: true, dataIndex: 'taskType'}, {xtype: 'gridcolumn', text: 'Status', autoScroll: true, dataIndex: 'status', width: 300, minWidth: 300, flex: 1, renderer: function(value) {
   if (value === "In progress") 
   {
     return '<div class="pace-activity"></div>Running...';
+  } else if (value === "Completed") 
+  {
+    return '<div class="status-note status-note-completed" style="margin-right:10px"></div>Completed.';
+  } else if (value === "Completed with warnings") 
+  {
+    return '<div class="status-note status-note-warning" style="margin-right:10px"></div>Completed with warnings.';
+  } else if (value === "Error") 
+  {
+    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Failed.';
+  } else if (value === "Canceled") 
+  {
+    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Canceled.';
   }
-}}, {xtype: 'gridcolumn', text: 'Date Initialized', autoScroll: true, dataIndex: 'dateStarted'}, {xtype: 'actioncolumn', align: 'center', items: [{icon: 'resources/images/ux/task/blocked.png', iconCls: 'task-icon', hidden: true, tooltip: 'Cancel Task', handler: function(grid, rowIndex, colIndex) {
+}}, {xtype: 'gridcolumn', text: 'Date Initialized', autoScroll: true, dataIndex: 'dateStarted'}, {xtype: 'actioncolumn', align: 'center', items: [{icon: 'resources/images/ux/task/blocked.png', iconCls: 'task-icon task-cancel x-hidden', tooltip: 'Cancel Task', handler: function(grid, rowIndex, colIndex) {
   var rec = grid.getStore().getAt(rowIndex);
   if (rec.data.taskType === "j5run") 
   socket.emit('cancelj5run', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id);
   if (rec.data.taskType === "builddna") 
   socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id);
   Teselagen.manager.ProjectManager.currentTasks.remove(rec);
-}}, {icon: 'resources/images/ux/task/new-tab.png', hidden: true, iconCls: 'task-icon', tooltip: 'View Result', handler: function(grid, rowIndex, colIndex) {
+}, getClass: function(v, meta, rec) {
+  if (rec.data.status != "In progress") 
+  {
+    return 'x-hide-display';
+  }
+}}]}, {xtype: 'actioncolumn', align: 'center', items: [{icon: 'resources/images/ux/task/new-tab.png', iconCls: 'task-icon task-link', tooltip: 'View Result', handler: function(grid, rowIndex, colIndex) {
   var rec = grid.getStore().getAt(rowIndex);
-  alert("Edit " + rec.get('firstname'));
-  debugger;
+  var data = {devicedesign_id: rec.data.devicedesign_id, project_id: rec.data.project_id, _id: rec.data.id};
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);
 }}]}]}]}, 0, ["TaskMonitorView"], ["TaskMonitorView", "panel", "component", "container", "box"], {"TaskMonitorView": true, "panel": true, "component": true, "container": true, "box": true}, ["widget.TaskMonitorView"], 0, [Vede.view.common, 'TaskMonitorView'], 0));
 ;
 
@@ -71466,7 +71625,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, {xtype: "button", cls: "findNextBtn", text: "<b>Find Next</b>", margin: "2 4 2 4"}, {xtype: "combobox", cls: "findInSelector", queryMode: "local", editable: false, value: "DNA", store: ["DNA", "Amino Acids"], margin: "2 4 2 4"}, {xtype: "combobox", cls: "literalSelector", queryMode: "local", editable: false, value: "Literal", store: ["Literal", "Ambiguous"], margin: "2 4 2 4"}, {xtype: "button", cls: "highlightAllBtn", enableToggle: true, text: "<b>Highlight All</b>", margin: "2 4 2 4"}]}, 0, ["VectorEditorFindPanel"], ["panel", "component", "container", "box", "VectorEditorFindPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorEditorFindPanel": true}, ["widget.VectorEditorFindPanel"], 0, [Vede.view.ve, 'VectorEditorFindPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.VectorEditorMainMenuBar', Ext.toolbar.Toolbar, {cls: 'VectorEditorMainMenuBar', items: [{xtype: 'button', text: 'File', menu: {xtype: 'menu', cls: 'veFileMenu', minWidth: 140, hideMode: 'offsets', items: [{xtype: 'menuitem', text: 'New Sequence', identifier: 'newBlankVectorEditorMenuItem'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', text: 'Save', identifier: 'saveMenuItem'}, {xtype: 'menuitem', text: 'Save As...', identifier: 'saveAsMenuItem'}, {xtype: 'menuseparator'}, {xtype: 'filefield', buttonOnly: true, identifier: 'importSequenceBtn', identifier: 'importSequenceMenuItem', text: 'Import File', buttonConfig: {border: false, text: 'Open a Sequence File', style: {left: "-6px"}}}, {xtype: 'menuitem', identifier: 'exportToFileMenuItem', text: 'Export to File'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', text: 'Print', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menuitem', identifier: 'printSequenceViewMenuItem', text: 'Sequence'}, {xtype: 'menuitem', identifier: 'printCircularViewMenuItem', text: 'Circular View'}, {xtype: 'menuitem', identifier: 'printLinearViewMenuItem', text: 'Linear View'}]}}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'propertiesMenuItem', text: 'Properties'}, {xtype: 'menuitem', identifier: 'preferencesMenuItem', text: 'Preferences...'}]}}, {xtype: 'button', text: 'Edit', menu: {xtype: 'menu', minWidth: 150, items: [{xtype: 'menuitem', identifier: 'cutMenuItem', text: 'Cut'}, {xtype: 'menuitem', identifier: 'copyMenuItem', text: 'Copy'}, {xtype: 'menuitem', identifier: 'pasteMenuItem', text: 'Paste'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'undoMenuItem', text: 'Undo'}, {xtype: 'menuitem', identifier: 'redoMenuItem', text: 'Redo'}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'safeEditingMenuItem', text: 'Safe Editing', checked: true}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'findMenuItem', text: 'Find...'}, {xtype: 'menuitem', identifier: 'gotoMenuItem', text: 'Go To...'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'selectMenuItem', text: 'Select...'}, {xtype: 'menuitem', identifier: 'selectAllMenuItem', text: 'Select All'}, {xtype: 'menuitem', identifier: 'selectInverseMenuItem', text: 'Select Inverse'}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'sequenceLinearMenuItem', text: 'Sequence Linear'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'reverseComplementMenuItem', text: 'Reverse Complement Entire Sequence'}, {xtype: 'menuitem', identifier: 'rebaseMenuItem', text: 'Rotate to Here'}]}}, {xtype: 'button', text: 'View', menu: {xtype: 'menu', minWidth: 140, items: [{xtype: 'menucheckitem', identifier: 'circularViewMenuItem', text: 'Circular', checked: true}, {xtype: 'menucheckitem', identifier: 'linearViewMenuItem', text: 'Linear', checked: false}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'mapCaretMenuItem', text: 'Map Caret', checked: true}, {xtype: 'menucheckitem', identifier: 'featuresMenuItem', text: 'Features', checked: true}, {xtype: 'menucheckitem', identifier: 'cutSitesMenuItem', text: 'Cut Sites'}, {xtype: 'menuitem', text: 'ORFs', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'All Frames', frameNumber: 'all'}, {xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'Frame 1', frameNumber: 1}, {xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'Frame 2', frameNumber: 2}, {xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'Frame 3', frameNumber: 3}]}}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'showComplementaryMenuItem', text: 'Complementary', checked: true}, {xtype: 'menucheckitem', identifier: 'showSpacesMenuItem', text: 'Spaces', checked: true}, {xtype: 'menuitem', text: 'Sequence AA', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'All Frames', frameNumber: 'all'}, {xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'Frame 1', frameNumber: 1}, {xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'Frame 2', frameNumber: 2}, {xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'Frame 3', frameNumber: 3}]}}, {xtype: 'menuitem', text: 'Revcom AA', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'All Frames', frameNumber: 'all'}, {xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'Frame 1', frameNumber: 1}, {xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'Frame 2', frameNumber: 2}, {xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'Frame 3', frameNumber: 3}]}}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'featureLabelsMenuItem', text: 'Feature Labels', checked: true}, {xtype: 'menucheckitem', identifier: 'cutSiteLabelsMenuItem', text: 'Cut Site Labels', checked: true}, {xtype: 'menuitem', identifier: 'zoomInMenuItem', hideOnClick: false, text: 'Zoom In (+)'}, {xtype: 'menuitem', identifier: 'zoomOutMenuItem', hideOnClick: false, text: 'Zoom Out (-)'}]}}, {xtype: 'button', text: 'Tools', menu: {xtype: 'menu', minWidth: 140, items: [{xtype: 'menuitem', identifier: 'restrictionEnzymesManagerMenuItem', text: 'Restriction Enzymes Manager'}, {xtype: 'menuitem', identifier: 'simulateDigestionMenuItem', text: 'Simulate Digestion'}]}}]}, 0, ["VectorEditorMainMenuBar"], ["toolbar", "component", "container", "box", "VectorEditorMainMenuBar"], {"toolbar": true, "component": true, "container": true, "box": true, "VectorEditorMainMenuBar": true}, ["widget.VectorEditorMainMenuBar"], 0, [Vede.view.ve, 'VectorEditorMainMenuBar'], 0));
+(Ext.cmd.derive('Vede.view.ve.VectorEditorMainMenuBar', Ext.toolbar.Toolbar, {cls: 'VectorEditorMainMenuBar', items: [{xtype: 'button', text: 'File', menu: {xtype: 'menu', cls: 'veFileMenu', minWidth: 140, hideMode: 'offsets', items: [{xtype: 'menuitem', text: 'New Sequence', identifier: 'newBlankVectorEditorMenuItem'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', text: 'Save', identifier: 'saveMenuItem'}, {xtype: 'menuitem', text: 'Save As...', identifier: 'saveAsMenuItem'}, {xtype: 'menuseparator'}, {xtype: 'filefield', buttonOnly: true, identifier: 'importSequenceBtn', identifier: 'importSequenceMenuItem', text: 'Import File', buttonConfig: {border: false, text: 'Open a Sequence File', style: {left: "-6px"}}}, {xtype: 'menuitem', identifier: 'exportToFileMenuItem', text: 'Export to File'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', text: 'Print', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menuitem', identifier: 'printSequenceViewMenuItem', text: 'Sequence'}, {xtype: 'menuitem', identifier: 'printCircularViewMenuItem', text: 'Circular View'}, {xtype: 'menuitem', identifier: 'printLinearViewMenuItem', text: 'Linear View'}]}}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'propertiesMenuItem', text: 'Properties'}, {xtype: 'menuitem', identifier: 'preferencesMenuItem', text: 'Preferences...'}]}}, {xtype: 'button', text: 'Edit', menu: {xtype: 'menu', minWidth: 150, items: [{xtype: 'menuitem', identifier: 'cutMenuItem', text: 'Cut'}, {xtype: 'menuitem', identifier: 'copyMenuItem', text: 'Copy'}, {xtype: 'menuitem', identifier: 'pasteMenuItem', text: 'Paste'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'undoMenuItem', text: 'Undo'}, {xtype: 'menuitem', identifier: 'redoMenuItem', text: 'Redo'}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'safeEditingMenuItem', text: 'Safe Editing', checked: true}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'findMenuItem', text: 'Find...'}, {xtype: 'menuitem', identifier: 'gotoMenuItem', text: 'Go To...'}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'selectMenuItem', text: 'Select...'}, {xtype: 'menuitem', identifier: 'selectAllMenuItem', text: 'Select All'}, {xtype: 'menuitem', identifier: 'selectInverseMenuItem', text: 'Select Inverse'}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'sequenceLinearMenuItem', text: 'Sequence Linear', checked: false}, {xtype: 'menuseparator'}, {xtype: 'menuitem', identifier: 'reverseComplementMenuItem', text: 'Reverse Complement Entire Sequence'}, {xtype: 'menuitem', identifier: 'rebaseMenuItem', text: 'Rotate to Here'}]}}, {xtype: 'button', text: 'View', menu: {xtype: 'menu', minWidth: 140, items: [{xtype: 'menucheckitem', identifier: 'circularViewMenuItem', text: 'Circular', checked: true}, {xtype: 'menucheckitem', identifier: 'linearViewMenuItem', text: 'Linear', checked: false}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'mapCaretMenuItem', text: 'Map Caret', checked: true}, {xtype: 'menucheckitem', identifier: 'featuresMenuItem', text: 'Features', checked: true}, {xtype: 'menucheckitem', identifier: 'cutSitesMenuItem', text: 'Cut Sites'}, {xtype: 'menuitem', text: 'ORFs', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'All Frames', frameNumber: 'all'}, {xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'Frame 1', frameNumber: 1}, {xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'Frame 2', frameNumber: 2}, {xtype: 'menucheckitem', identifier: 'orfsMenuItem', text: 'Frame 3', frameNumber: 3}]}}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'showComplementaryMenuItem', text: 'Complementary', checked: true}, {xtype: 'menucheckitem', identifier: 'showSpacesMenuItem', text: 'Spaces', checked: true}, {xtype: 'menuitem', text: 'Sequence AA', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'All Frames', frameNumber: 'all'}, {xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'Frame 1', frameNumber: 1}, {xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'Frame 2', frameNumber: 2}, {xtype: 'menucheckitem', identifier: 'showSequenceAAMenuItem', text: 'Frame 3', frameNumber: 3}]}}, {xtype: 'menuitem', text: 'Revcom AA', menu: {xtype: 'menu', width: 120, items: [{xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'All Frames', frameNumber: 'all'}, {xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'Frame 1', frameNumber: 1}, {xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'Frame 2', frameNumber: 2}, {xtype: 'menucheckitem', identifier: 'showRevcomAAMenuItem', text: 'Frame 3', frameNumber: 3}]}}, {xtype: 'menuseparator'}, {xtype: 'menucheckitem', identifier: 'featureLabelsMenuItem', text: 'Feature Labels', checked: true}, {xtype: 'menucheckitem', identifier: 'cutSiteLabelsMenuItem', text: 'Cut Site Labels', checked: true}, {xtype: 'menuitem', identifier: 'zoomInMenuItem', hideOnClick: false, text: 'Zoom In (+)'}, {xtype: 'menuitem', identifier: 'zoomOutMenuItem', hideOnClick: false, text: 'Zoom Out (-)'}]}}, {xtype: 'button', text: 'Tools', menu: {xtype: 'menu', minWidth: 140, items: [{xtype: 'menuitem', identifier: 'restrictionEnzymesManagerMenuItem', text: 'Restriction Enzymes Manager'}, {xtype: 'menuitem', identifier: 'simulateDigestionMenuItem', text: 'Simulate Digestion'}]}}]}, 0, ["VectorEditorMainMenuBar"], ["toolbar", "component", "container", "box", "VectorEditorMainMenuBar"], {"toolbar": true, "component": true, "container": true, "box": true, "VectorEditorMainMenuBar": true}, ["widget.VectorEditorMainMenuBar"], 0, [Vede.view.ve, 'VectorEditorMainMenuBar'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.VectorEditorMainToolBar', Ext.toolbar.Toolbar, {cls: 'VectorEditorMainToolBar', items: [{xtype: 'button', cls: 'saveSequenceBtn', scale: 'medium', icon: 'resources/images/save.png', tooltip: 'Save Sequence to Database'}, {xtype: 'tbseparator', cls: 'vetbseparator', height: 20}, {xtype: 'filefield', buttonOnly: true, buttonText: '', cls: 'importSequenceBtn', buttonConfig: {icon: 'resources/images/import_new.png', scale: 'medium', tooltip: 'Open a Sequence File'}, listeners: {render: {fn: function(field) {
@@ -71489,7 +71648,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.view.j5.AnalysisPanel', Ext.panel.Panel, {layout: {type: 'fit'}, title: 'Analysis', items: [{xtype: 'panel', border: 0, layout: {type: 'fit'}, title: 'Project Info', items: [{xtype: 'tabpanel', border: 0, activeTab: 0, items: [{xtype: 'panel', border: 0, layout: {align: 'stretch', type: 'vbox'}, title: 'Info', items: [{xtype: 'panel', flex: 1, border: 0, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', flex: 1, border: 0, layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'fieldcontainer', flex: 1, margins: '10', height: 150, minHeight: 150, width: 389, layout: {align: 'stretch', padding: 10, type: 'vbox'}, fieldLabel: '', hideLabel: true, items: [{xtype: 'displayfield', value: 'Display Field', fieldLabel: 'Status'}, {xtype: 'displayfield', value: 'Display Field', fieldLabel: 'Run Date'}, {xtype: 'displayfield', value: 'Display Field', fieldLabel: 'Run Time'}, {xtype: 'displayfield', value: 'Display Field', fieldLabel: 'Assembly Type'}, {xtype: 'displayfield', value: 'Display Field', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', value: 'Display Field', fieldLabel: 'Combinatorial'}]}, {xtype: 'panel', flex: 2, border: 0, margin: 10, layout: {align: 'stretch', padding: 5, type: 'vbox'}, items: [{xtype: 'button', margins: '5', icon: 'resources/images/ux/edit_button.png', scale: 'medium', text: 'Edit in Device Editor'}, {xtype: 'button', margins: '5', maxHeight: 30, minHeight: 30, maintainFlex: false, autoWidth: true, icon: 'resources/images/ux/view_button.png', scale: 'medium', text: 'View j5 Parameters'}, {xtype: 'splitbutton', flex: 3, margins: '5', maxHeight: 30, autoWidth: true, icon: 'resources/images/ux/submit_button.png', scale: 'large', text: 'Submit j5 Run', menu: {xtype: 'menu', items: [{xtype: 'menuitem', text: 'j5 Inputs'}]}}, {xtype: 'button', flex: 4, margins: '5', maxHeight: 30, minHeight: 30, maintainFlex: false, autoWidth: false, icon: 'resources/images/ux/downstream_button.png', scale: 'medium', text: 'Downstream Automation'}]}]}, {xtype: 'panel', flex: 1, margin: 30, layout: {align: 'stretch', type: 'vbox'}, title: 'Download Results', items: [{xtype: 'panel', flex: 1, border: 0, margin: 15, maxHeight: 50, layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'button', flex: 1, margins: '5', margin: '', icon: 'resources/images/ux/download_button.png', scale: 'large', text: 'Download All'}]}, {xtype: 'panel', flex: 1, border: 0, margin: 15, maintainFlex: false, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', flex: 1, border: 0, layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'button', margins: '5', icon: 'resources/images/ux/download_button2.png', scale: 'medium', text: 'Sequence File'}, {xtype: 'button', margins: '5', icon: 'resources/images/ux/download_button2.png', scale: 'medium', text: 'Parts File'}]}, {xtype: 'panel', flex: 1, border: 0, minWidth: 100, layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'button', margins: '5', icon: 'resources/images/ux/download_button2.png', scale: 'medium', text: 'Target Parts File'}, {xtype: 'button', margins: '5', icon: 'resources/images/ux/download_button2.png', scale: 'medium', text: 'Eugene Rules File'}]}]}, {xtype: 'panel', flex: 1, border: 0, margin: 15, maintainFlex: false, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', flex: 1, border: 0, layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'button', margins: '5', icon: 'resources/images/ux/download_button2.png', scale: 'medium', text: 'j5 Parameters'}]}, {xtype: 'panel', flex: 1, border: 0, minWidth: 100, layout: {align: 'stretch', type: 'vbox'}, items: [{xtype: 'button', margins: '5', icon: 'resources/images/ux/download_button2.png', scale: 'medium', text: 'Downstream Parameters'}]}]}]}]}, {xtype: 'form', flex: 1, border: 0, maxHeight: 250, bodyPadding: 10, title: 'Warnings'}]}, {xtype: 'panel', border: 0, title: 'Design Overview'}, {xtype: 'panel', border: 0, title: 'Sequences'}]}, {xtype: 'gridpanel', hidden: true, title: 'My Grid Panel', columns: [{xtype: 'gridcolumn', dataIndex: 'string', text: 'String'}, {xtype: 'numbercolumn', dataIndex: 'number', text: 'Number'}, {xtype: 'datecolumn', dataIndex: 'date', text: 'Date'}, {xtype: 'booleancolumn', dataIndex: 'bool', text: 'Boolean'}], viewConfig: {}}, {xtype: 'form', layout: {type: 'fit'}, bodyPadding: 10, title: 'j5 Run Info'}]}]}, 0, ["AnalysisPanel"], ["panel", "component", "container", "AnalysisPanel", "box"], {"panel": true, "component": true, "container": true, "AnalysisPanel": true, "box": true}, ["widget.AnalysisPanel"], 0, [Vede.view.j5, 'AnalysisPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.j5Report.j5ReportPanel', Ext.panel.Panel, {cls: 'j5ReportTab', frameHeader: false, closable: true, title: 'j5Report', layout: 'fit', dockedItems: [{xtype: 'panel', dock: 'left', floating: false, frame: true, cls: 'j5ReportsPanel', margin: '0 0 0 0', width: 350, bodyBorder: false, animCollapse: false, collapseDirection: 'left', collapsed: false, collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, autoScroll: true, titleCollapse: false, plain: false, removePanelHeader: false, layout: {deferredRender: false, type: 'card'}, title: 'j5Runs', items: [{xtype: 'menu', cls: 'j5RunsMenu', floating: false, autoScroll: false, width: 291, items: []}]}], items: [{xtype: 'panel', title: 'Detail', cls: 'j5detailpanel-fill', hidden: false, border: 0, items: [{xtype: 'container', cls: 'j5detailpanel-fillcontent', height: 40, padding: 12, margin: '20 10 10 10', html: 'Click on a J5 Run to View Results.'}]}, {xtype: 'panel', title: 'Detail', cls: 'j5detailpanel', hidden: true, autoScroll: true, border: 0, layout: {type: 'vbox', align: 'stretch'}, dockedItems: [{xtype: 'toolbar', height: 100, dock: 'top', layout: 'vbox', margin: '5 0 0 0', items: [{xtype: 'container', height: 50, width: '100%', flex: 1, layout: 'fit', items: [{xtype: 'button', margin: '0 0 5 0', layout: 'fit', text: 'Build', cls: 'buildBtn', overCls: 'buildBtn-over'}]}, {xtype: 'container', height: 50, flex: 1, width: '100%', layout: 'fit', items: [{xtype: 'button', margin: '0 0 5 0', text: 'Download Results', cls: 'downloadResults', overCls: 'downloadResults-over'}]}, {xtype: 'container', height: 50, flex: 1, width: '100%', layout: 'fit', items: [{xtype: 'button', margin: '0 0 5 0', text: 'Cancel j5 run', cls: 'cancelj5run', overCls: 'cancelj5Run-over'}]}]}], items: [{xtype: 'form', cls: 'j5RunInfo', margin: '10 10 10 10', border: 0, items: [{xtype: 'displayfield', height: 20, name: 'j5AssemblyType', cls: 'j5RunAssemblyType', fieldLabel: '<b>Assembly Type</b>', labelWidth: 100}, {xtype: 'displayfield', height: 20, name: 'j5RunStatus', cls: 'j5RunStatusField', fieldLabel: '<div class="status-note"></div><b>Run Status</b>', labelWidth: 115}, {xtype: 'displayfield', height: 20, name: 'j5RunStart', cls: 'j5RunStartField', fieldLabel: '<b>Date Submitted</b>', labelWidth: 100}, {xtype: 'displayfield', height: 20, name: 'j5RunEnd', cls: 'j5RunEndField', fieldLabel: '<b>Date Finished</b>', labelWidth: 100}, {xtype: 'displayfield', height: 20, name: 'j5RunElapsed', cls: 'j5RunElapsedField', fieldLabel: '<b>Run Time</b>', labelWidth: 100}]}, {xtype: 'gridpanel', name: 'warnings', cls: 'warningsGrid', hidden: true, margin: '10 10 20 10', title: 'Warnings', minHeight: 100, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'message', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
+(Ext.cmd.derive('Vede.view.j5Report.j5ReportPanel', Ext.panel.Panel, {cls: 'j5ReportTab', frameHeader: false, closable: true, title: 'j5Report', layout: 'fit', dockedItems: [{xtype: 'panel', dock: 'left', floating: false, frame: true, cls: 'j5ReportsPanel', margin: '0 0 0 0', width: 350, bodyBorder: false, animCollapse: false, collapseDirection: 'left', collapsed: false, collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, autoScroll: true, titleCollapse: false, plain: false, removePanelHeader: false, layout: {deferredRender: false, type: 'card'}, title: 'j5Runs', items: [{xtype: 'menu', cls: 'j5RunsMenu', floating: false, autoScroll: false, width: 291, items: []}]}], items: [{xtype: 'panel', title: 'Detail', cls: 'j5detailpanel-fill', hidden: false, border: 0, items: [{xtype: 'container', cls: 'j5detailpanel-fillcontent', height: 40, padding: 12, margin: '20 10 10 10', html: 'Click on a J5 Run to View Results.'}]}, {xtype: 'panel', title: 'Detail', cls: 'j5detailpanel', hidden: true, autoScroll: true, border: 0, layout: {type: 'vbox', align: 'stretch'}, dockedItems: [{xtype: 'toolbar', height: 100, dock: 'top', layout: 'vbox', margin: '5 0 0 0', items: [{xtype: 'container', height: 50, width: '100%', flex: 1, layout: 'fit', items: [{xtype: 'button', margin: '0 0 5 0', layout: 'fit', text: 'Build', cls: 'buildBtn', overCls: 'buildBtn-over'}]}, {xtype: 'container', height: 50, flex: 1, width: '100%', layout: 'fit', items: [{xtype: 'button', margin: '0 0 5 0', text: 'Download Results', cls: 'downloadResults', overCls: 'downloadResults-over'}]}]}], items: [{xtype: 'form', cls: 'j5RunInfo', margin: '10 10 10 10', border: 0, items: [{xtype: 'displayfield', height: 20, name: 'j5AssemblyType', cls: 'j5RunAssemblyType', fieldLabel: '<b>Assembly Type</b>', labelWidth: 100}, {xtype: 'displayfield', height: 20, name: 'j5RunStatus', cls: 'j5RunStatusField', fieldLabel: '<div class="status-note"></div><b>Run Status</b>', labelWidth: 115}, {xtype: 'displayfield', height: 20, name: 'j5RunStart', cls: 'j5RunStartField', fieldLabel: '<b>Date Submitted</b>', labelWidth: 100}, {xtype: 'displayfield', height: 20, name: 'j5RunEnd', cls: 'j5RunEndField', fieldLabel: '<b>Date Finished</b>', labelWidth: 100}, {xtype: 'displayfield', height: 20, name: 'j5RunElapsed', cls: 'j5RunElapsedField', fieldLabel: '<b>Run Time</b>', labelWidth: 100}]}, {xtype: 'gridpanel', name: 'warnings', cls: 'warningsGrid', hidden: true, margin: '10 10 20 10', title: 'Warnings', minHeight: 100, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'message', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
   val = val.substring(1, val.length - 1);
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}], viewConfig: {enableTextSelection: true}}, {xtype: 'gridpanel', name: 'errors', cls: 'errorsGrid', hidden: true, margin: '10 10 20 10', title: 'Errors', minHeight: 80, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'faultString', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
@@ -71509,8 +71668,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 
 (Ext.cmd.derive('Vede.view.AppViewport', Ext.container.Viewport, {layout: {type: 'border'}, initComponent: function() {
   var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'HeaderPanelView'}, {xtype: 'ProjectPanelView'}, {xtype: 'tabpanel', id: 'mainAppPanel', region: 'center', border: 0, activeTab: 0, items: [{xtype: 'DashboardPanelView', title: null, cls: 'DashboardPanelTab', iconCls: 'home-dash-icon', iconAlign: 'top', listeners: {tabchange: function() {
-  Vede.application.fireEvent("PopulateStats");
+  Ext.applyIf(me, {items: [{xtype: 'HeaderPanelView'}, {xtype: 'ProjectPanelView'}, {xtype: 'tabpanel', id: 'mainAppPanel', region: 'center', border: 0, activeTab: 0, items: [{xtype: 'DashboardPanelView', title: null, cls: 'DashboardPanelTab', iconCls: 'home-dash-icon', iconAlign: 'top', listeners: {tabchange: function(panel, newTab, oldTab) {
+  if (newTab.title === 'Dashboard' || panel.items.indexOf(newTab) === 0) 
+  {
+    Vede.application.fireEvent("PopulateStats");
+  }
 }}}]}, {xtype: 'TaskMonitorView'}]});
   me.callParent(arguments);
 }}, 0, 0, ["viewport", "component", "container", "box"], {"viewport": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view, 'AppViewport'], 0));
@@ -71585,8 +71747,17 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Teselagen.manager.AuthenticationManager.Login();
 }, onForgotClick: function() {
   Ext.create('Vede.view.ForgotWindow').show();
+}, onRequestError: function(connection, response, options, eOpts) {
+  if (response.status === 401 && !Ext.getCmp("AuthWindow")) 
+  {
+    Ext.Msg.alert("Please Log In Again", "You have been logged out due to inactivity. Please re-enter your credentials.", function() {
+  Ext.create("Vede.view.AuthWindow").show();
+});
+    return false;
+  }
 }, init: function() {
   var that = this;
+  Ext.Ajax.on('requestexception', this.onRequestError, this);
   this.control({"#headerPanel": {afterrender: this.onRender}, "#auth-login-btn": {click: this.onAuthLoginClick}, "#auth-forgot-btn": {click: this.onForgotClick}, "#auth-logout-btn": {click: this.onLogoutClick}, "#auth-reconnect-btn": {click: this.onReconnectClick}, "#auth-nosession-btn": {click: this.onNoSessionClick}, "#auth-username-field": {specialkey: function(field, e) {
   if (e.getKey() === e.ENTER) 
   {
@@ -72768,10 +72939,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
   }
 }, init: function() {
-  this.control({"#headerPanel": {afterrender: this.onRender}, "#help_btn": {click: this.onHelpBtnClick}, "#tasks_btn": {click: this.onTasksBtnClick}, "#reportFeedbackBtn": {click: this.onReportFeedbackBtnClick}, "#reportErrorBtn": {click: this.onReportErrorBtnClick}});
+  this.control({"#headerPanel": {afterrender: this.onRender}, "#help_btn": {click: this.onHelpBtnClick}, "#reportFeedbackBtn": {click: this.onReportFeedbackBtnClick}, "#reportErrorBtn": {click: this.onReportErrorBtnClick}});
 }, onRender: function() {
   Ext.get("help_btn").on('click', this.onHelpBtnClick);
-  Ext.get("tasks_btn").on('click', this.onTasksBtnClick);
   if (!Ext.isChrome) 
   {
     Ext.getCmp('header-browser-warning').show();
@@ -74331,7 +74501,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   return null;
 }, getModelData: function() {
   return null;
-}, flex: 1, dragGroup: me.ddGroup, dropGroup: me.ddGroup, title: title, store: {model: me.store.model, data: [], autoDestroy: true}, displayField: me.displayField, valueField: me.valueField, disabled: me.disabled, listeners: {boundList: {scope: me, itemdblclick: me.onItemDblClick, drop: me.syncValue}}});
+}, flex: 1, dragGroup: me.ddGroup, dropGroup: me.ddGroup, title: title, store: {model: me.store.model, data: [], autoDestroy: true}, displayField: me.displayField, valueField: me.valueField, disabled: me.disabled, listeners: {boundList: {scope: me, itemclick: me.onItemClick, itemdblclick: me.onItemDblClick, drop: me.syncValue}}});
 }, setupItems: function() {
   var me = this;
   me.fromField = me.createList(me.fromTitle);
@@ -74453,6 +74623,30 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, syncValue: function() {
   var me = this;
   me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
+}, onItemClick: function(view, record, el, index, event, eOpts) {
+  var selModel = view.getSelectionModel();
+  var currentSelected = selModel.getSelection();
+  if (event.ctrlKey) 
+  {
+    selModel.select(record, true);
+    return false;
+  } else if (event.shiftKey) 
+  {
+    if (!currentSelected) 
+    {
+      selModel.select(record);
+    } else {
+      selModel.selectRange(view.getStore().indexOf(currentSelected), index);
+    }
+  } else {
+    if (currentSelected.indexOf(record) !== -1) 
+    {
+      view.deselect(record);
+      return false;
+    } else {
+      selModel.select(record);
+    }
+  }
 }, onItemDblClick: function(view, rec) {
   this.moveRec(view === this.fromField.boundList, rec);
 }, setValue: function(value) {
@@ -74616,6 +74810,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
   if (userEnzymeGroupSelector.getValue() === this.GroupManager.ACTIVE) 
   {
+    this.GroupManager.removeUserGroup(this.GroupManager.ACTIVE);
+    this.GroupManager.createUserGroup(this.GroupManager.ACTIVE, enzymeSelector.toField.boundList.getStore().collect("name"));
     this.GroupManager.setActiveEnzymesChanged(true);
   }
 }, onCopyGroupButtonClick: function() {
@@ -74721,6 +74917,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 ;
 
 (Ext.cmd.derive('Vede.controller.VectorEditor.SequenceEditingController', Ext.app.Controller, {editingDETab: null, createPartWindow: null, VEManager: null, onPartCreated: function(sequence, part) {
+  if (sequence.getId()) 
+  {
+    part.setSequenceFile(sequence);
+  }
   processPrompt = function(btn, text) {
   part.set('name', text);
   executeRequest();
@@ -74865,7 +75065,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
   var sequencesNames = [];
   var name = Ext.String.trim(this.sequenceNameField.getValue());
-  if (name == null || name.match(/^\s*$/) || name.length == 0) 
+  if (!name || name.match(/^\s*$/) || !name.length) 
   {
     this.sequenceNameField.setFieldStyle("border-color:red");
   } else {
@@ -75151,6 +75351,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
         if (String(sequence.getAttribute("hash")) === String(targetHash) && !found) 
         {
           cb(sequence);
+        } else if (String(sequence.getAttribute("id")) === String(targetHash) && !found) 
+        {
+          cb(sequence);
         }
       }
   }
@@ -75199,7 +75402,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
               newBin.cells().add(newCell);
             } else {
               var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
-              var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+              if (part.getElementsByTagNameNS("*", "sequenceFileHash")[0]) 
+              {
+                var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
+              } else {
+                var hash = part.getElementsByTagNameNS("*", "sequenceFileID")[0].textContent;
+              }
               var name = this.getTagText(part, "name");
               var startBP = this.getTagText(part, "startBP");
               var endBP = this.getTagText(part, "stopBP");
@@ -75230,6 +75438,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent, sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent, sequenceFileName: me.getTagText(sequence, "fileName"), name: me.getTagText(sequence, "fileName")});
     newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
     newPart.setSequenceFile(newSequence);
+    var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: fas || "None"});
+    newCell.setPart(newPart);
+    newCell.setJ5Bin(newBin);
+    newBin.cells().add(newCell);
+    tempPartsArray.push(newPart);
+    fullPartsAssocArray[part.getAttribute("id")] = newPart;
   }
 });
             }
@@ -75260,7 +75474,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
         continue;
       }
       var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
-      var operand2isNumber = false;
+      if (rule.getElementsByTagNameNS("*", "negationOperator")[0]) 
+      {
+        var negationOperator = rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent;
+      }
+      if (rule.getElementsByTagNameNS("*", "compositionalOperator")[0]) 
+      {
+        var conditional = rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent;
+      }
       var operand2Node = rule.getElementsByTagNameNS("*", "operand2ID")[0];
       var operand2;
       if (!operand2Node) 
@@ -75269,7 +75490,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
         operand2 = parseInt(operand2Node.textContent);
         operand2isNumber = true;
       } else {
-        operand2 = operand2Node.textContent;
+        if (negationOperator == "true" && conditional == "MORE THAN") 
+        {
+          operand2 = parseInt(operand2Node.textContent);
+          operand2isNumber = true;
+        } else {
+          operand2 = operand2Node.textContent;
+          operand2isNumber = false;
+        }
       }
       var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {name: rule.getElementsByTagNameNS("*", "name")[0].textContent, compositionalOperator: rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent, negationOperator: rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent, operand2isNumber: operand2isNumber});
       newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
@@ -75487,7 +75715,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   return text;
 }, backgroundSequenceProcessing: function(parts) {
-  console.log(parts);
   var processFlag = true;
   toastr.options.onclick = function() {
   processFlag = false;
@@ -75846,6 +76073,49 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
 }, onDeviceEditorSaveEvent: function(arg) {
   this.saveDEProject(arg);
+}, onDeviceEditorSaveAsBtnClick: function() {
+  var saveAsWindow = Ext.create("Vede.view.de.SaveAsWindow").show();
+  var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
+  var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+  nameField.setValue(design.get("name") + ' Copy');
+}, onSaveDeviceAsWindowOKBtnClick: function() {
+  var saveAsWindow = Ext.ComponentQuery.query('window[cls="deviceEditorSaveAsWindow"]')[0];
+  var newName = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]').getValue();
+  var oldDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+  var newDesign = oldDesign.copy();
+  var currentProject = oldDesign.getProject();
+  currentProject.designs().load({callback: function() {
+  var duplicateIndex = currentProject.designs().find('name', newName);
+  newDesign.set({name: newName, project: currentProject});
+  newDesign.parts().add(oldDesign.parts().getRange());
+  newDesign.rulesStore = oldDesign.rulesStore;
+  newDesign.bins().add(oldDesign.bins().getRange());
+  if (duplicateIndex === -1) 
+  {
+    newDesign.save({success: function() {
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+  saveAsWindow.close();
+  Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+}, failure: function() {
+  Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+}});
+  } else {
+    Ext.Msg.confirm("Duplicate Design Name", "A design already exists in this project with that name.<br>" + "Continuing will create two designs with the same name. Are you sure?", function(button) {
+  if (button === "yes") 
+  {
+    newDesign.save({success: function() {
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+  saveAsWindow.close();
+  Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+}, failure: function() {
+  Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+}});
+  } else {
+    saveAsWindow.close();
+  }
+});
+  }
+}});
 }, onAddRowAboveClick: function() {
   this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
 }, onAddRowBelowClick: function() {
@@ -75865,9 +76135,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   toastr.options.onclick = null;
   toastr.info("Design Saved");
 }, onImportEugeneRulesBtnClick: function() {
-}, onJumpToJ5Run: function(data) {
+}, onJumpToJ5Run: function(data, jump) {
   var design_id = data.devicedesign_id;
   var project_id = data.project_id;
+  console.log(design_id);
+  console.log(project_id);
   var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
   var self = this;
   var continueCode = function() {
@@ -75933,6 +76205,26 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     $("#" + field + " .status-note").removeClass("status-note-completed");
     $("#" + field + " .status-note").removeClass("status-note-warning");
     $("#" + field + " .status-note").addClass("status-note-failed");
+  } else if (status == "Canceled") 
+  {
+    field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
+    Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+    Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+    Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
+    Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
+    $("#" + field + " .status-note").removeClass("status-note-completed");
+    $("#" + field + " .status-note").removeClass("status-note-warning");
+    $("#" + field + " .status-note").addClass("status-note-failed");
+  } else if (status == "In progress") 
+  {
+    field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+    Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
+    Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');
+    Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
+    Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
+    $("#" + field + " .status-note").removeClass("status-note-completed");
+    $("#" + field + " .status-note").removeClass("status-note-warning");
+    $("#" + field + " .status-note").removeClass("status-note-failed");
   }
   var warnings = self.activeJ5Run.raw.warnings;
   var errors = self.activeJ5Run.raw.error_list[0];
@@ -76002,13 +76294,16 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
 }});
 };
-  project.designs().load({id: design_id, callback: function(loadedDesign) {
+  if (jump == true) 
+  {
+    project.designs().load({id: design_id, callback: function(loadedDesign) {
   Teselagen.manager.ProjectManager.workingProject = project;
   console.log(loadedDesign);
   console.log(design_id);
   var design = loadedDesign[0];
   Teselagen.manager.ProjectManager.openj5Report(design, continueCode);
 }});
+  }
 }, elapsedDate: function(seconds) {
   var numdays = Math.floor((seconds % 31536000) / 86400);
   var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
@@ -76039,7 +76334,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.application.on(this.DeviceEvent.SAVE_DESIGN, this.onDeviceEditorSaveEvent, this);
   this.application.on(this.DeviceEvent.LOAD_EUGENE_RULES, this.onLoadEugeneRulesEvent, this);
   this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.onJumpToJ5Run, this);
-  this.control({"button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {click: this.onDeviceEditorSaveEvent}, "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {click: this.onDeviceEditorClearBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {click: this.onDeviceEditorDeleteBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {click: this.onDeviceEditorRenameBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {click: this.onImportEugeneRulesBtnClick}, "button[cls='insertMenu'] > menu > menuitem[text='Row Above']": {click: this.onAddRowAboveClick}, "button[cls='insertMenu'] > menu > menuitem[text='Row Below']": {click: this.onAddRowBelowClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {click: this.onAddColumnLeftClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {click: this.onAddColumnRightClick}, "button[cls='editMenu'] > menu > menuitem[text='Undo']": {click: this.onUndoMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Redo']": {click: this.onRedoMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {click: this.onclearPartMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {click: this.onRemoveColumnMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Row']": {click: this.onRemoveRowMenuItemClick}, "button[cls='examplesMenu'] > menu > menuitem": {click: this.onOpenExampleItemBtnClick}, "button[cls='j5button']": {click: this.onJ5buttonClick}});
+  this.control({"button[cls='saveDeviceAsWindowOKButton']": {click: this.onSaveDeviceAsWindowOKBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {click: this.onDeviceEditorSaveEvent}, "button[cls='fileMenu'] > menu > menuitem[text='Save Design As']": {click: this.onDeviceEditorSaveAsBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {click: this.onDeviceEditorClearBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {click: this.onDeviceEditorDeleteBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {click: this.onDeviceEditorRenameBtnClick}, "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {click: this.onImportEugeneRulesBtnClick}, "button[cls='insertMenu'] > menu > menuitem[text='Row Above']": {click: this.onAddRowAboveClick}, "button[cls='insertMenu'] > menu > menuitem[text='Row Below']": {click: this.onAddRowBelowClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {click: this.onAddColumnLeftClick}, "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {click: this.onAddColumnRightClick}, "button[cls='editMenu'] > menu > menuitem[text='Undo']": {click: this.onUndoMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Redo']": {click: this.onRedoMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {click: this.onclearPartMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {click: this.onRemoveColumnMenuItemClick}, "button[cls='editMenu'] > menu > menuitem[text='Remove Row']": {click: this.onRemoveRowMenuItemClick}, "button[cls='examplesMenu'] > menu > menuitem": {click: this.onOpenExampleItemBtnClick}, "button[cls='j5button']": {click: this.onJ5buttonClick}});
   this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'DeviceEditorPanelController'], 0));
 ;
@@ -77895,7 +78190,22 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Teselagen.manager.ProjectManager.parts.clearFilter(true);
   var win = this.up("window");
   var grid = win.down("gridpanel[name='deviceEditorPartLibraryGrid']");
+  if (grid.timeoutId) 
+  {
+    clearTimeout(grid.timeoutId);
+    delete grid.timeoutId;
+  }
+  grid.timeoutId = setTimeout(function() {
+  if (grid.store.proxy.activeRequest) 
+  {
+    Ext.Ajax.abort(grid.store.proxy.activeRequest);
+    delete grid.store.proxy.activeRequest;
+  }
+  grid.store.clearFilter(true);
   grid.store.filter("name", Ext.String.escapeRegex(newValue));
+  if (!grid.store.proxy.activeRequest) 
+  grid.store.load();
+}, 200);
 }}}, {xtype: "gridpanel", flex: 1, name: "deviceEditorPartLibraryGrid", border: false, autoScroll: true, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true}], columns: [{xtype: 'gridcolumn', text: 'Name', width: 180, dataIndex: 'name'}, {xtype: 'gridcolumn', text: 'Start BP', width: 100, dataIndex: 'genbankStartBP'}, {xtype: 'gridcolumn', text: 'Stop BP', width: 100, dataIndex: 'endBP'}, {xtype: 'gridcolumn', text: 'Reverse?', dataIndex: 'revComp', width: 100, renderer: function(val) {
   val = String(val);
   val = val.charAt(0).toUpperCase() + val.slice(1);
@@ -78044,15 +78354,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     self.j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
     self.runj5Btn1.enable();
     self.runj5Btn1.removeCls("btnDisabled");
-    self.runj5Btn2.enable();
-    self.runj5Btn2.removeCls("btnDisabled");
     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
   } else {
     self.j5ReadyField.setFieldStyle("color:red");
     self.runj5Btn1.disable();
     self.runj5Btn1.addCls("btnDisabled");
-    self.runj5Btn2.disable();
-    self.runj5Btn2.addCls("btnDisabled");
     inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
   }
   if (combinatorial) 
@@ -78675,7 +78981,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
     this.combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
     this.runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
-    this.runj5Btn2 = newTab.down("button[cls='j5button']");
     this.partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
     this.openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
     this.changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
@@ -78974,9 +79279,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'J5ControlsUtils'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.j5Parameters', Ext.window.Window, {height: 690, maxHeight: 830, width: 845, maxWidth: 845, title: 'j5 Parameters', cls: 'j5Parameters_Window', autoScroll: true, modal: true, maximizable: false, resizable: true, initComponent: function() {
+(Ext.cmd.derive('Vede.view.de.j5Parameters', Ext.window.Window, {height: 760, maxHeight: 830, width: 845, maxWidth: 845, title: 'j5 Parameters', cls: 'j5Parameters_Window', autoScroll: true, modal: true, maximizable: false, resizable: true, initComponent: function() {
   var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'container', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'container', flex: 1, items: [{xtype: 'numberfield', cls: 'masterOligoNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Oligo Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'masterPlasmidNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Plasmid Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapBPsValue', padding: 3, fieldLabel: 'Gibson Overlap BPs (26)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMinTmValue', padding: 3, fieldLabel: 'Gibson Overlap Min Tm (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMaxTmValue', padding: 3, fieldLabel: 'Gibson Overlap Max Tm (70)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'maxOligoLengthBPsValue', padding: 3, fieldLabel: 'Maximum Num of Oligo BPs (110)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minFragmentSizeGibsonBPsValue', padding: 3, fieldLabel: 'Minimum Gibson Fragment Size BPs (250)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'goldenGateOverhangBPsValue', padding: 3, fieldLabel: 'Golden Gate Overhang BPs (4)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'textfield', cls: 'goldenGateRecognitionSeqValue', padding: 3, fieldLabel: 'Golden Gate Recognition Sequence (GGTCTC)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'textfield', cls: 'goldenGateTerminiExtraSeqValue', padding: 3, fieldLabel: 'Golden Gate Term Extra Seq (CACACCAGGTCTCA)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'numberfield', cls: 'maxIdentitiesGoldenGateOverhangsCompatibleValue', padding: 3, fieldLabel: 'Max Identities Golden Gate Overhangs (2)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'oligoSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Oligo Synthesis Cost Per BP (US) (0.1)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoPagePurificationCostPerPieceUSDValue', padding: 3, fieldLabel: 'Oligo Purification Cost Per Piece (US) (40)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoMaxLengthNoPagePurificationRequiredBPsValue', padding: 3, fieldLabel: 'Oligo Max Length No Page Purification (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minPCRProductBPsValue', padding: 3, fieldLabel: 'Minimum PCR Product BPs (100)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'directSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Cost Per BP (US) (0.39)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'directSynthesisMinCostPerPieceUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Min. Cost Per Piece (US) (159)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'combobox', cls: 'outputSequenceFormatValue', padding: 3, fieldLabel: 'Output Sequence Format (Genbank)', labelSeparator: ' ', labelWidth: 270, queryMode: 'local', store: ['Genbank', 'FASTA', 'jbei-seq', 'SBOLXML'], value: 'Genbank'}]}, {xtype: 'container', flex: 0.8, width: 370, items: [{xtype: 'numberfield', cls: 'primerGCClampValue', padding: 3, fieldLabel: 'Primer GC Clamp (2)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'primerMinSizeValue', padding: 3, fieldLabel: 'Primer Min Size (18)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSizeValue', padding: 3, fieldLabel: 'Primer Max Size (36)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMinTmValue', padding: 3, fieldLabel: 'Primer Min Tm (60)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxTmValue', padding: 3, fieldLabel: 'Primer Max Tm (70)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxDiffTmValue', padding: 3, fieldLabel: 'Primer Max Tm Diff (5)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfAnyThValue', padding: 3, fieldLabel: 'Primer Max Self Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfEndThValue', padding: 3, fieldLabel: 'Primer Max Self Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplAnyThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplEndThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'checkboxfield', cls: 'primerTmSantaluciaValue', padding: 3, fieldLabel: 'Primer Tm Santa Lucia (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'primerSaltCorrectionsValue', padding: 3, fieldLabel: 'Primer Salt Corrections (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'numberfield', cls: 'primerDnaConcValue', padding: 3, fieldLabel: 'Primer DNA Conc (250)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'mispriming3PrimeBoundaryBPToWarnIfHitValue', padding: 3, fieldLabel: 'MisPriming 3\' Boundary (4)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingMinTmValue', padding: 3, fieldLabel: 'MisPriming Min Tm (45)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingSaltConcValue', padding: 3, fieldLabel: 'MisPriming Salt Conc (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'misprimingOligoConcValue', padding: 3, fieldLabel: 'MisPriming Oligo Conc (2.5e-7)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 8, step: 1.0E-8, minValue: 0}, {xtype: 'checkboxfield', cls: 'suppressPurePrimersValue', padding: 3, fieldLabel: 'Suppress Pure Primers (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'numberfield', cls: 'homologyMinLengthBPS', padding: 3, fieldLabel: 'Homology Min Length BPS (26)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'homologyMaxFractionMisMatches', padding: 3, fieldLabel: 'Homology Max Fraction Mis matches (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}]}]}, {xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {type: 'absolute'}, items: [{xtype: 'combobox', cls: 'inWindowPresetSelector', fieldLabel: '<b>Parameters preset:</b>', labelCls: 'assembly-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', displayField: 'presetName', valueField: 'presetName', x: 0, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: ''}, {xtype: 'button', cls: 'saveAsPresetBtn', x: 360, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Save preset</b>'}, {xtype: 'button', cls: 'j5ParamsCancelBtn', x: 640, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'j5ParamsOKBtn', x: 730, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>OK</b>'}]}]});
+  Ext.applyIf(me, {items: [{xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'combobox', cls: 'inWindowPresetSelector', fieldLabel: '<b>Parameters Preset:</b>', labelCls: 'assembly-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 550, queryMode: 'local', displayField: 'presetName', valueField: 'presetName', x: 0, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: ''}, {xtype: 'button', cls: 'savePresetBtn', x: 360, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Save Preset</b>'}, {xtype: 'button', cls: 'deletePresetBtn', x: 440, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Delete Preset</b>'}, {xtype: 'button', cls: 'newPresetBtn', x: 530, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>New Preset</b>'}]}, {xtype: 'container', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'container', flex: 1, items: [{xtype: 'numberfield', cls: 'masterOligoNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Oligo Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'masterPlasmidNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Plasmid Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapBPsValue', padding: 3, fieldLabel: 'Gibson Overlap BPs (26)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMinTmValue', padding: 3, fieldLabel: 'Gibson Overlap Min Tm (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMaxTmValue', padding: 3, fieldLabel: 'Gibson Overlap Max Tm (70)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'maxOligoLengthBPsValue', padding: 3, fieldLabel: 'Maximum Num of Oligo BPs (110)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minFragmentSizeGibsonBPsValue', padding: 3, fieldLabel: 'Minimum Gibson Fragment Size BPs (250)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'goldenGateOverhangBPsValue', padding: 3, fieldLabel: 'Golden Gate Overhang BPs (4)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'textfield', cls: 'goldenGateRecognitionSeqValue', padding: 3, fieldLabel: 'Golden Gate Recognition Sequence (GGTCTC)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'textfield', cls: 'goldenGateTerminiExtraSeqValue', padding: 3, fieldLabel: 'Golden Gate Term Extra Seq (CACACCAGGTCTCA)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'numberfield', cls: 'maxIdentitiesGoldenGateOverhangsCompatibleValue', padding: 3, fieldLabel: 'Max Identities Golden Gate Overhangs (2)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'oligoSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Oligo Synthesis Cost Per BP (US) (0.1)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoPagePurificationCostPerPieceUSDValue', padding: 3, fieldLabel: 'Oligo Purification Cost Per Piece (US) (40)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoMaxLengthNoPagePurificationRequiredBPsValue', padding: 3, fieldLabel: 'Oligo Max Length No Page Purification (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minPCRProductBPsValue', padding: 3, fieldLabel: 'Minimum PCR Product BPs (100)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'directSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Cost Per BP (US) (0.39)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'directSynthesisMinCostPerPieceUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Min. Cost Per Piece (US) (159)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'combobox', cls: 'outputSequenceFormatValue', padding: 3, fieldLabel: 'Output Sequence Format (Genbank)', labelSeparator: ' ', labelWidth: 270, queryMode: 'local', store: ['Genbank', 'FASTA', 'jbei-seq', 'SBOLXML'], value: 'Genbank'}]}, {xtype: 'container', flex: 0.8, width: 370, items: [{xtype: 'numberfield', cls: 'primerGCClampValue', padding: 3, fieldLabel: 'Primer GC Clamp (2)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'primerMinSizeValue', padding: 3, fieldLabel: 'Primer Min Size (18)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSizeValue', padding: 3, fieldLabel: 'Primer Max Size (36)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMinTmValue', padding: 3, fieldLabel: 'Primer Min Tm (60)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxTmValue', padding: 3, fieldLabel: 'Primer Max Tm (70)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxDiffTmValue', padding: 3, fieldLabel: 'Primer Max Tm Diff (5)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfAnyThValue', padding: 3, fieldLabel: 'Primer Max Self Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfEndThValue', padding: 3, fieldLabel: 'Primer Max Self Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplAnyThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplEndThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'checkboxfield', cls: 'primerTmSantaluciaValue', padding: 3, fieldLabel: 'Primer Tm Santa Lucia (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'primerSaltCorrectionsValue', padding: 3, fieldLabel: 'Primer Salt Corrections (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'numberfield', cls: 'primerDnaConcValue', padding: 3, fieldLabel: 'Primer DNA Conc (250)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'mispriming3PrimeBoundaryBPToWarnIfHitValue', padding: 3, fieldLabel: 'MisPriming 3\' Boundary (4)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingMinTmValue', padding: 3, fieldLabel: 'MisPriming Min Tm (45)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingSaltConcValue', padding: 3, fieldLabel: 'MisPriming Salt Conc (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'misprimingOligoConcValue', padding: 3, fieldLabel: 'MisPriming Oligo Conc (2.5e-7)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 8, step: 1.0E-8, minValue: 0}, {xtype: 'checkboxfield', cls: 'suppressPurePrimersValue', padding: 3, fieldLabel: 'Suppress Pure Primers (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'suppressPrimerAnnotationsValue', padding: 3, fieldLabel: 'Suppress Primer Annotations (disabled)', labelSeparator: ' ', labelWidth: 200, checked: false}, {xtype: 'numberfield', cls: 'homologyMinLengthBPS', padding: 3, fieldLabel: 'Homology Min Length BPS (26)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'homologyMaxFractionMisMatches', padding: 3, fieldLabel: 'Homology Max Fraction Mis matches (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}]}]}, {xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'j5ParamsCancelBtn', x: 640, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'j5ParamsOKBtn', x: 730, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>OK</b>'}]}]});
   me.callParent(arguments);
   me.center();
   me.on("maximize", function(me) {
@@ -78985,10 +79290,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   me.on("restore", function(me) {
   me.center();
 });
-}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5Parameters'], 0));
+}}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, ["j5ParametersWindow"], 0, [Vede.view.de, 'j5Parameters'], 0));
 ;
 
-(Ext.cmd.derive('Vede.controller.DeviceEditor.J5Controller', Ext.app.Controller, {DeviceDesignManager: null, J5ControlsUtils: null, j5Window: null, j5ParamsWindow: null, automationParamsWindow: null, inspector: null, previousJ5ParameterData: null, j5Parameters: null, j5ParameterFields: [], automationParameters: null, automationParameterFields: [], plasmidsListText: null, oligosListText: null, directSynthesesListText: null, onOpenJ5: function() {
+(Ext.cmd.derive('Vede.controller.DeviceEditor.J5Controller', Ext.app.Controller, {DeviceDesignManager: null, J5ControlsUtils: null, j5Window: null, j5ParamsWindow: null, automationParamsWindow: null, inspector: null, tasksWindow: null, previousJ5ParameterData: null, j5Parameters: null, j5ParameterFields: [], automationParameters: null, automationParameterFields: [], plasmidsListText: null, oligosListText: null, directSynthesesListText: null, j5Running: false, onOpenJ5: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var currentTabEl = (currentTab.getEl());
   var inspector = currentTab.down('InspectorPanel');
@@ -79055,12 +79360,13 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var selectedPreset = currentTab.presetsStore.findRecord('presetName', newPreset);
   currentTab.selectedPreset = selectedPreset;
-  if (newPreset == "Default") 
+  if (newPreset && newPreset == "Default") 
   {
     this.j5Parameters.setDefaultValues();
     currentTab.selectedPreset = selectedPreset;
     if (self.j5ParamsWindow) 
     self.populateJ5ParametersDialog();
+    self.disablePresetOptions();
     return null;
   }
   var selectedParameters = selectedPreset.get('j5parameters');
@@ -79071,6 +79377,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     }
   if (self.j5ParamsWindow) 
   self.populateJ5ParametersDialog();
+  self.disablePresetOptions();
 }, onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
   var self = this;
   if (newTab.initialCls == "DeviceEditorTab") 
@@ -79083,6 +79390,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
     }
     self.loadPresetsSelector();
+  }
+  if (this.j5Running) 
+  {
+    this.disableAllJ5RunButtons(true);
+  } else {
+    this.enableALLJ5RunButtons();
   }
 }, onTabChange: function(j5AdvancedTab, newTab, oldTab) {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -79171,8 +79484,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.j5Parameters.set(this.previousJ5ParameterData);
   this.j5ParamsWindow.close();
 }, onj5ParamsOKBtnClick: function() {
-  this.saveJ5Parameters();
-  this.j5ParamsWindow.close();
+  var self = this;
+  this.savePresetBtnClick(function() {
+  self.saveJ5Parameters();
+  self.j5ParamsWindow.close();
+});
 }, onCondenseAssemblyFilesSelectorChange: function(me, value) {
   var condenseAssemblyFiles = me.button.fileInputEl.dom;
   var fr = new FileReader();
@@ -79440,6 +79756,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
   inspector.j5comm = Teselagen.manager.J5CommunicationManager;
   inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod, design.get("isCircular"));
+  this.j5Running = true;
+  this.disableAllJ5RunButtons();
   Vede.application.fireEvent(this.DeviceEvent.SAVE_DESIGN, function() {
   if (!Teselagen.manager.TasksMonitor.disabled) 
   {
@@ -79450,6 +79768,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     toastr.options.onclick = null;
     toastr.info("j5 Run Submitted");
+    this.tasksWindow = Ext.getCmp('taskMonitor').expand();
+    this.tasksWindow.down('gridpanel').reconfigure(Teselagen.manager.ProjectManager.currentTasks);
   } else {
     var messagebox = Ext.MessageBox.show({title: "Execution Error", msg: responseData, buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
     Ext.Function.defer(function() {
@@ -79458,6 +79778,40 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 });
 });
+}, disableAllJ5RunButtons: function(skipAppendLoader) {
+  var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+  buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+  var button;
+  if (!skipAppendLoader) 
+  {
+    $("<div class='loader-mini rspin-mini'><span class='c'></span><span class='d-mini spin-mini'><span class='e'></span></span><span class='r-mini r1-mini'></span><span class='r-mini r2-mini'></span><span class='r-mini r3-mini'></span><span class='r-mini r4-mini'></span></div>").appendTo(".runj5Btn span span span");
+  }
+  for (var i = 0; i < buttonsToDisable.length; i++) 
+    {
+      button = buttonsToDisable[i];
+      button.disable();
+      if (button.cls === "runj5Btn") 
+      {
+        button.setText("Running j5...");
+      }
+    }
+}, enableALLJ5RunButtons: function() {
+  var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
+  buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
+  var button;
+  for (var i = 0; i < buttonsToEnable.length; i++) 
+    {
+      button = buttonsToEnable[i];
+      button.enable();
+      if (button.cls === "runj5Btn") 
+      {
+        button.setText("Submit Run to j5");
+        if (button.el) 
+        {
+          $(button.el.dom).find(".loader-mini").remove();
+        }
+      }
+    }
 }, onDistributePCRBtn: function() {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
@@ -79526,8 +79880,51 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (counter === 0 && typeof (cb) === "function") 
   cb();
 }, this);
-}, saveAsPresetBtn: function() {
+  if (this.j5ParamsWindow) 
+  {
+    var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+    currentTab.down("InspectorPanel").down('component[cls="presetSelector"]').setValue(this.j5ParamsWindow.down('component[cls="inWindowPresetSelector"]').getValue());
+  }
+}, disablePresetOptions: function() {
+  var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+  var selectedPreset = currentTab.selectedPreset;
+  var savePreset = Ext.ComponentQuery.query("component[cls='savePresetBtn']")[0];
+  var deletePreset = Ext.ComponentQuery.query("component[cls='deletePresetBtn']")[0];
+  var newPreset = Ext.ComponentQuery.query("component[cls='newPresetBtn']")[0];
+  if (selectedPreset && selectedPreset.get('presetName') !== "Default") 
+  {
+    if (savePreset) 
+    savePreset.enable();
+    if (deletePreset) 
+    deletePreset.enable();
+    if (newPreset) 
+    newPreset.enable();
+  } else if (selectedPreset && selectedPreset.get('presetName') === "Default") 
+  {
+    if (savePreset) 
+    savePreset.disable();
+    if (deletePreset) 
+    deletePreset.disable();
+    if (newPreset) 
+    newPreset.enable();
+  } else {
+    if (savePreset) 
+    savePreset.disable();
+    if (deletePreset) 
+    deletePreset.disable();
+    if (newPreset) 
+    newPreset.enable();
+  }
+}, savePresetBtnClick: function(cb) {
   var self = this;
+  var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+  var selectedPreset = currentTab.selectedPreset;
+  console.log(selectedPreset);
+  if (!selectedPreset || selectedPreset.get('presetName') === "Default") 
+  {
+    console.log("No preset selected");
+    return false;
+  }
   var parameters = {};
   this.j5Parameters.fields.eachKey(function(key) {
   if (key !== "id" && key !== "j5run_id") 
@@ -79535,33 +79932,60 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
   }
 }, this);
-  var createPreset = function() {
-  Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn, text) {
-  if (btn !== "ok") 
-  return null;
-  Ext.Ajax.request({method: 'POST', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {presetName: text, j5parameters: JSON.stringify(parameters)}, success: function(response) {
+  Ext.Ajax.request({method: 'PUT', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {id: selectedPreset.data.id, j5parameters: JSON.stringify(parameters)}, success: function(response) {
+  Ext.MessageBox.alert('Success', 'Preset updated', function() {
+  Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, selectedPreset.get('presetName'));
+  if (typeof (cb) == "function") 
+  cb();
+});
+}});
+}, deletePresetBtnClick: function() {
+  var self = this;
+  var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+  var selectedPreset = currentTab.selectedPreset;
+  if (!selectedPreset || selectedPreset.get('presetName') === "Default") 
+  {
+    console.log("No preset selected");
+    return false;
+  }
+  Ext.MessageBox.show({title: 'Delete preset?', msg: selectedPreset.get('presetName'), buttons: Ext.MessageBox.YESNO, buttonText: {yes: "Delete", no: "Cancel"}, fn: function(btn) {
+  if (btn === "yes") 
+  {
+    Ext.Ajax.request({method: 'DELETE', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {id: selectedPreset.data.id}, success: function(response) {
+  Ext.MessageBox.alert('Success', 'Preset deleted', function() {
+  Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, "");
+});
+}});
+  }
+}});
+}, newPresetBtnClick: function() {
+  var self = this;
+  var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+  var selectedPreset = currentTab.selectedPreset;
+  console.log("Trying to create new preset");
+  var parameters = {};
+  this.j5Parameters.fields.eachKey(function(key) {
+  if (key !== "id" && key !== "j5run_id") 
+  {
+    parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
+  }
+}, this);
+  function performCreation(text) {
+    Ext.Ajax.request({method: 'POST', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {presetName: text, j5parameters: JSON.stringify(parameters)}, success: function(response) {
   Ext.MessageBox.alert('Success', 'Preset saved', function() {
   Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, text);
 });
 }});
+  }
+  var promptName = function() {
+  Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn, text) {
+  if (btn !== "ok") 
+  return null;
+  if (text == "") 
+  promptName(); else performCreation(text);
 }, this);
 };
-  var editPreset = function(selectedPreset) {
-  Ext.Ajax.request({method: 'PUT', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {id: selectedPreset.data.id, j5parameters: JSON.stringify(parameters)}, success: function(response) {
-  Ext.MessageBox.alert('Success', 'Preset updated', function() {
-  Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, selectedPreset.get('presetName'));
-});
-}});
-};
-  var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-  if (currentTab.selectedPreset) 
-  {
-    var selectedPreset = currentTab.selectedPreset;
-    Ext.MessageBox.show({title: 'Update preset?', msg: selectedPreset.get('presetName'), buttons: Ext.MessageBox.YESNO, buttonText: {yes: "Update", no: "Create new"}, fn: function(btn) {
-  if (btn === "yes") 
-  editPreset(selectedPreset); else createPreset();
-}});
-  } else createPreset();
+  promptName();
 }, onDownloadj5Btn: function(button, e, options) {
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
@@ -79617,13 +80041,20 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
   var inspector = currentTab.down('InspectorPanel');
   inspector.j5comm.downloadCondenseAssemblyResults(button);
+}, onj5StatusChange: function(status) {
+  if (status == false) 
+  {
+    this.j5Running = false;
+    this.enableALLJ5RunButtons();
+  }
 }, init: function() {
   this.CommonEvent = Teselagen.event.CommonEvent;
   this.DeviceEvent = Teselagen.event.DeviceEvent;
-  this.control({"#mainAppPanel": {tabchange: this.onMainAppPanelTabChange}, "panel[cls='j5InfoTab-Sub-Advanced']": {tabchange: this.onTabChangeSub}, "panel[cls='j5InfoTab-Sub']": {tabchange: this.onTabChange}, "button[cls='editj5ParamsBtn']": {click: this.onEditJ5ParamsBtnClick}, "button[cls='resetj5DefaultParamsBtn']": {click: this.resetDefaultj5Params}, "button[cls='resetj5ServerParamsBtn']": {click: this.resetServerj5Params}, "button[cls='saveAsPresetBtn']": {click: this.saveAsPresetBtn}, "button[cls='j5ParamsCancelBtn']": {click: this.onj5ParamsCancelBtnClick}, "button[cls='j5ParamsOKBtn']": {click: this.onj5ParamsOKBtnClick}, "radio[cls='useServerPlasmidsRadioBtn']": {change: this.onUseServerPlasmidsRadioBtnChange}, "radio[cls='useEmptyPlasmidsRadioBtn']": {change: this.onUseEmptyPlasmidsRadioBtnChange}, "component[cls='plasmidsListFileSelector']": {change: this.onPlasmidsListFileSelectorChange}, "radio[cls='useServerOligosRadioBtn']": {change: this.onUseServerOligosRadioBtnChange}, "radio[cls='useEmptyOligosRadioBtn']": {change: this.onUseEmptyOligosRadioBtnChange}, "component[cls='oligosListFileSelector']": {change: this.onOligosListFileSelectorChange}, "radio[cls='useServerSynthesesRadioBtn']": {change: this.onUseServerSynthesesRadioBtnChange}, "radio[cls='useEmptySynthesesRadioBtn']": {change: this.onUseEmptySynthesesRadioBtnChange}, "component[cls='directSynthesesFileSelector']": {change: this.onDirectSynthesesFileSelectorChange}, "button[cls='customizeAutomationParamsBtn']": {click: this.onCustomizeAutomationParamsBtnClick}, "button[cls='runj5Btn']": {click: this.onRunJ5BtnClick}, "button[cls='loadAssemblyBtn']": {click: this.onLoadAssemblyBtnClick}, "button[cls='automationParamsCancelBtn']": {click: this.onAutomationParamsCancelClick}, "button[cls='automationParamsOKBtn']": {click: this.onAutomationParamsOKClick}, "button[cls='automationParamsResetBtn']": {click: this.onResetAutomationParamsBtnClick}, "button[cls='downloadj5Btn']": {click: this.onDownloadj5Btn}, "button[cls='downloadDownstreamAutomationBtn']": {click: this.onDownloadDownstreamAutomationBtn}, "component[cls='sourcePlateListSelector']": {change: this.onSourcePlateListFileSelectorChange}, "component[cls='zippedPlateFilesSelector']": {change: this.onZippedPlateFilesSelectorChange}, "component[cls='assemblyFileSelector']": {change: this.onAssemblyFileSelectorChange}, "button[cls='distributePCRBtn']": {click: this.onDistributePCRBtn}, "gridpanel[title=Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='condenseAssembliesBtn']": {click: this.onCondenseAssembliesBtnClick}, "component[cls='condenseAssemblyFilesSelector']": {change: this.onCondenseAssemblyFilesSelectorChange}, "component[cls='zippedAssemblyFilesSelector']": {change: this.onZippedAssemblyFilesSelectorChange}, "button[cls='downloadCondenseAssemblyResultsBtn']": {click: this.onDownloadCondenseAssemblyResultsBtnClick}, "button[cls='stopj5runBtn']": {click: this.abortJ5Run}, "component[cls='presetSelector']": {change: this.presetSelectorChange}, "component[cls='inWindowPresetSelector']": {change: this.presetSelectorChange}});
+  this.control({"#mainAppPanel": {tabchange: this.onMainAppPanelTabChange}, "panel[cls='j5InfoTab-Sub-Advanced']": {tabchange: this.onTabChangeSub}, "panel[cls='j5InfoTab-Sub']": {tabchange: this.onTabChange}, "button[cls='editj5ParamsBtn']": {click: this.onEditJ5ParamsBtnClick}, "button[cls='resetj5DefaultParamsBtn']": {click: this.resetDefaultj5Params}, "button[cls='resetj5ServerParamsBtn']": {click: this.resetServerj5Params}, "button[cls='savePresetBtn']": {click: this.savePresetBtnClick}, "button[cls='deletePresetBtn']": {click: this.deletePresetBtnClick}, "button[cls='newPresetBtn']": {click: this.newPresetBtnClick}, "button[cls='j5ParamsCancelBtn']": {click: this.onj5ParamsCancelBtnClick}, "button[cls='j5ParamsOKBtn']": {click: this.onj5ParamsOKBtnClick}, "radio[cls='useServerPlasmidsRadioBtn']": {change: this.onUseServerPlasmidsRadioBtnChange}, "radio[cls='useEmptyPlasmidsRadioBtn']": {change: this.onUseEmptyPlasmidsRadioBtnChange}, "component[cls='plasmidsListFileSelector']": {change: this.onPlasmidsListFileSelectorChange}, "radio[cls='useServerOligosRadioBtn']": {change: this.onUseServerOligosRadioBtnChange}, "radio[cls='useEmptyOligosRadioBtn']": {change: this.onUseEmptyOligosRadioBtnChange}, "component[cls='oligosListFileSelector']": {change: this.onOligosListFileSelectorChange}, "radio[cls='useServerSynthesesRadioBtn']": {change: this.onUseServerSynthesesRadioBtnChange}, "radio[cls='useEmptySynthesesRadioBtn']": {change: this.onUseEmptySynthesesRadioBtnChange}, "component[cls='directSynthesesFileSelector']": {change: this.onDirectSynthesesFileSelectorChange}, "button[cls='customizeAutomationParamsBtn']": {click: this.onCustomizeAutomationParamsBtnClick}, "button[cls='runj5Btn']": {click: this.onRunJ5BtnClick}, "button[cls='loadAssemblyBtn']": {click: this.onLoadAssemblyBtnClick}, "button[cls='automationParamsCancelBtn']": {click: this.onAutomationParamsCancelClick}, "button[cls='automationParamsOKBtn']": {click: this.onAutomationParamsOKClick}, "button[cls='automationParamsResetBtn']": {click: this.onResetAutomationParamsBtnClick}, "button[cls='downloadj5Btn']": {click: this.onDownloadj5Btn}, "button[cls='downloadDownstreamAutomationBtn']": {click: this.onDownloadDownstreamAutomationBtn}, "component[cls='sourcePlateListSelector']": {change: this.onSourcePlateListFileSelectorChange}, "component[cls='zippedPlateFilesSelector']": {change: this.onZippedPlateFilesSelectorChange}, "component[cls='assemblyFileSelector']": {change: this.onAssemblyFileSelectorChange}, "button[cls='distributePCRBtn']": {click: this.onDistributePCRBtn}, "gridpanel[title=Plasmids]": {itemclick: this.onPlasmidsItemClick}, "button[cls='condenseAssembliesBtn']": {click: this.onCondenseAssembliesBtnClick}, "component[cls='condenseAssemblyFilesSelector']": {change: this.onCondenseAssemblyFilesSelectorChange}, "component[cls='zippedAssemblyFilesSelector']": {change: this.onZippedAssemblyFilesSelectorChange}, "button[cls='downloadCondenseAssemblyResultsBtn']": {click: this.onDownloadCondenseAssemblyResultsBtnClick}, "button[cls='stopj5runBtn']": {click: this.abortJ5Run}, "component[cls='presetSelector']": {change: this.presetSelectorChange}, "component[cls='inWindowPresetSelector']": {change: this.presetSelectorChange}});
   this.application.on(this.CommonEvent.RUN_J5, this.onRunJ5Event, this);
   this.application.on(this.CommonEvent.LOAD_ASSEMBLY_METHODS, this.loadAssemblyMethodSelector, this);
   this.application.on(this.CommonEvent.LOAD_PRESETS, this.loadPresetsSelector, this);
+  this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.onj5StatusChange, this);
   this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
   this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
   this.j5Parameters = Ext.create("Teselagen.models.J5Parameters");
@@ -79633,6 +80064,340 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.combinatorialStore = new Ext.data.ArrayStore({fields: ['assemblyMethod'], data: [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]});
   this.nonCombinatorialStore = new Ext.data.ArrayStore({fields: ['assemblyMethod'], data: [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller.DeviceEditor, 'J5Controller'], 0));
+;
+
+(Ext.cmd.derive('Teselagen.utils.DeXmlUtils', Ext.Base, {singleton: true, constructor: function() {
+  XmlToJson = Teselagen.bio.util.XmlToJson;
+}, generateUUID: function() {
+  var uuid = "", i, random;
+  for (i = 0; i < 32; i++) 
+    {
+      random = Math.random() * 16 | 0;
+      if (i == 8 || i == 12 || i == 16 || i == 20) 
+      {
+        uuid += "-";
+      }
+      uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+    }
+  return uuid;
+}, formatXml: function(xml) {
+  var formatted = '';
+  var reg = /(>)(<)(\/*)/g;
+  xml = xml.replace(reg, '$1\r\n$2$3');
+  var pad = 0;
+  jQuery.each(xml.split('\r\n'), function(index, node) {
+  var indent = 0;
+  if (node.match(/.+<\/\w[^>]*>$/)) 
+  {
+    indent = 0;
+  } else if (node.match(/^<\/\w/)) 
+  {
+    if (pad != 0) 
+    {
+      pad -= 1;
+    }
+  } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) 
+  {
+    indent = 1;
+  } else {
+    indent = 0;
+  }
+  var padding = '';
+  for (var i = 0; i < pad; i++) 
+    {
+      padding += '  ';
+    }
+  formatted += padding + node + '\r\n';
+  pad += indent;
+});
+  return formatted;
+}, deXmlToJson: function(xmlStr) {
+  var result = {};
+  var json = XmlToJson.xml_str2json(xmlStr);
+  json = this.validateRawDeJson(json);
+  if (json["design"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No root or record tag 'design'"});
+  }
+  var schema = json["design"]["_xsi:schemaLocation"];
+  var xmlns = json["design"]["_xmlns:de"];
+  var xsi = json["design"]["_xmlns:xsi"];
+  var version = parseInt(json["design"]["version"]["__text"]);
+  var seqFiles = [];
+  var seq = json["design"]["sequenceFiles"]["sequenceFile_asArray"];
+  for (var i = 0; i < seq.length; i++) 
+    {
+      var hash = seq[i]["_hash"];
+      var format = seq[i]["format"]["__text"];
+      var content = seq[i]["content"]["__cdata"];
+      var filename = seq[i]["fileName"]["__text"];
+      seqFiles.push({"hash": hash, "de:format": format, "de:content": content, "de:fileName": filename});
+    }
+  var partVOs = [];
+  var part = json["design"]["partVOs"]["partVO_asArray"];
+  for (i = 0; i < part.length; i++) 
+    {
+      var id = parseInt(part[i]["_id"]);
+      var name = part[i]["name"]["__text"];
+      var revComp = (part[i]["revComp"]["__text"] === "true");
+      var startBP = parseInt(part[i]["startBP"]["__text"]);
+      var stopBP = parseInt(part[i]["stopBP"]["__text"]);
+      var seqFileHash = part[i]["sequenceFileHash"]["__text"];
+      var parts = [];
+      var ptId = parseInt(part[i]["parts"]["part"]["_id"]) || "";
+      var fas = part[i]["parts"]["part"]["fas"]["__text"] || "";
+      parts = {"id": ptId, "de:fas": fas};
+      partVOs.push({"id": id, "de:name": name, "de:revComp": revComp, "de:startBP": startBP, "de:stopBP": stopBP, "de:sequenceFileHash": seqFileHash, "de:parts": {"de:part": parts}});
+    }
+  var eugene = [];
+  var eug = json["design"]["eugeneRules"]["eugeneRule_asArray"];
+  for (i = 0; i < eug.length; i++) 
+    {
+      var name = eug[i]["name"]["__text"];
+      var negOp = (eug[i]["negationOperator"]["__text"] === "true");
+      var op1ID = parseInt(eug[i]["operand1ID"]["__text"]);
+      var compOp = eug[i]["compositionalOperator"]["__text"];
+      var op2ID = parseInt(eug[i]["operand2ID"]["__text"]);
+      eugene.push({"de:name": name, "de:negationOperator": negOp, "de:operand1ID": op1ID, "de:compositionalOperator": compOp, "de:operand2ID": op2ID});
+    }
+  var j5Bins = [];
+  var j5isCirc = (json["design"]["j5Collection"]["isCircular"]["__text"] === "true");
+  var j5 = json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"];
+  for (i = 0; i < j5.length; i++) 
+    {
+      var binName = j5[i]["binName"]["__text"];
+      var iconID = j5[i]["iconID"]["__text"];
+      var direction = j5[i]["direction"]["__text"];
+      var dsf = (j5[i]["dsf"]["__text"] === "true");
+      var binItems = [];
+      var bin = j5[i]["binItems"]["partID_asArray"];
+      for (var j = 0; j < bin.length; j++) 
+        {
+          binItems.push(parseInt(bin[j]["__text"]));
+        }
+      j5Bins.push({"de:binName": binName, "de:iconID": iconID, "de:direction": direction, "de:dsf": dsf, "de:binItems": {"de:partID": binItems}});
+    }
+  result = {"de:design": {"xsi:schemaLocation": schema, "xmlns:de": xmlns, "xmlns:xsi": xsi, "de:version": version, "de:sequenceFiles": {"de:sequenceFile": seqFiles}, "de:partVOs": {"de:partVO": partVOs}, "de:eugeneRules": {"eugeneRule": eugene}, "de:j5Collection": {"de:isCircular": j5isCirc, "de:j5Bins": {"de:j5Bin": j5Bins}}}};
+  return result;
+}, validateRawDeJson: function(json) {
+  var i, j;
+  if (json["design"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No root or record tag 'design'"});
+  }
+  if (json["design"]["_xsi:schemaLocation"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No xsi:schemaLocation key.");
+    json["design"]["_xsi:schemaLocation"] = "http://jbei.org/device_editor design.xsd";
+  }
+  if (json["design"]["_xmlns:de"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No xmlns:de key.");
+    json["design"]["_xmlns:de"] = "http://jbei.org/device_editor";
+  }
+  if (json["design"]["_xmlns:xsi"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No xmlns:xsi key.");
+    json["design"]["_xmlns:xsi"] = "http://www.w3.org/2001/XMLSchema-instance";
+  }
+  if (json["design"]["version"]["__text"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No version.");
+    json["design"]["version"] = {"__text": ""};
+  }
+  if (json["design"]["sequenceFiles"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No sequence"});
+    json["design"] = {"sequenceFiles": {"sequenceFile_asArray": []}};
+  }
+  if (json["design"]["sequenceFiles"]["sequenceFile_asArray"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No sequence"});
+  }
+  var seq = json["design"]["sequenceFiles"]["sequenceFile_asArray"];
+  for (i = 0; i < seq.length; i++) 
+    {
+      if (seq[i]["_hash"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No hash.");
+        json["design"]["sequenceFiles"]["sequenceFile_asArray"][i] = {"_hash": ""};
+      }
+      if (seq[i]["format"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No format.");
+        json["design"]["sequenceFiles"]["sequenceFile_asArray"][i] = {"format": {"__text": ""}};
+      }
+      if (seq[i]["content"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No content.");
+        json["design"]["sequenceFiles"]["sequenceFile_asArray"][i] = {"content": {"__cdata": ""}};
+      }
+      if (seq[i]["fileName"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No fileName.");
+        json["design"]["sequenceFiles"]["sequenceFile_asArray"][i] = {"fileName": {"__text": ""}};
+      }
+    }
+  if (json["design"]["partVOs"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No partVOs"});
+    json["design"] = {"partVOs": {"partVO_asArray": []}};
+  }
+  if (json["design"]["partVOs"]["partVO_asArray"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No partVOs array"});
+  }
+  var part = json["design"]["partVOs"]["partVO_asArray"];
+  for (i = 0; i < part.length; i++) 
+    {
+      if (part[i]["_id"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No part id.");
+        json["design"]["partVOs"]["partVO_asArray"][i] = {"_id": ""};
+      }
+      if (part[i]["name"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No part name.");
+        json["design"]["partVOs"]["partVO_asArray"][i] = {"name": {"__text": ""}};
+      }
+      if (part[i]["revComp"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No part revComp.");
+        json["design"]["partVOs"]["partVO_asArray"][i] = {"revComp": {"__text": ""}};
+      }
+      if (part[i]["startBP"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No part startBP.");
+        json["design"]["partVOs"]["partVO_asArray"][i] = {"startBP": {"__text": ""}};
+      }
+      if (part[i]["stopBP"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No part stopBP.");
+        json["design"]["partVOs"]["partVO_asArray"][i] = {"stopBP": {"__text": ""}};
+      }
+      if (part[i]["sequenceFileHash"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No part sequenceFileHash.");
+        json["design"]["partVOs"]["partVO_asArray"][i] = {"sequenceFileHash": {"__text": ""}};
+      }
+      var pt = part[i]["parts"]["part_asArray"];
+      for (j = 0; j < pt.length; j++) 
+        {
+          if (pt[j]["_id"] === undefined) 
+          {
+            console.warn("validateDeXml2Json: No parts id.");
+            json["design"]["partVOs"]["partVO_asArray"][i]["parts"]["part_asArray"][j] = {"_id": ""};
+          }
+          if (pt[j]["fas"] === undefined) 
+          {
+            console.warn("validateDeXml2Json: No parts id.");
+            json["design"]["partVOs"]["partVO_asArray"][i]["parts"]["part_asArray"][j] = {"fas": {"__text": ""}};
+          }
+        }
+    }
+  if (json["design"]["eugeneRules"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No eugeneRules.");
+    json["design"] = {"eugenRules": {"eugeneRule_asArray": []}};
+  }
+  if (json["design"]["eugeneRules"]["eugeneRule_asArray"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No eugeneRules-- eugenRule_asArray.");
+    json["design"]["eugeneRules"] = {"eugeneRule_asArray": []};
+  }
+  var eug = json["design"]["eugeneRules"]["eugeneRule_asArray"];
+  for (i = 0; i < eug.length; i++) 
+    {
+      if (eug[i]["name"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No eugene name.");
+        json["design"]["eugeneRules"]["eugeneRule_asArray"][i] = {"name": {"__text": ""}};
+      }
+      if (eug[i]["negationOperator"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No eugene negationOperator.");
+        json["design"]["eugeneRules"]["eugeneRule_asArray"][i] = {"negationOperator": {"__text": ""}};
+      }
+      if (eug[i]["operand1ID"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No eugene operand1ID.");
+        json["design"]["eugeneRules"]["eugeneRule_asArray"][i] = {"operand1ID": {"__text": ""}};
+      }
+      if (eug[i]["compositionalOperator"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No eugene compositionalOperator.");
+        json["design"]["eugeneRules"]["eugeneRule_asArray"][i] = {"compositionalOperator": {"__text": ""}};
+      }
+      if (eug[i]["operand2ID"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No eugene operand2ID.");
+        json["design"]["eugeneRules"]["eugeneRule_asArray"][i] = {"operand2ID": {"__text": ""}};
+      }
+    }
+  if (json["design"]["j5Collection"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No j5Collection"});
+  }
+  if (json["design"]["j5Collection"]["j5Bins"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No j5Collection j5Bins"});
+  }
+  if (json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"] === undefined) 
+  {
+    throw Ext.create("Teselagen.bio.BioException", {message: "Invalid DE-XML file. No j5Collection-j5Bins-j5Bin as array"});
+    json["design"]["j5Collection"]["j5Bins"] = {"j5Bin_asArray": []};
+  }
+  if (json["design"]["j5Collection"]["isCircular"] === undefined) 
+  {
+    console.warn("validateDeXml2Json: No j5Collection isCircular.");
+    json["design"]["j5Collection"] = {"isCircular": {"__text": ""}};
+  }
+  var j5 = json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"];
+  for (i = 0; i < j5.length; i++) 
+    {
+      var binName = j5[i]["binName"]["__text"];
+      var iconID = j5[i]["iconID"]["__text"];
+      var direction = j5[i]["direction"]["__text"];
+      var dsf = (j5[i]["dsf"]["__text"] === "true");
+      if (j5[i]["binName"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No j5Collection binName.");
+        json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"][i]["binName"]["__text"] = "";
+      }
+      if (j5[i]["iconID"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No j5Collection iconID.");
+        json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"][i]["iconID"]["__text"] = "";
+      }
+      if (j5[i]["direction"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No j5Collection direction.");
+        json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"][i]["direction"]["__text"] = "";
+      }
+      if (j5[i]["dsf"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No j5Collection dsf.");
+        json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"][i]["dsf"]["__text"] = "";
+      }
+      if (j5[i]["binItems"]["partID_asArray"] === undefined) 
+      {
+        console.warn("validateDeXml2Json: No j5Collection binItem PartID.");
+        json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"][i]["binItem"]["partID_asArray"] = [];
+      }
+      var bin = j5[i]["binItems"]["partID_asArray"];
+      for (j = 0; j < bin.length; j++) 
+        {
+          if (bin[j]["__text"] === undefined) 
+          {
+            console.warn("validateDeXml2Json: No j5Collection binItem.");
+            json["design"]["j5Collection"]["j5Bins"]["j5Bin_asArray"][i]["binItems"]["partID_asArray"][j]["__text"] = "";
+          }
+        }
+    }
+  return json;
+}, validateDeJson: function(json) {
+  var isValid = false;
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.utils, 'DeXmlUtils'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.manager.DeviceDesignExporterManager', Ext.Base, {singleton: true, saveToFile: function(fileName, fileContent) {
@@ -79647,6 +80412,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, generateObject: function(design, cb) {
   var json = {};
   json["de:j5Collection"] = {};
+  json["de:j5Collection"]["de:isCircular"] = design.get("isCircular");
   json["de:j5Collection"]["de:j5Bins"] = {};
   json["de:partVOs"] = {};
   json["de:sequenceFiles"] = {};
@@ -79659,6 +80425,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   design.bins().each(function(bin, binKey) {
   var jsonBin = {};
   jsonBin = {};
+  jsonBin.id = Teselagen.utils.DeXmlUtils.generateUUID();
   jsonBin["de:binName"] = bin.get("binName");
   jsonBin["de:iconID"] = bin.get("iconID");
   jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
@@ -79697,6 +80464,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       jsonPart["de:startBP"] = part.get("genbankStartBP");
       jsonPart["de:stopBP"] = part.get("endBP");
       jsonPart["de:sequenceFileHash"] = sequence.get("hash");
+      jsonPart["de:sequenceFileID"] = sequence.get("id");
       jsonPart["de:parts"] = {};
       jsonPart["de:parts"]["de:part"] = {};
       jsonPart["de:parts"]["de:part"].id = part.internalId;
@@ -79704,6 +80472,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       jsonPart["de:parts"]["de:part"]["de:fas"] = partFasAssocArray[part.internalId];
       parts.push(jsonPart);
       var jsonSequence = {};
+      jsonSequence.id = sequence.get("id");
       jsonSequence.hash = sequence.get("hash");
       jsonSequence["de:format"] = sequence.get("sequenceFileFormat");
       jsonSequence["de:content"] = sequence.get("sequenceFileContent");
@@ -79757,56 +80526,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var self = this;
   this.generateObject(deproject, function(json) {
   var fileName = deproject.get("name") + ".xml";
-  var namespaceURI = "https://www.teselagen.com";
+  var namespaceURI = "http://www.teselagen.com";
   var doc = document.implementation.createDocument(namespaceURI, "de:design", null);
-  var j5Collection = doc.documentElement.appendChild(doc.createElement("de:j5Collection"));
-  var j5Bins = j5Collection.appendChild(doc.createElement("de:j5Bins"));
-  json["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].forEach(function(bin) {
-  var j5Bin = j5Bins.appendChild(doc.createElement("de:j5Bin"));
-  for (var prop in bin) 
-    {
-      if (typeof (bin[prop]) !== "object" && prop != "de:iconID" && prop != "de:fro") 
-      {
-        if (bin[prop]) 
-        {
-          var propNode = j5Bin.appendChild(doc.createElement(prop));
-          propNode.textContent = bin[prop];
-        }
-      }
-    }
-  var propNode = j5Bin.appendChild(doc.createElement("de:iconID"));
-  propNode.textContent = bin["de:iconID"].toLowerCase();
-  if (bin["de:fro"]) 
-  {
-    var propNode = j5Bin.appendChild(doc.createElement("de:fro"));
-    propNode.textContent = parseInt(bin["de:fro"]);
-  }
-  var binItems = j5Bin.appendChild(doc.createElement("de:binItems"));
-  bin["de:binItems"]["de:partID"].forEach(function(partID) {
-  var part = binItems.appendChild(doc.createElement("de:partID"));
-  part.textContent = partID;
-});
-});
-  var partsVOs = doc.documentElement.appendChild(doc.createElement("de:partVOs"));
-  json["de:partVOs"]["de:partVO"].forEach(function(part) {
-  var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
-  for (var prop in part) 
-    {
-      if (typeof (part[prop]) !== "object" && prop !== "id") 
-      {
-        if (part[prop]) 
-        {
-          var propNode = partV0.appendChild(doc.createElement(prop));
-          propNode.textContent = part[prop];
-        }
-      }
-    }
-  partV0.setAttribute("id", part.id);
-  var deParts = partV0.appendChild(doc.createElement("de:parts"));
-  var dePart = deParts.appendChild(doc.createElement("de:part"));
-  dePart.setAttribute("id", part["de:parts"]["de:part"].id);
-  dePart.appendChild(doc.createElement("fas")).textContent = part["de:parts"]["de:part"]["de:fas"];
-});
   var sequenceFiles = doc.documentElement.appendChild(doc.createElement("de:sequenceFiles"));
   var sourceSequences = json["de:sequenceFiles"]["de:sequenceFile"];
   var sequences = [];
@@ -79821,18 +80542,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 });
   sequences.forEach(function(sequence) {
   var sequenceFile = sequenceFiles.appendChild(doc.createElement("de:sequenceFile"));
-  for (var prop in sequence) 
-    {
-      if (typeof (sequence[prop]) !== "object" && prop !== "hash" && prop !== "de:format" && prop !== "de:content") 
-      {
-        if (sequence[prop]) 
-        {
-          var propNode = sequenceFile.appendChild(doc.createElement(prop));
-          propNode.textContent = sequence[prop];
-        }
-      }
-    }
-  sequenceFile.setAttribute("hash", sequence.hash);
+  sequenceFile.setAttribute("id", sequence.id);
   var propNode = sequenceFile.appendChild(doc.createElement("de:format"));
   if (sequence["de:format"]) 
   {
@@ -79841,10 +80551,71 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
   if (sequence["de:content"]) 
   {
-    propNode.textContent = "<![CDATA[" + sequence["de:content"] + "]]>";
+    propNode.textContent = sequence["de:content"];
+  }
+  var propNode = sequenceFile.appendChild(doc.createElement("de:fileName"));
+  if (sequence["de:fileName"]) 
+  {
+    propNode.textContent = sequence["de:fileName"];
   }
 });
+  var partsVOs = doc.documentElement.appendChild(doc.createElement("de:partVOs"));
+  json["de:partVOs"]["de:partVO"].forEach(function(part) {
+  var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
+  partV0.setAttribute("id", part.id);
+  for (var prop in part) 
+    {
+      if (typeof (part[prop]) !== "object" && prop !== "id" && prop !== "de:sequenceFileHash" && prop !== "de:revComp") 
+      {
+        if (part[prop]) 
+        {
+          var propNode = partV0.appendChild(doc.createElement(prop));
+          propNode.textContent = part[prop];
+        }
+      }
+    }
+  var propNode = partV0.appendChild(doc.createElement("de:revComp"));
+  propNode.textContent = part["de:revComp"];
+  var deParts = partV0.appendChild(doc.createElement("de:parts"));
+  var dePart = deParts.appendChild(doc.createElement("de:part"));
+  dePart.setAttribute("id", part["de:parts"]["de:part"].id);
+  dePart.appendChild(doc.createElement("de:fas")).textContent = part["de:parts"]["de:part"]["de:fas"];
+});
   var eugeneRules = doc.documentElement.appendChild(doc.createElement("de:eugeneRules"));
+  var j5Collection = doc.documentElement.appendChild(doc.createElement("de:j5Collection"));
+  var propNode = j5Collection.appendChild(doc.createElement("de:isCircular"));
+  propNode.textContent = json["de:j5Collection"]["de:isCircular"];
+  var j5Bins = j5Collection.appendChild(doc.createElement("de:j5Bins"));
+  json["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].forEach(function(bin) {
+  var j5Bin = j5Bins.appendChild(doc.createElement("de:j5Bin"));
+  j5Bin.setAttribute("id", bin.id);
+  for (var prop in bin) 
+    {
+      if (typeof (bin[prop]) !== "object" && prop != "de:iconID" && prop != "de:fro" && prop != "de:dsf" && prop != "id") 
+      {
+        if (bin[prop]) 
+        {
+          var propNode = j5Bin.appendChild(doc.createElement(prop));
+          propNode.textContent = bin[prop];
+        }
+      }
+    }
+  var propNode = j5Bin.appendChild(doc.createElement("de:dsf"));
+  if (bin["de:dsf"]) 
+  propNode.textContent = bin["de:dsf"]; else propNode.textContent = false;
+  var propNode = j5Bin.appendChild(doc.createElement("de:iconID"));
+  propNode.textContent = bin["de:iconID"].toLowerCase();
+  if (bin["de:fro"]) 
+  {
+    var propNode = j5Bin.appendChild(doc.createElement("de:fro"));
+    propNode.textContent = parseInt(bin["de:fro"]);
+  }
+  var binItems = j5Bin.appendChild(doc.createElement("de:binItems"));
+  bin["de:binItems"]["de:partID"].forEach(function(partID) {
+  var part = binItems.appendChild(doc.createElement("de:partID"));
+  part.textContent = partID;
+});
+});
   json["de:eugeneRules"]["de:eugeneRule"].forEach(function(rule) {
   var eugeneRule = eugeneRules.appendChild(doc.createElement("de:eugeneRule"));
   for (var prop in rule) 
@@ -79852,7 +80623,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       if (typeof (rule[prop]) !== "object") 
       {
         var propNode = eugeneRule.appendChild(doc.createElement(prop));
-        if (rule[prop]) 
+        if (prop in rule) 
         {
           propNode.textContent = rule[prop];
         }
@@ -79867,7 +80638,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   fileContent = fileContent.replace(/amp;/g, '');
   fileContent = fileContent.replace(/&quot;/g, '"');
   fileContent = fileContent.replace(/quot;/g, '"');
-  fileContent = fileContent.replace('<de:design xmlns:de="https://www.teselagen.com">', '<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="https://jbei.org/device_editor design.xsd" xmlns:de="https://jbei.org/device_editor" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"><de:version>4.1</de:version>');
+  fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">', '<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.2</de:version>');
+  fileContent = Teselagen.utils.DeXmlUtils.formatXml(fileContent);
+  fileContent = fileContent.replace(/<de:content>/g, '<de:content><![CDATA[');
+  fileContent = fileContent.replace(/<\/de:content>/g, ']]></de:content>');
   self.saveToFile(fileName, fileContent);
 });
 }}, 0, 0, 0, 0, ["DeviceDesignExporterManager"], [['observable', Ext.util.Observable]], [Teselagen.manager, 'DeviceDesignExporterManager'], 0));
@@ -80554,7 +81328,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     Ext.Msg.alert('Cut Shortcut', 'Please use the Edit->Cut menu item for cut functionality.');
   } else if (event.ctrlKey && event.getKey() === event.C) 
   {
-    Ext.Msg.alert('Copy Shortcut', 'Please use the Edit->Copy menu item for copy functionality.');
+    this.copySelection();
   } else if (event.ctrlKey && event.getKey() === event.V) 
   {
   } else if (event.ctrlKey && event.getKey() === event.Z) 
@@ -80724,6 +81498,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (this.SelectionLayer.selected) 
   {
     this.application.ClipBoardData = this.SequenceManager.subSequenceManager(this.SelectionLayer.start, this.SelectionLayer.end);
+    var copySequenceWindow = Ext.create("Vede.view.ve.CopySequenceWindow").show();
+    var copyTextArea = copySequenceWindow.down("textarea");
+    copyTextArea.setValue(this.application.ClipBoardData.getSequence().toString());
+    Ext.defer(function() {
+  copyTextArea.selectText();
+}, 10);
   }
 }, pasteFromClipboard: function(text) {
   if (this.application.ClipBoardData || (text && typeof text === 'string')) 
@@ -81162,7 +81942,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   if (dsReversePosition < 0) 
   {
-    dsReversePosition -= seqLen;
+    dsReversePosition += seqLen;
   }
   if (dsForwardPosition <= row.rowData.getStart() || dsForwardPosition >= row.rowData.getEnd()) 
   {
@@ -81187,32 +81967,38 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.drawCurvyLine(cutSiteX, cutSiteY + cutSiteHeight, currentWidth - 2);
   } else if (endBP >= row.rowData.getStart()) 
   {
-    this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2);
     var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
-    var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotator.sequenceManager.sequence.length - 1));
+    var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, seqLen));
     var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-    var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.rowData.end, this.sequenceAnnotator.sequenceManager.sequence.length - 1));
+    var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.rowData.end, seqLen - 1));
     var cutSiteX1 = bpStartMetrics1.x;
     var cutSiteY1 = row.metrics.y + alignmentRowIndex * cutSiteHeight;
     var cutSiteX2 = bpStartMetrics2.x;
     var cutSiteY2 = cutSiteY1;
-    var currentWidth1 = bpEndMetrics1.x - bpStartMetrics1.x + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
-    var currentWidth2 = bpEndMetrics2.x - bpStartMetrics2.x + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+    var currentWidth1 = bpEndMetrics1.x - bpStartMetrics1.x + this.sequenceAnnotator.self.CHAR_WIDTH;
+    var currentWidth2 = bpEndMetrics2.x - bpStartMetrics2.x + this.sequenceAnnotator.self.CHAR_WIDTH;
     this.drawCurvyLine(cutSiteX1 + 2, cutSiteY1, currentWidth1 - 2);
     this.drawCurvyLine(cutSiteX2 + 2, cutSiteY2, currentWidth2 - 2);
+    dsReversePosition = cutSite.getEnd() - cutSite.getRestrictionEnzyme().getDsReverse() + Math.min(row.rowData.end, seqLen) - row.rowData.start;
+  }
+  if (cutSite.getStrand() !== 1) 
+  {
+    var temp = dsForwardPosition;
+    dsForwardPosition = dsReversePosition;
+    dsReversePosition = temp;
   }
   if (dsForwardPosition != -1) 
   {
     var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
-    var ds1X = dsForwardMetrics.x - 5;
+    var ds1X = dsForwardMetrics.x - 2;
     var ds1Y = cutSiteY + cutSiteHeight;
     this.drawDsForwardPosition(ds1X, ds1Y);
   }
   if (dsReversePosition != -1) 
   {
     var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
-    var ds2X = dsReverseMetrics.x;
-    var ds2Y = cutSiteY + cutSiteHeight + 3;
+    var ds2X = dsReverseMetrics.x - 2;
+    var ds2Y = cutSiteY + cutSiteHeight + 6;
     this.drawDsReversePosition(ds2X, ds2Y);
   }
   this.addToolTip(cutSite);
@@ -82638,7 +83424,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
   this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
 }, select: function(fromIndex, toIndex) {
-  if (fromIndex === this.start && toIndex === this.end && this.start !== -1 && this.end !== -1 || fromIndex == toIndex) 
+  if (fromIndex == toIndex) 
   {
     return;
   }
@@ -83719,7 +84505,15 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onSelectInverseMenuItemClick: function() {
   this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
 }, onSequenceLinearMenuItemCheckChange: function(checkitem, checked) {
-  this.sequenceManager.setCircular(!checked);
+  if (checked) 
+  {
+    viewMode = "linear";
+    this.sequenceManager.setCircular(false);
+  } else {
+    viewMode = "circular";
+    this.sequenceManager.setCircular(true);
+  }
+  this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
 }, onReverseComplementMenuItemClick: function() {
   this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
 }, onRebaseMenuItemClick: function() {
@@ -85074,8 +85868,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, onSelectionChanged: function(scope, start, end) {
   if (scope !== this) 
   {
-    this.SelectionLayer.select(start, end);
-    this.changeCaretPosition(start, true);
+    this.select(start, end);
   }
 }, onSequenceManagerChanged: function(pSeqMan) {
   this.callParent(arguments);
@@ -85656,6 +86449,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var circular = propertiesWindow.down("component[cls='propertiesWindowCircularField']").getValue();
   var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
   var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
+  var sequenceLinearBtn = this.SequenceController.getActiveTab().query("component[identifier*='sequenceLinearMenuItem']");
   var viewMode;
   if (name === null || name.match(/^\s*$/) || name.length === 0) 
   {
@@ -85668,6 +86462,18 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       sequenceManager.setCircular(circular);
       viewMode = circular ? "circular" : "linear";
+      if (viewMode == "linear") 
+      {
+        for (var i = 0; i < sequenceLinearBtn.length; i++) 
+          {
+            sequenceLinearBtn[i].setChecked(true, true);
+          }
+      } else {
+        for (var i = 0; i < sequenceLinearBtn.length; i++) 
+          {
+            sequenceLinearBtn[i].setChecked(false, true);
+          }
+      }
       this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
     }
     workingSequence.setSequenceManager(sequenceManager);
@@ -86877,7 +87683,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AuthEventDispatcherController'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.j5Report.buildDNAPanel', Ext.window.Window, {height: 133, width: 513, title: 'Build DNA', modal: true, items: [{xtype: 'form', bodyPadding: 10, title: '', items: [{xtype: 'combobox', anchor: '100%', fieldLabel: 'Select lab', name: 'server', value: 'https://lab001.teselagen.com:8090/printdna', store: [['https://lab001.teselagen.com:8090/printdna', 'Lab001 (San Francisco, CA)'], ['https://localhost:8090/printdna', 'Lab000 (Local)']]}, {xtype: 'textfield', anchor: '100%', inputType: 'password', fieldLabel: 'Password', name: 'password'}, {xtype: 'button', text: 'Start build process', name: 'start'}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.j5Report, 'buildDNAPanel'], 0));
+(Ext.cmd.derive('Vede.view.j5Report.buildDNAPanel', Ext.window.Window, {height: 133, width: 513, title: 'Build DNA', modal: true, items: [{xtype: 'form', bodyPadding: 10, title: '', items: [{xtype: 'combobox', anchor: '100%', fieldLabel: 'Select lab', name: 'server', value: '127.0.0.1', store: [['127.0.0.1', 'Lab001 (San Francisco, CA)'], ['127.0.0.1', 'Lab000 (Local)']]}, {xtype: 'textfield', anchor: '100%', inputType: 'password', fieldLabel: 'Password', name: 'password'}, {xtype: 'button', text: 'Start build process', name: 'start'}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.j5Report, 'buildDNAPanel'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.manager.PrinterMonitor', Ext.Base, {singleton: true, delay: 1000, debugFlag: true, feedback: "", updateFn: null, disabled: true, constructor: function() {
@@ -86895,7 +87701,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   task.delay(this.delay);
 }, monitorServerTasks: function() {
   var self = this;
-  Ext.Ajax.request({url: 'https://lab001.teselagen.com:8090/feedback', method: 'GET', success: function(response) {
+  Ext.Ajax.request({url: 'http://lab001.teselagen.com:8090/feedback', method: 'GET', success: function(response) {
   var parsedResponse = response.responseText;
   self.observeChanges(parsedResponse);
 }});
@@ -87002,6 +87808,26 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     $("#" + field + " .status-note").removeClass("status-note-completed");
     $("#" + field + " .status-note").removeClass("status-note-warning");
     $("#" + field + " .status-note").addClass("status-note-failed");
+  } else if (status == "Canceled") 
+  {
+    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+    this.tabPanel.down('button[cls="downloadResults"]').disable();
+    this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
+    this.tabPanel.down('button[cls="buildBtn"]').disable();
+    this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+    $("#" + field + " .status-note").removeClass("status-note-completed");
+    $("#" + field + " .status-note").removeClass("status-note-warning");
+    $("#" + field + " .status-note").addClass("status-note-failed");
+  } else if (status == "In progress") 
+  {
+    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+    this.tabPanel.down('button[cls="downloadResults"]').disable();
+    this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
+    this.tabPanel.down('button[cls="buildBtn"]').disable();
+    this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+    $("#" + field + " .status-note").removeClass("status-note-completed");
+    $("#" + field + " .status-note").removeClass("status-note-warning");
+    $("#" + field + " .status-note").removeClass("status-note-failed");
   }
   var warnings = this.activeJ5Run.raw.warnings;
   var errors = this.activeJ5Run.raw.error_list[0];
@@ -87110,10 +87936,27 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }, loadj5Results: function() {
   var self = this;
-  this.activeProject.j5runs().load({callback: function(runs) {
+  if (this.activeProject) 
+  {
+    this.activeProject.j5runs().load({callback: function(runs) {
   self.j5runs = runs.reverse();
   self.renderMenu();
+  if (self.activeJ5Run) 
+  {
+    self.selectJ5RunById(self.activeJ5Run.getId());
+  }
 }});
+  }
+}, selectJ5RunById: function(id) {
+  var runItems = this.tabPanel.query('menuitem');
+  for (var i = 0; i < runItems.length; i++) 
+    {
+      if (runItems[i].id === id) 
+      {
+        this.onJ5RunSelect(runItems[i]);
+        break;
+      }
+    }
 }, buildBtnClick: function() {
   var buildDNAWindows = Ext.create('Vede.view.j5Report.buildDNAPanel').show();
   buildDNAWindows.down('button').on('click', function() {
@@ -87152,6 +87995,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.callParent();
   this.CommonEvent = Teselagen.event.CommonEvent;
   this.application.on(this.CommonEvent.RESET_J5BTN, this.setActiveRun, this);
+  this.application.on(this.CommonEvent.LOAD_J5_RUNS, this.loadj5Results, this);
+  this.application.on(this.CommonEvent.J5_RUN_STATUS_CHANGED, this.loadj5Results, this);
   this.control({'panel[cls="j5ReportsPanel"] > menu > menuitem': {click: this.onJ5RunSelect}, 'button[cls="downloadResults"]': {click: this.downloadResults}, 'button[cls="cancelj5run"]': {click: this.onCancelJ5RunClick}, "gridpanel[name='assemblies']": {itemclick: this.onPlasmidsItemClick}, "button[cls='buildBtn']": {click: this.buildBtnClick}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'J5ReportController'], 0));
 ;
@@ -87608,6 +88453,11 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 }}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'new', title: 'New rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'ignored', title: 'Ignored statements', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'gridpanel', hideHeaders: true, height: 122, name: 'repeated', title: 'Repeated rules', columns: [{xtype: 'gridcolumn', dataIndex: 'originalRuleLine', text: '', forceFit: true, flex: 1, draggable: false, sortable: false, hideable: false, menuDisabled: true}], viewConfig: {}}, {xtype: 'button', margin: '10 0 0 10', text: 'Ok'}, {xtype: 'button', margin: '10 0 0 10', text: 'Cancel'}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'EugeneRulesImportDialog'], 0));
 ;
 
+(Ext.cmd.derive('Vede.view.de.SaveAsWindow', Ext.window.Window, {cls: 'deviceEditorSaveAsWindow', title: 'Save As...', modal: true, layout: {type: 'vbox', align: 'stretch'}, height: 100, width: 400, items: [{xtype: 'textfield', fieldLabel: 'Save As:', maxHeight: 30, cls: 'saveAsWindowDesignNameField', allowBlank: false}, {xtype: 'container', maxHeight: 40, layout: {pack: 'end', type: 'hbox'}, items: [{xtype: 'button', margin: 10, text: 'Cancel', handler: function() {
+  this.up('window').close();
+}}, {xtype: 'tbseparator'}, {xtype: 'button', cls: 'saveDeviceAsWindowOKButton', margin: 10, text: 'Ok'}]}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'SaveAsWindow'], 0));
+;
+
 (Ext.cmd.derive('Vede.view.de.WarningsWindow', Ext.window.Window, {cls: 'warningsWindow', width: 800, height: 400, title: 'Warnings', layout: 'fit', modal: true, items: [{xtype: 'gridpanel', autoScroll: true, forceFit: true, layout: 'fit', columnLines: true, rowLines: true, viewConfig: {listeners: {refresh: function(dataview) {
   var columns = dataview.panel.columns;
   for (var i = 0; i < columns.length; i++) 
@@ -87622,6 +88472,9 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Ext.applyIf(me, {items: [{xtype: 'numberfield', cls: 'maxDeltaTemperatureAdjacentZonesValue', padding: 3, fieldLabel: 'Max Delta Temp Adjacent Zones (5)', labelSeparator: ' ', labelWidth: 310, value: 5, maxValue: 1000, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'maxDeltaTemperatureReactionOptimumZoneAcceptableValue', padding: 3, fieldLabel: 'Max Delta Temp Reaction Optimum Zone Acceptable (5)', labelSeparator: ' ', labelWidth: 310, value: 5, step: 0.1}, {xtype: 'numberfield', cls: 'maxMcStepsPerZoneValue', padding: 3, fieldLabel: 'Max MC Steps Per Zone (1000)', labelSeparator: ' ', labelWidth: 310, value: 1000, decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'maxWellVolumeMultiwellPlateValue', padding: 3, fieldLabel: 'Max Well Volume Multi-well Plate (100)', labelSeparator: ' ', labelWidth: 310, value: 100, minValue: 0}, {xtype: 'numberfield', cls: 'mcTemperatureFinalValue', padding: 3, fieldLabel: 'MC Temp Final (0.0001)', labelSeparator: ' ', labelWidth: 310, value: 1.0E-4, decimalPrecision: 6, minValue: 0, step: 1.0E-5}, {xtype: 'numberfield', cls: 'mcTemperatureInitialValue', padding: 3, fieldLabel: 'MC Temp Initial (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'minPipettingVolumeValue', padding: 3, fieldLabel: 'Min Pipetting Volume (5)', labelSeparator: ' ', labelWidth: 310, value: 5, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'nColumnsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Columns in Multi-well Plate (12)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'nRowsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Rows in Multi-well Plate (8)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'trialDeltaTemperatureValue', padding: 3, fieldLabel: 'Trial Delta Temp (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'wellsPerThermocyclerZoneValue', padding: 3, fieldLabel: 'Wells Per Thermocycler Zone (16)', labelSeparator: ' ', labelWidth: 310, value: 16, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'numberfield', cls: 'zonesPerThermocyclerBlockValue', padding: 3, fieldLabel: 'Zones Per Thermocycler Block (6)', labelSeparator: ' ', labelWidth: 310, value: 6, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'container', height: 80, layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'automationParamsCancelBtn', x: 300, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'automationParamsOKBtn', x: 390, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>OK</b>'}, {xtype: 'button', cls: 'automationParamsResetBtn', x: 0, y: 50, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Reset To Defaults</b>'}]}]});
   me.callParent(arguments);
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5AutomationParameters'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.ve.CopySequenceWindow', Ext.window.Window, {title: 'Copy Sequence Text', modal: true, height: 300, width: 400, resizable: true, layout: {type: 'vbox'}, items: [{xtype: 'displayfield', value: 'Please copy the selected text below:'}, {xtype: 'textarea', cls: 'copySequenceTextArea', grow: true, height: 250, width: 392}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'CopySequenceWindow'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.CreateNewFeatureWindow', Ext.window.Window, {height: 450, id: 'CreateNewFeature', modal: true, width: 400, layout: {type: 'fit'}, title: 'Create New Feature', initComponent: function() {
