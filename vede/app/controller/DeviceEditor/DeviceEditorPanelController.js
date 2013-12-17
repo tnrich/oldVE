@@ -488,32 +488,59 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
         var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
-        nameField.inputEl.dom.setAttribute("placeholder", design.get("name"));
+        nameField.setValue(design.get("name") + ' Copy');
     },
 
     onSaveDeviceAsWindowOKBtnClick: function() {
         var saveAsWindow = Ext.ComponentQuery.query('window[cls="deviceEditorSaveAsWindow"]')[0];
-        var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
+        var newName = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]').getValue();
         var oldDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
         var newDesign = oldDesign.copy();
+        var currentProject = oldDesign.getProject();
 
-        newDesign.set({
-            name: nameField.getValue(),
-            project: oldDesign.getProject()
-        });
+        currentProject.designs().load({
+            callback: function() {
+                var duplicateIndex = currentProject.designs().find('name', newName);
 
-        newDesign.parts().add(oldDesign.parts().getRange());
-        newDesign.rules().add(oldDesign.rules().getRange());
-        newDesign.bins().add(oldDesign.bins().getRange());
+                newDesign.set({
+                    name: newName,
+                    project: currentProject
+                });
 
-        newDesign.save({
-            success: function() {
-                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
-                saveAsWindow.close();
-                Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
-            },
-            failure: function() {
-                Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                newDesign.parts().add(oldDesign.parts().getRange());
+                newDesign.rulesStore = oldDesign.rulesStore;
+                newDesign.bins().add(oldDesign.bins().getRange());
+
+                if(duplicateIndex === -1) {
+                    newDesign.save({
+                        success: function() {
+                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                            saveAsWindow.close();
+                            Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                        },
+                        failure: function() {
+                            Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                        }
+                    });
+                } else {
+                    Ext.Msg.confirm("Duplicate Design Name", "A design already exists in this project with that name.<br>" +
+                                    "Continuing will create two designs with the same name. Are you sure?", function(button) {
+                        if(button === "yes") {
+                            newDesign.save({
+                                success: function() {
+                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                                    saveAsWindow.close();
+                                    Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                                },
+                                failure: function() {
+                                    Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                                }
+                            });
+                        } else {
+                            saveAsWindow.close();
+                        }
+                    });
+                }
             }
         });
     },
