@@ -110,8 +110,8 @@ module.exports = function(app, express) {
             cookie: {
                 maxAge: 1000 * 60 * 60
             },
-            secret: 'j5',
-            store: new express.session.MemoryStore()
+            secret: 'j5'
+            //store: new express.session.MemoryStore()
         }));
 
         app.use(app.passport.initialize());
@@ -168,7 +168,7 @@ module.exports = function(app, express) {
             store: new RedisStore({
                 client: redis,
                 prefix: 'vede://',
-                ttl: 3600 * 1000
+                ttl: 3600
             })
         })); // Sessions managed using cookies
 
