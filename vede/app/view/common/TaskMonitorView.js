@@ -1,4 +1,5 @@
-    Ext.define('Vede.view.common.TaskMonitorView', {
+Ext.define('Vede.view.common.TaskMonitorView', {
+    requires: ['Teselagen.event.CommonEvent'],
     extend: 'Ext.panel.Panel',
     id: 'taskMonitor',
     alias: 'widget.TaskMonitorView',
@@ -53,6 +54,9 @@
             text: 'Status',
             autoScroll: true,
             dataIndex: 'status',
+            width: 300,
+            minWidth: 300,
+            flex: 1,
             renderer: function(value) {
                 if(value==="In progress") {
                     return '<div class="pace-activity"></div>Running...'
@@ -61,7 +65,9 @@
                 } else if(value==="Completed with warnings") {
                     return '<div class="status-note status-note-warning" style="margin-right:10px"></div>Completed with warnings.'
                 } else if(value==="Error") {
-                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Completed'
+                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Failed.'
+                } else if(value==="Canceled") {
+                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Canceled.'
                 }
             }
         },
@@ -84,8 +90,8 @@
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 },
-                getClass: function(v, meta, rec) {          
-                      if(rec.data.status != "In progress") {                                                                      
+                getClass: function(v, meta, rec) {
+                      if(rec.data.status != "In progress") {
                           return 'x-hide-display';
                       }
                   }
@@ -100,15 +106,14 @@
                 tooltip: 'View Result',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
+                    var data = {
+                        devicedesign_id: rec.data.devicedesign_id,
+                        project_id: rec.data.project_id,
+                        _id: rec.data.id
+                    };
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);
                 }
-            }],
-            listeners: {
-                 itemclick: function(grid,item){
-                    console.log(item);
-                    // Vede.application.fireEvent("jumpToJ5Run",item.raw);
-                }       
-            }
-        }      
-        ],
+            }]
+        }]
     }]
 });

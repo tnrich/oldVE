@@ -225,8 +225,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
-            this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start, true);
+            this.select(start, end);
         }
     },
 

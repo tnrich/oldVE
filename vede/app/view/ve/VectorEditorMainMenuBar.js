@@ -207,7 +207,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }, {
                 xtype: 'menucheckitem',
                 identifier: 'sequenceLinearMenuItem',
-                text: 'Sequence Linear'
+                text: 'Sequence Linear',
+                checked: false
             }, {
                 xtype: 'menuseparator'
             }, {

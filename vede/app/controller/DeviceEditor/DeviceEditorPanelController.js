@@ -468,22 +468,82 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         });
     },
 
-    onDeviceEditorSaveBtnClick: function () {
+    onDeviceEditorSaveBtnClick: function() {
         var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
         activeTab.el.mask("Loading", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        this.saveDEProject(function () {
+        this.saveDEProject(function() {
             activeTab.el.unmask();
-
         });
 
     },
 
-    onDeviceEditorSaveEvent: function (arg) {
+    onDeviceEditorSaveEvent: function(arg) {
         this.saveDEProject(arg);
     },
 
+    onDeviceEditorSaveAsBtnClick: function() {
+        var saveAsWindow = Ext.create("Vede.view.de.SaveAsWindow").show();
+        var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
+        nameField.setValue(design.get("name") + ' Copy');
+    },
+
+    onSaveDeviceAsWindowOKBtnClick: function() {
+        var saveAsWindow = Ext.ComponentQuery.query('window[cls="deviceEditorSaveAsWindow"]')[0];
+        var newName = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]').getValue();
+        var oldDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+        var newDesign = oldDesign.copy();
+        var currentProject = oldDesign.getProject();
+
+        currentProject.designs().load({
+            callback: function() {
+                var duplicateIndex = currentProject.designs().find('name', newName);
+
+                newDesign.set({
+                    name: newName,
+                    project: currentProject
+                });
+
+                newDesign.parts().add(oldDesign.parts().getRange());
+                newDesign.rulesStore = oldDesign.rulesStore;
+                newDesign.bins().add(oldDesign.bins().getRange());
+
+                if(duplicateIndex === -1) {
+                    newDesign.save({
+                        success: function() {
+                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                            saveAsWindow.close();
+                            Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                        },
+                        failure: function() {
+                            Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                        }
+                    });
+                } else {
+                    Ext.Msg.confirm("Duplicate Design Name", "A design already exists in this project with that name.<br>" +
+                                    "Continuing will create two designs with the same name. Are you sure?", function(button) {
+                        if(button === "yes") {
+                            newDesign.save({
+                                success: function() {
+                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                                    saveAsWindow.close();
+                                    Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                                },
+                                failure: function() {
+                                    Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                                }
+                            });
+                        } else {
+                            saveAsWindow.close();
+                        }
+                    });
+                }
+            }
+        });
+    },
 
     onAddRowAboveClick: function () {
         this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
@@ -516,7 +576,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onJ5buttonClick: function () {
         Vede.application.fireEvent(this.CommonEvent.RUN_J5);
         toastr.options.onclick = null;
-        
 
         toastr.info("Design Saved");
     },
@@ -525,9 +584,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
     },
 
-    onJumpToJ5Run: function(data) {
+    onJumpToJ5Run: function(data,jump) {
         var design_id = data.devicedesign_id;
         var project_id = data.project_id;
+        console.log(design_id);
+        console.log(project_id);
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
 
         var self = this;
@@ -598,10 +659,27 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
-
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").addClass("status-note-failed");
+                    } else if (status=="Canceled") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
+                        $("#" + field + " .status-note").removeClass("status-note-completed");
+                        $("#" + field + " .status-note").removeClass("status-note-warning");
+                        $("#" + field + " .status-note").addClass("status-note-failed");
+                    } else if (status=="In progress") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
+                        $("#" + field + " .status-note").removeClass("status-note-completed");
+                        $("#" + field + " .status-note").removeClass("status-note-warning");
+                        $("#" + field + " .status-note").removeClass("status-note-failed");
                     }
 
                     var warnings = self.activeJ5Run.raw.warnings;
@@ -680,16 +758,18 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 }
             });
         };
-        project.designs().load({
-            id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                console.log(loadedDesign);
-                console.log(design_id);
-                var design = loadedDesign[0];
-                Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
-            }
-        });
+        if(jump==true) {
+            project.designs().load({
+                id: design_id,
+                callback: function (loadedDesign) {
+                    Teselagen.manager.ProjectManager.workingProject = project;
+                    console.log(loadedDesign);
+                    console.log(design_id);
+                    var design = loadedDesign[0];
+                    Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
+                }
+            });
+        }
 
     },
 
@@ -737,8 +817,14 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.onJumpToJ5Run, this);
 
         this.control({
+            "button[cls='saveDeviceAsWindowOKButton']": {
+                click: this.onSaveDeviceAsWindowOKBtnClick
+            },
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
                 click: this.onDeviceEditorSaveEvent
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Save Design As']": {
+                click: this.onDeviceEditorSaveAsBtnClick
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {
                 click: this.onDeviceEditorClearBtnClick

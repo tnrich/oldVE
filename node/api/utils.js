@@ -8,8 +8,21 @@ module.exports = function(app) {
     var Part = app.db.model("part");
     var J5Runs = app.db.model("j5run");
 
-    return {
 
+    var website_html = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp","build","Vede","production") + '/index.html' , "utf8");
+
+    //if(app.get("env") === "production") {
+        var cdn_url = 'https://d3k67f84one1m6.cloudfront.net/';
+        cdn_url = 'https://s3-us-west-1.amazonaws.com/teselagen/';
+        //cdn_url = 'https://s3-us-west-1.amazonaws.com/app.teselagen.com/';
+        website_html = website_html.replace(/<link href="/g,'<link href="'+cdn_url);
+        website_html = website_html.replace(/<link rel="stylesheet" href="/g,'<link rel="stylesheet" href="'+cdn_url);
+        website_html = website_html.replace(/link rel="shortcut icon" href="/g,'link rel="shortcut icon" href="'+cdn_url);
+        website_html = website_html.replace(/<script type="text\/javascript" src="/g,'<script type="text/javascript" src="'+cdn_url);
+        website_html = website_html.replace(/<script src="/g,'<script src="'+cdn_url);
+    //}
+
+    return {
         post_error: function(req, res) {
             throw new Error("OH NOOO");
         },
@@ -26,9 +39,9 @@ module.exports = function(app) {
             if (req.body.feedback) {
                 app.mailer.sendMail({
                     from: "Teselagen <root@localhost>",
-                    to: "newticket+7ltwtp2jebrcwkne@email.codebasehq.com",
+                    to: "tickets@teselagen.uservoice.com",
                     subject: "Feedback",
-                    text: req.body.feedback + variables
+                    text: req.body.feedback + '<br>' + variables
                 }, function(error, response) {
                     if (error) {
                         console.log(error);
@@ -39,9 +52,9 @@ module.exports = function(app) {
             } else if (req.body.error) {
                 app.mailer.sendMail({
                     from: "Teselagen <root@localhost>",
-                    to: "newticket+7ltwtp2jebrcwkne@email.codebasehq.com",
+                    to: "tickets@teselagen.uservoice.com",
                     subject: "Error",
-                    text: req.body.error + '\n' + req.body.error_feedback + variables
+                    text: req.body.error + '<br>' + req.body.error_feedback + variables
                 }, function(error, response) {
                     if (error) {
                         console.log(error);
@@ -258,15 +271,13 @@ module.exports = function(app) {
         },
 
         get_rebase_xml: function(req,res) {
-            var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../","resources") + '/rebase.xml' , "utf8");
-            res.send(webpage);
+            var rebase_xml = app.fs.readFileSync( require('path').resolve(__dirname,"../","resources") + '/rebase.xml' , "utf8");
+            
+            res.send(rebase_xml);
         },
 
         index_website: function(req,res) {
-            var webpage = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp") + '/index.html' , "utf8");
-            res.send(webpage);
+            res.send(website_html);
         }
-
-
     };
 };

@@ -20,6 +20,7 @@ Ext.define("Teselagen.event.CommonEvent", {
 
     RUN_J5: "RunJ5",
     J5_RUN_STATUS_CHANGED: "J5RunStatusChanged",
+    LOAD_J5_RUNS: "LoadJ5Runs",
     JUMPTOJ5RUN: "jumpToJ5Run",
     RESET_J5BTN: "resetJ5ActiveRun",
 

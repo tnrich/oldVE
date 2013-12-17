@@ -42,8 +42,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
     },
 
     select: function(fromIndex, toIndex) {
-        if(fromIndex === this.start && toIndex === this.end &&
-           this.start !== -1 && this.end !== -1 || fromIndex == toIndex) {
+        if(fromIndex == toIndex) {
             return;
         }
 
@@ -58,7 +57,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         if(fromIndex > toIndex) {
             this.drawSelection(0, toIndex);
-            this.drawSelection(fromIndex, 
+            this.drawSelection(fromIndex,
                                this.sequenceManager.getSequence().toString().length);
         } else {
             this.drawSelection(fromIndex, toIndex);

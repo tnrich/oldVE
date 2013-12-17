@@ -10,7 +10,7 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
-    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager", 
+    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager",
                "Teselagen.manager.UserManager",
                "Teselagen.models.RestrictionEnzymeGroup",
                "Teselagen.utils.Logger"],
@@ -29,7 +29,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     Logger: null,
     RestrictionEnzymeManager: null,
     UserManager: null,
-    
+
     COMMON_ENZYMES: ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV",
                      "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI",
                      "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"],
@@ -92,7 +92,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         }
         this.changeActiveGroup();
     },
-    
+
     /**
      * Returns a group from userGroups by its name.
      * @param {String} name The name of the group to return.
@@ -173,7 +173,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         this.getUserEnzymeGroups().add(group);
         return group;
     },
-    
+
    /**
      * Copy an existing user restriction enzyme group.
      * @param {String} name The name of the group to copy.
@@ -192,7 +192,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         }
         return retVal;
     },
-    
+
     /**
      * Removes a user restriction enzyme group.
      * @param {String} name The name of the group.
@@ -207,7 +207,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
             console.warn("User group not found: ", pName);
         }
     },
-    
+
     /**
      * Returns a list of all group names.
      */
@@ -240,7 +240,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     getActiveUserGroup: function() {
         return this.getUserEnzymeGroupByName(this.ACTIVE);
     },
-    
+
     /**
      * Make the given user group's enzymes active.
      */
@@ -261,10 +261,10 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
                 userActiveGroup.userRestrictionEnzymes().collect("name"));
         this.setActiveGroup(activeGroup);
     },
-    
-   /**
-    * Save user groups
-    */
+
+    /**
+     * Load user groups
+     */
     loadUserGroups: function() {
         this.UserManager.loadUser(function(pSuccess) {
             if (!pSuccess) {
@@ -273,10 +273,10 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         });
         this.setActiveEnzymesChanged(false);
     },
-    
+
     /**
-    * Save user groups
-    */
+     * Save user groups
+     */
     saveUserGroups: function(pNext) {
         var me = this;
         this.UserManager.update(function(pSuccess) {
@@ -293,7 +293,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
             pNext(pSuccess);
         });
     },
-    
+
     /**
      * @private
      * Loads user enzymes into a store, clearing it first.  Checks that enzymes
@@ -315,7 +315,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
             }
         }
     },
-    
+
     /**
      * @private
      * Initializes activeGroup by setting it to the common enzyme group.
@@ -331,11 +331,11 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      */
     registerSystemGroups: function() {
         var newSystemGroups = this.getSystemGroups();
-        
+
         // 1. Common
         var commonGroup = this.createGroupByEnzymes("Common Enzymes", this.COMMON_ENZYMES);
         newSystemGroups.push(commonGroup);
-        
+
         // 2. REBASE
         var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
             name: "All Enzymes",
@@ -346,11 +346,11 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         // 3. Berkeley Biobrick
         var berkeleyBBGroup = this.createGroupByEnzymes("Berkeley BglBrick", ["EcoRI", "BglII", "BamHI", "XhoI"]);
         newSystemGroups.push(berkeleyBBGroup);
-        
+
         // 4. MIT Biobrick
         var mitBBGroup = this.createGroupByEnzymes("MIT BioBrick", ["EcoRI", "XbaI", "SpeI", "PstI"]);
         newSystemGroups.push(mitBBGroup);
-        
+
         // 5. Fermentas Fast Digest
         var fermentasFastDigestBBGroup = this.createGroupByEnzymes("Fermentas Fast Digest",
             ["AatII", "Acc65I", "AccI", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AgeI",

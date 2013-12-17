@@ -8,12 +8,26 @@ module.exports = function(app, express){
 
   var config = this;
 
-  var server = require('http').Server(app);
+  var options = {
+    key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
+    cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+    ca: [
+       app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
+       app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
+    ]
+  };
+
+  //console.log(options);
+
+  var httpsServer = require('https').createServer(options,app).listen(3443);
+  var httpServer = require('http').Server(app).listen(3000);
 
   require('./environments').readEnvironments(app);
 
   require('./logging').configLogging(app, express);
 
+  app.configure('development', function () { app.locals.pretty = true; });
+  app.configure('production', function () { app.locals.pretty = true; });
 
    var Opts = {
         host: "127.0.0.1",
@@ -37,6 +51,16 @@ module.exports = function(app, express){
     }
 
   if (!app.settings.env) {app.settings.env="development";}
+
+/*
+app.use(function(req,res,next) {
+  if (!/https/.test(req.protocol)){
+     res.redirect("https://" + req.headers.host + req.url);
+  } else {
+     return next();
+  } 
+});
+*/
 
   //env specific config
       app.configure('development', function(){

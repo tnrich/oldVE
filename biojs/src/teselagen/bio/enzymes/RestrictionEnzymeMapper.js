@@ -54,14 +54,20 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
         var startIndex = 0;
         var subSequence = sequence;
 
+        var start;
+        var end;
+
         while(matchIndex != -1) {
             if(matchIndex + startIndex + reLength - 1 >= sequence.length) { // subSequence is too short
                 break;
             }
 
+            start = matchIndex + startIndex;
+            end = matchIndex + reLength + startIndex;
+
             restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
-                start: matchIndex + startIndex,
-                end: matchIndex + reLength + startIndex,
+                start: start,
+                end: end,
                 strand: Teselagen.bio.sequence.common.StrandType.FORWARD,
                 restrictionEnzyme: restrictionEnzyme
             });
@@ -86,13 +92,20 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
                     break;
                 }
 
-                restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
-                    start: matchIndex - 1 + startIndex,
-                    end: matchIndex - 1 + reLength + startIndex,
-                    strand: Teselagen.bio.sequence.common.StrandType.BACKWARD,
-                    restrictionEnzyme: restrictionEnzyme
-                });
-                restrictionCutSites.push(restrictionCutSite);
+                start = matchIndex + startIndex -
+                    (restrictionEnzyme.getDsForward() - restrictionEnzyme.getSite().length);
+                end = start + reLength;
+
+                if(start >= 0) {
+                    restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
+                        start: start,
+                        end: end,
+                        strand: Teselagen.bio.sequence.common.StrandType.BACKWARD,
+                        restrictionEnzyme: restrictionEnzyme
+                    });
+
+                    restrictionCutSites.push(restrictionCutSite);
+                }
 
                 // Make sure that we always store the previous match index to ensure
                 // that we are always storing indices relative to the whole sequence,

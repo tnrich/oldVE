@@ -52,8 +52,10 @@ Ext.define('Vede.view.AppViewport', {
                             iconCls: 'home-dash-icon',
                             iconAlign: 'top',
                             listeners: {
-                                tabchange: function () {
-                                    Vede.application.fireEvent("PopulateStats");
+                                tabchange: function (panel, newTab, oldTab) {
+                                    if(newTab.title === 'Dashboard' || panel.items.indexOf(newTab) === 0) {
+                                        Vede.application.fireEvent("PopulateStats");
+                                    }
                                 }
                             }
                         }

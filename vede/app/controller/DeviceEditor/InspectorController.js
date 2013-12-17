@@ -150,8 +150,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     self.runj5Btn1.enable();
                     self.runj5Btn1.removeCls("btnDisabled");
 
-                    self.runj5Btn2.enable();
-                    self.runj5Btn2.removeCls("btnDisabled");
+                    // self.runj5Btn2.enable();
+                    // self.runj5Btn2.removeCls("btnDisabled");
 
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
                 } else {
@@ -160,8 +160,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     self.runj5Btn1.disable();
                     self.runj5Btn1.addCls("btnDisabled");
 
-                    self.runj5Btn2.disable();
-                    self.runj5Btn2.addCls("btnDisabled");
+                    // self.runj5Btn2.disable();
+                    // self.runj5Btn2.addCls("btnDisabled");
 
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
                 }
@@ -1143,7 +1143,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
 
             this.runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
-            this.runj5Btn2 = newTab.down("button[cls='j5button']");
+            // this.runj5Btn2 = newTab.down("button[cls='j5button']");
 
             this.partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
             this.openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");

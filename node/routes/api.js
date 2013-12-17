@@ -17,6 +17,24 @@ module.exports = function(app) {
     var utils = require('../api/utils.js')(app);
     var explorer = require('../api/explorer.js')(app);
 
+   /*
+    * Route to check current version of code
+    */
+    app.all('/v', function(req,res) {
+        require('fs').stat("app.js",function(err, stats){
+
+            var updated = "Server updated: "
+            if(!err&&stats&&stats.mtime) updated += stats.mtime;
+            else updated += "Error";
+
+
+            require('child_process').exec("git log -1", function puts(error, stdout, stderr) { 
+                var git = stdout;
+                return res.send(updated+"<br>"+git,200);
+            });
+        });
+    });
+
     app.get('/sequences', restrict, sequences.get);
     app.get('/sequences/:sequence_id', restrict, sequences.get);
     app.post('/sequences', restrict, sequences.post);
@@ -40,6 +58,7 @@ module.exports = function(app) {
     app.put("/users/:username", restrict, user.put_user);
     app.post('/presets' ,restrict, user.post_presets);
     app.put('/presets' ,restrict, user.put_presets);
+    app.delete('/presets' ,restrict, user.del_presets);
     app.get('/presets' ,restrict, user.get_presets);
 
     app.get('/fqdn', restrict, parts.fqdn);
@@ -79,5 +98,4 @@ module.exports = function(app) {
         });
     });
     */
-    
 };

@@ -7,7 +7,7 @@
 Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
     alias: "DeviceDesignExporterManager",
     singleton: true,
-    requires: ["Teselagen.manager.DeviceDesignManager"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.utils.DeXmlUtils"],
     mixins: {
         observable: "Ext.util.Observable"
     },
@@ -34,6 +34,8 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         
         // Structures
         json["de:j5Collection"] = {};
+        json["de:j5Collection"]["de:isCircular"] = design.get("isCircular");
+
         json["de:j5Collection"]["de:j5Bins"] = {};
 
         json["de:partVOs"] = {};
@@ -51,6 +53,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         design.bins().each(function(bin,binKey) {
         	var jsonBin = {};
             jsonBin = {};
+            jsonBin.id = Teselagen.utils.DeXmlUtils.generateUUID();
             jsonBin["de:binName"] = bin.get("binName");
             jsonBin["de:iconID" ] = bin.get("iconID");
             jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
@@ -96,6 +99,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonPart["de:startBP"] = part.get("genbankStartBP");
             jsonPart["de:stopBP"] = part.get("endBP");
             jsonPart["de:sequenceFileHash"] = sequence.get("hash");
+            jsonPart["de:sequenceFileID"] = sequence.get("id");
 
             jsonPart["de:parts"] = {};
             jsonPart["de:parts"]["de:part"] = {};
@@ -108,6 +112,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             
             // Process sequences
             var jsonSequence = {};
+            jsonSequence.id = sequence.get("id");
             jsonSequence.hash = sequence.get("hash");
             jsonSequence["de:format"] = sequence.get("sequenceFileFormat");
             jsonSequence["de:content"] = sequence.get("sequenceFileContent");
@@ -190,20 +195,95 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
     exportToXML: function (deproject) {
         var self = this;
         this.generateObject(deproject,function(json){
+
+            // UPDATED DEVICE DESIGN EDITOR XML V4.2
+
             var fileName = deproject.get("name")+".xml";
             var namespaceURI = "http://www.teselagen.com";
             var doc = document.implementation.createDocument(namespaceURI, "de:design", null);
 
+            // SEQUENCES PROCESSING
+
+            var sequenceFiles = doc.documentElement.appendChild(doc.createElement("de:sequenceFiles"));
+
+                // FIRST STEP IS REMOVE DUPLICATED SEQUENCE FILES
+            var sourceSequences = json["de:sequenceFiles"]["de:sequenceFile"];
+            var sequences = [];
+            sourceSequences.forEach(function(elem,index){
+                var duplicated = false;
+                sequences.forEach(function(seq)
+                {
+                    if(elem["hash"]===seq["hash"]) duplicated = true;
+                });
+                if(!duplicated) sequences.push(elem);
+            });
+
+                // SECOND STEP IS BULDING XML ELEMENTS
+            sequences.forEach(function(sequence){
+                var sequenceFile = sequenceFiles.appendChild(doc.createElement("de:sequenceFile"));
+                sequenceFile.setAttribute("id", sequence.id);
+                
+                // Setting customized properties (which need transformation)
+                var propNode = sequenceFile.appendChild(doc.createElement("de:format"));
+                if(sequence["de:format"]) { propNode.textContent = sequence["de:format"]; }
+
+                var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
+                if(sequence["de:content"]) { propNode.textContent = sequence["de:content"]; }
+
+                var propNode = sequenceFile.appendChild(doc.createElement("de:fileName"));
+                if(sequence["de:fileName"]) { propNode.textContent = sequence["de:fileName"]; }                
+            });
+
+            // PARTS PROCESSING
+
+            var partsVOs = doc.documentElement.appendChild(doc.createElement("de:partVOs"));
+
+            json["de:partVOs"]["de:partVO"].forEach(function(part){
+
+                var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
+                partV0.setAttribute("id", part.id);
+
+                for(var prop in part)
+                {
+                    if(typeof(part[prop]) !== "object" && prop !== "id" && prop !== "de:sequenceFileHash" && prop !== "de:revComp")
+                    {
+                        if(part[prop])
+                        {
+                            var propNode = partV0.appendChild(doc.createElement(prop));
+                            propNode.textContent = part[prop];
+                        }
+                    }
+                }
+
+                var propNode = partV0.appendChild(doc.createElement("de:revComp"));
+                propNode.textContent = part["de:revComp"];
+
+                var deParts = partV0.appendChild(doc.createElement("de:parts"));
+                var dePart = deParts.appendChild(doc.createElement("de:part"));
+                dePart.setAttribute("id", part["de:parts"]["de:part"].id);
+                dePart.appendChild(doc.createElement("de:fas")).textContent = part["de:parts"]["de:part"]["de:fas"];
+            });
+
+
+            var eugeneRules = doc.documentElement.appendChild(doc.createElement("de:eugeneRules"));
+
+
+            // BINS PROCESSING
+
             var j5Collection = doc.documentElement.appendChild(doc.createElement("de:j5Collection"));
+            
+            var propNode = j5Collection.appendChild(doc.createElement("de:isCircular"));
+            propNode.textContent = json["de:j5Collection"]["de:isCircular"];
+
             var j5Bins = j5Collection.appendChild(doc.createElement("de:j5Bins"));
 
-            // Bins Processing
             json["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].forEach(function(bin){
                 var j5Bin = j5Bins.appendChild(doc.createElement("de:j5Bin"));
+                j5Bin.setAttribute("id", bin.id);
 
                 for(var prop in bin)
                 {
-                    if(typeof(bin[prop]) !== "object" && prop!="de:iconID" && prop!="de:fro")
+                    if(typeof(bin[prop]) !== "object" && prop!="de:iconID" && prop!="de:fro" && prop!="de:dsf" && prop!="id")
                     {
                         if(bin[prop])
                         {
@@ -212,6 +292,10 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                         }
                     }
                 }
+
+                var propNode = j5Bin.appendChild(doc.createElement("de:dsf"));
+                if(bin["de:dsf"]) propNode.textContent = bin["de:dsf"];
+                else propNode.textContent = false;
 
                 var propNode = j5Bin.appendChild(doc.createElement("de:iconID"));
                 propNode.textContent = bin["de:iconID"].toLowerCase();
@@ -228,82 +312,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                 });
             });
 
-            var partsVOs = doc.documentElement.appendChild(doc.createElement("de:partVOs"));
-
-            // Parts Processing
-            json["de:partVOs"]["de:partVO"].forEach(function(part){
-
-                var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
-
-                for(var prop in part)
-                {
-                    if(typeof(part[prop]) !== "object" && prop !== "id")
-                    {
-                        if(part[prop])
-                        {
-                            var propNode = partV0.appendChild(doc.createElement(prop));
-                            propNode.textContent = part[prop];
-                        }
-                    }
-                }
-
-                partV0.setAttribute("id", part.id);
-
-                var deParts = partV0.appendChild(doc.createElement("de:parts"));
-                var dePart = deParts.appendChild(doc.createElement("de:part"));
-                dePart.setAttribute("id", part["de:parts"]["de:part"].id);
-                dePart.appendChild(doc.createElement("fas")).textContent = part["de:parts"]["de:part"]["de:fas"];
-            });
-
-            var sequenceFiles = doc.documentElement.appendChild(doc.createElement("de:sequenceFiles"));
-
-
-            // Sequences Processing
-
-            // FIRST STEP IS REMOVE DUPLICATED SEQUENCE FILES
-            var sourceSequences = json["de:sequenceFiles"]["de:sequenceFile"];
-            var sequences = [];
-            sourceSequences.forEach(function(elem,index){
-                var duplicated = false;
-                sequences.forEach(function(seq)
-                {
-                    if(elem["hash"]===seq["hash"]) duplicated = true;
-                });
-                if(!duplicated) sequences.push(elem);
-            });
-
-            // SECOND STEP IS BULDING XML ELEMENTS
-            sequences.forEach(function(sequence){
-                var sequenceFile = sequenceFiles.appendChild(doc.createElement("de:sequenceFile"));
-                
-                for(var prop in sequence)
-                {
-                    if(typeof(sequence[prop]) !== "object" && prop!=="hash" && prop!=="de:format" && prop!=="de:content")
-                    {
-                        if(sequence[prop])
-                        {
-                            var propNode = sequenceFile.appendChild(doc.createElement(prop));
-                            propNode.textContent = sequence[prop];
-                        }
-                    }
-                }
-
-                sequenceFile.setAttribute("hash", sequence.hash);
-
-                // Setting customized properties (which need transformation)
-                var propNode = sequenceFile.appendChild(doc.createElement("de:format"));
-                if(sequence["de:format"]) { propNode.textContent = sequence["de:format"]; }
-
-                var propNode = sequenceFile.appendChild(doc.createElement("de:content"));
-                if(sequence["de:content"]) { propNode.textContent = "<![CDATA[" + sequence["de:content"] +"]]>"; }
-                //if(sequence["de:content"]) { propNode.textContent = sequence["de:content"]; }
-
-                
-            });
-
-            var eugeneRules = doc.documentElement.appendChild(doc.createElement("de:eugeneRules"));
-
-            // EugeneRules Processing
+            // EUGENERULES PROCESSING
             json["de:eugeneRules"]["de:eugeneRule"].forEach(function(rule){
                 var eugeneRule = eugeneRules.appendChild(doc.createElement("de:eugeneRule"));
 
@@ -312,7 +321,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                     if(typeof(rule[prop]) !== "object")
                     {
                         var propNode = eugeneRule.appendChild(doc.createElement(prop));
-                        if(rule[prop]) { propNode.textContent = rule[prop]; }
+                        if(prop in rule) { propNode.textContent = rule[prop]; }
                     }
                 }
             });
@@ -337,7 +346,13 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             fileContent = fileContent.replace(/quot;/g,'"');
 
 
-            fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">','<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.1</de:version>');
+            fileContent = fileContent.replace('<de:design xmlns:de="http://www.teselagen.com">','<?xml version="1.0" encoding="UTF-8"?> <de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><de:version>4.2</de:version>');
+            
+            fileContent = Teselagen.utils.DeXmlUtils.formatXml(fileContent);
+
+            fileContent = fileContent.replace(/<de:content>/g,'<de:content><![CDATA[');
+            fileContent = fileContent.replace(/<\/de:content>/g,']]></de:content>');
+
             self.saveToFile(fileName,fileContent);
         });
     }

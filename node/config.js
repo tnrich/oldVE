@@ -15,12 +15,29 @@ module.exports = function(app, express) {
     app.dbname = "teselagen"; // Default DB (No change)
 
     if (app.program.prod) {
-        app.set("env", "production");
+        app.set('env', 'production');
+        require('newrelic');
     }
 
     var useAirbrake = app.program.useairbrake;
 
-    var server = require('http').Server(app);
+    var httpServer = require('http').createServer(app).listen(3000);
+  
+    if(app.get("env") === "production") {
+
+        var options = {
+            key: app.fs.readFileSync('/home/teselagen/keys/app.teselagen.com.key', 'utf8'),
+            cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+            ca: [
+                app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
+                app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
+            ]
+        };
+
+        var httpsServer = require('https').createServer(options,app).listen(3443);
+    }
+
+    app.io = app.socket.listen(httpServer, { log: false });
 
     // LOGGING
     require('./logging').configLogging(app, express);
@@ -139,7 +156,11 @@ module.exports = function(app, express) {
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({
             secret: 'j5',
-            store: new RedisStore({client: redis, prefix:'vede://', ttl:3600})
+            store: new RedisStore({
+                client: redis,
+                prefix: 'vede://',
+                ttl: 3600
+            })
         })); // Sessions managed using cookies
 
         redis.auth(Opts.redis_pass,function(err,ok){
@@ -295,6 +316,8 @@ module.exports = function(app, express) {
             });
         };
 
+        /*
+        MEM CACHE TESTS
         setTimeout(function(){
             console.log("writing to memcache");
             app.cache.set('test', 'hello', 0, function (err, result) {
@@ -311,6 +334,7 @@ module.exports = function(app, express) {
                 }
             });
         },1000);
+        */
     }
     else
     {
