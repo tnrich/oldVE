@@ -110,7 +110,7 @@ module.exports = function(app, express) {
             cookie: {
                 maxAge: 1000 * 60 * 60
             },
-            secret: 'j5'
+            secret: 'j5',
             store: new express.session.MemoryStore()
         }));
 
