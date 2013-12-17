@@ -576,8 +576,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var rule = eugeneRules[i];
             if (typeof(rule) !== "object") { continue; }
             var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
-
-            var operand2isNumber = false;
+            if(rule.getElementsByTagNameNS("*", "negationOperator")[0]) {
+                var negationOperator = rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent;
+            }
+            if(rule.getElementsByTagNameNS("*", "compositionalOperator")[0]) {
+                var conditional = rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent;
+            }
             var operand2Node = rule.getElementsByTagNameNS("*", "operand2ID")[0];
             var operand2;
             if(!operand2Node)
@@ -588,18 +592,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 operand2isNumber = true;
             }
             else {
-                operand2 = operand2Node.textContent;
-                if(parseInt(operand2)) {
-                    if(parseInt(operand2) == operand2Node) {
-                        operand2isNumber = false;
-                    } else {
-                        operand2 = parseInt(operand2);
-                        operand2isNumber = true;
-                    }
+                if(negationOperator == "true" && conditional=="MORE THAN") {
+                    operand2 = parseInt(operand2Node.textContent);
+                    operand2isNumber = true;
+                } else {
+                    operand2 = operand2Node.textContent;
+                    operand2isNumber = false;
                 }
             }
-
-            console.log(operand2);
 
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                 name: rule.getElementsByTagNameNS("*", "name")[0].textContent,
@@ -610,7 +610,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
             
-            console.log(operand2isNumber);
             if( operand2isNumber ) {
                 newEugeneRule.setOperand2(operand2);
             } else {

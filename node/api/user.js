@@ -153,13 +153,11 @@ module.exports = function(app) {
        * @method PUT "/users/:username"
        */
       put_user: function(req, res) {
-          req.user.username = req.body.username;
           req.user.preferences = req.body.preferences;
           req.user.userRestrictionEnzymeGroups = req.body.userRestrictionEnzymeGroups;
 
-          res.json({
-              error: true,
-              msg: 'Not allowed.'
+          req.user.save(function() {
+              res.json({});
           });
       },
 
@@ -168,7 +166,7 @@ module.exports = function(app) {
           var Preset = app.db.model('preset');
 
           User.findById(req.user._id).populate({
-            path: 'presets',
+            path: 'presets'
           }).exec(function(err, user) {
             var newPreset = new Preset({
               presetName: req.body.presetName,
@@ -194,6 +192,28 @@ module.exports = function(app) {
               res.json({});
             });
           });
+      },
+
+      del_presets: function(req,res){
+
+          var Preset = app.db.model('preset');
+
+          Preset.findByIdAndRemove(req.body.id,function(err){
+            if(err) return res.json({success:false});
+
+            User.findById(req.user._id).populate({
+              path: 'presets'
+            }).exec(function(err, user) {
+                user.presets.forEach(function(preset,presetKey){
+                  if(preset._id == req.body.id) delete user.presets[presetKey];
+                });
+                req.user.save(function(){
+                  res.json({});
+                });
+            });
+
+          });
+
       },
 
       get_presets: function(req,res){

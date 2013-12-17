@@ -1,4 +1,5 @@
-    Ext.define('Vede.view.common.TaskMonitorView', {
+Ext.define('Vede.view.common.TaskMonitorView', {
+    requires: ['Teselagen.event.CommonEvent'],
     extend: 'Ext.panel.Panel',
     id: 'taskMonitor',
     alias: 'widget.TaskMonitorView',
@@ -53,6 +54,9 @@
             text: 'Status',
             autoScroll: true,
             dataIndex: 'status',
+            width: 300,
+            minWidth: 300,
+            flex: 1,
             renderer: function(value) {
                 if(value==="In progress") {
                     return '<div class="pace-activity"></div>Running...'
@@ -62,6 +66,8 @@
                     return '<div class="status-note status-note-warning" style="margin-right:10px"></div>Completed with warnings.'
                 } else if(value==="Error") {
                     return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Failed.'
+                } else if(value==="Canceled") {
+                    return '<div class="status-note status-note-failed" style="margin-right:10px"></div>Canceled.'
                 }
             }
         },
@@ -84,8 +90,8 @@
                     if(rec.data.taskType === "builddna") socket.emit('cancelbuilddna', Teselagen.manager.ProjectManager.currentUser.data.username, rec.data.id );
                     Teselagen.manager.ProjectManager.currentTasks.remove(rec);
                 },
-                getClass: function(v, meta, rec) {          
-                      if(rec.data.status != "In progress") {                                                                      
+                getClass: function(v, meta, rec) {
+                      if(rec.data.status != "In progress") {
                           return 'x-hide-display';
                       }
                   }
@@ -105,10 +111,9 @@
                         project_id: rec.data.project_id,
                         _id: rec.data.id
                     };
-                    Vede.application.fireEvent("jumpToJ5Run",data);
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);
                 }
             }]
-        }      
-        ],
+        }]
     }]
 });

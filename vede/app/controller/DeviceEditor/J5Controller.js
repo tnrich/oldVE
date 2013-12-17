@@ -135,11 +135,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var selectedPreset = currentTab.presetsStore.findRecord('presetName',newPreset);
         currentTab.selectedPreset = selectedPreset;
 
-        if(newPreset=="Default")
+        if(newPreset && newPreset=="Default")
         {
             this.j5Parameters.setDefaultValues();
             currentTab.selectedPreset = selectedPreset;
             if(self.j5ParamsWindow) self.populateJ5ParametersDialog();
+            self.disablePresetOptions();
             return null;
         }
 
@@ -151,6 +152,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             self.j5Parameters.set(key, params);
         }
         if(self.j5ParamsWindow) self.populateJ5ParametersDialog();
+
+        self.disablePresetOptions();
     },
 
     onMainAppPanelTabChange: function(tabPanel, newTab, oldTab) {
@@ -338,8 +341,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onj5ParamsOKBtnClick: function () {
-        this.saveJ5Parameters();
-        this.j5ParamsWindow.close();
+        var self = this;
+        this.savePresetBtnClick(function(){
+            self.saveJ5Parameters();
+            self.j5ParamsWindow.close();
+        });
     },
 
     onCondenseAssemblyFilesSelectorChange: function (me, value) {
@@ -880,8 +886,46 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
     },
 
-    saveAsPresetBtn: function() {
+    disablePresetOptions: function(){
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var selectedPreset = currentTab.selectedPreset;
+
+        var savePreset = Ext.ComponentQuery.query("component[cls='savePresetBtn']")[0];
+        var deletePreset = Ext.ComponentQuery.query("component[cls='deletePresetBtn']")[0];
+        var newPreset = Ext.ComponentQuery.query("component[cls='newPresetBtn']")[0];
+
+        if(selectedPreset && selectedPreset.get('presetName') !== "Default")
+        {
+            if(savePreset) savePreset.enable();
+            if(deletePreset) deletePreset.enable();
+            if(newPreset) newPreset.enable();
+        }
+        else if(selectedPreset && selectedPreset.get('presetName') === "Default")
+        {
+            if(savePreset) savePreset.disable();
+            if(deletePreset) deletePreset.disable();
+            if(newPreset) newPreset.enable();            
+        }
+        else
+        {
+            if(savePreset) savePreset.disable();
+            if(deletePreset) deletePreset.disable();
+            if(newPreset) newPreset.enable();
+        }
+    },
+
+    savePresetBtnClick: function(cb) {
         var self = this;
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var selectedPreset = currentTab.selectedPreset;
+
+        console.log(selectedPreset);
+        if(!selectedPreset || selectedPreset.get('presetName') === "Default")
+        {
+            console.log("No preset selected"); return false;
+        }
+
         var parameters = {};
         this.j5Parameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
@@ -889,127 +933,104 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         }, this);
 
-
-
-        var createPreset = function(){
-            Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn,text){
-                if(btn !== "ok") return null;
-
-                Ext.Ajax.request({
-                    method: 'POST',
-                    url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
-                    params: {
-                        presetName: text,
-                        j5parameters: JSON.stringify(parameters)
-                    },
-                    success: function(response){
-                        Ext.MessageBox.alert('Success', 'Preset saved', function(){
-                            Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,text);
-                        });
-                    }
+        Ext.Ajax.request({
+            method: 'PUT',
+            url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+            params: {
+                id: selectedPreset.data.id,
+                j5parameters: JSON.stringify(parameters)
+            },
+            success: function(response){
+                Ext.MessageBox.alert('Success', 'Preset updated', function(){
+                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
+                    if(typeof(cb)=="function") cb();
                 });
+            }
+        });
+    },
 
+    deletePresetBtnClick: function() {
+        var self = this;
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var selectedPreset = currentTab.selectedPreset;
 
-            }, this);
-        };
+        if(!selectedPreset || selectedPreset.get('presetName') === "Default")
+        {
+            console.log("No preset selected"); return false;
+        }
 
-        var editPreset = function(selectedPreset){
+        Ext.MessageBox.show({
+            title: 'Delete preset?',
+            msg: selectedPreset.get('presetName'),
+            buttons: Ext.MessageBox.YESNO,
+            buttonText:{
+                yes: "Delete",
+                no: "Cancel"
+            },
+            fn: function(btn){
+                if(btn==="yes") {
+                    Ext.Ajax.request({
+                        method: 'DELETE',
+                        url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                        params: {
+                            id: selectedPreset.data.id
+                        },
+                        success: function(response){
+                            Ext.MessageBox.alert('Success', 'Preset deleted', function(){
+                                Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,"");
+                            });
+                        }
+                    });                        
+                }
+            }
+        });
+    },
+
+    newPresetBtnClick: function() {
+        var self = this;
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var selectedPreset = currentTab.selectedPreset;
+
+        //if(selectedPreset && selectedPreset.get('presetName') !== "Default")
+        //{
+        //    console.log("Preset already selected"); return false;
+        //}
+        console.log("Trying to create new preset");
+
+        var parameters = {};
+        this.j5Parameters.fields.eachKey(function (key) {
+            if(key !== "id" && key !== "j5run_id") {
+                parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
+            }
+        }, this);
+
+        function performCreation(text) {
             Ext.Ajax.request({
-                method: 'PUT',
+                method: 'POST',
                 url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
                 params: {
-                    id: selectedPreset.data.id,
+                    presetName: text,
                     j5parameters: JSON.stringify(parameters)
                 },
                 success: function(response){
-                    Ext.MessageBox.alert('Success', 'Preset updated', function(){
-                        Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
+                    Ext.MessageBox.alert('Success', 'Preset saved', function(){
+                        Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,text);
                     });
                 }
             });
-        };
-
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        if(currentTab.selectedPreset && currentTab.selectedPreset.get('presetName') != "Default")
-        {
-            var selectedPreset = currentTab.selectedPreset;
-
-            Ext.MessageBox.show({
-                title: 'Update preset?',
-                msg: selectedPreset.get('presetName'),
-                buttons: Ext.MessageBox.YESNO,
-                buttonText:{
-                    yes: "Update",
-                    no: "Create new"
-                },
-                fn: function(btn){
-                    if(btn==="yes") editPreset(selectedPreset);
-                    else createPreset();
-                }
-            });
         }
-        else createPreset();
-    },
 
-    onOverwritePresetBtnClick: function() {
-        var self = this;
-        var updateWindow = Ext.create('Ext.window.Window', {
-            title: 'Update Preset',
-            height: 120,
-            width: 280,
-            layout: 'vbox',
-            items: [{
-                xtype: 'displayfield',
-                value: 'Select the preset you would like to overwrite:'
-            }, {
-                xtype: 'combobox',
-                store: Ext.getCmp("mainAppPanel").getActiveTab().presetsStore,
-                displayField: 'presetName',
-                value: Ext.getCmp("mainAppPanel").getActiveTab().presetsStore.first()
-            }, {
-                xtype: 'container',
-                layout: 'hbox',
-                items: [{
-                    xtype: 'button',
-                    text: 'OK',
-                    listeners: {
-                        click: function() {
-                            var combobox = this.up('window').down('combobox');
-                            var selectedPreset = combobox.store.getAt(combobox.store.find(combobox.displayField, combobox.getValue()));
-                            var parameters = {};
+        var promptName = function() {
+            Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn,text){
+                if(btn !== "ok") return null;
+                if(text=="") promptName();
+                else performCreation(text);
+            }, this);
+        }
 
-                            self.j5Parameters.fields.eachKey(function (key) {
-                                if(key !== "id" && key !== "j5run_id") {
-                                    parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
-                                }
-                            });
+        promptName();        
 
-                            this.up('window').close();
-
-                            Ext.Ajax.request({
-                                method: 'PUT',
-                                url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
-                                params: {
-                                    id: selectedPreset.data.id,
-                                    j5parameters: JSON.stringify(parameters)
-                                },
-                                success: function(response){
-                                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
-                                }
-                            });
-                        }
-                    }
-                }, {
-                    xtype: 'button',
-                    text: 'Cancel',
-                    listeners: {
-                        click: function() {
-                            this.up('window').close();
-                        }
-                    }
-                }]
-            }]
-        }).show();
     },
 
     onDownloadj5Btn: function (button, e, options) {
@@ -1140,11 +1161,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='resetj5ServerParamsBtn']": {
                 click: this.resetServerj5Params
             },
-            "button[cls='saveAsPresetBtn']": {
-                click: this.saveAsPresetBtn
+            "button[cls='savePresetBtn']": {
+                click: this.savePresetBtnClick
             },
-            "button[cls='overwritePresetBtn']": {
-                click: this.onOverwritePresetBtnClick
+            "button[cls='deletePresetBtn']": {
+                click: this.deletePresetBtnClick
+            },
+            "button[cls='newPresetBtn']": {
+                click: this.newPresetBtnClick
             },
             "button[cls='j5ParamsCancelBtn']": {
                 click: this.onj5ParamsCancelBtnClick

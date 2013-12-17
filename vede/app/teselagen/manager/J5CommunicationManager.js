@@ -157,11 +157,9 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
      * Generates an AJAX request to the j5 server.
      */
     generateAjaxRequest: function (cb) {
-
-
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-
         var self = this;
+
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
             timeout: 100000,
@@ -187,8 +185,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 else return cb(false,response);
             }
         });
-        
     },
+
     downloadResults: function (btn) {
         if(this.currentResults) location.href="data:application/zip;base64,"+Teselagen.manager.SessionManager.buildUrl(this.currentResults.zipfile, "");
         btn.toggle();

@@ -6,7 +6,6 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.TasksMonitor", {
-
     singleton: true,
     requires: ["Ext.data.Store",
                "Teselagen.event.CommonEvent",
@@ -24,7 +23,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     bootMonitoring: function(){
         this.monitorServerTasks();
-    },    
+    },
 
     startMonitoring: function() {
     },
@@ -35,7 +34,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     stop: function(boot){
     },
 
-    addJ5RunObserver: function(){},
+    addJ5RunObserver: function(j5Run) {
+        Vede.application.fireEvent(Teselagen.event.CommonEvent.LOAD_J5_RUNS);
+    },
 
     monitorServerTasks: function(){
         var self = this;
@@ -48,6 +49,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 return false;
             }
 
+            console.log("Socket created");
+
             socket = io.connect(Teselagen.manager.SessionManager.getBaseURL().replace("/api/",":3000"));
 
             socket.on('message',function(msg) {
@@ -55,8 +58,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             });
 
             socket.on('connect',function() {
-                
-                console.log('SOCKET.IO : Connected');    
+
+                console.log('SOCKET.IO : Connected');
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('j5completed',function(data){
@@ -67,20 +70,25 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     console.log(startDate, endDate, elapsed);
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
-                    console.log("j5 run completed message");
-                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",data);}
+                    toastr.options.onclick = function() { Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);};
                     toastr.success("j5 Run for " +data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: data});
                     toastr.options.timeOut = 5000;
                     var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
-                    var btn = tab.query("button[cls='runj5Btn']")[0];
-                    btn.enable();
-                    btn.setText("Submit Run to j5");
-                    $(btn.el.dom).find(".loader-mini").remove();
-                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                    var j5tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + " j5 Report']")[0];
+                    if(tab) {
+                        var btn = tab.query("button[cls='runj5Btn']")[0];
+                        btn.enable();
+                        btn.setText("Submit Run to j5");
+                        $(btn.el.dom).find(".loader-mini").remove();
+                        Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                    }
+
+                    if(j5tab) {
+                        Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, false);
+                    }
                 });
 
                 socket.on('update',function(data){
-                    console.log(data);
                     if(!data)
                     {
                         Teselagen.manager.ProjectManager.currentTasks = Ext.create("Ext.data.Store", {
@@ -110,20 +118,54 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
                 });
 
+                socket.on('canceled', function(data) {
+                    console.log(data);
+                    console.log("here");
+                    var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
+                    var btn = tab.query("button[cls='runj5Btn']")[0];
+                    btn.enable();
+                    btn.setText("Submit Run to j5");
+                    $(btn.el.dom).find(".loader-mini").remove();
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                });
+
+                socket.on('j5error', function(data) {
+                    console.log("j5 error");
+                    var startDate = new Date(data.date);
+                    var endDate = new Date(data.endDate);
+                    var elapsed = endDate - startDate;
+                    console.log(startDate, endDate, elapsed);
+                    elapsed = Math.round(elapsed/1000);
+                    elapsed = self.elapsedDate(elapsed);
+                    toastr.options.onclick = function() { Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);};
+                    toastr.error("j5 Run for " +data.devicedesign_name + " " + data.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: data});
+                    toastr.options.timeOut = 5000;
+
+                    console.log(data);
+                    console.log("here");
+                    var tab = Ext.getCmp("mainAppPanel").query("component[title='" + data.devicedesign_name + "']")[0];
+                    var btn = tab.query("button[cls='runj5Btn']")[0];
+                    btn.enable();
+                    btn.setText("Submit Run to j5");
+                    $(btn.el.dom).find(".loader-mini").remove();
+                    Vede.application.fireEvent(Teselagen.event.CommonEvent.J5_RUN_STATUS_CHANGED, false);
+                    
+                });
+
             });
 
             socket.on('disconnect', function (socket) {
                 console.log('Disconnected');
             });
 
-            self.socket = socket; 
+            self.socket = socket;
 
         });
     },
 
     elapsedDate: function (seconds)
     {
-        var numdays = Math.floor((seconds % 31536000) / 86400); 
+        var numdays = Math.floor((seconds % 31536000) / 86400);
         var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
         var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
         var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
@@ -161,7 +203,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             if ( self.mon[j5run._id] )
             {
                 // Continue observed
-                if( self.mon[j5run._id] !== j5run.status ) 
+                if( self.mon[j5run._id] !== j5run.status )
                 {
                     // Change
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
@@ -200,7 +242,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
     elapsedDate: function (seconds)
     {
-    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numdays = Math.floor((seconds % 31536000) / 86400);
     var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
     var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
     var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
