@@ -83,6 +83,15 @@ module.exports = function(app, express) {
         Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname;
     }
 
+
+    app.use(function(req,res,next) {
+      if (!/https/.test(req.protocol)){
+         res.redirect("https://" + req.headers.host + req.url);
+      } else {
+         return next();
+      } 
+    });
+
     /*
     For quick activation
     db.users.update({"username" : "rpavez"},{$set:{"activated":true}})
@@ -125,15 +134,6 @@ module.exports = function(app, express) {
 
     app.configure('production', function() {
         process.env.NODE_ENV = 'production';
-
-
-        app.use(function(req,res,next) {
-          if (!/https/.test(req.protocol)){
-             res.redirect("https://" + req.headers.host + req.url);
-          } else {
-             return next();
-          } 
-        });
 
         if(useAirbrake) {
             // User Airbrake to log errors.
