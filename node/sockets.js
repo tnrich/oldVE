@@ -12,62 +12,63 @@ module.exports = function(app) {
     sub.subscribe("canceled");
     sub.subscribe("killj5pid");
 
+    sub.on("message", function (channel, data) {
+        if(channel=="j5jobs") 
+        {
+            var name = data;
+            if(!app.sockets[name]) { return false; }
+            app.cache.get(name,function(err,user){
+                if(user) app.sockets[name].emit('update',user);
+            });      
+        }
+        else if(channel=="j5completed")
+        {
+            var data = JSON.parse(data);
+            var name = data.user;
+            var j5run = data.j5run;
+            if(!app.sockets[name]) { return false; }
+            app.sockets[name].emit('j5completed',j5run);                  
+        }
+        else if(channel=="j5error")
+        {
+            var data = JSON.parse(data);
+            var name = data.user;
+            var j5run = data.j5run;
+            if(!app.sockets[name]) { return false; }
+            app.sockets[name].emit('j5error',j5run);                  
+        }
+        else if(channel=="canceled") 
+        {
+            var data = JSON.parse(data);
+            var name = data.user;
+            var j5run = data.j5run;
+            if(!app.sockets[name]) { return false; }
+            app.sockets[name].emit('canceled', j5run);   
+        }
+        else if(channel=="killj5pid") 
+        {
+            var data = JSON.parse(data);
+            var pid = data.pid;
+            console.log("Received broadcast to kill process "+pid)
+            if(app.j5pids[pid])
+            {
+                console.log("Server received broadcast to kill j5 job and is killing the process");
+                require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
+                    console.log(arguments);
+                    app.io.pub.publish("canceled", JSON.stringify({user:data.user,j5run:data.j5run}));
+                });
+            }
+            else
+            {
+                console.log("Server received broadcast to kill j5 job but process was not on this server");
+            } 
+        }
+    });
+
+
     io.sockets.on('connection', function (client) {
 
         console.log("New connection");
-
-        sub.on("message", function (channel, data) {
-            if(channel=="j5jobs") 
-            {
-                var name = data;
-    			if(!app.sockets[name]) { return false; }
-    			app.cache.get(name,function(err,user){
-    				if(user) app.sockets[name].emit('update',user);
-    			});      
-            }
-            else if(channel=="j5completed")
-            {
-                var data = JSON.parse(data);
-                var name = data.user;
-                var j5run = data.j5run;
-                if(!app.sockets[name]) { return false; }
-                app.sockets[name].emit('j5completed',j5run);                  
-            }
-            else if(channel=="j5error")
-            {
-                var data = JSON.parse(data);
-                var name = data.user;
-                var j5run = data.j5run;
-                if(!app.sockets[name]) { return false; }
-                app.sockets[name].emit('j5error',j5run);                  
-            }
-            else if(channel=="canceled") 
-            {
-                var data = JSON.parse(data);
-                var name = data.user;
-                var j5run = data.j5run;
-                if(!app.sockets[name]) { return false; }
-                app.sockets[name].emit('canceled', j5run);   
-            }
-            else if(channel=="killj5pid") 
-            {
-                var data = JSON.parse(data);
-                var pid = data.pid;
-                console.log("Received broadcast to kill process "+pid)
-                if(app.j5pids[pid])
-                {
-                    console.log("Server received broadcast to kill j5 job and is killing the process");
-                    require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
-                        console.log(arguments);
-                        app.io.pub.publish("canceled", JSON.stringify({user:data.user,j5run:data.j5run}));
-                    });
-                }
-                else
-                {
-                    console.log("Server received broadcast to kill j5 job but process was not on this server");
-                } 
-            }
-        });
 
         client.on("set nickname", function(name){
         	app.sockets[name] = client;
