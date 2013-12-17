@@ -126,6 +126,15 @@ module.exports = function(app, express) {
     app.configure('production', function() {
         process.env.NODE_ENV = 'production';
 
+
+        app.use(function(req,res,next) {
+          if (!/https/.test(req.protocol)){
+             res.redirect("https://" + req.headers.host + req.url);
+          } else {
+             return next();
+          } 
+        });
+
         if(useAirbrake) {
             // User Airbrake to log errors.
             var airbrake = require('airbrake').createClient("40e870e0-c0a6-c307-8bef-37371fd86407");
