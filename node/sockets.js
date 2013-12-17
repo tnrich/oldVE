@@ -51,12 +51,15 @@ module.exports = function(app) {
             }
             else if(channel=="killj5pid") 
             {
+                var data = JSON.parse(data);
+                var pid = data.pid;
+                console.log("Received broadcast to kll process "+pid)
                 if(app.j5pids[pid])
                 {
                     console.log("Server received broadcast to kill j5 job and is killing the process");
                     require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
                         console.log(arguments);
-                        app.io.pub.publish("canceled", JSON.stringify({user:username,j5run:j5run}));
+                        app.io.pub.publish("canceled", JSON.stringify({user:data.user,j5run:data.j5run}));
                     });
                 }
                 else
@@ -80,7 +83,6 @@ module.exports = function(app) {
         });
 
         client.on("cancelj5run", function(username, j5runid){
-            console.log(arguments);
             console.log("Attempt to cancel j5run");
 
             var j5Runs = app.db.model("j5run");
@@ -100,7 +102,7 @@ module.exports = function(app) {
                 else
                 {
                     console.log("j5 process not in this server... broadcasting to other servers")
-                    app.io.pub.publish("killj5pid", pid);
+                    app.io.pub.publish("killj5pid", JSON.stringify({user:username,j5run:j5run,pid:pid}));
                 }
             });
 
