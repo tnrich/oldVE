@@ -342,11 +342,11 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
                 viewMode = circular ? "circular" : "linear";
 
                 if(viewMode == "linear") {
-                    for(var i = 0; i < circularMenuItems.length; i++) {
+                    for(var i = 0; i < sequenceLinearBtn.length; i++) {
                         sequenceLinearBtn[i].setChecked(true, true);
                     }
                 } else {
-                    for(var i = 0; i < circularMenuItems.length; i++) {
+                    for(var i = 0; i < sequenceLinearBtn.length; i++) {
                         sequenceLinearBtn[i].setChecked(false, true);
                     }
                 }
