@@ -6,15 +6,15 @@ module.exports = function(app) {
     sub = app.io.sub;
     store = app.io.client;
 
+    sub.subscribe("j5jobs");
+    sub.subscribe("j5completed");
+    sub.subscribe("j5error");
+    sub.subscribe("canceled");
+    sub.subscribe("killj5pid");
+
     io.sockets.on('connection', function (client) {
 
         console.log("New connection");
-
-        sub.subscribe("j5jobs");
-        sub.subscribe("j5completed");
-        sub.subscribe("j5error");
-        sub.subscribe("canceled");
-        sub.subscribe("killj5pid");
 
         sub.on("message", function (channel, data) {
             if(channel=="j5jobs") 
@@ -53,7 +53,7 @@ module.exports = function(app) {
             {
                 var data = JSON.parse(data);
                 var pid = data.pid;
-                console.log("Received broadcast to kll process "+pid)
+                console.log("Received broadcast to kill process "+pid)
                 if(app.j5pids[pid])
                 {
                     console.log("Server received broadcast to kill j5 job and is killing the process");
