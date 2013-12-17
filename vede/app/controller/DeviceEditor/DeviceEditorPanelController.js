@@ -468,22 +468,55 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         });
     },
 
-    onDeviceEditorSaveBtnClick: function () {
+    onDeviceEditorSaveBtnClick: function() {
         var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
         activeTab.el.mask("Loading", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        this.saveDEProject(function () {
+        this.saveDEProject(function() {
             activeTab.el.unmask();
-
         });
 
     },
 
-    onDeviceEditorSaveEvent: function (arg) {
+    onDeviceEditorSaveEvent: function(arg) {
         this.saveDEProject(arg);
     },
 
+    onDeviceEditorSaveAsBtnClick: function() {
+        var saveAsWindow = Ext.create("Vede.view.de.SaveAsWindow").show();
+        var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
+        nameField.inputEl.dom.setAttribute("placeholder", design.get("name"));
+    },
+
+    onSaveDeviceAsWindowOKBtnClick: function() {
+        var saveAsWindow = Ext.ComponentQuery.query('window[cls="deviceEditorSaveAsWindow"]')[0];
+        var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
+        var oldDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+        var newDesign = oldDesign.copy();
+
+        newDesign.set({
+            name: nameField.getValue(),
+            project: oldDesign.getProject()
+        });
+
+        newDesign.parts().add(oldDesign.parts().getRange());
+        newDesign.rules().add(oldDesign.rules().getRange());
+        newDesign.bins().add(oldDesign.bins().getRange());
+
+        newDesign.save({
+            success: function() {
+                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                saveAsWindow.close();
+                Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+            },
+            failure: function() {
+                Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+            }
+        });
+    },
 
     onAddRowAboveClick: function () {
         this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
@@ -516,7 +549,6 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onJ5buttonClick: function () {
         Vede.application.fireEvent(this.CommonEvent.RUN_J5);
         toastr.options.onclick = null;
-        
 
         toastr.info("Design Saved");
     },
@@ -758,8 +790,14 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.onJumpToJ5Run, this);
 
         this.control({
+            "button[cls='saveDeviceAsWindowOKButton']": {
+                click: this.onSaveDeviceAsWindowOKBtnClick
+            },
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
                 click: this.onDeviceEditorSaveEvent
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Save Design As']": {
+                click: this.onDeviceEditorSaveAsBtnClick
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {
                 click: this.onDeviceEditorClearBtnClick
