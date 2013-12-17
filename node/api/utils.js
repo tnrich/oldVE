@@ -13,8 +13,8 @@ module.exports = function(app) {
 
     //if(app.get("env") === "production") {
         var cdn_url = 'https://d3k67f84one1m6.cloudfront.net/';
-        //cdn_url = 'https://s3-us-west-1.amazonaws.com/teselagen/';
-        cdn_url = 'https://s3-us-west-1.amazonaws.com/app.teselagen.com/';
+        cdn_url = 'https://s3-us-west-1.amazonaws.com/teselagen/';
+        //cdn_url = 'https://s3-us-west-1.amazonaws.com/app.teselagen.com/';
         website_html = website_html.replace(/<link href="/g,'<link href="'+cdn_url);
         website_html = website_html.replace(/<link rel="stylesheet" href="/g,'<link rel="stylesheet" href="'+cdn_url);
         website_html = website_html.replace(/link rel="shortcut icon" href="/g,'link rel="shortcut icon" href="'+cdn_url);
