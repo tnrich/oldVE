@@ -15,7 +15,6 @@ var async = require('async');
 var bcrypt = require('bcrypt');
 
 module.exports = function(db) {
-
     var mongoose = require("mongoose");
     var crypto = require("crypto");
 
@@ -287,6 +286,14 @@ module.exports = function(db) {
         }]
     });
     registerSchema('project', ProjectSchema);
+
+    ProjectSchema.pre('remove', function(next) {
+        db.model('User').update({}, {
+            $pull: {
+                projects: this._id
+            }
+        }).exec(next);
+    });
 
     var PresetSchema = new Schema({
         presetName: String,

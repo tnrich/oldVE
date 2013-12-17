@@ -4,7 +4,7 @@ module.exports = function(app) {
 
     var mandrill = require('mandrill-api/mandrill');
     var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
-    
+
     var sendRegisteredMail = function(user) {
       var html = app.constants.activationResponseEmailText;
       html = html.replace("<username>", user.firstName);
