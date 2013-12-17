@@ -21,15 +21,18 @@ module.exports = function(app, express) {
 
     var useAirbrake = app.program.useairbrake;
 
-    //console.log(options);
+    var options = {
+        key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
+        cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+        ca: [
+            app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
+            app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
+        ]
+    };
 
     var httpServer = require('http').createServer(app).listen(3000);
   
     if(app.get("env") === "production") {
-        var options = {
-            key: app.fs.readFileSync('/home/teselagen/keys/app.teselagen.com.key', 'utf8'),
-            cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
-        };
         var httpsServer = require('https').createServer(options,app).listen(3443);
     }
 
