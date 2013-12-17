@@ -22,7 +22,7 @@ module.exports = function(app, express) {
     var useAirbrake = app.program.useairbrake;
 
     var options = {
-        key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
+        key: app.fs.readFileSync('/home/teselagen/keys/app.teselagen.com.key', 'utf8'),
         cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
         ca: [
             app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
