@@ -27,6 +27,8 @@ module.exports = function(app){
     //if(app.get("env")==="production"){
 
         app.use(function(req,res,next) {
+            console.log(req.protocol);
+            return next();
           if (!/https/.test(req.protocol)){
              console.log("Forcing https");
              res.redirect("https://" + req.headers.host + req.url);
