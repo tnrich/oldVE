@@ -1,6 +1,6 @@
 module.exports = function(app) {	
 	app.sockets = {};
-
+    app.j5pids = {};
 	io = app.io;
     pub = app.io.pub;
     sub = app.io.sub;
@@ -14,6 +14,7 @@ module.exports = function(app) {
         sub.subscribe("j5completed");
         sub.subscribe("j5error");
         sub.subscribe("canceled");
+        sub.subscribe("killj5pid");
 
         sub.on("message", function (channel, data) {
             if(channel=="j5jobs") 
@@ -48,6 +49,20 @@ module.exports = function(app) {
                 if(!app.sockets[name]) { return false; }
                 app.sockets[name].emit('canceled', j5run);   
             }
+            else if(channel=="killj5pid") 
+            {
+                if(app.j5pids[pid])
+                {
+                    console.log("Server received broadcast to kill j5 job and is killing the process");
+                    require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
+                        console.log(arguments);
+                        app.io.pub.publish("canceled", JSON.stringify({user:username,j5run:j5run}));
+                }
+                else
+                {
+                    console.log("Server received broadcast to kill j5 job but process was not on this server");
+                } 
+            }
         });
 
         client.on("set nickname", function(name){
@@ -66,16 +81,26 @@ module.exports = function(app) {
         client.on("cancelj5run", function(username, j5runid){
             console.log(arguments);
             console.log("Attempt to cancel j5run");
+
             var j5Runs = app.db.model("j5run");
             j5Runs.findById(j5runid).exec(function(err,j5run){
                 if(err || !j5run) { console.log("j5Run not found"); return false;}
                 j5run.status = "Canceled"; j5run.save();
                 if(!j5run.process || !j5run.process.pid) { console.log("j5Run doesn't have attached process"); return false;}
                 var pid = j5run.process.pid;
-                require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
-                    console.log(arguments);
-                    app.io.pub.publish("canceled", JSON.stringify({user:username,j5run:j5run}));
-                });
+
+                if(app.j5pids[pid])
+                {
+                    require('child_process').exec('kill -15 '+pid, function (error, stdout, stderr) {
+                        console.log(arguments);
+                        app.io.pub.publish("canceled", JSON.stringify({user:username,j5run:j5run}));
+                    });
+                }
+                else
+                {
+                    console.log("j5 process not in this server... broadcasting to other servers")
+                    app.io.pub.publish("killj5pid", pid);
+                }
             });
 
             app.cache.removeTask( username , j5runid, function(){});

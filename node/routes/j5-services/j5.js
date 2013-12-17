@@ -358,6 +358,7 @@ app.post('/executej5',restrict,function(req,res){
           var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
           var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
           console.log("J5 Process started with pid: "+newChild.pid);
+          app.j5pids[newChild.pid] = true;
 
           newj5Run.process = {
             pid: newChild.pid,
@@ -379,6 +380,7 @@ app.post('/executej5',restrict,function(req,res){
 
           newChild.on('exit', function (code,signal) {
               console.log("Process finished with code ",code," and signal ",signal);
+              delete app.j5pids[newChild.pid];
               //quicklog(require('util').inspect(newChild.output,false,null));
               newChild.output = newChild.output.substr(newChild.output.indexOf('<'));
               require('xml2js').parseString(newChild.output, function (err, result) {
