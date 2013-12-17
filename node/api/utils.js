@@ -277,7 +277,15 @@ module.exports = function(app) {
         },
 
         index_website: function(req,res) {
-            res.send(website_html);
+
+            if(app.get("env") === "production") {
+                return res.send(website_html);
+            }
+            else
+            {
+                var website_html = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp","build","Vede","production") + '/index.html' , "utf8");
+                return res.send(website_html);
+            }
         }
     };
 };
