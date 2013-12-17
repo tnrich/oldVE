@@ -10,7 +10,7 @@ module.exports = function(app) {
     sub.subscribe("j5completed");
     sub.subscribe("j5error");
     sub.subscribe("canceled");
-    sub.subscribe("killj5pid");
+    sub.subscribe("killj5process");
 
     sub.on("message", function (channel, data) {
         if(channel=="j5jobs") 
@@ -45,7 +45,7 @@ module.exports = function(app) {
             if(!app.sockets[name]) { return false; }
             app.sockets[name].emit('canceled', j5run);   
         }
-        else if(channel=="killj5pid") 
+        else if(channel=="killj5process") 
         {
             var data = JSON.parse(data);
             var pid = data.pid;
@@ -103,7 +103,7 @@ module.exports = function(app) {
                 else
                 {
                     console.log("j5 process not in this server... broadcasting to other servers")
-                    app.io.pub.publish("killj5pid", JSON.stringify({user:username,j5run:j5run,pid:pid}));
+                    app.io.pub.publish("killj5process", JSON.stringify({user:username,j5run:j5run,pid:pid}));
                 }
             });
 
