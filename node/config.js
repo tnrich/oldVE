@@ -106,12 +106,11 @@ module.exports = function(app, express) {
         app.use(express.urlencoded());
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
-        app.use(express.session({
+        app.use(express.cookieSession({
             cookie: {
                 maxAge: 1000 * 60 * 60
             },
-            secret: 'j5'
-            //store: new express.session.MemoryStore()
+            secret: 'secretj5!'
         }));
 
         app.use(app.passport.initialize());
