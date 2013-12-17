@@ -24,16 +24,17 @@ module.exports = function(app){
     });
 
 
-    if(app.get("env")==="production"){
+    //if(app.get("env")==="production"){
 
         app.use(function(req,res,next) {
           if (!/https/.test(req.protocol)){
+             console.log("Forcing https");
              res.redirect("https://" + req.headers.host + req.url);
           } else {
              return next();
           } 
         });
 
-    };
+    //};
 
 }
