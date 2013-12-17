@@ -498,6 +498,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         var newDesign = oldDesign.copy();
         var currentProject = oldDesign.getProject();
 
+        // If we don't do this, it calls the API with an auto-generated ID.
+        currentProject.setId(oldDesign.get('project_id'));
+
         currentProject.designs().load({
             callback: function() {
                 var duplicateIndex = currentProject.designs().find('name', newName);
