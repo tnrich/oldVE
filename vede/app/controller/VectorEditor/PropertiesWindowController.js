@@ -328,6 +328,7 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
         var circular = propertiesWindow.down("component[cls='propertiesWindowCircularField']").getValue();
         var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
         var sequenceManager = this.SequenceController.getActiveTab().sequenceManager;
+        var sequenceLinearBtn = this.SequenceController.getActiveTab().query("component[identifier*='sequenceLinearMenuItem']");
         var viewMode;
 
         if(name === null || name.match(/^\s*$/) || name.length===0) {
@@ -339,6 +340,17 @@ Ext.define("Vede.controller.VectorEditor.PropertiesWindowController", {
             if (circular !== sequenceManager.getCircular()) {
                 sequenceManager.setCircular(circular);
                 viewMode = circular ? "circular" : "linear";
+
+                if(viewMode == "linear") {
+                    for(var i = 0; i < circularMenuItems.length; i++) {
+                        sequenceLinearBtn[i].setChecked(true, true);
+                    }
+                } else {
+                    for(var i = 0; i < circularMenuItems.length; i++) {
+                        sequenceLinearBtn[i].setChecked(false, true);
+                    }
+                }
+
                 this.application.fireEvent(this.VisibilityEvent.VIEW_MODE_CHANGED, viewMode);
             }
             workingSequence.setSequenceManager(sequenceManager);
