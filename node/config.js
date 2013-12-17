@@ -168,7 +168,7 @@ module.exports = function(app, express) {
             store: new RedisStore({
                 client: redis,
                 prefix: 'vede://',
-                ttl: 3600
+                ttl: 3600 * 1000
             })
         })); // Sessions managed using cookies
 
