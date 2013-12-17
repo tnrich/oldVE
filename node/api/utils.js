@@ -283,7 +283,7 @@ module.exports = function(app) {
             }
             else
             {
-                var website_html = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp","build","Vede","production") + '/index.html' , "utf8");
+                var website_html = app.fs.readFileSync( require('path').resolve(__dirname,"../../","vede-cp") + '/index.html' , "utf8");
                 return res.send(website_html);
             }
         }
