@@ -21,7 +21,6 @@ module.exports = function (app) {
 	var fs = require("fs");
 	var spawn = require('child_process').spawn;
 	var util = require('util');
-	var spawn = require('child_process').spawn;
 	var _ = require('underscore');
 
 /*

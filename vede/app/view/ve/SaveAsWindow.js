@@ -102,7 +102,7 @@ Ext.define('Vede.view.ve.SaveAsWindow', {
                             xtype: 'button',
                             id: 'saveAsWindowOKButton',
                             margin: 10,
-                            text: 'Ok'                                          
+                            text: 'Ok'
                         }
                     ]
                 }

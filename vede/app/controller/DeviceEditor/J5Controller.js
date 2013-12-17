@@ -343,6 +343,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onj5ParamsOKBtnClick: function () {
         var self = this;
+        var selectedPreset = currentTab.selectedPreset;
+
+        if(!selectedPreset || selectedPreset.get('presetName') === "Default") {
+            this.j5ParamsWindow.close();
+        }
+
         this.savePresetBtnClick(function(){
             self.saveJ5Parameters();
             self.j5ParamsWindow.close();

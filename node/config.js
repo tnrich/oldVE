@@ -21,15 +21,19 @@ module.exports = function(app, express) {
 
     var useAirbrake = app.program.useairbrake;
 
-    //console.log(options);
-
     var httpServer = require('http').createServer(app).listen(3000);
   
     if(app.get("env") === "production") {
+
         var options = {
             key: app.fs.readFileSync('/home/teselagen/keys/app.teselagen.com.key', 'utf8'),
             cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+            ca: [
+                app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
+                app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
+            ]
         };
+
         var httpsServer = require('https').createServer(options,app).listen(3443);
     }
 
@@ -106,8 +110,8 @@ module.exports = function(app, express) {
             cookie: {
                 maxAge: 1000 * 60 * 60
             },
-            secret: 'j5',
-            store: new express.session.MemoryStore()
+            secret: 'j5'
+            //store: new express.session.MemoryStore()
         }));
 
         app.use(app.passport.initialize());
@@ -121,6 +125,15 @@ module.exports = function(app, express) {
 
     app.configure('production', function() {
         process.env.NODE_ENV = 'production';
+
+
+        app.use(function(req,res,next) {
+          if (!/https/.test(req.protocol)){
+             res.redirect("https://" + req.headers.host + req.url);
+          } else {
+             return next();
+          } 
+        });
 
         if(useAirbrake) {
             // User Airbrake to log errors.
