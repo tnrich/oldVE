@@ -25,7 +25,7 @@ module.exports = function(app){
 
 
     //if(app.get("env")==="production"){
-
+      /*
         app.use(function(req,res,next) {
             console.log(req.protocol);
             return next();
@@ -36,7 +36,7 @@ module.exports = function(app){
              return next();
           } 
         });
-
+  */
     //};
 
 }
