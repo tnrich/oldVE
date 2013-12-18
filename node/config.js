@@ -8,6 +8,7 @@ module.exports = function(app, express) {
     .version('0.0.1')
     .option('-p, --prod', 'Run Production environment')
     .option('-d, --remote', 'Force use remote DB')
+    .option('-j, --localj5', 'Force use local j5')
     .option('-r, --port <n>', 'Node port default is 3000', parseInt)
     .parse(process.argv);
 
@@ -69,8 +70,7 @@ module.exports = function(app, express) {
     }
 
     if(app.program.remote) {
-        console.log("Using remote");
-        app.logger.log("USING REMOTE DB");
+        app.logger.info("USING REMOTE DB");
         Opts = {
             host: "54.215.198.196",
             port: 27017,

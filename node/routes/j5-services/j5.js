@@ -22,7 +22,8 @@ var path = require('path');
 var Serializer = require("./Serializer");
 var gridfs = require("./gridfs")(app);
 
-if(app.get("env") === "production") {
+if(app.get("env") === "production" || app.program.localj5) {
+  console.log("Using local perl j5")
   app.j5client = require("./j5communication")();
 };
 /**
