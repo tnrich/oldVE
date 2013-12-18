@@ -345,8 +345,8 @@ Ext.define("Teselagen.models.J5Parameters", {
         if(values.MISPRIMING_SALT_CONC                                 ) this.set("misprimingSaltConcValue" , values.MISPRIMING_SALT_CONC                   );
         if(values.MISPRIMING_OLIGO_CONC                                ) this.set("misprimingOligoConcValue" , values.MISPRIMING_OLIGO_CONC                  );
         if(values.OUTPUT_SEQUENCE_FORMAT                               ) this.set("outputSequenceFormatValue" , values.OUTPUT_SEQUENCE_FORMAT                 );
-        if(values.SUPPRESS_PURE_PRIMERS                                ) this.set("SPP_Default" , values.SUPPRESS_PURE_PRIMERS                               );
-        if(values.SUPPRESS_PRIMER_ANNOTATIONS                          ) this.set("SPA_Default" , values.SUPPRESS_PRIMER_ANNOTATIONS                              );
+        if(values.SUPPRESS_PURE_PRIMERS                                ) this.set("suppressPurePrimersValue" , values.SUPPRESS_PURE_PRIMERS                               );
+        if(values.SUPPRESS_PRIMER_ANNOTATIONS                          ) this.set("suppressPrimerAnnotationsValue" , values.SUPPRESS_PRIMER_ANNOTATIONS                              );
 
         if(values.HOMOLOGY_MIN_LENGTH_BPS                              ) this.set("homologyMinLengthBPS" , values.HOMOLOGY_MIN_LENGTH_BPS                               );
         if(values.HOMOLOGY_MAX_FRACTION_MISMATCHES                     ) this.set("homologyMaxFractionMisMatches" , values.HOMOLOGY_MAX_FRACTION_MISMATCHES                               );

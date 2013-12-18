@@ -105,13 +105,12 @@ module.exports = function(app, express) {
         app.use(express.json());
         app.use(express.urlencoded());
 
-        app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
-        app.use(express.session({
+        app.use(express.cookieParser()); // Use express response cookie parser (recommended)
+        app.use(express.cookieSession({
+            secret: 'secretj5!',
             cookie: {
                 maxAge: 1000 * 60 * 60
-            },
-            secret: 'j5',
-            store: new express.session.MemoryStore()
+            }
         }));
 
         app.use(app.passport.initialize());
@@ -164,6 +163,9 @@ module.exports = function(app, express) {
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
         app.use(express.session({
+            cookie: {
+                maxAge: 1000 * 60 * 60
+            },
             secret: 'j5',
             store: new RedisStore({
                 client: redis,

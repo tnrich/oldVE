@@ -297,6 +297,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     misprimingOligoConcValue: r.MISPRIMING_OLIGO_CONC,
                     outputSequenceFormatValue: r.OUTPUT_SEQUENCE_FORMAT,
                     suppressPurePrimersValue: r.SUPPRESS_PURE_PRIMERS,
+                    suppressPrimerAnnotationsValue: r.SUPPRESS_PRIMER_ANNOTATIONS,
                     homologyMinLengthBPS: r.HOMOLOGY_MIN_LENGTH_BPS,
                     homologyMaxFractionMisMatches2: r.HOMOLOGY_MAX_FRACTION_MISMATCHES
                 });
@@ -342,6 +343,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onj5ParamsOKBtnClick: function () {
         var self = this;
+        var selectedPreset = currentTab.selectedPreset;
+
+        if(!selectedPreset || selectedPreset.get('presetName') === "Default") {
+            this.j5ParamsWindow.close();
+        }
+
         this.savePresetBtnClick(function(){
             self.saveJ5Parameters();
             self.j5ParamsWindow.close();

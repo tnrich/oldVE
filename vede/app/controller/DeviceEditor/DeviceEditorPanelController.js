@@ -498,6 +498,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         var newDesign = oldDesign.copy();
         var currentProject = oldDesign.getProject();
 
+        // If we don't do this, it calls the API with an auto-generated ID.
+        currentProject.setId(oldDesign.get('project_id'));
+
         currentProject.designs().load({
             callback: function() {
                 var duplicateIndex = currentProject.designs().find('name', newName);
@@ -523,21 +526,26 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         }
                     });
                 } else {
-                    Ext.Msg.confirm("Duplicate Design Name", "A design already exists in this project with that name.<br>" +
-                                    "Continuing will create two designs with the same name. Are you sure?", function(button) {
-                        if(button === "yes") {
-                            newDesign.save({
-                                success: function() {
-                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
-                                    saveAsWindow.close();
-                                    Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
-                                },
-                                failure: function() {
-                                    Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
-                                }
-                            });
-                        } else {
-                            saveAsWindow.close();
+                    Ext.Msg.show({
+                        title: "Duplicate Design Name", 
+                        msg: "A design already exists in this project with that name.<br>" +
+                             "Continuing will create two designs with the same name. Are you sure?",
+                        buttons: 10,
+                        fn: function(button) {
+                            if(button === "yes") {
+                                newDesign.save({
+                                    success: function() {
+                                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                                        saveAsWindow.close();
+                                        Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                                    }
+                                });
+                            } else {
+                                saveAsWindow.close();
+                            }
                         }
                     });
                 }
