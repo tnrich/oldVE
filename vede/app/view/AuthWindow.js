@@ -167,9 +167,6 @@ Ext.define('Vede.view.AuthWindow', {
 
                                     if(match && match[1]) {
                                         lastBuildText = 'Last Build: ' + match[1];
-                                    } else {
-                                        console.log(response);
-                                        console.log(match);
                                     }
 
                                     if(lastBuildText && match[2]) {
