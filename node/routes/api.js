@@ -91,7 +91,7 @@ module.exports = function(app) {
 
     app.all('/https',  function (req, res) {
         console.log("Getting here");
-        return res.send(JSON.stringify(req));
+        return res.json({protocol:req.protocol,secure:req.secure});
     });
 
     /*
