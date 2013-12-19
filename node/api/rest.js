@@ -6,7 +6,7 @@ module.exports = function(app){
      */
 
     app.use(function(req, res, next) {
-
+        return res.send(JSON.stringify(req));
         if (req.headers["x-forwarded-proto"] === "https"){
 
             if (req.method === 'OPTIONS') {
