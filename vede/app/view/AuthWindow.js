@@ -161,7 +161,7 @@ Ext.define('Vede.view.AuthWindow', {
                                 url: Teselagen.manager.SessionManager.buildUrl('v', ''),
                                 method: 'GET',
                                 success: function(response) {
-                                    var regex = /(\w+ \w+ \d+ \d+ .+) GMT-\d+ \((\w+)\)/g;
+                                    var regex = /(\w+ \w+ \d+ \d+ .+) GMT[\-+]\d+ \((\w+)\)/g;
                                     var match = regex.exec(response.responseText);
                                     var lastBuildText = '';
 
