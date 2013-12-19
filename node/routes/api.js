@@ -89,6 +89,11 @@ module.exports = function(app) {
     app.all('/rebase.xml', utils.get_rebase_xml);
     app.all('/api/v', utils.get_api_version);
 
+    app.all('/https',  function (req, res) {
+        console.log("Getting here");
+        return res.send(JSON.stringify(req));
+    });
+
     /*
     app.all('/*',  function (req, res) {
         console.log("Getting here");
