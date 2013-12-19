@@ -39,6 +39,7 @@ app.program
 .version('0.0.1')
 .option('-p, --prod', 'Run Production environment')
 .option('-d, --remote', 'Force use remote DB')
+.option('-l, --localj5', 'Force use local j5')
 .option('-r, --port <n>', 'Node port default is 3000', parseInt)
 .parse(process.argv);
 

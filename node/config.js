@@ -23,7 +23,13 @@ module.exports = function(app, express) {
         var httpsServer = require('https').createServer(options,app).listen(3443);
     }
 
-    app.io = app.socket.listen(httpsServer, { log: false });
+    if(app.get("env") === "production") {
+        app.io = app.socket.listen(httpsServer, { log: false });
+    }
+    else
+    {
+        app.io = app.socket.listen(httpsServer, { log: false });
+    }
 
     // LOGGING
     require('./logging').configLogging(app, express);
