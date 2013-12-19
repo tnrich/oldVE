@@ -35,6 +35,21 @@ app.socketio = require('socket.io');
 app.http = require('http');
 //app.httpProxy = require('http-proxy');
 
+app.program
+.version('0.0.1')
+.option('-p, --prod', 'Run Production environment')
+.option('-d, --remote', 'Force use remote DB')
+.option('-r, --port <n>', 'Node port default is 3000', parseInt)
+.parse(process.argv);
+
+app.set("env", "development"); // Default ENV
+app.dbname = "teselagen"; // Default DB (No change)
+
+if (app.program.prod) {
+    app.set('env', 'production');
+    require('newrelic');
+}
+
 require('./api/rest.js')(app);
 
 // CONFIGURATION
