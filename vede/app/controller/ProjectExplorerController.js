@@ -168,9 +168,9 @@ Ext.define("Vede.controller.ProjectExplorerController", {
         var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
         oldTab.el.mask("Loading part", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
-        
+
         var part_id = record.data.id.replace("part","");
-     
+
         Teselagen.manager.ProjectExplorerManager.openPart(part_id,function(){
             oldTab.el.unmask();
         });

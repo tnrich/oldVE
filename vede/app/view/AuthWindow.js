@@ -4,6 +4,7 @@
  */
 Ext.define('Vede.view.AuthWindow', {
     extend: 'Ext.window.Window',
+    requires: ['Teselagen.manager.SessionManager'],
     id: 'AuthWindow',
     floating: true,
     modal: true,
@@ -30,7 +31,7 @@ Ext.define('Vede.view.AuthWindow', {
                 padding: 10,
                 width: 800,
                 margin: 10,
-                hidden: true,
+                hidden: true
                 },
                 {
                 xtype: 'form',
@@ -152,7 +153,60 @@ Ext.define('Vede.view.AuthWindow', {
                 }, {
                     xtype: 'panel',
                     flex: 1,
-                    html: '<div style="padding:10px"><div class="welcome_sub">Welcome to Teselagen BioCAD.</div><p>Please login using your credentials</p><p>For questions visit:<a href="http://teselagen.com">Teselagen Biotechnologies website</a></p><small>Last Build Oct 8, 20:24 PST</small></div><div class="auth-footer" style="margin-top: 110px;"><ul style="list-style:none; display="inline-block"><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com">Home</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/about">About</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/faq">FAQ</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/contact">Contact</a></li><li style="float:left; margin-right: 5px;"><a href="http://help.teselagen.com/manual/">Manual</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/terms">Terms</a></li><li style="float:left; margin-right: 5px;"><a href="http://teselagen.com/privacy">Privacy</a></li>'
+                    listeners: {
+                        render: function() {
+                            var field = this;
+
+                            Ext.Ajax.request({
+                                url: Teselagen.manager.SessionManager.buildUrl('v', ''),
+                                method: 'GET',
+                                success: function(response) {
+                                    var regex = /(\w+ \w+ \d+ \d+ .+) GMT-\d+ \((\w+)\)/g;
+                                    var match = regex.exec(response.responseText);
+                                    var lastBuildText = 'Last Build: ' + match[1] || '';
+
+                                    if(lastBuildText && match[2]) {
+                                        lastBuildText += ' ' + match[2];
+                                    }
+
+                                    field.update(
+                                        '<div style="padding:10px">' +
+                                            '<div class="welcome_sub">' +
+                                                'Welcome to Teselagen BioCAD.' +
+                                            '</div>' +
+                                            '<p>Please login using your credentials</p>' +
+                                            '<p>For questions visit <a href="http://teselagen.com">Our Website</a>' +
+                                            '</p>' +
+                                            '<small>' + lastBuildText + '</small>' +
+                                        '</div>' +
+                                        '<div class="auth-footer" style="margin-top: 110px;">' +
+                                            '<ul style="list-style:none; display="inline-block">' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://teselagen.com">Home</a>' +
+                                                '</li>' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://teselagen.com/about">About</a>' +
+                                                '</li>' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://teselagen.com/faq">FAQ</a></li>' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://teselagen.com/contact">Contact</a>' +
+                                                '</li>' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://help.teselagen.com/manual/">Manual</a>' +
+                                                '</li>' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://teselagen.com/terms">Terms</a>' +
+                                                '</li>' +
+                                                '<li style="float:left; margin-right: 5px;">' +
+                                                    '<a href="http://teselagen.com/privacy">Privacy</a>' +
+                                                '</li>' +
+                                            '</ul>' +
+                                        '</div>');
+                                }
+                            });
+                        }
+                    }
                 }]
             }]
         });
