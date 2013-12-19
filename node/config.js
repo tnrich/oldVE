@@ -4,20 +4,6 @@
  */
 
 module.exports = function(app, express) {
-    app.program
-    .version('0.0.1')
-    .option('-p, --prod', 'Run Production environment')
-    .option('-d, --remote', 'Force use remote DB')
-    .option('-r, --port <n>', 'Node port default is 3000', parseInt)
-    .parse(process.argv);
-
-    app.set("env", "development"); // Default ENV
-    app.dbname = "teselagen"; // Default DB (No change)
-
-    if (app.program.prod) {
-        app.set('env', 'production');
-        require('newrelic');
-    }
 
     var useAirbrake = app.program.useairbrake;
 
@@ -41,6 +27,8 @@ module.exports = function(app, express) {
 
     // LOGGING
     require('./logging').configLogging(app, express);
+
+    app.logger.info("ENVIRONMENT: "+app.get('env'));
 
     // PROXY
     //app.routingProxy = new app.httpProxy.RoutingProxy();
@@ -69,7 +57,6 @@ module.exports = function(app, express) {
     }
 
     if(app.program.remote) {
-        console.log("Using remote");
         app.logger.log("USING REMOTE DB");
         Opts = {
             host: "54.215.198.196",

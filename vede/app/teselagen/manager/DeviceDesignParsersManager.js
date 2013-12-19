@@ -624,7 +624,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         for(var key in fullPartsAssocArray) {
             partsArray.push(fullPartsAssocArray[key]);
         }
-
+        debugger;
         this.generateDesign(binsArray, partsArray, rulesArray, cb);
     },
 
