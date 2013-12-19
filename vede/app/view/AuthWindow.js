@@ -163,7 +163,14 @@ Ext.define('Vede.view.AuthWindow', {
                                 success: function(response) {
                                     var regex = /(\w+ \w+ \d+ \d+ .+) GMT-\d+ \((\w+)\)/g;
                                     var match = regex.exec(response.responseText);
-                                    var lastBuildText = 'Last Build: ' + match[1] || '';
+                                    var lastBuildText = '';
+
+                                    if(match && match[1]) {
+                                        lastBuildText = 'Last Build: ' + match[1];
+                                    } else {
+                                        console.log(response);
+                                        console.log(match);
+                                    }
 
                                     if(lastBuildText && match[2]) {
                                         lastBuildText += ' ' + match[2];
