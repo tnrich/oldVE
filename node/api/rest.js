@@ -6,8 +6,8 @@ module.exports = function(app){
      */
 
     app.use(function(req, res, next) {
-        return res.send(JSON.stringify(req));
-        if (req.headers["x-forwarded-proto"] === "https"){
+        //return res.send(JSON.stringify(req));
+        //if (req.headers["x-forwarded-proto"] === "https"){
 
             if (req.method === 'OPTIONS') {
                 var headers = {};
@@ -25,10 +25,10 @@ module.exports = function(app){
                 next();
             }
 
-        }
-        else {
-            res.redirect("https://" + req.headers.host + req.url);  
-        }
+        //}
+        //else {
+        //    res.redirect("https://" + req.headers.host + req.url);  
+        //}
 
     });
 
