@@ -154,6 +154,18 @@ module.exports = function(app, express) {
         app.use(express.urlencoded());
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
+
+        app.configure('production', function () {
+            app.use (function (req, res, next) {
+                var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+                if (schema === 'https') {
+                    next();
+                } else {
+                    res.redirect('https://' + req.headers.host + req.url);
+                }
+            });
+        });
+
         app.use(express.session({
             secret: 'j5',
             store: new RedisStore({
