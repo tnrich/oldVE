@@ -346,7 +346,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             {
                 if (!instances[j].nodeName) { continue; }
                 newPart = part.cloneNode(true);
-                newPart.setAttribute("id", instances[j].getAttribute("id"));
+                // newPart.setAttribute("id", instances[j].getAttribute("id"));
                 newPart.appendChild(xmlDoc.createElement("de:fas")).textContent = instances[j].getElementsByTagNameNS("*","fas")[0].textContent;
                 partIndex.push(newPart);
             }
@@ -375,6 +375,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     if (!instances[j].nodeName) { continue; }
                     if ( instances[j].getAttribute("id") === targetId )
                     {
+                        console.log("This part is linked " + part);
                         partfound = true;
                         return {
                             "part":part,
@@ -624,7 +625,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         for(var key in fullPartsAssocArray) {
             partsArray.push(fullPartsAssocArray[key]);
         }
-        debugger;
         this.generateDesign(binsArray, partsArray, rulesArray, cb);
     },
 
