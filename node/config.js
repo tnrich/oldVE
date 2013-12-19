@@ -37,7 +37,7 @@ module.exports = function(app, express) {
         var httpsServer = require('https').createServer(options,app).listen(3443);
     }
 
-    app.io = app.socket.listen(httpServer, { log: false });
+    app.io = app.socket.listen(httpsServer, { log: false });
 
     // LOGGING
     require('./logging').configLogging(app, express);
@@ -189,24 +189,7 @@ module.exports = function(app, express) {
     io.enable('browser client gzip');
     io.set( 'origins', '*:*' );
     io.set('log level', 1);
-
-    if(app.get("env")==="development")
-    {
-        //console.log("SOCKET : XHR POLLING");
-        io.set("transports", ["websocket"]);
-    }
-    else
-    {
-        console.log("SOCKET : SOCKET");
-
-        io.set('transports', [
-            'websocket'
-          //, 'flashsocket'
-          //, 'htmlfile'
-          //, 'xhr-polling'
-          //, 'jsonp-polling'
-        ]);
-    }
+    io.set("transports", ["websocket"]);
 
     var RedisStore = require('socket.io/lib/stores/redis');
 
