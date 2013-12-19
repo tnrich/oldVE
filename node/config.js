@@ -154,6 +154,7 @@ module.exports = function(app, express) {
         app.use(express.urlencoded());
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
+
         app.use(express.session({
             secret: 'j5',
             store: new RedisStore({

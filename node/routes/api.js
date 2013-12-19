@@ -90,7 +90,6 @@ module.exports = function(app) {
     app.all('/api/v', utils.get_api_version);
 
     app.all('/secure',  function (req, res) {
-        console.log(req);
         return res.json({protocol:req.protocol,secure:req.secure,headers:req.headers});
     });
 
