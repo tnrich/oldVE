@@ -964,7 +964,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             else
                             {
                                 countPartProcessing--;
+                                console.log(gb.getLocus().locusName);
                                 sequence.set("name",gb.getLocus().locusName);
+                                console.log(sequence);
                             }
                             if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
                             //if(err) debugger;
