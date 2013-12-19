@@ -4,21 +4,6 @@
  */
 
 module.exports = function(app, express) {
-    app.program
-    .version('0.0.1')
-    .option('-p, --prod', 'Run Production environment')
-    .option('-d, --remote', 'Force use remote DB')
-    .option('-j, --localj5', 'Force use local j5')
-    .option('-r, --port <n>', 'Node port default is 3000', parseInt)
-    .parse(process.argv);
-
-    app.set("env", "development"); // Default ENV
-    app.dbname = "teselagen"; // Default DB (No change)
-
-    if (app.program.prod) {
-        app.set('env', 'production');
-        require('newrelic');
-    }
 
     var useAirbrake = app.program.useairbrake;
 
@@ -38,10 +23,12 @@ module.exports = function(app, express) {
         var httpsServer = require('https').createServer(options,app).listen(3443);
     }
 
-    app.io = app.socket.listen(httpServer, { log: false });
+    app.io = app.socket.listen(httpsServer, { log: false });
 
     // LOGGING
     require('./logging').configLogging(app, express);
+
+    app.logger.info("ENVIRONMENT: "+app.get('env'));
 
     // PROXY
     //app.routingProxy = new app.httpProxy.RoutingProxy();
@@ -71,6 +58,7 @@ module.exports = function(app, express) {
 
     if(app.program.remote) {
         app.logger.info("USING REMOTE DB");
+
         Opts = {
             host: "54.215.198.196",
             port: 27017,
@@ -125,15 +113,6 @@ module.exports = function(app, express) {
     app.configure('production', function() {
         process.env.NODE_ENV = 'production';
 
-
-        app.use(function(req,res,next) {
-          if (!/https/.test(req.protocol)){
-             res.redirect("https://" + req.headers.host + req.url);
-          } else {
-             return next();
-          } 
-        });
-
         if(useAirbrake) {
             // User Airbrake to log errors.
             var airbrake = require('airbrake').createClient("40e870e0-c0a6-c307-8bef-37371fd86407");
@@ -162,6 +141,7 @@ module.exports = function(app, express) {
         app.use(express.urlencoded());
 
         app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
+
         app.use(express.session({
             cookie: {
                 maxAge: 1000 * 60 * 60
@@ -199,24 +179,7 @@ module.exports = function(app, express) {
     io.enable('browser client gzip');
     io.set( 'origins', '*:*' );
     io.set('log level', 1);
-
-    if(app.get("env")==="development")
-    {
-        //console.log("SOCKET : XHR POLLING");
-        io.set("transports", ["websocket"]);
-    }
-    else
-    {
-        console.log("SOCKET : SOCKET");
-
-        io.set('transports', [
-            'websocket'
-          //, 'flashsocket'
-          //, 'htmlfile'
-          //, 'xhr-polling'
-          //, 'jsonp-polling'
-        ]);
-    }
+    io.set("transports", ["websocket"]);
 
     var RedisStore = require('socket.io/lib/stores/redis');
 

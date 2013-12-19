@@ -89,6 +89,10 @@ module.exports = function(app) {
     app.all('/rebase.xml', utils.get_rebase_xml);
     app.all('/api/v', utils.get_api_version);
 
+    app.all('/secure',  function (req, res) {
+        return res.json({protocol:req.protocol,secure:req.secure,headers:req.headers});
+    });
+
     /*
     app.all('/*',  function (req, res) {
         console.log("Getting here");
