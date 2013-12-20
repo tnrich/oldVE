@@ -26,7 +26,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
     sbolIconMigrate: function(iconID){
         var map = {
-            "five_prime_utr" : "ribosome_entry_site"
+            "FIVE_PRIME_UTR" : "RIBOSOME_ENTRY_SITE"
         }
 
         if(map[iconID]) return map[iconID];
