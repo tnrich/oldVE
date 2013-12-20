@@ -138,6 +138,7 @@ module.exports = function(app) {
                 var filter = "";
                 var totalCount = 0;
                 var sortOpts = {};
+                var queryOpts = {};
 
                 if(req.query.filter)
                 {
@@ -176,58 +177,38 @@ module.exports = function(app) {
                 }
 
                 if(filter) {
-                    User.findById(req.user._id).populate({
-                            path: 'sequences',
-                            match: {
-                                name: {
-                                    $regex: filter
-                                }
+                    queryOpts = {
+                        path: 'sequences',
+                        match: {
+                            name: {
+                                $regex: filter
                             }
-                        }).exec(function(err, user) {
-                        totalCount = user.sequences.length;
-
-                        User.populate(user, {
-                            path: 'sequences',
-                            match: {
-                                name: {
-                                    $regex: filter
-                                }
-                            },
-                            options: {
-                                sort: sortOpts,
-                                limit: req.query.limit,
-                                skip: req.query.start
-                            }
-                        }, function(err, user) {
-                            res.json({
-                                success: true,
-                                sequences: user.sequences,
-                                results: user.sequences.length,
-                                total: totalCount
-                            });
-                        });
-                    });
+                        }
+                    };
                 } else {
-                    User.findById(req.user._id).exec(function(err, user) {
-                        totalCount = user.sequences.length;
+                    queryOpts = {
+                        path: 'sequences'
+                    };
+                }
 
-                        User.populate(user, {
-                            path: 'sequences',
-                            options: {
-                                sort: sortOpts,
-                                limit: req.query.limit,
-                                skip: req.query.start
-                            }
-                        }, function(err, user) {
-                            res.json({
-                                success: true,
-                                sequences: user.sequences,
-                                results: user.sequences.length,
-                                total: totalCount
-                            });
+                User.populate(req.user, queryOpts, function(err, user) {
+                    totalCount = user.sequences.length;
+
+                    queryOpts.options = {
+                        sort: sortOpts,
+                        limit: req.query.limit,
+                        skip: req.query.start
+                    };
+
+                    User.populate(user, queryOpts, function(err, user) {
+                        res.json({
+                            success: true,
+                            sequences: user.sequences,
+                            results: user.sequences.length,
+                            total: totalCount
                         });
                     });
-                }
+                });
             }
         },
 

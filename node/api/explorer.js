@@ -18,7 +18,6 @@ module.exports = function(app) {
          * @method POST /partLibrary
          */
         get_partLibrary: function(req, res) {
-            
             Part.find({
                 name: {
                     $ne: ""
@@ -33,9 +32,10 @@ module.exports = function(app) {
         },
 
         get_explorer_data: function(req, res) {
-            User.findById(req.user._id)
-            .populate({ path: 'projects', select: 'name designs id' })
-            .exec(function(err, user) {
+            User.populate(req.user, {
+                path: 'projects',
+                select: 'name designs id'
+            }, function(err, user) {
                 if(err) {
                     console.log('Error getting user projects.');
                     console.log(err);

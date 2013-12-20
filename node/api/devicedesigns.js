@@ -177,7 +177,6 @@ module.exports = function(app) {
             });
         },
 
-        
         /**
          * Delete device design
          * @memberof module:./routes/api
@@ -195,15 +194,12 @@ module.exports = function(app) {
                         app.errorHandler(err, req, res);
                     }
                     else {
-                        User.findById(req.user._id,function(err,user){
-                            user.designs[designs_id] = null;
-                            user.save(function(err){
-                                    res.json({
-                                        "designs": {}
-                                    });
+                        req.user.designs[designs_id] = null;
+                        req.user.save(function(err){
+                            res.json({
+                                "designs": {}
                             });
                         });
-                        
                     }
                 });
 

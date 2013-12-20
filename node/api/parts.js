@@ -67,7 +67,7 @@ module.exports = function(app) {
         post_parts:  function(req, res) {
             req.body.dateCreated = new Date();
             savePart(req,res,null,function(savedSequence){
-                User.findById(req.user._id).populate('parts').exec(function(err, user) {
+                User.populate(req.user, 'parts', function(err, user) {
                     user.parts.push(savedSequence);
                     user.save();
                 });
@@ -185,6 +185,7 @@ module.exports = function(app) {
             var filter = "";
             var totalCount = 0;
             var sortOpts = {};
+            var queryOpts = {};
 
             if(req.query.filter)
             {
@@ -220,21 +221,37 @@ module.exports = function(app) {
                 }
             }
 
-                if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
+            if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
 
-            User.findById(req.user._id).populate({
+            if(filter) {
+                queryOpts = {
                     path: 'parts',
-                    match: {name: {$regex: filter}}
-                }).exec(function(err, user) {
+                    match: {
+                        name: {
+                            $regex: filter
+                        }
+                    }
+                };
+            } else {
+                queryOpts = {
+                    path: 'parts'
+                };
+            }
+
+            User.populate(req.user, queryOpts, function(err, user) {
                 totalCount = user.parts.length;
 
-                User.findById(req.user._id).populate({
-                    path: 'parts',
-                    match: {name: {$regex: filter},
-                    sequencefile_id: {$ne: null}},
-                    options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
-                })
-                .exec(function(err, user) {
+                queryOpts.sequencefile_id = {
+                    $ne: null
+                };
+
+                queryOpts.options = {
+                    sort: sortOpts,
+                    limit: req.query.limit,
+                    skip: req.query.start
+                };
+
+                User.populate(req.user, queryOpts, function(err, user) {
                     res.json({
                         success: true,
                         parts: user.parts,
@@ -252,17 +269,16 @@ module.exports = function(app) {
          * @method GET 'parts/:part_id'
          */
         get_part_by_id:  function(req, res) {
-            User.findById(req.user._id).populate('parts').exec(function(err, user) {
-                User.findById(req.user._id).populate({
-                    path: 'parts',
-                    match: {_id: req.params.part_id}
-                })
-                .exec(function(err, user) {
-                    res.json({
-                        success: true,
-                        parts: user.parts,
-                        results: user.parts.length
-                    });
+            User.populate(req.user, {
+                path: 'parts',
+                match: {
+                    _id: req.params.part_id
+                }
+            }, function(err, user) {
+                res.json({
+                    success: true,
+                    parts: user.parts,
+                    results: user.parts.length
                 });
             });
         },

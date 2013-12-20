@@ -165,9 +165,7 @@ module.exports = function(app) {
 
           var Preset = app.db.model('preset');
 
-          User.findById(req.user._id).populate({
-            path: 'presets'
-          }).exec(function(err, user) {
+          User.populate(req.user, 'presets', function(err, user) {
             var newPreset = new Preset({
               presetName: req.body.presetName,
               j5parameters: JSON.parse(req.body.j5parameters)
@@ -201,9 +199,7 @@ module.exports = function(app) {
           Preset.findByIdAndRemove(req.body.id,function(err){
             if(err) return res.json({success:false});
 
-            User.findById(req.user._id).populate({
-              path: 'presets'
-            }).exec(function(err, user) {
+            User.populate(req.user, 'presets', function(err, user) {
                 user.presets.forEach(function(preset,presetKey){
                   if(preset._id == req.body.id) delete user.presets[presetKey];
                 });
@@ -217,9 +213,7 @@ module.exports = function(app) {
       },
 
       get_presets: function(req,res){
-          User.findById(req.user._id).populate({
-            path: 'presets',
-          }).exec(function(err, user) {
+          User.populate(req.user, 'presets', function(err, user) {
             res.json(user.presets);
           });
       }

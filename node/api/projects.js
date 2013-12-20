@@ -58,10 +58,8 @@ module.exports = function(app) {
     app.delete('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         if (req.body.id) {
-            Project.findById(req.body.id, function(err, proj) {
-                proj.remove(function() {
-                    res.json({});
-                });
+            Project.findByIdAndRemove(req.body.id, function(err, proj) {
+                res.json({});
             });
         } else {
             Project.remove({
@@ -83,13 +81,14 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects', restrict, function(req, res) {
         var User = app.db.model("User");
-        User.findById(req.user._id).populate('projects').exec(function(err, user) {
-                if (user.projects) {
-                    user.projects.forEach(function(proj) {
-                        proj.deprojects = undefined;
-                        proj.veprojects = undefined;
-                    });
-                }
+        User.populate(req.user, 'projects', function(err, user) {
+            if (user.projects) {
+                user.projects.forEach(function(proj) {
+                    proj.deprojects = undefined;
+                    proj.veprojects = undefined;
+                });
+            }
+
             res.json({
                 "projects": user.projects
             });

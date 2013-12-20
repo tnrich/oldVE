@@ -119,7 +119,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 callback: function (loadedDesign) {
                     Teselagen.manager.ProjectManager.workingProject = project;
                     var design = loadedDesign[0];
-                    //console.log(design);
                     //var j5report = loadedDesign[0].j5runs();
                     Teselagen.manager.ProjectManager.openj5Report(design);
                     if(typeof (cb) === "function") {cb(); }
@@ -199,12 +198,10 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             case "Delete":
                 switch(selectedRecordType) {
                     case "openproj":
-                        console.log("delete project");
                         selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.id);
                         self.deleteProject(selectedProject, expandPathCallback);
                         break;
                     case "opende":
-                        console.log("delete design");
                         selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
                         selectedProject.designs().load({
                             id: selectedRecord.id,
@@ -215,7 +212,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
                         break;
                     case "opensequence":
-                        console.log("delete sequence");
                         break;
                 }
             break;
