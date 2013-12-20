@@ -28,7 +28,7 @@ module.exports = function(app, express) {
     }
     else
     {
-        app.io = app.socket.listen(httpsServer, { log: false });
+        app.io = app.socket.listen(httpServer, { log: false });
     }
 
     // LOGGING
