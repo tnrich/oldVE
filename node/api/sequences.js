@@ -138,6 +138,7 @@ module.exports = function(app) {
                 var filter = "";
                 var totalCount = 0;
                 var sortOpts = {};
+                var queryOpts = {};
 
                 if(req.query.filter)
                 {
@@ -169,27 +170,44 @@ module.exports = function(app) {
                     }
                 }
 
-                    if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
+                if(!Object.keys(sortOpts).length) {
+                    sortOpts = {
+                        name: 1
+                    }; // Sorted by name by default
+                }
 
-                User.findById(req.user._id).populate({
+                if(filter) {
+                    queryOpts = {
                         path: 'sequences',
-                        match: {name: {$regex: filter}} 
-                    }).exec(function(err, user) {
+                        match: {
+                            name: {
+                                $regex: filter
+                            }
+                        }
+                    };
+                } else {
+                    queryOpts = {
+                        path: 'sequences'
+                    };
+                }
+
+                User.populate(req.user, queryOpts, function(err, user) {
                     totalCount = user.sequences.length;
 
-                    User.findById(req.user._id).populate({
-                        path: 'sequences', 
-                        match: {name: {$regex: filter}},
-                        options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
-                    })
-                        .exec(function(err, user) {
-                            res.json({
-                                success: true,
-                                sequences: user.sequences,
-                                results: user.sequences.length,
-                                total: totalCount
-                            });
+                    queryOpts.options = {
+                        sort: sortOpts,
+                        limit: req.query.limit,
+                        skip: req.query.start
+                    };
+
+                    User.populate(user, queryOpts, function(err, user) {
+                        res.json({
+                            success: true,
+                            sequences: user.sequences,
+                            results: user.sequences.length,
+                            total: totalCount
                         });
+                    });
                 });
             }
         },

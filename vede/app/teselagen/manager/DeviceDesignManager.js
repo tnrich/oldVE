@@ -950,19 +950,23 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     isPartInCollection: function(pDevice, pPart) {
         var partIsPresent = false;
-        if (pDevice.bins() === null || pDevice.bins().count() === 0) {
+        var binsStore = pDevice.bins();
+
+        if (!pPart || binsStore === null || binsStore.count() === 0) {
             return false;
         }
 
-        for (var i = 0; i < pDevice.bins().count(); i++) {
-            partIsPresent = pDevice.bins().getAt(i).hasPart(pPart);
+        var binsArray = binsStore.getRange();
+
+        for (var i = 0; i < binsArray.length; i++) {
+            partIsPresent = this.getBinAssignment(pDevice, binsArray[i]) !== -1;
+
             if (partIsPresent) {
                 return partIsPresent;
             }
         }
-        return partIsPresent;
 
-        //return pDevice.isPartInCollection(pPart);
+        return partIsPresent;
     },
 
     /**

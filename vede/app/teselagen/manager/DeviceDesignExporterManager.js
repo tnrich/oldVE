@@ -24,13 +24,23 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         saveFile(fileName, fileContent);
     },
 
+    sbolIconMigrate: function(iconID){
+        var map = {
+            "FIVE_PRIME_UTR" : "RIBOSOME_ENTRY_SITE",
+            "FIVE-PRIME-UTR" : "RIBOSOME-ENTRY-SITE"
+        }
+
+        if(map[iconID]) return map[iconID];
+        else return iconID;
+    },
+
     /**
      * Generate Object Structure
      * @param {Model} DEProject.
      * @param {Model} Callback.
      */
     generateObject: function (design,cb) {
-    	var json = {};
+    	var json = {}; var self = this;
         
         // Structures
         json["de:j5Collection"] = {};
@@ -55,7 +65,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonBin = {};
             jsonBin.id = Teselagen.utils.DeXmlUtils.generateUUID();
             jsonBin["de:binName"] = bin.get("binName");
-            jsonBin["de:iconID" ] = bin.get("iconID");
+            jsonBin["de:iconID" ] = self.sbolIconMigrate( bin.get("iconID") );
             jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
             jsonBin["de:dsf"] = bin.get("dsf");
             var binFas = bin.cells().getAt(0).get("fas");
