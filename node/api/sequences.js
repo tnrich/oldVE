@@ -169,20 +169,36 @@ module.exports = function(app) {
                     }
                 }
 
-                    if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
+                if(!Object.keys(sortOpts).length) {
+                    sortOpts = {
+                        name: 1
+                    }; // Sorted by name by default
+                }
 
-                User.findById(req.user._id).populate({
-                        path: 'sequences',
-                        match: {name: {$regex: filter}} 
-                    }).exec(function(err, user) {
-                    totalCount = user.sequences.length;
-
+                if(filter) {
                     User.findById(req.user._id).populate({
-                        path: 'sequences', 
-                        match: {name: {$regex: filter}},
-                        options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
-                    })
-                        .exec(function(err, user) {
+                            path: 'sequences',
+                            match: {
+                                name: {
+                                    $regex: filter
+                                }
+                            }
+                        }).exec(function(err, user) {
+                        totalCount = user.sequences.length;
+
+                        User.populate(user, {
+                            path: 'sequences',
+                            match: {
+                                name: {
+                                    $regex: filter
+                                }
+                            },
+                            options: {
+                                sort: sortOpts,
+                                limit: req.query.limit,
+                                skip: req.query.start
+                            }
+                        }, function(err, user) {
                             res.json({
                                 success: true,
                                 sequences: user.sequences,
@@ -190,7 +206,28 @@ module.exports = function(app) {
                                 total: totalCount
                             });
                         });
-                });
+                    });
+                } else {
+                    User.findById(req.user._id).exec(function(err, user) {
+                        totalCount = user.sequences.length;
+
+                        User.populate(user, {
+                            path: 'sequences',
+                            options: {
+                                sort: sortOpts,
+                                limit: req.query.limit,
+                                skip: req.query.start
+                            }
+                        }, function(err, user) {
+                            res.json({
+                                success: true,
+                                sequences: user.sequences,
+                                results: user.sequences.length,
+                                total: totalCount
+                            });
+                        });
+                    });
+                }
             }
         },
 

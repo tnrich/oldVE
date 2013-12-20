@@ -42,7 +42,7 @@ module.exports = function(app) {
         }, function(e) {
             console.log(error);
         });
-    }
+    };
 
 
     return {
