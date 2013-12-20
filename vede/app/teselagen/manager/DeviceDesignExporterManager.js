@@ -239,7 +239,6 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             var partsVOs = doc.documentElement.appendChild(doc.createElement("de:partVOs"));
 
             json["de:partVOs"]["de:partVO"].forEach(function(part){
-
                 var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
                 partV0.setAttribute("id", part.id);
 
