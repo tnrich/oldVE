@@ -52,15 +52,14 @@ module.exports = function(app, express){
 
   if (!app.settings.env) {app.settings.env="development";}
 
-/*
-app.use(function(req,res,next) {
-  if (!/https/.test(req.protocol)){
-     res.redirect("https://" + req.headers.host + req.url);
-  } else {
-     return next();
-  } 
-});
-*/
+  app.use (function (req, res, next) {
+      if (app.get("env")!="production") return next();
+      if (req.secure) {
+          next();
+      } else {
+          res.redirect('https://' + req.headers.host + req.url);
+      }
+  });
 
   //env specific config
       app.configure('development', function(){
