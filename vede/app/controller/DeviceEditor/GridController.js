@@ -39,10 +39,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onPartPanelButtonClick: function(button) {
         var selectedBin = Teselagen.manager.GridManager.selectedGridBin;
-    	if(selectedBin) {
-    		var oldIcon = selectedBin.datum().get("iconID");
-    		selectedBin.datum().set("iconID",button.data.iconKey);
-    		Teselagen.manager.GridCommandPatternManager.addCommand({
+        if(selectedBin) {
+            var oldIcon = selectedBin.datum().get("iconID");
+            selectedBin.datum().set("iconID",button.data.iconKey);
+            Teselagen.manager.GridCommandPatternManager.addCommand({
                 type: "BIN",
                 data: {
                     type: "ICON",
@@ -51,7 +51,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     newData: button.data.iconKey
                 }
             });
-		}
+        }
     },
 
     /**
@@ -67,8 +67,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
 
     onBeforeTabChange: function(tabPanel, newTab, oldTab) {
-        
-    	if(oldTab && oldTab.initialCls === "DeviceEditorTab" && this.grid.el) {
+
+        if(oldTab && oldTab.initialCls === "DeviceEditorTab" && this.grid.el) {
             var selectedBin = this.GridManager.selectedGridBin;
             var selectedCell = this.GridManager.selectedGridPart;
 
@@ -109,7 +109,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.Component} newTab The tab that is being switched to.
      */
     onTabChange: function(tabPanel, newTab, oldTab) {
-    	if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
+        if(newTab.initialCls === "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.down("component[cls='designGrid']");
 
             this.activeProject = newTab.model;
@@ -135,9 +135,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
             this.activeBins = this.activeProject.bins();
-            
+
             this.activeProject.setActive(true);
-            
+
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
 
@@ -167,7 +167,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
     },
-    
+
     onAddRowAbove: function() {
         this.GridManager.addRowAbove();
     },
@@ -248,9 +248,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.clearPartMenuItem.setDisabled(!state||false);
         this.removeColumnMenuItem.setDisabled(!state||false);
     },
-    
+
     toggleRemoveColumnOptions: function(state) {
-    	this.removeColumnMenuItem.setDisabled(!state||false);
+        this.removeColumnMenuItem.setDisabled(!state||false);
     },
 
     toggleInsertOptions: function(state) {
@@ -265,127 +265,137 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     toggleInsertRowBelowOptions: function(state) {
         this.rowBelowMenuItem.setDisabled(!state||false);
     },
-    
+
     onCutPartMenuItemClick: function() {
-    	this.application.fireEvent(this.DeviceEvent.CUT_PART);
+        this.application.fireEvent(this.DeviceEvent.CUT_PART);
     },
-    
+
     onCopyPartMenuItemClick: function() {
-    	this.application.fireEvent(this.DeviceEvent.COPY_PART);
+        this.application.fireEvent(this.DeviceEvent.COPY_PART);
     },
-    
+
     onPastePartMenuItemClick: function() {
-    	this.application.fireEvent(this.DeviceEvent.PASTE_PART);
+        this.application.fireEvent(this.DeviceEvent.PASTE_PART);
     },
-    
+
     onCutPart: function() {
-    	var gridManager = Teselagen.manager.GridManager;
-    	if(gridManager.selectedGridPart) {
-    		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
-    		
+        var gridManager = Teselagen.manager.GridManager;
+        if(gridManager.selectedGridPart) {
+            gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
+
             gridManager.clearSelectedPart();
             gridManager.InspectorController.clearPartInfo();
-    	}
+        }
     },
-    
+
     onCopyPart: function() {
-    	var gridManager = Teselagen.manager.GridManager;
-    	if(gridManager.selectedGridPart) {
-    		gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
-    	}
+        var gridManager = Teselagen.manager.GridManager;
+        if(gridManager.selectedGridPart) {
+            gridManager.clipboardPart = gridManager.selectedGridPart.datum().getPart();
+        }
     },
-    
+
     onPastePart: function() {
-    	var gridManager = Teselagen.manager.GridManager;
-    	var selectedCell = gridManager.selectedGridPart.datum();
+        var gridManager = Teselagen.manager.GridManager;
+        var selectedCell = gridManager.selectedGridPart.datum();
         var self = this;
-    	if(gridManager.clipboardPart && selectedCell) {
-    		Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), gridManager.clipboardPart.get("partSource"), function(identicalPart) {
-        		var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
-        		var yIndex = parseInt(gridManager.selectedGridPart.attr("deGridRowIndex"));
-        		var oldPart = selectedCell.getPart();
-        		var newPart = gridManager.clipboardPart;
-        		
-        		selectedCell.setPart(gridManager.clipboardPart);
-        		
-        		Vede.application.fireEvent(self.DeviceEvent.SELECT_CELL, selectedCell, xIndex, yIndex);
-        		
-    	    	Teselagen.manager.GridCommandPatternManager.addCommand({
-    	        	type: "PART",
-    	        	data: {
-    	        		type: "PASTE",
-    	        		x: xIndex,
-    	        		y: yIndex,
-    	        		oldPart: oldPart,
-    	        		newPart: newPart
-    	        	}
-    			});
-    		},"Invalid Paste"); 		
-    	}
+        var design = this.activeProject;
+
+        if(gridManager.clipboardPart && selectedCell) {
+            Vede.application.fireEvent(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME, gridManager.clipboardPart, gridManager.clipboardPart.get("name"), gridManager.clipboardPart.get("partSource"), function(identicalPart) {
+                var xIndex = parseInt(gridManager.selectedGridBin.attr("deGridBinIndex"));
+                var yIndex = parseInt(gridManager.selectedGridPart.attr("deGridRowIndex"));
+                var oldPart = selectedCell.getPart();
+                var newPart = gridManager.clipboardPart;
+
+                selectedCell.setPart(gridManager.clipboardPart);
+
+                if(design.parts().indexOf(newPart) === -1) {
+                    design.parts().add(newPart);
+                }
+
+                if(oldPart && self.DeviceDesignManager.isPartInCollection(design, oldPart)) {
+                    design.parts().remove(oldPart);
+                }
+
+                Vede.application.fireEvent(self.DeviceEvent.SELECT_CELL, selectedCell, xIndex, yIndex);
+
+                Teselagen.manager.GridCommandPatternManager.addCommand({
+                    type: "PART",
+                    data: {
+                        type: "PASTE",
+                        x: xIndex,
+                        y: yIndex,
+                        oldPart: oldPart,
+                        newPart: newPart
+                    }
+                });
+            },"Invalid Paste");
+        }
     },
-    
+
     onSelectBin: function(j5Bin, binIndex) {
-    	if(binIndex===null || binIndex===undefined) binIndex = this.activeProject.bins().indexOf(j5Bin);
-    	this.GridManager.selectGridBinHeaderByIndex(binIndex);
+        if(binIndex===null || binIndex===undefined) binIndex = this.activeProject.bins().indexOf(j5Bin);
+        this.GridManager.selectGridBinHeaderByIndex(binIndex);
     },
-    
+
     onSelectCell: function(cell, xIndex, yIndex) {
-    	this.GridManager.selectGridCellByIndex(xIndex, yIndex);
+        this.GridManager.selectGridCellByIndex(xIndex, yIndex);
     },
-    
+
     onClearPart: function() {
-    	this.GridManager.clearSelectedPart();
+        this.GridManager.clearSelectedPart();
     },
-    
+
     onRemoveColumn: function() {
-    	this.GridManager.removeColumn();
+        this.GridManager.removeColumn();
     },
-    
+
     onRemoveRow: function() {
-    	this.GridManager.removeRow();
+        this.GridManager.removeRow();
     },
-    
+
     scrollToBinOrCell: function(xIndex, yIndex, horizPadding, vertPadding) {
-    	horizPadding = horizPadding || 0;
-    	vertPadding = vertPadding || 0;
-    	
-    	var scrollTop = this.grid.el.getScrollTop();
-    	var scrollLeft = this.grid.el.getScrollLeft();
-    	var clientHeight = this.grid.el.dom.clientHeight;
-    	var clientWidth = this.grid.el.dom.clientWidth;
-    	
-    	if(yIndex>0 || yIndex===0) {
-    		var bottomBound;
-        	var topBound;
-        	
-    		bottomBound = this.GridManager.BIN_HEIGHT+10+this.GridManager.BIN_PART_GAP_HEIGHT+this.GridManager.PART_HEIGHT*(yIndex+1)-clientHeight;
-    		topBound = this.GridManager.BIN_HEIGHT+10+this.GridManager.BIN_PART_GAP_HEIGHT+this.GridManager.PART_HEIGHT*yIndex;
-    		bottomBound += vertPadding;
-    		topBound -= vertPadding;
-    		
-    		var isInVertBounds = scrollTop<=topBound && scrollTop>=bottomBound;
-    		
-        	if(!isInVertBounds) {
-        		var newScrollTop = scrollTop>topBound ? topBound : bottomBound;
-        		this.grid.el.setScrollTop(newScrollTop);
-        	}
-    	} else {
-    		this.grid.el.setScrollTop(0);
-    	}
-		
-    	var leftBound = 10+this.GridManager.COLUMN_WIDTH*(xIndex+1) - clientWidth;
-    	var rightBound = 10+this.GridManager.COLUMN_WIDTH*xIndex;
-    	leftBound += horizPadding;
-    	rightBound -= horizPadding;
-    	  	
-    	var isInHorizBounds = scrollLeft<=rightBound && scrollLeft>=leftBound;
-    	
-    	if(!isInHorizBounds) {
-    		var newScrollLeft = scrollLeft>rightBound ? rightBound : leftBound;
-    		this.grid.el.setScrollLeft(newScrollLeft);
-    	}
+        horizPadding = horizPadding || 0;
+        vertPadding = vertPadding || 0;
+
+        var scrollTop = this.grid.el.getScrollTop();
+        var scrollLeft = this.grid.el.getScrollLeft();
+        var clientHeight = this.grid.el.dom.clientHeight;
+        var clientWidth = this.grid.el.dom.clientWidth;
+
+        if(yIndex>0 || yIndex===0) {
+            var bottomBound;
+            var topBound;
+
+            bottomBound = this.GridManager.BIN_HEIGHT+10+this.GridManager.BIN_PART_GAP_HEIGHT+this.GridManager.PART_HEIGHT*(yIndex+1)-clientHeight;
+            topBound = this.GridManager.BIN_HEIGHT+10+this.GridManager.BIN_PART_GAP_HEIGHT+this.GridManager.PART_HEIGHT*yIndex;
+            bottomBound += vertPadding;
+            topBound -= vertPadding;
+
+            var isInVertBounds = scrollTop<=topBound && scrollTop>=bottomBound;
+
+            if(!isInVertBounds) {
+                var newScrollTop = scrollTop>topBound ? topBound : bottomBound;
+                this.grid.el.setScrollTop(newScrollTop);
+            }
+        } else {
+            this.grid.el.setScrollTop(0);
+        }
+
+        var leftBound = 10+this.GridManager.COLUMN_WIDTH*(xIndex+1) - clientWidth;
+        var rightBound = 10+this.GridManager.COLUMN_WIDTH*xIndex;
+        leftBound += horizPadding;
+        rightBound -= horizPadding;
+
+        var isInHorizBounds = scrollLeft<=rightBound && scrollLeft>=leftBound;
+
+        if(!isInHorizBounds) {
+            var newScrollLeft = scrollLeft>rightBound ? rightBound : leftBound;
+            this.grid.el.setScrollLeft(newScrollLeft);
+        }
     },
-    
+
     onLaunch: function() {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
@@ -398,7 +408,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     init: function() {
         this.callParent();
-        
+
         this.control({
             "#mainAppPanel": {
                 beforetabchange: this.onBeforeTabChange,
@@ -417,7 +427,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 click: this.onCutPartMenuItemClick
             }
         });
-        
+
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.GridEvent = Teselagen.event.GridEvent;
@@ -441,38 +451,38 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,
                             this.onAddColumnRight,
                             this);
-        
+
         this.application.on(this.DeviceEvent.CUT_PART,
-			                this.onCutPart,
-			                this);
+                            this.onCutPart,
+                            this);
 
-		this.application.on(this.DeviceEvent.COPY_PART,
-			                this.onCopyPart,
-			                this);
+        this.application.on(this.DeviceEvent.COPY_PART,
+                            this.onCopyPart,
+                            this);
 
-		this.application.on(this.DeviceEvent.PASTE_PART,
-			                this.onPastePart,
-			                this);
-		
+        this.application.on(this.DeviceEvent.PASTE_PART,
+                            this.onPastePart,
+                            this);
+
         this.application.on(this.DeviceEvent.CLEAR_PART,
                             this.onClearPart,
                             this);
-        
+
         this.application.on(this.DeviceEvent.REMOVE_COLUMN,
-			                this.onRemoveColumn,
-			                this);
-        
+                            this.onRemoveColumn,
+                            this);
+
         this.application.on(this.DeviceEvent.REMOVE_ROW,
                             this.onRemoveRow,
                             this);
-		
+
         this.application.on(this.DeviceEvent.SELECT_BIN,
                             this.onSelectBin,
                             this);
-        
+
         this.application.on(this.DeviceEvent.SELECT_CELL,
-			                this.onSelectCell,
-			                this);
+                            this.onSelectCell,
+                            this);
 
         this.application.on(this.DeviceEvent.VALIDATE_DUPLICATED_PART_NAME,
                             this.onValidateDuplicatedPartNameEvent,
