@@ -59,7 +59,9 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         var rules = [];
     	
         var partFasAssocArray = {};
-        
+        var partBinAssociationIDs = {};
+        var partBinFASAssociationIDs = {};
+
         design.bins().each(function(bin,binKey) {
         	var jsonBin = {};
             jsonBin = {};
@@ -85,10 +87,15 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             		jsonBin["de:binItems"]["de:partID"].push("");
             		jsonBin["de:binItems"]["de:fas"].push("");
             	} else {
-            		jsonBin["de:binItems"]["de:partID"].push(part.internalId);
+                    var binPartAssociationID = Teselagen.utils.DeXmlUtils.generateUUID();
+                    if(!partBinAssociationIDs[cell.getPart().internalId]) partBinAssociationIDs[cell.getPart().internalId] = [];
+                    if(!partBinFASAssociationIDs[cell.getPart().internalId]) partBinFASAssociationIDs[cell.getPart().internalId] = [];
+
+                    partBinAssociationIDs[cell.getPart().internalId].push(binPartAssociationID);
+            		jsonBin["de:binItems"]["de:partID"].push(binPartAssociationID);
             		var cellFas = (cell.get("fas")==="None") ? "" : cell.get("fas");
             		jsonBin["de:binItems"]["de:fas"].push(cellFas);
-            		partFasAssocArray[cell.getPart().internalId] = cellFas;
+            		partBinFASAssociationIDs[cell.getPart().internalId].push(cellFas);
             	}
             });
             
@@ -114,9 +121,14 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonPart["de:parts"] = {};
             jsonPart["de:parts"]["de:part"] = {};
             //jsonPart["de:parts"]["de:part"].id = part.get("id");
-            jsonPart["de:parts"]["de:part"].id = part.internalId;
-            var fas = part.data.fas;
-            jsonPart["de:parts"]["de:part"]["de:fas"] = partFasAssocArray[part.internalId];
+            partBinAssociationIDs[part.internalId].forEach(function(partAssocID,partInstanceKey){
+                jsonPart["de:parts"]["de:part"].id = partAssocID;
+                jsonPart["de:parts"]["de:part"]["de:fas"] = partBinFASAssociationIDs[part.internalId];
+            });
+
+            //jsonPart["de:parts"]["de:part"].id = part.internalId;
+            //var fas = part.data.fas;
+            //jsonPart["de:parts"]["de:part"]["de:fas"] = partFasAssocArray[part.internalId];
             
             parts.push(jsonPart);
             
