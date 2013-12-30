@@ -754,6 +754,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     disableAllJ5RunButtons: function(skipAppendLoader) {
+        return false;
         var buttonsToDisable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
         buttonsToDisable = buttonsToDisable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
         var button;
@@ -773,6 +774,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     enableALLJ5RunButtons: function() {
+        return false;
         var buttonsToEnable = Ext.ComponentQuery.query("button[cls='runj5Btn']");
         buttonsToEnable = buttonsToEnable.concat(Ext.ComponentQuery.query("button[cls='j5button']"));
         var button;
