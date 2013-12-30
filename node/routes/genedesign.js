@@ -266,7 +266,7 @@ Optional arguments:
 				  	response:data,
 				  	parameters: {
 				  		input: dnaSeq,
-				  		algorithm: algorithm
+				  		organism: organism
 				  	}});
 				});
 			});
