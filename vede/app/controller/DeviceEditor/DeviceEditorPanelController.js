@@ -808,10 +808,16 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
     onSuspendTabsEvent: function(){
         console.log("Suspending tabs");
+        Ext.getCmp("mainAppPanel").items.items.forEach(function(tab){
+            tab.disable();
+        });
     },
 
     onResumeTabsEvent: function(){
         console.log("Resuming tabs");
+        Ext.getCmp("mainAppPanel").items.items.forEach(function(tab){
+            tab.enable();
+        });        
     },
 
     /**
