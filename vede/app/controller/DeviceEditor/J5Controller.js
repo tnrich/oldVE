@@ -640,6 +640,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onRunJ5BtnClick: function () {
+        Vede.application.fireEvent(this.DeviceEvent.SUSPEND_TABS);
+
         $(".toast-success").hide();
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -727,6 +729,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 Teselagen.manager.TasksMonitor.start();
             }
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
+                Vede.application.fireEvent(this.DeviceEvent.RESUME_TABS);
                 if(success) {
                     toastr.options.onclick = null;
 

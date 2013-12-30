@@ -806,6 +806,14 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         Teselagen.manager.GridCommandPatternManager.redo();
     },
 
+    onSuspendTabsEvent: function(){
+        console.log("Suspending tabs");
+    },
+
+    onResumeTabsEvent: function(){
+        console.log("Resuming tabs");
+    },
+
     /**
      * @member Vede.controller.DeviceEditor.DeviceEditorPanelController
      */
@@ -822,7 +830,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
         this.application.on(this.DeviceEvent.LOAD_EUGENE_RULES, this.onLoadEugeneRulesEvent, this);
 
+        this.application.on(this.DeviceEvent.SUSPEND_TABS, this.onSuspendTabsEvent, this);
+
+        this.application.on(this.DeviceEvent.RESUME_TABS, this.onResumeTabsEvent, this);
+
         this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.onJumpToJ5Run, this);
+
 
         this.control({
             "button[cls='saveDeviceAsWindowOKButton']": {

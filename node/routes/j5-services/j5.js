@@ -197,7 +197,23 @@ function updateMasterSources(sources,user){
 };
 
 var clearUserFolder = function(user){
-  return false;
+
+  var otherRunningTasks = false;
+  app.cache.get(name,function(err,user){
+    if(user && user.tasks)
+    {
+      Object.keys(user.tasks).forEach(function(key){
+        if(user.tasks[key].status == "In progress") otherRunningTasks = true;
+      });
+    }
+  });  
+
+  if(otherRunningTasks)
+  {
+    console.log("Won't clear user folder, other running tasks");
+    return false;
+  }
+
   require('child_process').exec("rm -R /home/teselagen/j5service/usr/"+user.username+"/", function (error, stdout, stderr) { 
       console.log("User folder cleared");
   });
