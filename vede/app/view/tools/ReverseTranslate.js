@@ -28,27 +28,6 @@
 		},
         {
             xtype: 'combobox',
-            cls: 'algorithmSelector',
-            fieldLabel: '<b>Algorithm:</b>',
-            labelCls: 'algorithm-label',
-            editable: false,
-            labelSeparator: ' ',
-            labelWidth: 110,
-            width:350,
-            queryMode: 'local',
-            valueField: 'algorithmValue',
-            value: 'balanced',
-            displayField: 'algorithmName',
-			store: new Ext.data.ArrayStore({
-				fields: ['algorithmName'],
-				data: [
-					['balanced'],['high'],['most_different_sequence'],['least_different_RSCU'],['random'],
-
-				]
-			})
-        },
-        {
-            xtype: 'combobox',
             cls: 'organismSelector',
             fieldLabel: '<b>Organism:</b>',
             labelCls: 'organism-label',
@@ -90,42 +69,6 @@
 		        click: {
 		            fn: function(field){
 
-			            var messageBox = Ext.MessageBox.wait(
-			                "Executing Reverse Translate...",
-			                "Waiting for the server"
-			            );
-
-			            Ext.Ajax.request({
-			                url: Teselagen.manager.SessionManager.buildUrl("genedesign/reverse_translate", ''),
-			                method: 'POST',
-			                /*
-			                params: {
-			                    dna: seq,
-			                    algorithm: algorithm,
-			                    organism: organism
-			                },
-			                */
-			                success: function (response) {
-			                    responseObject = JSON.parse(response.responseText);
-			                    messageBox.close();
-			                    console.log(responseObject);
-								Ext.create('Ext.window.Window',{
-							        items: [{
-							            xtype: 'textarea',
-							            value: response.responseText,
-							            width: 500,
-							            height:200
-							        }]
-								}).show();
-			                },
-			                failure: function(response, opts) {
-			                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-			                    messageBox.close();
-			                    Ext.MessageBox.alert('Failed','Failed');
-			                }
-			            }); 
-
-		         		/*
 		            	var fileDom = this.up().down('filefield').extractFileInput();
 
 		            	if(!fileDom.files[0]) return Ext.Msg.alert('Error', 'Select input file');
@@ -146,7 +89,7 @@
 				            console.log(fr.result);
 
 				            var messageBox = Ext.MessageBox.wait(
-				                "Executing Codon Juggling...",
+				                "Executing Reverse Translate...",
 				                "Waiting for the server"
 				            );
 
@@ -154,11 +97,10 @@
 				            var seq = pFasta.replace('\n',"<line-break>");
 
 				            Ext.Ajax.request({
-				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),
+				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/reverse_translate", ''),
 				                method: 'POST',
 				                params: {
 				                    dna: seq,
-				                    algorithm: algorithm,
 				                    organism: organism
 				                },
 				                success: function (response) {
@@ -177,7 +119,7 @@
 				                failure: function(response, opts) {
 				                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
 				                    messageBox.close();
-				                    Ext.MessageBox.alert('Failed','Conversion failed');
+				                    Ext.MessageBox.alert('Failed','Failed');
 				                }
 				            }); 
 
@@ -185,7 +127,6 @@
 
 				        fr.onload = processFile;
 				        fr.readAsText(fileDom.files[0]);
-				        */
 		            }
 		        },
             }
