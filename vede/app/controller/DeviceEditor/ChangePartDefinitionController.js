@@ -46,7 +46,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             stopBP.disable();
         }
         else
-        {   
+        {
             startBP.enable();
             stopBP.enable();
             startBP.setReadOnly(false);

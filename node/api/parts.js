@@ -43,8 +43,11 @@ module.exports = function(app) {
                     }
                     else 
                         {
-                            if (typeof(cb) == 'function') cb(newPart);
-                            res.json({'parts': newPart,"duplicated":false,"err":err});
+                            if (typeof(cb) == 'function') {
+                                cb(newPart);
+                            } else {
+                                res.json({'parts': newPart,"duplicated":false,"err":err});
+                            }
                         }
                 });
             });
@@ -66,10 +69,17 @@ module.exports = function(app) {
          */
         post_parts:  function(req, res) {
             req.body.dateCreated = new Date();
-            savePart(req,res,null,function(savedSequence){
-                User.populate(req.user, 'parts', function(err, user) {
-                    user.parts.push(savedSequence);
-                    user.save();
+            savePart(req,res,null, function(newPart){
+                console.log(req.user.parts);
+                req.user.parts.push(mongoose.Types.ObjectId(newPart.id));
+                req.user.save(function(err, user) {
+                    console.log(user.parts);
+
+                    res.json({
+                        "parts": newPart,
+                        "duplicated":false,
+                        "err":err
+                    });
                 });
             });
         },
