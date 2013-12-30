@@ -10,8 +10,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     sequenceFileManager: null,
     sequence: null,
 
-    constructor: function(seq,mgr) {
-        this.sequenceManager = mgr;
+    constructor: function(seq, mgr) {
+        this.sequenceFileManager = mgr;
         this.sequence = seq;
     },
 
