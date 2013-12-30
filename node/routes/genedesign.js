@@ -230,8 +230,8 @@ Optional arguments:
 
 	app.post('/genedesign/reverse_translate',function(req,res){
 
-		var organism = req.query.organism || "yeast";
-		var dnaSeq = req.query.dna || "";
+		var organism = (req.body.organism)? req.body.organism : "yeast";
+		var dnaSeq = (req.body.dna)? req.body.dna : "";
 
 		//dnaSeq = "LYLIFGAWAGMVGTALSLLIRAELGQPGTLLGDDQIYNVIVTAHAFVMIFFMVMPIMIGGFGNWLVPLMIGAPDMAFPRMNNMSFWLLPPSFLLLLASSTVEAGAGTGWTVYPPLAGNLAHAGASVDLAIFSLHLAGVSSILGAINFITTAINMKPPTLSQYQTPLFVWSVLITAVLLLLSLPVLAAGITMLLTDRNLNTTFFDPAGGGDPVLYQHLFWFFGHPEVYILIL";
 

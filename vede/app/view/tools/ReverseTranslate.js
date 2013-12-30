@@ -78,7 +78,6 @@
 							return Ext.Msg.alert('Error', 'Only FAS files allowed');
 						}
 
-				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
 				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
 
 				        var fr = new FileReader();
