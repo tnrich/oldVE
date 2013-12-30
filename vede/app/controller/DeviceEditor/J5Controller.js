@@ -729,7 +729,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 Teselagen.manager.TasksMonitor.start();
             }
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
-                Vede.application.fireEvent(this.DeviceEvent.RESUME_TABS);
+                Vede.application.fireEvent(self.DeviceEvent.RESUME_TABS);
                 if(success) {
                     toastr.options.onclick = null;
 
