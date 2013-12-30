@@ -519,7 +519,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             {
                                 xtype: 'container',
                                 items: [
-                                    /*
                                     {
                                         xtype: 'button',
                                         text: 'Codon Optimizer',
@@ -530,7 +529,6 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         },
                                         width: 100
                                     }
-                                    */
                                 ],
                                 margin: '0 10 10 10'
                             },
