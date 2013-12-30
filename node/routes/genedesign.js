@@ -228,7 +228,7 @@ Optional arguments:
 
 */
 
-	app.get('/genedesign/reverse_translate',function(req,res){
+	app.post('/genedesign/reverse_translate',function(req,res){
 
 		var organism = req.query.organism || "yeast";
 		var dnaSeq = req.query.dna || "";
