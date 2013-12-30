@@ -6,17 +6,17 @@
 Ext.define("Teselagen.manager.ProjectManager", {
 
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.event.ProjectEvent", 
-               "Teselagen.event.SequenceManagerEvent", 
-               "Teselagen.store.UserStore", 
-               "Teselagen.manager.SessionManager", 
-               "Teselagen.manager.SequenceManager", 
-               "Teselagen.manager.DeviceDesignManager", 
-               "Teselagen.utils.FormatUtils", 
-               "Teselagen.models.J5Bin", 
+               "Teselagen.event.ProjectEvent",
+               "Teselagen.event.SequenceManagerEvent",
+               "Teselagen.store.UserStore",
+               "Teselagen.manager.SessionManager",
+               "Teselagen.manager.SequenceManager",
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.utils.FormatUtils",
+               "Teselagen.models.J5Bin",
                "Teselagen.models.Part",
-               "Teselagen.models.VectorEditorProject", 
-               "Vede.view.de.DeviceEditor", 
+               "Teselagen.models.VectorEditorProject",
+               "Vede.view.de.DeviceEditor",
                "Ext.window.MessageBox",
                 "Teselagen.manager.ProjectExplorerManager"
                ],
@@ -122,7 +122,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         if(!duplicated) { return cb(tabPanel); }
         else { 
             duplicatedTab.el.unmask();
-            //console.log("Trying to open duplicated tab!"); 
+            //console.log("Trying to open duplicated tab!");
         }
 
     },
@@ -155,11 +155,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function (itemCount, searchString) {
         var dashPanel = Ext.getCmp("DashboardPanel");
-        var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
+        var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
         var sequences = Teselagen.manager.ProjectManager.sequences;
 
-        dashPanel.getActiveTab().el.unmask(); 
-        if(sequenceGrid) 
+        dashPanel.getActiveTab().el.unmask();
+        if(sequenceGrid)
         {
             if(!itemCount) {
                 if(Math.round(sequenceGrid.getHeight()/33)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/33);}
@@ -169,8 +169,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
             if(searchString) {
                 sequences.remoteFilter = true;
-                sequences.on('load', function(s){ 
-                    s.remoteFilter = false; 
+                sequences.on('load', function(s){
+                    s.remoteFilter = false;
                 }, this, { single: true });
 
                 sequences.filter("name", Ext.String.escapeRegex(searchString));
@@ -188,7 +188,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']");
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
@@ -582,7 +582,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 ]
                             });
                             return Ext.MessageBox;
-                            
+
                         }
                     };
                     var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();
