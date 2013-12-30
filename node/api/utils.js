@@ -99,9 +99,14 @@ module.exports = function(app) {
             var User = app.db.model("User");
             var Part = app.db.model("part");
 
-            User.findById(req.user._id)
-            .populate({ path: 'parts', match: {sequencefile_id: {$ne: null}}})
-            .exec(function(err, user) {
+            User.populate(req.user, {
+                path: 'parts',
+                match: {
+                    sequencefile_id: {
+                        $ne: null
+                    }
+                }
+            }, function(err, user) {
                 var FQDN_candidate = req.user.FQDN+'.'+reqPart.name;
 
                 Part.generateDefinitionHash(req.user, reqPart, function(hash_candidate) {
@@ -232,10 +237,7 @@ module.exports = function(app) {
 
         get_getStats: function(req, res) {
             var User = app.db.model("User");
-            User.findById(req.user._id)
-            .populate('projects')
-            .populate('parts')
-            .exec(function(err, user) {
+            User.populate(req.user, 'projects parts', function(err, user) {
                 var countDesigns = 0;
                 user.projects.forEach(function(project){
                     countDesigns += project.designs.length;
