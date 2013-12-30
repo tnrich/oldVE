@@ -90,6 +90,11 @@
 		        click: {
 		            fn: function(field){
 
+			            var messageBox = Ext.MessageBox.wait(
+			                "Executing Reverse Translate...",
+			                "Waiting for the server"
+			            );
+
 			            Ext.Ajax.request({
 			                url: Teselagen.manager.SessionManager.buildUrl("genedesign/reverse_translate", ''),
 			                method: 'POST',
