@@ -1,6 +1,6 @@
 [
 	{"script":"app.js",
 	 "name":"Dev",
-	 "args":"['--prod','-r', '3000']",
+	 "args":"['--remote','--localj5','-r', '3000']",
 	 "instances":"1"}
 ]
