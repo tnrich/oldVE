@@ -1,10 +1,10 @@
-    Ext.define('Vede.view.tools.ToolsPanelView', {
+    Ext.define('Vede.view.tools.CodonJuggle', {
     extend: 'Ext.window.Window',
-    id: 'toolsPanelView',
-    alias: 'widget.ToolsPanelView',
+    id: 'CodonJuggle',
+    alias: 'widget.CodonJuggle',
     cls: 'tasksmonitorwindow',
     width: 400,
-    title: 'Tools',
+    title: 'Codon Juggle',
     items: [
 		{
 			xtype: 'filefield',

@@ -519,18 +519,26 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             {
                                 xtype: 'container',
                                 items: [
-                                    /*
                                     {
                                         xtype: 'button',
-                                        text: 'Codon Optimizer',
+                                        text: 'Codon Juggle',
                                         listeners: {
                                             click: function(){
-                                                Ext.create('Vede.view.tools.ToolsPanelView').show();
+                                                Ext.create('Vede.view.tools.CodonJuggle').show();
                                             }
                                         },
-                                        width: 100
+                                        width: 105
+                                    },
+                                    {
+                                        xtype: 'button',
+                                        text: 'Reverse Translate',
+                                        listeners: {
+                                            click: function(){
+                                                Ext.create('Vede.view.tools.ReverseTranslate').show();
+                                            }
+                                        },
+                                        width: 115
                                     }
-                                    */
                                 ],
                                 margin: '0 10 10 10'
                             },

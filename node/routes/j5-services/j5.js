@@ -199,7 +199,7 @@ function updateMasterSources(sources,user){
 var clearUserFolder = function(user){
 
   var otherRunningTasks = false;
-  app.cache.get(name,function(err,user){
+  app.cache.get(user.username,function(err,user){
     if(user && user.tasks)
     {
       Object.keys(user.tasks).forEach(function(key){
