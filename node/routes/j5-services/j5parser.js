@@ -1168,11 +1168,26 @@ function processCombinatorial(file,cb){
 function processAssemblies(files,cb)
 {
     files.forEach(function(file){
-        var sequence = file.fileContent;
-        // Try get Size (BP) from Genbank file.
+        var sequence;
+        var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
+
         try {
             console.log(file);
-            file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
+
+            if(fileExtension = "gb" || fileExtension = "genbank") {
+                // Find something in the form " ## bp"
+                file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
+            } else if(fileExtension = "fas" || fileExtension = "fasta") {
+                // Grab all characters after the first line starting with ">"
+                sequence = file.fileContent.match(/\s*>.*?\\n(.+)>?^/)[1];
+
+                console.log(sequence);
+
+                file.sizeBP = sequence.length;
+            } else if(fileExtension = "xml") {
+            } else {
+                throw "oh no.";
+            }
         }
         catch(err)
         {
