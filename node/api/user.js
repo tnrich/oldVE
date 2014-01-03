@@ -164,18 +164,24 @@ module.exports = function(app) {
       },
 
     post_presets: function(req,res){
-        req.user.presets.push({
+        app.db.model('preset').create({
             presetName: req.body.presetName,
             j5parameters: JSON.parse(req.body.j5parameters)
-        });
-
-        req.user.save(function(err) {
+        }, function(err, newPreset) {
             if(err) {
-                console.log('Error saving user.');
+                console.log('Error creating preset.');
                 console.log(err);
             }
 
-            return res.json({});
+            req.user.presets.push(newPreset._id);
+            req.user.save(function(err) {
+                if(err) {
+                    console.log('Error saving user.');
+                    console.log(err);
+                }
+
+                res.json({});
+            });
         });
 
         /*
