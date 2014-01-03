@@ -1165,12 +1165,10 @@ function processCombinatorial(file,cb){
 }
 
 function processAssemblies(files,cb) {
-    console.log('processing files');
-    console.log(typeof files);
-    console.log(files.length);
+    var file;
 
     for(var i = 0; i < files.length; i++) {
-        console.log(i);
+        file = files[i];
         var match;
         var sequence;
         var fileExtension = "";
