@@ -170,9 +170,23 @@ module.exports = function(app) {
               presetName: req.body.presetName,
               j5parameters: JSON.parse(req.body.j5parameters)
             });
-            newPreset.save(function(){
+            newPreset.save(function(err){
+              if(err) {
+                console.log('Error saving preset.');
+                console.log(err);
+              }
+
+              console.log(req.user.presets);
+
               req.user.presets.push(newPreset);
-              req.user.save(function(){
+              req.user.save(function(err){
+                if(err) {
+                  console.log('Error saving user.');
+                  console.log(err);
+                }
+
+                console.log(req.user.presets);
+
                 res.json({});
               });
             });
