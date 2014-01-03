@@ -1168,6 +1168,12 @@ function processCombinatorial(file,cb){
 }
 
 function processAssemblies(files,cb) {
+    var copy = [];
+    for(var i = 0; i < files.length; i++) {
+        copy.push(files[i]);
+    }
+    files = copy;
+
     console.log('processing files');
     console.log(files);
     console.log(typeof files);
