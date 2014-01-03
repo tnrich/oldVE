@@ -981,7 +981,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     cb();
                 }
             }
-        } else {
+        } else if(presetChanged) {
             Ext.Ajax.request({
                 method: 'PUT',
                 url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
@@ -992,10 +992,17 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 success: function(response){
                     Ext.MessageBox.alert('Success', 'Preset updated', function(){
                         Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
-                        if(typeof(cb)=="function") cb();
+
+                        if(typeof cb === "function") {
+                            cb();
+                        }
                     });
                 }
             });
+        } else {
+            if(typeof cb === "function") {
+                cb();
+            }
         }
     },
 
