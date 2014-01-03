@@ -611,8 +611,6 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
 }
 
 function processNonCombinatorial(method,file,cb) {
-    console.log('Processing non combinatorial.');
-    console.log(method);
     var lines = file.fileContent.split(/\r?\n/);
     var obj = {};
 
@@ -624,7 +622,6 @@ function processNonCombinatorial(method,file,cb) {
     */
 
     type = method;
-    console.log(method);
 
     if(type.match(/Mock/)) return processNonCombinatorial_MOCK(lines,cb);
     else if(type.match(/SLIC\/Gibson\/CPEC/)) return processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb);
@@ -1222,8 +1219,6 @@ function processAssemblies(files,cb) {
 }
 
 function processj5Parameters(file,cb){
-    console.log('processing j5 parameters');
-    console.log(file.fileContent);
     csv().from( file.fileContent ).to.array( function(data, count){
         var obj = {};
         for(var l in data)
@@ -1236,7 +1231,6 @@ function processj5Parameters(file,cb){
 }
 
 var processJ5Response = function(method,encodedFileData,callback) {
-    console.log('processing j5 response');
     var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
     var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
