@@ -173,22 +173,19 @@ module.exports = function(app) {
               j5parameters: JSON.parse(req.body.j5parameters)
             });
             newPreset.save(function(err, newPreset){
-              console.log(newPreset);
-              console.log(newPreset._id);
-
               if(err) {
                 console.log('Error saving preset.');
                 console.log(err);
               }
 
-              req.user.presets.push(new mongoose.Types.ObjectId(newPreset._id));
-              req.user.save(function(err){
+              user.presets.push(newPreset);
+              user.save(function(err){
                 if(err) {
                   console.log('Error saving user.');
                   console.log(err);
                 }
 
-                console.log(req.user.presets);
+                console.log(user.presets);
 
                 res.json({});
               });
