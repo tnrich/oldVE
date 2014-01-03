@@ -1170,6 +1170,8 @@ function processCombinatorial(file,cb){
 function processAssemblies(files,cb) {
     console.log('processing files');
     console.log(files);
+    console.log(typeof files);
+    console.log(files[0);
 
     async.forEach(files, function(file, done) {
         var match;
