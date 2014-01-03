@@ -1166,7 +1166,6 @@ function processCombinatorial(file,cb){
 
 function processAssemblies(files,cb) {
     console.log('processing files');
-    console.log(files);
     console.log(typeof files);
     console.log(files.length);
 
@@ -1196,17 +1195,14 @@ function processAssemblies(files,cb) {
             // Grab all characters after the first line starting with ">"
             match = file.fileContent.match(/\s*>.*?\n(.+)>?^/);
 
-            console.log(match);
-
             if(match) {
                 sequence = match[1];
                 file.sizeBP = sequence.length;
+                console.log(match[1].length);
             }
         } else if(fileExtension = "xml") {
-            console.log('woo');
             file.sizeBP = 0;
         } else {
-            console.log('wee');
             file.sizeBP = 0;
         }
 
@@ -1325,8 +1321,6 @@ var processJ5Response = function(method,encodedFileData,callback) {
     function(err, results) {
         //quicklog( require('util').inspect(results) );
         var warnings = '';
-        console.log('async results');
-        console.log(results);
         if(results.processedData.warnings) warnings = results.processedData.warnings;
         return callback(results,warnings);
     });
