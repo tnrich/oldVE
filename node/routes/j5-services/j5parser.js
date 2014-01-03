@@ -1169,9 +1169,8 @@ function processAssemblies(files,cb) {
     console.log(typeof files);
     console.log(files.length);
 
-    return cb([{sizeBP: 0, fileContent: ""}]);
-
     for(var i = 0; i < files.length; i++) {
+        console.log(i);
         var match;
         var sequence;
         var fileExtension = "";
