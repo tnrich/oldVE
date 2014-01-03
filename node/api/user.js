@@ -178,6 +178,8 @@ module.exports = function(app) {
                 console.log(err);
               }
 
+              console.log(arguments);
+              console.log('NEW PRESET:');
               console.log(newPreset);
 
               req.user.presets.push(mongoose.Types.ObjectId(newPreset._id));
