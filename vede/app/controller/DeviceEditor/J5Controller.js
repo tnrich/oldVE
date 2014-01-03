@@ -932,10 +932,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var selectedPreset = currentTab.selectedPreset;
         var parameters = {};
+        var presetChanged = false;
 
         this.j5Parameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
                 parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
+
+                if(parameters[key] !== this.j5Parameters.get(key)) {
+                    presetChanged = true;
+                }
             }
         }, this);
 
@@ -943,13 +948,24 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             console.log("No preset selected");
             return false;
         } else if(selectedPreset.get("presetName") === "Default") {
-            var message = 'You have modified the default preset. To create a new preset with these settings, enter a name for the preset.';
+            if(!presetChanged) {
+                var message = 'You have modified the default preset. To create a new preset with these settings, enter a name for the preset.';
 
-            Ext.MessageBox.prompt('Enter New Preset Name', message, function(value) {
-                console.log(arguments);
-                parameters.presetName = value;
-                savePreset(parameters);
-            });
+                Ext.MessageBox.prompt('Enter New Preset Name', message, function(button, value) {
+                    if(button === "ok") {
+                        parameters.presetName = value;
+                        savePreset(parameters);
+                    } else {
+                        if(typeof(cb)=="function") {
+                            cb();
+                        }
+                    }
+                });
+            } else {
+                if(typeof(cb)=="function") {
+                    cb();
+                }
+            }
         } else {
             savePreset(parameters);
         }
