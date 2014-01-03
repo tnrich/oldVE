@@ -946,6 +946,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             var message = 'You have modified the default preset. To create a new preset with these settings, enter a name for the preset.';
 
             Ext.MessageBox.prompt('Enter New Preset Name', message, function(value) {
+                console.log(arguments);
                 parameters.presetName = value;
                 savePreset(parameters);
             });
