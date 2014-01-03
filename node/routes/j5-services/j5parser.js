@@ -1,5 +1,6 @@
 var csv = require('csv');
 var async = require('async');
+var xml2js = require('xml2js');
 
 /**
  * Write to quick log.
@@ -1167,8 +1168,7 @@ function processCombinatorial(file,cb){
 function processAssemblies(files,cb) {
     var file;
 
-    for(var i = 0; i < files.length; i++) {
-        file = files[i];
+    async.forEach(files, function(file, done) {
         var match;
         var sequence;
         var fileExtension = "";
@@ -1187,6 +1187,8 @@ function processAssemblies(files,cb) {
             if(match && match[1]) {
                 file.sizeBP = Number(match[1]);
             }
+
+            return done();
         } else if(fileExtension === "fas" || fileExtension === "fasta") {
             file.fileType = "FASTA";
 
@@ -1199,24 +1201,33 @@ function processAssemblies(files,cb) {
                 sequence = sequence.replace(/\r/g, "");
                 file.sizeBP = sequence.length;
             }
+
+            return done();
         } else if(fileExtension === "xml") {
-            console.log(file.fileContent);
             file.fileType = "SBOLXML";
 
-            file.sizeBP = 0;
+            xml2js.parseString(file.fileContent, function(err, result) {
+                if(err) {
+                    console.log("Error parsing j5 xml.");
+                    console.log(err);
+
+                    file.sizeBP = 0;
+                    return done();
+                } else {
+                    console.log(result);
+                    file.sizeBP = 0;
+                    return done();
+                }
+            });
         } else {
             file.fileType = "Unknown";
             file.sizeBP = 0;
+
+            return done();
         }
-
-        if(!file.sizeBP) {
-            file.sizeBP = 0;
-        }
-
-        console.log(file.sizeBP);
-    }
-
-    return cb(files);
+    }, function(err) {
+        return cb(files);
+    });
 }
 
 function processj5Parameters(file,cb){
