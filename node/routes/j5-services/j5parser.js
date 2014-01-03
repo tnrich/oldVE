@@ -1200,7 +1200,8 @@ function processAssemblies(files,cb) {
                 file.sizeBP = sequence.length;
             }
         } else if(fileExtension === "xml") {
-            file.fileType = "XML";
+            console.log(file.fileContent);
+            file.fileType = "SBOLXML";
 
             file.sizeBP = 0;
         } else {
