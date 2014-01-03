@@ -1171,7 +1171,7 @@ function processAssemblies(files,cb) {
     console.log('processing files');
     console.log(files);
     console.log(typeof files);
-    console.log(files[0]);
+    console.log(files.length);
 
     return cb([{sizeBP: 0, fileContent: ""}]);
 
