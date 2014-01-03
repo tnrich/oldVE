@@ -1215,7 +1215,7 @@ function processAssemblies(files,cb) {
                     return done();
                 } else {
                     try {
-                        file.sizeBP = result["rdf:RDF"]["DnaComponent"][0]["dnaSequence"][0]["DnaSequence"][0]["nucleotides"].length;
+                        file.sizeBP = result["rdf:RDF"]["DnaComponent"][0]["dnaSequence"][0]["DnaSequence"][0]["nucleotides"][0].length;
                     } catch(err) {
                         file.sizeBP = 0;
                     }
