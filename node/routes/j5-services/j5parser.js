@@ -1178,9 +1178,9 @@ function processAssemblies(files,cb) {
             fileExtension = fileExtensionMatch[1].toLowerCase();
         }
 
-        console.log(fileExtension);
-
         if(fileExtension === "gb" || fileExtension === "genbank") {
+            file.fileType = "Genbank";
+
             // Find something in the form " ## bp"
             match = file.fileContent.match(/\s(\d+)\sbp/);
 
@@ -1188,6 +1188,8 @@ function processAssemblies(files,cb) {
                 file.sizeBP = Number(match[1]);
             }
         } else if(fileExtension === "fas" || fileExtension === "fasta") {
+            file.fileType = "FASTA";
+
             // Grab all characters after the first line starting with ">"
             match = file.fileContent.match(/\s*>.*?\n([\s\w]+)>?/);
 
@@ -1198,8 +1200,11 @@ function processAssemblies(files,cb) {
                 file.sizeBP = sequence.length;
             }
         } else if(fileExtension === "xml") {
+            file.fileType = "XML";
+
             file.sizeBP = 0;
         } else {
+            file.fileType = "Unknown";
             file.sizeBP = 0;
         }
 
