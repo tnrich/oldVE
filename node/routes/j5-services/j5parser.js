@@ -1176,7 +1176,7 @@ function processAssemblies(files,cb) {
         var fileExtension = "";
         var fileExtensionMatch = file.name.match(/\.(\w+)$/);
 
-        console.log(fileExtensionmatch);
+        console.log(fileExtensionMatch);
 
         if(fileExtensionMatch) {
             fileExtension = fileExtensionMatch[1].toLowerCase();
@@ -1197,7 +1197,6 @@ function processAssemblies(files,cb) {
             if(match) {
                 sequence = match[1];
                 file.sizeBP = sequence.length;
-                console.log(match[1].length);
             }
         } else if(fileExtension === "xml") {
             file.sizeBP = 0;
