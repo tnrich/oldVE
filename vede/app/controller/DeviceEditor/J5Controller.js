@@ -962,7 +962,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                             },
                             success: function(response){
                                 Ext.MessageBox.alert('Success', 'Preset Saved', function(){
-                                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, text);
+                                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, value);
                                 });
 
                                 if(typeof cb === "function") {
