@@ -1169,6 +1169,7 @@ function processAssemblies(files,cb) {
 
     for(var i = 0; i < files.length; i++) {
         file = files[i];
+        console.log(file.fileContent);
         var match;
         var sequence;
         var fileExtension = "";
@@ -1181,14 +1182,14 @@ function processAssemblies(files,cb) {
         }
 
 
-        if(fileExtension = "gb" || fileExtension = "genbank") {
+        if(fileExtension === "gb" || fileExtension === "genbank") {
             // Find something in the form " ## bp"
             match = file.fileContent.match(/\s(\d+)\sbp/);
 
             if(match && match[1]) {
                 file.sizeBP = Number(match[1]);
             }
-        } else if(fileExtension = "fas" || fileExtension = "fasta") {
+        } else if(fileExtension === "fas" || fileExtension === "fasta") {
             // Grab all characters after the first line starting with ">"
             match = file.fileContent.match(/\s*>.*?\n(.+)>?^/);
 
@@ -1197,7 +1198,7 @@ function processAssemblies(files,cb) {
                 file.sizeBP = sequence.length;
                 console.log(match[1].length);
             }
-        } else if(fileExtension = "xml") {
+        } else if(fileExtension === "xml") {
             file.sizeBP = 0;
         } else {
             file.sizeBP = 0;
