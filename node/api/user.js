@@ -163,34 +163,46 @@ module.exports = function(app) {
           });
       },
 
-      post_presets: function(req,res){
+    post_presets: function(req,res){
+        req.user.push({
+            presetName: req.body.presetName,
+            j5parameters: JSON.parse(req.body.j5parameters)
+        });
 
-          var Preset = app.db.model('preset');
-
-          User.populate(req.user, 'presets', function(err, user) {
-            var newPreset = new Preset({
-              presetName: req.body.presetName,
-              j5parameters: JSON.parse(req.body.j5parameters)
-            });
-            newPreset.save(function(err, newPreset){
-              if(err) {
-                console.log('Error saving preset.');
+        req.user.save(function(err) {
+            if(err) {
+                console.log('Error saving user.');
                 console.log(err);
-              }
+            }
 
-              user.presets.push(newPreset);
-              user.save(function(err){
-                if(err) {
-                  console.log('Error saving user.');
-                  console.log(err);
-                }
+            return res.json({});
+        });
 
-                console.log(user.presets);
+        /*
+        var Preset = app.db.model('preset');
 
-                res.json({});
-              });
-            });
+        var newPreset = new Preset({
+          presetName: req.body.presetName,
+          j5parameters: JSON.parse(req.body.j5parameters)
+        });
+
+        newPreset.save(function(err, newPreset){
+          if(err) {
+            console.log('Error saving preset.');
+            console.log(err);
+          }
+
+          req.user.presets.push(newPreset);
+          req.user.save(function(err){
+            if(err) {
+              console.log('Error saving user.');
+              console.log(err);
+            }
+
+            res.json({});
           });
+        });
+        */
       },
 
       put_presets: function(req,res){
