@@ -1176,12 +1176,9 @@ function processAssemblies(files,cb) {
         var fileExtension = "";
         var fileExtensionMatch = file.name.match(/\.(\w+)$/);
 
-        console.log(fileExtensionMatch);
-
         if(fileExtensionMatch) {
             fileExtension = fileExtensionMatch[1].toLowerCase();
         }
-
 
         if(fileExtension === "gb" || fileExtension === "genbank") {
             // Find something in the form " ## bp"
@@ -1207,6 +1204,8 @@ function processAssemblies(files,cb) {
         if(!file.sizeBP) {
             file.sizeBP = 0;
         }
+
+        console.log(file.sizeBP);
     }
 
     return cb(files);
