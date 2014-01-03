@@ -953,24 +953,35 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 Ext.MessageBox.prompt('Enter New Preset Name', message, function(button, value) {
                     if(button === "ok") {
-                        parameters.presetName = value;
-                        savePreset(parameters);
+                        Ext.Ajax.request({
+                            method: 'POST',
+                            url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                            params: {
+                                presetName: value,
+                                j5parameters: JSON.stringify(parameters)
+                            },
+                            success: function(response){
+                                Ext.MessageBox.alert('Success', 'Preset Saved', function(){
+                                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, text);
+                                });
+
+                                if(typeof cb === "function") {
+                                    cb();
+                                }
+                            }
+                        });
                     } else {
-                        if(typeof(cb)=="function") {
+                        if(typeof cb === "function") {
                             cb();
                         }
                     }
                 });
             } else {
-                if(typeof(cb)=="function") {
+                if(typeof cb === "function") {
                     cb();
                 }
             }
         } else {
-            savePreset(parameters);
-        }
-
-        function savePreset(parameters) {
             Ext.Ajax.request({
                 method: 'PUT',
                 url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
@@ -1053,7 +1064,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     j5parameters: JSON.stringify(parameters)
                 },
                 success: function(response){
-                    Ext.MessageBox.alert('Success', 'Preset saved', function(){
+                    Ext.MessageBox.alert('Success', 'Preset Saved', function(){
                         Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,text);
                     });
                 }
