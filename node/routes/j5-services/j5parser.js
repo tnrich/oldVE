@@ -611,6 +611,8 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
 }
 
 function processNonCombinatorial(method,file,cb) {
+    console.log('Processing non combinatorial.');
+    console.log(method);
     var lines = file.fileContent.split(/\r?\n/);
     var obj = {};
 
@@ -1213,6 +1215,8 @@ function processAssemblies(files,cb) {
 }
 
 function processj5Parameters(file,cb){
+    console.log('processing j5 parameters');
+    console.log(file.fileContent);
     csv().from( file.fileContent ).to.array( function(data, count){
         var obj = {};
         for(var l in data)
@@ -1320,6 +1324,8 @@ var processJ5Response = function(method,encodedFileData,callback) {
     function(err, results) {
         //quicklog( require('util').inspect(results) );
         var warnings = '';
+        console.log('async results');
+        console.log(results);
         if(results.processedData.warnings) warnings = results.processedData.warnings;
         return callback(results,warnings);
     });
