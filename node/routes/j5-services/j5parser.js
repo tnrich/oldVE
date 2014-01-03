@@ -6,12 +6,12 @@ var async = require('async');
  * @param s
  */
 function quicklog(s) {
-  var logpath = "/tmp/quick.log";
-  var fs = require('fs');
-  s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
-  var fd = fs.openSync(logpath, 'a+', 0666);
-  fs.writeSync(fd, s + '\n');
-  fs.closeSync(fd);
+    var logpath = "/tmp/quick.log";
+    var fs = require('fs');
+    s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
+    var fd = fs.openSync(logpath, 'a+', 0666);
+    fs.writeSync(fd, s + '\n');
+    fs.closeSync(fd);
 }
 
 function processNonCombinatorial_MOCK(lines,cb){
@@ -35,7 +35,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -176,7 +176,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
         obj.note = currentWarning; // In this method there is not space between warnings and note
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; //Empty space
 
 
         //Non degenerate Part IDs and Sources
@@ -213,7 +213,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; //Empty space
 
         //Target Parts
         lines.splice(0,1)[0]; //Header
@@ -1176,10 +1176,15 @@ function processAssemblies(files,cb) {
     for(var i = 0; i < files.length; i++) {
         var match;
         var sequence;
-        var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
+        var fileExtension = "";
+        var fileExtensionMatch = file.fileContent.match(/\.(\w+)$/);
 
-        console.log(fileExtension);
-        console.log(file);
+        console.log(fileExtensionmatch);
+
+        if(fileExtensionMatch) {
+            fileExtension = fileExtensionMatch[1].toLowerCase();
+        }
+
 
         if(fileExtension = "gb" || fileExtension = "genbank") {
             // Find something in the form " ## bp"
@@ -1190,7 +1195,7 @@ function processAssemblies(files,cb) {
             }
         } else if(fileExtension = "fas" || fileExtension = "fasta") {
             // Grab all characters after the first line starting with ">"
-            match = file.fileContent.match(/\s*>.*?\\n(.+)>?^/);
+            match = file.fileContent.match(/\s*>.*?\n(.+)>?^/);
 
             console.log(match);
 
@@ -1209,7 +1214,6 @@ function processAssemblies(files,cb) {
         if(!file.sizeBP) {
             file.sizeBP = 0;
         }
-
     }
 
     cb(files);
