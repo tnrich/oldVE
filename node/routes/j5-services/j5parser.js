@@ -1173,6 +1173,8 @@ function processAssemblies(files,cb) {
     console.log(typeof files);
     console.log(files[0]);
 
+    return cb([{sizeBP: 0, fileContent: ""}];
+
     for(var i = 0; i < files.length; i++) {
         var match;
         var sequence;
@@ -1216,7 +1218,7 @@ function processAssemblies(files,cb) {
         }
     }
 
-    cb(files);
+    return cb(files);
 }
 
 function processj5Parameters(file,cb){
