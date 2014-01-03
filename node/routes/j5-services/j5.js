@@ -367,7 +367,7 @@ app.post('/executej5',restrict,function(req,res){
         // In production mode use internal script
         //var testing = !(app.get("env") === "production");
 
-        if(app.get("env") === "production") {
+        if(app.get("env") === "production" || app.program.localj5) {
 
           //console.log("Executing experimental j5 through pipe");
 
@@ -435,6 +435,7 @@ app.post('/executej5',restrict,function(req,res){
                   }
                   else
                   { 
+                    quicklog(result);
                     var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
                     var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
                     onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
