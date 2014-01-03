@@ -1169,11 +1169,12 @@ function processAssemblies(files,cb) {
 
     for(var i = 0; i < files.length; i++) {
         file = files[i];
+        console.log(file.name);
         console.log(file.fileContent);
         var match;
         var sequence;
         var fileExtension = "";
-        var fileExtensionMatch = file.fileContent.match(/\.(\w+)$/);
+        var fileExtensionMatch = file.name.match(/\.(\w+)$/);
 
         console.log(fileExtensionmatch);
 
