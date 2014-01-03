@@ -1169,7 +1169,7 @@ function processAssemblies(files,cb) {
     console.log('processing files');
     console.log(files);
 
-    async.forEach(files, function(file) {
+    async.forEach(files, function(file, done) {
         var sequence;
         var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
 
@@ -1201,6 +1201,8 @@ function processAssemblies(files,cb) {
             console.log("Error parsing size BP");
             file.sizeBP = 0;
         }
+
+        done();
     }, function(err) {
         cb(files);
     });
