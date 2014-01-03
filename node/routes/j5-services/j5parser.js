@@ -1169,8 +1169,6 @@ function processAssemblies(files,cb) {
 
     for(var i = 0; i < files.length; i++) {
         file = files[i];
-        console.log(file.name);
-        console.log(file.fileContent);
         var match;
         var sequence;
         var fileExtension = "";
@@ -1179,6 +1177,8 @@ function processAssemblies(files,cb) {
         if(fileExtensionMatch) {
             fileExtension = fileExtensionMatch[1].toLowerCase();
         }
+
+        console.log(fileExtension);
 
         if(fileExtension === "gb" || fileExtension === "genbank") {
             // Find something in the form " ## bp"
@@ -1193,6 +1193,7 @@ function processAssemblies(files,cb) {
 
             if(match) {
                 sequence = match[1];
+                sequence.replace(/\n/g, "");
                 file.sizeBP = sequence.length;
             }
         } else if(fileExtension === "xml") {
