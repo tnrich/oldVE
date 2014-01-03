@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 module.exports = function(app) {
     var User = app.db.model("User");
     var restrict = app.auth.restrict;
