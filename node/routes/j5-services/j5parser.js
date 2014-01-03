@@ -1192,7 +1192,7 @@ function processAssemblies(files,cb) {
             }
         } else if(fileExtension === "fas" || fileExtension === "fasta") {
             // Grab all characters after the first line starting with ">"
-            match = file.fileContent.match(/\s*>.*?\n(.+)>?^/);
+            match = file.fileContent.match(/\s*>.*?\n([\s\w]+)>?/);
 
             if(match) {
                 sequence = match[1];
