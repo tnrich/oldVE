@@ -931,33 +931,44 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var self = this;
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var selectedPreset = currentTab.selectedPreset;
-
-        if(!selectedPreset || selectedPreset.get('presetName') === "Default")
-        {
-            console.log("No preset selected"); return false;
-        }
-
         var parameters = {};
+
         this.j5Parameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
                 parameters[key] = Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
             }
         }, this);
 
-        Ext.Ajax.request({
-            method: 'PUT',
-            url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
-            params: {
-                id: selectedPreset.data.id,
-                j5parameters: JSON.stringify(parameters)
-            },
-            success: function(response){
-                Ext.MessageBox.alert('Success', 'Preset updated', function(){
-                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
-                    if(typeof(cb)=="function") cb();
-                });
-            }
-        });
+        if(!selectedPreset) {
+            console.log("No preset selected");
+            return false;
+        } else if(selectedPreset.get("presetName") === "Default") {
+            var message = 'You have modified the default preset. To create a new preset with these settings, enter a name for the preset.';
+
+            Ext.MessageBox.prompt('Enter New Preset Name', message, function(value) {
+                parameters.presetName = value;
+                savePreset(parameters);
+            });
+        } else {
+            savePreset(parameters);
+        }
+
+        function savePreset(parameters) {
+            Ext.Ajax.request({
+                method: 'PUT',
+                url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                params: {
+                    id: selectedPreset.data.id,
+                    j5parameters: JSON.stringify(parameters)
+                },
+                success: function(response){
+                    Ext.MessageBox.alert('Success', 'Preset updated', function(){
+                        Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
+                        if(typeof(cb)=="function") cb();
+                    });
+                }
+            });
+        }
     },
 
     deletePresetBtnClick: function() {
