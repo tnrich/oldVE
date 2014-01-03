@@ -1165,8 +1165,9 @@ function processCombinatorial(file,cb){
     }
 }
 
-function processAssemblies(files,cb)
-{
+function processAssemblies(files,cb) {
+    console.log('processing files');
+    console.log(files);
     files.forEach(function(file){
         var sequence;
         var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
@@ -1185,8 +1186,10 @@ function processAssemblies(files,cb)
 
                 file.sizeBP = sequence.length;
             } else if(fileExtension = "xml") {
+                console.log('woo');
                 file.sizeBP = 0;
             } else {
+                console.log('wee');
                 throw "oh no.";
             }
         }
@@ -1195,7 +1198,6 @@ function processAssemblies(files,cb)
             console.log("Error parsing size BP");
             file.sizeBP = 0;
         }
-        //console.log(file.sizeBP);
     });
     cb(files);
 }
@@ -1213,7 +1215,7 @@ function processj5Parameters(file,cb){
 }
 
 var processJ5Response = function(method,encodedFileData,callback) {
-
+    console.log('processing j5 response');
     var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
     var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
