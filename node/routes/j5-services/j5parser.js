@@ -1170,35 +1170,39 @@ function processAssemblies(files,cb) {
     console.log(files);
 
     async.forEach(files, function(file, done) {
+        var match;
         var sequence;
         var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
 
         console.log(fileExtension);
+        console.log(file);
 
-        try {
-            console.log(file);
+        if(fileExtension = "gb" || fileExtension = "genbank") {
+            // Find something in the form " ## bp"
+            match = file.fileContent.match(/\s(\d+)\sbp/);
 
-            if(fileExtension = "gb" || fileExtension = "genbank") {
-                // Find something in the form " ## bp"
-                file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
-            } else if(fileExtension = "fas" || fileExtension = "fasta") {
-                // Grab all characters after the first line starting with ">"
-                sequence = file.fileContent.match(/\s*>.*?\\n(.+)>?^/)[1];
-
-                console.log(sequence);
-
-                file.sizeBP = sequence.length;
-            } else if(fileExtension = "xml") {
-                console.log('woo');
-                file.sizeBP = 0;
-            } else {
-                console.log('wee');
-                file.sizeBP = 0;
+            if(match && match[1]) {
+                file.sizeBP = Number(match[1]);
             }
+        } else if(fileExtension = "fas" || fileExtension = "fasta") {
+            // Grab all characters after the first line starting with ">"
+            match = file.fileContent.match(/\s*>.*?\\n(.+)>?^/);
+
+            console.log(match);
+
+            if(match) {
+                sequence = match[1];
+                file.sizeBP = sequence.length;
+            }
+        } else if(fileExtension = "xml") {
+            console.log('woo');
+            file.sizeBP = 0;
+        } else {
+            console.log('wee');
+            file.sizeBP = 0;
         }
-        catch(err)
-        {
-            console.log("Error parsing size BP");
+
+        if(!file.sizeBP) {
             file.sizeBP = 0;
         }
 
