@@ -1171,6 +1171,7 @@ function processAssemblies(files,cb)
         var sequence = file.fileContent;
         // Try get Size (BP) from Genbank file.
         try {
+            console.log(file);
             file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
         }
         catch(err)
