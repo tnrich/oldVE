@@ -1168,18 +1168,12 @@ function processCombinatorial(file,cb){
 }
 
 function processAssemblies(files,cb) {
-    var copy = [];
-    for(var i = 0; i < files.length; i++) {
-        copy.push(files[i]);
-    }
-    files = copy;
-
     console.log('processing files');
     console.log(files);
     console.log(typeof files);
     console.log(files[0]);
 
-    async.forEach(files, function(file, done) {
+    for(var i = 0; i < files.length; i++) {
         var match;
         var sequence;
         var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
@@ -1216,10 +1210,9 @@ function processAssemblies(files,cb) {
             file.sizeBP = 0;
         }
 
-        done();
-    }, function(err) {
-        cb(files);
-    });
+    }
+
+    cb(files);
 }
 
 function processj5Parameters(file,cb){
