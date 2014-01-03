@@ -179,8 +179,7 @@ module.exports = function(app) {
               }
 
               console.log(arguments);
-              console.log('NEW PRESET:');
-              console.log(newPreset);
+              console.log(newPreset._id);
 
               req.user.presets.push(mongoose.Types.ObjectId(newPreset._id));
               req.user.save(function(err){
