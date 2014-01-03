@@ -345,7 +345,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var self = this;
         var selectedPreset = currentTab.selectedPreset;
 
-        if(!selectedPreset || selectedPreset.get('presetName') === "Default") {
+        if(!selectedPreset) {
             this.j5ParamsWindow.close();
         }
 
