@@ -1193,7 +1193,8 @@ function processAssemblies(files,cb) {
 
             if(match) {
                 sequence = match[1];
-                sequence.replace(/\n/g, "");
+                sequence = sequence.replace(/\n/g, "");
+                sequence = sequence.replace(/\r/g, "");
                 file.sizeBP = sequence.length;
             }
         } else if(fileExtension === "xml") {
