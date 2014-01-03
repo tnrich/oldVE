@@ -8,7 +8,7 @@ module.exports = function(app, express) {
     var useAirbrake = app.program.useairbrake;
 
     var httpServer = require('http').createServer(app).listen(3000);
-  
+
     if(app.get("env") === "production") {
 
         var options = {

@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 module.exports = function(app) {
     var User = app.db.model("User");
     var restrict = app.auth.restrict;
@@ -161,22 +163,52 @@ module.exports = function(app) {
           });
       },
 
-      post_presets: function(req,res){
+    post_presets: function(req,res){
+        app.db.model('preset').create({
+            presetName: req.body.presetName,
+            j5parameters: JSON.parse(req.body.j5parameters)
+        }, function(err, newPreset) {
+            if(err) {
+                console.log('Error creating preset.');
+                console.log(err);
+            }
 
-          var Preset = app.db.model('preset');
+            req.user.presets.push(newPreset._id);
+            req.user.save(function(err) {
+                if(err) {
+                    console.log('Error saving user.');
+                    console.log(err);
+                }
 
-          User.populate(req.user, 'presets', function(err, user) {
-            var newPreset = new Preset({
-              presetName: req.body.presetName,
-              j5parameters: JSON.parse(req.body.j5parameters)
-            });
-            newPreset.save(function(){
-              req.user.presets.push(newPreset);
-              req.user.save(function(){
                 res.json({});
-              });
             });
+        });
+
+        /*
+        var Preset = app.db.model('preset');
+
+        var newPreset = new Preset({
+          presetName: req.body.presetName,
+          j5parameters: JSON.parse(req.body.j5parameters)
+        });
+
+        newPreset.save(function(err, newPreset){
+          if(err) {
+            console.log('Error saving preset.');
+            console.log(err);
+          }
+
+          req.user.presets.push(newPreset);
+          req.user.save(function(err){
+            if(err) {
+              console.log('Error saving user.');
+              console.log(err);
+            }
+
+            res.json({});
           });
+        });
+        */
       },
 
       put_presets: function(req,res){
