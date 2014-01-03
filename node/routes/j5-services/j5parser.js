@@ -1168,9 +1168,12 @@ function processCombinatorial(file,cb){
 function processAssemblies(files,cb) {
     console.log('processing files');
     console.log(files);
-    files.forEach(function(file){
+
+    async.forEach(files, function(file) {
         var sequence;
         var fileExtension = file.fileContent.match(/\.(\w+)$/)[1].toLowerCase();
+
+        console.log(fileExtension);
 
         try {
             console.log(file);
@@ -1190,7 +1193,7 @@ function processAssemblies(files,cb) {
                 file.sizeBP = 0;
             } else {
                 console.log('wee');
-                throw "oh no.";
+                file.sizeBP = 0;
             }
         }
         catch(err)
@@ -1198,8 +1201,9 @@ function processAssemblies(files,cb) {
             console.log("Error parsing size BP");
             file.sizeBP = 0;
         }
+    }, function(err) {
+        cb(files);
     });
-    cb(files);
 }
 
 function processj5Parameters(file,cb){
