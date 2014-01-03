@@ -1185,6 +1185,7 @@ function processAssemblies(files,cb)
 
                 file.sizeBP = sequence.length;
             } else if(fileExtension = "xml") {
+                file.sizeBP = 0;
             } else {
                 throw "oh no.";
             }
