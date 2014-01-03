@@ -164,7 +164,7 @@ module.exports = function(app) {
       },
 
     post_presets: function(req,res){
-        req.user.push({
+        req.user.presets.push({
             presetName: req.body.presetName,
             j5parameters: JSON.parse(req.body.j5parameters)
         });
