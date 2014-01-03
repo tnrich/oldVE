@@ -1215,8 +1215,9 @@ function processAssemblies(files,cb) {
                     return done();
                 } else {
                     console.log(result["rdf:RDF"]["DnaComponent"][0]);
-                    console.log(result["rdf:RDF"]["$"]["DnaComponent"][0]["dnaSequence"]);
-                    console.log(result["rdf:RDF"]["$"]["DnaComponent"][0]["dnaSequence"]["nucleotides"]);
+                    console.log(result["rdf:RDF"]["DnaComponent"][0]["dnaSequence"]);
+                    console.log(result["rdf:RDF"]["$"]["DnaComponent"][0]["dnaSequence"][0]);
+                    console.log(result["rdf:RDF"]["$"]["DnaComponent"][0]["dnaSequence"][0]["DnaSequence"]);
                     file.sizeBP = 0;
 
                     return done();
