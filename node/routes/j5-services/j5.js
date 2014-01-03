@@ -435,7 +435,7 @@ app.post('/executej5',restrict,function(req,res){
                   }
                   else
                   { 
-                    quicklog(result);
+                    //quicklog(result);
                     var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
                     var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
                     onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
