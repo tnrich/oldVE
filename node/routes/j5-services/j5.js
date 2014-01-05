@@ -367,108 +367,29 @@ app.post('/executej5',restrict,function(req,res){
         // In production mode use internal script
         //var testing = !(app.get("env") === "production");
 
-        if(app.get("env") === "production" || app.program.localj5) {
 
-          //console.log("Executing experimental j5 through pipe");
+        res.json({status:"In progress"});
+        
+        app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
+          if(error)
+          {
+            if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
+            
+            newj5Run.status = "Error";
+            newj5Run.endDate = Date.now();
+            newj5Run.error_list.push({"error":error});
+            newj5Run.save();
+            reportChange(newj5Run,user,true,true);
+          }
+          else
+          {
+            // Get and decode the zip file returned by j5 server
+            var encodedFileData = value['encoded_output_file'];
+            var fileName = value['output_filename'];
 
-          var xml = Serializer.serializeMethodCall('DesignAssembly', [data]);
-          var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-          var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
-          console.log("J5 Process started with pid: "+newChild.pid);
-          app.j5pids[newChild.pid] = true;
-
-          newj5Run.process = {
-            pid: newChild.pid,
-            server: app.localIP
-          };
-
-          res.json({status:"In progress",j5run:newj5Run});
-
-          newChild.stdin.setEncoding = 'utf-8';
-          newChild.stdin.write(xml+"\n");
-
-          newChild.output = "";
-
-          newChild.stdout.on('data', function (stoutData) {
-            newChild.output += stoutData;
-          });
-
-          newChild.stderr.on('data', function (stoutData) {}); // For further development
-
-          newChild.on('exit', function (code,signal) {
-              console.log("Process finished with code ",code," and signal ",signal);
-              delete app.j5pids[newChild.pid];
-              //quicklog(require('util').inspect(newChild.output,false,null));
-              newChild.output = newChild.output.substr(newChild.output.indexOf('<'));
-              require('xml2js').parseString(newChild.output, function (err, result) {
-                  if(signal === "SIGTERM")
-                  {
-                    newj5Run.status = "Canceled";
-                    newj5Run.endDate = Date.now();
-                    newj5Run.save();
-                    reportChange(newj5Run,req.user,true,true);
-                  }
-                  else if(err)
-                  {
-                    console.log(err);
-                    newj5Run.status = "Error";
-                    newj5Run.endDate = Date.now();
-                    newj5Run.error_list.push({"error":{faultString: "Error parsing j5 output: " + err}});
-                    newj5Run.save();
-                    reportChange(newj5Run,req.user,true,true);
-                  }
-                  else if(result.methodResponse.fault)
-                  {
-                    var error = result.methodResponse.fault[0].value[0].struct[0].member[0].value[0].string[0];
-                    console.log(error);
-                    if(error.match('Can\'t copy file masterplasmidlist.csv to the upload directory'))
-                    {
-                      error = "No previous master plasmids, please generate empty plasmid file";
-                    }
-
-                    newj5Run.status = "Error";
-                    newj5Run.endDate = Date.now();
-                    newj5Run.error_list.push({"error":{faultString: error}});
-                    newj5Run.save();
-                    reportChange(newj5Run,req.user,true,true);
-
-                  }
-                  else
-                  { 
-                    //quicklog(result);
-                    var fileName = result.methodResponse.params[0].param[0].value[0].struct[0].member[0].value[0].string[0];
-                    var encodedFileData = result.methodResponse.params[0].param[0].value[0].struct[0].member[1].value[0].string[0];
-                    onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
-                  }
-              });
-
-          });
-        }
-        else // Run as XML_RPC Depending on remote server (With timeout limit)
-        {
-          res.json({status:"In progress"});
-          console.log("Executing XML RPC");
-          app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-            if(error)
-            {
-              if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
-              
-              newj5Run.status = "Error";
-              newj5Run.endDate = Date.now();
-              newj5Run.error_list.push({"error":error});
-              newj5Run.save();
-              reportChange(newj5Run,user,true,true);
-            }
-            else
-            {
-              // Get and decode the zip file returned by j5 server
-              var encodedFileData = value['encoded_output_file'];
-              var fileName = value['output_filename'];
-
-              onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
-            }
-          });
-        }
+            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
+          }
+        });
 
       });
 
