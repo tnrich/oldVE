@@ -42,7 +42,9 @@ methodCall: function(methodName,data,cb){
             console.log("Process finished with code ",code," and signal ",signal);
         });
 
+    console.log("Parsing j5 xml output");
 		deserializer.deserializeMethodResponse(newChild.stdout, function(err,data){
+      console.log("Parsed j5 xml output");
 			//quicklog(require('util').inspect(data,false,null));
 			return cb(false,data);
 		});
