@@ -35,16 +35,18 @@ methodCall: function(methodName,data,cb){
         newChild.stdin.write(xml+"\n");
 
         newChild.stderr.on('data', function (stoutData) {
-        	//process.stdout.write(stoutData);
+        	process.stdout.write(stoutData);
+        });
+
+        newChild.stdout.on('data', function (stoutData) {
+          process.stdout.write(stoutData);
         });
 
         newChild.on('exit', function (code,signal) {
             console.log("Process finished with code ",code," and signal ",signal);
         });
 
-    console.log("Parsing j5 xml output");
 		deserializer.deserializeMethodResponse(newChild.stdout, function(err,data){
-      console.log("Parsed j5 xml output");
 			//quicklog(require('util').inspect(data,false,null));
 			return cb(false,data);
 		});

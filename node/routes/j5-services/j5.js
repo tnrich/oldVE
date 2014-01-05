@@ -370,10 +370,7 @@ app.post('/executej5',restrict,function(req,res){
 
         res.json({status:"In progress"});
         
-        console.log("Before starting j5");
         app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-          console.log("After j5");
-          return false;
           if(error)
           {
             if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
