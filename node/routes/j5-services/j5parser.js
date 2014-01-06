@@ -21,7 +21,7 @@ function processNonCombinatorial_MOCK(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -77,7 +77,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-        
+
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -130,7 +130,7 @@ function processNonCombinatorial_MOCK(lines,cb){
 
 
         cb(obj);
-    
+
         }
     catch(err)
         {
@@ -146,7 +146,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -161,7 +161,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -205,7 +205,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-        
+
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -394,14 +394,14 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
 
         cb(obj);
-    
+
         }
     catch(err)
         {
             console.log("Error processing j5 output");
             console.log(err);
             cb({warnings:["Error processing j5 output: " + err]});
-        }   
+        }
 }
 
 function processNonCombinatorial_GOLDEN_GATE(lines,cb){
@@ -410,7 +410,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -425,7 +425,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -468,7 +468,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-        
+
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -601,14 +601,14 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
 
 
         cb(obj);
-    
+
         }
     catch(err)
         {
             console.log("Error processing j5 output");
             console.log(err);
             cb({warnings:["Error processing j5 output: " + err]});
-        }   
+        }
 }
 
 function processNonCombinatorial(method,file,cb) {
@@ -638,7 +638,7 @@ function processCombinatorial_MOCK(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -660,7 +660,7 @@ function processCombinatorial_MOCK(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0] //Empty space
@@ -721,7 +721,7 @@ function processCombinatorial_MOCK(lines,cb){
         while(currentPart!== "")
         {
             splittedPart = currentPart.split(',');
-            
+
             binNumber = splittedPart.splice(0,1)[0];
             binName = splittedPart.splice(0,1)[0];
 
@@ -748,7 +748,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
     try {
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -770,7 +770,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0] //Empty space
@@ -893,7 +893,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         while(currentAssemblyPiece!== "")
         {
             splitted = currentAssemblyPiece.split(',');
-            // "ID Number",Type,"Type ID Number",Part(s),"Relative Overlap Position","Extra 5' CPEC bps","Extra 3' CPEC bps","CPEC Tm Next","Overlap with Next (bps)","Overlap with Next","Overlap with Next Reverse 
+            // "ID Number",Type,"Type ID Number",Part(s),"Relative Overlap Position","Extra 5' CPEC bps","Extra 3' CPEC bps","CPEC Tm Next","Overlap with Next (bps)","Overlap with Next","Overlap with Next Reverse
             obj.assemblyPieces.push({
                 id: splitted[0],
                 type: splitted[1],
@@ -978,7 +978,7 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0] //Empty space
@@ -1148,9 +1148,9 @@ function processCombinatorial(file,cb){
     var obj = {};
 
     /* First step is identify assembly */
-    /* 
+    /*
         Combinatorial Mock
-        Combinatorial Golden-gate 
+        Combinatorial Golden-gate
         Combinatorial SLIC/Gibson/CPEC
     */
 
@@ -1238,8 +1238,8 @@ function processj5Parameters(file,cb){
     csv().from( file.fileContent ).to.array( function(data, count){
         var obj = {};
         for(var l in data)
-        {
             line = data[l];
+        {
             obj[line[0]] = line[1];
         }
         cb(obj);
@@ -1263,7 +1263,7 @@ var processJ5Response = function(method,encodedFileData,callback) {
     files.zips = [];
     files.assembly = {}; // Non Combinatorial Assembly
     files.masterSources = {};
-    
+
     for(var file in zip.files)
     {
 
@@ -1335,7 +1335,7 @@ var processJ5Response = function(method,encodedFileData,callback) {
                     function(data){
                         callback(null, data);
                     });
-            }                
+            }
         }
     },
     function(err, results) {

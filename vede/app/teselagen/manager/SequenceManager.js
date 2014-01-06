@@ -216,7 +216,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
 
         var seq = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.toString());
-        
+
         return Ext.create("Teselagen.manager.SequenceManagerMemento", {
             name:     this.name,
             circular: this.circular,
@@ -504,7 +504,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         };
         return newFeatures;
     },
-      
+
     /**
      * Insert another sequence manager at position. This method is used on sequence paste.
      *
@@ -532,7 +532,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             insertFeature = pSequenceManager.getFeatures()[i].clone();
             //pSequenceManager.getFeatures()[i].shift(pPosition, this.sequence.getSymbolsLength(), this.circular);
             //this.addFeature(pSequenceManager.getFeatures()[i], true); // ERROR need cloning insertFeature
-            
+
             insertFeature.shift(pPosition, this.sequence.getSymbolsLength(), this.circular);
             this.addFeature(insertFeature, true); // original way
         }
@@ -679,7 +679,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
 
 
-        
+
         if(!quiet && !this.manualUpdateStarted) {
             Ext.suspendLayouts();
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength});
@@ -747,7 +747,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 if (DEBUG_MODE) console.log("case Fn,Sn 6");
             } else {
                 //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
-                
+
                 throw Ext.create("Teselagen.bio.BioException", {
                     message: "Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString()
                 });
@@ -965,7 +965,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 if (DEBUG_MODE) console.log("case Fc,Sc 6");
                 var delLength1a = pEndIndex;
                 var delLength1b = featEnd - pStartIndex;
-                
+
                 delLengthBetween = featStart - featEnd;
                 //console.log("delLength1a: " + delLength1a);
                 //console.log("delLength1b: " + delLength1b);
@@ -1182,7 +1182,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         });
         //console.log(pSequenceManager.getSequence().seqString());
         //console.log(revComSeq.seqString());
-        
+
         var seqLen = pSequenceManager.getSequence().length;
 
         var feats   = pSequenceManager.getFeatures();
@@ -1391,7 +1391,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var isCirc      = !genbank.getLocus().getLinear(); //genbank.getLocus().getCircular();
         var sequence    = Teselagen.bio.sequence.DNATools.createDNA(genbank.getOrigin().getSequence());
         var features    = [];
-        
+
         var gbFeats     = genbank.getFeatures().getFeaturesElements();
 
         for (var i=0; i < gbFeats.length; i++) {
@@ -1456,7 +1456,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.circular = isCirc;
         this.sequence = sequence;
         this.features = features;
-        
+
         return result;*/
     },
 
@@ -1478,7 +1478,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     fromFasta: function(pFasta) {
         return Teselagen.utils.FormatUtils.fastaToFeaturedDNASequence(pFasta);
     },
-    
+
     /**
      *
      * @private
