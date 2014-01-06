@@ -121,13 +121,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonPart["de:parts"] = [];
             jsonPart["de:parts"]["de:part"] = {};
             //jsonPart["de:parts"]["de:part"].id = part.get("id");
-            // debugger;
-            // for(var i=0;i<partBinAssociationIDs[part.internalId].length;i++){
-            //     var holdDePart={};
-            //     holdDePart.id = partBinAssociationIDs[part.internalId][i];
-            //     holdDePart.fas = partBinFASAssociationIDs[part.internalId][i];
-            //     jsonPart["de:parts"].push(holdDePart);
-            // }
+            
             partBinAssociationIDs[part.internalId].forEach(function(partAssocID,partInstanceKey){
                 var holdDePart={};
                 holdDePart.id = partBinAssociationIDs[part.internalId][partInstanceKey];
