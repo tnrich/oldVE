@@ -383,7 +383,7 @@ app.post('/executej5',restrict,function(req,res){
           }
           else
           {
-            quicklog(value);
+            quicklog(require('util').inspect(value,false,null));
             // Get and decode the zip file returned by j5 server
             var encodedFileData = value['encoded_output_file'];
             var fileName = value['output_filename'];
