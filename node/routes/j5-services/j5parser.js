@@ -1197,8 +1197,7 @@ function processAssemblies(files,cb) {
 
             if(match) {
                 sequence = match[1];
-                sequence = sequence.replace(/\n/g, "");
-                sequence = sequence.replace(/\r/g, "");
+                sequence = sequence.replace(/[\n\r]/g, "");
                 file.sizeBP = sequence.length;
             }
 
