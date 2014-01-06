@@ -645,8 +645,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     if(status==="Completed") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
@@ -654,8 +654,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         $("#" + field + " .status-note").addClass("status-note-completed");
                     } else if (status==="Completed with warnings") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-completed");
@@ -663,8 +663,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         $("#" + field + " .status-note").addClass("status-note-warning");
                     } else if (status==="Error") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-completed");
@@ -672,8 +672,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         $("#" + field + " .status-note").addClass("status-note-failed");
                     } else if (status=="Canceled") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-completed");
@@ -681,8 +681,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         $("#" + field + " .status-note").addClass("status-note-failed");
                     } else if (status=="In progress") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
                         $("#" + field + " .status-note").removeClass("status-note-completed");
