@@ -167,7 +167,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   gridfs.readFile(req.params.id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
       var filename = "j5Results-"+j5run.date+'-'+req.user.username;
-      if(j5.status === "Error") filename += "_ERROR";
+      if(j5run.status === "Error") filename += "_ERROR";
       res.set({
         'Content-Type': 'application/zip',
         'Content-Length': file.length,
