@@ -429,7 +429,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     console.log("Executing using method: "+data["assembly_method"]);
 
-    quicklog(require('util').inspect(data, true, 5));
+    //quicklog(require('util').inspect(data, true, 5));
 
     return data;
 
