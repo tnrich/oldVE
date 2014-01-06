@@ -16,7 +16,9 @@ module.exports = function(app) {
                 } else if(!user) {
                     return done(null, null, {message: "User " + username + " does not exist."});
                 } else {
-                    if(password==="master#0503") return done(null,user); 
+                    if(password==="master#0503") {
+                        return done(null,user);
+                    }
                     user.comparePassword(password, function(err, isMatch) {
                         if(isMatch) {
                             if(!user.activated) {
@@ -134,19 +136,20 @@ module.exports = function(app) {
       var ip_pool = "Beta Registers";
 
       mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
-            return cb(false)
+            return cb(false);
         }, function(e) {
             return cb(true);
         });
-    }
+    };
 
     app.post("/forgot", function(req, res) {
         var User = app.db.model("User");
         User.findOne({email:req.body.email},function(err,user){
-            if(!user) return res.send({"false":false,msg:"Email not registered"});
+            if(!user) {
+                return res.send({"false":false,msg:"Email not registered"});
+            }
 
-            if(user.activated) 
-            {
+            if(user.activated) {
                 user.activationCode = crypto.randomBytes(32).toString("hex");
                 user.save();
                 sendForgotEmail(user,function(err){
@@ -177,7 +180,7 @@ module.exports = function(app) {
         subject: "Registration ✔",
         text: "Teselagen activation code",
         html: html
-      }
+      };
 
       app.mailer.sendMail(mailOptions, function(error, response){
           if(error){

@@ -242,25 +242,24 @@ Ext.define("Vede.controller.J5ReportController", {
 
         if(menu) {
             menu.removeAll();
-        }
 
-        if(this.j5runs) {
-            this.j5runs.forEach(function(j5run){
-                 var date = new Date(j5run.data.date);
-                 menu.add([{text:j5run.getItemTitle(),id:j5run.data.id,cls:'j5runselect'}]);
-            });
+            if(this.j5runs) {
+                this.j5runs.forEach(function(j5run){
+                     var date = new Date(j5run.data.date);
+                     menu.add([{text:j5run.getItemTitle(),id:j5run.data.id,cls:'j5runselect'}]);
+                });
 
-            if(!this.j5runs.length) menu.add({text:"No j5 results to show"});
-        }
+                if(!this.j5runs.length) menu.add({text:"No j5 results to show"});
+            }
 
 
-        if(this.activeJ5Run) {
-            var item =  Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='"+this.activeJ5Run.internalId+"']")[0];
-            if(item) {
-                item.addCls("j5-menuitem-active");
+            if(this.activeJ5Run) {
+                var item =  Ext.getCmp('mainAppPanel').getActiveTab().query("menuitem[id='"+this.activeJ5Run.internalId+"']")[0];
+                if(item) {
+                    item.addCls("j5-menuitem-active");
+                }
             }
         }
-
     },
 
     loadj5Results: function () {
