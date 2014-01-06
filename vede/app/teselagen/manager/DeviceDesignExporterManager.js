@@ -328,8 +328,10 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
                 var binItems = j5Bin.appendChild(doc.createElement("de:binItems"));
                 bin["de:binItems"]["de:partID"].forEach(function(partID){
-                    var part = binItems.appendChild(doc.createElement("de:partID"));
-                    part.textContent = partID;
+                    if(partID) {
+                        var part = binItems.appendChild(doc.createElement("de:partID"));
+                        part.textContent = partID;
+                    }
                 });
             });
 

@@ -354,6 +354,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
 
         function getPartByID(targetId) {
+            debugger;
             var partfound = false;
             var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
             for (var i=0; i < parts.length; i++) {
@@ -446,6 +447,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             for (j = 0; j < parts.length; j++) {
                 if(parts[j].textContent) {
                     var partLookup = getPartByID(parts[j].textContent);
+
+                    console.log(parts[j], parts[j].textContent, partLookup);
 
                     if (!parts[j].nodeName) { 
                         continue; 
