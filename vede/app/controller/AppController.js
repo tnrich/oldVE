@@ -11,6 +11,9 @@ Ext.define('Vede.controller.AppController', {
     onLaunch: function() {
         Ext.tip.QuickTipManager.init();
 
+        // Increase the timeout time for ajax requests.
+        Ext.Ajax.timeout = 60000;
+
         // Prevent backspace key and control + arrow keys from sending the user
         // back a page.
         Ext.EventManager.addListener(Ext.getBody(), 'keydown', function(e){

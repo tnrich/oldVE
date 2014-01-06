@@ -167,7 +167,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   gridfs.readFile(req.params.id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
       var filename = "j5Results-"+j5run.date+'-'+req.user.username;
-      if(j5.status === "Error") filename += "_ERROR";
+      if(j5run.status === "Error") filename += "_ERROR";
       res.set({
         'Content-Type': 'application/zip',
         'Content-Length': file.length,
@@ -420,7 +420,7 @@ app.post('/sbol',function(req,res){
     //res.json({data:data});
   //});
     var data = {};
-    
+
     data["encoded_to_be_converted_file"] = req.body.data;
 
     if(req.body.preserveSBOL==="true")
@@ -453,7 +453,7 @@ app.post('/sbol',function(req,res){
 app.post('/genbanktosbol',function(req,res){
 
     var data = {};
-    
+
     data["encoded_to_be_converted_file"] = req.body.data;
     data["conversion_method"] = "ConvertGenBankToSBOLXML";
 
