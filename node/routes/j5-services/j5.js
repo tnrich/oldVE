@@ -386,7 +386,6 @@ app.post('/executej5',restrict,function(req,res){
           }
           else
           {
-            if()
             // Get and decode the zip file returned by j5 server
             var encodedFileData = value['encoded_output_file'];
             var error = value["error_message"] ? value["error_message"] : null;
