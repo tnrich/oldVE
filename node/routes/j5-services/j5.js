@@ -167,6 +167,7 @@ app.get('/getfile/:id',restrict,function(req,res){
   gridfs.readFile(req.params.id,function(inputStream){
       var file = new Buffer(inputStream, 'base64').toString('binary');
       var filename = "j5Results-"+j5run.date+'-'+req.user.username;
+      if(j5.status === "Error") filename += "_ERROR";
       res.set({
         'Content-Type': 'application/zip',
         'Content-Length': file.length,
@@ -231,7 +232,7 @@ function reportChange(j5run,user, completed, error){
 };
 
 
-function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
+function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error)
 {
 
   var handleErrors = function(err,newj5Run){
@@ -251,6 +252,8 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user)
       newj5Run.endDate = new Date();
       newj5Run.status = (warnings.length > 0) ? "Completed with warnings" : "Completed";
       newj5Run.warnings = warnings;
+
+      if(error) newj5Run.status = "Error";
 
       var completed = true;
       newj5Run.save();
@@ -383,12 +386,11 @@ app.post('/executej5',restrict,function(req,res){
           }
           else
           {
-            quicklog(require('util').inspect(value,false,null));
+            if()
             // Get and decode the zip file returned by j5 server
             var encodedFileData = value['encoded_output_file'];
-            var fileName = value['output_filename'];
-
-            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user);
+            var error = value["error_message"] ? value["error_message"] : null;
+            onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user,error);
           }
         });
 
