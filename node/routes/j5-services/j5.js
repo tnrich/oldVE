@@ -420,7 +420,7 @@ app.post('/sbol',function(req,res){
     //res.json({data:data});
   //});
     var data = {};
-    
+
     data["encoded_to_be_converted_file"] = req.body.data;
 
     if(req.body.preserveSBOL==="true")
@@ -453,7 +453,7 @@ app.post('/sbol',function(req,res){
 app.post('/genbanktosbol',function(req,res){
 
     var data = {};
-    
+
     data["encoded_to_be_converted_file"] = req.body.data;
     data["conversion_method"] = "ConvertGenBankToSBOLXML";
 
