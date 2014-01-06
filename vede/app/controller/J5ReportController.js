@@ -31,7 +31,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
         Teselagen.bio.parsers.ParsersManager.parseSequence(record.data.fileContent,ext,function(gb){
             var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
-                record.get('fileType'),
+                "GENBANK",
                 gb,
                 record.data.name,
                 partSource

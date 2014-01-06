@@ -378,9 +378,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         headers.forEach(function(header){
             var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+            var match = pFasta.match(escapedHeader + '\n([\s\w]+)>?');
+            var sequenceContent = "";
+
+            if(match) {
+                sequenceContent = match[1];
+            }
+
             sequences.push({
                 name : header.replace(">",""),
-                sequence: pFasta.match(escapedHeader+'\n(.+)')[1]
+                sequence: sequenceContent
             });
         })
 

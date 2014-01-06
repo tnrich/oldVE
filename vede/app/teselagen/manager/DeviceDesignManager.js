@@ -1228,7 +1228,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {String[]} pPartSource If null, will generate a display ID based on the File Content and Format
      */
     createSequenceFileStandAlone: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
-
         var seq = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileFormat: pSequenceFileFormat,
             sequenceFileContent: pSequenceFileContent,
