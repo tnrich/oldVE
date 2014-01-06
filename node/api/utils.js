@@ -279,8 +279,11 @@ module.exports = function(app) {
         },
 
         index_website: function(req,res) {
-            if(app.get('env')==="production") res.send(website_html_prod);
-            else res.send(website_html_dev);
+            if(app.get('env')==="production") {
+                return res.send(website_html_prod);
+            } else {
+                return res.send(website_html_dev);
+            }
         }
     };
 };

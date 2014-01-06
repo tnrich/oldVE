@@ -38,6 +38,10 @@ methodCall: function(methodName,data,cb){
         	//process.stdout.write(stoutData);
         });
 
+        newChild.stdout.on('data', function (stoutData) {
+          //process.stdout.write(stoutData);
+        });
+
         newChild.on('exit', function (code,signal) {
             console.log("Process finished with code ",code," and signal ",signal);
         });

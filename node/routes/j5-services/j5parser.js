@@ -1,17 +1,18 @@
 var csv = require('csv');
 var async = require('async');
+var xml2js = require('xml2js');
 
 /**
  * Write to quick log.
  * @param s
  */
 function quicklog(s) {
-  var logpath = "/tmp/quick.log";
-  var fs = require('fs');
-  s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
-  var fd = fs.openSync(logpath, 'a+', 0666);
-  fs.writeSync(fd, s + '\n');
-  fs.closeSync(fd);
+    var logpath = "/tmp/quick.log";
+    var fs = require('fs');
+    s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
+    var fd = fs.openSync(logpath, 'a+', 0666);
+    fs.writeSync(fd, s + '\n');
+    fs.closeSync(fd);
 }
 
 function processNonCombinatorial_MOCK(lines,cb){
@@ -35,7 +36,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -176,7 +177,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
         obj.note = currentWarning; // In this method there is not space between warnings and note
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; //Empty space
 
 
         //Non degenerate Part IDs and Sources
@@ -213,7 +214,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; //Empty space
 
         //Target Parts
         lines.splice(0,1)[0]; //Header
@@ -622,7 +623,6 @@ function processNonCombinatorial(method,file,cb) {
     */
 
     type = method;
-    console.log(method);
 
     if(type.match(/Mock/)) return processNonCombinatorial_MOCK(lines,cb);
     else if(type.match(/SLIC\/Gibson\/CPEC/)) return processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb);
@@ -1165,22 +1165,73 @@ function processCombinatorial(file,cb){
     }
 }
 
-function processAssemblies(files,cb)
-{
-    files.forEach(function(file){
-        var sequence = file.fileContent;
-        // Try get Size (BP) from Genbank file.
-        try {
-            file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
+function processAssemblies(files,cb) {
+    var file;
+
+    async.forEach(files, function(file, done) {
+        var match;
+        var sequence;
+        var fileExtension = "";
+        var fileExtensionMatch = file.name.match(/\.(\w+)$/);
+
+        if(fileExtensionMatch) {
+            fileExtension = fileExtensionMatch[1].toLowerCase();
         }
-        catch(err)
-        {
-            console.log("Error parsing size BP");
+
+        if(fileExtension === "gb" || fileExtension === "genbank") {
+            file.fileType = "Genbank";
+
+            // Find something in the form " ## bp"
+            match = file.fileContent.match(/\s(\d+)\sbp/);
+
+            if(match && match[1]) {
+                file.sizeBP = Number(match[1]);
+            }
+
+            return done();
+        } else if(fileExtension === "fas" || fileExtension === "fasta") {
+            file.fileType = "FASTA";
+
+            // Grab all characters after the first line starting with ">"
+            match = file.fileContent.match(/\s*>.*?\n([\s\w]+)>?/);
+
+            if(match) {
+                sequence = match[1];
+                sequence = sequence.replace(/\n/g, "");
+                sequence = sequence.replace(/\r/g, "");
+                file.sizeBP = sequence.length;
+            }
+
+            return done();
+        } else if(fileExtension === "xml") {
+            file.fileType = "SBOLXML";
+
+            xml2js.parseString(file.fileContent, function(err, result) {
+                if(err) {
+                    console.log("Error parsing j5 xml.");
+                    console.log(err);
+
+                    file.sizeBP = 0;
+                    return done();
+                } else {
+                    try {
+                        file.sizeBP = result["rdf:RDF"]["DnaComponent"][0]["dnaSequence"][0]["DnaSequence"][0]["nucleotides"][0].length;
+                    } catch(err) {
+                        file.sizeBP = 0;
+                    }
+
+                    return done();
+                }
+            });
+        } else {
+            file.fileType = "Unknown";
             file.sizeBP = 0;
+
+            return done();
         }
-        //console.log(file.sizeBP);
+    }, function(err) {
+        return cb(files);
     });
-    cb(files);
 }
 
 function processj5Parameters(file,cb){
@@ -1196,7 +1247,6 @@ function processj5Parameters(file,cb){
 }
 
 var processJ5Response = function(method,encodedFileData,callback) {
-
     var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
     var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
