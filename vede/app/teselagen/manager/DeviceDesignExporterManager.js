@@ -118,12 +118,15 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonPart["de:sequenceFileHash"] = sequence.get("hash");
             jsonPart["de:sequenceFileID"] = sequence.get("id");
 
-            jsonPart["de:parts"] = {};
+            jsonPart["de:parts"] = [];
             jsonPart["de:parts"]["de:part"] = {};
             //jsonPart["de:parts"]["de:part"].id = part.get("id");
+            
             partBinAssociationIDs[part.internalId].forEach(function(partAssocID,partInstanceKey){
-                jsonPart["de:parts"]["de:part"].id = partAssocID;
-                jsonPart["de:parts"]["de:part"]["de:fas"] = partBinFASAssociationIDs[part.internalId];
+                var holdDePart={};
+                holdDePart.id = partBinAssociationIDs[part.internalId][partInstanceKey];
+                holdDePart.fas = partBinFASAssociationIDs[part.internalId][partInstanceKey];
+                jsonPart["de:parts"].push(holdDePart);
             });
 
             //jsonPart["de:parts"]["de:part"].id = part.internalId;
@@ -262,6 +265,7 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
             json["de:partVOs"]["de:partVO"].forEach(function(part){
                 var partV0 = partsVOs.appendChild(doc.createElement("de:partVO"));
+                var deParts = partV0.appendChild(doc.createElement("de:parts"));
                 partV0.setAttribute("id", part.id);
 
                 for(var prop in part)
@@ -274,15 +278,25 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
                             propNode.textContent = part[prop];
                         }
                     }
+
+                    if(prop=="de:parts") {
+                        if(part[prop]) {
+                            debugger;
+                            for(var i=0; i<part[prop].length;i++) {
+                                var dePart = deParts.appendChild(doc.createElement("de:part"));
+                                dePart.setAttribute("id", part[prop][i].id);
+                                dePart.appendChild(doc.createElement("de:fas")).textContent = part[prop][i].fas;
+                            }
+                        }
+                    }
                 }
 
                 var propNode = partV0.appendChild(doc.createElement("de:revComp"));
                 propNode.textContent = part["de:revComp"];
 
-                var deParts = partV0.appendChild(doc.createElement("de:parts"));
-                var dePart = deParts.appendChild(doc.createElement("de:part"));
-                dePart.setAttribute("id", part["de:parts"]["de:part"].id);
-                dePart.appendChild(doc.createElement("de:fas")).textContent = part["de:parts"]["de:part"]["de:fas"];
+                // var dePart = deParts.appendChild(doc.createElement("de:part"));
+                // dePart.setAttribute("id", part["de:parts"]["de:part"].id);
+                // dePart.appendChild(doc.createElement("de:fas")).textContent = part["de:parts"]["de:part"]["de:fas"];
             });
 
 
@@ -328,8 +342,10 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
                 var binItems = j5Bin.appendChild(doc.createElement("de:binItems"));
                 bin["de:binItems"]["de:partID"].forEach(function(partID){
-                    var part = binItems.appendChild(doc.createElement("de:partID"));
-                    part.textContent = partID;
+                    if(partID) {
+                        var part = binItems.appendChild(doc.createElement("de:partID"));
+                        part.textContent = partID;
+                    }
                 });
             });
 

@@ -1,11 +1,11 @@
 var fs = require("fs");
-var spawn = require('child_process').spawn
+var spawn = require('child_process').spawn;
 var xml2js = require('xml2js');
 var util = require('util');
 var builder = require('xmlbuilder');
 var parser = new xml2js.Parser();
 var Serializer = require("./Serializer");
-var Deserializer = require('./Deserializer')
+var Deserializer = require('./Deserializer');
 
 module.exports = function() {
 
@@ -35,7 +35,7 @@ methodCall: function(methodName,data,cb){
         newChild.stdin.write(xml+"\n");
 
         newChild.stderr.on('data', function (stoutData) {
-        	//process.stdout.write(stoutData);
+            //process.stdout.write(stoutData);
         });
 
         newChild.stdout.on('data', function (stoutData) {
