@@ -1155,14 +1155,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.partSourceNameField = this.inspector.down("displayfield[cls='partSourceField']");
             this.removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
 
-            this.deletePartBtn.disable();
-            this.deletePartBtn.addCls("btnDisabled");
-            this.changePartDefinitionBtn.disable();
-            this.changePartDefinitionBtn.addCls("btnDisabled");
-            this.openPartLibraryBtn.disable();
-            this.openPartLibraryBtn.setText("Select Part From Library");
-            this.openPartLibraryBtn.removeCls("selectPartFocus");
-            this.openPartLibraryBtn.addCls("btnDisabled");
+            // this.deletePartBtn.disable();
+            // this.deletePartBtn.addCls("btnDisabled");
+            // this.changePartDefinitionBtn.disable();
+            // this.changePartDefinitionBtn.addCls("btnDisabled");
+            // this.openPartLibraryBtn.disable();
+            // this.openPartLibraryBtn.setText("Select Part From Library");
+            // this.openPartLibraryBtn.removeCls("selectPartFocus");
+            // this.openPartLibraryBtn.addCls("btnDisabled");
 
             this.renderCollectionInfo();
             this.inspector.setActiveTab(1);
