@@ -91,7 +91,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         lines.splice(0,1)[0]; //Part
         lines.splice(0,1)[0]; //Columns
 
-        console.log(lines);
+        //console.log(lines);
 
         obj.targetParts = [];
         var currentPart = lines.splice(0,1)[0];
@@ -917,7 +917,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         lines.splice(0,1)[0]; //Columns
 
         var binCount = (binLine.split("Bin").length-1);
-        console.log(binCount);
+        //console.log(binCount);
 
         obj.combinationPieces = [];
         var currentCombinatorialPiece = lines.splice(0,1)[0];
@@ -1113,7 +1113,7 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         lines.splice(0,1)[0]; //Columns
 
         var binCount = (binLine.split("Bin").length-1);
-        console.log(binCount);
+        //console.log(binCount);
 
         obj.combinationPieces = [];
         var currentCombinatorialPiece = lines.splice(0,1)[0];

@@ -253,8 +253,11 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
       newj5Run.status = (warnings.length > 0) ? "Completed with warnings" : "Completed";
       newj5Run.warnings = warnings;
 
-      if(error) newj5Run.status = "Error";
-
+      if(error) 
+        {
+          newj5Run.status = "Error";
+          newj5Run.error_list.push({"error":error.toString()});
+        }
       var completed = true;
       newj5Run.save();
       reportChange(newj5Run,user,completed);
