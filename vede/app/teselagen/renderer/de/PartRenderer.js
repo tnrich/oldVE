@@ -103,7 +103,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
                     })
                     .transition()
                     .duration(30)
-                    .attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR)
+                    .attr("stroke", gridManager.PART_SELECTED_OUTLINE_COLOR)
                     .attr("isSelected", "true");
 
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridCell.datum(), xIndex, yIndex);
