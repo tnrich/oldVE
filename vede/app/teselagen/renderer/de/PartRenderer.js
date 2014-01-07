@@ -69,7 +69,7 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
                     .duration(30)
                     .attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR);
             })
-            .on("mouseout", function() {
+            .on("mouseout", function(d) {
                 //var selection = d3.select(this);
                 var selection = d3.selectAll(".gridPartRectSVG");
                 selection.transition()
@@ -86,10 +86,26 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
                         }
                     });
             })
-            .on("click", function() {
+            .on("click", function(d) {
                 var gridCell = d3.select(this.parentNode);
                 var xIndex = parseInt(d3.select(this.parentNode.parentNode.parentNode).attr("deGridBinIndex"));
                 var yIndex = parseInt(gridCell.attr("deGridRowIndex"));
+
+                var part = d.getPart();
+
+                if(!part) {
+                    return;
+                }
+
+                d3.selectAll(".gridPartRectSVG")
+                    .filter(function(dr){
+                        return dr.getPart() === part;
+                    })
+                    .transition()
+                    .duration(30)
+                    .attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR)
+                    .attr("isSelected", "true");
+
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridCell.datum(), xIndex, yIndex);
             })
             .on("dblclick", function(d) {
