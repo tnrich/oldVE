@@ -51,6 +51,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         cls: 'sequenceAddBtn',
                         overCls: 'sequenceAddBtn-over',
                         height: 20,
+                        tooltip: 'New Sequence',
                         width: 20,
                         margin: 0,
                         listeners: {

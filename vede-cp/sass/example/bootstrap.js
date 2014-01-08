@@ -79,6 +79,7 @@ Ext.ClassManager.addNameAlternateMappings({
     "Teselagen.TranslationUtils"
   ],
   "Ext.ux.grid.filter.NumericFilter": [],
+  "Vede.view.tools.ReverseTranslate": [],
   "Teselagen.bio.parsers.GenbankManager_noSing": [],
   "Vede.view.common.DeletePartConfirmationWindow": [],
   "Ext.ux.event.Recorder": [],
@@ -161,7 +162,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.manager.DeviceDesignExporterManager": [],
   "Ext.ux.layout.Center": [],
   "Teselagen.models.j5Output.CombinatorialAssembly": [],
-  "Vede.view.tools.ToolsPanelView": [],
   "Teselagen.models.j5Output.Warning": [],
   "Teselagen.utils.FormatUtils": [],
   "Teselagen.manager.DeviceDesignParsersManager": [],
@@ -404,6 +404,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Teselagen.manager.SequenceAnnotationManager": [],
   "Teselagen.models.digest.SampleLane": [],
   "Teselagen.models.digest.GelBand": [],
+  "Vede.view.tools.CodonJuggle": [],
   "Vede.view.de_legacy.MainToolBar": [],
   "Teselagen.manager.DigestionManager": [],
   "Vede.view.de_legacy.MainMenuBar": [],
@@ -493,6 +494,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.bio.sequence.TranslationUtils": [],
   "Ext.ux.grid.filter.NumericFilter": [
     "gridfilter.numeric"
+  ],
+  "Vede.view.tools.ReverseTranslate": [
+    "widget.ReverseTranslate"
   ],
   "Teselagen.bio.parsers.GenbankManager_noSing": [],
   "Vede.view.common.DeletePartConfirmationWindow": [],
@@ -608,9 +612,6 @@ Ext.ClassManager.addNameAliasMappings({
     "layout.ux.center"
   ],
   "Teselagen.models.j5Output.CombinatorialAssembly": [],
-  "Vede.view.tools.ToolsPanelView": [
-    "widget.ToolsPanelView"
-  ],
   "Teselagen.models.j5Output.Warning": [],
   "Teselagen.utils.FormatUtils": [],
   "Teselagen.manager.DeviceDesignParsersManager": [
@@ -916,6 +917,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Teselagen.manager.SequenceAnnotationManager": [],
   "Teselagen.models.digest.SampleLane": [],
   "Teselagen.models.digest.GelBand": [],
+  "Vede.view.tools.CodonJuggle": [
+    "widget.CodonJuggle"
+  ],
   "Vede.view.de_legacy.MainToolBar": [
     "widget.DeviceEditorLegacyMainToolBar"
   ],

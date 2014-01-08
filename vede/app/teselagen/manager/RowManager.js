@@ -1,7 +1,7 @@
 Ext.define("Teselagen.manager.RowManager", {
     requires: ["Teselagen.models.sequence.Row",
                "Teselagen.models.sequence.RowData"],
-    
+
     config: {
         sequenceAnnotator: null,
 
@@ -21,7 +21,7 @@ Ext.define("Teselagen.manager.RowManager", {
 
     update: function(){
         this.rows = [];
-        
+
         if(this.sequenceAnnotator.getSequenceManager()) {
             var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
             this.numRows = Number(Math.ceil(((seqString.length + 1) / this.sequenceAnnotator.getBpPerRow())));
@@ -31,27 +31,27 @@ Ext.define("Teselagen.manager.RowManager", {
             for(var i = 0; i < this.numRows; i++) {
                 var start = i * this.sequenceAnnotator.getBpPerRow();
                 var end = (i + 1) * this.sequenceAnnotator.getBpPerRow() - 1;
-                
+
                 var sequence = seqString.substring(start, end + 1);
                 var oppositeSequence = complementSeqString.substring(start, end + 1);
-               
+
                 var rowData = Ext.create("Teselagen.models.sequence.RowData", {
                         start: start,
                         end: end,
                         sequence: sequence,
                         oppositeSequence: oppositeSequence
                 });
-     
+
                 //console.log("Row Data: \n Start: " + (start + 1) + " End: " + (end + 1)+ "\n Sequence Length: " + sequence.length);
                 var row = Ext.create("Teselagen.models.sequence.Row", {
                     index: i,
                     rowData: rowData
-                }); 
+                });
                 //console.log(row.getRowData().getSequence());
                 this.rows.push(row);
             }
-           
-               this.reloadFeatures(); 
+
+               this.reloadFeatures();
                this.reloadORFs();
                this.reloadCutSites();
         }
@@ -103,7 +103,7 @@ Ext.define("Teselagen.manager.RowManager", {
         for (var i = 0; i < this.numRows; i++){
             var start = i * this.sequenceAnnotator.getBpPerRow();
             var end = (i + 1) * this.sequenceAnnotator.getBpPerRow() - 1;
-            
+
             //console.log(rowsFeatures[i])
             var featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(rowsFeatures[i], this.sequenceAnnotator.getSequenceManager());
             //console.log(this.rows[i].getRowData().getFeaturesAlignment());
@@ -234,17 +234,18 @@ Ext.define("Teselagen.manager.RowManager", {
         //console.log("Row annotations: " + rows);
         return rows;
     },
+
     pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows){
-        //console.log("Push in Row annotations before: " + pRows);
         var bpPerRow = this.sequenceAnnotator.getBpPerRow();
         var seqLength = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;
+
         pItemEnd = Math.min(pItemEnd, seqLength - 1);
+
         if (pItemStart > pItemEnd){
             var rowStartIndex = Math.floor(pItemStart/bpPerRow);
             var rowEndIndex = Math.floor((seqLength - 1)/bpPerRow);
 
             var rowStartIndex2 = 0;
-            //var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
             var rowEndIndex2 = Math.floor(pItemEnd/bpPerRow);
 
             for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++){
@@ -255,15 +256,12 @@ Ext.define("Teselagen.manager.RowManager", {
             }
         } else {
             var rowStartIndex = Math.floor(pItemStart/bpPerRow);
-            var rowEndIndex = Math.floor(pItemEnd/bpPerRow);
-            //console.log("rowStartIndex: " + rowStartIndex);
-            //console.log("rowEndIndex: " + rowEndIndex);
+            var rowEndIndex = Math.floor((pItemEnd - 1)/bpPerRow);
 
             for (var z = rowStartIndex; z < rowEndIndex + 1; z++){
                 pRows[z].push(pAnnotation);
             }
         }
-        //console.log("Push in Row annotations after: " + pRows);
 
         return pRows;
     }
