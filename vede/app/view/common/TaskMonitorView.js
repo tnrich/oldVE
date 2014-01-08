@@ -39,8 +39,11 @@ Ext.define('Vede.view.common.TaskMonitorView', {
         columns: [
         {
             xtype: 'gridcolumn',
-            text: 'TaskName',
+            text: 'Task Name',
             autoScroll: true,
+            flex: 1,
+            minWidth: 100,
+            width: 100,
             dataIndex: 'taskName'
         },
         {
@@ -48,6 +51,9 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             text: 'Task Type',
             autoScroll: true,
             dataIndex: 'taskType',
+            minWidth: 100,
+            flex: 1,
+            width: 100
         },
         {
             xtype: 'gridcolumn',
@@ -75,10 +81,14 @@ Ext.define('Vede.view.common.TaskMonitorView', {
             xtype: 'gridcolumn',
             text: 'Date Initialized',
             autoScroll: true,
+            flex: 1,
+            width: 100,
+            minWidth: 100,
             dataIndex: 'dateStarted'
         },
         {
             xtype:'actioncolumn',
+            flex: 1,
             align: 'center',
             items: [{
                 icon: 'resources/images/ux/task/blocked.png',
@@ -99,6 +109,7 @@ Ext.define('Vede.view.common.TaskMonitorView', {
         },
         {
             xtype:'actioncolumn',
+            flex: 1,
             align: 'center',
             items: [{
                 icon: 'resources/images/ux/task/new-tab.png',

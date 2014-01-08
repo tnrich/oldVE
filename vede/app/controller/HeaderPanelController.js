@@ -91,7 +91,7 @@ Ext.define('Vede.controller.HeaderPanelController', {
 
 
     onRender: function() {
-        Ext.get("help_btn").on('click', this.onHelpBtnClick);
+        // Ext.get("help_btn").on('click', this.onHelpBtnClick);
         // Ext.get("tasks_btn").on('click', this.onTasksBtnClick);
 
         if(!Ext.isChrome) {
