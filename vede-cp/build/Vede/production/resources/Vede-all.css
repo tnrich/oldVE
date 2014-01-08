@@ -19692,7 +19692,7 @@ body.x-nbr .x-grid-row-editor-buttons-default-top-frameInfo {
   border-bottom-color: rgba(0, 0, 0, 0.2);
   position: absolute;
   top: -7px;
-  left: 9px;
+  left: 70px;
 }
 
 /* line 938, ../../../../sass/src/view/common/HeaderPanelView.scss */
@@ -19704,7 +19704,7 @@ body.x-nbr .x-grid-row-editor-buttons-default-top-frameInfo {
   border-bottom: 6px solid #ffffff;
   position: absolute;
   top: -6px;
-  left: 10px;
+  left: 70px;
 }
 
 /* line 948, ../../../../sass/src/view/common/HeaderPanelView.scss */

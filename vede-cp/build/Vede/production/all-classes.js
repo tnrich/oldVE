@@ -67011,7 +67011,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.event.AuthenticationEvent', Ext.Base, {singleton: true, LOGGED_IN: "LoggedIn", POPULATE_STATS: "PopulateStats"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'AuthenticationEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Explorer', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{xtype: 'container', layout: {type: 'vbox', align: 'stretch'}, border: 0, width: 220, id: 'projectPanelOptions', items: [{xtype: 'container', layout: 'hbox', items: [{xtype: 'button', border: '0', width: 220, id: "openSequenceLibraryBtn", text: 'My Sequences', cls: 'sequenceLibraryBtn', overCls: 'sequenceLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}, {xtype: 'button', border: '0', cls: 'sequenceAddBtn', overCls: 'sequenceAddBtn-over', height: 20, width: 20, margin: 0, listeners: {click: function() {
+(Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Explorer', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{xtype: 'container', layout: {type: 'vbox', align: 'stretch'}, border: 0, width: 220, id: 'projectPanelOptions', items: [{xtype: 'container', layout: 'hbox', items: [{xtype: 'button', border: '0', width: 220, id: "openSequenceLibraryBtn", text: 'My Sequences', cls: 'sequenceLibraryBtn', overCls: 'sequenceLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}, {xtype: 'button', border: '0', cls: 'sequenceAddBtn', overCls: 'sequenceAddBtn-over', height: 20, tooltip: 'New Sequence', width: 20, margin: 0, listeners: {click: function() {
   Vede.application.fireEvent("createSequence");
 }}}]}, {xtype: 'button', border: '0', id: "openPartLibraryBtn", text: 'My Parts', cls: 'partsLibraryBtn', overCls: 'partsLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}]}, {flex: 1, xtype: 'treepanel', border: false, id: 'projectTreePanel', title: 'My Projects', width: 220, rootVisible: false, animate: false, tools: [{type: 'plus', tooltip: 'New Project', cls: 'projectAddBtn', overCls: 'projectAddBtn-over', handler: function(event, toolEl, panelHeader) {
   Teselagen.manager.ProjectManager.createNewProject();
@@ -74177,12 +74177,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var type = Ext.getCmp("createNewFeatureWindowTypeComboBox").getValue();
   var start = Ext.getCmp("createNewFeatureWindowStartField").getValue() - 1;
   var end = Ext.getCmp("createNewFeatureWindowEndField").getValue();
-  if (name == null || name.match(/^\s*$/) || name.length == 0) 
+  if (!name || name.match(/^\s*$/) || name.length === 0) 
   {
     nameField.setFieldStyle("border-color:red");
   } else {
     var grid = Ext.getCmp("createNewFeatureWindowAttributesGridPanel");
-    var featureNotes = new Array();
+    var featureNotes = [];
     for (var i = 0; i < grid.numberOfLines; i++) 
       {
         var record = grid.store.getAt(i);
@@ -74194,7 +74194,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
           featureNotes.push(newFeatureNote);
         }
       }
-    console.log(strand);
     var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", {name: name, type: type, start: start, end: end, strand: strand, notes: featureNotes});
     this.sequenceManager.addFeature(newFeature);
     Ext.getCmp("CreateNewFeature").close();
@@ -81946,7 +81945,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       }
   } else {
     var rowStartIndex = Math.floor(pItemStart / bpPerRow);
-    var rowEndIndex = Math.floor(pItemEnd / bpPerRow);
+    var rowEndIndex = Math.floor((pItemEnd - 1) / bpPerRow);
     for (var z = rowStartIndex; z < rowEndIndex + 1; z++) 
       {
         pRows[z].push(pAnnotation);
@@ -82262,7 +82261,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
           this.drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
         } else if (this.feature.getStrand() == 1) 
         {
-          if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
+          if ((featureEnd - 1) >= row.getRowData().getStart() && (featureEnd - 1) <= row.getRowData().getEnd()) 
           {
             if (endBP === startBP) 
             {
@@ -82369,7 +82368,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
               this.drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
             } else if (this.feature.getStrand() == 1) 
             {
-              if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1) 
+              if ((location.getEnd() - 1) >= row.getRowData().getStart() && (location.getEnd() - 1) < row.getRowData().getEnd() + 1) 
               {
                 if ((location.getEnd() - location.getStart()) <= 1) 
                 {
