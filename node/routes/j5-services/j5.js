@@ -257,6 +257,8 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
         {
           newj5Run.status = "Error";
           newj5Run.error_list.push({"error":error});
+          console.log("Error received");
+          console.log(error);
         }
       var completed = true;
       newj5Run.save();
@@ -392,6 +394,8 @@ app.post('/executej5',restrict,function(req,res){
             // Get and decode the zip file returned by j5 server
             var encodedFileData = value['encoded_output_file'];
             var error = value["error_message"] ? value["error_message"] : null;
+            console.log("VALUE ERROR");
+            console.log(value["error_message"]);
             onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user,error);
           }
         });
