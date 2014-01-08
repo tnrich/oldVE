@@ -239,7 +239,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
     console.log(err);
     newj5Run.status = "Error";
     newj5Run.endDate = Date.now();
-    newj5Run.error_list.push({"error":err.toString()});
+    newj5Run.error_list.push({"faultString":err.toString()});
     newj5Run.save();
   };
 
@@ -256,7 +256,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
       if(error) 
         {
           newj5Run.status = "Error";
-          newj5Run.error_list.push({"error":error});
+          newj5Run.error_list.push({"faultString":error});
         }
       var completed = true;
       newj5Run.save();
