@@ -484,68 +484,84 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             revComp: revComp,
                         });
 
-                        getSequenceByID(hash, function (sequence) {
-                            var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
-
-                            if(ext) {
-                                var processSequence = Teselagen.bio.parsers.ParsersManager.parseSequence(sequence.getElementsByTagNameNS("*", "content")[0].textContent, ext[1], function(gb) {
-                                    Teselagen.bio.parsers.ParsersManager.createAndProcessSequenceFromGenbank(gb, name, function(err, sequence, sequenceManager, gb) {
-                                        if(err) {
-                                            return err;
-                                        }
-
-                                        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                                            sequenceFileContent: gb.toString(),
-                                            sequenceFileFormat: "GENBANK",
-                                            sequenceFileName: sequence.fileName,
-                                            name: sequence.name
-                                        });
-
-                                        newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-
-                                        newPart.setSequenceFile(newSequence);
-                                    
-                                        var newCell = Ext.create("Teselagen.models.Cell", {
-                                            index: j,
-                                            fas: fas || "None"
-                                        });
-
-                                        newCell.setPart(newPart);
-                                        newCell.setJ5Bin(newBin);
-
-                                        newBin.cells().add(newCell);
-
-                                        tempPartsArray.push(newPart);
-                                        fullPartsAssocArray[part.getAttribute("id")] = newPart;
-                                    });
-                                });
+                        for(var k = 0; k < tempPartsArray.length; k++) {
+                            var compareHash;
+                            if(parts[k].getElementsByTagNameNS("*", "sequenceFileHash")[0]) {
+                                compareHash = parts[k].getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
                             } else {
-                                var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                                    sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
-                                    sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
-                                    sequenceFileName: me.getTagText(sequence, "fileName"),
-                                    name: me.getTagText(sequence, "fileName")
-                                });
-
-                                newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
-                                //newSequence.set("name",newPart.get("name"));
-
-                                newPart.setSequenceFile(newSequence);
-
-                                var newCell = Ext.create("Teselagen.models.Cell", {
-                                    index: j,
-                                    fas: fas || "None"
-                                });
-
-                                newCell.setPart(newPart);
-                                newCell.setJ5Bin(newBin);
-
-                                newBin.cells().add(newCell);
-
-                                tempPartsArray.push(newPart);
-                                fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                                compareHash = parts[k].getElementsByTagNameNS("*", "sequenceFileID")[0].textContent;
                             }
-                        });
+
+                            if(compareHash === hash) {
+                                newPart.setSequenceFile(tempPartsArray[k].getSequenceFile());
+                                break;
+                            }
+                        }
+
+                        if(!newPart.getSequenceFile()) {
+                            getSequenceByID(hash, function (sequence) {
+                                var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
+
+                                if(ext) {
+                                    var processSequence = Teselagen.bio.parsers.ParsersManager.parseSequence(sequence.getElementsByTagNameNS("*", "content")[0].textContent, ext[1], function(gb) {
+                                        Teselagen.bio.parsers.ParsersManager.createAndProcessSequenceFromGenbank(gb, name, function(err, sequence, sequenceManager, gb) {
+                                            if(err) {
+                                                return err;
+                                            }
+
+                                            var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                                sequenceFileContent: gb.toString(),
+                                                sequenceFileFormat: "GENBANK",
+                                                sequenceFileName: sequence.fileName,
+                                                name: sequence.name
+                                            });
+
+                                            newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+
+                                            newPart.setSequenceFile(newSequence);
+                                        
+                                            var newCell = Ext.create("Teselagen.models.Cell", {
+                                                index: j,
+                                                fas: fas || "None"
+                                            });
+
+                                            newCell.setPart(newPart);
+                                            newCell.setJ5Bin(newBin);
+
+                                            newBin.cells().add(newCell);
+
+                                            tempPartsArray.push(newPart);
+                                            fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                                        });
+                                    });
+                                } else {
+                                    var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                                        sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent,
+                                        sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent,
+                                        sequenceFileName: me.getTagText(sequence, "fileName"),
+                                        name: me.getTagText(sequence, "fileName")
+                                    });
+
+                                    newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                                    //newSequence.set("name",newPart.get("name"));
+
+                                    newPart.setSequenceFile(newSequence);
+
+                                    var newCell = Ext.create("Teselagen.models.Cell", {
+                                        index: j,
+                                        fas: fas || "None"
+                                    });
+
+                                    newCell.setPart(newPart);
+                                    newCell.setJ5Bin(newBin);
+
+                                    newBin.cells().add(newCell);
+
+                                    tempPartsArray.push(newPart);
+                                    fullPartsAssocArray[part.getAttribute("id")] = newPart;
+                                }
+                            });
+                        }
                     }
                 }
             }
