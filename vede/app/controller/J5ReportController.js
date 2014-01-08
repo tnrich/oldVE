@@ -198,7 +198,7 @@ Ext.define("Vede.controller.J5ReportController", {
         });
         }
 
-        if ((warnings.length>0)==true) {
+        if (warnings.length>0) {
             this.tabPanel.down('gridpanel[name="warnings"]').show();
             this.tabPanel.down('gridpanel[name="warnings"]').reconfigure(warningsStore);
         } else {
@@ -207,7 +207,7 @@ Ext.define("Vede.controller.J5ReportController", {
              warningsStore = null;
         }
 
-        if (errors) {
+        if (errors.length>0) {
             this.tabPanel.down('gridpanel[name="errors"]').show();
             this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
         } else {
