@@ -272,6 +272,8 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
         }
+
+        this.SelectionLayer.refresh();
     },
 
     onShowCutSitesChanged: function(show) {
@@ -280,6 +282,8 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
         }
+
+        this.SelectionLayer.refresh();
     },
 
     onShowOrfsChanged: function(show) {
@@ -296,6 +300,8 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
         }
+
+        this.SelectionLayer.refresh();
     },
 
     onMousedown: function(pEvt, pOpts) {
