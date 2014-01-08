@@ -152,7 +152,7 @@ Ext.define("Vede.controller.J5ReportController", {
         }
 
         var warnings = this.activeJ5Run.raw.warnings;
-        var errors = this.activeJ5Run.raw.error_list[0];
+        var errors = this.activeJ5Run.raw.error_list;
 
         if(this.activeJ5Run.getJ5Results().raw.processedData) {
             if(this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
@@ -194,7 +194,7 @@ Ext.define("Vede.controller.J5ReportController", {
         if (errors) {
         var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
             model: 'Teselagen.models.j5Output.Error',
-            data: errors.error
+            data: errors
         });
         }
 
