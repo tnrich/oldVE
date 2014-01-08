@@ -313,7 +313,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
                 Teselagen.manager.ProjectManager.deleteProject(selectedProject);
                 toastr.options.onclick = null;
                 
-                toastr.info("Design '" + projectName +  "' Deleted");
+                toastr.info("Project '" + projectName +  "' Deleted");
              }
          }
 
