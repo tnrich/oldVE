@@ -93,18 +93,16 @@ Ext.define("Teselagen.renderer.de.PartRenderer", {
 
                 var part = d.getPart();
 
-                if(!part) {
-                    return;
+                if(part) {
+                    d3.selectAll(".gridPartRectSVG")
+                        .filter(function(dr){
+                            return dr.getPart() === part;
+                        })
+                        .transition()
+                        .duration(30)
+                        .attr("stroke", gridManager.PART_SELECTED_OUTLINE_COLOR)
+                        .attr("isSelected", "true");
                 }
-
-                d3.selectAll(".gridPartRectSVG")
-                    .filter(function(dr){
-                        return dr.getPart() === part;
-                    })
-                    .transition()
-                    .duration(30)
-                    .attr("stroke", gridManager.PART_HOVER_OUTLINE_COLOR)
-                    .attr("isSelected", "true");
 
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_CELL, gridCell.datum(), xIndex, yIndex);
             })

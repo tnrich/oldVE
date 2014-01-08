@@ -221,8 +221,8 @@ var clearUserFolder = function(user){
 };
 
 
-function reportChange(j5run,user, completed, error){
-  if(!user.username) throw new Error('Invalid user');
+function reportChange(j5run,user,completed,error){
+  if(!user || !user.username) throw new Error('Invalid user');
 
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
@@ -239,7 +239,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
     console.log(err);
     newj5Run.status = "Error";
     newj5Run.endDate = Date.now();
-    newj5Run.error_list.push({"error":err.toString()});
+    newj5Run.error_list.push({"faultString":err.toString()});
     newj5Run.save();
   };
 
@@ -256,7 +256,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
       if(error) 
         {
           newj5Run.status = "Error";
-          newj5Run.error_list.push({"error":error.toString()});
+          newj5Run.error_list.push({"faultString":error});
         }
       var completed = true;
       newj5Run.save();
@@ -377,7 +377,7 @@ app.post('/executej5',restrict,function(req,res){
         res.json({status:"In progress"});
         
         app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-          if(error)
+          if(error||!value)
           {
             if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
             
