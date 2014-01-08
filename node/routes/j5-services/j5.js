@@ -377,7 +377,7 @@ app.post('/executej5',restrict,function(req,res){
         res.json({status:"In progress"});
         
         app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-          if(error)
+          if(error||!value)
           {
             if(error && error.code && error.code === 'ECONNRESET') error = {faultString: "J5 Remote Server Timeout"};
             
