@@ -80,7 +80,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
             }
 
-            if( featureStart > featureEnd){
+            if(featureStart > featureEnd) {
                 if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()){
                     endBP = featureEnd - 1;
                 } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length){
@@ -94,12 +94,12 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 } else{
                     startBP = row.getRowData().getStart();
                 }
-            } else{
-                if(featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()){
+            } else {
+                if(featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()) {
                     continue;
-                } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()){
+                } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()) {
                     continue;
-                } else{
+                } else {
                     startBP = (featureStart < row.getRowData().getStart()) ? row.getRowData().getStart() : featureStart;
                     endBP = ((featureEnd - 1) < row.getRowData().getEnd()) ? (featureEnd - 1) : row.getRowData().getEnd();
                 }
@@ -112,7 +112,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 return;
             }
 
-            if (startBP > endBP && this.feature.getType() != "misc_feature"){
+            if (startBP > endBP && this.feature.getType() != "misc_feature") {
                 var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
                 var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
@@ -123,7 +123,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureX2 = bpStartMetrics2.x + this.self.ADDITIONAL_ROW_START_X;
                 var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
 
-                if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
+                if(this.sequenceAnnotationManager.showAminoAcidsRevCom) {
                     featureYCommon += 20 * this.sequenceAnnotationManager.getAminoAcidRevComFrames().length;
                 }
 
@@ -161,7 +161,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 if (this.feature.getStrand() == 0){
                     this.drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else if ( this.feature.getStrand() == 1){
-                    if(featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()){
+                    if((featureEnd - 1) >= row.getRowData().getStart() && (featureEnd - 1) <= row.getRowData().getEnd()){
                         // If the feature is 1 BP, draw a small arrow.
                         if(endBP === startBP) {
                             this.drawFeatureForwardSingleBP(g, featureX, featureY, featureRowWidth, featureRowHeight);
@@ -267,7 +267,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     if(this.feature.getStrand() == 0){
                         this.drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else if( this.feature.getStrand() == 1){
-                        if(location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1){
+                        if((location.getEnd() - 1) >= row.getRowData().getStart() && (location.getEnd() - 1) < row.getRowData().getEnd() + 1){
                             if((location.getEnd() - location.getStart()) <= 1) {
                                 this.drawFeatureForwardSingleBP(g, featureX, featureY, featureRowWidth, featureRowHeight);
                             } else {
@@ -340,7 +340,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         pY += this.self.ALL_ADDITIONAL_Y;
 
         if(pWidth ){
-
             pGraphics.append("svg:path")
                 .attr("d", " M " + (pX) + " " + (pY) +
                            " L " + (pX + pWidth - 8) + " " + (pY) +
@@ -349,21 +348,12 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                            " L " + (pX) + " " + (pY + pHeight) +
                            " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
         } else{
-
             pGraphics.append("svg:path")
                 .attr("d", " M " + (pX) + " " + (pY) +
                            " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
                            " L " + (pX) + " " + (pY + pHeight) +
                            " L " + (pX) + " " + (pY));
         }
-    /*
-        pGraphics.append("svg:line")
-            .attr("x", pX + 5)
-            .attr("y", pY +10)
-            .attr("stroke", this.featureColor)
-            .attr("stroke-width", 10)
-            .attr("height", pHeight);
-            */
     },
 
     drawFeatureForwardSingleBP: function(pGraphics, pX, pY, pWidth, pHeight) {
@@ -380,11 +370,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     },
 
     drawFeatureBackwardArrow: function(pGraphics, pX, pY, pWidth, pHeight){
-        //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
         pY += this.self.ALL_ADDITIONAL_Y;
 
         if(pWidth){
-
             pGraphics.append("svg:path")
                 .attr("d", " M " + (pX + 8) + " " + (pY) +
                            " L " + (pX + pWidth) + " " + (pY) +
@@ -393,7 +381,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                            " L " + (pX) + " " + (pY + pHeight / 2) +
                            " L " + (pX + 8) + " " + (pY));
         } else{
-
             pGraphics.append("svg:path")
                 .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) +
                            " L " + (pX + pWidth) + " " + (pY) +
