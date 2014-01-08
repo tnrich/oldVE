@@ -306,7 +306,7 @@ Ext.define('Vede.controller.VectorEditor.AnnotatePanelController', {
 
     onMousedown: function(pEvt, pOpts) {
         if(this.SequenceAnnotationManager.sequenceManager &&
-           (pEvt.getTarget().getBoundingClientRect().right - pEvt.getX()) > 18) {
+           (pEvt.getTarget().getBoundingClientRect().right - pEvt.getX()) > 5) {
             var el = this.activeTab.down("component[cls='AnnotateContainer']").el;
             var adjustedX = pEvt.getX() - el.getX();
             var adjustedY = pEvt.getY() + el.dom.scrollTop - el.getY();
