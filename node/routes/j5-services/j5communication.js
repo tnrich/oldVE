@@ -56,7 +56,7 @@ methodCall: function(methodName,data,cb,cb2){
 
         var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
         //var scriptPath = "/Users/rpavez/bin/downstream.pl";
-        var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
+        var newChild = spawn('/usr/bin/perl', ['-t',scriptPath,'2>/dev/null']);
         console.log(methodName + " started with pid: "+newChild.pid);
 
         if(typeof(cb2)==="function") cb2(newChild.pid);
