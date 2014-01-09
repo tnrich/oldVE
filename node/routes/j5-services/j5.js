@@ -222,7 +222,8 @@ var clearUserFolder = function(user){
 
 
 function reportChange(j5run,user,completed,error){
-  if(!user || !user.username) throw new Error('Invalid user');
+  if(!user) throw new Error('Empty user to report change');
+  if(!user.username) throw new Error('Empty username to report change');
 
   app.cache.cachej5Run(user.username,j5run,function(){
     app.io.pub.publish("j5jobs",user.username);
@@ -385,7 +386,7 @@ app.post('/executej5',restrict,function(req,res){
             newj5Run.endDate = Date.now();
             newj5Run.error_list.push({"error":error});
             newj5Run.save();
-            reportChange(newj5Run,user,true,true);
+            reportChange(newj5Run,req.user,true,true);
           }
           else
           {
