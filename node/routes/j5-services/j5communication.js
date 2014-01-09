@@ -20,7 +20,7 @@ function quicklog(s) {
 
 return {
 
-methodCall: function(methodName,data,cb){
+methodCall: function(methodName,data,cb,cb2){
 
         var xml = Serializer.serializeMethodCall(methodName, data);
 
@@ -30,6 +30,8 @@ methodCall: function(methodName,data,cb){
         //var scriptPath = "/Users/rpavez/bin/downstream.pl";
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log(methodName + " started with pid: "+newChild.pid);
+
+        if(typeof(cb2)==="function") cb2();
 
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");

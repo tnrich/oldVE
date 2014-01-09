@@ -394,6 +394,15 @@ app.post('/executej5',restrict,function(req,res){
             var error = value["error_message"] ? value["error_message"] : null;
             onDesignAssemblyComplete(newj5Run,data,req.body.parameters,encodedFileData,req.user,error);
           }
+        },
+        // This secondary callback returns the process pid
+        function(pid){
+          app.j5pids[newChild.pid] = true;
+          newj5Run.process = {
+            pid: newChild.pid,
+            server: app.localIP
+          };
+          newj5Run.save();     
         });
 
       });
