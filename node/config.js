@@ -9,6 +9,8 @@ module.exports = function(app, express) {
 
     var httpServer = require('http').createServer(app).listen(3000);
 
+    app.use(express.logger());
+
     if(app.get("env") === "production") {
 
         var options = {

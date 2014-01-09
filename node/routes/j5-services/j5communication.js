@@ -33,9 +33,12 @@ function createUUID() {
     return uuid;
 }
 
-function randomQuickLog(s) {
+function UUIDLog(s,uuid,sub_name) {
 
-  var logpath = "/tmp/j5_"+randomUUID()+".log";
+  if(!uuid) uuid = randomUUID();
+  if(!sub_name) sub_name = "";
+
+  var logpath = "/tmp/j5_"+uuid+"_"+sub_name+".log";
   var fs = require('fs');
   s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
   var fd = fs.openSync(logpath, 'a+', 0666);
@@ -45,7 +48,7 @@ function randomQuickLog(s) {
 
 return {
 
-methodCall: function(methodName,data,cb){
+methodCall: function(methodName,data,cb,cb2){
 
         var xml = Serializer.serializeMethodCall(methodName, data);
 
@@ -56,15 +59,21 @@ methodCall: function(methodName,data,cb){
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log(methodName + " started with pid: "+newChild.pid);
 
+        if(typeof(cb2)==="function") cb2(newChild.pid);
+
+        UUIDLog(xml,newChild.pid,"request");
+
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
         newChild.stderr.on('data', function (stoutData) {
-          randomQuickLog(stoutData);
+          //process.stdout.write(stoutData);
+          UUIDLog(stoutData,newChild.pid,"error");
         });
 
         newChild.stdout.on('data', function (stoutData) {
-          randomQuickLog(stoutData);
+          //process.stdout.write(stoutData);
+          UUIDLog(stoutData,newChild.pid,"stdout");
         });
 
         newChild.on('exit', function (code,signal) {
@@ -72,7 +81,6 @@ methodCall: function(methodName,data,cb){
         });
 
 		deserializer.deserializeMethodResponse(newChild.stdout, function(err,data){
-			//quicklog(require('util').inspect(data,false,null));
 			return cb(false,data);
 		});
 

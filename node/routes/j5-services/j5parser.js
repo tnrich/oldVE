@@ -136,7 +136,8 @@ function processNonCombinatorial_MOCK(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
+            //cb({warnings:["Error processing j5 output: " + err]});
+            cb({});
         }
 }
 
@@ -400,7 +401,8 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
+            //cb({warnings:["Error processing j5 output: " + err]});
+            cb({});
         }
 }
 
@@ -607,7 +609,8 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -629,7 +632,8 @@ function processNonCombinatorial(method,file,cb) {
     else if(type.match(/GoldenGate/)) return processNonCombinatorial_GOLDEN_GATE(lines,cb);
     else
     {
-        return cb({warnings:[{"message":"Wrong assembly method"}]});
+        return //cb({warnings:[{"message":"Wrong assembly method"}]});
+        cb({});
     }
 }
 
@@ -740,7 +744,8 @@ function processCombinatorial_MOCK(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -948,7 +953,8 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -1139,7 +1145,8 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -1161,7 +1168,8 @@ function processCombinatorial(file,cb){
     else if(type.match(/Combinatorial Golden-gate/)) return processCombinatorial_GOLDEN_GATE(lines,cb);
     else
     {
-        return cb({warnings:[{"message":"Wrong assembly method"}]});
+        return //cb({warnings:[{"message":"Wrong assembly method"}]});
+        cb({});
     }
 }
 

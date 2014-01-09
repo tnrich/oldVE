@@ -691,7 +691,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     }
 
                     var warnings = self.activeJ5Run.raw.warnings;
-                    var errors = self.activeJ5Run.raw.error_list[0];
+                    var errors = self.activeJ5Run.raw.error_list;
                     var warningsStore, errorsStore;
 
                     if(self.activeJ5Run.getJ5Results().raw.processedData) {
@@ -733,11 +733,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     if (errors) {
                         errorsStore = Ext.create("Teselagen.store.ErrorsStore", {
                         model: "Teselagen.models.j5Output.Error",
-                        data: errors.error
+                        data: errors
                     });
                     }
 
-                    if ((warnings.length>0)===true) {
+                    if (warnings.length>0) {
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").show();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").reconfigure(warningsStore);
                     } else {
@@ -746,7 +746,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                          warningsStore = null;
                     }
 
-                    if (errors) {
+                    if (errors.length>0) {
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").show();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").reconfigure(errorsStore);
                         // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
