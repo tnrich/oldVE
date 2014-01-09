@@ -66,10 +66,10 @@ methodCall: function(methodName,data,cb,cb2){
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
-        newChild.stderr.on('data', function (stoutData) {
+        //newChild.stderr.on('data', function (stoutData) {
           //process.stdout.write(stoutData);
-          UUIDLog(stoutData,newChild.pid,"error");
-        });
+          //UUIDLog(stoutData,newChild.pid,"error");
+        //});
 
         newChild.stdout.on('data', function (stoutData) {
           //process.stdout.write(stoutData);
