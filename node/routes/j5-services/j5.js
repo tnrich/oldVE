@@ -199,6 +199,8 @@ function updateMasterSources(sources,user){
 
 var clearUserFolder = function(user){
 
+  return false; // This is temporary deactivated;
+
   var otherRunningTasks = false;
   app.cache.get(user.username,function(err,user){
     if(user && user.tasks)
