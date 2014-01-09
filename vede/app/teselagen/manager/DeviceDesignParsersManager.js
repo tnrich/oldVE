@@ -499,8 +499,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                         var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                                             sequenceFileContent: gb.toString(),
                                             sequenceFileFormat: "GENBANK",
-                                            sequenceFileName: sequence.fileName,
-                                            name: sequence.name
+                                            sequenceFileName: sequence.get('sequenceFileName'),
+                                            name: sequence.get('name')
                                         });
 
                                         newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
