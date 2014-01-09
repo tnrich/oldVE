@@ -31,7 +31,7 @@ methodCall: function(methodName,data,cb,cb2){
         var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log(methodName + " started with pid: "+newChild.pid);
 
-        if(typeof(cb2)==="function") cb2();
+        if(typeof(cb2)==="function") cb2(newChild.pid);
 
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");

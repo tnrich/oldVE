@@ -397,9 +397,9 @@ app.post('/executej5',restrict,function(req,res){
         },
         // This secondary callback returns the process pid
         function(pid){
-          app.j5pids[newChild.pid] = true;
+          app.j5pids[pid] = true;
           newj5Run.process = {
-            pid: newChild.pid,
+            pid: pid,
             server: app.localIP
           };
           newj5Run.save();     
