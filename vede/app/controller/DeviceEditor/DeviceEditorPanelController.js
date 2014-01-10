@@ -263,7 +263,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
     },
 
-    analizeDesign: function(design,cb){
+    analyzeDesign: function(design,cb){
 
         function isValidObjectID(str) {
           if(!str) return false;
@@ -275,7 +275,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
           }
         }
 
-        console.log("Analizing design...");
+        console.log("Analyzing design...");
 
         var warnings = [];
         // Check data integrity
@@ -355,8 +355,12 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     if(associatedSequence)
                     {
                         var lastSequenceId = associatedSequence.get("id");
-                        associatedSequence.set("dateCreated", new Date());
-                        associatedSequence.set("dateModified", new Date());
+
+                        associatedSequence.set({
+                            dateCreated: new Date(),
+                            dateModified: new Date()
+                        });
+
                         if(Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId)
                         {
                             associatedSequence.save({
@@ -405,7 +409,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
                         toastr.options.onclick = null;
-                        
+
                         toastr.info("Design Saved");
                     });
                     gridManager.setListenersEnabled(true);
@@ -414,7 +418,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             });
         };
 
-        self.analizeDesign(design,function(){
+        self.analyzeDesign(design,function(){
             var countParts = 0;
             design.bins().each(function (bin) {
                 bin.cells().each(function(cell) {
@@ -434,7 +438,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         var sequenceManager;
 
                         if(part) {
-                            if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
+                            if(!part.data.project_id) {
+                                part.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
+                            }
 
                             if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                                 sequenceFile = part.getSequenceFile();
@@ -442,11 +448,14 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                                     sequenceManager = sequenceFile.getSequenceManager();
 
                                     if(sequenceManager) {
-                                        part.set("features", sequenceManager.featuresByRangeText(
-                                            part.get("genbankStartBP"), part.get("endBP")).toString());
+                                        part.set({
+                                            features: sequenceManager.featuresByRangeText(part.get("genbankStartBP"),
+                                                                                          part.get("endBP")).toString(),
+                                            partSource: sequenceFile.get("name")
+                                        });
+                                    } else {
+                                        part.set("partSource", sequenceFile.get("name"));
                                     }
-
-                                    part.set("partSource", sequenceFile.get("name"));
                                 }
                                 saveAssociatedSequence(part, function() {
                                     if(countParts === 1) {

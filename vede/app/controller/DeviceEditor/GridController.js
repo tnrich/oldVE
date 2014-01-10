@@ -149,8 +149,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             // Load the new tab's saved options, if they exist.
             if(newTab.options) {
-                this.grid.el.setScrollLeft(newTab.options.scrollLeft);
-                this.grid.el.setScrollTop(newTab.options.scrollTop);
+                var scroll = this.grid.el.getScroll();
+
+                if(scroll.left !== newTab.options.scrollLeft) {
+                    this.grid.el.setScrollLeft(newTab.options.scrollLeft);
+                }
+
+                if(scroll.top !== newTab.options.scrollTop) {
+                    this.grid.el.setScrollTop(newTab.options.scrollTop);
+                }
 
                 if(newTab.options.selection) {
                     if(newTab.options.selection.y !== undefined) {
