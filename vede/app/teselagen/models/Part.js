@@ -95,10 +95,14 @@ Ext.define("Teselagen.models.Part", {
         sortType: function (s) {
             return String(s).toUpperCase();
         },
-        convert: function(v) {
-            var name;
-            name = v;
-            if (v === undefined || v === null) {name = "";}
+        convert: function(name) {
+            if (name === undefined || name === null) {
+                name = "";
+            }
+
+            // Replace all special characters (not letters, numbers, -, or _) with underscores.
+            name = name.replace(/[^0-9a-zA-Z-_]/g, "_");
+
             return name;
     }}, {
         name: "partSource",
@@ -163,6 +167,10 @@ Ext.define("Teselagen.models.Part", {
     validations: [{
         field: "name",
         type: "presence"
+    }, {
+        field: "name",
+        type: "format",
+        matcher: /[0-9a-zA-Z-_]+/g
     }, {
         field: "partSource",
         type: "presence"

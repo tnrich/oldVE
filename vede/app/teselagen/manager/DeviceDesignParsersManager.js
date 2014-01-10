@@ -365,7 +365,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     return {
                         "part":part,
                         "linked":false
-                        };
+                    };
                 }
 
                 var instances = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part");
@@ -484,6 +484,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                             revComp: revComp,
                         });
 
+                        var partIDs = Object.keys(fullPartsAssocArray);
+
                         getSequenceByID(hash, function (sequence) {
                             var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
 
@@ -497,14 +499,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                         var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                                             sequenceFileContent: gb.toString(),
                                             sequenceFileFormat: "GENBANK",
-                                            sequenceFileName: sequence.fileName,
-                                            name: sequence.name
+                                            sequenceFileName: sequence.get('sequenceFileName'),
+                                            name: sequence.get('name')
                                         });
 
                                         newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
 
                                         newPart.setSequenceFile(newSequence);
-                                    
+
                                         var newCell = Ext.create("Teselagen.models.Cell", {
                                             index: j,
                                             fas: fas || "None"
@@ -565,8 +567,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
             }
 
-            //newBin.addToParts(tempPartsArray);
-            //newBin.set("fases",binFases);
             binsArray.push(newBin);
         }
 
@@ -610,7 +610,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             });
 
             newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-            
+
             if( operand2isNumber ) {
                 newEugeneRule.setOperand2(operand2);
             } else {
@@ -625,6 +625,23 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         for(var key in fullPartsAssocArray) {
             partsArray.push(fullPartsAssocArray[key]);
         }
+
+        var part;
+        var comparePart;
+
+        // If two parts share a sequence, make sure both parts' getSequenceFile() methods return the same object.
+        for(var i = 0; i < partsArray.length; i++) {
+            part = partsArray[i];
+
+            for(var j = i + 1; j < partsArray.length; j++) {
+                comparePart = partsArray[j];
+
+                if(comparePart.getSequenceFile().get('hash') === part.getSequenceFile().get('hash')) {
+                    comparePart.setSequenceFile(part.getSequenceFile());
+                }
+            }
+        }
+
         this.generateDesign(binsArray, partsArray, rulesArray, cb);
     },
 

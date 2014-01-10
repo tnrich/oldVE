@@ -917,7 +917,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         {
             if(savePreset) savePreset.disable();
             if(deletePreset) deletePreset.disable();
-            if(newPreset) newPreset.enable();            
+            if(newPreset) newPreset.enable();
         }
         else
         {
@@ -953,23 +953,29 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 Ext.MessageBox.prompt('Enter New Preset Name', message, function(button, value) {
                     if(button === "ok") {
-                        Ext.Ajax.request({
-                            method: 'POST',
-                            url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
-                            params: {
-                                presetName: value,
-                                j5parameters: JSON.stringify(parameters)
-                            },
-                            success: function(response){
-                                Ext.MessageBox.alert('Success', 'Preset Saved', function(){
-                                    Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, value);
-                                });
+                        var sameNameIndex = currentTab.presetsStore.find('presetName', value);
 
-                                if(typeof cb === "function") {
-                                    cb();
+                        if(sameNameIndex < 0) {
+                            Ext.Ajax.request({
+                                method: 'POST',
+                                url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                                params: {
+                                    presetName: value,
+                                    j5parameters: JSON.stringify(parameters)
+                                },
+                                success: function(response){
+                                    Ext.MessageBox.alert('Success', 'Preset Saved', function(){
+                                        Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, value);
+                                    });
+
+                                    if(typeof cb === "function") {
+                                        cb();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            Ext.MessageBox.alert('Error', 'A preset already exists with that name. Please enter another.');
+                        }
                     } else {
                         if(typeof cb === "function") {
                             cb();
@@ -990,7 +996,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     j5parameters: JSON.stringify(parameters)
                 },
                 success: function(response){
-                    Ext.MessageBox.alert('Success', 'Preset updated', function(){
+                    Ext.MessageBox.alert('Success', 'Preset Updated', function(){
                         Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,selectedPreset.get('presetName'));
 
                         if(typeof cb === "function") {
@@ -1033,11 +1039,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                             id: selectedPreset.data.id
                         },
                         success: function(response){
-                            Ext.MessageBox.alert('Success', 'Preset deleted', function(){
+                            self.loadPresetsSelector();
+                            self.j5ParamsWindow.down('combobox[cls="inWindowPresetSelector"]').select('Default');
+
+                            Ext.MessageBox.alert('Success', 'Preset Deleted', function(){
                                 Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,"");
                             });
                         }
-                    });                        
+                    });
                 }
             }
         });
@@ -1063,19 +1072,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }, this);
 
         function performCreation(text) {
-            Ext.Ajax.request({
-                method: 'POST',
-                url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
-                params: {
-                    presetName: text,
-                    j5parameters: JSON.stringify(parameters)
-                },
-                success: function(response){
-                    Ext.MessageBox.alert('Success', 'Preset Saved', function(){
-                        Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,text);
-                    });
-                }
-            });
+            var sameNameIndex = currentTab.presetsStore.find('presetName', text);
+
+            if(sameNameIndex < 0) {
+                Ext.Ajax.request({
+                    method: 'POST',
+                    url: Teselagen.manager.SessionManager.buildUrl("presets", ''),
+                    params: {
+                        presetName: text,
+                        j5parameters: JSON.stringify(parameters)
+                    },
+                    success: function(response){
+                        Ext.MessageBox.alert('Success', 'Preset Saved', function(){
+                            Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,text);
+                        });
+                    }
+                });
+            } else {
+                Ext.MessageBox.alert('Error', 'A preset already exists with that name. Please enter another.');
+            }
         }
 
         var promptName = function() {
@@ -1086,8 +1101,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }, this);
         }
 
-        promptName();        
-
+        promptName();
     },
 
     onDownloadj5Btn: function (button, e, options) {

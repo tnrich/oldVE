@@ -600,7 +600,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
      */
     jbeiseqXmlToJson: function(xmlStr) {
-
         return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToJson(xmlStr);
     },
 
