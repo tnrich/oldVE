@@ -316,9 +316,10 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             }
         });
 
-        setTimeout(function(){
-            if(warnings.length===0) console.log("Everything is ok");
-            else {
+        //setTimeout(function(){
+            if(warnings.length===0) {
+                console.log("Everything is ok");
+            } else {
                 console.log(warnings);
                 var warningsWindow = Ext.create('Vede.view.de.WarningsWindow').show();
 
@@ -337,8 +338,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 warningsWindow.down('gridpanel').reconfigure(errorStore);
 
             }
+
             cb();
-        },2000);
+        //},2000);
     },
 
     /**

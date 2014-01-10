@@ -1541,11 +1541,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     deSerialize: function(data){
         var self = this;
-        data.features.forEach(function(feature){
-            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature",feature.inData);
+        var feature;
+
+        for(var i = 0; i < data.features.length; i++) {
+            feature = data.features[i];
+
+            var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", feature.inData);
             newFeature.deSerialize(feature);
-            self.addFeature(newFeature,true);
-        });
+
+            self.addFeature(newFeature, true);
+        }
 
         var newSequence = Ext.create("Teselagen.bio.sequence.common.SymbolList",{});
         newSequence.deSerialize(data.sequence);
