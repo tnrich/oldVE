@@ -296,9 +296,15 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         sequences = {};
         design.parts().each(function(part){
             var sequence = part.getSequenceFile();
-            if(sequence)
-            {
+
+
+            if(sequence) {
+                if(!sequence.get('serialize')) {
+                    sequence.processSequence(function() {});
+                }
+
                 var sequenceKey = sequences[sequence.data.serialize.inData.name];
+
                 if(sequenceKey && sequenceKey.data.id!=sequence.data.id)
                 {
                     warnings.push("Warning, Locus name conflict between "+sequenceKey.data.name+" and "+sequence.data.name);
@@ -349,11 +355,9 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
         var saveAssociatedSequence = function (part, cb) {
             // Do not save sequence for an unmapped part.
-            if(part.isMapped())
-            {
+            if(part.isMapped()) {
                 part.getSequenceFile({callback: function(associatedSequence){
-                    if(associatedSequence)
-                    {
+                    if(associatedSequence) {
                         var lastSequenceId = associatedSequence.get("id");
 
                         associatedSequence.set({
@@ -361,35 +365,35 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                             dateModified: new Date()
                         });
 
-                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId)
-                        {
+                        if(!associatedSequence.get('serialize')) {
+                            associatedSequence.processSequence(function() {});
+                        }
+
+                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId) {
                             associatedSequence.save({
                                 callback: function (sequencefile) {
-                                    if(!lastSequenceId)
-                                    {
+                                    if(!lastSequenceId) {
                                         part.set("sequencefile_id", sequencefile.get("id"));
                                         part.save({
                                             callback: function () {
                                                 cb();
                                             }
                                         });
+                                    } else {
+                                        cb();
                                     }
-                                    else { cb(); }
                                 }
                             });
-                        }
-                        else
-                        {
+                        } else {
                             cb();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         cb();
                     }
                 }});
+            } else {
+                cb();
             }
-            else { cb(); }
         };
 
         var saveDesign = function () {
