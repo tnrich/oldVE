@@ -8,18 +8,22 @@ module.exports = function(app, express){
 
   var config = this;
 
-  var options = {
-    key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
-    cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
-    ca: [
-       app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
-       app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
-    ]
-  };
-
   //console.log(options);
 
-  var httpsServer = require('https').createServer(options,app).listen(3443);
+  if(app.get("env") === "production") {
+
+    var options = {
+      key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
+      cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+      ca: [
+         app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
+         app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
+      ]
+    };
+
+    var httpsServer = require('https').createServer(options,app).listen(3443);
+  }
+
   var httpServer = require('http').Server(app).listen(3000);
 
   require('./environments').readEnvironments(app);
