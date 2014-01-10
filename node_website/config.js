@@ -8,18 +8,23 @@ module.exports = function(app, express){
 
   var config = this;
 
-  var options = {
-    key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
-    cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
-    ca: [
-       app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
-       app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
-    ]
-  };
-
   //console.log(options);
 
-  var httpsServer = require('https').createServer(options,app).listen(3443);
+  if(app.get("env") === "production") {
+
+    var options = {
+      key: app.fs.readFileSync('/home/teselagen/keys/www.teselagen.com.key', 'utf8'),
+      cert: app.fs.readFileSync('/home/teselagen/keys/certificate.pem', 'utf8'),
+      ca: [
+         app.fs.readFileSync('/home/teselagen/keys/chain1.pem','utf8'),
+         app.fs.readFileSync('/home/teselagen/keys/chain2.pem','utf8')
+      ]
+    };
+
+    var httpsServer = require('https').createServer(options,app).listen(3443);
+    console.log("HTTPS SERVER ONLINE");
+  }
+
   var httpServer = require('http').Server(app).listen(3000);
 
   require('./environments').readEnvironments(app);
@@ -29,28 +34,19 @@ module.exports = function(app, express){
   app.configure('development', function () { app.locals.pretty = true; });
   app.configure('production', function () { app.locals.pretty = true; });
 
-   var Opts = {
-        host: "127.0.0.1",
-        port: 27017,
-        authHost: "mongodb://127.0.0.1/" + app.dbname
-    }; 
+  app.dbname = "teselagen";
 
-    app.set("env","production");
-    app.dbname = "teselagen";
+  var Opts = {
+    host: "54.215.198.196",
+    port: 27017,
+    username: "prod",
+    password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
+    authRequired : true,
+    redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
+  };
+  Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
 
-    if(app.get("env") === "production") {
-        var Opts = {
-            host: "54.215.198.196",
-            port: 27017,
-            username: "prod",
-            password: "o+Me+IFYebytd9u2TaCuSoI3AjAu2p4hplSIxqWKi/8=",
-            authRequired : true,
-            redis_pass : "X+lLN+06kOe7pVKT06z9b1lEPeuBam1EdQtUk965Wj8="
-        };
-        Opts.authHost = "mongodb://" + Opts.username + ":" + Opts.password + "@" + Opts.host + ":" + Opts.port + "/" + app.dbname
-    }
-
-  if (!app.settings.env) {app.settings.env="development";}
+  console.log("CURRENT ENV ID: "+app.get("env"));
 
   app.use (function (req, res, next) {
       if (app.get("env")!="production") return next();
@@ -72,18 +68,14 @@ module.exports = function(app, express){
             }); // This opt allow extends
             app.use(express.bodyParser()); // Use express response body parser (recommended)
             app.use(express.cookieParser("secretj5!")); // Use express response cookie parser (recommended)
-            app.use(express.session({ 
-              secret: 'teselagen',
-              store: new MongoStore(
-                  {
-                      db: app.dbname,
-                      host: 'localhost',
-                      collection: 'web_sessions',
-                      auto_reconnect: true
-                  }
-              )
-            })); // Sessions managed using cookies
 
+            var redis = require("redis").createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
+            app.redis = redis;
+            var RedisStore = require('connect-redis')(express)
+              app.use(express.session({ 
+              secret: 'j5',
+              store: new RedisStore({client: redis})
+            })); // Sessions managed using cookies
             app.use(app.passport.initialize());
             app.use(app.passport.session());
 
