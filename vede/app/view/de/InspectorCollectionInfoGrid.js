@@ -117,10 +117,18 @@ Ext.define('Vede.view.de.InspectorCollectionInfoGrid', {
                     dataIndex: 'fas',
                     renderer: function(value, metadata, record) {
                         metadata.tdAttr = 'data-qtip="' + value + '"';
-
                         if(record.cells().getRange().length > 0) {
-                            metadata.tdAttr = 'data-qtip="' + record.cells().getRange()[0].get("fas") + '"';
-                            return record.cells().getRange()[0].get("fas");
+                            for(var i=0; i < record.cells().getRange().length;i++) {
+                                if(record.cells().getRange()[i].get("fas")) {
+                                    var fas = record.cells().getRange()[i].get("fas");
+                                    if(fas!="None") {
+                                        metadata.tdAttr = 'data-qtip="' + fas + '"';
+                                        return fas;
+                                    }
+                                }
+                            }
+                            metadata.tdAttr = 'data-qtip="' + fas + '"';
+                            return fas;
                         } else {
                             metadata.tdAttr = 'data-qtip="' + value + '"';
                             return value;
