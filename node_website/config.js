@@ -22,6 +22,7 @@ module.exports = function(app, express){
     };
 
     var httpsServer = require('https').createServer(options,app).listen(3443);
+    console.log("HTTPS SERVER ONLINE");
   }
 
   var httpServer = require('http').Server(app).listen(3000);
