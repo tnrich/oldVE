@@ -98,54 +98,62 @@ Ext.define("Vede.controller.J5ReportController", {
         j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);
         var J5parametersValues = j5parameters.getParametersAsStore();
 
-        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
-        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
-        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
-        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
-        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
+        var warningsGrid = this.tabPanel.down('gridpanel[name="warnings"]');
+        var errorsGrid = this.tabPanel.down('gridpanel[name="errors"]');
+
+        var buildButton = this.tabPanel.down("button[cls='buildBtn']");
+
+        var j5RunInfo = this.tabPanel.down("form[cls='j5RunInfo']");
+        var j5RunInfoForm = j5RunInfo.getForm();
+
+        j5RunInfoForm.findField('j5AssemblyType').setValue(assemblyMethod);
+        j5RunInfoForm.findField('j5RunStatus').setValue(status);
+        j5RunInfoForm.findField('j5RunStart').setValue(startDate);
+        j5RunInfoForm.findField('j5RunEnd').setValue(endDate);
+        j5RunInfoForm.findField('j5RunElapsed').setValue(elapsed);
 
         if(status=="Completed") {
-            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-            //this.tabPanel.down('button[cls="downloadResults"]').enable();
-            //this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
-            this.tabPanel.down('button[cls="buildBtn"]').enable();
-            this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
+            var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+
+            buildButton.enable();
+            buildButton.removeCls('btnDisabled');
+
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").removeClass("status-note-failed");
             $("#" + field + " .status-note").addClass("status-note-completed");
         } else if (status=="Completed with warnings") {
-            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-            //this.tabPanel.down('button[cls="downloadResults"]').enable();
-            //this.tabPanel.down('button[cls="downloadResults"]').removeCls('btnDisabled');
-            this.tabPanel.down('button[cls="buildBtn"]').enable();
-            this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
+            var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+
+            buildButton.enable();
+            buildButton.removeCls('btnDisabled');
+
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-failed")
             $("#" + field + " .status-note").addClass("status-note-warning");;
         } else if (status=="Error") {
-            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-            //this.tabPanel.down('button[cls="downloadResults"]').disable();
-            //this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
-            this.tabPanel.down('button[cls="buildBtn"]').disable();
-            this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+            var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+
+            buildButton.disable();
+            buildButton.addClass('btnDisabled');
+
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
         } else if (status=="Canceled") {
-            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-            //this.tabPanel.down('button[cls="downloadResults"]').disable();
-            //this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
-            this.tabPanel.down('button[cls="buildBtn"]').disable();
-            this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+            var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+
+            buildButton.disable();
+            buildButton.addClass('btnDisabled');
+
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-failed");
         } else if (status=="In progress") {
-            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-            //this.tabPanel.down('button[cls="downloadResults"]').disable();
-            //this.tabPanel.down('button[cls="downloadResults"]').addClass('btnDisabled');
-            this.tabPanel.down('button[cls="buildBtn"]').disable();
-            this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+            var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+
+            buildButton.disable();
+            buildButton.addClass('btnDisabled');
+
             $("#" + field + " .status-note").removeClass("status-note-completed");
             $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").removeClass("status-note-failed");
@@ -185,35 +193,33 @@ Ext.define("Vede.controller.J5ReportController", {
         }
 
         if (warnings) {
-        var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
-            model: 'Teselagen.models.j5Output.Warning',
-            data: warnings
-        });
+            var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
+                model: 'Teselagen.models.j5Output.Warning',
+                data: warnings
+            });
         }
 
         if (errors) {
-        var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
-            model: 'Teselagen.models.j5Output.Error',
-            data: errors
-        });
+            var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {
+                model: 'Teselagen.models.j5Output.Error',
+                data: errors
+            });
         }
 
         if (warnings.length>0) {
-            this.tabPanel.down('gridpanel[name="warnings"]').show();
-            this.tabPanel.down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+            warningsGrid.show().reconfigure(warningsStore);
         } else {
-             this.tabPanel.down('gridpanel[name="warnings"]').hide();
-             warnings = null;
-             warningsStore = null;
+            warningsGrid.hide();
+            warnings = null;
+            warningsStore = null;
         }
 
         if (errors.length>0) {
-            this.tabPanel.down('gridpanel[name="errors"]').show();
-            this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
+            errorsGrid.show().reconfigure(errorsStore);
         } else {
-             this.tabPanel.down('gridpanel[name="errors"]').hide();
-             errors = null;
-             errorsStore = null;
+            errorsGrid.hide();
+            errors = null;
+            errorsStore = null;
         }
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
