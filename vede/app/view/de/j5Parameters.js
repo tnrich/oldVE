@@ -48,7 +48,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         margin: 5,
                         maxHeight: 23,
                         minHeight: 23,
-                        padding: '',
+                        padding: ''
                     }, {
                         xtype: 'button',
                         cls: 'savePresetBtn',

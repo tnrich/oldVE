@@ -101,7 +101,7 @@ Ext.define("Teselagen.models.Part", {
             }
 
             // Replace all special characters (not letters, numbers, -, or _) with underscores.
-            name.replace(/[^0-9a-zA-Z-_]/g, "_");
+            name = name.replace(/[^0-9a-zA-Z-_]/g, "_");
 
             return name;
     }}, {

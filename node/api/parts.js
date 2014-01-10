@@ -84,12 +84,14 @@ module.exports = function(app) {
             });
         },
 
-        updateAllPartHashes: function(req, res) {
+        updateAllPartNames: function(req, res) {
             Part.find().exec(function(err, parts) {
                 if(err) {
                     return res.send(err);
                 } else {
-                    /*async.forEach(parts, function(part, done) {
+                    async.forEach(parts, function(part, done) {
+                        part.name = part.name.replace(/[^0-9a-zA-Z-_]/g, "_");
+
                         Part.generateDefinitionHash(null, part, function(hash) {
                             part.definitionHash = hash;
                             part.save(done);
@@ -99,69 +101,6 @@ module.exports = function(app) {
                             return res.send(err);
                         } else {
                             return res.send('yay');
-                        }
-                    });*/
-                    async.forEach(parts, function(part, done) {
-                        Part.generateDefinitionHash(null, part, function(hash) {
-                            part.definitionHash = hash;
-                            part.save(function(err) {
-                                if(err) {
-                                    if(err.code === 11000 || err.code === 11001) {
-                                        Part.findOne({
-                                            FQDN: part.FQDN,
-                                            definitionHash: part.definitionHash
-                                        }).exec(function(err, duplicatePart) {
-                                            if(err) {
-                                                return done(err);
-                                            } else {
-                                                var oldPartId = mongoose.Types.ObjectId(part.id);
-                                                var duplicatePartId = mongoose.Types.ObjectId(duplicatePart.id);
-                                                Design.find({
-                                                    parts: oldPartId
-                                                }).exec(function(err, designs) {
-                                                    var design;
-
-                                                    if(err) {
-                                                        return done(err);
-                                                    } else {
-                                                        async.forEach(designs, function(design, innerCallback) {
-                                                            design.parts[design.parts.indexOf(oldPartId)] = duplicatePartId;
-
-                                                            for(var j = 0; j < design.bins.length; j++) {
-                                                                for(var k = 0; k < design.bins[j].cells.length; k++) {
-                                                                    var cell = design.bins[j].cells[k];
-
-                                                                    if(cell.part_id === oldPartId) {
-                                                                        cell.part_id === duplicatePartId;
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            design.save(innerCallback);
-                                                        }, function(err) {
-                                                            if(err) {
-                                                                return done(err);
-                                                            } else {
-                                                                part.remove(done);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        return done(err);
-                                    }
-                                } else {
-                                    return done();
-                                }
-                            });
-                        });
-                    }, function(err) {
-                        if(err) {
-                            return res.send(err);
-                        } else {
-                            return res.send('Success!');
                         }
                     });
                 }

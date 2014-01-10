@@ -63,7 +63,7 @@ module.exports = function(app) {
 
     app.get('/fqdn', restrict, parts.fqdn);
     app.post('/parts', restrict, parts.post_parts);
-    app.get('/updateAllPartHashes', restrict, parts.updateAllPartHashes);
+    app.get('/updateAllPartNames', restrict, parts.updateAllPartNames);
     app.put('/parts', restrict, parts.put_parts);
     app.get('/parts', restrict, parts.get_parts);
     app.get('/parts/:part_id', restrict, parts.get_part_by_id);
