@@ -56,7 +56,7 @@ methodCall: function(methodName,data,cb,cb2){
 
         var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
         //var scriptPath = "/Users/rpavez/bin/downstream.pl";
-        var newChild = spawn('/usr/bin/perl', ['-t',scriptPath,'2>/dev/null']);
+        var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
         console.log(methodName + " started with pid: "+newChild.pid);
 
         if(typeof(cb2)==="function") cb2(newChild.pid);
@@ -66,10 +66,10 @@ methodCall: function(methodName,data,cb,cb2){
         newChild.stdin.setEncoding = 'utf-8';
         newChild.stdin.write(xml+"\n");
 
-        //newChild.stderr.on('data', function (stoutData) {
+        newChild.stderr.on('data', function (stoutData) {
           //process.stdout.write(stoutData);
           //UUIDLog(stoutData,newChild.pid,"error");
-        //});
+        });
 
         newChild.stdout.on('data', function (stoutData) {
           //process.stdout.write(stoutData);
