@@ -917,7 +917,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         {
             if(savePreset) savePreset.disable();
             if(deletePreset) deletePreset.disable();
-            if(newPreset) newPreset.enable();            
+            if(newPreset) newPreset.enable();
         }
         else
         {
@@ -1039,11 +1039,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                             id: selectedPreset.data.id
                         },
                         success: function(response){
+                            self.loadPresetsSelector();
+                            self.j5ParamsWindow.down('combobox[cls="inWindowPresetSelector"]').select('Default');
+
                             Ext.MessageBox.alert('Success', 'Preset Deleted', function(){
                                 Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS,"");
                             });
                         }
-                    });                        
+                    });
                 }
             }
         });
@@ -1098,8 +1101,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }, this);
         }
 
-        promptName();        
-
+        promptName();
     },
 
     onDownloadj5Btn: function (button, e, options) {
