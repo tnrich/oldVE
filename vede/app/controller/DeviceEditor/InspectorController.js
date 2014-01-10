@@ -585,6 +585,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             		newFas: newStrategy
             	}
     		});
+
+            this.renderCollectionInfo();
         }
     },
 
