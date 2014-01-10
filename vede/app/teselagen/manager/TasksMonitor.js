@@ -63,11 +63,15 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username') );
 
                 socket.on('j5completed',function(data){
-                    console.log(data);
                     var startDate = new Date(data.date);
                     var endDate = new Date(data.endDate);
                     var elapsed = endDate - startDate;
-                    console.log(startDate, endDate, elapsed);
+                    var completedRunIndex = Teselagen.manager.ProjectManager.currentTasks.find('id', data.id);
+
+                    if(completedRunIndex !== -1) {
+                        Teselagen.manager.ProjectManager.currentTasks.getAt(completedRunIndex).set('status', 'Completed');
+                    }
+
                     elapsed = Math.round(elapsed/1000);
                     elapsed = self.elapsedDate(elapsed);
                     toastr.options.onclick = function() { Vede.application.fireEvent(Teselagen.event.CommonEvent.JUMPTOJ5RUN, data, true);};
