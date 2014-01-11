@@ -1,0 +1,163 @@
+!!! 5
+html(lang='en')
+	head
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		meta(name="google-site-verification" content="D_N10PLp200Cn7YPC4FkJ4hoMUnkTW_RFdsh0GaO_mQ")
+		
+		// Le styles
+		link(href='/css/foundation.min.css', rel='stylesheet')
+		link(href='/css/normalize.css', rel='stylesheet')
+		link(href='/css/styles.css', rel='stylesheet')
+		link(href='/css/features.css', rel='stylesheet')
+		link(href='/css/glide-style.css', rel='stylesheet')
+
+		// fav and touch icons 
+		<link rel="shortcut icon" href="resources/images/favicon.ico">
+
+		link(rel='shortcut icon', href='img/favicon.ico')
+		//- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/ico/apple-touch-icon-144-precomposed.png')
+		//- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/ico/apple-touch-icon-114-precomposed.png')
+		//- link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/ico/apple-touch-icon-72-precomposed.png')
+		//- link(rel='apple-touch-icon-precomposed', href='/ico/apple-touch-icon-57-precomposed.png')
+
+		// fonts
+		script(type='text/javascript', src='//use.typekit.net/wnz0zph.js')
+		script(type='text/javascript') try{Typekit.load();}catch(e){}
+		link(href='https://fonts.googleapis.com/css?family=PT+Sans:400,700italic', rel='stylesheet', type='text/css')
+
+		//- block scripts
+		block meta
+			title TeselaGen Biotechnology - DNA Design and Assembly Platform
+			meta(name='description', content='Powerful DNA Design and Assembly Tools for Biologists.')
+			
+	body
+		nav.top-bar
+			ul.title-area
+				li.name
+					a(href="/")
+						img(src='img/teselagen_toplogo.png')
+				li.toggle-topbar.menu-icon
+					a(href="#")
+						span
+			section.top-bar-section
+				ul.right
+					li#home_tab
+						a.active_top_menu(href='/', alt="Home") Home
+					li#features_tab
+						a(href='/features', alt="Features") Features
+					li#about_tab
+						a(href='/about', alt="About Us") About
+					li#faq_tab
+						a(href='/faq', alt="FAQs") FAQ
+					li#news_tab
+						a(href='/news', alt="News") News
+					li#blog_tab
+						a(href='http://blog.teselagen.com/', alt="Blog") Blog
+					li#contact_tab
+						a(href='/contact', alt="Contact Us") Contact  
+					li.signup_btn
+						a(href='/signup', alt="Sign Up") Sign Up
+					li.login_btn
+						a(href='http://app.teselagen.com/', alt="Login") Login
+		
+		.row
+			#feature-banner-top
+				h1 Powerful DNA Design and Assembly tools for biology.
+				h2 TeselaGen gives you the most advanced cloud based solution for combinatorial gene design.
+		.row#feature-slider
+			.slider
+				ul.slides
+					li.slide
+						img(src="/img/ve-chrome.png")
+						.slide-desc
+							h4 Sequence viewing, editing, and management
+							p Keep track of your sequences in one place. Edit, view, and analyze DNA is an easy to use interface.
+					li.slide
+						img(src="/img/de-chrome.png")
+						.slide-desc
+							h4 BioCAD/CAM Design Interface
+							p Combinatorial design simplified. Everything you need to construct your combinatorial design.
+					li.slide
+						img(src="/img/j5_chrome.png")
+						.slide-desc
+							h4 Downstream Automation & Assembly
+							p Automatically generate protocols for your DNA assembly and interface with existing assembly platfoms.
+			.slider-buttons
+		#feature-showcase
+
+		#footer
+			.large-12.small-12#footer_links
+				nav.top-bar
+					ul.title-area
+						li.toggle-topbar.menu-icon
+							a(href="#")
+								span
+					section.top-bar-section
+						ul.right
+							li
+								a(href='/careers', target='blank') Careers
+							li
+								a(href='http://help.teselagen.com', target='_blank') Manual
+							li
+								a(href='/terms') Terms
+							li
+								a(href='/privacy', target='_blank') Privacy          
+							li
+								a.social-footer-link(href='https://www.facebook.com/Teselagen', target='_blank')
+									img(src='img/icons/img-footer-facebook.png')
+							li
+								a.social-footer-link(href='https://twitter.com/teselagen', target='_blank')
+									img(src='img/icons/img-footer-twitter.png')
+							li
+								a.social-footer-link(href='http://www.linkedin.com/company/2838822', target='_blank')
+									img(src='img/icons/img-footer-linkedin.png')
+							li
+								a.social-footer-link(href='https://www.youtube.com/channel/UC9gW_S5i13WT68BiB3hQAhA', target='_blank')
+									img(src='img/icons/img-footer-youtube.png')
+
+		block scripts
+			// le javascripts
+			script(src='/js/jquery-1.10.2.min.js')
+			script(src='/js/parsley.js')
+			script(src='/js/application.js')
+			script(src='/js/jquery.glide.min.js')
+			script(type="text/javascript").
+				(function(d,s,i,r) {
+						if (d.getElementById(i)){return;}
+						var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+						n.id=i;n.src='//js.hubspot.com/analytics/'+(Math.ceil(new Date()/r)*r)+'/255634.js';
+						e.parentNode.insertBefore(n, e);
+				})(document,"script","hs-analytics",300000);
+			script(type="text/javascript").
+				// Include the UserVoice JavaScript SDK (only needed once on a page)
+				UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/NpuEOadKyACgLs6eRCCMw.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+
+				//
+				// UserVoice Javascript SDK developer documentation:
+				// https://www.uservoice.com/o/javascript-sdk
+				//
+
+				// Set colors
+				UserVoice.push(['set', {
+					accent_color: '#808283  ',
+					trigger_color: 'white',
+					trigger_background_color: '#448dd6  '
+				}]);
+
+				// Add default trigger to the bottom-right corner of the window:
+				UserVoice.push(['addTrigger', { mode: 'contact', trigger_position: 'bottom-left' }]);
+
+				// Or, use your own custom trigger:
+				//UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
+
+				// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+				UserVoice.push(['autoprompt', {}]);
+			script(src='/js/foundation.min.js')
+			script(type="text/javascript").
+				$(document).foundation();
+				$('.slider').glide({
+					arrows: false,
+					nav: '.slider-buttons',
+					animationTime: 4000
+				});
