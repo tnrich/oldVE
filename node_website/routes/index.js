@@ -9,6 +9,10 @@ app.get('/', function(req, res){
     res.render('index.jade', {});
 });
 
+app.get('/features', function(req, res){
+  res.render('features', {});
+});
+
 app.get('/about', function(req, res){
   res.render('about', {});
 });
