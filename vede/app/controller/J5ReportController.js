@@ -112,7 +112,11 @@ Ext.define("Vede.controller.J5ReportController", {
         j5RunInfoForm.findField('j5AssemblyType').setValue(assemblyMethod);
         j5RunInfoForm.findField('j5RunStatus').setValue(status);
         j5RunInfoForm.findField('j5RunStart').setValue(startDate);
-        j5RunInfoForm.findField('j5RunEnd').setValue(endDate);
+
+        if(endDate) {
+            j5RunInfoForm.findField('j5RunEnd').setValue(endDate);
+        }
+
         j5RunInfoForm.findField('j5RunElapsed').setValue(elapsed);
 
         if(status=="Completed") {
