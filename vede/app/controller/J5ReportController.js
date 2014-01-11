@@ -113,11 +113,13 @@ Ext.define("Vede.controller.J5ReportController", {
         j5RunInfoForm.findField('j5RunStatus').setValue(status);
         j5RunInfoForm.findField('j5RunStart').setValue(startDate);
 
-        if(endDate) {
+        if(this.activeJ5Run.get('endDate').toJSON()) {
             j5RunInfoForm.findField('j5RunEnd').setValue(endDate);
+            j5RunInfoForm.findField('j5RunElapsed').setValue(elapsed);
+        } else {
+            j5RunInfoForm.findField('j5RunEnd').setValue('N/A');
+            j5RunInfoForm.findField('j5RunElapsed').setValue('N/A');
         }
-
-        j5RunInfoForm.findField('j5RunElapsed').setValue(elapsed);
 
         if(status=="Completed") {
             var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
