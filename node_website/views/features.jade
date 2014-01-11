@@ -23,7 +23,8 @@ html(lang='en')
 
 		// fonts
 		script(type='text/javascript', src='//use.typekit.net/wnz0zph.js')
-		script(type='text/javascript') try{Typekit.load();}catch(e){}
+		script(type='text/javascript').
+			try{Typekit.load();}catch(e){}
 		link(href='https://fonts.googleapis.com/css?family=PT+Sans:400,700italic', rel='stylesheet', type='text/css')
 
 		//- block scripts
@@ -117,7 +118,6 @@ html(lang='en')
 									img(src='img/icons/img-footer-youtube.png')
 
 		block scripts
-			// le javascripts
 			script(src='/js/jquery-1.10.2.min.js')
 			script(src='/js/parsley.js')
 			script(src='/js/application.js')
