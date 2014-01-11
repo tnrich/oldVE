@@ -770,7 +770,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     {
                         if( e.message.match( /Illegal CompositionalOperator/ ) )
                         {
-                            //console.log("Unsupported operator");
                             unsupported = true;
                             ignoredLines.push({"originalRuleLine":line});
                         }
@@ -971,22 +970,23 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 if(!error) {
                     part.getSequenceFile({
                         callback: function(sequence){
-                        sequence.processSequence(function(err,seqMgr,gb){
-                            if(err)
-                            {
-                                countPartProcessing--;
-                                console.log("Sequence not imported");
-                                console.log(sequence);
-                            }
-                            else
-                            {
-                                countPartProcessing--;
-                                sequence.set("name",gb.getLocus().locusName);
-                            }
-                            if(!countPartProcessing) { Vede.application.fireEvent("allSequencesProcessed"); Vede.application.fireEvent("PopulateStats");}
-                            //if(err) debugger;
-                        });
-                    }});
+                            sequence.processSequence(function(err,seqMgr,gb){
+                                if(err) {
+                                    countPartProcessing--;
+                                    console.log("Sequence not imported");
+                                    console.log(sequence);
+                                } else {
+                                    countPartProcessing--;
+                                    sequence.set("name",gb.getLocus().locusName);
+                                }
+
+                                if(!countPartProcessing) {
+                                    Vede.application.fireEvent("allSequencesProcessed");
+                                    Vede.application.fireEvent("PopulateStats");
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });

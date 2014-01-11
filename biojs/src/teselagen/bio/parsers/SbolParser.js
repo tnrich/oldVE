@@ -118,6 +118,7 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
                 else if(buttonId==='no')
                 {
                     performOperation(false);
+                } else {
                 }
             },
             icon: Ext.MessageBox.ALERT
