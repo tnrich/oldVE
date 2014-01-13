@@ -203,7 +203,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
 
     /**
      * @private
-     * Called when features changes. Flags the renderer for recalculation.
+     * Called when features change. Flags the renderer for recalculation.
      */
     applyFeatures: function(pFeatures) {
         this.setNeedsMeasurement(true);

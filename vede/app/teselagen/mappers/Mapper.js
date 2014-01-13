@@ -4,7 +4,7 @@
  */
 Ext.define("Teselagen.mappers.Mapper", {
     requires: ["Teselagen.event.MapperEvent"],
-    
+
     config: {
         sequenceManager: null,
         dirty: true
@@ -13,7 +13,7 @@ Ext.define("Teselagen.mappers.Mapper", {
     previousCalculatedSequence: null,
 
     updateEventString: null,
-    
+
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The SequenceManager to listen to for events.
      * @param {Boolean} dirty A flag which signifies that the mapper must recalculate its data. Set when the SequenceManager fires a SequenceChanged event.
@@ -24,7 +24,7 @@ Ext.define("Teselagen.mappers.Mapper", {
      * Called when the sequence provider changes. Sets the dirty flag to true,
      * telling the mapper to recalculate when it is next accessed.
      */
-	sequenceChanged: function() {
+    sequenceChanged: function() {
         if(this.previousCalculatedSequence !== this.getSequenceManager().getSequence().toString()) {
             //console.log(this.$className + " dirty");
             this.setDirty(true);

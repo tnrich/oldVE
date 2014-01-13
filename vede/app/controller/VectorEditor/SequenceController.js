@@ -454,11 +454,11 @@ Ext.define("Vede.controller.VectorEditor.SequenceController", {
                 if(this.safeEditing) {
                     this.safeInsert(pasteSequenceManager, this.caretIndex, true);
                 } else {
-                    this.SequenceManager.insertSequenceManager(pasteSequenceManager, index);
+                    this.SequenceManager.insertSequenceManager(pasteSequenceManager, this.caretIndex);
 
-                    var sequenceLength = sequence.getSequence().toString().length;
+                    var sequenceLength = pasteSequenceManager.getSequence().toString().length;
 
-                    this.changeCaretPosition(index + sequenceLength);
+                    this.changeCaretPosition(this.caretIndex + sequenceLength);
                 }
             }, this);
 
