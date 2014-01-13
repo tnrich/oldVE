@@ -49,12 +49,16 @@ h4 {
 
 .feature-title h2 {
 	color: white;
+    background: rgb(62, 68, 74);
+    z-index: 100;
+    position: relative;
+    margin:0px 138px;
 }
 
 .feature-content {
-	padding: 50px 0px;
+	padding: 35px 0px 70px;
 	border:1px solid rgba(255,255,255,0.2);
-	margin-top: -60px;
+	margin-top: -15px;
 	z-index: 1;
 }
 
