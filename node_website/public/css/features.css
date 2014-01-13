@@ -12,7 +12,7 @@ h2 {
     font-family: 'proxima-nova';
 	font-size: 18px;
     color: #747B86;
-    letter-spacing: 1px;
+    /*letter-spacing: 1px;*/
 	font-weight: 400;
 }
 
@@ -28,8 +28,57 @@ h4 {
 }
 
 #feature-showcase {
-	height: 600px;
+	height: 100%;
 	background: rgb(62, 68, 74);
+	padding: 100px 0px;
+}
+
+.feature-title {
+	margin-top: 100px;
+}
+
+.feature-title h1 {
+	color: white;
+	font-size: 24px;
+    text-shadow: 1px 1px 0px #333;
+    background: rgb(62, 68, 74);
+    z-index: 100;
+    position: relative;
+    margin:0px 200px;
+}
+
+.feature-title h2 {
+	color: white;
+}
+
+.feature-content {
+	padding: 50px 0px;
+	border:1px solid rgba(255,255,255,0.2);
+	margin-top: -60px;
+	z-index: 1;
+}
+
+.feature-list {
+	list-style: none;
+	text-align: center;
+	margin-top: 40px;
+}
+
+.feature-list li {
+	display: inline-block;
+	text-align: center;
+}
+
+.feature-icon img{
+	max-width: 48px;
+	text-align: center;
+}
+
+.feature-desc {
+	color: white;
+	font-size: 14px;
+	text-align: center;
+	margin-top: 10px
 }
 
 .slide-desc {
