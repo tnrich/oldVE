@@ -76,6 +76,12 @@ module.exports = function(app, express){
               secret: 'j5',
               store: new RedisStore({client: redis})
             })); // Sessions managed using cookies
+
+            redis.auth(Opts.redis_pass,function(err,ok){
+                if(!err&&ok=="OK") app.logger.info("REDIS: Online (Remote Server)");
+                else app.logger.error("REDIS: CONNECTION PROBLEMS",err);
+            });
+              
             app.use(app.passport.initialize());
             app.use(app.passport.session());
 
