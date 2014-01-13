@@ -260,6 +260,7 @@ function onDesignAssemblyComplete(newj5Run,data,j5parameters,fileData,user,error
         {
           newj5Run.status = "Error";
           newj5Run.error_list.push({"faultString":error});
+          newj5Run.warnings = [];
         }
       var completed = true;
       newj5Run.save();
