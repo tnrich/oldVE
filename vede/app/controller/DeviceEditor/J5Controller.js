@@ -459,8 +459,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var that = this;
 
         function processPlasmidsFile() {
-            var result = fr.result;
-            var linesArray = result.split(/\n/);
+            var result = fr.result.replace(/,+$/, "");
+            var linesArray = result.split(/[\r\n|\n]+/);
             var headerFields = linesArray[0].split(/,\s*/);
 
             if(headerFields.length != 5 || headerFields[0] != "Plasmid Name" || headerFields[1] != "Alias" || headerFields[2] != "Contents" || headerFields[3] != "Length" || headerFields[4] != "Sequence") {
@@ -510,8 +510,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var that = this;
 
         function processOligosFile() {
-            var result = fr.result;
-            var linesArray = result.split(/\n/);
+            var result = fr.result.replace(/,+$/, "");
+            var linesArray = result.split(/[\r\n|\n]+/);
             var headerFields = linesArray[0].split(/,\s*/);
 
             if(headerFields.length != 5 || (headerFields[0] != "Oligo Name" && headerFields[0] != "Oigo Name") || //accounting for typo in example file
@@ -562,8 +562,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var that = this;
 
         function processSynthesesFile() {
-            var result = fr.result;
-            var linesArray = result.split(/\n/);
+            var result = fr.result.replace(/,+$/, "");
+            var linesArray = result.split(/[\r\n|\n]+/);
             var headerFields = linesArray[0].split(/,\s*/);
 
             if(headerFields.length != 5 || headerFields[0] != "Direct Synthesis Name" || headerFields[1] != "Alias" || headerFields[2] != "Contents" || headerFields[3] != "Length" || headerFields[4] != "Sequence") {
