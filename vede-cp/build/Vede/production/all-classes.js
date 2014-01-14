@@ -56389,6 +56389,7 @@ Ext.define('Ext.layout.container.border.Region', {override: 'Ext.Component', ini
   } else if (buttonId === 'no') 
   {
     performOperation(false);
+  } else {
   }
 }, icon: Ext.MessageBox.ALERT});
 }, jbeiseqJsonToXml: function(json) {
@@ -68777,11 +68778,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return data;
 }, deSerialize: function(data) {
   var self = this;
-  data.features.forEach(function(feature) {
-  var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", feature.inData);
-  newFeature.deSerialize(feature);
-  self.addFeature(newFeature, true);
-});
+  var feature;
+  for (var i = 0; i < data.features.length; i++) 
+    {
+      feature = data.features[i];
+      var newFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", feature.inData);
+      newFeature.deSerialize(feature);
+      self.addFeature(newFeature, true);
+    }
   var newSequence = Ext.create("Teselagen.bio.sequence.common.SymbolList", {});
   newSequence.deSerialize(data.sequence);
   this.setSequence(newSequence);
@@ -69071,13 +69075,12 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
 }}, statics: {defaultNamePrefix: "Part", highestDefaultNameIndex: 0}, hasSequenceFile: false, fields: [{name: "id", type: "long"}, {name: "eugenerule_id", type: "long"}, {name: "sequencefile_id", type: "long", defaultValue: null}, {name: "directionForward", type: "boolean", defaultValue: true}, {name: "name", sortType: function(s) {
   return String(s).toUpperCase();
-}, convert: function(v) {
-  var name;
-  name = v;
-  if (v === undefined || v === null) 
+}, convert: function(name) {
+  if (name === undefined || name === null) 
   {
     name = "";
   }
+  name = name.replace(/[^0-9a-zA-Z-_]/g, "_");
   return name;
 }}, {name: "partSource", type: "string", defaultValue: ""}, {name: "revComp", type: "boolean", defaultValue: false}, {name: "genbankStartBP", type: "int", defaultValue: 0, convert: function(value, record) {
   record.data.genbankStartBP = Number(value);
@@ -69087,7 +69090,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   record.data.endBP = Number(value);
   record.calculateSize(true);
   return value;
-}}, {name: "size", type: "int", defaultValue: 0}, {name: "iconID", type: "string", defaultValue: ""}, {name: "features", type: "string", defaultValue: ""}, {name: "dateCreated", type: "string"}, {name: "dateModified", type: "string"}, {name: "user_id", type: "long"}], validations: [{field: "name", type: "presence"}, {field: "partSource", type: "presence"}, {field: "revComp", type: "presence"}, {field: "genbankStartBP", type: "presence"}, {field: "endBP", type: "presence"}, {field: "iconID", type: "presence"}], associations: [{type: "hasOne", model: "Teselagen.models.SequenceFile", foreignKey: "sequencefile_id", getterName: "getSequenceFileModel", setterName: "setSequenceFileModel"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], constructor: function() {
+}}, {name: "size", type: "int", defaultValue: 0}, {name: "iconID", type: "string", defaultValue: ""}, {name: "features", type: "string", defaultValue: ""}, {name: "dateCreated", type: "string"}, {name: "dateModified", type: "string"}, {name: "user_id", type: "long"}], validations: [{field: "name", type: "presence"}, {field: "name", type: "format", matcher: /[0-9a-zA-Z-_]+/g}, {field: "partSource", type: "presence"}, {field: "revComp", type: "presence"}, {field: "genbankStartBP", type: "presence"}, {field: "endBP", type: "presence"}, {field: "iconID", type: "presence"}], associations: [{type: "hasOne", model: "Teselagen.models.SequenceFile", foreignKey: "sequencefile_id", getterName: "getSequenceFileModel", setterName: "setSequenceFileModel"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], constructor: function() {
   this.callParent(arguments);
 }, active: false, setActive: function(value) {
   this.active = value;
@@ -70635,8 +70638,20 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   metadata.tdAttr = 'data-qtip="' + value + '"';
   if (record.cells().getRange().length > 0) 
   {
-    metadata.tdAttr = 'data-qtip="' + record.cells().getRange()[0].get("fas") + '"';
-    return record.cells().getRange()[0].get("fas");
+    for (var i = 0; i < record.cells().getRange().length; i++) 
+      {
+        if (record.cells().getRange()[i].get("fas")) 
+        {
+          var fas = record.cells().getRange()[i].get("fas");
+          if (fas != "None") 
+          {
+            metadata.tdAttr = 'data-qtip="' + fas + '"';
+            return fas;
+          }
+        }
+      }
+    metadata.tdAttr = 'data-qtip="' + fas + '"';
+    return fas;
   } else {
     metadata.tdAttr = 'data-qtip="' + value + '"';
     return value;
@@ -70882,7 +70897,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     {
       Teselagen.manager.ProjectManager.deleteProject(selectedProject);
       toastr.options.onclick = null;
-      toastr.info("Design '" + projectName + "' Deleted");
+      toastr.info("Project '" + projectName + "' Deleted");
     }
   }
   Ext.Msg.show({title: "Are you sure you want to delete this project?", msg: "WARNING: This will remove project '" + projectName + "'. This action is not undoable!", cls: "messageBox", buttons: Ext.Msg.OKCANCEL, fn: DeleteProjectBtn, icon: Ext.Msg.QUESTION});
@@ -71332,11 +71347,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   console.log('SOCKET.IO : Connected');
   socket.emit('set nickname', Teselagen.manager.ProjectManager.currentUser.get('username'));
   socket.on('j5completed', function(data) {
-  console.log(data);
   var startDate = new Date(data.date);
   var endDate = new Date(data.endDate);
   var elapsed = endDate - startDate;
-  console.log(startDate, endDate, elapsed);
+  var completedRunIndex = Teselagen.manager.ProjectManager.currentTasks.find('id', data.id);
+  if (completedRunIndex !== -1) 
+  {
+    Teselagen.manager.ProjectManager.currentTasks.getAt(completedRunIndex).set('status', 'Completed');
+  }
   elapsed = Math.round(elapsed / 1000);
   elapsed = self.elapsedDate(elapsed);
   toastr.options.onclick = function() {
@@ -71678,6 +71696,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   val = val.substring(1, val.length - 1);
   return '<div style="white-space:normal !important;">' + val + '</div>';
 }}], viewConfig: {enableTextSelection: true}}, {xtype: 'gridpanel', name: 'errors', cls: 'errorsGrid', hidden: true, margin: '10 10 20 10', title: 'Errors', minHeight: 80, layout: 'fit', hideHeaders: true, columns: [{xtype: 'gridcolumn', dataIndex: 'faultString', autoHeight: true, forceFit: true, flex: 1, renderer: function(val) {
+  return '<div style="white-space:normal !important;">' + val + '.</div>';
   return val;
 }}], viewConfig: {enableTextSelection: true}, tools: [{type: 'help', tooltip: 'Get Help', handler: function(event, toolEl, panel) {
 }}]}, {xtype: 'gridpanel', name: 'assemblies', margin: '10 10 20 10', title: 'Output Assembled Constructs', overflowY: 'auto', layout: 'fit', forceFit: true, columns: [{xtype: 'gridcolumn', dataIndex: 'name', width: 120, text: 'Name', renderer: function(val, metadata) {
@@ -75439,6 +75458,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
               var endBP = this.getTagText(part, "stopBP");
               var revComp = (this.getTagText(part, "revComp") === "true");
               newPart = Ext.create("Teselagen.models.Part", {name: name, genbankStartBP: startBP, endBP: endBP, revComp: revComp});
+              var partIDs = Object.keys(fullPartsAssocArray);
               getSequenceByID(hash, function(sequence) {
   var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
   if (ext) 
@@ -75449,7 +75469,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     return err;
   }
-  var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: gb.toString(), sequenceFileFormat: "GENBANK", sequenceFileName: sequence.fileName, name: sequence.name});
+  var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: gb.toString(), sequenceFileFormat: "GENBANK", sequenceFileName: sequence.get('sequenceFileName'), name: sequence.get('name')});
   newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
   newPart.setSequenceFile(newSequence);
   var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: fas || "None"});
@@ -75539,6 +75559,20 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   for (var key in fullPartsAssocArray) 
     {
       partsArray.push(fullPartsAssocArray[key]);
+    }
+  var part;
+  var comparePart;
+  for (var i = 0; i < partsArray.length; i++) 
+    {
+      part = partsArray[i];
+      for (var j = i + 1; j < partsArray.length; j++) 
+        {
+          comparePart = partsArray[j];
+          if (comparePart.getSequenceFile().get('hash') === part.getSequenceFile().get('hash')) 
+          {
+            comparePart.setSequenceFile(part.getSequenceFile());
+          }
+        }
     }
   this.generateDesign(binsArray, partsArray, rulesArray, cb);
 }, parseEugeneRules: function(content, filename, design) {
@@ -75918,7 +75952,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 }, update: function(progress, msg) {
   msgBox.updateProgress(progress / 100, progress + "% completed", msg);
 }};
-}, analizeDesign: function(design, cb) {
+}, analyzeDesign: function(design, cb) {
   function isValidObjectID(str) {
     if (!str) 
     return false;
@@ -75930,7 +75964,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       return false;
     }
   }
-  console.log("Analizing design...");
+  console.log("Analyzing design...");
   var warnings = [];
   design.bins().each(function(bin) {
   bin.cells().each(function(cell) {
@@ -75950,6 +75984,11 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var sequence = part.getSequenceFile();
   if (sequence) 
   {
+    if (!sequence.get('serialize')) 
+    {
+      sequence.processSequence(function() {
+});
+    }
     var sequenceKey = sequences[sequence.data.serialize.inData.name];
     if (sequenceKey && sequenceKey.data.id != sequence.data.id) 
     {
@@ -75959,9 +75998,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     }
   }
 });
-  setTimeout(function() {
   if (warnings.length === 0) 
-  console.log("Everything is ok"); else {
+  {
+    console.log("Everything is ok");
+  } else {
     console.log(warnings);
     var warningsWindow = Ext.create('Vede.view.de.WarningsWindow').show();
     errorStore = Ext.create("Ext.data.Store", {fields: [{name: 'messages', type: 'auto'}]});
@@ -75969,7 +76009,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     warningsWindow.down('gridpanel').reconfigure(errorStore);
   }
   cb();
-}, 2000);
 }, saveDEProject: function(cb) {
   var self = this;
   var gridManager = Teselagen.manager.GridManager;
@@ -75983,8 +76022,12 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (associatedSequence) 
   {
     var lastSequenceId = associatedSequence.get("id");
-    associatedSequence.set("dateCreated", new Date());
-    associatedSequence.set("dateModified", new Date());
+    associatedSequence.set({dateCreated: new Date(), dateModified: new Date()});
+    if (!associatedSequence.get('serialize')) 
+    {
+      associatedSequence.processSequence(function() {
+});
+    }
     if (Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId) 
     {
       associatedSequence.save({callback: function(sequencefile) {
@@ -76032,7 +76075,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }});
 };
-  self.analizeDesign(design, function() {
+  self.analyzeDesign(design, function() {
   var countParts = 0;
   design.bins().each(function(bin) {
   bin.cells().each(function(cell) {
@@ -76065,9 +76108,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
         sequenceManager = sequenceFile.getSequenceManager();
         if (sequenceManager) 
         {
-          part.set("features", sequenceManager.featuresByRangeText(part.get("genbankStartBP"), part.get("endBP")).toString());
+          part.set({features: sequenceManager.featuresByRangeText(part.get("genbankStartBP"), part.get("endBP")).toString(), partSource: sequenceFile.get("name")});
+        } else {
+          part.set("partSource", sequenceFile.get("name"));
         }
-        part.set("partSource", sequenceFile.get("name"));
       }
       saveAssociatedSequence(part, function() {
   if (countParts === 1) 
@@ -76244,7 +76288,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     $("#" + field + " .status-note").removeClass("status-note-failed");
   }
   var warnings = self.activeJ5Run.raw.warnings;
-  var errors = self.activeJ5Run.raw.error_list[0];
+  var errors = self.activeJ5Run.raw.error_list;
   var warningsStore, errorsStore;
   if (self.activeJ5Run.getJ5Results().raw.processedData) 
   {
@@ -76286,9 +76330,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   if (errors) 
   {
-    errorsStore = Ext.create("Teselagen.store.ErrorsStore", {model: "Teselagen.models.j5Output.Error", data: errors.error});
+    errorsStore = Ext.create("Teselagen.store.ErrorsStore", {model: "Teselagen.models.j5Output.Error", data: errors});
   }
-  if ((warnings.length > 0) === true) 
+  if (warnings.length > 0) 
   {
     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").show();
     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").reconfigure(warningsStore);
@@ -76297,7 +76341,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     warnings = null;
     warningsStore = null;
   }
-  if (errors) 
+  if (errors.length > 0) 
   {
     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").show();
     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").reconfigure(errorsStore);
@@ -78023,8 +78067,15 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.GridManager.renderGrid(newTab.model);
     if (newTab.options) 
     {
-      this.grid.el.setScrollLeft(newTab.options.scrollLeft);
-      this.grid.el.setScrollTop(newTab.options.scrollTop);
+      var scroll = this.grid.el.getScroll();
+      if (scroll.left !== newTab.options.scrollLeft) 
+      {
+        this.grid.el.setScrollLeft(newTab.options.scrollLeft);
+      }
+      if (scroll.top !== newTab.options.scrollTop) 
+      {
+        this.grid.el.setScrollTop(newTab.options.scrollTop);
+      }
       if (newTab.options.selection) 
       {
         if (newTab.options.selection.y !== undefined) 
@@ -78691,6 +78742,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     var xIndex = this.selectedBinIndex;
     var yIndex = this.activeProject.bins().getAt(this.selectedBinIndex).cells().indexOf(this.selectedCell);
     Teselagen.manager.GridCommandPatternManager.addCommand({type: "PART", data: {type: "FAS", x: xIndex, y: yIndex, oldFas: oldFas, newFas: newStrategy}});
+    this.renderCollectionInfo();
   }
 }, onPlasmidGeometryChange: function(radioGroup, newValue) {
   this.activeProject.set("isCircular", newValue);
@@ -79989,7 +80041,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       Ext.MessageBox.prompt('Enter New Preset Name', message, function(button, value) {
   if (button === "ok") 
   {
-    Ext.Ajax.request({method: 'POST', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {presetName: value, j5parameters: JSON.stringify(parameters)}, success: function(response) {
+    var sameNameIndex = currentTab.presetsStore.find('presetName', value);
+    if (sameNameIndex < 0) 
+    {
+      Ext.Ajax.request({method: 'POST', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {presetName: value, j5parameters: JSON.stringify(parameters)}, success: function(response) {
   Ext.MessageBox.alert('Success', 'Preset Saved', function() {
   Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, value);
 });
@@ -79998,6 +80053,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     cb();
   }
 }});
+    } else {
+      Ext.MessageBox.alert('Error', 'A preset already exists with that name. Please enter another.');
+    }
   } else {
     if (typeof cb === "function") 
     {
@@ -80014,7 +80072,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   } else if (presetChanged) 
   {
     Ext.Ajax.request({method: 'PUT', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {id: selectedPreset.data.id, j5parameters: JSON.stringify(parameters)}, success: function(response) {
-  Ext.MessageBox.alert('Success', 'Preset updated', function() {
+  Ext.MessageBox.alert('Success', 'Preset Updated', function() {
   Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, selectedPreset.get('presetName'));
   if (typeof cb === "function") 
   {
@@ -80041,7 +80099,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (btn === "yes") 
   {
     Ext.Ajax.request({method: 'DELETE', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {id: selectedPreset.data.id}, success: function(response) {
-  Ext.MessageBox.alert('Success', 'Preset deleted', function() {
+  self.loadPresetsSelector();
+  self.j5ParamsWindow.down('combobox[cls="inWindowPresetSelector"]').select('Default');
+  Ext.MessageBox.alert('Success', 'Preset Deleted', function() {
   Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, "");
 });
 }});
@@ -80060,11 +80120,17 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 }, this);
   function performCreation(text) {
-    Ext.Ajax.request({method: 'POST', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {presetName: text, j5parameters: JSON.stringify(parameters)}, success: function(response) {
+    var sameNameIndex = currentTab.presetsStore.find('presetName', text);
+    if (sameNameIndex < 0) 
+    {
+      Ext.Ajax.request({method: 'POST', url: Teselagen.manager.SessionManager.buildUrl("presets", ''), params: {presetName: text, j5parameters: JSON.stringify(parameters)}, success: function(response) {
   Ext.MessageBox.alert('Success', 'Preset Saved', function() {
   Vede.application.fireEvent(self.CommonEvent.LOAD_PRESETS, text);
 });
 }});
+    } else {
+      Ext.MessageBox.alert('Error', 'A preset already exists with that name. Please enter another.');
+    }
   }
   var promptName = function() {
   Ext.MessageBox.prompt("Name", "Please enter a name for this preset:", function(btn, text) {
@@ -87868,9 +87934,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
   this.detailPanel.show();
   this.detailPanelFill.hide();
-  for (var i = 0; i < this.tabPanel.query("menuitem").length; i++) 
+  var menuItems = this.tabPanel.query("menuitem");
+  for (var i = 0; i < menuItems.length; i++) 
     {
-      this.tabPanel.query("menuitem")[i].removeCls("j5-menuitem-active");
+      menuItems[i].removeCls("j5-menuitem-active");
     }
   item.addCls("j5-menuitem-active");
   this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
@@ -87893,55 +87960,66 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var j5parameters = Ext.create("Teselagen.models.J5Parameters");
   j5parameters.loadValues(this.activeJ5Run.getJ5Input().getJ5Parameters().raw);
   var J5parametersValues = j5parameters.getParametersAsStore();
-  this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
-  this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
-  this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
-  this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
-  this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
+  var warningsGrid = this.tabPanel.down('gridpanel[name="warnings"]');
+  var errorsGrid = this.tabPanel.down('gridpanel[name="errors"]');
+  var buildButton = this.tabPanel.down("button[cls='buildBtn']");
+  var j5RunInfo = this.tabPanel.down("form[cls='j5RunInfo']");
+  var j5RunInfoForm = j5RunInfo.getForm();
+  j5RunInfoForm.findField('j5AssemblyType').setValue(assemblyMethod);
+  j5RunInfoForm.findField('j5RunStatus').setValue(status);
+  j5RunInfoForm.findField('j5RunStart').setValue(startDate);
+  if (this.activeJ5Run.get('endDate').toJSON()) 
+  {
+    j5RunInfoForm.findField('j5RunEnd').setValue(endDate);
+    j5RunInfoForm.findField('j5RunElapsed').setValue(elapsed);
+  } else {
+    j5RunInfoForm.findField('j5RunEnd').setValue('N/A');
+    j5RunInfoForm.findField('j5RunElapsed').setValue('N/A');
+  }
   if (status == "Completed") 
   {
-    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    this.tabPanel.down('button[cls="buildBtn"]').enable();
-    this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
+    var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+    buildButton.enable();
+    buildButton.removeCls('btnDisabled');
     $("#" + field + " .status-note").removeClass("status-note-warning");
     $("#" + field + " .status-note").removeClass("status-note-failed");
     $("#" + field + " .status-note").addClass("status-note-completed");
   } else if (status == "Completed with warnings") 
   {
-    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    this.tabPanel.down('button[cls="buildBtn"]').enable();
-    this.tabPanel.down('button[cls="buildBtn"]').removeCls('btnDisabled');
+    var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+    buildButton.enable();
+    buildButton.removeCls('btnDisabled');
     $("#" + field + " .status-note").removeClass("status-note-completed");
     $("#" + field + " .status-note").removeClass("status-note-failed");
     $("#" + field + " .status-note").addClass("status-note-warning");
     ;
   } else if (status == "Error") 
   {
-    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    this.tabPanel.down('button[cls="buildBtn"]').disable();
-    this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+    var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+    buildButton.disable();
+    buildButton.addClass('btnDisabled');
     $("#" + field + " .status-note").removeClass("status-note-completed");
     $("#" + field + " .status-note").removeClass("status-note-warning");
     $("#" + field + " .status-note").addClass("status-note-failed");
   } else if (status == "Canceled") 
   {
-    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    this.tabPanel.down('button[cls="buildBtn"]').disable();
-    this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+    var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+    buildButton.disable();
+    buildButton.addClass('btnDisabled');
     $("#" + field + " .status-note").removeClass("status-note-completed");
     $("#" + field + " .status-note").removeClass("status-note-warning");
     $("#" + field + " .status-note").addClass("status-note-failed");
   } else if (status == "In progress") 
   {
-    var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
-    this.tabPanel.down('button[cls="buildBtn"]').disable();
-    this.tabPanel.down('button[cls="buildBtn"]').addClass('btnDisabled');
+    var field = j5RunInfo.query('field[cls="j5RunStatusField"]')[0].getId();
+    buildButton.disable();
+    buildButton.addClass('btnDisabled');
     $("#" + field + " .status-note").removeClass("status-note-completed");
     $("#" + field + " .status-note").removeClass("status-note-warning");
     $("#" + field + " .status-note").removeClass("status-note-failed");
   }
   var warnings = this.activeJ5Run.raw.warnings;
-  var errors = this.activeJ5Run.raw.error_list[0];
+  var errors = this.activeJ5Run.raw.error_list;
   if (this.activeJ5Run.getJ5Results().raw.processedData) 
   {
     if (this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) 
@@ -87983,23 +88061,21 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   if (errors) 
   {
-    var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {model: 'Teselagen.models.j5Output.Error', data: errors.error});
+    var errorsStore = Ext.create('Teselagen.store.ErrorsStore', {model: 'Teselagen.models.j5Output.Error', data: errors});
   }
-  if ((warnings.length > 0) == true) 
+  if (warnings.length > 0) 
   {
-    this.tabPanel.down('gridpanel[name="warnings"]').show();
-    this.tabPanel.down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+    warningsGrid.show().reconfigure(warningsStore);
   } else {
-    this.tabPanel.down('gridpanel[name="warnings"]').hide();
+    warningsGrid.hide();
     warnings = null;
     warningsStore = null;
   }
-  if (errors) 
+  if (errors.length > 0) 
   {
-    this.tabPanel.down('gridpanel[name="errors"]').show();
-    this.tabPanel.down('gridpanel[name="errors"]').reconfigure(errorsStore);
+    errorsGrid.show().reconfigure(errorsStore);
   } else {
-    this.tabPanel.down('gridpanel[name="errors"]').hide();
+    errorsGrid.hide();
     errors = null;
     errorsStore = null;
   }
