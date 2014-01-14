@@ -507,6 +507,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
+        var that = this;
+
         function processOligosFile() {
             var result = fr.result;
             var linesArray = result.split(/\n/);
@@ -517,9 +519,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 alert("Invalid headers in master oligos list file.\n" + "Please check the formatting of the file.");
 
-                this.oligosListText = null;
+                that.oligosListText = null;
             } else {
-                this.oligosListText = result;
+                that.oligosListText = result;
             }
         }
 
@@ -557,6 +559,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
+        var that = this;
+
         function processSynthesesFile() {
             var result = fr.result;
             var linesArray = result.split(/\n/);
@@ -566,9 +570,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
                 alert("Invalid headers in master syntheses list file.\n" + "Please check the formatting of the file.");
 
-                this.directSynthesesListText = null;
+                that.directSynthesesListText = null;
             } else {
-                this.directSynthesesListText = result;
+                that.directSynthesesListText = result;
             }
         }
 
