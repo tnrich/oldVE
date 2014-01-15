@@ -1037,28 +1037,33 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
             currentBin = lines.splice(0,1)[0];
         }
 
-        //Direct Synthesis
-        lines.splice(0,1)[0]; //Header
-        lines.splice(0,1)[0]; //Columns
+        nextOpHeader = lines.splice(0,1)[0]; //Header
 
-        obj.directSynthesis = [];
-        var currentDirect = lines.splice(0,1)[0];
-        while(currentDirect!== "")
+        if(nextOpHeader=="\"Direct Synthesis\"")
         {
-            splitted = currentDirect.split(',');
-            // "ID Number",Name,Length,Cost,Sequence
-            obj.directSynthesis.push({
-                id: splitted[0],
-                name: splitted[1],
-                length: splitted[2],
-                cost: splitted[5],
-                sequence: splitted[6]
-            });
-            currentDirect = lines.splice(0,1)[0];
-        }
+            //Direct Synthesis
+            //lines.splice(0,1)[0]; //Header
+            lines.splice(0,1)[0]; //Columns
 
+            obj.directSynthesis = [];
+            var currentDirect = lines.splice(0,1)[0];
+            while(currentDirect!== "")
+            {
+                splitted = currentDirect.split(',');
+                // "ID Number",Name,Length,Cost,Sequence
+                obj.directSynthesis.push({
+                    id: splitted[0],
+                    name: splitted[1],
+                    length: splitted[2],
+                    cost: splitted[5],
+                    sequence: splitted[6]
+                });
+                currentDirect = lines.splice(0,1)[0];
+            }
+        }
+        
         //Oligo Synthesis
-        lines.splice(0,1)[0]; //Header
+        //lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Columns
 
         obj.oligoSynthesis = [];
