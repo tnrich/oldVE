@@ -174,7 +174,9 @@ Ext.define("Vede.controller.J5ReportController", {
         if(this.activeJ5Run.getJ5Results().raw.processedData) {
             if(this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) {
                 var combinationPieces = this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
-                for(var i = 0; i<assemblies.getCount(); i++) {
+                if(combinationPieces && combinationPieces.length) count = combinationPieces.length;
+                else count = assemblies.getCount();
+                for(var i = 0; i<count; i++) {
                     var combinationParts = [];
                     for (var k =0; k<combinationPieces[i].partsContained.length; k++) {
                         combinationParts.push(combinationPieces[i].partsContained[k].parts);
@@ -195,7 +197,9 @@ Ext.define("Vede.controller.J5ReportController", {
             if(this.activeJ5Run.getJ5Results().raw.processedData.combinationParts) {
                 var comboParts = this.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
                 var comboPartNames=[];
-                for(var i = 0; i<assemblies.getCount(); i++) {
+                if(combinationPieces && combinationPieces.length) count = combinationPieces.length;
+                else count = assemblies.getCount();
+                for(var i = 0; i<count; i++) {
                     assemblies.getAt(i).set("parts", comboParts[i].parts);
                 }
             }
