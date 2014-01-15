@@ -7,7 +7,9 @@ var parser = new xml2js.Parser();
 var Serializer = require("./Serializer");
 var Deserializer = require('./Deserializer');
 
-module.exports = function() {
+module.exports = function(app) {
+
+console.log("Using j5 debug instance");
 
 function quicklog(s) {
   var logpath = "/tmp/quick.log";
@@ -50,40 +52,21 @@ return {
 
   methodCall: function(methodName,data,cb,cb2){
 
-      var xml = Serializer.serializeMethodCall(methodName, data);
+      console.log("Reading output from j5output.xml");
 
+      var xml = Serializer.serializeMethodCall(methodName, data);
       var deserializer = new Deserializer();
 
-      var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
-      //var scriptPath = "/Users/rpavez/bin/downstream.pl";
-      var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
-      console.log(methodName + " started with pid: "+newChild.pid);
+      var filePath = require('path').resolve(__dirname,'../','../','j5output.xml');
 
-      if(typeof(cb2)==="function") cb2(newChild.pid);
+      var readStream = app.fs.createReadStream(filePath);
 
-      UUIDLog(xml,newChild.pid,"request");
-
-      newChild.stdin.setEncoding = 'utf-8';
-      newChild.stdin.write(xml+"\n");
-
-      newChild.stderr.on('data', function (stoutData) {
-        //process.stdout.write(stoutData);
-        //UUIDLog(stoutData,newChild.pid,"error");
+      deserializer.deserializeMethodResponse(readStream, function(err,data){
+        return cb(false,data);
       });
 
-      newChild.stdout.on('data', function (stoutData) {
-        //process.stdout.write(stoutData);
-        UUIDLog(stoutData,newChild.pid,"stdout");
-      });
-
-      newChild.on('exit', function (code,signal) {
-          console.log("Process finished with code ",code," and signal ",signal);
-      });
-
-  		deserializer.deserializeMethodResponse(newChild.stdout, function(err,data){
-  			return cb(false,data);
-  		});
   }
+
 };
 
 };

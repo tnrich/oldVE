@@ -1018,6 +1018,8 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
             currentPart = lines.splice(0,1)[0];
         }
 
+        lines.splice(0,1)[0] //Empty space
+
         //Target Bins
         lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Columns
@@ -1033,6 +1035,26 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
                 name: splittedBin[1]
             });
             currentBin = lines.splice(0,1)[0];
+        }
+
+        //Direct Synthesis
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.directSynthesis = [];
+        var currentDirect = lines.splice(0,1)[0];
+        while(currentDirect!== "")
+        {
+            splitted = currentDirect.split(',');
+            // "ID Number",Name,Length,Cost,Sequence
+            obj.directSynthesis.push({
+                id: splitted[0],
+                name: splitted[1],
+                length: splitted[2],
+                cost: splitted[5],
+                sequence: splitted[6]
+            });
+            currentDirect = lines.splice(0,1)[0];
         }
 
         //Oligo Synthesis

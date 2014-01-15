@@ -26,6 +26,9 @@ if(app.get("env") === "production" || app.program.localj5) {
   console.log("Using local perl j5")
   app.j5client = require("./j5communication")();
 };
+
+if(app.program.j5debug) app.j5client = require("./j5debug")(app);
+
 /**
  * Write to quick.log
  */
