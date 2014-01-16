@@ -810,12 +810,11 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         }
 
         nextLine = lines.splice(0,1)[0];
-        if(nextLine.match(/design:/))
+        while(nextLine.match(/design:/))
         {
             obj.warnings.push({"message": nextLine});
-            lines.splice(0,1)[0];
+            nextLine = lines.splice(0,1)[0];
         }
-        else lines.splice(0,0,nextLine)[0];
 
         //Target Bins
         lines.splice(0,1)[0]; //Header
@@ -834,8 +833,32 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
             currentBin = lines.splice(0,1)[0];
         }
 
+        nextOpHeader = lines.splice(0,1)[0]; //Header
+
+        if(nextOpHeader=="\"Direct Synthesis\"")
+        {
+            //Direct Synthesis
+            //lines.splice(0,1)[0]; //Header
+            lines.splice(0,1)[0]; //Columns
+
+            obj.directSynthesis = [];
+            var currentDirect = lines.splice(0,1)[0];
+            while(currentDirect!== "")
+            {
+                splitted = currentDirect.split(',');
+                // "ID Number",Name,Length,Cost,Sequence
+                obj.directSynthesis.push({
+                    id: splitted[0],
+                    name: splitted[1],
+                    length: splitted[2],
+                    cost: splitted[5],
+                    sequence: splitted[6]
+                });
+                currentDirect = lines.splice(0,1)[0];
+            }
+        }
+
         //Oligo Synthesis
-        lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Columns
 
         obj.oligoSynthesis = [];
