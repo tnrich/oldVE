@@ -259,7 +259,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         labelSeparator: ' ',
                         labelWidth: 270,
                         queryMode: 'local',
-                        store: ['Genbank', 'FASTA', 'jbei-seq', 'SBOLXML'],
+                        store: ['Genbank', 'FASTA', 'SBOLXML'],
                         value: 'Genbank'
                     }]
                 }, {
