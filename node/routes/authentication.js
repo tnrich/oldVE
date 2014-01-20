@@ -172,7 +172,7 @@ module.exports = function(app) {
         if(app.get("env") === "production") {
             html = html.replace("<activation>", '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">');
         } else {
-            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
+            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/users/activate/'+activationCode+'">');
         }
       var mailOptions = {
         from: "Teselagen ✔ <teselagen.testing@gmail.com>",
