@@ -139,8 +139,6 @@ module.exports = function(app) {
 
                             part.size = size;
 
-                            console.log(part.name + ': ' + startBP + ' - ' + endBP + ', ' + size + ' bp');
-
                             Part.generateDefinitionHash(null, part, function(hash) {
                                 part.definitionHash = hash;
                                 return part.save(done);
