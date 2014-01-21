@@ -305,11 +305,11 @@ Ext.define("Teselagen.models.Part", {
                 return false;
             }
 
-            var startBP = record.get("genbankStartBP");
-            var endBP = record.get("endBP");
+            var startBP = Number(record.get("genbankStartBP"));
+            var endBP = Number(record.get("endBP"));
 
             if(startBP>endBP) {
-                var tSize = record.getSequenceFile().getLength();
+                var tSize = Number(record.getSequenceFile().getLength());
                 size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
             } else if (startBP==endBP) {
                 size = 1;

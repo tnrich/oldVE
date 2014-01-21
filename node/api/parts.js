@@ -107,6 +107,52 @@ module.exports = function(app) {
             });
         },
 
+        updateAllPartSizes: function(req, res) {
+            var Sequence = app.db.model('sequence');
+
+            Part.find().exec(function(err, parts) {
+                if(err) {
+                    return res.send(err);
+                } else {
+                    async.forEach(parts, function(part, done) {
+                        var startBP = Number(part.genbankStartBP);
+                        var endBP = Number(part.endBP);
+                        var size;
+
+                        Sequence.findById(part.sequencefile_id).exec(function(err, sequence) {
+                            if(err) {
+                                return done(err);
+                            }
+
+                            if(startBP > endBP) {
+                                var tSize = Number(sequence.size);
+                                size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+                            } else if (startBP==endBP) {
+                                size = 1;
+                            } else {
+                                size = (Math.abs(startBP - endBP) + 1);
+                            }
+
+                            part.size = size;
+
+                            console.log(part.name + ': ' + startBP + ' - ' + endBP + ', ' + size + ' bp');
+
+                            Part.generateDefinitionHash(null, part, function(hash) {
+                                part.definitionHash = hash;
+                                return part.save(done);
+                            });
+                        });
+                    }, function(err) {
+                        if(err) {
+                            return res.send(err);
+                        } else {
+                            return res.send('yay');
+                        }
+                    });
+                }
+            });
+        },
+
         /**
          * PUT Parts
          * @memberof module:./routes/api
