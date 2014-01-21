@@ -125,8 +125,12 @@ module.exports = function(app) {
                             }
 
                             if(startBP > endBP) {
-                                var tSize = Number(sequence.size);
-                                size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+                                if(sequence) {
+                                    var tSize = Number(sequence.size);
+                                    size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+                                } else {
+                                    return done();
+                                }
                             } else if (startBP==endBP) {
                                 size = 1;
                             } else {
