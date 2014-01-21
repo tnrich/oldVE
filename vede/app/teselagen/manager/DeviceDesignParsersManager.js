@@ -135,7 +135,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     parseJSON: function (input,cb) {
         var jsonDoc = JSON.parse(input);
         jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
-
         var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
         var parts = jsonDoc["de:design"]["de:partVOs"]["de:partVO"];
         var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
@@ -144,6 +143,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var partsArray = [];
         var rulesArray = [];
         var fullPartsAssocArray = {};
+        var fullPartsAssocArrayUUID = {};
 
         function getSequenceByHash(targetHash, part, cb) {
             // Find sequence by hash
@@ -160,13 +160,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         // Parts Processing
         for (var i=0; i<parts.length; i++) {
             var part = parts[i];
-            var partId;
-            if (part["de:parts"]["de:part"] instanceof Array) {
-                // Cover the special cases in which some structures parts are inside subnodes that are array
-                partId = part["de:parts"]["de:part"][0].id;
-            } else {
-                partId = part["de:parts"]["de:part"].id;
-            }
+            var partId = part.id;
 
             getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
                 var newPart = Ext.create("Teselagen.models.Part", {
@@ -177,11 +171,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     endBP: part["de:stopBP"],
                     revComp: part["de:revComp"],
                 });
-                newPart.fas = part["de:parts"]["de:part"]["de:fas"] || "None";
+                newPart.fas = part["de:parts"][0].fas || "None";
                 newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
 
                 var partName;
-                partName = part.sequence.name;
+                partName = part["de:name"];
                 if(part.sequence["de:fileName"]) {partName = part.sequence["de:fileName"].replace(".gb","");}
                 if(newPart.get("partSource")===""&&!newPart.get("partSource")) {newPart.set("partSource",partName);}
                 // Sequence processing
@@ -198,6 +192,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 newPart.setSequenceFile(newSequence);
 
                 fullPartsAssocArray[partId] = newPart;
+                fullPartsAssocArrayUUID[part["de:parts"][0].id] = newPart;
                 partsArray.push(newPart);
             });
 
@@ -235,9 +230,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var cellFases;
             cellFases = bin["de:binItems"]["de:fas"];
 
-            var temCellsArray = [];
+            var tempCellsArray = [];
             for (var j=0; j<binParts.length; j++) {
-                var assocPart = fullPartsAssocArray[binParts[j]];
+                var assocPart = fullPartsAssocArrayUUID[binParts[j]];
                 var cellFas;
                 if(isNewFasScheme) cellFas = cellFases[j];
                 else cellFas = assocPart ? assocPart.fas : "None";
@@ -248,11 +243,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 });
                 newCell.setPart(assocPart);
                 newCell.setJ5Bin(newBin);
-                temCellsArray.push(newCell);
+                tempCellsArray.push(newCell);
             }
 
             newBin.cells().removeAll();
-            newBin.cells().insert(0, temCellsArray);
+            newBin.cells().insert(0, tempCellsArray);
             binsArray.push(newBin);
         }
 
@@ -875,7 +870,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
                 for(var oldName in existingSuffixes) {
                     var rule = ruleDuplNameMap[oldName];
-                    //debugger;
                     var newName = oldName+(parseInt(existingSuffixes[oldName])+1);
                     var rule2 = existingRule.get("operand2isNumber") ? existingRule.get("operand2Number") : existingRule.getOperand2().data.name;
                     conflictRules.push({"originalRuleLine":"There is a conflict between the existing rule "+existingRule.data.name +" ( "+existingRule.getOperand1().data.name+" "+existingRule.data.compositionalOperator+" "+rule2+" )"+" and the rule to be imported, "+rule.data.originalRuleLine +" Renaming the rule to be imported: "+newName});
@@ -948,7 +942,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     },
 
     backgroundSequenceProcessing: function(parts){
-        // debugger;
         var processFlag = true;
         toastr.options.onclick = function(){
             processFlag = false;

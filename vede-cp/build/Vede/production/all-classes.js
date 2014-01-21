@@ -58365,11 +58365,7 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   if (!grid.store.proxy.activeRequest) 
   grid.store.load();
 }, 200);
-}}}, {xtype: 'container', items: [{xtype: 'button', text: 'Codon Juggle', listeners: {click: function() {
-  Ext.create('Vede.view.tools.CodonJuggle').show();
-}}, width: 105}, {xtype: 'button', text: 'Reverse Translate', listeners: {click: function() {
-  Ext.create('Vede.view.tools.ReverseTranslate').show();
-}}, width: 115}], margin: '0 10 10 10'}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
+}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
   if (val) 
   {
     val = val.sequence.alphabet.toUpperCase();
@@ -88668,71 +88664,6 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Ext.applyIf(me, {items: [{xtype: 'numberfield', cls: 'maxDeltaTemperatureAdjacentZonesValue', padding: 3, fieldLabel: 'Max Delta Temp Adjacent Zones (5)', labelSeparator: ' ', labelWidth: 310, value: 5, maxValue: 1000, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'maxDeltaTemperatureReactionOptimumZoneAcceptableValue', padding: 3, fieldLabel: 'Max Delta Temp Reaction Optimum Zone Acceptable (5)', labelSeparator: ' ', labelWidth: 310, value: 5, step: 0.1}, {xtype: 'numberfield', cls: 'maxMcStepsPerZoneValue', padding: 3, fieldLabel: 'Max MC Steps Per Zone (1000)', labelSeparator: ' ', labelWidth: 310, value: 1000, decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'maxWellVolumeMultiwellPlateValue', padding: 3, fieldLabel: 'Max Well Volume Multi-well Plate (100)', labelSeparator: ' ', labelWidth: 310, value: 100, minValue: 0}, {xtype: 'numberfield', cls: 'mcTemperatureFinalValue', padding: 3, fieldLabel: 'MC Temp Final (0.0001)', labelSeparator: ' ', labelWidth: 310, value: 1.0E-4, decimalPrecision: 6, minValue: 0, step: 1.0E-5}, {xtype: 'numberfield', cls: 'mcTemperatureInitialValue', padding: 3, fieldLabel: 'MC Temp Initial (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'minPipettingVolumeValue', padding: 3, fieldLabel: 'Min Pipetting Volume (5)', labelSeparator: ' ', labelWidth: 310, value: 5, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'nColumnsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Columns in Multi-well Plate (12)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'nRowsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Rows in Multi-well Plate (8)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'trialDeltaTemperatureValue', padding: 3, fieldLabel: 'Trial Delta Temp (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'wellsPerThermocyclerZoneValue', padding: 3, fieldLabel: 'Wells Per Thermocycler Zone (16)', labelSeparator: ' ', labelWidth: 310, value: 16, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'numberfield', cls: 'zonesPerThermocyclerBlockValue', padding: 3, fieldLabel: 'Zones Per Thermocycler Block (6)', labelSeparator: ' ', labelWidth: 310, value: 6, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'container', height: 80, layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'automationParamsCancelBtn', x: 300, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'automationParamsOKBtn', x: 390, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>OK</b>'}, {xtype: 'button', cls: 'automationParamsResetBtn', x: 0, y: 50, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Reset To Defaults</b>'}]}]});
   me.callParent(arguments);
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5AutomationParameters'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.tools.CodonJuggle', Ext.window.Window, {id: 'CodonJuggle', cls: 'tasksmonitorwindow', width: 400, title: 'Codon Juggle', items: [{xtype: 'filefield', margin: '10 0 5 100', validateOnChange: false, padding: 0, height: 23, width: 250, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', fieldLabel: '<b style="margin-left:-100px">Input file:</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}, {xtype: 'combobox', cls: 'algorithmSelector', fieldLabel: '<b>Algorithm:</b>', labelCls: 'algorithm-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', valueField: 'algorithmValue', value: 'balanced', displayField: 'algorithmName', store: new Ext.data.ArrayStore({fields: ['algorithmName'], data: [['balanced'], ['high'], ['most_different_sequence'], ['least_different_RSCU'], ['random']]})}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', valueField: 'organismValue', value: 'yeast', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Drosophila_melanogaster'], ['Mycoplasma_genitalium'], ['Bacillus_subtilis'], ['Escherichia_coli'], ['oryza_sativa'], ['Caenorhabditis_elegans'], ['Flat'], ['Saccharomyces_cerevisiae'], ['Cglut'], ['Homo_sapiens'], ['Standard'], ['Deinococcus_radiodurans'], ['Mycoplasma_genitalium'], ['yeast']]})}, {xtype: 'button', text: 'Juggle Codon', margin: '2.5 0 2.5 0', height: 40, border: 0, listeners: {click: {fn: function(field) {
-  var fileDom = this.up().down('filefield').extractFileInput();
-  if (!fileDom.files[0]) 
-  return Ext.Msg.alert('Error', 'Select input file');
-  if (!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/)) 
-  {
-    return Ext.Msg.alert('Error', 'Only FAS files allowed');
-  }
-  var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
-  var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
-  var fr = new FileReader();
-  var that = this;
-  function processFile() {
-    console.log(fr.result);
-    var messageBox = Ext.MessageBox.wait("Executing Codon Juggling...", "Waiting for the server");
-    pFasta = fr.result;
-    var seq = pFasta.replace('\n', "<line-break>");
-    Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''), method: 'POST', params: {dna: seq, algorithm: algorithm, organism: organism}, success: function(response) {
-  responseObject = JSON.parse(response.responseText);
-  messageBox.close();
-  console.log(responseObject);
-  Ext.create('Ext.window.Window', {items: [{xtype: 'textarea', value: response.responseText, width: 500, height: 200}]}).show();
-}, failure: function(response, opts) {
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  messageBox.close();
-  Ext.MessageBox.alert('Failed', 'Conversion failed');
-}});
-  }
-  fr.onload = processFile;
-  fr.readAsText(fileDom.files[0]);
-}}}}]}, 0, ["CodonJuggle"], ["panel", "window", "component", "container", "box", "CodonJuggle"], {"panel": true, "window": true, "component": true, "container": true, "box": true, "CodonJuggle": true}, ["widget.CodonJuggle"], 0, [Vede.view.tools, 'CodonJuggle'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.tools.ReverseTranslate', Ext.window.Window, {id: 'ReverseTranslate', cls: 'tasksmonitorwindow', width: 400, title: 'Reverse Translate', items: [{xtype: 'filefield', margin: '10 0 5 100', validateOnChange: false, padding: 0, height: 23, width: 250, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', fieldLabel: '<b style="margin-left:-100px">Input file:</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', valueField: 'organismValue', value: 'yeast', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Drosophila_melanogaster'], ['Mycoplasma_genitalium'], ['Bacillus_subtilis'], ['Escherichia_coli'], ['oryza_sativa'], ['Caenorhabditis_elegans'], ['Flat'], ['Saccharomyces_cerevisiae'], ['Cglut'], ['Homo_sapiens'], ['Standard'], ['Deinococcus_radiodurans'], ['Mycoplasma_genitalium'], ['yeast']]})}, {xtype: 'button', text: 'Reverse Translate', margin: '2.5 0 2.5 0', height: 40, border: 0, listeners: {click: {fn: function(field) {
-  var fileDom = this.up().down('filefield').extractFileInput();
-  if (!fileDom.files[0]) 
-  return Ext.Msg.alert('Error', 'Select input file');
-  if (!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/)) 
-  {
-    return Ext.Msg.alert('Error', 'Only FAS files allowed');
-  }
-  var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
-  var fr = new FileReader();
-  var that = this;
-  function processFile() {
-    console.log(fr.result);
-    var messageBox = Ext.MessageBox.wait("Executing Reverse Translate...", "Waiting for the server");
-    pFasta = fr.result;
-    var seq = pFasta.replace('\n', "<line-break>");
-    Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genedesign/reverse_translate", ''), method: 'POST', params: {dna: seq, organism: organism}, success: function(response) {
-  responseObject = JSON.parse(response.responseText);
-  messageBox.close();
-  console.log(responseObject);
-  Ext.create('Ext.window.Window', {items: [{xtype: 'textarea', value: response.responseText, width: 500, height: 200}]}).show();
-}, failure: function(response, opts) {
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  messageBox.close();
-  Ext.MessageBox.alert('Failed', 'Failed');
-}});
-  }
-  fr.onload = processFile;
-  fr.readAsText(fileDom.files[0]);
-}}}}]}, 0, ["ReverseTranslate"], ["panel", "ReverseTranslate", "window", "component", "container", "box"], {"panel": true, "ReverseTranslate": true, "window": true, "component": true, "container": true, "box": true}, ["widget.ReverseTranslate"], 0, [Vede.view.tools, 'ReverseTranslate'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.CopySequenceWindow', Ext.window.Window, {title: 'Copy Sequence Text', modal: true, height: 300, width: 400, resizable: true, layout: {type: 'vbox'}, items: [{xtype: 'displayfield', value: 'Please copy the selected text below:'}, {xtype: 'textarea', cls: 'copySequenceTextArea', grow: true, height: 250, width: 392}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'CopySequenceWindow'], 0));

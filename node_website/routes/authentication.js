@@ -137,9 +137,9 @@ module.exports = function(app, express) {
 
 
         if(app.get("env") === "production") {
-            html = html.replace("<activation>", '<a href="http://app.teselagen.com/api/users/activate/'+activationCode+'">');
+            html = html.replace("<activation>", '<a href="http://app.teselagen.com/users/activate/'+activationCode+'">');
         } else {
-            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
+            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/users/activate/'+activationCode+'">');
         }
 
         var message = {

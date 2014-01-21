@@ -281,7 +281,6 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
                     if(prop=="de:parts") {
                         if(part[prop]) {
-                            debugger;
                             for(var i=0; i<part[prop].length;i++) {
                                 var dePart = deParts.appendChild(doc.createElement("de:part"));
                                 dePart.setAttribute("id", part[prop][i].id);

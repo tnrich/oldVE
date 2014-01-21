@@ -516,32 +516,32 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     }
                                 }
                             },
-                            {
-                                xtype: 'container',
-                                items: [
-                                    {
-                                        xtype: 'button',
-                                        text: 'Codon Juggle',
-                                        listeners: {
-                                            click: function(){
-                                                Ext.create('Vede.view.tools.CodonJuggle').show();
-                                            }
-                                        },
-                                        width: 105
-                                    },
-                                    {
-                                        xtype: 'button',
-                                        text: 'Reverse Translate',
-                                        listeners: {
-                                            click: function(){
-                                                Ext.create('Vede.view.tools.ReverseTranslate').show();
-                                            }
-                                        },
-                                        width: 115
-                                    }
-                                ],
-                                margin: '0 10 10 10'
-                            },
+                            // {
+                            //     xtype: 'container',
+                            //     items: [
+                            //         {
+                            //             xtype: 'button',
+                            //             text: 'Codon Juggle',
+                            //             listeners: {
+                            //                 click: function(){
+                            //                     Ext.create('Vede.view.tools.CodonJuggle').show();
+                            //                 }
+                            //             },
+                            //             width: 105
+                            //         },
+                            //         {
+                            //             xtype: 'button',
+                            //             text: 'Reverse Translate',
+                            //             listeners: {
+                            //                 click: function(){
+                            //                     Ext.create('Vede.view.tools.ReverseTranslate').show();
+                            //                 }
+                            //             },
+                            //             width: 115
+                            //         }
+                            //     ],
+                            //     margin: '0 10 10 10'
+                            // },
                             {
                                 xtype: 'gridpanel',
                                 border: 0,
