@@ -58365,11 +58365,7 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   if (!grid.store.proxy.activeRequest) 
   grid.store.load();
 }, 200);
-}}}, {xtype: 'container', items: [{xtype: 'button', text: 'Codon Juggle', listeners: {click: function() {
-  Ext.create('Vede.view.tools.CodonJuggle').show();
-}}, width: 105}, {xtype: 'button', text: 'Reverse Translate', listeners: {click: function() {
-  Ext.create('Vede.view.tools.ReverseTranslate').show();
-}}, width: 115}], margin: '0 10 10 10'}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
+}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
   if (val) 
   {
     val = val.sequence.alphabet.toUpperCase();
@@ -79370,7 +79366,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 
 (Ext.cmd.derive('Vede.view.de.j5Parameters', Ext.window.Window, {height: 760, maxHeight: 830, width: 845, maxWidth: 845, title: 'j5 Parameters', cls: 'j5Parameters_Window', autoScroll: true, modal: true, maximizable: false, resizable: true, initComponent: function() {
   var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'combobox', cls: 'inWindowPresetSelector', fieldLabel: '<b>Parameters Preset:</b>', labelCls: 'assembly-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 550, queryMode: 'local', displayField: 'presetName', valueField: 'presetName', x: 0, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: ''}, {xtype: 'button', cls: 'savePresetBtn', x: 360, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Save Preset</b>'}, {xtype: 'button', cls: 'deletePresetBtn', x: 440, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Delete Preset</b>'}, {xtype: 'button', cls: 'newPresetBtn', x: 530, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>New Preset</b>'}]}, {xtype: 'container', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'container', flex: 1, items: [{xtype: 'numberfield', cls: 'masterOligoNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Oligo Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'masterPlasmidNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Plasmid Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapBPsValue', padding: 3, fieldLabel: 'Gibson Overlap BPs (26)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMinTmValue', padding: 3, fieldLabel: 'Gibson Overlap Min Tm (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMaxTmValue', padding: 3, fieldLabel: 'Gibson Overlap Max Tm (70)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'maxOligoLengthBPsValue', padding: 3, fieldLabel: 'Maximum Num of Oligo BPs (110)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minFragmentSizeGibsonBPsValue', padding: 3, fieldLabel: 'Minimum Gibson Fragment Size BPs (250)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'goldenGateOverhangBPsValue', padding: 3, fieldLabel: 'Golden Gate Overhang BPs (4)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'textfield', cls: 'goldenGateRecognitionSeqValue', padding: 3, fieldLabel: 'Golden Gate Recognition Sequence (GGTCTC)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'textfield', cls: 'goldenGateTerminiExtraSeqValue', padding: 3, fieldLabel: 'Golden Gate Term Extra Seq (CACACCAGGTCTCA)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'numberfield', cls: 'maxIdentitiesGoldenGateOverhangsCompatibleValue', padding: 3, fieldLabel: 'Max Identities Golden Gate Overhangs (2)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'oligoSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Oligo Synthesis Cost Per BP (US) (0.1)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoPagePurificationCostPerPieceUSDValue', padding: 3, fieldLabel: 'Oligo Purification Cost Per Piece (US) (40)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoMaxLengthNoPagePurificationRequiredBPsValue', padding: 3, fieldLabel: 'Oligo Max Length No Page Purification (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minPCRProductBPsValue', padding: 3, fieldLabel: 'Minimum PCR Product BPs (100)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'directSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Cost Per BP (US) (0.39)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'directSynthesisMinCostPerPieceUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Min. Cost Per Piece (US) (159)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'combobox', cls: 'outputSequenceFormatValue', padding: 3, fieldLabel: 'Output Sequence Format (Genbank)', labelSeparator: ' ', labelWidth: 270, queryMode: 'local', store: ['Genbank', 'FASTA', 'jbei-seq', 'SBOLXML'], value: 'Genbank'}]}, {xtype: 'container', flex: 0.8, width: 370, items: [{xtype: 'numberfield', cls: 'primerGCClampValue', padding: 3, fieldLabel: 'Primer GC Clamp (2)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'primerMinSizeValue', padding: 3, fieldLabel: 'Primer Min Size (18)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSizeValue', padding: 3, fieldLabel: 'Primer Max Size (36)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMinTmValue', padding: 3, fieldLabel: 'Primer Min Tm (60)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxTmValue', padding: 3, fieldLabel: 'Primer Max Tm (70)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxDiffTmValue', padding: 3, fieldLabel: 'Primer Max Tm Diff (5)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfAnyThValue', padding: 3, fieldLabel: 'Primer Max Self Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfEndThValue', padding: 3, fieldLabel: 'Primer Max Self Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplAnyThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplEndThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'checkboxfield', cls: 'primerTmSantaluciaValue', padding: 3, fieldLabel: 'Primer Tm Santa Lucia (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'primerSaltCorrectionsValue', padding: 3, fieldLabel: 'Primer Salt Corrections (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'numberfield', cls: 'primerDnaConcValue', padding: 3, fieldLabel: 'Primer DNA Conc (250)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'mispriming3PrimeBoundaryBPToWarnIfHitValue', padding: 3, fieldLabel: 'MisPriming 3\' Boundary (4)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingMinTmValue', padding: 3, fieldLabel: 'MisPriming Min Tm (45)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingSaltConcValue', padding: 3, fieldLabel: 'MisPriming Salt Conc (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'misprimingOligoConcValue', padding: 3, fieldLabel: 'MisPriming Oligo Conc (2.5e-7)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 8, step: 1.0E-8, minValue: 0}, {xtype: 'checkboxfield', cls: 'suppressPurePrimersValue', padding: 3, fieldLabel: 'Suppress Pure Primers (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'suppressPrimerAnnotationsValue', padding: 3, fieldLabel: 'Suppress Primer Annotations (disabled)', labelSeparator: ' ', labelWidth: 200, checked: false}, {xtype: 'numberfield', cls: 'homologyMinLengthBPS', padding: 3, fieldLabel: 'Homology Min Length BPS (26)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'homologyMaxFractionMisMatches', padding: 3, fieldLabel: 'Homology Max Fraction Mis matches (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}]}]}, {xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'j5ParamsCancelBtn', x: 640, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'j5ParamsOKBtn', x: 730, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>OK</b>'}]}]});
+  Ext.applyIf(me, {items: [{xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'combobox', cls: 'inWindowPresetSelector', fieldLabel: '<b>Parameters Preset:</b>', labelCls: 'assembly-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 550, queryMode: 'local', displayField: 'presetName', valueField: 'presetName', x: 0, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: ''}, {xtype: 'button', cls: 'savePresetBtn', x: 360, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Save Preset</b>'}, {xtype: 'button', cls: 'deletePresetBtn', x: 440, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Delete Preset</b>'}, {xtype: 'button', cls: 'newPresetBtn', x: 530, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>New Preset</b>'}]}, {xtype: 'container', layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'container', flex: 1, items: [{xtype: 'numberfield', cls: 'masterOligoNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Oligo Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'masterPlasmidNumberOfDigitsValue', padding: 3, fieldLabel: 'Master Plasmid Num of Digits (5)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapBPsValue', padding: 3, fieldLabel: 'Gibson Overlap BPs (26)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMinTmValue', padding: 3, fieldLabel: 'Gibson Overlap Min Tm (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'gibsonOverlapMaxTmValue', padding: 3, fieldLabel: 'Gibson Overlap Max Tm (70)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'maxOligoLengthBPsValue', padding: 3, fieldLabel: 'Maximum Num of Oligo BPs (110)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minFragmentSizeGibsonBPsValue', padding: 3, fieldLabel: 'Minimum Gibson Fragment Size BPs (250)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'goldenGateOverhangBPsValue', padding: 3, fieldLabel: 'Golden Gate Overhang BPs (4)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'textfield', cls: 'goldenGateRecognitionSeqValue', padding: 3, fieldLabel: 'Golden Gate Recognition Sequence (GGTCTC)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'textfield', cls: 'goldenGateTerminiExtraSeqValue', padding: 3, fieldLabel: 'Golden Gate Term Extra Seq (CACACCAGGTCTCA)', labelSeparator: ' ', labelWidth: 270, emptyText: '100'}, {xtype: 'numberfield', cls: 'maxIdentitiesGoldenGateOverhangsCompatibleValue', padding: 3, fieldLabel: 'Max Identities Golden Gate Overhangs (2)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'oligoSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Oligo Synthesis Cost Per BP (US) (0.1)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoPagePurificationCostPerPieceUSDValue', padding: 3, fieldLabel: 'Oligo Purification Cost Per Piece (US) (40)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'oligoMaxLengthNoPagePurificationRequiredBPsValue', padding: 3, fieldLabel: 'Oligo Max Length No Page Purification (60)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'minPCRProductBPsValue', padding: 3, fieldLabel: 'Minimum PCR Product BPs (100)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'directSynthesisCostPerBPUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Cost Per BP (US) (0.39)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'directSynthesisMinCostPerPieceUSDValue', padding: 3, fieldLabel: 'Direct Synthesis Min. Cost Per Piece (US) (159)', labelSeparator: ' ', labelWidth: 270, emptyText: '100', decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'combobox', cls: 'outputSequenceFormatValue', padding: 3, fieldLabel: 'Output Sequence Format (Genbank)', labelSeparator: ' ', labelWidth: 270, queryMode: 'local', store: ['Genbank', 'FASTA', 'SBOLXML'], value: 'Genbank'}]}, {xtype: 'container', flex: 0.8, width: 370, items: [{xtype: 'numberfield', cls: 'primerGCClampValue', padding: 3, fieldLabel: 'Primer GC Clamp (2)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'primerMinSizeValue', padding: 3, fieldLabel: 'Primer Min Size (18)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSizeValue', padding: 3, fieldLabel: 'Primer Max Size (36)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMinTmValue', padding: 3, fieldLabel: 'Primer Min Tm (60)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxTmValue', padding: 3, fieldLabel: 'Primer Max Tm (70)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxDiffTmValue', padding: 3, fieldLabel: 'Primer Max Tm Diff (5)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfAnyThValue', padding: 3, fieldLabel: 'Primer Max Self Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerMaxSelfEndThValue', padding: 3, fieldLabel: 'Primer Max Self Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplAnyThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl Any TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'primerPairMaxComplEndThValue', padding: 3, fieldLabel: 'Primer Pair Max Compl End TH (47)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'checkboxfield', cls: 'primerTmSantaluciaValue', padding: 3, fieldLabel: 'Primer Tm Santa Lucia (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'primerSaltCorrectionsValue', padding: 3, fieldLabel: 'Primer Salt Corrections (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'numberfield', cls: 'primerDnaConcValue', padding: 3, fieldLabel: 'Primer DNA Conc (250)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'mispriming3PrimeBoundaryBPToWarnIfHitValue', padding: 3, fieldLabel: 'MisPriming 3\' Boundary (4)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingMinTmValue', padding: 3, fieldLabel: 'MisPriming Min Tm (45)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'misprimingSaltConcValue', padding: 3, fieldLabel: 'MisPriming Salt Conc (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'misprimingOligoConcValue', padding: 3, fieldLabel: 'MisPriming Oligo Conc (2.5e-7)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', decimalPrecision: 8, step: 1.0E-8, minValue: 0}, {xtype: 'checkboxfield', cls: 'suppressPurePrimersValue', padding: 3, fieldLabel: 'Suppress Pure Primers (enabled)', labelSeparator: ' ', labelWidth: 200, checked: true}, {xtype: 'checkboxfield', cls: 'suppressPrimerAnnotationsValue', padding: 3, fieldLabel: 'Suppress Primer Annotations (disabled)', labelSeparator: ' ', labelWidth: 200, checked: false}, {xtype: 'numberfield', cls: 'homologyMinLengthBPS', padding: 3, fieldLabel: 'Homology Min Length BPS (26)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0}, {xtype: 'numberfield', cls: 'homologyMaxFractionMisMatches', padding: 3, fieldLabel: 'Homology Max Fraction Mis matches (0.05)', labelSeparator: ' ', labelWidth: 200, emptyText: '100', minValue: 0, step: 0.01}]}]}, {xtype: 'container', cls: 'j5Parameters_Buttons', height: '40px', layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'j5ParamsCancelBtn', x: 640, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'j5ParamsOKBtn', x: 730, y: 5, margin: 5, maxHeight: 23, minHeight: 23, padding: '', width: 75, text: '<b>OK</b>'}]}]});
   me.callParent(arguments);
   me.center();
   me.on("maximize", function(me) {
@@ -79657,8 +79653,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   me.inputEl.dom.value = this.getFileNameFromField(me);
   var that = this;
   function processPlasmidsFile() {
-    var result = fr.result;
-    var linesArray = result.split(/\n/);
+    var result = fr.result.replace(/,+$/, "");
+    var linesArray = result.split(/[\r\n|\n]+/);
     var headerFields = linesArray[0].split(/,\s*/);
     if (headerFields.length != 5 || headerFields[0] != "Plasmid Name" || headerFields[1] != "Alias" || headerFields[2] != "Contents" || headerFields[3] != "Length" || headerFields[4] != "Sequence") 
     {
@@ -79692,16 +79688,17 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   inspector.down("radio[cls='useServerOligosRadioBtn']").setValue(false);
   inspector.down("radio[cls='useEmptyOligosRadioBtn']").setValue(false);
   me.inputEl.dom.value = this.getFileNameFromField(me);
+  var that = this;
   function processOligosFile() {
-    var result = fr.result;
-    var linesArray = result.split(/\n/);
+    var result = fr.result.replace(/,+$/, "");
+    var linesArray = result.split(/[\r\n|\n]+/);
     var headerFields = linesArray[0].split(/,\s*/);
     if (headerFields.length != 5 || (headerFields[0] != "Oligo Name" && headerFields[0] != "Oigo Name") || headerFields[1] != "Length" || headerFields[2] != "Tm" || headerFields[3] != "Tm (3' only)" || headerFields[4] != "Sequence") 
     {
       alert("Invalid headers in master oligos list file.\n" + "Please check the formatting of the file.");
-      this.oligosListText = null;
+      that.oligosListText = null;
     } else {
-      this.oligosListText = result;
+      that.oligosListText = result;
     }
   }
   fr.onload = processOligosFile;
@@ -79728,16 +79725,17 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   inspector.down("radio[cls='useServerSynthesesRadioBtn']").setValue(false);
   inspector.down("radio[cls='useEmptySynthesesRadioBtn']").setValue(false);
   me.inputEl.dom.value = this.getFileNameFromField(me);
+  var that = this;
   function processSynthesesFile() {
-    var result = fr.result;
-    var linesArray = result.split(/\n/);
+    var result = fr.result.replace(/,+$/, "");
+    var linesArray = result.split(/[\r\n|\n]+/);
     var headerFields = linesArray[0].split(/,\s*/);
     if (headerFields.length != 5 || headerFields[0] != "Direct Synthesis Name" || headerFields[1] != "Alias" || headerFields[2] != "Contents" || headerFields[3] != "Length" || headerFields[4] != "Sequence") 
     {
       alert("Invalid headers in master syntheses list file.\n" + "Please check the formatting of the file.");
-      this.directSynthesesListText = null;
+      that.directSynthesesListText = null;
     } else {
-      this.directSynthesesListText = result;
+      that.directSynthesesListText = result;
     }
   }
   fr.onload = processSynthesesFile;
@@ -81715,9 +81713,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   {
     this.safeInsert(pasteSequenceManager, this.caretIndex, true);
   } else {
-    this.SequenceManager.insertSequenceManager(pasteSequenceManager, index);
-    var sequenceLength = sequence.getSequence().toString().length;
-    this.changeCaretPosition(index + sequenceLength);
+    this.SequenceManager.insertSequenceManager(pasteSequenceManager, this.caretIndex);
+    var sequenceLength = pasteSequenceManager.getSequence().toString().length;
+    this.changeCaretPosition(this.caretIndex + sequenceLength);
   }
 }, this);
     confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {
@@ -88025,7 +88023,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     if (this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces) 
     {
       var combinationPieces = this.activeJ5Run.getJ5Results().raw.processedData.combinationPieces;
-      for (var i = 0; i < assemblies.getCount(); i++) 
+      if (combinationPieces && combinationPieces.length) 
+      count = combinationPieces.length; else count = assemblies.getCount();
+      for (var i = 0; i < count; i++) 
         {
           var combinationParts = [];
           for (var k = 0; k < combinationPieces[i].partsContained.length; k++) 
@@ -88049,7 +88049,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     {
       var comboParts = this.activeJ5Run.getJ5Results().raw.processedData.combinationParts;
       var comboPartNames = [];
-      for (var i = 0; i < assemblies.getCount(); i++) 
+      if (combinationPieces && combinationPieces.length) 
+      count = combinationPieces.length; else count = assemblies.getCount();
+      for (var i = 0; i < count; i++) 
         {
           assemblies.getAt(i).set("parts", comboParts[i].parts);
         }
@@ -88126,7 +88128,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (this.activeProject) 
   {
     this.activeProject.j5runs().load({callback: function(runs) {
-  self.j5runs = runs.reverse();
+  if (runs) 
+  {
+    self.j5runs = runs.reverse();
+  }
   self.renderMenu();
   if (self.activeJ5Run) 
   {
@@ -88659,71 +88664,6 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Ext.applyIf(me, {items: [{xtype: 'numberfield', cls: 'maxDeltaTemperatureAdjacentZonesValue', padding: 3, fieldLabel: 'Max Delta Temp Adjacent Zones (5)', labelSeparator: ' ', labelWidth: 310, value: 5, maxValue: 1000, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'maxDeltaTemperatureReactionOptimumZoneAcceptableValue', padding: 3, fieldLabel: 'Max Delta Temp Reaction Optimum Zone Acceptable (5)', labelSeparator: ' ', labelWidth: 310, value: 5, step: 0.1}, {xtype: 'numberfield', cls: 'maxMcStepsPerZoneValue', padding: 3, fieldLabel: 'Max MC Steps Per Zone (1000)', labelSeparator: ' ', labelWidth: 310, value: 1000, decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'maxWellVolumeMultiwellPlateValue', padding: 3, fieldLabel: 'Max Well Volume Multi-well Plate (100)', labelSeparator: ' ', labelWidth: 310, value: 100, minValue: 0}, {xtype: 'numberfield', cls: 'mcTemperatureFinalValue', padding: 3, fieldLabel: 'MC Temp Final (0.0001)', labelSeparator: ' ', labelWidth: 310, value: 1.0E-4, decimalPrecision: 6, minValue: 0, step: 1.0E-5}, {xtype: 'numberfield', cls: 'mcTemperatureInitialValue', padding: 3, fieldLabel: 'MC Temp Initial (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'minPipettingVolumeValue', padding: 3, fieldLabel: 'Min Pipetting Volume (5)', labelSeparator: ' ', labelWidth: 310, value: 5, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'nColumnsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Columns in Multi-well Plate (12)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'nRowsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Rows in Multi-well Plate (8)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'trialDeltaTemperatureValue', padding: 3, fieldLabel: 'Trial Delta Temp (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'wellsPerThermocyclerZoneValue', padding: 3, fieldLabel: 'Wells Per Thermocycler Zone (16)', labelSeparator: ' ', labelWidth: 310, value: 16, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'numberfield', cls: 'zonesPerThermocyclerBlockValue', padding: 3, fieldLabel: 'Zones Per Thermocycler Block (6)', labelSeparator: ' ', labelWidth: 310, value: 6, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'container', height: 80, layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'automationParamsCancelBtn', x: 300, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'automationParamsOKBtn', x: 390, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>OK</b>'}, {xtype: 'button', cls: 'automationParamsResetBtn', x: 0, y: 50, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Reset To Defaults</b>'}]}]});
   me.callParent(arguments);
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5AutomationParameters'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.tools.CodonJuggle', Ext.window.Window, {id: 'CodonJuggle', cls: 'tasksmonitorwindow', width: 400, title: 'Codon Juggle', items: [{xtype: 'filefield', margin: '10 0 5 100', validateOnChange: false, padding: 0, height: 23, width: 250, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', fieldLabel: '<b style="margin-left:-100px">Input file:</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}, {xtype: 'combobox', cls: 'algorithmSelector', fieldLabel: '<b>Algorithm:</b>', labelCls: 'algorithm-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', valueField: 'algorithmValue', value: 'balanced', displayField: 'algorithmName', store: new Ext.data.ArrayStore({fields: ['algorithmName'], data: [['balanced'], ['high'], ['most_different_sequence'], ['least_different_RSCU'], ['random']]})}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', valueField: 'organismValue', value: 'yeast', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Drosophila_melanogaster'], ['Mycoplasma_genitalium'], ['Bacillus_subtilis'], ['Escherichia_coli'], ['oryza_sativa'], ['Caenorhabditis_elegans'], ['Flat'], ['Saccharomyces_cerevisiae'], ['Cglut'], ['Homo_sapiens'], ['Standard'], ['Deinococcus_radiodurans'], ['Mycoplasma_genitalium'], ['yeast']]})}, {xtype: 'button', text: 'Juggle Codon', margin: '2.5 0 2.5 0', height: 40, border: 0, listeners: {click: {fn: function(field) {
-  var fileDom = this.up().down('filefield').extractFileInput();
-  if (!fileDom.files[0]) 
-  return Ext.Msg.alert('Error', 'Select input file');
-  if (!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/)) 
-  {
-    return Ext.Msg.alert('Error', 'Only FAS files allowed');
-  }
-  var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
-  var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
-  var fr = new FileReader();
-  var that = this;
-  function processFile() {
-    console.log(fr.result);
-    var messageBox = Ext.MessageBox.wait("Executing Codon Juggling...", "Waiting for the server");
-    pFasta = fr.result;
-    var seq = pFasta.replace('\n', "<line-break>");
-    Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''), method: 'POST', params: {dna: seq, algorithm: algorithm, organism: organism}, success: function(response) {
-  responseObject = JSON.parse(response.responseText);
-  messageBox.close();
-  console.log(responseObject);
-  Ext.create('Ext.window.Window', {items: [{xtype: 'textarea', value: response.responseText, width: 500, height: 200}]}).show();
-}, failure: function(response, opts) {
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  messageBox.close();
-  Ext.MessageBox.alert('Failed', 'Conversion failed');
-}});
-  }
-  fr.onload = processFile;
-  fr.readAsText(fileDom.files[0]);
-}}}}]}, 0, ["CodonJuggle"], ["panel", "window", "component", "container", "box", "CodonJuggle"], {"panel": true, "window": true, "component": true, "container": true, "box": true, "CodonJuggle": true}, ["widget.CodonJuggle"], 0, [Vede.view.tools, 'CodonJuggle'], 0));
-;
-
-(Ext.cmd.derive('Vede.view.tools.ReverseTranslate', Ext.window.Window, {id: 'ReverseTranslate', cls: 'tasksmonitorwindow', width: 400, title: 'Reverse Translate', items: [{xtype: 'filefield', margin: '10 0 5 100', validateOnChange: false, padding: 0, height: 23, width: 250, allowBlank: false, hideLabel: false, labelWidth: 10, preventMark: false, buttonOnly: false, buttonText: '<b>Choose File</b>', fieldLabel: '<b style="margin-left:-100px">Input file:</b>', buttonConfig: {stlye: {paddingTop: '0px !important'}}}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, queryMode: 'local', valueField: 'organismValue', value: 'yeast', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Drosophila_melanogaster'], ['Mycoplasma_genitalium'], ['Bacillus_subtilis'], ['Escherichia_coli'], ['oryza_sativa'], ['Caenorhabditis_elegans'], ['Flat'], ['Saccharomyces_cerevisiae'], ['Cglut'], ['Homo_sapiens'], ['Standard'], ['Deinococcus_radiodurans'], ['Mycoplasma_genitalium'], ['yeast']]})}, {xtype: 'button', text: 'Reverse Translate', margin: '2.5 0 2.5 0', height: 40, border: 0, listeners: {click: {fn: function(field) {
-  var fileDom = this.up().down('filefield').extractFileInput();
-  if (!fileDom.files[0]) 
-  return Ext.Msg.alert('Error', 'Select input file');
-  if (!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/)) 
-  {
-    return Ext.Msg.alert('Error', 'Only FAS files allowed');
-  }
-  var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
-  var fr = new FileReader();
-  var that = this;
-  function processFile() {
-    console.log(fr.result);
-    var messageBox = Ext.MessageBox.wait("Executing Reverse Translate...", "Waiting for the server");
-    pFasta = fr.result;
-    var seq = pFasta.replace('\n', "<line-break>");
-    Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genedesign/reverse_translate", ''), method: 'POST', params: {dna: seq, organism: organism}, success: function(response) {
-  responseObject = JSON.parse(response.responseText);
-  messageBox.close();
-  console.log(responseObject);
-  Ext.create('Ext.window.Window', {items: [{xtype: 'textarea', value: response.responseText, width: 500, height: 200}]}).show();
-}, failure: function(response, opts) {
-  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-  messageBox.close();
-  Ext.MessageBox.alert('Failed', 'Failed');
-}});
-  }
-  fr.onload = processFile;
-  fr.readAsText(fileDom.files[0]);
-}}}}]}, 0, ["ReverseTranslate"], ["panel", "ReverseTranslate", "window", "component", "container", "box"], {"panel": true, "ReverseTranslate": true, "window": true, "component": true, "container": true, "box": true}, ["widget.ReverseTranslate"], 0, [Vede.view.tools, 'ReverseTranslate'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.CopySequenceWindow', Ext.window.Window, {title: 'Copy Sequence Text', modal: true, height: 300, width: 400, resizable: true, layout: {type: 'vbox'}, items: [{xtype: 'displayfield', value: 'Please copy the selected text below:'}, {xtype: 'textarea', cls: 'copySequenceTextArea', grow: true, height: 250, width: 392}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'CopySequenceWindow'], 0));
