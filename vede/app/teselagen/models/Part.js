@@ -298,8 +298,15 @@ Ext.define("Teselagen.models.Part", {
         var record = this;
         var size = 0;
 
+        var reload = false;
+
+        // If the sequence file has no size, we need to reload it.
+        if(!record.getSequenceFile().getLength()) {
+            reload = true;
+        }
+
         record.getSequenceFile({
-            reload: true,
+            reload: reload,
             callback: function(sequenceFile) {
                 if(!sequenceFile && !ignoreNoSequenceFile)
                 {
