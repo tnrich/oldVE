@@ -298,30 +298,33 @@ Ext.define("Teselagen.models.Part", {
         var record = this;
         var size = 0;
 
-        record.getSequenceFile(function(sequenceFile) {
-            if(!sequenceFile && !ignoreNoSequenceFile)
-            {
-                console.warn("Trying to calculate size of Part with no sequenceFile");
-                return false;
+        record.getSequenceFile({
+            reload: true,
+            callback: function(sequenceFile) {
+                if(!sequenceFile && !ignoreNoSequenceFile)
+                {
+                    console.warn("Trying to calculate size of Part with no sequenceFile");
+                    return false;
+                }
+
+                var startBP = Number(record.get("genbankStartBP"));
+                var endBP = Number(record.get("endBP"));
+
+                if(startBP>endBP) {
+                    var tSize = Number(record.getSequenceFile().getLength());
+                    size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+                } else if (startBP==endBP) {
+                    size = 1;
+                } else {
+                    size = (Math.abs(startBP - endBP) + 1);
+                }
+
+                if(size === 0) {
+                    console.warn("Part with sequence with length zero.");
+                }
+
+                record.set('size', size);
             }
-
-            var startBP = Number(record.get("genbankStartBP"));
-            var endBP = Number(record.get("endBP"));
-
-            if(startBP>endBP) {
-                var tSize = Number(record.getSequenceFile().getLength());
-                size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
-            } else if (startBP==endBP) {
-                size = 1;
-            } else {
-                size = (Math.abs(startBP - endBP) + 1);
-            }
-
-            if(size === 0) {
-                console.warn("Part with sequence with length zero.");
-            }
-
-            record.set('size', size);
         });
     },
 
