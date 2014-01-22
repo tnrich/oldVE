@@ -306,7 +306,7 @@ Ext.define("Teselagen.models.Part", {
                 reload = true;
             }
 
-            record.getSequenceFile({
+            record.getSequenceFileModel({
                 reload: reload,
                 callback: function(sequenceFile) {
                     if(!sequenceFile && !ignoreNoSequenceFile)
