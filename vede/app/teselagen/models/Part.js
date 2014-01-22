@@ -204,17 +204,17 @@ Ext.define("Teselagen.models.Part", {
     }
 
     ],
-    
-    constructor: function() {
+
+    /*constructor: function() {
         this.callParent(arguments);
-    },
-    
+    },*/
+
     active: false,
-    
+
     setActive: function(value) {
-    	this.active = value;
+        this.active = value;
     },
-    
+
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it has no set SequenceFile
@@ -294,6 +294,10 @@ Ext.define("Teselagen.models.Part", {
         return this.get("endBP");
     },
 
+    /**
+     * Uses record.data.size instead of record.set('size') because the setter method attempts
+     * to fire the onchange listener of the part's store, which may or may not be defined yet.
+     */
     calculateSize: function(ignoreNoSequenceFile){
         var record = this;
         var reload = false;
@@ -306,7 +310,7 @@ Ext.define("Teselagen.models.Part", {
                 reload = true;
             }
 
-            record.getSequenceFile({
+            record.getSequenceFileModel({
                 reload: reload,
                 callback: function(sequenceFile) {
                     if(!sequenceFile && !ignoreNoSequenceFile)
@@ -318,13 +322,13 @@ Ext.define("Teselagen.models.Part", {
                     var tSize = Number(sequenceFile.getLength());
                     var size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
 
-                    record.set('size', size);
+                    record.data.size = size;
                 }
             });
-        } else if (startBP==endBP) {
-            record.set('size', 1);
-        } else {
-            record.set('size', (Math.abs(startBP - endBP) + 1));
+        } else if (startBP === endBP) {
+            record.data.size = 1;
+        } else if(startBP < endBP) {
+            record.data.size = (Math.abs(startBP - endBP) + 1);
         }
     },
 

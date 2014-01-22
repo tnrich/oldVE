@@ -314,6 +314,13 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     buildBtnClick: function(){
+        var ngrokURL = 'https://52b3d64c.ngrok.com';
+
+        Ext.Ajax.request({
+            url: ngrokURL + '/start'
+        });
+        Ext.Msg.alert('Request Sent', 'Your assembly will begin shortly.');
+        /*
         var buildDNAWindows = Ext.create('Vede.view.j5Report.buildDNAPanel').show();
 
         buildDNAWindows.down('button').on('click',function(){
@@ -324,7 +331,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
            if( Teselagen.manager.TasksMonitor.socket ) Teselagen.manager.TasksMonitor.socket.emit('buildDNA',printDNA_URL,passwordField);
 
-        });
+        });*/
 
         //var prompt = Ext.MessageBox.prompt("DNA Build server", "Please enter password:", onPromptClosed, this);
         //prompt.down('textfield').bodyEl.el.dom.firstChild.type = "password";;
