@@ -92,8 +92,12 @@ Arguments:
 
 	app.post('/genedesign/codon_optimize',function(req,res){
 
+		var organism = (req.body.organism)? req.body.organism : "yeast";
+		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
+		var dnaSeq = (req.body.dna)? req.body.dna : "";
 
 		if(app.get("env") !== "production") {
+
 			/*
 			return res.json(
 				{
@@ -118,12 +122,16 @@ Arguments:
 				}
 			);
 			*/
-			return res.json({msg: "In dev mode"});
+			return res.json({
+				"msg": "In dev mode",
+				"data":{
+					"organism": organism,
+					"algorithm": algorithm,
+					"dnaSeq": dnaSeq
+				}
+			});
 		}
 
-		var organism = (req.body.organism)? req.body.organism : "yeast";
-		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
-		var dnaSeq = (req.body.dna)? req.body.dna : "";
 
 		dnaSeq = dnaSeq.replace('<line-break>','\n');
 
