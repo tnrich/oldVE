@@ -181,6 +181,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
 
         this.callParent();
+
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
         this.pieManager.setFeatures(this.SequenceManager.getFeatures());
