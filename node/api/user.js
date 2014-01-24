@@ -118,6 +118,10 @@ module.exports = function(app) {
               if(err) {
                   return res.send("Error finding the user associated with this code.<br>Are you sure this is the correct URL?");
               } else if(user) {
+                  if(user.activated)
+                  {
+                    res.send("This user has already been activated.");
+                  }
                   user.activated = true;
                   //user.activationCode = undefined;
                   sendRegisteredMail(user);

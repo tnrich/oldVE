@@ -399,6 +399,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
 
         var saveDesign = function () {
+            Vede.application.fireEvent(self.DeviceEvent.SUSPEND_TABS);
             design.rules().clearFilter(true);
 
             design.rules().each(function(rule) {
@@ -417,6 +418,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         toastr.options.onclick = null;
 
                         toastr.info("Design Saved");
+                        Vede.application.fireEvent(self.DeviceEvent.RESUME_TABS);
                     });
                     gridManager.setListenersEnabled(true);
                     if(typeof (cb) === "function") { cb(); }
@@ -495,6 +497,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     },
 
     onDeviceEditorSaveEvent: function(arg) {
+        Vede.application.fireEvent(this.DeviceEvent.SUSPEND_TABS);
         this.saveDEProject(arg);
     },
 
