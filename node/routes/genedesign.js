@@ -102,7 +102,20 @@ Arguments:
 		'Homo sapiens': 'Homo_sapiens',
 		'Mycoplasma genitalium': 'Mycoplasma_genitalium',
 		'Orzya sativa': 'oryza_sativa',
-		'Saccharomyces cerevisiae': 'Saccharomyces_cerevisiae'
+		'Saccharomyces cerevisiae': 'Saccharomyces_cerevisiae',
+		'Arabidopsis thaliana' : 'arabidopsis_thaliana'
+	}
+
+	function organismToStandardName(organismFullName){
+		if(organismMap[organismFullName])
+		{
+			return organismMap[organismFullName];	
+		}
+		else
+		{
+			console.log("Couldn't find organism");
+			return false;
+		}
 	}
 
 	app.post('/genedesign/codon_optimize',function(req,res){
@@ -110,18 +123,6 @@ Arguments:
 		var organism = (req.body.organism)? req.body.organism : "yeast";
 		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
 		var dnaSeq = (req.body.dna)? req.body.dna : "";
-
-		function organismToStandardName(organismFullName){
-			if(organismMap[organismFullName])
-			{
-				return organismMap[organismFullName];	
-			}
-			else
-			{
-				console.log("Couldn't find organism");
-				return false;
-			}
-		}
 
 		organism = organismToStandardName(organism);
 
@@ -160,6 +161,8 @@ Arguments:
 				}
 			});
 		}
+		else
+		{
 
 
 		dnaSeq = dnaSeq.replace('<line-break>','\n');
@@ -224,7 +227,8 @@ Arguments:
 			});
 
 		});
-
+		
+		}
     });
 
 /*
@@ -269,12 +273,53 @@ Optional arguments:
 
 		var organism = (req.body.organism)? req.body.organism : "yeast";
 		var dnaSeq = (req.body.dna)? req.body.dna : "";
+		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
+
+		organism = organismToStandardName(organism);
 
 		//dnaSeq = "LYLIFGAWAGMVGTALSLLIRAELGQPGTLLGDDQIYNVIVTAHAFVMIFFMVMPIMIGGFGNWLVPLMIGAPDMAFPRMNNMSFWLLPPSFLLLLASSTVEAGAGTGWTVYPPLAGNLAHAGASVDLAIFSLHLAGVSSILGAINFITTAINMKPPTLSQYQTPLFVWSVLITAVLLLLSLPVLAAGITMLLTDRNLNTTFFDPAGGGDPVLYQHLFWFFGHPEVYILIL";
 
+		if(app.get("env") !== "production") {
+
+			/*
+			return res.json(
+				{
+				  "response": ">insequence balanced codon juggled with yeast RSCU values\nATGACCGACCAGGCTACTCCAAACTTGCCTTCTCGTGATTTCGACTCTACCGCTGCTTTC\nTACGAAAGATTAGGTTTCGGTATTGTTTTCAGAGATGCTTTGGCTGACGTCTTGATCGTC\nCACGACGCTCGTGACTTCGTCGCTCTAGCCGATGGTCAACAAGTTGGTAGACAAGCCCAT\nGCTGGTAGACGTAGATTGTTCTTGAACAGATCTTCCTTCGTCTGGAAGGCCGTTCACTTG\nGACCGTTGGGCTGCTTTGCCAGGTTGGTTGGGTTTTATTTCCCACCCATTGGCCTTGATC\nTGTTACGCTGGTGGTTCTAGACCAGCCTCTCAATCTAGAATCCCAGTCGAACATAGACAA\nGTTAGAATCCGTGACTCTGAAGAAGGTACCCCAGGTAGAGGTTGGGCTTACTTCACCTAC\nCCTGCACCATTGACCCCATTAGACACCCCAAGAAAGGTCTACACCAACCCATTGGCTAAG\nTCCTGTATTTCATGTGAAAAGGGTTGGATCTACCGTAAGAACAGATACAACGACCCAGAA\nGCTGGTTTGTGTTCTGGTAAGGCTATGACCAAGATTCCATAA\n",
+				  "parsedResponse": [
+				    "ATGACCGACCAGGCTACTCCAAACTTGCCTTCTCGTGATTTCGACTCTACCGCTGCTTTC",
+				    "TACGAAAGATTAGGTTTCGGTATTGTTTTCAGAGATGCTTTGGCTGACGTCTTGATCGTC",
+				    "CACGACGCTCGTGACTTCGTCGCTCTAGCCGATGGTCAACAAGTTGGTAGACAAGCCCAT",
+				    "GCTGGTAGACGTAGATTGTTCTTGAACAGATCTTCCTTCGTCTGGAAGGCCGTTCACTTG",
+				    "GACCGTTGGGCTGCTTTGCCAGGTTGGTTGGGTTTTATTTCCCACCCATTGGCCTTGATC",
+				    "TGTTACGCTGGTGGTTCTAGACCAGCCTCTCAATCTAGAATCCCAGTCGAACATAGACAA",
+				    "GTTAGAATCCGTGACTCTGAAGAAGGTACCCCAGGTAGAGGTTGGGCTTACTTCACCTAC",
+				    "CCTGCACCATTGACCCCATTAGACACCCCAAGAAAGGTCTACACCAACCCATTGGCTAAG",
+				    "TCCTGTATTTCATGTGAAAAGGGTTGGATCTACCGTAAGAACAGATACAACGACCCAGAA",
+				    "GCTGGTTTGTGTTCTGGTAAGGCTATGACCAAGATTCCATAA"
+				  ],
+				  "parameters": {
+				    "input": "ATGACCGACCAAGCGACGCCCAACCTGCCATCACGAGATTTCGATTCCACCGCCGCCTTCTATGAAAGGTTGGGCTTCGGAATCGTTTTCCGGGACGCCCTCGCGGACGTGCTCATAGTCCACGACGCCCGTGATTTTGTAGCCCTGGCCGACGGCCAGCAGGTAGGCCGACAGGCTCATGCCGGCCGCCGCCGCCTTTTCCTCAATCGCTCTTCGTTCGTCTGGAAGGCAGTACACCTTGATAGGTGGGCTGCCCTTCCTGGTTGGCTTGGTTTCATCAGCCATCCGCTTGCCCTCATCTGTTACGCCGGCGGTAGCCGGCCAGCCTCGCAGAGCAGGATTCCCGTTGAGCACCGCCAGGTGCGAATAAGGGACAGTGAAGAAGGAACACCCGGTCGCGGGTGGGCCTACTTCACCTATCCTGCCCCGCTGACGCCGTTGGATACACCAAGGAAAGTCTACACGAACCCTTTGGCAAAATCCTGTATATCGTGCGAAAAAGGATGGATATACCGAAAAAATCGCTATAATGACCCCGAAGCAGGGTTATGCAGCGGAAAAGCCATGACCAAAATCCCTTAA",
+				    "algorithm": "balanced",
+				    "organism": "yeast"
+				  }
+				}
+			);
+			*/
+			return res.json({
+				"msg": "In dev mode",
+				"data":{
+					"organism": organism,
+					"dnaSeq": dnaSeq,
+					"algorithm": algorithm
+				}
+			});
+		}
+		else
+		{
+
 		fs.writeFile("/home/teselagen/geneDesign/protein.fasta", '>insequence\n'+dnaSeq, function(err) {
 	        
-			var deploySh = spawn('/usr/local/bin/GD_Reverse_Translate.pl', ['-i','protein.fasta','-org',organism], {
+			var deploySh = spawn('/usr/local/bin/GD_Reverse_Translate.pl', ['-i','protein.fasta','-org',organism,'-a',algorithm], {
 				cwd: '/home/teselagen/geneDesign',
 				env: (process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
 			});
@@ -309,6 +354,8 @@ Optional arguments:
 			});
 
 		});
+
+		}
 
     });
 
