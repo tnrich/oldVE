@@ -37,25 +37,25 @@
             width:350,
             queryMode: 'local',
             valueField: 'organismValue',
-            value: 'yeast',
+            value: 'Standard',
             displayField: 'organismName',
 			store: new Ext.data.ArrayStore({
 				fields: ['organismName'],
-				data: [
-					['Drosophila_melanogaster'],
-					['Mycoplasma_genitalium'],
-					['Bacillus_subtilis'],
-					['Escherichia_coli'],
-					['oryza_sativa'],
-					['Caenorhabditis_elegans'],
+				data:
+				[
+					['Arabidopsis thaliana'],
+					['Bacillus subtilis'],
+					['Caenorhabditis elegans'],
+					['Corynebacterium glutamicum'],
+					['Deinococcus radiodurans'],
+					['Drosophila melanogaster'],
+					['Escherichia coli'],
 					['Flat'],
-					['Saccharomyces_cerevisiae'],
-					['Cglut'],
-					['Homo_sapiens'],
-					['Standard'],
-					['Deinococcus_radiodurans'],
-					['Mycoplasma_genitalium'],
-					['yeast']
+					['Homo sapiens'],
+					['Mycoplasma genitalium'],
+					['Orzya sativa'],
+					['Saccharomyces cerevisiae'],
+					['Standard']
 				]
 			})
         },

@@ -265,6 +265,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
     analyzeDesign: function(design,cb){
 
+        return cb();
+
         function isValidObjectID(str) {
           if(!str) return false;
           var len = str.length;

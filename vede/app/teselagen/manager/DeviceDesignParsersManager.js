@@ -504,6 +504,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                         newPart = Ext.create("Teselagen.models.Part");
 
                                         newPart.setSequenceFile(newSequence);
+                                        console.log("("+newPart.internalId+") "+newPart.data.name+" part associated with sequence "+newSequence.data.name+" partSource "+newSequence.data.partSource+" ("+newSequence.internalId+")");
 
                                         newPart.set({
                                             name: name,
@@ -538,6 +539,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                 //newSequence.set("name",newPart.get("name"));
 
                                 newPart.setSequenceFile(newSequence);
+                                console.log("("+newPart.internalId+") "+newPart.data.name+" part associated with sequence "+newSequence.data.name+" partSource "+newSequence.data.partSource+" ("+newSequence.internalId+")");
 
                                 var newCell = Ext.create("Teselagen.models.Cell", {
                                     index: j,
@@ -643,6 +645,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                 if(comparePart.getSequenceFile().get('hash') === part.getSequenceFile().get('hash')) {
                     comparePart.setSequenceFile(part.getSequenceFile());
+                    console.log("(CHECK SCRIPT) ("+comparePart.internalId+") "+comparePart.data.name+" part associated with sequence "+part.getSequenceFile().data.name+" partSource "+part.getSequenceFile().data.partSource+" ("+part.getSequenceFile().internalId+")");
                 }
             }
         }
