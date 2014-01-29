@@ -308,6 +308,7 @@ Ext.define("Teselagen.models.Part", {
             // If the sequence file has no size, we need to reload it.
             if(!record.getSequenceFile() || !record.getSequenceFile().getLength()) {
                 reload = true;
+                console.log('reloading');
             }
 
             record.getSequenceFileModel({
@@ -347,11 +348,12 @@ Ext.define("Teselagen.models.Part", {
 
             this.setSequenceFileModel(pSequenceFile);
 
+            // Avoid recalculating the size by not using the setter functions.
             if (this.get("genbankStartBP") === 0) {
-                this.set("genbankStartBP", start);
+                this.data.genbankStartBP = start;
             }
             if (this.get("endBP") === 0) {
-                this.set("endBP", stop);
+                this.data.endBP = stop;
             }
 
             success = true;

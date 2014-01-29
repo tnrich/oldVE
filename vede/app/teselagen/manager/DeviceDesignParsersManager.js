@@ -163,22 +163,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var partId = part.id;
 
             getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
-                var newPart = Ext.create("Teselagen.models.Part", {
-                    //id: partId,
-                    name: part["de:name"],
-                    partSource: part["de:partSource"],
-                    genbankStartBP: part["de:startBP"],
-                    endBP: part["de:stopBP"],
-                    revComp: part["de:revComp"],
-                });
-                newPart.fas = part["de:parts"][0].fas || "None";
-                newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+                var partName = part["de:name"];
 
-                var partName;
-                partName = part["de:name"];
-                if(part.sequence["de:fileName"]) {partName = part.sequence["de:fileName"].replace(".gb","");}
-                if(newPart.get("partSource")===""&&!newPart.get("partSource")) {newPart.set("partSource",partName);}
-                // Sequence processing
+                if(part.sequence["de:fileName"]) {
+                    partName = part.sequence["de:fileName"].replace(".gb", "");
+                }
 
                 var newSequence = Ext.create("Teselagen.models.SequenceFile", {
                     name: partName,
@@ -189,7 +178,26 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                 newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
 
+                var newPart = Ext.create("Teselagen.models.Part");
+
                 newPart.setSequenceFile(newSequence);
+
+                newPart.set({
+                    //id: partId,
+                    name: part["de:name"],
+                    partSource: part["de:partSource"],
+                    genbankStartBP: part["de:startBP"],
+                    endBP: part["de:stopBP"],
+                    revComp: part["de:revComp"],
+                });
+
+                if(newPart.get("partSource") === "" && !newPart.get("partSource")) {
+                    newPart.set("partSource",partName);
+                }
+
+                newPart.fas = part["de:parts"][0].fas || "None";
+                newPart.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
+
 
                 fullPartsAssocArray[partId] = newPart;
                 fullPartsAssocArrayUUID[part["de:parts"][0].id] = newPart;
@@ -472,13 +480,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         var endBP = this.getTagText(part, "stopBP");
                         var revComp = (this.getTagText(part, "revComp")==="true");
 
-                        newPart = Ext.create("Teselagen.models.Part", {
-                            name: name,
-                            genbankStartBP: startBP,
-                            endBP: endBP,
-                            revComp: revComp,
-                        });
-
                         var partIDs = Object.keys(fullPartsAssocArray);
 
                         getSequenceByID(hash, function (sequence) {
@@ -500,7 +501,16 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                                         newSequence.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id);
 
+                                        newPart = Ext.create("Teselagen.models.Part");
+
                                         newPart.setSequenceFile(newSequence);
+
+                                        newPart.set({
+                                            name: name,
+                                            genbankStartBP: startBP,
+                                            endBP: endBP,
+                                            revComp: revComp,
+                                        });
 
                                         var newCell = Ext.create("Teselagen.models.Cell", {
                                             index: j,
