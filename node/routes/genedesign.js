@@ -90,11 +90,40 @@ Arguments:
       -h,   --help : Display this message
 */
 
+	var organismMap = {
+		'Standard': 'Standard',
+		'Flat': 'Flat',
+		'Bacillus subtilis': 'Bacillus_subtilis',
+		'Caenorhabditis elegans': 'Caenorhabditis_elegans',
+		'Corynebacterium glutamicum': 'Cglut',
+		'Deinococcus radiodurans': 'Deinococcus_radiodurans',
+		'Drosophila melanogaster': 'Drosophila_melanogaster',
+		'Escherichia coli': 'Escherichia_coli',
+		'Homo sapiens': 'Homo_sapiens',
+		'Mycoplasma genitalium': 'Mycoplasma_genitalium',
+		'Orzya sativa': 'oryza_sativa',
+		'Saccharomyces cerevisiae': 'Saccharomyces_cerevisiae'
+	}
+
 	app.post('/genedesign/codon_optimize',function(req,res){
 
 		var organism = (req.body.organism)? req.body.organism : "yeast";
 		var algorithm = (req.body.algorithm)? req.body.algorithm : "balanced";
 		var dnaSeq = (req.body.dna)? req.body.dna : "";
+
+		function organismToStandardName(organismFullName){
+			if(organismMap[organismFullName])
+			{
+				return organismMap[organismFullName];	
+			}
+			else
+			{
+				console.log("Couldn't find organism");
+				return false;
+			}
+		}
+
+		organism = organismToStandardName(organism);
 
 		if(app.get("env") !== "production") {
 
