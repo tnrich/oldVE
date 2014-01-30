@@ -23,6 +23,9 @@ module.exports = function (app) {
 	var util = require('util');
 	var _ = require('underscore');
 
+
+	var scriptsEnabled = fs.existsSync('/usr/local/bin/GD_Juggle_Codons.pl');
+
 /*
 Name:
       GD_Juggle_Codons.pl
@@ -126,7 +129,7 @@ Arguments:
 
 		organism = organismToStandardName(organism);
 
-		if(app.get("env") !== "production") {
+		if(!scriptsEnabled) {
 
 			/*
 			return res.json(
@@ -279,7 +282,7 @@ Optional arguments:
 
 		//dnaSeq = "LYLIFGAWAGMVGTALSLLIRAELGQPGTLLGDDQIYNVIVTAHAFVMIFFMVMPIMIGGFGNWLVPLMIGAPDMAFPRMNNMSFWLLPPSFLLLLASSTVEAGAGTGWTVYPPLAGNLAHAGASVDLAIFSLHLAGVSSILGAINFITTAINMKPPTLSQYQTPLFVWSVLITAVLLLLSLPVLAAGITMLLTDRNLNTTFFDPAGGGDPVLYQHLFWFFGHPEVYILIL";
 
-		if(app.get("env") !== "production") {
+		if(!scriptsEnabled) {
 
 			/*
 			return res.json(
