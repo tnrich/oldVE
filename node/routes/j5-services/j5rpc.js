@@ -234,7 +234,9 @@ function encoded_eugene_rules_list_file(model)
     var eugenes = model["rules"];
     //console.log("Processing "+eugenes.length+" eugene rules");
     var out = "";
-    
+
+    console.log(eugenes);
+
     eugenes.forEach(function(val,key){
         var name = val["name"];
         var operand1 = val["operand1_id"];
@@ -256,7 +258,7 @@ function encoded_eugene_rules_list_file(model)
 
 
     });
-    
+
     //quicklog(out);
     return new Buffer(out).toString('base64');
 }
