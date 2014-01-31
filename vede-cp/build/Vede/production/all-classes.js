@@ -58365,7 +58365,7 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   if (!grid.store.proxy.activeRequest) 
   grid.store.load();
 }, 200);
-}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
+}}}, {xtype: 'container', margin: '0 10 10 10'}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
   if (val) 
   {
     val = val.sequence.alphabet.toUpperCase();
@@ -69086,9 +69086,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   record.data.endBP = Number(value);
   record.calculateSize(true);
   return value;
-}}, {name: "size", type: "int", defaultValue: 0}, {name: "iconID", type: "string", defaultValue: ""}, {name: "features", type: "string", defaultValue: ""}, {name: "dateCreated", type: "string"}, {name: "dateModified", type: "string"}, {name: "user_id", type: "long"}], validations: [{field: "name", type: "presence"}, {field: "name", type: "format", matcher: /[0-9a-zA-Z-_]+/g}, {field: "partSource", type: "presence"}, {field: "revComp", type: "presence"}, {field: "genbankStartBP", type: "presence"}, {field: "endBP", type: "presence"}, {field: "iconID", type: "presence"}], associations: [{type: "hasOne", model: "Teselagen.models.SequenceFile", foreignKey: "sequencefile_id", getterName: "getSequenceFileModel", setterName: "setSequenceFileModel"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], constructor: function() {
-  this.callParent(arguments);
-}, active: false, setActive: function(value) {
+}}, {name: "size", type: "int", defaultValue: 0}, {name: "iconID", type: "string", defaultValue: ""}, {name: "features", type: "string", defaultValue: ""}, {name: "dateCreated", type: "string"}, {name: "dateModified", type: "string"}, {name: "user_id", type: "long"}], validations: [{field: "name", type: "presence"}, {field: "name", type: "format", matcher: /[0-9a-zA-Z-_]+/g}, {field: "partSource", type: "presence"}, {field: "revComp", type: "presence"}, {field: "genbankStartBP", type: "presence"}, {field: "endBP", type: "presence"}, {field: "iconID", type: "presence"}], associations: [{type: "hasOne", model: "Teselagen.models.SequenceFile", foreignKey: "sequencefile_id", getterName: "getSequenceFileModel", setterName: "setSequenceFileModel"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], active: false, setActive: function(value) {
   this.active = value;
 }, isEmpty: function() {
   var partEmpty = false;
@@ -69128,31 +69126,33 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return this.get("endBP");
 }, calculateSize: function(ignoreNoSequenceFile) {
   var record = this;
-  var size = 0;
-  record.getSequenceFile(function(sequenceFile) {
+  var reload = false;
+  var startBP = Number(record.get("genbankStartBP"));
+  var endBP = Number(record.get("endBP"));
+  if (startBP > endBP) 
+  {
+    if (!record.getSequenceFile() || !record.getSequenceFile().getLength()) 
+    {
+      reload = true;
+      console.log('reloading');
+    }
+    record.getSequenceFileModel({reload: reload, callback: function(sequenceFile) {
   if (!sequenceFile && !ignoreNoSequenceFile) 
   {
     console.warn("Trying to calculate size of Part with no sequenceFile");
     return false;
   }
-  var startBP = record.get("genbankStartBP");
-  var endBP = record.get("endBP");
-  if (startBP > endBP) 
+  var tSize = Number(sequenceFile.getLength());
+  var size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+  record.data.size = size;
+}});
+  } else if (startBP === endBP) 
   {
-    var tSize = record.getSequenceFile().getLength();
-    size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
-  } else if (startBP == endBP) 
+    record.data.size = 1;
+  } else if (startBP < endBP) 
   {
-    size = 1;
-  } else {
-    size = (Math.abs(startBP - endBP) + 1);
+    record.data.size = (Math.abs(startBP - endBP) + 1);
   }
-  if (size === 0) 
-  {
-    console.warn("Part with sequence with length zero.");
-  }
-  record.set('size', size);
-});
 }, setSequenceFile: function(pSequenceFile) {
   var success = false;
   if (pSequenceFile === null) 
@@ -69164,11 +69164,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     this.setSequenceFileModel(pSequenceFile);
     if (this.get("genbankStartBP") === 0) 
     {
-      this.set("genbankStartBP", start);
+      this.data.genbankStartBP = start;
     }
     if (this.get("endBP") === 0) 
     {
-      this.set("endBP", stop);
+      this.data.endBP = stop;
     }
     success = true;
     this.hasSequenceFile = true;
@@ -69221,7 +69221,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return false;
   }
-}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'Part'], 0));
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'Part'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.Cell', Ext.data.Model, {proxy: {type: "memory", reader: {type: "json"}}, fields: [{name: "index", type: "int", defaultValue: 0}, {name: "part_id", type: "long", defaultValue: null}, {name: "fas", type: "string", defaultValue: "None"}, {name: "j5bin_id", type: "long", defaultValue: null}], associations: [{type: "belongsTo", model: "Teselagen.models.J5Bin", name: "j5Bin", getterName: "getJ5Bin", setterName: "setJ5Bin", associationKey: "j5Bin", foreignKey: "j5bin_id"}], constructor: function() {
@@ -75208,6 +75208,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   var partsArray = [];
   var rulesArray = [];
   var fullPartsAssocArray = {};
+  var fullPartsAssocArrayUUID = {};
   function getSequenceByHash(targetHash, part, cb) {
     var found = false;
     sequences.forEach(function(sequence) {
@@ -75222,31 +75223,26 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   for (var i = 0; i < parts.length; i++) 
     {
       var part = parts[i];
-      var partId;
-      if (part["de:parts"]["de:part"] instanceof Array) 
-      {
-        partId = part["de:parts"]["de:part"][0].id;
-      } else {
-        partId = part["de:parts"]["de:part"].id;
-      }
+      var partId = part.id;
       getSequenceByHash(part["de:sequenceFileHash"], part, function(part) {
-  var newPart = Ext.create("Teselagen.models.Part", {name: part["de:name"], partSource: part["de:partSource"], genbankStartBP: part["de:startBP"], endBP: part["de:stopBP"], revComp: part["de:revComp"]});
-  newPart.fas = part["de:parts"]["de:part"]["de:fas"] || "None";
-  newPart.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
-  var partName;
-  partName = part.sequence.name;
+  var partName = part["de:name"];
   if (part.sequence["de:fileName"]) 
   {
     partName = part.sequence["de:fileName"].replace(".gb", "");
   }
+  var newSequence = Ext.create("Teselagen.models.SequenceFile", {name: partName, sequenceFileContent: part.sequence["de:content"], sequenceFileFormat: part.sequence["de:format"], sequenceFileName: part.sequence["de:fileName"]});
+  newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
+  var newPart = Ext.create("Teselagen.models.Part");
+  newPart.setSequenceFile(newSequence);
+  newPart.set({name: part["de:name"], partSource: part["de:partSource"], genbankStartBP: part["de:startBP"], endBP: part["de:stopBP"], revComp: part["de:revComp"]});
   if (newPart.get("partSource") === "" && !newPart.get("partSource")) 
   {
     newPart.set("partSource", partName);
   }
-  var newSequence = Ext.create("Teselagen.models.SequenceFile", {name: partName, sequenceFileContent: part.sequence["de:content"], sequenceFileFormat: part.sequence["de:format"], sequenceFileName: part.sequence["de:fileName"]});
-  newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
-  newPart.setSequenceFile(newSequence);
+  newPart.fas = part["de:parts"][0].fas || "None";
+  newPart.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
   fullPartsAssocArray[partId] = newPart;
+  fullPartsAssocArrayUUID[part["de:parts"][0].id] = newPart;
   partsArray.push(newPart);
 });
     }
@@ -75275,20 +75271,20 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       }
       var cellFases;
       cellFases = bin["de:binItems"]["de:fas"];
-      var temCellsArray = [];
+      var tempCellsArray = [];
       for (var j = 0; j < binParts.length; j++) 
         {
-          var assocPart = fullPartsAssocArray[binParts[j]];
+          var assocPart = fullPartsAssocArrayUUID[binParts[j]];
           var cellFas;
           if (isNewFasScheme) 
           cellFas = cellFases[j]; else cellFas = assocPart ? assocPart.fas : "None";
           var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: cellFas});
           newCell.setPart(assocPart);
           newCell.setJ5Bin(newBin);
-          temCellsArray.push(newCell);
+          tempCellsArray.push(newCell);
         }
       newBin.cells().removeAll();
-      newBin.cells().insert(0, temCellsArray);
+      newBin.cells().insert(0, tempCellsArray);
       binsArray.push(newBin);
     }
   if (typeof (cb) !== "function") 
@@ -75453,7 +75449,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
               var startBP = this.getTagText(part, "startBP");
               var endBP = this.getTagText(part, "stopBP");
               var revComp = (this.getTagText(part, "revComp") === "true");
-              newPart = Ext.create("Teselagen.models.Part", {name: name, genbankStartBP: startBP, endBP: endBP, revComp: revComp});
               var partIDs = Object.keys(fullPartsAssocArray);
               getSequenceByID(hash, function(sequence) {
   var ext = me.getTagText(sequence, "fileName").match(/^.*\.(genbank|gb|fas|fasta|xml|json|rdf)$/i);
@@ -75467,7 +75462,10 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
   var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: gb.toString(), sequenceFileFormat: "GENBANK", sequenceFileName: sequence.get('sequenceFileName'), name: sequence.get('name')});
   newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
+  newPart = Ext.create("Teselagen.models.Part");
   newPart.setSequenceFile(newSequence);
+  console.log("(" + newPart.internalId + ") " + newPart.data.name + " part associated with sequence " + newSequence.data.name + " partSource " + newSequence.data.partSource + " (" + newSequence.internalId + ")");
+  newPart.set({name: name, genbankStartBP: startBP, endBP: endBP, revComp: revComp});
   var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: fas || "None"});
   newCell.setPart(newPart);
   newCell.setJ5Bin(newBin);
@@ -75480,6 +75478,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     var newSequence = Ext.create("Teselagen.models.SequenceFile", {sequenceFileContent: sequence.getElementsByTagNameNS("*", "content")[0].textContent, sequenceFileFormat: sequence.getElementsByTagNameNS("*", "format")[0].textContent, sequenceFileName: me.getTagText(sequence, "fileName"), name: me.getTagText(sequence, "fileName")});
     newSequence.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
     newPart.setSequenceFile(newSequence);
+    console.log("(" + newPart.internalId + ") " + newPart.data.name + " part associated with sequence " + newSequence.data.name + " partSource " + newSequence.data.partSource + " (" + newSequence.internalId + ")");
     var newCell = Ext.create("Teselagen.models.Cell", {index: j, fas: fas || "None"});
     newCell.setPart(newPart);
     newCell.setJ5Bin(newBin);
@@ -75567,6 +75566,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
           if (comparePart.getSequenceFile().get('hash') === part.getSequenceFile().get('hash')) 
           {
             comparePart.setSequenceFile(part.getSequenceFile());
+            console.log("(CHECK SCRIPT) (" + comparePart.internalId + ") " + comparePart.data.name + " part associated with sequence " + part.getSequenceFile().data.name + " partSource " + part.getSequenceFile().data.partSource + " (" + part.getSequenceFile().internalId + ")");
           }
         }
     }
@@ -75949,6 +75949,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   msgBox.updateProgress(progress / 100, progress + "% completed", msg);
 }};
 }, analyzeDesign: function(design, cb) {
+  return cb();
   function isValidObjectID(str) {
     if (!str) 
     return false;
@@ -76049,6 +76050,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   }
 };
   var saveDesign = function() {
+  Vede.application.fireEvent(self.DeviceEvent.SUSPEND_TABS);
   design.rules().clearFilter(true);
   design.rules().each(function(rule) {
   rule.set("operand1_id", rule.getOperand1().getId());
@@ -76063,6 +76065,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
   toastr.options.onclick = null;
   toastr.info("Design Saved");
+  Vede.application.fireEvent(self.DeviceEvent.RESUME_TABS);
 });
   gridManager.setListenersEnabled(true);
   if (typeof (cb) === "function") 
@@ -76138,6 +76141,7 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   activeTab.el.unmask();
 });
 }, onDeviceEditorSaveEvent: function(arg) {
+  Vede.application.fireEvent(this.DeviceEvent.SUSPEND_TABS);
   this.saveDEProject(arg);
 }, onDeviceEditorSaveAsBtnClick: function() {
   var saveAsWindow = Ext.create("Vede.view.de.SaveAsWindow").show();
@@ -76386,11 +76390,14 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   console.log("Suspending tabs");
   Ext.getCmp("mainAppPanel").items.items.forEach(function(tab) {
   tab.disable();
+  tab.el.mask('Parsing File', "loader rspin");
+  $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 });
 }, onResumeTabsEvent: function() {
   console.log("Resuming tabs");
   Ext.getCmp("mainAppPanel").items.items.forEach(function(tab) {
   tab.enable();
+  tab.el.unmask();
 });
 }, init: function() {
   this.callParent();
@@ -80747,7 +80754,6 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       {
         if (part[prop]) 
         {
-          debugger;
           for (var i = 0; i < part[prop].length; i++) 
             {
               var dePart = deParts.appendChild(doc.createElement("de:part"));
@@ -88150,14 +88156,9 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
       }
     }
 }, buildBtnClick: function() {
-  var buildDNAWindows = Ext.create('Vede.view.j5Report.buildDNAPanel').show();
-  buildDNAWindows.down('button').on('click', function() {
-  var printDNA_URL = buildDNAWindows.down('combobox[name="server"]').value;
-  var passwordField = buildDNAWindows.down('textfield[name="password"]').value;
-  buildDNAWindows.close();
-  if (Teselagen.manager.TasksMonitor.socket) 
-  Teselagen.manager.TasksMonitor.socket.emit('buildDNA', printDNA_URL, passwordField);
-});
+  var ngrokURL = 'https://52b3d64c.ngrok.com';
+  Ext.Ajax.request({url: ngrokURL + '/start'});
+  Ext.Msg.alert('Request Sent', 'Your assembly will begin shortly.');
 }, onTabChange: function(tabPanel, newTab, oldTab) {
   if (newTab.initialCls == "j5ReportTab") 
   {
