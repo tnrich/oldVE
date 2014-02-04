@@ -518,7 +518,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             },
                             {
                                 xtype: 'container',
-                                /*
+                                
                                 items: [
                                     {
                                         xtype: 'button',
@@ -541,7 +541,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         width: 115
                                     }
                                 ],
-                                */
+                                
                                 margin: '0 10 10 10'
                             },
                             {
