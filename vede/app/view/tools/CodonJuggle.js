@@ -3,7 +3,9 @@
     id: 'CodonJuggle',
     alias: 'widget.CodonJuggle',
     cls: 'tasksmonitorwindow',
-    width: 400,
+    width: 500,
+    pack: 'center',
+    buttonAlign: 'center',
     title: 'Codon Juggle',
     items: [
 		// {
@@ -39,6 +41,7 @@
             labelSeparator: ' ',
             labelWidth: 110,
             width:350,
+            margin: '10 60',
             queryMode: 'local',
             valueField: 'algorithmValue',
             value: 'balanced',
@@ -60,6 +63,7 @@
             labelSeparator: ' ',
             labelWidth: 110,
             width:350,
+            margin: '10 60',
             queryMode: 'local',
             valueField: 'organismValue',
             value: 'Standard',
@@ -87,8 +91,9 @@
         {
             xtype: 'button',
             text : 'Juggle Codon',
-            margin: '2.5 0 2.5 0',
-            height: 40,
+            margin: '10 200',
+            height: 30,
+            width: 140,
             border: 0,
             listeners: {
 		        click: {

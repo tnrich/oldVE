@@ -717,8 +717,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             }, {
                                                 text: 'Codon Juggle',
                                                 handler: function() {
-                                                    console.log(record.getSequenceManager().getSequence());
-                                                    var win = Ext.create('Vede.view.tools.CodonJuggle').show();
+                                                    var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
                                                     win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
                                                 }
                                             }]
