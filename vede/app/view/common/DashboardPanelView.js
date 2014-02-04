@@ -516,34 +516,34 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                     }
                                 }
                             },
-                            {
-                                xtype: 'container',
+                            // {
+                            //     xtype: 'container',
                                 
-                                items: [
-                                    {
-                                        xtype: 'button',
-                                        text: 'Codon Juggle',
-                                        listeners: {
-                                            click: function(){
-                                                Ext.create('Vede.view.tools.CodonJuggle').show();
-                                            }
-                                        },
-                                        width: 105
-                                    },
-                                    {
-                                        xtype: 'button',
-                                        text: 'Reverse Translate',
-                                        listeners: {
-                                            click: function(){
-                                                Ext.create('Vede.view.tools.ReverseTranslate').show();
-                                            }
-                                        },
-                                        width: 115
-                                    }
-                                ],
+                            //     items: [
+                            //         {
+                            //             xtype: 'button',
+                            //             text: 'Codon Juggle',
+                            //             listeners: {
+                            //                 click: function(){
+                            //                     Ext.create('Vede.view.tools.CodonJuggle').show();
+                            //                 }
+                            //             },
+                            //             width: 105
+                            //         },
+                            //         {
+                            //             xtype: 'button',
+                            //             text: 'Reverse Translate',
+                            //             listeners: {
+                            //                 click: function(){
+                            //                     Ext.create('Vede.view.tools.ReverseTranslate').show();
+                            //                 }
+                            //             },
+                            //             width: 115
+                            //         }
+                            //     ],
                                 
-                                margin: '0 10 10 10'
-                            },
+                            //     margin: '0 10 10 10'
+                            // },
                             {
                                 xtype: 'gridpanel',
                                 border: 0,
@@ -713,6 +713,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 text: 'Delete',
                                                 handler: function() {
                                                     Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_SEQUENCE, record);
+                                                }
+                                            }, {
+                                                text: 'Codon Juggle',
+                                                handler: function() {
+                                                    console.log(record.getSequenceManager().getSequence());
+                                                    var win = Ext.create('Vede.view.tools.CodonJuggle').show();
+                                                    win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
                                                 }
                                             }]
                                         }).show();

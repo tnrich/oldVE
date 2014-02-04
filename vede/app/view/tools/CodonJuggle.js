@@ -6,25 +6,29 @@
     width: 400,
     title: 'Codon Juggle',
     items: [
+		// {
+		// 	xtype: 'filefield',
+		// 	margin: '10 0 5 100',
+		// 	validateOnChange: false,
+		// 	padding: 0,
+		// 	height: 23,
+		// 	width: 250,
+		// 	allowBlank: false,
+		// 	hideLabel: false,
+		// 	labelWidth: 10,
+		// 	preventMark: false,
+		// 	buttonOnly: false,
+		// 	buttonText: '<b>Choose File</b>',
+		// 	fieldLabel: '<b style="margin-left:-100px">Input file:</b>',
+		// 	buttonConfig: {
+		// 		stlye: {
+		// 			paddingTop: '0px !important'
+		// 		}
+		// 	}
+		// },
 		{
-			xtype: 'filefield',
-			margin: '10 0 5 100',
-			validateOnChange: false,
-			padding: 0,
-			height: 23,
-			width: 250,
-			allowBlank: false,
-			hideLabel: false,
-			labelWidth: 10,
-			preventMark: false,
-			buttonOnly: false,
-			buttonText: '<b>Choose File</b>',
-			fieldLabel: '<b style="margin-left:-100px">Input file:</b>',
-			buttonConfig: {
-				stlye: {
-					paddingTop: '0px !important'
-				}
-			}
+			xtype: 'textareafield',
+			hidden: true
 		},
         {
             xtype: 'combobox',
@@ -90,34 +94,29 @@
 		        click: {
 		            fn: function(field){
 
-		            	var fileDom = this.up().down('filefield').extractFileInput();
+		            	var seq = this.up().down('textareafield').rawValue;
+		            	console.log(seq);
 
-		            	if(!fileDom.files[0]) return Ext.Msg.alert('Error', 'Select input file');
+		    //         	if(!fileDom.files[0]) return Ext.Msg.alert('Error', 'Select input file');
 
-						if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
-						{
-							return Ext.Msg.alert('Error', 'Only FAS files allowed');
-						}
+						// if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
+						// {
+						// 	return Ext.Msg.alert('Error', 'Only FAS files allowed');
+						// }
 
 				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
 				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
 
-				        var fr = new FileReader();
+				        // var fr = new FileReader();
 				        
 				        var that = this;
 
-				        function processFile() {
-				            console.log(fr.result);
-
-				            var messageBox = Ext.MessageBox.wait(
+				        var messageBox = Ext.MessageBox.wait(
 				                "Executing Codon Juggling...",
 				                "Waiting for the server"
-				            );
+				        );
 
-				            pFasta = fr.result;
-				            var seq = pFasta.replace('\n',"<line-break>");
-
-				            Ext.Ajax.request({
+				        Ext.Ajax.request({
 				                url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),
 				                method: 'POST',
 				                params: {
@@ -145,10 +144,49 @@
 				                }
 				            }); 
 
-				        }
+				     //    function processFile() {
+				     //        console.log(fr.result);
 
-				        fr.onload = processFile;
-				        fr.readAsText(fileDom.files[0]);
+				     //        var messageBox = Ext.MessageBox.wait(
+				     //            "Executing Codon Juggling...",
+				     //            "Waiting for the server"
+				     //        );
+
+				     //        pFasta = fr.result;
+				     //        // var seq = pFasta.replace('\n',"<line-break>");
+
+				     //        Ext.Ajax.request({
+				     //            url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''),
+				     //            method: 'POST',
+				     //            params: {
+				     //                dna: seq,
+				     //                algorithm: algorithm,
+				     //                organism: organism
+				     //            },
+				     //            success: function (response) {
+				     //                responseObject = JSON.parse(response.responseText);
+				     //                messageBox.close();
+				     //                console.log(responseObject);
+									// Ext.create('Ext.window.Window',{
+								 //        items: [{
+								 //            xtype: 'textarea',
+								 //            value: response.responseText,
+								 //            width: 500,
+								 //            height:200
+								 //        }]
+									// }).show();
+				     //            },
+				     //            failure: function(response, opts) {
+				     //                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+				     //                messageBox.close();
+				     //                Ext.MessageBox.alert('Failed','Conversion failed');
+				     //            }
+				     //        }); 
+
+				     //    }
+
+				     //    fr.onload = processFile;
+				     //    fr.readAsText(fileDom.files[0]);
 		            }
 		        },
             }
