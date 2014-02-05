@@ -896,7 +896,12 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                     var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
                                                     VEManager.saveSequenceToFile();
                                                 }
-                                              }]
+                                              },{
+                                                text: 'Codon Juggle',
+                                                handler: function() {
+                                                    Vede.application.getController("Vede.controller.DashboardPanelController").onPartCodonJuggle(record);
+                                                }
+                                            }]
                                         }).show();
                                         contextMenu.setPagePosition(e.getX(),e.getY()-5)
                                     }

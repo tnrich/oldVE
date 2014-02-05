@@ -377,6 +377,14 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     },
 
+    onPartCodonJuggle: function(record) {
+        var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('partLibraryArea')}).show();
+        var sequenceManager = record.getSequenceFile().getSequenceManager();
+        var subSequence = sequenceManager.subSequence(record.get('genbankStartBP'), record.get('endBP'));
+        win.down('textareafield').setValue(subSequence);
+
+    },
+
     onLaunch: function () {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },

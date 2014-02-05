@@ -4,6 +4,7 @@
     alias: 'widget.CodonJuggle',
     cls: 'tasksmonitorwindow',
     width: 500,
+    modal: true,
     callback: function() {},
     pack: 'center',
     buttonAlign: 'center',
@@ -131,10 +132,15 @@
 				                    organism: organism
 				                },
 				                success: function (response) {
+				                	Ext.getCmp("CodonJuggle").close();
 				                    responseObject = JSON.parse(response.responseText);
 				                    messageBox.close();
 				                    console.log(responseObject);
 									Ext.create('Ext.window.Window',{
+    									padding: '20px',
+    									title: 'Codon Juggle',
+    									modal: true,
+    									renderTo: Ext.getCmp("DashboardPanel").getActiveTab().down().id,
 								        items: [{
 									        	xtype: 'displayfield',
 										        hideLabel: true,
@@ -147,17 +153,10 @@
 									            flex: 1,
 									            items: [{
 									                xtype: 'button',
-									                text: 'View Sequence',
-									                margin: 2,
-									                padding: 2,
-									                handler: function() {
-									                    // this.up('window').callback();
-									                    this.up('window').close();
-									                }
-									            }, {
-									                xtype: 'button',
 									                text: 'Overwrite Sequence',
-									                margin: 2,
+									                margin: 10,
+            										height: 30,
+									            	flex: 1,
 									                padding: 2,
 									                handler: function() {
 									                    this.up('window').close();
@@ -165,7 +164,9 @@
 									            }, {
 									                xtype: 'button',
 									                text: 'Create New Sequence',
-									                margin: 2,
+            										height: 30,
+									                margin: '10 20',
+									            	flex: 1,
 									                padding: 2,
 									                handler: function() {
 									                    this.up('window').close();
