@@ -4,6 +4,7 @@
     alias: 'widget.CodonJuggle',
     cls: 'tasksmonitorwindow',
     width: 500,
+    callback: function() {},
     pack: 'center',
     buttonAlign: 'center',
     title: 'Codon Juggle',
@@ -135,7 +136,44 @@
 				                    console.log(responseObject);
 									Ext.create('Ext.window.Window',{
 								        items: [{
+									        	xtype: 'displayfield',
+										        hideLabel: true,
+										        value: 'Sequence successfully juggled. What would you like to do?'
+								        	},{
+									            xtype: 'container',
+									            layout: {
+									                type: 'hbox'
+									            },
+									            flex: 1,
+									            items: [{
+									                xtype: 'button',
+									                text: 'View Sequence',
+									                margin: 2,
+									                padding: 2,
+									                handler: function() {
+									                    // this.up('window').callback();
+									                    this.up('window').close();
+									                }
+									            }, {
+									                xtype: 'button',
+									                text: 'Overwrite Sequence',
+									                margin: 2,
+									                padding: 2,
+									                handler: function() {
+									                    this.up('window').close();
+									                }
+									            }, {
+									                xtype: 'button',
+									                text: 'Create New Sequence',
+									                margin: 2,
+									                padding: 2,
+									                handler: function() {
+									                    this.up('window').close();
+									                }
+									            }]
+									        }, {
 								            xtype: 'textarea',
+								            hidden: true,
 								            value: response.responseText,
 								            width: 500,
 								            height:200

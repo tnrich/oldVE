@@ -371,6 +371,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
         }, 10);
     },
 
+    onSequenceCodonJuggle: function(record) {
+        var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
+        win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
+
+    },
+
     onLaunch: function () {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
