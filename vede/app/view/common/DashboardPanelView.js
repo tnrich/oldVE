@@ -497,8 +497,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 },
                                 anchor: '100%',
                                 height: 30,
-                                id: 'StrainLibrarySearch',
-                                cls: 'StrainLibrarySearchField',
+                                id: 'strainLibrarySearch',
+                                cls: 'strainLibrarySearchField',
                                 width: '98%',
                                 emptyText: 'Search Strain Library',
                                 emptyCls: 'empty-search-field',
@@ -524,7 +524,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                             {
                                 xtype: 'gridpanel',
                                 border: 0,
-                                name: 'StrainLibraryGrid',
+                                name: 'strainLibraryGrid',
                                 loadMask: true,
                                 autoHeight: true,
                                 flex: 1,
@@ -532,10 +532,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 viewConfig: {
                                     style: 'overflow-y: auto'
                                 },
-                                cls: 'StrainLibraryGrid',
+                                cls: 'strainLibraryGrid',
                                 height: '100%',
                                 autoScroll: true,
-                                id: 'StrainLibrary',
+                                id: 'strainLibrary',
                                 columns: [
 
                                     {
@@ -635,7 +635,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                         items: [
                                                 {
                                                     xtype: 'container',
-                                                    cls: 'StrainLibraryOptionsContainer',
+                                                    cls: 'strainLibraryOptionsContainer',
                                                     items: [
                                                         {
                                                             xtype: 'text',
