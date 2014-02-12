@@ -373,7 +373,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     onSequenceCodonJuggle: function(record) {
         var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
-        win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
+        var sequenceManager = record.getSequenceManager();
+        var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(sequenceManager.toGenbank());
+        win.down('textareafield').setValue(fasta);
 
     },
 

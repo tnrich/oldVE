@@ -486,7 +486,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                         autoScroll: true,
                         layout: {
                             type: 'vbox',
-                            align: 'stretch'
+                            align: 'stretch',
                         },
                         items : [
                             {
