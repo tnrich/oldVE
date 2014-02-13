@@ -428,7 +428,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
                     console.log(success.record);
                     console.log(seqMan);
-                    console.log(sequenceFile);
+                    console.log(newSequenceFile);
 
                     newSequenceFile.save({
                         callback: function () {
