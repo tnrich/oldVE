@@ -397,6 +397,52 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
     onCodonJuggleCreateSequence: function(success) {
         console.log(success);
+        success.responseObject.parsedResponse.shift();
+        var newSeq = success.responseObject.parsedResponse.join('');
+
+        var onPromptClosed = function (btn, text) {
+                if(btn === "ok") {
+                    text = Ext.String.trim(text);
+                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
+
+                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
+                    $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+                    var self = this;
+
+                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "GENBANK",
+                        sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                        sequenceFileName: "untitled.gb",
+                        partSource: "Untitled sequence",
+                        name: text
+                    });
+
+                    // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
+                    var seqMan = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(newSequenceFile);
+                    seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
+                    var rawGenbank = newSequenceManager.toGenbank().toString();
+                    newSequenceFile.setSequenceFileContent(rawGenbank);
+                    newSequenceFile.setSequenceManager(seqMan);
+
+                    newSequenceFile.save({
+                        callback: function () {
+                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
+                                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                                self.openSequence(newSequenceFile);
+                                toastr.info ("New Sequence Created");
+                            });
+                        }
+                    });
+
+                    Vede.application.fireEvent("PopulateStats");
+                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
+
+                } else {
+                    return false;
+                }
+            };
     },
 
     onLaunch: function () {
