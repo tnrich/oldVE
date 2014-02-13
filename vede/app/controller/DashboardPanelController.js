@@ -424,7 +424,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
                     var rawGenbank = seqMan.toGenbank().toString();
                     seqMan.toGenbank().setLocus(text);
                     seqMan.name = text;
-                    newSequenceFile.setSequenceFileName(text);
+                    newSequenceFile.set('name', text);
                     newSequenceFile.setSequenceFileContent(rawGenbank);
                     newSequenceFile.setSequenceManager(seqMan);
 
