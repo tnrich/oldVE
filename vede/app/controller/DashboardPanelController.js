@@ -396,9 +396,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onCodonJuggleCreateSequence: function(success) {
-        console.log(success);
         success.responseObject.parsedResponse.shift();
         var newSeq = success.responseObject.parsedResponse.join('');
+        console.log(newSeq);
 
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
@@ -430,14 +430,12 @@ Ext.define("Vede.controller.DashboardPanelController", {
                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
                                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-                                self.openSequence(newSequenceFile);
+                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
                                 toastr.info ("New Sequence Created");
+                                Vede.application.fireEvent("PopulateStats");
                             });
                         }
                     });
-
-                    Vede.application.fireEvent("PopulateStats");
-                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
 
                 } else {
                     return false;
