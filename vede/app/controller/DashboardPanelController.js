@@ -396,7 +396,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onCodonJuggleCreateSequence: function(success) {
-        success.responseObject.parsedResponse.shift();
+        // success.responseObject.parsedResponse.shift();
         var newSeq = success.responseObject.parsedResponse.join('');
         console.log(newSeq);
 
@@ -422,6 +422,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
                     var seqMan = success.record.getSequenceManager();
                     seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
                     var rawGenbank = seqMan.toGenbank().toString();
+                    newSequenceFile.setSequenceFileName(text);
                     newSequenceFile.setSequenceFileContent(rawGenbank);
                     newSequenceFile.setSequenceManager(seqMan);
 
