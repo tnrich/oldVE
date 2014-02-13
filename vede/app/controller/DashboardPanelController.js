@@ -422,6 +422,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
                     var seqMan = success.record.getSequenceManager();
                     seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
                     var rawGenbank = seqMan.toGenbank().toString();
+                    seqMan.toGenbank().setLocus(text);
+                    seqMan.name = text;
                     newSequenceFile.setSequenceFileName(text);
                     newSequenceFile.setSequenceFileContent(rawGenbank);
                     newSequenceFile.setSequenceManager(seqMan);
