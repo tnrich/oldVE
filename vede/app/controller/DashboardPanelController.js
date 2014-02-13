@@ -396,7 +396,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onCodonJuggleCreateSequence: function(success) {
-        // success.responseObject.parsedResponse.shift();
+        success.responseObject.parsedResponse.shift();
         var newSeq = success.responseObject.parsedResponse.join('');
         console.log(newSeq);
 
@@ -425,6 +425,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
                     newSequenceFile.setSequenceFileName(text);
                     newSequenceFile.setSequenceFileContent(rawGenbank);
                     newSequenceFile.setSequenceManager(seqMan);
+
+                    console.log(record);
+                    console.log(seqMan);
+                    console.log(sequenceFile);
 
                     newSequenceFile.save({
                         callback: function () {
