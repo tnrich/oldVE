@@ -419,7 +419,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
                     });
 
                     // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
-                    var seqMan = success.record.getSequenceFile().getSequenceManager();
+                    var seqMan = success.record.getSequenceManager();
                     seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
                     var rawGenbank = newSequenceManager.toGenbank().toString();
                     newSequenceFile.setSequenceFileContent(rawGenbank);
