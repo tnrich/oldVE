@@ -32,9 +32,31 @@
 		// },
 		{
 			xtype: 'textareafield',
+			name: 'file',
 			hidden: true
-		},
-        {
+		},{
+			xtype: 'textareafield',
+			name: 'record',
+			hidden: true
+		},{
+			xtype: 'textareafield',
+			name: 'type',
+			hidden: true
+		},{
+			xtype: 'displayfield',
+			fieldLabel: "<b>Sequence</b>",
+			labelWidth: 110,
+            width:350,
+            margin: '5 60',
+			cls: 'cjSequenceName'
+		},{
+			xtype: 'displayfield',
+			fieldLabel: "<b>Size(bps)</b>",
+			labelWidth: 110,
+            width:350,
+            margin: '5 60',
+			cls: 'cjSequenceSize'
+		},{
             xtype: 'combobox',
             cls: 'algorithmSelector',
             fieldLabel: '<b>Algorithm:</b>',
@@ -93,7 +115,7 @@
         {
             xtype: 'button',
             text : 'Juggle Codon',
-            margin: '10 200',
+            margin: '10 180',
             height: 30,
             width: 140,
             border: 0,
@@ -101,15 +123,10 @@
 		        click: {
 		            fn: function(field){
 
-		            	var seq = this.up().down('textareafield').rawValue;
+		            	var seq = this.up().down('textareafield[name="file"]').rawValue;
+		            	var record = this.up().down('textareafield[name="record"]').rawValue;
+		            	var type = this.up().down('textareafield[name="type"]').rawValue;
 		            	console.log(seq);
-
-		    //         	if(!fileDom.files[0]) return Ext.Msg.alert('Error', 'Select input file');
-
-						// if(!fileDom.files[0].name.match(/^.*\.(fas|FAS|fasta|FASTA)$/))
-						// {
-						// 	return Ext.Msg.alert('Error', 'Only FAS files allowed');
-						// }
 
 				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
 				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
@@ -159,6 +176,11 @@
 									            	flex: 1,
 									                padding: 2,
 									                handler: function() {
+									                    var success ={};
+									                	success.responseObject = responseObject;
+									                	success.type = type;
+									                	success.record = record;
+									                	Vede.application.fireEvent(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, success);
 									                    this.up('window').close();
 									                }
 									            }, {
@@ -169,7 +191,12 @@
 									            	flex: 1,
 									                padding: 2,
 									                handler: function() {
-									                    this.up('window').close();
+									                	var success ={};
+									                	success.responseObject = responseObject;
+									                	success.type = type;
+									                	success.record = record;
+									                	Vede.application.fireEvent(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, success);
+									                	this.up('window').close();
 									                }
 									            }]
 									        }, {

@@ -375,7 +375,11 @@ Ext.define("Vede.controller.DashboardPanelController", {
         var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
         var sequenceManager = record.getSequenceManager();
         var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(sequenceManager.toGenbank());
-        win.down('textareafield').setValue(fasta);
+        win.down('textareafield[name="record"]').setValue(record);
+        win.down('textareafield[name="file"]').setValue(fasta);
+        win.down('textareafield[name="type"]').setValue("sequence");
+        win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+        win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
 
     },
 
@@ -383,11 +387,16 @@ Ext.define("Vede.controller.DashboardPanelController", {
         var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('partLibraryArea')}).show();
         var sequenceManager = record.getSequenceFile().getSequenceManager();
         var subSequence = sequenceManager.subSequenceManager(record.get('genbankStartBP'), record.get('endBP'));
-        console.log(subSequence);
         var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(subSequence.toGenbank());
-        console.log(fasta);
-        win.down('textareafield').setValue(subSequence);
+        win.down('textareafield[name="record"]').setValue(record);
+        win.down('textareafield[name="file"]').setValue(subSequence);
+        win.down('textareafield[name="type"]').setValue("part");
+        win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+        win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
+    },
 
+    onCodonJuggleCreateSequence: function(success) {
+        console.log(success);
     },
 
     onLaunch: function () {
@@ -402,6 +411,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
         this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
         this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, this.onCodonJuggleCreateSequence);
 
         this.control({
             "#mainAppPanel": {
