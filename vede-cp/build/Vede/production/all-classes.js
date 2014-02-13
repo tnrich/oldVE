@@ -58347,7 +58347,45 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   introJs().start();
 }}}]}, {xtype: 'container', id: 'dashboardStats', margin: '10 100 50 100', flex: 1, minHeight: 320, minWidth: 800, border: 0, layout: {type: 'hbox', align: 'stretch'}, listeners: {afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'Here are some awesome stats to keep you up to date.', "data-position": 'top', "data-step": 3});
-}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Sequence Library', cls: 'sequenceLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'sequenceLibraryContainer', id: 'sequenceLibraryArea', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', anchor: '100%', height: 30, cls: 'sequenceLibrarySearchField', width: '98%', emptyText: 'Search Sequence Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
+}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Strain Library', cls: 'strainLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'StrainLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'StrainLibrarySearch', cls: 'StrainLibrarySearchField', width: '98%', emptyText: 'Search Strain Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
+  Teselagen.manager.ProjectManager.Strains.clearFilter(true);
+  var grid = Ext.getCmp('StrainLibrary');
+  if (grid.timeoutId) 
+  {
+    clearTimeout(grid.timeoutId);
+    delete grid.timeoutId;
+  }
+  grid.timeoutId = setTimeout(function() {
+  if (grid.store.proxy.activeRequest) 
+  {
+    Ext.Ajax.abort(grid.store.proxy.activeRequest);
+    delete grid.store.proxy.activeRequest;
+  }
+  grid.store.clearFilter(true);
+  grid.store.filter("name", Ext.String.escapeRegex(newValue));
+  if (!grid.store.proxy.activeRequest) 
+  grid.store.load();
+}, 200);
+}}}, {xtype: 'gridpanel', border: 0, name: 'StrainLibraryGrid', loadMask: true, autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, cls: 'StrainLibraryGrid', height: '100%', autoScroll: true, id: 'StrainLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {xtype: 'gridcolumn', text: 'PI', width: 80, dataIndex: 'pi', sortable: false}, {xtype: 'gridcolumn', text: 'Creator', width: 160, dataIndex: 'creator', sortable: true}, {xtype: 'gridcolumn', flex: 1, text: 'Sequences', width: 150, dataIndex: 'Sequences', sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
+  e.preventDefault();
+  var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Rename', handler: function() {
+  Teselagen.manager.ProjectExplorerManager.renameStrain(record);
+}}, {text: 'Open', handler: function() {
+  Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null, record.getSequenceFile());
+}}, {text: 'Delete', handler: function() {
+  Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_Strain, record);
+}}, {text: 'Download Source Sequence', handler: function() {
+  var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
+  VEManager.saveSequenceToFile();
+}}]}).show();
+  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
+}}, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'StrainLibraryOptionsContainer', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
+}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '40', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
+}}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '60', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+  Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
+}}}]}]}]}]}]}, {xtype: 'panel', title: 'Sequence Library', cls: 'sequenceLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'sequenceLibraryContainer', id: 'sequenceLibraryArea', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', anchor: '100%', height: 30, cls: 'sequenceLibrarySearchField', width: '98%', emptyText: 'Search Sequence Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
   var grid = Ext.getCmp('sequenceLibrary');
   if (grid.timeoutId) 
   {
@@ -58365,7 +58403,7 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   if (!grid.store.proxy.activeRequest) 
   grid.store.load();
 }, 200);
-}}}, {xtype: 'container', margin: '0 10 10 10'}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
+}}}, {xtype: 'gridpanel', border: 0, name: 'SequenceLibraryGrid', cls: 'sequenceLibraryGrid', layout: 'fit', autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, id: 'sequenceLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {text: 'Type', width: 75, dataIndex: 'serialize', renderer: function(val) {
   if (val) 
   {
     val = val.sequence.alphabet.toUpperCase();
@@ -58402,6 +58440,9 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   VEManager.saveSequenceToFile();
 }}, {text: 'Delete', handler: function() {
   Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_SEQUENCE, record);
+}}, {text: 'Codon Juggle', handler: function() {
+  Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceCodonJuggle(record);
+  var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
 }}]}).show();
   contextMenu.setPagePosition(e.getX(), e.getY() - 5);
 }}}]}, {xtype: "dropZone", name: "dropZone"}]}, {xtype: 'panel', title: 'Part Library', cls: 'partLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'partLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'partLibrarySearch', cls: 'partLibrarySearchField', width: '98%', emptyText: 'Search Part Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
@@ -58438,6 +58479,8 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
 }}, {text: 'Download Source Sequence', handler: function() {
   var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
   VEManager.saveSequenceToFile();
+}}, {text: 'Codon Juggle', handler: function() {
+  Vede.application.getController("Vede.controller.DashboardPanelController").onPartCodonJuggle(record);
 }}]}).show();
   contextMenu.setPagePosition(e.getX(), e.getY() - 5);
 }}, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'partLibraryOptionsContainer', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
@@ -67008,7 +67051,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.event.AuthenticationEvent', Ext.Base, {singleton: true, LOGGED_IN: "LoggedIn", POPULATE_STATS: "PopulateStats"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'AuthenticationEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Explorer', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{xtype: 'container', layout: {type: 'vbox', align: 'stretch'}, border: 0, width: 220, id: 'projectPanelOptions', items: [{xtype: 'container', layout: 'hbox', items: [{xtype: 'button', border: '0', width: 220, id: "openSequenceLibraryBtn", text: 'My Sequences', cls: 'sequenceLibraryBtn', overCls: 'sequenceLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}, {xtype: 'button', border: '0', cls: 'sequenceAddBtn', overCls: 'sequenceAddBtn-over', height: 20, tooltip: 'New Sequence', width: 20, margin: 0, listeners: {click: function() {
+(Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Explorer', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{xtype: 'container', layout: {type: 'vbox', align: 'stretch'}, border: 0, width: 220, id: 'projectPanelOptions', items: [{xtype: 'container', layout: 'hbox', items: [{xtype: 'button', border: '0', width: 220, id: "openStrainLibraryBtn", text: 'My Strains', cls: 'strainLibraryBtn', overCls: 'strainLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}, {xtype: 'button', border: '0', cls: 'strainAddBtn', overCls: 'strainAddBtn-over', height: 20, tooltip: 'New Strain', width: 20, margin: 0, listeners: {click: function() {
+  Vede.application.fireEvent("createStrain");
+}}}]}, {xtype: 'container', layout: 'hbox', items: [{xtype: 'button', border: '0', width: 220, id: "openSequenceLibraryBtn", text: 'My Sequences', cls: 'sequenceLibraryBtn', overCls: 'sequenceLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}, {xtype: 'button', border: '0', cls: 'sequenceAddBtn', overCls: 'sequenceAddBtn-over', height: 20, tooltip: 'New Sequence', width: 20, margin: 0, listeners: {click: function() {
   Vede.application.fireEvent("createSequence");
 }}}]}, {xtype: 'button', border: '0', id: "openPartLibraryBtn", text: 'My Parts', cls: 'partsLibraryBtn', overCls: 'partsLibraryBtn-over', textAlign: 'left', margin: 0, height: 30}]}, {flex: 1, xtype: 'treepanel', border: false, id: 'projectTreePanel', title: 'My Projects', width: 220, rootVisible: false, animate: false, tools: [{type: 'plus', tooltip: 'New Project', cls: 'projectAddBtn', overCls: 'projectAddBtn-over', handler: function(event, toolEl, panelHeader) {
   Teselagen.manager.ProjectManager.createNewProject();
@@ -72938,6 +72983,14 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.defer(function() {
   sequenceLibrary.el.unmask();
 }, 10);
+}, onSequenceCodonJuggle: function(record) {
+  var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
+  win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
+}, onPartCodonJuggle: function(record) {
+  var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('partLibraryArea')}).show();
+  var sequenceManager = record.getSequenceFile().getSequenceManager();
+  var subSequence = sequenceManager.subSequence(record.get('genbankStartBP'), record.get('endBP'));
+  win.down('textareafield').setValue(subSequence);
 }, onLaunch: function() {
   Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
 }, init: function() {
@@ -74410,7 +74463,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   this.pieContextMenuNewFeature = {xtype: 'menuitem', text: 'Annotate as new Sequence Feature', id: 'PieContextMenuNewFeature', autoDestroy: false};
   this.pieContextMenuEditFeature = {xtype: 'menuitem', text: 'Edit Sequence Feature', id: 'PieContextMenuEditFeature', autoDestroy: false};
   this.pieContextMenuDeleteFeature = {xtype: 'menuitem', text: 'Delete Sequence Feature', id: 'PieContextMenuDeleteFeature', autoDestroy: false};
-  this.control({'#mainAppPanel': {tabchange: this.onTabChange}, '#PieContextMenu': {show: this.onPieContextMenuShow, beforehide: this.onPieContextMenuHide}, '#PieContextMenuNewFeature': {click: this.onPieContextMenuNewFeatureClick}, '#PieContextMenuEditFeature': {click: this.onPieContextMenuEditFeatureClick}, '#PieContextMenuDeleteFeature': {click: this.onPieContextMenuDeleteFeatureClick}});
+  this.pieContextMenuCodonJuggle = {xtype: 'menuitem', text: 'Codon Juggle', id: 'PieContextMenuCodonJuggle', autoDestroy: false};
+  this.control({'#mainAppPanel': {tabchange: this.onTabChange}, '#PieContextMenu': {show: this.onPieContextMenuShow, beforehide: this.onPieContextMenuHide}, '#PieContextMenuNewFeature': {click: this.onPieContextMenuNewFeatureClick}, '#PieContextMenuEditFeature': {click: this.onPieContextMenuEditFeatureClick}, '#PieContextMenuDeleteFeature': {click: this.onPieContextMenuDeleteFeatureClick}, '#PieContextMenuCodonJuggle': {click: this.onPieContextMenuCodonJuggleClick}});
   Vede.application.on('newFeatureinProperties', this.onPieContextMenuNewFeatureClick, this);
   Vede.application.on('editFeatureinProperties', this.onPieContextMenuEditFeatureClick, this);
   Vede.application.on('getSelectedFeatureFromProperties', this.getSelectedFeature, this);
@@ -74450,17 +74504,21 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   if (this.isPieSelectionLayerRightClicked && !this.containsNewFeature) 
   {
     this.pieContextMenu.insert(0, this.pieContextMenuNewFeature);
+    this.pieContextMenu.insert(1, this.pieContextMenuCodonJuggle);
     this.containsNewFeature = true;
   } else if (!this.isPieSelectionLayerRightClicked) 
   {
     if (Ext.getCmp("PieContextMenuNewFeature")) 
     this.pieContextMenu.remove(Ext.getCmp("PieContextMenuNewFeature"));
+    if (Ext.getCmp("PieContextMenuCodonJuggle")) 
+    this.pieContextMenu.remove(Ext.getCmp("PieContextMenuCodonJuggle"));
     this.containsNewFeature = false;
   }
   if (this.isPieAnnotationRightClicked && !this.containsEditAndDeleteFeature) 
   {
     this.pieContextMenu.add(this.pieContextMenuEditFeature);
     this.pieContextMenu.add(this.pieContextMenuDeleteFeature);
+    this.pieContextMenu.add(this.pieContextMenuCodonJuggle);
     this.containsEditAndDeleteFeature = true;
   } else if (!this.isPieAnnotationRightClicked) 
   {
@@ -74468,6 +74526,8 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
     this.pieContextMenu.remove(Ext.getCmp("PieContextMenuEditFeature"));
     if (Ext.getCmp("PieContextMenuDeleteFeature")) 
     this.pieContextMenu.remove(Ext.getCmp("PieContextMenuDeleteFeature"));
+    if (Ext.getCmp("PieContextMenuCodonJuggle")) 
+    this.pieContextMenu.remove(Ext.getCmp("PieContextMenuCodonJuggle"));
     this.containsEditAndDeleteFeature = false;
   }
   this.pieContextMenu.show();
@@ -74514,6 +74574,17 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
   ;
 }, onPieContextMenuDeleteFeatureClick: function() {
   this.sequenceManager.removeFeature(this.selectedFeature, false);
+  this.isPieContextMenuOpen = false;
+  this.isPieAnnotationRightClicked = false;
+  this.isPieSelectionLayerRightClicked = false;
+  if (this.pieContextMenu) 
+  {
+    this.pieContextMenu.hide();
+  }
+  ;
+  Vede.application.fireEvent('rerenderFeaturesGrid');
+  Vede.application.fireEvent('toggleFeatureEditOptions');
+}, onPieContextMenuCodonJuggleClick: function() {
   this.isPieContextMenuOpen = false;
   this.isPieAnnotationRightClicked = false;
   this.isPieSelectionLayerRightClicked = false;
@@ -88665,6 +88736,32 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   Ext.applyIf(me, {items: [{xtype: 'numberfield', cls: 'maxDeltaTemperatureAdjacentZonesValue', padding: 3, fieldLabel: 'Max Delta Temp Adjacent Zones (5)', labelSeparator: ' ', labelWidth: 310, value: 5, maxValue: 1000, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'maxDeltaTemperatureReactionOptimumZoneAcceptableValue', padding: 3, fieldLabel: 'Max Delta Temp Reaction Optimum Zone Acceptable (5)', labelSeparator: ' ', labelWidth: 310, value: 5, step: 0.1}, {xtype: 'numberfield', cls: 'maxMcStepsPerZoneValue', padding: 3, fieldLabel: 'Max MC Steps Per Zone (1000)', labelSeparator: ' ', labelWidth: 310, value: 1000, decimalPrecision: 1, minValue: 0}, {xtype: 'numberfield', cls: 'maxWellVolumeMultiwellPlateValue', padding: 3, fieldLabel: 'Max Well Volume Multi-well Plate (100)', labelSeparator: ' ', labelWidth: 310, value: 100, minValue: 0}, {xtype: 'numberfield', cls: 'mcTemperatureFinalValue', padding: 3, fieldLabel: 'MC Temp Final (0.0001)', labelSeparator: ' ', labelWidth: 310, value: 1.0E-4, decimalPrecision: 6, minValue: 0, step: 1.0E-5}, {xtype: 'numberfield', cls: 'mcTemperatureInitialValue', padding: 3, fieldLabel: 'MC Temp Initial (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 3, minValue: 0, step: 0.01}, {xtype: 'numberfield', cls: 'minPipettingVolumeValue', padding: 3, fieldLabel: 'Min Pipetting Volume (5)', labelSeparator: ' ', labelWidth: 310, value: 5, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'nColumnsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Columns in Multi-well Plate (12)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'nRowsMultiwellPlateValue', padding: 3, fieldLabel: 'Num Rows in Multi-well Plate (8)', labelSeparator: ' ', labelWidth: 310, value: 12, decimalPrecision: 1, minValue: 1, step: 1}, {xtype: 'numberfield', cls: 'trialDeltaTemperatureValue', padding: 3, fieldLabel: 'Trial Delta Temp (0.1)', labelSeparator: ' ', labelWidth: 310, value: 0.1, decimalPrecision: 2, minValue: 0, step: 0.1}, {xtype: 'numberfield', cls: 'wellsPerThermocyclerZoneValue', padding: 3, fieldLabel: 'Wells Per Thermocycler Zone (16)', labelSeparator: ' ', labelWidth: 310, value: 16, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'numberfield', cls: 'zonesPerThermocyclerBlockValue', padding: 3, fieldLabel: 'Zones Per Thermocycler Block (6)', labelSeparator: ' ', labelWidth: 310, value: 6, decimalPrecision: 1, minValue: 0, step: 1}, {xtype: 'container', height: 80, layout: {type: 'absolute'}, items: [{xtype: 'button', cls: 'automationParamsCancelBtn', x: 300, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>Cancel</b>'}, {xtype: 'button', cls: 'automationParamsOKBtn', x: 390, y: 50, margin: 5, maxHeight: 23, minHeight: 23, minWidth: 75, padding: '', text: '<b>OK</b>'}, {xtype: 'button', cls: 'automationParamsResetBtn', x: 0, y: 50, margin: 5, maxHeight: 23, minHeight: 23, padding: '', text: '<b>Reset To Defaults</b>'}]}]});
   me.callParent(arguments);
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5AutomationParameters'], 0));
+;
+
+(Ext.cmd.derive('Vede.view.tools.CodonJuggle', Ext.window.Window, {id: 'CodonJuggle', cls: 'tasksmonitorwindow', width: 500, modal: true, callback: function() {
+}, pack: 'center', buttonAlign: 'center', title: 'Codon Juggle', items: [{xtype: 'textareafield', hidden: true}, {xtype: 'combobox', cls: 'algorithmSelector', fieldLabel: '<b>Algorithm:</b>', labelCls: 'algorithm-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, margin: '10 60', queryMode: 'local', valueField: 'algorithmValue', value: 'balanced', displayField: 'algorithmName', store: new Ext.data.ArrayStore({fields: ['algorithmName'], data: [['balanced'], ['high'], ['most_different_sequence'], ['least_different_RSCU'], ['random']]})}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, margin: '10 60', queryMode: 'local', valueField: 'organismValue', value: 'Standard', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Arabidopsis thaliana'], ['Bacillus subtilis'], ['Caenorhabditis elegans'], ['Corynebacterium glutamicum'], ['Deinococcus radiodurans'], ['Drosophila melanogaster'], ['Escherichia coli'], ['Flat'], ['Homo sapiens'], ['Mycoplasma genitalium'], ['Orzya sativa'], ['Saccharomyces cerevisiae'], ['Standard']]})}, {xtype: 'button', text: 'Juggle Codon', margin: '10 200', height: 30, width: 140, border: 0, listeners: {click: {fn: function(field) {
+  var seq = this.up().down('textareafield').rawValue;
+  console.log(seq);
+  var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
+  var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
+  var that = this;
+  var messageBox = Ext.MessageBox.wait("Executing Codon Juggling...", "Waiting for the server");
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("genedesign/codon_optimize", ''), method: 'POST', params: {dna: seq, algorithm: algorithm, organism: organism}, success: function(response) {
+  Ext.getCmp("CodonJuggle").close();
+  responseObject = JSON.parse(response.responseText);
+  messageBox.close();
+  console.log(responseObject);
+  Ext.create('Ext.window.Window', {padding: '20px', title: 'Codon Juggle', modal: true, renderTo: Ext.getCmp("DashboardPanel").getActiveTab().down().id, items: [{xtype: 'displayfield', hideLabel: true, value: 'Sequence successfully juggled. What would you like to do?'}, {xtype: 'container', layout: {type: 'hbox'}, flex: 1, items: [{xtype: 'button', text: 'Overwrite Sequence', margin: 10, height: 30, flex: 1, padding: 2, handler: function() {
+  this.up('window').close();
+}}, {xtype: 'button', text: 'Create New Sequence', height: 30, margin: '10 20', flex: 1, padding: 2, handler: function() {
+  this.up('window').close();
+}}]}, {xtype: 'textarea', hidden: true, value: response.responseText, width: 500, height: 200}]}).show();
+}, failure: function(response, opts) {
+  Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  messageBox.close();
+  Ext.MessageBox.alert('Failed', 'Conversion failed');
+}});
+}}}}]}, 0, ["CodonJuggle"], ["panel", "window", "component", "container", "box", "CodonJuggle"], {"panel": true, "window": true, "component": true, "container": true, "box": true, "CodonJuggle": true}, ["widget.CodonJuggle"], 0, [Vede.view.tools, 'CodonJuggle'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.CopySequenceWindow', Ext.window.Window, {title: 'Copy Sequence Text', modal: true, height: 300, width: 400, resizable: true, layout: {type: 'vbox'}, items: [{xtype: 'displayfield', value: 'Please copy the selected text below:'}, {xtype: 'textarea', cls: 'copySequenceTextArea', grow: true, height: 250, width: 392}]}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'CopySequenceWindow'], 0));

@@ -18107,7 +18107,7 @@ body.x-nbr .x-grid-row-editor-buttons-default-top-frameInfo {
 }
 
 /* line 134, ../../../../sass/src/view/common/DashboardPanelView.scss */
-.sequenceLibrarySearchField .x-form-text, .partLibrarySearchField .x-form-text {
+.sequenceLibrarySearchField .x-form-text, .partLibrarySearchField .x-form-text, .strainLibrarySearchField .x-form-text {
   background-image: url(images/ux/magnifier.png) !important;
   background-position: 12px center;
   background-repeat: no-repeat;
@@ -18334,7 +18334,7 @@ body.x-nbr .x-grid-row-editor-buttons-default-top-frameInfo {
 }
 
 /* line 143, ../../../../sass/src/view/common/ProjectPanelView.scss */
-.sequenceLibraryBtn, .partsLibraryBtn {
+.sequenceLibraryBtn, .partsLibraryBtn, .strainLibraryBtn {
   background: #006cab !important;
   border-radius: 0px !important;
   transition: background .2s ease-in-out;
@@ -18343,19 +18343,19 @@ body.x-nbr .x-grid-row-editor-buttons-default-top-frameInfo {
 }
 
 /* line 151, ../../../../sass/src/view/common/ProjectPanelView.scss */
-.sequenceLibraryBtn .x-btn-inner, .partsLibraryBtn .x-btn-inner {
+.sequenceLibraryBtn .x-btn-inner, .partsLibraryBtn .x-btn-inner, .strainLibraryBtn .x-btn-inner {
   color: white;
   border: 0 !important;
   border-bottom: 1px solid #4C85BE !important;
 }
 
 /* line 157, ../../../../sass/src/view/common/ProjectPanelView.scss */
-.x-sequenceLibraryBtn-over, .x-partsLibraryBtn-over {
+.x-sequenceLibraryBtn-over, .x-partsLibraryBtn-over, .x-strainLibraryBtn-over {
   background: #004065 !important;
 }
 
 /* line 161, ../../../../sass/src/view/common/ProjectPanelView.scss */
-.sequenceAddBtn {
+.sequenceAddBtn, .strainAddBtn {
   left: 197px !important;
   border-radius: 0px !important;
   top: 4px !important;
@@ -18370,7 +18370,7 @@ body.x-nbr .x-grid-row-editor-buttons-default-top-frameInfo {
 }
 
 /* line 175, ../../../../sass/src/view/common/ProjectPanelView.scss */
-.x-sequenceAddBtn-over {
+.x-sequenceAddBtn-over, .x-strainAddBtn-over {
   background: none;
   opacity: 1;
 }
