@@ -61,7 +61,9 @@ module.exports = function(app) {
     };
 
     app.post('/login', function(req, res, next) {
+        console.log('Got a login request.');
         app.passport.authenticate('local', function(err, user, info) {
+            console.log('Passport completed.');
             if(err) {
                 return res.json({
                     success: false,
@@ -75,7 +77,9 @@ module.exports = function(app) {
                     msg: info.message
                 });
             } else {
+                console.log('logging in');
                 req.logIn(user, function(err) {
+                    console.log('logged in');
                     if(err) {
                         return res.json({
                             success: false,

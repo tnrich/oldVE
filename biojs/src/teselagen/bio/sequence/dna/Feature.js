@@ -25,7 +25,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
     constructor: function (inData) {
         var name, type, notes, index;
         if (inData) {
-            name = inData.name || "";
+            name = String(inData.name || "");
             type = inData.type || "";
             notes = inData.notes || [];
             index = inData.index || 0;
