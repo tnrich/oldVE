@@ -43,7 +43,13 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     		text: 'Delete Sequence Feature',
             id: 'PieContextMenuDeleteFeature',
             autoDestroy: false
-    	};	
+    	};
+    	this.pieContextMenuCodonJuggle = {
+    		xtype: 'menuitem',
+    		text: 'Codon Juggle',
+            id: 'PieContextMenuCodonJuggle',
+            autoDestroy: false
+    	};
     	
 		this.control({
             '#mainAppPanel': {
@@ -61,6 +67,9 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     		}, 
     		'#PieContextMenuDeleteFeature': {
 				click: this.onPieContextMenuDeleteFeatureClick
+    		},
+    		'#PieContextMenuCodonJuggle': {
+				click: this.onPieContextMenuCodonJuggleClick
     		} 		
     	});	
 
@@ -121,19 +130,23 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
 	initiateContextMenu: function() {
 		if(this.isPieSelectionLayerRightClicked && !this.containsNewFeature) {
 			this.pieContextMenu.insert(0,this.pieContextMenuNewFeature);
+			this.pieContextMenu.insert(1, this.pieContextMenuCodonJuggle);
 			this.containsNewFeature = true;
 		} else if(!this.isPieSelectionLayerRightClicked) {
 			if(Ext.getCmp("PieContextMenuNewFeature")) this.pieContextMenu.remove(Ext.getCmp("PieContextMenuNewFeature"));
+			if(Ext.getCmp("PieContextMenuCodonJuggle")) this.pieContextMenu.remove(Ext.getCmp("PieContextMenuCodonJuggle"));
 			this.containsNewFeature = false;
 		}
 		
 		if(this.isPieAnnotationRightClicked && !this.containsEditAndDeleteFeature) {
 			this.pieContextMenu.add(this.pieContextMenuEditFeature);
 			this.pieContextMenu.add(this.pieContextMenuDeleteFeature);
+			this.pieContextMenu.add(this.pieContextMenuCodonJuggle);
 			this.containsEditAndDeleteFeature = true;		
 		} else if(!this.isPieAnnotationRightClicked) {
 			if(Ext.getCmp("PieContextMenuEditFeature")) this.pieContextMenu.remove(Ext.getCmp("PieContextMenuEditFeature"));
 			if(Ext.getCmp("PieContextMenuDeleteFeature")) this.pieContextMenu.remove(Ext.getCmp("PieContextMenuDeleteFeature"));
+			if(Ext.getCmp("PieContextMenuCodonJuggle")) this.pieContextMenu.remove(Ext.getCmp("PieContextMenuCodonJuggle"));
 			this.containsEditAndDeleteFeature = false;			
 		}
 		
@@ -189,6 +202,17 @@ Ext.define("Vede.controller.VectorEditor.PieContextMenuController", {
     
     onPieContextMenuDeleteFeatureClick: function() {
     	this.sequenceManager.removeFeature(this.selectedFeature,false);
+    	this.isPieContextMenuOpen = false;
+		this.isPieAnnotationRightClicked = false;
+		this.isPieSelectionLayerRightClicked = false;
+		if (this.pieContextMenu) {
+			this.pieContextMenu.hide();
+		};
+		Vede.application.fireEvent('rerenderFeaturesGrid');
+		Vede.application.fireEvent('toggleFeatureEditOptions');
+    },
+
+    onPieContextMenuCodonJuggleClick: function() {
     	this.isPieContextMenuOpen = false;
 		this.isPieAnnotationRightClicked = false;
 		this.isPieSelectionLayerRightClicked = false;

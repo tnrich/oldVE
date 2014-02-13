@@ -140,7 +140,7 @@ $grid-row-cell-font-size: 12px;
   background: white;
 }
 
-.sequenceLibraryBtn, .partsLibraryBtn {
+.sequenceLibraryBtn, .partsLibraryBtn, .strainLibraryBtn {
   background: #006cab !important;
   border-radius: 0px !important;
   transition: background .2s ease-in-out;
@@ -148,17 +148,17 @@ $grid-row-cell-font-size: 12px;
   -webkit-transition: background .2s ease-in-out;
 }
 
-.sequenceLibraryBtn .x-btn-inner, .partsLibraryBtn .x-btn-inner {
+.sequenceLibraryBtn .x-btn-inner, .partsLibraryBtn .x-btn-inner, .strainLibraryBtn .x-btn-inner {
   color: white;
   border: 0 !important;
   border-bottom: 1px solid #4C85BE !important;
 }
 
-.x-sequenceLibraryBtn-over, .x-partsLibraryBtn-over {
+.x-sequenceLibraryBtn-over, .x-partsLibraryBtn-over, .x-strainLibraryBtn-over {
   background: #004065 !important;
 }
 
-.sequenceAddBtn {
+.sequenceAddBtn, .strainAddBtn {
   left: 197px !important;
   border-radius: 0px !important;
   top: 4px !important;
@@ -172,7 +172,7 @@ $grid-row-cell-font-size: 12px;
   -webkit-transition: background .2s ease-in-out;
 }
 
-.x-sequenceAddBtn-over {
+.x-sequenceAddBtn-over, .x-strainAddBtn-over {
   background: none;
   opacity: 1;
 }

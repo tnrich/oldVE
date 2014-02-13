@@ -372,17 +372,84 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onSequenceCodonJuggle: function(record) {
-        var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
-        win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
+        var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea'), record: record}).show();
+        var sequenceManager = record.getSequenceManager();
+        var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(sequenceManager.toGenbank());
+        win.down('textareafield[name="record"]').setValue(record);
+        win.down('textareafield[name="file"]').setValue(fasta);
+        win.down('textareafield[name="type"]').setValue("sequence");
+        win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+        win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
 
     },
 
     onPartCodonJuggle: function(record) {
         var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('partLibraryArea')}).show();
         var sequenceManager = record.getSequenceFile().getSequenceManager();
-        var subSequence = sequenceManager.subSequence(record.get('genbankStartBP'), record.get('endBP'));
-        win.down('textareafield').setValue(subSequence);
+        var subSequence = sequenceManager.subSequenceManager(record.get('genbankStartBP'), record.get('endBP'));
+        var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(subSequence.toGenbank());
+        win.down('textareafield[name="record"]').setValue(record);
+        win.down('textareafield[name="file"]').setValue(subSequence);
+        win.down('textareafield[name="type"]').setValue("part");
+        win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+        win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
+    },
 
+    onCodonJuggleCreateSequence: function(success) {
+        success.responseObject.parsedResponse.shift();
+        var newSeq = success.responseObject.parsedResponse.join('');
+        console.log(newSeq);
+
+        var onPromptClosed = function (btn, text) {
+                if(btn === "ok") {
+                    text = Ext.String.trim(text);
+                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
+
+                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
+                    $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+                    var self = this;
+
+                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "GENBANK",
+                        sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                        sequenceFileName: "untitled.gb",
+                        partSource: "Untitled sequence",
+                        name: text
+                    });
+
+                    // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
+                    var seqMan = success.record.getSequenceManager();
+                    seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
+                    var rawGenbank = seqMan.toGenbank().toString();
+                    seqMan.toGenbank().setLocus(text);
+                    seqMan.name = text;
+                    newSequenceFile.set('name', text);
+                    newSequenceFile.setSequenceFileContent(rawGenbank);
+                    newSequenceFile.setSequenceManager(seqMan);
+
+                    console.log(success.record);
+                    console.log(seqMan);
+                    console.log(newSequenceFile);
+
+                    newSequenceFile.save({
+                        callback: function () {
+                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
+                                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
+                                toastr.info ("New Sequence Created");
+                                Vede.application.fireEvent("PopulateStats");
+                            });
+                        }
+                    });
+
+                } else {
+                    return false;
+                }
+            };
+
+        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
     },
 
     onLaunch: function () {
@@ -397,6 +464,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
         this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
         this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, this.onCodonJuggleCreateSequence);
 
         this.control({
             "#mainAppPanel": {

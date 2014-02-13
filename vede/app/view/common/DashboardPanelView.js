@@ -472,6 +472,217 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     }
                 ]
             },
+
+            {
+                xtype: 'panel',
+                title: 'Strain Library',
+                cls: 'strainLibraryPanel',
+                border: 0,
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'container',
+                        cls: 'StrainLibraryContainer',
+                        autoScroll: true,
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch',
+                        },
+                        items : [
+                            {
+                                xtype: 'textfield',
+                                layout: {
+                                    type: 'fit',
+                                    align: 'stretch'
+                                },
+                                anchor: '100%',
+                                height: 30,
+                                id: 'strainLibrarySearch',
+                                cls: 'strainLibrarySearchField',
+                                width: '98%',
+                                emptyText: 'Search Strain Library',
+                                emptyCls: 'empty-search-field',
+                                margin: 13,
+                                listeners: {
+                                    change: function(field, newValue, oldValue, eOpts) {                                        
+                                        Teselagen.manager.ProjectManager.Strains.clearFilter(true);
+                                        var grid = Ext.getCmp('StrainLibrary');
+                                        if(grid.timeoutId) { clearTimeout(grid.timeoutId); delete grid.timeoutId;}
+                                        grid.timeoutId = setTimeout(function(){
+                                            if(grid.store.proxy.activeRequest) 
+                                            {
+                                                Ext.Ajax.abort(grid.store.proxy.activeRequest);
+                                                delete grid.store.proxy.activeRequest;
+                                            }
+                                            grid.store.clearFilter(true);
+                                            grid.store.filter("name", Ext.String.escapeRegex(newValue));
+                                            if(!grid.store.proxy.activeRequest) grid.store.load();
+                                        }, 200);
+                                    }
+                                }
+                            },
+                            {
+                                xtype: 'gridpanel',
+                                border: 0,
+                                name: 'strainLibraryGrid',
+                                loadMask: true,
+                                autoHeight: true,
+                                flex: 1,
+                                autoScroll: true,
+                                viewConfig: {
+                                    style: 'overflow-y: auto'
+                                },
+                                cls: 'strainLibraryGrid',
+                                height: '100%',
+                                autoScroll: true,
+                                id: 'strainLibrary',
+                                columns: [
+
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Name',
+                                        width: 220,
+                                        dataIndex: 'name',
+                                        sortable: true
+                                    },{
+                                        xtype: 'gridcolumn',
+                                        text: 'PI',
+                                        width: 80,
+                                        dataIndex: 'pi',
+                                        sortable: false
+                                    },
+                                    // {
+                                    //     xtype: 'gridcolumn',
+                                    //     text: 'Bio-safety Level',
+                                    //     width: 80,
+                                    //     dataIndex: 'biosafety',
+                                    //     sortable: true
+                                    // },
+                                    // {
+                                    //     xtype: 'gridcolumn',
+                                    //     text: 'Status',
+                                    //     width: 160,
+                                    //     dataIndex: 'status',
+                                    //     sortable: true
+                                    // },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Creator',
+                                        width: 160,
+                                        dataIndex: 'creator',
+                                        sortable: true
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        flex: 1,
+                                        text: 'Sequences',
+                                        width: 150,
+                                        dataIndex: 'Sequences',
+                                        sortable: false
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Date Created',
+                                        width: 180,
+                                        dataIndex: 'dateCreated',
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'),
+                                        sortable: true
+                                    },
+                                    {
+                                        xtype: 'gridcolumn',
+                                        text: 'Last Modified',
+                                        width: 180,
+                                        dataIndex: 'dateModified',
+                                        renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')
+                                    }
+
+                                ],
+                                listeners: {
+                                    itemcontextmenu: function(el, record, item, index, e, eOpts){
+                                        e.preventDefault();
+                                        var contextMenu = Ext.create('Ext.menu.Menu',{
+                                              items: [
+                                              {
+                                                text: 'Rename',
+                                                handler: function() {
+                                                    Teselagen.manager.ProjectExplorerManager.renameStrain(record);
+                                                }
+                                              }, {
+                                                text: 'Open',
+                                                handler: function(){
+                                                    Vede.application.getController("Vede.controller.DashboardPanelController").onSequenceGridItemClick(null,record.getSequenceFile());
+                                                }
+                                              }, {
+                                                text: 'Delete',
+                                                handler: function() {
+                                                    Vede.application.fireEvent(Teselagen.event.CommonEvent.DELETE_Strain, record);
+                                                }
+                                              }, {
+                                                text: 'Download Source Sequence',
+                                                handler: function() {
+                                                    var VEManager = Ext.create("Teselagen.manager.VectorEditorManager", record.getSequenceFile(), record.getSequenceFile().getSequenceManager());
+                                                    VEManager.saveSequenceToFile();
+                                                }
+                                              }]
+                                        }).show();
+                                        contextMenu.setPagePosition(e.getX(),e.getY()-5)
+                                    }
+                                },
+                                dockedItems: [{
+                                        xtype: 'pagingtoolbar',
+                                        dock: 'bottom',
+                                        displayInfo: true,
+                                        items: [
+                                                {
+                                                    xtype: 'container',
+                                                    cls: 'strainLibraryOptionsContainer',
+                                                    items: [
+                                                        {
+                                                            xtype: 'text',
+                                                            text: 'Show:'
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '20',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '40',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            cls: 'pagingSizeBtn',
+                                                            text: '60',
+                                                            margin: '0 0 0 5',
+                                                            listeners: {
+                                                                click: function(btn, e) {
+                                                                    Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                            ]
+                                }]
+                            }
+                        ]
+                    }
+                ]
+            },
             {
                 xtype: 'panel',
                 title: 'Sequence Library',
