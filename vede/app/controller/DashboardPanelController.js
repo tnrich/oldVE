@@ -443,6 +443,8 @@ Ext.define("Vede.controller.DashboardPanelController", {
                     return false;
                 }
             };
+
+        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
     },
 
     onLaunch: function () {
