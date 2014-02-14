@@ -437,12 +437,12 @@ module.exports = function(app, express) {
             if(err||!servers)
             {
                 var servers = {};
-                servers[app.localIP] = 1;
+                servers[app.localIP] = "http://"+app.localIP+"/health";
                 app.cache.set("servers", servers, 0, function(err){});
             }
             else
             {
-                servers[app.localIP] = 1;
+                servers[app.localIP] = "http://"+app.localIP+"/health";
                 app.cache.set("servers", servers, 0, function(err){});
             }
         });
