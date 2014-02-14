@@ -140,8 +140,62 @@ module.exports = function(app) {
              
         });
 
-        client.on('disconnect', function() {});
-         
+        client.on('disconnect', function() {});         
     });
+
+    
+    /*
+
+    // Recapture lost processes
+
+    console.log("Recapturing possible lost processes");
+    
+    //var child = {};
+    //child.stdin = fs.createWriteStream('/proc/PID/fd/0');
+    //child.stdout = fs.createReadStream('/proc/PID/fd/1');
+    //child.stderr = fs.createReadStream('/proc/PID/fd/2');
+    
+
+    var j5Runs = app.db.model("j5run");
+    var fs = require("fs");
+
+    j5Runs.find({status:"In progress"}).exec(function(err,activej5runs){
+        console.log(activej5runs.length+" j5 runs found.");
+        activej5runs.forEach(function(activej5run){
+            if(activej5run.pid)
+            {
+                var pid = activej5run.pid;
+                console.log("Checking for j5run with pid: "+pid);
+                if(fs.existsSync("/proc/"+pid))
+                {
+                    console.log("Process found!... Reattaching");
+                    var newChild = {};
+                    newChild.stdin = fs.createWriteStream('/proc/'+pid+'/');
+                    newChild.stdout = fs.createReadStream('/proc/'+pid+'/');
+                    newChild.stderr = fs.createReadStream('/proc/'+pid+'/');
+
+                    //newChild.stderr.on('data', function (stoutData) {
+                    //    process.stdout.write(stoutData);
+                    //} 
+                    //newChild.stderr.on('exit', function (stoutData) {
+                    //    process.stdout.write(stoutData);
+                    //}   
+
+                    newChild.stdout.pipe(process.stdout);
+                    newChild.stderr.pipe(process.stdout);          
+                }
+                else
+                {
+                    console.log("Process not found");
+                }
+            }
+            else
+            {
+                console.log("J5 run doesn\'t have pid");
+            }
+       });
+    });
+
+    */
 
 };
