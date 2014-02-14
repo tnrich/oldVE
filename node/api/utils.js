@@ -23,6 +23,14 @@ module.exports = function(app) {
     website_html_prod = website_html_prod.replace(/<script src="/g,'<script src="'+cdn_url);
 
     return {
+
+        health: function(req,res){
+            app.db.db.stats(function(err, stats){
+                stats._state = app.db.db._state;
+                res.json(stats);
+            });
+        },
+
         post_error: function(req, res) {
             throw new Error("OH NOOO");
         },

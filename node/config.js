@@ -374,6 +374,15 @@ module.exports = function(app, express) {
     app.db = app.mongoose.createConnection(Opts.authHost, opts);
     app.db.on('connected', function (err) {
         app.logger.log("info","MONGOOSE: Online", app.dbname);
+        app.db.db.logger.debug = function(message, object){
+            process.stdout.write(message);
+        };
+        app.db.db.logger.error = function(message, object){
+            process.stdout.write(message);
+        };
+        app.db.db.logger.log = function(message, object){
+            process.stdout.write(message);
+        };
     });
 
     app.db.on('error', function (err) {
