@@ -4,49 +4,6 @@ module.exports = function(app) {
     var User = app.db.model("User");
     var restrict = app.auth.restrict;
 
-    var mandrill = require('mandrill-api/mandrill');
-    var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
-
-    var sendRegisteredMail = function(user) {
-      var html = app.constants.activationResponseEmailText;
-      html = html.replace("<username>", user.firstName);
-
-      var message = {
-        "html": html,
-        "subject": "TeselaGen Beta Access",
-        "from_email": "registration@teselagen.com",
-        "from_name": "TeselaGen",
-        "to": [{
-                "email": user.email,
-                "name": user.firstName
-            }],
-        "headers": {
-            "Reply-To": "registration@teselagen.com"
-        },
-        "track_opens": true,
-        "track_clicks": true,
-        "tags": [
-            "user-activation"
-        ],
-        "metadata": {
-            "website": "www.teselagen.com"
-        },
-        "recipient_metadata": [{
-            "rcpt": user.email
-        }]
-      };
-
-      var async = false;
-      var ip_pool = "Beta Registers";
-
-      mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
-            console.log(result);
-        }, function(e) {
-            console.log(error);
-        });
-    };
-
-
     return {
 
       beta: function (req, res) {
@@ -118,24 +75,58 @@ module.exports = function(app) {
               if(err) {
                   return res.send("Error finding the user associated with this code.<br>Are you sure this is the correct URL?");
               } else if(user) {
-                  if(user.activated)
+                  if(user.verifiedEmail)
                   {
-                    res.send("This user has already been activated.");
+                    return res.send("Your email is already verified");
                   }
-                  user.activated = true;
+                  user.verifiedEmail = true;
                   //user.activationCode = undefined;
-                  sendRegisteredMail(user);
+                  //sendRegisteredMail(user);
                   user.save(function(err) {
+                      if(err) return res.json(err);
                       if(app.get("env") === "production") {
                           return res.redirect("http://app.teselagen.com");
                       } else {
-                          return res.redirect("http://dev.teselagen.com");
+                          //return res.redirect("http://development.teselagen.com");
+                          res.json(user);
+                          //return res.send('You email has been verified');
                       }
                   });
               } else {
                   return res.send("Activation code invalid.");
               }
           });
+      },
+
+      /**
+       * Get user by id stored in session
+       * @memberof module:./routes/api
+       * @method GET "/users/:username"
+       */
+      get_unverified_Status: function(req, res) {
+          
+          function daydiff(first, second) {
+              return (second-first)/(1000*60*60*24)
+          }
+
+          if(req.isAuthenticated()) {
+              var user = req.user;
+              if(!user.verifiedEmail)
+              {
+                return res.json({
+                  verifiedEmail: false,
+                  daysLeft: daydiff(new Date(),newDate(req.user.dateCreated)
+                });
+              }
+              else
+              {
+                  return res.json({
+                    verifiedEmail: true
+                  });
+              }
+          } else {
+              res.send("Not authenticated", 401);
+          }
       },
 
       /**

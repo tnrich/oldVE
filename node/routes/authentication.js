@@ -4,6 +4,10 @@ module.exports = function(app) {
     var mandrill = require('mandrill-api/mandrill');
     var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
 
+    function daydiff(first, second) {
+        return (second-first)/(1000*60*60*24)
+    }
+
     app.passport.use(new LocalStrategy(
         function(username, password, done) {
             var User = app.db.model("User");
@@ -26,6 +30,12 @@ module.exports = function(app) {
                                     message: "You must activate your account by email before you can log in."
                                 });
                             } else {
+                                if(!user.verifiedEmail && daydiff(new Date(),newDate(user.dateCreated)>15))
+                                {
+                                    return done(null, null, {
+                                        message: "You must verify you email."
+                                    });
+                                }
                                 return done(null, user);
                             }
                         } else {

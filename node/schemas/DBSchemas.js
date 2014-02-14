@@ -307,6 +307,7 @@ module.exports = function(db) {
         firstName: String,
         lastName: String,
         email: String,
+        verifiedEmail: {type: Boolean, default: false},
         activated: {type: Boolean, default: false},
         activationCode: String,
         preferences: Mixed,
