@@ -398,58 +398,55 @@ Ext.define("Vede.controller.DashboardPanelController", {
     onCodonJuggleCreateSequence: function(success) {
         success.responseObject.parsedResponse.shift();
         var newSeq = success.responseObject.parsedResponse.join('');
-        console.log(newSeq);
+        
+        if(success.type=='sequence') {
+            var onPromptClosed = function (btn, text) {
+                    if(btn === "ok") {
+                        text = Ext.String.trim(text);
+                        if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
 
-        var onPromptClosed = function (btn, text) {
-                if(btn === "ok") {
-                    text = Ext.String.trim(text);
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
+                        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
+                        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
-                    $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+                        var self = this;
 
-                    var self = this;
+                        var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                            sequenceFileFormat: "GENBANK",
+                            sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                            sequenceFileName: "untitled.gb",
+                            partSource: "Untitled sequence",
+                            name: text
+                        });
 
-                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                        sequenceFileFormat: "GENBANK",
-                        sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                        sequenceFileName: "untitled.gb",
-                        partSource: "Untitled sequence",
-                        name: text
-                    });
+                        // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
+                        var seqMan = success.record.getSequenceManager();
+                        seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
+                        var rawGenbank = seqMan.toGenbank().toString();
+                        seqMan.toGenbank().setLocus(text);
+                        seqMan.name = text;
+                        newSequenceFile.set('name', text);
+                        newSequenceFile.setSequenceFileContent(rawGenbank);
+                        newSequenceFile.setSequenceManager(seqMan);
 
-                    // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
-                    var seqMan = success.record.getSequenceManager();
-                    seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
-                    var rawGenbank = seqMan.toGenbank().toString();
-                    seqMan.toGenbank().setLocus(text);
-                    seqMan.name = text;
-                    newSequenceFile.set('name', text);
-                    newSequenceFile.setSequenceFileContent(rawGenbank);
-                    newSequenceFile.setSequenceManager(seqMan);
+                        newSequenceFile.save({
+                            callback: function () {
+                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                    Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
+                                    Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
+                                    toastr.info ("New Sequence Created");
+                                    Vede.application.fireEvent("PopulateStats");
+                                });
+                            }
+                        });
 
-                    console.log(success.record);
-                    console.log(seqMan);
-                    console.log(newSequenceFile);
+                    } else {
+                        return false;
+                    }
+                };
 
-                    newSequenceFile.save({
-                        callback: function () {
-                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-                                Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
-                                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
-                                toastr.info ("New Sequence Created");
-                                Vede.application.fireEvent("PopulateStats");
-                            });
-                        }
-                    });
-
-                } else {
-                    return false;
-                }
-            };
-
-        Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
+            Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
+        }
     },
 
     onLaunch: function () {

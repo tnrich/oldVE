@@ -128,7 +128,6 @@
 		            	var record = this.up().record;;
 		            	console.log(record);
 		            	var type = this.up().down('textareafield[name="type"]').rawValue;
-
 				        var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
 				        var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
 
