@@ -35,7 +35,7 @@ module.exports = function(app) {
                                 if(!user.verifiedEmail && daydiff(dateCreated,today)>15)
                                 {
                                     return done(null, null, {
-                                        message: "You must verify you email."
+                                        message: "You must verify you email <a href=\"/resendActivation/?id="+user.id+"\">ReSend Activation email</a>"
                                     });
                                 }
                                 return done(null, user);
