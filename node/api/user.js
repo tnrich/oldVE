@@ -106,7 +106,7 @@ module.exports = function(app) {
       get_unverified_Status: function(req, res) {
           
           function daydiff(first, second) {
-              return (second-first)/(1000*60*60*24)
+              return (second-first)/(1000*60*60*24);
           }
 
           if(req.isAuthenticated()) {
@@ -115,7 +115,7 @@ module.exports = function(app) {
               {
                 return res.json({
                   verifiedEmail: false,
-                  daysLeft: daydiff(new Date(),newDate(req.user.dateCreated)
+                  daysLeft: daydiff(new Date(),newDate(req.user.dateCreated))
                 });
               }
               else
