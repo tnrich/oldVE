@@ -386,7 +386,7 @@ module.exports = function(app, express) {
     });
 
     app.db.on('error', function (err) {
-        app.logger.error("error","MONGODB ERROR: Offline", err); console.log(err);
+        app.logger.error("error", err); console.log(err);
     });
 
     require('./schemas/DBSchemas.js')(app.db);
