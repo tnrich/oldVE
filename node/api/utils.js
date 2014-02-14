@@ -35,7 +35,10 @@ module.exports = function(app) {
                     retries: app.cache.retries,
                     failures: app.cache.failures,
                 },
-                //redis: JSON.stringify(),
+                redis: {
+                    connected: app.redisClient.connected,
+                    server_status: app.redisClient.server_info
+                }
 
             }
 
