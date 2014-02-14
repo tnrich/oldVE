@@ -33,7 +33,7 @@ module.exports = function(app) {
                     retries: app.cache.retries,
                     failures: app.cache.failures,
                 },
-                redis: JSON.stringify(app.redis),
+                redis: JSON.stringify(app.redisClient),
 
             }
 
