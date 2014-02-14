@@ -2,12 +2,13 @@ module.exports = function(app, express){
 
   var adminRestrict = app.auth.adminRestrict;
   
+  var User = app.db.model("User");
+
   app.get('/admin/dashboard', adminRestrict, function(req, res){
     res.render('dashboard');
   });
 
   app.get('/admin/users',function(req,res){
-    var User = app.db.model("User");
     User.find({},{firstName:1,lastName:1,email:1,username:1,userType:1,groupType:1,groupName:1,activated:1,userType:1,dateCreated:1,lastAccess:1,debugAccess:true}).exec(function(err,users){
       res.json({users:users});
     });
@@ -41,7 +42,15 @@ module.exports = function(app, express){
   });
 
   app.get('/admin/mailing', adminRestrict, function(req, res){
-    res.render('mailing',{});
+    db.users.find({},{email:1})
+    User.find({},{email:1,dateCreated:1}).exec(function(err,users){
+      var encodedUsers = JSON.stringify(users);
+      var emails = "";
+      users.forEach(function(user){
+        emails+=user.email+",";
+      });
+      res.render('mailing',{encodedUsers:encodedUsers,emails:emails});
+    });
   });
 
   app.get('/admin/edituser', adminRestrict, function(req,res){
