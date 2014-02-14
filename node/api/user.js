@@ -129,6 +129,13 @@ module.exports = function(app) {
           }
       },
 
+      resendVerificationEmail: function(req, user){
+        User.findOne(req.query.id).exec(function(err,user){
+          app.auth.sendRegisteredMail(user,user.activationCode);
+          res.send("Email verification sent!");
+        });
+      },
+
       /**
        * Get user by id stored in session
        * @memberof module:./routes/api

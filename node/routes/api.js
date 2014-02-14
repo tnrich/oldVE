@@ -52,6 +52,7 @@ module.exports = function(app) {
     app.get('/beta', restrict, user.beta);
     app.get("/userStats/:code", user.stats);
     app.get('/checkEmailVerifiedStatus', user.get_unverified_Status);
+    app.get('/resendVerificationEmail', user.resendVerificationEmail);
     app.get("/integrity/:code", user.integrityCheck);
     app.get("/users/:username", restrict, user.get_user);
     app.get("/users/activate/:activationCode", user.activate);
