@@ -429,5 +429,23 @@ module.exports = function(app, express) {
     require('child_process').exec('curl http://169.254.169.254/latest/meta-data/public-hostname', function (error, stdout, stderr) {
         var decoder = new (require('string_decoder').StringDecoder)('utf-8');
         app.localIP = decoder.write(stdout);
+
+        //app.cache.get(userKey,function(err,user){
+        //app.cache.set(userKey, user, 0, function(err){
+
+        app.cache.get("servers",function(err,servers){
+            if(err)
+            {
+                var servers = {};
+                servers[app.localIP] = 1;
+                app.cache.set("servers",servers);
+            }
+            else
+            {
+                servers[app.localIP] = 1;
+                app.cache.set("servers",servers);
+            }
+        });
+
     });
 };

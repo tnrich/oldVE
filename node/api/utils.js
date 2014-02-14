@@ -40,18 +40,23 @@ module.exports = function(app) {
 
             }
 
-            require('child_process').exec('ps aux | grep perl | grep -v grep', function (error, stdout, stderr) {
-                var decoder = new (require('string_decoder').StringDecoder)('utf-8');
-                var output = decoder.write(stdout);
+            app.cache.get("servers",function(err,servers){
 
-                app.db.db.stats(function(err, dbstats){
-                    dbstats._state = app.db.db._state;
-                    stats.db = dbstats;
-                    stats.perl_processes = output.split('\n');
-                    res.json(stats);
+                require('child_process').exec('ps aux | grep perl | grep -v grep', function (error, stdout, stderr) {
+                    var decoder = new (require('string_decoder').StringDecoder)('utf-8');
+                    var output = decoder.write(stdout);
+
+                    app.db.db.stats(function(err, dbstats){
+                        dbstats._state = app.db.db._state;
+                        stats.db = dbstats;
+                        if(!err) stats.servers = servers;
+                        stats.perl_processes = output.split('\n');
+                        res.json(stats);
+                    });
+
                 });
 
-            });
+            }
 
         },
 
