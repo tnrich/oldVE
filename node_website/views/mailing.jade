@@ -9,7 +9,8 @@ block container
         p Mailing
         p(id="emailsRow", data="#{encodedUsers}", style="width: 1130px; word-wrap: break-word;") #{emails}
     .row
-    	p Newsletter Composer (In development)
+        p Newsletter Composer (In development)
         input(id='emailContent',type='textarea',value='',placeholder='')
+
 block scripts
-	script(src='/js/mailing.js')
+    script(src='/js/mailing.js')
