@@ -8,7 +8,7 @@ block container
     .row
         p Mailing
         //p(id="emailsRow", data="#{encodedUsers}", style="width: 1130px; word-wrap: break-word;") #{emails}
-        button#copy-button(data-clipboard-text='#{emails}', title='Copy emails Clipboard.') Copy emails Clipboard
+        button#copy-button(data-clipboard-text='#{emails}', title='Copy emails to clipboard.') Copy emails to clipboard
     .row(style="visibility:hidden;")
         p Newsletter Composer (In development)
         textarea(id='emailContent')
