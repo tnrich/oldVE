@@ -26,6 +26,8 @@ module.exports = function(app) {
 
         health: function(req,res){
 
+            console.log(app.redisClient);
+
             var stats = {
                 currentServer: app.localIP,
                 memcache: {
@@ -33,7 +35,7 @@ module.exports = function(app) {
                     retries: app.cache.retries,
                     failures: app.cache.failures,
                 },
-                redis: JSON.stringify(app.redisClient),
+                //redis: JSON.stringify(),
 
             }
 
