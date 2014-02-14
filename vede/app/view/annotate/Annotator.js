@@ -43,7 +43,6 @@ Ext.define("Vede.view.annotate.Annotator", {
      * @member Vede.view.annotate.Annotator
      */
     constructor: function(inData){
-        derp;
         this.callParent([inData]);
         this.initConfig(inData);
         this.cls = "AnnotationSurface";
