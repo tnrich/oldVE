@@ -26,8 +26,6 @@ module.exports = function(app) {
 
         health: function(req,res){
 
-            console.log(app.redisClient);
-
             var stats = {
                 currentServer: app.localIP,
                 memcache: {
@@ -37,7 +35,7 @@ module.exports = function(app) {
                 },
                 redis: {
                     connected: app.redisClient.connected,
-                    server_status: app.redisClient.server_info
+                    //server_status: app.redisClient.server_info
                 }
 
             }
