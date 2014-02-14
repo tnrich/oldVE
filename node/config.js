@@ -135,11 +135,13 @@ module.exports = function(app, express) {
         });
         }
 
-        // Use Nodetime to monitor/profile the server.
+        // Use Nodetime to monitor/profile the server. DISABLED
+        /*
         require('nodetime').profile({
             accountKey: '7a81c5694843fb2ead319abf624219460dad4f47',
             appName: 'Teselagen App'
         });
+        */
 
         var redis = app.redis.createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
         app.redisClient = redis;
@@ -361,16 +363,23 @@ module.exports = function(app, express) {
      * MONGOOSE (ODM) Initialization using app.dbname
      */
 
+    var opts = { 
+        server: {
+            auto_reconnect: true,
+            poolSize: 5, 
+            socketOptions: { keepAlive: 1 } 
+        } 
+    };
 
-    app.db = app.mongoose.createConnection(Opts.authHost, function(err) {
-        if (err) {
-            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(err);
-            //app.mongoose.connection.db.serverConfig.connection.autoReconnect = true;
-        }
-        else {
-            app.logger.log("info","MONGOOSE: Online", app.dbname);
-        }
+    app.db = app.mongoose.createConnection(Opts.authHost, opts);
+    app.db.on('connected', function (err) {
+        app.logger.log("info","MONGOOSE: Online", app.dbname);
     });
+
+    app.db.on('error', function (err) {
+        app.logger.error("error","MONGODB ERROR: Offline", err); console.log(err);
+    });
+
     require('./schemas/DBSchemas.js')(app.db);
 
 
