@@ -88,7 +88,8 @@ module.exports = function(app) {
                           return res.redirect("http://app.teselagen.com");
                       } else {
                           //return res.redirect("http://development.teselagen.com");
-                          res.json(user);
+                          //res.json(user);
+                          res.send("Account activated. <a href=\"http://app.teselagen.com/\">Continue</a>");
                           //return res.send('You email has been verified');
                       }
                   });
