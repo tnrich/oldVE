@@ -25,10 +25,31 @@ module.exports = function(app) {
     return {
 
         health: function(req,res){
-            app.db.db.stats(function(err, stats){
-                stats._state = app.db.db._state;
-                res.json(stats);
+
+            var stats = {
+                currentServer: app.localIP,
+                memcache: {
+                    activeQueries: app.cache.activeQueries,
+                    retries: app.cache.retries,
+                    failures: app.cache.failures,
+                },
+                redis: JSON.stringify(app.redis),
+
+            }
+
+            require('child_process').exec('ps aux | grep perl | grep -v grep', function (error, stdout, stderr) {
+                var decoder = new (require('string_decoder').StringDecoder)('utf-8');
+                var output = decoder.write(stdout);
+
+                app.db.db.stats(function(err, dbstats){
+                    dbstats._state = app.db.db._state;
+                    stats.db = dbstats;
+                    stats.perl_processes = output.split('\n');
+                    res.json(stats);
+                });
+
             });
+
         },
 
         post_error: function(req, res) {
