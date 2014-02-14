@@ -434,7 +434,7 @@ module.exports = function(app, express) {
         //app.cache.set(userKey, user, 0, function(err){
 
         app.cache.get("servers",function(err,servers){
-            if(err)
+            if(err||!servers)
             {
                 var servers = {};
                 servers[app.localIP] = 1;
