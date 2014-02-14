@@ -207,6 +207,58 @@ module.exports = function(app) {
       });
     }
 
+
+    var sendActivationEmail = function(user,activationCode)
+    {
+        var html = app.constants.userActivationEmailText;
+        html = html.replace("<firstName>", user.firstName);
+        html = html.replace("<lastName>", user.lastName);
+        html = html.replace("<email>", user.email);
+        html = html.replace("<organizationName>", user.groupName);
+        html = html.replace("<organizationType>", user.groupType);
+        html = html.replace("<username>", user.username);
+
+
+        if(app.get("env") === "production") {
+            html = html.replace("<activation>", '<a href="http://app.teselagen.com/users/activate/'+activationCode+'">ACTIVATION LINK</a>');
+        } else {
+            html = html.replace("<activation>", '<a href="http://development.teselagen.com/users/activate/'+activationCode+'">ACTIVATION LINK</a>');
+        }
+
+        var message = {
+            "html": html,
+            "subject": "Teselagen account activation",
+            "from_email": "registration@teselagen.com",
+            "from_name": "TeselaGen",
+            "to": [{
+                    "email": user.email,
+                }],
+            "headers": {
+                "Reply-To": "registration@teselagen.com"
+            },
+            "track_opens": true,
+            "track_clicks": true,
+            "tags": [
+                "user-activation"
+            ],
+            "metadata": {
+                "website": "www.teselagen.com"
+            },
+            "recipient_metadata": [{
+                "rcpt": user.email
+            }]
+        };
+
+        var async = false;
+        var ip_pool = "Beta Registers";
+
+        app.mailer.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
+    }
+
     app.post('/register', function(req, res) {
         var User = app.db.model("User");
 
@@ -278,5 +330,5 @@ module.exports = function(app) {
 
     app.auth = {};
     app.auth.restrict = restrict;
-    app.auth.sendRegisteredMail = sendRegisteredMail;
+    app.auth.sendActivationEmail = sendActivationEmail;
 };

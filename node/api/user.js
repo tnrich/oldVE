@@ -131,7 +131,7 @@ module.exports = function(app) {
 
       resendVerificationEmail: function(req, user){
         User.findOne(req.query.id).exec(function(err,user){
-          app.auth.sendRegisteredMail(user,user.activationCode);
+          app.auth.sendActivationEmail(user,user.activationCode);
           res.send("Email verification sent!");
         });
       },
