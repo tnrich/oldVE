@@ -5,9 +5,9 @@ module.exports = function(app){
     app.constants.activationResponseEmailText = '<p>\
 Dear <username>,<br>\
 <br>\
-Welcome to TeselaGen! Your username is:  ' + USERNAME + '. To complete the registration process we request that you confirm your account by clicking the link below:<br>\
+Welcome to TeselaGen! Your username is:  ' + 'USERNAME' + '. To complete the registration process we request that you confirm your account by clicking the link below:<br>\
 <br>\
-Activate Account:' + ACTIVATION LINK + '<br>\
+Activate Account:' + 'ACTIVATION LINK' + '<br>\
 <br>\
 <p>\
 Thank you,<br>\

@@ -5,7 +5,7 @@
 module.exports = function(app) {
 
     require('./authentication.js')(app);
-    require('../routes/constants')(app);
+    require('./constants')(app);
 
     var restrict = app.auth.restrict;
     var sequences = require('../api/sequences')(app);
