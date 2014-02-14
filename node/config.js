@@ -438,12 +438,12 @@ module.exports = function(app, express) {
             {
                 var servers = {};
                 servers[app.localIP] = 1;
-                app.cache.set("servers",servers);
+                app.cache.set("servers", servers, 0, function(err){});
             }
             else
             {
                 servers[app.localIP] = 1;
-                app.cache.set("servers",servers);
+                app.cache.set("servers", servers, 0, function(err){});
             }
         });
 
