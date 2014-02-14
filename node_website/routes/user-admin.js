@@ -33,12 +33,15 @@ module.exports = function(app, express){
   });
 
   app.get('/admin/stats', adminRestrict, function(req, res){
-
     app.redis.send_command('keys',['vede://*'],function(err,keys){    
       var stats = [['label','value']];
       stats.push(['users',keys.length]);
       res.render('stats',{data:JSON.stringify(stats)});
     });
+  });
+
+  app.get('/admin/mailing', adminRestrict, function(req, res){
+    res.render('mailing',{});
   });
 
   app.get('/admin/edituser', adminRestrict, function(req,res){
