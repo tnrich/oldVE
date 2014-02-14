@@ -42,7 +42,6 @@ module.exports = function(app, express){
   });
 
   app.get('/admin/mailing', adminRestrict, function(req, res){
-    db.users.find({},{email:1})
     User.find({},{email:1,dateCreated:1}).exec(function(err,users){
       var encodedUsers = JSON.stringify(users);
       var emails = "";
