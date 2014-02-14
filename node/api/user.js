@@ -130,7 +130,7 @@ module.exports = function(app) {
       },
 
       resendVerificationEmail: function(req, res){
-        User.findOne({"id":req.query.id}).exec(function(err,user){
+        User.findOne({"_id":req.query.id}).exec(function(err,user){
           if(err|!user) return res.send("User not found ("+req.query.id+")");
           res.json(user);
           //app.auth.sendActivationEmail(user,user.activationCode);
