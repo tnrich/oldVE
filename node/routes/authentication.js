@@ -30,14 +30,12 @@ module.exports = function(app) {
                                     message: "You must activate your account by email before you can log in."
                                 });
                             } else {
-                                /*
-                                if(!user.verifiedEmail && daydiff(new Date(),newDate(user.dateCreated)>15))
+                                if(!user.verifiedEmail && daydiff(newDate(user.dateCreated),new Date())>15)
                                 {
                                     return done(null, null, {
                                         message: "You must verify you email."
                                     });
                                 }
-                                */
                                 return done(null, user);
                             }
                         } else {
