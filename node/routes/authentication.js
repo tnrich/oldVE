@@ -3,6 +3,7 @@ module.exports = function(app) {
     var crypto = require("crypto");
     var mandrill = require('mandrill-api/mandrill');
     var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
+    app.mailer = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
 
     function daydiff(first, second) {
         return (second-first)/(1000*60*60*24)
