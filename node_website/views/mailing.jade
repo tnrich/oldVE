@@ -9,7 +9,7 @@ block container
         p Mailing
         //p(id="emailsRow", data="#{encodedUsers}", style="width: 1130px; word-wrap: break-word;") #{emails}
         button#copy-button(data-clipboard-text='#{emails}', title='Copy emails Clipboard.') Copy emails Clipboard
-    .row
+    .row(style="visible:none;")
         p Newsletter Composer (In development)
         textarea(id='emailContent')
     .row(style="height:400px")
