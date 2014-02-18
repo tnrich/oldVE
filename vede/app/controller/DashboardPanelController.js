@@ -48,6 +48,9 @@ Ext.define("Vede.controller.DashboardPanelController", {
             url: Teselagen.manager.SessionManager.buildUrl("checkEmailVerifiedStatus", ''),
             success:function(response) {
                 console.log(response);
+            },
+            failure: function(response) {
+                console.log('getting verification failed');
             }
     },
 
