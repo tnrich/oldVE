@@ -43,12 +43,12 @@ Dear <firstName>,<br>\
 	The TeselaGen Team<br>\
 	<br>\
 	<p>\
-	This e-mail was sent to you at your request. If you have received this e-mail in error, we apologize for any inconvenience. If you believe this message is inappropriate or an abuse of the TeselaGen system, please let us know.<br>\
-	</p>\
-	<p>\
 	Twitter: @TeselaGen<br>\
 	email: support@teselagen.com<br>\
 	phone: 650-387-5932<br>\
+	</p>\
+	<p>\
+	This e-mail was sent to you at your request. If you have received this e-mail in error, we apologize for any inconvenience. If you believe this message is inappropriate or an abuse of the TeselaGen system, please let us know.<br>\
 	</p>\
 	'; 
 
