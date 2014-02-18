@@ -76,7 +76,7 @@ Ext.define('Vede.view.AuthWindow', {
                         xtype: 'button',
                         id: 'auth-register-btn',
                         margin: '0 0 0 15',
-                        href: "http://beta.teselagen.com/signup",
+                        href: "https://teselagen.com/signup",
                         padding: 3,
                         text: 'Register',
                         name: 'register'
@@ -179,31 +179,31 @@ Ext.define('Vede.view.AuthWindow', {
                                                 'Welcome to Teselagen BioCAD.' +
                                             '</div>' +
                                             '<p>Please login using your credentials</p>' +
-                                            '<p>For questions visit <a href="http://teselagen.com">Our Website</a>' +
+                                            '<p>For questions visit <a href="https://teselagen.com">Our Website</a>' +
                                             '</p>' +
                                             '<small>' + lastBuildText + '</small>' +
                                         '</div>' +
                                         '<div class="auth-footer" style="margin-top: 110px;">' +
                                             '<ul style="list-style:none; display="inline-block">' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://teselagen.com">Home</a>' +
+                                                    '<a href="https://teselagen.com">Home</a>' +
                                                 '</li>' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://teselagen.com/about">About</a>' +
+                                                    '<a href="https://teselagen.com/about">About</a>' +
                                                 '</li>' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://teselagen.com/faq">FAQ</a></li>' +
+                                                    '<a href="https://teselagen.com/faq">FAQ</a></li>' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://teselagen.com/contact">Contact</a>' +
+                                                    '<a href="https://teselagen.com/contact">Contact</a>' +
                                                 '</li>' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://help.teselagen.com/manual/">Manual</a>' +
+                                                    '<a href="https://help.teselagen.com/manual/">Manual</a>' +
                                                 '</li>' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://teselagen.com/terms">Terms</a>' +
+                                                    '<a href="https://teselagen.com/terms">Terms</a>' +
                                                 '</li>' +
                                                 '<li style="float:left; margin-right: 5px;">' +
-                                                    '<a href="http://teselagen.com/privacy">Privacy</a>' +
+                                                    '<a href="https://teselagen.com/privacy">Privacy</a>' +
                                                 '</li>' +
                                             '</ul>' +
                                         '</div>');
