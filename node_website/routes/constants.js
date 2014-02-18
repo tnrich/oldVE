@@ -4,11 +4,11 @@
     app.constants.emptyGenbank = '"LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//"';
 
     app.constants.userActivationEmailText = '<p>\
-	Dear <username>,<br>\
+	Dear <firstName>,<br>\
 	<br>\
 	Welcome to TeselaGen! Your username is:  ' + '<username>' + '. To complete the registration process we request that you confirm your account by clicking the link below:<br>\
 	<br>\
-	Activate Account:' + '<activation>' + '<br>\
+	Activate Account: ' + '<activation>' + '<br>\
 	<br>\
 	<p>\
 	Thank you,<br>\
