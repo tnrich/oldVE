@@ -52,6 +52,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
             failure: function(response) {
                 console.log('getting verification failed');
             }
+        });
     },
 
     populateStatistics: function () {
