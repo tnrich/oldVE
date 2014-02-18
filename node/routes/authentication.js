@@ -39,7 +39,7 @@ module.exports = function(app) {
                                         message: "You must verify you email <a href=\"/resendVerificationEmail/?id="+user.id+"\">Resend verification email</a>"
                                     });
                                 }
-                                return done(null, user);
+                                else return done(null, user);
                             }
                         } else {
                             return done(null, null, {message: "Incorrect password."});

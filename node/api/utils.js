@@ -23,6 +23,43 @@ module.exports = function(app) {
     website_html_prod = website_html_prod.replace(/<script src="/g,'<script src="'+cdn_url);
 
     return {
+
+        health: function(req,res){
+
+            var stats = {
+                currentServer: app.localIP,
+                memcache: {
+                    activeQueries: app.cache.activeQueries,
+                    retries: app.cache.retries,
+                    failures: app.cache.failures,
+                },
+                redis: {
+                    connected: app.redisClient.connected,
+                    //server_status: app.redisClient.server_info
+                }
+
+            }
+
+            app.cache.get("servers",function(err,servers){
+
+                require('child_process').exec('ps aux | grep perl | grep -v grep', function (error, stdout, stderr) {
+                    var decoder = new (require('string_decoder').StringDecoder)('utf-8');
+                    var output = decoder.write(stdout);
+
+                    app.db.db.stats(function(err, dbstats){
+                        dbstats._state = app.db.db._state;
+                        stats.db = dbstats;
+                        if(!err) stats.servers = servers;
+                        stats.perl_processes = output.split('\n');
+                        res.json(stats);
+                    });
+
+                });
+
+            });
+
+        },
+
         post_error: function(req, res) {
             throw new Error("OH NOOO");
         },

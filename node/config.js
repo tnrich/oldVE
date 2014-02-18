@@ -135,11 +135,13 @@ module.exports = function(app, express) {
         });
         }
 
-        // Use Nodetime to monitor/profile the server.
+        // Use Nodetime to monitor/profile the server. DISABLED
+        /*
         require('nodetime').profile({
             accountKey: '7a81c5694843fb2ead319abf624219460dad4f47',
             appName: 'Teselagen App'
         });
+        */
 
         var redis = app.redis.createClient(6379,Opts.host,{ auth_pass : Opts.redis_pass });
         app.redisClient = redis;
@@ -361,16 +363,32 @@ module.exports = function(app, express) {
      * MONGOOSE (ODM) Initialization using app.dbname
      */
 
+    var opts = { 
+        server: {
+            auto_reconnect: true,
+            poolSize: 5, 
+            socketOptions: { keepAlive: 1 } 
+        } 
+    };
 
-    app.db = app.mongoose.createConnection(Opts.authHost, function(err) {
-        if (err) {
-            app.logger.error("info","MONGOOSE: Offline", err[0]); console.log(err);
-            //app.mongoose.connection.db.serverConfig.connection.autoReconnect = true;
-        }
-        else {
-            app.logger.log("info","MONGOOSE: Online", app.dbname);
-        }
+    app.db = app.mongoose.createConnection(Opts.authHost, opts);
+    app.db.on('connected', function (err) {
+        app.logger.log("info","MONGOOSE: Online", app.dbname);
+        app.db.db.logger.debug = function(message, object){
+            process.stdout.write(message);
+        };
+        app.db.db.logger.error = function(message, object){
+            process.stdout.write(message);
+        };
+        app.db.db.logger.log = function(message, object){
+            process.stdout.write(message);
+        };
     });
+
+    app.db.on('error', function (err) {
+        app.logger.error("error", err); console.log(err);
+    });
+
     require('./schemas/DBSchemas.js')(app.db);
 
 
@@ -411,5 +429,23 @@ module.exports = function(app, express) {
     require('child_process').exec('curl http://169.254.169.254/latest/meta-data/public-hostname', function (error, stdout, stderr) {
         var decoder = new (require('string_decoder').StringDecoder)('utf-8');
         app.localIP = decoder.write(stdout);
+
+        //app.cache.get(userKey,function(err,user){
+        //app.cache.set(userKey, user, 0, function(err){
+
+        app.cache.get("servers",function(err,servers){
+            if(err||!servers)
+            {
+                var servers = {};
+                servers[app.localIP] = "https://"+app.localIP+":3443/health";
+                app.cache.set("servers", servers, 0, function(err){});
+            }
+            else
+            {
+                servers[app.localIP] = "https://"+app.localIP+":3443/health";
+                app.cache.set("servers", servers, 0, function(err){});
+            }
+        });
+
     });
 };
