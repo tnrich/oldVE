@@ -56,7 +56,18 @@ return {
 
       var scriptPath = "/home/teselagen/j5service/j5Interface.pl";
       //var scriptPath = "/Users/rpavez/bin/downstream.pl";
-      var newChild = spawn('/usr/bin/perl', ['-t',scriptPath]);
+
+
+      var env = {
+        USER: 'teselagen',
+        PATH: '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/teselagen/bin',
+        PWD: '/home/teselagen/j5service',
+        LANG: 'en_US.UTF-8',
+        SHLVL: '1',
+        HOME: '/home/teselagen',
+      };
+
+      var newChild = spawn('/usr/bin/perl', ['-t',scriptPath],  { uid:500, gid:500, env: env } );
       console.log(methodName + " started with pid: "+newChild.pid);
 
       if(typeof(cb2)==="function") cb2(newChild.pid);
