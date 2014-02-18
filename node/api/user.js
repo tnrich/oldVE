@@ -116,7 +116,7 @@ module.exports = function(app) {
               {
                 return res.json({
                   verifiedEmail: false,
-                  daysLeft: daydiff(new Date(),newDate(req.user.dateCreated))
+                  daysLeft: daydiff(new Date(),new Date(req.user.dateCreated))
                 });
               }
               else
