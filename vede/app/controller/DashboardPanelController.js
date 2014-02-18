@@ -39,6 +39,18 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Teselagen.manager.ProjectManager.openDeviceDesign(record);
     },
 
+    checkVerification: function() {
+        if(!Teselagen.manager.UserManager.user) {
+            return;
+        }
+
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("checkEmailVerifiedStatus", ''),
+            success:function(response) {
+                console.log(response);
+            }
+    },
+
     populateStatistics: function () {
         if(!Teselagen.manager.UserManager.user) {
             return;
@@ -457,6 +469,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
         this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatistics);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.checkVerification);
         this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
         this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
         this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
