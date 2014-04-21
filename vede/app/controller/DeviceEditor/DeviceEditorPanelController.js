@@ -74,9 +74,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 Ext.MessageBox.alert("Error","Problem while loading Eugene Rules");
             }
         });
-        
     },
-    
 
     /**
      * When opening a Device Editor project, store it in the "model" attribute of the active Device Editor panel.
@@ -88,80 +86,81 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onDeviceEditorRenameBtnClick: function () {
         var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
-    	var project = Teselagen.manager.ProjectManager.projects.getById(deproject.get("project_id"));
+        var project = Teselagen.manager.ProjectManager.projects.getById(deproject.get("project_id"));
         var projectNames = [];
         project.designs().load().each(function (design) {
             if(design!==deproject) projectNames.push(design.data.name);
         });
-        
+
         var onPromptClosed = function (answer, text) {
-        	if(answer ==="ok") {
-	        	text = Ext.String.trim(text);
-	        	if(text === "") { return Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this); }
-	        	
-	            for (var j=0; j<projectNames.length; j++) {
-	                if (projectNames[j]===text) {
-	                    Ext.MessageBox.show({
-	                        title: "Name",
-	                        msg: "A design with this name already exists in this project. <p> Please enter another name:",
-	                        buttons: Ext.MessageBox.OKCANCEL,
-	                        fn: onPromptClosed,
-	                        prompt: true,
-	                        cls: "sequencePrompt-box",
-	                        scope: this,
-	                        style: {
-	                            "text-align": "center"
-	                        },
-	                        scope: this,
-	                        layout: {
-	                            align: "center"
-	                        },
-	                        items: [
-	                            {
-	                                xtype: "textfield",
-	                                layout: {
-	                                    align: "center"
-	                                },
-	                                width: 50
-	                            }
-	                        ]
-	                    });
-	                    return Ext.MessageBox;
-	                    
-	                }
-	            }
-	    		deproject.set("name", text);
-	            deproject.save({
-	                callback: function () {
-	                    Ext.getCmp("mainAppPanel").getActiveTab().setTitle(text);
-	                    toastr.options.onclick = null;
-	                    toastr.info("Design renamed");
-	                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
-	                        Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
-	                    });
-	                }
-	            });
-        	} else {
-        		return false;
-        	}
+            if(answer ==="ok") {
+                text = Ext.String.trim(text);
+                if(text === "") { return Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this); }
+
+                for (var j=0; j<projectNames.length; j++) {
+                    if (projectNames[j]===text) {
+                        Ext.MessageBox.show({
+                            title: "Name",
+                            msg: "A design with this name already exists in this project. <p> Please enter another name:",
+                            buttons: Ext.MessageBox.OKCANCEL,
+                            fn: onPromptClosed,
+                            prompt: true,
+                            cls: "sequencePrompt-box",
+                            scope: this,
+                            style: {
+                                "text-align": "center"
+                            },
+                            scope: this,
+                            layout: {
+                                align: "center"
+                            },
+                            items: [
+                                {
+                                    xtype: "textfield",
+                                    layout: {
+                                        align: "center"
+                                    },
+                                    width: 50
+                                }
+                            ]
+                        });
+                        return Ext.MessageBox;
+
+                    }
+                }
+                deproject.set("name", text);
+                deproject.save({
+                    callback: function () {
+                        Ext.getCmp("mainAppPanel").getActiveTab().setTitle(text);
+                        toastr.options.onclick = null;
+                        
+                        toastr.info("Design renamed");
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            Ext.getCmp("projectTreePanel").expandPath("/root/" + deproject.data.project_id + "/" + deproject.data.id);
+                        });
+                    }
+                });
+            } else {
+                return false;
+            }
         };
 
         Ext.MessageBox.prompt("Rename Design", "New name:", onPromptClosed, this, false, deproject.get("name"));
     },
 
     onDeviceEditorClearBtnClick: function () {
-    	var gridManager = Teselagen.manager.GridManager;
-		
+        var gridManager = Teselagen.manager.GridManager;
+
         function ClearDeviceDesignBtn (btn) {
             if (btn==="ok") {
 
-        		gridManager.setListenersEnabled(false);
-        		
-            	var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+                gridManager.setListenersEnabled(false);
+
+                var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
                 existingDesign.bins().removeAll(true);
                 existingDesign.rules().removeAll(true);
                 existingDesign.parts().removeAll(true);
-                
+
                 var newBin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "Bin1"
                 });
@@ -178,15 +177,16 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                 newBin.cells().insert(0, [newCell,newCell2]);
                 existingDesign.bins().insert(0, newBin);
-                
+
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.RERENDER_DE_CANVAS);
                 gridManager.setListenersEnabled(true);
-                
+
                 Vede.application.fireEvent(Teselagen.event.DeviceEvent.SELECT_BIN, newBin, 0);
-                
+
                 toastr.options.onclick = null;
-                toastr.info("Design Cleared");
                 
+                toastr.info("Design Cleared");
+
             }
         }
 
@@ -208,6 +208,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                 var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
                 toastr.options.onclick = null;
+                
                 toastr.info("Design Deleted");
              }
          }
@@ -262,61 +263,145 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         };
     },
 
+    analyzeDesign: function(design,cb){
+
+        return cb();
+
+        function isValidObjectID(str) {
+          if(!str) return false;
+          var len = str.length;
+          if (len == 12 || len == 24) {
+            return /^[0-9a-fA-F]+$/.test(str);
+          } else {
+            return false;
+          }
+        }
+
+        console.log("Analyzing design...");
+
+        var warnings = [];
+        // Check data integrity
+        design.bins().each(function(bin){
+            bin.cells().each(function(cell){
+                if(cell.data.part_id)
+                {
+                    var part = cell.getPart();
+                    if(part && !isValidObjectID(part.data.sequencefile_id)) warnings.push("Part "+part.data.name+" with not mapped sequence");
+                    var sequence = part.getSequenceFile();
+                    if(sequence && !(sequence.data.sequenceFileContent!="")) warnings.push("Sequence "+sequence.data.name+" with empty sequence");
+
+                }
+            });
+        });
+
+        // Check for duplicated LOCUS NAME
+        sequences = {};
+        design.parts().each(function(part){
+            var sequence = part.getSequenceFile();
+
+
+            if(sequence) {
+                if(!sequence.get('serialize')) {
+                    sequence.processSequence(function() {});
+                }
+
+                var sequenceKey = sequences[sequence.data.serialize.inData.name];
+
+                if(sequenceKey && sequenceKey.data.id!=sequence.data.id)
+                {
+                    warnings.push("Warning, Locus name conflict between "+sequenceKey.data.name+" and "+sequence.data.name);
+                }
+                else
+                {
+                    sequences[sequence.data.serialize.inData.name] = sequence;
+                }
+            }
+        });
+
+        //setTimeout(function(){
+            if(warnings.length===0) {
+                console.log("Everything is ok");
+            } else {
+                console.log(warnings);
+                var warningsWindow = Ext.create('Vede.view.de.WarningsWindow').show();
+
+                errorStore = Ext.create("Ext.data.Store", {
+                    fields: [
+                        {name: 'messages', type: 'auto'}
+                    ]
+                });
+
+                errorStore.add({
+                    fileName: '',
+                    partSource: '',
+                    messages: 'test'
+                });
+
+                warningsWindow.down('gridpanel').reconfigure(errorStore);
+
+            }
+
+            cb();
+        //},2000);
+    },
+
     /**
      * Saves the device design
      */
     saveDEProject: function (cb) {
         var self = this;
         var gridManager = Teselagen.manager.GridManager;
-        
+
         gridManager.setListenersEnabled(false);
-        
+
         Vede.application.fireEvent(this.GridEvent.SUSPEND_PART_ALERTS);
-        var design = Ext.getCmp("mainAppPanel").getActiveTab().model; 
-        
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
         var saveAssociatedSequence = function (part, cb) {
             // Do not save sequence for an unmapped part.
-            if(part.isMapped())
-            {
+            if(part.isMapped()) {
                 part.getSequenceFile({callback: function(associatedSequence){
-                    if(associatedSequence)
-                    {
+                    if(associatedSequence) {
                         var lastSequenceId = associatedSequence.get("id");
-                        associatedSequence.set("dateCreated", new Date());
-                        associatedSequence.set("dateModified", new Date());
-                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId)
-                        {
+
+                        associatedSequence.set({
+                            dateCreated: new Date(),
+                            dateModified: new Date()
+                        });
+
+                        if(!associatedSequence.get('serialize')) {
+                            associatedSequence.processSequence(function() {});
+                        }
+
+                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !lastSequenceId) {
                             associatedSequence.save({
                                 callback: function (sequencefile) {
-                                    if(!lastSequenceId)
-                                    {
+                                    if(!lastSequenceId) {
                                         part.set("sequencefile_id", sequencefile.get("id"));
                                         part.save({
                                             callback: function () {
                                                 cb();
                                             }
                                         });
+                                    } else {
+                                        cb();
                                     }
-                                    else { cb(); }
                                 }
                             });
-                        }
-                        else
-                        {
+                        } else {
                             cb();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         cb();
                     }
                 }});
+            } else {
+                cb();
             }
-            else { cb(); }
-            
         };
 
         var saveDesign = function () {
+            Vede.application.fireEvent(self.DeviceEvent.SUSPEND_TABS);
             design.rules().clearFilter(true);
 
             design.rules().each(function(rule) {
@@ -329,12 +414,13 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
             design.save({
                 callback: function () {
-
                     Vede.application.fireEvent(self.GridEvent.RESUME_PART_ALERTS);
                     Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                         Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
                         toastr.options.onclick = null;
+
                         toastr.info("Design Saved");
+                        Vede.application.fireEvent(self.DeviceEvent.RESUME_TABS);
                     });
                     gridManager.setListenersEnabled(true);
                     if(typeof (cb) === "function") { cb(); }
@@ -342,77 +428,150 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
             });
         };
 
-        var countParts = 0;
-        design.bins().each(function (bin) {
-            bin.cells().each(function(cell) {
-                if(cell.getPart()) {
-                    countParts++;
-                }
+        self.analyzeDesign(design,function(){
+            var countParts = 0;
+            design.bins().each(function (bin) {
+                bin.cells().each(function(cell) {
+                    if(cell.getPart()) {
+                        countParts++;
+                    }
+                });
             });
-        });
-        
-        if(countParts === 0) {
-        	saveDesign();
-        } else {
-	        design.bins().each(function (bin) {
-	            bin.cells().each(function (cell) {
-	                var part = cell.getPart();
-                    var sequenceFile;
-                    var sequenceManager;
-	
-	                if(part) {
-	                    if(!part.data.project_id) { part.set("project_id",Teselagen.manager.ProjectManager.workingProject.data.id); }
-	
-	                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                            sequenceFile = part.getSequenceFile();
-                            if(sequenceFile) {
-                                sequenceManager = sequenceFile.getSequenceManager();
 
-                                if(sequenceManager) {
-                                    part.set("features", sequenceManager.featuresByRangeText(
-                                        part.get("genbankStartBP"), part.get("endBP")).toString());
-                                }
+            if(countParts === 0) {
+                saveDesign();
+            } else {
+                design.bins().each(function (bin) {
+                    bin.cells().each(function (cell) {
+                        var part = cell.getPart();
+                        var sequenceFile;
+                        var sequenceManager;
 
-                                part.set("partSource", sequenceFile.get("name"));
+                        if(part) {
+                            if(!part.data.project_id) {
+                                part.set("project_id", Teselagen.manager.ProjectManager.workingProject.data.id);
                             }
 
-	                        part.save({
-	                            callback: function (part) {
-	                                saveAssociatedSequence(part, function () {
-	                                	if(countParts === 1) { saveDesign();}
-	                                	countParts--;
-	                                });
-	                            }
-	                        });
-	                    } else {
-                            
-	                        saveAssociatedSequence(part,function(){
-	                        	if(countParts === 1) { saveDesign(); }
-	                        	countParts--;
-	                        });
-	                    }
-	                }
-	            });
-	        });
-        }
+                            if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                                sequenceFile = part.getSequenceFile();
+                                if(sequenceFile) {
+                                    sequenceManager = sequenceFile.getSequenceManager();
+
+                                    if(sequenceManager) {
+                                        part.set({
+                                            features: sequenceManager.featuresByRangeText(part.get("genbankStartBP"),
+                                                                                          part.get("endBP")).toString(),
+                                            partSource: sequenceFile.get("name")
+                                        });
+                                    } else {
+                                        part.set("partSource", sequenceFile.get("name"));
+                                    }
+                                }
+                                saveAssociatedSequence(part, function() {
+                                    if(countParts === 1) {
+                                        saveDesign();
+                                    }
+
+                                    countParts--;
+                               });
+                            } else {
+                                saveAssociatedSequence(part,function(){
+                                    if(countParts === 1) { saveDesign(); }
+                                    countParts--;
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        });
     },
 
-    onDeviceEditorSaveBtnClick: function () {
+    onDeviceEditorSaveBtnClick: function() {
         var activeTab = Ext.getCmp("mainAppPanel").getActiveTab();
         activeTab.el.mask("Loading", "loader rspin");
         $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
 
-        this.saveDEProject(function () {
+        this.saveDEProject(function() {
             activeTab.el.unmask();
-
         });
 
     },
 
-    onDeviceEditorSaveEvent: function (arg) {
+    onDeviceEditorSaveEvent: function(arg) {
+        Vede.application.fireEvent(this.DeviceEvent.SUSPEND_TABS);
         this.saveDEProject(arg);
     },
 
+    onDeviceEditorSaveAsBtnClick: function() {
+        var saveAsWindow = Ext.create("Vede.view.de.SaveAsWindow").show();
+        var nameField = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]');
+        var design = Ext.getCmp("mainAppPanel").getActiveTab().model;
+
+        nameField.setValue(design.get("name") + ' Copy');
+    },
+
+    onSaveDeviceAsWindowOKBtnClick: function() {
+        var saveAsWindow = Ext.ComponentQuery.query('window[cls="deviceEditorSaveAsWindow"]')[0];
+        var newName = saveAsWindow.down('textfield[cls="saveAsWindowDesignNameField"]').getValue();
+        var oldDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+        var newDesign = oldDesign.copy();
+        var currentProject = oldDesign.getProject();
+
+        // If we don't do this, it calls the API with an auto-generated ID.
+        currentProject.setId(oldDesign.get('project_id'));
+
+        currentProject.designs().load({
+            callback: function() {
+                var duplicateIndex = currentProject.designs().find('name', newName);
+
+                newDesign.set({
+                    name: newName,
+                    project: currentProject
+                });
+
+                newDesign.parts().add(oldDesign.parts().getRange());
+                newDesign.rulesStore = oldDesign.rulesStore;
+                newDesign.bins().add(oldDesign.bins().getRange());
+
+                if(duplicateIndex === -1) {
+                    newDesign.save({
+                        success: function() {
+                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                            saveAsWindow.close();
+                            Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                        },
+                        failure: function() {
+                            Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                        }
+                    });
+                } else {
+                    Ext.Msg.show({
+                        title: "Duplicate Design Name", 
+                        msg: "A design already exists in this project with that name.<br>" +
+                             "Continuing will create two designs with the same name. Are you sure?",
+                        buttons: 10,
+                        fn: function(button) {
+                            if(button === "yes") {
+                                newDesign.save({
+                                    success: function() {
+                                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+                                        saveAsWindow.close();
+                                        Teselagen.manager.ProjectManager.openDeviceDesign(newDesign);
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('', 'Error saving sequence. Please try again.');
+                                    }
+                                });
+                            } else {
+                                saveAsWindow.close();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    },
 
     onAddRowAboveClick: function () {
         this.application.fireEvent(this.DeviceEvent.ADD_ROW_ABOVE);
@@ -445,16 +604,19 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
     onJ5buttonClick: function () {
         Vede.application.fireEvent(this.CommonEvent.RUN_J5);
         toastr.options.onclick = null;
+
         toastr.info("Design Saved");
     },
 
     onImportEugeneRulesBtnClick: function(){
-        
+
     },
 
-    onJumpToJ5Run: function(data) {
+    onJumpToJ5Run: function(data,jump) {
         var design_id = data.devicedesign_id;
         var project_id = data.project_id;
+        console.log(design_id);
+        console.log(project_id);
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
 
         var self = this;
@@ -472,7 +634,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     var field;
                     j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
 
-                    self.activeJ5Run = j5runs.getById(data.id);
+                    self.activeJ5Run = j5runs.getById(data._id);
 
                     for(var i=0; i<Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem").length; i++) {
                         Ext.getCmp("mainAppPanel").getActiveTab().query("menuitem")[i].removeCls("j5-menuitem-active");
@@ -503,8 +665,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
                     if(status==="Completed") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
@@ -512,8 +674,8 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         $("#" + field + " .status-note").addClass("status-note-completed");
                     } else if (status==="Completed with warnings") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").enable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").removeCls("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").enable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").removeCls("btnDisabled");
                         $("#" + field + " .status-note").removeClass("status-note-completed");
@@ -521,18 +683,35 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                         $("#" + field + " .status-note").addClass("status-note-warning");
                     } else if (status==="Error") {
                         field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
-                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
-
                         $("#" + field + " .status-note").removeClass("status-note-completed");
                         $("#" + field + " .status-note").removeClass("status-note-warning");
                         $("#" + field + " .status-note").addClass("status-note-failed");
+                    } else if (status=="Canceled") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query("field[cls='j5RunStatusField']")[0].getId();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").disable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='downloadResults']").addClass("btnDisabled");
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down("button[cls='buildBtn']").addClass("btnDisabled");
+                        $("#" + field + " .status-note").removeClass("status-note-completed");
+                        $("#" + field + " .status-note").removeClass("status-note-warning");
+                        $("#" + field + " .status-note").addClass("status-note-failed");
+                    } else if (status=="In progress") {
+                        field = Ext.getCmp("mainAppPanel").getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').disable();
+                        //Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="downloadResults"]').addClass('btnDisabled');
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').disable();
+                        Ext.getCmp("mainAppPanel").getActiveTab().down('button[cls="buildBtn"]').addClass('btnDisabled');
+                        $("#" + field + " .status-note").removeClass("status-note-completed");
+                        $("#" + field + " .status-note").removeClass("status-note-warning");
+                        $("#" + field + " .status-note").removeClass("status-note-failed");
                     }
 
                     var warnings = self.activeJ5Run.raw.warnings;
-                    var errors = self.activeJ5Run.raw.error_list[0];
+                    var errors = self.activeJ5Run.raw.error_list;
                     var warningsStore, errorsStore;
 
                     if(self.activeJ5Run.getJ5Results().raw.processedData) {
@@ -574,11 +753,11 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     if (errors) {
                         errorsStore = Ext.create("Teselagen.store.ErrorsStore", {
                         model: "Teselagen.models.j5Output.Error",
-                        data: errors.error
+                        data: errors
                     });
                     }
 
-                    if ((warnings.length>0)===true) {
+                    if (warnings.length>0) {
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").show();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='warnings']").reconfigure(warningsStore);
                     } else {
@@ -587,7 +766,7 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                          warningsStore = null;
                     }
 
-                    if (errors) {
+                    if (errors.length>0) {
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").show();
                         Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='errors']").reconfigure(errorsStore);
                         // Ext.getCmp('mainAppPanel').getActiveTab() .down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue("N/A");
@@ -601,22 +780,24 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='assemblies']").reconfigure(assemblies);
                     Ext.getCmp("mainAppPanel").getActiveTab().down("gridpanel[name='j5parameters']").reconfigure(J5parametersValues);
 
-                    
+
                     Vede.application.fireEvent("resetJ5ActiveRun", self.activeJ5Run);
                     // Ext.getCmp('mainAppPanel').getActiveTab().down('button[cls="downloadResults"]').href = '/api/getfile/'+self.activeJ5Run.data.file_id;
                 }
             });
         };
-        project.designs().load({
-            id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                console.log(loadedDesign);
-                console.log(design_id);
-                var design = loadedDesign[0];
-                Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
-            }
-        });
+        if(jump==true) {
+            project.designs().load({
+                id: design_id,
+                callback: function (loadedDesign) {
+                    Teselagen.manager.ProjectManager.workingProject = project;
+                    console.log(loadedDesign);
+                    console.log(design_id);
+                    var design = loadedDesign[0];
+                    Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
+                }
+            });
+        }
 
     },
 
@@ -636,15 +817,32 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
         return numseconds + " seconds";
         }
     },
-    
+
     onUndoMenuItemClick: function() {
-    	Teselagen.manager.GridCommandPatternManager.undo();
+        Teselagen.manager.GridCommandPatternManager.undo();
     },
-    
+
     onRedoMenuItemClick: function() {
-    	Teselagen.manager.GridCommandPatternManager.redo();
+        Teselagen.manager.GridCommandPatternManager.redo();
     },
-    
+
+    onSuspendTabsEvent: function(){
+        console.log("Suspending tabs");
+        Ext.getCmp("mainAppPanel").items.items.forEach(function(tab){
+            tab.disable();
+            tab.el.mask('Parsing File',"loader rspin");
+            $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+        });
+    },
+
+    onResumeTabsEvent: function(){
+        console.log("Resuming tabs");
+        Ext.getCmp("mainAppPanel").items.items.forEach(function(tab){
+            tab.enable();
+            tab.el.unmask();
+        });        
+    },
+
     /**
      * @member Vede.controller.DeviceEditor.DeviceEditorPanelController
      */
@@ -661,11 +859,22 @@ Ext.define("Vede.controller.DeviceEditor.DeviceEditorPanelController", {
 
         this.application.on(this.DeviceEvent.LOAD_EUGENE_RULES, this.onLoadEugeneRulesEvent, this);
 
+        this.application.on(this.DeviceEvent.SUSPEND_TABS, this.onSuspendTabsEvent, this);
+
+        this.application.on(this.DeviceEvent.RESUME_TABS, this.onResumeTabsEvent, this);
+
         this.application.on(this.CommonEvent.JUMPTOJ5RUN, this.onJumpToJ5Run, this);
 
+
         this.control({
+            "button[cls='saveDeviceAsWindowOKButton']": {
+                click: this.onSaveDeviceAsWindowOKBtnClick
+            },
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
                 click: this.onDeviceEditorSaveEvent
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Save Design As']": {
+                click: this.onDeviceEditorSaveAsBtnClick
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Clear Design']": {
                 click: this.onDeviceEditorClearBtnClick

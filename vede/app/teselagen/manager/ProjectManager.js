@@ -6,17 +6,17 @@
 Ext.define("Teselagen.manager.ProjectManager", {
 
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.event.ProjectEvent", 
-               "Teselagen.event.SequenceManagerEvent", 
-               "Teselagen.store.UserStore", 
-               "Teselagen.manager.SessionManager", 
-               "Teselagen.manager.SequenceManager", 
-               "Teselagen.manager.DeviceDesignManager", 
-               "Teselagen.utils.FormatUtils", 
-               "Teselagen.models.J5Bin", 
+               "Teselagen.event.ProjectEvent",
+               "Teselagen.event.SequenceManagerEvent",
+               "Teselagen.store.UserStore",
+               "Teselagen.manager.SessionManager",
+               "Teselagen.manager.SequenceManager",
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.utils.FormatUtils",
+               "Teselagen.models.J5Bin",
                "Teselagen.models.Part",
-               "Teselagen.models.VectorEditorProject", 
-               "Vede.view.de.DeviceEditor", 
+               "Teselagen.models.VectorEditorProject",
+               "Vede.view.de.DeviceEditor",
                "Ext.window.MessageBox",
                 "Teselagen.manager.ProjectExplorerManager"
                ],
@@ -37,7 +37,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @member Teselagen.manager.ProjectManager
      * Loads a user, sets currentUser, load projects and fire renderProjectTree (ProjectExplorer)
      */
-    loadUser: function () {
+    loadUser: function (cb) {
         // Set the username into headerUserField and set the welcomeUser name (This should be refactored on a cleaner way)
         Ext.get("headerUserIcon").down(".headerUserField").dom.innerHTML = Teselagen.manager.AuthenticationManager.username+"<b class=\"caret\"></b>";
         if(Ext.getCmp("welcomeUserIcon")) { Ext.getCmp("welcomeUserIcon").setText(Teselagen.manager.AuthenticationManager.username); }
@@ -63,14 +63,24 @@ Ext.define("Teselagen.manager.ProjectManager", {
         self.sequences.loadPage(1);
         self.parts.loadPage(1);
 
+        /*
+        self.currentTasks = Ext.create("Ext.data.Store", {
+            fields: [
+                {name: 'devicedesign_name', type: 'auto'},
+                {name: 'status', type: 'auto'},
+                {name: 'date', type: 'auto'}
+            ]
+        });
+        */
+
         var projectsStore = self.currentUser.projects().load(
             function (projects, operation, success) {
                 if(!success) { Ext.Error.raise("Error loading projects"); }
                 self.projects = projectsStore;
-                Teselagen.manager.ProjectExplorerManager.load();
             }
         );
 
+        if( typeof(cb) == "function" ) cb();
     },
 
     /**
@@ -112,7 +122,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         if(!duplicated) { return cb(tabPanel); }
         else { 
             duplicatedTab.el.unmask();
-            //console.log("Trying to open duplicated tab!"); 
+            //console.log("Trying to open duplicated tab!");
         }
 
     },
@@ -145,11 +155,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openSequenceLibrary: function (itemCount, searchString) {
         var dashPanel = Ext.getCmp("DashboardPanel");
-        var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");   
+        var sequenceGrid = dashPanel.down("gridpanel[name='SequenceLibraryGrid']");
         var sequences = Teselagen.manager.ProjectManager.sequences;
 
-        dashPanel.getActiveTab().el.unmask(); 
-        if(sequenceGrid) 
+        dashPanel.getActiveTab().el.unmask();
+        if(sequenceGrid)
         {
             if(!itemCount) {
                 if(Math.round(sequenceGrid.getHeight()/33)>20){sequences.pageSize = Math.round(sequenceGrid.getHeight()/33);}
@@ -159,8 +169,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
             if(searchString) {
                 sequences.remoteFilter = true;
-                sequences.on('load', function(s){ 
-                    s.remoteFilter = false; 
+                sequences.on('load', function(s){
+                    s.remoteFilter = false;
                 }, this, { single: true });
 
                 sequences.filter("name", Ext.String.escapeRegex(searchString));
@@ -178,7 +188,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.suspendLayouts();
         var dashPanel = Ext.getCmp("DashboardPanel");
 
-        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']"); 
+        partGrid = dashPanel.down("gridpanel[name='PartLibraryGrid']");
         var parts = Teselagen.manager.ProjectManager.parts;
 
         if(partGrid) {
@@ -308,6 +318,55 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     /**
+     * Deletes the given sequence and updates designs associated with the affected parts.
+     * @param {Teselagen.models.Sequence} sequence The sequence to delete.
+     * @param {Object[]} affectedParts The parts that will be removed in object form.
+     */
+    deleteSequence: function(sequence, affectedParts) {
+        var design;
+        var part;
+        var tabs = Ext.getCmp("mainAppPanel").items.getRange();
+
+        if(affectedParts.length > 0) {
+            for(var i = 0; i < tabs.length; i++) {
+                design = tabs[i].model;
+
+                if(tabs[i].initialCls === 'DeviceEditorTab') {
+                    for(var j = 0; j < affectedParts.length; j++) {
+                        part = design.parts().getById(affectedParts[j].id);
+
+                        if(part) {
+                            Teselagen.manager.DeviceDesignManager.removePartFromDesign(design, part);
+                        }
+                    }
+                }
+            }
+        }
+
+        sequence.destroy();
+    },
+
+    /**
+     * Deletes the given part and removes it from any open designs.
+     * @param {Teselagen.models.Part} part The part to delete.
+     */
+    deletePart: function(part) {
+        var design;
+        var tabs = Ext.getCmp("mainAppPanel").items.getRange();
+
+        for(var i = 0; i < tabs.length; i++) {
+            design = tabs[i].model;
+
+            if(tabs[i].initialCls === 'DeviceEditorTab' && design.parts().indexOf(part) !== -1) {
+                Teselagen.manager.DeviceDesignManager.removePartFromDesign(design, part);
+            }
+        }
+
+        part.destroy();
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
+    },
+
+    /**
      * openSequence
      * Opens a SequenceFile model in a new tab.
      * @param {model} Receives a j5Report model (already loaded)
@@ -323,10 +382,58 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 //Ext.getCmp("projectTreePanel").expandPath('/root/',null,null,function(item,item2){
                     var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
                     var sequenceNode = rootNode.findChild('id',sequence.data.id,true);
-                    if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);                    
+                    if(sequenceNode) Ext.getCmp("projectTreePanel").getSelectionModel().select(sequenceNode);
                 //});
 
  //           }).delay(500);
+        });
+    },
+
+    /**
+     * Returns a list of all designs which contain the given part.
+     * @param {Teselagen.models.Part} part The part to return designs for.
+     */
+    getDesignsInvolvingPart: function(part, callback) {
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("getDesignsWithPart", ""),
+            method: "GET",
+            withCredentials: true,
+            params: {
+                part: JSON.stringify(part.data)
+            },
+            success: function(response) {
+                return callback(JSON.parse(response.responseText).designs);
+            },
+            failure: function(response) {
+                console.log("Error getting designs involving part.");
+                console.log(response);
+
+                return callback(false);
+            }
+        });
+    },
+
+    /**
+     * Returns a list of all parts deriving from the given sequence, as well as designs they are in.
+     * @param {Teselagen.models.Sequence} sequence The sequence.
+     */
+    getPartsAndDesignsBySequence: function(sequence, callback) {
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("getPartsAndDesignsBySequence", ""),
+            method: "GET",
+            withCredentials: true,
+            params: {
+                sequenceId: JSON.stringify(sequence.get("id"))
+            },
+            success: function(response) {
+                return callback(JSON.parse(response.responseText).parts);
+            },
+            failure: function(response) {
+                console.log("Error getting parts involving sequence.");
+                console.log(response);
+
+                return callback(false);
+            }
         });
     },
 
@@ -475,7 +582,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 ]
                             });
                             return Ext.MessageBox;
-                            
+
                         }
                     };
                     var oldTab = Ext.getCmp("mainAppPanel").getActiveTab();

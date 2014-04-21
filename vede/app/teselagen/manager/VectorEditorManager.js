@@ -10,8 +10,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     sequenceFileManager: null,
     sequence: null,
 
-    constructor: function(seq,mgr) {
-        this.sequenceManager = mgr;
+    constructor: function(seq, mgr) {
+        this.sequenceFileManager = mgr;
         this.sequence = seq;
     },
 
@@ -37,6 +37,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             var parttext = Ext.getCmp("mainAppPanel").getActiveTab().down("tbtext[cls=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Saved at ' + nowTime + ' on '+ nowDate);
             toastr.options.onclick = null;
+
             toastr.info ("Sequence Saved");
 
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();

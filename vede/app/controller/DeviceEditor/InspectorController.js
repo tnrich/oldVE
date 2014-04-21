@@ -67,6 +67,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.partPropertiesForm.loadRecord(newPart);
         // toastr.options.onclick = null;
+
+
+
+
         // toastr.info("Part Cleared");
         this.application.fireEvent(this.DeviceEvent.CHECK_J5_READY);
     },
@@ -146,8 +150,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     self.runj5Btn1.enable();
                     self.runj5Btn1.removeCls("btnDisabled");
 
-                    self.runj5Btn2.enable();
-                    self.runj5Btn2.removeCls("btnDisabled");
+                    // self.runj5Btn2.enable();
+                    // self.runj5Btn2.removeCls("btnDisabled");
 
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
                 } else {
@@ -156,8 +160,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     self.runj5Btn1.disable();
                     self.runj5Btn1.addCls("btnDisabled");
 
-                    self.runj5Btn2.disable();
-                    self.runj5Btn2.addCls("btnDisabled");
+                    // self.runj5Btn2.disable();
+                    // self.runj5Btn2.addCls("btnDisabled");
 
                     inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
                 }
@@ -581,6 +585,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             		newFas: newStrategy
             	}
     		});
+
+            this.renderCollectionInfo();
         }
     },
 
@@ -732,6 +738,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     selectedRule.destroy();
                     this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,this.selectedPart);
                     toastr.options.onclick = null;
+
+
+
+
                     toastr.info("Eugene Rule Removed");
 
                     Teselagen.manager.GridCommandPatternManager.addCommand({
@@ -821,6 +831,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         
         toastr.options.onclick = null;
+        
         toastr.info("Eugene Rule Added");
         Vede.application.fireEvent(Teselagen.event.DeviceEvent.SAVE_DESIGN);
         
@@ -1134,7 +1145,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
 
             this.runj5Btn1 = this.inspector.down("button[cls='runj5Btn']");
-            this.runj5Btn2 = newTab.down("button[cls='j5button']");
+            // this.runj5Btn2 = newTab.down("button[cls='j5button']");
 
             this.partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
             this.openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
@@ -1146,14 +1157,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.partSourceNameField = this.inspector.down("displayfield[cls='partSourceField']");
             this.removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
 
-            this.deletePartBtn.disable();
-            this.deletePartBtn.addCls("btnDisabled");
-            this.changePartDefinitionBtn.disable();
-            this.changePartDefinitionBtn.addCls("btnDisabled");
-            this.openPartLibraryBtn.disable();
-            this.openPartLibraryBtn.setText("Select Part From Library");
-            this.openPartLibraryBtn.removeCls("selectPartFocus");
-            this.openPartLibraryBtn.addCls("btnDisabled");
+            // this.deletePartBtn.disable();
+            // this.deletePartBtn.addCls("btnDisabled");
+            // this.changePartDefinitionBtn.disable();
+            // this.changePartDefinitionBtn.addCls("btnDisabled");
+            // this.openPartLibraryBtn.disable();
+            // this.openPartLibraryBtn.setText("Select Part From Library");
+            // this.openPartLibraryBtn.removeCls("selectPartFocus");
+            // this.openPartLibraryBtn.addCls("btnDisabled");
 
             this.renderCollectionInfo();
             this.inspector.setActiveTab(1);

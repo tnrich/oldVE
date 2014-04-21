@@ -122,11 +122,16 @@ Ext.application({
         // Task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             Teselagen.manager.SessionManager.unmaskApp();
-            Teselagen.manager.ProjectManager.loadUser();
+            Teselagen.manager.ProjectManager.loadUser(function(){
+                Teselagen.manager.TasksMonitor.bootMonitoring();
+            });
         });
 
         // After logged in execute task to fadeOut the splashscreen
-        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});        
+        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){
+            Teselagen.manager.ProjectExplorerManager.load();
+            task.delay(500);
+        });        
 
     }
 });

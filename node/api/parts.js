@@ -10,16 +10,6 @@ module.exports = function(app) {
     var Design = app.db.model("devicedesign");
 
 
-    /*
-     * When a part is created a Fully quilified domain name (FQDN) should be generated.
-     * <company/institution>.<group>.<subgroup>.<user>..<design>.<part>
-     */
-
-    app.get('/fqdn', restrict,  function(req, res) {
-        return res.json(req.user)
-    });
-
-
     var savePart = function(req,res,existingPart,cb){
         var newPart = existingPart;
         if(!existingPart) { newPart = new Part(); }
@@ -53,227 +43,260 @@ module.exports = function(app) {
                     }
                     else 
                         {
-                            if (typeof(cb) == 'function') cb(newPart);
-                            res.json({'parts': newPart,"duplicated":false,"err":err});
+                            if (typeof(cb) == 'function') {
+                                cb(newPart);
+                            } else {
+                                res.json({'parts': newPart,"duplicated":false,"err":err});
+                            }
                         }
                 });
             });
     };
 
-    /**
-     * Create Part
-     * @memberof module:./routes/api
-     * @method POST 'parts'
-     */
-    app.post('/parts', restrict,  function(req, res) {
-        req.body.dateCreated = new Date();
-        savePart(req,res,null,function(savedSequence){
-            User.findById(req.user._id).populate('parts').exec(function(err, user) {
-                user.parts.push(savedSequence);
-                user.save();
-            });
-        });
-    });
+    return {
+        /*
+         * When a part is created a Fully quilified domain name (FQDN) should be generated.
+         * <company/institution>.<group>.<subgroup>.<user>..<design>.<part>
+         */
+        fqdn:  function(req, res) {
+            return res.json(req.user)
+        },
 
-    app.get('/updateAllPartHashes', restrict, function(req, res) {
-        Part.find({
-            user_id: mongoose.Types.ObjectId("522f9f52299669d80300030b")
-        }).exec(function(err, parts) {
-            if(err) {
-                return res.send(err);
-            } else {
-                async.forEach(parts, function(part, done) {
-                    Part.generateDefinitionHash(null, part, function(hash) {
-                        part.definitionHash = hash;
-                        part.save(function(err) {
-                            if(err) {
-                                if(err.code === 11000 || err.code === 11001) {
-                                    Part.findOne({
-                                        FQDN: part.FQDN,
-                                        definitionHash: part.definitionHash
-                                    }).exec(function(err, duplicatePart) {
-                                        if(err) {
-                                            return done(err);
-                                        } else {
-                                            var oldPartId = mongoose.Types.ObjectId(part.id);
-                                            var duplicatePartId = mongoose.Types.ObjectId(duplicatePart.id);
-                                            Design.find({
-                                                parts: oldPartId
-                                            }).exec(function(err, designs) {
-                                                var design;
+        /**
+         * Create Part
+         * @memberof module:./routes/api
+         * @method POST 'parts'
+         */
+        post_parts:  function(req, res) {
+            req.body.dateCreated = new Date();
+            savePart(req,res,null, function(newPart){
+                console.log(req.user.parts);
+                req.user.parts.push(mongoose.Types.ObjectId(newPart.id));
+                req.user.save(function(err, user) {
+                    console.log(user.parts);
 
-                                                if(err) {
-                                                    return done(err);
-                                                } else {
-                                                    async.forEach(designs, function(design, innerCallback) {
-                                                        design.parts[design.parts.indexOf(oldPartId)] = duplicatePartId;
-
-                                                        for(var j = 0; j < design.bins.length; j++) {
-                                                            for(var k = 0; k < design.bins[j].cells.length; k++) {
-                                                                var cell = design.bins[j].cells[k];
-
-                                                                if(cell.part_id === oldPartId) {
-                                                                    cell.part_id === duplicatePartId;
-                                                                }
-                                                            }
-                                                        }
-
-                                                        design.save(innerCallback);
-                                                    }, function(err) {
-                                                        if(err) {
-                                                            return done(err);
-                                                        } else {
-                                                            part.remove(done);
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    return done(err);
-                                }
-                            } else {
-                                return done();
-                            }
-                        });
+                    res.json({
+                        "parts": newPart,
+                        "duplicated":false,
+                        "err":err
                     });
-                }, function(err) {
-                    if(err) {
-                        return res.send(err);
-                    } else {
-                        return res.send('Success!');
-                    }
+                });
+            });
+        },
+
+        updateAllPartNames: function(req, res) {
+            Part.find().exec(function(err, parts) {
+                if(err) {
+                    return res.send(err);
+                } else {
+                    async.forEach(parts, function(part, done) {
+                        part.name = part.name.replace(/[^0-9a-zA-Z-_]/g, "_");
+
+                        Part.generateDefinitionHash(null, part, function(hash) {
+                            part.definitionHash = hash;
+                            part.save(done);
+                        });
+                    }, function(err) {
+                        if(err) {
+                            return res.send(err);
+                        } else {
+                            return res.send('yay');
+                        }
+                    });
+                }
+            });
+        },
+
+        updateAllPartSizes: function(req, res) {
+            var Sequence = app.db.model('sequence');
+
+            Part.find().exec(function(err, parts) {
+                if(err) {
+                    return res.send(err);
+                } else {
+                    async.forEach(parts, function(part, done) {
+                        var startBP = Number(part.genbankStartBP);
+                        var endBP = Number(part.endBP);
+                        var size;
+
+                        Sequence.findById(part.sequencefile_id).exec(function(err, sequence) {
+                            if(err) {
+                                return done(err);
+                            }
+
+                            if(startBP > endBP) {
+                                if(sequence) {
+                                    var tSize = Number(sequence.size);
+                                    size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+                                } else {
+                                    return done();
+                                }
+                            } else if (startBP==endBP) {
+                                size = 1;
+                            } else {
+                                size = (Math.abs(startBP - endBP) + 1);
+                            }
+
+                            part.size = size;
+
+                            Part.generateDefinitionHash(null, part, function(hash) {
+                                part.definitionHash = hash;
+                                return part.save(done);
+                            });
+                        });
+                    }, function(err) {
+                        if(err) {
+                            return res.send(err);
+                        } else {
+                            return res.send('yay');
+                        }
+                    });
+                }
+            });
+        },
+
+        /**
+         * PUT Parts
+         * @memberof module:./routes/api
+         * @method PUT 'parts'
+         */
+        put_parts:  function(req, res) {
+            if(!req.body.id) { savePart(req,res); }
+            else
+            {
+                Part.findById(req.body.id, function(err, newPart) {
+                    if(err) return res.json(500,{"error":err});
+                    if(!newPart) return res.json(500,{"error":"Part not found!"});
+                    savePart(req,res,newPart);
                 });
             }
-        });
-    });
+        },
 
-    /**
-     * PUT Parts
-     * @memberof module:./routes/api
-     * @method PUT 'parts'
-     */
-    app.put('/parts', restrict,  function(req, res) {
-        if(!req.body.id) { savePart(req,res); }
-        else
-        {
-            Part.findById(req.body.id, function(err, newPart) {
-                if(err) return res.json(500,{"error":err});
-                if(!newPart) return res.json(500,{"error":"Part not found!"});
-                savePart(req,res,newPart);
-            });
-        }
-    });
+        /**
+         * GET Parts
+         * @memberof module:./routes/api
+         * @method GET 'parts'
+         */
+        get_parts:  function(req, res) {
 
-    /**
-     * GET Parts
-     * @memberof module:./routes/api
-     * @method GET 'parts'
-     */
-    app.get('/parts', restrict,  function(req, res) {
+            var filter = "";
+            var totalCount = 0;
+            var sortOpts = {};
+            var queryOpts = {};
 
-        var filter = "";
-        var totalCount = 0;
-        var sortOpts = {};
+            if(req.query.filter)
+            {
+                var filterOptions = JSON.parse(req.query.filter); 
+                if(filterOptions[0] && filterOptions[0].property==="name")
+                {
+                    filter = new RegExp(filterOptions[0].value, "i");
+                }
+            }
 
-        if(req.query.filter)
-        {
-            var filterOptions = JSON.parse(req.query.filter); 
-            if(filterOptions[0] && filterOptions[0].property==="name")
+            if(req.query.sort)
             {
-                filter = new RegExp(filterOptions[0].value, "i");
+                var sortOptions = JSON.parse(req.query.sort); 
+                if(sortOptions[0] && sortOptions[0].property==="name")
+                {
+                    sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
+                }
+                if(sortOptions[0] && sortOptions[0].property==="dateModified")
+                {
+                    sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                }
+                if(sortOptions[0] && sortOptions[0].property==="dateCreated")
+                {
+                    sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
+                }
+                if(sortOptions[0] && sortOptions[0].property==="size")
+                {
+                    sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
+                }
+                if(sortOptions[0] && sortOptions[0].property==="partSource")
+                {
+                    sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
+                }
             }
-        }
-
-        if(req.query.sort)
-        {
-            var sortOptions = JSON.parse(req.query.sort); 
-            if(sortOptions[0] && sortOptions[0].property==="name")
-            {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
-            }
-            if(sortOptions[0] && sortOptions[0].property==="dateModified")
-            {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
-            }
-            if(sortOptions[0] && sortOptions[0].property==="dateCreated")
-            {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? -1 : 1 ;
-            }
-            if(sortOptions[0] && sortOptions[0].property==="size")
-            {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
-            }
-            if(sortOptions[0] && sortOptions[0].property==="partSource")
-            {
-                sortOpts[sortOptions[0].property] = (sortOptions[0].direction==="DESC") ? 1 : -1 ;
-            }
-        }
 
             if(!Object.keys(sortOpts).length) sortOpts = { name: 1 }; // Sorted by name by default
 
-        User.findById(req.user._id).populate({
-                path: 'parts',
-                match: {name: {$regex: filter}}
-            }).exec(function(err, user) {
-            totalCount = user.parts.length;
+            if(filter) {
+                queryOpts = {
+                    path: 'parts',
+                    match: {
+                        name: {
+                            $regex: filter
+                        }
+                    }
+                };
+            } else {
+                queryOpts = {
+                    path: 'parts'
+                };
+            }
 
-            User.findById(req.user._id).populate({
-                path: 'parts',
-                match: {name: {$regex: filter},
-                sequencefile_id: {$ne: null}},
-                options: { sort: sortOpts, limit: req.query.limit, skip: req.query.start }
-            })
-            .exec(function(err, user) {
-                res.json({
-                    success: true,
-                    parts: user.parts,
-                    results: user.parts.length,
-                    total: totalCount
+            User.populate(req.user, queryOpts, function(err, user) {
+                totalCount = user.parts.length;
+
+                queryOpts.sequencefile_id = {
+                    $ne: null
+                };
+
+                queryOpts.options = {
+                    sort: sortOpts,
+                    limit: req.query.limit,
+                    skip: req.query.start
+                };
+
+                User.populate(req.user, queryOpts, function(err, user) {
+                    res.json({
+                        success: true,
+                        parts: user.parts,
+                        results: user.parts.length,
+                        total: totalCount
+                    });
                 });
             });
-        });
-    });
+        },
 
 
-    /**
-     * GET Parts by id
-     * @memberof module:./routes/api
-     * @method GET 'parts/:part_id'
-     */
-    app.get('/parts/:part_id', restrict,  function(req, res) {
-        User.findById(req.user._id).populate('parts').exec(function(err, user) {
-            User.findById(req.user._id).populate({
+        /**
+         * GET Parts by id
+         * @memberof module:./routes/api
+         * @method GET 'parts/:part_id'
+         */
+        get_part_by_id:  function(req, res) {
+            User.populate(req.user, {
                 path: 'parts',
-                match: {_id: req.params.part_id}
-            })
-            .exec(function(err, user) {
+                match: {
+                    _id: req.params.part_id
+                }
+            }, function(err, user) {
                 res.json({
                     success: true,
                     parts: user.parts,
                     results: user.parts.length
                 });
             });
-        });
-    });
+        },
 
-    /**
-     * DELETE Parts
-     * @memberof module:./routes/api
-     * @method DELETE 'parts'
-     */
-    app.delete('/parts/:part_id', restrict, function(req, res) {
-        var partId = req.params.part_id;
-        var Part = app.db.model("part");
-        var Design = app.db.model("devicedesign");
+        /**
+         * DELETE Parts
+         * @memberof module:./routes/api
+         * @method DELETE 'parts'
+         */
+        delete_parts: function(req, res) {
+            var partId = req.params.part_id;
+            var Part = app.db.model("part");
+            var Design = app.db.model("devicedesign");
 
-        Part.findByIdAndRemove(partId, function(pErr, pDocs) {
-            if(pErr) {
-                return errorHandler(pErr, req, res);
-            } else {
-                return res.json({});
-            }
-        });
-    });
+            Part.findByIdAndRemove(partId, function(pErr, pDocs) {
+                if(pErr) {
+                    return errorHandler(pErr, req, res);
+                } else {
+                    return res.json({});
+                }
+            });
+        }
+    };
 };

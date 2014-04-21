@@ -181,6 +181,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
         var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
 
         this.callParent();
+
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
         this.pieManager.setFeatures(this.SequenceManager.getFeatures());
@@ -225,8 +226,7 @@ Ext.define('Vede.controller.VectorEditor.PieController', {
 
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
-            this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start, true);
+            this.select(start, end);
         }
     },
 

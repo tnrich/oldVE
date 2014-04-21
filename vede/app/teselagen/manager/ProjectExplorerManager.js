@@ -13,13 +13,16 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
     loadData: function(cb,cb2,scope){
         var self = scope;
+        setTimeout(function(){
         Ext.Ajax.request({
+            withCredentials: true,
             url: Teselagen.manager.SessionManager.buildUserResUrl("/projectExplorer/getData", ""),
             success: function(response){
                 self.projectsData = JSON.parse(response.responseText);
                 return cb(self,cb2);
             }
         });
+    },5000);
     },
 
     reRenderProjectExplorer: function(scope,cb){
@@ -96,12 +99,14 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
         openDesign: function(design_id,project_id,cb){
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        
+
         project.designs().load({
             id: design_id,
-            callback: function (loadedDesign) {
-                Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+            callback: function(loadedDesign, operation, success) {
+                if(success) {
+                    Teselagen.manager.ProjectManager.workingProject = project;
+                    Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
+                }
                 if(typeof (cb) === "function") {cb(); }
             }
         });
@@ -109,17 +114,16 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
     openJ5Report: function(design_id,project_id,cb){
             var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-    project.designs().load({
-        id: design_id,
-        callback: function (loadedDesign) {
-            Teselagen.manager.ProjectManager.workingProject = project;
-            var design = loadedDesign[0];
-            //console.log(design);
-            //var j5report = loadedDesign[0].j5runs();
-            Teselagen.manager.ProjectManager.openj5Report(design);
-            if(typeof (cb) === "function") {cb(); }
-        }
-    });	
+            project.designs().load({
+                id: design_id,
+                callback: function (loadedDesign) {
+                    Teselagen.manager.ProjectManager.workingProject = project;
+                    var design = loadedDesign[0];
+                    //var j5report = loadedDesign[0].j5runs();
+                    Teselagen.manager.ProjectManager.openj5Report(design);
+                    if(typeof (cb) === "function") {cb(); }
+                }
+            });	
     },
 
     openPart: function(part_id,cb){
@@ -194,12 +198,10 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             case "Delete":
                 switch(selectedRecordType) {
                     case "openproj":
-                        console.log("delete project");
                         selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.id);
                         self.deleteProject(selectedProject, expandPathCallback);
                         break;
                     case "opende":
-                        console.log("delete design");
                         selectedProject = Teselagen.manager.ProjectManager.projects.getById(selectedRecord.parentId);
                         selectedProject.designs().load({
                             id: selectedRecord.id,
@@ -210,7 +212,6 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
 
                         break;
                     case "opensequence":
-                        console.log("delete sequence");
                         break;
                 }
             break;
@@ -290,6 +291,7 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             if (btn==="ok") {
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(selectedDesign);
                 toastr.options.onclick = null;
+                
                 toastr.info("Design '" + designName +  "' Deleted");
              }
          }
@@ -310,7 +312,8 @@ Ext.define("Teselagen.manager.ProjectExplorerManager", {
             if (btn==="ok") {
                 Teselagen.manager.ProjectManager.deleteProject(selectedProject);
                 toastr.options.onclick = null;
-                toastr.info("Design '" + projectName +  "' Deleted");
+                
+                toastr.info("Project '" + projectName +  "' Deleted");
              }
          }
 

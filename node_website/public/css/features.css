@@ -1,0 +1,95 @@
+h1 {
+	text-align: center;
+    font-family: 'proxima-nova';
+	font-size: 32px;
+	margin-bottom: 10px;
+    text-shadow: 1px 1px 0px white;
+    color: #414C57;
+}
+
+h2 {
+	text-align: center;
+    font-family: 'proxima-nova';
+	font-size: 18px;
+    color: #747B86;
+    /*letter-spacing: 1px;*/
+	font-weight: 400;
+}
+
+h4 {
+	font-size: 18px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+#feature-slider {
+	height: 500px;
+}
+
+#feature-showcase {
+	height: 100%;
+	background: rgb(62, 68, 74);
+	padding: 100px 0px;
+}
+
+.feature-title {
+	margin-top: 100px;
+}
+
+.feature-title h1 {
+	color: white;
+	font-size: 24px;
+    text-shadow: 1px 1px 0px #333;
+    background: rgb(62, 68, 74);
+    z-index: 100;
+    position: relative;
+    margin:0px 200px;
+}
+
+.feature-title h2 {
+	color: white;
+    background: rgb(62, 68, 74);
+    z-index: 100;
+    position: relative;
+    margin:0px 138px;
+}
+
+.feature-content {
+	padding: 35px 0px 70px;
+	border:1px solid rgba(255,255,255,0.2);
+	margin-top: -15px;
+	z-index: 1;
+}
+
+.feature-list {
+	list-style: none;
+	text-align: center;
+	margin-top: 40px;
+}
+
+.feature-list li {
+	display: inline-block;
+	text-align: center;
+}
+
+.feature-icon img{
+	max-width: 48px;
+	text-align: center;
+}
+
+.feature-desc {
+	color: white;
+	font-size: 14px;
+	text-align: center;
+	margin-top: 10px
+}
+
+.slide-desc {
+	width: 1000px;
+	position: relative;
+	bottom: 240px;
+	margin: 0px 70px;
+	padding: 20px;
+	background: rgba(255, 255, 255, 0.95);
+}

@@ -62,6 +62,9 @@ Ext.define("Teselagen.event.DeviceEvent", {
     
     CUT_PART: "CutPart",
     COPY_PART: "CopyPart",
-    PASTE_PART: "PastePart"
+    PASTE_PART: "PastePart",
+
+    SUSPEND_TABS: "Suspend_tabs",
+    RESUME_TABS: "Resume_tabs"
     
 });

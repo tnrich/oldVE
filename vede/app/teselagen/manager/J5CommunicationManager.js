@@ -69,8 +69,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     },
 
     condenseAssemblyFiles: function(data,cb){
-
         toastr.options.onclick = null;
+        
         toastr.info("Condensing Assembly Files...");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -93,6 +93,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
 
                 toastr.options.onclick = null;
+                
                 toastr.success("Assembly Files Ready to Download");
                 self.condenseAssemblyFilesResults = response;
                 return cb(true);
@@ -107,6 +108,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     distributePCRRequest: function(data,cb){
         toastr.options.onclick = null;
+        
         toastr.info("Distributing PCR Reactions...");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -136,6 +138,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
 
                 toastr.options.onclick = null;
+                
                 toastr.success("PCR Distribution Complete");
 
                 self.designDownstreamAutomationResults = response;
@@ -154,11 +157,9 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
      * Generates an AJAX request to the j5 server.
      */
     generateAjaxRequest: function (cb) {
-
-
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-
         var self = this;
+
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
             timeout: 100000,
@@ -184,8 +185,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 else return cb(false,response);
             }
         });
-        
     },
+
     downloadResults: function (btn) {
         if(this.currentResults) location.href="data:application/zip;base64,"+Teselagen.manager.SessionManager.buildUrl(this.currentResults.zipfile, "");
         btn.toggle();

@@ -58,7 +58,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     progressIncrement: 0,
 
     processQueue: function(callback){
-
         var processArray = function (process, context, callback){
             setTimeout(function(){
 
@@ -75,7 +74,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     }
                 });
 
-            }, 200); 
+            }, 200);
 
         };
 
@@ -173,7 +172,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         if(!NameUtils.isLegalName(name)) {
             legalName = false;
-            console.log(name);
             name = NameUtils.reformatName(name);
         }
 
@@ -187,7 +185,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var sequence = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileContent: currentGB,
             sequenceFileFormat: "GENBANK",
-            name: name,
+            name: currentGB.getLocus().locusName,
             sequenceFileName: name,
             firstTimeImported: true
         });
@@ -221,7 +219,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             self.batchImportMessages.add({
                 fileName: name + '.' + ext,
                 partSource: partSource,
-                messages: genbankObject.getMessages().concat(seqMgr.getParseMessages())
+                messages: messages
             });
         }
 
@@ -231,7 +229,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 sequence.sequenceManager = null;
 
                 var duplicated = JSON.parse(arguments[1].response.responseText).duplicated;
-                if(!duplicated) 
+                if(!duplicated)
                 {
                     Ext.getCmp("sequenceLibrary").down('pagingtoolbar').doRefresh();
                     return cb(false);
@@ -239,11 +237,11 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 else
                 {
                     var msg = toastr.warning("Error: Duplicated Sequence");
-                    
+
                     var duplicateFileName = JSON.parse(arguments[1].response.responseText).sequences.sequenceFileName;
                     var duplicateSequenceName = JSON.parse(arguments[1].response.responseText).sequences.serialize.inData.name;
 
-                    var duplicateMessage = 'Exact sequence already exists in library with' + 
+                    var duplicateMessage = 'Exact sequence already exists in library with' +
                                            ' filename ' + duplicateFileName;
 
                     var messageIndex = self.batchImportMessages.findBy(function(record) {
@@ -268,7 +266,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     } else {
                         var record = self.batchImportMessages.getAt(messageIndex);
                         record.set('partSource', partSource);
-                        record.set('messages', 
+                        record.set('messages',
                             record.get('messages').concat([duplicateMessage]));
                     }
 
@@ -316,7 +314,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var self = this;
         var asyncParseFlag = false;
 
-        console.log(pExt);
         switch (pExt) {
             case "fasta":
                 asyncParseFlag = true;
@@ -381,9 +378,17 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         headers.forEach(function(header){
             var escapedHeader = header.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+            var match = pFasta.match(escapedHeader + '\\n([\\s\\w]+)>?');
+            var sequenceContent = "";
+
+            if(match) {
+                sequenceContent = match[1];
+                sequenceContent = sequenceContent.replace(/[\n\r]/g, "");
+            }
+
             sequences.push({
                 name : header.replace(">",""),
-                sequence: pFasta.match(escapedHeader+'\n(.+)')[1]
+                sequence: sequenceContent
             });
         })
 
@@ -456,9 +461,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                     result = Ext.create("Teselagen.bio.parsers.Genbank", {});
 
                     result.addKeyword(locus);
-                    result.addKeyword(origin);  
+                    result.addKeyword(origin);
 
-                    returnSequences.push(result);              
+                    returnSequences.push(result);
                 });
 
                 if(typeof(cb==="function")) return cb(returnSequences);
@@ -467,12 +472,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             };
 
             var tempStore = new Ext.data.JsonStore({
-                  fields: [ 
+                  fields: [
                       {name:'name',type:'string'},
                       {name: 'sequence', type:'string'}
                 ],
                   data: sequences
-              });  
+              });
 
         if(sequences.length>1)
         {
@@ -531,7 +536,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             var selectionArr = [];
             selectionArr.push( tempStore.getAt(0) );
             generate(selectionArr);
-        } 
+        }
         else
         {
             console.warn("no sequences found in fas file.");
@@ -595,7 +600,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
      */
     jbeiseqXmlToJson: function(xmlStr) {
-
         return Teselagen.bio.parsers.JbeiseqParser.jbeiseqXmlToJson(xmlStr);
     },
 

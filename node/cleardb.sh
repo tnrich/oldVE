@@ -1,1 +1,0 @@
-mongo teselagenDev clear.js

@@ -18,6 +18,7 @@ Ext.define('Vede.view.AppViewport', {
         'Vede.view.common.HeaderPanelView',
         'Vede.view.common.ProjectPanelView',
         'Vede.view.common.DashboardPanelView',
+        'Vede.view.common.TaskMonitorView',
         'Vede.view.de.DeviceEditor',
         'Vede.view.ve.VectorEditorPanel',
         'Vede.view.j5.AnalysisPanel',
@@ -51,72 +52,17 @@ Ext.define('Vede.view.AppViewport', {
                             iconCls: 'home-dash-icon',
                             iconAlign: 'top',
                             listeners: {
-                                tabchange: function () {
-                                    Vede.application.fireEvent("PopulateStats");
+                                tabchange: function (panel, newTab, oldTab) {
+                                    if(newTab.title === 'Dashboard' || panel.items.indexOf(newTab) === 0) {
+                                        Vede.application.fireEvent("PopulateStats");
+                                    }
                                 }
                             }
-                        }/*, {
-                            xtype: "textarea",
-                            id: "InvisibleTextarea",
-                            floating: true,
-                            autoShow: true,
-                            listeners: {
-                                show: function(textarea) {
-                                    textarea.setX(-10000);
-                                }
-                            }
-                        }*/
+                        }
                     ]
-                    /*
-                    listeners: {
-                        add: function( tabpanel, tab, index, eOpts )
-                        {   
-                            tab.tab.on("render",function(){
-                                arguments[0].getEl().on("contextmenu",function(){
-                                    tab = Ext.getCmp(yourelement.id);
-                                });
-                            });
-                        }
-                    },
-                    // WAITING FOR EXT PEOPLE FIX THIS PLUGIN
-                    plugins: Ext.create('Ext.ux.TabCloseMenu', {
-                        extraItemsTail: [
-                            '-',
-                            {
-                                text: 'Closable',
-                                checked: true,
-                                hideOnClick: true,
-                                handler: function (item) {
-                                    currentItem.tab.setClosable(item.checked);
-                                }
-                            },
-                            '-',
-                            {
-                                text: 'Enabled',
-                                checked: true,
-                                hideOnClick: true,
-                                handler: function(item) {
-                                    currentItem.tab.setDisabled(!item.checked);
-                                }
-                            }
-                        ],
-                        listeners: {
-                            beforemenu: function (menu, item) {
-                                var enabled = menu.child('[text="Enabled"]'); 
-                                menu.child('[text="Closable"]').setChecked(item.closable);
-                                if (item.tab.active) {
-                                    enabled.disable();
-                                } else {
-                                    enabled.enable();
-                                    enabled.setChecked(!item.tab.isDisabled());
-                                }
-
-                                currentItem = item;
-                            }
-                        }
-                    })
-                    */
-                       
+                },
+                {
+                    xtype: 'TaskMonitorView'
                 }
             ]
         });

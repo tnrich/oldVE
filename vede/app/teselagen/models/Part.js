@@ -2,7 +2,7 @@
  * @class Teselagen.models.Part
  * Class describing a Part.
  * @author Diana Wong
- * @author Douglas Densmore (original author) ?
+ * @author Douglas Densmore (original author) << Really?
  */
 Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
@@ -21,31 +21,37 @@ Ext.define("Teselagen.models.Part", {
             totalProperty: "total"
         },
         writer: {
-            type: "json",
+            type: "json"
         },
         buildUrl: function(request) {
+            var url;
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "devicedesign_id" )
             {
                 var project_id = Teselagen.manager.ProjectManager.workingProject.data.id;
-                var url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
+                url = "/projects"+'/'+ project_id +'/'+ 'devicedesigns' +'/'+ request.operation.filters[0].value+"/parts";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
             }
 
             if(request.action === "read" && request.params && request.params.id )
             {
-                var url = "parts/"+request.params.id;
+                url = "parts/"+request.params.id;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             if(request.action === "read" && request.operation.filters && request.operation.filters[0] && request.operation.filters[0].property === "user_id" )
             {
-                var url = "parts";
+                url = "parts";
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
+
+            if(request.action === "destroy" && request.records.length === 1) {
+                url = "parts/" + request.records[0].get('id');
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
-        },
+        }
     },
 
     statics: {
@@ -89,10 +95,14 @@ Ext.define("Teselagen.models.Part", {
         sortType: function (s) {
             return String(s).toUpperCase();
         },
-        convert: function(v) {
-            var name;
-            name = v;
-            if (v === undefined || v === null) {name = "";}
+        convert: function(name) {
+            if (name === undefined || name === null) {
+                name = "";
+            }
+
+            // Replace all special characters (not letters, numbers, -, or _) with underscores.
+            name = name.replace(/[^0-9a-zA-Z-_]/g, "_");
+
             return name;
     }}, {
         name: "partSource",
@@ -108,7 +118,7 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0,
         convert: function(value, record) {
-            record.data.genbankStartBP = value;
+            record.data.genbankStartBP = Number(value);
             record.calculateSize(true);
 
             return value;
@@ -119,7 +129,7 @@ Ext.define("Teselagen.models.Part", {
         type: "int",
         defaultValue: 0,
         convert: function(value, record) {
-            record.data.endBP = value;
+            record.data.endBP = Number(value);
             record.calculateSize(true);
 
             return value;
@@ -142,11 +152,11 @@ Ext.define("Teselagen.models.Part", {
     },
     {
         name: "dateCreated",
-        type: "string",
+        type: "string"
     },
     {
         name: "dateModified",
-        type: "string",
+        type: "string"
     },
     {
         name: "user_id",
@@ -157,6 +167,10 @@ Ext.define("Teselagen.models.Part", {
     validations: [{
         field: "name",
         type: "presence"
+    }, {
+        field: "name",
+        type: "format",
+        matcher: /[0-9a-zA-Z-_]+/g
     }, {
         field: "partSource",
         type: "presence"
@@ -190,17 +204,17 @@ Ext.define("Teselagen.models.Part", {
     }
 
     ],
-    
-    constructor: function() {
+
+    /*constructor: function() {
         this.callParent(arguments);
-    },
-    
+    },*/
+
     active: false,
-    
+
     setActive: function(value) {
-    	this.active = value;
+        this.active = value;
     },
-    
+
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it has no set SequenceFile
@@ -280,29 +294,43 @@ Ext.define("Teselagen.models.Part", {
         return this.get("endBP");
     },
 
+    /**
+     * Uses record.data.size instead of record.set('size') because the setter method attempts
+     * to fire the onchange listener of the part's store, which may or may not be defined yet.
+     */
     calculateSize: function(ignoreNoSequenceFile){
         var record = this;
-        var size = 0;
+        var reload = false;
+        var startBP = Number(record.get("genbankStartBP"));
+        var endBP = Number(record.get("endBP"));
 
-        record.getSequenceFile(function(sequenceFile) {
-            if(!sequenceFile && !ignoreNoSequenceFile)
-            {
-                console.warn("Trying to calculate size of Part with no sequenceFile");
-                return false;
+        if(startBP > endBP) {
+            // If the sequence file has no size, we need to reload it.
+            if(!record.getSequenceFile() || !record.getSequenceFile().getLength()) {
+                reload = true;
+                console.log('reloading');
             }
 
-            if(record.get("genbankStartBP")>record.get("endBP")) {
-                var tSize = record.getSequenceFile().getLength();
-                size = Math.abs(tSize - (Math.abs(record.get("endBP") - record.get("genbankStartBP"))) + 1);
-            } else if (record.get("genbankStartBP")==record.get("endBP")) {
-                size = 1;
-            } else {
-                size = (Math.abs(record.get("genbankStartBP") - record.get("endBP")) + 1);
-            }
-            if(size === 0) console.warn("Part with sequence with length zero.");
+            record.getSequenceFileModel({
+                reload: reload,
+                callback: function(sequenceFile) {
+                    if(!sequenceFile && !ignoreNoSequenceFile)
+                    {
+                        console.warn("Trying to calculate size of Part with no sequenceFile");
+                        return false;
+                    }
 
-            record.set('size', size);
-        });
+                    var tSize = Number(sequenceFile.getLength());
+                    var size = Math.abs(tSize - (Math.abs(endBP - startBP)) + 1);
+
+                    record.data.size = size;
+                }
+            });
+        } else if (startBP === endBP) {
+            record.data.size = 1;
+        } else if(startBP < endBP) {
+            record.data.size = (Math.abs(startBP - endBP) + 1);
+        }
     },
 
     /**
@@ -320,11 +348,12 @@ Ext.define("Teselagen.models.Part", {
 
             this.setSequenceFileModel(pSequenceFile);
 
+            // Avoid recalculating the size by not using the setter functions.
             if (this.get("genbankStartBP") === 0) {
-                this.set("genbankStartBP", start);
+                this.data.genbankStartBP = start;
             }
             if (this.get("endBP") === 0) {
-                this.set("endBP", stop);
+                this.data.endBP = stop;
             }
 
             success = true;
@@ -346,19 +375,26 @@ Ext.define("Teselagen.models.Part", {
             var sequence = sequences.getById(this.get("sequencefile_id"));
 
             if(sequence) {
-                if(typeof(callbackFn) === "object") return callbackFn.callback(sequence);
-                else return sequence;
+                if(typeof(callbackFn) === "object") {
+                    return callbackFn.callback(sequence);
+                } else if(typeof callbackFn === "function") {
+                    return callbackFn(sequence);
+                } else {
+                    return sequence;
+                }
             }
 
             if(typeof(callbackFn) === "object"){
                 return this.getSequenceFileModel({
                     callback: callbackFn.callback
                 });
+            } else if(typeof callbackFn === "function") {
+                return callbackFn(this.getSequenceFileModel());
             } else {
                 return this.getSequenceFileModel();
             }
         } else {
-            return null
+            return null;
         }
 
     },

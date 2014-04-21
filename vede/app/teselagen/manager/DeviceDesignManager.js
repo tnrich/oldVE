@@ -22,7 +22,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     constants: null,
-    
+
     /**
      * @member Teselagen.manager.DeviceDesignManager
      */
@@ -72,31 +72,31 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return device;
     },
-    
+
     clearDesignAndAddBinsAndPartsAndRules: function(device,pBins,pParts,pRules) {
         var bins = device.bins();
         var parts = device.parts();
         var rules = device.rules();
-        
+
         rules.clearFilter(true);
         rules.removeAll(true);
         rules.add(pRules);
-        
+
         parts.removeAll(true);
         parts.add(pParts);
-        
+
         bins.removeAll(true);
         bins.add(pBins);
-        
+
         Teselagen.manager.DeviceDesignManager.enforceColumnLength(device);
-                
+
         /*var err = device.validate();
         if (err.length > 0) {
             console.warn("Clearing DeviceDesign: " + err.length + " errors found.");
         }*/
         return device;
     },
-    
+
     /**
      * Creates a DeviceDesign using a given set of J5Bins.
      * The order in the array determines the order in the Collection.
@@ -121,13 +121,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return device;
     },
-    
+
     createDeviceDesignFromBinsAndParts: function(pBins, pParts) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
 
         device.parts().removeAll();
         device.parts().add(pParts);
-        
+
         device.bins().removeAll();
         device.bins().add(pBins);
 
@@ -137,7 +137,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return device;
     },
-    
+
     //================================================================
     // EugeneRules Management
     //================================================================
@@ -265,137 +265,158 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                 highestRuleNameNumber = Number(match[1]);
             }
         }
-        
+
         return prefix + (highestRuleNameNumber + 1);
     },
-    
+
+    /**
+     * Removes the given part from the given design's part store and unmaps it
+     * from all cells it is mapped to.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     */
+    removePartFromDesign: function(pDevice, pPart) {
+        var ownerBins = this.getParentBins(pDevice, pPart);
+        var cell;
+
+        for(var j = 0; j < ownerBins.length; j++) {
+            ownerBins[j].cells().each(function(cell) {
+                if(cell.get('part_id') === pPart.get('id')) {
+                    cell.setPart(null);
+                }
+            });
+        }
+
+        pDevice.parts().remove(pPart);
+    },
+
     removeRulesAndPartsAssocWithCell: function(pDevice, pCell) {
-    	var part = pCell.getPart();
-    	var removedPart;
-    	var removedRules = [];
-    	if(part) {
-    		var otherParts = false;
+        var part = pCell.getPart();
+        var removedPart;
+        var removedRules = [];
+        if(part) {
+            var otherParts = false;
             loop:
-    		for(var i=0;i<pDevice.bins().count();i++) {
-    			var bin = pDevice.bins().getAt(i);
-    			for(var j=0;j<bin.cells().count();j++) {
-    				var cell = bin.cells().getAt(j);
-    				if(cell.getPart() === part && pCell !== cell) {
-    					otherParts = true;
-    					break loop;
-    				}
-    			}
-    		}
-    		if(!otherParts) {
-    			removedPart = part;
-    			
-    			this.getRulesInvolvingPart(pDevice, part, false);
-    			removedRules = pDevice.rules().getRange();
-    			
-    			pDevice.rules().removeAll();
-    			pDevice.rules().clearFilter(true);
-    			
-    			pDevice.parts().remove(part);
-    		}
-    	}
-        
-    	return {
-    		removedRules: removedRules,
-    		removedPart: removedPart
-		}
+            for(var i=0;i<pDevice.bins().count();i++) {
+                var bin = pDevice.bins().getAt(i);
+                for(var j=0;j<bin.cells().count();j++) {
+                    var cell = bin.cells().getAt(j);
+                    if(cell.getPart() === part && pCell !== cell) {
+                        otherParts = true;
+                        break loop;
+                    }
+                }
+            }
+            if(!otherParts) {
+                removedPart = part;
+
+                this.getRulesInvolvingPart(pDevice, part, false);
+                removedRules = pDevice.rules().getRange();
+
+                pDevice.rules().removeAll();
+                pDevice.rules().clearFilter(true);
+
+                pDevice.parts().remove(part);
+            }
+        }
+
+        return {
+            removedRules: removedRules,
+            removedPart: removedPart
+        }
     },
-    
+
     removeRulesAndPartsAssocWithBin: function(pDevice, pBin, binIndex) {
-    	if(binIndex===null || binIndex===undefined) binIndex = pDevice.bins().indexOf(pBin);
-    	if(pBin===null || pBin===undefined) pBin = pDevice.bins().getAt(binIndex);
-    	
-    	var removedParts = [];
-    	var removedRules = [];
-    	
-    	var partsAssocArray = {};
-    	for(var i=0;i<pBin.cells().count();i++) {
-    		var part = pBin.cells().getAt(i).getPart();
-    		if(part) partsAssocArray[part.internalId] = part;
-    	}
-    	for(var x in partsAssocArray) {
-    		var part = partsAssocArray[x];
-    		
-    		var otherParts = false;
+        if(binIndex===null || binIndex===undefined) binIndex = pDevice.bins().indexOf(pBin);
+        if(pBin===null || pBin===undefined) pBin = pDevice.bins().getAt(binIndex);
+
+        var removedParts = [];
+        var removedRules = [];
+
+        var partsAssocArray = {};
+        for(var i=0;i<pBin.cells().count();i++) {
+            var part = pBin.cells().getAt(i).getPart();
+            if(part) partsAssocArray[part.internalId] = part;
+        }
+        for(var x in partsAssocArray) {
+            var part = partsAssocArray[x];
+
+            var otherParts = false;
             loop:
-    		for(var i=0;i<pDevice.bins().count();i++) {
-    			var bin = pDevice.bins().getAt(i);
-    			if(i===binIndex) continue;
-    			for(var j=0;j<bin.cells().count();j++) {
-    				var cell = bin.cells().getAt(j);
-    				if(cell.getPart() === part) {
-    					otherParts = true;
-    					break loop;
-    				}
-    			}
-    		}
-    		if(!otherParts) {    			
-    			removedParts.push(part);
-    			
-    			this.getRulesInvolvingPart(pDevice, part, false);
-    			removedRules = removedRules.concat(pDevice.rules().getRange());
-    			
-    			pDevice.rules().removeAll();
-    			pDevice.rules().clearFilter(true);
-    			
-    			pDevice.parts().remove(part);
-    		}  	
-    	}
-    	
-    	return {
-    		removedRules: removedRules,
-    		removedParts: removedParts
-		}
+            for(var i=0;i<pDevice.bins().count();i++) {
+                var bin = pDevice.bins().getAt(i);
+                if(i===binIndex) continue;
+                for(var j=0;j<bin.cells().count();j++) {
+                    var cell = bin.cells().getAt(j);
+                    if(cell.getPart() === part) {
+                        otherParts = true;
+                        break loop;
+                    }
+                }
+            }
+            if(!otherParts) {
+                removedParts.push(part);
+
+                this.getRulesInvolvingPart(pDevice, part, false);
+                removedRules = removedRules.concat(pDevice.rules().getRange());
+
+                pDevice.rules().removeAll();
+                pDevice.rules().clearFilter(true);
+
+                pDevice.parts().remove(part);
+            }
+        }
+
+        return {
+            removedRules: removedRules,
+            removedParts: removedParts
+        }
     },
-    
+
     removeRulesAndPartsAssocWithRow: function(pDevice, rowIndex) {
-    	var removedParts = [];
-    	var removedRules = [];
-    	
-    	var partsAssocArray = {};
-    	for(var i=0;i<pDevice.bins().count();i++) {
-			var part = pDevice.bins().getAt(i).cells().getAt(rowIndex).getPart();
-    		if(part) partsAssocArray[part.internalId] = part;
-    	}
-    	for(var x in partsAssocArray) {
-    		var part = partsAssocArray[x];
-    		
-    		var otherParts = false;
+        var removedParts = [];
+        var removedRules = [];
+
+        var partsAssocArray = {};
+        for(var i=0;i<pDevice.bins().count();i++) {
+            var part = pDevice.bins().getAt(i).cells().getAt(rowIndex).getPart();
+            if(part) partsAssocArray[part.internalId] = part;
+        }
+        for(var x in partsAssocArray) {
+            var part = partsAssocArray[x];
+
+            var otherParts = false;
             loop:
-    		for(var i=0;i<pDevice.bins().count();i++) {
-    			var bin = pDevice.bins().getAt(i);
-    			for(var j=0;j<bin.cells().count();j++) {
-    				if(j===rowIndex) continue;
-    				var cell = bin.cells().getAt(j);
-    				if(cell.getPart() === part) {
-    					otherParts = true;
-    					break loop;
-    				}
-    			}
-    		}
-    		if(!otherParts) {
-    			removedParts.push(part);
-    			
-    			this.getRulesInvolvingPart(pDevice, part, false);
-    			removedRules = removedRules.concat(pDevice.rules().getRange());
-    			
-    			pDevice.rules().removeAll();
-    			pDevice.rules().clearFilter(true);
-    			
-    			pDevice.parts().remove(part);
-    		}  	
-    	}
-    	
-    	return {
-    		removedRules: removedRules,
-    		removedParts: removedParts
-		}
+            for(var i=0;i<pDevice.bins().count();i++) {
+                var bin = pDevice.bins().getAt(i);
+                for(var j=0;j<bin.cells().count();j++) {
+                    if(j===rowIndex) continue;
+                    var cell = bin.cells().getAt(j);
+                    if(cell.getPart() === part) {
+                        otherParts = true;
+                        break loop;
+                    }
+                }
+            }
+            if(!otherParts) {
+                removedParts.push(part);
+
+                this.getRulesInvolvingPart(pDevice, part, false);
+                removedRules = removedRules.concat(pDevice.rules().getRange());
+
+                pDevice.rules().removeAll();
+                pDevice.rules().clearFilter(true);
+
+                pDevice.parts().remove(part);
+            }
+        }
+
+        return {
+            removedRules: removedRules,
+            removedParts: removedParts
+        }
     },
-    
+
     //================================================================
     // J5Collection Management
     //================================================================
@@ -420,7 +441,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var collection = Ext.create("Teselagen.models.J5Collection", {
             isCircular: pIsCircular
         });
-        
+
         // GO BACK AND FIX THIS VALIDATOR
         var err = collection.validate();
         if (err.length > 0) {
@@ -540,26 +561,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return num;
     },
-    
+
     /**
-     * Fills columns with phantom parts so that all columns have the same 
+     * Fills columns with phantom parts so that all columns have the same
      * number of parts.
      * @param {Teselagen.models.DeviceDesign}
      */
     enforceColumnLength: function(pDevice) {
-    	var maxNumParts = Teselagen.manager.DeviceDesignManager.findMaxNumParts(pDevice);
-    	pDevice.bins().each(function(bin) {
-    		var phantomArray = [];
-    		for(var i=bin.cells().getCount(); i<maxNumParts; i++) {
-    			var phantomCell = Ext.create("Teselagen.models.Cell", {
-    				index: i
-    			});
-    			phantomCell.setJ5Bin(bin);
-    			phantomArray.push(phantomCell);
-    		}
-    		bin.cells().add(phantomArray);
-    		
-    	});
+        var maxNumParts = Teselagen.manager.DeviceDesignManager.findMaxNumParts(pDevice);
+        pDevice.bins().each(function(bin) {
+            var phantomArray = [];
+            for(var i=bin.cells().getCount(); i<maxNumParts; i++) {
+                var phantomCell = Ext.create("Teselagen.models.Cell", {
+                    index: i
+                });
+                phantomCell.setJ5Bin(bin);
+                phantomArray.push(phantomCell);
+            }
+            bin.cells().add(phantomArray);
+
+        });
     },
 
     /**
@@ -888,7 +909,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             //console.warn(err);
         }
         this.addPartToBin(pDevice, part, pBinIndex, pPos, pFas);
-        
+
         return part;
     },
     /**
@@ -913,7 +934,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Array} Array of all parts except for pExcept.
      */
     getAllParts: function(pDevice, pExcept) {
-        var allParts = pDevice.parts().getRange(); 
+        var allParts = pDevice.parts().getRange();
 
         if(pExcept && pExcept.$className === "Teselagen.models.Part") {
             allParts.splice(allParts.indexOf(pExcept), 1);
@@ -929,21 +950,25 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     isPartInCollection: function(pDevice, pPart) {
         var partIsPresent = false;
-        if (pDevice.bins() === null || pDevice.bins().count() === 0) {
+        var binsStore = pDevice.bins();
+
+        if (!pPart || binsStore === null || binsStore.count() === 0) {
             return false;
         }
-        
-        for (var i = 0; i < pDevice.bins().count(); i++) {
-            partIsPresent = pDevice.bins().getAt(i).hasPart(pPart);
+
+        var binsArray = binsStore.getRange();
+
+        for (var i = 0; i < binsArray.length; i++) {
+            partIsPresent = this.getBinAssignment(pDevice, binsArray[i]) !== -1;
+
             if (partIsPresent) {
                 return partIsPresent;
             }
         }
-        return partIsPresent;
 
-        //return pDevice.isPartInCollection(pPart);
+        return partIsPresent;
     },
-    
+
     /**
      * Determines bin that pCell is in and returns its index.
      * @param {Teselagen.models.DeviceDesign} pDevice
@@ -1000,8 +1025,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             partsStore = binsStore.getAt(i).cells();
 
             for(var j = 0; j < partsStore.getCount(); j++) {
-                if(partsStore.getAt(j) && partsStore.getAt(j).get("part_id") && pPart.id) { 
-                    if(partsStore.getAt(j).get("part_id") === pPart.id) {
+                if(partsStore.getAt(j) && partsStore.getAt(j).get("part_id") && pPart.get("id")) {
+                    if(partsStore.getAt(j).get("part_id") === pPart.get("id")) {
                         binIndices.push(i);
                     }
                 }
@@ -1108,7 +1133,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         return index;
     },
-    
+
     /**
      * Set the Start index for a Part
      * @param {Teselagen.models.Part} pPart
@@ -1203,7 +1228,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {String[]} pPartSource If null, will generate a display ID based on the File Content and Format
      */
     createSequenceFileStandAlone: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
-
         var seq = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileFormat: pSequenceFileFormat,
             sequenceFileContent: pSequenceFileContent,

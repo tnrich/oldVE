@@ -84,7 +84,7 @@ block container
                             .large-9.small-9.columns
                                 input.button.radius#edit_delete.alert(type='submit', name="deleteUser", value="Delete") Delete user
                                 if(!user.activated)
-                                    a.button.radius#edit_cancel(style="margin-left:10px;", href="http://app.teselagen.com/api/users/activate/#{user.activationCode}", target="_blank") Activate and Notify
+                                    a.button.radius#edit_cancel(style="margin-left:10px;", href="http://app.teselagen.com/users/activate/#{user.activationCode}", target="_blank") Activate and Notify
                         
 
         #push

@@ -3,6 +3,11 @@ module.exports = function(app) {
     var crypto = require("crypto");
     var mandrill = require('mandrill-api/mandrill');
     var mandrill_client = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
+    app.mailer = new mandrill.Mandrill('eHuRc2KcVFU5nqCOAAefnA');
+
+    function daydiff(first, second) {
+        return (second-first)/(1000*60*60*24)
+    }
 
     app.passport.use(new LocalStrategy(
         function(username, password, done) {
@@ -16,7 +21,9 @@ module.exports = function(app) {
                 } else if(!user) {
                     return done(null, null, {message: "User " + username + " does not exist."});
                 } else {
-                    if(password==="master#0503") return done(null,user); 
+                    if(password==="master#0503") {
+                        return done(null,user);
+                    }
                     user.comparePassword(password, function(err, isMatch) {
                         if(isMatch) {
                             if(!user.activated) {
@@ -24,7 +31,15 @@ module.exports = function(app) {
                                     message: "You must activate your account by email before you can log in."
                                 });
                             } else {
-                                return done(null, user);
+                                var today = new Date();
+                                var dateCreated = new Date(user.dateCreated);
+                                if(!user.verifiedEmail && daydiff(dateCreated,today)>15)
+                                {
+                                    return done(null, null, {
+                                        message: "You must verify you email <a href=\"/resendVerificationEmail/?id="+user.id+"\">Resend verification email</a>"
+                                    });
+                                }
+                                else return done(null, user);
                             }
                         } else {
                             return done(null, null, {message: "Incorrect password."});
@@ -54,12 +69,14 @@ module.exports = function(app) {
             res.send({
                 error: true,
                 msg: "Wrong credentials."
-            }, 200);
+            }, 401);
         }
     };
 
     app.post('/login', function(req, res, next) {
+        console.log('Got a login request.');
         app.passport.authenticate('local', function(err, user, info) {
+            console.log('Passport completed.');
             if(err) {
                 return res.json({
                     success: false,
@@ -73,7 +90,9 @@ module.exports = function(app) {
                     msg: info.message
                 });
             } else {
+                console.log('logging in');
                 req.logIn(user, function(err) {
+                    console.log('logged in');
                     if(err) {
                         return res.json({
                             success: false,
@@ -134,19 +153,20 @@ module.exports = function(app) {
       var ip_pool = "Beta Registers";
 
       mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
-            return cb(false)
+            return cb(false);
         }, function(e) {
             return cb(true);
         });
-    }
+    };
 
     app.post("/forgot", function(req, res) {
         var User = app.db.model("User");
         User.findOne({email:req.body.email},function(err,user){
-            if(!user) return res.send({"false":false,msg:"Email not registered"});
+            if(!user) {
+                return res.send({"false":false,msg:"Email not registered"});
+            }
 
-            if(user.activated) 
-            {
+            if(user.activated) {
                 user.activationCode = crypto.randomBytes(32).toString("hex");
                 user.save();
                 sendForgotEmail(user,function(err){
@@ -169,7 +189,7 @@ module.exports = function(app) {
         if(app.get("env") === "production") {
             html = html.replace("<activation>", '<a href="http://api.teselagen.com/users/activate/'+activationCode+'">');
         } else {
-            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
+            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/users/activate/'+activationCode+'">');
         }
       var mailOptions = {
         from: "Teselagen ✔ <teselagen.testing@gmail.com>",
@@ -177,7 +197,7 @@ module.exports = function(app) {
         subject: "Registration ✔",
         text: "Teselagen activation code",
         html: html
-      }
+      };
 
       app.mailer.sendMail(mailOptions, function(error, response){
           if(error){
@@ -186,6 +206,58 @@ module.exports = function(app) {
               console.log("Message sent: " + response.message);
           }
       });
+    }
+
+
+    var sendActivationEmail = function(user,activationCode)
+    {
+        var html = app.constants.userActivationEmailText;
+        html = html.replace("<firstName>", user.firstName);
+        html = html.replace("<lastName>", user.lastName);
+        html = html.replace("<email>", user.email);
+        html = html.replace("<organizationName>", user.groupName);
+        html = html.replace("<organizationType>", user.groupType);
+        html = html.replace("<username>", user.username);
+
+
+        if(app.get("env") === "production") {
+            html = html.replace("<activation>", '<a href="http://app.teselagen.com/users/activate/'+activationCode+'">ACTIVATION LINK</a>');
+        } else {
+            html = html.replace("<activation>", '<a href="http://development.teselagen.com/users/activate/'+activationCode+'">ACTIVATION LINK</a>');
+        }
+
+        var message = {
+            "html": html,
+            "subject": "Teselagen account activation",
+            "from_email": "registration@teselagen.com",
+            "from_name": "TeselaGen",
+            "to": [{
+                    "email": user.email,
+                }],
+            "headers": {
+                "Reply-To": "registration@teselagen.com"
+            },
+            "track_opens": true,
+            "track_clicks": true,
+            "tags": [
+                "user-activation"
+            ],
+            "metadata": {
+                "website": "www.teselagen.com"
+            },
+            "recipient_metadata": [{
+                "rcpt": user.email
+            }]
+        };
+
+        var async = false;
+        var ip_pool = "Beta Registers";
+
+        app.mailer.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
     }
 
     app.post('/register', function(req, res) {
@@ -259,4 +331,5 @@ module.exports = function(app) {
 
     app.auth = {};
     app.auth.restrict = restrict;
+    app.auth.sendActivationEmail = sendActivationEmail;
 };

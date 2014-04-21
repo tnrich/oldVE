@@ -37,6 +37,39 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         xtype: 'button',
                         border: '0',
                         width: 220,
+                        id: "openStrainLibraryBtn",
+                        text: 'My Strains',
+                        cls: 'strainLibraryBtn',
+                        overCls: 'strainLibraryBtn-over',
+                        textAlign: 'left',
+                        margin: 0,
+                        height: 30
+                    },
+                    {
+                        xtype: 'button',
+                        border: '0',
+                        cls: 'strainAddBtn',
+                        overCls: 'strainAddBtn-over',
+                        height: 20,
+                        tooltip: 'New Strain',
+                        width: 20,
+                        margin: 0,
+                        listeners: {
+                            click: function () {
+                                Vede.application.fireEvent("createStrain");
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                xtype: 'container',
+                layout:'hbox',
+                items: [
+                    {
+                        xtype: 'button',
+                        border: '0',
+                        width: 220,
                         id: "openSequenceLibraryBtn",
                         text: 'My Sequences',
                         cls: 'sequenceLibraryBtn',
@@ -51,6 +84,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                         cls: 'sequenceAddBtn',
                         overCls: 'sequenceAddBtn-over',
                         height: 20,
+                        tooltip: 'New Sequence',
                         width: 20,
                         margin: 0,
                         listeners: {

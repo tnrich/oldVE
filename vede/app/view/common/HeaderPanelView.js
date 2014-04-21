@@ -21,18 +21,18 @@ Ext.define('Vede.view.common.HeaderPanelView', {
             height: 40,
             padding: 10,
             width: 400,
-            hidden: true,
+            hidden: true
 		},
 		{
 		xtype: 'container',
 		id: 'headerPanel-navbar',
 		cls: 'navbar-inner',
-		html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div><div id="headerProgressCancel"><a href="" id="headerProgressCancelBtn">Cancel</a></div></div></li><li id="headerUserIcon"><a class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li><a id="help_btn">Help</a></li></ul></ul>',
+		html: '<ul class="nav"><li><div id="headerProgressBox"><div id="headerProgressBar" class="progress progress-info progress-striped active"><div class="bar" id="headerProgress"></div></div><div id="headerProgressText"></div><div id="headerProgressCancel"><a href="" id="headerProgressCancelBtn">Cancel</a></div></div></li><li id="headerUserIcon"><a class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li></ul></ul>',
 		items: [
 		{
 			xtype: 'image',
 			id: 'headerIcon',
-			src: 'http://app.teselagen.com.s3-website-us-west-1.amazonaws.com/resources/images/teselagen_toplogo.png'
+			src: 'https://s3-us-west-1.amazonaws.com/teselagen/resources/images/teselagen_toplogo.png'
 		}
 		]
 	}]

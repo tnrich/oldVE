@@ -17,6 +17,50 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
         XmlToJson = Teselagen.bio.util.XmlToJson;
     },
 
+
+    generateUUID: function() {
+      var uuid = "", i, random;
+      for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+     
+        if (i == 8 || i == 12 || i == 16 || i == 20) {
+          uuid += "-"
+        }
+        uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+      }
+      return uuid;
+    },
+
+    formatXml: function(xml) {
+        var formatted = '';
+        var reg = /(>)(<)(\/*)/g;
+        xml = xml.replace(reg, '$1\r\n$2$3');
+        var pad = 0;
+        jQuery.each(xml.split('\r\n'), function(index, node) {
+            var indent = 0;
+            if (node.match( /.+<\/\w[^>]*>$/ )) {
+                indent = 0;
+            } else if (node.match( /^<\/\w/ )) {
+                if (pad != 0) {
+                    pad -= 1;
+                }
+            } else if (node.match( /^<\w[^>]*[^\/]>.*$/ )) {
+                indent = 1;
+            } else {
+                indent = 0;
+            }
+     
+            var padding = '';
+            for (var i = 0; i < pad; i++) {
+                padding += '  ';
+            }
+     
+            formatted += padding + node + '\r\n';
+            pad += indent;
+        });
+     
+        return formatted;
+    },
  
     /**
      * Converts Device Editor XML (DE-XML) into Device Editor JSON (DE-JSON) format.

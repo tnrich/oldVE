@@ -35,7 +35,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
                     field.el.set({title: "Open a Sequence File"});
                 }
             }
-        },
+        }
     },
     {
         xtype: 'tbseparator',

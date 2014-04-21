@@ -1,0 +1,19 @@
+extends admin
+
+block head
+    link(rel='stylesheet', href='http://yui.yahooapis.com/3.12.0/build/cssreset-context/cssreset-context.css', type='text/css')
+
+block container
+
+    .row
+        p Mailing
+        //p(id="emailsRow", data="#{encodedUsers}", style="width: 1130px; word-wrap: break-word;") #{emails}
+        button#copy-button(data-clipboard-text='#{emails}', title='Copy emails to clipboard.') Copy emails to clipboard
+    .row(style="visibility:hidden;")
+        p Newsletter Composer (In development)
+        textarea(id='emailContent')
+    .row(style="height:400px")
+
+block scripts
+    script(src='/libs/zerotoclipboard/ZeroClipboard.min.js')
+    script(src='/js/mailing.js')

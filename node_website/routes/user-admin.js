@@ -2,12 +2,13 @@ module.exports = function(app, express){
 
   var adminRestrict = app.auth.adminRestrict;
   
+  var User = app.db.model("User");
+
   app.get('/admin/dashboard', adminRestrict, function(req, res){
     res.render('dashboard');
   });
 
   app.get('/admin/users',function(req,res){
-    var User = app.db.model("User");
     User.find({},{firstName:1,lastName:1,email:1,username:1,userType:1,groupType:1,groupName:1,activated:1,userType:1,dateCreated:1,lastAccess:1,debugAccess:true}).exec(function(err,users){
       res.json({users:users});
     });
@@ -33,11 +34,21 @@ module.exports = function(app, express){
   });
 
   app.get('/admin/stats', adminRestrict, function(req, res){
-
     app.redis.send_command('keys',['vede://*'],function(err,keys){    
       var stats = [['label','value']];
       stats.push(['users',keys.length]);
       res.render('stats',{data:JSON.stringify(stats)});
+    });
+  });
+
+  app.get('/admin/mailing', adminRestrict, function(req, res){
+    User.find({},{email:1,dateCreated:1}).exec(function(err,users){
+      var encodedUsers = JSON.stringify(users);
+      var emails = "";
+      users.forEach(function(user){
+        emails+=user.email+",";
+      });
+      res.render('mailing',{encodedUsers:encodedUsers,emails:emails});
     });
   });
 
@@ -62,6 +73,7 @@ module.exports = function(app, express){
       user.email = req.body.email;
       user.groupName = req.body.organizationName;
       user.groupType = req.body.organizationType;
+      user.activated = req.body.activated;
       user.debugAccess = req.body.debugAccess;
       //user.username = req.body.username;
       user.userType = req.body.userType;

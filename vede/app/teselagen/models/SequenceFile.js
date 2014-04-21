@@ -21,56 +21,55 @@ Ext.define("Teselagen.models.SequenceFile", {
             type: "json"
         },
         buildUrl: function(request) {
+            var url;
 
             // GET SEQUENCES
-            if( request.action === "read" && !request.operation.id)
-            {
-                    var url = "sequences";
-                    //delete request.params;
-                    return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            if(request.action === "read" && !request.operation.id) {
+                url = "sequences";
+                //delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             // GET SPECIFIC SEQUENCE
-            if( request.operation.action === "read" && !request.operation.filters && request.params.id)
-            {
-                var url = "sequences/"+request.params.id;
+            if(request.operation.action === "read" && !request.operation.filters && request.params.id) {
+                url = "sequences/"+request.params.id;
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             // CREATE A NEW SEQUENCE
-            if(request.action === "create" && !request.records[0].data.id)
-            {
-                var url = "sequences";
+            if(request.action === "create" && !request.records[0].data.id) {
+                url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             // GET CREATE SEQUENCE WITHOUT ID!
-            if( request.operation.action === "create" && !request.operation.filters && !request.params.id)
-            {
-                var url = "sequences";
+            if(request.operation.action === "create" && !request.operation.filters && !request.params.id) {
+                url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             // GET SPECIFIC SEQUENCE WITHOUT ID!
-            if( request.operation.action === "read" && !request.operation.filters && !request.params.id)
-            {
-                var url = "sequences";
+            if(request.operation.action === "read" && !request.operation.filters && !request.params.id) {
+                url = "sequences";
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);
             }
 
             // UPDATE A SEQUENCE
-            if ( request.action === "update" && request.records[0].data.id)
-            {
-                var url = "sequences/" + request.records[0].data.id;
+            if(request.action === "update" && request.records[0].data.id) {
+                url = "sequences/" + request.records[0].data.id;
                 delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl(url, this.url);                
             }
 
-
+            if(request.action === "destroy" && request.records.length === 1) {
+                url = "sequences/" + request.records[0].data.id;
+                delete request.params;
+                return Teselagen.manager.SessionManager.buildUrl(url, this.url);
+            }
         }
     },
 

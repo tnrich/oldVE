@@ -673,7 +673,7 @@ Ext.define("Teselagen.manager.RailManager", {
 
         return pOrfs;
     },
-    
+
     /**
      * @private
      * Adds the caret to the rail.

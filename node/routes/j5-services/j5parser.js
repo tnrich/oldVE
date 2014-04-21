@@ -1,17 +1,18 @@
 var csv = require('csv');
 var async = require('async');
+var xml2js = require('xml2js');
 
 /**
  * Write to quick log.
  * @param s
  */
 function quicklog(s) {
-  var logpath = "/tmp/quick.log";
-  var fs = require('fs');
-  s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
-  var fd = fs.openSync(logpath, 'a+', 0666);
-  fs.writeSync(fd, s + '\n');
-  fs.closeSync(fd);
+    var logpath = "/tmp/quick.log";
+    var fs = require('fs');
+    s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
+    var fd = fs.openSync(logpath, 'a+', 0666);
+    fs.writeSync(fd, s + '\n');
+    fs.closeSync(fd);
 }
 
 function processNonCombinatorial_MOCK(lines,cb){
@@ -20,7 +21,7 @@ function processNonCombinatorial_MOCK(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -35,7 +36,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -76,7 +77,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-        
+
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -90,7 +91,7 @@ function processNonCombinatorial_MOCK(lines,cb){
         lines.splice(0,1)[0]; //Part
         lines.splice(0,1)[0]; //Columns
 
-        console.log(lines);
+        //console.log(lines);
 
         obj.targetParts = [];
         var currentPart = lines.splice(0,1)[0];
@@ -129,13 +130,14 @@ function processNonCombinatorial_MOCK(lines,cb){
 
 
         cb(obj);
-    
+
         }
     catch(err)
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
+            //cb({warnings:["Error processing j5 output: " + err]});
+            cb({});
         }
 }
 
@@ -145,7 +147,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -160,7 +162,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -176,7 +178,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
         obj.note = currentWarning; // In this method there is not space between warnings and note
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; //Empty space
 
 
         //Non degenerate Part IDs and Sources
@@ -204,7 +206,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-        
+
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -213,7 +215,7 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
             currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
         }
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; //Empty space
 
         //Target Parts
         lines.splice(0,1)[0]; //Header
@@ -393,14 +395,15 @@ function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
 
 
         cb(obj);
-    
+
         }
     catch(err)
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
-        }   
+            //cb({warnings:["Error processing j5 output: " + err]});
+            cb({});
+        }
 }
 
 function processNonCombinatorial_GOLDEN_GATE(lines,cb){
@@ -409,7 +412,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -424,7 +427,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0]; // Empty space
@@ -467,7 +470,7 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
         }
 
         lines.splice(0,1)[0]; // Extra empty space
-        
+
         //Warnings
         var currentWarning = lines.splice(0,1)[0];
         while(currentWarning.match(/"Warning:/) !== null)
@@ -600,14 +603,15 @@ function processNonCombinatorial_GOLDEN_GATE(lines,cb){
 
 
         cb(obj);
-    
+
         }
     catch(err)
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
-        }   
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
+        }
 }
 
 function processNonCombinatorial(method,file,cb) {
@@ -622,14 +626,14 @@ function processNonCombinatorial(method,file,cb) {
     */
 
     type = method;
-    console.log(method);
 
     if(type.match(/Mock/)) return processNonCombinatorial_MOCK(lines,cb);
     else if(type.match(/SLIC\/Gibson\/CPEC/)) return processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb);
     else if(type.match(/GoldenGate/)) return processNonCombinatorial_GOLDEN_GATE(lines,cb);
     else
     {
-        return cb({warnings:["Wrong assembly method"]});
+        return //cb({warnings:[{"message":"Wrong assembly method"}]});
+        cb({});
     }
 }
 
@@ -638,7 +642,7 @@ function processCombinatorial_MOCK(lines,cb){
 
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -660,7 +664,7 @@ function processCombinatorial_MOCK(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0] //Empty space
@@ -721,7 +725,7 @@ function processCombinatorial_MOCK(lines,cb){
         while(currentPart!== "")
         {
             splittedPart = currentPart.split(',');
-            
+
             binNumber = splittedPart.splice(0,1)[0];
             binName = splittedPart.splice(0,1)[0];
 
@@ -740,7 +744,8 @@ function processCombinatorial_MOCK(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -748,7 +753,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
     try {
         var obj = {};
         /* Lines by line processing */
-        
+
         // Type of assembly and date
         obj.date = lines.splice(0,1)[0];
         // Cite
@@ -770,7 +775,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0] //Empty space
@@ -805,12 +810,11 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         }
 
         nextLine = lines.splice(0,1)[0];
-        if(nextLine.match(/design:/))
+        while(nextLine.match(/design:/))
         {
             obj.warnings.push({"message": nextLine});
-            lines.splice(0,1)[0];
+            nextLine = lines.splice(0,1)[0];
         }
-        else lines.splice(0,0,nextLine)[0];
 
         //Target Bins
         lines.splice(0,1)[0]; //Header
@@ -829,8 +833,32 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
             currentBin = lines.splice(0,1)[0];
         }
 
+        nextOpHeader = lines.splice(0,1)[0]; //Header
+
+        if(nextOpHeader=="\"Direct Synthesis\"")
+        {
+            //Direct Synthesis
+            //lines.splice(0,1)[0]; //Header
+            lines.splice(0,1)[0]; //Columns
+
+            obj.directSynthesis = [];
+            var currentDirect = lines.splice(0,1)[0];
+            while(currentDirect!== "")
+            {
+                splitted = currentDirect.split(',');
+                // "ID Number",Name,Length,Cost,Sequence
+                obj.directSynthesis.push({
+                    id: splitted[0],
+                    name: splitted[1],
+                    length: splitted[2],
+                    cost: splitted[5],
+                    sequence: splitted[6]
+                });
+                currentDirect = lines.splice(0,1)[0];
+            }
+        }
+
         //Oligo Synthesis
-        lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Columns
 
         obj.oligoSynthesis = [];
@@ -893,7 +921,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         while(currentAssemblyPiece!== "")
         {
             splitted = currentAssemblyPiece.split(',');
-            // "ID Number",Type,"Type ID Number",Part(s),"Relative Overlap Position","Extra 5' CPEC bps","Extra 3' CPEC bps","CPEC Tm Next","Overlap with Next (bps)","Overlap with Next","Overlap with Next Reverse 
+            // "ID Number",Type,"Type ID Number",Part(s),"Relative Overlap Position","Extra 5' CPEC bps","Extra 3' CPEC bps","CPEC Tm Next","Overlap with Next (bps)","Overlap with Next","Overlap with Next Reverse
             obj.assemblyPieces.push({
                 id: splitted[0],
                 type: splitted[1],
@@ -917,7 +945,7 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         lines.splice(0,1)[0]; //Columns
 
         var binCount = (binLine.split("Bin").length-1);
-        console.log(binCount);
+        //console.log(binCount);
 
         obj.combinationPieces = [];
         var currentCombinatorialPiece = lines.splice(0,1)[0];
@@ -948,7 +976,8 @@ function processCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -978,7 +1007,7 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         var values = lines.splice(0,1)[0].split(',');
 
         params.forEach(function(val,key){
-            obj.assemblyParameters[val] = values[key];       
+            obj.assemblyParameters[val] = values[key];
         });
 
         lines.splice(0,1)[0] //Empty space
@@ -1012,6 +1041,8 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
             currentPart = lines.splice(0,1)[0];
         }
 
+        lines.splice(0,1)[0] //Empty space
+
         //Target Bins
         lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Columns
@@ -1029,8 +1060,33 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
             currentBin = lines.splice(0,1)[0];
         }
 
+        nextOpHeader = lines.splice(0,1)[0]; //Header
+
+        if(nextOpHeader=="\"Direct Synthesis\"")
+        {
+            //Direct Synthesis
+            //lines.splice(0,1)[0]; //Header
+            lines.splice(0,1)[0]; //Columns
+
+            obj.directSynthesis = [];
+            var currentDirect = lines.splice(0,1)[0];
+            while(currentDirect!== "")
+            {
+                splitted = currentDirect.split(',');
+                // "ID Number",Name,Length,Cost,Sequence
+                obj.directSynthesis.push({
+                    id: splitted[0],
+                    name: splitted[1],
+                    length: splitted[2],
+                    cost: splitted[5],
+                    sequence: splitted[6]
+                });
+                currentDirect = lines.splice(0,1)[0];
+            }
+        }
+        
         //Oligo Synthesis
-        lines.splice(0,1)[0]; //Header
+        //lines.splice(0,1)[0]; //Header
         lines.splice(0,1)[0]; //Columns
 
         obj.oligoSynthesis = [];
@@ -1113,7 +1169,7 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         lines.splice(0,1)[0]; //Columns
 
         var binCount = (binLine.split("Bin").length-1);
-        console.log(binCount);
+        //console.log(binCount);
 
         obj.combinationPieces = [];
         var currentCombinatorialPiece = lines.splice(0,1)[0];
@@ -1139,7 +1195,8 @@ function processCombinatorial_GOLDEN_GATE(lines,cb){
         {
             console.log("Error processing j5 output");
             console.log(err);
-            cb({warnings:["Error processing j5 output: " + err]});
+            //cb({warnings:[{"message":"Error processing j5 output: " + err}]});
+            cb({});
         }
 }
 
@@ -1148,9 +1205,9 @@ function processCombinatorial(file,cb){
     var obj = {};
 
     /* First step is identify assembly */
-    /* 
+    /*
         Combinatorial Mock
-        Combinatorial Golden-gate 
+        Combinatorial Golden-gate
         Combinatorial SLIC/Gibson/CPEC
     */
 
@@ -1161,34 +1218,85 @@ function processCombinatorial(file,cb){
     else if(type.match(/Combinatorial Golden-gate/)) return processCombinatorial_GOLDEN_GATE(lines,cb);
     else
     {
-        return cb({warnings:["Wrong assembly method"]});
+        return //cb({warnings:[{"message":"Wrong assembly method"}]});
+        cb({});
     }
 }
 
-function processAssemblies(files,cb)
-{
-    files.forEach(function(file){
-        var sequence = file.fileContent;
-        // Try get Size (BP) from Genbank file.
-        try {
-            file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
+function processAssemblies(files,cb) {
+    var file;
+
+    async.forEach(files, function(file, done) {
+        var match;
+        var sequence;
+        var fileExtension = "";
+        var fileExtensionMatch = file.name.match(/\.(\w+)$/);
+
+        if(fileExtensionMatch) {
+            fileExtension = fileExtensionMatch[1].toLowerCase();
         }
-        catch(err)
-        {
-            console.log("Error parsing size BP");
+
+        if(fileExtension === "gb" || fileExtension === "genbank") {
+            file.fileType = "Genbank";
+
+            // Find something in the form " ## bp"
+            match = file.fileContent.match(/\s(\d+)\sbp/);
+
+            if(match && match[1]) {
+                file.sizeBP = Number(match[1]);
+            }
+
+            return done();
+        } else if(fileExtension === "fas" || fileExtension === "fasta") {
+            file.fileType = "FASTA";
+
+            // Grab all characters after the first line starting with ">"
+            match = file.fileContent.match(/\s*>.*?\n([\s\w]+)>?/);
+
+            if(match) {
+                sequence = match[1];
+                sequence = sequence.replace(/[\n\r]/g, "");
+                file.sizeBP = sequence.length;
+            }
+
+            return done();
+        } else if(fileExtension === "xml") {
+            file.fileType = "SBOLXML";
+
+            xml2js.parseString(file.fileContent, function(err, result) {
+                if(err) {
+                    console.log("Error parsing j5 xml.");
+                    console.log(err);
+
+                    file.sizeBP = 0;
+                    return done();
+                } else {
+                    try {
+                        file.sizeBP = result["rdf:RDF"]["DnaComponent"][0]["dnaSequence"][0]["DnaSequence"][0]["nucleotides"][0].length;
+                    } catch(err) {
+                        file.sizeBP = 0;
+                    }
+
+                    return done();
+                }
+            });
+        } else {
+            file.fileType = "Unknown";
             file.sizeBP = 0;
+
+            return done();
         }
-        //console.log(file.sizeBP);
+    }, function(err) {
+        return cb(files);
     });
-    cb(files);
 }
 
 function processj5Parameters(file,cb){
     csv().from( file.fileContent ).to.array( function(data, count){
         var obj = {};
         for(var l in data)
-        {
             line = data[l];
+        {
             obj[line[0]] = line[1];
         }
         cb(obj);
@@ -1196,7 +1304,6 @@ function processj5Parameters(file,cb){
 }
 
 var processJ5Response = function(method,encodedFileData,callback) {
-
     var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
     var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
@@ -1213,7 +1320,7 @@ var processJ5Response = function(method,encodedFileData,callback) {
     files.zips = [];
     files.assembly = {}; // Non Combinatorial Assembly
     files.masterSources = {};
-    
+
     for(var file in zip.files)
     {
 
@@ -1285,7 +1392,7 @@ var processJ5Response = function(method,encodedFileData,callback) {
                     function(data){
                         callback(null, data);
                     });
-            }                
+            }
         }
     },
     function(err, results) {

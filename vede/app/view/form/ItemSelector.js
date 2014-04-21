@@ -77,7 +77,7 @@ Ext.define('Vede.view.form.ItemSelector', {
                 return null;
             },
             getModelData: function(){
-                return null;    
+                return null;
             },
             flex: 1,
             dragGroup: me.ddGroup,
@@ -94,6 +94,7 @@ Ext.define('Vede.view.form.ItemSelector', {
             listeners: {
                 boundList: {
                     scope: me,
+                    itemclick: me.onItemClick,
                     itemdblclick: me.onItemDblClick,
                     drop: me.syncValue
                 }
@@ -145,11 +146,11 @@ Ext.define('Vede.view.form.ItemSelector', {
 
     /**
      * Get the selected records from the specified list.
-     * 
+     *
      * Records will be returned *in store order*, not in order of selection.
      * @param {Ext.view.BoundList} list The list to read selections from.
      * @return {Ext.data.Model[]} The selected records in store order.
-     * 
+     *
      */
     getSelections: function(list) {
         var store = list.getStore();
@@ -177,7 +178,7 @@ Ext.define('Vede.view.form.ItemSelector', {
         store.insert(0, selected);
         store.resumeEvents();
         list.refresh();
-        this.syncValue(); 
+        this.syncValue();
         list.getSelectionModel().select(selected);
     },
 
@@ -309,9 +310,33 @@ Ext.define('Vede.view.form.ItemSelector', {
 
     // Synchronizes the submit value with the current state of the toStore
     syncValue: function() {
-        var me = this; 
+        var me = this;
         me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
     },
+
+    onItemClick: function(view, record, el, index, event, eOpts) {
+        var selModel = view.getSelectionModel();
+        var currentSelected = selModel.getSelection();
+
+        if(event.ctrlKey) {
+            selModel.select(record, true);
+            return false;
+        } else if(event.shiftKey) {
+            if(!currentSelected) {
+                selModel.select(record);
+            } else {
+                selModel.selectRange(view.getStore().indexOf(currentSelected), index);
+            }
+        } else {
+            if(currentSelected.indexOf(record) !== -1) {
+                view.deselect(record);
+                return false;
+            } else {
+                selModel.select(record);
+            }
+        }
+    },
+
 
     onItemDblClick: function(view, rec) {
         this.moveRec(view === this.fromField.boundList, rec);
@@ -366,7 +391,7 @@ Ext.define('Vede.view.form.ItemSelector', {
         Ext.suspendLayouts();
         fromField.boundList.refresh();
         toField.boundList.refresh();
-        Ext.resumeLayouts(true);        
+        Ext.resumeLayouts(true);
     },
 
     onBindStore: function(store, initial) {

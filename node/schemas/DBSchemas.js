@@ -15,7 +15,6 @@ var async = require('async');
 var bcrypt = require('bcrypt');
 
 module.exports = function(db) {
-
     var mongoose = require("mongoose");
     var crypto = require("crypto");
 
@@ -95,6 +94,8 @@ module.exports = function(db) {
     SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true });
 
     SequenceSchema.pre('remove', function(next) {
+        var sequence = this;
+
         db.model('part').find({
             sequencefile_id: this.id
         }, function(err, parts) {
@@ -107,7 +108,20 @@ module.exports = function(db) {
                     part.remove();
                     done();
                 }, function(err) {
-                    next();
+                    db.model('User').update({
+                        _id: sequence.user_id
+                    }, {
+                        $pull: {
+                            sequences: sequence._id
+                        }
+                    }, function(err) {
+                        if(err) {
+                            console.log('Error removing sequence from user.');
+                            console.log(err);
+                        }
+
+                        next();
+                    });
                 });
             }
         });
@@ -159,7 +173,7 @@ module.exports = function(db) {
     });
 
     PartSchema.statics.generateDefinitionHash = function(user, part, cb) {
-        db.model('sequence').findOne({'_id': part.sequencefile_id}, function(err, file) {
+        db.model('sequence').findById(part.sequencefile_id, function(err, file) {
             var hashArray = [part.genbankStartBP,
                              part.endBP,
                              part.revComp];
@@ -235,7 +249,6 @@ module.exports = function(db) {
     });
 
     DeviceDesignSchema.pre('remove',function (next) {
-      
       // Remove from Projects
       console.log("Trying to remove "+this._id);
       db.model('project').update({}, {$pull : {designs : this._id}}).exec(function(err, numberAffected){
@@ -248,7 +261,7 @@ module.exports = function(db) {
       //    console.log(numberAffected+" users updated");
       //});
 
-      
+
       // Remove from j5reports and associated j5reports
       db.model('j5run').remove({devicedesign_id: this}).exec(function(err, numberAffected){
           console.log(numberAffected+" j5runs removed");
@@ -274,6 +287,14 @@ module.exports = function(db) {
     });
     registerSchema('project', ProjectSchema);
 
+    ProjectSchema.pre('remove', function(next) {
+        db.model('User').update({}, {
+            $pull: {
+                projects: this._id
+            }
+        }).exec(next);
+    });
+
     var PresetSchema = new Schema({
         presetName: String,
         j5parameters: Mixed
@@ -286,6 +307,7 @@ module.exports = function(db) {
         firstName: String,
         lastName: String,
         email: String,
+        verifiedEmail: {type: Boolean, default: false},
         activated: {type: Boolean, default: false},
         activationCode: String,
         preferences: Mixed,
@@ -412,4 +434,6 @@ module.exports = function(db) {
     });
 
     registerSchema('User', UserSchema);
+
+    UserSchema.index({"username": 1}, {unique: true, dropDups: true});
 };

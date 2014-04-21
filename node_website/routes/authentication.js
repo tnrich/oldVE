@@ -125,22 +125,15 @@ module.exports = function(app, express) {
     });
 
 
-    var sendActivationMail = function(user,activationCode)
+    var sendNewUserNotificationEmail = function(user)
     {
-        var html = app.constants.activationEmailText;
+        var html = app.constants.newUserNotificationEmailText;
         html = html.replace("<firstName>", user.firstName);
         html = html.replace("<lastName>", user.lastName);
         html = html.replace("<email>", user.email);
         html = html.replace("<organizationName>", user.groupName);
         html = html.replace("<organizationType>", user.groupType);
         html = html.replace("<username>", user.username);
-
-
-        if(app.get("env") === "production") {
-            html = html.replace("<activation>", '<a href="http://app.teselagen.com/api/users/activate/'+activationCode+'">');
-        } else {
-            html = html.replace("<activation>", '<a href="http://dev.teselagen.com/api/users/activate/'+activationCode+'">');
-        }
 
         var message = {
             "html": html,
@@ -164,6 +157,57 @@ module.exports = function(app, express) {
             },
             "recipient_metadata": [{
                 "rcpt": "mike.fero@teselagen.com"
+            }]
+        };
+
+        var async = false;
+        var ip_pool = "Beta Registers";
+
+        app.mailer.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result){
+            console.log(result);
+        }, function(e) {
+            console.log(error);
+        });
+    }
+
+    var sendActivationEmail = function(user,activationCode)
+    {
+        var html = app.constants.userActivationEmailText;
+        html = html.replace("<firstName>", user.firstName);
+        html = html.replace("<lastName>", user.lastName);
+        html = html.replace("<email>", user.email);
+        html = html.replace("<organizationName>", user.groupName);
+        html = html.replace("<organizationType>", user.groupType);
+        html = html.replace("<username>", user.username);
+
+
+        if(app.get("env") === "production") {
+            html = html.replace("<activation>", '<a href="http://app.teselagen.com/users/activate/'+activationCode+'">ACTIVATION LINK</a>');
+        } else {
+            html = html.replace("<activation>", '<a href="http://development.teselagen.com/users/activate/'+activationCode+'">ACTIVATION LINK</a>');
+        }
+
+        var message = {
+            "html": html,
+            "subject": "Teselagen account activation",
+            "from_email": "registration@teselagen.com",
+            "from_name": "TeselaGen",
+            "to": [{
+                    "email": user.email,
+                }],
+            "headers": {
+                "Reply-To": "registration@teselagen.com"
+            },
+            "track_opens": true,
+            "track_clicks": true,
+            "tags": [
+                "user-activation"
+            ],
+            "metadata": {
+                "website": "www.teselagen.com"
+            },
+            "recipient_metadata": [{
+                "rcpt": user.email
             }]
         };
 
@@ -241,7 +285,8 @@ module.exports = function(app, express) {
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email:    req.body.email,
-                    activated: false,
+                    verifiedEmail: false,
+                    activated: true,
                     activationCode: crypto.randomBytes(32).toString("hex"),
                     groupName: req.body.organizationName,
                     groupType: req.body.organizationType,
@@ -253,8 +298,8 @@ module.exports = function(app, express) {
                             msg: "Error creating user."
                         });
                     } else {
-                        sendActivationMail(user, user.activationCode);
-                        sendRegisteredMail(user);
+                        sendActivationEmail(user, user.activationCode);
+                        sendNewUserNotificationEmail(user);
                         res.json({
                             success: false,
                             redirect: '/thanks',

@@ -157,7 +157,7 @@ function encoded_j5_parameters_file(params)
 
 
     for(var prop in params) {
-        out += prop + ',' + params[prop] + '\n';
+        out += prop + ',' + params[prop].toString().toUpperCase() + '\n';
     }
     //quicklog(out);
     return new Buffer(out).toString('base64');
@@ -187,20 +187,20 @@ function encoded_target_part_order_list_file(model,method)
                 if(part)
                 {
                     fas = (cell.fas === 'None') ? '' : cell.fas;
-                    fro = (bin['fro'] === 'None') ? '' : bin['fro'];
                     direction = (bin["directionForward"] === 'true') ? 'forward' : 'reverse';
                     dsf = (bin['dsf'] === false) ? '' : '';
                     extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
                     extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
 
-                    tempOut += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
+                    tempOut += part["name"] + ',' + direction + ',' + fas + ',' + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
                 }
             });
 
             fas = "";
+            fro = (bin['fro'] === 'None') ? '' : bin['fro'];
             var firstCell = bin.cells[0];
             if(firstCell) fas = (firstCell.fas === 'None') ? '' : firstCell.fas;
-            tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';
+            tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + fro +  ',' + bin["dsf"] + ',' + ',' + '\n';
             out += tempBinHeader;
             out += tempOut;
 
@@ -234,7 +234,9 @@ function encoded_eugene_rules_list_file(model)
     var eugenes = model["rules"];
     //console.log("Processing "+eugenes.length+" eugene rules");
     var out = "";
-    
+
+    console.log(eugenes);
+
     eugenes.forEach(function(val,key){
         var name = val["name"];
         var operand1 = val["operand1_id"];
@@ -256,7 +258,7 @@ function encoded_eugene_rules_list_file(model)
 
 
     });
-    
+
     //quicklog(out);
     return new Buffer(out).toString('base64');
 }
@@ -264,7 +266,7 @@ function encoded_eugene_rules_list_file(model)
 /**
  * Encode j5 inputs
  */
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user,testing) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod,user) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);
@@ -426,7 +428,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     console.log("Executing using method: "+data["assembly_method"]);
 
-    quicklog(require('util').inspect(data, true, 5));
+    //quicklog(require('util').inspect(data, true, 5));
 
     return data;
 

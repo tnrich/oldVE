@@ -25,20 +25,19 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 items: [{
                     xtype: 'menuitem',
                     text: 'Save Design'
-                },
-                {
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Save Design As'
+                }, {
                     xtype: 'menuitem',
                     text: 'Clear Design'
-                },
-                {
+                }, {
                     xtype: 'menuitem',
                     text: 'Delete Design'
-                }, 
-                {
+                }, {
                     xtype: 'menuitem',
                     text: 'Rename Design'
-                }, 
-                {
+                }, {
                     xtype: 'filefield',
                     buttonOnly: true,
                     cls: 'importEugeneRulesBtn',
@@ -50,8 +49,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                             left: "-2px"
                         }
                     }
-                }
-                ]
+                }]
             }
         }, {
             xtype: 'button',
@@ -203,11 +201,6 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     disabled: true
                 }]
             }
-        }, {
-            xtype: 'button',
-            text: 'J5 Optimize',
-            cls: 'j5button',
-            menuAlign: 'tr-br?'
         }]
     }]
 }

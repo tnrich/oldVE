@@ -1,0 +1,16 @@
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+   DocumentRoot "/Users/rpavez/Sites/Teselagen/VEDERepo/vede"
+   ServerName localhost
+</VirtualHost>
+
+<VirtualHost *:80>
+	ServerNAme teselagen.local
+	DocumentRoot "/Users/rpavez/Sites/Teselagen/VEDERepo/vede-cp"
+	DirectoryIndex index.html
+ 	
+ 	ProxyTimeout 36000
+	ProxyPass /        http://127.0.0.1:3000/ retry=0
+	ProxyPassReverse / http://127.0.0.1:3000/ retry=0
+</VirtualHost>

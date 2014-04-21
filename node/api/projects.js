@@ -1,7 +1,6 @@
 module.exports = function(app) {
-
+    var Project = app.db.model("project");
     var restrict = app.auth.restrict;
-    var projectManager = new app.ProjectManager(app.db);
 
     /**
      * POST Project
@@ -9,15 +8,21 @@ module.exports = function(app) {
      * @method POST '/users/:username/projects'
      */
     app.post('/users/:username/projects', restrict, function(req, res) {
-        projectManager.create({
+        Project.create({
             name: req.body.name,
             user_id: req.user.id,
             dateCreated: req.body.dateCreated,
             dateModified: req.body.dateModified
         }, function(err, project) {
             if (!err) {
-                res.json({
-                    "projects": project
+                app.db.model("User").findByIdAndUpdate(project.user_id, {
+                    $push: {
+                        projects: project
+                    }
+                }, function() {
+                    res.json({
+                        "projects": project
+                    });
                 });
             }
             else {
@@ -32,7 +37,6 @@ module.exports = function(app) {
      * @method PUT '/users/:username/projects'
      */
     app.put('/users/:username/projects', restrict, function(req, res) {
-        var Project = app.db.model("project");
         Project.findById(req.body.id, function(err, proj) {
             if (err || !proj) return res.json({
                 'fault': err
@@ -54,10 +58,8 @@ module.exports = function(app) {
     app.delete('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         if (req.body.id) {
-            Project.findById(req.body.id, function(err, proj) {
-                proj.remove(function() {
-                    res.json({});
-                });
+            Project.findByIdAndRemove(req.body.id, function(err, proj) {
+                res.json({});
             });
         } else {
             Project.remove({
@@ -79,13 +81,14 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects', restrict, function(req, res) {
         var User = app.db.model("User");
-        User.findById(req.user._id).populate('projects').exec(function(err, user) {
-                if (user.projects) {
-                    user.projects.forEach(function(proj) {
-                        proj.deprojects = undefined;
-                        proj.veprojects = undefined;
-                    });
-                }
+        User.populate(req.user, 'projects', function(err, user) {
+            if (user.projects) {
+                user.projects.forEach(function(proj) {
+                    proj.deprojects = undefined;
+                    proj.veprojects = undefined;
+                });
+            }
+
             res.json({
                 "projects": user.projects
             });

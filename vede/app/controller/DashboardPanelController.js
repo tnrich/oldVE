@@ -3,9 +3,9 @@
  * @class Vede.controller.DashboardPanelController
  */
 Ext.define("Vede.controller.DashboardPanelController", {
-	extend: "Ext.app.Controller",
+    extend: "Ext.app.Controller",
 
-	requires: ["Teselagen.event.ProjectEvent",
+    requires: ["Teselagen.event.ProjectEvent",
                "Teselagen.manager.ProjectManager",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.bio.parsers.ParsersManager",
@@ -24,19 +24,35 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onMainAppPanelTabChange: function(mainAppPanel, newTab, oldTab) {
-        if(newTab.initialCls === "DashboardPanelTab" && 
-           newTab.getActiveTab().initialCls === "sequenceLibraryPanel") {
+        if(newTab.initialCls === "DashboardPanelTab") {
+            if(newTab.getActiveTab().initialCls === "sequenceLibraryPanel") {
+                var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
+                Teselagen.manager.ProjectManager.openSequenceLibrary(null, 
+                                                            searchField.getValue());
+            }
 
-            var searchField = Ext.ComponentQuery.query("textfield[cls='sequenceLibrarySearchField']")[0];
-            Teselagen.manager.ProjectManager.openSequenceLibrary(null, 
-                                                        searchField.getValue());
+            this.populateStatistics();
         }
-
-        this.populateStatistics();
     },
 
     onLastDEProjectsItemClick: function (item,record) {
         Teselagen.manager.ProjectManager.openDeviceDesign(record);
+    },
+
+    checkVerification: function() {
+        if(!Teselagen.manager.UserManager.user) {
+            return;
+        }
+
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("checkEmailVerifiedStatus", ''),
+            success:function(response) {
+                console.log(response);
+            },
+            failure: function(response) {
+                console.log('getting verification failed');
+            }
+        });
     },
 
     populateStatistics: function () {
@@ -265,6 +281,51 @@ Ext.define("Vede.controller.DashboardPanelController", {
         Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSeq);
     },
 
+    onDeleteSequence: function(sequence) {
+        Teselagen.manager.ProjectManager.getPartsAndDesignsBySequence(sequence, function(parts) {
+            var confirmationWindow = Ext.create("Vede.view.common.DeleteSequenceConfirmationWindow");
+            var callback = function() {
+                Teselagen.manager.ProjectManager.deleteSequence(sequence, parts);
+            };
+
+            if(parts !== false) {
+                confirmationWindow.show();
+                confirmationWindow.callback = callback;
+
+                if(parts.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(parts);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this sequence will not affect any parts. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
+            } else {
+                Ext.Msg.alert('Network Error', 'We could not determine which parts are associated with that sequence.');
+            }
+        });
+    },
+
+    onDeletePart: function(part) {
+        Teselagen.manager.ProjectManager.getDesignsInvolvingPart(part, function(affectedDesigns) {
+            var confirmationWindow = Ext.create("Vede.view.common.DeletePartConfirmationWindow");
+            var callback = function() {
+                Teselagen.manager.ProjectManager.deletePart(part);
+            };
+
+            if(affectedDesigns !== false) {
+                confirmationWindow.show();
+                confirmationWindow.callback = callback;
+
+                if(affectedDesigns.length > 0) {
+                    confirmationWindow.down('gridpanel').reconfigure(affectedDesigns);
+                } else {
+                    confirmationWindow.down('displayfield').setValue('Deleting this part will not affect any designs. However, you cannot undo this action.');
+                    confirmationWindow.down('gridpanel').hide();
+                }
+            } else {
+                Ext.Msg.alert('Network Error', 'We could not determine which designs are associated with that part.');
+            }
+        });
+    },
 
     /**
      * Hide the vector viewer when the mouse leaves the current grid
@@ -281,7 +342,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
     },
 
     onVectorViewerMouseLeave: function(event, target) {
-        var target = event.getRelatedTarget();
+        target = event.getRelatedTarget();
 
         // Check if we are mousing into an item on the grid. If not, hide the
         // vector viewer.
@@ -290,20 +351,138 @@ Ext.define("Vede.controller.DashboardPanelController", {
         }
     },
 
+    onSequenceLibraryImportChange: function(field, value) {
+        var items = field.extractFileInput().files;
+        var file;
+        var sequenceLibrary = Ext.getCmp("sequenceLibrary");
+
+        setTimeout(function(){
+            $(".batch-import-area").fadeOut("fast");
+            $("#headerProgressBox").fadeIn();
+            $("#headerProgressCancelBtn").on("click", function() {
+                Teselagen.bio.parsers.ParsersManager.batchImportQueue = [];
+                console.log(Teselagen.bio.parsers.ParsersManager.batchImportQueue);
+                return false;
+            });
+        },25);
+
+        sequenceLibrary.el.mask("Importing Sequence(s)", "loader rspin");
+        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+        Teselagen.bio.parsers.ParsersManager.startCount = 0;
+        Teselagen.bio.parsers.ParsersManager.progressIncrement = 100/items.length;
+
+        for (var i = 0; i < items.length; i++) {
+            file = items[i];
+
+            Teselagen.bio.parsers.ParsersManager.batchImportQueue.push(file);
+            Teselagen.bio.parsers.ParsersManager.processQueue(function(errorStore) {
+                var warningsWindow = Ext.create('Vede.view.common.ImportWarningsWindow').show();
+                warningsWindow.down('gridpanel').reconfigure(errorStore);
+            });
+        }
+
+        Ext.defer(function() {
+            sequenceLibrary.el.unmask();
+        }, 10);
+    },
+
+    onSequenceCodonJuggle: function(record) {
+        var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea'), record: record}).show();
+        var sequenceManager = record.getSequenceManager();
+        var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(sequenceManager.toGenbank());
+        win.down('textareafield[name="record"]').setValue(record);
+        win.down('textareafield[name="file"]').setValue(fasta);
+        win.down('textareafield[name="type"]').setValue("sequence");
+        win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+        win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
+
+    },
+
+    onPartCodonJuggle: function(record) {
+        var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('partLibraryArea')}).show();
+        var sequenceManager = record.getSequenceFile().getSequenceManager();
+        var subSequence = sequenceManager.subSequenceManager(record.get('genbankStartBP'), record.get('endBP'));
+        var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(subSequence.toGenbank());
+        win.down('textareafield[name="record"]').setValue(record);
+        win.down('textareafield[name="file"]').setValue(subSequence);
+        win.down('textareafield[name="type"]').setValue("part");
+        win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+        win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
+    },
+
+    onCodonJuggleCreateSequence: function(success) {
+        success.responseObject.parsedResponse.shift();
+        var newSeq = success.responseObject.parsedResponse.join('');
+        
+        if(success.type=='sequence') {
+            var onPromptClosed = function (btn, text) {
+                    if(btn === "ok") {
+                        text = Ext.String.trim(text);
+                        if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
+
+                        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
+                        $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+
+                        var self = this;
+
+                        var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                            sequenceFileFormat: "GENBANK",
+                            sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                            sequenceFileName: "untitled.gb",
+                            partSource: "Untitled sequence",
+                            name: text
+                        });
+
+                        // Give the sequence file a blank sequence manager, so that it's serialize field will be populated.
+                        var seqMan = success.record.getSequenceManager();
+                        seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
+                        var rawGenbank = seqMan.toGenbank().toString();
+                        seqMan.toGenbank().setLocus(text);
+                        seqMan.name = text;
+                        newSequenceFile.set('name', text);
+                        newSequenceFile.setSequenceFileContent(rawGenbank);
+                        newSequenceFile.setSequenceManager(seqMan);
+
+                        newSequenceFile.save({
+                            callback: function () {
+                                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                    Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
+                                    Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
+                                    toastr.info ("New Sequence Created");
+                                    Vede.application.fireEvent("PopulateStats");
+                                });
+                            }
+                        });
+
+                    } else {
+                        return false;
+                    }
+                };
+
+            Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
+        }
+    },
+
     onLaunch: function () {
         Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
     },
 
-  	init: function () {
+    init: function () {
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN,this.populateStatistics);
-        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS,this.populateStatistics);
-        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE,this.DashNewSequence);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatistics);
+        this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.checkVerification);
+        this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
+        this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
+        this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
+        this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, this.onCodonJuggleCreateSequence);
 
-	     	this.control({
+        this.control({
             "#mainAppPanel": {
-                beforetabchange: this.onBeforeTabChange,
+                Beforetabchange: this.onBeforeTabChange,
                 tabchange: this.onMainAppPanelTabChange
             },
             "#designGrid_Panel": {
@@ -318,7 +497,10 @@ Ext.define("Vede.controller.DashboardPanelController", {
                 itemclick: this.onPartGridItemClick,
                 itemmouseenter: this.onPartGridItemMouseEnter,
                 itemmouseleave: this.onPartGridItemMouseLeave
+            },
+            "filefield[cls='sequenceLibraryImportButton']": {
+                change: this.onSequenceLibraryImportChange
             }
-		});
-	}
+        });
+    }
 });
