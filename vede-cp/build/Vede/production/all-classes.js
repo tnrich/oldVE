@@ -58341,13 +58341,13 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   cmp.getEl().set({"data-intro": 'You can start with a blank sequence by clicking here.', "data-step": 2});
 }}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'readManualsBtn', scale: 'medium', flex: 1, overCls: 'readManualsBtn-over', iconAlign: 'top', iconCls: 'manuals-icon', text: 'Manuals', href: 'http://help.teselagen.com/manual/', listeners: {afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'Make sure you check out the manuals for a thorough documentation.', "data-step": 4});
-}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'seeTutsBtn', scale: 'medium', flex: 1, overCls: 'tutorial-over', iconAlign: 'top', iconCls: 'tutorial-icon', text: 'Tutorials', href: 'http://classroom.tv/teselagen', listeners: {afterrender: function(cmp) {
+}}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'seeTutsBtn', scale: 'medium', flex: 1, overCls: 'tutorial-over', iconAlign: 'top', iconCls: 'tutorial-icon', text: 'Tutorials', href: 'https://www.youtube.com/channel/UC9gW_S5i13WT68BiB3hQAhA', listeners: {afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'See some tutorials to help you get started.', "data-step": 5});
 }}}, {xtype: 'button', cls: 'dashBtn', height: 100, id: 'tourBtn', scale: 'medium', flex: 1, overCls: 'tourBtn-over', iconAlign: 'top', iconCls: 'tour-icon', iconAlign: 'top', text: 'Take a Tour', listeners: {click: function() {
   introJs().start();
 }}}]}, {xtype: 'container', id: 'dashboardStats', margin: '10 100 50 100', flex: 1, minHeight: 320, minWidth: 800, border: 0, layout: {type: 'hbox', align: 'stretch'}, listeners: {afterrender: function(cmp) {
   cmp.getEl().set({"data-intro": 'Here are some awesome stats to keep you up to date.', "data-position": 'top', "data-step": 3});
-}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Strain Library', cls: 'strainLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'StrainLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'StrainLibrarySearch', cls: 'StrainLibrarySearchField', width: '98%', emptyText: 'Search Strain Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
+}}, items: [{xtype: 'container', cls: 'dashboardStats-container', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashProjectsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'projectsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'projectsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'projects-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'projectsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-num', border: 0, flex: 0.8, text: null}, {xtype: 'textfield', readOnly: true, cls: 'projectsCountBox-desc', flex: 0.6, border: 0}]}]}, {xtype: 'container', cls: 'dashDesignsData', margin: '10 10 10 10', width: 430, flex: 0.5, id: 'designsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'designsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'designs-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'designsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'designsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'designsCountBox-desc', border: 0, flex: 0.6}]}]}]}, {xtype: 'container', cls: 'dashboardStats-container2', margin: '0 0 0 0', border: 0, flex: 0.5, maxHeight: 320, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'dashSequencesData', margin: '10 10 10 10', flex: 0.5, id: 'sequencesCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'sequencesCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'sequences-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'sequencesCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'sequencesCountBox-desc', border: 0, flex: 0.6}]}]}, {xtype: 'container', cls: 'dashPartsData', margin: '10 10 10 10', flex: 0.5, id: 'partsCountBox', layout: {type: 'hbox', align: 'stretch'}, items: [{xtype: 'container', cls: 'partsCountBox-icon', flex: 0.6, layout: {type: 'hbox', pack: 'center'}, items: [{xtype: 'image', imgCls: 'parts-icon', border: 0, margin: '32 0 0 0'}]}, {xtype: 'container', cls: 'partsCountBox-data', flex: 1, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', readOnly: true, cls: 'partsCountBox-num', border: 0, flex: 1, text: null}, {xtype: 'textfield', readOnly: true, cls: 'partsCountBox-desc', border: 0, flex: 0.6}]}]}]}]}]}, {xtype: 'panel', title: 'Strain Library', cls: 'strainLibraryPanel', border: 0, layout: 'fit', items: [{xtype: 'container', cls: 'StrainLibraryContainer', autoScroll: true, layout: {type: 'vbox', align: 'stretch'}, items: [{xtype: 'textfield', layout: {type: 'fit', align: 'stretch'}, anchor: '100%', height: 30, id: 'strainLibrarySearch', cls: 'strainLibrarySearchField', width: '98%', emptyText: 'Search Strain Library', emptyCls: 'empty-search-field', margin: 13, listeners: {change: function(field, newValue, oldValue, eOpts) {
   Teselagen.manager.ProjectManager.Strains.clearFilter(true);
   var grid = Ext.getCmp('StrainLibrary');
   if (grid.timeoutId) 
@@ -58366,7 +58366,7 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   if (!grid.store.proxy.activeRequest) 
   grid.store.load();
 }, 200);
-}}}, {xtype: 'gridpanel', border: 0, name: 'StrainLibraryGrid', loadMask: true, autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, cls: 'StrainLibraryGrid', height: '100%', autoScroll: true, id: 'StrainLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {xtype: 'gridcolumn', text: 'PI', width: 80, dataIndex: 'pi', sortable: false}, {xtype: 'gridcolumn', text: 'Creator', width: 160, dataIndex: 'creator', sortable: true}, {xtype: 'gridcolumn', flex: 1, text: 'Sequences', width: 150, dataIndex: 'Sequences', sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
+}}}, {xtype: 'gridpanel', border: 0, name: 'strainLibraryGrid', loadMask: true, autoHeight: true, flex: 1, autoScroll: true, viewConfig: {style: 'overflow-y: auto'}, cls: 'strainLibraryGrid', height: '100%', autoScroll: true, id: 'strainLibrary', columns: [{xtype: 'gridcolumn', text: 'Name', width: 220, dataIndex: 'name', sortable: true}, {xtype: 'gridcolumn', text: 'PI', width: 80, dataIndex: 'pi', sortable: false}, {xtype: 'gridcolumn', text: 'Creator', width: 160, dataIndex: 'creator', sortable: true}, {xtype: 'gridcolumn', flex: 1, text: 'Sequences', width: 150, dataIndex: 'Sequences', sortable: false}, {xtype: 'gridcolumn', text: 'Date Created', width: 180, dataIndex: 'dateCreated', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A'), sortable: true}, {xtype: 'gridcolumn', text: 'Last Modified', width: 180, dataIndex: 'dateModified', renderer: Ext.util.Format.dateRenderer('F d, Y g:i A')}], listeners: {itemcontextmenu: function(el, record, item, index, e, eOpts) {
   e.preventDefault();
   var contextMenu = Ext.create('Ext.menu.Menu', {items: [{text: 'Rename', handler: function() {
   Teselagen.manager.ProjectExplorerManager.renameStrain(record);
@@ -58379,7 +58379,7 @@ Ext.define('Ext.view.override.Table', {override: 'Ext.view.Table', doStripeRows:
   VEManager.saveSequenceToFile();
 }}]}).show();
   contextMenu.setPagePosition(e.getX(), e.getY() - 5);
-}}, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'StrainLibraryOptionsContainer', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
+}}, dockedItems: [{xtype: 'pagingtoolbar', dock: 'bottom', displayInfo: true, items: [{xtype: 'container', cls: 'strainLibraryOptionsContainer', items: [{xtype: 'text', text: 'Show:'}, {xtype: 'button', cls: 'pagingSizeBtn', text: '20', margin: '0 0 0 5', listeners: {click: function(btn, e) {
   Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
 }}}, {xtype: 'button', cls: 'pagingSizeBtn', text: '40', margin: '0 0 0 5', listeners: {click: function(btn, e) {
   Teselagen.manager.ProjectManager.openStrainLibrary(btn.text);
@@ -67080,7 +67080,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 
 (Ext.cmd.derive('Vede.view.AuthWindow', Ext.window.Window, {id: 'AuthWindow', floating: true, modal: true, frame: false, style: 'z-index:8000', layout: {type: 'vbox', align: 'center'}, bodyBorder: false, closable: false, title: 'Authentication', initComponent: function() {
   var me = this;
-  Ext.applyIf(me, {items: [{xtype: 'panel', id: 'browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 800, margin: 10, hidden: true}, {xtype: 'form', id: 'auth-form', height: 280, width: 800, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', height: 275, width: 400, items: [{xtype: 'fieldset', margin: '60 10 10 10', items: [{xtype: 'textfield', anchor: '100%', fieldLabel: 'Username', name: 'username', id: 'auth-username-field', width: 300}, {xtype: 'textfield', inputType: 'password', anchor: '100%', fieldLabel: 'Password', name: 'password', id: 'auth-password-field', width: 300}]}, {xtype: 'button', id: 'auth-login-btn', margin: '0 0 0 15', text: 'Login', padding: 3, name: 'login'}, {xtype: 'button', id: 'auth-register-btn', margin: '0 0 0 15', href: "http://beta.teselagen.com/signup", padding: 3, text: 'Register', name: 'register'}, {xtype: 'button', id: 'auth-forgot-btn', margin: '0 0 0 15', padding: 3, text: 'Forgot your password?', name: 'forgot'}, {xtype: 'displayfield', id: 'auth-response', border: 0, width: 350, margin: '0 0 0 20'}]}, {xtype: 'panel', flex: 1, listeners: {render: function() {
+  Ext.applyIf(me, {items: [{xtype: 'panel', id: 'browser-warning', html: 'Warning: TeselaGen Beta works best in a Google Chrome Browser.', height: 40, padding: 10, width: 800, margin: 10, hidden: true}, {xtype: 'form', id: 'auth-form', height: 280, width: 800, layout: {align: 'stretch', type: 'hbox'}, items: [{xtype: 'panel', height: 275, width: 400, items: [{xtype: 'fieldset', margin: '60 10 10 10', items: [{xtype: 'textfield', anchor: '100%', fieldLabel: 'Username', name: 'username', id: 'auth-username-field', width: 300}, {xtype: 'textfield', inputType: 'password', anchor: '100%', fieldLabel: 'Password', name: 'password', id: 'auth-password-field', width: 300}]}, {xtype: 'button', id: 'auth-login-btn', margin: '0 0 0 15', text: 'Login', padding: 3, name: 'login'}, {xtype: 'button', id: 'auth-register-btn', margin: '0 0 0 15', href: "https://teselagen.com/signup", padding: 3, text: 'Register', name: 'register'}, {xtype: 'button', id: 'auth-forgot-btn', margin: '0 0 0 15', padding: 3, text: 'Forgot your password?', name: 'forgot'}, {xtype: 'displayfield', id: 'auth-response', border: 0, width: 350, margin: '0 0 0 20'}]}, {xtype: 'panel', flex: 1, listeners: {render: function() {
   var field = this;
   Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl('v', ''), method: 'GET', success: function(response) {
   var regex = /(\w+ \w+ \d+ \d+ .+) GMT[\-+]\d+ \((\w+)\)/g;
@@ -67094,7 +67094,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     lastBuildText += ' ' + match[2];
   }
-  field.update('<div style="padding:10px">' + '<div class="welcome_sub">' + 'Welcome to Teselagen BioCAD.' + '</div>' + '<p>Please login using your credentials</p>' + '<p>For questions visit <a href="http://teselagen.com">Our Website</a>' + '</p>' + '<small>' + lastBuildText + '</small>' + '</div>' + '<div class="auth-footer" style="margin-top: 110px;">' + '<ul style="list-style:none; display="inline-block">' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://teselagen.com">Home</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://teselagen.com/about">About</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://teselagen.com/faq">FAQ</a></li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://teselagen.com/contact">Contact</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://help.teselagen.com/manual/">Manual</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://teselagen.com/terms">Terms</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="http://teselagen.com/privacy">Privacy</a>' + '</li>' + '</ul>' + '</div>');
+  field.update('<div style="padding:10px">' + '<div class="welcome_sub">' + 'Welcome to Teselagen BioCAD.' + '</div>' + '<p>Please login using your credentials</p>' + '<p>For questions visit <a href="https://teselagen.com">Our Website</a>' + '</p>' + '<small>' + lastBuildText + '</small>' + '</div>' + '<div class="auth-footer" style="margin-top: 110px;">' + '<ul style="list-style:none; display="inline-block">' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://teselagen.com">Home</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://teselagen.com/about">About</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://teselagen.com/faq">FAQ</a></li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://teselagen.com/contact">Contact</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://help.teselagen.com/manual/">Manual</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://teselagen.com/terms">Terms</a>' + '</li>' + '<li style="float:left; margin-right: 5px;">' + '<a href="https://teselagen.com/privacy">Privacy</a>' + '</li>' + '</ul>' + '</div>');
 }});
 }}}]}]});
   me.callParent(arguments);
@@ -67542,7 +67542,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW_ABOVE: "AddRowAbove", ADD_ROW_BELOW: "AddRowBelow", CHECK_J5_READY: "CheckJ5Ready", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", SELECT_CELL: "SelectCell", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", FILL_BLANK_CELLS: "FillBlankCells", RERENDER_COLLECTION_INFO: "RerenderCollectionInfo", RERENDER_DE_CANVAS: "RerenderDECanvas", RELOAD_DESIGN: "ReloadDesign", SAVE_DESIGN: "SaveDesign", LOAD_EUGENE_RULES: "LoadEugeneRules", OPEN_PART_LIBRARY: "OpenPartLibrary", OPEN_CHANGE_PART_DEFINITION: "OpenChangePartDefinition", CREATE_PART_DEFINITION: "CreatePartDefinition", CREATE_PART_IN_DESIGN: "CreatePartInDesign", PART_CREATED: "PartCreated", VALIDATE_DUPLICATED_PART_NAME: "ValidateDuplicatedPartName", CLOSE_PART_CREATE_WINDOW: "ClosePartCreateWindow", CUT_PART: "CutPart", COPY_PART: "CopyPart", PASTE_PART: "PastePart", SUSPEND_TABS: "Suspend_tabs", RESUME_TABS: "Resume_tabs"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.event.ProjectEvent', Ext.Base, {singleton: true, OPEN_PROJECT: "openProject", SAVE_PROJECT: "saveProject", CLOSE_PROJECT: "closeProject", LOAD_PROJECT_TREE: "loadProjectTree", CREATE_SEQUENCE: "createSequence", IMPORT_FILE_TO_SEQUENCE: "ImportFileToSequence", OPEN_SEQUENCE_IN_VE: "OpenSequenceInVectorEditor"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'ProjectEvent'], 0));
+(Ext.cmd.derive('Teselagen.event.ProjectEvent', Ext.Base, {singleton: true, OPEN_PROJECT: "openProject", SAVE_PROJECT: "saveProject", CLOSE_PROJECT: "closeProject", LOAD_PROJECT_TREE: "loadProjectTree", CREATE_SEQUENCE: "createSequence", CREATE_SEQUENCE_JUGGLE: "createSequenceJuggle", IMPORT_FILE_TO_SEQUENCE: "ImportFileToSequence", OPEN_SEQUENCE_IN_VE: "OpenSequenceInVectorEditor"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'ProjectEvent'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.event.SequenceManagerEvent', Ext.Base, {singleton: true, SEQUENCE_MANAGER_CHANGED: "SequenceManagerChanged", SEQUENCE_CHANGING: "SequenceChanging", SEQUENCE_CHANGED: "SequenceChanged", KIND_FEATURE_ADD: "FeatureAddSequenceProviderEvent", KIND_FEATURE_REMOVE: "FeatureRemoveSequenceProviderEvent", KIND_FEATURES_ADD: "FeaturesAddSequenceProviderEvent", KIND_FEATURES_REMOVE: "FeaturesRemoveSequenceProviderEvent", KIND_SEQUENCE_INSERT: "SequenceInsertSequenceProviderEvent", KIND_SEQUENCE_REMOVE: "SequenceRemoveSequenceProviderEvent", KIND_MANUAL_UPDATE: "ManualUpdate", KIND_SET_MEMENTO: "SetMemento", KIND_INITIALIZED: "SequenceInitialized"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'SequenceManagerEvent'], 0));
@@ -71773,6 +71773,19 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.controller.AppController', Ext.app.Controller, {init: function() {
   Vede.application = this.application;
 }, onLaunch: function() {
+  if (document.URL.indexOf("app.teselagen") >= 0 || document.URL.indexOf("dev.teselagen") >= 0) 
+  {
+    var env;
+    if (document.URL.indexOf("app.teselagen") >= 0) 
+    {
+      env = "production";
+    } else if (document.URL.indexOf("dev.teselagen") >= 0) 
+    {
+      env = "development";
+    } else {
+      env = "unknown";
+    }
+  }
   Ext.tip.QuickTipManager.init();
   Ext.Ajax.timeout = 60000;
   Ext.EventManager.addListener(Ext.getBody(), 'keydown', function(e) {
@@ -71789,6 +71802,18 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   Ext.EventManager.addListener(Ext.getBody(), 'mousedown', function(e) {
   Vede.application.fireEvent(Teselagen.event.ContextMenuEvent.MOUSE_DOWN_ANYWHERE, e);
 });
+  Ext.Error.handle = function(err) {
+  debugger;
+  if (true || env === 'production') 
+  {
+    var stackLines = err.stack.split('\n');
+    var stackXML = stackLines.map(function(line) {
+  return '<line>' + line + '</line>';
+}).join('');
+    var xml = '<?xml version="1.0" encoding="UTF-8"?>' + '<notice version="2.3">' + '<api-key>40e870e0-c0a6-c307-8bef-37371fd86407</api-key>' + '<notifier>' + '<name>TeselaGen App</name>' + '<version>0.0.1</version>' + '<url>www.teselagen.com</url>' + '</notifier>' + '<error>' + '<class>' + err.name + '</class>' + '<message>' + err.message + '</message>' + '<backtrace>' + stackXML + '</backtrace>' + '</error>' + '<server-environment>' + '<environment-name>' + env + '</environment-name>' + '</server-environment>' + '</notice>' + '</xml>';
+    Ext.Ajax.request({url: 'https://exceptions.codebasehq.com/notifier_api/v2/notices', xmlData: xml});
+  }
+};
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AppController'], 0));
 ;
 
@@ -72744,6 +72769,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 }, onLastDEProjectsItemClick: function(item, record) {
   Teselagen.manager.ProjectManager.openDeviceDesign(record);
+}, checkVerification: function() {
+  if (!Teselagen.manager.UserManager.user) 
+  {
+    return;
+  }
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("checkEmailVerifiedStatus", ''), success: function(response) {
+  console.log(response);
+}, failure: function(response) {
+  console.log('getting verification failed');
+}});
 }, populateStatistics: function() {
   if (!Teselagen.manager.UserManager.user) 
   {
@@ -72984,22 +73019,75 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   sequenceLibrary.el.unmask();
 }, 10);
 }, onSequenceCodonJuggle: function(record) {
-  var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea')}).show();
-  win.down('textareafield').setValue(record.getSequenceManager().getSequence().sequenceString);
+  var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('sequenceLibraryArea'), record: record}).show();
+  var sequenceManager = record.getSequenceManager();
+  var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(sequenceManager.toGenbank());
+  win.down('textareafield[name="record"]').setValue(record);
+  win.down('textareafield[name="file"]').setValue(fasta);
+  win.down('textareafield[name="type"]').setValue("sequence");
+  win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+  win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
 }, onPartCodonJuggle: function(record) {
   var win = Ext.create('Vede.view.tools.CodonJuggle', {renderTo: Ext.get('partLibraryArea')}).show();
   var sequenceManager = record.getSequenceFile().getSequenceManager();
-  var subSequence = sequenceManager.subSequence(record.get('genbankStartBP'), record.get('endBP'));
-  win.down('textareafield').setValue(subSequence);
+  var subSequence = sequenceManager.subSequenceManager(record.get('genbankStartBP'), record.get('endBP'));
+  var fasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(subSequence.toGenbank());
+  win.down('textareafield[name="record"]').setValue(record);
+  win.down('textareafield[name="file"]').setValue(subSequence);
+  win.down('textareafield[name="type"]').setValue("part");
+  win.down('displayfield[cls="cjSequenceName"]').setValue(record.get("name"));
+  win.down('displayfield[cls="cjSequenceSize"]').setValue(record.get("size"));
+}, onCodonJuggleCreateSequence: function(success) {
+  success.responseObject.parsedResponse.shift();
+  var newSeq = success.responseObject.parsedResponse.join('');
+  if (success.type == 'sequence') 
+  {
+    var onPromptClosed = function(btn, text) {
+  if (btn === "ok") 
+  {
+    text = Ext.String.trim(text);
+    if (text === "") 
+    {
+      return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
+    }
+    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence", "loader rspin");
+    $(".loader").html("<span class='c'></span><span class='d spin'><span class='e'></span></span><span class='r r1'></span><span class='r r2'></span><span class='r r3'></span><span class='r r4'></span>");
+    var self = this;
+    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "GENBANK", sequenceFileContent: "LOCUS       " + text + "                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//", sequenceFileName: "untitled.gb", partSource: "Untitled sequence", name: text});
+    var seqMan = success.record.getSequenceManager();
+    seqMan.sequence = Teselagen.bio.sequence.DNATools.createDNA(newSeq);
+    var rawGenbank = seqMan.toGenbank().toString();
+    seqMan.toGenbank().setLocus(text);
+    seqMan.name = text;
+    newSequenceFile.set('name', text);
+    newSequenceFile.setSequenceFileContent(rawGenbank);
+    newSequenceFile.setSequenceManager(seqMan);
+    newSequenceFile.save({callback: function() {
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function() {
+  Ext.getCmp("projectTreePanel").expandPath("/root/" + newSequenceFile.data.id);
+  Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_SEQUENCE_IN_VE, newSequenceFile);
+  toastr.info("New Sequence Created");
+  Vede.application.fireEvent("PopulateStats");
+});
+}});
+  } else {
+    return false;
+  }
+};
+    Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this);
+  }
 }, onLaunch: function() {
   Ext.getCmp("DashboardPanel").on("tabchange", this.onTabChange);
 }, init: function() {
   this.ProjectEvent = Teselagen.event.ProjectEvent;
   this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.populateStatistics);
+  this.application.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, this.checkVerification);
   this.application.on(Teselagen.event.AuthenticationEvent.POPULATE_STATS, this.populateStatistics);
   this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE, this.DashNewSequence);
   this.application.on(Teselagen.event.CommonEvent.DELETE_PART, this.onDeletePart);
   this.application.on(Teselagen.event.CommonEvent.DELETE_SEQUENCE, this.onDeleteSequence);
+  this.application.on(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, this.onCodonJuggleCreateSequence);
   this.control({"#mainAppPanel": {Beforetabchange: this.onBeforeTabChange, tabchange: this.onMainAppPanelTabChange}, "#designGrid_Panel": {itemclick: this.onLastDEProjectsItemClick}, "gridpanel[name='SequenceLibraryGrid']": {itemclick: this.onSequenceGridItemClick, itemmouseenter: this.onSequenceGridItemMouseEnter, itemmouseleave: this.onSequenceGridItemMouseLeave}, "gridpanel[name='PartLibraryGrid']": {itemclick: this.onPartGridItemClick, itemmouseenter: this.onPartGridItemMouseEnter, itemmouseleave: this.onPartGridItemMouseLeave}, "filefield[cls='sequenceLibraryImportButton']": {change: this.onSequenceLibraryImportChange}});
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'DashboardPanelController'], 0));
 ;
@@ -88738,10 +88826,13 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.de, 'j5AutomationParameters'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.tools.CodonJuggle', Ext.window.Window, {id: 'CodonJuggle', cls: 'tasksmonitorwindow', width: 500, modal: true, callback: function() {
-}, pack: 'center', buttonAlign: 'center', title: 'Codon Juggle', items: [{xtype: 'textareafield', hidden: true}, {xtype: 'combobox', cls: 'algorithmSelector', fieldLabel: '<b>Algorithm:</b>', labelCls: 'algorithm-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, margin: '10 60', queryMode: 'local', valueField: 'algorithmValue', value: 'balanced', displayField: 'algorithmName', store: new Ext.data.ArrayStore({fields: ['algorithmName'], data: [['balanced'], ['high'], ['most_different_sequence'], ['least_different_RSCU'], ['random']]})}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, margin: '10 60', queryMode: 'local', valueField: 'organismValue', value: 'Standard', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Arabidopsis thaliana'], ['Bacillus subtilis'], ['Caenorhabditis elegans'], ['Corynebacterium glutamicum'], ['Deinococcus radiodurans'], ['Drosophila melanogaster'], ['Escherichia coli'], ['Flat'], ['Homo sapiens'], ['Mycoplasma genitalium'], ['Orzya sativa'], ['Saccharomyces cerevisiae'], ['Standard']]})}, {xtype: 'button', text: 'Juggle Codon', margin: '10 200', height: 30, width: 140, border: 0, listeners: {click: {fn: function(field) {
-  var seq = this.up().down('textareafield').rawValue;
-  console.log(seq);
+(Ext.cmd.derive('Vede.view.tools.CodonJuggle', Ext.window.Window, {record: null, id: 'CodonJuggle', cls: 'tasksmonitorwindow', width: 500, modal: true, callback: function() {
+}, pack: 'center', buttonAlign: 'center', title: 'Codon Juggle', items: [{xtype: 'textareafield', name: 'file', hidden: true}, {xtype: 'textareafield', name: 'record', hidden: true}, {xtype: 'textareafield', name: 'type', hidden: true}, {xtype: 'displayfield', fieldLabel: "<b>Sequence</b>", labelWidth: 110, width: 350, margin: '5 60', cls: 'cjSequenceName'}, {xtype: 'displayfield', fieldLabel: "<b>Size(bps)</b>", labelWidth: 110, width: 350, margin: '5 60', cls: 'cjSequenceSize'}, {xtype: 'combobox', cls: 'algorithmSelector', fieldLabel: '<b>Algorithm:</b>', labelCls: 'algorithm-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, margin: '10 60', queryMode: 'local', valueField: 'algorithmValue', value: 'balanced', displayField: 'algorithmName', store: new Ext.data.ArrayStore({fields: ['algorithmName'], data: [['balanced'], ['high'], ['most_different_sequence'], ['least_different_RSCU'], ['random']]})}, {xtype: 'combobox', cls: 'organismSelector', fieldLabel: '<b>Organism:</b>', labelCls: 'organism-label', editable: false, labelSeparator: ' ', labelWidth: 110, width: 350, margin: '10 60', queryMode: 'local', valueField: 'organismValue', value: 'Standard', displayField: 'organismName', store: new Ext.data.ArrayStore({fields: ['organismName'], data: [['Arabidopsis thaliana'], ['Bacillus subtilis'], ['Caenorhabditis elegans'], ['Corynebacterium glutamicum'], ['Deinococcus radiodurans'], ['Drosophila melanogaster'], ['Escherichia coli'], ['Flat'], ['Homo sapiens'], ['Mycoplasma genitalium'], ['Orzya sativa'], ['Saccharomyces cerevisiae'], ['Standard']]})}, {xtype: 'button', text: 'Juggle Codon', margin: '10 180', height: 30, width: 140, border: 0, listeners: {click: {fn: function(field) {
+  var seq = this.up().down('textareafield[name="file"]').rawValue;
+  var record = this.up().record;
+  ;
+  console.log(record);
+  var type = this.up().down('textareafield[name="type"]').rawValue;
   var algorithm = this.up().query('combobox[cls="algorithmSelector"]')[0].rawValue;
   var organism = this.up().query('combobox[cls="organismSelector"]')[0].rawValue;
   var that = this;
@@ -88752,8 +88843,18 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   messageBox.close();
   console.log(responseObject);
   Ext.create('Ext.window.Window', {padding: '20px', title: 'Codon Juggle', modal: true, renderTo: Ext.getCmp("DashboardPanel").getActiveTab().down().id, items: [{xtype: 'displayfield', hideLabel: true, value: 'Sequence successfully juggled. What would you like to do?'}, {xtype: 'container', layout: {type: 'hbox'}, flex: 1, items: [{xtype: 'button', text: 'Overwrite Sequence', margin: 10, height: 30, flex: 1, padding: 2, handler: function() {
+  var success = {};
+  success.responseObject = responseObject;
+  success.type = type;
+  success.record = record;
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, success);
   this.up('window').close();
 }}, {xtype: 'button', text: 'Create New Sequence', height: 30, margin: '10 20', flex: 1, padding: 2, handler: function() {
+  var success = {};
+  success.responseObject = responseObject;
+  success.type = type;
+  success.record = record;
+  Vede.application.fireEvent(Teselagen.event.ProjectEvent.CREATE_SEQUENCE_JUGGLE, success);
   this.up('window').close();
 }}]}, {xtype: 'textarea', hidden: true, value: response.responseText, width: 500, height: 200}]}).show();
 }, failure: function(response, opts) {
