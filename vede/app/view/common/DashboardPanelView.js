@@ -161,7 +161,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                 iconAlign: 'top',
                                 iconCls: 'tutorial-icon',
                                 text: 'Tutorials',
-                                href: 'http://classroom.tv/teselagen',
+                                href: 'https://www.youtube.com/channel/UC9gW_S5i13WT68BiB3hQAhA',
                                 listeners: {
                                     afterrender: function(cmp) {
                                         cmp.getEl().set({
